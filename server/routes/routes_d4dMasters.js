@@ -7,7 +7,7 @@ var configmgmtDao = require('../model/d4dmasters/configmgmt.js');
 var Chef = require('../lib/chef');
 var Curl = require('../lib/utils/curl.js');
 var appConfig = require('../config/app_config');
-var logger  = require('../lib/logger')(module);
+var logger = require('../lib/logger')(module);
 var childProcess = require('child_process');
 var exec = childProcess.exec;
 var masterUtil = require('../lib/utils/masterUtil.js');
@@ -15,7 +15,7 @@ var masterUtil = require('../lib/utils/masterUtil.js');
 
 module.exports.setRoutes = function(app, sessionVerification) {
 
-    app.all('/d4dMasters/*',sessionVerification);
+    app.all('/d4dMasters/*', sessionVerification);
 
 
     /*app.get('/d4dMasters/saveTest', function(req, res) {
@@ -26,7 +26,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
         });
     })*/
     app.get('/d4dmasters/dockervalidate/:username/:password', function(req, res) {
-        logger.debug("Enter get() for /d4dmasters/dockervalidate/%s/%s",req.params.username,req.params.password);
+        logger.debug("Enter get() for /d4dmasters/dockervalidate/%s/%s", req.params.username, req.params.password);
         var cmd = 'curl --raw -L --user ' + req.params.username + ':' + req.params.password + ' https://index.docker.io/v1/users';
         var curl = new Curl();
         curl.executecurl(cmd, function(err, stdout) {
@@ -42,15 +42,15 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 }
             }
         });
-        logger.debug("Exit get() for /d4dmasters/dockervalidate/%s/%s",req.params.username,req.params.password);
+        logger.debug("Exit get() for /d4dmasters/dockervalidate/%s/%s", req.params.username, req.params.password);
 
     });
 
-    app.get('/d4dmasters/instanceping/:ip',function(req,res){
-        logger.debug("Enter get() for /d4dmasters/instanceping/%s",req.params.ip);
-        var cmd = 'ping -c 1 -w 1 ' + req.params.ip ;
+    app.get('/d4dmasters/instanceping/:ip', function(req, res) {
+        logger.debug("Enter get() for /d4dmasters/instanceping/%s", req.params.ip);
+        var cmd = 'ping -c 1 -w 1 ' + req.params.ip;
         var curl = new Curl();
-        console.log("Pinging Node to check if alive :" + cmd );
+        console.log("Pinging Node to check if alive :" + cmd);
         curl.executecurl(cmd, function(err, stdout) {
             if (err) {
                 res.end(err);
@@ -60,14 +60,14 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     //res.send();
                     res.end('Alive');
                     //res.send('200');
-                    logger.debug("Exit get() for /d4dmasters/instanceping/%s",req.params.ip);
+                    logger.debug("Exit get() for /d4dmasters/instanceping/%s", req.params.ip);
                     return;
 
                 } else {
                     logger.debug('Not Found');
                     //res.send('400 Not Found');\
-                   res.end('Not Alive');
-                   // res.send('200');
+                    res.end('Not Alive');
+                    // res.send('200');
                     return;
                 }
             }
@@ -75,7 +75,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
     });
 
     app.get('/d4dmasters/getdockertags/:repopath/:dockerreponame', function(req, res) {
-        logger.debug("Enter get() for /d4dmasters/getdockertags/%s/%s",req.params.repopath,req.params.dockerreponame);
+        logger.debug("Enter get() for /d4dmasters/getdockertags/%s/%s", req.params.repopath, req.params.dockerreponame);
         //fetch the username and password from 
         //Need to populate dockerrowid in template card. - done
         logger.debug('hit getdockertags');
@@ -93,7 +93,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 var curl = new Curl();
                 curl.executecurl(cmd, function(err, stdout) {
                     if (err) {
-                        logger.error("Error occured: ",err);
+                        logger.error("Error occured: ", err);
                         res.end(err);
                     }
                     if (stdout) {
@@ -103,7 +103,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
                         } else {
                             logger.debug("Received JSON");
-                            logger.debug("Exit get() for /d4dmasters/getdockertags/%s/%s",req.params.repopath,req.params.dockerreponame);
+                            logger.debug("Exit get() for /d4dmasters/getdockertags/%s/%s", req.params.repopath, req.params.dockerreponame);
                             res.end(stdout);
                         }
                     }
@@ -131,7 +131,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
     });
     //getAccessFilesForRole
     app.get('/d4dMasters/getaccessroles/:loginname', function(req, res) {
-        logger.debug("Enter get() for /d4dMasters/getaccessroles/%s",req.params.loginname);
+        logger.debug("Enter get() for /d4dMasters/getaccessroles/%s", req.params.loginname);
         configmgmtDao.getAccessFilesForRole(req.params.loginname, req, res, function(err, getAccessFiles) {
             if (getAccessFiles) {
                 getAccessFiles = getAccessFiles.replace(/\"/g, '').replace(/\:/g, '')
@@ -140,7 +140,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 res.end(req.session.user.authorizedfiles);
             }
         });
-        logger.debug("Exit get() for /d4dMasters/getaccessroles/%s",req.params.loginname);
+        logger.debug("Exit get() for /d4dMasters/getaccessroles/%s", req.params.loginname);
     });
 
     app.get('/d4dMasters/getaccessroles/:masterid/:fieldname/:filedvalue', function(req, res) {
@@ -149,14 +149,14 @@ module.exports.setRoutes = function(app, sessionVerification) {
     });
 
     app.get('/d4dMasters/getcodelist/:name', function(req, res) {
-        logger.debug("Enter get() for /d4dMasters/getcodelist/%s",req.params.name);
+        logger.debug("Enter get() for /d4dMasters/getcodelist/%s", req.params.name);
         configmgmtDao.getCodeList(req.params.name, function(err, cl) {
             if (cl) {
                 logger.debug("Closing");
                 res.end(cl);
             }
         });
-        logger.debug("Exit get() for /d4dMasters/getcodelist/%s",req.params.name);
+        logger.debug("Exit get() for /d4dMasters/getcodelist/%s", req.params.name);
     });
 
     app.get('/d4dMasters/getuser', function(req, res) {
@@ -177,7 +177,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
         // query['id'] = '7';
 
         // console.log(req.session.user.cn);
-       
+
         // d4dModelNew.d4dModelMastersUsers.find(query, function(err, d4dMasterJson) {
         //     if (err) {
         //         console.log("Hit and error:" + err);
@@ -185,7 +185,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
         //     res.end(JSON.stringify(d4dMasterJson));
         //     console.log("sent response" + JSON.stringify(d4dMasterJson));
         // });
-            
+
     });
 
     app.get('/d4dMasters/authorizedfiles', function(req, res) {
@@ -194,29 +194,29 @@ module.exports.setRoutes = function(app, sessionVerification) {
         logger.debug("Exit get() for /d4dMasters/authorizedfiles");
     });
 
-    app.get('/d4dMasters/candelete/:rowid/:formid',function(req,res){
-         
-         // swtich(req.params.formid){
-         //    case "1": //this will be org
+    app.get('/d4dMasters/candelete/:rowid/:formid', function(req, res) {
 
-         // }
-         // configmgmtDao.deleteCheck(req.params.rowid,formids,fieldname,function(err,data){
-            
-         // });
-         
+        // swtich(req.params.formid){
+        //    case "1": //this will be org
+
+        // }
+        // configmgmtDao.deleteCheck(req.params.rowid,formids,fieldname,function(err,data){
+
+        // });
+
     });
 
-    app.get('/d4dMasters/setting',function(req,res){
-        configmgmtDao.getTeamsOrgBuProjForUser(req.session.user.cn,function(err,data){
+    app.get('/d4dMasters/setting', function(req, res) {
+        configmgmtDao.getTeamsOrgBuProjForUser(req.session.user.cn, function(err, data) {
             logger.debug('Retuened setting : ' + data);
             res.send(200);
         });
     });
 
     app.get('/d4dMasters/removeitem/:id/:fieldname/:fieldvalue', function(req, res) {
-        logger.debug("Received request for delete chk. %s : %s : %s", req.params.fieldvalue ,req.params.id ,req.params.fieldname);
-       // console.log('received request ' + req.params.id);
-       logger.debug('Verifying User permission set for delete.');
+        logger.debug("Received request for delete chk. %s : %s : %s", req.params.fieldvalue, req.params.id, req.params.fieldname);
+        // console.log('received request ' + req.params.id);
+        logger.debug('Verifying User permission set for delete.');
         var user = req.session.user;
         var category = configmgmtDao.getCategoryFromID(req.params.id);
         var permissionto = 'delete';
@@ -235,18 +235,18 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 return;
             }
 
-            masterUtil.getLoggedInUser(user.cn,function(err,anUser){
-            if(err){
-                res.send(500,"Failed to fetch User.");
-            }
-            logger.debug("LoggedIn User:>>>> ",JSON.stringify(anUser));
-            if(anUser){
-                //data == true (create permission)
-                if(!data){
-                    logger.debug("Inside check not authorized.");
-                    res.send(401,"You don't have permission to perform this operation.");
-                    return;
+            masterUtil.getLoggedInUser(user.cn, function(err, anUser) {
+                if (err) {
+                    res.send(500, "Failed to fetch User.");
                 }
+                logger.debug("LoggedIn User:>>>> ", JSON.stringify(anUser));
+                if (anUser) {
+                    //data == true (create permission)
+                    if (!data) {
+                        logger.debug("Inside check not authorized.");
+                        res.send(401, "You don't have permission to perform this operation.");
+                        return;
+                    }
 
                     var tocheck = [];
                     var fieldname = '';
@@ -327,26 +327,28 @@ module.exports.setRoutes = function(app, sessionVerification) {
         var chefRepoPath = settings.chefReposLocation;
         console.log(chefRepoPath);
         var file = chefRepoPath + 'catalyst_files/' + req.params.imagename;
-        logger.debug("File:>>>>>>>>>>>> %s",file);
-        fs.exists(file,function(exists){ 
-            if(exists){ 
+        logger.debug("File:>>>>>>>>>>>> %s", file);
+        fs.exists(file, function(exists) {
+            if (exists) {
                 fs.readFile(chefRepoPath + 'catalyst_files/' + req.params.imagename, function(err, data) {
                     if (err) {
                         logger.debug("File not founnd>>>>>>>>");
                         res.end(404);
+                        return;
                     }
                     res.writeHead(200, {
                         'Content-Type': 'image/gif'
                     });
                     res.end(data, 'binary');
                 });
+            } else {
+                res.send(404);
             }
         });
-            logger.debug("Exit get() for /d4dMasters/image/%s", req.params.imagename);
+        logger.debug("Exit get() for /d4dMasters/image/%s", req.params.imagename);
     });
-
     app.get('/d4dMasters/readmasterjson/:id', function(req, res) {
-        logger.debug("Enter get() for /d4dMasters/readmasterjson/%s",req.params.id);
+        logger.debug("Enter get() for /d4dMasters/readmasterjson/%s", req.params.id);
         d4dModel.findOne({
             id: req.params.id
         }, function(err, d4dMasterJson) {
@@ -370,14 +372,14 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 });
                 logger.debug("none found");
             }
-            logger.debug("Exit get() for /d4dMasters/readmasterjson/%s",req.params.id);
+            logger.debug("Exit get() for /d4dMasters/readmasterjson/%s", req.params.id);
 
         });
     });
 
     app.get('/d4dMasters/readmasterjsonrecord/:id/:rowid', function(req, res) {
-        logger.debug("Enter get() for /d4dMasters/readmasterjsonrecord/%s/%s",req.params.id,req.params.rowid);
-        configmgmtDao.getRowids(function(err,rowidlist){
+        logger.debug("Enter get() for /d4dMasters/readmasterjsonrecord/%s/%s", req.params.id, req.params.rowid);
+        configmgmtDao.getRowids(function(err, rowidlist) {
             configmgmtDao.getDBModelFromID(req.params.id, function(err, dbtype) {
                 if (err) {
                     logger.error("Hit and error:", err);
@@ -400,59 +402,56 @@ module.exports.setRoutes = function(app, sessionVerification) {
                             //res.setHeader('Content-Type', 'application/json');
 
                             //Change any _rowid references to the name
-                           
-                                //var __keys = Object.keys(d4dMasterJson[k]);
-                               
-                                //console.log('OBject:' + d4dMasterJson[k]);
-                                var jobj = JSON.parse(JSON.stringify(d4dMasterJson));
-                            
-                                for(var k1 in jobj){
-                                    //if any key has _rowid then update corresponding field
-                                    //configmgmtDao.convertRowIDToValue('4a6934a5-74d6-47fe-b930-36cde5167ad7',rowidlist);
-                                    if(k1.indexOf('_rowid') > 0){
 
-                                        var flds = k1.split('_');
-                                        var names = '';
-                                        if(jobj[k1].indexOf(',') > 0){
-                                            //Will handle this seperately : Vinod to Do
-                                            var itms = jobj[k1].split(',');
-                                            for(_itms in itms){
-                                                logger.debug("in items");
-                                                if(names == '')
-                                                {
-                                                    names = configmgmtDao.convertRowIDToValue(itms[_itms],rowidlist);
-                                                }
-                                                else{
-                                                    names += ',' + configmgmtDao.convertRowIDToValue(itms[_itms],rowidlist);
-                                                }
-                                                logger.debug("names: %s",names);
+                            //var __keys = Object.keys(d4dMasterJson[k]);
+
+                            //console.log('OBject:' + d4dMasterJson[k]);
+                            var jobj = JSON.parse(JSON.stringify(d4dMasterJson));
+
+                            for (var k1 in jobj) {
+                                //if any key has _rowid then update corresponding field
+                                //configmgmtDao.convertRowIDToValue('4a6934a5-74d6-47fe-b930-36cde5167ad7',rowidlist);
+                                if (k1.indexOf('_rowid') > 0) {
+
+                                    var flds = k1.split('_');
+                                    var names = '';
+                                    if (jobj[k1].indexOf(',') > 0) {
+                                        //Will handle this seperately : Vinod to Do
+                                        var itms = jobj[k1].split(',');
+                                        for (_itms in itms) {
+                                            logger.debug("in items");
+                                            if (names == '') {
+                                                names = configmgmtDao.convertRowIDToValue(itms[_itms], rowidlist);
+                                            } else {
+                                                names += ',' + configmgmtDao.convertRowIDToValue(itms[_itms], rowidlist);
                                             }
-                                            
-                                        }
-                                        else{
-                                            names = configmgmtDao.convertRowIDToValue(jobj[k1],rowidlist)
+                                            logger.debug("names: %s", names);
                                         }
 
-
-
-
-                                        
-                                        d4dMasterJson[flds[0]] = names; //configmgmtDao.convertRowIDToValue(jobj[k1],rowidlist);
-                                       
-                                       // console.log('jobj[flds[0]]',d4dMasterJson[flds[0]],flds[0],k1);
+                                    } else {
+                                        names = configmgmtDao.convertRowIDToValue(jobj[k1], rowidlist)
                                     }
-                                    //console.log("key***:",k1," val***:",jobj[k1]);
-                                   
+
+
+
+
+
+                                    d4dMasterJson[flds[0]] = names; //configmgmtDao.convertRowIDToValue(jobj[k1],rowidlist);
+
+                                    // console.log('jobj[flds[0]]',d4dMasterJson[flds[0]],flds[0],k1);
                                 }
-                                //console.log("sent response" + JSON.stringify(d4dMasterJson));
-                                //res.end(JSON.stringify(d4dMasterJson));
-                                
-                               // console.log(k,d4dMasterJson[k],v);
-                           
+                                //console.log("key***:",k1," val***:",jobj[k1]);
+
+                            }
+                            //console.log("sent response" + JSON.stringify(d4dMasterJson));
+                            //res.end(JSON.stringify(d4dMasterJson));
+
+                            // console.log(k,d4dMasterJson[k],v);
+
 
                             res.end(JSON.stringify(d4dMasterJson));
                             logger.debug("sent response %s", JSON.stringify(d4dMasterJson));
-                            logger.debug("Exit get() for /d4dMasters/readmasterjsonrecord/%s/%s",req.params.id,req.params.rowid);
+                            logger.debug("Exit get() for /d4dMasters/readmasterjsonrecord/%s/%s", req.params.id, req.params.rowid);
                             //res.end();
                         } else {
                             res.end(JSON.stringify([]));
@@ -468,7 +467,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
     });
 
     app.get('/d4dMasters/readmasterjsonnew__/:id', function(req, res) {
-        logger.debug("Enter get() for /d4dMasters/readmasterjsonnew__/%s",req.params.id);
+        logger.debug("Enter get() for /d4dMasters/readmasterjsonnew__/%s", req.params.id);
         d4dModelNew.d4dModelMastersOrg.find({
             id: req.params.id
         }, function(err, d4dMasterJson) {
@@ -486,7 +485,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 //res.setHeader('Content-Type', 'application/json');
                 res.end(JSON.stringify(d4dMasterJson));
                 logger.debug("sent response %s", JSON.stringify(d4dMasterJson));
-                logger.debug("Exit get() for /d4dMasters/readmasterjsonnew__/%s",req.params.id);
+                logger.debug("Exit get() for /d4dMasters/readmasterjsonnew__/%s", req.params.id);
                 //res.end();
             } else {
                 res.send(400, {
@@ -500,33 +499,33 @@ module.exports.setRoutes = function(app, sessionVerification) {
     });
 
     app.get('/d4dMasters/readmasterjsonnew/:id', function(req, res) {
-        logger.debug("Enter get() for /d4dMasters/readmasterjsonnew/%s",req.params.id);
-        logger.debug("Logged in user: ",req.session.user.cn);
-        logger.debug("incomming id:>>>>>>>>>>>>>>>>>>>> ",req.params.id);
+        logger.debug("Enter get() for /d4dMasters/readmasterjsonnew/%s", req.params.id);
+        logger.debug("Logged in user: ", req.session.user.cn);
+        logger.debug("incomming id:>>>>>>>>>>>>>>>>>>>> ", req.params.id);
         var loggedInUser = req.session.user.cn;
-        masterUtil.getLoggedInUser(loggedInUser,function(err,anUser){
-            if(err){
-                res.send(500,"Failed to fetch User.");
+        masterUtil.getLoggedInUser(loggedInUser, function(err, anUser) {
+            if (err) {
+                res.send(500, "Failed to fetch User.");
             }
-            if(!anUser){
-                res.send(500,"Invalid User.");
+            if (!anUser) {
+                res.send(500, "Invalid User.");
             }
-            if(anUser.orgname_rowid[0] === ""){
+            if (anUser.orgname_rowid[0] === "") {
                 d4dModelNew.find({
-                        id: req.params.id
-                    },function(err,data){
-                        if(err){
-                            logger.debug("Unable to fetch Settings.");
-                            res.send(500,"Unable to fetch Settings for Id: ",req.params.id);
-                        }
-                        logger.debug("Called /d4dMasters/readmasterjsonnew/ for superadmin.");
-                        if(req.params.id === "16"){
-                            res.send(JSON.stringify(data));
-                            return;
-                        }else{
+                    id: req.params.id
+                }, function(err, data) {
+                    if (err) {
+                        logger.debug("Unable to fetch Settings.");
+                        res.send(500, "Unable to fetch Settings for Id: ", req.params.id);
+                    }
+                    logger.debug("Called /d4dMasters/readmasterjsonnew/ for superadmin.");
+                    if (req.params.id === "16") {
+                        res.send(JSON.stringify(data));
+                        return;
+                    } else {
                         res.send(data);
-                        }
-                    });
+                    }
+                });
 
 
                 /*configmgmtDao.getRowids(function(err,rowidlist){
@@ -636,97 +635,90 @@ module.exports.setRoutes = function(app, sessionVerification) {
         });*/ //rowidlist
 
                 // For non-catalystadmin
-            }else {
-                    logger.debug("incomming id:>>>>>>>>>>>>>>>>>>>> ",req.params.id);
+            } else {
+                logger.debug("incomming id:>>>>>>>>>>>>>>>>>>>> ", req.params.id);
                 // For Org
-                masterUtil.getOrgs(loggedInUser,function(err,orgList){
-                    logger.debug("got org list ==>",JSON.stringify(orgList));
-                    if(err){
-                        res.send(500,'Not able to fetch Orgs.');
+                masterUtil.getOrgs(loggedInUser, function(err, orgList) {
+                    logger.debug("got org list ==>", JSON.stringify(orgList));
+                    if (err) {
+                        res.send(500, 'Not able to fetch Orgs.');
+                        return;
+                    } else if (req.params.id === '1') {
+                        logger.debug("Returned Org List:>>>> ", JSON.stringify(orgList));
+                        res.send(orgList);
                         return;
                     }
-            else if(req.params.id === '1'){
-                    logger.debug("Returned Org List:>>>> ",JSON.stringify(orgList));
-                    res.send(orgList);
-                    return;
-            }
-           // for(var i=0;i<orgList.length;i++){
-                //(function(count){
-                    else if(req.params.id === '2'){
-                            // For BusinessGroup
-                            masterUtil.getBusinessGroups(orgList,function(err,bgList){
-                                if(err){
-                                    res.send(500,'Not able to fetch BG.');
-                                }
-                                logger.debug("Returned BG List:>>>> ",JSON.stringify(bgList));
-                                res.send(bgList);
-                                return;
-                            });
-                        }
-                    else if(req.params.id === '3'){
-                            // For Environment
-                            masterUtil.getEnvironments(orgList,function(err,envList){
-                                if(err){
-                                    res.send(500,'Not able to fetch ENV.');
-                                }
-                                logger.debug("Returned ENV List:>>>>> ",JSON.stringify(envList));
-                                res.send(envList);
-                                return;
-                            });
-                        }
-                    else if(req.params.id === '4'){    
-                            // For Projects
-                            masterUtil.getProjects(orgList,function(err,projectList){
-                                if(err){
-                                    res.send(500,'Not able to fetch Project.');
-                                }
-                                logger.debug("Returned Project List:>>>>> ",JSON.stringify(projectList));
-                                res.send(projectList);
-                                return;
-                            })
-                        }
-                    else if(req.params.id === '10'){    
-                            // For ConfigManagement
-                            masterUtil.getCongifMgmts(orgList,function(err,configMgmtList){
-                                if(err){
-                                    res.send(500,'Not able to fetch ConfigManagement.');
-                                }
-                                logger.debug("Returned ConfigManagement List:>>>>> ",configMgmtList);
-                                res.send(configMgmtList);
-                                return;
-                            });
-                            
-                        }
-                    else if(req.params.id === '18'){    
-                            // For Docker
-                            logger.debug("Id for docker:>> ",req.params.id);
-                            masterUtil.getDockers(orgList,function(err,dockerList){
-                                if(err){
-                                    res.send(500,'Not able to fetch Dockers.');
-                                }
-                                logger.debug("Returned Dockers List:>>>>> ",JSON.stringify(dockerList));
-                                res.send(dockerList);
-                                return;
-                            });
-                            
-                        }
-                    else if(req.params.id === '17'){    
-                            // For Template
-                            logger.debug("Id for template:>> ",req.params.id);
-                            masterUtil.getTemplates(orgList,function(err,templateList){
-                                if(err){
-                                    res.send(500,'Not able to fetch Template.');
-                                }
-                                logger.debug("Returned Template List:>>>>> ",JSON.stringify(templateList));
-                                res.send(templateList);
-                                return;
-                            });
-                            
-                        }
-                        else if(req.params.id === '16'){    
-                            // For Template
-                            logger.debug("Id for templateType:>> ",req.params.id);
-                            /*masterUtil.getTemplateTypes(orgList,function(err,templateList){
+                    // for(var i=0;i<orgList.length;i++){
+                    //(function(count){
+                    else if (req.params.id === '2') {
+                        // For BusinessGroup
+                        masterUtil.getBusinessGroups(orgList, function(err, bgList) {
+                            if (err) {
+                                res.send(500, 'Not able to fetch BG.');
+                            }
+                            logger.debug("Returned BG List:>>>> ", JSON.stringify(bgList));
+                            res.send(bgList);
+                            return;
+                        });
+                    } else if (req.params.id === '3') {
+                        // For Environment
+                        masterUtil.getEnvironments(orgList, function(err, envList) {
+                            if (err) {
+                                res.send(500, 'Not able to fetch ENV.');
+                            }
+                            logger.debug("Returned ENV List:>>>>> ", JSON.stringify(envList));
+                            res.send(envList);
+                            return;
+                        });
+                    } else if (req.params.id === '4') {
+                        // For Projects
+                        masterUtil.getProjects(orgList, function(err, projectList) {
+                            if (err) {
+                                res.send(500, 'Not able to fetch Project.');
+                            }
+                            logger.debug("Returned Project List:>>>>> ", JSON.stringify(projectList));
+                            res.send(projectList);
+                            return;
+                        })
+                    } else if (req.params.id === '10') {
+                        // For ConfigManagement
+                        masterUtil.getCongifMgmts(orgList, function(err, configMgmtList) {
+                            if (err) {
+                                res.send(500, 'Not able to fetch ConfigManagement.');
+                            }
+                            logger.debug("Returned ConfigManagement List:>>>>> ", configMgmtList);
+                            res.send(configMgmtList);
+                            return;
+                        });
+
+                    } else if (req.params.id === '18') {
+                        // For Docker
+                        logger.debug("Id for docker:>> ", req.params.id);
+                        masterUtil.getDockers(orgList, function(err, dockerList) {
+                            if (err) {
+                                res.send(500, 'Not able to fetch Dockers.');
+                            }
+                            logger.debug("Returned Dockers List:>>>>> ", JSON.stringify(dockerList));
+                            res.send(dockerList);
+                            return;
+                        });
+
+                    } else if (req.params.id === '17') {
+                        // For Template
+                        logger.debug("Id for template:>> ", req.params.id);
+                        masterUtil.getTemplates(orgList, function(err, templateList) {
+                            if (err) {
+                                res.send(500, 'Not able to fetch Template.');
+                            }
+                            logger.debug("Returned Template List:>>>>> ", JSON.stringify(templateList));
+                            res.send(templateList);
+                            return;
+                        });
+
+                    } else if (req.params.id === '16') {
+                        // For Template
+                        logger.debug("Id for templateType:>> ", req.params.id);
+                        /*masterUtil.getTemplateTypes(orgList,function(err,templateList){
                                 if(err){
                                     res.send(500,'Not able to fetch TemplateType.');
                                 }
@@ -735,103 +727,98 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                 return;
                             });*/
 
-                            d4dModelNew.d4dModelMastersDesignTemplateTypes.find({
-                                id: req.params.id
-                            },function(err,data){
-                                if(err){
-                                    logger.debug("Unable to fetch TemplateType.");
-                                    res.send(500,"Unable to fetch TemplateType for Id: ",req.params.id);
-                                }
-                                logger.debug("Called /d4dMasters/readmasterjsonnew/ for non superadmin.");
-                                res.send(JSON.stringify(data));
-                            });
-                            
-                        }
-                    else if(req.params.id === '19'){    
-                            // For ServiceCommand
-                            masterUtil.getServiceCommands(orgList,function(err,serviceCommandList){
-                                if(err){
-                                    res.send(500,'Not able to fetch ServiceCommand.');
-                                }
-                                logger.debug("Returned ServiceCommand List:>>>>> ",JSON.stringify(serviceCommandList));
-                                res.send(serviceCommandList);
-                                return;
-                            });
-                            
-                        }
-                    else if(req.params.id === '20'){    
-                            // For Jenkins
-                            masterUtil.getJenkins(orgList,function(err,jenkinList){
-                                if(err){
-                                    res.send(500,'Not able to fetch Jenkins.');
-                                }
-                                logger.debug("Returned Jenkins List:>>>>> ",JSON.stringify(jenkinList));
-                                res.send(jenkinList);
-                                return;
-                            });
-                            
-                        }
-                     else if(req.params.id === '6'){    
-                            // For User Role
-                            masterUtil.getUserRoles(function(err,userRoleList){
-                                if(err){
-                                    res.send(500,'Not able to fetch UserRole.');
-                                }
-                                logger.debug("Returned UserRole List:>>>>> ",JSON.stringify(userRoleList));
-                                res.send(userRoleList);
-                                return;
-                            });
-                            
-                        }
-                     else if(req.params.id === '7'){    
-                            // For User
-                            masterUtil.getUsersForOrg(orgList,function(err,userList){
-                                if(err){
-                                    res.send(500,'Not able to fetch User.');
-                                }
-                                logger.debug("Returned User List:>>>>> ",JSON.stringify(userList));
-                                res.send(userList);
-                                return;
-                            });
-                            
-                        }
-                     else if(req.params.id === '21'){    
-                            // For Team
-                            masterUtil.getTeams(orgList,function(err,teamList){
-                                if(err){
-                                    res.send(500,'Not able to fetch Team.');
-                                }
-                                logger.debug("Returned Team List:>>>>> ",JSON.stringify(teamList));
-                                res.send(teamList);
-                                return;
-                            }); 
-                        } else {
-                            logger.debug('nothin here');
-                            res.send([]);
-                        }
+                        d4dModelNew.d4dModelMastersDesignTemplateTypes.find({
+                            id: req.params.id
+                        }, function(err, data) {
+                            if (err) {
+                                logger.debug("Unable to fetch TemplateType.");
+                                res.send(500, "Unable to fetch TemplateType for Id: ", req.params.id);
+                            }
+                            logger.debug("Called /d4dMasters/readmasterjsonnew/ for non superadmin.");
+                            res.send(JSON.stringify(data));
+                        });
 
-                        //res.send(200,[]);
+                    } else if (req.params.id === '19') {
+                        // For ServiceCommand
+                        masterUtil.getServiceCommands(orgList, function(err, serviceCommandList) {
+                            if (err) {
+                                res.send(500, 'Not able to fetch ServiceCommand.');
+                            }
+                            logger.debug("Returned ServiceCommand List:>>>>> ", JSON.stringify(serviceCommandList));
+                            res.send(serviceCommandList);
+                            return;
+                        });
 
-                // })(i);
-              // }
+                    } else if (req.params.id === '20') {
+                        // For Jenkins
+                        masterUtil.getJenkins(orgList, function(err, jenkinList) {
+                            if (err) {
+                                res.send(500, 'Not able to fetch Jenkins.');
+                            }
+                            logger.debug("Returned Jenkins List:>>>>> ", JSON.stringify(jenkinList));
+                            res.send(jenkinList);
+                            return;
+                        });
+
+                    } else if (req.params.id === '6') {
+                        // For User Role
+                        masterUtil.getUserRoles(function(err, userRoleList) {
+                            if (err) {
+                                res.send(500, 'Not able to fetch UserRole.');
+                            }
+                            logger.debug("Returned UserRole List:>>>>> ", JSON.stringify(userRoleList));
+                            res.send(userRoleList);
+                            return;
+                        });
+
+                    } else if (req.params.id === '7') {
+                        // For User
+                        masterUtil.getUsersForOrg(orgList, function(err, userList) {
+                            if (err) {
+                                res.send(500, 'Not able to fetch User.');
+                            }
+                            logger.debug("Returned User List:>>>>> ", JSON.stringify(userList));
+                            res.send(userList);
+                            return;
+                        });
+
+                    } else if (req.params.id === '21') {
+                        // For Team
+                        masterUtil.getTeams(orgList, function(err, teamList) {
+                            if (err) {
+                                res.send(500, 'Not able to fetch Team.');
+                            }
+                            logger.debug("Returned Team List:>>>>> ", JSON.stringify(teamList));
+                            res.send(teamList);
+                            return;
+                        });
+                    } else {
+                        logger.debug('nothin here');
+                        res.send([]);
+                    }
+
+                    //res.send(200,[]);
+
+                    // })(i);
+                    // }
                 });
             }
         });
-        
+
     });
 
-     app.get('/d4dMasters/readmasterjsonneworglist/:id', function(req, res) {
+    app.get('/d4dMasters/readmasterjsonneworglist/:id', function(req, res) {
         logger.debug("Enter get() for /d4dMasters/readmasterjsonneworglist/%s", req.params.id);
         var loggedInUser = req.session.user.cn;
-        masterUtil.getLoggedInUser(loggedInUser,function(err,anUser){
-            if(err){
-                res.send(500,"Failed to fetch User.");
+        masterUtil.getLoggedInUser(loggedInUser, function(err, anUser) {
+            if (err) {
+                res.send(500, "Failed to fetch User.");
             }
-            if(!anUser){
-                res.send(500,"Invalid User.");
+            if (!anUser) {
+                res.send(500, "Invalid User.");
             }
-            if(anUser.orgname_rowid[0] === ""){
-                 configmgmtDao.getRowids(function(err,rowidlist){
+            if (anUser.orgname_rowid[0] === "") {
+                configmgmtDao.getRowids(function(err, rowidlist) {
 
                     logger.debug("Rowid List----&&&&----> ", rowidlist);
                     configmgmtDao.getDBModelFromID(req.params.id, function(err, dbtype) {
@@ -840,107 +827,102 @@ module.exports.setRoutes = function(app, sessionVerification) {
                         }
                         if (dbtype) {
                             logger.debug("Master Type: %s", dbtype);
-                            
+
                             var query = {};
-                            
+
                             query['id'] = req.params.id;
-                            if(req.params.id == '2' || req.params.id == '3' || req.params.id == '4' || req.params.id == '10'){
+                            if (req.params.id == '2' || req.params.id == '3' || req.params.id == '4' || req.params.id == '10') {
                                 query['active'] = true;
                             }
 
 
-                            eval('d4dModelNew.' + dbtype).find(
-                                {id:req.params.id
-                                }
-                            , function(err, d4dMasterJson) {
+                            eval('d4dModelNew.' + dbtype).find({
+                                id: req.params.id
+                            }, function(err, d4dMasterJson) {
                                 if (err) {
                                     logger.debug("Hit and error:", err);
                                 }
                                 //Need to iterate thru the json and find if there is a field with _rowid then convert it to prefix before sending.
-                                    var _keys = Object.keys(d4dMasterJson);
-                                    logger.debug("Master Length:" + _keys.length);
-                                    if(_keys.length <= 0){
-                                        logger.debug("sent response %s", JSON.stringify(d4dMasterJson));
-                                        res.end(JSON.stringify(d4dMasterJson));
-                                    }
-                                    var counter = 0;
-                                    var todelete = [];
-                                    //_keys.forEach(function(k,v){
-                                    for(var k=0,v=0;k<_keys.length;k++,v++) {
-                                        //var __keys = Object.keys(d4dMasterJson[k]);
-                                       
-                                        //console.log('OBject:' + d4dMasterJson[k]);
-                                        var jobj = JSON.parse(JSON.stringify(d4dMasterJson[k]));
-                                    
-                                        for(var k1 in jobj){
-                                            //if any key has _rowid then update     corresponding field
-                                            //configmgmtDao.convertRowIDToValue('4a6934a5-74d6-47fe-b930-36cde5167ad7',rowidlist);
-                                            if(k1.indexOf('_rowid') > 0){
-                                                //check if its an array of rowid's
-                                                var flds = k1.split('_');
-                                                var names = '';
-                                                if(jobj[k1].indexOf(',') > 0){
-                                                    //Will handle this seperately : Vinod to Do
-                                                    var itms = jobj[k1].split(',');
-                                                    for(_itms in itms){
-                                                        var _itmsName = configmgmtDao.convertRowIDToValue(itms[_itms],rowidlist);
-                                                        if(_itmsName != '')
-                                                        {
-                                                                if(names == '')
-                                                                {
-                                                                    names = _itmsName; //configmgmtDao.convertRowIDToValue(itms[_itms],rowidlist);
-                                                                }
-                                                                else{
-                                                                    names += ',' + _itmsName; //configmgmtDao.convertRowIDToValue(itms[_itms],rowidlist);
-                                                                }
-                                                                logger.debug("names: %s",names);
+                                var _keys = Object.keys(d4dMasterJson);
+                                logger.debug("Master Length:" + _keys.length);
+                                if (_keys.length <= 0) {
+                                    logger.debug("sent response %s", JSON.stringify(d4dMasterJson));
+                                    res.end(JSON.stringify(d4dMasterJson));
+                                }
+                                var counter = 0;
+                                var todelete = [];
+                                //_keys.forEach(function(k,v){
+                                for (var k = 0, v = 0; k < _keys.length; k++, v++) {
+                                    //var __keys = Object.keys(d4dMasterJson[k]);
+
+                                    //console.log('OBject:' + d4dMasterJson[k]);
+                                    var jobj = JSON.parse(JSON.stringify(d4dMasterJson[k]));
+
+                                    for (var k1 in jobj) {
+                                        //if any key has _rowid then update     corresponding field
+                                        //configmgmtDao.convertRowIDToValue('4a6934a5-74d6-47fe-b930-36cde5167ad7',rowidlist);
+                                        if (k1.indexOf('_rowid') > 0) {
+                                            //check if its an array of rowid's
+                                            var flds = k1.split('_');
+                                            var names = '';
+                                            if (jobj[k1].indexOf(',') > 0) {
+                                                //Will handle this seperately : Vinod to Do
+                                                var itms = jobj[k1].split(',');
+                                                for (_itms in itms) {
+                                                    var _itmsName = configmgmtDao.convertRowIDToValue(itms[_itms], rowidlist);
+                                                    if (_itmsName != '') {
+                                                        if (names == '') {
+                                                            names = _itmsName; //configmgmtDao.convertRowIDToValue(itms[_itms],rowidlist);
+                                                        } else {
+                                                            names += ',' + _itmsName; //configmgmtDao.convertRowIDToValue(itms[_itms],rowidlist);
                                                         }
+                                                        logger.debug("names: %s", names);
                                                     }
-                                                    
-                                                }
-                                                else{
-                                                    names = configmgmtDao.convertRowIDToValue(jobj[k1],rowidlist);
                                                 }
 
-                                                d4dMasterJson[k][flds[0]] = names;
-
-                                                if(names == '' && k1.indexOf('orgname_rowid') >= 0)
-                                                    todelete.push(k);
-                                                //console.log('jobj[flds[0]]',jobj[flds[0]]);
-                                                logger.debug("jobj[flds[0]] %s %s %s %s",d4dMasterJson[k][flds[0]],flds[0],k1,k);
+                                            } else {
+                                                names = configmgmtDao.convertRowIDToValue(jobj[k1], rowidlist);
                                             }
-                                            
-                                          //  console.log("key**:",k1," val**:",jobj[k1]);
-                                           
+
+                                            d4dMasterJson[k][flds[0]] = names;
+
+                                            if (names == '' && k1.indexOf('orgname_rowid') >= 0)
+                                                todelete.push(k);
+                                            //console.log('jobj[flds[0]]',jobj[flds[0]]);
+                                            logger.debug("jobj[flds[0]] %s %s %s %s", d4dMasterJson[k][flds[0]], flds[0], k1, k);
                                         }
-                                        logger.debug("Orgname check: %s", d4dMasterJson[k]['orgname']);
-                                        
-                                        
-                                        counter++;
-                                    };//);
-                                            logger.debug("To Delete Array: %s", todelete.toString());
-                                            var collection = [];
-                                            
-                                            for(var i = 0; i < d4dMasterJson.length;i++){
-                                                if(todelete.indexOf(i) === -1) {
-                                                    collection.push(d4dMasterJson[i]);
-                                                }
-                                                
-                                            }
-                                            logger.debug("sent response 686 %s", JSON.stringify(collection));
-                                            res.end(JSON.stringify(collection));
-                                            logger.debug("Exit get() for /d4dMasters/readmasterjsonneworglist/%s", req.params.id);
-                                 });
-                             }
-                        });
-                     }); //rowidlist
-        }else{
-            // For non-catalystadmin
 
-            masterUtil.getOrgs(loggedInUser,function(err,orgList){
-                if(orgList){
-                    logger.debug("Returned Org List: >>>>>> ",JSON.stringify(orgList));
-                    res.send(orgList);
+                                        //  console.log("key**:",k1," val**:",jobj[k1]);
+
+                                    }
+                                    logger.debug("Orgname check: %s", d4dMasterJson[k]['orgname']);
+
+
+                                    counter++;
+                                }; //);
+                                logger.debug("To Delete Array: %s", todelete.toString());
+                                var collection = [];
+
+                                for (var i = 0; i < d4dMasterJson.length; i++) {
+                                    if (todelete.indexOf(i) === -1) {
+                                        collection.push(d4dMasterJson[i]);
+                                    }
+
+                                }
+                                logger.debug("sent response 686 %s", JSON.stringify(collection));
+                                res.end(JSON.stringify(collection));
+                                logger.debug("Exit get() for /d4dMasters/readmasterjsonneworglist/%s", req.params.id);
+                            });
+                        }
+                    });
+                }); //rowidlist
+            } else {
+                // For non-catalystadmin
+
+                masterUtil.getOrgs(loggedInUser, function(err, orgList) {
+                    if (orgList) {
+                        logger.debug("Returned Org List: >>>>>> ", JSON.stringify(orgList));
+                        res.send(orgList);
                     }
                 });
 
@@ -950,7 +932,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
     //for kana to be reverted to the original function 
     app.get('/d4dMasters/readmasterjsonnewk_/:id', function(req, res) {
         logger.debug("Enter get() for /d4dMasters/readmasterjsonnewk_/%s", req.params.id);
-        configmgmtDao.getRowids(function(err,rowidlist){
+        configmgmtDao.getRowids(function(err, rowidlist) {
 
             logger.debug("Rowid List-->", rowidlist);
             d4dModelNew.d4dModelMastersOrg.find({
@@ -959,7 +941,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 var orgnames = docorgs.map(function(docorgs1) {
                     return docorgs1.rowid;
                 });
-                if(req.params.id == '2'  || req.params.id == '3'  || req.params.id == '10' ){
+                if (req.params.id == '2' || req.params.id == '3' || req.params.id == '10') {
                     configmgmtDao.getDBModelFromID(req.params.id, function(err, dbtype) {
                         if (err) {
                             logger.error("Hit and error:", err);
@@ -977,66 +959,65 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                 }
                                 //Need to iterate thru the json and find if there is a field with _rowid then convert it to prefix before sending.
                                 var _keys = Object.keys(d4dMasterJson);
-                                _keys.forEach(function(k,v){
+                                _keys.forEach(function(k, v) {
                                     //var __keys = Object.keys(d4dMasterJson[k]);
-                                   
+
                                     //console.log('OBject:' + d4dMasterJson[k]);
                                     var jobj = JSON.parse(JSON.stringify(d4dMasterJson[k]));
-                                    for(var k1 in jobj){
+                                    for (var k1 in jobj) {
                                         //if any key has _rowid then update corresponding field
                                         //configmgmtDao.convertRowIDToValue('4a6934a5-74d6-47fe-b930-36cde5167ad7',rowidlist);
-                                        if(k1.indexOf('_rowid')){
+                                        if (k1.indexOf('_rowid')) {
                                             var flds = k1.split('_');
-                                            jobj[flds[0]] = configmgmtDao.convertRowIDToValue(jobj[k1],rowidlist);
+                                            jobj[flds[0]] = configmgmtDao.convertRowIDToValue(jobj[k1], rowidlist);
                                         }
-                                        logger.debug("key: %s val: %s",k1,jobj[k1]);
+                                        logger.debug("key: %s val: %s", k1, jobj[k1]);
 
                                     }
                                 });
                                 logger.debug("sent response %s", JSON.stringify(d4dMasterJson));
                                 res.end(JSON.stringify(d4dMasterJson));
-                                
+
                                 logger.debug("Exit get() for /d4dMasters/readmasterjsonnewk_/%s", req.params.id);
                             });
                         }
                     });
                 } //end if (1,2,3,4)
-                else if(req.params.id == '1' || req.params.id == '4'){
-                        d4dModelNew.d4dModelMastersProductGroup.find({
-                            id: 2,
-                            rowid:{
-                                $in: orgnames
-                            }
-                        }, function(err, docbgs) {
-                            var bgnames = docbgs.map(function(docbgs1) {
-                                return docbgs1.productgroupname;
-                            });
-                            configmgmtDao.getDBModelFromID(req.params.id, function(err, dbtype) {
-                                if (err) {
-                                    logger.error("Hit and error:", err);
-                                }
-                                if (dbtype) {
-                                    logger.debug("Master Type: %s", dbtype);
-                                    eval('d4dModelNew.' + dbtype).find({
-                                        id: req.params.id,
-                                        productgroupname: {
-                                            $in: bgnames
-                                        }
-                                    }, function(err, d4dMasterJson) {
-                                        if (err) {
-                                            logger.error("Hit and error:", err);
-                                        }
-                                        res.end(JSON.stringify(d4dMasterJson));
-                                        logger.debug("sent response %s", JSON.stringify(d4dMasterJson));
-                                        logger.debug("Exit get() for /d4dMasters/readmasterjsonnewk_/%s", req.params.id);
-                                    });
-                                }
-                            });
-
-
+                else if (req.params.id == '1' || req.params.id == '4') {
+                    d4dModelNew.d4dModelMastersProductGroup.find({
+                        id: 2,
+                        rowid: {
+                            $in: orgnames
+                        }
+                    }, function(err, docbgs) {
+                        var bgnames = docbgs.map(function(docbgs1) {
+                            return docbgs1.productgroupname;
                         });
-                }
-                else{
+                        configmgmtDao.getDBModelFromID(req.params.id, function(err, dbtype) {
+                            if (err) {
+                                logger.error("Hit and error:", err);
+                            }
+                            if (dbtype) {
+                                logger.debug("Master Type: %s", dbtype);
+                                eval('d4dModelNew.' + dbtype).find({
+                                    id: req.params.id,
+                                    productgroupname: {
+                                        $in: bgnames
+                                    }
+                                }, function(err, d4dMasterJson) {
+                                    if (err) {
+                                        logger.error("Hit and error:", err);
+                                    }
+                                    res.end(JSON.stringify(d4dMasterJson));
+                                    logger.debug("sent response %s", JSON.stringify(d4dMasterJson));
+                                    logger.debug("Exit get() for /d4dMasters/readmasterjsonnewk_/%s", req.params.id);
+                                });
+                            }
+                        });
+
+
+                    });
+                } else {
                     configmgmtDao.getDBModelFromID(req.params.id, function(err, dbtype) {
                         if (err) {
                             logger.error("Hit and error:", err);
@@ -1057,196 +1038,214 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     });
                 } //end else
             });
-        });//get rowid list
+        }); //get rowid list
     });
 
 
-    app.get('/d4dMasters/readmasterjsoncounts',function(req,res){
+    app.get('/d4dMasters/readmasterjsoncounts', function(req, res) {
         logger.debug("Enter get() for  /d4dMasters/readmasterjsoncounts");
-        logger.debug("Logged in User: ",req.session.user.cn);
-       
+        logger.debug("Logged in User: ", req.session.user.cn);
+
         var ret = [];
         var masts = ['2', '3', '4'];
         var counts = [];
-        masterUtil.getLoggedInUser(req.session.user.cn,function(err,anUser){
-            if(err){
-                res.send(500,"Failed to fetch User.");
+        masterUtil.getLoggedInUser(req.session.user.cn, function(err, anUser) {
+            if (err) {
+                res.send(500, "Failed to fetch User.");
             }
-            if(!anUser){
-                res.send(500,"Invalid User.");
+            if (!anUser) {
+                res.send(500, "Invalid User.");
             }
-        if(anUser.orgname_rowid[0] === ""){
-                for(var i =1;i<5;i++)
+            if (anUser.orgname_rowid[0] === "") {
+                for (var i = 1; i < 5; i++)
                     counts[i] = 0;
-                  d4dModelNew.d4dModelMastersOrg.find({
+                d4dModelNew.d4dModelMastersOrg.find({
                     id: 1,
-                    active:true
+                    active: true
                 }, function(err, docorgs) {
                     var orgnames = docorgs.map(function(docorgs1) {
                         return docorgs1.rowid;
                     });
-                d4dModelNew.d4dModelMastersOrg.find({
-                    id: {
-                        $in: masts,
-                    },
-                    orgname_rowid:{$in:orgnames}
-                }, function(err, d4dMasterJson) {
-                    if (err) {
-                        logger.error("Hit and error:", err);
-                    }
-                    if (d4dMasterJson) {
-                        // res.send(200, d4dMasterJson);
-                        // res.writeHead(200, { 'Content-Type': 'text/plain' });
-                        res.writeHead(200, {
-                            'Content-Type': 'application/json'
-                        });
-                        
-                        logger.debug("sent response %s", JSON.stringify(d4dMasterJson));
-                        logger.debug(d4dMasterJson.length);
-                        var i = 0;
-                        for(var i=0;i < d4dMasterJson.length;i++){
-                            //Need to do a org check.
+                    d4dModelNew.d4dModelMastersOrg.find({
+                        id: {
+                            $in: masts,
+                        },
+                        orgname_rowid: {
+                            $in: orgnames
+                        }
+                    }, function(err, d4dMasterJson) {
+                        if (err) {
+                            logger.error("Hit and error:", err);
+                        }
+                        if (d4dMasterJson) {
+                            // res.send(200, d4dMasterJson);
+                            // res.writeHead(200, { 'Content-Type': 'text/plain' });
+                            res.writeHead(200, {
+                                'Content-Type': 'application/json'
+                            });
 
-                            logger.debug(d4dMasterJson[i]["id"]);
-                            counts[d4dMasterJson[i]["id"]]++;
+                            logger.debug("sent response %s", JSON.stringify(d4dMasterJson));
+                            logger.debug(d4dMasterJson.length);
+                            var i = 0;
+                            for (var i = 0; i < d4dMasterJson.length; i++) {
+                                //Need to do a org check.
+
+                                logger.debug(d4dMasterJson[i]["id"]);
+                                counts[d4dMasterJson[i]["id"]]++;
+                            }
+                            for (var i = 2; i < 5; i++) {
+                                ret.push('{"' + i + '":"' + counts[i] + '"}');
+                            }
+                            ret.push('{"1":"' + orgnames.length + '"}');
+                            logger.debug("Configured json:>>>>> ", '[' + ret.join(',') + ']');
+                            res.end('[' + ret.join(',') + ']');
+                            //res.end();
+                            logger.debug("Exit get() for  /d4dMasters/readmasterjsoncounts");
+                            return;
+                        } else {
+                            //res.send(400, {
+                            ret.push(i + ':' + '');
+                            // "error": err
+                            // });
+                            logger.debug("none found");
                         }
-                        for(var i =2;i<5;i++){
-                            ret.push('{"' + i + '":"' + counts[i] + '"}');
+                    });
+                });
+            } else {
+                // For Settings Button
+                var settingsList = [];
+                var loggedInUser = req.session.user.cn;
+                var callCount = 0;
+                masterUtil.getOrgs(loggedInUser, function(err, orgs) {
+                    logger.debug("got org list ==>", JSON.stringify(orgs));
+                    if (err) {
+                        res.send(500, "Failed to fetch Org.");
+                    }
+                    if (orgs) {
+                        orgCount = orgs.length;
+                        logger.debug("orgCount: ", orgCount);
+                        if (settingsList.length === 0) {
+                            settingsList.push({
+                                "1": orgCount
+                            });
+                            logger.debug("Org if....");
                         }
-                        ret.push('{"1":"' + orgnames.length + '"}');
-                        logger.debug("Configured json:>>>>> ", '[' + ret.join(',') + ']');
-                        res.end('[' + ret.join(',') + ']');
-                        //res.end();
-                        logger.debug("Exit get() for  /d4dMasters/readmasterjsoncounts");
-                        return;
+                        for (var s = 0; s < settingsList.length; s++) {
+                            logger.debug("Entered orgs.....");
+                            (function(s1) {
+                                if (settingsList[s1].hasOwnProperty("1")) {
+                                    delete settingsList[s1];
+                                    settingsList.push({
+                                        "1": orgCount
+                                    });
+                                    settingsList = settingsList.filter(Object);
+                                    return;
+                                }
+                            })(s);
+                        }
+                        //for(var x=0;x<orgs.length;x++){
+                        //(function(countOrg){
+                        logger.debug("Organization: ");
+                        masterUtil.getBusinessGroups(orgs, function(err, bgs) {
+                            if (err) {
+                                res.send(500, "Failed to fetch BGroups");
+                            }
+                            if (bgs) {
+                                bgCount = bgs.length;
+                                logger.debug("bgCount: ", bgCount);
+                                if (settingsList.length === 1) {
+                                    settingsList.push({
+                                        "2": bgCount
+                                    });
+                                    logger.debug("BG if....");
+                                }
+                                for (var s = 0; s < settingsList.length; s++) {
+                                    (function(s1) {
+                                        if (settingsList[s1].hasOwnProperty("2")) {
+                                            delete settingsList[s1];
+                                            settingsList.push({
+                                                "2": bgCount
+                                            });
+                                            settingsList = settingsList.filter(Object);
+                                            return;
+                                        }
+                                    })(s);
+                                }
+                            }
+                            // });
+                            masterUtil.getEnvironments(orgs, function(err, envs) {
+                                if (err) {
+                                    res.send(500, "Failed to fetch ENVs.");
+                                }
+                                if (envs) {
+                                    envCount = envs.length;
+                                    logger.debug("envCount: ", envCount);
+                                    if (settingsList.length === 2) {
+                                        settingsList.push({
+                                            "3": envCount
+                                        });
+                                        logger.debug("Env if....");
+                                    }
+                                    for (var s = 0; s < settingsList.length; s++) {
+                                        (function(s1) {
+                                            if (settingsList[s1].hasOwnProperty("3")) {
+                                                delete settingsList[s1];
+                                                settingsList.push({
+                                                    "3": envCount
+                                                });
+                                                settingsList = settingsList.filter(Object);
+                                                return;
+                                            }
+                                        })(s);
+                                    }
+                                }
+                                // });
+                                masterUtil.getProjects(orgs, function(err, projects) {
+                                    if (err) {
+                                        res.send(500, "Failed to fetch Projects.");
+                                    }
+                                    if (projects) {
+                                        projectCount = projects.length;
+                                        logger.debug("projectCount: ", projectCount);
+                                        if (settingsList.length === 3) {
+                                            settingsList.push({
+                                                "4": projectCount
+                                            });
+                                            logger.debug("Proj if....");
+                                        }
+                                        for (var s = 0; s < settingsList.length; s++) {
+                                            (function(s1) {
+                                                if (settingsList[s1].hasOwnProperty("4")) {
+                                                    logger.debug("Has project.");
+                                                    delete settingsList[s1];
+                                                    settingsList.push({
+                                                        "4": projectCount
+                                                    });
+                                                    settingsList = settingsList.filter(Object);
+                                                    return;
+                                                }
+                                            })(s);
+                                        }
+                                    }
+                                    /*callCount+=1;
+                                        if(callCount === 3){*/
+                                    logger.debug("All settings: ", JSON.stringify(settingsList));
+                                    res.send(settingsList);
+                                    // }
+                                });
+                            });
+                        });
+
+                        // })(x);
+                        // }
                     } else {
-                        //res.send(400, {
-                        ret.push(i + ':' + '');
-                        // "error": err
-                        // });
-                        logger.debug("none found");
+                        res.send(200, settingsList);
                     }
                 });
-            });
-        }else{
-            // For Settings Button
-            var settingsList =[];
-            var loggedInUser = req.session.user.cn;
-            var callCount = 0;
-            masterUtil.getOrgs(loggedInUser,function(err,orgs){
-                logger.debug("got org list ==>",JSON.stringify(orgs));
-                if(err){
-                    res.send(500,"Failed to fetch Org.");
-                }
-                if(orgs){
-                    orgCount = orgs.length;
-                    logger.debug("orgCount: ",orgCount);
-                    if(settingsList.length === 0){
-                        settingsList.push({"1":orgCount});
-                        logger.debug("Org if....");
-                        }
-                    for(var s=0;s<settingsList.length;s++){
-                        logger.debug("Entered orgs.....");
-                        (function(s1){
-                        if(settingsList[s1].hasOwnProperty("1")){
-                            delete settingsList[s1];
-                            settingsList.push({"1":orgCount});
-                            settingsList = settingsList.filter(Object);
-                            return;
-                                    }
-                                })(s);
-                            }
-                    //for(var x=0;x<orgs.length;x++){
-                        //(function(countOrg){
-                            logger.debug("Organization: ");
-                            masterUtil.getBusinessGroups(orgs,function(err,bgs){
-                                if(err){
-                                    res.send(500,"Failed to fetch BGroups");
-                                }
-                                if(bgs){
-                                    bgCount = bgs.length;
-                                    logger.debug("bgCount: ",bgCount);
-                                    if(settingsList.length === 1){
-                                         settingsList.push({"2":bgCount});
-                                         logger.debug("BG if....");
-                                         }
-                                    for(var s=0;s<settingsList.length;s++){
-                                        (function(s1){
-                                            if(settingsList[s1].hasOwnProperty("2")){
-                                                delete settingsList[s1];
-                                                settingsList.push({"2":bgCount});
-                                                settingsList = settingsList.filter(Object);
-                                                return;
-                                            }
-                                        })(s);
-                                    }
-                                 }
-                           // });
-                            masterUtil.getEnvironments(orgs,function(err,envs){
-                            if(err){
-                                res.send(500,"Failed to fetch ENVs.");
-                            }
-                            if(envs){
-                                envCount = envs.length;
-                                logger.debug("envCount: ",envCount);
-                                if(settingsList.length === 2){
-                                         settingsList.push({"3":envCount});
-                                         logger.debug("Env if....");
-                                         }
-                                for(var s=0;s<settingsList.length;s++){
-                                        (function(s1){
-                                            if(settingsList[s1].hasOwnProperty("3")){
-                                                delete settingsList[s1];
-                                                settingsList.push({"3":envCount});
-                                                settingsList = settingsList.filter(Object);
-                                                return;
-                                            }
-                                        })(s);
-                                    }
-                                }
-                           // });
-                            masterUtil.getProjects(orgs,function(err,projects){
-                                if(err){
-                                    res.send(500,"Failed to fetch Projects.");
-                                }
-                                if(projects){
-                                    projectCount = projects.length;
-                                    logger.debug("projectCount: ",projectCount);
-                                    if(settingsList.length === 3){
-                                         settingsList.push({"4":projectCount});
-                                         logger.debug("Proj if....");
-                                         }
-                                    for(var s=0;s<settingsList.length;s++){
-                                        (function(s1){
-                                            if(settingsList[s1].hasOwnProperty("4")){
-                                                logger.debug("Has project.");
-                                                delete settingsList[s1];
-                                                settingsList.push({"4":projectCount});
-                                                settingsList = settingsList.filter(Object);
-                                                return;
-                                            }
-                                            })(s);
-                                            }
-                                        }
-                                        /*callCount+=1;
-                                        if(callCount === 3){*/
-                                        logger.debug("All settings: ",JSON.stringify(settingsList));
-                                        res.send(settingsList);
-                                       // }
-                                    });
-                                 });
-                             });
-                            
-                       // })(x);
-                   // }
-                } else {
-                    res.send(200,settingsList);
-                }
-            });
-        }//else
-    });
+            } //else
+        });
 
-});
+    });
 
     app.get('/d4dMasters/getdashboardvalues/:items', function(req, res) {
         logger.debug("Enter get() for  /d4dMasters/getdashboardvalues/%s", req.params.items);
@@ -1275,7 +1274,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     for (var j = 0; j < itm.field.length; j++) {
                         if (itm.field[j]["name"] == 'rowid') {
                             if (itm.field[j]["values"].value == req.params.rowid) {
-                                logger.debug("found: %s  -- %s", i,itm.field[j]["values"].value);
+                                logger.debug("found: %s  -- %s", i, itm.field[j]["values"].value);
                                 hasOrg = true;
                                 //Re-construct the json with the item found
                                 var configmgmt = '';
@@ -1301,7 +1300,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
 
     app.get('/d4dMasters/getlist/:masterid/:fieldname', function(req, res) {
-        logger.debug("Enter get() for  /d4dMasters/getlist/%s/%s",req.params.masterid,req.params.fieldname);
+        logger.debug("Enter get() for  /d4dMasters/getlist/%s/%s", req.params.masterid, req.params.fieldname);
         d4dModel.findOne({
             id: req.params.masterid
         }, function(err, d4dMasterJson) {
@@ -1330,14 +1329,14 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 });
                 configmgmt = "{" + jsonlist + "}";
                 logger.debug(JSON.stringify(jsonlist));
-                logger.debug("Exit get() for  /d4dMasters/getlist/%s/%s",req.params.masterid,req.params.fieldname);
+                logger.debug("Exit get() for  /d4dMasters/getlist/%s/%s", req.params.masterid, req.params.fieldname);
                 //res.end(jsonlist);
             }
         });
     });
 
     app.get('/d4dMasters/getlist/:masterid/:fieldname/:fieldname1', function(req, res) {
-        logger.debug("Enter get() for  /d4dMasters/getlist/%s/%s/%s",req.params.masterid,req.params.fieldname,req.params.fieldname);
+        logger.debug("Enter get() for  /d4dMasters/getlist/%s/%s/%s", req.params.masterid, req.params.fieldname, req.params.fieldname);
         d4dModel.findOne({
             id: req.params.masterid
         }, function(err, d4dMasterJson) {
@@ -1373,7 +1372,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 configmgmt = "[" + jsonlist + "]";
                 logger.debug(JSON.stringify(jsonlist));
                 res.end(configmgmt);
-                logger.debug("Exit get() for  /d4dMasters/getlist/%s/%s/%s",req.params.masterid,req.params.fieldname,req.params.fieldname);
+                logger.debug("Exit get() for  /d4dMasters/getlist/%s/%s/%s", req.params.masterid, req.params.fieldname, req.params.fieldname);
             } else {
                 res.send(404);
             }
@@ -1381,7 +1380,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
     });
 
     app.get('/d4dMasters/getorgnamebychefserver/:chefserver', function(req, res) {
-        logger.debug("Enter get() for  /d4dMasters/getorgnamebychefserver/%s",req.params.chefserver);
+        logger.debug("Enter get() for  /d4dMasters/getorgnamebychefserver/%s", req.params.chefserver);
         configmgmtDao.getListFiltered(10, 'orgname', 'configname', req.params.chefserver, function(err, catorgname) {
             if (err) {
                 res.send(500);
@@ -1391,19 +1390,19 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
             if (!catorgname) {
                 res.send('');
-                logger.debug("Exit get() for  /d4dMasters/getorgnamebychefserver/%s",req.params.chefserver);
+                logger.debug("Exit get() for  /d4dMasters/getorgnamebychefserver/%s", req.params.chefserver);
                 return;
             } else {
                 res.end(catorgname);
-                logger.debug("Exit get() for  /d4dMasters/getorgnamebychefserver/%s",req.params.chefserver);
+                logger.debug("Exit get() for  /d4dMasters/getorgnamebychefserver/%s", req.params.chefserver);
                 return;
             }
 
 
         });
     });
-    app.post('/d4dMasters/getListFiltered/:masterid',function(req,res){
-        logger.debug("Enter post() for  /d4dMasters/getListFiltered/%s",req.params.masterid);
+    app.post('/d4dMasters/getListFiltered/:masterid', function(req, res) {
+        logger.debug("Enter post() for  /d4dMasters/getListFiltered/%s", req.params.masterid);
         configmgmtDao.getDBModelFromID(req.params.masterid, function(err, dbtype) {
             if (err) {
                 logger.error("Hit and error:", err);
@@ -1419,8 +1418,8 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
                 logger.debug("Query Build in getListFiltered: %s", JSON.stringify(bodyJson));
                 var _keys = Object.keys(bodyJson);
-                _keys.forEach(function(k,v){
-                    console.log(k,bodyJson[k]);
+                _keys.forEach(function(k, v) {
+                    console.log(k, bodyJson[k]);
                     query[k] = bodyJson[k];
                 });
                 // bodyJson.forEach(function(k, v)    {
@@ -1435,18 +1434,15 @@ module.exports.setRoutes = function(app, sessionVerification) {
                         logger.error("Hit and error:", err);
                     }
                     logger.debug("getListFiltered %s", d4dMasterJson.length);
-                    if(d4dMasterJson.length > 0)
-                    {   
+                    if (d4dMasterJson.length > 0) {
                         logger.debug("sent response %s", JSON.stringify(d4dMasterJson));
                         res.send("Found");
-                        logger.debug("Exit post() for  /d4dMasters/getListFiltered/%s",req.params.masterid);
+                        logger.debug("Exit post() for  /d4dMasters/getListFiltered/%s", req.params.masterid);
+                    } else {
+                        logger.debug("sent response %s", JSON.stringify(d4dMasterJson));
+                        res.send("Not Found");
                     }
-                    else
-                        {
-                            logger.debug("sent response %s", JSON.stringify(d4dMasterJson));
-                            res.send("Not Found");
-                        }
-                    
+
                 });
             } else {
                 res.send(500);
@@ -1455,7 +1451,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
     });
 
     app.get('/d4dMasters/:masterid/:filtercolumnname/:filtercolumnvalue', function(req, res) {
-        logger.debug("Enter get() for  /d4dMasters/%s/%s/%s",req.params.masterid,req.params.filtercolumnname,req.params.filtercolumnvalue);
+        logger.debug("Enter get() for  /d4dMasters/%s/%s/%s", req.params.masterid, req.params.filtercolumnname, req.params.filtercolumnvalue);
         configmgmtDao.getDBModelFromID(req.params.masterid, function(err, dbtype) {
             if (err) {
                 logger.error("Hit and error:", err);
@@ -1472,7 +1468,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     }
                     res.end(JSON.stringify(d4dMasterJson));
                     logger.debug("sent response %s", JSON.stringify(d4dMasterJson));
-                    logger.debug("Exit get() for  /d4dMasters/%s/%s/%s",req.params.masterid,req.params.filtercolumnname,req.params.filtercolumnvalue);
+                    logger.debug("Exit get() for  /d4dMasters/%s/%s/%s", req.params.masterid, req.params.filtercolumnname, req.params.filtercolumnvalue);
                 });
             }
         });
@@ -1482,7 +1478,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
 
     app.get('/d4dMasters/configmgmt/:rowid', function(req, res) {
-        logger.debug("Enter get() for  /d4dMasters/configmgmt/%s",req.params.rowid);
+        logger.debug("Enter get() for  /d4dMasters/configmgmt/%s", req.params.rowid);
         d4dModel.findOne({
             id: '10'
         }, function(err, d4dMasterJson) {
@@ -1501,7 +1497,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                         for (var j = 0; j < itm.field.length; j++) {
                             if (itm.field[j]["name"] == 'rowid') {
                                 if (itm.field[j]["values"].value == req.params.rowid) {
-                                    logger.debug("found: %s -- %s", i,itm.field[j]["values"].value);
+                                    logger.debug("found: %s -- %s", i, itm.field[j]["values"].value);
                                     hasOrg = true;
                                     //Re-construct the json with the item found
                                     var configmgmt = '';
@@ -1526,7 +1522,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                     }
                                     configmgmt = "{" + configmgmt + "}";
                                     logger.debug(JSON.stringify(configmgmt));
-                                    logger.debug("Exit get() for  /d4dMasters/configmgmt/%s",req.params.rowid);
+                                    logger.debug("Exit get() for  /d4dMasters/configmgmt/%s", req.params.rowid);
                                 }
                             }
 
@@ -1589,58 +1585,55 @@ module.exports.setRoutes = function(app, sessionVerification) {
             //if ( e.code != 'EEXIST' ) throw e;
         }
     }
-    function updateProjectWithEnv(projects,envid){
-        for(var p = 0; p < projects.length;p++){
-        
-        var currproj = projects[p];
-        logger.debug('Project : ' + currproj);
-        d4dModelNew.d4dModelMastersProjects.findOne({
-                            rowid: currproj,
-                            id:'4'
-                        },function(err,data2){
-                            if(!err)
-                            {
-                                logger.debug('Project JSON:' + JSON.stringify(data2));
-                                var newenv = envid;
-                                if(data2.environmentname_rowid != '')
-                                    {
-                                        // logger.debug("Env Names found :========> " +data2.environmentname_rowid );
-                                        // var _data2env = data2.environmentname_rowid.split(',');
-                                        // if(_data2env.indexOf(envid) >= 0){
-                                        //     //found an env in the list exit
-                                        //        return;
-                                        // }
-                                        // data2.environmentname_rowid +=  ',' ;
-                                        if(data2.environmentname_rowid.indexOf(envid) < 0){
-                                            newenv = data2.environmentname_rowid + ',' + envid;
-                                        }
-                                    }
-                                //var newenv = data2.environmentname_rowid + envid;
 
-                                logger.debug('Newenv ====>',newenv);
-                                d4dModelNew.d4dModelMastersProjects.update({
-                                    rowid: currproj,
-                                    id:'4'
-                                },{environmentname_rowid:newenv},function(err,data1){
-                                    if(!err)
-                                        { 
-                                            //data2.environmentname_rowid
-                                         logger.debug('Updated project ' + currproj + ' with env : ' + newenv);
-                                               return;
-                                        }
-                                    else{
-                                        logger.debug('Err while updating d4dModelMastersProjects' + err);
-                                        return;
-                                    }
-    
-                                });
-                            }
-                            else
-                            {
-                                logger.debug('Err in findone updateProjectWithEnv - d4dModelMastersProjects' + err);
-                                return;
-                            }
-                        });
+    function updateProjectWithEnv(projects, envid) {
+        for (var p = 0; p < projects.length; p++) {
+
+            var currproj = projects[p];
+            logger.debug('Project : ' + currproj);
+            d4dModelNew.d4dModelMastersProjects.findOne({
+                rowid: currproj,
+                id: '4'
+            }, function(err, data2) {
+                if (!err) {
+                    logger.debug('Project JSON:' + JSON.stringify(data2));
+                    var newenv = envid;
+                    if (data2.environmentname_rowid != '') {
+                        // logger.debug("Env Names found :========> " +data2.environmentname_rowid );
+                        // var _data2env = data2.environmentname_rowid.split(',');
+                        // if(_data2env.indexOf(envid) >= 0){
+                        //     //found an env in the list exit
+                        //        return;
+                        // }
+                        // data2.environmentname_rowid +=  ',' ;
+                        if (data2.environmentname_rowid.indexOf(envid) < 0) {
+                            newenv = data2.environmentname_rowid + ',' + envid;
+                        }
+                    }
+                    //var newenv = data2.environmentname_rowid + envid;
+
+                    logger.debug('Newenv ====>', newenv);
+                    d4dModelNew.d4dModelMastersProjects.update({
+                        rowid: currproj,
+                        id: '4'
+                    }, {
+                        environmentname_rowid: newenv
+                    }, function(err, data1) {
+                        if (!err) {
+                            //data2.environmentname_rowid
+                            logger.debug('Updated project ' + currproj + ' with env : ' + newenv);
+                            return;
+                        } else {
+                            logger.debug('Err while updating d4dModelMastersProjects' + err);
+                            return;
+                        }
+
+                    });
+                } else {
+                    logger.debug('Err in findone updateProjectWithEnv - d4dModelMastersProjects' + err);
+                    return;
+                }
+            });
         }
     };
 
@@ -1675,7 +1668,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
         logger.debug("Type of org : %s", typeof req.params.orgname);
         logger.debug("Org ID: %s", req.params.orgid);
         logger.debug(chefRepoPath + req.params.orgname + folderpath.substring(0, folderpath.length - 1));
-        logger.debug("Orgname : # %s # %s", req.params.orgname.toString(),(req.params.orgname == ''));
+        logger.debug("Orgname : # %s # %s", req.params.orgname.toString(), (req.params.orgname == ''));
 
         //Handling the exception to handle uploads without orgname
         if (req.params.orgname) {
@@ -1721,22 +1714,22 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                     }
                                 });*/
                 if (folderpath == '') {
-                    logger.debug("this is where file gets saved as (no folderpath): %s %s / %s %s __ %s",chefRepoPath,req.params.orgname,suffix,controlName,fil.name);
+                    logger.debug("this is where file gets saved as (no folderpath): %s %s / %s %s __ %s", chefRepoPath, req.params.orgname, suffix, controlName, fil.name);
                     fs.writeFileSync(chefRepoPath + req.params.orgname + '/' + suffix + controlName + '__' + fil.name, data);
                 } else {
                     if (folderpath.indexOf('.chef') > 0) { //identifying if its a chef config file
-                        logger.debug("this is where file gets saved as .chef (with folderpath):    %s %s %s %s",chefRepoPath,req.params.orgid,folderpath,fil.name);
+                        logger.debug("this is where file gets saved as .chef (with folderpath):    %s %s %s %s", chefRepoPath, req.params.orgid, folderpath, fil.name);
                         fs.writeFileSync(chefRepoPath + req.params.orgid + folderpath + fil.name, data);
                     } else //not a a chef config file
                     {
                         logger.debug("Folderpath rcvd: %s", folderpath);
 
                         if (fil.name == saveAsfileName) {
-                            logger.debug("this is where file gets saved as (with folderpath): %s %s / %s %s __ %s",chefRepoPath,req.params.orgid,suffix,controlName,fil.name);
+                            logger.debug("this is where file gets saved as (with folderpath): %s %s / %s %s __ %s", chefRepoPath, req.params.orgid, suffix, controlName, fil.name);
                             fs.writeFileSync(chefRepoPath + req.params.orgname + '/' + suffix + controlName + '__' + fil.name, data);
 
                         } else {
-                            logger.debug("this is where file gets saved as (with folderpath) fixed name: %s %s %s / %s",chefRepoPath,req.params.orgid,folderpath,saveAsfileName);
+                            logger.debug("this is where file gets saved as (with folderpath) fixed name: %s %s %s / %s", chefRepoPath, req.params.orgid, folderpath, saveAsfileName);
                             //fs.writeFileSync(chefRepoPath + folderpath.substring(1,folderpath.length) + fil.name, data);
                             fs.writeFileSync(chefRepoPath + req.params.orgname + folderpath + '/' + saveAsfileName, data);
                         }
@@ -1750,17 +1743,17 @@ module.exports.setRoutes = function(app, sessionVerification) {
             }
         }
         logger.debug("Before ssl fetch");
-        if(req.params.id == '10') //Fix introduced for Kana 
-        { 
+        if (req.params.id == '10') //Fix introduced for Kana 
+        {
             logger.debug("In ssl fetch");
             var options = {
-                    cwd: chefRepoPath + req.params.orgname + folderpath,
-                    onError: function(err) {
-                        callback(err, null);
-                    },
-                    onClose: function(code) {
-                        callback(null, code);
-                    }
+                cwd: chefRepoPath + req.params.orgname + folderpath,
+                onError: function(err) {
+                    callback(err, null);
+                },
+                onClose: function(code) {
+                    callback(null, code);
+                }
             };
             var cmdSSLFetch = 'knife ssl fetch';
 
@@ -1792,7 +1785,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
             if (dbtype) {
                 var query = {};
                 query['rowid'] = {
-                    '$in':req.body.serviceids
+                    '$in': req.body.serviceids
                 }
                 query['id'] = req.params.masterid;
 
@@ -1825,7 +1818,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 if (bodyJson["serviceids"] != null) {
                     var root = '';
                     bodyJson["serviceids"].forEach(function(serviceid, servicecount) {
-                        logger.debug("%s :: %s",serviceid,servicecount);
+                        logger.debug("%s :: %s", serviceid, servicecount);
 
                         d4dMasterJson.masterjson.rows.row.forEach(function(itm, i) {
                             logger.debug("found %s", itm.field.length);
@@ -1835,7 +1828,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                             for (var j = 0; j < itm.field.length; j++) {
                                 if (itm.field[j]["name"] == 'rowid') {
                                     if (itm.field[j]["values"].value == serviceid) {
-                                        logger.debug("found: %s -- %s", i,itm.field[j]["values"].value);
+                                        logger.debug("found: %s -- %s", i, itm.field[j]["values"].value);
                                         hasOrg = true;
                                         //Re-construct the json with the item found
 
@@ -1935,7 +1928,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
 
     app.post('/d4dMasters/savemasterjsonrow/:id/:fileinputs/:orgname', function(req, res) {
-        logger.debug('Enter post() for  /d4dMasters/savemasterjsonrow/%s/%s/%s', req.params.id,req.params.fileinputs,req.params.orgname);
+        logger.debug('Enter post() for  /d4dMasters/savemasterjsonrow/%s/%s/%s', req.params.id, req.params.fileinputs, req.params.orgname);
         d4dModel.findOne({
             id: req.params.id
         }, function(err, d4dMasterJson) {
@@ -2062,302 +2055,298 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     else
                         res.send(200);
 
-                    if(req.params.id == '10'){
+                    if (req.params.id == '10') {
 
                     }
                     //res.send(200);
                     //callback(null, data);
-                    logger.debug("Exit post() for  /d4dMasters/savemasterjsonrow/%s/%s/%s", req.params.id,req.params.fileinputs,req.params.orgname);
+                    logger.debug("Exit post() for  /d4dMasters/savemasterjsonrow/%s/%s/%s", req.params.id, req.params.fileinputs, req.params.orgname);
                 });
             }
         });
     });
-    app.post('/d4dMasters/deactivateorg/:action',function(req,res){
-        logger.debug("Enter post() for /d4dMasters/deactivateorg/%s",req.params.action);
+    app.post('/d4dMasters/deactivateorg/:action', function(req, res) {
+        logger.debug("Enter post() for /d4dMasters/deactivateorg/%s", req.params.action);
         var bodyJson = JSON.parse(JSON.stringify(req.body));
 
-        if(!req.orgid){
+        if (!req.orgid) {
             logger.debug('Org ID found %s', bodyJson.orgid);
-            configmgmtDao.deactivateOrg(bodyJson.orgid,req.params.action,function(err,data){
-                 if(err){
+            configmgmtDao.deactivateOrg(bodyJson.orgid, req.params.action, function(err, data) {
+                if (err) {
                     logger.error('Error: ', err);
                     res.send(500);
-                 }
-                 logger.debug('=== %s',data);
-                 res.send(200);
-                 logger.debug("Exit post() for /d4dMasters/deactivateorg/%s",req.params.action);
+                }
+                logger.debug('=== %s', data);
+                res.send(200);
+                logger.debug("Exit post() for /d4dMasters/deactivateorg/%s", req.params.action);
             });
         }
-       
+
     });
 
 
     app.post('/d4dMasters/savemasterjsonrownew/:id/:fileinputs/:orgname', function(req, res) {
-    logger.debug("Enter post() for /d4dMasters/savemasterjsonrownew/%s/%s/%s", req.params.id, req.params.fileinputs, req.params.orgname);
-    var bodyJson = JSON.parse(JSON.stringify(req.body));
-    //pushing the rowid field
+        logger.debug("Enter post() for /d4dMasters/savemasterjsonrownew/%s/%s/%s", req.params.id, req.params.fileinputs, req.params.orgname);
+        var bodyJson = JSON.parse(JSON.stringify(req.body));
+        //pushing the rowid field
 
-    var editMode = false; //to identify if in edit mode.
-    var rowtoedit = null;
-    if (bodyJson["rowid"] != null) {
-        editMode = true;
-    } else {
-        editMode = false;
-        bodyJson["rowid"] = uuid.v4();
-    }
-    //Authorize user to create / modify.
-
-    //function(username,category,permissionto,req,permissionset,callback){
-    logger.debug('Users Session : ' + JSON.stringify(req.session.user));
-    var user = req.session.user;
-    var category = configmgmtDao.getCategoryFromID(req.params.id);
-    var permissionto = 'create';
-    if (editMode == true) {
-        permissionto = 'modify';
-    }
-
-
-    usersDao.haspermission(user.cn, category, permissionto, null, req.session.user.permissionset, function(err, data) {
-        if (!err) {
-            logger.debug('Returned from haspermission : ' + data + ' : ' + (data == false));
-            if (data == false) {
-                logger.debug('No permission to ' + permissionto + ' on ' + category);
-                res.send(401,"You don't have permission to perform this operation.");
-                return;
-            }
+        var editMode = false; //to identify if in edit mode.
+        var rowtoedit = null;
+        if (bodyJson["rowid"] != null) {
+            editMode = true;
         } else {
-            logger.error("Hit and error in haspermission:", err);
-            res.send(500);
-            return;
+            editMode = false;
+            bodyJson["rowid"] = uuid.v4();
+        }
+        //Authorize user to create / modify.
+
+        //function(username,category,permissionto,req,permissionset,callback){
+        logger.debug('Users Session : ' + JSON.stringify(req.session.user));
+        var user = req.session.user;
+        var category = configmgmtDao.getCategoryFromID(req.params.id);
+        var permissionto = 'create';
+        if (editMode == true) {
+            permissionto = 'modify';
         }
 
-        masterUtil.getLoggedInUser(user.cn,function(err,anUser){
-            if(err){
-                res.send(500,"Failed to fetch User.");
+
+        usersDao.haspermission(user.cn, category, permissionto, null, req.session.user.permissionset, function(err, data) {
+            if (!err) {
+                logger.debug('Returned from haspermission : ' + data + ' : ' + (data == false));
+                if (data == false) {
+                    logger.debug('No permission to ' + permissionto + ' on ' + category);
+                    res.send(401, "You don't have permission to perform this operation.");
+                    return;
+                }
+            } else {
+                logger.error("Hit and error in haspermission:", err);
+                res.send(500);
+                return;
             }
-            logger.debug("LoggedIn User:>>>> ",JSON.stringify(anUser));
-            if(anUser){
-                //data == true (create permission)
-                logger.debug("All condition:>>>>> data",data," rowid: ",anUser.orgname_rowid[0]," role: ",anUser.userrolename);
-                /*if(data && anUser.orgname_rowid[0] !== "" && anUser.userrolename !== "Admin"){
+
+            masterUtil.getLoggedInUser(user.cn, function(err, anUser) {
+                if (err) {
+                    res.send(500, "Failed to fetch User.");
+                }
+                logger.debug("LoggedIn User:>>>> ", JSON.stringify(anUser));
+                if (anUser) {
+                    //data == true (create permission)
+                    logger.debug("All condition:>>>>> data", data, " rowid: ", anUser.orgname_rowid[0], " role: ", anUser.userrolename);
+                    /*if(data && anUser.orgname_rowid[0] !== "" && anUser.userrolename !== "Admin"){
                     logger.debug("Inside check not authorized.");
                     res.send(401,"You don't have permission to perform this operation.");
                     return;
                 }*/
-        
-        logger.debug('EditMode: %s', editMode);
-        bodyJson["id"] = req.params.id; //storing the form id.
 
-        // Handled for "any" field Org for User.
-        if(req.params.id === '7' && bodyJson["orgname"] === 'any'){
-            logger.debug("Inside User check for any value.");
-            bodyJson["orgname"]= "";
-            bodyJson["orgname_rowid"]= "";
-        }
+                    logger.debug('EditMode: %s', editMode);
+                    bodyJson["id"] = req.params.id; //storing the form id.
 
-        logger.debug("Full bodyJson: ",JSON.stringify(bodyJson));
-        configmgmtDao.getDBModelFromID(req.params.id, function(err, dbtype) {
-            if (err) {
-                logger.error("Hit and error:", err);
-            }
-            if (dbtype) {
-                logger.debug("Master Type: %s", dbtype);
-
-                eval('d4dModelNew.' + dbtype).findOne({
-                    rowid: bodyJson["rowid"]
-                }, function(err, d4dMasterJson) {
-                    if (err) {
-                        logger.error("Hit and error:", err);
-                    }
-                    if (d4dMasterJson) {
-                        rowtoedit = JSON.parse(JSON.stringify(d4dMasterJson));
-                        logger.debug('<<<<< Reached here >>>> %s', (rowtoedit == null));
-                    }
-                    // if(!rowtoedit)
-                    //  console.log("Edited Row:" + rowtoedit);
-
-                    var frmkeys = Object.keys(bodyJson);
-                    var orgid = '';
-                    if (frmkeys.indexOf('orgname_rowid') >= 0) { //
-                        req.params['orgid'] = bodyJson['orgname_rowid'];
+                    // Handled for "any" field Org for User.
+                    if (req.params.id === '7' && bodyJson["orgname"] === 'any') {
+                        logger.debug("Inside User check for any value.");
+                        bodyJson["orgname"] = "";
+                        bodyJson["orgname_rowid"] = "";
                     }
 
-                    //var frmvals = Object.keys(bodyJson);
-                    var rowFLD = [];
-                    //  var filesNames = Object.keys(req.files);
-                    var folderpath = ''; //will hold the folderpath field to create the path in the system
-
-                    //       console.log('BodyJSON rowid:' + JSON.stringify(bodyJson));
-                    var newrowid = '';
-                    frmkeys.forEach(function(itm) {
-                        logger.debug("Each item: itm %s bodyJson[itm] %s", itm, bodyJson[itm]);
-                        if (itm.trim() == 'rowid') {
-                            logger.debug('!!!! in rowid %s', bodyJson[itm]);
-                            newrowid = bodyJson[itm];
+                    logger.debug("Full bodyJson: ", JSON.stringify(bodyJson));
+                    configmgmtDao.getDBModelFromID(req.params.id, function(err, dbtype) {
+                        if (err) {
+                            logger.error("Hit and error:", err);
                         }
-                        if (!editMode) {
-                            var thisVal = bodyJson[itm];
-                            logger.debug(thisVal);
-                            var item = null;
-                                if (thisVal.indexOf('[') >= 0 && itm != "templatescookbooks") { //used to check if its an array
-                                    item = "\"" + itm + "\" : \"" + thisVal + "\"";
-                                } else //
-                                    item = "\"" + itm + "\" : \"" + thisVal.replace(/\"/g, '\\"') + "\"";
-                            rowFLD.push(item);
-                            if (itm == 'folderpath') { //special variable to hold the folder to which the files will be copied.
-                                rowFLD.push("\"" + itm + "\" : \"" + thisVal.replace(/\"/g, '\\"') + "\"");
-                                logger.debug('Got a folderpath: %s', thisVal);
-                                folderpath = thisVal;
-                            }
-                        } else {
-                            if (d4dMasterJson != null) {
-                                uuid1 = bodyJson["rowid"];
-                                //    console.log('Bodyjson[folderpath]:' + bodyJson["folderpath"]);
-                                // console.log('rowtoedit :' + JSON.stringify(rowtoedit) + ' : ' + JSON.stringify(bodyJson) );
+                        if (dbtype) {
+                            logger.debug("Master Type: %s", dbtype);
 
-                                if (bodyJson["folderpath"] == undefined) //folderpath issue fix
-                                    folderpath = ''
-                                else
-                                    folderpath = bodyJson["folderpath"];
-                                var fldadded = false;
-                                for (var myval in rowtoedit) {
-                                    if (itm == myval) {
-                                        rowtoedit[myval] = bodyJson[myval];
-                                        fldadded = true;
-                                    }
-                                    //   console.log("itm " + itm + " myval:" + myval + " value : " + rowtoedit[myval]);
+                            eval('d4dModelNew.' + dbtype).findOne({
+                                rowid: bodyJson["rowid"]
+                            }, function(err, d4dMasterJson) {
+                                if (err) {
+                                    logger.error("Hit and error:", err);
                                 }
-                                if (!fldadded) {
-                                    logger.debug('Not Added ---------> %s', itm);
-                                    if (bodyJson[itm] != '') //found to have a value
-                                    {
-                                        rowtoedit[itm] = bodyJson[itm];
-                                        //  console.log('New Entity :' + rowtoedit[myval]);
-                                    }
+                                if (d4dMasterJson) {
+                                    rowtoedit = JSON.parse(JSON.stringify(d4dMasterJson));
+                                    logger.debug('<<<<< Reached here >>>> %s', (rowtoedit == null));
                                 }
-                                // for(var myval in d4dMasterJson){
-                                //      console.log("key:"+myval+", value:");
-                                // //   d4dMasterJson[myval] = bodyJson[myval];
+                                // if(!rowtoedit)
+                                //  console.log("Edited Row:" + rowtoedit);
 
-                                // }
+                                var frmkeys = Object.keys(bodyJson);
+                                var orgid = '';
+                                if (frmkeys.indexOf('orgname_rowid') >= 0) { //
+                                    req.params['orgid'] = bodyJson['orgname_rowid'];
+                                }
+
+                                //var frmvals = Object.keys(bodyJson);
+                                var rowFLD = [];
+                                //  var filesNames = Object.keys(req.files);
+                                var folderpath = ''; //will hold the folderpath field to create the path in the system
+
+                                //       console.log('BodyJSON rowid:' + JSON.stringify(bodyJson));
+                                var newrowid = '';
+                                frmkeys.forEach(function(itm) {
+                                    logger.debug("Each item: itm %s bodyJson[itm] %s", itm, bodyJson[itm]);
+                                    if (itm.trim() == 'rowid') {
+                                        logger.debug('!!!! in rowid %s', bodyJson[itm]);
+                                        newrowid = bodyJson[itm];
+                                    }
+                                    if (!editMode) {
+                                        var thisVal = bodyJson[itm];
+                                        logger.debug(thisVal);
+                                        var item = null;
+                                        if (thisVal.indexOf('[') >= 0 && itm != "templatescookbooks") { //used to check if its an array
+                                            item = "\"" + itm + "\" : \"" + thisVal + "\"";
+                                        } else //
+                                            item = "\"" + itm + "\" : \"" + thisVal.replace(/\"/g, '\\"') + "\"";
+                                        rowFLD.push(item);
+                                        if (itm == 'folderpath') { //special variable to hold the folder to which the files will be copied.
+                                            rowFLD.push("\"" + itm + "\" : \"" + thisVal.replace(/\"/g, '\\"') + "\"");
+                                            logger.debug('Got a folderpath: %s', thisVal);
+                                            folderpath = thisVal;
+                                        }
+                                    } else {
+                                        if (d4dMasterJson != null) {
+                                            uuid1 = bodyJson["rowid"];
+                                            //    console.log('Bodyjson[folderpath]:' + bodyJson["folderpath"]);
+                                            // console.log('rowtoedit :' + JSON.stringify(rowtoedit) + ' : ' + JSON.stringify(bodyJson) );
+
+                                            if (bodyJson["folderpath"] == undefined) //folderpath issue fix
+                                                folderpath = ''
+                                            else
+                                                folderpath = bodyJson["folderpath"];
+                                            var fldadded = false;
+                                            for (var myval in rowtoedit) {
+                                                if (itm == myval) {
+                                                    rowtoedit[myval] = bodyJson[myval];
+                                                    fldadded = true;
+                                                }
+                                                //   console.log("itm " + itm + " myval:" + myval + " value : " + rowtoedit[myval]);
+                                            }
+                                            if (!fldadded) {
+                                                logger.debug('Not Added ---------> %s', itm);
+                                                if (bodyJson[itm] != '') //found to have a value
+                                                {
+                                                    rowtoedit[itm] = bodyJson[itm];
+                                                    //  console.log('New Entity :' + rowtoedit[myval]);
+                                                }
+                                            }
+                                            // for(var myval in d4dMasterJson){
+                                            //      console.log("key:"+myval+", value:");
+                                            // //   d4dMasterJson[myval] = bodyJson[myval];
+
+                                            // }
+                                            //console.log(JSON.stringify(d4dMasterJson));
+                                        }
+                                    }
+                                });
+                                var FLD = JSON.stringify(rowFLD);
+                                if (!editMode) { //push new values only when not in edit mode
+                                    //dMasterJson = JSON.parse(FLD);
+                                    //   console.log('>>>>>> Whats going to be saved:' + FLD['rowid']);
+                                    logger.debug("FLD>>>>>>>>>>>>> ", FLD);
+                                    eval('var mastersrdb =  new d4dModelNew.' + dbtype + '({' + JSON.parse(FLD) + '})');
+                                    mastersrdb.save(function(err, data) {
+                                        if (err) {
+                                            logger.error('Hit Save error', err);
+                                            res.send(500);
+                                            return;
+
+                                        }
+                                        logger.debug('New Master Saved');
+
+                                        logger.debug(req.params.fileinputs == 'null');
+                                        logger.debug('New record folderpath: % rowid %s FLD["folderpath"]:', folderpath, newrowid, folderpath);
+                                        if (!folderpath) {
+                                            if (FLD["folderpath"] == undefined) //folderpath issue fix
+                                                folderpath = ''
+                                            else
+                                                folderpath = rowFLD["folderpath"];
+                                        }
+                                        //if env is saved then it should be associated with project.
+                                        if (req.params.id == '3') {
+                                            logger.debug('in env update');
+                                            var teamids = bodyJson['teamname_rowid'].split(',');
+                                            logger.debug('teamids:', teamids);
+                                            configmgmtDao.getProjectsForTeams(teamids.join(), function(err, projs_) {
+                                                if (!err) {
+                                                    logger.debug('Project found for team :' + projs_);
+                                                    updateProjectWithEnv(projs_, newrowid);
+                                                }
+                                            });
+                                        }
+
+                                        if (req.params.fileinputs != 'null')
+                                            res.send(saveuploadedfile(newrowid + '__', folderpath, req));
+                                        else
+                                            res.send(200);
+
+                                        return;
+                                    });
+                                } else {
+                                    logger.debug("Rowid: %s", bodyJson["rowid"]);
+                                    var currowid = bodyJson["rowid"];
+                                    delete rowtoedit._id; //fixing the issue of 
+                                    logger.debug('Rowtoedit: %s', JSON.stringify(rowtoedit));
+                                    eval('d4dModelNew.' + dbtype).update({
+                                        rowid: bodyJson["rowid"]
+                                    }, {
+                                        $set: rowtoedit
+                                    }, {
+                                        upsert: false
+                                    }, function(err, saveddata) {
+                                        if (err) {
+                                            logger.error('Hit Save error', err);
+                                            res.send(500);
+                                            return;
+                                        }
+
+                                        if (bodyJson["folderpath"] == undefined) //folderpath issue fix
+                                            folderpath = ''
+                                        else
+                                            folderpath = bodyJson["folderpath"];
+
+                                        //if env is saved then it should be associated with project.
+                                        if (req.params.id == '3') {
+                                            logger.debug('in env update');
+                                            var teamids = bodyJson['teamname_rowid'].split(',');
+                                            logger.debug('teamids:', teamids);
+                                            configmgmtDao.getProjectsForTeams(teamids.join(), function(err, projs_) {
+                                                if (!err) {
+                                                    logger.debug('Project found for team :' + projs_);
+                                                    updateProjectWithEnv(projs_, currowid);
+                                                }
+                                            });
+                                        }
+
+                                        logger.debug('Master Data Updated: %s', saveddata);
+                                        logger.debug('folderpath: %s rowid %s', folderpath, currowid);
+
+                                        if (req.params.fileinputs != 'null')
+                                            res.send(saveuploadedfile(currowid + '__', folderpath, req));
+                                        else
+                                            res.send(200);
+                                        logger.debug("Exit post() for /d4dMasters/savemasterjsonrownew/%s/%s/%s", req.params.id, req.params.fileinputs, req.params.orgname);
+                                        return;
+                                    });
+                                }
+                                //dMasterJson = rowtoedit;
+
                                 //console.log(JSON.stringify(d4dMasterJson));
-                            }
+
+
+
+                            }); //end findone
+                            //console.log('state of rowtoedit ' + (rowtoedit != null)); //testing if the rowtoedit has a value
+
                         }
-                    });
-                    var FLD = JSON.stringify(rowFLD);
-                    if (!editMode) { //push new values only when not in edit mode
-                        //dMasterJson = JSON.parse(FLD);
-                        //   console.log('>>>>>> Whats going to be saved:' + FLD['rowid']);
-                        logger.debug("FLD>>>>>>>>>>>>> ",FLD);
-                        eval('var mastersrdb =  new d4dModelNew.' + dbtype + '({' + JSON.parse(FLD) + '})');
-                        mastersrdb.save(function(err, data) {
-                            if (err) {
-                                logger.error('Hit Save error', err);
-                                res.send(500);
-                                return;
+                    }); //end getdbmodelfromid
+                } // if
+            }); // getSingleUser
+        }); //end of haspermission
 
-                            }
-                            logger.debug('New Master Saved');
-
-                            logger.debug(req.params.fileinputs == 'null');
-                            logger.debug('New record folderpath: % rowid %s FLD["folderpath"]:', folderpath, newrowid, folderpath);
-                            if (!folderpath) {
-                                if (FLD["folderpath"] == undefined) //folderpath issue fix
-                                    folderpath = ''
-                                else
-                                    folderpath = rowFLD["folderpath"];
-                            }
-                            //if env is saved then it should be associated with project.
-                            if(req.params.id == '3')
-                            {
-                                logger.debug('in env update');
-                                var teamids = bodyJson['teamname_rowid'].split(',');
-                                logger.debug('teamids:', teamids);
-                                configmgmtDao.getProjectsForTeams(teamids.join(),function(err,projs_){
-                                    if(!err)
-                                    {
-                                        logger.debug('Project found for team :' + projs_);
-                                        updateProjectWithEnv(projs_,newrowid);
-                                    }
-                                });
-                            }
-
-                            if (req.params.fileinputs != 'null')
-                                res.send(saveuploadedfile(newrowid + '__', folderpath, req));
-                            else
-                                res.send(200);
-
-                            return;
-                        });
-                    } else {
-                        logger.debug("Rowid: %s", bodyJson["rowid"]);
-                        var currowid = bodyJson["rowid"];
-                        delete rowtoedit._id; //fixing the issue of 
-                        logger.debug('Rowtoedit: %s', JSON.stringify(rowtoedit));
-                        eval('d4dModelNew.' + dbtype).update({
-                            rowid: bodyJson["rowid"]
-                        }, {
-                            $set: rowtoedit
-                        }, {
-                            upsert: false
-                        }, function(err, saveddata) {
-                            if (err) {
-                                logger.error('Hit Save error', err);
-                                res.send(500);
-                                return;
-                            }
-
-                            if (bodyJson["folderpath"] == undefined) //folderpath issue fix
-                                folderpath = ''
-                            else
-                                folderpath = bodyJson["folderpath"];
-
-                            //if env is saved then it should be associated with project.
-                            if(req.params.id == '3')
-                            {
-                                logger.debug('in env update');
-                                var teamids = bodyJson['teamname_rowid'].split(',');
-                                logger.debug('teamids:', teamids);
-                                configmgmtDao.getProjectsForTeams(teamids.join(),function(err,projs_){
-                                    if(!err)
-                                    {
-                                        logger.debug('Project found for team :' + projs_);
-                                        updateProjectWithEnv(projs_,currowid);
-                                    }
-                                });
-                            }
-
-                            logger.debug('Master Data Updated: %s', saveddata);
-                            logger.debug('folderpath: %s rowid %s', folderpath, currowid);
-
-                            if (req.params.fileinputs != 'null')
-                                res.send(saveuploadedfile(currowid + '__', folderpath, req));
-                            else
-                                res.send(200);
-                            logger.debug("Exit post() for /d4dMasters/savemasterjsonrownew/%s/%s/%s", req.params.id, req.params.fileinputs, req.params.orgname);
-                            return;
-                        });
-                    }
-                    //dMasterJson = rowtoedit;
-
-                    //console.log(JSON.stringify(d4dMasterJson));
-
-
-
-                }); //end findone
-                //console.log('state of rowtoedit ' + (rowtoedit != null)); //testing if the rowtoedit has a value
-
-                }
-             }); //end getdbmodelfromid
-            } // if
-        }); // getSingleUser
-    }); //end of haspermission
-
-});
+    });
 
     app.post('/d4dMasters/testingupload/:suffix/:fileinputs', function(req, res) {
-        logger.debug("Enter post() for /d4dMasters/testingupload/%s/%s",req.params.suffix,req.params.fileinputs);
-        logger.debug("req body: %s",req.body);
+        logger.debug("Enter post() for /d4dMasters/testingupload/%s/%s", req.params.suffix, req.params.fileinputs);
+        logger.debug("req body: %s", req.body);
         var fi;
         if (req.params.fileinputs.indexOf(',') > 0)
             fi = req.params.fileinputs.split(',');
@@ -2382,11 +2371,11 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 var controlName = fi[i];
                 var fil = eval('req.files.' + fi[i]);
                 if (typeof fil != 'undefined') {
-                    logger.debug('this is where file gets saved  : %s %s',chefRepoPath,fil.name);
+                    logger.debug('this is where file gets saved  : %s %s', chefRepoPath, fil.name);
                     fileIo.readFile(fil.path, function(err, data) {
                         //var getDirName = require("path").dirname;
                         fileIo.writeFile(chefRepoPath + req.params.orgname + '/' + controlName + '__' + fil.name, data, null, function(err) {
-                            logger.error("Hit error: ",err);
+                            logger.error("Hit error: ", err);
                             count--;
                             if (count === 0) { // all files uploaded
                                 res.send("ok");
@@ -2411,7 +2400,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
             }
         });
         res.send(200);
-        logger.debug("Exit post() for /d4dMasters/testingupload/%s/%s",req.params.suffix,req.params.fileinputs);
+        logger.debug("Exit post() for /d4dMasters/testingupload/%s/%s", req.params.suffix, req.params.fileinputs);
     });
 
 
@@ -2420,7 +2409,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
     app.post('/d4dMasters/savemasterjson/:id', function(req, res) {
         //Finding the Master Json if present
-        logger.debug("Enter post() for /d4dMasters/savemasterjson/%s",req.params.id);
+        logger.debug("Enter post() for /d4dMasters/savemasterjson/%s", req.params.id);
         d4dModel.findOne({
             id: req.params.id
         }, function(err, d4dMasterJson) {
@@ -2454,13 +2443,13 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 });
                 res.send(200);
             }
-            logger.debug("Exit post() for /d4dMasters/savemasterjson/%s",req.params.id);
+            logger.debug("Exit post() for /d4dMasters/savemasterjson/%s", req.params.id);
         });
         //mongoose.disconnect();
     });
 
     app.get('/createbg/:orgname/:bgname', function(req, res) {
-        logger.debug("Enter get() for /createbg/%s/%s",req.params.orgname,req.params.bgname);
+        logger.debug("Enter get() for /createbg/%s/%s", req.params.orgname, req.params.bgname);
         // var envField = "{\"field\":[{\"name\":\"environmentname\",\"values\":{\"value\":\"" + req.params.envname + "\"}},{\"name\":\"orgname\",\"values\":{\"value\":\"" + req.params.orgname + "\"}}]}";
         var bgfield = "{\"field\":[{\"values\":{\"value\":\"" + req.params.bgname + "\"},\"name\":\"productgroupname\"},{\"values\":{\"value\":\"" + req.params.orgname + "\"},\"name\":\"orgname\"},{\"name\":\"costcode\"}] }";
         //var orgField = "{\"field\":[{\"values\":{\"value\":\"" + req.params.orgname + "\"},\"name\":\"orgname\"},{\"values\":{\"value\":\"\"},\"name\":\"domainname\"},{\"values\":{\"value\":[\"Dev\",\"Test\",\"Stage\"]},\"name\":\"costcode\"}]}";
@@ -2485,7 +2474,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     for (var j = 0; j < itm.field.length; j++) {
                         if (itm.field[j]["name"] == 'productgroupname') {
                             if (itm.field[j]["values"].value == req.params.bgname) {
-                                logger.debug("found: %s -- %s",i,itm.field[j]["values"].value);
+                                logger.debug("found: %s -- %s", i, itm.field[j]["values"].value);
                                 hasOrg = true;
                             }
                         }
@@ -2524,14 +2513,14 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 });
                 logger.debug("none found");
             }
-            logger.debug("Exit get() for /createbg/%s/%s",req.params.orgname,req.params.bgname);
+            logger.debug("Exit get() for /createbg/%s/%s", req.params.orgname, req.params.bgname);
 
         });
     });
 
 
     app.get('/createproj/:orgname/:envname/:prodgroup/:projname', function(req, res) {
-         logger.debug("Enter get() for /createproj/%s/%s/%s/%s",req.params.orgname,req.params.envname,req.params.prodgroup,req.params.projname);
+        logger.debug("Enter get() for /createproj/%s/%s/%s/%s", req.params.orgname, req.params.envname, req.params.prodgroup, req.params.projname);
         var projField = "{\"field\":[{\"values\":{\"value\":\"" + req.params.projname + "\"},\"name\":\"projectname\"},{\"values\":{\"value\":\"" + req.params.orgname + "\"},\"name\":\"orgname\"},{\"values\":{\"value\":\"" + req.params.prodgroup + "\"},\"name\":\"productgroupname\"},{\"values\":{\"value\":\"" + req.params.envname + "\"},\"name\":\"environmentname\"},{\"values\":{\"value\":[\"Code 1\",\"Code 2\"]},\"name\":\"costcode\"}] }";
 
         //var orgField = "{\"field\":[{\"values\":{\"value\":\"" + req.params.orgname + "\"},\"name\":\"orgname\"},{\"values\":{\"value\":\"\"},\"name\":\"domainname\"},{\"values\":{\"value\":[\"Dev\",\"Test\",\"Stage\"]},\"name\":\"costcode\"}]}";
@@ -2557,7 +2546,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                         if (itm.field[j]["name"] == 'projectname') {
                             //console.log("found:" + itm.field[j]["values"].value);
                             if (itm.field[j]["values"].value == req.params.projname) {
-                                logger.debug("found: %s -- %s",i,itm.field[j]["values"].value);
+                                logger.debug("found: %s -- %s", i, itm.field[j]["values"].value);
                                 hasOrg = true;
                             }
                         }
@@ -2596,14 +2585,14 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 });
                 logger.debug("none found");
             }
-            logger.debug("Exit get() for /createproj/%s/%s/%s/%s",req.params.orgname,req.params.envname,req.params.prodgroup,req.params.projname);
+            logger.debug("Exit get() for /createproj/%s/%s/%s/%s", req.params.orgname, req.params.envname, req.params.prodgroup, req.params.projname);
 
         });
     });
 
 
     app.get('/createenv/:orgname/:envname', function(req, res) {
-        logger.debug("Enter get() for /createenv/%s/%s", req.params.orgname,req.params.envname);
+        logger.debug("Enter get() for /createenv/%s/%s", req.params.orgname, req.params.envname);
         var envField = "{\"field\":[{\"name\":\"environmentname\",\"values\":{\"value\":\"" + req.params.envname + "\"}},{\"name\":\"orgname\",\"values\":{\"value\":\"" + req.params.orgname + "\"}}]}";
         //var orgField = "{\"field\":[{\"values\":{\"value\":\"" + req.params.orgname + "\"},\"name\":\"orgname\"},{\"values\":{\"value\":\"\"},\"name\":\"domainname\"},{\"values\":{\"value\":[\"Dev\",\"Test\",\"Stage\"]},\"name\":\"costcode\"}]}";
         db.on('error', console.error.bind(console, 'connection error:'));
@@ -2628,7 +2617,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                         if (itm.field[j]["name"] == 'environmentname') {
                             //console.log("found:" + itm.field[j]["values"].value);
                             if (itm.field[j]["values"].value == req.params.envname) {
-                                logger.debug("found: %s -- %s", i,itm.field[j]["values"].value);
+                                logger.debug("found: %s -- %s", i, itm.field[j]["values"].value);
                                 hasOrg = true;
                             }
                         }
@@ -2669,7 +2658,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 });
                 logger.debug("none found");
             }
-            logger.debug("Exit get() for /createenv/%s/%s", req.params.orgname,req.params.envname);
+            logger.debug("Exit get() for /createenv/%s/%s", req.params.orgname, req.params.envname);
 
         });
     });
@@ -2700,7 +2689,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                         if (itm.field[j]["name"] == 'orgname') {
                             //console.log("found:" + itm.field[j]["values"].value);
                             if (itm.field[j]["values"].value == req.params.orgname) {
-                                logger.debug("found: %s -- %s", i,itm.field[j]["values"].value);
+                                logger.debug("found: %s -- %s", i, itm.field[j]["values"].value);
                                 hasOrg = true;
                             }
                         }
@@ -2797,11 +2786,11 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
     });
 
-    app.post('/d4dMasters/test',function(req,res){
+    app.post('/d4dMasters/test', function(req, res) {
         var bodyJson = JSON.parse(JSON.stringify(req.body));
         logger.debug('rcvd : ' + bodyJson['teamids']);
-        configmgmtDao.getProjectsForTeams(bodyJson['teamids'],function(err,data){
-            if(!err){
+        configmgmtDao.getProjectsForTeams(bodyJson['teamids'], function(err, data) {
+            if (!err) {
                 res.send(data);
             }
         });
@@ -2847,20 +2836,24 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
     app.get('/d4dMasters/loggedInUser', function(req, res) {
         var loggedInUser = req.session.user.cn;
-            masterUtil.getLoggedInUser(loggedInUser,function(err,anUser){
-                if(err){
-                    res.send(500,"Failed to fetch User.");
-                }
-                if(!anUser){
-                    res.send(500,"Invalid User.");
-                }
-                if(anUser.orgname_rowid[0] === ""){
-                    res.send({"isSuperAdmin":true});
-                    return;
-                }else{
-                    res.send({"isSuperAdmin":false});
-                    return;
-                }
-            });
+        masterUtil.getLoggedInUser(loggedInUser, function(err, anUser) {
+            if (err) {
+                res.send(500, "Failed to fetch User.");
+            }
+            if (!anUser) {
+                res.send(500, "Invalid User.");
+            }
+            if (anUser.orgname_rowid[0] === "") {
+                res.send({
+                    "isSuperAdmin": true
+                });
+                return;
+            } else {
+                res.send({
+                    "isSuperAdmin": false
+                });
+                return;
+            }
+        });
     });
 }
