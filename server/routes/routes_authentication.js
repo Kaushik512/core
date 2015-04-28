@@ -15,11 +15,18 @@ module.exports.setRoutes = function(app) {
         //var settings = ldapSettings;
         //   chefRepoPath = settings.chefReposLocation;
         if (req.body) {
-            var ldapClient = new LdapClient();
+            var ldapClient = new LdapClient({
+                host: appConfig.ldap.host,
+                port: appConfig.ldap.port,
+                baseDn: appConfig.ldap.baseDn,
+                ou: appConfig.ldap.ou,
+                adminUser: appConfig.ldap.adminUser,
+                adminPass: appConfig.ldap.adminPass
+            });
             console.log('Create User request received:', req.body.username, req.body.password.length, req.body.fname, req.body.lname);
-            console.log('ldappass:' + ldapSettings.rootpass);
+           
             //Hardcoding to be removed....
-            ldapClient.createUser('Admin', 'ReleV@ance', req.body.username, req.body.password, req.body.fname, req.body.lname, function(err, user) {
+            ldapClient.createUser(req.body.username, req.body.password, req.body.fname, req.body.lname, function(err, user) {
                 if (err) {
                     console.log('In Error', err);
                     res.send(err);
@@ -97,7 +104,14 @@ module.exports.setRoutes = function(app) {
 
     app.get('/auth/userexists/:username', function(req, res) {
         logger.debug('Enter /auth/userexists/:username. for Username ::' + req.params.username);
-        var ldapClient = new LdapClient();
+        var ldapClient = new LdapClient({
+            host: appConfig.ldap.host,
+            port: appConfig.ldap.port,
+            baseDn: appConfig.ldap.baseDn,
+            ou: appConfig.ldap.ou,
+            adminUser: appConfig.ldap.adminUser,
+            adminPass: appConfig.ldap.adminPass
+        });
         ldapClient.compare(req.params.username, function(err, status) {
             // logger.debug("/auth/userexists/:username. LDAP Response = " + status);
             res.send(status)
@@ -112,7 +126,7 @@ module.exports.setRoutes = function(app) {
         logger.debug('hit permissionset ' + req.session.user.cn);
         if (req.session.user.password)
             delete req.session.user.password;
-        logger.debug("Return User from session:>>>> ",JSON.stringify(req.session.user));
+        logger.debug("Return User from session:>>>> ", JSON.stringify(req.session.user));
         res.send(JSON.stringify(req.session.user));
     });
 

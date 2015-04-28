@@ -144,8 +144,8 @@ var config = {
     ldap: {
         host: '54.68.204.110',
         port: 389,
-        rootuser: 'Admin',
-        rootpass: 'ReleV@ance',
+        adminUser: 'Admin',
+        adminPass: 'ReleV@ance',
         //baseDn: 'cn=root',
         baseDn: 'dc=d4d-ldap,dc=relevancelab,dc=com',
         ou:''
