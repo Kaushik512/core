@@ -7490,6 +7490,7 @@ body .ui-tooltip {
     height:430px;
     overflow-y:auto;
     overflow-x:hidden;
+    word-break:break-word;
 }
 
 .dockerModal{
@@ -7665,6 +7666,13 @@ word-break:break-word;
 .imgMargin{
     margin-left: -12px;
 }
+.awsExisting{
+    margin-top: 15px;
+    border: solid gray 1px;
+    padding-top: 12px;
+    padding-bottom: 17px;
+}
+
 
 
 
