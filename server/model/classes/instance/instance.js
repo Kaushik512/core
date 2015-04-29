@@ -1,9 +1,9 @@
 var mongoose = require('mongoose');
 var ObjectId = require('mongoose').Types.ObjectId;
-var schemaValidator = require('./schema-validator');
+var schemaValidator = require('./../../dao/schema-validator');
 var uniqueValidator = require('mongoose-unique-validator');
-var logger = require('../../lib/logger')(module);
-
+var logger = require('../../../lib/logger')(module);
+var ChefClientExecution = require('./chefClientExecution/chefClientExecution');
 
 var Schema = mongoose.Schema;
 
@@ -188,7 +188,8 @@ var InstanceSchema = new Schema({
         type: String,
         trim: true
     }],
-    actionLogs: [ActionLogSchema]
+    actionLogs: [ActionLogSchema],
+    chefClientExecutionIds: [String]
 
 });
 

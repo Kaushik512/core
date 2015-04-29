@@ -464,7 +464,9 @@ function CreateTableFromJson(formID, idFieldName, createFileName) {
                 if(d4ddata[x].orgname[0] === ""){
                     console.log("Value for all");
                     d4ddata[x].orgname[0] = "All";
-                }
+                }/*else if(d4ddata[x].orgname === ""){
+                    d4ddata[x].orgname = "All";
+                }*/
             }
         }
         formData = d4ddata;

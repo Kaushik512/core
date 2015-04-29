@@ -24,12 +24,11 @@
                                        <!-- widget content -->
                                        <div class="widget-body no-padding">
                                              <div class="col-lg-6 col-md-6">
-                                             <label for="category">Organization:<span style="color:Red;" class="control-label">&nbsp;*</span>
-                                                        </label>
-                                          <select id="orgname" class="chooseOrganization width-100" sourcepath="1" datapath="masterjson.rows.row" valuelinkfield="costcode" style="vertical-align:central"  cdata="catalyst" cat-validation="required">
-                                          <option value="">Select an Organization</option>
-                                          </select>               
-                                        </div>
+                                          <label for="">Organization:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+                                          <select id="orgname" class="chooseOrganization width-100" sourcepath="1" datapath="masterjson.rows.row"  cdata="catalyst" cat-validation="required">
+                                             <option value="">Select Organization</option>
+                                          </select>
+                                       </div>
                                              <div class="col-lg-6 col-md-6">
                                                 <label for="name">Name:
                                                 <span style="color:Red;" class="control-label">&nbsp;*</span></label>
@@ -53,7 +52,7 @@
                                                 <label class="">
                                                 Select Chefserver<span style="color:Red;" class="control-label">&nbsp;*</span>
                                                 </label>
-                                                <select class="chooseChefServerdropdown width-100" cdata="catalyst"  id="configname"  sourcepath="10" onchange="loadcookbooksinto('servicecookbook','configname');" datapath="masterjson.rows.row">
+                                                <select class="chooseChefServerdropdown width-100" cdata="catalyst"  id="configname"  sourcepath="10" onchange="loadcookbooksinto('servicecookbook','configname');" datapath="masterjson.rows.row" >
                                                 </select>
                                                 <input type="text" id="chefserverid"  cdata="catalyst" style="display:none" />
                                              </div>

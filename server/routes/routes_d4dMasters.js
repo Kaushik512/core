@@ -2145,10 +2145,15 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     bodyJson["id"] = req.params.id; //storing the form id.
 
                     // Handled for "any" field Org for User.
-                    /*if (req.params.id === '7' && bodyJson["orgname"] === 'all') {
-                        logger.debug("Inside User check for any value.");
+                    logger.debug(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ",bodyJson["orgname"].length);
+                    if(req.params.id === '7' && bodyJson["orgname"] === ""){
+                        logger.debug("Inside if for empty");
                         bodyJson["orgname"] = "";
                         bodyJson["orgname_rowid"] = "";
+                    }/*else if (req.params.id === '7' && bodyJson["orgname"].length === 0) {
+                        logger.debug("Inside User check for any value.");
+                        bodyJson["orgname"] = [""];
+                        bodyJson["orgname_rowid"] = [""];
                     }*/
 
                     logger.debug("Full bodyJson: ", JSON.stringify(bodyJson));
@@ -2288,9 +2293,15 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                         return;
                                     });
                                 } else {
+                                    
                                     logger.debug("Rowid: %s", bodyJson["rowid"]);
                                     var currowid = bodyJson["rowid"];
                                     delete rowtoedit._id; //fixing the issue of 
+                                    if(req.params.id === '7' && bodyJson["orgname"] === ""){
+                                        logger.debug("Inside if for empty for update..");
+                                        rowtoedit["orgname"] = [""];
+                                        rowtoedit["orgname_rowid"] = [""];
+                                    }
                                     logger.debug('Rowtoedit: %s', JSON.stringify(rowtoedit));
                                     eval('d4dModelNew.' + dbtype).update({
                                         rowid: bodyJson["rowid"]
@@ -2866,4 +2877,21 @@ module.exports.setRoutes = function(app, sessionVerification) {
             }
         });
     });
+
+    /*app.get('/d4dMasters/orgs/:orgId/projects/all', function(req, res) {
+        var loggedInUser = req.session.user.cn;
+        masterUtil.getProjectsForOrg(req.params.orgId, function(err, projects) {
+            if (err) {
+                res.send(500, "Failed to fetch projects.");
+            }
+            if (projects) {
+                res.send(projects);
+                return;
+            }else{
+                res.send([]);
+                return;
+            }
+            
+        });
+    });*/
 }
