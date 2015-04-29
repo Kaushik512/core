@@ -491,7 +491,30 @@ var InstancesDao = function() {
             logger.debug("Exit updateAppUrl2 (%s, %s,%s)", instanceId, appUrlId, url);
             callback(null, data);
         });
-    }
+    };
+
+    this.removeAppUrl = function(instanceId, appUrlId, callback) {
+        logger.debug("Enter removeAppUrl (%s, %s)", instanceId, appUrlId);
+        Instances.update({
+            "_id": new ObjectId(instanceId)
+        }, {
+            $pull: {
+                appUrls: {
+                    "_id": new ObjectId(appUrlId),
+                }
+            }
+        }, {
+            upsert: false
+        }, function(err, count) {
+            if (err) {
+                logger.error("Failed to removeAppUrl (%s, %s,%s,%s)", instanceId, appUrlId, err);
+                callback(err, null);
+                return;
+            }
+            logger.debug("Exit removeAppUrl (%s, %s,%s)", instanceId, appUrlId);
+            callback(null, count);
+        });
+    };
 
 
 
