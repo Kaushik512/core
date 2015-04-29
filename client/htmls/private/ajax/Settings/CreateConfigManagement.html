@@ -148,8 +148,8 @@
        var ten = 10;
        readformnew(ten); //6 is for role
        //
-       /*if(typeof $('#myForm22').find('button[rowid]').attr('rowid') != 'undefined')
-          $('#orgname').attr('disabled','disabled'); */
+       if(typeof $('#myForm22').find('button[rowid]').attr('rowid') != 'undefined')
+          $('#orgname').attr('disabled','disabled');
         
        $('#content').css("opacity", "1 !important");
        //Force opening the left navigation menu
@@ -178,6 +178,7 @@
    $(document).ready(function () {
       $("#configname").focus();
        $('#myForm22').submit(function() {
+
            // $(this).validate();
    
            // if($(this).valid){
