@@ -1116,7 +1116,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 var settingsList = [];
                 var loggedInUser = req.session.user.cn;
                 var callCount = 0;
-                masterUtil.getOrgs(loggedInUser, function(err, orgs) {
+                masterUtil.getActiveOrgs(loggedInUser, function(err, orgs) {
                     logger.debug("got org list ==>", JSON.stringify(orgs));
                     if (err) {
                         res.send(500, "Failed to fetch Org.");

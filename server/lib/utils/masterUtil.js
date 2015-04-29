@@ -60,8 +60,7 @@ var MasterUtil = function(){
                                 
                                         logger.debug("Org orgIds for query: ",orgIds);
                                         d4dModelNew.d4dModelMastersOrg.find({
-                                            rowid : {$in:orgIds},
-                                            active : true
+                                            rowid : {$in:orgIds}
                                             },function(err,orgs){
                                                 count++;
                                             if(err){
@@ -340,43 +339,96 @@ var MasterUtil = function(){
         });
     }
 
-    // Return all UserRoles specific to User
-    /*this.getUserRoles = function(loggedInUser,callback){
-        var userRoleList = [];
-        d4dModelNew.d4dModelMastersUsers.find({
-            loginname : loggedInUser
-        },function(err,users){
-            if(users){
-                for(var i1 =0; i1< users.length; i1++){
-                    (function(i){
-                    if(users[i].id === '7'){
-                        d4dModelNew.d4dModelMastersUserroles.find({
-                            userrolename : users[i].userrolename
-                        },function(err,userRoles){
-                            if(err){
-                                    callback(err,null);
-                                    }
-                            if(userRoles){
-                                for(var j1=0; j1< userRoles.length; j1++){
-                                    (function(j){
-                                    if(userRoles[j].id === '6'){
-                                        userRoleList.push(userRoles[j]);
-                                    }
-                                })(j1);
-                                }
-                                 callback(null,userRoleList);
-                            }
-
-                        });
-                    }
-                })(i1);
+    // Return All Orgs specific to User
+    this.getActiveOrgs = function (loggedInUser,callback){   
+        var orgList = [];
+            d4dModelNew.d4dModelMastersUsers.find({
+                loginname: loggedInUser
+            },function(err,users){
+                if(err){
+                    logger.debug("Unable to fetch User.");
+                    callback(err,null);
                 }
-            }else{
-                callback(err,null);
-            }
-
-        });
-    }*/
+                logger.debug("Able to get User: ",JSON.stringify(users));
+                if(users){
+                    var count = 0;
+                    var usrCount = 0;
+                    var errOccured = false;
+                    for(var x=0; x<users.length;x++){
+                        (function(countUser){
+                            logger.debug("x+++++++++++++++++++++++ ",countUser);
+                            if(users[countUser].id === '7'){
+                                usrCount++;
+                                var orgIds = users[countUser].orgname_rowid;
+                                logger.debug("orgIds: ",typeof orgIds[0]);
+                                if(typeof orgIds[0] === 'undefined'){
+                                    d4dModelNew.d4dModelMastersOrg.find({
+                                            id : "1",
+                                            active : true
+                                            },function(err,orgs){
+                                                count++;
+                                            if(err){
+                                                logger.debug("Unable to fetch Org.",err);
+                                                errOccured = true;
+                                                return;
+                                            }
+                                            if(orgs){
+                                                for(var y=0;y<orgs.length;y++){
+                                                    (function(countOrg){
+                                                        logger.debug("y++++++++++++++++ ",countOrg);
+                                                        if(orgs[countOrg].id === '1'){
+                                                            logger.debug("Able to get Org.",JSON.stringify(orgs[countOrg]));
+                                                            orgList.push(orgs[countOrg]);
+                                                        }
+                                                    })(y);
+                                                }
+                                               
+                                        }
+                                         if(count === usrCount) { 
+                                                 logger.debug("Returned Orgs: ",JSON.stringify(orgList));
+                                                 callback(errOccured,orgList);
+                                                }
+                                           
+                                             
+                                        });
+                                }else{
+                                
+                                        logger.debug("Org orgIds for query: ",orgIds);
+                                        d4dModelNew.d4dModelMastersOrg.find({
+                                            rowid : {$in:orgIds},
+                                            active : true
+                                            },function(err,orgs){
+                                                count++;
+                                            if(err){
+                                                logger.debug("Unable to fetch Org.",err);
+                                                 errOccured = true;
+                                                return;
+                                            }
+                                            if(orgs){
+                                                for(var y=0;y<orgs.length;y++){
+                                                    (function(countOrg){
+                                                        if(orgs[countOrg].id === '1'){
+                                                            logger.debug("Able to get Org.",JSON.stringify(orgs[countOrg]));
+                                                            orgList.push(orgs[countOrg]);
+                                                        }
+                                                    })(y);
+                                                }
+                                            }
+                                            logger.debug('count ==>',count, "user length = >",usrCount);
+                                         if(count === usrCount) { 
+                                                 logger.debug("Returned Orgs: ",JSON.stringify(orgList));
+                                                 callback(errOccured,orgList);
+                                                }
+                                        });
+                                   } 
+                            }
+                        })(x);
+                    }
+                } else {
+                    callback(null,orgList);
+                }
+          });
+    }
 
     this.getUserRoles = function(callback){
         var userRoleList = [];
