@@ -1,6 +1,6 @@
               //function for showing the tableview and the cardview
-
-             function showHideControl(objID) {
+function devCall(){
+             window.showHideControl = function(objID) {
                  if (objID) {
                      if (objID == "divinstancescardview" || objID == "defaultViewButton") {
                          $("#divinstancestableview").removeClass("visibleClass").hide();
@@ -3633,3 +3633,5 @@
                  
 
              });
+
+          }
