@@ -213,7 +213,7 @@
 
                                                 <label for="">Application URL</label>
                                                 
-                                                <input type="url" name="appNameURL" class="form-control appURL" placeholder="http://$host[:port]/appname">
+                                                <input type="text" name="appNameURL" class="form-control appURL" placeholder="http://$host[:port]/appname">
                                                 <b class="tooltip tooltip-top-right">
                                                     <i class="fa fa-user txt-color-teal"></i> Please enter URL</b>
                                               </div>
@@ -1835,8 +1835,22 @@ $(document).ready(function(e){
                   var appUrls = []
                   $(this).find('.applicationURLContainer').each(function() {
                       var appUrlData = {};
+                      var regexpURL = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/; 
+
                       appUrlData.name = $(this).find('.appName').val();
                       appUrlData.url = $(this).find('.appURL').val();
+                      if(!(appUrlData.name)) {
+                          bootbox.alert("Please Enter Name");
+                          return false;
+                        }
+                        if(!(appUrlData.url)) {
+                          bootbox.alert("Please Enter URL");
+                          return false;
+                        }
+                        if(!regexpURL.test(appUrlData.url)){
+                          bootbox.alert('Please Enter a Valid URL');
+                          return false;
+                        }
                       if (appUrlData.name && appUrlData.url) {
                           appUrls.push(appUrlData);
                       }

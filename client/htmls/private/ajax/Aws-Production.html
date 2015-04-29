@@ -161,6 +161,7 @@
 
  <div class="col-lg-6" style="margin-top:15px;">
  <label for="">Select VPC:<span style="color:red">*</span></label>
+ <label id="vpcSpinner" class="hidden"><img  style="margin-left:5px;margin-right:25px;" src="img/select2-spinner.gif"></label>
  <select id="vpcId" class="chooseSelect chooseImage width-100">
  <option value="">Select VPC</option>                          
  </select>                                                                                            
@@ -168,6 +169,7 @@
 
  <div class="col-lg-6" style="margin-top:15px;">
  <label for="">Select Subnet:<span style="color:red">*</span></label>
+ <label id="spinnerSubnet" class="hidden"><img  style="margin-left:5px;margin-right:25px;" src="img/select2-spinner.gif"></label>
  <select id="subnetId" class="chooseSelect chooseImage width-100">
  <option value="">Select Subnet</option>                          
  </select>                                                     
@@ -818,9 +820,9 @@
 
  <!--app series-->
  <div class="applicationURLContainer" id="appSeries"> 
- <div class="col-lg-6 col-md-6" style="margin-top:15px;">
+ <div class="col-lg-6 col-md-6 projectRepo">
 
- <label for="">Name</label>
+ <label for="">Name:<span style="color:red">&nbsp;*</span></label>
 
  <input placeholder="AppName" type="text" maxlength="8" name="appNameInput" class="form-control appName">
  <b class="tooltip tooltip-top-right">
@@ -829,9 +831,9 @@
 
  </div>
 
- <div class="col-lg-6 col-md-6" style="margin-top:15px">
+ <div class="col-lg-6 col-md-6 projectRepo">
 
- <label for="">URL:<span style="color:Red;">&nbsp;*<span class="appUrlss hidden">Enter a Valid URL</span></span></label>
+ <label for="">URL:<span style="color:red">&nbsp;*</span></label>
 
  <input placeholder="http://$host[:port]/appname" name="appNameURL" class="form-control appURL" type="text">
  <b class="tooltip tooltip-top-right">
@@ -1373,15 +1375,21 @@ function getVPC(){
 
   function populateData(){
     var $provider=$('#providerId');
+    var $spinner = $('#vpcSpinner').addClass('hidden');
     var accessKey=$provider.find("option:selected").attr('accessKey'),
     secretKey=$provider.find("option:selected").attr('secretKey'),
     region=$('#region').val();
+    
+    
     if(accessKey && secretKey && region){
+      //alert('region');
+      $spinner.removeClass('hidden');
       $.ajax({
         url:"/aws/providers/describe/vpcs",
         method:"post",
         data:{"accessKey":accessKey,"secretKey":secretKey,"region":region},
         success:function(data){
+
           console.log(data);
           var str='';
           var filteredData=[];
@@ -1399,6 +1407,7 @@ function getVPC(){
             }
           }
           $('#vpcId').html(str).select2().trigger('change');
+          $spinner.addClass('hidden');
         },
         error:function(xhr){
           bootbox.alert(xhr.responseText);
@@ -1418,11 +1427,13 @@ $('#region').on('change',populateData);
 function getSubnet(){
   function populateData(){
     var $provider=$('#providerId');
+    var $spinnerSubnet = $('#spinnerSubnet').addClass('hidden');
     var accessKey=$provider.find("option:selected").attr('accessKey'),
     secretKey=$provider.find("option:selected").attr('secretKey'),
     region=$('#region').val(),
     vpcId=$('#vpcId').val();
     if(accessKey && secretKey && region && vpcId){
+      $spinnerSubnet.removeClass('hidden');
       $.ajax({
         url:"/aws/providers/vpc/"+vpcId+"/subnets",
         method:"post",
@@ -1441,7 +1452,7 @@ function getSubnet(){
           (filteredData[i].Tags.length?filteredData[i].Tags[0].Value:"")+'</option>';
           
         }
-
+        $spinnerSubnet.addClass('hidden');
         $('#subnetId').html(str).select2();
       },
       error:function(xhr){
@@ -2395,10 +2406,10 @@ $cookbookShow.append('<img class="center-block" style="height:50px;width:50px;ma
 
                  /*Binding Click events to Blueprints*/
 
-                 function initializeBluePrints() {
-                     bindClick_bluePrintUpdateNew();
-                     bindClick_updateInstanceRunListNew();
-                 }
+                 /*function initializeBluePrints() {
+                    // bindClick_bluePrintUpdateNew();
+                    // bindClick_updateInstanceRunListNew();
+                 }*/
 
                
 
@@ -2408,9 +2419,9 @@ $cookbookShow.append('<img class="center-block" style="height:50px;width:50px;ma
 
                  	
                  	             var reqBodyNew = {};
-                 var $orgListInput = $('#orgnameSelectNew');
-                 
-    			 reqBodyNew.orgId = $orgListInput.val();
+                               var $orgListInput = $('#orgnameSelectNew');
+                               
+                  			       reqBodyNew.orgId = $orgListInput.val();
 
                      var $AppFactpanelBody = $('.appFactoryPanel').find('.panel-body');
                      $AppFactpanelBody.empty();
@@ -2712,7 +2723,7 @@ $cookbookShow.append('<img class="center-block" style="height:50px;width:50px;ma
                  };
 
                  //Updating blueprints
-                 function bindClick_bluePrintUpdateNew() {
+                /* function bindClick_bluePrintUpdateNew() {
                      $('.blueprintUpdateBtn').click(function(e) {
 
                          var $blueprintEditResultContainer = $('#blueprintEditResultContainer');
@@ -2739,10 +2750,10 @@ $cookbookShow.append('<img class="center-block" style="height:50px;width:50px;ma
 
                          }
                      });
-                 }
+                 }*/
 
                  //Updating the blueprint Runlist
-                 function bindClick_updateInstanceRunListNew() {
+                /* function bindClick_updateInstanceRunListNew() {
                      // Blueprint runtlist updation
                      $('.btnUpdateInstanceRunlist').click(function(e) {
                          bootbox.confirm("Update runlist?", function(result) {
@@ -2791,7 +2802,7 @@ $cookbookShow.append('<img class="center-block" style="height:50px;width:50px;ma
 
 
                      });
-                 }
+                 }*/
 
                        //for removing the selected blueprint in the Existing Blueprints tab
              function removeSelectedBlueprint() {
@@ -2823,7 +2834,7 @@ $cookbookShow.append('<img class="center-block" style="height:50px;width:50px;ma
 
 
                  //Launching Blueprints when the user clicks on the launch button in blueprints tab
-                 function bindClick_LaunchBtn() {
+                 /*function bindClick_LaunchBtn() {
 
                      $('.launchBtn').click(function(e) {
                          $('#commentForm')[0].reset();
@@ -3010,7 +3021,7 @@ $cookbookShow.append('<img class="center-block" style="height:50px;width:50px;ma
                      });
 
                  }
-
+*/
 
 
 
