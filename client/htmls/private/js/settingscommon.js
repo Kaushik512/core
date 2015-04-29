@@ -2676,7 +2676,7 @@ function isFormValid(formid) {
     });
     if (formid && formid === 19) {
         var selectionMode = $('#commandtype').val();
-        if (selectionMode === "Chef Cookbook/Recepie") {
+        if (selectionMode === "Chef Cookbook/Recipe") {
             if ($('#servicename').val().trim()) {
                 isValid = true;
             } else {

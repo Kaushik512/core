@@ -44,7 +44,7 @@
                                                 Service Command Type
                                                 </label>
                                                 <select class="width-100" id="commandtype" cdata="catalyst">
-                                                   <option value="Chef Cookbook/Recepie">Chef Cookbook/Recepie</option>
+                                                   <option value="Chef Cookbook/Recipe">Chef Cookbook/Recipe</option>
                                                    
                                                    <option value="Service Command">Service Command</option>
                                                 </select>
@@ -225,7 +225,7 @@
    $("#customScript-dropdown").hide();
    
    $('#commandtype').change(function(e) {
-   if(this.value=="Chef Cookbook/Recepie"){
+   if(this.value=="Chef Cookbook/Recipe"){
       $("#customScript-dropdown").hide();
       $("#chefCookbook-dropdown").show();
       $(".ServiceCookbooks").show();
