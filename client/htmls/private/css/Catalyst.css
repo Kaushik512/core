@@ -7494,6 +7494,7 @@ body .ui-tooltip {
     height:430px;
     overflow-y:auto;
     overflow-x:hidden;
+    word-break:break-word;
 }
 
 .dockerModal{
@@ -7669,47 +7670,6 @@ word-break:break-word;
 .imgMargin{
     margin-left: -12px;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 .smart-form .icon-append, .smart-form .icon-prepend {
     position: absolute;
     top: 5px;
@@ -7748,14 +7708,6 @@ word-break:break-word;
     display: table;
     clear: both;
 }
-
-
-
-
-
-
-
-
 .widget-toolbar .smart-form .icon-append, .widget-toolbar .smart-form .icon-prepend, .widget-toolbar.smart-form .icon-append, .widget-toolbar.smart-form .icon-prepend {
     top: 3px!important;
 }
@@ -7801,4 +7753,10 @@ word-break:break-word;
     appearance: normal;
     -moz-appearance: none;
     -webkit-appearance: none;
+}
+.awsExisting{
+    margin-top: 15px;
+    border: solid gray 1px;
+    padding-top: 12px;
+    padding-bottom: 17px;
 }
