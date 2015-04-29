@@ -2142,11 +2142,11 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     bodyJson["id"] = req.params.id; //storing the form id.
 
                     // Handled for "any" field Org for User.
-                    if (req.params.id === '7' && bodyJson["orgname"] === 'any') {
+                    /*if (req.params.id === '7' && bodyJson["orgname"] === 'all') {
                         logger.debug("Inside User check for any value.");
                         bodyJson["orgname"] = "";
                         bodyJson["orgname_rowid"] = "";
-                    }
+                    }*/
 
                     logger.debug("Full bodyJson: ", JSON.stringify(bodyJson));
                     configmgmtDao.getDBModelFromID(req.params.id, function(err, dbtype) {

@@ -51,9 +51,9 @@
                                                         <label for="category">Organization:<span style="color:Red;" class="control-label">&nbsp;*</span>
                                                         </label>
 
-                                                        <select id="orgname" class="chooseOrganization width-100" sourcepath="1" datapath="masterjson.rows.row" valuelinkfield="costcode" style="vertical-align:central" cdata="catalyst" cat-validation="required" cat-validation="required" linkedfields="['configname']" onchange="$('#configname').change();">
-                                                            <option value="">Select an Organization</option>
-                                                            <option value="any">Any</option>
+                                                        <select id="orgname" class="chooseOrganization width-100" sourcepath="1" datapath="masterjson.rows.row" valuelinkfield="costcode" style="vertical-align:central" cdata="catalyst" >
+                                                            <!-- <option value="">Select an Organization</option> -->
+                                                            <option value="" hidden>All</option>
                                                         </select>
 
                                                     </div>
