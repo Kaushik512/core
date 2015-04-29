@@ -28,7 +28,8 @@ var MasterUtil = function(){
                                 logger.debug("orgIds: ",typeof orgIds[0]);
                                 if(typeof orgIds[0] === 'undefined'){
                                     d4dModelNew.d4dModelMastersOrg.find({
-                                            id : "1"
+                                            id : "1",
+                                            active : true
                                             },function(err,orgs){
                                                 count++;
                                             if(err){
@@ -59,7 +60,8 @@ var MasterUtil = function(){
                                 
                                         logger.debug("Org orgIds for query: ",orgIds);
                                         d4dModelNew.d4dModelMastersOrg.find({
-                                            rowid : {$in:orgIds}
+                                            rowid : {$in:orgIds},
+                                            active : true
                                             },function(err,orgs){
                                                 count++;
                                             if(err){
@@ -568,7 +570,8 @@ var MasterUtil = function(){
                             logger.debug("Team array: ",JSON.stringify(teams));
                             returnObj.teams=teams;
                             d4dModelNew.d4dModelMastersOrg.find({
-                                rowid:{$in:users[usr].orgname_rowid}
+                                rowid:{$in:users[usr].orgname_rowid},
+                                active : true
                             },function(err,org){
                                 if(err){
                                     callback(err,null);
@@ -758,6 +761,31 @@ var MasterUtil = function(){
                 })
             }
         })
+    }
+
+    // check valid user permission
+    this.getProjectsForOrg = function(orgId,callback){
+        var projectList =[];
+        d4dModelNew.d4dModelMastersProjects.find({
+            orgname_rowid: orgId
+        },function(err,projects){
+            if(err){
+                callback(err,null);
+            }
+            if(projects){
+                for(var i=0;i<projects.length;i++){
+                    (function(projectCount){
+                        if(projects[projectCount].id === '4'){
+                            projectList.push(projects[projectCount]);
+                        }
+                    })(i);
+                }
+                logger.debug("Returned Projects: ",JSON.stringify(projectList));
+                //callback(null,projectList);
+            }
+            callback(null,projectList);
+        });
+
     }
 }
 
