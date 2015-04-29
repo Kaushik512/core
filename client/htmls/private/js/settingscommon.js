@@ -458,6 +458,15 @@ function CreateTableFromJson(formID, idFieldName, createFileName) {
 
         // alert(JSON.stringify(formData));
         //Reading row to get schema
+        for(var x=0;x<d4ddata.length;x++){
+            if(d4ddata[x].orgname !== "undefined"){
+               // console.log("Value for all",d4ddata[x].orgname[0]);
+                if(d4ddata[x].orgname[0] === ""){
+                    console.log("Value for all");
+                    d4ddata[x].orgname[0] = "All";
+                }
+            }
+        }
         formData = d4ddata;
         //alert(JSON.stringify(formData));
 
@@ -1204,6 +1213,14 @@ function readform(formID) {
         // //  alert(orgName);
         // var editMode = false;
         //  alert(d4ddata);
+
+        /*for(var x=0;x<d4ddata.length;x++){
+            console.log("d4ddata[x].orgname[x]>>>>>>> ",d4ddata[x].orgname[0]);
+            if(d4ddata[x].orgname[0] === ""){
+                console.log("Value for all");
+                d4ddata[x].orgname[0] = "All";
+            }
+        }*/
         formData = d4ddata;
 
         //alert("here " + JSON.stringify(formData) + ":" + orgName);
@@ -1573,6 +1590,7 @@ function readformnew(formID) {
 
 
         //   alert(JSON.stringify(formData.rows.row[0].field));
+        // here
 
         $.each(formData, function(k, v) {
             var inputC = null;
@@ -1937,7 +1955,12 @@ function saveform(formID, operationTypes) {
         data1.append("rowid", button.attr("rowid"));
     }
 
-
+    
+    if(orgname){
+        console.log("no orgname>>>>");
+        orgName = "all";
+    }
+    console.log(">>>>>>>>>>>>>>>>>>>>>>>>> orgname: ",orgname);
     //alert("Length : " + data1.length);
     //data1.append("costcode","[\"code1\",\"code2\",\"code3\"]");
     //setting filenames to null if empty
@@ -1969,7 +1992,7 @@ function saveform(formID, operationTypes) {
         data1.append('osusername','ubuntu');
        }
    }
-    console.log(data1);
+    console.log(orgName);
     // alert(serviceURL + "savemasterjsonrownew/" + formID + "/" + fileNames + "/" + orgName );
     $.ajax({
         url: serviceURL + "savemasterjsonrownew/" + formID + "/" + fileNames + "/" + orgName,

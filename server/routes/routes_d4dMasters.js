@@ -1672,10 +1672,10 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
         //Handling the exception to handle uploads without orgname
         if (req.params.orgname) {
-            if (req.params.orgname == '/')
+            if (req.params.orgname === '/')
                 req.params.orgname = '';
 
-            if (req.params.orgname == '' || req.params.orgname == "undefined") {
+            if (req.params.orgname === '' || req.params.orgname === "undefined") {
                 req.params.orgname = "catalyst_files";
             }
         }
@@ -2049,7 +2049,10 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     // To do save uploaded files.
                     //saveuploadedfile(suffix,fileinputs,orgname,req,res,callback)
                     logger.debug("folderpath: %s", folderpath);
-
+                    //resetting the orgname when saving template
+                    if(req.params.id == '17'){
+                        req.params.orgname = '';
+                    }
                     if (req.params.fileinputs != 'null')
                         res.send(saveuploadedfile(uuid1 + '__', folderpath, req));
                     else
@@ -2142,11 +2145,11 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     bodyJson["id"] = req.params.id; //storing the form id.
 
                     // Handled for "any" field Org for User.
-                    if (req.params.id === '7' && bodyJson["orgname"] === 'any') {
+                    /*if (req.params.id === '7' && bodyJson["orgname"] === 'all') {
                         logger.debug("Inside User check for any value.");
                         bodyJson["orgname"] = "";
                         bodyJson["orgname_rowid"] = "";
-                    }
+                    }*/
 
                     logger.debug("Full bodyJson: ", JSON.stringify(bodyJson));
                     configmgmtDao.getDBModelFromID(req.params.id, function(err, dbtype) {
@@ -2272,6 +2275,10 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                 }
                                             });
                                         }
+                                        //resetting the orgname to empty string when a template type file is uploaded.
+                                        if(req.params.id == '17'){
+                                           req.params.orgname = "undefined";
+                                        }
 
                                         if (req.params.fileinputs != 'null')
                                             res.send(saveuploadedfile(newrowid + '__', folderpath, req));
@@ -2318,7 +2325,10 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
                                         logger.debug('Master Data Updated: %s', saveddata);
                                         logger.debug('folderpath: %s rowid %s', folderpath, currowid);
-
+                                        //resetting the orgname to empty string when a template type file is uploaded.
+                                        if(req.params.id == '17'){
+                                            req.params.orgname = "undefined";
+                                        }
                                         if (req.params.fileinputs != 'null')
                                             res.send(saveuploadedfile(currowid + '__', folderpath, req));
                                         else
