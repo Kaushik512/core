@@ -8,7 +8,7 @@ var appConfig = require('../../config/app_config');
 var chefSettings = appConfig.chef;
 var logger = require('../../lib/logger')(module);
 var blueprintdao = require('../dao/blueprints.js');
-var instancedao = require('../dao/instancesdao.js');
+var instancedao = require('../classes/instance/instance.js');
 
 function Configmgmt() {
     this.getDBModelFromID = function(id, callback) {

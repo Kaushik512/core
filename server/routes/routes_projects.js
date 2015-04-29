@@ -1,6 +1,6 @@
 var blueprintsDao = require('../model/dao/blueprints');
 
-var instancesDao = require('../model/dao/instancesdao');
+var instancesDao = require('../model/classes/instance/instance');
 
 module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
