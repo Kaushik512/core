@@ -186,8 +186,6 @@
 
  <div class="col-lg-6 col-md-6" style="margin-top:15px;">
  <label for="">Select KeyPair :<span style="color:red">*</span></label>
-
-
  <select id="keypairId" class="instanceType chooseInstance width-100">
  <option value="">Choose KeyPair </option>
  </select>
@@ -212,6 +210,7 @@
 
  <div class="col-lg-6" style="margin-top:15px;">
  <label for="category">Security Group:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+ <label id="spinnerSecurityGroup" class="hidden"><img  style="margin-left:5px;margin-right:25px;" src="img/select2-spinner.gif"></label>
  <div class="col-lg-6 smart-form multiselect" style="  height: 140px;overflow-y: scroll;border:1px solid gray;padding: 0px;width:100%">       
  <div id="securityGroupIds" multiselect="multiselect" datatype="select" datapath="" class="input-group from-control col-md-12 widthBox" style="width:99%;margin-top:-1px;border:0px" cdata="catalyst" cat-validation="onechecked">
  </div>
@@ -822,7 +821,7 @@
  <div class="applicationURLContainer" id="appSeries"> 
  <div class="col-lg-6 col-md-6 projectRepo">
 
- <label for="">Name:<span style="color:red">&nbsp;*</span></label>
+ <label for="">Name:</label>
 
  <input placeholder="AppName" type="text" maxlength="8" name="appNameInput" class="form-control appName">
  <b class="tooltip tooltip-top-right">
@@ -833,7 +832,7 @@
 
  <div class="col-lg-6 col-md-6 projectRepo">
 
- <label for="">URL:<span style="color:red">&nbsp;*</span></label>
+ <label for="">URL:</label>
 
  <input placeholder="http://$host[:port]/appname" name="appNameURL" class="form-control appURL" type="text">
  <b class="tooltip tooltip-top-right">
@@ -1300,11 +1299,13 @@ return data;
 
   function populateData(){
     var $provider=$('#providerId');
-    var accessKey=$provider.find("option:selected").attr('accessKey'),
-    secretKey=$provider.find("option:selected").attr('secretKey'),
-    region=$('#region').val(),
+    var accessKey=$provider.find("option:selected").attr('accessKey');
+    secretKey=$provider.find("option:selected").attr('secretKey');
+    region=$('#region').val();
     vpcId=$('#vpcId').val();
+    var $spinnerSecurityGroup = $('#spinnerSecurityGroup').addClass('hidden');
     if(accessKey && secretKey && region && vpcId){
+      $spinnerSecurityGroup.removeClass('hidden');
       $.ajax({
         url:'/aws/providers/vpc/'+vpcId+'/securitygroups',
         method:"post",
@@ -1320,6 +1321,7 @@ return data;
     for(var i=0;i<len;i++){
       str=str+getTemplate(list[i].GroupId,list[i].GroupId+' | '+list[i].GroupName);
     }
+    $spinnerSecurityGroup.addClass('hidden');
     $('#securityGroupIds').html('').append(str);
 
   },
