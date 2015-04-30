@@ -153,7 +153,7 @@ var config = {
     },
 
     features: {
-        appcard: true
+        appcard: false
     },
 
     //getter methods
