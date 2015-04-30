@@ -52,7 +52,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
                                 //nodeNames.push(instances[i].chef.chefNodeName);
                                 var index = nodeList.indexOf(instances[i].chef.chefNodeName);
                                 if( index !== -1) {
-                                  nodeList.splice(index,1); 
+                                  // nodeList.splice(index,1); //commented to prevent existing nodes not to be listed. Vinod 30-Apr-2015
                                 }
                             }
                             res.send(nodeList);
