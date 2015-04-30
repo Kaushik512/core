@@ -145,7 +145,7 @@ function getDefaultsConfig() {
             ou: ''*/
         },
         features: {
-            appcard: true
+            appcard: false
         },
 
         //getter methods

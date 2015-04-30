@@ -1130,6 +1130,11 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                             return;
                         }
                         console.log(updateCount);
+                        console.log("upda countt  ====>",updateCount);
+                        console.log(typeof updateCount);
+                        if(updateCount && (typeof updateCount === 'Object' ||  typeof updateCount === 'object') && updateCount.n) {
+                            updateCount = updateCount.n;
+                        }
                         if (updateCount > 0) {
                             logger.debug("Exit post() for /instances/%s/services/add", req.params.instanceId);
                             res.send(200, req.body.serviceIds);
@@ -1294,7 +1299,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                         });
                         return;
                     }
-                    if (serviceData.commandtype === "Chef Cookbook/Recepie") {
+                    if (serviceData.commandtype === "Chef Cookbook/Recipe") {
                         configmgmtDao.getChefServerDetails(serviceData.chefserverid, function(err, chefDetails) {
                             if (err) {
                                 var timestampEnded = new Date().getTime();
