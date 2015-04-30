@@ -1299,7 +1299,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                         });
                         return;
                     }
-                    if (serviceData.commandtype === "Chef Cookbook/Recepie") {
+                    if (serviceData.commandtype === "Chef Cookbook/Recipe") {
                         configmgmtDao.getChefServerDetails(serviceData.chefserverid, function(err, chefDetails) {
                             if (err) {
                                 var timestampEnded = new Date().getTime();
