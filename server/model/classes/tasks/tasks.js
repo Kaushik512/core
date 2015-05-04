@@ -8,6 +8,9 @@ var uniqueValidator = require('mongoose-unique-validator');
 var ChefTask = require('./taskTypeChef');
 var JenkinsTask = require('./taskTypeJenkins');
 
+var TaskHistory = require('./taskHistory');
+
+
 var Schema = mongoose.Schema;
 
 var TASK_TYPE = {
@@ -61,7 +64,7 @@ var taskSchema = new Schema({
     taskConfig: Schema.Types.Mixed,
     lastTaskStatus: String,
     lastRunTimestamp: Number,
-    timestampEnded: Number,
+    timestampEnded: Number
 });
 
 // instance method :-  
@@ -71,10 +74,26 @@ taskSchema.methods.execute = function(userName, baseUrl, callback, onComplete) {
     logger.debug('Executing');
     var task;
     var self = this;
+
+    var taskHistoryData = {
+        taskId: self._id,
+        taskType: self.taskType,
+        user: userName
+    };
+
     if (this.taskType === TASK_TYPE.CHEF_TASK) {
         task = new ChefTask(this.taskConfig);
+
+        taskHistoryData.nodeIds = this.taskConfig.nodeIds;
+        taskHistoryData.runlist = this.taskConfig.runlist;
+        taskHistoryData.attributes = this.taskConfig.attributes;
+
     } else if (this.taskType === TASK_TYPE.JENKINS_TASK) {
         task = new JenkinsTask(this.taskConfig);
+        taskHistoryData.jenkinsServerId = this.taskConfig.jenkinsServerId;
+        taskHistoryData.jobName = this.taskConfig.jobName;
+
+
     } else {
         callback({
             message: "Invalid Task Type"
@@ -82,7 +101,7 @@ taskSchema.methods.execute = function(userName, baseUrl, callback, onComplete) {
         return;
     }
     var timestamp = new Date().getTime();
-
+    var taskHistory = null;
     task.execute(userName, baseUrl, function(err, taskExecuteData) {
         if (err) {
             callback(err, null);
@@ -97,11 +116,30 @@ taskSchema.methods.execute = function(userName, baseUrl, callback, onComplete) {
             }
             logger.debug("Task last run timestamp updated");
         });
+
+
         if (!taskExecuteData) {
             taskExecuteData = {};
         }
         taskExecuteData.timestamp = timestamp;
         taskExecuteData.taskType = task.taskType;
+
+
+        //making task history entry
+        taskHistoryData.status = TASK_STATUS.RUNNING;
+        taskHistoryData.timestampStarted = timestamp;
+        if (taskExecuteData.buildNumber) {
+            taskHistoryData.buildNumber = taskExecuteData.buildNumber;
+        }
+        TaskHistory.createNew(taskHistoryData, function(err, taskHistoryEntry) {
+            if (err) {
+                logger.error("Unable to make task history entry", err);
+                return;
+            }
+            taskHistory = taskHistoryEntry;
+            logger.debug("Task history created");
+        });
+
         callback(null, taskExecuteData);
     }, function(err, status) {
         self.timestampEnded = new Date().getTime();
@@ -111,6 +149,14 @@ taskSchema.methods.execute = function(userName, baseUrl, callback, onComplete) {
             self.lastTaskStatus = TASK_STATUS.FAILED;
         }
         self.save();
+
+        //updating task history
+        if (taskHistory) {
+            taskHistory.timestampEnded = self.timestampEnded;
+            taskHistory.status = self.lastTaskStatus;
+            taskHistory.save();
+        }
+
         if (typeof onComplete === 'function') {
             onComplete(err, status);
         }
