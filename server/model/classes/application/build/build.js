@@ -27,7 +27,7 @@ var buildSchema = new Schema({
 
 // instance method
 // Do a build
-buildSchema.methods.execute = function(user, callback) {
+buildSchema.methods.execute = function(user, baseUrl, callback) {
     var self = this;
     Task.getTaskById(self.taskId, function(err, task) {
         if (err) {
@@ -37,7 +37,7 @@ buildSchema.methods.execute = function(user, callback) {
         }
         var buildHistory;
         var timestampStarted = new Date().getTime();
-        task.execute(user, function(err, taskRes) {
+        task.execute(user, baseUrl, function(err, taskRes) {
             if (err) {
                 logger.error(err);
                 callback(err, null)

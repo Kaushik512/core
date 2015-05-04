@@ -67,7 +67,7 @@ var taskSchema = new Schema({
 // instance method :-  
 
 // Executes a task
-taskSchema.methods.execute = function(userName, callback, onComplete) {
+taskSchema.methods.execute = function(userName, baseUrl, callback, onComplete) {
     logger.debug('Executing');
     var task;
     var self = this;
@@ -83,7 +83,7 @@ taskSchema.methods.execute = function(userName, callback, onComplete) {
     }
     var timestamp = new Date().getTime();
 
-    task.execute(userName, function(err, taskExecuteData) {
+    task.execute(userName, baseUrl, function(err, taskExecuteData) {
         if (err) {
             callback(err, null);
             return;
@@ -145,7 +145,7 @@ taskSchema.statics.createNew = function(taskData, callback) {
         });
     } else if (taskData.taskType === TASK_TYPE.CHEF_TASK) {
         var attrJson = null;
-        
+
         taskConfig = new ChefTask({
             taskType: TASK_TYPE.CHEF_TASK,
             nodeIds: taskData.nodeIds,
@@ -263,7 +263,7 @@ taskSchema.statics.updateTaskById = function(taskId, taskData, callback) {
             jobName: taskData.jobName
         });
     } else if (taskData.taskType === TASK_TYPE.CHEF_TASK) {
-       
+
         taskConfig = new ChefTask({
             taskType: TASK_TYPE.CHEF_TASK,
             nodeIds: taskData.nodeIds,

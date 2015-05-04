@@ -22,7 +22,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 res.send(500, errorResponses.db.error);
                 return;
             }
-            task.execute(req.session.user.cn, function(err, taskRes) {
+            task.execute(req.session.user.cn, req.protocol + '://' + req.get('host'), function(err, taskRes) {
                 if (err) {
                     logger.error(err);
                     res.send(500, err);

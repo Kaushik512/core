@@ -44,7 +44,7 @@ AppInstanceSchema.methods.getNodes = function(callback) {
     getWorkflowNodes(this.workflows[count]);
 };
 
-AppInstanceSchema.methods.executeWorkflow = function(workflowId, username, callback, onComplete) {
+AppInstanceSchema.methods.executeWorkflow = function(workflowId, username, baseUrl, callback, onComplete) {
     var workflows = this.workflows;
     if (!workflows.length) {
         callback({
@@ -66,7 +66,7 @@ AppInstanceSchema.methods.executeWorkflow = function(workflowId, username, callb
         return;
     }
 
-    workflow.execute(username, function(err, tasks) {
+    workflow.execute(username, baseUrl, function(err, tasks) {
         if (err) {
             callback(err, null);
             return;
