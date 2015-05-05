@@ -2422,7 +2422,9 @@
 
                                        function pollJobOutput() {
                                            $.get('../jenkins/' + jenkinsServerId + '/jobs/' + jobName + '/builds/' + buildNumber + '/output', function(jobOutput) {
-                                               $tabContent.find('.taskLogArea').html(jobOutput.output);
+                                               var output = jobOutput.output.replace(/\r?\n/g, "<br />");
+
+                                               $tabContent.find('.taskLogArea').html(output);
                                                console.log(jobOutput);
                                                setTimeout(function() {
                                                    if ($('#assignedExecute').data()['bs.modal'].isShown) {
