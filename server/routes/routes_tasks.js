@@ -81,6 +81,27 @@ module.exports.setRoutes = function(app, sessionVerification) {
         });
     });
 
+    app.get('/tasks/:taskId/history', function(req, res) {
+        Tasks.getTaskById(req.params.taskId, function(err, task) {
+            if (err) {
+                logger.error(err);
+                res.send(500, errorResponses.db.error);
+                return;
+            }
+            if (task) {
+                task.getHistory(function(err, tHistories) {
+                    if (err) {
+                        res.send(500, errorResponses.db.error);
+                        return;
+                    }
+                    res.send(tHistories);
+                });
+            } else {
+                res.send(404);
+            }
+        });
+    });
+
     app.post('/tasks', function(req, res) {
         Tasks.getTaskByIds(req.body.taskIds, function(err, data) {
             if (err) {
