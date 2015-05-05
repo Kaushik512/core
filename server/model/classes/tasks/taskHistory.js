@@ -39,12 +39,25 @@ taskHistorySchema.statics.createNew = function(historyData, callback) {
     var taskHistory = new self(historyData);
 
     taskHistory.save(function(err, tHistory) {
-    	logger.debug('saving task history ==>');
+        logger.debug('saving task history ==>');
         if (err) {
             callback(err, null);
             return;
         }
         callback(null, tHistory);
+    });
+};
+
+taskHistorySchema.statics.getHistoryByTaskId = function(taskId, callback) {
+
+    this.find({
+        taskId: taskId
+    }, function(err, tHistories) {
+        if (err) {
+            callback(err, null);
+            return;
+        }
+        callback(null, tHistories);
     });
 };
 
