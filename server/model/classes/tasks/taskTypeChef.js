@@ -77,13 +77,17 @@ chefTaskSchema.methods.execute = function(userName, baseUrl, onExecute, onComple
         var count = 0;
         var overallStatus = 0;
         var instanceResultList = [];
+        var executionIds = [];
 
-        function instanceOnCompleteHandler(err, status, instanceId) {
+        function instanceOnCompleteHandler(err, status, instanceId, executionId) {
             logger.debug('Instance onComplete fired', count, instances.length);
             count++;
             var result = {
                 instanceId: instanceId,
                 status: 'success'
+            }
+            if(executionId) {
+                result.executionId = executionId;
             }
             if (err) {
                 result.status = 'failed';
@@ -99,7 +103,9 @@ chefTaskSchema.methods.execute = function(userName, baseUrl, onExecute, onComple
             instanceResultList.push(result);
             if (!(count < instances.length)) {
                 if (typeof onComplete === 'function') {
-                    onComplete(null, overallStatus);
+                    onComplete(null, overallStatus, {
+                        instancesResults: instanceResultList
+                    });
                 }
             }
         }
@@ -235,7 +241,7 @@ chefTaskSchema.methods.execute = function(userName, baseUrl, onExecute, onComple
                                         timestamp: timestampEnded
                                     });
                                     instancesDao.updateActionLog(instance._id, actionLog._id, false, timestampEnded);
-                                    instanceOnCompleteHandler(err, 1, instance._id);
+                                    instanceOnCompleteHandler(err, 1, instance._id, chefClientExecution.id);
                                     return;
                                 }
                                 console.log("knife ret code", retCode);
@@ -248,9 +254,9 @@ chefTaskSchema.methods.execute = function(userName, baseUrl, onExecute, onComple
                                         timestamp: timestampEnded
                                     });
                                     instancesDao.updateActionLog(instance._id, actionLog._id, true, timestampEnded);
-                                    instanceOnCompleteHandler(null, 0, instance._id);
+                                    instanceOnCompleteHandler(null, 0, instance._id, chefClientExecution.id);
                                 } else {
-                                    instanceOnCompleteHandler(null, retCode, instance._id);
+                                    instanceOnCompleteHandler(null, retCode, instance._id, chefClientExecution.id);
                                     if (retCode === -5000) {
                                         logsDao.insertLog({
                                             referenceId: logsReferenceIds,
