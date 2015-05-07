@@ -23,6 +23,8 @@ Testing All New Config Management Conditions
     Config Name left empty  ${VaildEmptyConfignameErrMsg}
     Vaildate Empty User Name  ${VaildEmptyUsername}
     User Name left empty  ${VaildEmptyUsernameErrMsg}
+    Vaildate Empty User Pem and Validator Pem and Knife File 
+
 
 Create New Config Management
     Clicks on New button to Create New Config Management
@@ -39,12 +41,7 @@ Create New Config Management
 Unique Devops Configuration Management
     Clicks on New button to Create New Config Management
     Validate the Unique Configuration Name   ${ValidateAlrdyExistConfigName}
-    Enters config management user name
     Validate the Unique Organization   ${ValidateAlrdyExistOrgName}
-    Enters config management URL
-    Upload user Pem File
-    Upload Validator Pem File
-    Upload Validator Knife File
     Clicks on Save button to save the Environment detail
     Configuration name already exists    ${ValidateAlrdyExistConfigNameErrMsg}
     Organization name already exists     ${ValidateAlrdyExistOrgNameErrMsg}
@@ -56,10 +53,35 @@ Devops Click on Update of Your org and Org is disabled
     Organization is Disabled
     Verify the Organziation
     Clicks on Save button to save the Environment detail
+
+Catlayst Unique Organization Validation
+    Clicks on New button to Create New Config Management
+    Enters New Configrtn Name to check
+    Enters config management user name
+    Enters config management URL
+    Select organization for config management
+    Upload user Pem File
+    Upload Validator Pem File
+    Upload Validator Knife File
+    Clicks on Save button to save the Environment detail
+    Validate the Organization of Already Created
+
+Enters New Configrtn Name to check
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    id=configname    CatServer
+
+Validate the Organization of Already Created
+    Element Should Contain    id=unique_orgname    ${AlreadyExistOrg}
+    Clicks on Config Cancel Button
+
     
-
-
-
+Vaildate Empty User Pem and Validator Pem and Knife File
+    Clicks on New button to Create New Config Management
+    Enters config management name
+    Enters config management user name
+    Select organization for config management
+    Enters config management URL
+    Clicks on Save button to save the Environment detail
+    Clicks on Config Cancel Button
 
 
 Vaildate Empty User Name
@@ -136,7 +158,7 @@ Vaildate the Empty URL field
 
 
 Enters empty config management URL
-    Input Text    id=url    ${url}
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    id=url    ${url}
 
 
 
@@ -207,13 +229,13 @@ Enters config management name
 
 Enters config management user name
     Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       id=loginname
-    Input Text     id=loginname      ${CONFIG MANAGEMENT USER NAME}
+    Input Text     id=loginname      pcjoshi9
 
 Select organization for config management
     Select From List     id=orgname      ${ORGANIZATION NAME}
 
 Enters config management URL
-    Input Text     id=url      ${CONFIG MANAGEMENT URL}
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text     id=url      ${CONFIG MANAGEMENT URL}
 
 
 Upload user Pem File
@@ -237,8 +259,18 @@ Clicks on Save button to save the Environment detail
 #    Click Element     xpath=.//*[@id='bot2-Msg1']
 
 Validate the Unique Configuration Name                       #Unique Devops Config name start
-    [Arguments]    ${configname}
-    Enters config management name
+    [Arguments]    ${config}
+    Enters config management Unique name    ${config}
+
+
+Enters config user name
+    Input Text    id=loginname    pcjoshi9
+
+Enters config management Unique name
+    [Arguments]    ${config}
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    id=configname    ${config}
+
+
 
 Configuration name already exists
      [Arguments]    ${ValidateAlrdyExistConfigNameErrMsg}
@@ -283,10 +315,6 @@ Verify the Organziation
 
 Clicks on Environments menu
     Click Element    xpath=.//*[@id='Settings']/li[2]/ul/li[2]/a/span
-
-
-
-
 
 
 
@@ -340,7 +368,7 @@ Catalyst import chef server nodes by provider
     Select the Project from dropdown list
     Select the Provider from dropdown list
     Select Assign User
-    Click on Import button
+    Click on Nodes Import button
 
 
 Chef server nodes import              
@@ -348,14 +376,14 @@ Chef server nodes import
     Clicks on DevOps Setup menu
     Clicks on Config Management menu
     Select chef server and click on the last icon namely import nodes Button
-    Select the nodes namely MySql_Server and WebServer 
+    Select the Environment to Import Nodes
     Click on Import nodes button on the bottom of the page
     Select the Business Group from dropdown list
     Select the Project from dropdown list
     Import User Name and Password
     Choose Authentication Type
     Upload user NodePem File
-    Select Multiple Assign User
+    #Select Multiple Assign User
     Click on Import button
 
 Verify the Workzone and Design
@@ -377,6 +405,13 @@ Verify the Workzone and Design
     Wait for few minutes and click on close button
     Verify the stop status of the instance
 
+
+Click on Nodes Import button
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='myForm12']/div[3]/div/button
+
+
+
+
 Verify the Workzone Instances
 #    Wait For Condition  Page Should Contain Link      xpath=//header[@id='header']/div[2]/li/a      WORKZONE
     Look for the list of links for the logged in user
@@ -396,7 +431,7 @@ Select chef server and click on the last icon namely import nodes under Action
 #    \       Run Keyword If    '${extracted chef server name}' == '${ORGANIZATION NAME}'       Click Element        xpath=//div[@id='envtable_wrapper']/table/tbody/tr[${INDEX}]/td[5]/div/a[3]
 #    \       Click Element        xpath=//div[@id='envtable_wrapper']/table/tbody/tr[${INDEX}]/td[5]/div/a[3]
 #    \       Exit For Loop If     '${extracted chef server name}' == '${ORGANIZATION NAME}'
-    Wait Until Keyword Succeeds    1 minute     1 seconds       Element Should Be Visible       xpath=//div[@id='envtable_wrapper']/table/tbody/tr[1]/td[1]
+    Wait Until Keyword sSucceeds    1 minute     1 seconds       Element Should Be Visible       xpath=//div[@id='envtable_wrapper']/table/tbody/tr[1]/td[1]
                 ${maxloop} =        Set Variable     200
     :FOR    ${INDEX}    IN RANGE    1    ${maxloop}
     \       ${extracted chef server name}          Get Text       xpath=//div[@id='envtable_wrapper']/table/tbody/tr[${INDEX}]/td[4]
@@ -405,6 +440,26 @@ Select chef server and click on the last icon namely import nodes under Action
 #    \       Exit For Loop If     '${extracted chef server name}' == '${ORGANIZATION NAME}'
     Click Element        xpath=//div[@id='envtable_wrapper']/table/tbody/tr[${last index}]/td[5]/div/a[3]
 
+
+Select the Environment to Import Nodes
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='organiz']/table/tbody/tr[1]/td[6][//@class='chef-env']/div
+    #Input Text    xpath=.//*[@id='select2-drop']/div/input    Dev
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='select2-drop']/ul/li/div[text()='Dev']
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@class='btn btn-primary']
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='organiz']/table/tbody/tr[1]/td[7]/label[@class='checkbox']
+    
+
+
+    #Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    
+    #xpath=.//*[@id='organiz']/table/tbody/tr[2]/td[6][//@class='chef-env']/div
+    #Input Text    xpath=.//*[@id='select2-drop']/div/input    QA   
+    #Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    
+    #xpath=.//*[@id='select2-drop']/ul/li/div[text()='QA']
+    #Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    
+    #xpath=.//*[@class='btn btn-primary']
+    #Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    
+    #xpath=.//*[@id='organiz']/table/tbody/tr[2]/td[7]/label[@class='checkbox']
+    
 
 
 Select the nodes namely MySql_Server and WebServer
@@ -416,9 +471,8 @@ Select the nodes namely MySql_Server and WebServer
     Click Element      xpath=.//*[@id='organiz']/table/tbody/tr[2]/td[7]/label[1]/i    #//input[@data-nodename='Web_Server']
 
 Upload user NodePem File
-    Choose File    id=importPemfileInput    C:\\Users\\adarsh.RLINDIA\\Desktop\\caty\\Chef\\pcjoshi9.pem 
+    Choose File    id=importPemfileInput    C:\\Users\\adarsh.RLINDIA\\Desktop\\caty\\Chef\\catalyst.pem
    
-
 Click on Import nodes button on the bottom of the page
     Wait Until Keyword Succeeds    1 minute     10 seconds       Element Should Be Visible       xpath=//input[@value='Import Nodes']
     Click Element      xpath=//input[@value='Import Nodes']    #xpath=.//*[@id='organiz']/div/input
@@ -459,7 +513,7 @@ Select chef server and click on the last icon namely import nodes Button
 
 
 Click on Import button
-    Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element      xpath=//button[./text()='Import']
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element      xpath=.//*[@id='myForm12']/div[3]/div/button
     Focus    xpath=.//*[@id='chefImportNodesResultModal']/div/div/div[3]/button  
     Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element      xpath=.//*[@id='chefImportNodesResultModal']/div/div/div[3]/button
     

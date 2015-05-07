@@ -1,0 +1,1086 @@
+*** Settings ***
+Documentation      A resource file with reusable keywords and variables.
+...
+...                This file is part of a prototype automated test suite designed to
+...                test web application products built on top of the SLZ platform.
+...
+
+Library            Selenium2Library
+Library            String
+Library            Collections
+
+Resource           catalyst.txt
+Resource           ${CATALYST TEST DATA}/${TESTDATA}
+Resource           ${CATALYST ACTION}/Organization_Setup_Action_Steps.txt
+Resource           ${CATALYST ACTION}/DevOps_Setup_Action_Steps.txt
+Resource           ${CATALYST ACTION}/Gallery_setup_TempService_Steps.txt
+
+
+
+*** Keywords ***
+Validation of Adding New Providers
+    Validation of Selecting No Provider Type          #${VaildNoProvider}
+    No Selection of Provider Type  ${VaildProviderErrMsg}
+    Validation of No Name of Provider  ${VaildNoProviderName}
+    Provider Name Left Empty  ${VaildNoNameErrMsg}
+    Validation of No Access Key  ${VaildNoAccessKey}
+    Access Field Left Empty  ${VaildAccessFieldErrMsg}
+    Validation of No Secret Key  ${VaildNoSecretKey}
+    Secret Field Left Empty  ${VaildSecretFieldErrMsg}
+
+
+Validation of Selecting No Provider Type
+    Clicks on New Button of Providers     
+    Enters the Name of the Provider
+    Enters the Access Key
+    Enters the Secret Key
+    Selects the Region
+    Select organization
+    Selects the Key Pair
+    Uploads the Pem File for Provider
+    Clicks on Save Button of the Provider
+
+No Selection of Provider Type
+    [Arguments]    ${VaildProviderErrMsg}  
+    Validate the Provider field    ${VaildProviderErrMsg}
+
+Validate the Provider field    
+    [Arguments]    ${ErrMsg}
+    Element Should Contain    id=errmsg_providertype    ${ErrMsg}
+    Clicks on Provider Cancel Button
+
+Validation of No Name of Provider
+    [Arguments]    ${NoName}
+    Clicks on New Button of Providers
+    Select the Provider
+    Enters the Access Key
+    Enters the Secret Key
+    Selects the Region
+    Select organization
+    Selects the Key Pair
+    Uploads the Pem File for Provider
+    Clicks on Save Button of the Provider
+
+Provider Name Left Empty
+    [Arguments]    ${VaildNoNameErrMsg}
+    Validate the provider name field  ${VaildNoNameErrMsg}
+
+Validate the provider name field
+    [Arguments]    ${ErrMsg}
+    Element Should Contain    id=errmsg_name    ${ErrMsg}
+    Clicks on Provider Cancel Button
+
+Validation of No Access Key
+    [Arguments]    ${NoAccessKey}
+    Clicks on New Button of Providers
+    Select the Provider
+    Enters the Name of the Provider
+    Enters the Secret Key
+    Selects the Region
+    Select organization
+    Uploads the Pem File for Provider
+    Clicks on Save Button of the Provider
+
+Access Field Left Empty  
+    [Arguments]    ${VaildAccessFieldErrMsg}
+    Validate the no access Key  ${VaildAccessFieldErrMsg}
+
+Validate the no access Key
+    [Arguments]    ${ErrMsg}
+    Element Should Contain    id=errmsg_accessKey    ${ErrMsg}
+    Clicks on Provider Cancel Button
+
+Validation of No Secret Key
+    [Arguments]    ${NoSecretKey}
+    Clicks on New Button of Providers
+    Select the Provider
+    Enters the Name of the Provider
+    Enters the Access Key
+    Selects the Region
+    Select organization
+    Uploads the Pem File for Provider
+    Clicks on Save Button of the Provider
+
+Secret Field Left Empty
+    [Arguments]    ${VaildSecretFieldErrMsg}
+    Validate No Secret Key  ${VaildSecretFieldErrMsg}
+
+Validate No Secret Key
+    [Arguments]    ${ErrMsg}
+    Element Should contain    id=errmsg_secretKey    ${ErrMsg}
+    Clicks on Provider Cancel Button
+
+
+Catalyst Creation of Providers Setup 
+    Clicks on Settings
+    Clicks on DevOps Setup menu
+    Clicks on Providers           
+    Clicks on New Button of Providers
+    Select the Provider
+    Enters the Name of the Provider
+    Enters the Access Key
+    Enters the Secret Key
+    Selects the Region
+    Select organization
+    Selects the Key Pair
+    Uploads the Pem File for Provider
+    Clicks on Save Button of the Provider
+
+
+
+Validation of Creation of New Image
+    Validation of Empty Image Name  ${ValidEmptyImageName}
+    Image Name Left Empty  ${ValidEmptImgNameErrMsg}
+    Validation of No Selection Provider  ${ValidEmptyNoProvider}
+    Provider field Name Left Empty  ${ValidEmptyProviderErrMsg}
+    Validation of No Operating System  ${ValidEmptyNoOperatingSys}
+    Operating System Left Empty  ${ValidEmptyNoOSErrMsg}
+    Validation of No Image ID  ${ValidEmptyImageID}
+    Image ID Left Empty  ${ValidEmptImgIDErrMsg}
+    Validation of Image No User Name  ${ValidEmptyIUserName}
+    Image User Name Left Empty  ${ValidEmptyIUserNameErrMsg}
+            
+
+Catalyst Creation of VM Image Process for CentOS
+    Clicks on New Button of VMImage
+    Enters the Image Name for CentOS
+    Choosess The Provider of Image
+    Select the Operating System to Image for CentOS
+    Enters the Image ID for CentOS
+    Enters the UserName of CentOSProviders
+    Select the Organizatn to Create Cent OS Img
+    Clicks on Save Button of Providers
+
+Catalyst Creation of VM Image Process for Ubutnu
+    Clicks on New Button of VMImage
+    Enters the Image Name for Ubuntu
+    Choosess The Provider of Image
+    Select the Operating System to Image for Ubuntu 
+    Enters the Image ID for Ubuntu
+    Enters the UserName of UbuntuProviders
+    Select the Organizatn to Create Ubuntu Img
+    Clicks on Save Button of Providers
+
+Catalyst Creation of VM Image Process for Windows
+    Clicks on New Button of VMImage
+    Enters the Image Name for Windows
+    Choosess The Provider of Image
+    Select the Operating System to Image for Windows
+    Enters the Image ID for Windows
+    Enters the UserName of WindowsProviders
+    Select the Organizatn to Create Windows Img
+    Clicks on Save Button of Providers
+
+Select the Organizatn to Create Cent OS Img
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='s2id_orgId']/a/span[1]
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Input Text    xpath=.//*[@id='select2-drop']/div/input     ${ORGANIZATION NAME}
+    Click Element    xpath=.//*[@id='select2-drop']/ul/li/div  
+    
+
+Select the Organizatn to Create Ubuntu Img
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='s2id_orgId']/a/span[1]
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Input Text    xpath=.//*[@id='select2-drop']/div/input     ${ORGANIZATION NAME}
+    Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
+
+Select the Organizatn to Create Windows Img
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='s2id_orgId']/a/span[1]
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Input Text    xpath=.//*[@id='select2-drop']/div/input     ${ORGANIZATION NAME}
+    Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
+
+
+Enters the UserName of CentOSProviders
+    Input Text    id=UserName    root
+
+Enters the UserName of UbuntuProviders
+    Input Text    id=UserName    ubuntu
+
+Enters the UserName of WindowsProviders
+    Input Text    id=UserName    administrator
+
+Catalyst Choose Template and Launch Setup
+    Clicks on Settings
+    Clicks on Design
+    Clicks on Next Button
+    Chooses the Template User Created
+    Clicks on Next Button
+    Chooses the Operating System
+    Choose the Provider
+    Choose the Available Images
+    Choose the Region
+    Select the Subnet
+    Select the Key Pair
+    Choose Instance Size
+    Select the Security Group
+    Clicks on Configure Provider Parameters 
+    Clicks on Configure Chef Runlist
+    Chooses Organization
+    Select WorkCookBooks
+    Clicks on >>T Button
+    Clicks on Configure Chef Runlist
+    Clicks on Edit Organization Parameters    
+    Enters The Blueprint Name
+    Chooses The Business Group
+    Chooses The Project
+    Chooses The Environment
+    Clicks on Configure Application URL
+    Clicks on AppNew Button
+    Enters the Application URL Name
+    Enters the AppURL
+    Clicks on AppADD Button 
+    Clicks on Next Button
+
+    
+Catlayst Workzone and Status Setup           
+    Clicks on Workzone Button
+    Clicks on User Created Organization
+    Clicks on User Created BusinessGroup
+    Clicks on > Button to your Environment
+    Clicks on Blueprint Section
+    Select the Blueprint
+    Clicks on Launch Button
+    Clicks on Instance Close Button
+    Clicks on Instances Button
+    Verify the IP Address of the Instance
+    Verfiy the Status of the Instance
+    Verify the CHEF Client Run
+    Verfiy the SSH is Disabled
+    Verfiy the STOP Button is Disabled
+    Verfiy the More Info Button is Dispalyed
+
+
+Catalyst Check INFORMATION Status
+    Clicks on Workzone Button
+    Clicks on User Created Organization
+    Clicks on User Created BusinessGroup
+    Clicks on > Button to your Environment
+    #-Clicks on your Blueeeprint
+    Clicks on Contreol Panel
+    Check Machine Status
+    Check the Total MeMory
+    Check the Free Memory
+    Check the OS
+    Check the Version
+    Check the Chef BootStrap
+    Clicks on Back To Instances
+
+
+
+#Add The Appplication Name
+#Add The Appplication Url
+#Clicks on SUBMIT Button
+
+
+Catalyst Work SSH CHEFCLIENT STOP Setup after LAUNCH
+    Verify the Status after Launch of Instance
+    Verify the IP Address after Launch of Instance
+    Verfiy the Chef Client Run 
+    Verify the SSH
+    Verify the STOP
+    Verfiy the More Info Button is Dispalyed
+    Clicks on Contreol Panel
+    Clicks on Action History
+    Checking THe BootStrpa Status
+    Clicks on Back To Instances
+    Steps To Run Chef Client
+    Steps to Run SSH
+    Steps to Run Stopping the Instance
+
+
+
+Steps To Run Chef Client
+    Click on RUNNN of Chef Client
+    Update the Run List with Cookbook
+    Clicks on Update Button of Runlist
+    Clicks on Contreol Panel
+    Clicks on Action History
+    Checking the BChefClient Run Status
+    Clicks on Back To Instances
+    
+Steps to Run SSH
+    Click on Verified SSH Instance
+    Enters the Username in the Terminal
+    Select Authentication Type
+    Upload the Catalyst PEM File
+    Clicks on Terminlal Submit Button
+    Close the SSH Terminal
+    Clicks on Contreol Panel
+    Clicks on Action History
+    Verfify the status of SSH Shell
+    Clicks on Back To Instances
+    
+Steps to Run Stopping the Instance
+    Clicks on STOP of Verfied Instance
+    Verfified the STOPPED Status
+    Clicks on Contreol Panel
+    Clicks on Action History
+    Verfiy the Table contains the Status
+    Clicks on Back To Instances
+    
+
+Catlayst verfication of Instance Stop Setup and Disable
+    Clicks on Workzone Button
+    Clicks on User Created Organization
+    Clicks on User Created BusinessGroup
+    Clicks on > Button to your Environment
+    #-Clicks on your Blueeeprint
+    Verfified the STOPPED Status
+    Verify the IP Address after Launch of Instance
+    Verify the CHEF Client Run
+    Verfiy the SSH is Disabled
+    Verify the Start Button Enabled
+    Verfiy the More Info Button is Dispalyed
+    Clicks on Contreol Panel
+    Verify the IP Address after Launch of Instance
+    Verify the Stopped CHEF Client Run after Updation
+    Verfiy the Stopped SSH is Disabled after Updation
+    Verify the Start Button Enabled from Contrl Panel
+    Verfiy the More Info Button is Dispalyed from Control panel
+    Verify the Machine status from CntrlPanel
+    Verify the Total Memory from CntrlPanel
+    #Verify the Free Memory from CntrlPanel
+    Verfiy the OS Frm ContrlPanel
+    Verfify the Chef Bootstrap frm ContrlPanel
+    Verify the Runlist from CntrlPanel
+
+
+
+
+Catalyst Choose Template and Launch Setup for UBUNTU
+    Clicks on Settings
+    Clicks on Design
+    Clicks on Next Button
+    Chooses the Template User Created
+    Clicks on Next Button
+    Chooses the Operating System as Ubuntu
+    Choose the Provider
+    Choose the Available Images
+    Choose the Region
+    Select the Subnet
+    Select the Key Pair
+    Choose Instance Size
+    Select the Security Group
+    Clicks on Configure Provider Parameters 
+    Clicks on Configure Chef Runlist
+    Chooses Organization
+    Select WorkCookBooks
+    Clicks on >>T Button
+    Clicks on Configure Chef Runlist
+    Clicks on Edit Organization Parameters    
+    Enters The Blueprint Name
+    Chooses The Business Group
+    Chooses The Project
+    Chooses The Environment
+    Clicks on Configure Application URL
+    Clicks on AppNew Button
+    Enters the Application URL Name
+    Enters the AppURL
+    Clicks on AppADD Button 
+    Clicks on Next Button
+
+Catlayst Workzone and Status Setup for Ubuntu
+    Clicks on Workzone Button
+    Clicks on User Created Organization
+    Clicks on User Created BusinessGroup
+    Clicks on > Button to your Environment
+    Clicks on Blueprint Section
+    Select the BlueprintUbuntu
+    Clicks on Launch Button
+    Clicks on Instance Close Button
+    Clicks on Instances Button
+    Verify the IP Address of the Ubuntu Instance
+    Verfiy the Status of the Ubuntu Instance
+    Verify the CHEF Client Run for Ubuntu
+    Verfiy the SSH is Disabled for Ubuntu
+    Verfiy the STOP Button is Disabled for Ubuntu
+    Verfiy the More Info Button is Dispalyed for Ubuntu
+
+
+Catalyst Check INFORMATION Status for Ubuntu
+    Clicks on Workzone Button
+    Clicks on User Created Organization
+    Clicks on User Created BusinessGroup
+    Clicks on > Button to your Environment
+    Clicks on your Ubuntu Blueeeprint
+    Clicks on Contreol Panel
+    Check Machine Status
+    Check the Total MeMory
+    Check the Free Memory
+    Check the OS
+    Check the Version
+    Check the Chef BootStrap
+    Clicks on Back To Instances
+
+Catalyst Work SSH CHEFCLIENT STOP Setup after LAUNCH of Ubuntu
+    Verify the Status after Launch of Ubuntu Instance
+    Verify the IP Address after Launch of Ubuntu Instance
+    Verfiy the Chef Client Run of Ubuntu
+    Verify the SSH of Ubuntu
+    Verify the STOP of Ubuntu
+    Verfiy the More Info Button is Dispalyed for Ubuntu
+    Clicks on Contreol Panel
+    Clicks on Action History
+    Checking THe BootStrpa Status
+    Clicks on Back To Instances
+    Steps To Run Chef Client
+    Steps to Run SSH
+    Steps to Run Stopping the Instance
+
+
+
+
+
+
+
+
+
+
+
+
+
+Chooses the Operating System as Ubuntu
+    Click Element    xpath=.//*[@id='s2id_instanceOS']/a
+    Input Text    xpath=.//*[@id='select2-drop']/div/input    ${OPERATING SYSTEM2}
+    Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
+
+Enters The Blueprint Name
+    Input Text    id=blueprintNameInput    ${BLUEPRINT NAME1}
+
+
+Verify the Start Button Enabled from Contrl Panel
+    Wait Until Keyword Succeeds    2 minute     1 seconds    Element Should Be Visible    xpath=.//*[@id='controlPanelContainer']/div/div[1]/ul/li[contains(.,"ApacheNew")]/div/div/div/div/div/div[4]/div[@class='startstoptoggler stopped']
+
+
+
+Clicks on your Blueeeprint
+    Click Element    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(., "ApacheNew")]/div[1]
+
+Clicks on your Ubuntu Blueeeprint
+    Click Element    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(., "UbuntuApac")]/div[1]
+
+
+
+Verify the Machine status from CntrlPanel
+    Wait Until Keyword Succeeds    2 minute     1 seconds    Element Should Contain    xpath=.//*[@id='collapseHardware']/div/table/tbody/tr[1]/td[3]    ${MAT STAT}
+
+Verify the Total Memory from CntrlPanel
+    Wait Until Keyword Succeeds    2 minute     1 seconds    Element Should Contain    xpath=.//*[@id='collapseHardware']/div/table/tbody/tr[2]/td[3]    ${MAT MEM}
+
+
+Verify the Free Memory from CntrlPanel
+    Wait Until Keyword Succeeds    2 minute     1 seconds    Element Should Contain    xpath=.//*[@id='collapseHardware']/div/table/tbody/tr[3]/td[3]    ${MAT FREEMEM}
+
+Verfiy the OS Frm ContrlPanel
+    Wait Until Keyword Succeeds    2 minute     1 seconds    Element Should Contain    xpath=.//*[@id='collapseSoftware']/div/table/tbody/tr[1]/td[3]    ${MAT OS}
+
+Verfify the Chef Bootstrap frm ContrlPanel
+    Wait Until Keyword Succeeds    2 minute     1 seconds    Element Should Contain    xpath=.//*[@id='collapseConfigmgmt']/div/table/tbody/tr[1]/td[3]    ${MAT BOOTSTRAP}
+
+Verify the Runlist from CntrlPanel
+    Wait Until Keyword Succeeds    2 minute     1 seconds    Element Should Contain    xpath=.//*[@id='collapseConfigmgmt']/div/table/tbody/tr[2]/td[3]    ${MAT RUNLIST}
+
+
+
+Verify the Start Button Enabled
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Element Should Be Visible    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"ApacheNew")]/div/div/div/div/div/div[4]/div[@class='startstoptoggler stopped'] 
+
+Verify the Stopped CHEF Client Run after Updation
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Element Should Be Visible    xpath=.//*[@id='controlPanelContainer']/div/div/ul/li[contains(.,"ApacheNew")]/div/div/div/div/div/div[4]/div[1]/a[@class='instanceActionBtnUpdateRunlist instance-bootstrap-list-image isStopedInstance actionbuttonChefClientRundisable']   
+
+Verfiy the Stopped SSH is Disabled after Updation
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Element Should Be Visible    xpath=.//*[@id='controlPanelContainer']/div/div/ul/li[contains(.,"ApacheNew")]/div/div/div/div/div/div[4]/div[4]/a[@class='cpTop isStopedInstance sshIcondisable']
+
+
+
+Checking THe BootStrpa Status
+    Wait Until Keyword Succeeds    2 minute     1 seconds    Element Should Contain    xpath=.//*[@id='tableactionHistory']/tbody/tr/td[2]    ${STATS RUN}
+    Sleep    40 seconds
+    Wait Until Keyword Succeeds    2 minute     1 seconds    Element Should Contain    xpath=.//*[@id='tableactionHistory']/tbody//tr/td[normalize-space(text())="Bootstrap"]/../td[2]    ${SATSS}
+
+Clicks on Back To Instances
+    Wait Until Keyword Succeeds    2 minute     1 seconds    Click Element    xpath=.//*[@id='getViewAttr']
+
+
+Check Machine Status
+    Wait Until Keyword Succeeds    2 minute     1 seconds    Element Should Contain    xpath=.//*[@id='collapseHardware']/div/table/tbody/tr[1]/td[3]    ${MACHINE STATS}
+
+Check the Total MeMory
+    Wait Until Keyword Succeeds    2 minute     1 seconds    Element Should Contain    xpath=.//*[@id='collapseHardware']/div/table/tbody/tr[2]/td[3]    ${MACHINE STATS}
+
+Check the Free Memory
+    Wait Until Keyword Succeeds    2 minute     1 seconds    Element Should Contain    xpath=.//*[@id='collapseHardware']/div/table/tbody/tr[3]/td[3]    ${MACHINE STATS}
+
+Check the OS
+    Wait Until Keyword Succeeds    2 minute     1 seconds    Element Should Contain    xpath=.//*[@id='collapseSoftware']/div/table/tbody/tr[1]/td[3]    ${MACHINE STATS}    
+
+Check the Version
+    Wait Until Keyword Succeeds    2 minute     1 seconds    Element Should Contain    xpath=.//*[@id='collapseSoftware']/div/table/tbody/tr[2]/td[3]    ${MACHINE STATS}
+
+Check the Chef BootStrap
+    Wait Until Keyword Succeeds    2 minute     1 seconds    Element Should Contain    xpath=.//*[@id='collapseConfigmgmt']/div/table/tbody/tr[1]/td[3]    ${CHEF BOOTSTRAP}
+
+Add The Appplication Name
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Input Text    xpath=.//*[@id='appSeries12']/div[1]/input    ${APPLICATION NAME}
+
+Add The Appplication Url
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Input Text    xpath=.//*[@id='appSeries12']/div[2]/input    ${APPLICATION URL}
+
+Clicks on SUBMIT Button
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='appUrlTemplateFormCreate']/button
+
+
+
+
+
+Checking the BChefClient Run Status
+    Wait Until Keyword Succeeds    4 minute     1 seconds    Element Should Contain    xpath=.//*[@id='tableactionHistory']/tbody/tr[2]/td[2]    ${RUNNING}
+    Sleep    1 minutes
+    Wait Until Keyword Succeeds    3 minute     1 seconds    Element Should Contain    xpath=.//*[@id='tableactionHistory']/tbody/tr/td[2]    ${SATSS}
+
+Verfiy the Table contains the Status
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Element Should Contain    xpath=.//*[@id='tableactionHistory']/tbody//tr/td[normalize-space(text())="Stop"]/../td[2]    ${SATSS}
+
+Verfify the status of SSH Shell
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Element Should Contain    xpath=.//*[@id='tableactionHistory']/tbody//tr/td[normalize-space(text())="SSH-Shell"]/../td[2]    ${SATSS}
+
+
+Clicks on Contreol Panel
+    Wait Until Keyword Succeeds    2 minute     1 seconds    Click Element    xpath=//*[@class='btn btn-primary actionControlPanel']
+
+Clicks on Action History
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='myTab3']/li[3]/a
+
+Verfiy the More Info Button is Dispalyed
+    Wait Until Keyword Succeeds    1 minute     1 seconds     Element Should Be Visible    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"ApacheNew")]/div/div/div/div/div/div[4]/span/a[@class='moreInfo']
+
+Verfiy the More Info Button is Dispalyed for Ubuntu
+    Wait Until Keyword Succeeds    1 minute     1 seconds     Element Should Be Visible    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"UbuntuApac")]/div/div/div/div/div/div[4]/span/a[@class='moreInfo']
+
+
+Verfiy the More Info Button is Dispalyed from Control panel
+    Wait Until Keyword Succeeds    1 minute     1 seconds     Element Should Be Visible    xpath=.//*[@id='controlPanelContainer']/div/div/ul/li[contains(.,"ApacheNew")]/div/div/div/div/div/div[4]/span/a[@class='moreInfo']
+
+
+Clicks on Control Panel Button
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='l1']/footer/div/div/button
+
+Clicks on Configure Provider Parameters
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='accordion-Design']/div[1]/div[1]/h4/a
+
+
+
+Verify the STOP
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Element Should Be Visible    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"ApacheNew")]/div/div/div/div/div/div[4]/div[@class='startstoptoggler running']  
+
+Verify the STOP of Ubuntu
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Element Should Be Visible    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"UbuntuApac")]/div/div/div/div/div/div[4]/div[@class='startstoptoggler running']  
+
+
+Clicks on STOP of Verfied Instance    
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"ApacheNew")]/div/div/div/div/div/div[4]/div[5]
+    Wait Until Keyword Succeeds    1 minute     5 seconds      Click Element    xpath=//*[text()='OK']
+    Wait Until Keyword Succeeds    2 minute     5 seconds      Click Element    xpath=.//*[@id='instanceLogModalContainer']/div/div/div[3]/button
+    Sleep    10 seconds
+
+
+Verfified the STOPPED Status
+    Wait Until Keyword Succeeds    2 minute     1 seconds    Element Should Contain    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"ApacheNew")]/div/div/div/div/div/div[3]/div/span/span[@class='instance-state instance-state-text-stopped']    ${SUITS}
+
+
+
+
+
+
+
+
+Verify the IP Address after Launch of Instance
+    ${EXTRACTED}=    Get Value       xpath=//.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"ApacheNew")]/div/div/div[1]/div/div/div[3]/div/span[1]/strong[@class='instanceip']
+    Run Keyword If    '${STATS}' != '${EXTRACTED}'    Log    ${PRINTSTMT} is the IP Address
+
+Verify the IP Address after Launch of Ubuntu Instance
+    ${EXTRACTED}=    Get Value       xpath=//.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"UbuntuApac")]/div/div/div[1]/div/div/div[3]/div/span[1]/strong[@class='instanceip']
+    Run Keyword If    '${STATS}' != '${EXTRACTED}'    Log    ${PRINTSTMT} is the IP Address
+
+
+
+Verify the Status after Launch of Instance
+    Sleep    3 minutes
+    Wait Until Keyword Succeeds    5 minute     10 seconds    Element Should Contain    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"ApacheNew")]/div/div/div/div/div/div[3]/div/span[2]/span    ${STATS RUN}
+
+Verify the Status after Launch of Ubuntu Instance
+    Sleep    3 minutes
+    Wait Until Keyword Succeeds    5 minute     10 seconds    Element Should Contain    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"UbuntuApac")]/div/div/div/div/div/div[3]/div/span[2]/span    ${STATS RUN}
+
+
+Verfiy the Chef Client Run
+    Sleep    8 seconds
+    Wait Until Keyword Succeeds    2 minute     1 seconds    Element Should Be Visible    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"ApacheNew")]/div/div/div/div/div/div[4]/div[1]/a[@class='chefClientRunlistImage instance-bootstrap-list-image actionbuttonChefClientRun']
+
+Verfiy the Chef Client Run of Ubuntu
+    Sleep    8 seconds
+    Wait Until Keyword Succeeds    2 minute     1 seconds    Element Should Be Visible    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"UbuntuApac")]/div/div/div/div/div/div[4]/div[1]/a[@class='chefClientRunlistImage instance-bootstrap-list-image actionbuttonChefClientRun']
+
+
+
+Click on RUNNN of Chef Client
+    Wait Until Keyword Succeeds    2 minute     1 seconds    Click Element    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"ApacheNew")]/div/div/div/div/div/div[4]/div[1]/a
+
+
+Verify the SSH
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Element Should Be Visible    xpath=.//*[@id='divinstancescardview']/div/div//ul/li[contains(.,"ApacheNew")]/div/div/div/div/div/div[4]/div[2]/a[@class='devTOP sshIcon']
+
+Verify the SSH of Ubuntu
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Element Should Be Visible    xpath=.//*[@id='divinstancescardview']/div/div//ul/li[contains(.,"UbuntuApac")]/div/div/div/div/div/div[4]/div[2]/a[@class='devTOP sshIcon']
+
+    
+Click on Verified SSH Instance
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='divinstancescardview']/div/div//ul/li[contains(.,"ApacheNew")]/div/div/div[1]/div/div/div[4]/div[2]/a
+
+
+Verify the IP Address of the Instance
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Element Should Contain    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"ApacheNew")]/div/div/div/div/div/div[3]/div/span[1]/strong    ${IPTEXT}
+
+Verify the IP Address of the Ubuntu Instance
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Element Should Contain    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"UbuntuApac")]/div/div/div/div/div/div[3]/div/span[1]/strong    ${IPTEXT}
+
+
+Verfiy the Status of the Instance
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Element Should Contain    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"ApacheNew")]/div/div/div/div/div/div[3]/div/span[2]/span    ${STATS}
+
+Verfiy the Status of the Ubuntu Instance
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Element Should Contain    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"UbuntuApac")]/div/div/div/div/div/div[3]/div/span[2]/span    ${STATS}
+
+
+
+Verify the CHEF Client Run
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Element Should Be Visible    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"ApacheNew")]/div/div/div/div/div/div[4]/div[1]/a[@class='chefClientRunlistImage instance-bootstrap-list-image isStopedInstance actionbuttonChefClientRundisable']
+
+
+Verify the CHEF Client Run for Ubuntu
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Element Should Be Visible    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"UbuntuApac")]/div/div/div/div/div/div[4]/div[1]/a[@class='chefClientRunlistImage instance-bootstrap-list-image isStopedInstance actionbuttonChefClientRundisable']
+
+Verfiy the SSH is Disabled
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Element Should Be Visible    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"ApacheNew")]/div/div/div[1]/div/div/div[4]/div[2]/a[@class='devTOP isStopedInstance sshIcondisable']
+
+Verfiy the SSH is Disabled for Ubuntu
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Element Should Be Visible    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"UbuntuApac")]/div/div/div[1]/div/div/div[4]/div[2]/a[@class='devTOP isStopedInstance sshIcondisable']    
+
+Verfiy the STOP Button is Disabled
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Element Should Be Visible     xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"ApacheNew")]/div/div/div/div/div/div[4]/div[@class='startstoptoggler pending']
+
+Verfiy the STOP Button is Disabled for Ubuntu
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Element Should Be Visible     xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"UbuntuApac")]/div/div/div/div/div/div[4]/div[@class='startstoptoggler pending']
+
+
+Verify the Chef run icon and click on it
+    #Element Should Be Visible      xpath=.//*[@id='divinstancescardview']/div/div/ul/li[2]/div/div/div[1]/div/div/div[4]/div[1]/a
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[2]/div/div/div[1]/div/div/div[4]/div[1]/a
+
+Update the Run List with Cookbook
+    Wait Until Keyword Succeeds    1 minute     10 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[@value='recipe[cron]']
+    Wait Until Keyword Succeeds    1 minute     10 seconds      Click Element    id=btnaddToRunlist
+
+Clicks on Update Button of Runlist
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='chefRunModalContainer']/div/div/div[3]/button[1]
+    Wait Until Keyword Succeeds    1 minute     4 seconds      Click Element    xpath=//*[text()='OK']
+    Wait Until Keyword Succeeds    1 minute     5 seconds      Click Element    xpath=.//*[@id='instanceLogModalContainer']/div/div/div[3]/button      #close
+
+
+
+
+
+
+
+
+
+
+
+
+
+Validation of Empty Image Name
+    [Arguments]    ${Name}
+    Clicks on Settings
+    Clicks on Gallery Setup
+    Clicks on VMImage
+    Clicks on New Button of VMImage
+    Enters the Empty Image Name
+    Choosess The Provider of Image
+    Select the Operating System to Image for CentOS
+    Enters the Image ID for CentOS
+    Enters the UserName of Providers
+    Select the Organizatn to Create Cent OS Img
+    Clicks on Save Button of Providers
+    Clicks on OKX Button
+
+Choose the Provider
+    Click Element    xpath=.//*[@id='s2id_providerId']/a/span[1]
+    Input Text    xpath=.//*[@id='select2-drop']/div/input    AWS RELPRO
+    Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
+
+Choose the Available Images
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='s2id_imageId']/a/span[1]
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='select2-drop']/ul/li[2]/div
+
+Choose the Region
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='s2id_region']/a/span[1]
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='select2-drop']/ul/li[2]/div
+
+Select the Subnet
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='s2id_subnetId']/a/span[1]
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='select2-drop']/ul/li[2]/div
+
+Select the Key Pair
+   Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element     xpath=.//*[@id='s2id_keypairId']/a/span[1]
+   Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element     xpath=.//*[@id='select2-drop']/ul/li[2]/div
+
+Choose Instance Size
+    Click Element    xpath=.//*[@id='s2id_instancesize']/a
+    Click Element    xpath=.//*[@id='select2-drop']/ul/li[2]/div
+
+Select the Security Group
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='securityGroupIds']/label[1]/i
+
+
+Clicks on OKX Button
+    Click Element     xpath=.//*[@id='btnsubmit']
+
+
+Image Name Left Empty  
+    [Arguments]    ${ValidEmptImgNameErrMsg}
+    Validate the Empty Image Field  ${ValidEmptImgNameErrMsg}
+
+Validate the Empty Image Field
+    [Arguments]    ${ErrMsg}
+    Element Should Contain    id=errmsg_name    ${ErrMsg}
+    Clicks on Image Cancel Button
+
+Validation of No Selection Provider
+    [Arguments]    ${NoProvider}
+    Clicks on New Button of VMImage
+    Enters the Image Name for CentOS
+    Select the Operating System to Image for CentOS
+    Enters the Image ID for CentOS
+    Enters the UserName of Providers
+    Select the Organizatn to Create Cent OS Img
+    Clicks on Save Button of Providers
+    Clicks on OKX Button
+
+Provider field Name Left Empty
+    [Arguments]    ${VaildNoNameErrMsg}
+    Validate Emptyprovider name  ${VaildNoNameErrMsg}
+
+Validate Emptyprovider name
+    [Arguments]    ${ErrMsg}
+    Element Should Contain    id=errmsg_providerId    ${ErrMsg}
+    Clicks on Image Cancel Button
+
+
+Validation of No Operating System
+    [Arguments]    ${OperatingSystem}
+    Clicks on New Button of VMImage
+    Enters the Image Name for CentOS
+    Choosess The Provider of Image
+    Enters the Image ID for CentOS
+    Enters the UserName of Providers
+    Select the Organizatn to Create Cent OS Img
+    Clicks on Save Button of Providers
+    Clicks on OKX Button
+
+Operating System Left Empty  
+    [Arguments]    ${ValidEmptyNoOSErrMsg}
+    Validate the Operating System field empty  ${ValidEmptyNoOSErrMsg}
+
+Validate the Operating System field empty
+    [Arguments]    ${ErrMsg}
+    Element Should Contain    id=errmsg_osType    ${ErrMsg}
+    Clicks on Image Cancel Button
+
+Validation of No Image ID
+    [Arguments]    ${Imageidentifire}
+    Clicks on New Button of VMImage
+    Enters the Image Name for CentOS
+    Choosess The Provider of Image
+    Select the Operating System to Image for CentOS
+    Enters the UserName of Providers
+    Select the Organizatn to Create Cent OS Img
+    Clicks on Save Button of Providers
+    Clicks on OKX Button
+
+Image ID Left Empty  
+    [Arguments]    ${ValidEmptImgIDErrMsg}
+    Validate the Image Id field  ${ValidEmptImgIDErrMsg}
+
+Validate the Image Id field
+    [Arguments]    ${ErrMsg}
+    Element Should Contain    id=errmsg_imageidentifire    ${ErrMsg}
+    Clicks on Image Cancel Button
+
+Validation of Image No User Name
+    [Arguments]    ${username}
+    Clicks on New Button of VMImage
+    Enters the Image Name for CentOS
+    Choosess The Provider of Image
+    Select the Operating System to Image for CentOS
+    Enters the Image ID for CentOS
+    Select the Organizatn to Create Cent OS Img
+    Clicks on Save Button of Providers
+    Clicks on OKX Button
+
+Image User Name Left Empty
+    [Arguments]    ${ValidEmptyIUserNameErrMsg}
+    Validate the Username field  ${ValidEmptyIUserNameErrMsg}
+
+Validate the Username field
+    [Arguments]    ${ErrMsg}
+    Element Should Contain    id=errmsg_UserName    ${ErrMsg}
+    Clicks on Image Cancel Button
+
+
+
+Clicks on Image Cancel Button
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='btncancel']
+
+
+
+Enters the Empty Image Name
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    id=name    ${EmptyImgName}
+
+
+Clicks on Provider Cancel Button
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='btncancel']
+
+Clicks on Providers
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='setting_tree']/ul/li[7]/a
+
+Clicks on New Button of Providers
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='addnewitem']
+
+Select the Provider
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='s2id_providertype']
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    xpath=.//*[@id='select2-drop']/div/input    ${PROVIDERR}
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
+
+Enters the Name of the Provider
+    Input Text    id=name    ${PROVIDER NAME}
+
+Enters the Access Key
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    id=accessKey    ${ACCESS KEY} 
+
+Enters the Secret Key
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    id=secretKey    ${SECRET KEY}
+
+Selects the Region   
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=//*[text()='Select Region']
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Wait Until Element Is Visible    xpath=.//*[@id='select2-drop']/ul/li[3]/div     Click Element    xpath=.//*[@id='select2-drop']/ul/li[3]/div
+
+    #Select From List By Value    xpath=.//*[contains(text(), "US West (Oregon) | us-west-2")]     ${REG}
+    #Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='select2-drop']/ul/li[3]/div
+    #Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    name=region
+     #//select/option[4]/@value
+     #//select/option[@value = "us-west-1"]
+     
+Selects the Key Pair
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=//*[contains(text(), 'Select Any Key Pair')]
+    Input Text    xpath=.//*[@id='select2-drop']/div/input    Catalyst
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='select2-drop']/ul/li[1]/div
+
+Uploads the Pem File for Provider
+    Choose File     xpath=.//*[@class='gui-file file']     C:\\Users\\adarsh.RLINDIA\\Desktop\\caty\\Chef\\catalyst.pem
+
+Clicks on Save Button of the Provider
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='myForm54']/div/div[3]/div/input
+
+Clicks on VMImage
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='setting_tree']/ul/li[7]/a
+
+Clicks on New Button of VMImage
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='addnewitem']
+
+Enters the Image Name for CentOS
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    id=name    ${IMAGE NAME1}
+
+Enters the Image Name for Ubuntu
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    id=name    ${IMAGE NAME2}
+
+Enters the Image Name for Windows
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    id=name    ${IMAGE NAME3}
+
+Choosess The Provider of Image
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='s2id_providerId']/a
+    Input Text    xpath=.//*[@id='select2-drop']/div/input    ${PROVIDER NAME}
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
+
+Select the Operating System to Image for CentOS
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='s2id_osType']/a/span[1]
+    Input Text    xpath=.//*[@id='select2-drop']/div/input     ${OPERATING SYSTEM1}
+    Click Element    xpath=.//*[@id='select2-drop']/ul/li/div      #Cent OS
+
+Select the Operating System to Image for Ubuntu
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='s2id_osType']/a/span[1]
+    Input Text    xpath=.//*[@id='select2-drop']/div/input     ${OPERATING SYSTEM2}
+    Click Element    xpath=.//*[@id='select2-drop']/ul/li/div     #Ubuntu
+
+Select the Operating System to Image for Windows   
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='s2id_osType']/a/span[1] 
+    Input Text    xpath=.//*[@id='select2-drop']/div/input     ${OPERATING SYSTEM3}
+    Click Element    xpath=.//*[@id='select2-drop']/ul/li/div     #Windows 2008
+    
+Enters the Image ID for CentOS
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    id=imageidentifire    ${IMAGE ID1}
+
+Enters the Image ID for Ubuntu
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    id=imageidentifire    ${IMAGE ID2}
+
+Enters the Image ID for Windows
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    id=imageidentifire    ${IMAGE ID3}
+
+
+Enters the UserName of Providers
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    id=UserName    ${USER}
+
+Clicks on Save Button of Providers
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='btnsubmit']
+
+
+
+
+Clicks on Instances Button
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='myTab3']/li[1]/a
+
+Clicks on More Info Button
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"ApacheNew")]/div/div/div/div/div/div[4]/span/a
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='instanceLogModalContainer']/div/div/div[3]/button
+
+
+Clicks on SSH Button
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='divinstancescardview']/div/div//ul/li[contains(.,"ApacheNew")]/div/div/div[1]/div/div/div[4]/div[2]/a
+
+Enters the Username in the Terminal
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    id=ssh-username    ${TERMINAL USERNAME}
+
+Select Authentication Type
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='s2id_ssh-pemFileCheckbox']/a
+    #Input Text    xpath=.//*[@id='select2-drop']/div/input  
+    Click Element    xpath=.//*[@id='select2-drop']/ul/li[2]/div  
+
+Clicks on Terminlal Submit Button
+    Wait Until Keyword Succeeds    2 minute     1 seconds      Click Element    xpath=.//*[@id='ssh-login-form']/div[7]/button[1]
+    Sleep      3s  
+
+
+Upload the Catalyst PEM File
+    Choose File     xpath=.//*[@id='ssh-pemfileInput']    C:\\Users\\adarsh.RLINDIA\\Desktop\\caty\\Chef\\catalyst.pem
+
+Close the SSH Terminal
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='modalSSHShellContainer']/div/div/div[1]/button
+
+Clicks on Workzone Button
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='workZoneNew']
+
+Clicks on User Created Organization
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=//*[normalize-space(text())="Relevance_Labs"]
+
+Clicks on User Created BusinessGroup
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=//*[normalize-space(text())="Devops"]
+
+Clicks on User Created Projects
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=//*[normalize-space(text())="Catalyst"]
+
+Clicks on > Button to your Environment
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=//li[contains(., "Catalyst")]/./span[3]              #Catalyst project
+    #Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='tree']/ul/li[contains(., "Catalyst")]/./span[3]
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=//*[normalize-space(text())="Dev"]
+    Sleep    5 seconds         
+
+Clicks on Blueprint Section
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='myTab3']/li[2]/a
+
+Clicks on Launch Button
+    Wait Until Keyword Succeeds    2 minute     2 seconds      Click Element    xpath=.//*[@id='l2']/footer/div/div/button
+    Sleep    3 seconds
+
+Select the Blueprint
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='collapse0']/div/div/div/ul/li/u/b[text()="ApacheNew"]
+
+Select the BlueprintUbuntu
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='collapse0']/div/div/div/ul/li/u/b[text()="UbuntuApac"]    
+
+Clicks on Instance Close Button
+    Wait Until Keyword Succeeds    2 minute     1 seconds      Click Element    xpath=.//*[@id='launchResultContainer']/div/div/div[3]/button
+
+
+
+Clicks on Design
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       xpath=.//*[@id='designNew']
+    Click Element    xpath=.//*[@id='designNew']
+
+Chooses the Template Type
+    Click Element    xpath=.//*[@id='grid0']           #AppFactory
+
+Clicks on Next Button
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='nextSpecificValue']/a
+
+Chooses the Template User Created
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='individualTemplateNameGrid']/div/div/ul/li/u/b[text()="ApacRelevance"]
+
+Chooses the Operating System
+    Click Element    xpath=.//*[@id='s2id_instanceOS']/a
+    Input Text    xpath=.//*[@id='select2-drop']/div/input    ${OPERATING SYSTEM1}
+    Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
+
+#Choose Instance Size
+    #Click Element    xpath=.//*[@id='s2id_intanceTypeControl']/a/span[1]
+    #Input Text    xpath=.//*[@id='select2-drop']/div/input    ${INSTANCE SIZE}
+    #Click Element    xpath=.//*[@id='select2-drop']/ul/li[1]/div
+
+Clicks on Configure Chef Runlist
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='accordion-Design']/div[2]/div[1]/h4/a
+
+Chooses Organization
+    Click Element    xpath=.//*[@id='s2id_orgnameSelect']/a
+    Input Text    xpath=.//*[@id='select2-drop']/div/input    ${ORGANIZATION NAME}
+    Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
+
+Select WorkCookBooks
+    #Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[2]
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[text()='a']
+    #Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[@value='recipe[a]']
+
+Clicks on >>T Button
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    id=btnaddToRunlist
+
+Clicks on Edit Organization Parameters 
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='accordion-Design']/div[3]/div[1]/h4/a
+
+Enters The Blueprint Name
+    Input Text    id=blueprintNameInput    ${BLUEPRINT NAME}
+
+Chooses The Business Group
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='s2id_bgListInput']/a
+    Input Text    xpath=.//*[@id='select2-drop']/div/input    ${BUSINESS GROUP NAME}       #Devops
+    Click Element    xpath=.//*[@id='select2-drop']/ul/li/div      
+
+Chooses The Project
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='s2id_projectListInput']/a    
+    Input Text    xpath=.//*[@id='select2-drop']/div/input    ${PROJECT NAME}
+    Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
+
+Chooses The Environment
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='s2id_envList']/a
+    Input Text    xpath=.//*[@id='select2-drop']/div/input    ${ENVIRONMENT NAME}
+    Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
+
+Clicks on Configure Application URL
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='accordion-Design']/div[4]/div[1]/h4/a
+
+Clicks on AppNew Button
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='newAppSeries']
+
+Enters the Application URL Name
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    xpath=.//*[@id='appSeries']/div[1]/input     ${APPNAME}
+
+Enters the AppURL
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    xpath=.//*[@id='appSeries']/div[2]/input     ${APP URL}
+
+Clicks on AppADD Button
+    Click Element    xpath=.//*[@id='addAppBtn'] 
+    
