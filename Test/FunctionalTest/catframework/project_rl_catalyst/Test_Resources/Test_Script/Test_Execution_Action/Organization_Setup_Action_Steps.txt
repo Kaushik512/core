@@ -74,14 +74,20 @@ Vaildate the Organization feilds
 
 Vaildate the Organizationsame feilds
     [Arguments]    ${OrgName}
-    Click Element    xpath=.//*[@id='setting_tree']/ul/li[2]/a
-    Validate Org same path
+    #-Click Element    xpath=.//*[@id='setting_tree']/ul/li[2]/a
+    Validate Org remaining path
 
 Validate Org same path
     Clicks on New button to Create New Organization
     Enters organization name        ${OrgName}
     Enters organization domain name    
-    Clicks on Save button to save the Organization details    
+    Clicks on Save button to save the Organization details 
+
+Validate Org remaining path
+    Enters organization name        ${OrgName}
+    Enters organization domain name    
+    Clicks on Save button to save the Organization details
+
 
 Vaildate the Edit Organization fields
     [Arguments]    ${Orgname}
@@ -97,11 +103,12 @@ Vaildate the Edit Organization domain name fields
     Clicks on Save button to save the Organization details 
     Verfiy that EditedOrganizationdomain is created  ${Domainname}
 
-
-Clicks on Settings
-#    Wait Until Element Is Visible      xpath=//a[contains(text(),'SETTINGS')]      1 seconds
-    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       xpath=//a[contains(text(),'SETTINGS')]
+Clicks on Settings      
+    Wait Until Element Is Visible      xpath=//a[contains(text(),'SETTINGS')]      1 seconds
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible    xpath=//a[contains(text(),'SETTINGS')]
     Click Element    xpath=//a[contains(text(),'SETTINGS')]
+
+
 
 Clicks on Organization image
     Click Element    xpath=.//*[@id='setting_tree']/ul/li[1]/a
@@ -110,6 +117,7 @@ Clicks on Organization image
 Clicks on New button to Create New Organization
     Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       link=New
     Click Element    link=New
+    
 Enters organization name
     [Arguments]    ${Orgname}
     Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       id=orgname
@@ -587,4 +595,5 @@ Catalyst Logout
 
 Clicks on LogOut link
     Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       xpath=.//*[@id='logout']/span/a/i
-    Click Element    xpath=.//*[@id='logout']/span/a/i
+    Focus    xpath=.//*[@id='logout']/span/a/i
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='logout']/span/a/i
