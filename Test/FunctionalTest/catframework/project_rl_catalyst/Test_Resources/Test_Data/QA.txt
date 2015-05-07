@@ -9,8 +9,8 @@ Resource           catalyst.txt
 
 
 *** Variables ***
-${BROWSER TYPE}                   firefox                           #internetexplorer               #phantomjs
-${ENVIRONMENT SERVER}             ${ENVSERVER}
+${BROWSER TYPE}                   chrome              #firefox #http://54.149.39.160:3001                    #internetexplorer               #phantomjs
+${ENVIRONMENT SERVER}                http://52.24.127.215:3001/public/login.html
 ${ENV}                 QA.txt
 ${VALID USER}             superadmin
 ${VALID PASSWORD}         superadmin@123
@@ -36,8 +36,15 @@ ${MACHINE}         x86_64
 ${TOTAL MEMORY}     604680kB
 ${FREE MEMORY}      298024kB
 ${ENVIRONMENTSER NAME}          _default
-
-
+${NEW USER}                   Cricinfo
+${NEW EMAIL}                  crickinfo@gmail.com
+${AlreadyExistOrg}            Selected is already registered
+${IPTEXT}                   undefined
+${STATS}                    pending
+${STATS RUN}                running
+${VAR}            54.75.4.3
+${PRINTSTMT}            The Instance has an IP Address
+${SATSS}                         success
 ${APACHE WEBSERVER STACK}         Java
 ${CENTOS STACK}          CentOS
 ${LAMP STACK}       LAMP
@@ -50,6 +57,7 @@ ${SERVER TIME COOKBOOK}            starter
 
 ${CENT OS}            Cent OS
 ${UBUNTU OS}            ubuntu
+${SUITS}                stopped
 
 ${PHOENIX COMMERNCE WITHOUT COOKBOOK UBUNTUOS}            Phoenix Commernce without Cookbook UbuntuOS
 ${PHOENIX COMMERCE WITH COOKBOOK UBUNTUOS}          Phoenix Commerce With CookBook ubuntuOS
@@ -61,6 +69,96 @@ ${TASK NAME}          Test Task
 ${USERPEMFILE}              ${ROOTPATH}/Chef/pcjoshi9.pem 
 ${VALIDATORPEMFILE}      ${ROOTPATH}/Chef/pjlab-validator.pem
 ${KNIFERBFILE}                ${ROOTPATH}/Chef/knife.rb
+
+${JENKINSNAME}            JenkinsTAT
+${JENKINS URL}               http://54.149.26.254:9090/
+${JENKINS USERID}         superadmin
+${JENKINS PASSWORD}       superadmin@123
+${TASK NAME}              Task1
+${JENKINS SERVER}         JenkinsTAT
+${OPERATING SYSTEM}        Cent OS
+${INSTANCE SIZE}           t1.micro
+${BLUEPRINT NAME}          ApacheNew
+${BLUEPRINT NAME1}         UbuntuApac
+${APPNAME}                 CatalystCop                
+${APP URL}                 http://www.google.com
+${COOKBOOK NAME}           mongodb
+${TERMINAL USERNAME}       root
+${TASK TYPE}               Jenkins
+${TASK TYPE1}              Chef 
+${REPO URL}                https://github.com/RLIndia/D4D
+${REPO USER}               arabind 
+${REPO PASSWORD}           Syntel$
+${IP ADDRESS}             52.10.69.55
+${IP USERNAME}            root
+${IP APPNAME}             RelevanceApp
+${IP URL}                 http://www.google.com
+${REG}                    US West (Oregon) | us-west-2
+${CHEF BOOTSTRAP}         waiting
+${MACHINE STATS}           unknown
+${APPLICATION NAME}       RelRio
+${APPLICATION URL}        http://d4d.relevancelab.com
+${MAT STAT}                 x86_64
+${MAT MEM}                 604488kB
+${MAT FREEMEM}             80476kB
+${MAT OS}                  centos
+${MAT BOOTSTRAP}           success
+${MAT RUNLIST}             recipe[apache2],recipe[git],recipe[a],recipe[cron]
+
+
+
+#Provider
+${PROVIDER NAME}          AWS RELPRO
+${PROVIDERR}                 AWS
+${SECRET KEY}                         qZOZuI2Ys0/Nc7txsc0V2eMMVnsEK6+Qa03Vqiyw
+${ACCESS KEY}                  AKIAI6TVFFD23LMBJUPA
+${IMAGE NAME1}                 Cent OSIm
+${IMAGE NAME2}                 UbuntuIm
+${IMAGE NAME3}                 Windows 2008Im
+${OPERATING SYSTEM1}           Cent OS
+${OPERATING SYSTEM2}           Ubuntu
+${OPERATING SYSTEM3}           Windows 2008
+${IMAGE ID1}                   ami-b6bdde86
+${IMAGE ID2}                   ami-3d50120d
+${IMAGE ID3}                   ami-21732111
+${USER}                        superadmin
+
+#provider
+${VaildNoProvider}   
+${VaildNoProviderName}
+${VaildNoAccessKey}
+${VaildNoSecretKey}
+${ValidEmptyImageName}
+${ValidEmptyNoProvider}
+${ValidEmptyNoOperatingSys}
+${ValidEmptyImageID}
+${ValidEmptyIUserName}
+${EmptyImgName}
+
+${VaildProviderErrMsg}            Required
+${VaildNoNameErrMsg}              Required
+${VaildAccessFieldErrMsg}         Required
+${VaildSecretFieldErrMsg}         Required
+${ValidEmptImgNameErrMsg}         Required
+${ValidEmptyProviderErrMsg}       Required
+${ValidEmptyNoOSErrMsg}           Required
+${ValidEmptImgIDErrMsg}           Required
+${ValidEmptyIUserNameErrMsg}      Required
+
+
+
+#Build Health Jenkins
+${FUNCTIONAL}                    http://www.google.com
+${PERFORMANCE}                   http://www.google.com
+${NONFUNCTIONAL}                 http://www.google.com
+${SECURITY}                      http://www.google.com
+${UNIT}                          http://www.google.com
+${CODE}                          http://www.google.com
+${CODEANALYZE}                   http://www.google.com
+${UI PERFORMANCE}                http://www.google.com
+
+
+
 
 
 #Organization Name
@@ -93,6 +191,8 @@ ${VaildateNoOrgEName}                  RLdev
 ${VaildEnvName1}                       Dev
 ${VaildEnvName2}                       QTest
 ${VaildEditEnvironment}                QA
+${EnV1}                                Dev
+${EnV2}                                QA
 
 ${Vaildate15ChrErrMsg}              limited to 15 chars            
 ${VaildateBlankSpacesErrMsg}        space(s) not allowed
@@ -170,7 +270,6 @@ ${ValidationImageBreadCrumb}         SettingsDevOps SetupImage
 
 
 #Devops Config Mgmt
-
 ${ValidateAlrdyExistConfigName}       RLChefServer
 ${ValidateAlrdyExistOrgName}          Relevance_Labs
 ${ValidateUserPemFilename}            catalyst.pem
@@ -179,32 +278,80 @@ ${ValidateKnifeFilename}              Knife.rb
 ${VaildEmptyURL}
 ${VaildEmptyConfigname}
 ${VaildEmptyUsername}
+${VaildEmptyValidatorname}
+${VaildEmptyKnifename}
 
 
 ${ValidateAlrdyExistConfigNameErrMsg}    Selected is already registered
 ${ValidateAlrdyExistOrgNameErrMsg}       Selected is already registered
-${VaildEmptyURLErrMsg}                  Required
+${VaildEmptyURLErrMsg}                   Please enter a valid Url
 ${VaildEmptyConfignameErrMsg}           Required
 ${VaildEmptyUsernameErrMsg}             Required
+${VaildEmptyValidatornameErrMsg}        Required
+${VaildEmptyKnifeErrMsg}                Required
 
 
 #Team Names
-${TEAMNAME1}             Development
-${TEAMNAME2}             Scholastic
-${TEAMDESCRIPTION}      Developes the code
-${TEAMDESCRIPTION2}     Research on Project
+${TEAMNAME1}                  Development
+${TEAMNAME2}                  Scholastic
+${TEAMDESCRIPTION}            Developes the code
+${TEAMDESCRIPTION2}           Research on Project
 ${VaildEmptyTeamName}
 ${VaildEmptyUsers}
 ${VaildEmptyProjects}
+${EDIT TEAMNAME}                   Scholasticon
+${EDIT DESCRIPTION}               Builds and Deployment
+${Vaildate15ChrTeamName}          ScholllasticTeame
+${VaildateBlankSpacesTeamName}    Schola Team 
+${VaildateSpecialChrTeamName}     Sch#21$$%#@
 
-${VaildEmptyTeamNameErrMsg}   Required 
-${VaildEmptyUsersErrMsg}      Atleast one required
-${VaildEmptyProjectsErrMsg}   Atleast one required
 
-    
+${VaildEmptyTeamNameErrMsg}           Required 
+${VaildEmptyUsersErrMsg}              Atleast one required
+${VaildEmptyProjectsErrMsg}           Atleast one required
+${Vaildate15ChrTeamErrMsg}            limited to 15 chars
+${VaildateTeamBlankSpacesErrMsg}       space(s) not allowed 
+${VaildateTeamSpecialChrErrMsg}        special chars not allowed  
+
+   
 #Users Setup
 ${VaildateEmptyUserName} 
 ${VaildateEmptyEmailName}
+${ValidateNotExistLDAP}              0740453NewKat
+${ValidAldyExistLogName}             Admin
+${EDIT EMAIL}                        AdminDave@gmail.com
 
-${VaildateEmptyUserNameErrMsg}       Required    
-${VaildateEmptyEmailNameErrMsg}      Required
+${VaildateEmptyUserNameErrMsg}           Required    
+${VaildateEmptyEmailNameErrMsg}          Required
+${ValidNotLDAPExistErrMsg}              selected is NOT in LDAP.
+${ValidAldyExistLogNameErrMsg}          Selected is already registered
+
+
+#Gallery Setup
+${VaildEmptyTemplateName}
+${Vaild15ChrTemplateName}                ReelvanceLabsTemplat
+
+${VaildEmptyTemplateNameErrMsg}              Required
+${Vaild15ChrTemplateNameErrMsg}             limited to 15 chars
+
+#Service Setup
+${VaildEmptyServiceName}
+${Vaild15ChrServiceName}                        SQLLiteRelevance
+
+${VaildEmptyServiceNameErrMsg}                  Required
+${Vaild15ChrServiceNameErrMsg}                  limited to 15 chars
+
+
+#Jenkins Configuration 
+${VaildEmptyRefName}   
+${Vaild15ChrRefName}                        JenkinsConfiguration
+${VaildEmptyJenkinsURL} 
+${VaildEmptyUserID}      
+${VaildEmptyPassword}                       
+
+
+${VaildEmptyRefNameErrMsg}                      Required
+${Vaild15ChrRefNameErrMsg}                      Required           
+${VaildEmptyJenkinsURLErrMsg}                   Please enter a valid Url
+${VaildEmptyUserIDErrMsg}                       Required
+${VaildEmptyPasswordErrMsg}                     Required
