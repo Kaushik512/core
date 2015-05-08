@@ -623,4 +623,27 @@ app.post('/aws/providers/keypairs/list',function(req,res){
         }
       });
     });
+
+    // Return AWS Providers respect to orgid.
+app.get('/aws/providers/org/:orgId', function(req, res) {
+ logger.debug("Enter get() for /providers/org/%s",req.params.orgId);
+ var orgId = req.params.orgId.trim();
+     if(typeof orgId === 'undefined' || orgId.length === 0){
+        res.send(500,"Please Enter orgId.");
+        return;
+    }
+        AWSProvider.getAWSProvidersByOrgId(orgId,function(err, providers) {
+              if (err) {
+                  logger.error(err);
+                  res.send(500, errorResponses.db.error);
+                  return;
+              }
+              logger.debug("providers>>> ",   JSON.stringify(providers));
+              if (providers) {
+                  res.send(providers);
+              } else {
+                  res.send([]);
+              }
+        });
+  });
 }

@@ -28,7 +28,7 @@
                                                         <label for="category">Organization:<span style="color:Red;" class="control-label">&nbsp;*</span>
                                                         </label>
 
-                                                        <select id="orgname" class="chooseOrganization width-100" sourcepath="1" datapath="masterjson.rows.row" valuelinkfield="costcode" style="vertical-align:central" cdata="catalyst" cat-validation="required" cat-validation="required" linkedfields="['configname']" onchange="$('#configname').change();">
+                                                        <select id="orgname" class="chooseOrganization width-100" sourcepath="1" datapath="masterjson.rows.row" valuelinkfield="costcode" style="vertical-align:central" cdata="catalyst" cat-validation="required" cat-validation="required" linkedfields="['configname','teamname']" onchange="$('#configname').change();">
                                                             <option value="">Select an Organization</option>
                                                         </select>
 
@@ -55,7 +55,7 @@
                                                     
                                                     <div class="col-lg-6 col-md-6 smart-form" style="margin-top:25px;">
                                                         <label for="category">Assign Teams:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
-                                                        <div id="teamname" multiselect="multiselect" datatype="select" datapath="masterjson.rows.row" class="input-group from-control col-md-12 widthBox"  sourcepath="21" cdata="catalyst" cat-validation="onechecked">
+                                                        <div id="teamname" multiselect="multiselect" datatype="select" datapath="masterjson.rows.row" class="input-group from-control col-md-12 widthBox"  sourcepath="21" cdata="catalyst" cat-validation="onechecked" linkedto="orgname">
                                                         </div>
                                                     </div>
                                                 </div>
