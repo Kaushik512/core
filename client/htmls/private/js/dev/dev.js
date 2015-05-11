@@ -913,12 +913,13 @@
                                pollLogs(lastTimestamp, 0, true);
                            };
 
-
+          
                            //emptying ssh container
-                           $('#modalSSHShellContainer').on('hide.bs.modal', function(e) {
-                               $('#modalSSHShellContainer').find('#ssh-terminateBtn').click();
-                               $('#modalSSHShellContainer').find('.modal-body').empty();
+                           $('#dialog').on('hide.bs.modal', function(e) {
+                               $('#dialog').find('#ssh-terminateBtn').click();
+                               $('#dialog').find('.modal-body').empty();
                            });
+                           
 
                            function showRDP() {
                                if ($(this).hasClass('isStopedInstance')) {
@@ -939,10 +940,28 @@
                                    return;
                                }
 
-                               var $sshModal = $('#modalSSHShellContainer');
+                               var $sshModal = $('#dialog');
+                               dialog = $( "#dialog" ).dialog({
+                                  autoOpen: true,
+                                  height: 500,
+                                  width: 650,
+                                  modal: true,
+                                  /*buttons: {
+                                    
+                                    Close: function() {
+                                      dialog.dialog( "close" );
+                                    }
+                                  },*/
+                                
+                                });
+                               $("#dialog").dialog({ closeOnEscape: false });
+                               /*$("#dialog").dialog({
+                                minHeight:400,
+                                minWidth:300,
+                               })*/
                                var instanceId = $(this).attr('data-instanceId');
                                $sshModal.find('.modal-body').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
-                               $sshModal.modal('show');
+                               //$sshModal.modal('show');
                                $.get('sshShell.html?id=' + instanceId, function(data) {
 
                                    $sshModal.find('.modal-body').empty().append(data);
