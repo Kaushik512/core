@@ -27,4 +27,21 @@ module.exports.setRoutes = function(app) {
             }
         });
     });
+
+    app.get('/chefClientExecution/:executionId', function(req, res) {
+
+        ChefClientExecution.getExecutionById(req.params.executionId, function(err, chefClientExecution) {
+            if (err) {
+                res.send(500, errorResponses.db.error);
+                return;
+            }
+            if(chefClientExecution) {
+                res.send(chefClientExecution);
+            } else {
+                res.send(404,{
+                    message:"Execution id does not exist"
+                });
+            }
+        });
+    });
 };

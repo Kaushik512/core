@@ -154,17 +154,9 @@ taskSchema.methods.execute = function(userName, baseUrl, callback, onComplete) {
         if (taskHistory) {
             taskHistory.timestampEnded = self.timestampEnded;
             taskHistory.status = self.lastTaskStatus;
-            var executionIds = [];
             if (resultData && resultData.instancesResults && resultData.instancesResults.length) {
-                var instancesResults = resultData.instancesResults;
-                for (var i = 0; i < instancesResults.length; i++) {
-                    if (instancesResults[i].executionId) {
-                        executionIds.push(instancesResults[i].executionId);
-                    }
-                }
-
+                taskHistory.executionResults = resultData.instancesResults;
             }
-            taskHistory.executionIds = executionIds
             taskHistory.save();
         }
 
