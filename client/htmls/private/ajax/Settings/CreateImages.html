@@ -149,6 +149,7 @@
 
 
   function inLineReady() {
+    $("#orgId").select2();
     $("#providerId").select2();
     $("#region").select2();
     $("input[type='text']").on("click", function () {
@@ -290,7 +291,8 @@
     }else{
     $('#orgId').val("").select2();
     }
-     getProviderList();
+    $('#orgId').on('change',getProviderWithOrgFilter);
+     $('#orgId').change();
   });
 }
 /*function getProviderWithOrgFilter(){
@@ -337,20 +339,22 @@ function getProviderWithOrgFilter(){
      type: "GET",
      url: "/aws/providers/org/"+orgId,
      success: function (data) {
-      var str=' <option value="">Choose Provider</option>',len=data.length;
+      var str='<option value="">Choose Providers</option>',len=data.length;
     for(var i=0;i<data.length;i++){
         str=str+'<option value="'+data[i]._id+'">'+data[i].providerName+'</option>';
     }
     $('#providerId').html(str);
+    $('#providerId').change();
     if( $('#providerId').attr('answer')){
       $('#providerId').val($('#orgId').attr('answer')).select2();
     }else{
     $('#providerId').val("").select2();
     }
+
   }
   });
 }
-  $('#orgId').on('change',getProviderWithOrgFilter);
+  
 }
 
   function populateOSList(){
@@ -448,9 +452,7 @@ $(document).ready(function () {
             // $(this).validate();
             if(isFormValid()){
               saveImageForm();
-            }else{
-                   // bootbox.alert('invalid form Data submitted'); // for demo
-                  }
+            }
                return false; // for demo
              });
 
@@ -467,9 +469,10 @@ $(document).ready(function () {
             $('#imageidentifire').val(data.imageIdentifier).attr('answer',data.imageidentifire);
             $('#name').val(data.name).attr('answer',data.imageidentifire);
             $('#osType').attr('answer',data.osName).val(data.osName).select2();
-            $('#providerId').attr('answer',data.providerId).val(data.providerId).select2();
+            $('#orgId').val(data.orgId).attr({'answer': data.orgId}).trigger('change').select2().val(data.providerId);
+            $('#providerId').attr('answer',data.providerId).val(data.providerId).trigger('change').select2();
             $('#userName').val(data.userName);
-            $('#orgId').val(data.orgId[0]).attr({'answer': data.orgId[0]}).select2();
+            
 
           });
          }
