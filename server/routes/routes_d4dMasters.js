@@ -293,7 +293,8 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                     res.send(500,"Error from DB.");
                                     return;
                                 }
-                                if(bpData){
+                                logger.debug(">>>>>>>>>>>>>>>>>>>>> ",bpData.length);
+                                if(bpData.length > 0){
                                     res.send(500,"TemplateType can't be deleted,It's used by some BluePrint.");
                                     return;
                                 }
