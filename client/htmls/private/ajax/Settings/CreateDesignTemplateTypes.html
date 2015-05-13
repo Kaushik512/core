@@ -50,7 +50,12 @@
                                                                  </div>
                                                             
                                                           
-
+                                                                 <div class="col-lg-6 col-md-6 projectRepo">
+                                          <label for="">Organization:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+                                          <select id="orgname" class="chooseOrganization width-100" sourcepath="1" datapath="masterjson.rows.row" linkedfields="['projectname']"  cdata="catalyst" cat-validation="required">
+                                             <option value="">Select Organization</option>
+                                          </select>
+                                       </div>
 
 
 
@@ -139,6 +144,7 @@
 </script>
 <script>
 $(document).ready(function(){
+    $('select').select2();
     $('#myForm333').submit(function() {
 //alert('here');
     if($(this).valid){

@@ -221,15 +221,15 @@ module.exports.setRoutes = function(app, sessionVerification) {
         var category = configmgmtDao.getCategoryFromID(req.params.id);
         var permissionto = 'delete';
         usersDao.haspermission(user.cn, category, permissionto, null, req.session.user.permissionset, function(err, data) {
-            if (!err) {
+            if (err) {
                 logger.debug('Returned from haspermission : ' + data + ' , Condition State : ' + (data == false));
-                if (data == false) {
+                /*if (data == false) {
                     logger.debug('No permission to ' + permissionto + ' on ' + category);
                     res.end('401');
 
                     return;
                 }
-            } else {
+            } else {*/
                 logger.error("Hit and error in haspermission:", err);
                 res.send(500);
                 return;
@@ -242,11 +242,11 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 logger.debug("LoggedIn User:>>>> ", JSON.stringify(anUser));
                 if (anUser) {
                     //data == true (create permission)
-                    if (!data) {
+                    /*if (!data) {
                         logger.debug("Inside check not authorized.");
                         res.send(401, "You don't have permission to perform this operation.");
                         return;
-                    }
+                    }*/
 
                     var tocheck = [];
                     var fieldname = '';
@@ -2114,16 +2114,14 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
 
         usersDao.haspermission(user.cn, category, permissionto, null, req.session.user.permissionset, function(err, data) {
-            if (!err) {
+            if (err) {
                 logger.debug('Returned from haspermission : ' + data + ' : ' + (data == false));
-                if (data == false) {
+                /*if (data == false) {
                     logger.debug('No permission to ' + permissionto + ' on ' + category);
                     res.send(401, "You don't have permission to perform this operation.");
                     return;
-                }
-            } else {
-                logger.error("Hit and error in haspermission:", err);
-                res.send(500);
+                }*/
+                res.send(500,"Server Error");
                 return;
             }
 
@@ -2145,7 +2143,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     bodyJson["id"] = req.params.id; //storing the form id.
 
                     // Handled for "any" field Org for User.
-                    logger.debug(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ",bodyJson["orgname"].length);
+                    //logger.debug(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ",bodyJson["orgname"].length);
                     if(req.params.id === '7' && bodyJson["orgname"] === ""){
                         logger.debug("Inside if for empty");
                         bodyJson["orgname"] = "";
