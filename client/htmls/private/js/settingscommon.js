@@ -568,7 +568,11 @@ function CreateTableFromJson(formID, idFieldName, createFileName) {
                         if(haspermission('teams','modify')){
                         hasEditPermission =true;
                         }
-                    }else if(createFileName==='CreateTemplates.html'){
+                    }/*else if(createFileName==='CreateDesignTemplateTypes.html'){
+                        if(haspermission('templatetypes','modify')){
+                        hasEditPermission =true;
+                        }
+                    }*/else if(createFileName==='CreateTemplates.html'){
                         if(haspermission('templates','modify')){
                         hasEditPermission =true;
                         }
@@ -653,7 +657,11 @@ function CreateTableFromJson(formID, idFieldName, createFileName) {
                         if(haspermission('teams','delete')){
                         hasDeletePermission =true;
                         }
-                    }else if(createFileName==='CreateTemplates.html'){
+                    }/*else if(createFileName==='CreateDesignTemplateTypes.html'){
+                        if(haspermission('templatetypes','delete')){
+                        hasDeletePermission =true;
+                        }
+                    }*/else if(createFileName==='CreateTemplates.html'){
                         if(haspermission('templates','delete')){
                         hasDeletePermission =true;
                         }
