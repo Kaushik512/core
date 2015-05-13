@@ -458,6 +458,7 @@ function CreateTableFromJson(formID, idFieldName, createFileName) {
 
         // alert(JSON.stringify(formData));
         //Reading row to get schema
+        console.log("hiiiii>>>>> "+d4ddata);
         for(var x=0;x<d4ddata.length;x++){
             if(d4ddata[x].orgname !== "undefined"){
                // console.log("Value for all",d4ddata[x].orgname[0]);
@@ -568,11 +569,11 @@ function CreateTableFromJson(formID, idFieldName, createFileName) {
                         if(haspermission('teams','modify')){
                         hasEditPermission =true;
                         }
-                    }/*else if(createFileName==='CreateDesignTemplateTypes.html'){
+                    }else if(createFileName==='CreateDesignTemplateTypes.html'){
                         if(haspermission('templatetypes','modify')){
                         hasEditPermission =true;
                         }
-                    }*/else if(createFileName==='CreateTemplates.html'){
+                    }else if(createFileName==='CreateTemplates.html'){
                         if(haspermission('templates','modify')){
                         hasEditPermission =true;
                         }
@@ -657,11 +658,11 @@ function CreateTableFromJson(formID, idFieldName, createFileName) {
                         if(haspermission('teams','delete')){
                         hasDeletePermission =true;
                         }
-                    }/*else if(createFileName==='CreateDesignTemplateTypes.html'){
+                    }else if(createFileName==='CreateDesignTemplateTypes.html'){
                         if(haspermission('templatetypes','delete')){
                         hasDeletePermission =true;
                         }
-                    }*/else if(createFileName==='CreateTemplates.html'){
+                    }else if(createFileName==='CreateTemplates.html'){
                         if(haspermission('templates','delete')){
                         hasDeletePermission =true;
                         }
@@ -1966,17 +1967,17 @@ function saveform(formID, operationTypes) {
     }
 
     
-    if(orgname){
+    if(orgName){
         console.log("no orgname>>>>");
         orgName = "all";
     }
-    console.log(">>>>>>>>>>>>>>>>>>>>>>>>> orgname: ",orgname);
+    console.log(">>>>>>>>>>>>>>>>>>>>>>>>> orgname: ",orgName);
     //alert("Length : " + data1.length);
     //data1.append("costcode","[\"code1\",\"code2\",\"code3\"]");
     //setting filenames to null if empty
     if (fileNames == '')
         fileNames = 'null';
-    if (typeof(orgname) == 'undefined') {
+    if (typeof(orgName) == 'undefined') {
         orgName = '%2f'; //When this is updated the upload of image has an issue
     }
     //alert('This is the data that gets saved:' + JSON.stringify(data1));
