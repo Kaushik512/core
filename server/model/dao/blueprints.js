@@ -503,6 +503,22 @@ this.getBlueprintByKeyPairId = function(keyPairId, callback) {
 
         });
     };
+
+this.getBlueprintByTemplateType = function(templateType, callback) {
+        logger.debug("Enter getBlueprintByTemplateType(%s)", templateType);
+        Blueprint.find({
+            "templateType": templateType
+        }, function(err, data) {
+            if (err) {
+                logger.error("Failed getting Blueprint >> %s", templateType, err);
+                callback(err, null);
+                return;
+            }
+            logger.debug("Exit getBlueprintByTemplateType (templateType = %s)", templateType);
+            callback(null, data);
+
+        });
+    };
 }
 
 module.exports = new BlueprintsDao();

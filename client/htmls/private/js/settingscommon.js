@@ -1836,7 +1836,7 @@ function saveform(formID, operationTypes) {
 
     var data1 = new FormData();
     var fileNames = '';
-    var orgName = $('#orgname').val();
+    var orgName = $('#orgname').val().trim();
     var button = $("form[id*='myForm']").find("div.pull-right > button");
 
     if (button) {
@@ -1966,12 +1966,12 @@ function saveform(formID, operationTypes) {
         data1.append("rowid", button.attr("rowid"));
     }
 
-    
-    if(orgName){
+    console.log(">>>>>>>>>>>>>>>>>>>>>>>>> orgname: ",orgName);
+    if(orgName === ""){
         console.log("no orgname>>>>");
         orgName = "all";
     }
-    console.log(">>>>>>>>>>>>>>>>>>>>>>>>> orgname: ",orgName);
+    
     //alert("Length : " + data1.length);
     //data1.append("costcode","[\"code1\",\"code2\",\"code3\"]");
     //setting filenames to null if empty
@@ -1979,6 +1979,9 @@ function saveform(formID, operationTypes) {
         fileNames = 'null';
     if (typeof(orgName) == 'undefined') {
         orgName = '%2f'; //When this is updated the upload of image has an issue
+    }
+    if(formID == 16){
+        orgName = '%2f';
     }
     //alert('This is the data that gets saved:' + JSON.stringify(data1));
 
