@@ -275,6 +275,9 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         var instanceid = req.params.instanceid;
         var _docker = new Docker();
         var cmd = "sudo docker exec " + req.params.containerid + ' bash ' + req.params.action;
+        //returning browser handle before execution starts.
+        res.send(200);
+        
         _docker.runDockerCommands(cmd, instanceid, function(err, retCode) {
             if (!err) {
                 logsDao.insertLog({
@@ -284,7 +287,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                     timestamp: new Date().getTime()
                 });
                 logger.debug("Docker Command run Successfully");
-                res.send(200);
+                
                 logger.debug("Exit get() for /instances/dockerexecute/%s/%s/%s", req.params.instanceid, req.params.containerid, req.params.action);
             } else {
                 logger.error("Excute Error : ", err);
@@ -294,8 +297,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                     log: "Excute Error : " + err,
                     timestamp: new Date().getTime()
                 });
-                logger.error("Error hits while running Docker Command: ", err);
-                res.send(500);
+                logger.error("Error hit while running Docker Command: ", err);
+                 logger.debug("Exit get() for /instances/dockerexecute/%s/%s/%s", req.params.instanceid, req.params.containerid, req.params.action);
             }
         });
 
