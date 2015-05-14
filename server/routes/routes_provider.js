@@ -149,7 +149,12 @@ app.get('/aws/providers', function(req, res) {
                   res.send(500,"Invalid User.");
               }
    if(anUser.orgname_rowid[0] === ""){
-       AWSProvider.getAWSProviders(function(err, providers) {
+       masterUtil.getAllActiveOrg(function(err,orgList){
+          if(err){
+            res.send(500,'Not able to fetch Orgs.');
+          }
+          if(orgList){
+            AWSProvider.getAWSProvidersForOrg(orgList,function(err, providers) {
               if (err) {
                   logger.error(err);
                   res.send(500, errorResponses.db.error);
@@ -161,6 +166,8 @@ app.get('/aws/providers', function(req, res) {
               } else {
                   res.send([]);
               }
+            });
+          }
       });
     }else{
       masterUtil.getOrgs(loggedInUser,function(err,orgList){
