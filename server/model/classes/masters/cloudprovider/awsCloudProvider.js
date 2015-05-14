@@ -170,6 +170,28 @@ awsProviderSchema.statics.removeAWSProviderById = function(providerId, callback)
     });
 };
 
+awsProviderSchema.statics.getAWSProvidersByOrgId = function(orgId,callback) {
+    logger.debug("Enter getAWSProvidersByOrgId");
+        logger.debug("org id: ",orgId);
+    this.find({
+        orgId : orgId
+    }, function(err, providers) {
+        if (err) {
+            logger.error(err);
+            callback(err, null);
+            return;
+        }
+        if (providers.length) {
+            logger.debug("Exit getAWSProvidersByOrgId with providers present");
+            callback(null, providers);
+        } else {
+            logger.debug("Exit getAWSProvidersByOrgId with no providers present");
+            callback(null, null);
+        }
+
+    });
+};
+
 var AWSProvider = mongoose.model('AWSProvider', awsProviderSchema);
 
 module.exports = AWSProvider;
