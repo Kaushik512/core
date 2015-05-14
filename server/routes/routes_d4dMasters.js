@@ -11,6 +11,7 @@ var logger = require('../lib/logger')(module);
 var childProcess = require('child_process');
 var exec = childProcess.exec;
 var masterUtil = require('../lib/utils/masterUtil.js');
+var blueprintsDao = require('../model/dao/blueprints');
 
 
 module.exports.setRoutes = function(app, sessionVerification) {
@@ -221,15 +222,15 @@ module.exports.setRoutes = function(app, sessionVerification) {
         var category = configmgmtDao.getCategoryFromID(req.params.id);
         var permissionto = 'delete';
         usersDao.haspermission(user.cn, category, permissionto, null, req.session.user.permissionset, function(err, data) {
-            if (!err) {
+            if (err) {
                 logger.debug('Returned from haspermission : ' + data + ' , Condition State : ' + (data == false));
-                if (data == false) {
+                /*if (data == false) {
                     logger.debug('No permission to ' + permissionto + ' on ' + category);
                     res.end('401');
 
                     return;
                 }
-            } else {
+            } else {*/
                 logger.error("Hit and error in haspermission:", err);
                 res.send(500);
                 return;
@@ -242,11 +243,11 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 logger.debug("LoggedIn User:>>>> ", JSON.stringify(anUser));
                 if (anUser) {
                     //data == true (create permission)
-                    if (!data) {
+                    /*if (!data) {
                         logger.debug("Inside check not authorized.");
                         res.send(401, "You don't have permission to perform this operation.");
                         return;
-                    }
+                    }*/
 
                     var tocheck = [];
                     var fieldname = '';
@@ -280,41 +281,102 @@ module.exports.setRoutes = function(app, sessionVerification) {
                             fieldname = "projectId";
                             break;
                     }
-                    configmgmtDao.deleteCheck(req.params.fieldvalue, tocheck, fieldname, function(err, data) {
-                        logger.debug("Delete check returned: %s", data);
-                        if (data == "none") {
-                            logger.debug("entering delete");
-                            configmgmtDao.getDBModelFromID(req.params.id, function(err, dbtype) {
-                                if (err) {
-                                    logger.debug("Hit and error:", err);
-                                }
-                                if (dbtype) {
-                                    //Currently rowid is hardcoded since variable declaration was working
-                                    var item = '\"' + req.params.fieldname + '\"';
-                                    logger.debug("About to delete Master Type: %s : % : %", dbtype, item, req.params.fieldvalue);
-                                    //res.send(500);
-                                    eval('d4dModelNew.' + dbtype).remove({
-                                        rowid: req.params.fieldvalue
-                                    }, function(err) {
-                                        if (err) {
-                                            logger.debug("Hit an errror on delete : %s", err);
-                                            res.send(500);
-                                            return;
-                                        } else {
-                                            logger.debug("Document deleted : %s", req.params.fieldvalue);
-                                            res.send(200);
-                                            logger.debug("Exit get() for /d4dMasters/removeitem/%s/%s/%s", req.params.id, req.params.fieldname, req.params.fieldvalue);
-                                            return;
-                                        }
-                                    }); //end findOne
-                                }
-                            }); //end configmgmtDao
-                        } else {
-                            logger.debug("There are dependent elements cannot delete");
-                            res.send(412, "Cannot proceed with delete. \n Dependent elements found");
+
+                    masterUtil.getTemplateTypesById(req.params.fieldvalue,function(err,templateTypeData){
+                        if(err){
+                            res.send(500,"Error from DB");
                             return;
                         }
-                    }); //deleteCheck
+                        if(templateTypeData.length > 0){
+                            blueprintsDao.getBlueprintByTemplateType(templateTypeData[0].templatetypename,function(err,bpData){
+                                if(err){
+                                    res.send(500,"Error from DB.");
+                                    return;
+                                }
+                                logger.debug(">>>>>>>>>>>>>>>>>>>>> ",bpData.length);
+                                if(bpData.length > 0){
+                                    res.send(500,"TemplateType can't be deleted,It's used by some BluePrint.");
+                                    return;
+                                }
+
+                                configmgmtDao.deleteCheck(req.params.fieldvalue, tocheck, fieldname, function(err, data) {
+                                    logger.debug("Delete check returned: %s", data);
+                                    if (data == "none") {
+                                        logger.debug("entering delete");
+                                        configmgmtDao.getDBModelFromID(req.params.id, function(err, dbtype) {
+                                            if (err) {
+                                                logger.debug("Hit and error:", err);
+                                            }
+                                            if (dbtype) {
+                                                //Currently rowid is hardcoded since variable declaration was working
+                                                logger.debug("Data from DB: >>>>>>>>>>>>>",JSON.stringify(dbtype));
+                                                var item = '\"' + req.params.fieldname + '\"';
+                                                logger.debug("About to delete Master Type: %s : % : %", dbtype, item, req.params.fieldvalue);
+                                                //res.send(500);
+                                                eval('d4dModelNew.' + dbtype).remove({
+                                                    rowid: req.params.fieldvalue
+                                                }, function(err) {
+                                                    if (err) {
+                                                        logger.debug("Hit an errror on delete : %s", err);
+                                                        res.send(500);
+                                                        return;
+                                                    } else {
+                                                        logger.debug("Document deleted : %s", req.params.fieldvalue);
+                                                        res.send(200);
+                                                        logger.debug("Exit get() for /d4dMasters/removeitem/%s/%s/%s", req.params.id, req.params.fieldname, req.params.fieldvalue);
+                                                        return;
+                                                    }
+                                                }); //end findOne
+                                            }
+                                        }); //end configmgmtDao
+                                    } else {
+                                        logger.debug("There are dependent elements cannot delete");
+                                        res.send(412, "Cannot proceed with delete. \n Dependent elements found");
+                                        return;
+                                    }
+                                }); //deleteCheck
+                            });
+                        }else{
+                            configmgmtDao.deleteCheck(req.params.fieldvalue, tocheck, fieldname, function(err, data) {
+                                    logger.debug("Delete check returned: %s", data);
+                                    if (data == "none") {
+                                        logger.debug("entering delete");
+                                        configmgmtDao.getDBModelFromID(req.params.id, function(err, dbtype) {
+                                            if (err) {
+                                                logger.debug("Hit and error:", err);
+                                            }
+                                            if (dbtype) {
+                                                //Currently rowid is hardcoded since variable declaration was working
+                                                logger.debug("Data from DB: >>>>>>>>>>>>>",JSON.stringify(dbtype));
+                                                var item = '\"' + req.params.fieldname + '\"';
+                                                logger.debug("About to delete Master Type: %s : % : %", dbtype, item, req.params.fieldvalue);
+                                                //res.send(500);
+                                                eval('d4dModelNew.' + dbtype).remove({
+                                                    rowid: req.params.fieldvalue
+                                                }, function(err) {
+                                                    if (err) {
+                                                        logger.debug("Hit an errror on delete : %s", err);
+                                                        res.send(500);
+                                                        return;
+                                                    } else {
+                                                        logger.debug("Document deleted : %s", req.params.fieldvalue);
+                                                        res.send(200);
+                                                        logger.debug("Exit get() for /d4dMasters/removeitem/%s/%s/%s", req.params.id, req.params.fieldname, req.params.fieldvalue);
+                                                        return;
+                                                    }
+                                                }); //end findOne
+                                            }
+                                        }); //end configmgmtDao
+                                    } else {
+                                        logger.debug("There are dependent elements cannot delete");
+                                        res.send(412, "Cannot proceed with delete. \n Dependent elements found");
+                                        return;
+                                    }
+                                }); //deleteCheck
+                        }
+
+                    });
+
                 }
             });
         }); //haspermission
@@ -511,7 +573,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 res.send(500, "Invalid User.");
             }
             if (anUser.orgname_rowid[0] === "") {
-                d4dModelNew.find({
+                /*d4dModelNew.find({
                     id: req.params.id
                 }, function(err, data) {
                     if (err) {
@@ -525,114 +587,168 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     } else {
                         res.send(data);
                     }
-                });
+                });*/
 
-
-                /*configmgmtDao.getRowids(function(err,rowidlist){
-
-            logger.debug("Rowid List----&&&&----> %s", rowidlist);
-            configmgmtDao.getDBModelFromID(req.params.id, function(err, dbtype) {
-                if (err) {
-                    logger.error("Hit and error:", err);
-                }
-                if (dbtype) {
-                    logger.debug("Master Type: %s", dbtype);
-                    
-                    var query = {};
-                query['id'] = req.params.id;
-                
-                    
-                    
-                    if(req.params.id == '1' || req.params.id == '2' || req.params.id == '3' || req.params.id == '4' || req.params.id == '10'){
-                        query['active'] = 'true';
+// For Org
+                masterUtil.getAllActiveOrg(function(err, orgList) {
+                    logger.debug("got org list ==>", JSON.stringify(orgList));
+                    if (err) {
+                        res.send(500, 'Not able to fetch Orgs.');
+                        return;
+                    } else if (req.params.id === '1') {
+                        logger.debug("Returned Org List:>>>> ", JSON.stringify(orgList));
+                        res.send(orgList);
+                        return;
                     }
-
-
-                    eval('d4dModelNew.' + dbtype).find(
-                        query
-                        
-                    , function(err, d4dMasterJson) {
-                        if (err) {
-                            logger.error("Hit and error:", err);
-                        }
-                        //Need to iterate thru the json and find if there is a field with _rowid then convert it to prefix before sending.
-                            var _keys = Object.keys(d4dMasterJson);
-                            logger.debug("Master Length: %s", _keys.length);
-                            if(_keys.length <= 0){
-                                logger.debug("sent response %s", JSON.stringify(d4dMasterJson));
-                                res.end(JSON.stringify(d4dMasterJson));
+                    // for(var i=0;i<orgList.length;i++){
+                    //(function(count){
+                    else if (req.params.id === '2') {
+                        // For BusinessGroup
+                        masterUtil.getBusinessGroups(orgList, function(err, bgList) {
+                            if (err) {
+                                res.send(500, 'Not able to fetch BG.');
                             }
-                            var counter = 0;
-                            var todelete = [];
-                            //_keys.forEach(function(k,v){
-                            for(var k=0,v=0;k<_keys.length;k++,v++) {
-                                //var __keys = Object.keys(d4dMasterJson[k]);
-                               
-                                //console.log('OBject:' + d4dMasterJson[k]);
-                                var jobj = JSON.parse(JSON.stringify(d4dMasterJson[k]));
-                            
-                                for(var k1 in jobj){
-                                    //if any key has _rowid then update     corresponding field
-                                    //configmgmtDao.convertRowIDToValue('4a6934a5-74d6-47fe-b930-36cde5167ad7',rowidlist);
-                                    if(k1.indexOf('_rowid') > 0){
-                                        //check if its an array of rowid's
-                                        var flds = k1.split('_');
-                                        var names = '';
-                                        if(jobj[k1].indexOf(',') > 0){
-                                            //Will handle this seperately : Vinod to Do
-                                            var itms = jobj[k1].split(',');
-                                            for(_itms in itms){
-                                                logger.debug("in items");
-                                                var _itmsName = configmgmtDao.convertRowIDToValue(itms[_itms],rowidlist);
-                                                if(_itmsName != '')
-                                                {
-                                                        if(names == '')
-                                                        {
-                                                            names = _itmsName; //configmgmtDao.convertRowIDToValue(itms[_itms],rowidlist);
-                                                        }
-                                                        else{
-                                                            names += ',' + _itmsName; //configmgmtDao.convertRowIDToValue(itms[_itms],rowidlist);
-                                                        }
-                                                        logger.debug("names: %s",names);
-                                                }
-                                            }
-                                            
-                                        }
-                                        else{
-                                            names = configmgmtDao.convertRowIDToValue(jobj[k1],rowidlist)
-                                        }
+                            logger.debug("Returned BG List:>>>> ", JSON.stringify(bgList));
+                            res.send(bgList);
+                            return;
+                        });
+                    } else if (req.params.id === '3') {
+                        // For Environment
+                        masterUtil.getEnvironments(orgList, function(err, envList) {
+                            if (err) {
+                                res.send(500, 'Not able to fetch ENV.');
+                            }
+                            logger.debug("Returned ENV List:>>>>> ", JSON.stringify(envList));
+                            res.send(envList);
+                            return;
+                        });
+                    } else if (req.params.id === '4') {
+                        // For Projects
+                        masterUtil.getProjects(orgList, function(err, projectList) {
+                            if (err) {
+                                res.send(500, 'Not able to fetch Project.');
+                            }
+                            logger.debug("Returned Project List:>>>>> ", JSON.stringify(projectList));
+                            res.send(projectList);
+                            return;
+                        })
+                    } else if (req.params.id === '10') {
+                        // For ConfigManagement
+                        masterUtil.getCongifMgmts(orgList, function(err, configMgmtList) {
+                            if (err) {
+                                res.send(500, 'Not able to fetch ConfigManagement.');
+                            }
+                            logger.debug("Returned ConfigManagement List:>>>>> ", configMgmtList);
+                            res.send(configMgmtList);
+                            return;
+                        });
 
-                                        d4dMasterJson[k][flds[0]] = names;
+                    } else if (req.params.id === '18') {
+                        // For Docker
+                        logger.debug("Id for docker:>> ", req.params.id);
+                        masterUtil.getDockers(orgList, function(err, dockerList) {
+                            if (err) {
+                                res.send(500, 'Not able to fetch Dockers.');
+                            }
+                            logger.debug("Returned Dockers List:>>>>> ", JSON.stringify(dockerList));
+                            res.send(dockerList);
+                            return;
+                        });
 
-                                        if(names == '' && k1.indexOf('orgname_rowid') >= 0)
-                                            todelete.push(k);
-                                        //console.log('jobj[flds[0]]',jobj[flds[0]]);
-                                        logger.debug("jobj[flds[0]] %s %s %s %s",d4dMasterJson[k][flds[0]],flds[0],k1,k);
-                                    }
-                                  //  console.log("key**:",k1," val**:",jobj[k1]);
-                                   
+                    } else if (req.params.id === '17') {
+                        // For Template
+                        logger.debug("Id for template:>> ", req.params.id);
+                        masterUtil.getTemplates(orgList, function(err, templateList) {
+                            if (err) {
+                                res.send(500, 'Not able to fetch Template.');
+                            }
+                            logger.debug("Returned Template List:>>>>> ", JSON.stringify(templateList));
+                            res.send(templateList);
+                            return;
+                        });
+
+                    } else if (req.params.id === '16') {
+                        // For Template
+                        logger.debug("Id for templateType:>> ", req.params.id);
+                        masterUtil.getTemplateTypes(orgList,function(err,templateList){
+                                if(err){
+                                    res.send(500,'Not able to fetch TemplateType.');
                                 }
-                                logger.debug("Orgname check: %s", d4dMasterJson[k]['orgname']);
-                                
-                                
-                                counter++;
-                            };//);
-                                    logger.debug("To Delete Array: %s", todelete.toString());
-                                    var collection = [];
-                                    
-                                    for(var i = 0; i < d4dMasterJson.length;i++){
-                                        if(todelete.indexOf(i) === -1) {
-                                            collection.push(d4dMasterJson[i]);
-                                        }
-                                        
-                                    }
-                                    logger.debug("sent response 579 %s", JSON.stringify(collection));
-                                    res.end(JSON.stringify(collection));
-                                    logger.debug("Exit get() for /d4dMasters/readmasterjsonnew/%s",req.params.id);
-                    });
-                }
-            });
-        });*/ //rowidlist
+                                logger.debug("Returned TemplateType List:>>>>> ",JSON.stringify(templateList));
+                                res.send(JSON.stringify(templateList));
+                                return;
+                            });
+
+                        /*d4dModelNew.d4dModelMastersDesignTemplateTypes.find({
+                            id: req.params.id
+                        }, function(err, data) {
+                            if (err) {
+                                logger.debug("Unable to fetch TemplateType.");
+                                res.send(500, "Unable to fetch TemplateType for Id: ", req.params.id);
+                            }
+                            logger.debug("Called /d4dMasters/readmasterjsonnew/ for non superadmin.");
+                            res.send(JSON.stringify(data));
+                        });*/
+
+                    } else if (req.params.id === '19') {
+                        // For ServiceCommand
+                        masterUtil.getServiceCommands(orgList, function(err, serviceCommandList) {
+                            if (err) {
+                                res.send(500, 'Not able to fetch ServiceCommand.');
+                            }
+                            logger.debug("Returned ServiceCommand List:>>>>> ", JSON.stringify(serviceCommandList));
+                            res.send(serviceCommandList);
+                            return;
+                        });
+
+                    } else if (req.params.id === '20') {
+                        // For Jenkins
+                        masterUtil.getJenkins(orgList, function(err, jenkinList) {
+                            if (err) {
+                                res.send(500, 'Not able to fetch Jenkins.');
+                            }
+                            logger.debug("Returned Jenkins List:>>>>> ", JSON.stringify(jenkinList));
+                            res.send(jenkinList);
+                            return;
+                        });
+
+                    } else if (req.params.id === '6') {
+                        // For User Role
+                        masterUtil.getUserRoles(function(err, userRoleList) {
+                            if (err) {
+                                res.send(500, 'Not able to fetch UserRole.');
+                            }
+                            logger.debug("Returned UserRole List:>>>>> ", JSON.stringify(userRoleList));
+                            res.send(userRoleList);
+                            return;
+                        });
+
+                    } else if (req.params.id === '7') {
+                        // For User
+                        masterUtil.getUsersForOrgOrAll(orgList, function(err, userList) {
+                            if (err) {
+                                res.send(500, 'Not able to fetch User.');
+                            }
+                            logger.debug("Returned User List:>>>>> ", JSON.stringify(userList));
+                            res.send(userList);
+                            return;
+                        });
+
+                    } else if (req.params.id === '21') {
+                        // For Team
+                        masterUtil.getTeams(orgList, function(err, teamList) {
+                            if (err) {
+                                res.send(500, 'Not able to fetch Team.');
+                            }
+                            logger.debug("Returned Team List:>>>>> ", JSON.stringify(teamList));
+                            res.send(teamList);
+                            return;
+                        });
+                    } else {
+                        logger.debug('nothin here');
+                        res.send([]);
+                    }
+                });
 
                 // For non-catalystadmin
             } else {
@@ -718,16 +834,16 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     } else if (req.params.id === '16') {
                         // For Template
                         logger.debug("Id for templateType:>> ", req.params.id);
-                        /*masterUtil.getTemplateTypes(orgList,function(err,templateList){
+                        masterUtil.getTemplateTypes(orgList,function(err,templateList){
                                 if(err){
                                     res.send(500,'Not able to fetch TemplateType.');
                                 }
                                 logger.debug("Returned TemplateType List:>>>>> ",JSON.stringify(templateList));
-                                res.send(templateList);
+                                res.send(JSON.stringify(templateList));
                                 return;
-                            });*/
+                            });
 
-                        d4dModelNew.d4dModelMastersDesignTemplateTypes.find({
+                        /*d4dModelNew.d4dModelMastersDesignTemplateTypes.find({
                             id: req.params.id
                         }, function(err, data) {
                             if (err) {
@@ -736,7 +852,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                             }
                             logger.debug("Called /d4dMasters/readmasterjsonnew/ for non superadmin.");
                             res.send(JSON.stringify(data));
-                        });
+                        });*/
 
                     } else if (req.params.id === '19') {
                         // For ServiceCommand
@@ -2114,16 +2230,14 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
 
         usersDao.haspermission(user.cn, category, permissionto, null, req.session.user.permissionset, function(err, data) {
-            if (!err) {
+            if (err) {
                 logger.debug('Returned from haspermission : ' + data + ' : ' + (data == false));
-                if (data == false) {
+                /*if (data == false) {
                     logger.debug('No permission to ' + permissionto + ' on ' + category);
                     res.send(401, "You don't have permission to perform this operation.");
                     return;
-                }
-            } else {
-                logger.error("Hit and error in haspermission:", err);
-                res.send(500);
+                }*/
+                res.send(500,"Server Error");
                 return;
             }
 
@@ -2145,7 +2259,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     bodyJson["id"] = req.params.id; //storing the form id.
 
                     // Handled for "any" field Org for User.
-                    logger.debug(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ",bodyJson["orgname"].length);
+                    //logger.debug(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ",bodyJson["orgname"].length);
                     if(req.params.id === '7' && bodyJson["orgname"] === ""){
                         logger.debug("Inside if for empty");
                         bodyJson["orgname"] = "";

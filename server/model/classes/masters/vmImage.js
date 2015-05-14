@@ -158,9 +158,10 @@ imageSchema.statics.updateImageById = function(imageId, imageData, callback) {
             imageIdentifier: imageData.imageIdentifier,
             name: imageData.name,
             vType: imageData.vType,
-            osName: imageData.osType,
+            osType: imageData.osType,
             userName: imageData.userName,
-            orgId: imageData.orgId
+            orgId: imageData.orgId,
+            osName: imageData.osName
         }
     }, {
         upsert: false
