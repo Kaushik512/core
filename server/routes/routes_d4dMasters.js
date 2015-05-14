@@ -11,6 +11,7 @@ var logger = require('../lib/logger')(module);
 var childProcess = require('child_process');
 var exec = childProcess.exec;
 var masterUtil = require('../lib/utils/masterUtil.js');
+var blueprintsDao = require('../model/dao/blueprints');
 
 
 module.exports.setRoutes = function(app, sessionVerification) {
@@ -221,15 +222,15 @@ module.exports.setRoutes = function(app, sessionVerification) {
         var category = configmgmtDao.getCategoryFromID(req.params.id);
         var permissionto = 'delete';
         usersDao.haspermission(user.cn, category, permissionto, null, req.session.user.permissionset, function(err, data) {
-            if (!err) {
+            if (err) {
                 logger.debug('Returned from haspermission : ' + data + ' , Condition State : ' + (data == false));
-                if (data == false) {
+                /*if (data == false) {
                     logger.debug('No permission to ' + permissionto + ' on ' + category);
                     res.end('401');
 
                     return;
                 }
-            } else {
+            } else {*/
                 logger.error("Hit and error in haspermission:", err);
                 res.send(500);
                 return;
@@ -242,11 +243,11 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 logger.debug("LoggedIn User:>>>> ", JSON.stringify(anUser));
                 if (anUser) {
                     //data == true (create permission)
-                    if (!data) {
+                    /*if (!data) {
                         logger.debug("Inside check not authorized.");
                         res.send(401, "You don't have permission to perform this operation.");
                         return;
-                    }
+                    }*/
 
                     var tocheck = [];
                     var fieldname = '';
@@ -280,41 +281,65 @@ module.exports.setRoutes = function(app, sessionVerification) {
                             fieldname = "projectId";
                             break;
                     }
-                    configmgmtDao.deleteCheck(req.params.fieldvalue, tocheck, fieldname, function(err, data) {
-                        logger.debug("Delete check returned: %s", data);
-                        if (data == "none") {
-                            logger.debug("entering delete");
-                            configmgmtDao.getDBModelFromID(req.params.id, function(err, dbtype) {
-                                if (err) {
-                                    logger.debug("Hit and error:", err);
-                                }
-                                if (dbtype) {
-                                    //Currently rowid is hardcoded since variable declaration was working
-                                    var item = '\"' + req.params.fieldname + '\"';
-                                    logger.debug("About to delete Master Type: %s : % : %", dbtype, item, req.params.fieldvalue);
-                                    //res.send(500);
-                                    eval('d4dModelNew.' + dbtype).remove({
-                                        rowid: req.params.fieldvalue
-                                    }, function(err) {
-                                        if (err) {
-                                            logger.debug("Hit an errror on delete : %s", err);
-                                            res.send(500);
-                                            return;
-                                        } else {
-                                            logger.debug("Document deleted : %s", req.params.fieldvalue);
-                                            res.send(200);
-                                            logger.debug("Exit get() for /d4dMasters/removeitem/%s/%s/%s", req.params.id, req.params.fieldname, req.params.fieldvalue);
-                                            return;
-                                        }
-                                    }); //end findOne
-                                }
-                            }); //end configmgmtDao
-                        } else {
-                            logger.debug("There are dependent elements cannot delete");
-                            res.send(412, "Cannot proceed with delete. \n Dependent elements found");
+
+                    masterUtil.getTemplateTypesById(req.params.fieldvalue,function(err,templateTypeData){
+                        if(err){
+                            res.send(500,"Error from DB");
                             return;
                         }
-                    }); //deleteCheck
+                        if(templateTypeData.length > 0){
+                            blueprintsDao.getBlueprintByTemplateType(templateTypeData[0].templatetypename,function(err,bpData){
+                                if(err){
+                                    res.send(500,"Error from DB.");
+                                    return;
+                                }
+                                logger.debug(">>>>>>>>>>>>>>>>>>>>> ",bpData.length);
+                                if(bpData.length > 0){
+                                    res.send(500,"TemplateType can't be deleted,It's used by some BluePrint.");
+                                    return;
+                                }
+
+                                configmgmtDao.deleteCheck(req.params.fieldvalue, tocheck, fieldname, function(err, data) {
+                                    logger.debug("Delete check returned: %s", data);
+                                    if (data == "none") {
+                                        logger.debug("entering delete");
+                                        configmgmtDao.getDBModelFromID(req.params.id, function(err, dbtype) {
+                                            if (err) {
+                                                logger.debug("Hit and error:", err);
+                                            }
+                                            if (dbtype) {
+                                                //Currently rowid is hardcoded since variable declaration was working
+                                                logger.debug("Data from DB: >>>>>>>>>>>>>",JSON.stringify(dbtype));
+                                                var item = '\"' + req.params.fieldname + '\"';
+                                                logger.debug("About to delete Master Type: %s : % : %", dbtype, item, req.params.fieldvalue);
+                                                //res.send(500);
+                                                eval('d4dModelNew.' + dbtype).remove({
+                                                    rowid: req.params.fieldvalue
+                                                }, function(err) {
+                                                    if (err) {
+                                                        logger.debug("Hit an errror on delete : %s", err);
+                                                        res.send(500);
+                                                        return;
+                                                    } else {
+                                                        logger.debug("Document deleted : %s", req.params.fieldvalue);
+                                                        res.send(200);
+                                                        logger.debug("Exit get() for /d4dMasters/removeitem/%s/%s/%s", req.params.id, req.params.fieldname, req.params.fieldvalue);
+                                                        return;
+                                                    }
+                                                }); //end findOne
+                                            }
+                                        }); //end configmgmtDao
+                                    } else {
+                                        logger.debug("There are dependent elements cannot delete");
+                                        res.send(412, "Cannot proceed with delete. \n Dependent elements found");
+                                        return;
+                                    }
+                                }); //deleteCheck
+                            });
+                        }
+
+                    });
+
                 }
             });
         }); //haspermission
@@ -718,16 +743,16 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     } else if (req.params.id === '16') {
                         // For Template
                         logger.debug("Id for templateType:>> ", req.params.id);
-                        /*masterUtil.getTemplateTypes(orgList,function(err,templateList){
+                        masterUtil.getTemplateTypes(orgList,function(err,templateList){
                                 if(err){
                                     res.send(500,'Not able to fetch TemplateType.');
                                 }
                                 logger.debug("Returned TemplateType List:>>>>> ",JSON.stringify(templateList));
-                                res.send(templateList);
+                                res.send(JSON.stringify(templateList));
                                 return;
-                            });*/
+                            });
 
-                        d4dModelNew.d4dModelMastersDesignTemplateTypes.find({
+                        /*d4dModelNew.d4dModelMastersDesignTemplateTypes.find({
                             id: req.params.id
                         }, function(err, data) {
                             if (err) {
@@ -736,7 +761,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                             }
                             logger.debug("Called /d4dMasters/readmasterjsonnew/ for non superadmin.");
                             res.send(JSON.stringify(data));
-                        });
+                        });*/
 
                     } else if (req.params.id === '19') {
                         // For ServiceCommand
@@ -2114,16 +2139,14 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
 
         usersDao.haspermission(user.cn, category, permissionto, null, req.session.user.permissionset, function(err, data) {
-            if (!err) {
+            if (err) {
                 logger.debug('Returned from haspermission : ' + data + ' : ' + (data == false));
-                if (data == false) {
+                /*if (data == false) {
                     logger.debug('No permission to ' + permissionto + ' on ' + category);
                     res.send(401, "You don't have permission to perform this operation.");
                     return;
-                }
-            } else {
-                logger.error("Hit and error in haspermission:", err);
-                res.send(500);
+                }*/
+                res.send(500,"Server Error");
                 return;
             }
 
@@ -2145,7 +2168,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     bodyJson["id"] = req.params.id; //storing the form id.
 
                     // Handled for "any" field Org for User.
-                    logger.debug(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ",bodyJson["orgname"].length);
+                    //logger.debug(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ",bodyJson["orgname"].length);
                     if(req.params.id === '7' && bodyJson["orgname"] === ""){
                         logger.debug("Inside if for empty");
                         bodyJson["orgname"] = "";

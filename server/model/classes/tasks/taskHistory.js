@@ -19,7 +19,7 @@ var taskHistorySchema = new Schema({
     user: String,
     timestampStarted: Number,
     timestampEnded: Number,
-    executionIds: [String]
+    executionResults: [Schema.Types.Mixed]
 });
 
 taskHistorySchema.method.update = function(status, timestampEnded, callback) {

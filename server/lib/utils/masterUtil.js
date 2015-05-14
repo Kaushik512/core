@@ -60,7 +60,8 @@ var MasterUtil = function(){
                                 
                                         logger.debug("Org orgIds for query: ",orgIds);
                                         d4dModelNew.d4dModelMastersOrg.find({
-                                            rowid : {$in:orgIds}
+                                            rowid : {$in:orgIds},
+                                            active : true
                                             },function(err,orgs){
                                                 count++;
                                             if(err){
@@ -838,6 +839,30 @@ var MasterUtil = function(){
             callback(null,projectList);
         });
 
+    }
+
+    // Return all TemplateTypes
+    this.getTemplateTypesById = function(anId,callback){
+        logger.debug("getTemplateTypesById called. ",JSON.stringify(anId));
+        var templateTypeList = [];
+        d4dModelNew.d4dModelMastersDesignTemplateTypes.find({
+            rowid : anId
+        },function(err,templateTypes){
+            if(err){
+                callback(err,null);
+            }
+            if(templateTypes){
+                for(var i =0; i< templateTypes.length; i++){
+                    if(templateTypes[i].id === '16'){
+                        templateTypeList.push(templateTypes[i]);
+                    }
+                }
+                callback(null,templateTypeList);
+            }else{
+                callback(null,templateTypeList);
+            }
+
+        });
     }
 }
 
