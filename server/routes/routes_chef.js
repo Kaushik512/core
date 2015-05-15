@@ -754,7 +754,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
                 chefValidationPemFile: chefDetails.validatorpemfile,
                 hostedChefUrl: chefDetails.url,
             });
-
+            console.log("Chef...>>>>>>>>>>>>>>>>>>> "+JSON.stringify(chef));
             chef.getCookbook(req.params.cookbookName, function(err, cookbooks) {
                 console.log(err);
                 if (err) {
