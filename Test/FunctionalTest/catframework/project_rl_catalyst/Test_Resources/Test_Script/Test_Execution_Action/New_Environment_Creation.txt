@@ -24,18 +24,18 @@ Catalyst Addition and Creation of New Envirorments Setup
     Clicks on New button Create New Environment
     Select organization for Env
     #Select the Configuration name
-    Clicks on Add Button
-    Add the Environment Named1
-    Clicks on ADD Chef Env Button
+    #-Clicks on Add Button
+    #-Add the Environment Named1
+    #-Clicks on ADD Chef Env Button
     Select the Environments1
     Assign Teams1
     Clicks on Save Button to save the Environments
     Clicks on New button Create New Environment
     Select organization for Env
     #Select the Configuration name
-    Clicks on Add Button
-    Add the Environment Named2
-    Clicks on ADD Chef Env Button
+    #-Clicks on Add Button
+    #-Add the Environment Named2
+    #-Clicks on ADD Chef Env Button
     Select the Environment2
     Assign Team2
     Clicks on Save Button to save the Environments
