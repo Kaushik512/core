@@ -28,15 +28,16 @@ function $chefCookbookRoleSelector(catorgname, callback, selectedRunlist, readMo
     };
     if (!listVisible) {
         listVisible = defaultVisilbleList;
-    } 
+    }
     //listVisible = $.extend(listVisible, defaultVisilbleList, listVisible);
 
     console.log(listVisible);
 
 
     var $row = $("<div></div>").addClass('row margin0');
+    var $divFilterContainer = $("<div></div>").addClass('col-lg-12 divtablemarginpadding');
     var $divtable = $("<div></div>").addClass('divtablemarginpadding');
-    var $firstcol6 = $("<div></div>").addClass('col-lg-6');
+    var $firstcol6 = $("<div></div>").addClass('col-lg-6 availableRunlistContainer');
 
     var $inputgroup = $("<div></div>").addClass('input-group width100');
     var $firstlabelinput = $("<label></label>").addClass('input searchCookbooksRolesLabel');
@@ -52,23 +53,27 @@ function $chefCookbookRoleSelector(catorgname, callback, selectedRunlist, readMo
 
     var $searchiconappend = $("<i></i>").addClass('icon-append fa fa-search');
     var $searchinputtextbox = $('<input type="text" placeholder="Search Cookbooks/Roles" id="textbox"/>');
-    $firstlabelinput.append($searchiconappend);
-    $firstlabelinput.append($searchinputtextbox);
+    var $searchinputtextboxContainer = $("<div></div>").addClass('input-group width100').css({
+        'width': '100px'
+    });
+    $searchinputtextboxContainer.append($searchiconappend);
+    $searchinputtextboxContainer.append($searchinputtextbox);
+    $divFilterContainer.append($searchinputtextboxContainer);
     $inputgroup.append($firstlabelinput);
 
     //checking for tasks class(deploy,all)
-    var $cookbooksFilterNew = $('<label class="radio hidden" style="margin: 5px;font-size:13px;"><input class="listSelectorCkb" name="radio" type="radio" id="deployCookbooks"  value="DeployCookbooks"/><i></i>Deploy Cookbooks</label>');
+    var $cookbooksFilterNew = $('<label class="radio hidden col-lg-3" style="margin: 5px;font-size:13px;"><input class="listSelectorCkb" name="radio" type="radio" id="deployCookbooks"  value="DeployCookbooks"/><i></i>Deploy Cookbooks</label>');
     //var $allFilterNew = $('<label class="radio" style="margin: 5px;font-size:13px;"><input name="radio" type="radio" id="allNew"  value="All"/><i></i>All</label>');
-    $firstlabelinput.append($cookbooksFilterNew);
+    $divFilterContainer.append($cookbooksFilterNew);
     //$firstlabelinput.append($allFilterNew);
 
-    var $rolesFilter = $('<label class="radio hidden" style="margin: 5px;font-size:13px;"><input name="radio" class="listSelectorCkb" type="radio" id="roles"  value="Roles"/><i></i>Roles</label>');
-    var $cookbooksFilter = $('<label class="radio hidden" style="margin: 5px;font-size:13px;"><input name="radio" class="listSelectorCkb" type="radio" id="cookbooks"  value="Cookbooks"/><i></i>Cookbooks</label>');
-    var $allFilter = $('<label class="radio hidden" style="margin: 5px;font-size:13px;"><input name="radio" class="listSelectorCkb" type="radio" id="all"  value="All"/><i></i>All</label>');
+    var $rolesFilter = $('<label class="radio hidden col-lg-3" style="margin: 5px;font-size:13px;"><input name="radio" class="listSelectorCkb" type="radio" id="roles"  value="Roles"/><i></i>Roles</label>');
+    var $cookbooksFilter = $('<label class="radio hidden col-lg-3" style="margin: 5px;font-size:13px;"><input name="radio" class="listSelectorCkb" type="radio" id="cookbooks"  value="Cookbooks"/><i></i>Cookbooks</label>');
+    var $allFilter = $('<label class="radio hidden col-lg-3" style="margin: 5px;font-size:13px;"><input name="radio" class="listSelectorCkb" type="radio" id="all"  value="All"/><i></i>All</label>');
 
-    $firstlabelinput.append($rolesFilter);
-    $firstlabelinput.append($cookbooksFilter);
-    $firstlabelinput.append($allFilter);
+    $divFilterContainer.append($rolesFilter);
+    $divFilterContainer.append($cookbooksFilter);
+    $divFilterContainer.append($allFilter);
 
     var $selectCookbooksandRecipesparentdiv = $("<div></div>").addClass('btn-group selectCookbooksandRecipesdiv');
     var $selectCookbooksandRecipes = $("<select id='cookbooksrecipesList' size='10' multiple='multiple'></select>").addClass('btn-group selectCookbooksandRecipes');
@@ -153,6 +158,7 @@ function $chefCookbookRoleSelector(catorgname, callback, selectedRunlist, readMo
 
     $secondcol6.append($inputgroupsecond);
     $divtable.append($secondcol6);
+    $row.append($divFilterContainer);
     $row.append($divtable);
     $chefItemdiv.append($row);
 
@@ -179,7 +185,7 @@ function $chefCookbookRoleSelector(catorgname, callback, selectedRunlist, readMo
         } else if (val == 'DeployCookbooks') {
             cookbookrecipesTotallist = cookbookrecipesTotallist.concat(deployCookbookList);
         }
-        console.log('val ==> ',val);
+        console.log('val ==> ', val);
 
         for (var i = 0; i < cookbookrecipesTotallist.length; i++) {
             if (selectedRunlist.indexOf(cookbookrecipesTotallist[i].value) === -1) {
@@ -225,11 +231,11 @@ function $chefCookbookRoleSelector(catorgname, callback, selectedRunlist, readMo
             if (selectedRunlist.indexOf(obj.value) === -1) {
                 obj.display = 'block';
             }
-            if(obj.value.toLowerCase().indexOf('deploy') === -1) {
+            if (obj.value.toLowerCase().indexOf('deploy') === -1) {
                 cookbookDataList.push(obj);
             } else {
-                 cookbookDataList.push(obj); 
-                 deployCookbookList.push(obj);
+                cookbookDataList.push(obj);
+                deployCookbookList.push(obj);
             }
         }
         var roles = data.roles;
@@ -258,6 +264,9 @@ function $chefCookbookRoleSelector(catorgname, callback, selectedRunlist, readMo
         $beforesearchappend.hide();
         $searchinputtextbox.show();
         $searchiconappend.show();
+        $chefItemdiv.find('.availableRunlistContainer').css({
+            'margin-top': '34px'
+        });
         $('.cookbookspinner').detach();
 
 

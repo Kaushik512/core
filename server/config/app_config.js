@@ -41,7 +41,7 @@ var config = {
     chef: {
         chefReposDirName: 'chef-repos',
         cookbooksDirName: 'cookbooks',
-        defaultChefCookbooks: ['recipe[logstash-forwarder]'],
+        defaultChefCookbooks: [],
         ohaiHints: ['ec2'],
         attributeExtractorCookbookName: 'attrib',
 

@@ -1260,7 +1260,7 @@ $('.startstoptoggler').click(startAndStopToggler);
 
 
     if (data.appUrls && data.appUrls.length) {
-      var $collapseAppURL = $('#collapseAppURL');
+      var $collapseAppURL = $('#collapseAppURL').find('.panel-body');
       var $cardAppUrlListContanier = $('.instance-bootstrap-list');
         for (var k = 0; k < data.appUrls.length; k++) {
           var url = data.appUrls[k].url;
@@ -1867,7 +1867,7 @@ $(document).ready(function(e){
                         $('#appUrlTemplateFormCreate').addClass('hidden');
                           $.get('../instances/' + urlParams.id, function(data) {
                               if (data.appUrls && data.appUrls.length) {
-                                  var $collapseAppURL = $('#collapseAppURL');
+                                  var $collapseAppURL = $('#collapseAppURL').find('.panel-body');
                                   var $cardAppUrlListContanier = $('.instance-bootstrap-list');
                                   for (var k = 0; k < data.appUrls.length; k++) {
                                       var url = data.appUrls[k].url;
