@@ -31,7 +31,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     message: "application not founds"
                 });
             }
-            application.build(req.session.user.cn, function(err, buildRes) {
+            application.build(req.session.user.cn, req.protocol + '://' + req.get('host'), function(err, buildRes) {
                 if (err) {
                     res.send(500, err);
                     return;
@@ -348,7 +348,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     message: "application not founds"
                 });
             }
-            application.deploy(req.params.appInstanceId, req.params.workflowId, req.session.user.cn, function(err, tasks) {
+            application.deploy(req.params.appInstanceId, req.params.workflowId, req.session.user.cn, req.protocol + '://' + req.get('host'), function(err, tasks) {
                 logger.debug('Workflow executed');
                 if (err) {
                     res.send(500, err);

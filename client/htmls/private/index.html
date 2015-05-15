@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html lang="en-us">
 
-	<head>
-		<meta charset="utf-8">
-		<!--<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">-->
-		<link rel="shortcut icon" href="../img/favicon.ico" type="image/x-icon">
-		
-		<title>Catalyst</title>
-		<meta name="description" content="">
-		<meta name="author" content="">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-		<link rel="stylesheet" type="text/css" media="screen" href="css/bootstrap.css">
-		<link rel="stylesheet" type="text/css" media="screen" href="css/Catalyst.css">
-		<style>
+    <head>
+        <meta charset="utf-8">
+        <!--<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">-->
+        <link rel="shortcut icon" href="../img/favicon.ico" type="image/x-icon">
+        
+        <title>Catalyst</title>
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        <link rel="stylesheet" type="text/css" media="screen" href="css/bootstrap.css">
+        <link rel="stylesheet" type="text/css" media="screen" href="css/Catalyst.css">
+        <style>
 
 #clickdisabler{
     width:100%;
@@ -26,7 +26,6 @@
 }
         </style>
         <script>
-console.log = function() {};
 function showLoader(){
     $('#clickdisabler').show();
 }
@@ -632,6 +631,15 @@ var SettingTreeJson=[
         "text": "Gallery Setup",
         "icon": "fa fa-lg fa-fw fa-building",
         "nodes": [
+             {
+                "name": "templates",
+                "text": "Template Types",
+                "borderColor": "#000",
+                "href": "#ajax/Settings/DesignTemplateTypesList.html",
+                "selectable": true,
+                "icon":"fa fa-lg fa-fw fa-files-o"
+                
+            },
             {
                 "name": "organizations",
                 "text": "Templates",
@@ -917,23 +925,23 @@ function loadSettingsTree(){
 
     };
 
-	//Renavigate to the tab that was previously selected.
-	checkandnavigatetotab = function(){
-		//has tab in LS
-		var ltab = localStorage.getItem("lasttabselected");
-		//alert(ltab);
-		if(ltab){
-			//trigger click on tab
-			//alert('about to click on ' + ltab);
+    //Renavigate to the tab that was previously selected.
+    checkandnavigatetotab = function(){
+        //has tab in LS
+        var ltab = localStorage.getItem("lasttabselected");
+        //alert(ltab);
+        if(ltab){
+            //trigger click on tab
+            //alert('about to click on ' + ltab);
             console.log('tab loading');
-			$('#' + ltab).trigger('click');
-			drawBreadCrumb();
+            $('#' + ltab).trigger('click');
+            drawBreadCrumb();
         }
-		else{ //will be a first time load
-			console.log('selecting first env');
+        else{ //will be a first time load
+            console.log('selecting first env');
             selectFirstEnv();
-		}
-	};
+        }
+    };
 checkandnavigatetotab();
 loadSettingsTree();
 foldTreeForSetting();

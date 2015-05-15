@@ -735,4 +735,38 @@ module.exports.setRoutes = function(app, verificationFunc) {
             });
         });
     });
+
+    app.get('/chef/servers/:serverId/cookbooks/:cookbookName/metadata', function(req, res) {
+
+        configmgmtDao.getChefServerDetails(req.params.serverId, function(err, chefDetails) {
+            if (err) {
+                res.send(500);
+                return;
+            }
+            if (!chefDetails) {
+                res.send(404);
+                return;
+            }
+            var chef = new Chef({
+                userChefRepoLocation: chefDetails.chefRepoLocation,
+                chefUserName: chefDetails.loginname,
+                chefUserPemFile: chefDetails.userpemfile,
+                chefValidationPemFile: chefDetails.validatorpemfile,
+                hostedChefUrl: chefDetails.url,
+            });
+            console.log("Chef...>>>>>>>>>>>>>>>>>>> "+JSON.stringify(chef));
+            chef.getCookbook(req.params.cookbookName, function(err, cookbooks) {
+                console.log(err);
+                if (err) {
+                    res.send(500);
+                    return;
+                } else {
+                    res.send(cookbooks.metadata);
+                }
+            });
+
+
+        });
+
+    });
 };

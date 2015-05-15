@@ -104,6 +104,8 @@ function initializeTaskArea(data) {
                     "bSortable": false
                 }, {
                     "bSortable": false
+                },{
+                    "bSortable": false
                 },
                 null, {
                     "bSortable": false
@@ -276,6 +278,7 @@ function initializeTaskArea(data) {
             });
         });
         $tr.append($tdExecute);
+
         var timestamp = "-";
         if (data[i].lastRunTimestamp) {
             var date = new Date().setTime(data[i].lastRunTimestamp);

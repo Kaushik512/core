@@ -15,7 +15,7 @@ var jenkinsTaskSchema = taskTypeSchema.extend({
 });
 
 // Instance Method :- run task
-jenkinsTaskSchema.methods.execute = function(userName, onExecute, onComplete) {
+jenkinsTaskSchema.methods.execute = function(userName, baseUrl, onExecute, onComplete) {
     var self = this;
     configmgmtDao.getJenkinsDataFromId(this.jenkinsServerId, function(err, jenkinsData) {
         if (err) {

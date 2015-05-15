@@ -149,7 +149,12 @@ app.get('/aws/providers', function(req, res) {
                   res.send(500,"Invalid User.");
               }
    if(anUser.orgname_rowid[0] === ""){
-       AWSProvider.getAWSProviders(function(err, providers) {
+       masterUtil.getAllActiveOrg(function(err,orgList){
+          if(err){
+            res.send(500,'Not able to fetch Orgs.');
+          }
+          if(orgList){
+            AWSProvider.getAWSProvidersForOrg(orgList,function(err, providers) {
               if (err) {
                   logger.error(err);
                   res.send(500, errorResponses.db.error);
@@ -161,6 +166,8 @@ app.get('/aws/providers', function(req, res) {
               } else {
                   res.send([]);
               }
+            });
+          }
       });
     }else{
       masterUtil.getOrgs(loggedInUser,function(err,orgList){
@@ -623,4 +630,27 @@ app.post('/aws/providers/keypairs/list',function(req,res){
         }
       });
     });
+
+    // Return AWS Providers respect to orgid.
+app.get('/aws/providers/org/:orgId', function(req, res) {
+ logger.debug("Enter get() for /providers/org/%s",req.params.orgId);
+ var orgId = req.params.orgId.trim();
+     if(typeof orgId === 'undefined' || orgId.length === 0){
+        res.send(500,"Please Enter orgId.");
+        return;
+    }
+        AWSProvider.getAWSProvidersByOrgId(orgId,function(err, providers) {
+              if (err) {
+                  logger.error(err);
+                  res.send(500, errorResponses.db.error);
+                  return;
+              }
+              logger.debug("providers>>> ",   JSON.stringify(providers));
+              if (providers) {
+                  res.send(providers);
+              } else {
+                  res.send([]);
+              }
+        });
+  });
 }

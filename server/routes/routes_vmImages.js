@@ -148,7 +148,12 @@ module.exports.setRoutes = function(app, sessionVerificationFunc){
                   res.send(500,"Invalid User.");
               }
        if(anUser.orgname_rowid[0] === ""){
-           VMImage.getImages(function(err, images) {
+           masterUtil.getAllActiveOrg(function(err,orgList){
+          if(err){
+            res.send(500,'Not able to fetch Orgs.');
+          }
+          if(orgList){
+              VMImage.getImagesForOrg(orgList,function(err, images) {
                 if (err) {
                     logger.error(err);
                     res.send(500, errorResponses.db.error);
@@ -160,7 +165,9 @@ module.exports.setRoutes = function(app, sessionVerificationFunc){
                } else {
                 res.send([]);
                 }
-            });
+              });
+            }
+          });
          }else{
            masterUtil.getOrgs(loggedInUser,function(err,orgList){
           if(err){

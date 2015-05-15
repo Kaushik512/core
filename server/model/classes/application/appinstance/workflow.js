@@ -34,7 +34,7 @@ WorkflowSchema.methods.getNodes = function(callback) {
 }
 
 
-WorkflowSchema.methods.execute = function(username, callback, onComplete) {
+WorkflowSchema.methods.execute = function(username, baseUrl, callback, onComplete) {
     if (!(this.taskIds && this.taskIds.length)) {
         callback(null, []);
         return;
@@ -56,7 +56,7 @@ WorkflowSchema.methods.execute = function(username, callback, onComplete) {
         var overallSuccess = 0;
 
         function executeTasks(task) {
-            task.execute(username, function(err, taskExecuteData) {
+            task.execute(username, baseUrl, function(err, taskExecuteData) {
                 count++;
                 if (err) {
                     logger.error(err);
@@ -78,7 +78,7 @@ WorkflowSchema.methods.execute = function(username, callback, onComplete) {
                 }
                 if (!(onCompleteCount < tasks.length)) {
                     if (typeof onComplete === 'function') {
-                        onComplete(null,overallSuccess);
+                        onComplete(null, overallSuccess);
                     }
                 }
 

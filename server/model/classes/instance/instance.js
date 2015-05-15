@@ -88,6 +88,10 @@ var ActionLog = mongoose.model('actionLogs', ActionLogSchema);
 
 
 var InstanceSchema = new Schema({
+    name: {
+        type: String,
+        trim: true
+    },
     orgId: {
         type: String,
         required: true,
@@ -1065,6 +1069,28 @@ var InstancesDao = function() {
             } else {
                 callback(null, null);
             }
+        });
+    };
+
+    this.updateInstanceName = function(instanceId, name, callback) {
+        logger.debug("Enter updateInstanceName (%s, %s)", instanceId, name);
+        Instances.update({
+            "_id": new ObjectId(instanceId),
+        }, {
+            $set: {
+                "name": name
+            }
+        }, {
+            upsert: false
+        }, function(err, data) {
+            if (err) {
+                logger.error("Failed to updateInstanceName (%s, %s)", instanceId, name, err);
+                callback(err, null);
+                return;
+            }
+
+            logger.debug("Exit updateInstanceName (%s, %s)", instanceId, name);
+            callback(null, data);
         });
     };
 

@@ -22,7 +22,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 res.send(500, errorResponses.db.error);
                 return;
             }
-            task.execute(req.session.user.cn, function(err, taskRes) {
+            task.execute(req.session.user.cn, req.protocol + '://' + req.get('host'), function(err, taskRes) {
                 if (err) {
                     logger.error(err);
                     res.send(500, err);
@@ -75,6 +75,27 @@ module.exports.setRoutes = function(app, sessionVerification) {
             }
             if (data) {
                 res.send(data);
+            } else {
+                res.send(404);
+            }
+        });
+    });
+
+    app.get('/tasks/:taskId/history', function(req, res) {
+        Tasks.getTaskById(req.params.taskId, function(err, task) {
+            if (err) {
+                logger.error(err);
+                res.send(500, errorResponses.db.error);
+                return;
+            }
+            if (task) {
+                task.getHistory(function(err, tHistories) {
+                    if (err) {
+                        res.send(500, errorResponses.db.error);
+                        return;
+                    }
+                    res.send(tHistories);
+                });
             } else {
                 res.send(404);
             }

@@ -60,7 +60,8 @@ var MasterUtil = function(){
                                 
                                         logger.debug("Org orgIds for query: ",orgIds);
                                         d4dModelNew.d4dModelMastersOrg.find({
-                                            rowid : {$in:orgIds}
+                                            rowid : {$in:orgIds},
+                                            active : true
                                             },function(err,orgs){
                                                 count++;
                                             if(err){
@@ -430,6 +431,28 @@ var MasterUtil = function(){
           });
     }
 
+    this.getAllActiveOrg = function(callback) {
+        var orgList = [];
+        d4dModelNew.d4dModelMastersOrg.find({
+            id: "1",
+            active: true
+        }, function(err, orgs) {
+            if (err) {
+                callback(err, null);
+            }
+            if (orgs) {
+                for (var j1 = 0; j1 < orgs.length; j1++) {
+                    if (orgs[j1].id === '1') {
+                        orgList.push(orgs[j1]);
+                    }
+                }
+                callback(null, orgList);
+            } else {
+                callback(null, orgList);
+            }
+        });
+    }
+
     this.getUserRoles = function(callback){
         var userRoleList = [];
         d4dModelNew.d4dModelMastersUserroles.find({
@@ -482,6 +505,32 @@ var MasterUtil = function(){
         logger.debug("org rowids: ",rowIds);
         d4dModelNew.d4dModelMastersUsers.find({
             orgname_rowid : rowIds
+        },function(err,users){
+            if(users){
+                for(var i =0; i< users.length; i++){
+                    if(users[i].id === '7'){
+                        userList.push(users[i]);
+                    }
+                }
+                callback(null,userList);
+            }else{
+                callback(err,null);
+            }
+
+        });
+    }
+
+    // Return all Users whose are associated to loggedIn User
+    this.getUsersForOrgOrAll = function(orgList,callback){
+        var userList = [];
+        var rowIds = [];
+        for(var x=0;x<orgList.length;x++){
+            rowIds.push(orgList[x].rowid);
+        }
+        logger.debug("org rowids: ",rowIds);
+        d4dModelNew.d4dModelMastersUsers.find({
+            $or:[{orgname_rowid : {$in:rowIds}},
+            {orgname_rowid : [""]}]
         },function(err,users){
             if(users){
                 for(var i =0; i< users.length; i++){
@@ -838,6 +887,30 @@ var MasterUtil = function(){
             callback(null,projectList);
         });
 
+    }
+
+    // Return all TemplateTypes
+    this.getTemplateTypesById = function(anId,callback){
+        logger.debug("getTemplateTypesById called. ",JSON.stringify(anId));
+        var templateTypeList = [];
+        d4dModelNew.d4dModelMastersDesignTemplateTypes.find({
+            rowid : anId
+        },function(err,templateTypes){
+            if(err){
+                callback(err,null);
+            }
+            if(templateTypes){
+                for(var i =0; i< templateTypes.length; i++){
+                    if(templateTypes[i].id === '16'){
+                        templateTypeList.push(templateTypes[i]);
+                    }
+                }
+                callback(null,templateTypeList);
+            }else{
+                callback(null,templateTypeList);
+            }
+
+        });
     }
 }
 

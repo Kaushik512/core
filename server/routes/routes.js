@@ -28,6 +28,8 @@ var jira = require('./routes_jira');
 var provider = require('./routes_provider');
 var vmimage = require('./routes_vmImages');
 
+var chefClientExecution = require('./routes_chefClientExecutionResponse');
+
 module.exports.setRoutes = function(app) {
 
 
@@ -72,7 +74,7 @@ module.exports.setRoutes = function(app) {
     provider.setRoutes(app, sessionVerificationFunc);
 
     vmimage.setRoutes(app, sessionVerificationFunc);
-
+    chefClientExecution.setRoutes(app);
 
     app.get('/', function(req, res) {
         res.redirect('/private/index.html');

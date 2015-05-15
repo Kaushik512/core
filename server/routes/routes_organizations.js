@@ -1756,6 +1756,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                         return;
                                     }
                                     var instance = {
+                                        name: "",
                                         orgId: req.params.orgId,
                                         bgId: req.params.bgId,
                                         projectId: req.params.projectId,

@@ -458,6 +458,7 @@ function CreateTableFromJson(formID, idFieldName, createFileName) {
 
         // alert(JSON.stringify(formData));
         //Reading row to get schema
+        console.log("hiiiii>>>>> "+d4ddata);
         for(var x=0;x<d4ddata.length;x++){
             if(d4ddata[x].orgname !== "undefined"){
                // console.log("Value for all",d4ddata[x].orgname[0]);
@@ -568,6 +569,10 @@ function CreateTableFromJson(formID, idFieldName, createFileName) {
                         if(haspermission('teams','modify')){
                         hasEditPermission =true;
                         }
+                    }else if(createFileName==='CreateDesignTemplateTypes.html'){
+                        if(haspermission('templatetypes','modify')){
+                        hasEditPermission =true;
+                        }
                     }else if(createFileName==='CreateTemplates.html'){
                         if(haspermission('templates','modify')){
                         hasEditPermission =true;
@@ -651,6 +656,10 @@ function CreateTableFromJson(formID, idFieldName, createFileName) {
                         }
                     }else if(createFileName==='CreateTeam.html'){
                         if(haspermission('teams','delete')){
+                        hasDeletePermission =true;
+                        }
+                    }else if(createFileName==='CreateDesignTemplateTypes.html'){
+                        if(haspermission('templatetypes','delete')){
                         hasDeletePermission =true;
                         }
                     }else if(createFileName==='CreateTemplates.html'){
@@ -1827,7 +1836,7 @@ function saveform(formID, operationTypes) {
 
     var data1 = new FormData();
     var fileNames = '';
-    var orgName = $('#orgname').val();
+    var orgName = $('#orgname').val().trim();
     var button = $("form[id*='myForm']").find("div.pull-right > button");
 
     if (button) {
@@ -1957,19 +1966,22 @@ function saveform(formID, operationTypes) {
         data1.append("rowid", button.attr("rowid"));
     }
 
-    
-    if(orgname){
+    console.log(">>>>>>>>>>>>>>>>>>>>>>>>> orgname: ",orgName);
+    if(orgName === ""){
         console.log("no orgname>>>>");
         orgName = "all";
     }
-    console.log(">>>>>>>>>>>>>>>>>>>>>>>>> orgname: ",orgname);
+    
     //alert("Length : " + data1.length);
     //data1.append("costcode","[\"code1\",\"code2\",\"code3\"]");
     //setting filenames to null if empty
     if (fileNames == '')
         fileNames = 'null';
-    if (typeof(orgname) == 'undefined') {
+    if (typeof(orgName) == 'undefined') {
         orgName = '%2f'; //When this is updated the upload of image has an issue
+    }
+    if(formID == 16){
+        orgName = '%2f';
     }
     //alert('This is the data that gets saved:' + JSON.stringify(data1));
 

@@ -8,13 +8,15 @@ Resource           ${CATALYST ACTION}/Users_Setup_With_New_Users.txt
 Resource           ${COMMON RESOURCES}/catalyst_grid_node.txt
 
 
+
 *** Test Cases ***
 Catalyst new users setup
     [Tags]       Sanity               Smoke
 #    Catalyst Login
     Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
     Test Validation of Creation of New users
-    Devops Config Management New Users               
+    Devops Config Management New Users
+    Devops Edit Users Setup               
     Catalyst Logout                      
     [Teardown]     Close Browser
 
@@ -24,7 +26,8 @@ Catalyst new teams setup
 #    Catalyst Login
     Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
     Test Validation of Creation of New Teams
-    Devops Config Management New Teams               
+    Devops Config Management New Teams  
+    Devops Edit Teams Setup             
     Catalyst Logout                      
     [Teardown]     Close Browser
 

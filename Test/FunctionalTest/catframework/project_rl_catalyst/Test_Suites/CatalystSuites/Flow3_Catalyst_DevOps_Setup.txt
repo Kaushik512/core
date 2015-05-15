@@ -16,7 +16,8 @@ Catalyst new Config management setup
     Testing All New Config Management Conditions
     Create New Config Management
     Unique Devops Configuration Management
-    Devops Click on Update of Your org and Org is disabled 
+    Devops Click on Update of Your org and Org is disabled
+    Catlayst Unique Organization Validation 
     Catalyst Logout
     [Teardown]     Close Browser
 
@@ -30,13 +31,7 @@ Catalyst new Config management setup
 #   Catalyst Logout
     #-[Teardown]     Close Browser
 
-Catalyst import chef server nodes
-    #-[Tags]       Sanity       ps
-#    Catalyst Login
-    #-Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
-    #-Chef server nodes import
-    #-Catalyst Logout
-    #-[Teardown]     Close Browser
+
 
 #-Access catalyst as Designer and password as Designer
     #-[Tags]       Sanity      Smoke

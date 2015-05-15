@@ -1,4 +1,3 @@
-
 *** Settings ***
 Documentation      A resource file with reusable keywords and variables.
 ...
@@ -12,21 +11,34 @@ Library            Collections
 
 Resource           catalyst.txt
 Resource           ${CATALYST TEST DATA}/${TESTDATA}
+Resource           ${CATALYST ACTION}/Organization_Setup_Action_Steps.txt
+Resource           ${CATALYST ACTION}/Design_Create_Launch_Providers_Template.txt
 
 
 
 *** Keywords ***
-Catalyst Create New Environments Setup
+Catalyst Addition and Creation of New Envirorments Setup
     Clicks on Settings
     Clicks on DevOps Setup menu
     Clicks on EEnvironments menu line
     Clicks on New button Create New Environment
     Select organization for Env
-    Select the Configuration name
+    #Select the Configuration name
+    Clicks on Add Button
+    Add the Environment Named1
+    Clicks on ADD Chef Env Button
     Select the Environments1
     Assign Teams1
     Clicks on Save Button to save the Environments
-    Catalyst Environments2 setup
+    Clicks on New button Create New Environment
+    Select organization for Env
+    #Select the Configuration name
+    Clicks on Add Button
+    Add the Environment Named2
+    Clicks on ADD Chef Env Button
+    Select the Environment2
+    Assign Team2
+    Clicks on Save Button to save the Environments
 
 Catalyst Environments2 setup
     Clicks on New button Create New Environment
@@ -35,6 +47,39 @@ Catalyst Environments2 setup
     Select the Environment2
     Assign Team2
     Clicks on Save Button to save the Environments
+
+Catalyst Activation of Environments
+    Clicks on Settings
+    Clicks on Org Tree Setup
+    Clicks on projects menu
+    Clicks on Edit Update Button of the Project1 Created
+    #User Activates the Environment1
+    Clicks on Save Button of Your Project
+    Clicks on Edit Update Button of the Project2 Created
+    #User Activates the Environment2
+    Clicks on Save Button of Your Project
+
+
+
+Chef nodes import by IP
+    Clicks on Settings
+    Clicks on Workzone Button
+    Clicks on User Created Organization
+    Clicks on User Created BusinessGroup
+    Clicks on > Button to your Environment
+    Clicks on Import By IP Button
+    Enters the IP Address for IP
+    Choose the Operating System for IP
+    Enters the UserName for IP
+    Choose the Authentication Type for IP
+    Upload the Pem File for IP
+    Enters the Application Name for IP
+    Enters the Application URL for IP
+    Clicks on Import Button for IP
+
+
+
+
 
 
 #Catalyst Edit the Project Setup
@@ -45,8 +90,36 @@ Catalyst Environments2 setup
     #Assign the Environments to your Project
     #Clicks on Save Button
 
+Clicks on Add Button
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='wid-id-3']/div/div/div[3]/a
+
+Clicks on ADD Chef Env Button
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='myModalCreateChefEnv']/div/div/div[3]/div/button[1]
+
+Add the Environment Named1
+    Input Text    id=chefenvname    ${EnV1}
+
+Add the Environment Named2
+    Input Text    id=chefenvname    ${EnV2}
+
+Clicks on Edit Update Button of the Project1 Created
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()="Catalyst"]/../td[6]/div/a
+
+User Activates the Environment1
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='environmentname']/label[text()='Dev']
+
+Clicks on Save Button of Your Project
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='myForm3']/div/div[3]/div/button
+
+Clicks on Edit Update Button of the Project2 Created
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()="Primary_Edu"]/../td[6]/div/a
+
+User Activates the Environment2
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='environmentname']/label[text()='QA']
 
 
+Clicks on Org Tree Setup
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='setting_tree']/ul/li[1]/a
 
 
 #Edit Project Start
@@ -79,15 +152,56 @@ Clicks on New button create new Environment
 
 Select the Environments1
     Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element    xpath=.//div[@id="s2id_environmentname"]
-    Wait Until Keyword Succeeds    1 minute     1 seconds       Select From List    id=environmentname         Dev                        #Dev
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Input Text    xpath=.//*[@id='select2-drop']/div/input     ${EnV1}
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element    xpath=.//*[@id='select2-drop']/ul/li[contains("Dev",.)]
+    #Select From List     id=chefenvname         Dev
 
 Select the Environment2
     Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element    xpath=.//div[@id="s2id_environmentname"]
-    Wait Until Keyword Succeeds    1 minute     1 seconds       Select From List    id=environmentname         QA                       #QA
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Input Text    xpath=.//*[@id='select2-drop']/div/input     ${EnV2}
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element    xpath=.//*[@id='select2-drop']/ul/li[contains("QA",.)]
+    #Select From List    id=chefenvname         QA                       #QA
 
 Assign Teams1
     Click Element    xpath=.//*[@id='teamname']/label[text()="Development"]/i              #Development Team
 
 Assign Team2
-    Click Element    xpath=.//*[@id='teamname']/label[text()="Scholastic"]/i                #Scholastic Team
+    Click Element    xpath=.//*[@id='teamname']/label[text()="Scholasticon"]/i                #Scholastic Team
  #Environment End
+
+
+ #Import By IP
+ Clicks on Import By IP Button
+     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='ipaddressimport']
+
+Enters the IP Address for IP
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    id=instanceFQDN     ${IP ADDRESS}
+
+Choose the Operating System for IP
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='s2id_importinstanceOS']/a/span[1]
+    Click Element    xpath=.//*[@id='select2-drop']/ul/li[2]/div      #linuxCentos
+    #Click Element    xpath=.//*[@id='select2-drop']/ul/li[3]/div   #Windows
+
+Enters the UserName for IP
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    id=instanceUsername    ${IP USERNAME}
+
+
+Choose the Authentication Type for IP
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='s2id_pemFileDropdown']/a/span
+    Click Element    xpath=.//*[@id='select2-drop']/ul/li[2]/div
+
+
+Upload the Pem File for IP
+    Choose File     xpath=.//*[@id='importPemfileInput']     C:\\Users\\adarsh.RLINDIA\\Desktop\\caty\\Chef\\catalyst.pem
+
+Enters the Application Name for IP
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    xpath=.//*[@id='appSeries12']/div[1]/input    ${IP APPNAME}
+
+Enters the Application URL for IP
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    xpath=.//*[@id='appSeries12']/div[2]/input     ${IP URL}
+
+Clicks on Import Button for IP
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='addInstanceBtn']
+
+
+

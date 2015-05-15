@@ -14,8 +14,8 @@ var Chef = require('../../../lib/chef');
 
 var taskTypeSchema = require('./taskTypeSchema');
 
-var util = require('util');
-
+var ChefClientExecution = require('../instance/chefClientExecution/chefClientExecution.js');
+var utils = require('../utils/utils.js');
 
 var chefTaskSchema = taskTypeSchema.extend({
     nodeIds: [String],
@@ -33,38 +33,24 @@ chefTaskSchema.methods.getNodes = function() {
 };
 
 // Instance Method :- run task
-chefTaskSchema.methods.execute = function(userName, onExecute, onComplete) {
+chefTaskSchema.methods.execute = function(userName, baseUrl, onExecute, onComplete) {
     var self = this;
 
     //merging attributes Objects
     var attributeObj = {};
-    var currentObj;
-
-    function mergeObj(currentObj, obj) {
-        var keys = Object.keys(obj);
-        for (var j = 0; j < keys.length; j++) {
-            if (!currentObj[keys[j]]) {
-                currentObj[keys[j]] = {};
-            }
-            if (typeof obj[keys[j]] === 'object' && !util.isArray(obj[keys[j]])) {
-                mergeObj(currentObj[keys[j]], obj[keys[j]]);
-            } else {
-                currentObj[keys[j]] = obj[keys[j]];
-            }
-        }
-    }
+    var objectArray = [];
     for (var i = 0; i < self.attributes.length; i++) {
-         currentObj = attributeObj;
-         mergeObj(currentObj,self.attributes[i].jsonObj);
-         attributeObj = currentObj; 
+        objectArray.push(self.attributes[i].jsonObj);
     }
-    
-    var jsonAttributesString = '';
-    if(Object.keys(attributeObj).length) {
+
+    var attributeObj = utils.mergeObjects(objectArray);
+
+    /* var jsonAttributesString = '';
+    if (Object.keys(attributeObj).length) {
         jsonAttributesString = JSON.stringify(attributeObj);
-    }
-   
-  
+    }*/
+
+
     var instanceIds = this.nodeIds;
     if (!(instanceIds && instanceIds.length)) {
         if (typeof onExecute === 'function') {
@@ -91,13 +77,17 @@ chefTaskSchema.methods.execute = function(userName, onExecute, onComplete) {
         var count = 0;
         var overallStatus = 0;
         var instanceResultList = [];
+        var executionIds = [];
 
-        function instanceOnCompleteHandler(err, status, instanceId) {
+        function instanceOnCompleteHandler(err, status, instanceId, executionId) {
             logger.debug('Instance onComplete fired', count, instances.length);
             count++;
             var result = {
                 instanceId: instanceId,
                 status: 'success'
+            }
+            if(executionId) {
+                result.executionId = executionId;
             }
             if (err) {
                 result.status = 'failed';
@@ -113,7 +103,9 @@ chefTaskSchema.methods.execute = function(userName, onExecute, onComplete) {
             instanceResultList.push(result);
             if (!(count < instances.length)) {
                 if (typeof onComplete === 'function') {
-                    onComplete(null, overallStatus);
+                    onComplete(null, overallStatus, {
+                        instancesResults: instanceResultList
+                    });
                 }
             }
         }
@@ -178,114 +170,138 @@ chefTaskSchema.methods.execute = function(userName, onExecute, onComplete) {
                             instanceOnCompleteHandler(err, 1, instance._id);
                             return;
                         }
-                        var chef = new Chef({
-                            userChefRepoLocation: chefDetails.chefRepoLocation,
-                            chefUserName: chefDetails.loginname,
-                            chefUserPemFile: chefDetails.userpemfile,
-                            chefValidationPemFile: chefDetails.validatorpemfile,
-                            hostedChefUrl: chefDetails.url,
-                        });
-                        console.log('instance IP ==>', instance.instanceIP);
-                        // if(self.attributesjson.toString().indexOf('"\\') <= 0)
-                        // self.attributesjson = JSON.stringify(self.attributesjson);
 
+                        ChefClientExecution.createNew({
+                            instanceId: instance._id
 
-                        var chefClientOptions = {
-                            privateKey: decryptedCredentials.pemFileLocation,
-                            username: decryptedCredentials.username,
-                            host: instance.instanceIP,
-                            instanceOS: instance.hardware.os,
-                            port: 22,
-                            runlist: self.runlist, // runing service runlist
-                            jsonAttributes: jsonAttributesString,
-                            overrideRunlist: true
-                        }
-                        if (decryptedCredentials.pemFileLocation) {
-                            chefClientOptions.privateKey = decryptedCredentials.pemFileLocation;
-                        } else {
-                            chefClientOptions.password = decryptedCredentials.password;
-                        }
-                        console.log('running chef client');
-                        console.log('>>>>chefClientOptions:' + JSON.stringify(chefClientOptions));
-                        chef.runChefClient(chefClientOptions, function(err, retCode) {
-                            if (decryptedCredentials.pemFileLocation) {
-                                fileIo.removeFile(decryptedCredentials.pemFileLocation, function(err) {
-                                    if (err) {
-                                        console.log("Unable to delete temp pem file =>", err);
-                                    } else {
-                                        console.log("temp pem file deleted =>", err);
-                                    }
-                                });
-                            }
+                        }, function(err, chefClientExecution) {
                             if (err) {
                                 var timestampEnded = new Date().getTime();
                                 logsDao.insertLog({
-                                    referenceId: logsReferenceIds,
+                                    referenceId: logReferenceIds,
                                     err: true,
-                                    log: 'Unable to run chef-client',
+                                    log: "Unable to generate chef run execution id. Chef run failed",
                                     timestamp: timestampEnded
                                 });
                                 instancesDao.updateActionLog(instance._id, actionLog._id, false, timestampEnded);
                                 instanceOnCompleteHandler(err, 1, instance._id);
                                 return;
                             }
-                            console.log("knife ret code", retCode);
-                            if (retCode == 0) {
-                                var timestampEnded = new Date().getTime();
+
+                            var executionIdJsonAttributeObj = {
+                                catalystCallbackUrl: baseUrl + '/chefClientExecution/' + chefClientExecution.id
+                            };
+
+                            var jsonAttributeObj = utils.mergeObjects([executionIdJsonAttributeObj, attributeObj]);
+                            var jsonAttributesString = JSON.stringify(jsonAttributeObj);
+
+                            var chef = new Chef({
+                                userChefRepoLocation: chefDetails.chefRepoLocation,
+                                chefUserName: chefDetails.loginname,
+                                chefUserPemFile: chefDetails.userpemfile,
+                                chefValidationPemFile: chefDetails.validatorpemfile,
+                                hostedChefUrl: chefDetails.url,
+                            });
+                            console.log('instance IP ==>', instance.instanceIP);
+                            // if(self.attributesjson.toString().indexOf('"\\') <= 0)
+                            // self.attributesjson = JSON.stringify(self.attributesjson);
+
+
+                            var chefClientOptions = {
+                                privateKey: decryptedCredentials.pemFileLocation,
+                                username: decryptedCredentials.username,
+                                host: instance.instanceIP,
+                                instanceOS: instance.hardware.os,
+                                port: 22,
+                                runlist: self.runlist, // runing service runlist
+                                jsonAttributes: jsonAttributesString,
+                                overrideRunlist: true
+                            }
+                            if (decryptedCredentials.pemFileLocation) {
+                                chefClientOptions.privateKey = decryptedCredentials.pemFileLocation;
+                            } else {
+                                chefClientOptions.password = decryptedCredentials.password;
+                            }
+                            chef.runChefClient(chefClientOptions, function(err, retCode) {
+                                if (decryptedCredentials.pemFileLocation) {
+                                    fileIo.removeFile(decryptedCredentials.pemFileLocation, function(err) {
+                                        if (err) {
+                                            console.log("Unable to delete temp pem file =>", err);
+                                        } else {
+                                            console.log("temp pem file deleted =>", err);
+                                        }
+                                    });
+                                }
+                                if (err) {
+                                    var timestampEnded = new Date().getTime();
+                                    logsDao.insertLog({
+                                        referenceId: logsReferenceIds,
+                                        err: true,
+                                        log: 'Unable to run chef-client',
+                                        timestamp: timestampEnded
+                                    });
+                                    instancesDao.updateActionLog(instance._id, actionLog._id, false, timestampEnded);
+                                    instanceOnCompleteHandler(err, 1, instance._id, chefClientExecution.id);
+                                    return;
+                                }
+                                console.log("knife ret code", retCode);
+                                if (retCode == 0) {
+                                    var timestampEnded = new Date().getTime();
+                                    logsDao.insertLog({
+                                        referenceId: logsReferenceIds,
+                                        err: false,
+                                        log: 'Task execution success',
+                                        timestamp: timestampEnded
+                                    });
+                                    instancesDao.updateActionLog(instance._id, actionLog._id, true, timestampEnded);
+                                    instanceOnCompleteHandler(null, 0, instance._id, chefClientExecution.id);
+                                } else {
+                                    instanceOnCompleteHandler(null, retCode, instance._id, chefClientExecution.id);
+                                    if (retCode === -5000) {
+                                        logsDao.insertLog({
+                                            referenceId: logsReferenceIds,
+                                            err: true,
+                                            log: 'Host Unreachable',
+                                            timestamp: new Date().getTime()
+                                        });
+                                    } else if (retCode === -5001) {
+                                        logsDao.insertLog({
+                                            referenceId: logsReferenceIds,
+                                            err: true,
+                                            log: 'Invalid credentials',
+                                            timestamp: new Date().getTime()
+                                        });
+                                    } else {
+                                        logsDao.insertLog({
+                                            referenceId: logsReferenceIds,
+                                            err: true,
+                                            log: 'Unknown error occured. ret code = ' + retCode,
+                                            timestamp: new Date().getTime()
+                                        });
+                                    }
+                                    var timestampEnded = new Date().getTime();
+                                    logsDao.insertLog({
+                                        referenceId: logsReferenceIds,
+                                        err: true,
+                                        log: 'Error in running chef-client',
+                                        timestamp: timestampEnded
+                                    });
+                                    instancesDao.updateActionLog(instance._id, actionLog._id, false, timestampEnded);
+                                }
+                            }, function(stdOutData) {
                                 logsDao.insertLog({
                                     referenceId: logsReferenceIds,
                                     err: false,
-                                    log: 'Task execution success',
-                                    timestamp: timestampEnded
+                                    log: stdOutData.toString('ascii'),
+                                    timestamp: new Date().getTime()
                                 });
-                                instancesDao.updateActionLog(instance._id, actionLog._id, true, timestampEnded);
-                                instanceOnCompleteHandler(null, 0, instance._id);
-                            } else {
-                                instanceOnCompleteHandler(null, retCode, instance._id);
-                                if (retCode === -5000) {
-                                    logsDao.insertLog({
-                                        referenceId: logsReferenceIds,
-                                        err: true,
-                                        log: 'Host Unreachable',
-                                        timestamp: new Date().getTime()
-                                    });
-                                } else if (retCode === -5001) {
-                                    logsDao.insertLog({
-                                        referenceId: logsReferenceIds,
-                                        err: true,
-                                        log: 'Invalid credentials',
-                                        timestamp: new Date().getTime()
-                                    });
-                                } else {
-                                    logsDao.insertLog({
-                                        referenceId: logsReferenceIds,
-                                        err: true,
-                                        log: 'Unknown error occured. ret code = ' + retCode,
-                                        timestamp: new Date().getTime()
-                                    });
-                                }
-                                var timestampEnded = new Date().getTime();
+                            }, function(stdOutErr) {
                                 logsDao.insertLog({
                                     referenceId: logsReferenceIds,
                                     err: true,
-                                    log: 'Error in running chef-client',
-                                    timestamp: timestampEnded
+                                    log: stdOutErr.toString('ascii'),
+                                    timestamp: new Date().getTime()
                                 });
-                                instancesDao.updateActionLog(instance._id, actionLog._id, false, timestampEnded);
-                            }
-                        }, function(stdOutData) {
-                            logsDao.insertLog({
-                                referenceId: logsReferenceIds,
-                                err: false,
-                                log: stdOutData.toString('ascii'),
-                                timestamp: new Date().getTime()
-                            });
-                        }, function(stdOutErr) {
-                            logsDao.insertLog({
-                                referenceId: logsReferenceIds,
-                                err: true,
-                                log: stdOutErr.toString('ascii'),
-                                timestamp: new Date().getTime()
                             });
                         });
                     });

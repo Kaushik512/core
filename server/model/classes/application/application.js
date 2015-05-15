@@ -52,7 +52,7 @@ var ApplicationSchema = new Schema({
 });
 
 // instance method 
-ApplicationSchema.methods.build = function(user, callback) {
+ApplicationSchema.methods.build = function(user, baseUrl, callback) {
     logger.debug("Executing build");
     Build.getBuildById(this.buildId, function(err, build) {
         if (err) {
@@ -60,7 +60,7 @@ ApplicationSchema.methods.build = function(user, callback) {
             callback(err, null);
             return;
         }
-        build.execute(user, callback);
+        build.execute(user, baseUrl, callback);
     });
 };
 
@@ -201,7 +201,7 @@ ApplicationSchema.methods.getAppInstance = function(appInstanceId) {
     return appInstance;
 };
 
-ApplicationSchema.methods.deploy = function(appInstanceId, workflowId, username, callback) {
+ApplicationSchema.methods.deploy = function(appInstanceId, workflowId, username, baseUrl, callback) {
     var self = this;
     var appInstances = this.appInstances;
     if (!appInstances.length) {
@@ -220,7 +220,7 @@ ApplicationSchema.methods.deploy = function(appInstanceId, workflowId, username,
     if (appInstance) {
         var timestampStarted = new Date().getTime();
         var deployHistory = null;
-        appInstance.executeWorkflow(workflowId, username, function(err, tasks) {
+        appInstance.executeWorkflow(workflowId, username, baseUrl, function(err, tasks) {
             if (err) {
                 callback(err, null);
                 return;
