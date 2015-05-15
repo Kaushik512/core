@@ -1735,7 +1735,7 @@ $("#templateContent #grid0").addClass("role-Selected");
 	// }
 	console.log('here end');
 	
-	
+	if(getImage){
 	getIndividualData += '<div class="col-sm-3 col-lg-2 col-md-3">' +
 	'<div class="productdiv2" data-templateId="' + getTempName + '" data-' +
 	'templateComponent="component' + z + '" ' +
@@ -1748,7 +1748,21 @@ $("#templateContent #grid0").addClass("role-Selected");
 	'<li><img style="height:40px;width:auto;" alt="" ' +
 	'src="/d4dMasters/image/' + getRowID + '__templatesicon__' + getImage + '">' +
 	'</li><li style="font-size:12px;"><u><b>' + getTempName + '</b></u></li>';
-	//If standard template
+	}
+	else{
+		getIndividualData += '<div class="col-sm-3 col-lg-2 col-md-3">' +
+	'<div class="productdiv2" data-templateId="' + getTempName + '" data-' +
+	'templateComponent="component' + z + '" ' +
+	'dockercontainerpathstitle="' + dockercontainerpathstitle + '" ' +
+	'dockercontainerpaths="' + dockercontainerpaths + '" ' +
+	'dockerreponame="' + dockerreponame + '" ' +
+	'data-templateName="' + getTempName + '" data-' +
+	'templateType="' + getTemplateType + '" templatetype="' + getTemplateType + '" templatename="' + getTempName + '" templatescookbooks="' + gettemplatescookbooks + '">' +
+	'<ul class="list-unstyled system-prop" style="text-align:center;">' +
+	'<li><img style="height:40px;width:auto;" alt="" ' +
+	'src="img/logo.png">' +
+	'</li><li style="font-size:12px;"><u><b>' + getTempName + '</b></u></li>';
+	}//If standard template
 	if (getTemplateType != "Docker") {
    var cb = gettemplatescookbooks.split(',');
    var licb = '';

@@ -130,6 +130,44 @@
     </div>
 </div> <!--SSH container ends here-->
 
+<!--modal for instance edit-->
+
+<div class="modal fade" id="modalforInstanceEdit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog " style="">
+        <div class="modal-content"> 
+            <form role="form" id="instanceEditNew">
+             <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">
+                    &nbsp;Edit Name
+                </h4>
+
+            </div> 
+            
+            
+             <div class="modal-body" style="height:78px;">
+                <div class="col-lg-6 col-md-6">
+
+                            <label for="">Edit Name<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+
+                            <input type="text" name="editName" class="form-control" id="instanceEditName" autofocus/>
+                </div>
+                
+                    <input type="hidden" id="instanceIDHiddenInput">
+                
+
+            </div>
+            
+               <div class="modal-footer">
+        <input type="submit" id="editSaveBTN" class="btn btn-primary" value="Save" />
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+      </div>   
+  </form>
+         </div>
+    </div>
+</div>
+
+<!--modal ends-->
 <!-- Modal for Import By IP tab started-->
 <div class="modal fade" id="modalContainerimportInstance" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
     <div class="modal-dialog">

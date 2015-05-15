@@ -1763,6 +1763,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                         url: appConfig.logServerUrl
                                     });
                                     var instance = {
+                                        name: "",
                                         orgId: req.params.orgId,
                                         bgId: req.params.bgId,
                                         projectId: req.params.projectId,
