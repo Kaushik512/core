@@ -267,6 +267,13 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                         logger.debug("Instance Launched. Runlist = ", version.runlist);
                                                         logger.debug("Instance Launched. Instance data = ", instanceData);
                                                         logger.debug("UserName:::::::::: ", anImage.userName);
+                                                        if (!blueprint.appUrls) {
+                                                            blueprint.appUrls = [];
+                                                        }
+                                                        blueprint.appUrls.unshift({
+                                                            name: 'logs',
+                                                            url: appConfig.logServerUrl
+                                                        });
                                                         var instance = {
                                                             name: "",
                                                             orgId: blueprint.orgId,
@@ -309,7 +316,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                 templateComponents: blueprint.templateComponents,
                                                                 iconPath: blueprint.iconpath
                                                             }
-                                                        }
+                                                        };
 
                                                         logger.debug('Creating instance in catalyst');
                                                         instancesDao.createInstance(instance, function(err, data) {

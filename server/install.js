@@ -28,7 +28,7 @@ function getDefaultsConfig() {
         chef: {
             chefReposDirName: 'chef-repos',
             cookbooksDirName: 'cookbooks',
-            defaultChefCookbooks: [],
+            defaultChefCookbooks: ['recipe[starter]'],
             ohaiHints: ['ec2'],
             attributeExtractorCookbookName: 'attrib',
 
@@ -144,6 +144,7 @@ function getDefaultsConfig() {
             baseDn: 'dc=rlindia,dc=com',
             ou: ''*/
         },
+        logServerUrl: 'http://localhost:5555/logs',
         features: {
             appcard: false
         },
