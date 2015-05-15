@@ -275,7 +275,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                             url: appConfig.logServerUrl
                                                         });
                                                         var instance = {
-                                                            name: "",
+                                                            name: blueprint.name,
                                                             orgId: blueprint.orgId,
                                                             bgId: blueprint.bgId,
                                                             projectId: blueprint.projectId,

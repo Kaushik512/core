@@ -318,7 +318,10 @@ $(document).ready(function() {
                     }
                     var nodeName = data[i].chef.chefNodeName;
                     if(data[i].instanceIP) {
-                        var nodeName = data[i].instanceIP;
+                        nodeName = data[i].instanceIP;
+                    }
+                    if(data[i].blueprintData && data[i].blueprintData.blueprintName) {
+                        nodeName = data[i].blueprintData.blueprintName;
                     }
                     if(data[i].name) {
                         nodeName = data[i].name;

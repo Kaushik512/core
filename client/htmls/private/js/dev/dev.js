@@ -1126,9 +1126,10 @@
                                   $divDomainRolesCaption.append(cardTemplate.getDomainRolesHeading(data) + "<hr>");
 
                                   $divDomainRolesCaption.find('.editInstanceNameBtn').click(function(e) {
-                                      $('#instanceIDHiddenInput').val(data._id);
                                       $('#instanceEditNew').trigger("reset");
-
+                                      $('#instanceIDHiddenInput').val(data._id);
+                                      var prevName = $divDomainRolesCaption.find('.cardHeadingTextoverflow').text();
+                                      $('#instanceEditName').val(prevName);
                                   });
 
                                   if (data.instanceState == 'running') {
