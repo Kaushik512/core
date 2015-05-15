@@ -28,7 +28,7 @@ function getDefaultsConfig() {
         chef: {
             chefReposDirName: 'chef-repos',
             cookbooksDirName: 'cookbooks',
-            defaultChefCookbooks: [],
+            defaultChefCookbooks: ['recipe[starter]'],
             ohaiHints: ['ec2'],
             attributeExtractorCookbookName: 'attrib',
 
