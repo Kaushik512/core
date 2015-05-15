@@ -355,6 +355,18 @@
                                  });
                              }
 
+                            /* $('#editSaveBTN').submit(function(e){
+                                var reqBodyEdit = {};
+                                var $form = $('#instanceEditNew');
+                                reqBodyEdit.name = $form.find('#instanceEditName').val();
+                                $.post('../instances/' + instanceId + updateName, {
+                                    name=reqBodyEdit.name
+                                }, function(data){
+                                    
+                                });
+                                
+                             });*/
+
                              //checking the IP address and form validations for Import By IP
                              function bindSubmit_AddInstance() {
                                  /* Add Instance by IP form submission */
@@ -915,10 +927,10 @@
 
 
                              //emptying ssh container
-                             $('#dialog').on('hide.bs.modal', function(e) {
-                               $('#dialog').find('#ssh-terminateBtn').click();
-                               $('#dialog').find('.modal-bodyNew').empty();
-                           });
+                             $('#modalSSHShellContainer').on('hide.bs.modal', function(e) {
+                                 $('#modalSSHShellContainer').find('#ssh-terminateBtn').click();
+                                 $('#modalSSHShellContainer').find('.modal-body').empty();
+                             });
 
                              function showRDP() {
                                  if ($(this).hasClass('isStopedInstance')) {
@@ -926,48 +938,29 @@
                                  }
                              }
                              //function for showing the SSH Modal
-                           //function for showing the SSH Modal
-                           function showSSHModal() {
-                               if ($(this).hasClass('isStopedInstance')) {
-                                   return false;
-                               }
-                               var hasConnectPermission = false;
-                               if (haspermission("instanceconnect", "execute")) {
-                                   hasConnectPermission = true;
-                               }
-                               if (!hasConnectPermission) {
-                                   bootbox.alert('User has no permission to do SSH');
-                                   return;
-                               }
+                             function showSSHModal() {
+                                 if ($(this).hasClass('isStopedInstance')) {
+                                     return false;
+                                 }
+                                 var hasConnectPermission = false;
+                                 if (haspermission("instanceconnect", "execute")) {
+                                     hasConnectPermission = true;
+                                 }
+                                 if (!hasConnectPermission) {
+                                     bootbox.alert('User has no permission to do SSH');
+                                     return;
+                                 }
 
-                               var $sshModal = $('#dialog');
-                               dialog = $( "#dialog" ).dialog({
-                                  autoOpen: true,
-                                  height: 500,
-                                  width: 650,
-                                  modal: true,
-                                  /*buttons: {
-                                    
-                                    Close: function() {
-                                      dialog.dialog( "close" );
-                                    }
-                                  },*/
-                                
-                                });
-                               $("#dialog").dialog({ closeOnEscape: false });
-                               /*$("#dialog").dialog({
-                                minHeight:400,
-                                minWidth:300,
-                               })*/
-                               var instanceId = $(this).attr('data-instanceId');
-                               $sshModal.find('.modal-bodyNew').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
-                               //$sshModal.modal('show');
-                               $.get('sshShell.html?id=' + instanceId, function(data) {
+                                 var $sshModal = $('#modalSSHShellContainer');
+                                 var instanceId = $(this).attr('data-instanceId');
+                                 $sshModal.find('.modal-body').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
+                                 $sshModal.modal('show');
+                                 $.get('sshShell.html?id=' + instanceId, function(data) {
 
-                                   $sshModal.find('.modal-bodyNew').empty().append(data);
-                                   $sshModal.find('#ssh-instanceId').val(instanceId);
-                               });
-                           }
+                                     $sshModal.find('.modal-body').empty().append(data);
+                                     $sshModal.find('#ssh-instanceId').val(instanceId);
+                                 });
+                             }
 
                              //adding instance to DOM by Import,Blueprint Launch and Chef-Sync
                              function addInstanceToDOM(data) {
@@ -1003,7 +996,7 @@
                                      getDomainRolesCaption: function(conf) {
                                          return '<div class="domain-roles-caption" data-instanceId="' + conf._id + '"' + 'data-blueprintName="' + conf.blueprintData.blueprintName + '"' + 'data-osType="' + conf.hardware.os + '"></div>';
                                      },
-                                     getSpanHeadingLeft: function(data) {
+                                      getSpanHeadingLeft: function(data) {
                                         var imgPath;
                                         if(data.blueprintData.iconPath==undefined){
                                             data.blueprintData.iconPath='img/logo.png';
@@ -1012,7 +1005,7 @@
                                          return '<span class="domain-roles-icon" contenteditable="false"><img src="' + data.blueprintData.iconPath + '" style="margin-right:5px;margin-top:-10px;width:27px"/></span>';
                                      },
                                      getSpanHeadingMiddle: function(data) {
-                                         return '<span class="cardHeadingTextoverflow" rel="tooltip" data-placement="top" data-original-title="' + data.blueprintData.blueprintName + '">' + data.blueprintData.blueprintName + '</span>';
+                                         return '<span class="cardHeadingTextoverflow" rel="tooltip" data-placement="top" data-original-title="' + data.blueprintData.blueprintName + '">' + data.blueprintData.blueprintName + '</span>' + '<a href="#modalforInstanceEdit" data-backdrop="false" data-toggle="modal" id="instanceEdit" class="glyphicon glyphicon-pencil" style="cursor:pointer;"></a></span>' ;
                                      },
                                      getSpanHeadingRight: function(data) {
                                          return '<span style="float:left;margin-top:4px;margin-left:8px;"><a rel="tooltip" class="moreInfo" href="javascript:void(0)" data-instanceId="' + data._id + '" data-placement="top" data-original-title="MoreInfo"></a></span>';
@@ -1186,9 +1179,7 @@
 
                                  $rowContainter.append('<td></td>');
                                  $rowContainter.append('<td><img src="' + data.blueprintData.iconPath + '" style="width:auto;height:30px;" /></td>');
-                                 if(data.blueprintData.iconpath==undefined){
-                                    console.log('check');
-                                 }
+
 
                                  $rowContainter.append('<td>' + data.blueprintData.blueprintName.toString().substring(0, 25) + '</td>');
 
@@ -1840,10 +1831,10 @@
                                              if (data[i].iconpath)
                                                  $img = $('<img />').attr('src', data[i].iconpath).attr('alt', data[i].name).addClass('cardLogo');
                                              else
-                                                 $img = $('<img />').attr('src', 'img/logo.png').attr('alt', data[i].name).addClass('cardLogo');
+                                                 $img = $('<img />').attr('src', '').attr('alt', data[i].name).addClass('cardLogo');
                                              var $liImage = $('<li></li>').append($img);
                                              $ul.append($liImage);
-                
+
                                              var $liCardName = $('<li title="' + data[i].name + '"></li>').addClass('Cardtextoverflow').html('<u><b>' + data[i].name + '</b></u>');
 
                                              $ul.append($liCardName);
