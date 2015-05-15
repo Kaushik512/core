@@ -4898,6 +4898,7 @@ nav ul
     position: relative;
     vertical-align: top;
     width: 100%;
+    padding-left: 7px;
 }
 
 
@@ -6658,6 +6659,9 @@ button.ui-button::-moz-focus-inner {
 .ui-dialog .ui-dialog-titlebar {
     padding: .4em 1em;
     position: relative;
+    width:101%;
+    margin-left: -3px;
+    margin-top: -3px;
 }
 .ui-dialog .ui-dialog-title {
     float: left;
@@ -7444,7 +7448,7 @@ body .ui-tooltip {
 ----------------------------------*/
 
 /* Corner radius */
-.ui-corner-all,
+/*.ui-corner-all,
 .ui-corner-top,
 .ui-corner-left,
 .ui-corner-tl {
@@ -7467,7 +7471,7 @@ body .ui-tooltip {
 .ui-corner-right,
 .ui-corner-br {
     border-bottom-right-radius: 4px;
-}
+}*/
 
 /* Overlays */
 .ui-widget-overlay {
@@ -7767,24 +7771,13 @@ word-break:break-word;
     padding-top: 12px;
     padding-bottom: 17px;
 }
-.terminal {
-  float: left;
-   border: #000000 solid 5px; 
-  font-family: "DejaVu Sans Mono", "Liberation Mono", monospace;
-  font-size: 13px;
-  color: #f0f0f0;
-  background: #000000;
-  /*width: 100%;
-  height:586px;*/
+.appNameLabel {
+    margin-top:25px;
 }
 
-.sshContainer{
-    display: none;
-    overflow: hidden;
-    width:114%;
-    height:100%;
-    margin-left: -35px;
-    margin-top: -26px;
+.sshStyle{
+    margin-bottom:4%;
+    font-size:13px;
 }
 
 

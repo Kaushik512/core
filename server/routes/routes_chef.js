@@ -51,8 +51,8 @@ module.exports.setRoutes = function(app, verificationFunc) {
                             for (var i = 0; i < instances.length; i++) {
                                 //nodeNames.push(instances[i].chef.chefNodeName);
                                 var index = nodeList.indexOf(instances[i].chef.chefNodeName);
-                                if( index !== -1) {
-                                  // nodeList.splice(index,1); //commented to prevent existing nodes not to be listed. Vinod 30-Apr-2015
+                                if (index !== -1) {
+                                    // nodeList.splice(index,1); //commented to prevent existing nodes not to be listed. Vinod 30-Apr-2015
                                 }
                             }
                             res.send(nodeList);
@@ -267,6 +267,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
                     console.log('nodeip ==> ', nodeIp);
                     console.log('alive ==> ', node.isAlive);
                     var instance = {
+                        name: node.name,
                         orgId: orgId,
                         bgId: bgId,
                         projectId: projectId,

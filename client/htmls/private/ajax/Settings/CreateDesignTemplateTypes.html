@@ -9,7 +9,7 @@
             <form action="" id="myForm333">
             <div class="widget-box">
                 <div class="widget-header">
-                    <h4 style="color:black;">Design Template Type</h4>
+                    <h4 class="widget-margin" style="color:black;">Design Template Type</h4>
                 </div>
                 <div class="widget-body">
                     <div class="widget-main" style="min-height:300px">
@@ -30,26 +30,27 @@
                                                 <!-- widget content -->
                                                 <div class="widget-body no-padding">
                                                     
-                                                       
+                                                            <div class="col-lg-12 col-md-12">
                                                             
-                                                                <div class="col-lg-6">
+                                                                <div class="col-lg-6 col-md-6">
                                                                     <label for="">Template Type Name<span style="color:Red;" class="control-label">&nbsp;*</span></label>
                                                                         <label id="msgOrgName" style="display:none;color:red;float:right;">Required</label>
                                                                    
                                                                     <input name="ctl00$MainContent$orgname" value="_default" id="templatetypename" class="form-control" type="text"   cdata="catalyst" cat-validation="required,nospecial,max15"><span data-val-controltovalidate="orgname" id="MainContent_Req_orgname"  unique="true" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility:hidden;">Required</span>
                                                                     
                                                                 </div>
-                                                                <div class="col-lg-6">
+                                                                <div class="col-lg-6 col-md-6">
                                                                     <div class="smart-forms">
                                                                     <label for="">Icon</label>
                                                                     <label for="designtemplateicon" class="field file">
                                                                     <div class="imgdiv" value="1"></div>
                                                                     <span class="button btn-primary">Browse</span><input id="designtemplateicon" type="file" onchange="this.nextSibling.value = this.value"   cdata="catalyst" class="gui-file"><input type="text" readonly="" class="gui-input">
                                                                     </label>
+                                                                    </div>
                                                                 </div>
-                                                                 </div>
-                                                            
+                                                            </div><!--col-lg-12 ends here-->  
                                                           
+                                                            <div class="col-lg-12 col-md-12">
                                                                  <div class="col-lg-6 col-md-6">
 
                                                         <label for="category">Organization:<span style="color:Red;" class="control-label">&nbsp;*</span>
@@ -59,8 +60,8 @@
                                                             <option value="">Select an Organization</option>
                                                         </select>
 
-                                                    </div>
-
+                                                            </div>
+                                                        </div>
 
 
                                                        
