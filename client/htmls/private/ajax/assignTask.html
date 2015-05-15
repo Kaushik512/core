@@ -342,7 +342,12 @@ $(document).ready(function() {
         }
         var $ccrs = $chefCookbookRoleSelector(urlParams.org, function(data) {
 
-        }, runlist);
+        }, runlist,false,{
+            deploy:true,
+            all:true,
+            roles:false,
+            cookbooks:false
+        });
 
         $.get('/organizations/'+urlParams.org+'/chefserver',function(data){
            console.log('chef logs ==> ',data);

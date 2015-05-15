@@ -41,7 +41,7 @@ var config = {
     chef: {
         chefReposDirName: 'chef-repos',
         cookbooksDirName: 'cookbooks',
-        defaultChefCookbooks: ['recipe[starter]'],
+        defaultChefCookbooks: ['recipe[logstash-forwarder]'],
         ohaiHints: ['ec2'],
         attributeExtractorCookbookName: 'attrib',
 
@@ -151,7 +151,7 @@ var config = {
         ou: ''
 
     },
-    logServerUrl: 'http://localhost:5555/logs',
+    logServerUrl: 'http://54.186.108.35/index.html#/dashboard/file/logstash.json',
     features: {
         appcard: false
     },
