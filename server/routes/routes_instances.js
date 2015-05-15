@@ -1528,6 +1528,30 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
     });
 
+    app.post('/instances/:instanceId/updateName', function(req, res) {
+        logger.debug("Enter post() for /instances/%s/updateName", req.params.instanceId);
+        instancesDao.getInstanceById(req.params.instanceId, function(err, anInstance) {
+            if (err) {
+                logger.error("Failed to fetch Instance: ", err);
+                res.send(500,"Failed to fetch Instance: ");
+                return;
+            }
+            if(anInstance){
+                instancesDao.updateInstanceName(req.params.instanceId,req.body.name,function(err,updateCount){
+                    if(err){
+                        req.send(500,"Failed to update instance name");
+                    }
+                    res.send(updateCount);
+                });
+
+            }else{
+                res.send(404,"No Instance found.")
+            }
+
+        });
+
+    });
+
 
 
 };

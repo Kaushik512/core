@@ -268,6 +268,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                         logger.debug("Instance Launched. Instance data = ", instanceData);
                                                         logger.debug("UserName:::::::::: ", anImage.userName);
                                                         var instance = {
+                                                            name: "",
                                                             orgId: blueprint.orgId,
                                                             bgId: blueprint.bgId,
                                                             projectId: blueprint.projectId,
