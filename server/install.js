@@ -144,6 +144,7 @@ function getDefaultsConfig() {
             baseDn: 'dc=rlindia,dc=com',
             ou: ''*/
         },
+        logServerUrl: 'http://localhost:5555/logs',
         features: {
             appcard: false
         },
