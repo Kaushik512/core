@@ -104,6 +104,11 @@ ${MAT FREEMEM}             80476kB
 ${MAT OS}                  centos
 ${MAT BOOTSTRAP}           success
 ${MAT RUNLIST}             recipe[apache2],recipe[git],recipe[a],recipe[cron]
+${MAT RUNLIST1}            recipe[a],recipe[cron]
+${MAT OS1}                 ubuntu
+${UBUNTU MEM}              1016256kB
+${UBUNTU REC}              recipe[a],recipe[a],recipe[cron]
+${TEMPLATE TYPENAME}       CatAutomation
 
 
 
@@ -114,7 +119,8 @@ ${SECRET KEY}                         qZOZuI2Ys0/Nc7txsc0V2eMMVnsEK6+Qa03Vqiyw
 ${ACCESS KEY}                  AKIAI6TVFFD23LMBJUPA
 ${IMAGE NAME1}                 Cent OSIm
 ${IMAGE NAME2}                 UbuntuIm
-${IMAGE NAME3}                 Windows 2008Im
+${IMAGE NAME3}                 Windows
+${IMAGE NAME4}                 Windows 2008Im
 ${OPERATING SYSTEM1}           Cent OS
 ${OPERATING SYSTEM2}           Ubuntu
 ${OPERATING SYSTEM3}           Windows 2008
@@ -122,6 +128,9 @@ ${IMAGE ID1}                   ami-b6bdde86
 ${IMAGE ID2}                   ami-3d50120d
 ${IMAGE ID3}                   ami-21732111
 ${USER}                        superadmin
+${COOKBOOK NAME1}              apache2
+${SERVICE NAME1}               Apachenew
+${ValidEditVMImage}            Windows 2008
 
 #provider
 ${VaildNoProvider}   
@@ -317,7 +326,7 @@ ${VaildateTeamSpecialChrErrMsg}        special chars not allowed
 #Users Setup
 ${VaildateEmptyUserName} 
 ${VaildateEmptyEmailName}
-${ValidateNotExistLDAP}              0740453NewKat
+${ValidateNotExistLDAP}              2532096jkap
 ${ValidAldyExistLogName}             Admin
 ${EDIT EMAIL}                        AdminDave@gmail.com
 
@@ -330,13 +339,16 @@ ${ValidAldyExistLogNameErrMsg}          Selected is already registered
 #Gallery Setup
 ${VaildEmptyTemplateName}
 ${Vaild15ChrTemplateName}                ReelvanceLabsTemplat
+${ValidTEditemplName}                    ApacRelevance
 
 ${VaildEmptyTemplateNameErrMsg}              Required
 ${Vaild15ChrTemplateNameErrMsg}             limited to 15 chars
+${VaildOrGErrMsg}                           Required
 
 #Service Setup
 ${VaildEmptyServiceName}
 ${Vaild15ChrServiceName}                        SQLLiteRelevance
+${ValidEditService}                              Apache2
 
 ${VaildEmptyServiceNameErrMsg}                  Required
 ${Vaild15ChrServiceNameErrMsg}                  limited to 15 chars
@@ -347,7 +359,8 @@ ${VaildEmptyRefName}
 ${Vaild15ChrRefName}                        JenkinsConfiguration
 ${VaildEmptyJenkinsURL} 
 ${VaildEmptyUserID}      
-${VaildEmptyPassword}                       
+${VaildEmptyPassword}  
+
 
 
 ${VaildEmptyRefNameErrMsg}                      Required
@@ -355,3 +368,4 @@ ${Vaild15ChrRefNameErrMsg}                      Required
 ${VaildEmptyJenkinsURLErrMsg}                   Please enter a valid Url
 ${VaildEmptyUserIDErrMsg}                       Required
 ${VaildEmptyPasswordErrMsg}                     Required
+${VaildNotSelectOrg}                            Required
