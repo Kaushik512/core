@@ -1673,7 +1673,7 @@ input[type="submit"].btn-block, input[type="reset"].btn-block, input[type="butto
 }
 .glyphicon {
     position: relative;
-    top: 1px;
+    top: -4px;
     display: inline-block;
     font-family: 'Glyphicons Halflings';
     font-style: normal;

@@ -318,8 +318,12 @@ $(document).ready(function() {
                     }
                     var nodeName = data[i].chef.chefNodeName;
                     if(data[i].instanceIP) {
-                        nodeName = data[i].instanceIP;
+                        var nodeName = data[i].instanceIP;
                     }
+                    if(data[i].name) {
+                        nodeName = data[i].name;
+                    }
+
                     var $li = $('<li><label class="checkbox" style="margin: 5px;font-size:13px;"><input type="checkbox" name="deploymentNodesCheckBox" value="' + data[i]._id + '"><i></i>' + nodeName + '</label></li>');
                     if (checked) {
                         $li.find('input')[0].checked = true;

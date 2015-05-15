@@ -782,8 +782,11 @@ $.get('../instances/'+urlParams.id,function(data){
    }
    var $spanheadingLeftCP = $('<span></span>').addClass('domain-roles-icon').html('<img src="'+data.blueprintData.iconPath+'" style="width:27px;margin-right:5px;margin-top:-10px;"/>').attr('contenteditable', 'false');
 
-
-    var $spanheadingMiddleCP = $('<span>' + data.blueprintData.blueprintName + '</span>').addClass('cardHeadingTextoverflow').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', ''+ data.blueprintData.blueprintName +'');
+   var name = data.name;
+    if(!name) {
+      name = data.blueprintData.blueprintName;
+    }
+    var $spanheadingMiddleCP = $('<span>' + name + '</span>').addClass('cardHeadingTextoverflow').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', ''+ name +'');
     var $spanheadingRightCP = $('<span></span>').css({
       'float':'left','margin-top':'4px','margin-left':'8px'
     }).append($('<a href="javascript:void(0)" data-instanceId="' + data._id + '"></a>').addClass('moreInfo').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'MoreInfo'));

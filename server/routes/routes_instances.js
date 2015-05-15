@@ -1539,9 +1539,13 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             if(anInstance){
                 instancesDao.updateInstanceName(req.params.instanceId,req.body.name,function(err,updateCount){
                     if(err){
-                        req.send(500,"Failed to update instance name");
+                        res.send(500,"Failed to update instance name");
+                        return;
                     }
-                    res.send(updateCount);
+                    console.log(updateCount);
+                    res.send(200,{
+                        updateCount :updateCount
+                    });
                 });
 
             }else{
