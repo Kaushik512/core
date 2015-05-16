@@ -339,37 +339,13 @@
                   <div class="modal-body">
                     <div class="row">
 
-                      <div class="col-md-12">
-                        <div id="paragraphs" class="p-sieve">
-                         <!--  <p><i class="fa fa-chevron-right txt-color-blue"></i>&nbsp;MAKEDEV.x86_64              3.24-6.el6                 @CentOS6-Base/$releasever</p>
-                          <hr>
-
-                          <p><i class="fa fa-chevron-right txt-color-blue"></i>&nbsp;acl.x86_64                  2.2.49-6.el6               @CentOS6-Base/$releasever</p>
-                          <hr>
-
-                          <p><i class="fa fa-chevron-right txt-color-blue"></i>&nbsp;acpid.x86_64                1.0.10-2.1.el6             @CentOS6-Base/$releasever</p>
-                          <hr>
-
-                          <p><i class="fa fa-chevron-right txt-color-blue"></i>&nbsp;attr.x86_64                 2.4.44-7.el6               @CentOS6-Base/$releasever</p>
-                          <hr>
-
-                          <p><i class="fa fa-chevron-right txt-color-blue"></i>&nbsp;audit.x86_64                2.2-2.el6                  @CentOS6-Base/$releasever</p>
-                          <hr>
-
-                          <p><i class="fa fa-chevron-right txt-color-blue"></i>&nbsp;accountsservice          install</p>
-                          <hr>
-
-                          <p><i class="fa fa-chevron-right txt-color-blue"></i>&nbsp;acpid            install</p>
-                          <hr>
-
-                          <p><i class="fa fa-chevron-right txt-color-blue"></i>&nbsp;groff-base         install</p>
-                          <hr>
-
-                          <p><i class="fa fa-chevron-right txt-color-blue"></i>&nbsp;init-system-helpers        install</p>
-                          <hr>
-
-                          <p><i class="fa fa-chevron-right txt-color-blue"></i>&nbsp;landscape-common       install</p>
-                           -->
+                      <div class="col-md-12 heightModal400">
+                        
+                        <div id="paragraphs" class="p-sieve paraHeightModal">
+                         
+                        </div>
+                        <div class="loadingContainerimageCSS">
+                          <img  style="margin-left:5px;margin-right:25px;margin-top:8px;" src="img/loading.gif"></img>
                         </div>
                       </div>
                     </div>
@@ -613,6 +589,7 @@ var urlParams ={};
 
 
 function populateJsonData(instanceId) {
+  $('.paraHeightModal').hide();
     $.ajax({
         type: "GET",
         url: "/instances/" + instanceId + "/inspect",
@@ -622,8 +599,10 @@ function populateJsonData(instanceId) {
             var dataToBeUsed = typeof jsonArray == "object" ? jsonArray : JSON.parse(jsonArray);
             var temp = '';
             for (var i = 0; i < dataToBeUsed.length; i++) {
-                temp = temp + '<p><i class="fa fa-chevron-right txt-color-blue"></i>&nbsp;' + dataToBeUsed[i] + '</p><hr>';
+                temp = temp + '<p><i class="fa fa-chevron-right txt-color-blue"></i>&nbsp;' + dataToBeUsed[i] + '</p>';
             }
+            $('.loadingContainerimageCSS').hide();
+            $('.paraHeightModal').show();
             $('#paragraphs').append(temp);
         },
         failure: function(data) {

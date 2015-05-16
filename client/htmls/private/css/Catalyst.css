@@ -7779,5 +7779,12 @@ word-break:break-word;
     margin-bottom:4%;
     font-size:13px;
 }
-
+/*Inspect CSS*/
+.paraHeightModal{
+    overflow: auto;
+    height: 370px;
+}
+.heightModal400{
+    height:400px;
+}
 
