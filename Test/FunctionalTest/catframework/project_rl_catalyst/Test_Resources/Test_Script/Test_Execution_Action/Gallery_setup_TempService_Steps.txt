@@ -31,6 +31,43 @@ Catalyst User New Template Creation
     Select CookBooks
     Clicks on >> Button
     Clicks on Save Button
+    Validate the Edit Template name  ${ValidTEditemplName}
+
+
+Test Validation of New Template Type
+    Validate the No Organization for Template Type
+    Organization not selected ErrorMessage  ${VaildOrGErrMsg}
+
+
+Validate the No Organization for Template Type
+    Clicks on Settings
+    Clicks on Gallery Setup
+    Clicks on Template Type
+    Clicks on New Template Type Button
+    Enters the Design Template name
+    Chooses Template type Icon
+    Clicks on Template Save Button
+
+Organization not selected ErrorMessage
+    [Arguments]    ${ErrMsg}
+    Element Should Contain    id=errmsg_orgname    ${ErrMsg}
+    Clicks on Templat type Cancel Button
+    
+
+Catalyst User New Design Template Type
+    Clicks on New Template Type Button
+    Enters the Design Template name
+    Chooses Template type Icon
+    Select Created organization
+    Clicks on Template Save Button
+    
+Validate the Edit Template name
+    [Arguments]    ${templatename}
+    Clicks on Edit Button of Temp Created
+    Enters the New Template Name
+    Select New CookBooks for Template
+    Clicks on Save Button
+
 
 
 
@@ -48,11 +85,36 @@ Vaildate the Empty Template Name
     Clicks on >> Button
     Clicks on Save Button
 
+
+Clicks on Templat type Cancel Button
+    Click Element    xpath=.//*[@id='btncancel'] 
+
+Clicks on Template Type
+    Click Element    xpath=.//*[@id='setting_tree']/ul/li[5]/a
+
+Clicks on New Template Type Button
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    id=addnewitem
+
+Enters the Design Template name
+    Input Text    id=templatetypename    ${TEMPLATE TYPENAME}
+
+Chooses Template type Icon
+    Choose File     xpath=.//*[@id='designtemplateicon']     C:\\Users\\adarsh.RLINDIA\\Desktop\\index.jpg
+
+Clicks on Template Save Button
+    Click Element    xpath=.//*[@id='myForm333']/div/div[3]/div/button
+
 Select Created organization
     Wait Until Keyword Succeeds    1 minute     1 seconds     Select From List     id=orgname      ${ORGANIZATION NAME}
 
 Enters empty Template Name
     Input Text    id=templatename    ${templatename}
+
+Enters the New Template Name
+    Input Text    id=templatename    ${templatename}
+
+Clicks on Edit Button of Temp Created
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()='Apac']/../td[6]/div/a
 
 Template Name left empty
     [Arguments]    ${VaildEmptyTemplateNameErrMsg}
@@ -101,7 +163,7 @@ Clicks on Gallery Setup
     Click Element    xpath=.//*[@id='setting_tree']/ul/li[4]/a
 
 Clicks on Templates
-    Click Element    xpath=.//*[@id='setting_tree']/ul/li[5]/a
+    Click Element    xpath=.//*[@id='setting_tree']/ul/li[6]/a
 
 Clicks on New Button
     Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       xpath=.//*[@id='newTemplate']
@@ -110,7 +172,7 @@ Clicks on New Button
 
 Enters Template Name
     Wait Until Keyword Succeeds    1 minute     1 seconds    Wait Until Element Is Visible    id=templatename
-    Input Text    id=templatename    ApacRelevance
+    Input Text    id=templatename    Apac
 
 
 Chooses Icon
@@ -131,10 +193,12 @@ Select Chef Server
 
 
 Select CookBooks
-    #Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    id=textbox    apache2
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[8]
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[30]
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[text()='apache2']
+    #Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    id=btnaddToRunlist
 
+Select New CookBooks for Template
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[text()='git']
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    id=btnaddToRunlist
 
 
     #xpath=.//*[@id='cookbooksrecipesList']/option[text()='apache2']
@@ -149,9 +213,6 @@ Select Roles
 
 Clicks on >> Button
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    id=btnaddToRunlist
-
-    #Wait Until Keyword Succeeds    1 minute     1 seconds    Wait Until Element Is Visible    xpath=.//*[@id='templatescookbooks']/div/fieldset/section[1]/div/div[2]/div/div[1]/button
-    #Click Element    xpath=.//*[@id='templatescookbooks']/div/fieldset/section[1]/div/div[2]/div/div[1]/button
 
 
 Clicks on Save Button
@@ -176,7 +237,15 @@ Catalyst User Service Command Services
     Select Service CookBooks
     Select the Actions
     Clicks on SerSave Button
+    Validate the Edit Service command  ${ValidEditService}
 
+Validate the Edit Service command
+    [Arguments]    ${Servicename}
+    Clicks on Edit Button of Service
+    Enters New Service Name
+    Select Edit Service CookBooks
+    Select the Edit Actions
+    Clicks on SerSave Button
 
 Vaildate the 15Character Service Name
     [Arguments]   ${Servicename}
@@ -188,6 +257,9 @@ Vaildate the 15Character Service Name
     Select Service CookBooks
     Select the Actions
     Clicks on SerSave Button
+
+Clicks on Edit Button of Service
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()='MongoDB']/../td[5]/div/a
 
 
 
@@ -224,6 +296,9 @@ Vaildate the Empty Service Name
 Enters Empty Service Name
     Input Text    id=servicename    ${servicename}
 
+Enters New Service Name
+    Input Text    id=servicename    ${SERVICE NAME1}
+
 Service Name left empty
     [Arguments]    ${VaildEmptyTemplateNameErrMsg}
     Vaildate empty Service name field  ${VaildEmptyTemplateNameErrMsg}
@@ -239,22 +314,9 @@ Clicks on Service Cancel Button
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 Clicks on Service Command
-    Wait Until Keyword Succeeds    1 minute     1 seconds    Wait Until Element Is Visible    xpath=.//*[@id='setting_tree']/ul/li[6]/a
-    Click Element    xpath=.//*[@id='setting_tree']/ul/li[6]/a
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Wait Until Element Is Visible    xpath=.//*[@id='setting_tree']/ul/li[7]/a
+    Click Element    xpath=.//*[@id='setting_tree']/ul/li[7]/a
 
 
 Clicks on SNew Button
@@ -278,12 +340,23 @@ Select Service CookBooks
     Wait Until Keyword Succeeds    1 minute     1 seconds    Input Text    xpath=.//*[@id='select2-drop']/div/input    ${COOKBOOK NAME}
     Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='select2-drop']/ul/li/div        
 
+Select Edit Service CookBooks
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='s2id_servicecookbook']/a
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Input Text    xpath=.//*[@id='select2-drop']/div/input    ${COOKBOOK NAME1}
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='select2-drop']/ul/li/div  
+
+
 
 Select the Actions
     Click Element    xpath=.//*[@id='chefCookbook-dropdown']/div[1]/div[1]/div[1]/label        #Start
     Click Element    xpath=.//*[@id='chefCookbook-dropdown']/div[1]/div[2]/div[1]/label        #Stop
     Click Element    xpath=.//*[@id='chefCookbook-dropdown']/div[2]/div[1]/div[1]/label        #Restart
-    Click Element    xpath=.//*[@id='chefCookbook-dropdown']/div[2]/div[2]/div[1]/label        #Status
+
+Select the Edit Actions
+    Click Element    xpath=.//*[@id='chefCookbook-dropdown']/div[1]/div[1]/div[1]/label        #Start
+    Click Element    xpath=.//*[@id='chefCookbook-dropdown']/div[1]/div[2]/div[1]/label        #Stop
+    Click Element    xpath=.//*[@id='chefCookbook-dropdown']/div[2]/div[1]/div[1]/label        #Restart
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='chefCookbook-dropdown']/div[2]/div[2]/div[1]/label        #Status
 
 Clicks on SerSave Button
     Click Element    xpath=.//*[@id='myForm50']/div/div[3]/div/button      

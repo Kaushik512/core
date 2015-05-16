@@ -1,3 +1,4 @@
+<script src="js/jquery.sieve.min.js" type="text/javascript"></script>
 <div class="row">
 
     <article class="col-sm-12 col-md-12 col-lg-12" id="controlPanelContainer" style="display:none">
@@ -152,6 +153,12 @@
                         <div class="panel panel-default" id="accordion-Software">
                           <div class="panel-heading">
                             <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion-Software" href="#collapseSoftware" ><i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i><i class="fa fa-fw fa-rss fa-dot-circle-o" style="font-size:14px;"></i> <b style="color:#3a87ad;font-size:12px;"><u>Software</u></b></a></h4>
+
+                            <a class="btn btn-primary" data-toggle="modal" href="#installedSoftwareModalContainer" style="float: right; margin-right: 5px; margin-top: 2px;">
+                              <i class="fa fa-fw fa-play" style="font-size:14px;"></i>
+                              Execute
+                            </a>
+
                           </div>
                           <div id="collapseSoftware" class="panel-collapse collapse in">
                             <div class="panel-body">
@@ -320,7 +327,63 @@
                 </div>
               </div>
             </div>
+          
 
+            <div class="modal fade" id="installedSoftwareModalContainer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+                <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="myModalLabel"><i class="fa fa-list txt-color-blue"></i>&nbsp;&nbsp;Inspect Installed Software</h4>
+                  </div>
+                  <div class="modal-body">
+                    <div class="row">
+
+                      <div class="col-md-12">
+                        <div id="paragraphs" class="p-sieve">
+                         <!--  <p><i class="fa fa-chevron-right txt-color-blue"></i>&nbsp;MAKEDEV.x86_64              3.24-6.el6                 @CentOS6-Base/$releasever</p>
+                          <hr>
+
+                          <p><i class="fa fa-chevron-right txt-color-blue"></i>&nbsp;acl.x86_64                  2.2.49-6.el6               @CentOS6-Base/$releasever</p>
+                          <hr>
+
+                          <p><i class="fa fa-chevron-right txt-color-blue"></i>&nbsp;acpid.x86_64                1.0.10-2.1.el6             @CentOS6-Base/$releasever</p>
+                          <hr>
+
+                          <p><i class="fa fa-chevron-right txt-color-blue"></i>&nbsp;attr.x86_64                 2.4.44-7.el6               @CentOS6-Base/$releasever</p>
+                          <hr>
+
+                          <p><i class="fa fa-chevron-right txt-color-blue"></i>&nbsp;audit.x86_64                2.2-2.el6                  @CentOS6-Base/$releasever</p>
+                          <hr>
+
+                          <p><i class="fa fa-chevron-right txt-color-blue"></i>&nbsp;accountsservice          install</p>
+                          <hr>
+
+                          <p><i class="fa fa-chevron-right txt-color-blue"></i>&nbsp;acpid            install</p>
+                          <hr>
+
+                          <p><i class="fa fa-chevron-right txt-color-blue"></i>&nbsp;groff-base         install</p>
+                          <hr>
+
+                          <p><i class="fa fa-chevron-right txt-color-blue"></i>&nbsp;init-system-helpers        install</p>
+                          <hr>
+
+                          <p><i class="fa fa-chevron-right txt-color-blue"></i>&nbsp;landscape-common       install</p>
+                           -->
+                        </div>
+                      </div>
+                    </div>
+                    
+                  </div>
+                  
+                  <div class="modal-footer">
+                    <!-- <button type="button" class="btn btn-default btn-primary btnsaveDeploymentBP btnSaveService"><i class="ace-icon fa fa-check bigger-110"></i>&nbsp;Save</button> -->
+                    <button type="button" class="btn btn-default btn-primary" data-dismiss="modal"><i class="ace-icon fa fa-undo bigger-110"></i>&nbsp;Cancel</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+           
             <!-- Configure tab contents starts here -->
             <div class="tab-pane" id="l3" style="height:415px;overflow-y: auto;">
               <div class="table-responsive" style="border:1px solid #dddddd;min-height:400px;border-radius:11px">
@@ -549,6 +612,28 @@ var urlParams ={};
 })();
 
 
+function populateJsonData(instanceId) {
+    $.ajax({
+        type: "GET",
+        url: "/instances/" + instanceId + "/inspect",
+        success: function(data) {
+            //alert(data);
+            var jsonArray = data;
+            var dataToBeUsed = typeof jsonArray == "object" ? jsonArray : JSON.parse(jsonArray);
+            var temp = '';
+            for (var i = 0; i < dataToBeUsed.length; i++) {
+                temp = temp + '<p><i class="fa fa-chevron-right txt-color-blue"></i>&nbsp;' + dataToBeUsed[i] + '</p><hr>';
+            }
+            $('#paragraphs').append(temp);
+        },
+        failure: function(data) {
+            alert('Failure');
+            //alert(data.toString());
+        }
+    });
+}
+//$('.inspectBtn').click(populateJsonData);
+
 function disableSSHBtn(instanceId) {
   var $cardViewInstanceId = $(".domain-roles-caption[data-instanceId='"+instanceId+"']");
   $cardViewInstanceId.find('.instance-bootstrap-ActionSSH a').addClass('isStopedInstance').removeClass('sshIcon').addClass('hidden');
@@ -614,7 +699,7 @@ function disableInstanceStartStopActionBtns(instanceId){
 var logTimeout;
 var stateTimeout;
 $.get('../instances/'+urlParams.id,function(data){
-
+    populateJsonData(data._id);
    //setting tree and drawing breadcrumb
    //alert(data.projectId)
    var $selectedOrg = $('.orgsList').find('[data-org="'+urlParams.org+'"]');
@@ -629,7 +714,7 @@ $.get('../instances/'+urlParams.id,function(data){
     // $li.parents('ul').css({'display':'block'});
     // drawBreadCrumb();
    } 
- 
+   
    console.log(data);
    
 
@@ -777,9 +862,16 @@ $.get('../instances/'+urlParams.id,function(data){
     
    var $divHeadingCP = $domainRolesCaption.find('.domain-roles-heading').empty();
 
+   if(data.blueprintData.iconPath==undefined){
+      data.blueprintData.iconPath='img/logo.png'
+   }
    var $spanheadingLeftCP = $('<span></span>').addClass('domain-roles-icon').html('<img src="'+data.blueprintData.iconPath+'" style="width:27px;margin-right:5px;margin-top:-10px;"/>').attr('contenteditable', 'false');
 
-    var $spanheadingMiddleCP = $('<span>' + data.blueprintData.blueprintName + '</span>').addClass('cardHeadingTextoverflow').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', ''+ data.blueprintData.blueprintName +'');
+   var name = data.name;
+    if(!name) {
+      name = data.blueprintData.blueprintName;
+    }
+    var $spanheadingMiddleCP = $('<span>' + name + '</span>').addClass('cardHeadingTextoverflow').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', ''+ name +'');
     var $spanheadingRightCP = $('<span></span>').css({
       'float':'left','margin-top':'4px','margin-left':'8px'
     }).append($('<a href="javascript:void(0)" data-instanceId="' + data._id + '"></a>').addClass('moreInfo').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'MoreInfo'));
@@ -1260,7 +1352,7 @@ $('.startstoptoggler').click(startAndStopToggler);
 
 
     if (data.appUrls && data.appUrls.length) {
-      var $collapseAppURL = $('#collapseAppURL');
+      var $collapseAppURL = $('#collapseAppURL').find('.panel-body');
       var $cardAppUrlListContanier = $('.instance-bootstrap-list');
         for (var k = 0; k < data.appUrls.length; k++) {
           var url = data.appUrls[k].url;
@@ -1867,7 +1959,7 @@ $(document).ready(function(e){
                         $('#appUrlTemplateFormCreate').addClass('hidden');
                           $.get('../instances/' + urlParams.id, function(data) {
                               if (data.appUrls && data.appUrls.length) {
-                                  var $collapseAppURL = $('#collapseAppURL');
+                                  var $collapseAppURL = $('#collapseAppURL').find('.panel-body');
                                   var $cardAppUrlListContanier = $('.instance-bootstrap-list');
                                   for (var k = 0; k < data.appUrls.length; k++) {
                                       var url = data.appUrls[k].url;
@@ -1888,4 +1980,17 @@ $(document).ready(function(e){
                   return false;
 
               });
+</script>
+
+
+<script>
+    // var searchTemplate = "<div class='row form-inline'><label style='float: left;margin-left:15px;'>Search: <input type='text' class='form-control' placeholder='(start typing)'></label></div>"
+    // $(".table-sieve").sieve({
+    //     searchTemplate: searchTemplate
+    // });
+    var searchTemplate = "<div class='row form-inline'><label style='float: left;margin-left:15px;'>Filter: <input type='text' class='form-control' placeholder='search e.g. acpid'></label></div>"
+    $(".p-sieve").sieve({
+        searchTemplate: searchTemplate,
+        itemSelector: "p"
+    }); 
 </script>

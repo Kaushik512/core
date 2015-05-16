@@ -20,13 +20,13 @@ Catalyst new Environments setup
 
 
 
-Catalyst Activation of User Created Envirornments           #from chef server
-    [Tags]       Sanity       ps
+#Catalyst Activation of User Created Envirornments           #from chef server
+    #[Tags]       Sanity       ps
 #    Catalyst Login
-    Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
-    Catalyst Activation of Environments
-    Catalyst Logout
-    [Teardown]     Close Browser
+    #Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
+    #Catalyst Activation of Environments
+    #Catalyst Logout
+    #[Teardown]     Close Browser
 
 
 #-Catalyst import chef server nodes            #from chef server

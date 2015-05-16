@@ -148,10 +148,10 @@ var config = {
         adminPass: 'ReleV@ance',
         //baseDn: 'cn=root',
         baseDn: 'dc=d4d-ldap,dc=relevancelab,dc=com',
-        ou:''
+        ou: ''
 
     },
-
+    logServerUrl: 'http://54.186.108.35/index.html#/dashboard/file/logstash.json',
     features: {
         appcard: false
     },

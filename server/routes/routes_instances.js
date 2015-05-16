@@ -559,6 +559,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
     });
 
     app.post('/instances/:instanceId/updateRunlist', function(req, res) {
+        logger.debug("InstanceID>>>>>>>>>>> ",req.params.instanceId);
         if (req.session.user.rolename === 'Consumer') {
             res.send(401);
             return;
@@ -568,7 +569,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             res.send(400);
             return;
         }
-        logger.debug(req.body.runlist);
+        logger.debug(">>>>>>>>>>>>>>>>>>>>>>>> ",req.body.runlist);
         //verifying permission to update runlist
         logger.debug('Verifying User permission set for execute.');
         var user = req.session.user;
@@ -692,7 +693,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                             log: 'Running chef-client',
                                             timestamp: new Date().getTime()
                                         });
-
+                                        logger.debug("=============================== ",JSON.stringify(chef));
                                         chef.runChefClient(chefClientOptions, function(err, retCode) {
                                             if (decryptedCredentials.pemFileLocation) {
                                                 fileIo.removeFile(decryptedCredentials.pemFileLocation, function(err) {
@@ -1531,6 +1532,160 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
     });
 
+    app.post('/instances/:instanceId/updateName', function(req, res) {
+        logger.debug("Enter post() for /instances/%s/updateName", req.params.instanceId);
+        instancesDao.getInstanceById(req.params.instanceId, function(err, anInstance) {
+            if (err) {
+                logger.error("Failed to fetch Instance: ", err);
+                res.send(500,"Failed to fetch Instance: ");
+                return;
+            }
+            if(anInstance){
+                instancesDao.updateInstanceName(req.params.instanceId,req.body.name,function(err,updateCount){
+                    if(err){
+                        res.send(500,"Failed to update instance name");
+                        return;
+                    }
+                    console.log(updateCount);
+                    res.send(200,{
+                        updateCount :updateCount
+                    });
+                });
 
+            }else{
+                res.send(404,"No Instance found.")
+            }
+
+        });
+
+    });
+
+    app.get('/instances/:instanceId/inspect', function(req, res) {
+        logger.debug("Enter get() for /instances/%s/inspect", req.params.instanceId);
+        instancesDao.getInstanceById(req.params.instanceId, function(err, anInstance) {
+            if (err) {
+                logger.error("Failed to fetch Instance: ", err);
+                res.send(500, "Failed to fetch Instance: ");
+                return;
+            }
+            logger.debug("Return instance>>>>>>>>>>> ",JSON.stringify(anInstance));
+            if (anInstance.length) {
+                 configmgmtDao.getChefServerDetails(anInstance[0].chef.serverId, function(err, chefDetails) {
+                    if (err) {
+                        res.send(500);
+                        return;
+                    }
+                    if (!chefDetails) {
+                        res.send(404);
+                        return;
+                    }
+
+                    logger.debug("anInstance[0].credentials>>>> ",anInstance[0].credentials);
+                    //decrypting pem file
+                    credentialCryptography.decryptCredential(anInstance[0].credentials, function(err, decryptedCredentials) {
+                        if (err) {
+                            res.send(500, "Unable to decrypt file.");
+                            return;
+                        }
+
+                        //getting chef run execution Id 
+
+                        ChefClientExecution.createNew({
+                            instanceId: anInstance[0].id
+
+                        }, function(err, chefClientExecution) {
+                            if (err) {
+                                res.send(500, "Unable to get  execution Id .");
+                                return;
+                            }
+
+                            // creating json attribute for execution id
+                            var jsonAttributeObj = {
+                                catalystCallbackUrl: req.protocol + '://' + req.get('host') + '/chefClientExecution/' + chefClientExecution.id
+                            };
+                            logger.debug("chefDetails>>>>>>>>>>>>>>>>>>>>> ",JSON.stringify(chefDetails));
+                            var chef = new Chef({
+                                userChefRepoLocation: chefDetails.chefRepoLocation,
+                                chefUserName: chefDetails.loginname,
+                                chefUserPemFile: chefDetails.userpemfile,
+                                chefValidationPemFile: chefDetails.validatorpemfile,
+                                hostedChefUrl: chefDetails.url,
+                            });
+
+                             logger.debug("Chef...>>>>>>>>>>>>>>>>>>> ",JSON.stringify(chef));
+                            
+                            var list =[];
+                            list.push("recipe[inspect_software]");
+                            var chefClientOptions = {
+                                privateKey: decryptedCredentials.pemFileLocation,
+                                username: decryptedCredentials.username,
+                                host: anInstance[0].instanceIP,
+                                instanceOS: anInstance[0].hardware.os,
+                                port: 22,
+                                runlist: list,
+                                overrideRunlist: false,
+                                jsonAttributes: JSON.stringify(jsonAttributeObj)
+                            }
+
+                            logger.debug("chefClientOptions>>>>>>>>>>>>>>>>>>> ",JSON.stringify(chefClientOptions));
+                            logger.debug('decryptCredentials ==>', decryptedCredentials);
+                            if (decryptedCredentials.pemFileLocation) {
+                                chefClientOptions.privateKey = decryptedCredentials.pemFileLocation;
+                            } else {
+                                chefClientOptions.password = decryptedCredentials.password;
+                            }
+                            var installedList = [];
+                            var installedString;
+                            chef.runChefClient(chefClientOptions, function(err, retCode) {
+                                if (err) {
+                                    res.send(500, "Unable to run chef-client.");
+                                    return;
+                                }
+                                logger.debug("retCode>>>>>>>>>>>>>>>>>>> ",retCode);
+                                if (decryptedCredentials.pemFileLocation) {
+                                    fileIo.removeFile(decryptedCredentials.pemFileLocation, function(err) {
+                                        if (err) {
+                                            logger.debug("Unable to delete temp pem file =>", err);
+                                        } else {
+                                            logger.debug("temp pem file deleted =>", err);
+                                        }
+                                    });
+                                }
+                            }, function(stdOutData) {
+                                logger.debug("Return from chef client>>>>>>>>>>>>>>>>>>>: ", typeof stdOutData);
+                                installedString = installedString+"{"+stdOutData.replace(/\s+/g, ' ')+"},";
+                                if(stdOutData === "{catalyst.inspect.stop}"){
+                                    if(anInstance[0].credentials.username === "root"){
+                                        var insString =installedString.split("{Installed Packages}").pop().split("{{catalyst.inspect.stop}}").shift();
+                                    insString = insString.substr(1);
+                                    insString = insString.slice(0, -1);
+                                    res.send(insString.split(","));
+                                    return;
+                                }else{
+                                    var insString =installedString.split("{{catalyst.inspect.start}}").pop().split("{{catalyst.inspect.stop}}").shift();
+                                    insString = insString.substr(1);
+                                    insString = insString.slice(0, -1);
+                                    res.send(insString.split(","));
+                                    return;
+                                }
+                            }
+
+                            }, function(stdOutErr) {
+                                logger.debug("Return error from chef client:>>>>>>>>>>>>>: ", stdOutErr.toString('ascii'));
+                                res.send(stdOutErr);
+                                return;
+                            });
+                        });
+                    });
+                });
+
+            } else {
+                res.send(404, "No Instance found.");
+                return;
+            }
+
+        });
+
+    });
 
 };

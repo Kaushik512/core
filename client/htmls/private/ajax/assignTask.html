@@ -8,7 +8,7 @@
                 <select id="taskType" class="chooseTasktype width-100">
                     <option id="Chef" value="chef">Chef</option>
                     <option id="Jenkins" value="jenkins">Jenkins</option>
-                    <option id="Custom" value="custom">Custom</option>
+                   <!-- <option id="Custom" value="custom">Custom</option>-->
                 </select>
             </div>  
         </div>
@@ -153,6 +153,7 @@
         </div>
     </div>
 </div>
+<!--
 <div id="Custom-dropdown">
     <div class="col-lg-3 paddingleftright0">
         <div class="col-lg-12 margintop15">
@@ -187,7 +188,7 @@
             <textarea rows="15" class="custom-scroll bordersolidgrey"></textarea> 
         </div>
     </div>
-</div>
+</div>-->
 <div class="row">
         <div class="col-md-10 col-sm-12 col-xs-12 footerfixed">
             <div class="clearfix form-actions text-align-center">
@@ -319,6 +320,13 @@ $(document).ready(function() {
                     if(data[i].instanceIP) {
                         nodeName = data[i].instanceIP;
                     }
+                    if(data[i].blueprintData && data[i].blueprintData.blueprintName) {
+                        nodeName = data[i].blueprintData.blueprintName;
+                    }
+                    if(data[i].name) {
+                        nodeName = data[i].name;
+                    }
+
                     var $li = $('<li><label class="checkbox" style="margin: 5px;font-size:13px;"><input type="checkbox" name="deploymentNodesCheckBox" value="' + data[i]._id + '"><i></i>' + nodeName + '</label></li>');
                     if (checked) {
                         $li.find('input')[0].checked = true;
@@ -337,7 +345,12 @@ $(document).ready(function() {
         }
         var $ccrs = $chefCookbookRoleSelector(urlParams.org, function(data) {
 
-        }, runlist);
+        }, runlist,false,{
+            deploy:true,
+            all:true,
+            roles:false,
+            cookbooks:false
+        });
 
         $.get('/organizations/'+urlParams.org+'/chefserver',function(data){
            console.log('chef logs ==> ',data);
@@ -676,22 +689,22 @@ $(document).ready(function() {
 
 
     $("#Jenkins-dropdown").hide();
-    $("#Custom-dropdown").hide();
+   // $("#Custom-dropdown").hide();
 
     $('#taskType').change(function(e) {
         if (this.value == "chef") {
             $("#Jenkins-dropdown").hide();
-            $("#Custom-dropdown").hide();
+           // $("#Custom-dropdown").hide();
             $("#chef-dropdown").show();
         } else if (this.value == "jenkins") {
             $("#Jenkins-dropdown").show();
-            $("#Custom-dropdown").hide();
+           // $("#Custom-dropdown").hide();
             $("#chef-dropdown").hide();
-        } else {
+        }/* else {
             $("#Jenkins-dropdown").hide();
             $("#Custom-dropdown").show();
             $("#chef-dropdown").hide();
-        }
+        }*/
     });
 
     /*if (!$.fn.dataTable.isDataTable('#attributesEditListArea')) {

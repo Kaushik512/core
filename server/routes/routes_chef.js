@@ -51,8 +51,8 @@ module.exports.setRoutes = function(app, verificationFunc) {
                             for (var i = 0; i < instances.length; i++) {
                                 //nodeNames.push(instances[i].chef.chefNodeName);
                                 var index = nodeList.indexOf(instances[i].chef.chefNodeName);
-                                if( index !== -1) {
-                                  // nodeList.splice(index,1); //commented to prevent existing nodes not to be listed. Vinod 30-Apr-2015
+                                if (index !== -1) {
+                                    // nodeList.splice(index,1); //commented to prevent existing nodes not to be listed. Vinod 30-Apr-2015
                                 }
                             }
                             res.send(nodeList);
@@ -267,6 +267,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
                     console.log('nodeip ==> ', nodeIp);
                     console.log('alive ==> ', node.isAlive);
                     var instance = {
+                        name: node.name,
                         orgId: orgId,
                         bgId: bgId,
                         projectId: projectId,
@@ -734,5 +735,39 @@ module.exports.setRoutes = function(app, verificationFunc) {
                 }
             });
         });
+    });
+
+    app.get('/chef/servers/:serverId/cookbooks/:cookbookName/metadata', function(req, res) {
+
+        configmgmtDao.getChefServerDetails(req.params.serverId, function(err, chefDetails) {
+            if (err) {
+                res.send(500);
+                return;
+            }
+            if (!chefDetails) {
+                res.send(404);
+                return;
+            }
+            var chef = new Chef({
+                userChefRepoLocation: chefDetails.chefRepoLocation,
+                chefUserName: chefDetails.loginname,
+                chefUserPemFile: chefDetails.userpemfile,
+                chefValidationPemFile: chefDetails.validatorpemfile,
+                hostedChefUrl: chefDetails.url,
+            });
+            console.log("Chef...>>>>>>>>>>>>>>>>>>> "+JSON.stringify(chef));
+            chef.getCookbook(req.params.cookbookName, function(err, cookbooks) {
+                console.log(err);
+                if (err) {
+                    res.send(500);
+                    return;
+                } else {
+                    res.send(cookbooks.metadata);
+                }
+            });
+
+
+        });
+
     });
 };

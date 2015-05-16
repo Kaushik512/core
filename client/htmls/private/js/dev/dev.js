@@ -1,4 +1,4 @@
-                      //function for showing the tableview and the cardview
+                       //function for showing the tableview and the cardview
                       function devCall() {
                           window.showHideControl = function(objID) {
                               if (objID) {
@@ -155,99 +155,116 @@
                                   bindSubmit_AddInstance();
                                   bindClick_removeInstance();
                                   populateOSList();
+
+                                  $('#instanceEditNew').submit(function(e) {
+                                      var reqBodyEdit = {};
+
+                                      var $form = $('#instanceEditNew');
+                                      reqBodyEdit.name = $form.find('#instanceEditName').val();
+                                      var instanceId = $form.find('#instanceIDHiddenInput').val();
+                                      $.post('../instances/' + instanceId + '/updateName', reqBodyEdit, function(data) {
+
+                                          $('.domain-roles-caption[data-instanceId="' + instanceId + '"]').find('.cardHeadingTextoverflow').html(reqBodyEdit.name);
+                                          $('#modalforInstanceEdit').modal('hide');
+                                      });
+
+                                      return false;
+
+                                  });
+        
                               }
 
                               function bindClick_removeInstance() {
-                                      $('#removeInstance').on('click', removeSelectedInstance);
-                                  }
-                                  /*removing selected instance*/
-                                  //function for removing the selected instance
+                                  $('#removeInstance').on('click', removeSelectedInstance);
+                              }
+                              /*removing selected instance*/
+                              //function for removing the selected instance
                               function removeSelectedInstance() {
-                                      var instanceId = null;
-                                      var blueprintName = null;
-                                      if ($('#divinstancescardview').is(':visible')) {
-                                          var $selectedCard = $('.container.role-Selectedcard').find('.domain-roles-caption');
-                                          instanceId = $selectedCard.attr('data-instanceid');
-                                          blueprintName = $selectedCard.attr('data-blueprintName');
-                                      } else if ($('#divinstancestableview').is(':visible')) {
-                                          var $selectedRow = $('#tableinstanceview').find('tr.rowcustomselected');
-                                          instanceId = $selectedRow.attr('data-instanceId');
-                                          blueprintName = $selectedRow.attr('data-blueprintName');
-                                      } else {
-                                          instanceId = null;
-                                      }
-                                      if (instanceId) {
-                                          //found now delete
-                                          var dialog = bootbox.dialog({
-                                              title: "Remove Instance",
-                                              message: '<div class="row">  ' +
-                                                  '<div class="col-md-12"> ' +
-                                                  '<div id="deleteInstanceWorkingIndicator" style="display:none"><img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" /></div>' +
-                                                  '<form id="deleteInstanceForm" class="form-horizontal"> ' +
-                                                  '<input type="hidden" id="deleteInstanceIdInput" value="' + instanceId + '"/>' +
-                                                  '<div class="form-group"> ' +
-                                                  '<span class="col-md-12" for="name">Are you sure you would like to remove this instance?<br/>Note : This will not terminate the instance from the provider.</span> ' +
-                                                  '</div>' +
-                                                  '<div class="form-group"> ' +
-                                                  '<label class="col-md-4 control-label forBootBox1" for="name">Name : </label> ' +
-                                                  '<span class="col-md-4 forBootBox" for="name">' + blueprintName + '</span> ' +
-                                                  '</div> ' +
-                                                  '<div class="form-group"> ' +
-                                                  '<label class="col-md-3 control-label" for="ckbChefDelete"></label> ' +
-                                                  '<div class="col-md-8"> <div class="checkbox"> <label for="ckbChefDelete-0"> ' +
-                                                  '<input type="checkbox" name="ckbChefDelete" id="ckbChefDelete"> ' +
-                                                  'Delete this node from chef server </label> ' +
-                                                  '</div>' +
-                                                  '</div>' +
-                                                  '</form> </div>  </div>',
-                                              buttons: {
-                                                  success: {
-                                                      label: "Delete",
-                                                      className: "btn-primary",
-                                                      callback: function(evt, arg2) {
-                                                          $('#deleteInstanceForm').hide();
-                                                          $('#deleteInstanceWorkingIndicator').show();
-                                                          $(evt.target).attr('disabled', 'disabled');
+                                  var instanceId = null;
+                                  var blueprintName = null;
+                                  if ($('#divinstancescardview').is(':visible')) {
+                                      var $selectedCard = $('.container.role-Selectedcard').find('.domain-roles-caption');
+                                      instanceId = $selectedCard.attr('data-instanceid');
+                                      blueprintName = $selectedCard.attr('data-blueprintName');
+                                  } else if ($('#divinstancestableview').is(':visible')) {
+                                      var $selectedRow = $('#tableinstanceview').find('tr.rowcustomselected');
+                                      instanceId = $selectedRow.attr('data-instanceId');
+                                      blueprintName = $selectedRow.attr('data-blueprintName');
+                                  } else {
+                                      instanceId = null;
+                                  }
+                                  if (instanceId) {
+                                      //found now delete
+                                      var dialog = bootbox.dialog({
+                                          title: "Remove Instance",
+                                          message: '<div class="row">  ' +
+                                              '<div class="col-md-12"> ' +
+                                              '<div id="deleteInstanceWorkingIndicator" style="display:none"><img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" /></div>' +
+                                              '<form id="deleteInstanceForm" class="form-horizontal"> ' +
+                                              '<input type="hidden" id="deleteInstanceIdInput" value="' + instanceId + '"/>' +
+                                              '<div class="form-group"> ' +
+                                              '<span class="col-md-12" for="name">Are you sure you would like to remove this instance?<br/>Note : This will not terminate the instance from the provider.</span> ' +
+                                              '</div>' +
+                                              '<div class="form-group"> ' +
+                                              '<label class="col-md-4 control-label forBootBox1" for="name">Name : </label> ' +
+                                              '<span class="col-md-4 forBootBox" for="name">' + blueprintName + '</span> ' +
+                                              '</div> ' +
+                                              '<div class="form-group"> ' +
+                                              '<label class="col-md-3 control-label" for="ckbChefDelete"></label> ' +
+                                              '<div class="col-md-8"> <div class="checkbox"> <label for="ckbChefDelete-0"> ' +
+                                              '<input type="checkbox" name="ckbChefDelete" id="ckbChefDelete"> ' +
+                                              'Delete this node from chef server </label> ' +
+                                              '</div>' +
+                                              '</div>' +
+                                              '</form> </div>  </div>',
+                                          buttons: {
+                                              success: {
+                                                  label: "Delete",
+                                                  className: "btn-primary",
+                                                  callback: function(evt, arg2) {
+                                                      $('#deleteInstanceForm').hide();
+                                                      $('#deleteInstanceWorkingIndicator').show();
+                                                      $(evt.target).attr('disabled', 'disabled');
 
 
-                                                          var url = '/instances/' + instanceId;
-                                                          if ($('#ckbChefDelete').is(':checked')) {
-                                                              url = url + '?chefRemove=true';
+                                                      var url = '/instances/' + instanceId;
+                                                      if ($('#ckbChefDelete').is(':checked')) {
+                                                          url = url + '?chefRemove=true';
+                                                      }
+
+                                                      $.ajax({
+                                                          url: url,
+                                                          type: 'DELETE',
+                                                          success: function() {
+                                                              $('#divinstancescardview').find('.domain-roles-caption[data-instanceId=' + instanceId + ']').parents('.domain-role-thumbnail').remove();
+                                                              // serachBoxInInstance.updateData(undefined,"remove",instanceId);
+
+                                                              var table = $('#tableinstanceview').DataTable();
+                                                              table.row('[data-instanceid=' + instanceId + ']').remove().draw(false);
+                                                              dialog.modal('hide');
                                                           }
+                                                      }).fail(function() {
+                                                          $('#deleteInstanceForm').html('Server Behaved Unexpectedly. Unable to delete instance');
+                                                          $('#deleteInstanceWorkingIndicator').hide();
+                                                          $('#deleteInstanceForm').show();
+                                                      });
+                                                      return false;
+                                                  }
+                                              },
+                                              cancel: {
+                                                  label: "Close",
+                                                  className: "btn-primary",
+                                                  callback: function() {
 
-                                                          $.ajax({
-                                                              url: url,
-                                                              type: 'DELETE',
-                                                              success: function() {
-                                                                  $('#divinstancescardview').find('.domain-roles-caption[data-instanceId=' + instanceId + ']').parents('.domain-role-thumbnail').remove();
-                                                                  // serachBoxInInstance.updateData(undefined,"remove",instanceId);
-
-                                                                  var table = $('#tableinstanceview').DataTable();
-                                                                  table.row('[data-instanceid=' + instanceId + ']').remove().draw(false);
-                                                                  dialog.modal('hide');
-                                                              }
-                                                          }).fail(function() {
-                                                              $('#deleteInstanceForm').html('Server Behaved Unexpectedly. Unable to delete instance');
-                                                              $('#deleteInstanceWorkingIndicator').hide();
-                                                              $('#deleteInstanceForm').show();
-                                                          });
-                                                          return false;
-                                                      }
-                                                  },
-                                                  cancel: {
-                                                      label: "Close",
-                                                      className: "btn-primary",
-                                                      callback: function() {
-
-                                                      }
                                                   }
                                               }
-                                          });
-                                      } else {
-                                          bootbox.alert('Please select an instance to remove.');
-                                      }
+                                          }
+                                      });
+                                  } else {
+                                      bootbox.alert('Please select an instance to remove.');
                                   }
-                                  /*
+                              }
+                              /*
             Attaching Click Event on IP Address Import, which will reset instance form.
             */
                               function bindClick_ipaddressImport() {
@@ -278,41 +295,41 @@
             Attaching Click event on instances tab which will set BreadCrumb for Instances
             */
                               function bindClick_instnaceTab() {
-                                      $('.Instances').click(function(e) {
-                                          var getbreadcrumbul = $('#ribbon').find('.breadcrumb').find('li:lt(5)');
-                                          var getbreadcrumbullength = getbreadcrumbul.length;
-                                          var DummyBreadCrumb;
-                                          if (getbreadcrumbullength > 0) {
-                                              //alert(getbreadcrumbullength);
-                                              for (var counter = 0; counter < getbreadcrumbullength; counter++) {
-                                                  var getbreadcrumbulname = getbreadcrumbul[counter].innerHTML;
-                                                  //alert(getbreadcrumbulname);
-                                                  if (DummyBreadCrumb != null && DummyBreadCrumb != "" && DummyBreadCrumb != "undefined") {
-                                                      DummyBreadCrumb += '>' + getbreadcrumbulname;
-                                                  } else {
-                                                      DummyBreadCrumb = getbreadcrumbulname;
-                                                  }
+                                  $('.Instances').click(function(e) {
+                                      var getbreadcrumbul = $('#ribbon').find('.breadcrumb').find('li:lt(5)');
+                                      var getbreadcrumbullength = getbreadcrumbul.length;
+                                      var DummyBreadCrumb;
+                                      if (getbreadcrumbullength > 0) {
+                                          //alert(getbreadcrumbullength);
+                                          for (var counter = 0; counter < getbreadcrumbullength; counter++) {
+                                              var getbreadcrumbulname = getbreadcrumbul[counter].innerHTML;
+                                              //alert(getbreadcrumbulname);
+                                              if (DummyBreadCrumb != null && DummyBreadCrumb != "" && DummyBreadCrumb != "undefined") {
+                                                  DummyBreadCrumb += '>' + getbreadcrumbulname;
+                                              } else {
+                                                  DummyBreadCrumb = getbreadcrumbulname;
                                               }
-                                              DummyBreadCrumb += '>' + 'Instances';
+                                          }
+                                          DummyBreadCrumb += '>' + 'Instances';
 
-                                              if (DummyBreadCrumb != null && DummyBreadCrumb != 'undefined') {
-                                                  localStorage.removeItem("breadcrumb");
-                                                  splitBread = DummyBreadCrumb.split('>');
-                                                  if (splitBread.length > 0) {
-                                                      $('#ribbon').find('.breadcrumb').find('li').detach();
-                                                      for (var arraycount = 0; arraycount < splitBread.length; arraycount++) {
-                                                          var liNew = document.createElement('li');
-                                                          liNew.innerHTML = splitBread[arraycount];
-                                                          $('#ribbon').find('.breadcrumb').append(liNew);
-                                                      }
+                                          if (DummyBreadCrumb != null && DummyBreadCrumb != 'undefined') {
+                                              localStorage.removeItem("breadcrumb");
+                                              splitBread = DummyBreadCrumb.split('>');
+                                              if (splitBread.length > 0) {
+                                                  $('#ribbon').find('.breadcrumb').find('li').detach();
+                                                  for (var arraycount = 0; arraycount < splitBread.length; arraycount++) {
+                                                      var liNew = document.createElement('li');
+                                                      liNew.innerHTML = splitBread[arraycount];
+                                                      $('#ribbon').find('.breadcrumb').append(liNew);
                                                   }
                                               }
                                           }
+                                      }
 
-                                      });
+                                  });
 
-                                  }
-                                  /*Binding Click events to Instance*/
+                              }
+                              /*Binding Click events to Instance*/
 
 
 
@@ -329,7 +346,7 @@
                                               return false;
                                           } else {
                                               var found = false;
-                                              JSON.parse(data).forEach(function(k, v) {
+                                              JSON.parse(JSON.stringify(data)).forEach(function(k, v) {
                                                   var kt = Object.keys(k);
 
                                                   if (k['orgname_rowid'] == _org) {
@@ -354,6 +371,8 @@
                                       $(this).next().val(this.files[0].name);
                                   });
                               }
+
+
 
                               //checking the IP address and form validations for Import By IP
                               function bindSubmit_AddInstance() {
@@ -585,7 +604,7 @@
                                       });
                                   }
 
-
+                                  
                                   for (var i = 0; i < data.length; i++) {
 
                                       addInstanceToDOM(data[i]);
@@ -921,11 +940,11 @@
                               });
 
                               function showRDP() {
-                                      if ($(this).hasClass('isStopedInstance')) {
-                                          return false;
-                                      }
+                                  if ($(this).hasClass('isStopedInstance')) {
+                                      return false;
                                   }
-                                  //function for showing the SSH Modal
+                              }
+                              //function for showing the SSH Modal
                               function showSSHModal() {
                                   if ($(this).hasClass('isStopedInstance')) {
                                       return false;
@@ -985,10 +1004,19 @@
                                           return '<div class="domain-roles-caption" data-instanceId="' + conf._id + '"' + 'data-blueprintName="' + conf.blueprintData.blueprintName + '"' + 'data-osType="' + conf.hardware.os + '"></div>';
                                       },
                                       getSpanHeadingLeft: function(data) {
+                                          var imgPath;
+                                          if (data.blueprintData.iconPath == undefined) {
+                                              data.blueprintData.iconPath = 'img/logo.png';
+
+                                          }
                                           return '<span class="domain-roles-icon" contenteditable="false"><img src="' + data.blueprintData.iconPath + '" style="margin-right:5px;margin-top:-10px;width:27px"/></span>';
                                       },
                                       getSpanHeadingMiddle: function(data) {
-                                          return '<span class="cardHeadingTextoverflow" rel="tooltip" data-placement="top" data-original-title="' + data.blueprintData.blueprintName + '">' + data.blueprintData.blueprintName + '</span>';
+                                          var name = data.name;
+                                          if (!name) {
+                                              name = data.blueprintData.blueprintName;
+                                          }
+                                          return '<span class="cardHeadingTextoverflow" rel="tooltip" data-placement="top" data-original-title="' + name + '">' + name + '</span>' + '<a href="#modalforInstanceEdit" data-backdrop="false" data-toggle="modal" class="glyphicon glyphicon-pencil editInstanceNameBtn" style="cursor:pointer;"></a></span>';
                                       },
                                       getSpanHeadingRight: function(data) {
                                           return '<span style="float:left;margin-top:4px;margin-left:8px;"><a rel="tooltip" class="moreInfo" href="javascript:void(0)" data-instanceId="' + data._id + '" data-placement="top" data-original-title="MoreInfo"></a></span>';
@@ -1097,7 +1125,12 @@
 
                                   $divDomainRolesCaption.append(cardTemplate.getDomainRolesHeading(data) + "<hr>");
 
-
+                                  $divDomainRolesCaption.find('.editInstanceNameBtn').click(function(e) {
+                                      $('#instanceEditNew').trigger("reset");
+                                      $('#instanceIDHiddenInput').val(data._id);
+                                      var prevName = $divDomainRolesCaption.find('.cardHeadingTextoverflow').text();
+                                      $('#instanceEditName').val(prevName);
+                                  });
 
                                   if (data.instanceState == 'running') {
 
@@ -1209,7 +1242,8 @@
                                   if (data.appUrls && data.appUrls.length) {
                                       for (var k = 0; k < data.appUrls.length; k++) {
                                           var url = data.appUrls[k].url;
-                                          url = url.replace('$host', data.instanceIP);
+                                          if(data.appUrls[k].url)
+                                            url = url.replace('$host', data.instanceIP);
                                           var $anchor = "<span class='marginForURL'><a style='font-size:10px;' data-appUrlId='" + data.appUrls[k]._id + "' class='app-url' title='" + data.appUrls[k].name + "' href='" + url + "'' target='_blank' >" + data.appUrls[k].name + "</a></span>";
                                           $divComponentListContainer.append($anchor);
                                           temp = temp + ' ' + $anchor;
@@ -1563,19 +1597,19 @@
 
                               function startAndStopToggler(e) {
 
-                                      if ($(this).hasClass('unknown') || $(this).hasClass('pending') || $(this).hasClass('stopping')) {
-                                          console.log('pending or Unknow State');
-                                          return false;
-                                      } else if ($(this).hasClass('running')) {
-                                          console.log('running State');
-                                          $(this).parent().find('[data-actionType="Stop"]').trigger('click');
+                                  if ($(this).hasClass('unknown') || $(this).hasClass('pending') || $(this).hasClass('stopping')) {
+                                      console.log('pending or Unknow State');
+                                      return false;
+                                  } else if ($(this).hasClass('running')) {
+                                      console.log('running State');
+                                      $(this).parent().find('[data-actionType="Stop"]').trigger('click');
 
-                                      } else if ($(this).hasClass('stopped')) {
-                                          console.log('Stopped State');
-                                          $(this).parent().find('[data-actionType="Start"]').trigger('click');
-                                      }
+                                  } else if ($(this).hasClass('stopped')) {
+                                      console.log('Stopped State');
+                                      $(this).parent().find('[data-actionType="Start"]').trigger('click');
                                   }
-                                  //enaling the start Button and checking the instanceID & OS-Type
+                              }
+                              //enaling the start Button and checking the instanceID & OS-Type
                               function enableInstanceActionStartBtn(instanceId, osType) {
                                   var $cardViewInstanceId = $(".domain-roles-caption[data-instanceId='" + instanceId + "']");
                                   var $tableViewInstanceId = $("tr[data-instanceId='" + instanceId + "']");
@@ -1781,7 +1815,7 @@
                                           $containerTemp = '<div class="panel panel-default blueprintContainer hidden">' +
                                               '<div class="panel-heading">' +
 
-                                              '<h4 class="panel-title">' +
+                                          '<h4 class="panel-title">' +
                                               '<a href="#collapse' + i + '" data-parent="#accordion-2" data-toggle="collapse" class="collapsed"> ' +
                                               '<i class="fa fa-fw fa-plus-circle txt-color-blue"></i> ' +
                                               '<i class="fa fa-fw fa-minus-circle txt-color-red"></i>' + getDesignTypeName + '</a>' +
@@ -2483,9 +2517,17 @@
                                                       var $tr = $('<tr></tr>').css({
                                                           'line-height': '2.1'
                                                       });
-                                                      var $tdInstanceName = $('<td></td>').append(instances[i].chef.chefNodeName).css({
+                                                      var nodeName = instances[i].chef.chefNodeName;
+                                                      if (instances[i].instanceIP) {
+                                                          var nodeName = instances[i].instanceIP;
+                                                      }
+                                                      if (instances[i].name) {
+                                                          nodeName = instances[i].name;
+                                                      }
+                                                      var $tdInstanceName = $('<td></td>').append(nodeName).css({
                                                           'font-size': '12px'
                                                       });
+
                                                       var $tdInstanceIp = $('<td></td>').append(instances[i].instanceIP).css({
                                                           'font-size': '12px'
                                                       });
@@ -2855,44 +2897,44 @@
                               /*Binding Click events to Containers and showing the breadcrumb*/
 
                               function initializeContainer() {
-                                      $('.Containers').click(function(e) {
-                                          //debugger;
-                                          var getbreadcrumbul = $('#ribbon').find('.breadcrumb').find('li:lt(5)');
-                                          var getbreadcrumbullength = getbreadcrumbul.length;
-                                          var DummyBreadCrumb;
-                                          if (getbreadcrumbullength > 0) {
-                                              //alert(getbreadcrumbullength);
-                                              for (var counter = 0; counter < getbreadcrumbullength; counter++) {
-                                                  var getbreadcrumbulname = getbreadcrumbul[counter].innerHTML;
-                                                  //alert(getbreadcrumbulname);
-                                                  if (DummyBreadCrumb != null && DummyBreadCrumb != "" && DummyBreadCrumb != "undefined") {
-                                                      DummyBreadCrumb += '>' + getbreadcrumbulname;
-                                                  } else {
-                                                      DummyBreadCrumb = getbreadcrumbulname;
-                                                  }
+                                  $('.Containers').click(function(e) {
+                                      //debugger;
+                                      var getbreadcrumbul = $('#ribbon').find('.breadcrumb').find('li:lt(5)');
+                                      var getbreadcrumbullength = getbreadcrumbul.length;
+                                      var DummyBreadCrumb;
+                                      if (getbreadcrumbullength > 0) {
+                                          //alert(getbreadcrumbullength);
+                                          for (var counter = 0; counter < getbreadcrumbullength; counter++) {
+                                              var getbreadcrumbulname = getbreadcrumbul[counter].innerHTML;
+                                              //alert(getbreadcrumbulname);
+                                              if (DummyBreadCrumb != null && DummyBreadCrumb != "" && DummyBreadCrumb != "undefined") {
+                                                  DummyBreadCrumb += '>' + getbreadcrumbulname;
+                                              } else {
+                                                  DummyBreadCrumb = getbreadcrumbulname;
                                               }
-                                              DummyBreadCrumb += '>' + 'Containers';
-
-                                              if (DummyBreadCrumb != null && DummyBreadCrumb != 'undefined') {
-                                                  localStorage.removeItem("breadcrumb");
-                                                  splitBread = DummyBreadCrumb.split('>');
-                                                  if (splitBread.length > 0) {
-                                                      $('#ribbon').find('.breadcrumb').find('li').detach();
-                                                      for (var arraycount = 0; arraycount < splitBread.length; arraycount++) {
-                                                          var liNew = document.createElement('li');
-                                                          liNew.innerHTML = splitBread[arraycount];
-                                                          $('#ribbon').find('.breadcrumb').append(liNew);
-                                                      }
-                                                  }
-                                              }
-                                              //$('#ribbon').find('.breadcrumb').append('<li>"'+ DummyBreadCrumb'"</li>');
-                                              //alert(DummyBreadCrumb);
                                           }
+                                          DummyBreadCrumb += '>' + 'Containers';
 
-                                      });
-                                  }
-                                  /************************************ControlPanel.js*****************************************************/
-                                  //drawing the breadcrumb when user clicks on control-panel
+                                          if (DummyBreadCrumb != null && DummyBreadCrumb != 'undefined') {
+                                              localStorage.removeItem("breadcrumb");
+                                              splitBread = DummyBreadCrumb.split('>');
+                                              if (splitBread.length > 0) {
+                                                  $('#ribbon').find('.breadcrumb').find('li').detach();
+                                                  for (var arraycount = 0; arraycount < splitBread.length; arraycount++) {
+                                                      var liNew = document.createElement('li');
+                                                      liNew.innerHTML = splitBread[arraycount];
+                                                      $('#ribbon').find('.breadcrumb').append(liNew);
+                                                  }
+                                              }
+                                          }
+                                          //$('#ribbon').find('.breadcrumb').append('<li>"'+ DummyBreadCrumb'"</li>');
+                                          //alert(DummyBreadCrumb);
+                                      }
+
+                                  });
+                              }
+                              /************************************ControlPanel.js*****************************************************/
+                              //drawing the breadcrumb when user clicks on control-panel
                               function initializeControlPanel() {
                                   $('.actionControlPanel').click(function(e) {
                                       //var getbreadcrumbul = $('#ribbon').find('.breadcrumb').find('li').length;
@@ -3147,7 +3189,6 @@
                                                       $statmessage.append('<span style="margin-left:5px;text-decoration:none" class="dockermessage">Pull done </span>');
                                                   } else {
                                                       if ($('#Containernamefield').val() != '') {
-
                                                           $.get('../instances/dockerexecute/' + instid + '/' + $('#Containernamefield').val() + '/' + ep, function(data) {
                                                               if (data == "OK") {
                                                                   $td.find('.dockerspinner').detach();
@@ -3214,10 +3255,7 @@
                                   initializeBlueprintArea(data.blueprints);
                                   initializeTaskArea(data.tasks);
                                   x = data.instances;
-                                  
-                                  var y = data.instances.splice(0,50);
-                                 // alert(y.length);
-                                 initializeInstanceArea(y);
+                                  initializeInstanceArea(data.instances);
 
                               });
 

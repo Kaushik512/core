@@ -170,6 +170,18 @@ Catalyst Creation of VM Image Process for Windows
     Enters the UserName of WindowsProviders
     Select the Organizatn to Create Windows Img
     Clicks on Save Button of Providers
+    Validate the Edit of VM Image
+
+Validate the Edit of VM Image
+    Clicks on Edit Button of Windows Image
+    Enters the New Image name for Windows
+    Enters the UserName of WindowsProviders
+    Clicks on Save Button of Providers
+
+
+
+Clicks on Edit Button of Windows Image
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()='Windows']/../td[6]/div/a[2]
 
 Select the Organizatn to Create Cent OS Img
     Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='s2id_orgId']/a/span[1]
@@ -236,7 +248,7 @@ Catlayst Workzone and Status Setup
     Clicks on User Created BusinessGroup
     Clicks on > Button to your Environment
     Clicks on Blueprint Section
-    Select the Blueprint
+    Select the CentosBlueprint
     Clicks on Launch Button
     Clicks on Instance Close Button
     Clicks on Instances Button
@@ -306,7 +318,7 @@ Steps to Run SSH
     Clicks on Contreol Panel
     Clicks on Action History
     Verfify the status of SSH Shell
-    Clicks on Back To Instances
+    Clicks Back Burtton of Instances
     
 Steps to Run Stopping the Instance
     Clicks on STOP of Verfied Instance
@@ -362,11 +374,11 @@ Catalyst Choose Template and Launch Setup for UBUNTU
     Clicks on Configure Provider Parameters 
     Clicks on Configure Chef Runlist
     Chooses Organization
-    Select WorkCookBooks
+    Select WorkCookBooks for Ubuntu
     Clicks on >>T Button
     Clicks on Configure Chef Runlist
     Clicks on Edit Organization Parameters    
-    Enters The Blueprint Name
+    Enters The ubuntu Blueprint Name
     Chooses The Business Group
     Chooses The Project
     Chooses The Environment
@@ -387,6 +399,7 @@ Catlayst Workzone and Status Setup for Ubuntu
     Clicks on Launch Button
     Clicks on Instance Close Button
     Clicks on Instances Button
+    #Clicks on your Ubuntu Blueeeprint
     Verify the IP Address of the Ubuntu Instance
     Verfiy the Status of the Ubuntu Instance
     Verify the CHEF Client Run for Ubuntu
@@ -409,7 +422,7 @@ Catalyst Check INFORMATION Status for Ubuntu
     Check the Version
     Check the Chef BootStrap
     Clicks on Back To Instances
-
+-----------------------------------------------------------------
 Catalyst Work SSH CHEFCLIENT STOP Setup after LAUNCH of Ubuntu
     Verify the Status after Launch of Ubuntu Instance
     Verify the IP Address after Launch of Ubuntu Instance
@@ -419,18 +432,70 @@ Catalyst Work SSH CHEFCLIENT STOP Setup after LAUNCH of Ubuntu
     Verfiy the More Info Button is Dispalyed for Ubuntu
     Clicks on Contreol Panel
     Clicks on Action History
-    Checking THe BootStrpa Status
+    Checking THe Ubuntu BootStrpa Status
     Clicks on Back To Instances
-    Steps To Run Chef Client
-    Steps to Run SSH
-    Steps to Run Stopping the Instance
+    Steps To Run Chef Client of Ubuntu
+    Steps to Run SSH of Ubuntu
+    Steps to Run Stopping the Instance of Ubuntu
 
 
+Steps To Run Chef Client of Ubuntu
+    #Clicks on your Ubuntu Blueeeprint
+    Click on RUNNN of Chef Client of Ubuntu
+    Update the Run List with Cookbook
+    Clicks on Update Button of Runlist
+    Clicks on Contreol Panel
+    Clicks on Action History
+    Checking the Ubuntu BChefClient Run Status
+    Clicks on Back To Instances
 
+Steps to Run SSH of Ubuntu
+    #Clicks on your Ubuntu Blueeeprint
+    Click on Verified SSH Instance of Ubuntu
+    Enters the Username in the Terminal
+    Select Authentication Type
+    Upload the Catalyst PEM File
+    Clicks on Terminlal Submit Button
+    Close the SSH Terminal
+    Clicks on Contreol Panel
+    Clicks on Action History
+    Verfify the status of SSH Shell
+    Clicks on Back To Instances
 
+Steps to Run Stopping the Instance of Ubuntu
+    #Clicks on your Ubuntu Blueeeprint
+    Clicks Ubuntu STOP Machine of Verfied Instance    
+    Verfified the Ubuntu STOPPED Status
+    Clicks on your Ubuntu Blueeeprint
+    Clicks on Contreol Panel
+    Clicks on Action History
+    Verfiy the Table contains the Status
+    Clicks on Back To Instances
 
-
-
+Catlayst verfication of Instance Stop Setup and Disable of Ubuntu
+    Clicks on Workzone Button
+    Clicks on User Created Organization
+    Clicks on User Created BusinessGroup
+    Clicks on > Button to your Environment
+    Clicks on your Ubuntu Blueeeprint
+    Verfified the Ubuntu STOPPED Status
+    Verify the IP Address after Launch of Ubuntu Instance
+    Verify the CHEF Client Run for Ubuntu
+    Verfiy the SSH is Disabled for Ubuntu
+    Verify the Ubuntuu Start Button Enabled
+    Verfiy the More Info Button is Dispalyed for Ubuntu
+    Clicks on Contreol Panel
+    Verify the IP Address after Launch of Ubuntu Instance
+    Verify the Ubuntuu Stopped CHEF Client Run after Updation
+    Verfiy the Ubuntu Stopped SSH is Disabled after Updation
+    Verify the Ubuntu Start Button Enabled from Contrl Panel
+    Verfiy the Ubuntu More Info Button is Dispalyed from Control panel
+    Verify the Machine status from CntrlPanel
+    #Verify the UBUNTU Total Memory from CntrlPanel
+    #Verify the Free Memory from CntrlPanel
+    Verfiy the Ubuntu OS Frm ContrlPanel
+    Verfify the Chef Bootstrap frm ContrlPanel
+    Verify the Runlist for Ubuntu from CntrlPanel
 
 
 
@@ -442,13 +507,15 @@ Chooses the Operating System as Ubuntu
     Input Text    xpath=.//*[@id='select2-drop']/div/input    ${OPERATING SYSTEM2}
     Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
 
-Enters The Blueprint Name
-    Input Text    id=blueprintNameInput    ${BLUEPRINT NAME1}
+#Enters The Blueprint Name
+    #Input Text    id=blueprintNameInput    ${BLUEPRINT NAME1}
 
 
 Verify the Start Button Enabled from Contrl Panel
     Wait Until Keyword Succeeds    2 minute     1 seconds    Element Should Be Visible    xpath=.//*[@id='controlPanelContainer']/div/div[1]/ul/li[contains(.,"ApacheNew")]/div/div/div/div/div/div[4]/div[@class='startstoptoggler stopped']
 
+Verify the Ubuntu Start Button Enabled from Contrl Panel
+    Wait Until Keyword Succeeds    2 minute     1 seconds    Element Should Be Visible    xpath=.//*[@id='controlPanelContainer']/div/div[1]/ul/li[contains(.,"UbuntuApac")]/div/div/div/div/div/div[4]/div[@class='startstoptoggler stopped']
 
 
 Clicks on your Blueeeprint
@@ -465,6 +532,8 @@ Verify the Machine status from CntrlPanel
 Verify the Total Memory from CntrlPanel
     Wait Until Keyword Succeeds    2 minute     1 seconds    Element Should Contain    xpath=.//*[@id='collapseHardware']/div/table/tbody/tr[2]/td[3]    ${MAT MEM}
 
+Verify the UBUNTU Total Memory from CntrlPanel
+    Wait Until Keyword Succeeds    2 minute     1 seconds    Element Should Contain    xpath=.//*[@id='collapseHardware']/div/table/tbody/tr[2]/td[3]    ${UBUNTU MEM}
 
 Verify the Free Memory from CntrlPanel
     Wait Until Keyword Succeeds    2 minute     1 seconds    Element Should Contain    xpath=.//*[@id='collapseHardware']/div/table/tbody/tr[3]/td[3]    ${MAT FREEMEM}
@@ -472,33 +541,58 @@ Verify the Free Memory from CntrlPanel
 Verfiy the OS Frm ContrlPanel
     Wait Until Keyword Succeeds    2 minute     1 seconds    Element Should Contain    xpath=.//*[@id='collapseSoftware']/div/table/tbody/tr[1]/td[3]    ${MAT OS}
 
+Verfiy the Ubuntu OS Frm ContrlPanel
+    Wait Until Keyword Succeeds    2 minute     1 seconds    Element Should Contain    xpath=.//*[@id='collapseSoftware']/div/table/tbody/tr[1]/td[3]    ${MAT OS1}
+
+
+
 Verfify the Chef Bootstrap frm ContrlPanel
     Wait Until Keyword Succeeds    2 minute     1 seconds    Element Should Contain    xpath=.//*[@id='collapseConfigmgmt']/div/table/tbody/tr[1]/td[3]    ${MAT BOOTSTRAP}
 
 Verify the Runlist from CntrlPanel
     Wait Until Keyword Succeeds    2 minute     1 seconds    Element Should Contain    xpath=.//*[@id='collapseConfigmgmt']/div/table/tbody/tr[2]/td[3]    ${MAT RUNLIST}
 
+Verify the Runlist for Ubuntu from CntrlPanel
+    Wait Until Keyword Succeeds    2 minute     1 seconds    Element Should Contain    xpath=.//*[@id='collapseConfigmgmt']/div/table/tbody/tr[2]/td[3]    ${UBUNTU REC}
 
 
 Verify the Start Button Enabled
     Wait Until Keyword Succeeds    1 minute     1 seconds    Element Should Be Visible    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"ApacheNew")]/div/div/div/div/div/div[4]/div[@class='startstoptoggler stopped'] 
 
+Verify the Ubuntuu Start Button Enabled
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Element Should Be Visible    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"ApacheNew")]/div/div/div/div/div/div[4]/div[@class='startstoptoggler stopped']
+
+
 Verify the Stopped CHEF Client Run after Updation
-    Wait Until Keyword Succeeds    1 minute     1 seconds    Element Should Be Visible    xpath=.//*[@id='controlPanelContainer']/div/div/ul/li[contains(.,"ApacheNew")]/div/div/div/div/div/div[4]/div[1]/a[@class='instanceActionBtnUpdateRunlist instance-bootstrap-list-image isStopedInstance actionbuttonChefClientRundisable']   
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Element Should Be Visible    xpath=.//*[@id='controlPanelContainer']/div/div/ul/li[contains(.,"ApacheNew")]/div/div/div/div/div/div[4]/div[1]/a[@class='instanceActionBtnUpdateRunlist instance-bootstrap-list-image isStopedInstance actionbuttonChefClientRundisable'] 
+
+Verify the Ubuntuu Stopped CHEF Client Run after Updation
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Element Should Be Visible    xpath=.//*[@id='controlPanelContainer']/div/div/ul/li[contains(.,"UbuntuApac")]/div/div/div/div/div/div[4]/div[1]/a[@class='instanceActionBtnUpdateRunlist instance-bootstrap-list-image isStopedInstance actionbuttonChefClientRundisable']
+
 
 Verfiy the Stopped SSH is Disabled after Updation
     Wait Until Keyword Succeeds    1 minute     1 seconds    Element Should Be Visible    xpath=.//*[@id='controlPanelContainer']/div/div/ul/li[contains(.,"ApacheNew")]/div/div/div/div/div/div[4]/div[4]/a[@class='cpTop isStopedInstance sshIcondisable']
 
-
+Verfiy the Ubuntu Stopped SSH is Disabled after Updation
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Element Should Be Visible    xpath=.//*[@id='controlPanelContainer']/div/div/ul/li[contains(.,"UbuntuApac")]/div/div/div/div/div/div[4]/div[4]/a[@class='cpTop isStopedInstance sshIcondisable']
 
 Checking THe BootStrpa Status
     Wait Until Keyword Succeeds    2 minute     1 seconds    Element Should Contain    xpath=.//*[@id='tableactionHistory']/tbody/tr/td[2]    ${STATS RUN}
     Sleep    40 seconds
     Wait Until Keyword Succeeds    2 minute     1 seconds    Element Should Contain    xpath=.//*[@id='tableactionHistory']/tbody//tr/td[normalize-space(text())="Bootstrap"]/../td[2]    ${SATSS}
 
+
+Checking THe Ubuntu BootStrpa Status
+    #Wait Until Keyword Succeeds    2 minute     1 seconds    Element Should Contain    xpath=.//*[@id='tableactionHistory']/tbody/tr/td[2]    ${STATS RUN}
+    Sleep    2 minutes
+    Wait Until Keyword Succeeds    2 minute     1 seconds    Element Should Contain    xpath=.//*[@id='tableactionHistory']/tbody//tr/td[normalize-space(text())="Bootstrap"]/../td[2]    ${SATSS}
+
 Clicks on Back To Instances
     Wait Until Keyword Succeeds    2 minute     1 seconds    Click Element    xpath=.//*[@id='getViewAttr']
 
+Clicks Back Burtton of Instances
+    Sleep    1 seconds
+    Wait Until Keyword Succeeds    2 minute     1 seconds    Click Element    xpath=.//*[@id='getViewAttr']
 
 Check Machine Status
     Wait Until Keyword Succeeds    2 minute     1 seconds    Element Should Contain    xpath=.//*[@id='collapseHardware']/div/table/tbody/tr[1]/td[3]    ${MACHINE STATS}
@@ -536,6 +630,11 @@ Checking the BChefClient Run Status
     Sleep    1 minutes
     Wait Until Keyword Succeeds    3 minute     1 seconds    Element Should Contain    xpath=.//*[@id='tableactionHistory']/tbody/tr/td[2]    ${SATSS}
 
+Checking the Ubuntu BChefClient Run Status
+    Sleep    3 seconds
+    Wait Until Keyword Succeeds    3 minute     1 seconds    Element Should Contain    xpath=.//*[@id='tableactionHistory']/tbody/tr/td[2]    ${SATSS}
+
+
 Verfiy the Table contains the Status
     Wait Until Keyword Succeeds    1 minute     1 seconds    Element Should Contain    xpath=.//*[@id='tableactionHistory']/tbody//tr/td[normalize-space(text())="Stop"]/../td[2]    ${SATSS}
 
@@ -559,6 +658,10 @@ Verfiy the More Info Button is Dispalyed for Ubuntu
 Verfiy the More Info Button is Dispalyed from Control panel
     Wait Until Keyword Succeeds    1 minute     1 seconds     Element Should Be Visible    xpath=.//*[@id='controlPanelContainer']/div/div/ul/li[contains(.,"ApacheNew")]/div/div/div/div/div/div[4]/span/a[@class='moreInfo']
 
+Verfiy the Ubuntu More Info Button is Dispalyed from Control panel
+    Wait Until Keyword Succeeds    1 minute     1 seconds     Element Should Be Visible    xpath=.//*[@id='controlPanelContainer']/div/div/ul/li[contains(.,"UbuntuApac")]/div/div/div/div/div/div[4]/span/a[@class='moreInfo']
+
+
 
 Clicks on Control Panel Button
     Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='l1']/footer/div/div/button
@@ -581,9 +684,17 @@ Clicks on STOP of Verfied Instance
     Wait Until Keyword Succeeds    2 minute     5 seconds      Click Element    xpath=.//*[@id='instanceLogModalContainer']/div/div/div[3]/button
     Sleep    10 seconds
 
+Clicks Ubuntu STOP Machine of Verfied Instance    
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"UbuntuApac")]/div/div/div/div/div/div[4]/div[5]
+    Wait Until Keyword Succeeds    1 minute     5 seconds      Click Element    xpath=//*[text()='OK']
+    Wait Until Keyword Succeeds    2 minute     5 seconds      Click Element    xpath=.//*[@id='instanceLogModalContainer']/div/div/div[3]/button
+    Sleep    10 seconds
 
 Verfified the STOPPED Status
     Wait Until Keyword Succeeds    2 minute     1 seconds    Element Should Contain    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"ApacheNew")]/div/div/div/div/div/div[3]/div/span/span[@class='instance-state instance-state-text-stopped']    ${SUITS}
+
+Verfified the Ubuntu STOPPED Status
+    Wait Until Keyword Succeeds    2 minute     1 seconds    Element Should Contain    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"UbuntuApac")]/div/div/div/div/div/div[3]/div/span/span[@class='instance-state instance-state-text-stopped']    ${SUITS}
 
 
 
@@ -607,7 +718,7 @@ Verify the Status after Launch of Instance
     Wait Until Keyword Succeeds    5 minute     10 seconds    Element Should Contain    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"ApacheNew")]/div/div/div/div/div/div[3]/div/span[2]/span    ${STATS RUN}
 
 Verify the Status after Launch of Ubuntu Instance
-    Sleep    3 minutes
+    Sleep    30 seconds
     Wait Until Keyword Succeeds    5 minute     10 seconds    Element Should Contain    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"UbuntuApac")]/div/div/div/div/div/div[3]/div/span[2]/span    ${STATS RUN}
 
 
@@ -624,6 +735,9 @@ Verfiy the Chef Client Run of Ubuntu
 Click on RUNNN of Chef Client
     Wait Until Keyword Succeeds    2 minute     1 seconds    Click Element    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"ApacheNew")]/div/div/div/div/div/div[4]/div[1]/a
 
+Click on RUNNN of Chef Client of Ubuntu
+    Wait Until Keyword Succeeds    2 minute     1 seconds    Click Element    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"UbuntuApac")]/div/div/div/div/div/div[4]/div[1]/a    
+
 
 Verify the SSH
     Wait Until Keyword Succeeds    1 minute     1 seconds    Element Should Be Visible    xpath=.//*[@id='divinstancescardview']/div/div//ul/li[contains(.,"ApacheNew")]/div/div/div/div/div/div[4]/div[2]/a[@class='devTOP sshIcon']
@@ -634,6 +748,11 @@ Verify the SSH of Ubuntu
     
 Click on Verified SSH Instance
     Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='divinstancescardview']/div/div//ul/li[contains(.,"ApacheNew")]/div/div/div[1]/div/div/div[4]/div[2]/a
+
+Click on Verified SSH Instance of Ubuntu
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='divinstancescardview']/div/div//ul/li[contains(.,"UbuntuApac")]/div/div/div[1]/div/div/div[4]/div[2]/a
+
+
 
 
 Verify the IP Address of the Instance
@@ -890,7 +1009,7 @@ Clicks on Save Button of the Provider
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='myForm54']/div/div[3]/div/input
 
 Clicks on VMImage
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='setting_tree']/ul/li[7]/a
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='setting_tree']/ul/li[8]/a
 
 Clicks on New Button of VMImage
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='addnewitem']
@@ -903,6 +1022,10 @@ Enters the Image Name for Ubuntu
 
 Enters the Image Name for Windows
     Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    id=name    ${IMAGE NAME3}
+
+Enters the New Image name for Windows
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    id=name    ${IMAGE NAME4}
+
 
 Choosess The Provider of Image
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='s2id_providerId']/a
@@ -998,7 +1121,7 @@ Clicks on Launch Button
     Wait Until Keyword Succeeds    2 minute     2 seconds      Click Element    xpath=.//*[@id='l2']/footer/div/div/button
     Sleep    3 seconds
 
-Select the Blueprint
+Select the CentosBlueprint
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='collapse0']/div/div/div/ul/li/u/b[text()="ApacheNew"]
 
 Select the BlueprintUbuntu
@@ -1045,6 +1168,19 @@ Select WorkCookBooks
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[text()='a']
     #Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[@value='recipe[a]']
 
+Select WorkCookBooks for Ubuntu
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesselectedList']/option[text()='apache2']
+    Click Element    id=btnremoveFromRunlist
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesselectedList']/option[text()='git']
+    Click Element    id=btnremoveFromRunlist
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[text()='a']
+    Click Element    id=btnaddToRunlist 
+
+
+
+
+
+
 Clicks on >>T Button
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    id=btnaddToRunlist
 
@@ -1053,6 +1189,9 @@ Clicks on Edit Organization Parameters
 
 Enters The Blueprint Name
     Input Text    id=blueprintNameInput    ${BLUEPRINT NAME}
+
+Enters The ubuntu Blueprint Name
+    Input Text    id=blueprintNameInput    ${BLUEPRINT NAME1}
 
 Chooses The Business Group
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='s2id_bgListInput']/a

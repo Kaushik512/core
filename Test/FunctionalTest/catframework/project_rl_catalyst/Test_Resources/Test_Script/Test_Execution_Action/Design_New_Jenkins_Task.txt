@@ -1,0 +1,428 @@
+*** Settings ***
+Documentation      A resource file with reusable keywords and variables.
+...
+...                This file is part of a prototype automated test suite designed to
+...                test web application products built on top of the SLZ platform.
+...
+
+Library            Selenium2Library
+Library            String
+Library            Collections
+Resource           catalyst.txt
+Resource           ${CATALYST TEST DATA}/${TESTDATA}
+Resource           ${COMMON RESOURCES}/catalyst_grid_node.txt
+Resource           ${CATALYST ACTION}/Organization_Setup_Action_Steps.txt
+Resource           ${CATALYST ACTION}/DevOps_Setup_Action_Steps.txt
+Resource           ${CATALYST ACTION}/Design_Create_Launch_Providers_Template.txt
+
+*** Variables ***
+
+*** Keywords ***
+Validate the Jenkins Configuration Setup
+    Clicks on Settings
+    Clicks on DevOps Setup menu
+    Clicks on Jenkins Link
+    Clicks on Jenkins New Button
+    Vaildate the Empty Reference Name  ${VaildEmptyRefName}
+    Reference Name left Empty  ${VaildEmptyRefNameErrMsg}
+    Vaildate the 15Character Reference Name  ${Vaild15ChrRefName}
+    Reference Name with 15Chars  ${Vaild15ChrRefNameErrMsg}
+    Vaildate the Empty Jenkins URL  ${VaildEmptyJenkinsURL}
+    Jenkins URL Name left Empty  ${VaildEmptyJenkinsURLErrMsg}
+    Vaildate the Empty User ID  ${VaildEmptyUserID}
+    User ID Name left Empty  ${VaildEmptyUserIDErrMsg}
+    Vaildate the Empty Password  ${VaildEmptyPassword}
+    Password Field left Empty  ${VaildEmptyPasswordErrMsg}
+    Validate the Empty Organizartion
+    Organization not Selected  ${VaildNotSelectOrg}
+
+Catalyst Create New Jenkins Configuration Setup
+    Clicks on Jenkins New Button
+    Select your Orgg Created
+    Enters the Reference Name
+    Enters the Jenkins URL
+    Enters the User ID Name
+    Enters the Password
+    Clicks on JeSave Button   
+
+
+Catalyst Creation of Jenkins Task in Environment
+    Clicks on Workzone
+    Clicks on User Created Organization
+    Clicks on User Created BusinessGroup
+    Clicks on > Button to your Environment
+    Clicks on Orchestration Tab
+    Clicks on New Button of Jenkins
+    Clicks on Choose Task Type of Jenkins
+    Enter the Task Name of Jenkins
+    #-Select Nodes
+    #-Assign Runlist
+    #-Clicks on >>T Button
+    #Select the Jenkins Server
+    #Select the Job to Run
+    #Assign Users to Run
+    Clicks on Save Task Button
+
+Catalyst Creation of Chef Task in Environment
+    Clicks on Workzone
+    Clicks on User Created Organization
+    Clicks on User Created BusinessGroup
+    Clicks on > Button to your Environment
+    Clicks on Orchestration Tab
+    Clicks on New Button of Jenkins
+    Clicks on Choose Task Type of Chef
+    Enter the Task Name of Chef 
+    Select the ChefNodes
+    Selection of CookBooks
+    Clicks on CookBook Attributes
+    Clicks on Edit Button for Attributes
+    Clicks on Save Button of Attributes and Values
+
+
+Creation of New Application for your Project and Executing Tasks  
+    Clicks on Workzone
+    Clicks on User Created Organization
+    Clicks on User Created BusinessGroup
+    Clicks on > Button
+    Clicks on ADD APP Button
+    Enters the Application Name
+    Upload the Application Icon
+    Enters the Repo URL
+    Enters the Repo UserName
+    Enters the Repo Password
+    Clicks on Jenkins Configure Build Parameters
+    Clicks on Choose Environment
+    Choose Your Task
+    Clicks on Build Health Parameters
+    Enters the Functional Test Result
+    Enters the Performanc Test Result
+    Enters the Non Functional Test Result
+    Enters the Security Test Result
+    Enters the Unit Result Result
+    Enters the Code Coverage
+    Enters the Code Analysis
+    Enters the UI Performance Analysis
+    Clicks on Jenkins Save Button
+
+Clicks on Save Button of Attributes and Values
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='editAttributesModalContainer']/div/div/div[3]/button[2]
+
+Organization not Selected
+    [Arguments]    ${ErrMsg}
+    Element Should Contain    id=errmsg_orgname    ${ErrMsg}
+    Clicks on Jenkins Cancel Button
+
+Clicks on Edit Button for Attributes
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='editAttributesBtn']/i
+
+
+Clicks on CookBook Attributes
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='accordion-assigntask']/div[2]/div[1]/h4/a
+
+Select the ChefNodes
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='selectedNodesChefTask']/li[1]/label
+
+Selection of CookBooks
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[text()='apache2']
+    Click Element    xpath=.//*[@id='btnaddToRunlist']
+
+Clicks on New Button of Jenkins
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='l3']/div/div/div/div/div[1]/div/div/button   
+
+Clicks on ADD APP Button
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='l2']/div/div/div/div[1]/div/div/a
+
+Enters the Application Name
+    Input Text    id=applicationNameInput     RelevanceApp
+
+Upload the Application Icon
+    Choose File     xpath=applicationiconInput     C:\\Users\\adarsh.RLINDIA\\Desktop\\rel.jpg
+
+Enters the Repo URL
+    Input Text    id=gitURLInputaddApp     ${REPO URL}
+
+Enters the Repo Password
+    Input Text    id=gitusernameaddApp     ${REPO USER}
+
+Enters the Repo Password
+    Input Text    id=gitpasswordaddApp     ${REPO PASSWORD}
+
+Clicks on Jenkins Configure Build Parameters
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='accordion-DesignaddApp']/div[2]/div[1]/h4/a
+
+Clicks on Choose Environment
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='s2id_environmentList']/a
+    Click Element    xpath=.//*[@id='select2-drop']/ul/li[2]/div      #Dev
+    #Click Element    xpath=.//*[@id='select2-drop']/ul/li[3]/div      #QA
+
+Choose Your Task
+    Wait Until Keyword Succeeds    1 minute     1 seconds     Click Element    xpath=.//*[@id='s2id_taskList']/a/span[1]
+    Click Element    xpath=.//*[@id='select2-drop']/ul/li[1]/div
+
+Clicks on Build Health Parameters
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='accordion-DesignaddApp']/div[3]/div[1]/h4/a
+
+Enters the Functional Test Result
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    id=appFunctionalTest    ${FUNCTIONAL}   
+    
+Enters the Performanc Test Result
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    id=appPerformanceTest    ${PERFORMANCE}
+
+Enters the Non Functional Test Result
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    id=appFunctionalTest    ${NONFUNCTIONAL}
+
+Enters the Security Test Result
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    id=appSecurityTest    ${SECURITY}
+
+Enters the Unit Result Result
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    id=appUnitTest    ${UNIT}
+
+Enters the Code Coverage
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    id=appCodeCoverage    ${CODE}
+
+Enters the Code Analysis
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    id=appCodeAnalysis    ${CODEANALYZE}
+
+Enters the UI Performance Analysis
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    id=UIPerfAnalysis    ${UI PERFORMANCE}
+
+Clicks on Jenkins Save Button
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='modaladdAppCard']/div/div/div/div/a[1]    
+
+
+
+
+
+Clicks on Jenknis New Button
+    Click  Element    xpath=.//*[@id='content']/div/div/div/div/div[1]/div/div/a[2]
+
+Clicks on Orchestration Tab
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='myTab3']/li[3]/a
+
+
+Clicks on Choose Task Type of Jenkins
+    Click Element    xpath=.//*[@id='s2id_taskType']/a
+    Input Text    xpath=.//*[@id='select2-drop']/div/input     ${TASK TYPE}
+    Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
+
+Clicks on Choose Task Type of Chef
+    Click Element    xpath=.//*[@id='s2id_taskType']/a
+    Input Text    xpath=.//*[@id='select2-drop']/div/input     ${TASK TYPE1}
+    Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
+
+
+Enter the Task Name of Jenkins
+    Input Text    id=jenkinsTaskName    JenkinsTask
+
+Enter the Task Name of Chef
+    Input Text    id=chefTaskName    ChefTask
+
+
+Select the Job to Run
+    Wait Until Keyword Succeeds    1 minute     1 seconds
+    Click Element    xpath=.//*[@id='s2id_jobListJenkins']/a
+    Input Text    xpath=.//*[@id='select2-drop']/div/input     Kana
+    #Input Text    xpath=.//*[@id='select2-drop']/div/input     Catalyst_Build_Demo
+    #Input Text    xpath=.//*[@id='select2-drop']/div/input     Catalyst_Get
+    #Input Text    xpath=.//*[@id='select2-drop']/div/input     LR-AngularPorlet
+
+Assign Users to Run
+    Click Element    xpath=.//*[@id='jenkinsUserList']/option[text()="Admin"]
+    Click Element    xpath=.//*[@id='jenkinsUserList']/option[text()="Designer"]
+    Click Element    xpath=.//*[@id='jenkinsUserList']/option[text()="superadmin"]
+    Click Element    xpath=.//*[@id='jenkinsUserList']/option[text()="Consumer"]
+
+Clicks on  Save Task Button
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element   xpath=.//*[@id='content']/div[3]/div/div/div/a[1]
+
+
+Clicks on > Button
+    Click Element    xpath=//*[normalize-space(text())="Catalyst"]
+
+Clicks on Workzone
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element    xpath=.//*[@id='workZoneNew']
+
+
+Clicks on Orchestration
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='myTab3']/li[3]/a    
+
+Clicks on Task New Button
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='content']/div/div/div/div/div[1]/div/div/a[2]
+
+
+Select the Task Type
+    Click Element    xpath=.//*[@id='s2id_taskType']/a/span[1]
+    Input Text    xpath=.//*[@id='select2-drop']/div/input    Jenkins
+    Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
+
+Enters the Task Name
+    Input Text    id=jenkinsTaskName     ${TASK NAME}
+
+Select the Jenkins Server
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='s2id_jenkinsServerList']/a/span[1]
+    Input Text    xpath=.//*[@id='select2-drop']/div/input    ${JENKINS SERVER}
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
+
+Select Job
+    Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
+    Input Text    xpath=.//*[@id='select2-drop']/div/input    ${JOB}
+    Click Element    xpath=.//*[@id='select2-drop']/ul/li[1]/div
+
+Assign Users
+    Click Element    xpath=.//*[@id='jenkinsUserList']/option[1]       #Superadmin
+    Click Element    xpath=.//*[@id='jenkinsUserList']/option[2]       #Admin
+    Click Element    xpath=.//*[@id='jenkinsUserList']/option[3]       #User
+
+Clicks on Save Task Button
+    Click Element    xpath=.//*[@id='content']/div[3]/div/div/div/a[1]
+
+Clicks on Execute Button
+    Click Element    xpath=.//*[@id='tableOrchestration']/tbody/tr/td[4]/a
+   
+Vaildate the Empty Password
+    [Arguments]    ${Jenkinspassword}
+    Clicks on Jenkins New Button
+    Select your Orgg Created
+    Enters the Reference Name
+    Enters the Jenkins URL
+    Enters the User ID Name
+    Enters the Empty Password
+    Clicks on JeSave Button 
+
+Password Field left Empty    
+    [Arguments]    ${VaildEmptyPasswordErrMsg}
+    Validate the password field    ${VaildEmptyPasswordErrMsg}
+
+Validate the password field
+    [Arguments]    ${ErrMsg}
+    Element Should Contain    id=errmsg_jenkinspassword    ${ErrMsg}
+    Clicks on Jenkins Cancel Button
+ 
+Vaildate the Empty User ID
+    [Arguments]    ${Jenkinsusername}
+    Clicks on Jenkins New Button
+    Select your Orgg Created
+    Enters the Reference Name
+    Enters the Jenkins URL
+    Enters the Empty User ID 
+    Enters the Password
+    Clicks on JeSave Button 
+
+User ID Name left Empty  
+    [Arguments]    ${VaildEmptyUserIDErrMsg}
+    Validate the User id    ${VaildEmptyUserIDErrMsg}
+
+ Validate the User id
+     [Arguments]    ${ErrMsg}
+     Element Should Contain    id=errmsg_jenkinsusername     ${ErrMsg}
+     Clicks on Jenkins Cancel Button
+
+Clicks on JeSave Button 
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='myForm50']/div/div[3]/div/button
+
+
+
+Vaildate the Empty Jenkins URL  
+    [Arguments]    ${Jenkinsurl}
+    Clicks on Jenkins New Button
+    Select your Orgg Created
+    Enters the Reference Name
+    Enters the Empty Jenkins URL
+    Enters the User ID Name
+    Enters the Password
+    #Upload the Certificate Key File 
+    Clicks on JeSave Button 
+
+Validate the Empty Organizartion
+    Clicks on Jenkins New Button
+    Enters the Reference Name
+    Enters the Jenkins URL
+    Enters the User ID Name
+    Enters the Password
+    #Upload the Certificate Key File 
+    Clicks on JeSave Button 
+
+
+Jenkins URL Name left Empty  
+    [Arguments]    ${VaildEmptyJenkinsURLErrMsg}
+    Validate the Jenkins URL Name    ${VaildEmptyJenkinsURLErrMsg}
+
+
+Validate the Jenkins URL Name
+    [Arguments]    ${ErrMsg}
+    Element Should Contain     id=errmsg_jenkinsurl     ${ErrMsg}
+    Clicks on Jenkins Cancel Button
+
+
+Vaildate the Empty Reference Name
+    [Arguments]    ${Jenkinsname}
+    Select your Orgg Created
+    Enters the Jenkins URL
+    Enters the User ID Name
+    Enters the Password
+    #Upload the Certificate Key File 
+    Clicks on JeSave Button 
+
+Reference Name left Empty
+    [Arguments]    ${VaildEmptyRefNameErrMsg}
+    Validate the Reference Name  ${VaildEmptyRefNameErrMsg}  
+
+Validate the Reference Name
+    [Arguments]    ${ErrMsg}
+    Element Should Contain    id=errmsg_jenkinsname     ${ErrMsg}
+    Clicks on Jenkins Cancel Button
+
+Vaildate the 15Character Reference Name  
+    [Arguments]    ${Jenkinsname}
+    Clicks on Jenkins New Button
+    Select your Orgg Created
+    Enters the Jenkins URL
+    Enters the User ID Name
+    Enters the Password
+    Clicks on JeSave Button 
+
+Reference Name with 15Chars
+    [Arguments]    ${Vaild15ChrRefNameErrMsg}
+    Validadate 15chr Reference name Message  ${Vaild15ChrRefNameErrMsg}
+
+
+Validadate 15chr Reference name Message
+    [Arguments]     ${ErrMsg}
+    Element Should Contain     id=errmsg_jenkinsname     ${ErrMsg}
+    Clicks on Jenkins Cancel Button
+
+
+Enters the Reference Name
+    Input Text    id=jenkinsname    ${JENKINSNAME}
+
+Enters the Jenkins URL
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    id=jenkinsurl     ${JENKINS URL}
+
+Enters the User ID Name
+    Input Text    id=jenkinsusername     ${JENKINS USERID}
+
+Enters the Password
+    Input Text    id=jenkinspassword     ${JENKINS PASSWORD}
+
+
+Enters the Empty Jenkins URL
+    Input Text    id=jenkinsurl    ${VaildEmptyJenkinsURL}
+
+Enters the Empty User ID
+    Input Text    id=jenkinsusername    ${VaildEmptyUserID}
+
+
+Enters the Empty Password
+    Input Text    id=jenkinspassword    ${VaildEmptyPassword}
+
+Clicks on Jenkins Link
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='setting_tree']/ul/li[6]/a
+
+Select your Orgg Created
+    Select From List   id=orgname    ${ORGANIZATION NAME}
+
+Clicks on Jenkins New Button
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element     xpath=.//*[@id='content']/div/div/div/div/div[1]/div/div/a[2]
+
+Clicks on Jenkins Cancel Button
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='btncancel']

@@ -521,7 +521,7 @@ function CreateTableFromJson(formID, idFieldName, createFileName) {
                 if (imageTD) {
                     if (imageTD.length > 0) {
                         console.log("Template Icon:" + idFieldValue);
-                        var imgpath = 'img/blank.png';
+                        var imgpath = 'img/logo.png';
                         if (imageTD.html().indexOf('<img') >= 0) {
                             imageTD.html(''); //fix for image tag gettnig embedded. - Vinod
                         } else

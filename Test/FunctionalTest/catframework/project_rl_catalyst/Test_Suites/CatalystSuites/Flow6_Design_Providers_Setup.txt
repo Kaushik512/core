@@ -8,6 +8,7 @@ Resource           ${CATALYST ACTION}/Design_Create_Launch_Providers_Template.tx
 Resource           ${COMMON RESOURCES}/catalyst_grid_node.txt
 
 
+
 *** Test Cases ***
 #-Catalyst new PROVIDERS setup
     #-[Tags]       Sanity               Smoke
@@ -59,9 +60,7 @@ Catalyst NEW CENT OS INSTANCE CONTROL PANEL setup
     Catalyst Logout                      
     [Teardown]     Close Browser    
 
-
-
-
+--------------------------------------------------------------------------------------
 
 Catalyst new UBUNTU DESIGN setup
     [Tags]       Sanity               Smoke
@@ -79,5 +78,14 @@ Catalyst new UBUNTU WORKZONE setup
     Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
     Catalyst Check INFORMATION Status for Ubuntu
     Catalyst Work SSH CHEFCLIENT STOP Setup after LAUNCH of Ubuntu
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+Catalyst UBUNTU INSTANCE CONTROL PANEL setup
+    [Tags]       Sanity               Smoke
+#    Catalyst Login
+    Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
+    Catlayst verfication of Instance Stop Setup and Disable of Ubuntu
     Catalyst Logout                      
     [Teardown]     Close Browser

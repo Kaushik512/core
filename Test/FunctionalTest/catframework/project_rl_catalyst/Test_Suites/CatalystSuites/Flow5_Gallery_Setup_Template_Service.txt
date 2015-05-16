@@ -14,20 +14,22 @@ Catalyst new Gallery Template setup
     [Tags]       Sanity               Smoke
 #    Catalyst Login
     Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
+    Test Validation of New Template Type
+    Catalyst User New Design Template Type
     Test Validation of Creation of New Templates
     Catalyst User New Template Creation
     Catalyst Logout                      
     [Teardown]     Close Browser
 
 
-#-Catalyst new Gallery Service Command setup
-    #-[Tags]       Sanity               Smoke
+Catalyst new Gallery Service Command setup
+    [Tags]       Sanity               Smoke
 #    Catalyst Login
-    #-Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
-    #-Test Validation of Creation of New Services
-    #-Catalyst User Service Command Services
-    #-Catalyst Logout                      
-    #-[Teardown]     Close Browser
+    Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
+    Test Validation of Creation of New Services
+    Catalyst User Service Command Services
+    Catalyst Logout                      
+    [Teardown]     Close Browser
 
 
 

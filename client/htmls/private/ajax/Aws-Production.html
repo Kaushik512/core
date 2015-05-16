@@ -340,7 +340,7 @@
  <div class="col-lg-12 col-md-12">
  <div class="col-lg-6 col-md-6 fordocker dockerProjPort dockerLEFT">
 
- <label for="category" class="pull-left">Launch Parameters<a id="launchParamDocker" href="javascript:void(0);" onclick="$('[dockerparamkey]').val('');loadLaunchParams();"><i title="Add" class="icon-append fa fa-plus" ></i></a>
+ <label for="category" class="pull-left">Launch Parameters<a id="launchParamDocker" href="javascript:void(0);" onclick=""><i title="Add" class="icon-append fa fa-plus" ></i></a>
  </label>               
  <div class="btn-group pull-left">
 
@@ -1108,6 +1108,7 @@
 
  $('#launchParamDocker').click(function(){
    $('#dockerparamsform')[0].reset();
+   loadLaunchParams();
    $('.chooseSelectExit').change();
  });
 
@@ -1131,18 +1132,25 @@
  }
 
  function loadLaunchParams(){
-   if($('#dockerlaunchparameters').val() != ''){
+  if($('#dockerlaunchparameters').val() != ''){
      $('[dockerparamkey]').val('');
      var params = $('#dockerlaunchparameters').val().split(' -');
      for(para in params){
+     	
        var subparam = params[para].split(' ');
        if(subparam.length > 0){
          $inp = $('[dockerparamkey="-' + subparam[0] + '"]').first();
+         var sp_ = '';
+         for(var i = 1;i < subparam.length;i++)
+           sp_+= subparam[i] + ' ';
+         sp_ = sp_.trim();
          if($inp.val() != '')
-           $inp.val($inp.val() + ',' + subparam[1]);
+           $inp.val($inp.val() + ',' + sp_);
          else
-           $inp.val(subparam[1]);
+           $inp.val(sp_);
+       	alert($inp.val());
        }
+
      }
    }
    $('#myModalLabelDockerContainer').modal('show');
@@ -1735,7 +1743,7 @@ $("#templateContent #grid0").addClass("role-Selected");
 	// }
 	console.log('here end');
 	
-	
+	if(getImage){
 	getIndividualData += '<div class="col-sm-3 col-lg-2 col-md-3">' +
 	'<div class="productdiv2" data-templateId="' + getTempName + '" data-' +
 	'templateComponent="component' + z + '" ' +
@@ -1748,7 +1756,21 @@ $("#templateContent #grid0").addClass("role-Selected");
 	'<li><img style="height:40px;width:auto;" alt="" ' +
 	'src="/d4dMasters/image/' + getRowID + '__templatesicon__' + getImage + '">' +
 	'</li><li style="font-size:12px;"><u><b>' + getTempName + '</b></u></li>';
-	//If standard template
+	}
+	else{
+		getIndividualData += '<div class="col-sm-3 col-lg-2 col-md-3">' +
+	'<div class="productdiv2" data-templateId="' + getTempName + '" data-' +
+	'templateComponent="component' + z + '" ' +
+	'dockercontainerpathstitle="' + dockercontainerpathstitle + '" ' +
+	'dockercontainerpaths="' + dockercontainerpaths + '" ' +
+	'dockerreponame="' + dockerreponame + '" ' +
+	'data-templateName="' + getTempName + '" data-' +
+	'templateType="' + getTemplateType + '" templatetype="' + getTemplateType + '" templatename="' + getTempName + '" templatescookbooks="' + gettemplatescookbooks + '">' +
+	'<ul class="list-unstyled system-prop" style="text-align:center;">' +
+	'<li><img style="height:40px;width:auto;" alt="" ' +
+	'src="img/logo.png">' +
+	'</li><li style="font-size:12px;"><u><b>' + getTempName + '</b></u></li>';
+	}//If standard template
 	if (getTemplateType != "Docker") {
    var cb = gettemplatescookbooks.split(',');
    var licb = '';
