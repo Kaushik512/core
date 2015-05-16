@@ -346,7 +346,7 @@
                                               return false;
                                           } else {
                                               var found = false;
-                                              JSON.parse(data).forEach(function(k, v) {
+                                              JSON.parse(JSON.stringify(data)).forEach(function(k, v) {
                                                   var kt = Object.keys(k);
 
                                                   if (k['orgname_rowid'] == _org) {
@@ -604,7 +604,7 @@
                                       });
                                   }
 
-
+                                  
                                   for (var i = 0; i < data.length; i++) {
 
                                       addInstanceToDOM(data[i]);
@@ -1242,7 +1242,8 @@
                                   if (data.appUrls && data.appUrls.length) {
                                       for (var k = 0; k < data.appUrls.length; k++) {
                                           var url = data.appUrls[k].url;
-                                          url = url.replace('$host', data.instanceIP);
+                                          if(data.appUrls[k].url)
+                                            url = url.replace('$host', data.instanceIP);
                                           var $anchor = "<span class='marginForURL'><a style='font-size:10px;' data-appUrlId='" + data.appUrls[k]._id + "' class='app-url' title='" + data.appUrls[k].name + "' href='" + url + "'' target='_blank' >" + data.appUrls[k].name + "</a></span>";
                                           $divComponentListContainer.append($anchor);
                                           temp = temp + ' ' + $anchor;

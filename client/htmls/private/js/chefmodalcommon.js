@@ -4,65 +4,65 @@
  * Copyright (c) 2013 Ryan McGeary; Licensed MIT
  */
 (function() {
-  var $;
+    var $;
 
-  $ = jQuery;
+    $ = jQuery;
 
-  $.fn.sieve = function(options) {
-    var compact;
-    compact = function(array) {
-      var item, _i, _len, _results;
-      _results = [];
-      for (_i = 0, _len = array.length; _i < _len; _i++) {
-        item = array[_i];
-        if (item) {
-          _results.push(item);
-        }
-      }
-      return _results;
-    };
-    return this.each(function() {
-      var container, searchBar, settings;
-      container = $(this);
-      settings = $.extend({
-        searchInput: null,
-        searchTemplate: "<div><label>Search: <input type='text'></label></div>",
-        itemSelector: "tbody tr",
-        textSelector: null,
-        toggle: function(item, match) {
-          return item.toggle(match);
-        },
-        complete: function() {}
-      }, options);
-      if (!settings.searchInput) {
-        searchBar = $(settings.searchTemplate);
-        settings.searchInput = searchBar.find("input");
-        container.before(searchBar);
-      }
-      return settings.searchInput.on("keyup.sieve change.sieve", function() {
-        var items, query;
-        query = compact($(this).val().toLowerCase().split(/\s+/));
-        items = container.find(settings.itemSelector);
-        items.each(function() {
-          var cells, item, match, q, text, _i, _len;
-          item = $(this);
-          if (settings.textSelector) {
-            cells = item.find(settings.textSelector);
-            text = cells.text().toLowerCase();
-          } else {
-            text = item.text().toLowerCase();
-          }
-          match = true;
-          for (_i = 0, _len = query.length; _i < _len; _i++) {
-            q = query[_i];
-            match && (match = text.indexOf(q) >= 0);
-          }
-          return settings.toggle(item, match);
+    $.fn.sieve = function(options) {
+        var compact;
+        compact = function(array) {
+            var item, _i, _len, _results;
+            _results = [];
+            for (_i = 0, _len = array.length; _i < _len; _i++) {
+                item = array[_i];
+                if (item) {
+                    _results.push(item);
+                }
+            }
+            return _results;
+        };
+        return this.each(function() {
+            var container, searchBar, settings;
+            container = $(this);
+            settings = $.extend({
+                searchInput: null,
+                searchTemplate: "<div><label>Search: <input type='text'></label></div>",
+                itemSelector: "tbody tr",
+                textSelector: null,
+                toggle: function(item, match) {
+                    return item.toggle(match);
+                },
+                complete: function() {}
+            }, options);
+            if (!settings.searchInput) {
+                searchBar = $(settings.searchTemplate);
+                settings.searchInput = searchBar.find("input");
+                container.before(searchBar);
+            }
+            return settings.searchInput.on("keyup.sieve change.sieve", function() {
+                var items, query;
+                query = compact($(this).val().toLowerCase().split(/\s+/));
+                items = container.find(settings.itemSelector);
+                items.each(function() {
+                    var cells, item, match, q, text, _i, _len;
+                    item = $(this);
+                    if (settings.textSelector) {
+                        cells = item.find(settings.textSelector);
+                        text = cells.text().toLowerCase();
+                    } else {
+                        text = item.text().toLowerCase();
+                    }
+                    match = true;
+                    for (_i = 0, _len = query.length; _i < _len; _i++) {
+                        q = query[_i];
+                        match && (match = text.indexOf(q) >= 0);
+                    }
+                    return settings.toggle(item, match);
+                });
+                return settings.complete();
+            });
         });
-        return settings.complete();
-      });
-    });
-  };
+    };
 
 }).call(this);
 
@@ -103,7 +103,7 @@ function $chefCookbookRoleSelector(catorgname, callback, selectedRunlist, readMo
 
 
     var $row = $("<div></div>").addClass('row margin0');
-    var $divFilterContainer = $("<div></div>").addClass('col-lg-12 divtablemarginpadding');
+    var $divFilterContainer = $("<div></div>").addClass('col-lg-6 divtablemarginpadding');
     var $divtable = $("<div></div>").addClass('divtablemarginpadding');
     var $firstcol6 = $("<div></div>").addClass('col-lg-6 availableRunlistContainer');
 
@@ -119,29 +119,31 @@ function $chefCookbookRoleSelector(catorgname, callback, selectedRunlist, readMo
     $firstlabelinput.append($beforesearchappend);
 
 
-    var $searchiconappend = $("<i></i>").addClass('icon-append fa fa-search');
-    var $searchinputtextbox = $('<input type="text" placeholder="Search Cookbooks/Roles" id="textbox"/>');
-    var $searchinputtextboxContainer = $("<div></div>").addClass('input-group width100').css({
-        'width': '100px'
-    });
-    $searchinputtextboxContainer.append($searchiconappend);
-    $searchinputtextboxContainer.append($searchinputtextbox);
-    $divFilterContainer.append($searchinputtextboxContainer);
-    $inputgroup.append($firstlabelinput);
+
 
     //checking for tasks class(deploy,all)
-    var $cookbooksFilterNew = $('<label class="radio hidden col-lg-3" style="margin: 5px;font-size:13px;"><input class="listSelectorCkb" name="radio" type="radio" id="deployCookbooks"  value="DeployCookbooks"/><i></i>Deploy Cookbooks</label>');
+    var $cookbooksFilterNew = $('<label class="radio hidden col-lg-4" style="font-size:13px;"><input class="listSelectorCkb" name="radio" type="radio" id="deployCookbooks"  value="DeployCookbooks"/><i></i>Deploy Cookbooks</label>');
     //var $allFilterNew = $('<label class="radio" style="margin: 5px;font-size:13px;"><input name="radio" type="radio" id="allNew"  value="All"/><i></i>All</label>');
     $divFilterContainer.append($cookbooksFilterNew);
     //$firstlabelinput.append($allFilterNew);
 
-    var $rolesFilter = $('<label class="radio hidden col-lg-3" style="margin: 5px;font-size:13px;"><input name="radio" class="listSelectorCkb" type="radio" id="roles"  value="Roles"/><i></i>Roles</label>');
-    var $cookbooksFilter = $('<label class="radio hidden col-lg-3" style="margin: 5px;font-size:13px;"><input name="radio" class="listSelectorCkb" type="radio" id="cookbooks"  value="Cookbooks"/><i></i>Cookbooks</label>');
-    var $allFilter = $('<label class="radio hidden col-lg-3" style="margin: 5px;font-size:13px;"><input name="radio" class="listSelectorCkb" type="radio" id="all"  value="All"/><i></i>All</label>');
+    var $rolesFilter = $('<label class="radio hidden col-lg-3" style="font-size:13px;"><input name="radio" class="listSelectorCkb" type="radio" id="roles"  value="Roles"/><i></i>Roles</label>');
+    var $cookbooksFilter = $('<label class="radio hidden col-lg-3" style="font-size:13px;"><input name="radio" class="listSelectorCkb" type="radio" id="cookbooks"  value="Cookbooks"/><i></i>Cookbooks</label>');
+    var $allFilter = $('<label class="radio hidden col-lg-3" style="font-size:13px;"><input name="radio" class="listSelectorCkb" type="radio" id="all"  value="All"/><i></i>All</label>');
 
     $divFilterContainer.append($rolesFilter);
     $divFilterContainer.append($cookbooksFilter);
     $divFilterContainer.append($allFilter);
+
+    var $searchiconappend = $("<i></i>").addClass('icon-append fa fa-search');
+    var $searchinputtextbox = $('<input type="text" placeholder="Search Cookbooks/Roles" id="textbox"/>');
+    var $searchinputtextboxContainer = $("<div></div>").addClass('input-group').css({
+        'width': '150px'
+    });
+    $firstlabelinput.append($searchiconappend);
+    $firstlabelinput.append($searchinputtextbox);
+    $divFilterContainer.append($searchinputtextboxContainer);
+    $inputgroup.append($firstlabelinput);
 
     var $selectCookbooksandRecipesparentdiv = $("<div></div>").addClass('btn-group selectCookbooksandRecipesdiv');
     var $selectCookbooksandRecipes = $("<select id='cookbooksrecipesList' size='10' multiple='multiple'></select>").addClass('btn-group selectCookbooksandRecipes');
@@ -332,9 +334,7 @@ function $chefCookbookRoleSelector(catorgname, callback, selectedRunlist, readMo
         $beforesearchappend.hide();
         $searchinputtextbox.show();
         $searchiconappend.show();
-        $chefItemdiv.find('.availableRunlistContainer').css({
-            'margin-top': '34px'
-        });
+        $chefItemdiv.find('.availableRunlistContainer');
         $('.cookbookspinner').detach();
 
 

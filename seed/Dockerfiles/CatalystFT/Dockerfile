@@ -11,11 +11,11 @@ RUN apt-get -y install wget && wget http://python.org/ftp/python/2.7.5/Python-2.
 RUN apt-get -y install wget && wget https://bootstrap.pypa.io/get-pip.py && python /opt/get-pip.py && pip install robotframework && pip install robotframework-selenium2library 
 
 
-RUN apt-get -y install xvfb firefox
+RUN apt-get -y update && apt-get -y install xvfb firefox
 ENV DISPLAY :99
 ENV PYTHONPATH /home/ubuntu/development/catalyst/D4D/Test/FunctionalTest/catframework/project_rl_catalyst/Common_Resources
 ADD runtest.sh /usr/bin/
-RUN chmod 755 /usr/bin/runtest.sh
+#RUN chmod 755 /usr/bin/runtest.sh
 CMD /usr/bin/runtest.sh
 
 #docker run -t -i -d --name catalystft --link catalyst1:catalyst --volumes-from catalystcode -v /var/www/html:/home/ubuntu/development/catalyst/Test_Results relevancelab/catalystft:1.0 /bin/bash

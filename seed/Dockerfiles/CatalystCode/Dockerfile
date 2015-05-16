@@ -10,10 +10,10 @@ RUN mkdir -p /home/ubuntu/development/catalyst
 VOLUME ["/home/ubuntu/development/catalyst"]
 
 #Installing Node JS
-RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10 
+#RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10 
 #Node Js installation starts
-RUN apt-get update && apt-get install -y nodejs && apt-get install -y npm &&  apt-get install nodejs-legacy -y
-RUM rm -rf /home/ubuntu/development/catalyst/D4D/node-modules && cd /home/ubuntu/development/catalyst/D4D/server && npm install
+#RUN apt-get update && apt-get install -y nodejs && apt-get install -y npm &&  apt-get install nodejs-legacy -y
+#RUN rm -rf /home/ubuntu/development/catalyst/D4D/node-modules && cd /home/ubuntu/development/catalyst/D4D/server && npm install
 
 #End NodeJS isntallation
 
