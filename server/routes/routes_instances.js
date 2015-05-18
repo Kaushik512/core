@@ -1643,15 +1643,15 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                 }
                                 logger.debug("retCode>>>>>>>>>>>>>>>>>>> ",retCode);
                                 if (retCode === -5000) {
-                                    res.send(1001,"Host Unreachable");
+                                    res.send(1001,"Host Unreachable.");
                                     return;
                                 } else if (retCode === -5001) {
-                                    res.send(401,"Invalid credentials");
+                                    res.send(401,"Invalid credentials.");
                                     return;
                                 }else if(retCode === -5002){
-                                    res.send(400,"host must not be null");
+                                    res.send(400,"host must not be null.");
                                     return;
-                                }else if(retCode === 1){
+                                }else if(retCode == 1){
                                     res.send(500," Failed to execute command on Instance.");
                                     return;
                                 }
@@ -1685,7 +1685,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
                             }, function(stdOutErr) {
                                 logger.debug("Return error from chef client:>>>>>>>>>>>>>: ", JSON.stringify(stdOutErr));
-                                res.send(stdOutErr);
+                                res.send(500," Failed to execute command on Instance.");
                                 return;
                             });
                         });
