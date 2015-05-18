@@ -3643,7 +3643,17 @@ body
     border-radius: 5px;
     float: left;
     margin-bottom: 20px;
-    margin-right: 18px;
+    margin-right: 18px;/*changed by srikanth*/
+    /*max-height: 145px;*//*arabinda*/
+    /*After depolyed changes
+    max-width: 162px;*/
+    min-width: 162px;
+}
+.domain-role-thumbnailDev {
+    border-radius: 5px;
+    float: left;
+    margin-bottom: 20px;
+    margin-right: 43px;/*changed by srikanth*/
     /*max-height: 145px;*//*arabinda*/
     /*After depolyed changes
     max-width: 162px;*/
@@ -7791,4 +7801,10 @@ word-break:break-word;
 .heightModal400{
     height:400px;
 }
+
+#containerLazyLoad {
+    height: 300px;
+    overflow: scroll;
+}
+
 
