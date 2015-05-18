@@ -1904,7 +1904,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                             logsDao.insertLog({
                                                                 referenceId: logsRefernceIds,
                                                                 err: false,
-                                                                log: "Instance Bootstrapped Successessfully",
+                                                                log: "Instance Bootstrapped Successfully",
                                                                 timestamp: timestampEnded
                                                             });
                                                             instancesDao.updateActionLog(instance.id, actionLog._id, true, timestampEnded);
@@ -1953,7 +1953,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                             logsDao.insertLog({
                                                                 referenceId: logsRefernceIds,
                                                                 err: true,
-                                                                log: "Bootstrapped Failed",
+                                                                log: "Bootstrap Failed",
                                                                 timestamp: timestampEnded
                                                             });
                                                             instancesDao.updateActionLog(instance.id, actionLog._id, false, timestampEnded);

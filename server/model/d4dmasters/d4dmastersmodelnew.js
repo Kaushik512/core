@@ -205,7 +205,7 @@ var d4dMastersDesignTemplateTypes = new mongoose.Schema(
 	{id: {type:String,required:true, trim:true},
 	name: {type:String,trim:true},
 	templatetypename: {type:String,required:true, trim:true, validate:nameValidator},
-	designtemplateicon_filename: {type:String,required:true, trim:true},
+	designtemplateicon_filename: {type:String,trim:true},
 	orgname: {type:[String],required:false, trim:true},
 	orgname_rowid: {type:[String], trim:true},
 	rowid:{type:String,required:true, trim:true}},{collection:'d4dmastersnew'}
