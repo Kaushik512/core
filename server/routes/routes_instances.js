@@ -1642,6 +1642,16 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                     return;
                                 }
                                 logger.debug("retCode>>>>>>>>>>>>>>>>>>> ",retCode);
+                                if (retCode === -5000) {
+                                    res.status(1001);
+                                    res.send("Host Unreachable");
+                                } else if (retCode === -5001) {
+                                    res.status(401);
+                                    res.send("Invalid credentials");
+                                }else if(retCode === -5002){
+                                    res.status(400);
+                                    res.send("host must not be null");
+                                }
                                 if (decryptedCredentials.pemFileLocation) {
                                     fileIo.removeFile(decryptedCredentials.pemFileLocation, function(err) {
                                         if (err) {
@@ -1657,21 +1667,21 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                 if(stdOutData === "{catalyst.inspect.stop}"){
                                     if(anInstance[0].credentials.username === "root"){
                                         var insString =installedString.split("{Installed Packages}").pop().split("{{catalyst.inspect.stop}}").shift();
-                                    insString = insString.substr(1);
-                                    insString = insString.slice(0, -1);
-                                    res.send(insString.split(","));
-                                    return;
-                                }else{
-                                    var insString =installedString.split("{{catalyst.inspect.start}}").pop().split("{{catalyst.inspect.stop}}").shift();
-                                    insString = insString.substr(1);
-                                    insString = insString.slice(0, -1);
-                                    res.send(insString.split(","));
-                                    return;
-                                }
+                                        insString = insString.substr(1);
+                                        insString = insString.slice(0, -1);
+                                        res.send(insString.split(","));
+                                        return;
+                                    }else{
+                                        var insString =installedString.split("{{catalyst.inspect.start}}").pop().split("{{catalyst.inspect.stop}}").shift();
+                                        insString = insString.substr(1);
+                                        insString = insString.slice(0, -1);
+                                        res.send(insString.split(","));
+                                        return;
+                                    }
                             }
 
                             }, function(stdOutErr) {
-                                logger.debug("Return error from chef client:>>>>>>>>>>>>>: ", stdOutErr.toString('ascii'));
+                                logger.debug("Return error from chef client:>>>>>>>>>>>>>: ", JSON.stringify(stdOutErr));
                                 res.send(stdOutErr);
                                 return;
                             });
