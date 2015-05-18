@@ -1603,7 +1603,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                             var jsonAttributeObj = {
                                 catalystCallbackUrl: req.protocol + '://' + req.get('host') + '/chefClientExecution/' + chefClientExecution.id
                             };
-                            logger.debug("chefDetails>>>>>>>>>>>>>>>>>>>>> ",JSON.stringify(chefDetails));
+                           // logger.debug("chefDetails>>>>>>>>>>>>>>>>>>>>> ",JSON.stringify(chefDetails));
                             var chef = new Chef({
                                 userChefRepoLocation: chefDetails.chefRepoLocation,
                                 chefUserName: chefDetails.loginname,
@@ -1627,8 +1627,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                 jsonAttributes: JSON.stringify(jsonAttributeObj)
                             }
 
-                            logger.debug("chefClientOptions>>>>>>>>>>>>>>>>>>> ",JSON.stringify(chefClientOptions));
-                            logger.debug('decryptCredentials ==>', decryptedCredentials);
+                           // logger.debug("chefClientOptions>>>>>>>>>>>>>>>>>>> ",JSON.stringify(chefClientOptions));
+                            //logger.debug('decryptCredentials ==>', decryptedCredentials);
                             if (decryptedCredentials.pemFileLocation) {
                                 chefClientOptions.privateKey = decryptedCredentials.pemFileLocation;
                             } else {
@@ -1636,6 +1636,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                             }
                             var installedList = [];
                             var installedString;
+                            var strWindows;
                             chef.runChefClient(chefClientOptions, function(err, retCode) {
                                 if (err) {
                                     res.send(500, "Unable to run chef-client.");
@@ -1665,7 +1666,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                     });
                                 }
                             }, function(stdOutData) {
-                                logger.debug("Return from chef client>>>>>>>>>>>>>>>>>>>: ", typeof stdOutData);
+                                //logger.debug("Return from chef client>>>>>>>>>>>>>>>>>>>: ", typeof stdOutData);
                                 installedString = installedString+"{"+stdOutData.replace(/\s+/g, ' ')+"},";
                                 if(stdOutData === "{catalyst.inspect.stop}"){
                                     if(anInstance[0].credentials.username === "root"){
@@ -1681,6 +1682,36 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                         res.send(insString.split(","));
                                         return;
                                     }
+                            }
+                            if(chefClientOptions.username === "administrator"){
+                                //installedList.push("{"+stdOutData.replace(/\s+/g, ' ')+"}");
+                                logger.debug("installedList>>>>>>>>>>>>>>> ",stdOutData);
+                                var str = stdOutData.split("\n");
+                                for(var i=0;i<str.length;i++){
+                                    strWindows = strWindows+"{"+str[i].replace(/\s+/g, ' ')+"},";
+                                    if(str[i] === chefClientOptions.host+" {catalyst.inspect.stop}"){
+                                        var insString =strWindows.split(chefClientOptions.host+" Name Version ").pop().split(chefClientOptions.host+" {catalyst.inspect.stop}").shift();
+                                        insString = insString.substr(1);
+                                        insString = insString.slice(0, -1);
+                                        var arr = insString.split(",");
+                                        for(var x=0;x<arr.length;x++){
+                                            logger.debug(">>>>>>>>>>>> ",arr[x].length);
+                                            if(arr[x] !== "{"+chefClientOptions.host+" }"){
+                                                installedList.push(arr[x]);
+                                            }else if(arr[x] !== "{"+chefClientOptions.host+"}" && arr[x] !== "{"+chefClientOptions.host+" }"){
+                                                installedList.push(arr[x]);
+                                            }else if(arr[x] !== "{}" && arr[x] !== "{"+chefClientOptions.host+"}" && arr[x] !== "{"+chefClientOptions.host+" }"){
+                                                installedList.push(arr[x]);
+                                            }else if(arr[x].length != 0 && arr[x] !== "{}" && arr[x] !== "{"+chefClientOptions.host+"}" && arr[x] !== "{"+chefClientOptions.host+" }"){
+                                               logger.debug("0 called...");
+                                                installedList.push(arr[x]);
+                                            }
+                                        }
+                                        res.send(installedList.filter(Boolean));
+                                        return;
+                                    }
+                                }
+
                             }
 
                             }, function(stdOutErr) {
