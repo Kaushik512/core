@@ -103,7 +103,7 @@ function $chefCookbookRoleSelector(catorgname, callback, selectedRunlist, readMo
 
 
     var $row = $("<div></div>").addClass('row margin0');
-    var $divFilterContainer = $("<div></div>").addClass('col-lg-6 divtablemarginpadding');
+    var $divFilterContainer = $("<div></div>").addClass('col-lg-7 divtablemarginpadding');
     var $divtable = $("<div></div>").addClass('divtablemarginpadding');
     var $firstcol6 = $("<div></div>").addClass('col-lg-6 availableRunlistContainer');
 
