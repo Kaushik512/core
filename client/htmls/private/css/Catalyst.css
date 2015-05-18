@@ -37,6 +37,10 @@
     margin-top: 10%;
     margin-bottom: 10%;
 }
+.loadingContainerimageInspectCSS{
+    height:50px;
+    width:50px;
+}
 .loadingerrorMsgContainerCSS{
     font-size: 14px;
     height: 100px;
