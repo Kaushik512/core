@@ -464,7 +464,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                                     logsDao.insertLog({
                                                                                         referenceId: logsReferenceIds,
                                                                                         err: false,
-                                                                                        log: "Instance Bootstraped successessfully",
+                                                                                        log: "Instance Bootstraped successfully",
                                                                                         timestamp: timestampEnded
                                                                                     });
                                                                                     instancesDao.updateActionLog(instance.id, actionLog._id, true, timestampEnded);
@@ -529,7 +529,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                                     logsDao.insertLog({
                                                                                         referenceId: logsReferenceIds,
                                                                                         err: false,
-                                                                                        log: "Bootstraped Failed",
+                                                                                        log: "Bootstrap Failed",
                                                                                         timestamp: timestampEnded
                                                                                     });
                                                                                     instancesDao.updateActionLog(instance.id, actionLog._id, false, timestampEnded);
