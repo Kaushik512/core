@@ -154,7 +154,7 @@
                           <div class="panel-heading">
                             <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion-Software" href="#collapseSoftware" ><i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i><i class="fa fa-fw fa-rss fa-dot-circle-o" style="font-size:14px;"></i> <b style="color:#3a87ad;font-size:12px;"><u>Software</u></b></a></h4>
 
-                            <a class="btn btn-primary" data-toggle="modal" href="#installedSoftwareModalContainer" style="float: right; margin-right: 5px; margin-top: 2px;">
+                            <a class="btn btn-primary inspectBtn" data-toggle="modal" href="#installedSoftwareModalContainer" style="float: right; margin-right: 5px; margin-top: 2px;">
                               <i class="fa fa-fw fa-search" style="font-size:14px;"></i>
                               Inspect
                             </a>
@@ -592,7 +592,7 @@ function populateJsonData(instanceId) {
   $('.paraHeightModal').hide();
     $.ajax({
         type: "GET",
-        url: "/instances/" + instanceId + "/inspect",
+        url: "/instances/" + urlParams.id + "/inspect",
         success: function(data) {
             //alert(data);
             var jsonArray = data;
@@ -617,7 +617,7 @@ function populateJsonData(instanceId) {
         }
     });
 }
-//$('.inspectBtn').click(populateJsonData);
+$('.inspectBtn').click(populateJsonData);
 
 function disableSSHBtn(instanceId) {
   var $cardViewInstanceId = $(".domain-roles-caption[data-instanceId='"+instanceId+"']");
@@ -684,7 +684,7 @@ function disableInstanceStartStopActionBtns(instanceId){
 var logTimeout;
 var stateTimeout;
 $.get('../instances/'+urlParams.id,function(data){
-    populateJsonData(data._id);
+    //populateJsonData(data._id);
    //setting tree and drawing breadcrumb
    //alert(data.projectId)
    var $selectedOrg = $('.orgsList').find('[data-org="'+urlParams.org+'"]');
