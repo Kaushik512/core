@@ -1643,14 +1643,17 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                 }
                                 logger.debug("retCode>>>>>>>>>>>>>>>>>>> ",retCode);
                                 if (retCode === -5000) {
-                                    res.status(1001);
-                                    res.send("Host Unreachable");
+                                    res.send(1001,"Host Unreachable");
+                                    return;
                                 } else if (retCode === -5001) {
-                                    res.status(401);
-                                    res.send("Invalid credentials");
+                                    res.send(401,"Invalid credentials");
+                                    return;
                                 }else if(retCode === -5002){
-                                    res.status(400);
-                                    res.send("host must not be null");
+                                    res.send(400,"host must not be null");
+                                    return;
+                                }else if(retCode === 1){
+                                    res.send(500," Failed to execute command on Instance.");
+                                    return;
                                 }
                                 if (decryptedCredentials.pemFileLocation) {
                                     fileIo.removeFile(decryptedCredentials.pemFileLocation, function(err) {
