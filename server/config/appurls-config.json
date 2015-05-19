@@ -1,0 +1,6 @@
+{
+    "appUrls": [{
+        "name": "logs",
+        "url": "http://54.186.108.35/index.html#/dashboard/file/logstash.json"
+    }]
+}
