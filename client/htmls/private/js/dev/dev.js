@@ -1612,8 +1612,11 @@
                                       disableInstanceStartStopActionBtns(data._id, data.hardware.os);
                                   }
                                   if (!data.providerId) {
+                                      
+                                      var $parentTrNew = $('#tableinstanceview tr[data-instanceId="' + data._id + '"] td div.startstoptoggler');
                                       disableInstanceStartStopActionBtns(data._id, data.hardware.os);
                                       $('.domain-roles').find('[data-instanceid="' + data._id + '"]').find('.startstoptoggler').removeClass('running').addClass('shutdown');
+                                      $parentTrNew.removeClass('running').addClass('shutdown');
                                   }
                                   $startStopToggler.click(startAndStopToggler);
                                   $rowContainter.find('.startstoptoggler').off('click').on('click', startAndStopToggler);
