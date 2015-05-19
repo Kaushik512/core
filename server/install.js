@@ -31,6 +31,7 @@ function getDefaultsConfig() {
             defaultChefCookbooks: [],
             ohaiHints: ['ec2'],
             attributeExtractorCookbookName: 'attrib',
+            defaultChefClientRunCookbooks: ['recipe[catalyst_attribute_handler]'],
 
             // getter methods
             get chefReposLocation() {

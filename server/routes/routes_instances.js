@@ -277,7 +277,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         var cmd = "sudo docker exec " + req.params.containerid + ' bash ' + req.params.action;
         //returning browser handle before execution starts.
         res.send(200);
-        
+
         _docker.runDockerCommands(cmd, instanceid, function(err, retCode) {
             if (!err) {
                 logsDao.insertLog({
@@ -287,7 +287,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                     timestamp: new Date().getTime()
                 });
                 logger.debug("Docker Command run Successfully");
-                
+
                 logger.debug("Exit get() for /instances/dockerexecute/%s/%s/%s", req.params.instanceid, req.params.containerid, req.params.action);
             } else {
                 logger.error("Excute Error : ", err);
@@ -298,7 +298,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                     timestamp: new Date().getTime()
                 });
                 logger.error("Error hit while running Docker Command: ", err);
-                 logger.debug("Exit get() for /instances/dockerexecute/%s/%s/%s", req.params.instanceid, req.params.containerid, req.params.action);
+                logger.debug("Exit get() for /instances/dockerexecute/%s/%s/%s", req.params.instanceid, req.params.containerid, req.params.action);
             }
         });
 
@@ -559,7 +559,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
     });
 
     app.post('/instances/:instanceId/updateRunlist', function(req, res) {
-        logger.debug("InstanceID>>>>>>>>>>> ",req.params.instanceId);
+        logger.debug("InstanceID>>>>>>>>>>> ", req.params.instanceId);
         if (req.session.user.rolename === 'Consumer') {
             res.send(401);
             return;
@@ -569,7 +569,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             res.send(400);
             return;
         }
-        logger.debug(">>>>>>>>>>>>>>>>>>>>>>>> ",req.body.runlist);
+        logger.debug(">>>>>>>>>>>>>>>>>>>>>>>> ", req.body.runlist);
         //verifying permission to update runlist
         logger.debug('Verifying User permission set for execute.');
         var user = req.session.user;
@@ -659,7 +659,9 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
                                         // creating json attribute for execution id
                                         var jsonAttributeObj = {
-                                            catalystCallbackUrl: req.protocol + '://' + req.get('host') + '/chefClientExecution/' + chefClientExecution.id
+                                            catalyst_attribute_handler: {
+                                                catalystCallbackUrl: req.protocol + '://' + req.get('host') + '/chefClientExecution/' + chefClientExecution.id
+                                            }
                                         };
 
                                         var chef = new Chef({
@@ -693,7 +695,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                             log: 'Running chef-client',
                                             timestamp: new Date().getTime()
                                         });
-                                        logger.debug("=============================== ",JSON.stringify(chef));
+                                        logger.debug("=============================== ", JSON.stringify(chef));
                                         chef.runChefClient(chefClientOptions, function(err, retCode) {
                                             if (decryptedCredentials.pemFileLocation) {
                                                 fileIo.removeFile(decryptedCredentials.pemFileLocation, function(err) {
@@ -1537,23 +1539,23 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         instancesDao.getInstanceById(req.params.instanceId, function(err, anInstance) {
             if (err) {
                 logger.error("Failed to fetch Instance: ", err);
-                res.send(500,"Failed to fetch Instance: ");
+                res.send(500, "Failed to fetch Instance: ");
                 return;
             }
-            if(anInstance){
-                instancesDao.updateInstanceName(req.params.instanceId,req.body.name,function(err,updateCount){
-                    if(err){
-                        res.send(500,"Failed to update instance name");
+            if (anInstance) {
+                instancesDao.updateInstanceName(req.params.instanceId, req.body.name, function(err, updateCount) {
+                    if (err) {
+                        res.send(500, "Failed to update instance name");
                         return;
                     }
                     console.log(updateCount);
-                    res.send(200,{
-                        updateCount :updateCount
+                    res.send(200, {
+                        updateCount: updateCount
                     });
                 });
 
-            }else{
-                res.send(404,"No Instance found.")
+            } else {
+                res.send(404, "No Instance found.")
             }
 
         });
@@ -1568,9 +1570,9 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 res.send(500, "Failed to fetch Instance: ");
                 return;
             }
-            logger.debug("Return instance>>>>>>>>>>> ",JSON.stringify(anInstance));
+            logger.debug("Return instance>>>>>>>>>>> ", JSON.stringify(anInstance));
             if (anInstance.length) {
-                 configmgmtDao.getChefServerDetails(anInstance[0].chef.serverId, function(err, chefDetails) {
+                configmgmtDao.getChefServerDetails(anInstance[0].chef.serverId, function(err, chefDetails) {
                     if (err) {
                         res.send(500);
                         return;
@@ -1580,7 +1582,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                         return;
                     }
 
-                    logger.debug("anInstance[0].credentials>>>> ",anInstance[0].credentials);
+                    logger.debug("anInstance[0].credentials>>>> ", anInstance[0].credentials);
                     //decrypting pem file
                     credentialCryptography.decryptCredential(anInstance[0].credentials, function(err, decryptedCredentials) {
                         if (err) {
@@ -1601,9 +1603,10 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
                             // creating json attribute for execution id
                             var jsonAttributeObj = {
-                                catalystCallbackUrl: req.protocol + '://' + req.get('host') + '/chefClientExecution/' + chefClientExecution.id
+                                catalyst_attribute_handler: {
+                                    catalystCallbackUrl: req.protocol + '://' + req.get('host') + '/chefClientExecution/' + chefClientExecution.id
+                                }
                             };
-                           // logger.debug("chefDetails>>>>>>>>>>>>>>>>>>>>> ",JSON.stringify(chefDetails));
                             var chef = new Chef({
                                 userChefRepoLocation: chefDetails.chefRepoLocation,
                                 chefUserName: chefDetails.loginname,
@@ -1612,9 +1615,9 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                 hostedChefUrl: chefDetails.url,
                             });
 
-                             logger.debug("Chef...>>>>>>>>>>>>>>>>>>> ",JSON.stringify(chef));
-                            
-                            var list =[];
+                            logger.debug("Chef...>>>>>>>>>>>>>>>>>>> ", JSON.stringify(chef));
+
+                            var list = [];
                             list.push("recipe[inspect_software]");
                             var chefClientOptions = {
                                 privateKey: decryptedCredentials.pemFileLocation,
@@ -1627,8 +1630,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                 jsonAttributes: JSON.stringify(jsonAttributeObj)
                             }
 
-                           // logger.debug("chefClientOptions>>>>>>>>>>>>>>>>>>> ",JSON.stringify(chefClientOptions));
-                            //logger.debug('decryptCredentials ==>', decryptedCredentials);
                             if (decryptedCredentials.pemFileLocation) {
                                 chefClientOptions.privateKey = decryptedCredentials.pemFileLocation;
                             } else {
@@ -1642,18 +1643,18 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                     res.send(500, "Unable to run chef-client.");
                                     return;
                                 }
-                                logger.debug("retCode>>>>>>>>>>>>>>>>>>> ",retCode);
+                                logger.debug("retCode>>>>>>>>>>>>>>>>>>> ", retCode);
                                 if (retCode === -5000) {
-                                    res.send(1001,"Host Unreachable.");
+                                    res.send(1001, "Host Unreachable.");
                                     return;
                                 } else if (retCode === -5001) {
-                                    res.send(401,"Invalid credentials.");
+                                    res.send(401, "Invalid credentials.");
                                     return;
-                                }else if(retCode === -5002){
-                                    res.send(400,"host must not be null.");
+                                } else if (retCode === -5002) {
+                                    res.send(400, "host must not be null.");
                                     return;
-                                }else if(retCode == 1){
-                                    res.send(500," Failed to execute command on Instance.");
+                                } else if (retCode == 1) {
+                                    res.send(500, " Failed to execute command on Instance.");
                                     return;
                                 }
                                 if (decryptedCredentials.pemFileLocation) {
@@ -1716,7 +1717,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
                             }, function(stdOutErr) {
                                 logger.debug("Return error from chef client:>>>>>>>>>>>>>: ", JSON.stringify(stdOutErr));
-                                res.send(500," Failed to execute command on Instance.");
+                                res.send(500, " Failed to execute command on Instance.");
                                 return;
                             });
                         });

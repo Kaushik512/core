@@ -189,7 +189,9 @@ chefTaskSchema.methods.execute = function(userName, baseUrl, onExecute, onComple
                             }
 
                             var executionIdJsonAttributeObj = {
-                                catalystCallbackUrl: baseUrl + '/chefClientExecution/' + chefClientExecution.id
+                                catalyst_attribute_handler : {
+                                  catalystCallbackUrl: baseUrl + '/chefClientExecution/' + chefClientExecution.id  
+                                }
                             };
 
                             var jsonAttributeObj = utils.mergeObjects([executionIdJsonAttributeObj, attributeObj]);

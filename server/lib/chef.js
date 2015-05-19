@@ -559,6 +559,8 @@ var Chef = function(settings) {
         }
         //options.jsonAttributes = JSON.stringify({"A":{"B":{"passedin":"Cool Test"}}});
 
+        runlist = chefDefaults.defaultChefClientRunCookbooks.concat(runlist);
+
         if (options.instanceOS != 'windows') {
             var sshParamObj = {
                 host: options.host,

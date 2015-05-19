@@ -165,6 +165,7 @@
                                       $.post('../instances/' + instanceId + '/updateName', reqBodyEdit, function(data) {
 
                                           $('.domain-roles-caption[data-instanceId="' + instanceId + '"]').find('.cardHeadingTextoverflow').html(reqBodyEdit.name);
+                                          $('.domain-roles-caption[data-instanceId="' + instanceId + '"]').find('.cardHeadingTextoverflow').attr('rel','tooltip').attr('data-original-title', reqBodyEdit.name);
                                           $('#modalforInstanceEdit').modal('hide');
                                       });
 
@@ -236,7 +237,7 @@
                                                           url: url,
                                                           type: 'DELETE',
                                                           success: function() {
-                                                              $('#divinstancescardview').find('.domain-roles-caption[data-instanceId=' + instanceId + ']').parents('.domain-role-thumbnail').remove();
+                                                              $('#divinstancescardview').find('.domain-roles-caption[data-instanceId=' + instanceId + ']').parents('.domain-role-thumbnailDev').remove();
                                                               // serachBoxInInstance.updateData(undefined,"remove",instanceId);
 
                                                               var table = $('#tableinstanceview').DataTable();
@@ -681,7 +682,24 @@
                                   }
                                   // serachBoxInInstance.initData(data);
                                   a = createInstanceUI;
+                                  localStorage.setItem("instanceData",JSON.stringify(data));
+                                  var pageset = 15;
+                                  data = data.splice(0,15);
+                                  localStorage.lastinstanceshown = pageset;
                                   createInstanceUI(data);
+                                   $('#accordion-1').scrollTop(0);
+                                  $('#accordion-1').bind('scroll',function(){
+                                    if($(this).scrollTop() + $(this).innerHeight() >= this.scrollHeight) {
+                                            $('#instanceSpinner').removeClass('hidden');
+                                              //alert('end reached ' + localStorage.lastinstanceshown + ' ' + pageset + ' ' + localStorage.instanceData.length);
+                                              //loading next 15 if available
+                                              data = JSON.parse(localStorage.instanceData).splice(parseInt(localStorage.lastinstanceshown),pageset);
+                                              localStorage.lastinstanceshown = parseInt(localStorage.lastinstanceshown) + pageset;
+                                              //alert(JSON.stringify(data));
+                                              createInstanceUI(data);
+                                              $('#instanceSpinner').addClass('hidden');
+                                          }
+                                  });
                               }
 
                               b = initializeInstanceArea;
@@ -986,7 +1004,7 @@
                                           return '<tr data-instanceId="' + data._id + '" data-blueprintName="' + data.blueprintData.blueprintName + '"></tr>';
                                       },
                                       getDomainRoleThumbnail: function() {
-                                          return '<li class="domain-role-thumbnail"></li>';
+                                          return '<li class="domain-role-thumbnailDev"></li>';
                                       },
                                       getContainer: function() {
                                           return '<div class="flip-toggle container"></div>';
@@ -1100,12 +1118,12 @@
                                   } else {
                                       $item = $($carouselItemContainers.get($carouselItemContainers.length - 1));
                                       $instancesList = $item.find('ul');
-                                      if ($instancesList.children().length === 5) {
+                                      /*if ($instancesList.children().length === 5) {
                                           $item = $(cardTemplate.getItem());
                                           $instancesList = $(cardTemplate.getInstanceList());
                                           $item.append($instancesList);
                                           $divinstancescardview.append($item);
-                                      }
+                                      }*/
                                   }
                                   var $rowContainter = $(cardTemplate.getRowContainer(data));
 
@@ -3725,11 +3743,12 @@
                               }
 
                               function loadcarousel() {
-                                  $('.carousel.slide').carousel({
-                                      interval: false,
-                                      cycle: false
-                                  });
+                                  // $('.carousel.slide').carousel({
+                                  //     interval: false,
+                                  //     cycle: false
+                                  // });
                               }
+
 
                               var serachBoxInInstance = {
                                   instanceData: null,
@@ -3738,8 +3757,8 @@
                                       this.updateUI = this.updateUI.bind(this);
 
                                       $('#search').on('click', this.updateUI);
-                                      $('.custom-left').click(function() { //previous list
-                                          var originalList = $('#divinstancescardview').find('.carousel-inner');
+                                    /*  $('.custom-left').click(function() { //previous list
+                                          var originalList = $('#divinstancescardview');
                                           var activeList = originalList.find('.active'),
                                               prevList = activeList.prev();
                                           if (prevList.length == 1) {
@@ -3752,7 +3771,7 @@
                                       });
 
                                       $('.custom-right').click(function() {
-                                          var originalList = $('#divinstancescardview').find('.carousel-inner');
+                                          var originalList = $('#divinstancescardview');
                                           var activeList = originalList.find('.active'),
                                               nextList = activeList.next();
                                           if (nextList.length == 1) {
@@ -3763,7 +3782,7 @@
                                               originalList.find('.item:first').addClass('active');
                                           }
 
-                                      });
+                                      });*/
 
                                   },
                                   initData: function(data) {
