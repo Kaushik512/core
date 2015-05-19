@@ -1654,7 +1654,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                     res.send(400, "host must not be null.");
                                     return;
                                 } else if (retCode == 1) {
-                                    res.send(500, " Failed to execute command on Instance.");
+                                    res.send(500, " Chef run process exited unsuccessfully.");
                                     return;
                                 }
                                 if (decryptedCredentials.pemFileLocation) {
@@ -1667,7 +1667,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                     });
                                 }
                             }, function(stdOutData) {
-                                logger.debug("Return from chef client>>>>>>>>>>>>>>>>>>>: ", stdOutData);
+                                //logger.debug("Return from chef client>>>>>>>>>>>>>>>>>>>: ", stdOutData);
                                 installedString = installedString+"{"+stdOutData.replace(/\s+/g, ' ')+"},";
                                 if(stdOutData === "{catalyst.inspect.stop}"){
                                     // For CentOS
@@ -1695,7 +1695,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                 for(var i=0;i<str.length;i++){
                                     strWindows = strWindows+"{"+str[i].replace(/\s+/g, ' ')+"},";
                                     if(str[i] === chefClientOptions.host+" {catalyst.inspect.stop}"){
-                                        logger.debug("strWindows>>>>>>>>> ",strWindows);
+                                        //logger.debug("strWindows>>>>>>>>> ",strWindows);
                                         var insString;
                                         if(str[i] === chefClientOptions.host+" Name Version "){
                                             insString =strWindows.split(chefClientOptions.host+" Name Version ").pop().split(chefClientOptions.host+" {catalyst.inspect.stop}").shift();
