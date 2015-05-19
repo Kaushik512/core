@@ -681,7 +681,24 @@
                                   }
                                   // serachBoxInInstance.initData(data);
                                   a = createInstanceUI;
+                                  localStorage.setItem("instanceData",JSON.stringify(data));
+                                  var pageset = 15;
+                                  data = data.splice(0,15);
+                                  localStorage.lastinstanceshown = pageset;
                                   createInstanceUI(data);
+                                   $('#accordion-1').scrollTop(0);
+                                  $('#accordion-1').bind('scroll',function(){
+                                    if($(this).scrollTop() + $(this).innerHeight() >= this.scrollHeight) {
+                                            $('#instanceSpinner').removeClass('hidden');
+                                              //alert('end reached ' + localStorage.lastinstanceshown + ' ' + pageset + ' ' + localStorage.instanceData.length);
+                                              //loading next 15 if available
+                                              data = JSON.parse(localStorage.instanceData).splice(parseInt(localStorage.lastinstanceshown),pageset);
+                                              localStorage.lastinstanceshown = parseInt(localStorage.lastinstanceshown) + pageset;
+                                              //alert(JSON.stringify(data));
+                                              createInstanceUI(data);
+                                              $('#instanceSpinner').addClass('hidden');
+                                          }
+                                  });
                               }
 
                               b = initializeInstanceArea;
@@ -3725,10 +3742,10 @@
                               }
 
                               function loadcarousel() {
-                                  $('.carousel.slide').carousel({
-                                      interval: false,
-                                      cycle: false
-                                  });
+                                  // $('.carousel.slide').carousel({
+                                  //     interval: false,
+                                  //     cycle: false
+                                  // });
                               }
 
                               var serachBoxInInstance = {
