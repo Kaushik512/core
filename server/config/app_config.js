@@ -12,9 +12,20 @@ try {
         'encoding': 'utf8'
     });
 } catch (err) {
-    console.log(err);
+    logger.error(err);
     configJson = null;
     throw err;
+}
+
+var appUrlsConfig;
+try {
+    appUrlsConfig = fs.readFileSync(currentDirectory + '/appurls-config.json', {
+        'encoding': 'utf8'
+    });
+
+} catch (err) {
+    logger.error(err);
+    appUrlsConfig = null;
 }
 
 
@@ -22,6 +33,14 @@ if (configJson) {
     var config = JSON.parse(configJson);
     //console.log(config);
 }
+
+if (appUrlsConfig) {
+    appUrlsConfig = JSON.parse(appUrlsConfig);
+}
+console.log(appUrlsConfig);
+
+config.appUrls = appUrlsConfig.appUrls;
+
 //creating path
 mkdirp.sync(config.catalystHome);
 mkdirp.sync(config.instancePemFilesDir);
