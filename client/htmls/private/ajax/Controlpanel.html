@@ -154,9 +154,9 @@
                           <div class="panel-heading">
                             <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion-Software" href="#collapseSoftware" ><i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i><i class="fa fa-fw fa-rss fa-dot-circle-o" style="font-size:14px;"></i> <b style="color:#3a87ad;font-size:12px;"><u>Software</u></b></a></h4>
 
-                            <a class="btn btn-primary" data-toggle="modal" href="#installedSoftwareModalContainer" style="float: right; margin-right: 5px; margin-top: 2px;">
-                              <i class="fa fa-fw fa-play" style="font-size:14px;"></i>
-                              Execute
+                            <a class="btn btn-primary inspectBtn" data-toggle="modal" href="#installedSoftwareModalContainer" style="float: right; margin-right: 5px; margin-top: 2px;">
+                              <i class="fa fa-fw fa-search" style="font-size:14px;"></i>
+                              Inspect
                             </a>
 
                           </div>
@@ -339,37 +339,13 @@
                   <div class="modal-body">
                     <div class="row">
 
-                      <div class="col-md-12">
-                        <div id="paragraphs" class="p-sieve">
-                         <!--  <p><i class="fa fa-chevron-right txt-color-blue"></i>&nbsp;MAKEDEV.x86_64              3.24-6.el6                 @CentOS6-Base/$releasever</p>
-                          <hr>
-
-                          <p><i class="fa fa-chevron-right txt-color-blue"></i>&nbsp;acl.x86_64                  2.2.49-6.el6               @CentOS6-Base/$releasever</p>
-                          <hr>
-
-                          <p><i class="fa fa-chevron-right txt-color-blue"></i>&nbsp;acpid.x86_64                1.0.10-2.1.el6             @CentOS6-Base/$releasever</p>
-                          <hr>
-
-                          <p><i class="fa fa-chevron-right txt-color-blue"></i>&nbsp;attr.x86_64                 2.4.44-7.el6               @CentOS6-Base/$releasever</p>
-                          <hr>
-
-                          <p><i class="fa fa-chevron-right txt-color-blue"></i>&nbsp;audit.x86_64                2.2-2.el6                  @CentOS6-Base/$releasever</p>
-                          <hr>
-
-                          <p><i class="fa fa-chevron-right txt-color-blue"></i>&nbsp;accountsservice          install</p>
-                          <hr>
-
-                          <p><i class="fa fa-chevron-right txt-color-blue"></i>&nbsp;acpid            install</p>
-                          <hr>
-
-                          <p><i class="fa fa-chevron-right txt-color-blue"></i>&nbsp;groff-base         install</p>
-                          <hr>
-
-                          <p><i class="fa fa-chevron-right txt-color-blue"></i>&nbsp;init-system-helpers        install</p>
-                          <hr>
-
-                          <p><i class="fa fa-chevron-right txt-color-blue"></i>&nbsp;landscape-common       install</p>
-                           -->
+                      <div class="col-md-12 heightModal400">
+                        
+                        <div id="paragraphs" class="p-sieve paraHeightModal">
+                         
+                        </div>
+                        <div class="loadingContainerimageInspectCSS">
+                          <img  style="margin-left:140px;" src="img/spinner.gif"></img>
                         </div>
                       </div>
                     </div>
@@ -464,6 +440,7 @@
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
         <h4 class="modal-title" id="myModalLabel"><i class="fa fa-pencil-square-o txt-color-blue"></i>Update Runlist</h4>
+         <a style="font-size:14px!important;margin-top:-24px;float:right;margin-right:60px;" href="#modalForHelp" data-toggle="modal"><i class="fa fa-question"></i>&nbsp;Help</a>
       </div>
       <div class="modal-body" style="padding:0px !important">
         
@@ -474,6 +451,187 @@
       </div>
     </div>
   </div>
+</div>
+
+<!--modal for help-->
+
+<div class="modal fade" id="modalForHelp" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog " style="">
+        <div class="modal-content"> 
+            
+             <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">
+                    &nbsp;CookBook Information
+                </h4>
+
+            </div> 
+            
+            
+             <div class="modal-body" style="height:400px;overflow-y:auto">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                        <th>CookBook Name</th>
+                        <th>Description</th>
+                        <tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                        <td>apache2-windows</td>
+                        <td>Installation &amp; Configuration of Apache Server</td>
+                        </tr>
+                            <tr>
+                                <td>apache2</td>
+                                <td>Installation &amp; Configuration of Apache Server</td>
+                            </tr>
+                        <!--2nd set-->
+                        <tr>
+                        <td>cassandra</td>
+                        <td>Installation and configuration of Cassandra Server</td>
+                        </tr>
+                            <tr>
+                                <td>eclipse_windows</td>
+                                <td>Installtion of Eclispe on Windows</td>
+                            </tr>   
+                            <!--3rd set-->
+
+                        <tr>
+                        <td>visualstudio_windows</td>
+                        <td>Installation of Visual Studio</td>
+                        </tr>
+                            <tr>
+                                <td>iis</td>
+                                <td>Installation and configuration of IIS Server</td>
+                            </tr>
+                            <!--4th set-->
+                        <tr>
+                        <td>jboss7</td>
+                        <td>Installation and Configuration of JBOSS7 Server</td>
+                        </tr>
+                            <tr>
+                                <td>tomcat</td>
+                                <td>Installs and configures Tomcat, Java servlet engine and webserver</td>
+                            </tr>
+                            <!--5th set-->
+                            <tr>
+                        <td>weblogic</td>
+                        <td>Installation and Configuration of weblogic</td>
+                        </tr>
+                            <tr>
+                                <td>java</td>
+                                <td>Installation of Java</td>
+                            </tr>
+                            <!--6th set-->
+                            <tr>
+                        <td>java_windows</td>
+                        <td>Installation of Java</td>
+                        </tr>
+                            <tr>
+                                <td>nodejs</td>
+                                <td>Installation of NodeJS and npm package</td>
+                            </tr>   
+                            <!--7th set-->
+
+                            <tr>
+                        <td>php</td>
+                        <td>Installation and Configuration of PHP</td>
+                        </tr>
+                            <tr>
+                                <td>lamp_role</td>
+                                <td>Installation and Configuration of LAMP stack</td>
+                            </tr>   
+
+                            <!--8th set-->
+                            <tr>
+                        <td>mysql-windows</td>
+                        <td>Installation and Configuration of Mysql</td>
+                        </tr>
+                            <tr>
+                                <td>mysql</td>
+                                <td>Installation and Configuration of Mysql</td>
+                            </tr>   
+                            <!--9th set-->
+
+                            <tr>
+                        <td>oracle_windows</td>
+                        <td>Installation and Configuration of Oracle</td>
+                        </tr>
+                            <tr>
+                                <td>postgresql</td>
+                                <td>Installation and Configurationof postgresql</td>
+                            </tr>   
+                            <!--10th set-->
+                            <tr>
+                        <td>service_apache</td>
+                        <td>Service cookbook for apache server</td>
+                        </tr>
+                            <tr>
+                                <td>service_iptables</td>
+                                <td>Service cookbook for firewall</td>
+                            </tr>   
+
+                            <!--11th set-->
+                            <tr>
+                        <td>service_jboss</td>
+                        <td>Service cookbook for Jboss server</td>
+                        </tr>
+                            <tr>
+                                <td>service_mysql</td>
+                                <td>Service cookbook for Mysql</td>
+                            </tr>   
+                            <!--12th set-->
+                            <tr>
+                        <td>service_nginx</td>
+                        <td>Service cookbook for nginx </td>
+                        </tr>
+                            <tr>
+                                <td>service_tomcat</td>
+                                <td>Service cookbook for tomcat</td>
+                            </tr>   
+                            <!--13th set-->
+                            <tr>
+                        <td>service_weblogic</td>
+                        <td>service cookbook for weblogic</td>
+                        </tr>
+                            <tr>
+                                <td>seven_zip</td>
+                                <td>Installation of 7Zip</td>
+                            </tr>
+                            <!--14th set-->
+                            <tr>
+                        <td>git</td>
+                        <td>Installs git and optionally sets up a git server as a daemon under runit</td>
+                        </tr>
+                            <tr>
+                                <td>wget_windows</td>
+                                <td>Installs wget on windows</td>
+                            </tr>
+                            <!--15th set-->
+                            <tr>
+                        <td>toad_windows</td>
+                        <td>Installation and Configuration of TOAD</td>
+                        </tr>
+                            <tr>
+                                <td>docker</td>
+                                <td>Installation and Configuration of docker engine</td>
+                            </tr>   
+                            <tr>
+                                <td>jenkins</td>
+                                <td>Installs and configures Jenkins CI master &amp; node slaves</td>
+                            </tr>   
+                    </tbody>
+                </table>
+
+            </div>
+            
+                <div class="modal-footer">
+        
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                </div>   
+  
+         </div>
+    </div>
 </div>
 
 
@@ -613,26 +771,35 @@ var urlParams ={};
 
 
 function populateJsonData(instanceId) {
+  $('.paraHeightModal').hide();
     $.ajax({
         type: "GET",
-        url: "/instances/" + instanceId + "/inspect",
+        url: "/instances/" + urlParams.id + "/inspect",
         success: function(data) {
             //alert(data);
             var jsonArray = data;
             var dataToBeUsed = typeof jsonArray == "object" ? jsonArray : JSON.parse(jsonArray);
             var temp = '';
             for (var i = 0; i < dataToBeUsed.length; i++) {
-                temp = temp + '<p><i class="fa fa-chevron-right txt-color-blue"></i>&nbsp;' + dataToBeUsed[i] + '</p><hr>';
+                temp = temp + '<p><i class="fa fa-chevron-right txt-color-blue"></i>&nbsp;' + dataToBeUsed[i] + '</p>';
             }
+            $('.loadingContainerimageInspectCSS').hide();
+            $('.paraHeightModal').show();
             $('#paragraphs').append(temp);
         },
         failure: function(data) {
-            alert('Failure');
-            //alert(data.toString());
+          bootbox.alert(data.responseText);
+          $('.loadingContainerimageInspectCSS').hide();
+          $('.paraHeightModal').hide();
+        },
+        error: function(jqxhr){
+          bootbox.alert(jqxhr.responseText);
+          $('.loadingContainerimageInspectCSS').hide();
+          $('.paraHeightModal').hide();
         }
     });
 }
-//$('.inspectBtn').click(populateJsonData);
+$('.inspectBtn').click(populateJsonData);
 
 function disableSSHBtn(instanceId) {
   var $cardViewInstanceId = $(".domain-roles-caption[data-instanceId='"+instanceId+"']");
@@ -699,7 +866,7 @@ function disableInstanceStartStopActionBtns(instanceId){
 var logTimeout;
 var stateTimeout;
 $.get('../instances/'+urlParams.id,function(data){
-    populateJsonData(data._id);
+    //populateJsonData(data._id);
    //setting tree and drawing breadcrumb
    //alert(data.projectId)
    var $selectedOrg = $('.orgsList').find('[data-org="'+urlParams.org+'"]');
@@ -1356,7 +1523,9 @@ $('.startstoptoggler').click(startAndStopToggler);
       var $cardAppUrlListContanier = $('.instance-bootstrap-list');
         for (var k = 0; k < data.appUrls.length; k++) {
           var url = data.appUrls[k].url;
+          if(url) {
           url = url.replace('$host',data.instanceIP);
+          }
           var anchor = "<span class='marginForURLCP'><a class='app-url ' data-appUrlId='"+data.appUrls[k]._id+"' href='"+url+"'' target='_blank' title='"+data.appUrls[k].name+"'>"+data.appUrls[k].name+"</a></span>";
             $cardAppUrlListContanier.last().append(anchor);
             var $form = $('#appUrlTemplateForm').clone(true);
@@ -1963,7 +2132,9 @@ $(document).ready(function(e){
                                   var $cardAppUrlListContanier = $('.instance-bootstrap-list');
                                   for (var k = 0; k < data.appUrls.length; k++) {
                                       var url = data.appUrls[k].url;
+                                      if(url) {
                                       url = url.replace('$host', data.instanceIP);
+                                      }
                                       var anchor = "<span class='marginForURLCP'><a class='app-url ' data-appUrlId='" + data.appUrls[k]._id + "' href='" + url + "'' target='_blank' title='" + data.appUrls[k].name + "'>" + data.appUrls[k].name + "</a></span>";
                                       $cardAppUrlListContanier.last().append(anchor);
                                       var $form = $('#appUrlTemplateForm').clone(true);
