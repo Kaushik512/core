@@ -4,8 +4,8 @@ var errorResponses = require('./error_responses');
 
 module.exports.setRoutes = function(app) {
     app.post('/chefClientExecution/:executionId', function(req, res) {
-         console.log(' chef exec id -==>',req.params.executionId);
-        console.log(' chef exec -==>',req.body);
+        //  console.log(' chef exec id -==>',req.params.executionId);
+        // console.log(' chef exec -==>',req.body);
         ChefClientExecution.getExecutionById(req.params.executionId, function(err, chefClientExecution) {
             if (err) {
                 res.send(500, errorResponses.db.error);
