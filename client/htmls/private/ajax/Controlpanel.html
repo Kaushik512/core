@@ -739,6 +739,43 @@
   </div>
 </div>
 
+<!--modal for instance edit-->
+
+<div class="modal fade" id="modalforInstanceEdit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog " style="">
+        <div class="modal-content"> 
+            <form role="form" id="instanceEditNew">
+             <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">
+                    &nbsp;Edit Instance Name
+                </h4>
+
+            </div> 
+            
+            
+             <div class="modal-body" style="height:78px;">
+                <div class="col-lg-6 col-md-6">
+
+                            <label for="">Name<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+
+                            <input type="text" name="editName" class="form-control" id="instanceEditName" autofocus/>
+                </div>
+                
+                    <input type="hidden" id="instanceIDHiddenInput">
+                
+
+            </div>
+            
+               <div class="modal-footer">
+        <input type="submit" id="editSaveBTN" class="btn btn-primary" value="Save" />
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+      </div>   
+  </form>
+         </div>
+    </div>
+</div>
+
 
 
 <!-- div of Contant tab starts here -->
@@ -768,6 +805,8 @@ var urlParams ={};
  }
      
 })();
+
+ 
 
 
 function populateJsonData(instanceId) {
@@ -1038,11 +1077,10 @@ $.get('../instances/'+urlParams.id,function(data){
     if(!name) {
       name = data.blueprintData.blueprintName;
     }
-    var $spanheadingMiddleCP = $('<span>' + name + '</span>').addClass('cardHeadingTextoverflow').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', ''+ name +'');
+    var $spanheadingMiddleCP = $('<span class="cardHeadingTextoverflow" rel="tooltip" data-placement="top" data-original-title="' + name + '">' + name + '</span>' + '<a href="#modalforInstanceEdit" data-backdrop="false" data-toggle="modal" class="glyphicon glyphicon-pencil editInstanceNameBtn" style="cursor:pointer;"></a></span>');
     var $spanheadingRightCP = $('<span></span>').css({
       'float':'left','margin-top':'4px','margin-left':'8px'
     }).append($('<a href="javascript:void(0)" data-instanceId="' + data._id + '"></a>').addClass('moreInfo').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'MoreInfo'));
-
 
     $divHeadingCP.append($spanheadingLeftCP);
     $divHeadingCP.append($spanheadingMiddleCP);
@@ -1192,6 +1230,34 @@ $('.startstoptoggler').click(startAndStopToggler);
         //     addInstanceToDaddInstanceToDOMOMaddInstanceToDOM(data);
         // });
     };
+
+    $('#instanceEditNew').submit(function(e) {
+     var reqBodyEdit = {};
+
+     var $form = $('#instanceEditNew');
+     reqBodyEdit.name = $form.find('#instanceEditName').val();
+     var instanceId = $form.find('#instanceIDHiddenInput').val();
+     var $selectedRow = $('#tableinstanceview').find('tr.rowcustomselected');
+
+     blueprintName = $selectedRow.attr('data-blueprintName');
+     $.post('/instances/' + instanceId + '/updateName', reqBodyEdit, function(data) {
+
+         $('.domain-roles-caption[data-instanceId="' + instanceId + '"]').find('.cardHeadingTextoverflow').html(reqBodyEdit.name);
+         $('.domain-roles-caption[data-instanceId="' + instanceId + '"]').find('.cardHeadingTextoverflow').attr('rel', 'tooltip').attr('data-original-title', reqBodyEdit.name);
+         $('tr[data-instanceId="' + instanceId + '"] td.instanceBlueprintName').html(reqBodyEdit.name);
+         $('#modalforInstanceEdit').modal('hide');
+     });
+
+     return false;
+
+ });
+    function editInstanceNameHandler(e) {
+        $('#instanceEditNew').trigger("reset");
+        $('#instanceIDHiddenInput').val(data._id);
+        var prevName = $('.domain-role-thumbnail').find('.cardHeadingTextoverflow').text();
+        $('#instanceEditName').val(prevName);
+    }
+    $('.domain-role-thumbnail').find('.editInstanceNameBtn').click(editInstanceNameHandler);
 
   $('.moreInfo').click(displayLog);
   $('#controlPanelLogTab').on('shown.bs.tab',displayLog);
