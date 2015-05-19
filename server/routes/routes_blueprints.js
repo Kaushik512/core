@@ -270,10 +270,11 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                         if (!blueprint.appUrls) {
                                                             blueprint.appUrls = [];
                                                         }
-                                                        blueprint.appUrls.unshift({
-                                                            name: 'logs',
-                                                            url: appConfig.logServerUrl
-                                                        });
+                                                        var appUrls = blueprint.appUrls;
+                                                        if(appConfig.appUrls && appConfig.appUrls.length) {
+                                                          appUrls =  appUrls.concat(appConfig.appUrls);  
+                                                        }
+                                                         
                                                         var instance = {
                                                             name: blueprint.name,
                                                             orgId: blueprint.orgId,
@@ -285,7 +286,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                             chefNodeName: instanceData.InstanceId,
                                                             runlist: version.runlist,
                                                             platformId: instanceData.InstanceId,
-                                                            appUrls: blueprint.appUrls,
+                                                            appUrls: appUrls,
                                                             instanceIP: instanceData.PublicIpAddress,
                                                             instanceState: instanceData.State.Name,
                                                             bootStrapStatus: 'waiting',

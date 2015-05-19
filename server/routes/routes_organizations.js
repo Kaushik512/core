@@ -1758,10 +1758,14 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                     if (!req.body.appUrls) {
                                         req.body.appUrls = [];
                                     }
-                                    req.body.appUrls.unshift({
-                                        name: 'logs',
-                                        url: appConfig.logServerUrl
-                                    });
+                                  
+
+                                    var appUrls = req.body.appUrls;
+                                    if (appConfig.appUrls && appConfig.appUrls.length) {
+                                        appUrls = appUrls.concat(appConfig.appUrls);
+                                    }
+
+
                                     var instance = {
                                         name: req.body.fqdn,
                                         orgId: req.params.orgId,
@@ -1772,7 +1776,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                         instanceState: nodeAlive,
                                         bootStrapStatus: 'waiting',
                                         runlist: [],
-                                        appUrls: req.body.appUrls,
+                                        appUrls: appUrls,
                                         users: [req.session.user.cn], //need to change this
                                         hardware: {
                                             platform: 'unknown',
