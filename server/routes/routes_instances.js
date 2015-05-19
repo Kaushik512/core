@@ -1672,6 +1672,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                 if(stdOutData === "{catalyst.inspect.stop}"){
                                     // For CentOS
                                     if(anInstance[0].credentials.username === "root"){
+                                        logger.debug("CentOS Called...");
                                         var insString =installedString.split("{Installed Packages}").pop().split("{{catalyst.inspect.stop}}").shift();
                                         insString = insString.substr(1);
                                         insString = insString.slice(0, -1);
@@ -1679,6 +1680,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                         return;
                                     }else{
                                         // For Ubuntu
+                                        logger.debug("Ubuntu Called...");
                                         var insString =installedString.split("{{catalyst.inspect.start}}").pop().split("{{catalyst.inspect.stop}}").shift();
                                         insString = insString.substr(1);
                                         insString = insString.slice(0, -1);
@@ -1688,11 +1690,18 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                             }
                             // For Windows
                             if(chefClientOptions.username === "administrator"){
+                                logger.debug("Windows Called...");
                                 var str = stdOutData.split("\n");
                                 for(var i=0;i<str.length;i++){
                                     strWindows = strWindows+"{"+str[i].replace(/\s+/g, ' ')+"},";
                                     if(str[i] === chefClientOptions.host+" {catalyst.inspect.stop}"){
-                                        var insString =strWindows.split(chefClientOptions.host+" Name Version ").pop().split(chefClientOptions.host+" {catalyst.inspect.stop}").shift();
+                                        logger.debug("strWindows>>>>>>>>> ",strWindows);
+                                        var insString;
+                                        if(str[i] === chefClientOptions.host+" Name Version "){
+                                            insString =strWindows.split(chefClientOptions.host+" Name Version ").pop().split(chefClientOptions.host+" {catalyst.inspect.stop}").shift();
+                                        }else{
+                                            insString =strWindows.split("{"+chefClientOptions.host+" Name Version }").pop().split("{"+chefClientOptions.host+" {catalyst.inspect.stop}}").shift();
+                                        }
                                         insString = insString.substr(1);
                                         insString = insString.slice(0, -1);
                                         var arr = insString.split(",");
