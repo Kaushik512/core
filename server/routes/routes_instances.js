@@ -1666,9 +1666,10 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                     });
                                 }
                             }, function(stdOutData) {
-                                //logger.debug("Return from chef client>>>>>>>>>>>>>>>>>>>: ", typeof stdOutData);
+                                logger.debug("Return from chef client>>>>>>>>>>>>>>>>>>>: ", stdOutData);
                                 installedString = installedString+"{"+stdOutData.replace(/\s+/g, ' ')+"},";
                                 if(stdOutData === "{catalyst.inspect.stop}"){
+                                    // For CentOS
                                     if(anInstance[0].credentials.username === "root"){
                                         var insString =installedString.split("{Installed Packages}").pop().split("{{catalyst.inspect.stop}}").shift();
                                         insString = insString.substr(1);
@@ -1676,6 +1677,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                         res.send(insString.split(","));
                                         return;
                                     }else{
+                                        // For Ubuntu
                                         var insString =installedString.split("{{catalyst.inspect.start}}").pop().split("{{catalyst.inspect.stop}}").shift();
                                         insString = insString.substr(1);
                                         insString = insString.slice(0, -1);
@@ -1683,9 +1685,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                         return;
                                     }
                             }
+                            // For Windows
                             if(chefClientOptions.username === "administrator"){
-                                //installedList.push("{"+stdOutData.replace(/\s+/g, ' ')+"}");
-                                logger.debug("installedList>>>>>>>>>>>>>>> ",stdOutData);
                                 var str = stdOutData.split("\n");
                                 for(var i=0;i<str.length;i++){
                                     strWindows = strWindows+"{"+str[i].replace(/\s+/g, ' ')+"},";
@@ -1695,16 +1696,15 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                         insString = insString.slice(0, -1);
                                         var arr = insString.split(",");
                                         for(var x=0;x<arr.length;x++){
-                                            logger.debug(">>>>>>>>>>>> ",arr[x].length);
                                             if(arr[x] !== "{"+chefClientOptions.host+" }"){
-                                                installedList.push(arr[x]);
+                                                installedList.push(arr[x].replace(chefClientOptions.host,''));
                                             }else if(arr[x] !== "{"+chefClientOptions.host+"}" && arr[x] !== "{"+chefClientOptions.host+" }"){
-                                                installedList.push(arr[x]);
+                                                installedList.push(arr[x].replace(chefClientOptions.host,''));
                                             }else if(arr[x] !== "{}" && arr[x] !== "{"+chefClientOptions.host+"}" && arr[x] !== "{"+chefClientOptions.host+" }"){
-                                                installedList.push(arr[x]);
+                                                installedList.push(arr[x].replace(chefClientOptions.host,''));
                                             }else if(arr[x].length != 0 && arr[x] !== "{}" && arr[x] !== "{"+chefClientOptions.host+"}" && arr[x] !== "{"+chefClientOptions.host+" }"){
                                                logger.debug("0 called...");
-                                                installedList.push(arr[x]);
+                                                installedList.push(arr[x].replace(chefClientOptions.host,''));
                                             }
                                         }
                                         res.send(installedList.filter(Boolean));
