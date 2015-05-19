@@ -161,11 +161,16 @@
 
                                       var $form = $('#instanceEditNew');
                                       reqBodyEdit.name = $form.find('#instanceEditName').val();
+                                      
                                       var instanceId = $form.find('#instanceIDHiddenInput').val();
+                                      var $selectedRow = $('#tableinstanceview').find('tr.rowcustomselected');
+                                      
+                                      blueprintName = $selectedRow.attr('data-blueprintName');
                                       $.post('../instances/' + instanceId + '/updateName', reqBodyEdit, function(data) {
 
                                           $('.domain-roles-caption[data-instanceId="' + instanceId + '"]').find('.cardHeadingTextoverflow').html(reqBodyEdit.name);
                                           $('.domain-roles-caption[data-instanceId="' + instanceId + '"]').find('.cardHeadingTextoverflow').attr('rel','tooltip').attr('data-original-title', reqBodyEdit.name);
+                                          $('tr[data-instanceId="' + instanceId + '"] td.instanceBlueprintName span').html(reqBodyEdit.name);
                                           $('#modalforInstanceEdit').modal('hide');
                                       });
 
@@ -984,7 +989,11 @@
                                           return '<ul class="thumbnails marginleft-40 padding-top-30 list-unstyled instancesList"></ul>';
                                       },
                                       getRowContainer: function(data) {
-                                          return '<tr data-instanceId="' + data._id + '" data-blueprintName="' + data.blueprintData.blueprintName + '"></tr>';
+                                        var name = data.name;
+                                          if (!name) {
+                                              name = data.blueprintData.blueprintName;
+                                          }
+                                          return '<tr data-instanceId="' + data._id + '" data-blueprintName="' + name + '"></tr>';
                                       },
                                       getDomainRoleThumbnail: function() {
                                           return '<li class="domain-role-thumbnailDev"></li>';
@@ -1126,12 +1135,7 @@
 
                                   $divDomainRolesCaption.append(cardTemplate.getDomainRolesHeading(data) + "<hr>");
 
-                                  $divDomainRolesCaption.find('.editInstanceNameBtn').click(function(e) {
-                                      $('#instanceEditNew').trigger("reset");
-                                      $('#instanceIDHiddenInput').val(data._id);
-                                      var prevName = $divDomainRolesCaption.find('.cardHeadingTextoverflow').text();
-                                      $('#instanceEditName').val(prevName);
-                                  });
+                                  
 
                                   if (data.instanceState == 'running') {
 
@@ -1197,9 +1201,19 @@
                                   $rowContainter.append('<td></td>');
                                   $rowContainter.append('<td><img src="' + data.blueprintData.iconPath + '" style="width:auto;height:30px;" /></td>');
 
-
-                                  $rowContainter.append('<td>' + data.blueprintData.blueprintName.toString().substring(0, 25) + '</td>');
-
+                                  var name = data.name;
+                                  if (!name) {
+                                      name = data.blueprintData.blueprintName;
+                                  }
+                                  $rowContainter.append('<td class="instanceBlueprintName">' + '<span>' + name.toString().substring(0, 25) + '</span>' + '<a href="#modalforInstanceEdit" data-backdrop="false" data-toggle="modal" style="margin-left:10px" class="glyphicon glyphicon-pencil editInstanceNameBtn" style="cursor:pointer;"></a></td>');
+                                  function editInstanceNameHandler(e) {
+                                      $('#instanceEditNew').trigger("reset");
+                                      $('#instanceIDHiddenInput').val(data._id);
+                                      var prevName = $divDomainRolesCaption.find('.cardHeadingTextoverflow').text();
+                                      $('#instanceEditName').val(prevName);
+                                  }
+                                  $divDomainRolesCaption.find('.editInstanceNameBtn').click(editInstanceNameHandler);
+                                  $rowContainter.find('.editInstanceNameBtn').click(editInstanceNameHandler);
                                   $rowContainter.append('<td class="instanceIPCol">' + data.instanceIP + '</td>');
                                   var $tableRunlistDiv = $('<div></div>'); /*.append('<span>'+data.runlist.join()+'</span>');*/
 
