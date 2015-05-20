@@ -924,6 +924,10 @@ function populateJsonData(instanceId) {
     });
 }
 $('.inspectBtn').click(populateJsonData);
+$('.inspectBtn').click(function(){
+  $('.loadingContainerimageInspectCSS').show();
+  $('div').find('#paragraphs').empty();
+});
 
 function disableSSHBtn(instanceId) {
   var $cardViewInstanceId = $(".domain-roles-caption[data-instanceId='"+instanceId+"']");
