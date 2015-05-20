@@ -454,6 +454,9 @@ var InstancesDao = function() {
 
     this.addAppUrls = function(instanceId, appUrls, callback) {
         console.log(appUrls);
+        for (var i = 0; i < appUrls.length; i++) {
+            appUrls[i]._id = new ObjectId();
+        }
         logger.debug("Enter updateAppUrl2 (%s, %s)", instanceId, appUrls);
         Instances.update({
             "_id": new ObjectId(instanceId)
@@ -465,25 +468,31 @@ var InstancesDao = function() {
             }
         }, {
             upsert: false
-        }, function(err, data) {
+        }, function(err, updateCount) {
             if (err) {
                 logger.error("Failed to addAppUrl (%s, %s,%s)", instanceId, appUrls, err);
                 callback(err, null);
                 return;
             }
             logger.debug("Exit addAppUrl (%s, %s)", instanceId, appUrls);
-            callback(null, data);
+            if (updateCount) {
+                callback(null, appUrls);
+            } else {
+                callback(null, null);
+            }
+
         });
     }
 
-    this.updateAppUrl = function(instanceId, appUrlId, url, callback) {
+    this.updateAppUrl = function(instanceId, appUrlId, name, url, callback) {
         logger.debug("Enter updateAppUrl2 (%s, %s)", instanceId, url);
         Instances.update({
             "_id": new ObjectId(instanceId),
             "appUrls._id": new ObjectId(appUrlId)
         }, {
             $set: {
-                "appUrls.$.url": url
+                "appUrls.$.url": url,
+                "appUrls.$.name": name
             }
         }, {
             upsert: false
