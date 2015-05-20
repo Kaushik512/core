@@ -2374,6 +2374,46 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                         }
                                         logger.debug('New Master Saved');
 
+                                        // Start Auto create Team
+                                        if(req.params.id === '7' && bodyJson["orgname_rowid"] !== ""){
+                                            d4dModelNew.d4dModelMastersProjects.find({
+                                            orgname_rowid : bodyJson["orgname_rowid"]
+                                        },function(err,projects){
+                                            if(err){
+                                                res.send(500,"Failed to fetch Project for Org");
+                                                return;
+                                            }
+                                            var teamData;
+                                            for(var i=0;i<projects.length;i++){
+                                                if(projects[i].id === "4"){
+                                                    teamData = {
+                                                        "teamname": bodyJson["orgname"]+"_admins",
+                                                        "description": "Team For Org Admin.",
+                                                        "orgname": bodyJson["orgname"],
+                                                        "orgname_rowid": bodyJson["orgname_rowid"],
+                                                        "loginname": data.loginname,
+                                                        "loginname_rowid": data.rowid,
+                                                        "projectname": projects[i].projectname,
+                                                        "projectname_rowid": projects[i].rowid,
+                                                        "rowid": uuid.v4(),
+                                                        "id": "21"
+                                                    };
+                                                }
+                                            }
+                                            logger.debug("teamData>>>>>>>>>>>>>>>>>>>>>>>> ",teamData);
+                                            var teamModel = new d4dModelNew.d4dModelMastersTeams(teamData);
+                                            teamModel.save(function(err,aTeam){
+                                                if(err){
+                                                    res.send(500,"Failed to save Team.");
+                                                }
+                                                logger.debug("Auto created Team:>>>>>>>> ",JSON.stringify(aTeam));
+                                            });
+
+                                        });
+
+                                        }
+                                        // End Auto create Team
+
                                         logger.debug(req.params.fileinputs == 'null');
                                         logger.debug('New record folderpath: % rowid %s FLD["folderpath"]:', folderpath, newrowid, folderpath);
                                         if (!folderpath) {
