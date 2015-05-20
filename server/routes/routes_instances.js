@@ -1690,33 +1690,30 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                             }
                             // For Windows
                             if(chefClientOptions.username === "administrator"){
+                                var insString;
+                                var arr = [];
                                 logger.debug("Windows Called...");
                                 var str = stdOutData.split("\n");
                                 for(var i=0;i<str.length;i++){
-                                    strWindows = strWindows+"{"+str[i].replace(/\s+/g, ' ')+"},";
+                                    var actualStr = str[i].replace(/\s+/g, ' ');
+                                    strWindows = strWindows+"{"+actualStr+"},";
+                                    if(actualStr === chefClientOptions.host+" Name Version "){
+                                        insString =strWindows.split(chefClientOptions.host+" Name Version ").pop().split(chefClientOptions.host+" {catalyst.inspect.stop}").shift();
+                                    }else{
+                                        insString =strWindows.split("{"+chefClientOptions.host+" Name Version }").pop().split("{"+chefClientOptions.host+" {catalyst.inspect.stop}}").shift();
+                                    }
                                     if(str[i] === chefClientOptions.host+" {catalyst.inspect.stop}"){
-                                        //logger.debug("strWindows>>>>>>>>> ",strWindows);
-                                        var insString;
-                                        if(str[i] === chefClientOptions.host+" Name Version "){
-                                            insString =strWindows.split(chefClientOptions.host+" Name Version ").pop().split(chefClientOptions.host+" {catalyst.inspect.stop}").shift();
-                                        }else{
-                                            insString =strWindows.split("{"+chefClientOptions.host+" Name Version }").pop().split("{"+chefClientOptions.host+" {catalyst.inspect.stop}}").shift();
-                                        }
                                         insString = insString.substr(1);
                                         insString = insString.slice(0, -1);
-                                        var arr = insString.split(",");
+                                        arr = insString.split(",");
                                         for(var x=0;x<arr.length;x++){
-                                            if(arr[x] !== "{"+chefClientOptions.host+" }"){
-                                                installedList.push(arr[x].replace(chefClientOptions.host,''));
-                                            }else if(arr[x] !== "{"+chefClientOptions.host+"}" && arr[x] !== "{"+chefClientOptions.host+" }"){
-                                                installedList.push(arr[x].replace(chefClientOptions.host,''));
-                                            }else if(arr[x] !== "{}" && arr[x] !== "{"+chefClientOptions.host+"}" && arr[x] !== "{"+chefClientOptions.host+" }"){
-                                                installedList.push(arr[x].replace(chefClientOptions.host,''));
-                                            }else if(arr[x].length != 0 && arr[x] !== "{}" && arr[x] !== "{"+chefClientOptions.host+"}" && arr[x] !== "{"+chefClientOptions.host+" }"){
-                                               logger.debug("0 called...");
-                                                installedList.push(arr[x].replace(chefClientOptions.host,''));
+                                            var replaceStr;
+                                            if(arr[x].length != 0 && arr[x] !== "{}" && arr[x] !== "{"+chefClientOptions.host+"}" && arr[x] !== "{"+chefClientOptions.host+" }"){
+                                                replaceStr = arr[x].replace("{}",'');
+                                                installedList.push(replaceStr.replace(chefClientOptions.host,''));
                                             }
                                         }
+                                        logger.debug("Exit get() for /instances/%s/inspect", req.params.instanceId);
                                         res.send(installedList.filter(Boolean));
                                         return;
                                     }
