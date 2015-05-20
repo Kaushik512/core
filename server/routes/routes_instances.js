@@ -1681,7 +1681,12 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                     }else{
                                         // For Ubuntu
                                         logger.debug("Ubuntu Called...");
-                                        var insString =installedString.split("{{catalyst.inspect.start}}").pop().split("{{catalyst.inspect.stop}}").shift();
+                                        var insString;
+                                        if(stdOutData === "{{catalyst.inspect.start}}"){
+                                            insString =installedString.split("{{catalyst.inspect.start}}").pop().split("{{catalyst.inspect.stop}}").shift();
+                                        }else{
+                                            insString =installedString.split("{catalyst.inspect.start}}").pop().split("{{catalyst.inspect.stop}}").shift();
+                                        }
                                         insString = insString.substr(1);
                                         insString = insString.slice(0, -1);
                                         res.send(insString.split(","));
