@@ -37,7 +37,7 @@ if (configJson) {
 if (appUrlsConfig) {
     appUrlsConfig = JSON.parse(appUrlsConfig);
 }
-console.log(appUrlsConfig);
+
 
 config.appUrls = appUrlsConfig.appUrls;
 

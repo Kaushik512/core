@@ -777,12 +777,30 @@ $(document).ready(function() {
                     }
                     var $tdAttribName = $('<td/>').html(displayName);
                     var value = '';
-
+                    if(attributesList[i].attributes[attributesNamesList[j]]['default']) {
+                      value =  attributesList[i].attributes[attributesNamesList[j]]['default'];
+                    }
                     var $trView = $tbodyViewAttributes.find('tr[data-attributeKey="'+attributesNamesList[j]+'"]');
                     if($trView.length) {
                         value = $trView.attr('data-attributeValue');
                     }
-                    var $tdAttribEditor = $('<td/>').append('<input type="text" class="attribValue" data-attribKey="'+attributesNamesList[j]+'" value="'+value+'" data-attribName="'+displayName+'"/>');
+                    
+                    var $attributeInput;
+                    var choices = attributesList[i].attributes[attributesNamesList[j]].choice;
+                    if (choices && choices.length) {
+                        $attributeInput = $('<select class="attribValueInput" data-attribKey="'+attributesNamesList[j]+'" data-attribName="'+displayName+'"></select>');
+                        for (var k = 0; k < choices.length; k++) {
+                           var $option = $('<option></option>').val(choices[k]).html(choices[k]);
+                           $attributeInput.append($option);
+                        }
+                        $attributeInput.val(value);
+                    } else {
+                       $attributeInput = $('<input type="text" class="attribValueInput" data-attribKey="'+attributesNamesList[j]+'" value="'+value+'" data-attribName="'+displayName+'"/>');
+                    }
+
+
+                    
+                    var $tdAttribEditor = $('<td/>').append($attributeInput);
                     $tr.append($tdAttribName).append($tdAttribEditor);
                     //dataTable.row.add($tr).draw();
                     $tbody.append($tr)
@@ -834,7 +852,7 @@ $(document).ready(function() {
     $('.saveAttribBtn').click(function(e) {
         var $modal = $('#editAttributesModalContainer');
         var $tbody = $modal.find('.attributesEditTableBody');
-        var $input = $tbody.find('.attribValue');
+        var $input = $tbody.find('.attribValueInput');
         var attributes = [];
         $input.each(function() {
             var $this = $(this);
