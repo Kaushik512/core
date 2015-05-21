@@ -1887,7 +1887,7 @@ function saveform(formID, operationTypes) {
         // alert('id:' + k);
         $(this).find("input").each(function() {
             // alert($(this).val());
-            if ($(this).is(":checked")) {
+            if ($(this).is(":checked") && !$(this).hasClass('runlistTypeSelectorRadioBtn')) {
                 //    v.push("\"" + $(this).val() + "\"");
                 v.push($(this).val());
                 v_rowid.push($(this).attr('rowid'));
@@ -1909,13 +1909,9 @@ function saveform(formID, operationTypes) {
         var $ccrs = $(this).data('$ccrs');  
         if ($ccrs) {
             var runlist = $ccrs.getSelectedRunlist();
-            var v2 = [];
-            for(kk=0;kk<runlist.length;kk++) {
-                v2.push("\"" + runlist[kk] + "\"");
-            } 
             
             //alert('hit on run list' + v2.join(','));
-            v.push(v2.join(','));
+            v.push(runlist.join(','));
         }
         if (k != '') {
             //data1.append(k,"[" + v.toString() + "]");

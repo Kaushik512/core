@@ -481,17 +481,7 @@
          itms = [];
        }
        console.log(itms);
-       var $ccrs = $chefCookbookRoleSelector('usechefserver/' + csid,function(data){
-               // var itms = $('#templatescookbooks').attr('savedvalue').split(',');
-               // //Adding previously saved items
-               // $.each(itms,function(i,v){
-               //   console.log(i + ' ' + v.replace(/"/g, "") );
-               //   $('.deploymentsCookbookList input[value="' + v.replace(/"/g, "") + '"],.deploymentRoleList input[value="' + v.replace(/"/g, "")  + '"]').attr('checked','checked');
-               //   $('.btnItemAdd').trigger('click');
-               // });
-             
-                   
-       },itms);
+       var $ccrs = $chefCookbookRoleSelector('usechefserver/' + csid,null,itms);
         $('#templatescookbooks').empty().append($ccrs).data('$ccrs',$ccrs);
    
        }

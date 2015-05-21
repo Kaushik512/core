@@ -1493,6 +1493,7 @@ $('.startstoptoggler').click(startAndStopToggler);
                                                  $('.app-url[data-appUrlId="' + data.appUrls[k]._id + '"]').attr('href', url).attr('data-instanceIP',data.instanceIP);
                                              }
                                       }
+                                       window.instanceIPForAppLink =  data.instanceIP;
                                 }
                             }
                         })
@@ -1672,13 +1673,15 @@ $('.startstoptoggler').click(startAndStopToggler);
   $cfmwareTbody.append($tr);
 
 
-
+    window.instanceIPForAppLink =  data.instanceIP;
+    
     if (data.appUrls && data.appUrls.length) {
       for(var kk =0;kk<data.appUrls.length;kk++) {
         createAppUrlTableRow(data.appUrls[kk]);
         createAppUrlCardLink(data.appUrls[kk],data.instanceIP);
       }
-    } /*else {
+    }
+    /*else {
       $('#appUrlTemplateFormCreate').removeClass('hidden');
     }*/
    
@@ -2302,17 +2305,20 @@ function createAppUrlTableRow(appUrlData) {
     $row.data('appUrlData', appUrlData);
     var $tdName = $('<td class="appNameTable"/>');
     $tdName.append(appUrlData.name);
-    var $tdURL = $('<td class="appUrlTable"/>').append('<a href="'+appUrlData.url+'" target="_blank">'+appUrlData.url+'</a> ');
+    var url = appUrlData.url;
+    if(url){
+      url = url.replace('$host',window.instanceIPForAppLink);
+    }
+    var $tdURL = $('<td class="appUrlTable"/>').append('<a href="'+url+'" target="_blank">'+url+'</a> ');
     var $tdAction = $('<td/>');
     $tdAction.append('<div class="btn-group"><button class="btn btn-info pull-left btn-sg tableactionbutton appUrlEditLink" value="Update" title="Update"><i class="ace-icon fa fa-pencil bigger-120"></i></button></div>').append('<div style="margin-left:5px;" class="btn-group"><button class="btn btn-danger pull-left btn-sg tableactionbutton appUrlRemoveLink" value="Remove" title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></div>');
 
     $tdAction.find('.appUrlEditLink').click(function(){
-       
+        var appUrlData = $row.data('appUrlData');
         var $editModal = $('#modalAppNameURL');
+        
         $editModal.modal('show');
-        var prevName = $row.find('td.appNameTable').text();
         $editModal.find('.appName').val(appUrlData.name);
-        var prevUrl = $row.find('td.appUrlTable').text();
         $editModal.find('.appURL').val(appUrlData.url);
         $editModal.find('.appUrlId').val(appUrlData._id);
     });
@@ -2416,13 +2422,22 @@ $('#appURLForm').submit(function(e) {
        $appUrlIdInput.val('');
         console.log(data);
         if (!appUrlId) {
-            createAppUrlTableRow(appUrlData);
-            
+            createAppUrlTableRow(data[0]);
+            createAppUrlCardLink(data[0],window.instanceIPForAppLink);
         } else {
           var $tr = $('tr[data-appUrlIdTableRow="'+appUrlId+'"]');
           $tr.find('.appNameTable').text(reqBody.name);
-          $tr.find('.appUrlTable').html('<a href="'+reqBody.url+'" target="_blank">'+reqBody.url+'</a> ');
-          
+          var url = reqBody.url;
+          if(url){
+            url = url.replace('$host',window.instanceIPForAppLink);
+          }
+          $tr.find('.appUrlTable').html('<a href="'+url+'" target="_blank">'+url+'</a> ');
+          $tr.data('appUrlData',{
+            _id:appUrlId,
+            name:reqBody.name,
+            url:reqBody.url
+          })
+
           var $a = $('.app-url[data-appUrlId="'+appUrlId+'"]');
           $a.html(reqBody.name);
           var instanceIP = $a.attr('data-instanceIP');
