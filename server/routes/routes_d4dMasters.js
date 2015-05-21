@@ -2375,7 +2375,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                         logger.debug('New Master Saved');
 
                                         // Start Auto create Team
-                                        if(req.params.id === '7' && bodyJson["userrolename"] === "Admin" && bodyJson["orgname_rowid"] !== ""){
+                                        /*if(req.params.id === '7' && bodyJson["userrolename"] === "Admin" && bodyJson["orgname_rowid"] !== ""){
                                             d4dModelNew.d4dModelMastersProjects.find({
                                             orgname_rowid : bodyJson["orgname_rowid"]
                                         },function(err,projects){
@@ -2411,7 +2411,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
                                         });
 
-                                        }
+                                        }*/
                                         // End Auto create Team
 
                                         logger.debug(req.params.fileinputs == 'null');
