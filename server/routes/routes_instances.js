@@ -1697,7 +1697,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                     }
                             }
                             // For Windows
-                            if(chefClientOptions.username === "administrator"){
+                            if(chefClientOptions.username === "administrator" || chefClientOptions.username === "Admin"){
                                 var insString;
                                 var arr = [];
                                 logger.debug("Windows Called...");
@@ -1707,6 +1707,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                     strWindows = strWindows+"{"+actualStr+"},";
                                     if(actualStr === chefClientOptions.host+" Name Version "){
                                         insString =strWindows.split(chefClientOptions.host+" Name Version ").pop().split(chefClientOptions.host+" {catalyst.inspect.stop}").shift();
+                                    }else if(actualStr === "{ "+chefClientOptions.host+" Name Version }"){
+                                        insString =strWindows.split("{ "+chefClientOptions.host+" Name Version }").pop().split("{"+chefClientOptions.host+" {catalyst.inspect.stop}}").shift();
                                     }else{
                                         insString =strWindows.split("{"+chefClientOptions.host+" Name Version }").pop().split("{"+chefClientOptions.host+" {catalyst.inspect.stop}}").shift();
                                     }
