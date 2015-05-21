@@ -201,46 +201,69 @@
                           </div>
                           <div id="collapseAppURL" class="panel-collapse collapse in">
                             <div class="panel-body">
-                              <!--user has given no app name-->
-                              <form action="" id="appUrlTemplateFormCreate" data-appURLType="1" class="appUrlFormNew hidden">
-                                  <!--1st text box-->
-                                            <div class="applicationURLContainer" id="appSeries12"> 
-                                                <div class="col-lg-6 col-md-6" style="margin-top:15px;">
+                              <!--row starts AWS-->
+                               <div class="row">
+ <div class="col-md-12">
+ <div class="col-md-12">
 
-                                                <label for="">Application Name</label>
+ <div class="widget-box">
+ <div class="widget-header">
+ <h5 class="widget-title" style="color:#4e5964;">
+ <strong>Application URL</strong>
+ </h5>
+ <div class="widget-toolbar no-border">
 
-                                                <input placeholder="AppName" maxlength="8" type="text" name="appNameInput" class="form-control appName">
-                                                <b class="tooltip tooltip-top-right">
-                                                    <i class="fa fa-user txt-color-teal"></i> Please enter Application</b>
+ <a id="newAppSeries" class="btn btn-minier btn-primary" href="#modalAppNameURL" data-toggle="modal">
+ <i class="ace-icon ace-icon fa fa-plus bigger-110"></i>
+ New
+ </a>                                                
+
+ </div>
+
+ </div>
+ <div class="widget-body">
+ <div class="widget-main" style="min-height:100px">
+ <div class="col-md-12 table-responsive" style="padding-left:0px; padding-right:0px;">
+   
+ 
+ <table id="appUrlTable" class="table table-striped table-bordered table-hover dataTable no-footer" cellpadding="5px" width="100%" style="text-align:center";>
+ <!-- <div class="applicationURLContainer" id="appSeries12"> -->
+ <thead>
+ <tr class="rowCustomStyle">
+
+                                                                            
+ <td style="width:20%">Name</td>
+ <td style="width:40%">URL</td>
+ <td style="width:20%" class="">Action</td>
+
+ </tr>
+ </thead>
+ <tbody>
+  
+ </tbody>
+ </table>
+  
+ <div id="envtable_tools1"></div>
+
+ <div class="col-md-5">
+
+ </div>
+ </div>
+
+ </div>
+ <div class="widget-toolbox padding-8 clearfix dataTables_wrapper">
+ <div id="tableFooterLeft" class="pull-left"></div>
+ <div id="tableFooterRight" class="pull-right"></div>
+ </div>
 
 
-                                               </div>
-
-                                               <div class="col-lg-6 col-md-6" style="margin-top:15px">
-
-                                                <label for="">Application URL</label>
-                                                
-                                                <input type="text" name="appNameURL" class="form-control appURL" placeholder="http://$host[:port]/appname">
-                                                <b class="tooltip tooltip-top-right">
-                                                    <i class="fa fa-user txt-color-teal"></i> Please enter URL</b>
-                                              </div>
-                                            </div>
-                                            <button type="submit" class="btn btn-primary marginSubmit"> Submit </button>
-                                            <a href="javascript:void(0)" class="clearfix pull-right addNewApp1 appDesignNew" data-backdrop="false" data-toggle="modal">Add Application URL</a>
-                                </form>
-                                <!--form ends here-->
-                              <!--when app name is given during blueprint save or Import by IP-->
-                                <form action="" id="appUrlTemplateForm" style="display:none" data-appURLType="1" class="appUrlForm">
-                                  <!--1st text box-->
-                                  <div class="col-lg-6 col-md-6 appTop">
-                                    <input type="hidden" class="appUrlId" />
-                                    <label class="appNameLabel" for=""></label>&nbsp;&nbsp;<a class="appUrlRemoveLink" href="javascript:void(0)">Remove</a><span class="hidden urlsaved" >&nbsp;&nbsp;Saved</span>
-                                    <br>
-                                      <input name="check" type="text" class="appUrlInput" type="url">
-
-                                    <span name="editText" class="glyphicon glyphicon-pencil" style="cursor:pointer;"></span>
-                                  </div>
-                                </form>
+ </div>
+ </div>
+ </div>
+ </div>
+ </div>
+                              <!--row ends from Aws--> 
+                             
                                 
 
                               
@@ -248,8 +271,70 @@
                           </div>
                         </div>
                         <!--Application URL Ends here-->
-                      </div>
+ <!--app series-->
+ <div class="modal fade" id="modalAppNameURL" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+ <div class="modal-dialog">
+ <div class="modal-content">
+ <form role="form" id="appURLForm" autocomplete="off">
+ <div class="modal-header">
+ <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+ &times;
+ </button>
+ <h4 class="modal-title">
+ <i class="fa fa-th-list txt-color-blue"></i>&nbsp;&nbsp;Add Application URL
+ </h4>
+ </div>
 
+ <div class="modal-body appSeriesHeight">
+
+
+
+ <!--app series-->
+ <div class="applicationURLContainer" id="appSeries"> 
+ <div class="col-lg-6 col-md-6 projectRepo">
+
+ <label for="">Name:</label>
+
+ <input type="hidden" class="form-control appUrlId">
+ <input placeholder="AppName" type="text" maxlength="8" name="appNameInput" class="form-control appName">
+ <b class="tooltip tooltip-top-right">
+ <i class="fa fa-user txt-color-teal"></i> Please enter Application</b>
+
+
+ </div>
+
+ <div class="col-lg-6 col-md-6 projectRepo">
+
+ <label for="">URL:</label>
+
+ <input placeholder="http://$host[:port]/appname" name="appNameURL" class="form-control appURL" type="text">
+ <b class="tooltip tooltip-top-right">
+ <i class="fa fa-user txt-color-teal"></i> Please enter URL</b>
+ </div>
+ </div>
+
+
+
+ </div>
+ <div class="modal-footer">
+ <label id="nodeAppspinner" class=" hidden"><img  style="margin-left:5px;margin-right:25px;" src="img/select2-spinner.gif"></label>
+ <div class="marginForButtons">
+ <button id="addAppBtn" class="btn btn-primary" type="submit">
+ <i class="fa fa-upload fa-1x"></i>&nbsp;Add
+ </button>
+ <a class="btn btn-primary" type="submit" data-dismiss="modal">
+ <i class="fa fa-undo fa-1x"></i>&nbsp;Cancel
+ </a>
+ </div>
+ </div>
+ </form>
+ </div><!-- /.modal-content -->
+ </div><!-- /.modal-dialog -->
+ </div><!-- /.modal for appSeries ends-->
+
+
+
+                      </div>
             </div> <!-- info tab contents ends here-->
 
             <!-- tab of Actions starts here -->
@@ -345,7 +430,7 @@
                          
                         </div>
                         <div class="loadingContainerimageInspectCSS">
-                          <img  style="margin-left:140px;" src="img/spinner.gif"></img>
+                          <img  style="margin-left:140px;" src="img/spinner.gif">
                         </div>
                       </div>
                     </div>
@@ -1405,7 +1490,7 @@ $('.startstoptoggler').click(startAndStopToggler);
                                              for (var k = 0; k < data.appUrls.length; k++) {
                                                  var url = data.appUrls[k].url;
                                                  url = url.replace('$host', data.instanceIP);
-                                                 $('.app-url[data-appUrlId="' + data.appUrls[k]._id + '"]').attr('href', url);
+                                                 $('.app-url[data-appUrlId="' + data.appUrls[k]._id + '"]').attr('href', url).attr('data-instanceIP',data.instanceIP);
                                              }
                                       }
                                 }
@@ -1589,25 +1674,13 @@ $('.startstoptoggler').click(startAndStopToggler);
 
 
     if (data.appUrls && data.appUrls.length) {
-      var $collapseAppURL = $('#collapseAppURL').find('.panel-body');
-      var $cardAppUrlListContanier = $('.instance-bootstrap-list');
-        for (var k = 0; k < data.appUrls.length; k++) {
-          var url = data.appUrls[k].url;
-          if(url) {
-          url = url.replace('$host',data.instanceIP);
-          }
-          var anchor = "<span class='marginForURLCP'><a class='app-url ' data-appUrlId='"+data.appUrls[k]._id+"' href='"+url+"'' target='_blank' title='"+data.appUrls[k].name+"'>"+data.appUrls[k].name+"</a></span>";
-            $cardAppUrlListContanier.last().append(anchor);
-            var $form = $('#appUrlTemplateForm').clone(true);
-            $form.find('.appNameLabel').html(data.appUrls[k].name);
-            $form.find('.appUrlId').val(data.appUrls[k]._id);
-            $form.find('.appUrlInput').val(data.appUrls[k].url);
-            $collapseAppURL.append($form);
-            $form.show();
-        }
-    } else {
+      for(var kk =0;kk<data.appUrls.length;kk++) {
+        createAppUrlTableRow(data.appUrls[kk]);
+        createAppUrlCardLink(data.appUrls[kk],data.instanceIP);
+      }
+    } /*else {
       $('#appUrlTemplateFormCreate').removeClass('hidden');
-    }
+    }*/
    
 
  
@@ -2081,25 +2154,7 @@ $(document).ready(function(e){
             return false;
        });
        
-       $('.appUrlRemoveLink').click(function(e){
-          var $this = $(this);
-          var $form = $this.parents('form');
-          var appUrlId = $form.find('.appUrlId').val();
-          $.ajax({
-            url:'../instances/'+urlParams.id+'/appUrl/'+appUrlId,
-            method:'DELETE',
-            success:function(){
-              $form.remove();
-              $('.app-url[data-appUrlId="'+appUrlId+'"]').parent('span').remove();
-              if($('.appUrlForm').length === 1) {
-                $('#appUrlTemplateFormCreate').removeClass('hidden');
-              }
-            },
-            fail:function(){
-               alert("Unable to delete URL please try again later");
-            }
-          });
-       });
+      
 
    });
 </script>
@@ -2162,7 +2217,7 @@ $(document).ready(function(e){
 
               });
 
-              $('#appUrlTemplateFormCreate').submit(function(e) {
+             /* $('#appUrlTemplateFormCreate').submit(function(e) {
                   var appUrls = []
                   $(this).find('.applicationURLContainer').each(function() {
                       var appUrlData = {};
@@ -2220,7 +2275,7 @@ $(document).ready(function(e){
                   }
                   return false;
 
-              });
+              });*/
 </script>
 
 
@@ -2235,3 +2290,157 @@ $(document).ready(function(e){
         itemSelector: "p"
     }); 
 </script>
+
+<script>
+ $('#newAppSeries').click(function(e){
+   $('#appURLForm').trigger("reset");
+});
+ 
+function createAppUrlTableRow(appUrlData) {
+    var $appUrlTableBody = $('#appUrlTable tbody');
+    var $row = $('<tr/>').attr('data-appUrlIdTableRow',appUrlData._id);
+    $row.data('appUrlData', appUrlData);
+    var $tdName = $('<td class="appNameTable"/>');
+    $tdName.append(appUrlData.name);
+    var $tdURL = $('<td class="appUrlTable"/>').append('<a href="'+appUrlData.url+'" target="_blank">'+appUrlData.url+'</a> ');
+    var $tdAction = $('<td/>');
+    $tdAction.append('<div class="btn-group"><button class="btn btn-info pull-left btn-sg tableactionbutton appUrlEditLink" value="Update" title="Update"><i class="ace-icon fa fa-pencil bigger-120"></i></button></div>').append('<div style="margin-left:5px;" class="btn-group"><button class="btn btn-danger pull-left btn-sg tableactionbutton appUrlRemoveLink" value="Remove" title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></div>');
+
+    $tdAction.find('.appUrlEditLink').click(function(){
+       
+        var $editModal = $('#modalAppNameURL');
+        $editModal.modal('show');
+        var prevName = $row.find('td.appNameTable').text();
+        $editModal.find('.appName').val(appUrlData.name);
+        var prevUrl = $row.find('td.appUrlTable').text();
+        $editModal.find('.appURL').val(appUrlData.url);
+        $editModal.find('.appUrlId').val(appUrlData._id);
+    });
+    
+    $tdAction.find('.appUrlRemoveLink').click(function() {
+        var $this = $(this);
+        var $tr = $this.parents('tr');
+        var appUrlData = $tr.data('appUrlData');
+        $.ajax({
+            url: '../instances/' + urlParams.id + '/appUrl/' + appUrlData._id,
+            method: 'DELETE',
+            success: function() {
+                $tr.remove();
+                removeAppUrlCardLink(appUrlData._id);
+                
+            },
+            fail: function() {
+                alert("Unable to delete URL please try again later");
+            }
+        });
+    });
+    $row.append($tdName).append($tdURL).append($tdAction);
+    $appUrlTableBody.append($row);
+
+}
+
+function removeAppUrlCardLink(appUrlId) {
+   var $anchor = $('a[data-appUrlId="'+appUrlId+'"]').parent();
+   if(!$anchor.length) {
+    return;
+
+   }
+   console.log($anchor.index());
+   var index = $anchor.index();
+   if(index < 3) {
+     var $nextLink;
+     if(index == 1) {
+       $nextLink  = $anchor.next().next();
+     } else {
+      $nextLink  = $anchor.next();
+     }
+     console.log($nextLink.length);
+     $nextLink.show();
+   }
+   $anchor.remove();
+}
+
+function createAppUrlCardLink(appUrlData, instanceIP) {
+    var $cardAppUrlListContanier = $('.instance-bootstrap-list');
+    var url = appUrlData.url;
+    if (url) {
+        url = url.replace('$host', instanceIP);
+    }
+    var anchor = "<span class='marginForURLCP'><a class='app-url' data-instanceIP='"+instanceIP+"' data-appUrlId='" + appUrlData._id + "' href='" + url + "'' target='_blank' title='" + appUrlData.name + "'>" + appUrlData.name + "</a></span>";
+    var $anchor = $(anchor);
+    if($cardAppUrlListContanier.children().length > 2) {
+      $anchor.hide();
+    }
+    $cardAppUrlListContanier.last().append( $anchor);
+
+}
+
+$('#appURLForm').submit(function(e) {
+    var appUrls = []
+    var regexpURL = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
+    var appUrlData = {};
+
+
+    appUrlData.name = $(this).find('.appName').val();
+    appUrlData.url = $(this).find('.appURL').val();
+    if (!(appUrlData.name)) {
+        alert("Please Enter Name");
+        return false;
+    }
+    if (!(appUrlData.url)) {
+        alert('Please Enter URL');
+        return false;
+    }
+
+    if (!regexpURL.test(appUrlData.url)) {
+        alert('Please Enter a Valid URL');
+        return false;
+    }
+
+    var appUrlId = $(this).find('.appUrlId').val();
+    var url = '../instances/' + urlParams.id + '/appUrl';
+    var reqBody = {
+       appUrls: [appUrlData]
+    }
+    if (appUrlId) {
+        url = '../instances/' + urlParams.id + '/appUrl/' + appUrlId + '/update';
+        reqBody = {
+            url: appUrlData.url,
+            name: appUrlData.name
+        }
+    }
+
+    var $appUrlIdInput = $(this).find('.appUrlId');
+
+    $.post(url, reqBody, function(data) {
+       $appUrlIdInput.val('');
+        console.log(data);
+        if (!appUrlId) {
+            createAppUrlTableRow(appUrlData);
+            
+        } else {
+          var $tr = $('tr[data-appUrlIdTableRow="'+appUrlId+'"]');
+          $tr.find('.appNameTable').text(reqBody.name);
+          $tr.find('.appUrlTable').html('<a href="'+reqBody.url+'" target="_blank">'+reqBody.url+'</a> ');
+          
+          var $a = $('.app-url[data-appUrlId="'+appUrlId+'"]');
+          $a.html(reqBody.name);
+          var instanceIP = $a.attr('data-instanceIP');
+          var url =  reqBody.url;
+          if(url) {
+            url = url.replace('$host', instanceIP);
+          }
+          $a.attr('href',url); 
+        }
+        $('#modalAppNameURL').modal('hide');
+        $('#appEntry').addClass('hidden');
+
+
+    }).fail(function(){
+      $appUrlIdInput.val('');
+    });
+
+    return false;
+
+});
+  </script>

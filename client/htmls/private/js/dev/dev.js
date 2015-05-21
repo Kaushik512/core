@@ -1273,6 +1273,9 @@
                                   var temp = '';
                                   if (data.appUrls && data.appUrls.length) {
                                       for (var k = 0; k < data.appUrls.length; k++) {
+                                          if(k == 2) {
+                                            break;
+                                          }
                                           var url = data.appUrls[k].url;
                                           if(data.appUrls[k].url)
                                             url = url.replace('$host', data.instanceIP);

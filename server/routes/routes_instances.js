@@ -140,22 +140,25 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
     app.post('/instances/:instanceId/appUrl', function(req, res) { //function(instanceId, ipaddress, callback)
 
-        instancesDao.addAppUrls(req.params.instanceId, req.body.appUrls, function(err, updateCount) {
+        instancesDao.addAppUrls(req.params.instanceId, req.body.appUrls, function(err, appUrls) {
             if (err) {
-                logger.error("Failed to update instanceip", err);
+                logger.error("Failed to add appurl", err);
                 res.send(500);
                 return;
             }
-            res.send({
-                updateCount: updateCount
-            });
+            if (appUrls) {
+                res.send(appUrls);
+            } else {
+                res.send(404);
+            }
+
         });
     });
 
 
     app.post('/instances/:instanceId/appUrl/:appUrlId/update', function(req, res) { //function(instanceId, ipaddress, callback)
         logger.debug("Enter post() for /instances/%s/appUrl/update", req.params.instanceId);
-        instancesDao.updateAppUrl(req.params.instanceId, req.params.appUrlId, req.body.url, function(err, updateCount) {
+        instancesDao.updateAppUrl(req.params.instanceId, req.params.appUrlId,req.body.name, req.body.url, function(err, updateCount) {
             if (err) {
                 logger.error("Failed to update appurl", err);
                 res.send(500);
