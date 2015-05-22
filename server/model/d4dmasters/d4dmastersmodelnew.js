@@ -108,7 +108,19 @@ var d4dMastersDynamic = new mongoose.Schema(
 );
 var d4dModelMastersDynamic = mongoose.model('d4dModelMastersDynamic',d4dMastersDynamic,'d4dmastersnew');
 
-
+var d4dMastersTeams = new mongoose.Schema(
+	{id: {type:String, trim:true},
+	teamname: {type:String, trim:true, validate:nameValidator},
+	loginname: {type:String, trim:true},
+	loginname_rowid: {type:String,trim:true},
+	projectname: {type:String, trim:true},
+	projectname_rowid: {type:String,trim:true},
+	orgname: {type:[String],required:false, trim:true},
+	orgname_rowid: {type:[String], trim:true},
+	description: {type:String, trim:true, validate:descValidator},
+	rowid:{type:String,required:true, trim:true}},{collection:'d4dmastersnew'}
+);
+var d4dModelMastersTeams = mongoose.model('d4dModelMastersTeams',d4dMastersTeams,'d4dmastersnew');
 
 var d4dMastersProjects = new mongoose.Schema(
 	{id: {type:String,required:true, trim:true},
@@ -122,6 +134,8 @@ var d4dMastersProjects = new mongoose.Schema(
 	environmentname_rowid: {type:String, trim:true},
 	description: {type:String, trim:true, validate:descValidator},
 	active: {type:Boolean, trim:true,default:true},
+	teamname: {type:String, trim:true},
+	teamname_rowid: {type:String, trim:true},
 	rowid:{type:String,required:true, trim:true}},{collection:'d4dmastersnew'}
 );
 var d4dModelMastersProjects = mongoose.model('d4dModelMastersProjects',d4dMastersProjects,'d4dmastersnew');
@@ -168,25 +182,12 @@ var d4dMastersUsers = new mongoose.Schema(
 	userrolename: {type:String, trim:true},
 	orgname: {type:[String],required:false, trim:true},
 	orgname_rowid: {type:[String], trim:true},
+	teamname: {type:String,required:true,trim:true},
+	teamname_rowid: {type:String,required:true,trim:true},
 	active: {type:Boolean, trim:true,default:true},
 	rowid:{type:String,required:true, trim:true}},{collection:'d4dmastersnew'}
 );
 var d4dModelMastersUsers = mongoose.model('d4dModelMastersUsers',d4dMastersUsers,'d4dmastersnew');
-
-
-var d4dMastersTeams = new mongoose.Schema(
-	{id: {type:String, trim:true},
-	teamname: {type:String, trim:true, validate:nameValidator},
-	loginname: {type:String, trim:true},
-	loginname_rowid: {type:String,trim:true},
-	projectname: {type:String, trim:true},
-	projectname_rowid: {type:String,trim:true},
-	orgname: {type:[String],required:false, trim:true},
-	orgname_rowid: {type:[String], trim:true},
-	description: {type:String, trim:true, validate:descValidator},
-	rowid:{type:String,required:true, trim:true}},{collection:'d4dmastersnew'}
-);
-var d4dModelMastersTeams = mongoose.model('d4dModelMastersTeams',d4dMastersTeams,'d4dmastersnew');
 
 var d4dMastersUserroles = new mongoose.Schema(
 	{id: {type:String,required:true, trim:true},

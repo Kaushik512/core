@@ -2402,7 +2402,12 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                         "orgname": bodyJson["orgname"],
                                                         "orgname_rowid": bodyJson["rowid"],
                                                         "rowid": uuid.v4(),
-                                                        "id": "21"
+                                                        "id": "21",
+                                                        "loginname": "",
+                                                        "loginname_rowid": "",
+                                                        "projectname": "",
+                                                        "projectname_rowid": ""
+
                                                     };
                                                     logger.debug("teamData>>>>>>>>>>>>>>>>>>>>>>>> ", teamData);
                                                     var teamModel = new d4dModelNew.d4dModelMastersTeams(teamData);
