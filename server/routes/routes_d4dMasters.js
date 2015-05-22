@@ -2363,6 +2363,65 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                 if (!editMode) { //push new values only when not in edit mode
                                     //dMasterJson = JSON.parse(FLD);
                                     //   console.log('>>>>>> Whats going to be saved:' + FLD['rowid']);
+
+                                    // Start Auto create Team
+                                        if(req.params.id === '1'){
+                                            var orgData = {
+                                                "orgname": bodyJson['orgname'],
+                                                "domainname": bodyJson['domainname'],
+                                                "rowid": bodyJson['rowid'],
+                                                "id": "1"
+                                            }
+                                            var orgObj = new d4dModelNew.d4dModelMastersOrg(orgData);
+                                            orgObj.save(function(err,anOrg){
+                                                if(err){
+                                                    res.send(500,"Failed to save Org.");
+                                                }
+                                                for (var x = 0; x < 4; x++) {
+                                                    var teamName;
+                                                    var descriptions;
+                                                    if (x === 0) {
+                                                        teamName = bodyJson["orgname"] + "_Admins";
+                                                        descriptions = "Team For " + teamName;
+                                                    } else if (x === 1) {
+                                                        teamName = bodyJson["orgname"] + "_DEV";
+                                                        descriptions = "Team For " + teamName;
+                                                    } else if (x === 2) {
+                                                        teamName = bodyJson["orgname"] + "_QA";
+                                                        descriptions = "Team For " + teamName;
+                                                    } else {
+                                                        teamName = bodyJson["orgname"] + "_DevOps";
+                                                        descriptions = "Team For " + teamName;
+                                                    }
+
+                                                    logger.debug("orgname_rowid>>>>>>>>>>>>>>>> ", bodyJson["rowid"]);
+
+                                                    var teamData = {
+                                                        "teamname": teamName,
+                                                        "description": descriptions,
+                                                        "orgname": bodyJson["orgname"],
+                                                        "orgname_rowid": bodyJson["rowid"],
+                                                        "rowid": uuid.v4(),
+                                                        "id": "21"
+                                                    };
+                                                    logger.debug("teamData>>>>>>>>>>>>>>>>>>>>>>>> ", teamData);
+                                                    var teamModel = new d4dModelNew.d4dModelMastersTeams(teamData);
+                                                    teamModel.save(function(err, aTeam) {
+                                                        if (err) {
+                                                            //res.send(500,"Failed to save Team.");
+                                                            logger.debug("Failed to save Team.");
+                                                        }
+                                                        logger.debug("Auto created Team:>>>>>>>> ", JSON.stringify(aTeam));
+                                                    });
+                                                    if(x === 3){
+                                                        res.send(200);
+                                                        return;
+                                                    }
+
+                                                }
+
+                                            });
+                                        }else{
                                     logger.debug("FLD>>>>>>>>>>>>> ", FLD);
                                     eval('var mastersrdb =  new d4dModelNew.' + dbtype + '({' + JSON.parse(FLD) + '})');
                                     mastersrdb.save(function(err, data) {
@@ -2373,48 +2432,6 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
                                         }
                                         logger.debug('New Master Saved');
-
-                                        // Start Auto create Team
-                                        if(req.params.id === '1'){
-                                            for(var x = 0; x < 4; x++){
-                                                var teamName;
-                                                var descriptions;
-                                                if(x===0){
-                                                    teamName = bodyJson["orgname"]+"_Admins";
-                                                    descriptions = "Team For "+teamName;
-                                                }else if(x===1){
-                                                    teamName = bodyJson["orgname"]+"_DEV";
-                                                    descriptions = "Team For "+teamName;
-                                                }else if(x===2){
-                                                    teamName = bodyJson["orgname"]+"_QA";
-                                                    descriptions = "Team For "+teamName;
-                                                }else{
-                                                    teamName = bodyJson["orgname"]+"_DevOps";
-                                                    descriptions = "Team For "+teamName;
-                                                }
-
-                                                var teamData = {
-                                                        "teamname": teamName,
-                                                        "description": descriptions,
-                                                        "orgname": bodyJson["orgname"],
-                                                        "orgname_rowid": bodyJson["orgname_rowid"],
-                                                        "rowid": uuid.v4(),
-                                                        "id": "21"
-                                                    };
-                                                logger.debug("teamData>>>>>>>>>>>>>>>>>>>>>>>> ",teamData);
-                                                var teamModel = new d4dModelNew.d4dModelMastersTeams(teamData);
-                                                teamModel.save(function(err,aTeam){
-                                                    if(err){
-                                                        res.send(500,"Failed to save Team.");
-                                                    }
-                                                    logger.debug("Auto created Team:>>>>>>>> ",JSON.stringify(aTeam));
-                                                });
-
-                                            }
-
-                                        }
-                                        // End Auto create Team
-
                                         logger.debug(req.params.fileinputs == 'null');
                                         logger.debug('New record folderpath: % rowid %s FLD["folderpath"]:', folderpath, newrowid, folderpath);
                                         if (!folderpath) {
@@ -2446,7 +2463,8 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                             res.send(200);
 
                                         return;
-                                    });
+                                      });
+                                    }
                                 } else {
                                     
                                     logger.debug("Rowid: %s", bodyJson["rowid"]);
@@ -2519,6 +2537,47 @@ module.exports.setRoutes = function(app, sessionVerification) {
         }); //end of haspermission
 
     });
+
+    function autoCreateTeams(bodyJson) {
+        for (var x = 0; x < 4; x++) {
+            var teamName;
+            var descriptions;
+            if (x === 0) {
+                teamName = bodyJson["orgname"] + "_Admins";
+                descriptions = "Team For " + teamName;
+            } else if (x === 1) {
+                teamName = bodyJson["orgname"] + "_DEV";
+                descriptions = "Team For " + teamName;
+            } else if (x === 2) {
+                teamName = bodyJson["orgname"] + "_QA";
+                descriptions = "Team For " + teamName;
+            } else {
+                teamName = bodyJson["orgname"] + "_DevOps";
+                descriptions = "Team For " + teamName;
+            }
+
+            logger.debug("orgname_rowid>>>>>>>>>>>>>>>> ", bodyJson["rowid"]);
+
+            var teamData = {
+                "teamname": teamName,
+                "description": descriptions,
+                "orgname": bodyJson["orgname"],
+                "orgname_rowid": bodyJson["rowid"],
+                "rowid": uuid.v4(),
+                "id": "21"
+            };
+            logger.debug("teamData>>>>>>>>>>>>>>>>>>>>>>>> ", teamData);
+            var teamModel = new d4dModelNew.d4dModelMastersTeams(teamData);
+            teamModel.save(function(err, aTeam) {
+                if (err) {
+                    //res.send(500,"Failed to save Team.");
+                    logger.debug("Failed to save Team.");
+                }
+                logger.debug("Auto created Team:>>>>>>>> ", JSON.stringify(aTeam));
+            });
+
+        }
+    }
 
     app.post('/d4dMasters/testingupload/:suffix/:fileinputs', function(req, res) {
         logger.debug("Enter post() for /d4dMasters/testingupload/%s/%s", req.params.suffix, req.params.fileinputs);
