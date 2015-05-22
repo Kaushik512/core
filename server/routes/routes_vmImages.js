@@ -117,7 +117,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc){
                             res.send(500,"Invalid Image Id.");
                             return;
                         }
-                        if(data.length > 0){
+                        if(data.Images.length > 0){
                             logger.debug("Success to Describe Images from AWS. %s",data.Images[0].VirtualizationType);
                             vmimageData.vType = data.Images[0].VirtualizationType;
                             VMImage.createNew(vmimageData, function(err, anImage) {
