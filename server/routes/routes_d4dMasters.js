@@ -1702,19 +1702,20 @@ module.exports.setRoutes = function(app, sessionVerification) {
         }
     }
 
-    function updateProjectWithEnv(projects, envid) {
+    function updateProjectWithEnv(projects, bodyJson) {
         for (var p = 0; p < projects.length; p++) {
 
             var currproj = projects[p];
             logger.debug('Project : ' + currproj);
             d4dModelNew.d4dModelMastersProjects.findOne({
-                rowid: currproj,
+                rowid: currproj.rowid,
                 id: '4'
             }, function(err, data2) {
                 if (!err) {
+                    logger.debug("env rowid:>>>>>>>>>>>>>>>>>> ",data2.environmentname_rowid);
                     logger.debug('Project JSON:' + JSON.stringify(data2));
-                    var newenv = envid;
-                    if (data2.environmentname_rowid != '') {
+                    var newenv = bodyJson['rowid'];
+                    if (data2 != null && data2.environmentname_rowid != 'undefined' && data2.environmentname_rowid != '') {
                         // logger.debug("Env Names found :========> " +data2.environmentname_rowid );
                         // var _data2env = data2.environmentname_rowid.split(',');
                         // if(_data2env.indexOf(envid) >= 0){
@@ -1722,15 +1723,15 @@ module.exports.setRoutes = function(app, sessionVerification) {
                         //        return;
                         // }
                         // data2.environmentname_rowid +=  ',' ;
-                        if (data2.environmentname_rowid.indexOf(envid) < 0) {
-                            newenv = data2.environmentname_rowid + ',' + envid;
+                        if (data2.environmentname_rowid.indexOf(bodyJson['rowid']) < 0) {
+                            newenv = data2.environmentname_rowid + ',' + bodyJson['rowid'];
                         }
                     }
                     //var newenv = data2.environmentname_rowid + envid;
 
                     logger.debug('Newenv ====>', newenv);
                     d4dModelNew.d4dModelMastersProjects.update({
-                        rowid: currproj,
+                        rowid: currproj.rowid,
                         id: '4'
                     }, {
                         environmentname_rowid: newenv
@@ -2448,12 +2449,12 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                         //if env is saved then it should be associated with project.
                                         if (req.params.id == '3') {
                                             logger.debug('in env update');
-                                            var teamids = bodyJson['teamname_rowid'].split(',');
-                                            logger.debug('teamids:', teamids);
-                                            configmgmtDao.getProjectsForTeams(teamids.join(), function(err, projs_) {
+                                            var orgId = bodyJson['orgname_rowid'];
+                                            logger.debug('orgId:', orgId);
+                                            configmgmtDao.getProjectsForOrgs(orgId, function(err, projs_) {
                                                 if (!err) {
-                                                    logger.debug('Project found for team :' + projs_);
-                                                    updateProjectWithEnv(projs_, newrowid);
+                                                    logger.debug('Project found for Org ======++++++++++++++++++:' + projs_);
+                                                    updateProjectWithEnv(projs_, bodyJson);
                                                 }
                                             });
                                         }
@@ -2502,12 +2503,12 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                         //if env is saved then it should be associated with project.
                                         if (req.params.id == '3') {
                                             logger.debug('in env update');
-                                            var teamids = bodyJson['teamname_rowid'].split(',');
-                                            logger.debug('teamids:', teamids);
-                                            configmgmtDao.getProjectsForTeams(teamids.join(), function(err, projs_) {
+                                            var orgId = bodyJson['orgname_rowid'];
+                                            logger.debug('orgId:', orgId);
+                                            configmgmtDao.getProjectsForOrgs(orgId, function(err, projs_) {
                                                 if (!err) {
-                                                    logger.debug('Project found for team :' + projs_);
-                                                    updateProjectWithEnv(projs_, currowid);
+                                                    logger.debug('Project found for Org ======++++++++++++++++++:' + projs_);
+                                                    updateProjectWithEnv(projs_, bodyJson);
                                                 }
                                             });
                                         }

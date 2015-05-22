@@ -784,6 +784,18 @@ function Configmgmt() {
             
         });
     };
+
+    this.getProjectsForOrgs  = function(orgId,callback){
+        d4dModelNew.d4dModelMastersProjects.find({
+            orgname_rowid: orgId,
+            id: "4"
+        },function(err,data){
+            if(err){
+                callback(err,null);
+            }
+            callback(null,data);
+        });
+    };
     this.convertRowIDToValue = function(rowid, rowidcont) {
         // if(rowidcont.length > 0)
         // { 
