@@ -2377,6 +2377,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                             orgObj.save(function(err,anOrg){
                                                 if(err){
                                                     res.send(500,"Failed to save Org.");
+                                                    return;
                                                 }
                                                 for (var x = 0; x < 4; x++) {
                                                     var teamName;
