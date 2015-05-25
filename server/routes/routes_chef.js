@@ -13,6 +13,7 @@ var Curl = require('../lib/utils/curl.js');
 
 var errorResponses = require('./error_responses');
 var waitForPort = require('wait-for-port');
+var logger = require('../lib/logger')(module);
 
 
 module.exports.setRoutes = function(app, verificationFunc) {
@@ -763,11 +764,313 @@ module.exports.setRoutes = function(app, verificationFunc) {
                     return;
                 } else {
                     res.send(cookbooks.metadata);
+                    return;
                 }
             });
 
 
         });
 
+    });
+
+    
+    // Create new Data Bag.
+    app.post("/chef/servers/:serverId/databag/create",function(req,res){
+        logger.debug("Enter /chef/../databag/create");
+        configmgmtDao.getChefServerDetails(req.params.serverId, function(err, chefDetails) {
+            if (err) {
+                res.send(500);
+                return;
+            }
+            if (!chefDetails) {
+                res.send(404);
+                return;
+            }
+            var chef = new Chef({
+                userChefRepoLocation: chefDetails.chefRepoLocation,
+                chefUserName: chefDetails.loginname,
+                chefUserPemFile: chefDetails.userpemfile,
+                chefValidationPemFile: chefDetails.validatorpemfile,
+                hostedChefUrl: chefDetails.url,
+            });
+            logger.debug("Chef...>>>>>>>>>>>>>>>>>>> ",JSON.stringify(chef));
+            chef.createDataBag(req.body.name,function(err,dataBag){
+                if(err){
+                    logger.debug("Exit /chef/../databag/create");
+                    res.send(500,"Failed to create Data Bag on Chef.");
+                    return;
+                }
+                if(dataBag === 409){
+                    logger.debug("Exit /chef/../databag/create");
+                    res.send(500,"Data Bag already exist on Chef.");
+                    return;
+                }
+                logger.debug("Exit /chef/../databag/create");
+                res.send(dataBag);
+                return;
+            });
+        });
+    });
+
+    // List all Data Bags.
+    app.get("/chef/servers/:serverId/databag/list",function(req,res){
+        logger.debug("Enter /chef/../databag/list");
+        configmgmtDao.getChefServerDetails(req.params.serverId, function(err, chefDetails) {
+            if (err) {
+                res.send(500);
+                return;
+            }
+            if (!chefDetails) {
+                res.send(404);
+                return;
+            }
+            var chef = new Chef({
+                userChefRepoLocation: chefDetails.chefRepoLocation,
+                chefUserName: chefDetails.loginname,
+                chefUserPemFile: chefDetails.userpemfile,
+                chefValidationPemFile: chefDetails.validatorpemfile,
+                hostedChefUrl: chefDetails.url,
+            });
+            console.log("Chef...>>>>>>>>>>>>>>>>>>> "+JSON.stringify(chef));
+            chef.getDataBags(function(err,dataBags){
+                if(err){
+                    logger.debug("Exit /chef/../databag/list");
+                    res.send(500,"Failed to get Data Bag from Chef.");
+                    return;
+                }
+                logger.debug("Exit /chef/../databag/list");
+                res.send(dataBags);
+                return;
+            });
+        });
+    });
+
+    // Delete a particular Data Bag.
+    app.delete("/chef/servers/:serverId/databag/:dataBagName/delete",function(req,res){
+        logger.debug("Enter /chef/../databag/../delete");
+        configmgmtDao.getChefServerDetails(req.params.serverId, function(err, chefDetails) {
+            if (err) {
+                res.send(500);
+                return;
+            }
+            if (!chefDetails) {
+                res.send(404);
+                return;
+            }
+            var chef = new Chef({
+                userChefRepoLocation: chefDetails.chefRepoLocation,
+                chefUserName: chefDetails.loginname,
+                chefUserPemFile: chefDetails.userpemfile,
+                chefValidationPemFile: chefDetails.validatorpemfile,
+                hostedChefUrl: chefDetails.url,
+            });
+            console.log("Chef...>>>>>>>>>>>>>>>>>>> "+JSON.stringify(chef));
+            chef.deleteDataBag(req.params.dataBagName,function(err,statusCode){
+                if(err){
+                    logger.debug("Exit /chef/../databag/../delete");
+                    res.send(500,"Failed to delete Data Bag on Chef.");
+                    return;
+                }else if(statusCode === 404){
+                    logger.debug("Exit /chef/../databag/../delete");
+                    res.send(500,"No Data Bag found on Chef.");
+                    return;
+                }
+                logger.debug("Exit /chef/../databag/../delete");
+                res.send(statusCode);
+                return;
+            });
+        });
+    });
+
+    
+    // Create new Data Bag Item.
+    app.post("/chef/servers/:serverId/databag/:dataBagName/item/create",function(req,res){
+        logger.debug("Enter /chef/../databag/../item/create");
+        configmgmtDao.getChefServerDetails(req.params.serverId, function(err, chefDetails) {
+            if (err) {
+                res.send(500);
+                return;
+            }
+            if (!chefDetails) {
+                res.send(404);
+                return;
+            }
+            var chef = new Chef({
+                userChefRepoLocation: chefDetails.chefRepoLocation,
+                chefUserName: chefDetails.loginname,
+                chefUserPemFile: chefDetails.userpemfile,
+                chefValidationPemFile: chefDetails.validatorpemfile,
+                hostedChefUrl: chefDetails.url,
+            });
+            logger.debug("Chef...>>>>>>>>>>>>>>>>>>> ",JSON.stringify(chef));
+            var dataBagItem;
+            try{
+                logger.debug("Incomming data bag item: ",JSON.stringify(req.body.dataBagItem));
+                dataBagItem = JSON.parse(JSON.stringify(req.body.dataBagItem));
+            }catch(e){
+                logger.debug("error: ",e);
+                res.send(500,"Invalid Json for Data Bag item.");
+                return;
+            }
+            chef.createDataBagItem(req.params.dataBagName,dataBagItem,function(err,dataBagItem){
+                if(err){
+                    logger.debug("Exit /chef/../databag/../item/create");
+                    res.send(500,"Failed to create Data Bag Item on Chef.");
+                    return;
+                }
+                if(dataBagItem === 409){
+                    logger.debug("Exit /chef/../databag/../item/create");
+                    res.send(500,"Data Bag Item already exist on Chef.");
+                    return;
+                }
+                logger.debug("Exit /chef/../databag/../item/create");
+                res.send(dataBagItem);
+                return;
+            });
+        });
+    });
+
+
+    // List all Data Bag Items for a Data Bag.
+    app.get("/chef/servers/:serverId/databag/:dataBagName/item/list",function(req,res){
+        logger.debug("Enter /chef/../databag/item/list");
+        configmgmtDao.getChefServerDetails(req.params.serverId, function(err, chefDetails) {
+            if (err) {
+                res.send(500);
+                return;
+            }
+            if (!chefDetails) {
+                res.send(404);
+                return;
+            }
+            var chef = new Chef({
+                userChefRepoLocation: chefDetails.chefRepoLocation,
+                chefUserName: chefDetails.loginname,
+                chefUserPemFile: chefDetails.userpemfile,
+                chefValidationPemFile: chefDetails.validatorpemfile,
+                hostedChefUrl: chefDetails.url,
+            });
+            console.log("Chef...>>>>>>>>>>>>>>>>>>> "+JSON.stringify(chef));
+            chef.getDataBagItems(req.params.dataBagName,function(err,dataBagItems){
+                if(err){
+                    logger.debug("Exit /chef/../databag/item/list");
+                    res.send(500,"Failed to get Data Bag from Chef.");
+                    return;
+                }
+                logger.debug("Exit /chef/../databag/item/list");
+                res.send(dataBagItems);
+                return;
+            });
+        });
+    });
+
+
+    // Update a Data Bag Item.
+    app.post("/chef/servers/:serverId/databag/:dataBagName/item/:itemId/update",function(req,res){
+        logger.debug("Enter /chef/../databag/../item/update");
+        configmgmtDao.getChefServerDetails(req.params.serverId, function(err, chefDetails) {
+            if (err) {
+                res.send(500);
+                return;
+            }
+            if (!chefDetails) {
+                res.send(404);
+                return;
+            }
+            var chef = new Chef({
+                userChefRepoLocation: chefDetails.chefRepoLocation,
+                chefUserName: chefDetails.loginname,
+                chefUserPemFile: chefDetails.userpemfile,
+                chefValidationPemFile: chefDetails.validatorpemfile,
+                hostedChefUrl: chefDetails.url,
+            });
+            logger.debug("Chef...>>>>>>>>>>>>>>>>>>> ",JSON.stringify(chef));
+            var dataBagItem;
+            try{
+                logger.debug("Incomming data bag item: ",JSON.stringify(req.body.dataBagItem));
+                dataBagItem = JSON.parse(JSON.stringify(req.body.dataBagItem));
+            }catch(e){
+                logger.debug("error: ",e);
+                res.send(500,"Invalid Json for Data Bag item.");
+                return;
+            }
+            chef.updateDataBagItem(req.params.dataBagName,req.params.itemId,dataBagItem,function(err,dataBagItem){
+                if(err){
+                    logger.debug("Exit /chef/../databag/../item/update");
+                    res.send(500,"Failed to update Data Bag Item on Chef.");
+                    return;
+                }
+                logger.debug("Exit /chef/../databag/../item/update");
+                res.send(dataBagItem);
+                return;
+            });
+        });
+    });
+
+    // Delete a Data Bag Item from a Data Bag.
+    app.delete("/chef/servers/:serverId/databag/:dataBagName/item/:itemName/delete",function(req,res){
+        logger.debug("Enter /chef/../databag/../item/delete");
+        configmgmtDao.getChefServerDetails(req.params.serverId, function(err, chefDetails) {
+            if (err) {
+                res.send(500);
+                return;
+            }
+            if (!chefDetails) {
+                res.send(404);
+                return;
+            }
+            var chef = new Chef({
+                userChefRepoLocation: chefDetails.chefRepoLocation,
+                chefUserName: chefDetails.loginname,
+                chefUserPemFile: chefDetails.userpemfile,
+                chefValidationPemFile: chefDetails.validatorpemfile,
+                hostedChefUrl: chefDetails.url,
+            });
+            logger.debug("Chef...>>>>>>>>>>>>>>>>>>> ",JSON.stringify(chef));
+            chef.deleteDataBagItem(req.params.dataBagName,req.params.itemName,function(err,dataBagItem){
+                if(err){
+                    logger.debug("Exit /chef/../databag/../item/delete");
+                    res.send(500,"Failed to delete Data Bag Item on Chef.");
+                    return;
+                }
+                logger.debug("Exit /chef/../databag/../item/delete");
+                res.send(dataBagItem);
+                return;
+            });
+        });
+    });
+
+    // Find a Data Bag Item by Id from a Data Bag.
+    app.get("/chef/servers/:serverId/databag/:dataBagName/item/:itemId/find",function(req,res){
+        logger.debug("Enter /chef/../databag/../item/find");
+        configmgmtDao.getChefServerDetails(req.params.serverId, function(err, chefDetails) {
+            if (err) {
+                res.send(500);
+                return;
+            }
+            if (!chefDetails) {
+                res.send(404);
+                return;
+            }
+            var chef = new Chef({
+                userChefRepoLocation: chefDetails.chefRepoLocation,
+                chefUserName: chefDetails.loginname,
+                chefUserPemFile: chefDetails.userpemfile,
+                chefValidationPemFile: chefDetails.validatorpemfile,
+                hostedChefUrl: chefDetails.url,
+            });
+            logger.debug("Chef...>>>>>>>>>>>>>>>>>>> ",JSON.stringify(chef));
+            chef.getDataBagItemById(req.params.dataBagName,req.params.itemId,function(err,dataBagItem){
+                if(err){
+                    logger.debug("Exit /chef/../databag/../item/find");
+                    res.send(500,"Failed to find Data Bag Item on Chef.");
+                    return;
+                }
+                logger.debug("Exit /chef/../databag/../item/find");
+                logger.debug("dataBagItem:>>>>>>>>>>>> ",JSON.stringify(dataBagItem));
+                res.send(dataBagItem);
+                return;
+            });
+        });
     });
 };

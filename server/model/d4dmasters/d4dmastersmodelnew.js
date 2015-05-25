@@ -110,7 +110,7 @@ var d4dModelMastersDynamic = mongoose.model('d4dModelMastersDynamic',d4dMastersD
 
 var d4dMastersTeams = new mongoose.Schema(
 	{id: {type:String, trim:true},
-	teamname: {type:String, trim:true, validate:nameValidator},
+	teamname: {type:String, trim:true},
 	loginname: {type:String, trim:true},
 	loginname_rowid: {type:String,trim:true},
 	projectname: {type:String, trim:true},
