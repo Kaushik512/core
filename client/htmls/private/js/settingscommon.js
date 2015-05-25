@@ -616,6 +616,15 @@ function CreateTableFromJson(formID, idFieldName, createFileName) {
                     importbutton.addClass('tableactionbutton');
                 }
 
+                var dataBags = $('.rowtemplate').find('a[title="Manage DB"]');
+
+                if(dataBags && dataBags.length > 0 ) {
+                    dataBags.attr("href", "#ajax/Settings/dbList.html?" + idFieldValue);
+                    dataBags.removeClass('btn-xs');
+                    dataBags.addClass('btn-sg');
+                    dataBags.addClass('tableactionbutton');
+                }
+
 
 
                 //setting the delete button

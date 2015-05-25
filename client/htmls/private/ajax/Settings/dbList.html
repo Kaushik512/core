@@ -1,0 +1,519 @@
+<div class="row">
+
+  <div class="col-md-12">
+   <div class="col-md-12">
+      <form action="" id="myForm">
+         <div class="widget-box">
+            <div class="widget-header">
+               <h4 class="widget-margin" style="color:black;">Data-Bags</h4>
+            </div>
+            <div class="widget-body">
+               <div class="widget-main" style="min-height:200px">
+                  <section id="widget-grid" class="">
+                     <!-- START ROW -->
+                     <div class="row">
+                        <!-- Widget ID (each widget will need unique ID)-->
+                        <div class="jarviswidget" id="wid-id-3" data-widget-editbutton="false" data-widget-custombutton="false">
+                           <!-- widget div-->
+                           <div>
+                              <!-- widget content -->
+                              <div class="widget-body no-padding">
+                                 <div class="col-lg-12 col-md-12">
+                                  <!--table-->
+
+                                  <div class="widget-body">
+                    <div class="widget-main" style="min-height:300px">
+                        <div class="col-md-4 table-responsive" style="padding-left:0px; padding-right:0px;">
+                         <table id="dbNameTable" class="table table-striped table-bordered table-hover dataTable no-footer" cellpadding="5px" width="100%" style="text-align:center">
+                             <a href="#modalForDB" data-backdrop="false" data-toggle="modal" style="cursor:pointer;"> <img src="img/add.png" style="float:right;" class="addDB" rel="tooltip" data-placement="top" /></a>
+                                <thead>
+                                    <tr class="rowCustomStyle">
+                                        <td>List of Data-Bags</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                      <tr><td class="dataAv" colspan=2>No Data Available</td></tr>
+                                       
+                                </tbody>
+                                    
+                            </table>
+                        </div>
+                        
+                    </div>
+                    
+                   
+                    
+                </div>
+
+
+                                  <!--table ends here-->
+                                    
+                                 </div>
+                                 <div class="col-lg-6 col-md-6">
+                                    
+                                 </div>
+                                 
+                                 
+                              </div>
+                              <!-- end widget content -->
+                           </div>
+                           <!-- end widget div -->
+                        </div>
+                        <!-- end widget -->
+                     </div>
+                     <!-- END ROW -->
+                  </section>
+                  <!-- end widget grid -->
+               </div>
+            </div>
+            <div class="widget-toolbox clearfix">
+               <div class="btn-group pull-right">
+                  <button class="btn btn-primary btn-mini" style="margin-right:11px;">
+                  <i class="ace-icon fa fa-check bigger-110"></i>
+                  Save
+                  </button>
+                  <a class="btn btn-primary btn-mini" onclick="window.history.back();" id="btncancel">
+                  <i class="ace-icon fa fa-undo bigger-110"></i>
+                  Cancel
+                  </a>
+               </div>
+            </div>
+         </div>
+      </form>
+   </div>
+ </div>
+</div>
+
+<!--modal for DBList-->
+<div class="modal fade" id="modalForDB" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog " style="">
+        <div class="modal-content"> 
+            <form role="form" id="instanceDBName">
+             <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">
+                    &nbsp;Create Data-Bags
+                </h4>
+
+            </div> 
+            
+            
+             <div class="modal-body" style="height:78px;">
+                <div class="col-lg-6 col-md-6">
+
+                            <label for="">Name<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+
+                            <input type="text" name="dbName" class="form-control dbName" id="instanceDataName" autofocus/>
+                </div>
+                
+                    <input type="hidden" id="serverIDHiddenInput">
+                
+
+            </div>
+            
+               <div class="modal-footer">
+        <input type="submit" id="saveBTN" class="btn btn-primary" value="Save" />
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+      </div>   
+  </form>
+         </div>
+    </div>
+</div>
+<!--modal for DBlist-->
+
+<script>
+$(document).ready(function(){
+$('.addDB').click(function(e){
+  $('#instanceDBName').trigger('reset');
+  //$('#serverIDHiddenInput').val(data._id);
+});
+
+$('#instanceDBName').submit(function(e) {
+        var reqBodyName = {};
+        var $row = $('<tr/>');
+        var $form = $('#instanceDBName');
+        reqBodyName.name = $form.find('.dbName').val();
+        var serverId = $form.find('#serverIDHiddenInput').val();
+        if (!(reqBodyName.name)) {
+            alert("Please Enter Name");
+            return false;
+        }
+        $.post('../chef/servers/' + serverId + 'databag/create', reqBodyName ,function(data){
+            alert('sriki');
+            var $tdName = $('<td class="dBNameCheck"/>');
+            $tdName.append(reqBodyName.name).append('<div class="btn-group del" style="float:right;"><button class="btn btn-danger pull-left btn-sg tableactionbutton deleteRow" value="Remove" title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></div>');
+            $row.append($tdName);
+            $('#dbNameTable').find('tbody tr td.dataAv').addClass('hidden');
+            $('#dbNameTable tbody tr td.dBNameCheck div.del').hide();
+            $('#dbNameTable').find('tbody').append($row);
+            $('#modalForDB').modal('hide');
+            return false;
+
+        });
+
+        
+
+        /*var $tdAction = $('<td/>');*/
+        
+
+        $tdName.find('.deleteRow').click(function() {
+            $row.remove();
+            var emptyTr = $('#dbNameTable').find('tbody > tr');
+            if (emptyTr.length === 1) {
+
+                $('#dbNameTable').find('tbody tr td.dataAv').removeClass('hidden');
+            }
+        });
+        
+});
+
+    $('#dbNameTable tbody tr td.dBName').hover(function() {
+        $(this).find('div.del').animate({
+            opacity: 1
+        }, 100)
+    }, function() {
+        $(this).find('div.del').animate({
+            opacity: 0
+        }, 100)
+    });
+});
+</script>
+<script>
+   //Form Name
+   
+   
+   function inLineReady() {
+       $("input[type='text']").on("click", function () {
+           $(this).select();
+           $("#msgOrgName").hide();
+       });
+       readform(1);
+   
+   
+       //Force opening the left navigation menu
+       if ($('#navSettings').is(":visible") == false) {
+           $('#navSettings').css("display", '');
+           $('#navSettings > ul > li').first().addClass('open');
+           $('#navSettings > ul > li > ul').css("display", "none");
+           $('#navSettings > ul > li > ul').first().css("display", "block");
+       }
+       //redrawing the breadcrumb and selecting the tree
+       $('#ulsettingstree > li').removeClass('active');
+       $('#ulsettingstree > li').each(function () {
+           if ($(this).text().trim() == "Organizations")
+               $(this).addClass('active');
+       });
+       drawBreadCrumb1();
+       enableUniqueCheckingForInputs(1);
+       //enabling active org section
+       if(typeof $('#myForm').find('button').first().attr('rowid') != "undefined")
+          $('#myForm').find('.orgactive').first().removeClass('hidden');
+       else
+          $('#myForm').find('.orgactive').first().addClass('hidden');
+
+      if($('#active').val() == "false"){
+        if(!$('#currentorgstatus').is(':checked'))
+          $('#currentorgstatus').trigger('click');
+        //$('#currentorgstatus').text('Deactive');
+
+      }
+   }
+   
+   var btnenablement = function(){
+    var data1 = new FormData();
+    if (confirm('You have selected to change the status of this organization. Proceed?')) {
+            var $deactivatebtn = $(this);
+            $deactivatebtn.attr('disabled','disabled');
+            var orgid__ = $('#myForm').find('button').first().attr('rowid');
+            var action = "true";
+            // if($('#deactivateradio').is(':checked'))
+            //   action = "false";
+            if($('#currentorgstatus').is(':checked') == true){
+               action = "false";
+            }
+
+            var retVal = false;
+          //alert(action);
+          if(orgid__)
+            {
+              $deactivatebtn.parent().prepend('<label id="masterativatessavespinner" class="" style="float:left;"><img  style="margin-left:5px;margin-right:25px;margin-top:8px;" src="img/select2-spinner.gif"></img> </label>');
+                  
+                   data1.append("orgid", orgid__);
+
+            
+
+                 $.ajax({
+                    url: '/d4dMasters/deactivateorg/' + action,
+                    data: data1,
+                    processData: false,
+                    contentType: false,
+                    type: 'POST',
+                    async: false,
+                    success: function(data, success) {
+                      $('#masterativatessavespinner').detach();
+                      $deactivatebtn.removeAttr('disabled');
+                      // if(action == "false")
+                      //   $('#currentorgstatus').html('Deactive');
+                      // else
+                      //   $('#currentorgstatus').html('Active');
+                     // alert('done');
+                      retVal = true;
+                    },
+                    error: function(jqxhr) {
+                        $('#masterativatessavespinner').detach();
+                        $deactivatebtn.removeAttr('disabled');
+                        alert(jqxhr.status);
+                        retVal = false;
+                    }
+              });
+      }
+    }
+    return retVal;
+   };
+
+
+   function readform_todelete(formName) {
+       var formData = null;
+   
+       //  alert("before d4d" + JSON.stringify(d4ddata));
+       readMasterJson(1);
+       // alert("after d4d" + JSON.stringify(d4ddata));
+   
+       /* $.each(d4ddata.sections.section, function (i, item) {
+            if (item.name == formName) {
+                formData = item;
+            }
+        });*/
+       // alert(JSON.stringify(formData));
+       //Reading row to get schema
+       //alert('here');
+       formData = d4ddata.masterjson;
+   
+       var formSchema = null;
+       var orgName = url.substr(url.indexOf("?") + 1);
+       // alert( JSON.stringify(formData));
+       var editMode = false;
+       $.each(formData.rows.row, function (i, item) {
+           // alert('Expanded field ' + JSON.stringify(item.field[0].values.value.toLowerCase()));
+           if (item.field[0].values.value.toLowerCase() == orgName.toLowerCase()) {
+               formSchema = item.field;
+               editMode = true;
+               return (false);
+           }
+           formSchema = item.field;
+       });
+       if (editMode == false)
+           return;
+       // alert(JSON.stringify(formSchema));
+       //Read current form values with the field names
+       var formSchemaNew = formSchema;
+   
+       $.each(formSchemaNew, function (i, item) {
+           var inputC = null;
+           // debugger;
+           $.each(item, function (k, v) {
+               if (k == "name") {
+                   inputC = $("#" + v);
+               }
+           });
+           $.each(item, function (k, v) {
+               if (k == "values") {
+                   if (inputC) {
+                       $.each(v, function (k1, v1) {
+                           // debugger;
+                           if (inputC.getType().toLowerCase() == "text") {
+                               //   alert(inputC.attr("datavalues"));
+                               if (inputC.attr("datavalues")) {
+                                   //var array = v[k1].split(",");
+                                   $.each(v[k1], function (i) {
+                                       addToCodeList(v[k1][i]);
+                                   });
+                               }
+                               else
+                                   inputC.val(v[k1]);
+   
+                           }
+                           if (inputC.getType().toLowerCase() == "file") {
+                               //  v[k1]
+                           }
+                           if (inputC.getType().toLowerCase() == "hidden") {
+                               inputC.val(getUUID());
+                           }
+                       });
+                   }
+                   inputC = null;
+               }
+           });
+       });
+   }
+       $.fn.getType = function() {
+        if($(this).length){
+        return this[0].tagName == "INPUT" ? this[0].type.toLowerCase() : this[0].tagName.toLowerCase();
+        }else{
+            return "undefined";
+        }
+    }
+   
+   
+   function saveform_old(formName) {
+
+       // debugger;
+       $(".savespinner").show();
+       //   $('.widget-box').css('opacity', '0.1');
+       //To Do SAve...
+       // var d4djson = $.parseJSON(d4ddata);
+       // alert(d4ddata.sections.section[0].name);
+       var formData = null;
+       //    alert("before d4d" + d4ddata);
+       readMasterJson(1);
+       //    alert("after d4d" + d4ddata);
+       /*  $.each(d4ddata.sections.section, function (i, item) {
+   
+             if (item.name == formName) {
+                 formData = item;
+             }
+         });*/
+       // alert(JSON.stringify(formData));
+       //Reading row to get schema
+       var formSchema = null;
+       var orgName = url.substr(url.indexOf("?") + 1);
+       //   alert(orgName);
+       var editMode = false;
+   
+       formData = d4ddata.masterjson;
+   
+       $.each(formData.rows.row, function (i, item) {
+           // alert('Expanded field ' + JSON.stringify(item.field[0].values.value.toLowerCase()));
+           if (item.field[0].values.value.toLowerCase() == orgName.toLowerCase()) {
+               formSchema = item.field;
+               editMode = true;
+               return (false);
+           }
+           formSchema = item.field;
+       });
+       
+       //Read current form values with the field names
+       var formSchemaNew = null;
+       if (editMode == false)
+           formSchemaNew = JSON.parse(JSON.stringify(formSchema));
+       else
+           formSchemaNew = formSchema;
+   
+     //  alert("1" + JSON.stringify(formSchemaNew));
+       $.each(formSchemaNew, function (i, item) {
+           //alert('in');
+           var inputC = null;
+           $.each(item, function (k, v) {
+               if (k == "name") {
+                   inputC = $("#" + v);
+   
+               }
+           });
+           $.each(item, function (k, v) {
+               if (k == "values") {
+                   if (inputC) {
+                       $.each(v, function (k1, v1) {
+                           if (inputC.getType().toLowerCase() == "text") {
+                              // alert(inputC.attr("datavalues"));
+                               if (inputC.attr('datavalues')) {
+   
+                                   var itms = '';
+   
+                                   v1.splice(0, v1.length);
+                                   $('.' + inputC.attr('datavalues')).each(function () {
+                                       v1.push($(this).text());
+                                   });
+                                   //  alert(v1.length);
+   
+                                   // v[k1] = '';
+                                   //   v[k1].push(v1);
+                               }
+                               else
+                                   v[k1] = inputC.val();
+                           }
+                           if (inputC.getType().toLowerCase() == "file") {
+                               v[k1] = inputC.files[0].name;
+                           }
+                       });
+   
+                   }
+                   inputC = null;
+               }
+   
+           });
+   
+       });
+   
+     //  alert(editMode + '{\"field\":' + JSON.stringify(formSchemaNew) + '}');
+   
+       if (editMode == false)
+           formData.rows.row.push(JSON.parse('{\"field\":' + JSON.stringify(formSchemaNew) + '}'));
+       //alert(JSON.stringify(formData).replace(/\./gi, "$dot$"));
+       //Call the nodejs to save the json
+       $.ajax({
+           type: "post",
+           dataType: "text",
+           data: formData,
+           async: false,
+           url: serviceURL + "savemasterjson/1",
+           success: function (data) {
+               //  alert(data.toString());
+               alert('Successfully Saved');
+           },
+           failure: function (data) {
+               alert(data.toString());
+           }
+       }); 
+       $(".savespinner").hide();
+       $('#btncancel').click();
+       
+   }
+   
+   function validateForm() {
+       //Check for required parameter
+       return (true);
+   } 
+   inLineReady();
+</script>
+<script>
+   $(document).ready(function () {
+    var rowid = $('#myForm').find('button').first().attr('rowid');
+    if(typeof rowid == "undefined"){
+      //$('.orgactive').removeClass('hidden'); //commented to hide isactive check
+      $('#active').val('true');
+    }
+    $("#orgname").focus();
+       $('#myForm').submit(function() {
+         //do not save this 
+          if($('#currentorgstatus').is(':checked').toString() == $('#active').val()){
+            if(!btnenablement()){
+             // alert('in return');
+              return false;
+            }
+              $('#active').detach();
+          }
+         console.log('serialize ==> ',$(this).serialize());
+           $(this).validate();
+   
+           if($(this).valid){
+                /*alert('valid form submitted'); // for demo*/
+               if(!saveform('1'))return false;
+             
+           }else{
+                alert('invalid valid form submitted'); // for demo
+           }
+           return false; // for demo
+       });
+   
+   
+   //isUserTypeSuperAdmin();
+   
+   });
+   function isUserTypeSuperAdmin(){
+       $.get('/d4dMasters/loggedInUser',function(data){
+         if(!data.isSuperAdmin){
+          $('#orgname').attr('disabled','disabled');
+            }
+            });
+          }
+</script>
