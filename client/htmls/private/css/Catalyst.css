@@ -7806,5 +7806,10 @@ word-break:break-word;
     height: 300px;
     overflow: scroll;
 }
+.taskCardIMG{
+    width:auto;
+    height:27px;
+    float:right;
+}
 
 

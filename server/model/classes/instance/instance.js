@@ -193,7 +193,8 @@ var InstanceSchema = new Schema({
         trim: true
     }],
     actionLogs: [ActionLogSchema],
-    chefClientExecutionIds: [String]
+    chefClientExecutionIds: [String],
+    taskId: String,
 
 });
 
@@ -483,6 +484,89 @@ var InstancesDao = function() {
 
         });
     }
+
+    this.addTaskId = function(instanceId, taskId, callback) {
+       
+
+        logger.debug("Enter addTaskId (%s, %s)", instanceId, taskId);
+        Instances.update({
+            "_id": new ObjectId(instanceId)
+        }, {
+            $set: {
+                taskId: taskId
+            }
+        }, {
+            upsert: false
+        }, function(err, updateCount) {
+            if (err) {
+                logger.error("Failed to addTaskId (%s, %s,%s)", instanceId, taskId, err);
+                callback(err, null);
+                return;
+            }
+            logger.debug("Exit addTaskId (%s, %s)", instanceId, taskId);
+            if (updateCount) {
+                callback(null, updateCount);
+            } else {
+                callback(null, null);
+            }
+
+        });
+    };
+
+    this.removeTaskId = function(instanceId, callback) {
+        
+        logger.debug("Enter removeTaskId (%s)", instanceId);
+        Instances.update({
+            "_id": new ObjectId(instanceId)
+        }, {
+            $unset: {
+                taskId: ""
+            }
+        }, {
+            upsert: false
+        }, function(err, updateCount) {
+            if (err) {
+                logger.error("Failed to addAppUrl (%s, %s)", instanceId, err);
+                callback(err, null);
+                return;
+            }
+            logger.debug("Exit addAppUrl (%s)", instanceId);
+            if (updateCount) {
+                callback(null, updateCount);
+            } else {
+                callback(null, null);
+            }
+
+        });
+    };
+
+    this.removeTaskIdFromAllInstances = function(taskId, callback) {
+      
+
+        logger.debug("Enter removeTaskIdFromAllInstances (%s)", taskId);
+        Instances.update({
+            taskId: taskId
+        }, {
+            $unset: {
+                taskId: ""
+            }
+        }, {
+            upsert: false
+        }, function(err, updateCount) {
+            if (err) {
+                logger.error("Failed to removeTaskIdFromAllInstances (%s, %s)", taskId, err);
+                callback(err, null);
+                return;
+            }
+            logger.debug("Exit addAppUrl (%s)", taskId);
+            if (updateCount) {
+                callback(null, updateCount);
+            } else {
+                callback(null, null);
+            }
+
+        });
+    };
 
     this.updateAppUrl = function(instanceId, appUrlId, name, url, callback) {
         logger.debug("Enter updateAppUrl2 (%s, %s)", instanceId, url);

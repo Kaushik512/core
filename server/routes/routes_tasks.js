@@ -8,6 +8,7 @@ var errorResponses = require('./error_responses.js');
 
 var Tasks = require('../model/classes/tasks/tasks.js');
 var Application = require('../model/classes/application/application');
+var instancesDao = require('../model/classes/instance/instance');
 
 
 var logger = require('../lib/logger')(module);
@@ -47,20 +48,27 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 });
                 return;
             } else {
-                Tasks.removeTaskById(req.params.taskId, function(err, deleteCount) {
+                instancesDao.removeTaskIdFromAllInstances(req.params.taskId, function(err, deleteCount) {
                     if (err) {
                         logger.error(err);
                         res.send(500, errorResponses.db.error);
                         return;
                     }
-                    if (deleteCount) {
-                        res.send({
-                            deleteCount: deleteCount
-                        });
-                    } else {
-                        res.send(400);
-                    }
-                });
+                    Tasks.removeTaskById(req.params.taskId, function(err, deleteCount) {
+                        if (err) {
+                            logger.error(err);
+                            res.send(500, errorResponses.db.error);
+                            return;
+                        }
+                        if (deleteCount) {
+                            res.send({
+                                deleteCount: deleteCount
+                            });
+                        } else {
+                            res.send(400);
+                        }
+                    });
+                })
             }
         })
 
@@ -115,6 +123,18 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 res.send(404);
             }
         });
+    });
+
+    app.get('/tasks', function(req, res) {
+        logger.debug("Enter get() for /organizations/%s/businessgroups/%s/projects/%s/environments/%s/tasks", req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId);
+        Tasks.getTasksByOrgBgProjectAndEnvId(req.query.orgId, req.query.bgId, req.query.projectId, req.query.envId, function(err, data) {
+            if (err) {
+                res.send(500);
+                return;
+            }
+            res.send(data);
+        });
+        logger.debug("Exit get() for /organizations/%s/businessgroups/%s/projects/%s/environments/%s/tasks", req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId);
     });
 
     app.post('/tasks/:taskId/update', function(req, res) {

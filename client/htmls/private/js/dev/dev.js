@@ -1210,7 +1210,18 @@
                                       }
                                   }
 
+                                  //for task icon on card
+                                  if(data.taskId) {
+                                    var $taskIcon = $('<a href="javascript:void(0)" ><img class="taskCardIMG" alt="task" src="img/galleryIcons/Docker.png"></a>');
+                                    $taskIcon.click(function(e){
+                                      $('a[data-taskId="'+data.taskId+'"]').click();
 
+                                    });
+                                    $divComponentListContainer.append($taskIcon); 
+
+  
+                                  }
+                                  
 
 
 
@@ -2603,7 +2614,7 @@
                                       $tr.append($tdRunlist);
 
                                       var $tdExecute = $('<td></td>').append('<a rel="tooltip" data-placement="top" data-original-title="Execute" data-toggle="modal" href="javascript:void(0)" class="btn btn-primary btn-sg tableactionbutton"><i class="ace-icon fa fa-play bigger-120"></i></a>');
-                                      $tdExecute.find('a').data('taskId', data[i]._id).click(function(e) {
+                                      $tdExecute.find('a').data('taskId', data[i]._id).attr('data-taskId',data[i]._id).click(function(e) {
                                           var taskId = $(this).data('taskId');
                                           var $taskExecuteTabsHeaderContainer = $('#taskExecuteTabsHeader').empty();
                                           var $taskExecuteTabsContent = $('#taskExecuteTabsContent').empty();

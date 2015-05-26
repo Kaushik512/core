@@ -158,7 +158,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
     app.post('/instances/:instanceId/appUrl/:appUrlId/update', function(req, res) { //function(instanceId, ipaddress, callback)
         logger.debug("Enter post() for /instances/%s/appUrl/update", req.params.instanceId);
-        instancesDao.updateAppUrl(req.params.instanceId, req.params.appUrlId,req.body.name, req.body.url, function(err, updateCount) {
+        instancesDao.updateAppUrl(req.params.instanceId, req.params.appUrlId, req.body.name, req.body.url, function(err, updateCount) {
             if (err) {
                 logger.error("Failed to update appurl", err);
                 res.send(500);
@@ -183,6 +183,46 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             });
         });
     });
+
+    // add instance task
+    app.post('/instances/:instanceId/addTask', function(req, res) { //function(instanceId, ipaddress, callback)
+        if (!req.body.taskId) {
+            res.send(404, {
+                message: "Invalid Task Id"
+            });
+            return;
+        }
+        instancesDao.addTaskId(req.params.instanceId, req.body.taskId, function(err, updateCount) {
+            if (err) {
+                logger.error("Failed to add taskId", err);
+                res.send(500);
+                return;
+            }
+            if (updateCount) {
+                res.send(200, {
+                    updateCount: updateCount
+                });
+            } else {
+                res.send(404);
+            }
+       });
+    });
+
+     app.delete('/instances/:instanceId/removeTask', function(req, res) { //function(instanceId, ipaddress, callback)
+        
+        instancesDao.removeTaskId(req.params.instanceId, function(err, deleteCount) {
+            if (err) {
+                logger.error("Failed to taskId", err);
+                res.send(500, errorResponses.db.error);
+                return;
+            }
+            res.send({
+                deleteCount: deleteCount
+            });
+        });
+    });
+
+
     //updateInstanceIp
     app.get('/instances/updateip/:instanceId/:ipaddress', function(req, res) { //function(instanceId, ipaddress, callback)
         logger.debug("Enter get() for /instances/updateip/%s/%s", req.params.instanceId, req.params.ipaddress);
@@ -1671,65 +1711,65 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                 }
                             }, function(stdOutData) {
                                 logger.debug("Return from chef client>>>>>>>>>>>>>>>>>>>: ", stdOutData);
-                                installedString = installedString+"{"+stdOutData.replace(/\s+/g, ' ')+"},";
-                                if(stdOutData === "{catalyst.inspect.stop}"){
+                                installedString = installedString + "{" + stdOutData.replace(/\s+/g, ' ') + "},";
+                                if (stdOutData === "{catalyst.inspect.stop}") {
                                     // For CentOS
-                                    if(anInstance[0].credentials.username === "root"){
+                                    if (anInstance[0].credentials.username === "root") {
                                         logger.debug("CentOS Called...");
-                                        var insString =installedString.split("{Installed Packages}").pop().split("{{catalyst.inspect.stop}}").shift();
+                                        var insString = installedString.split("{Installed Packages}").pop().split("{{catalyst.inspect.stop}}").shift();
                                         insString = insString.substr(1);
                                         insString = insString.slice(0, -1);
                                         res.send(insString.split(","));
                                         return;
-                                    }else{
+                                    } else {
                                         // For Ubuntu
                                         logger.debug("Ubuntu Called...");
                                         var insString;
-                                        if(stdOutData === "{{catalyst.inspect.start}}"){
-                                            insString =installedString.split("{{catalyst.inspect.start}}").pop().split("{{catalyst.inspect.stop}}").shift();
-                                        }else{
-                                            insString =installedString.split("{catalyst.inspect.start}}").pop().split("{{catalyst.inspect.stop}}").shift();
+                                        if (stdOutData === "{{catalyst.inspect.start}}") {
+                                            insString = installedString.split("{{catalyst.inspect.start}}").pop().split("{{catalyst.inspect.stop}}").shift();
+                                        } else {
+                                            insString = installedString.split("{catalyst.inspect.start}}").pop().split("{{catalyst.inspect.stop}}").shift();
                                         }
                                         insString = insString.substr(1);
                                         insString = insString.slice(0, -1);
                                         res.send(insString.split(","));
                                         return;
                                     }
-                            }
-                            // For Windows
-                            if(chefClientOptions.username === "administrator" || chefClientOptions.username === "Admin"){
-                                var insString;
-                                var arr = [];
-                                logger.debug("Windows Called...");
-                                var str = stdOutData.split("\n");
-                                for(var i=0;i<str.length;i++){
-                                    var actualStr = str[i].replace(/\s+/g, ' ');
-                                    strWindows = strWindows+"{"+actualStr+"},";
-                                    if(actualStr === chefClientOptions.host+" Name Version "){
-                                        insString =strWindows.split(chefClientOptions.host+" Name Version ").pop().split(chefClientOptions.host+" {catalyst.inspect.stop}").shift();
-                                    }else if(actualStr === "{ "+chefClientOptions.host+" Name Version }"){
-                                        insString =strWindows.split("{ "+chefClientOptions.host+" Name Version }").pop().split("{"+chefClientOptions.host+" {catalyst.inspect.stop}}").shift();
-                                    }else{
-                                        insString =strWindows.split("{"+chefClientOptions.host+" Name Version }").pop().split("{"+chefClientOptions.host+" {catalyst.inspect.stop}}").shift();
-                                    }
-                                    if(str[i] === chefClientOptions.host+" {catalyst.inspect.stop}"){
-                                        insString = insString.substr(1);
-                                        insString = insString.slice(0, -1);
-                                        arr = insString.split(",");
-                                        for(var x=0;x<arr.length;x++){
-                                            var replaceStr;
-                                            if(arr[x].length != 0 && arr[x] !== "{}" && arr[x] !== "{"+chefClientOptions.host+"}" && arr[x] !== "{"+chefClientOptions.host+" }"){
-                                                replaceStr = arr[x].replace("{}",'');
-                                                installedList.push(replaceStr.replace(chefClientOptions.host,''));
-                                            }
-                                        }
-                                        logger.debug("Exit get() for /instances/%s/inspect", req.params.instanceId);
-                                        res.send(installedList.filter(Boolean));
-                                        return;
-                                    }
                                 }
+                                // For Windows
+                                if (chefClientOptions.username === "administrator" || chefClientOptions.username === "Admin") {
+                                    var insString;
+                                    var arr = [];
+                                    logger.debug("Windows Called...");
+                                    var str = stdOutData.split("\n");
+                                    for (var i = 0; i < str.length; i++) {
+                                        var actualStr = str[i].replace(/\s+/g, ' ');
+                                        strWindows = strWindows + "{" + actualStr + "},";
+                                        if (actualStr === chefClientOptions.host + " Name Version ") {
+                                            insString = strWindows.split(chefClientOptions.host + " Name Version ").pop().split(chefClientOptions.host + " {catalyst.inspect.stop}").shift();
+                                        } else if (actualStr === "{ " + chefClientOptions.host + " Name Version }") {
+                                            insString = strWindows.split("{ " + chefClientOptions.host + " Name Version }").pop().split("{" + chefClientOptions.host + " {catalyst.inspect.stop}}").shift();
+                                        } else {
+                                            insString = strWindows.split("{" + chefClientOptions.host + " Name Version }").pop().split("{" + chefClientOptions.host + " {catalyst.inspect.stop}}").shift();
+                                        }
+                                        if (str[i] === chefClientOptions.host + " {catalyst.inspect.stop}") {
+                                            insString = insString.substr(1);
+                                            insString = insString.slice(0, -1);
+                                            arr = insString.split(",");
+                                            for (var x = 0; x < arr.length; x++) {
+                                                var replaceStr;
+                                                if (arr[x].length != 0 && arr[x] !== "{}" && arr[x] !== "{" + chefClientOptions.host + "}" && arr[x] !== "{" + chefClientOptions.host + " }") {
+                                                    replaceStr = arr[x].replace("{}", '');
+                                                    installedList.push(replaceStr.replace(chefClientOptions.host, ''));
+                                                }
+                                            }
+                                            logger.debug("Exit get() for /instances/%s/inspect", req.params.instanceId);
+                                            res.send(installedList.filter(Boolean));
+                                            return;
+                                        }
+                                    }
 
-                            }
+                                }
 
                             }, function(stdOutErr) {
                                 logger.debug("Return error from chef client:>>>>>>>>>>>>>: ", JSON.stringify(stdOutErr));

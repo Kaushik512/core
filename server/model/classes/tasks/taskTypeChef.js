@@ -86,7 +86,7 @@ chefTaskSchema.methods.execute = function(userName, baseUrl, onExecute, onComple
                 instanceId: instanceId,
                 status: 'success'
             }
-            if(executionId) {
+            if (executionId) {
                 result.executionId = executionId;
             }
             if (err) {
@@ -178,7 +178,7 @@ chefTaskSchema.methods.execute = function(userName, baseUrl, onExecute, onComple
                             if (err) {
                                 var timestampEnded = new Date().getTime();
                                 logsDao.insertLog({
-                                    referenceId: logReferenceIds,
+                                    referenceId: logsReferenceIds,
                                     err: true,
                                     log: "Unable to generate chef run execution id. Chef run failed",
                                     timestamp: timestampEnded
@@ -189,8 +189,8 @@ chefTaskSchema.methods.execute = function(userName, baseUrl, onExecute, onComple
                             }
 
                             var executionIdJsonAttributeObj = {
-                                catalyst_attribute_handler : {
-                                  catalystCallbackUrl: baseUrl + '/chefClientExecution/' + chefClientExecution.id  
+                                catalyst_attribute_handler: {
+                                    catalystCallbackUrl: baseUrl + '/chefClientExecution/' + chefClientExecution.id
                                 }
                             };
 
@@ -224,6 +224,12 @@ chefTaskSchema.methods.execute = function(userName, baseUrl, onExecute, onComple
                             } else {
                                 chefClientOptions.password = decryptedCredentials.password;
                             }
+                            logsDao.insertLog({
+                                referenceId: logsReferenceIds,
+                                err: false,
+                                log: "Executing Task",
+                                timestamp: new Date().getTime()
+                            });
                             chef.runChefClient(chefClientOptions, function(err, retCode) {
                                 if (decryptedCredentials.pemFileLocation) {
                                     fileIo.removeFile(decryptedCredentials.pemFileLocation, function(err) {
