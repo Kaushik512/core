@@ -117,7 +117,7 @@ function getDefaultsConfig() {
                 osType: "linux"
             }, {
 
-                os_name: "Windows 2008",
+                os_name: "Windows",
                 osType: "windows"
             }, {
 
