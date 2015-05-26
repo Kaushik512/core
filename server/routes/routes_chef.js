@@ -1,3 +1,13 @@
+/* Copyright (C) Relevance Lab Private Limited- All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Gobinda Das <gobinda.das@relevancelab.com>, 
+ * May 2015
+ */
+
+// This file act as a Controller which contains chef server related all end points.
+
+
 var Chef = require('../lib/chef');
 var EC2 = require('../lib/ec2');
 var instancesDao = require('../model/classes/instance/instance');

@@ -1,3 +1,12 @@
+/* Copyright (C) Relevance Lab Private Limited- All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Gobinda Das <gobinda.das@relevancelab.com>, 
+ * May 2015
+ */
+
+// This file act as a Controller which contains Settings related all end points.
+
 var d4dModel = require('../model/d4dmasters/d4dmastersmodel.js');
 var d4dModelNew = require('../model/d4dmasters/d4dmastersmodelnew.js');
 var usersDao = require('../model/users.js');
