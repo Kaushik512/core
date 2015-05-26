@@ -1705,7 +1705,7 @@ function resetForm(){
      var $instanceOS = $('#instanceOS');
      $instanceOS.append('<option value="">Select Operating System</option>')
      for(var i=0;i<data.length;i++) {
-       $option = $('<option data-amiid="'+data[i].amiid+'" data-amiid-username="'+data[i].username+'" data-instanceOS="'+data[i].osType+'" value="'+data[i].name+'">'+data[i].name+'</option>');
+       $option = $('<option data-instanceOS="'+data[i].osType+'" value="'+data[i].os_name+'">'+data[i].os_name+'</option>');
        $option.data('supportedInstanceType',data[i].supportedInstanceType);
        $instanceOS.append($option);
      }
