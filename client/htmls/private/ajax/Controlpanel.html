@@ -899,7 +899,7 @@
 
                             <label for="">Name<span style="color:Red;" class="control-label">&nbsp;*</span></label>
 
-                            <select class="form-control" id="taskList"> </select>
+                            <select class="form-control" id="taskList" multiple> </select>
                             
                 </div>
                 
@@ -1726,11 +1726,19 @@ $('.startstoptoggler').click(startAndStopToggler);
   $cfmwareTbody.append($tr);
 
     //$collapseTaskAreaTbody.empty();
-    if (data.taskId) {
+    if (data.taskIds && data.taskIds.length) {
         var $collapseTaskAreaTbody = $('#collapseTaskArea').find('tbody');
         var $trTask = $('<tr style="line-height:2.3"></tr>');
-        $.get('../tasks/' + data.taskId, function(taskData) {
-            $collapseTaskAreaTbody.find('.taskNameTd').html(taskData.name);
+        $.post('../tasks',{
+          taskIds:data.taskIds
+        }, function(tasks) {
+            var str = '';  
+            for(var i=0;i<tasks.length;i++) {
+              console.log(tasks[i]);
+              str = str+tasks[i].name+'</br>';
+            }
+            console.log(str);
+            $collapseTaskAreaTbody.find('.taskNameTd').html(str);
             //$trTask.append('<td scope="col" style="font-size:12px;">Task</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + taskData.name + '</td>');
         });
         //$collapseTaskAreaTbody.append($trTask);
@@ -1758,9 +1766,16 @@ $('.startstoptoggler').click(startAndStopToggler);
 
     $('#addTaskBtn').click(function(e) {
         var $select = $('#taskList').empty();
+        var taskIds = []; 
+        if(data.taskIds && data.taskIds.length) {
+         taskIds = data.taskIds;
+        }
         $.get('/tasks?orgId='+data.orgId+'&bgId='+data.bgId+'&projectId='+data.projectId+'&envId='+data.envId,function(taskList){
           for(var i=0;i<taskList.length;i++) {
                 var $option = $("<option></option>").val(taskList[i]._id).html(taskList[i].name).attr('data-taskName',taskList[i].name);
+               if(taskIds.indexOf(taskList[i]._id) !== -1) {
+                $option.attr('selected','selected');
+               }
                 $select.append($option);
           }
           $('#instanceTaskModal').modal('show');
@@ -1768,14 +1783,20 @@ $('.startstoptoggler').click(startAndStopToggler);
     });
 
     $('#saveTaskBtn').click(function() {
-       var $selectedOption = $('#taskList option:selected');
-        var taskId = $selectedOption.val();
-        if (taskId) {
+        var $taskSelect = $('#taskList');
+        var $selectedOptions = $taskSelect.find('option:selected');
+        var taskIds = $taskSelect.val();
+        if (taskIds) {
             $.post('../instances/' + data._id + '/addTask', {
-                taskId: taskId
+                taskIds: taskIds
             }, function() {
-                $('.taskNameTd').html($selectedOption.text());
+                var str = '';
+                for(var i=0;i<$selectedOptions.length;i++){
+                  str += $($selectedOptions[i]).text()+'</br>'
+                }
+                $('.taskNameTd').html(str);
                 $('#instanceTaskModal').modal('hide');
+                data.taskIds = taskIds;
             });
         } else {
             $('#instanceTaskModal').modal('hide');

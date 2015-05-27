@@ -194,16 +194,16 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
     });
 
     // add instance task
-    app.post('/instances/:instanceId/addTask', function(req, res) { //function(instanceId, ipaddress, callback)
-        if (!req.body.taskId) {
+    app.post('/instances/:instanceId/addTask', function(req, res) {
+        if (!(req.body.taskIds && req.body.taskIds.length)) {
             res.send(404, {
                 message: "Invalid Task Id"
             });
             return;
         }
-        instancesDao.addTaskId(req.params.instanceId, req.body.taskId, function(err, updateCount) {
+        instancesDao.addTaskIds(req.params.instanceId, req.body.taskIds, function(err, updateCount) {
             if (err) {
-                logger.error("Failed to add taskId", err);
+                logger.error("Failed to add taskIds", err);
                 res.send(500);
                 return;
             }
@@ -214,7 +214,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             } else {
                 res.send(404);
             }
-       });
+        });
     });
 
      app.delete('/instances/:instanceId/removeTask', function(req, res) { //function(instanceId, ipaddress, callback)

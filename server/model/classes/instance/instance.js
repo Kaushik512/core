@@ -194,7 +194,7 @@ var InstanceSchema = new Schema({
     }],
     actionLogs: [ActionLogSchema],
     chefClientExecutionIds: [String],
-    taskId: String,
+    taskIds: [String],
 
 });
 
@@ -485,25 +485,25 @@ var InstancesDao = function() {
         });
     }
 
-    this.addTaskId = function(instanceId, taskId, callback) {
-       
+    this.addTaskIds = function(instanceId, taskIds, callback) {
 
-        logger.debug("Enter addTaskId (%s, %s)", instanceId, taskId);
+
+        logger.debug("Enter addTaskId (%s, %s)", instanceId, taskIds);
         Instances.update({
             "_id": new ObjectId(instanceId)
         }, {
             $set: {
-                taskId: taskId
+                taskIds: taskIds
             }
         }, {
             upsert: false
         }, function(err, updateCount) {
             if (err) {
-                logger.error("Failed to addTaskId (%s, %s,%s)", instanceId, taskId, err);
+                logger.error("Failed to addTaskId (%s, %s,%s)", instanceId, taskIds, err);
                 callback(err, null);
                 return;
             }
-            logger.debug("Exit addTaskId (%s, %s)", instanceId, taskId);
+            logger.debug("Exit addTaskId (%s, %s)", instanceId, taskIds);
             if (updateCount) {
                 callback(null, updateCount);
             } else {
@@ -514,7 +514,7 @@ var InstancesDao = function() {
     };
 
     this.removeTaskId = function(instanceId, callback) {
-        
+
         logger.debug("Enter removeTaskId (%s)", instanceId);
         Instances.update({
             "_id": new ObjectId(instanceId)
@@ -541,14 +541,14 @@ var InstancesDao = function() {
     };
 
     this.removeTaskIdFromAllInstances = function(taskId, callback) {
-      
+
 
         logger.debug("Enter removeTaskIdFromAllInstances (%s)", taskId);
         Instances.update({
-            taskId: taskId
+            taskIds: taskId
         }, {
-            $unset: {
-                taskId: ""
+            $pull: {
+                taskIds: taskId
             }
         }, {
             upsert: false
