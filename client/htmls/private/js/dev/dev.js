@@ -1210,26 +1210,6 @@
                                        }
                                    }
 
-                                   //for task icon on card
-                                   if (data.taskIds && data.taskIds.length) {
-                                       for (var ll = 0; ll < data.taskIds.length; ll++) {
-                                           var $taskIcon = $('<a href="javascript:void(0)" ><img class="taskCardIMG" alt="task" src="img/galleryIcons/Docker.png"></a></br>');
-                                           (function(taskId) {
-                                               $taskIcon.attr('data-taskCardIconId', taskId).click(function(e) {
-                                                   $('a[data-taskId="' + taskId + '"]').click();
-
-                                               });
-                                           })(data.taskIds[ll]);
-                                           $divComponentListContainer.append($taskIcon);
-                                       }
-
-
-                                   }
-
-
-
-
-
                                    $rowContainter.append('<td></td>');
                                    $rowContainter.append('<td><img src="' + data.blueprintData.iconPath + '" style="width:auto;height:30px;" /></td>');
 
@@ -1299,6 +1279,42 @@
                                            $divComponentListContainer.append($anchor);
                                            temp = temp + ' ' + $anchor;
                                        }
+                                   }
+
+                                    //for task icon on card
+                                   if (data.taskIds && data.taskIds.length) {
+                                       for (var ll = 0; ll < data.taskIds.length; ll++) {
+                                           var $taskIcon = $('<div class="tasksBlock"><img rel="tooltip" data-placement="top" data-original-title="Tasks" class="taskCardIMG" alt="task" style="cursor:pointer" src="img/tasks.png"/><div class="tasksLinks hidden"><a rel="tooltip" data-placement="top" data-original-title="Execute" data-toggle="modal" href="javascript:void(0)" class="btn btn-primary btn-sg tableactionbutton"><i class="ace-icon fa fa-play bigger-120"></i></a><a style="margin-left:15px;" rel="tooltip" data-placement="top" data-original-title="History" data-toggle="modal" href="javascript:void(0)" class="btn btn-primary btn-sg tableactionbutton"><i class="ace-icon fa fa-header bigger-120"></i></a></div></div><br/><br/>');
+                                           //for showing the hover
+                                          if (ll == 2) {
+                                              break;
+                                          }
+
+                                        
+      
+                                          //click for tasks
+                                           (function(taskId) {
+                                               $taskIcon.attr('data-taskCardIconId', taskId).click(function(e) {
+                                                  e.preventDefault();
+                                                  $('div.tasksLinks').toggleClass('hidden')
+                                                   $('a[data-taskId="' + taskId + '"]').click();
+
+                                               });
+                                           })(data.taskIds[ll]);
+                                           $divComponentListContainer.append($taskIcon);
+                                       }
+
+                                       /*$('.tasksLinks').mouseup(function(e) {
+                                            var containerTask = $(".tasksLinks");
+
+                                            if (!containerTask.is(e.target) // if the target of the click isn't the container...
+                                                && containerTask.has(e.target).length === 0) // ... nor a descendant of the container
+                                            {
+                                                containerTask.hide();
+                                            }
+                                        });*/
+
+
                                    }
 
                                    $rowContainter.append('<td>' + temp + '</td>');
@@ -3914,8 +3930,7 @@
                                getViewTile();
                                $('#defaultViewButton').click(); //setting the detault view
 
-
-
                            });
+
 
                        }
