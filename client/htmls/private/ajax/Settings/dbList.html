@@ -205,7 +205,8 @@ $('.addList').click(function(e){
 });
 
 
-
+$(document).ready(function(e) {
+    //for getting the list of data-bags
     var chefServer = '../chef/servers/' + urlParams.id + '/databag/list';
 
     $.get(chefServer, function(data) {
@@ -226,20 +227,20 @@ $('.addList').click(function(e){
             var $tdClick = $('<a id="dbNameClick" style="cursor:pointer;">' + name + '</a>');
             $tdName.append($tdClick);
             $tdName.append('<div class="btn-group del" style="float:right;"><button class="btn btn-danger pull-left btn-sg tableactionbutton deleteRow" value="Remove" title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></div>');
-           
+
 
             $tr.append($tdName);
             $dbNameList.append($tr);
 
-             $tdName.find('button.deleteRow').click(function() {
+            $tdName.find('button.deleteRow').click(function() {
                 var $this = $(this);
                 var $trNew = $this.parents('tr.dbTest');
                 console.log(name);
                 var dataBagName = name;
                 console.log(dataBagName);
-                
+
                 $.ajax({
-                    url: '../chef/servers/'+ urlParams.id + '/databag/' + dataBagName + '/delete',
+                    url: '../chef/servers/' + urlParams.id + '/databag/' + dataBagName + '/delete',
                     method: 'DELETE',
                     success: function() {
                         $trNew.remove();
@@ -263,197 +264,201 @@ $('.addList').click(function(e){
 
     });
 
-function getItemsList() {
-    var dataBagName = $('#dataBagIDHiddenInput').val();
-    console.log(dataBagName);
-    var $tableDataBagItem = $('#listData');
+    //for getting the list when we click on db
+    function getItemsList() {
+        var dataBagName = $('#dataBagIDHiddenInput').val();
+        console.log(dataBagName);
+        var $tableDataBagItem = $('#listData');
 
-    var listItems = '../chef/servers/' + urlParams.id + '/databag/' + dataBagName + '/item/list';
-    $.get(listItems, function(data) {
-        $.each(data, function(k) {
-            console.log(data);
-            if(k){
-              $('#listData').find('tbody tr td.dataAvList').addClass('hidden');
-            }
-            var $trForItems = $('<tr class="itemsList"/>');
+        var listItems = '../chef/servers/' + urlParams.id + '/databag/' + dataBagName + '/item/list';
+        $.get(listItems, function(data) {
+            $.each(data, function(k) {
+                console.log(data);
+                if (k) {
+                    $('#listData').find('tbody tr td.dataAvList').addClass('hidden');
+                }
+                var $trForItems = $('<tr class="itemsList"/>');
 
-            var $tdForItems = $('<td class="listData"/>');
-            $tdForItems.append('<a id="listNameClickNew"  onclick="myFunctionListClick()">' + k + '</a>').append('<div class="btn-group"><button class="btn btn-info pull-left btn-sg tableactionbutton editRow" value="Update" title="Update"><i class="ace-icon fa fa-pencil bigger-120"></i></button></div>').append('<div style="margin-left:5px;" class="btn-group del" style="float:right;"><button class="btn btn-danger pull-left btn-sg tableactionbutton deleteRow" value="Remove" title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></div>');
-            //for edit
-            $tdForItems.find('button.editRow').click(function() {
-                var $this = $(this);
-                var $trNew = $this.parents('tr.itemsList');
-                var $editModal = $('#modalForItems');
-                $editModal.modal('show');
-                $editModal.find('.listID').val(k);
-                $editModal.find('.listName').val();
-                var dataBagName = $('#dataBagIDHiddenInput').val();
-                console.log(dataBagName);
-                console.log(k);
-                var itemId = k;
-                console.log(itemId);
-                $.post('../chef/servers/'+ urlParams.id+ '/databag/' + dataBagName+ '/item/' + itemId+ '/update' , function(data){
-                    alert('hello');
+                var $tdForItems = $('<td class="listData"/>');
+                $tdForItems.append('<a id="listNameClickNew"  onclick="myFunctionListClick()">' + k + '</a>').append('<div class="btn-group"><button class="btn btn-info pull-left btn-sg tableactionbutton editRow" value="Update" title="Update"><i class="ace-icon fa fa-pencil bigger-120"></i></button></div>').append('<div style="margin-left:5px;" class="btn-group del" style="float:right;"><button class="btn btn-danger pull-left btn-sg tableactionbutton deleteRow" value="Remove" title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></div>');
+                //for edit
+                $tdForItems.find('button.editRow').click(function() {
+                    var $this = $(this);
+                    var $trNew = $this.parents('tr.itemsList');
+                    var $editModal = $('#modalForItems');
+                    $editModal.modal('show');
+                    $editModal.find('.listID').val(k);
+                    $editModal.find('.listName').val();
+                    var dataBagName = $('#dataBagIDHiddenInput').val();
+                    console.log(dataBagName);
+                    console.log(k);
+                    var itemId = k;
+                    console.log(itemId);
+                    $.post('../chef/servers/' + urlParams.id + '/databag/' + dataBagName + '/item/' + itemId + '/update', function(data) {
+                        alert('hello');
+                    });
                 });
-              });
-            //for delete
-            $tdForItems.find('button.deleteRow').click(function() {
-                var $this = $(this);
-                var $trNew = $this.parents('tr.itemsList');
-                var dataBagName = $('#dataBagIDHiddenInput').val();
-                console.log(dataBagName);
-                console.log(k);
-                var itemName = k;
-                console.log(itemName);
+                //for delete
+                $tdForItems.find('button.deleteRow').click(function() {
+                    var $this = $(this);
+                    var $trNew = $this.parents('tr.itemsList');
+                    var dataBagName = $('#dataBagIDHiddenInput').val();
+                    console.log(dataBagName);
+                    console.log(k);
+                    var itemName = k;
+                    console.log(itemName);
 
-                $.ajax({
-                    url: '../chef/servers/' + urlParams.id + '/databag/' + dataBagName + '/item/' + itemName+ '/delete',
-                    method: 'DELETE',
-                    success: function() {
-                        $trNew.remove();
-                    },
-                    fail: function() {
-                        alert("Unable to delete URL please try again later");
-                    }
+                    $.ajax({
+                        url: '../chef/servers/' + urlParams.id + '/databag/' + dataBagName + '/item/' + itemName + '/delete',
+                        method: 'DELETE',
+                        success: function() {
+                            $trNew.remove();
+                        },
+                        fail: function() {
+                            alert("Unable to delete URL please try again later");
+                        }
+                    });
                 });
+
+                $trForItems.append($tdForItems);
+                $('#listData').find('tbody').append($trForItems);
+
+            });
+        });
+    };
+
+    //for db..
+    $('#instanceDBName').submit(function(e) {
+        var reqBodyName = {};
+        var $row = $('<tr class="dbTest"/>');
+        var $form = $('#instanceDBName');
+        reqBodyName.name = $form.find('.dbName').val();
+        //var serverId = $form.find('#serverIDHiddenInput').val();
+        if (!(reqBodyName.name)) {
+            alert("Please Enter Name");
+            return false;
+        }
+        $.post('../chef/servers/' + urlParams.id + '/databag/create', reqBodyName, function(data) {
+            var $tdNameNew = $('<td class="dBNameCheck"></td>');
+            var $tdClick = $('<a id="dbNameClick" style="cursor:pointer;">' + reqBodyName.name + '</a>');
+            $tdNameNew.append($tdClick);
+            $tdNameNew.append('<div class="btn-group del" style="float:right;"><button class="btn btn-danger pull-left btn-sg tableactionbutton deleteRow" value="Remove" title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></div>');
+
+            $row.append($tdNameNew);
+            console.log(reqBodyName.name);
+            $('#dbNameTable').find('tbody tr td.dataAv').addClass('hidden');
+
+            $('#dbNameTable').find('tbody').append($row);
+            $('#modalForDB').modal('hide');
+
+            $tdClick.click(function(e) {
+                alert('hello');
+                $('.tableHidden').css('display', 'block');
+                alert(JSON.stringify(reqBodyName.name));
+                $('#dataBagIDHiddenInput').val(reqBodyName.name);
+                getItemsList();
             });
 
-            $trForItems.append($tdForItems);
-            $('#listData').find('tbody').append($trForItems);
-
         });
-    });
-};
-
-$('#instanceDBName').submit(function(e) {
-    var reqBodyName = {};
-    var $row = $('<tr class="dbTest"/>');
-    var $form = $('#instanceDBName');
-    reqBodyName.name = $form.find('.dbName').val();
-    //var serverId = $form.find('#serverIDHiddenInput').val();
-    if (!(reqBodyName.name)) {
-        alert("Please Enter Name");
         return false;
-    }
-    $.post('../chef/servers/' + urlParams.id + '/databag/create', reqBodyName, function(data) {
-      var $tdNameNew = $('<td class="dBNameCheck"></td>');
-      var $tdClick = $('<a id="dbNameClick" style="cursor:pointer;">' + reqBodyName.name + '</a>');
-        $tdNameNew.append($tdClick);
-        $tdNameNew.append('<div class="btn-group del" style="float:right;"><button class="btn btn-danger pull-left btn-sg tableactionbutton deleteRow" value="Remove" title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></div>');
-      
-      $row.append($tdNameNew);
-        console.log(reqBodyName.name);
-        $('#dbNameTable').find('tbody tr td.dataAv').addClass('hidden');
-        
-        $('#dbNameTable').find('tbody').append($row);
-        $('#modalForDB').modal('hide');
-
-        $tdClick.click(function(e) {
-            alert('hello');
-            $('.tableHidden').css('display', 'block');
-            alert(JSON.stringify(reqBodyName.name));
-            $('#dataBagIDHiddenInput').val(reqBodyName.name);
-            getItemsList();
-        });
-        
     });
-    return false;
-});
 
 
-//for list items
+    //for list items
 
-$('#instanceItemName').submit(function(e) {
-    var $row = $('<tr class="itemsList"/>');
-    var $form = $('#instanceItemName');
-    var reqBodyID = $form.find('.listID').val();
-    console.log("<<<<<<<<<<<<< "+reqBodyID);
-    var jsonString = $form.find('.listName').val();
-    var jsonObj;
-    try {
-      jsonObj = JSON.parse(jsonString);
-    } catch(err) {
-      alert('error');
-      return false; 
-    }
-    var dataBagName = $form.find('#dataBagIDHiddenInput').val();
-    if (!(reqBodyID)) {
-        alert("Please Enter ID");
-        return false;
-    }
-    console.log("????????????????????"+JSON.stringify(jsonObj));
+    $('#instanceItemName').submit(function(e) {
+        var $row = $('<tr class="itemsList"/>');
+        var $form = $('#instanceItemName');
+        var reqBodyID = $form.find('.listID').val();
+        console.log("<<<<<<<<<<<<< " + reqBodyID);
+        var jsonString = $form.find('.listName').val();
+        var jsonObj;
+        try {
+            jsonObj = JSON.parse(jsonString);
+        } catch (err) {
+            alert('error');
+            return false;
+        }
+        var dataBagName = $form.find('#dataBagIDHiddenInput').val();
+        if (!(reqBodyID)) {
+            alert("Please Enter ID");
+            return false;
+        }
+        console.log("????????????????????" + JSON.stringify(jsonObj));
 
-    $.ajax({
-        method:"POST",
-        url:'../chef/servers/' + urlParams.id + '/databag/' + dataBagName + '/item/create',
-        data:{ "id": reqBodyID, "dataBagItem": jsonObj},
-        success: function(data, success) {
-          if (data!=500) {
-            if ($('#btncancel').length){
-              $('#btncancel').click(); 
-            }                
-          }
-          else{
-           alert(data.toString());
-         }
-          $tdName = $('<td class="listData"/>')
-      $tdName.append('<a id="listNameClick" href="javascript:void(0);" style="cursor:pointer;" onclick="myFunctionListClick()">' + reqBodyID + '</a>').append('<div class="btn-group"><button class="btn btn-info pull-left btn-sg tableactionbutton editRow" value="Update" title="Update"><i class="ace-icon fa fa-pencil bigger-120"></i></button></div>').append('<div style="margin-left:5px;" class="btn-group del" style="float:right;"><button class="btn btn-danger pull-left btn-sg tableactionbutton deleteRow" value="Remove" title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></div>');
-        console.log(reqBodyID);
-        console.log(jsonString);
-        $tdName.find('button.editRow').click(function() {
-                var $this = $(this);
-                var $trNew = $this.parents('tr.itemsList');
-                var $editModal = $('#modalForItems');
-                $editModal.modal('show');
-                $editModal.find('.listID').val(reqBodyID);
-                $editModal.find('.listName').val();
-                var dataBagName = $('#dataBagIDHiddenInput').val();
-                console.log(dataBagName);
+        $.ajax({
+            method: "POST",
+            url: '../chef/servers/' + urlParams.id + '/databag/' + dataBagName + '/item/create',
+            data: {
+                "id": reqBodyID,
+                "dataBagItem": jsonObj
+            },
+            success: function(data, success) {
+                if (data != 500) {
+                    if ($('#btncancel').length) {
+                        $('#btncancel').click();
+                    }
+                } else {
+                    alert(data.toString());
+                }
+                $tdName = $('<td class="listData"/>')
+                $tdName.append('<a id="listNameClick" href="javascript:void(0);" style="cursor:pointer;" onclick="myFunctionListClick()">' + reqBodyID + '</a>').append('<div class="btn-group"><button class="btn btn-info pull-left btn-sg tableactionbutton editRow" value="Update" title="Update"><i class="ace-icon fa fa-pencil bigger-120"></i></button></div>').append('<div style="margin-left:5px;" class="btn-group del" style="float:right;"><button class="btn btn-danger pull-left btn-sg tableactionbutton deleteRow" value="Remove" title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></div>');
                 console.log(reqBodyID);
-                var itemId = reqBodyID;
-                console.log(itemId);
-                $.post('../chef/servers/'+ urlParams.id+ '/databag/' + dataBagName+ '/item/' + itemId+ '/update' , function(data){
-                    alert('hello');
+                console.log(jsonString);
+                $tdName.find('button.editRow').click(function() {
+                    var $this = $(this);
+                    var $trNew = $this.parents('tr.itemsList');
+                    var $editModal = $('#modalForItems');
+                    $editModal.modal('show');
+                    $editModal.find('.listID').val(reqBodyID);
+                    $editModal.find('.listName').val();
+                    var dataBagName = $('#dataBagIDHiddenInput').val();
+                    console.log(dataBagName);
+                    console.log(reqBodyID);
+                    var itemId = reqBodyID;
+                    console.log(itemId);
+                    $.post('../chef/servers/' + urlParams.id + '/databag/' + dataBagName + '/item/' + itemId + '/update', function(data) {
+                        alert('hello');
+                    });
                 });
-              });
-        $tdName.find('button.deleteRow').click(function() {
-                var $this = $(this);
-                var $trNew = $this.parents('tr.itemsList');
-                var dataBagName = $('#dataBagIDHiddenInput').val();
-                console.log(dataBagName);
-                var itemName = reqBodyID;
-                console.log(itemName);
+                $tdName.find('button.deleteRow').click(function() {
+                    var $this = $(this);
+                    var $trNew = $this.parents('tr.itemsList');
+                    var dataBagName = $('#dataBagIDHiddenInput').val();
+                    console.log(dataBagName);
+                    var itemName = reqBodyID;
+                    console.log(itemName);
 
-                $.ajax({
-                    url: '../chef/servers/' + urlParams.id + '/databag/' + dataBagName + '/item/' + itemName+ '/delete',
-                    method: 'DELETE',
-                    success: function() {
-                        $trNew.remove();
-                    },
-                    fail: function() {
-                        alert("Unable to delete URL please try again later");
-                    }
+                    $.ajax({
+                        url: '../chef/servers/' + urlParams.id + '/databag/' + dataBagName + '/item/' + itemName + '/delete',
+                        method: 'DELETE',
+                        success: function() {
+                            $trNew.remove();
+                        },
+                        fail: function() {
+                            alert("Unable to delete URL please try again later");
+                        }
+                    });
                 });
-            });
-        $row.append($tdName);
-        $('#listData').find('tbody tr td.dataAvList').addClass('hidden');
+                $row.append($tdName);
+                $('#listData').find('tbody tr td.dataAvList').addClass('hidden');
 
-        $('#listData').find('tbody').append($row);
-        $('#modalForItems').modal('hide');
-    },
-    error: function(jqxhr) {
-        bootbox.alert(jqxhr.responseText);
-    },
-    failure: function(data) {
-        bootbox.alert(data.responseText);
-    }
+                $('#listData').find('tbody').append($row);
+                $('#modalForItems').modal('hide');
+            },
+            error: function(jqxhr) {
+                bootbox.alert(jqxhr.responseText);
+            },
+            failure: function(data) {
+                bootbox.alert(data.responseText);
+            }
+        });
+
+        return false;
+    });
+
+
 });
-   
-    return false;
-});
-
-
-
 
 
 
