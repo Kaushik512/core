@@ -194,24 +194,7 @@
                         </div>
 
                          <!--Configmgmt Attributes Starts here-->
-                        <div class="panel panel-default">
-                          <div class="panel-heading">
-                            <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion-configmgmt" href="#collapseTaskArea"> <i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i><i class="fa fa-fw fa-bar-chart-o" style="font-size:14px;"></i> <b style="color:#3a87ad;font-size:12px;"><u>Task</u></b></a></h4>
-                          </div>
-                          <div id="collapseTaskArea" class="panel-collapse collapse in">
-                            <div class="panel-body">
-                                <table align="left">
-                                 
-                                 <tbody > 
-                                  <tr>
-                                    <td>Task Name</td><td> : </td><td class="taskNameTd"></td><td class=""><button id="addTaskBtn">Edit</button></td>
-                                  </tr>
-                                    
-                                </tbody>
-                              </table>
-                            </div>
-                          </div>
-                        </div>
+                       
                         <!--Configmgmt Attributes Ends here-->
 
                         <!--Application URL-->
@@ -291,6 +274,74 @@
                           </div>
                         </div>
                         <!--Application URL Ends here-->
+                        <!--tasks start here-->
+                         <div class="panel panel-default">
+                          <div class="panel-heading">
+                            <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion-configmgmt" href="#collapseTaskArea"> <i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i><i class="fa fa-fw fa-bar-chart-o" style="font-size:14px;"></i> <b style="color:#3a87ad;font-size:12px;"><u>Task</u></b></a></h4>
+                          </div>
+                          <div id="collapseTaskArea" class="panel-collapse collapse in">
+                            <div class="panel-body">
+                                <!-- <table align="left">
+                                 
+                                 <tbody > 
+                                  <tr>
+                                    <td>Task Name</td><td> : </td><td class="taskNameTd"></td><td class=""><button id="addTaskBtn">Edit</button></td>
+                                  </tr>
+                                    
+                                </tbody>
+                              </table> -->
+                                     <div class="row">
+ <div class="col-md-12">
+ <div class="col-md-12">
+
+ <div class="widget-box">
+ <div class="widget-header">
+ <h5 class="widget-title" style="color:#4e5964;">
+ <strong>List of Task</strong>
+ </h5>
+ <div class="widget-toolbar no-border">
+
+ <a id="addTaskBtn" class="btn btn-minier btn-primary" data-toggle="modal">
+ <i class="ace-icon ace-icon fa fa-plus bigger-110"></i>
+ Edit
+ </a>                                                
+
+ </div>
+
+ </div>
+ <div class="widget-body">
+ <div class="widget-main" style="min-height:100px">
+ <div class="col-md-12 table-responsive" style="padding-left:0px; padding-right:0px;">
+   
+ 
+ <table  class="table table-striped table-bordered table-hover dataTable no-footer" cellpadding="5px" width="100%" style="text-align:center";>
+ <!-- <div class="applicationURLContainer" id="appSeries12"> -->
+ <thead>
+ <tr class="rowCustomStyle">
+
+                                                                            
+ <td>Tasks Name</td>
+
+
+ </tr>
+ </thead>
+ <tbody>
+  <td class="taskNameTd"></td>
+ </tbody>
+ </table>
+  
+ </div>
+
+ </div>
+ </div>
+ </div>
+ </div>
+ </div>
+ </div>
+                            </div>
+                          </div>
+                        </div>
+                        <!--tasks name ends here-->
  <!--app series-->
  <div class="modal fade" id="modalAppNameURL" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
  <div class="modal-dialog">
