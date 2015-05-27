@@ -1210,6 +1210,18 @@
                                       }
                                   }
 
+                                  var $vmConeBtn = $('<a rel="tooltip" data-placement="top" data-original-title="Execute" data-toggle="modal" href="javascript:void(0)" class="cloneIMG btn btn-primary btn-sg tableactionbutton"><i class="ace-icon fa fa-play bigger-120"></i></a>');
+                                  $vmConeBtn.click(function(e) {
+                                      var $modal = $('#cloneRunlistContainer');
+
+                                      $modal.find('.modal-body').append();
+                                      $modal.modal('show');
+
+
+                                  });
+                                  $divComponentListContainer.append($vmConeBtn);
+
+
 
 
 
@@ -3292,6 +3304,7 @@
                                   //Syncing up the tree view based on url
                                   initializeBlueprintArea(data.blueprints);
                                   initializeTaskArea(data.tasks);
+                                 // alert(JSON.stringify(data.tasks));
                                   x = data.instances;
                                   initializeInstanceArea(data.instances);
 

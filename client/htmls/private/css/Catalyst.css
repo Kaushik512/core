@@ -4382,7 +4382,7 @@ float: left;
     background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#f2f2f2), to(#fafafa));
 }
 .tableactionWidthCheficon{
-    width:140px;
+    width:181px;
 }
 .cookbookChefClientRun{
     height: 150px;
@@ -7805,6 +7805,10 @@ word-break:break-word;
 #containerLazyLoad {
     height: 300px;
     overflow: scroll;
+}
+.cloneIMG{
+    float:right;
+    margin-top:-45px;
 }
 
 

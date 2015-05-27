@@ -898,11 +898,11 @@ module.exports.setRoutes = function(app, verificationFunc) {
         logger.debug("Enter /chef/../databag/../item/create");
         configmgmtDao.getChefServerDetails(req.params.serverId, function(err, chefDetails) {
             if (err) {
-                res.send(500);
+                res.send(500,"Error to get chef detail.");
                 return;
             }
             if (!chefDetails) {
-                res.send(404);
+                res.send(404,"No chef detail found.");
                 return;
             }
             var chef = new Chef({
@@ -913,10 +913,22 @@ module.exports.setRoutes = function(app, verificationFunc) {
                 hostedChefUrl: chefDetails.url,
             });
             logger.debug("Chef...>>>>>>>>>>>>>>>>>>> ",JSON.stringify(chef));
+            logger.debug("Id check: ",JSON.stringify(req.body));
+            if(req.body.id === 'undefined' || req.body.id.length === 0){
+                res.send(400,"Id can't be empty.");
+                return;
+            }
             var dataBagItem;
+            logger.debug("dataBagItem>>>>>>>>> ",req.body.dataBagItem);
+            if(typeof req.body.dataBagItem === 'undefined'){
+                dataBagItem = {"id":req.body.id};
+            }else{
+                dataBagItem =req.body.dataBagItem;
+                dataBagItem.id = req.body.id;
+            }
             try{
-                logger.debug("Incomming data bag item: ",JSON.stringify(req.body.dataBagItem));
-                dataBagItem = JSON.parse(JSON.stringify(req.body.dataBagItem));
+                logger.debug("Incoming data bag item: ",JSON.stringify(dataBagItem));
+                dataBagItem = JSON.parse(JSON.stringify(dataBagItem));
             }catch(e){
                 logger.debug("error: ",e);
                 res.send(500,"Invalid Json for Data Bag item.");
@@ -968,8 +980,14 @@ module.exports.setRoutes = function(app, verificationFunc) {
                     return;
                 }
                 logger.debug("Exit /chef/../databag/item/list");
-                res.send(dataBagItems);
-                return;
+                if(dataBagItems.length > 0){
+                    logger.debug(JSON.stringify(dataBagItems.split(",")));
+                    res.send(dataBagItems.split(","));
+                    return;
+                } else {
+                    res.send(dataBagItems);
+                    return;
+            }
             });
         });
     });

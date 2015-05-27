@@ -616,6 +616,15 @@ function CreateTableFromJson(formID, idFieldName, createFileName) {
                     importbutton.addClass('tableactionbutton');
                 }
 
+                var dataBags = $('.rowtemplate').find('a[title="Manage DB"]');
+
+                if(dataBags && dataBags.length > 0 ) {
+                    dataBags.attr("href", "#ajax/Settings/dbList.html?id=" + idFieldValue);
+                    dataBags.removeClass('btn-xs');
+                    dataBags.addClass('btn-sg');
+                    dataBags.addClass('tableactionbutton');
+                }
+
 
 
                 //setting the delete button
@@ -2674,6 +2683,13 @@ function isFormValid(formid) {
                     if (currCtrl.val().length > 15) {
                         isValid = false;
                         errormessageforInput(currCtrl.attr('id'), "limited to 15 chars");
+                        currCtrl.focus();
+                    }
+                    break;
+                case "max22":
+                    if (currCtrl.val().length > 22) {
+                        isValid = false;
+                        errormessageforInput(currCtrl.attr('id'), "limited to 22 chars");
                         currCtrl.focus();
                     }
                     break;
