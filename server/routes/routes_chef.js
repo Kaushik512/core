@@ -1009,7 +1009,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
                 dataBagItem = JSON.parse(JSON.stringify(req.body.dataBagItem));
             }catch(e){
                 logger.debug("error: ",e);
-                res.send(500,"Invalid Json for Data Bag item.");
+                res.send(400,"Invalid Json for Data Bag item.");
                 return;
             }
             chef.updateDataBagItem(req.params.dataBagName,req.params.itemId,dataBagItem,function(err,dataBagItem){

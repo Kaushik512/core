@@ -5,7 +5,7 @@
       <form action="" id="myForm">
          <div class="widget-box">
             <div class="widget-header">
-               <h4 class="widget-margin" style="color:black;">Data-Bags</h4>
+               <h4 class="widget-margin" style="color:black;">Data Bags for </h4>
             </div>
             <div class="widget-body">
                <div class="widget-main" style="min-height:200px">
@@ -25,10 +25,10 @@
                     <div class="widget-main" style="min-height:300px">
                         <div class="col-md-4 table-responsive" style="padding-left:0px; padding-right:0px;">
                          <table id="dbNameTable" class="table table-striped table-bordered table-hover dataTable no-footer" cellpadding="5px" width="100%" style="text-align:center">
-                             <a href="#modalForDB" data-backdrop="false" data-toggle="modal" style="cursor:pointer;"> <img src="img/add.png" style="float:right;" class="addDB" rel="tooltip" data-placement="top" /></a>
+                             <a href="#modalForDB" data-backdrop="false" data-toggle="modal" style="cursor:pointer;"> <img src="img/add.png" style="float:right;" class="addDB" rel="tooltip" data-placement="top" data-original-title="Add Data Bag" /></a>
                                 <thead>
                                     <tr class="rowCustomStyle">
-                                        <td>List of Data-Bags</td>
+                                        <td>Data Bags</td>
                                     </tr>
                                 </thead>
                                 <tbody id="dbNameTableTest">
@@ -38,25 +38,15 @@
                                     
                             </table>
                         </div>
-                        
-                   
-                    
-                   
-                    
-                
-
 
                                   <!--table ends here-->
-                                    
-                                 
-                                 
 
                         <div class="col-md-4 table-responsive tableHidden" id="listData" style="padding-left:10px; padding-right:0px;display:none;">
                          <table id="listNameTable" class="table table-striped table-bordered table-hover dataTable no-footer" cellpadding="5px" width="100%" style="text-align:center">
-                             <a href="#modalForItems" data-backdrop="false" data-toggle="modal" style="cursor:pointer;"> <img src="img/add.png" style="float:right;" class="addList" rel="tooltip" data-placement="top" /></a>
+                             <a href="#modalForItems" data-backdrop="false" data-toggle="modal" style="cursor:pointer;"> <img src="img/add.png" style="float:right;" class="addList" rel="tooltip" data-placement="top" data-original-title="Add Item" /></a>
                                 <thead>
                                     <tr class="rowCustomStyle">
-                                        <td>List of Items</td>
+                                        <td>Items</td>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -85,18 +75,6 @@
                   <!-- end widget grid -->
                </div>
             </div>
-            <!-- <div class="widget-toolbox clearfix">
-               <div class="btn-group pull-right">
-                  <button class="btn btn-primary btn-mini" style="margin-right:11px;">
-                  <i class="ace-icon fa fa-check bigger-110"></i>
-                  Save
-                  </button>
-                  <a class="btn btn-primary btn-mini" onclick="window.history.back();" id="btncancel">
-                  <i class="ace-icon fa fa-undo bigger-110"></i>
-                  Cancel
-                  </a>
-               </div>
-            </div> -->
          </div>
       </form>
    </div>
@@ -111,7 +89,7 @@
              <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title">
-                    &nbsp;Create Data-Bags
+                    &nbsp;Create Data Bag
                 </h4>
 
             </div> 
@@ -124,11 +102,7 @@
 
                             <input type="text" name="dbName" class="form-control dbName" id="instanceDataName" autofocus/>
                 </div>
-                
-                    <input type="hidden" id="serverIDHiddenInput">
-                
-
-            </div>
+             </div>
             
                <div class="modal-footer">
         <input type="submit" id="saveBTN" class="btn btn-primary" value="Save" />
@@ -148,7 +122,7 @@
              <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title">
-                    &nbsp;Create Items
+                    &nbsp;Create Item
                 </h4>
 
             </div> 
@@ -157,25 +131,26 @@
              <div class="modal-body" style="height:200px;">
                 <div class="col-lg-6 col-md-6">
 
-                            <label for="">ID<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+                    <label for="">ID<span style="color:Red;" class="control-label">&nbsp;*</span></label>
 
-                            <input type="text" name="listID" class="form-control listID" id="instanceListID" autofocus/>
-                            <br/>
-                            <textarea rows="4" cols="50" name="listName" class="form-control listName" id="instanceListName" autofocus>{}</textarea>
+                    <input type="text" name="listID" class="form-control listID" id="instanceListID" autofocus/>
+                    <br/>
+                    <textarea rows="4" cols="50" name="listName" class="form-control listName" id="instanceListName" autofocus>{}</textarea>
                 </div>
                 
                     <input type="hidden" id="dataBagIDHiddenInput">
+                     <input type="hidden" id="itemEditHiddenInput">
                 
 
             </div>
             
                <div class="modal-footer">
-        <input type="submit" id="saveBTNList" class="btn btn-primary" value="Save" />
-        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-      </div>   
-  </form>
-         </div>
+          <input type="submit" id="saveBTNList" class="btn btn-primary" value="Save" />
+          <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+        </div>   
+      </form>
     </div>
+  </div>
 </div>
 <!--modal for Itemlist-->
 
@@ -226,7 +201,7 @@ $(document).ready(function(e) {
             var $tdName = $('<td class="dBNameCheck"></td>');
             var $tdClick = $('<a id="dbNameClick" style="cursor:pointer;">' + name + '</a>');
             $tdName.append($tdClick);
-            $tdName.append('<div class="btn-group del" style="float:right;"><button class="btn btn-danger pull-left btn-sg tableactionbutton deleteRow" value="Remove" title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></div>');
+            $tdName.append('<div class="btn-group del" style="float:right;"><button class="deleteRow" value="Remove" title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></div>');
 
 
             $tr.append($tdName);
@@ -234,7 +209,7 @@ $(document).ready(function(e) {
 
             $tdName.find('button.deleteRow').click(function() {
                 var $this = $(this);
-                var $trNew = $this.parents('tr.dbTest');
+                var $tr = $this.parents('tr.dbTest');
                 console.log(name);
                 var dataBagName = name;
                 console.log(dataBagName);
@@ -243,7 +218,8 @@ $(document).ready(function(e) {
                     url: '../chef/servers/' + urlParams.id + '/databag/' + dataBagName + '/delete',
                     method: 'DELETE',
                     success: function() {
-                        $trNew.remove();
+                        $tr.remove();
+                        $('#listNameTable').find('tbody tr').empty();
                     },
                     fail: function() {
                         alert("Unable to delete URL please try again later");
@@ -252,11 +228,15 @@ $(document).ready(function(e) {
             });
 
             $tdClick.click(function(e) {
-                alert('hello');
+                //alert('hello');
+                $('#listNameTable').find('tbody tr td.dataAvList').removeClass('hidden');
                 $('.tableHidden').css('display', 'block');
-                alert(JSON.stringify(k));
+                //alert(JSON.stringify(k));
                 $('#dataBagIDHiddenInput').val(k);
-                getItemsList();
+
+                getList(k);
+                $('#listNameTable').find('tbody tr').empty();
+
             });
 
 
@@ -264,70 +244,22 @@ $(document).ready(function(e) {
 
     });
 
-    //for getting the list when we click on db
-    function getItemsList() {
+    function getList(k) {
         var dataBagName = $('#dataBagIDHiddenInput').val();
         console.log(dataBagName);
-        var $tableDataBagItem = $('#listData');
-
         var listItems = '../chef/servers/' + urlParams.id + '/databag/' + dataBagName + '/item/list';
         $.get(listItems, function(data) {
             $.each(data, function(k) {
                 console.log(data);
                 if (k) {
-                    $('#listData').find('tbody tr td.dataAvList').addClass('hidden');
+                    $('#listNameTable').find('tbody tr td.dataAvList').addClass('hidden');
                 }
-                var $trForItems = $('<tr class="itemsList"/>');
-
-                var $tdForItems = $('<td class="listData"/>');
-                $tdForItems.append('<a id="listNameClickNew"  onclick="myFunctionListClick()">' + k + '</a>').append('<div class="btn-group"><button class="btn btn-info pull-left btn-sg tableactionbutton editRow" value="Update" title="Update"><i class="ace-icon fa fa-pencil bigger-120"></i></button></div>').append('<div style="margin-left:5px;" class="btn-group del" style="float:right;"><button class="btn btn-danger pull-left btn-sg tableactionbutton deleteRow" value="Remove" title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></div>');
-                //for edit
-                $tdForItems.find('button.editRow').click(function() {
-                    var $this = $(this);
-                    var $trNew = $this.parents('tr.itemsList');
-                    var $editModal = $('#modalForItems');
-                    $editModal.modal('show');
-                    $editModal.find('.listID').val(k);
-                    $editModal.find('.listName').val();
-                    var dataBagName = $('#dataBagIDHiddenInput').val();
-                    console.log(dataBagName);
-                    console.log(k);
-                    var itemId = k;
-                    console.log(itemId);
-                    $.post('../chef/servers/' + urlParams.id + '/databag/' + dataBagName + '/item/' + itemId + '/update', function(data) {
-                        alert('hello');
-                    });
-                });
-                //for delete
-                $tdForItems.find('button.deleteRow').click(function() {
-                    var $this = $(this);
-                    var $trNew = $this.parents('tr.itemsList');
-                    var dataBagName = $('#dataBagIDHiddenInput').val();
-                    console.log(dataBagName);
-                    console.log(k);
-                    var itemName = k;
-                    console.log(itemName);
-
-                    $.ajax({
-                        url: '../chef/servers/' + urlParams.id + '/databag/' + dataBagName + '/item/' + itemName + '/delete',
-                        method: 'DELETE',
-                        success: function() {
-                            $trNew.remove();
-                        },
-                        fail: function() {
-                            alert("Unable to delete URL please try again later");
-                        }
-                    });
-                });
-
-                $trForItems.append($tdForItems);
-                $('#listData').find('tbody').append($trForItems);
-
+                createItemTableRow(k);
             });
         });
     };
 
-    //for db..
+    //for db submit..
     $('#instanceDBName').submit(function(e) {
         var reqBodyName = {};
         var $row = $('<tr class="dbTest"/>');
@@ -342,7 +274,28 @@ $(document).ready(function(e) {
             var $tdNameNew = $('<td class="dBNameCheck"></td>');
             var $tdClick = $('<a id="dbNameClick" style="cursor:pointer;">' + reqBodyName.name + '</a>');
             $tdNameNew.append($tdClick);
-            $tdNameNew.append('<div class="btn-group del" style="float:right;"><button class="btn btn-danger pull-left btn-sg tableactionbutton deleteRow" value="Remove" title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></div>');
+            $tdNameNew.append('<div class="btn-group del" style="float:right;"><button class="deleteRow" value="Remove" title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></div>');
+
+            $tdNameNew.find('button.deleteRow').click(function() {
+                var $this = $(this);
+                var $row = $this.parents('tr.dbTest');
+                console.log(reqBodyName.name);
+                var dataBagName = reqBodyName.name;
+                console.log(dataBagName);
+
+                $.ajax({
+                    url: '../chef/servers/' + urlParams.id + '/databag/' + dataBagName + '/delete',
+                    method: 'DELETE',
+                    success: function() {
+                        $row.remove();
+                        $('#listNameTable').find('tbody tr').empty();
+                        $('#listNameTable').find('tbody tr td.dataAvList').removeClass('hidden');
+                    },
+                    fail: function() {
+                        alert("Unable to delete URL please try again later");
+                    }
+                });
+            });
 
             $row.append($tdNameNew);
             console.log(reqBodyName.name);
@@ -356,95 +309,113 @@ $(document).ready(function(e) {
                 $('.tableHidden').css('display', 'block');
                 alert(JSON.stringify(reqBodyName.name));
                 $('#dataBagIDHiddenInput').val(reqBodyName.name);
-                getItemsList();
+                getList(k);
             });
 
         });
         return false;
     });
 
+//new function for creating items from databags
+function createItemTableRow(k){
+        var itemTable = $('#listNameTable tbody');
+        var $trForItems = $('<tr class="itemsList"/>');
+        var $tdForItems = $('<td class="listData"/>');
+        $tdForItems.append('<a id="listNameClickNew">' + k + '</a>').append('<div class="btn-group" style="float:right;"><button class="editRow" value="Update" title="Update"><i class="ace-icon fa fa-pencil bigger-120"></i></button></div>').append('<div style="margin-left:5px;float:right;" class="btn-group del"><button class="deleteRow" value="Remove" title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></div>');
+        //for edit
+        $tdForItems.find('button.editRow').click(function() {
+            var $this = $(this);
+            var $trNew = $this.parents('tr.itemsList');
+            var $editModal = $('#modalForItems');
+            $editModal.modal('show');
+            $editModal.find('.listID').val(k);
+            $editModal.find('.listName').val();
+            $editModal.find('#itemEditHiddenInput').val('edit');
+            /*var dataBagName = $('#dataBagIDHiddenInput').val();
+                console.log(dataBagName);
+                console.log(k);
+                var itemId = k;
+                console.log(itemId);
+                $.get('../chef/servers/' + urlParams.id + '/databag/' + dataBagName + '/item/' + itemId + '/find', function(data) {
+                    alert('hello');
+                });*/
+        });
+        //for delete
+        $tdForItems.find('button.deleteRow').click(function() {
+            var $this = $(this);
+            var $trNew = $this.parents('tr.itemsList');
+            var dataBagName = $('#dataBagIDHiddenInput').val();
+            console.log(dataBagName);
+            console.log(k);
+            var itemName = k;
+            console.log(itemName);
+
+            $.ajax({
+                url: '../chef/servers/' + urlParams.id + '/databag/' + dataBagName + '/item/' + itemName + '/delete',
+                method: 'DELETE',
+                success: function() {
+                    $trNew.remove();
+                },
+                fail: function() {
+                    alert("Unable to delete URL please try again later");
+                }
+            });
+        });
+        $trForItems.append($tdForItems);
+        $('#listNameTable').find('tbody').append($trForItems);
+
+    };
 
     //for list items
+    $('.addList').click(function(e){
+        $('#itemEditHiddenInput').val('new');
+    });
 
     $('#instanceItemName').submit(function(e) {
-        var $row = $('<tr class="itemsList"/>');
         var $form = $('#instanceItemName');
-        var reqBodyID = $form.find('.listID').val();
-        console.log("<<<<<<<<<<<<< " + reqBodyID);
+        var itemID = $form.find('.listID').val();
+        
         var jsonString = $form.find('.listName').val();
         var jsonObj;
         try {
             jsonObj = JSON.parse(jsonString);
         } catch (err) {
-            alert('error');
+            alert('Invalid JSON');
             return false;
         }
-        var dataBagName = $form.find('#dataBagIDHiddenInput').val();
-        if (!(reqBodyID)) {
+        if (!(itemID)) {
             alert("Please Enter ID");
             return false;
         }
-        console.log("????????????????????" + JSON.stringify(jsonObj));
+        debugger;
+        var dataBagName = $form.find('#dataBagIDHiddenInput').val();
+        var itemsEditNew = $(this).find('#itemEditHiddenInput').val();
+        var url;
+        var reqBody;
+        if (itemsEditNew === 'edit') {
+            url = '../chef/servers/' + urlParams.id + '/databag/' + dataBagName + '/item/' + itemID + '/update';
+            reqBody = {
+                "dataBagItem": jsonObj
+            };
+        } else {
+            url = '../chef/servers/' + urlParams.id + '/databag/' + dataBagName + '/item/create';
+            reqBody = {
+                "id": itemID,
+                "dataBagItem": jsonObj
+            };
+        }
 
+        
         $.ajax({
             method: "POST",
-            url: '../chef/servers/' + urlParams.id + '/databag/' + dataBagName + '/item/create',
-            data: {
-                "id": reqBodyID,
-                "dataBagItem": jsonObj
-            },
+            url: url,
+            data: reqBody,
             success: function(data, success) {
-                if (data != 500) {
-                    if ($('#btncancel').length) {
-                        $('#btncancel').click();
-                    }
-                } else {
-                    alert(data.toString());
-                }
-                $tdName = $('<td class="listData"/>')
-                $tdName.append('<a id="listNameClick" href="javascript:void(0);" style="cursor:pointer;" onclick="myFunctionListClick()">' + reqBodyID + '</a>').append('<div class="btn-group"><button class="btn btn-info pull-left btn-sg tableactionbutton editRow" value="Update" title="Update"><i class="ace-icon fa fa-pencil bigger-120"></i></button></div>').append('<div style="margin-left:5px;" class="btn-group del" style="float:right;"><button class="btn btn-danger pull-left btn-sg tableactionbutton deleteRow" value="Remove" title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></div>');
-                console.log(reqBodyID);
-                console.log(jsonString);
-                $tdName.find('button.editRow').click(function() {
-                    var $this = $(this);
-                    var $trNew = $this.parents('tr.itemsList');
-                    var $editModal = $('#modalForItems');
-                    $editModal.modal('show');
-                    $editModal.find('.listID').val(reqBodyID);
-                    $editModal.find('.listName').val();
-                    var dataBagName = $('#dataBagIDHiddenInput').val();
-                    console.log(dataBagName);
-                    console.log(reqBodyID);
-                    var itemId = reqBodyID;
-                    console.log(itemId);
-                    $.post('../chef/servers/' + urlParams.id + '/databag/' + dataBagName + '/item/' + itemId + '/update', function(data) {
-                        alert('hello');
-                    });
-                });
-                $tdName.find('button.deleteRow').click(function() {
-                    var $this = $(this);
-                    var $trNew = $this.parents('tr.itemsList');
-                    var dataBagName = $('#dataBagIDHiddenInput').val();
-                    console.log(dataBagName);
-                    var itemName = reqBodyID;
-                    console.log(itemName);
-
-                    $.ajax({
-                        url: '../chef/servers/' + urlParams.id + '/databag/' + dataBagName + '/item/' + itemName + '/delete',
-                        method: 'DELETE',
-                        success: function() {
-                            $trNew.remove();
-                        },
-                        fail: function() {
-                            alert("Unable to delete URL please try again later");
-                        }
-                    });
-                });
-                $row.append($tdName);
-                $('#listData').find('tbody tr td.dataAvList').addClass('hidden');
-
-                $('#listData').find('tbody').append($row);
+                $('#listNameTable').find('tbody tr td.dataAvList').addClass('hidden');
                 $('#modalForItems').modal('hide');
+                if(itemsEditNew ==='new'){
+                  createItemTableRow(itemID);
+                }
             },
             error: function(jqxhr) {
                 bootbox.alert(jqxhr.responseText);
@@ -453,17 +424,12 @@ $(document).ready(function(e) {
                 bootbox.alert(data.responseText);
             }
         });
-
         return false;
     });
 
 
 });
-
-
-
-
-
 </script>
+
 
 
