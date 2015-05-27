@@ -7806,9 +7806,11 @@ word-break:break-word;
     height: 300px;
     overflow: scroll;
 }
-.cloneIMG{
+.taskCardIMG{
+    width:auto;
+    height:27px;
     float:right;
-    margin-top:-45px;
+
 }
 
 

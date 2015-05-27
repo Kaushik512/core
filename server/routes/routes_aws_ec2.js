@@ -31,7 +31,7 @@ module.exports.setRoutes = function(app, verifySession) {
 
     app.get('/aws/ec2/amiids', function(req, res) {
         logger.debug("Enter /aws/ec2/amiids");
-        res.send(appConfig.aws.os);
+        res.send(appConfig.aws.operatingSystems);
     });
 
 }

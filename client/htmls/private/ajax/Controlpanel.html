@@ -192,6 +192,26 @@
                             </div>
                           </div>
                         </div>
+
+                         <!--Configmgmt Attributes Starts here-->
+                        <div class="panel panel-default">
+                          <div class="panel-heading">
+                            <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion-configmgmt" href="#collapseTaskArea"> <i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i><i class="fa fa-fw fa-bar-chart-o" style="font-size:14px;"></i> <b style="color:#3a87ad;font-size:12px;"><u>Task</u></b></a></h4>
+                          </div>
+                          <div id="collapseTaskArea" class="panel-collapse collapse in">
+                            <div class="panel-body">
+                                <table align="left">
+                                 
+                                 <tbody > 
+                                  <tr>
+                                    <td>Task Name</td><td> : </td><td class="taskNameTd"></td><td class=""><button id="addTaskBtn">Edit</button></td>
+                                  </tr>
+                                    
+                                </tbody>
+                              </table>
+                            </div>
+                          </div>
+                        </div>
                         <!--Configmgmt Attributes Ends here-->
 
                         <!--Application URL-->
@@ -861,6 +881,39 @@
     </div>
 </div>
 
+
+<div class="modal fade" id="instanceTaskModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog " style="">
+        <div class="modal-content"> 
+             <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">
+                    &nbsp;Edit Instance Name
+                </h4>
+
+            </div> 
+            
+            
+             <div class="modal-body" style="height:78px;">
+                <div class="col-lg-6 col-md-6">
+
+                            <label for="">Name<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+
+                            <select class="form-control" id="taskList"> </select>
+                            
+                </div>
+                
+                
+
+            </div>
+            
+               <div class="modal-footer">
+        <input type="submit" id="saveTaskBtn" class="btn btn-primary" value="Save" />
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+      </div>   
+         </div>
+    </div>
+</div>
 
 
 <!-- div of Contant tab starts here -->
@@ -1672,6 +1725,17 @@ $('.startstoptoggler').click(startAndStopToggler);
   $tr.append('<td scope="col" style="font-size:12px;">Runlist</td><td scope="col"> : </td><td scope="col" style="font-size:12px;" class="runlistInfoContainer" > '+data.runlist.join()+'</td>');
   $cfmwareTbody.append($tr);
 
+    //$collapseTaskAreaTbody.empty();
+    if (data.taskId) {
+        var $collapseTaskAreaTbody = $('#collapseTaskArea').find('tbody');
+        var $trTask = $('<tr style="line-height:2.3"></tr>');
+        $.get('../tasks/' + data.taskId, function(taskData) {
+            $collapseTaskAreaTbody.find('.taskNameTd').html(taskData.name);
+            //$trTask.append('<td scope="col" style="font-size:12px;">Task</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + taskData.name + '</td>');
+        });
+        //$collapseTaskAreaTbody.append($trTask);
+    }
+
 
     window.instanceIPForAppLink =  data.instanceIP;
     
@@ -1690,10 +1754,38 @@ $('.startstoptoggler').click(startAndStopToggler);
 
     $('.loadingControlPanelIndicator').hide();
     $('#controlPanelContainer').show();
-  
+    
+
+    $('#addTaskBtn').click(function(e) {
+        var $select = $('#taskList').empty();
+        $.get('/tasks?orgId='+data.orgId+'&bgId='+data.bgId+'&projectId='+data.projectId+'&envId='+data.envId,function(taskList){
+          for(var i=0;i<taskList.length;i++) {
+                var $option = $("<option></option>").val(taskList[i]._id).html(taskList[i].name).attr('data-taskName',taskList[i].name);
+                $select.append($option);
+          }
+          $('#instanceTaskModal').modal('show');
+        });
+    });
+
+    $('#saveTaskBtn').click(function() {
+       var $selectedOption = $('#taskList option:selected');
+        var taskId = $selectedOption.val();
+        if (taskId) {
+            $.post('../instances/' + data._id + '/addTask', {
+                taskId: taskId
+            }, function() {
+                $('.taskNameTd').html($selectedOption.text());
+                $('#instanceTaskModal').modal('hide');
+            });
+        } else {
+            $('#instanceTaskModal').modal('hide');
+        }
+    });
+
 
 
 });
+
 
 function getActionBtnClass(actionType) {
   console.log(actionType)
