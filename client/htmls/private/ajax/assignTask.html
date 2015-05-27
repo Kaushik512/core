@@ -776,6 +776,11 @@ $(document).ready(function() {
                         displayName = attributesList[i].attributes[attributesNamesList[j]].display_name;
                     }
                     var $tdAttribName = $('<td/>').html(displayName);
+                    var required = false;
+                    if(attributesList[i].attributes[attributesNamesList[j]]['required'] === 'required'){
+                       $tdAttribName.append('<span class="control-label" style="color:Red;">&nbsp;*</span>');
+                       required = true;
+                    }
                     var value = '';
                     if(attributesList[i].attributes[attributesNamesList[j]]['default']) {
                       value =  attributesList[i].attributes[attributesNamesList[j]]['default'];
@@ -788,19 +793,27 @@ $(document).ready(function() {
                     var $attributeInput;
                     var choices = attributesList[i].attributes[attributesNamesList[j]].choice;
                     if (choices && choices.length) {
-                        $attributeInput = $('<select class="attribValueInput" data-attribKey="'+attributesNamesList[j]+'" data-attribName="'+displayName+'"></select>');
+                        $attributeInput = $('<select class="attribValueInput" data-attribKey="'+attributesNamesList[j]+'" data-attribName="'+displayName+'" data-attributeRequired="'+required+'"></select>');
                         for (var k = 0; k < choices.length; k++) {
                            var $option = $('<option></option>').val(choices[k]).html(choices[k]);
                            $attributeInput.append($option);
                         }
                         $attributeInput.val(value);
                     } else {
-                       $attributeInput = $('<input type="text" class="attribValueInput" data-attribKey="'+attributesNamesList[j]+'" value="'+value+'" data-attribName="'+displayName+'"/>');
+                       $attributeInput = $('<input type="text" class="attribValueInput" data-attribKey="'+attributesNamesList[j]+'" value="'+value+'" data-attribName="'+displayName+'" data-attributeRequired="'+required+'"/>');
                     }
 
+                    
+                    
 
                     
                     var $tdAttribEditor = $('<td/>').append($attributeInput);
+                     var desc = attributesList[i].attributes[attributesNamesList[j]]['description'];
+                     if(desc) {
+                      var $tooltipAnchor = $('<a href="#" data-toggle="tooltip" title="'+desc+'!" style="margin-left:15px"><i class="fa fa-info"></i></a>');
+                      $tooltipAnchor.tooltip();
+                      $tdAttribEditor.append($tooltipAnchor);
+                    }
                     $tr.append($tdAttribName).append($tdAttribEditor);
                     //dataTable.row.add($tr).draw();
                     $tbody.append($tr)
@@ -854,8 +867,8 @@ $(document).ready(function() {
         var $tbody = $modal.find('.attributesEditTableBody');
         var $input = $tbody.find('.attribValueInput');
         var attributes = [];
-        $input.each(function() {
-            var $this = $(this);
+        for (var j = 0; j < $input.length; j++) {
+          var $this = $($input[j]);
             var attributeKey = $this.attr('data-attribKey');
             console.log(attributeKey);
             var attribValue = $this.val();
@@ -878,8 +891,14 @@ $(document).ready(function() {
                     name: $this.attr('data-attribName'),
                     jsonObj: attributeObj
                 });
+            } else {
+                if($this.attr('data-attributeRequired') === 'true') {
+                    alert("Please fill in the required attributes");
+                    return false;
+                }
             }
-        });
+        }
+       
         console.log('attributeObj ==>', attributes);
         //$('#attrtextarea').text(JSON.stringify(attributeObj));
         createAttribTableRowFromJson(attributes);

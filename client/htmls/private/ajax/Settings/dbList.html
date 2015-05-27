@@ -244,7 +244,7 @@ $(document).ready(function(e) {
 
     });
 
-    function getList(k) {
+    function getList(itemName) {
         var dataBagName = $('#dataBagIDHiddenInput').val();
         console.log(dataBagName);
         var listItems = '../chef/servers/' + urlParams.id + '/databag/' + dataBagName + '/item/list';
@@ -254,7 +254,7 @@ $(document).ready(function(e) {
                 if (k) {
                     $('#listNameTable').find('tbody tr td.dataAvList').addClass('hidden');
                 }
-                createItemTableRow(k);
+                createItemTableRow(itemName);
             });
         });
     };
@@ -305,11 +305,11 @@ $(document).ready(function(e) {
             $('#modalForDB').modal('hide');
 
             $tdClick.click(function(e) {
-                alert('hello');
+                //alert('hello');
                 $('.tableHidden').css('display', 'block');
-                alert(JSON.stringify(reqBodyName.name));
+                //alert(JSON.stringify(reqBodyName.name));
                 $('#dataBagIDHiddenInput').val(reqBodyName.name);
-                getList(k);
+                getList(itemName);
             });
 
         });
@@ -317,7 +317,7 @@ $(document).ready(function(e) {
     });
 
 //new function for creating items from databags
-function createItemTableRow(k){
+function createItemTableRow(itemName){
         var itemTable = $('#listNameTable tbody');
         var $trForItems = $('<tr class="itemsList"/>');
         var $tdForItems = $('<td class="listData"/>');
@@ -387,7 +387,6 @@ function createItemTableRow(k){
             alert("Please Enter ID");
             return false;
         }
-        debugger;
         var dataBagName = $form.find('#dataBagIDHiddenInput').val();
         var itemsEditNew = $(this).find('#itemEditHiddenInput').val();
         var url;

@@ -1,3 +1,12 @@
+/* Copyright (C) Relevance Lab Private Limited- All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Gobinda Das <gobinda.das@relevancelab.com>, 
+ * May 2015
+ */
+
+// This file act as a Util class which contains provider related util methods.
+
 var logger = require('../../lib/logger')(module);
 var currentDirectory = __dirname;
 var fs = require('fs');
