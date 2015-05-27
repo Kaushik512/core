@@ -914,7 +914,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
             });
             logger.debug("Chef...>>>>>>>>>>>>>>>>>>> ",JSON.stringify(chef));
             logger.debug("Id check: ",JSON.stringify(req.body));
-            if(req.body.id === 'undefined' || req.body.id.length === 0){
+            if(typeof req.body.id === 'undefined' || req.body.id.length === 0){
                 res.send(400,"Id can't be empty.");
                 return;
             }

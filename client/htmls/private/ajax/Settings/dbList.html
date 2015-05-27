@@ -252,9 +252,9 @@ $(document).ready(function(e) {
             });
 
             $tdClick.click(function(e) {
-                alert('hello');
+                //alert('hello');
                 $('.tableHidden').css('display', 'block');
-                alert(JSON.stringify(k));
+                //alert(JSON.stringify(k));
                 $('#dataBagIDHiddenInput').val(k);
                 getItemsList();
             });
@@ -295,7 +295,7 @@ $(document).ready(function(e) {
                     var itemId = k;
                     console.log(itemId);
                     $.post('../chef/servers/' + urlParams.id + '/databag/' + dataBagName + '/item/' + itemId + '/update', function(data) {
-                        alert('hello');
+                        //alert('hello');
                     });
                 });
                 //for delete
@@ -352,9 +352,9 @@ $(document).ready(function(e) {
             $('#modalForDB').modal('hide');
 
             $tdClick.click(function(e) {
-                alert('hello');
+                //alert('hello');
                 $('.tableHidden').css('display', 'block');
-                alert(JSON.stringify(reqBodyName.name));
+                //alert(JSON.stringify(reqBodyName.name));
                 $('#dataBagIDHiddenInput').val(reqBodyName.name);
                 getItemsList();
             });
@@ -376,7 +376,7 @@ $(document).ready(function(e) {
         try {
             jsonObj = JSON.parse(jsonString);
         } catch (err) {
-            alert('error');
+            alert("Invalid Json.");
             return false;
         }
         var dataBagName = $form.find('#dataBagIDHiddenInput').val();
@@ -418,7 +418,7 @@ $(document).ready(function(e) {
                     var itemId = reqBodyID;
                     console.log(itemId);
                     $.post('../chef/servers/' + urlParams.id + '/databag/' + dataBagName + '/item/' + itemId + '/update', function(data) {
-                        alert('hello');
+                        //alert('hello');
                     });
                 });
                 $tdName.find('button.deleteRow').click(function() {
