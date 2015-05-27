@@ -888,11 +888,11 @@ module.exports.setRoutes = function(app, verificationFunc) {
         logger.debug("Enter /chef/../databag/../item/create");
         configmgmtDao.getChefServerDetails(req.params.serverId, function(err, chefDetails) {
             if (err) {
-                res.send(500);
+                res.send(500,"Error to get chef detail.");
                 return;
             }
             if (!chefDetails) {
-                res.send(404);
+                res.send(404,"No chef detail found.");
                 return;
             }
             var chef = new Chef({

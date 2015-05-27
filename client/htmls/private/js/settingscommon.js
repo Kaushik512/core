@@ -2686,6 +2686,13 @@ function isFormValid(formid) {
                         currCtrl.focus();
                     }
                     break;
+                case "max22":
+                    if (currCtrl.val().length > 22) {
+                        isValid = false;
+                        errormessageforInput(currCtrl.attr('id'), "limited to 22 chars");
+                        currCtrl.focus();
+                    }
+                    break;
                 case "nospace":
                     var str = currCtrl.val();
                     if (str.indexOf(' ') > 0) {
