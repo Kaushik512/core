@@ -3653,7 +3653,7 @@ body
     border-radius: 5px;
     float: left;
     margin-bottom: 20px;
-    margin-right: 43px;/*changed by srikanth*/
+    margin-right: 59px;/*changed by srikanth*/
     /*max-height: 145px;*//*arabinda*/
     /*After depolyed changes
     max-width: 162px;*/
@@ -7820,7 +7820,7 @@ word-break:break-word;
     padding: 3px;
     position: absolute;
     background-color: white;
-    width:84px;
+    width:58px;
     border-radius: 5px;
 }
 

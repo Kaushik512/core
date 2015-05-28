@@ -1297,7 +1297,7 @@
                                                  if (ll == 2) {
                                                      break;
                                                  }
-                                                 var $taskIcon = $('<div class="tasksBlock"><img rel="tooltip" data-taskid=' + tasks[ll]._id + ' data-placement="top" class="taskCardIMG" title=' + tasks[ll].name + '  alt="task" style="cursor:pointer" src="img/tasks.png"/><div class="tasksLinks hidden"><a style="margin-left:9px" rel="tooltip" data-placement="top" data-original-title="Execute" data-toggle="modal" href="javascript:void(0)" class="btn btn-primary btn-xs tableactionbutton taskLinkExecute"><i class="ace-icon fa fa-play bigger-120"></i></a><a style="margin-left:15px;" rel="tooltip" data-placement="top" data-original-title="History" data-toggle="modal" href="javascript:void(0)" class="btn btn-primary btn-xs tableactionbutton taskLinkHistory"><i class="ace-icon fa fa-header bigger-120"></i></a></div></div>');
+                                                 var $taskIcon = $('<div class="tasksBlock"><img rel="tooltip" data-taskid=' + tasks[ll]._id + ' data-placement="top" class="taskCardIMG" title=' + tasks[ll].name + '  alt="task" style="cursor:pointer" src="img/tasks.png"/><div class="tasksLinks hidden"><a  rel="tooltip" data-placement="top" data-original-title="Execute" data-toggle="modal" href="javascript:void(0)" class="btn btn-primary btn-xs tableactionbutton taskLinkExecute"><i class="ace-icon fa fa-play bigger-120"></i></a><a style="margin-left:3px;" rel="tooltip" data-placement="top" data-original-title="History" data-toggle="modal" href="javascript:void(0)" class="btn btn-primary btn-xs tableactionbutton taskLinkHistory"><i class="ace-icon fa fa-header bigger-120"></i></a></div></div>');
                                                  //for showing the hover
 
                                                  if (ll == 1) {
@@ -1322,6 +1322,7 @@
                                                      });
                                                  })(tasks[ll]._id);
                                                  $taskIcon.find('img').tooltip();
+                                                 $taskIcon.find('a').tooltip();
                                                  $divComponentListContainer.append($taskIcon, '<br/><br/>');
                                              }
                                          });
