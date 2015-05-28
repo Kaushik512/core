@@ -314,19 +314,18 @@
  <div class="col-md-12 table-responsive" style="padding-left:0px; padding-right:0px;">
    
  
- <table  class="table table-striped table-bordered table-hover dataTable no-footer" cellpadding="5px" width="100%" style="text-align:center";>
+ <table id="tasksLists"  class="table table-striped table-bordered table-hover dataTable no-footer" cellpadding="5px" width="100%" style="text-align:center";>
  <!-- <div class="applicationURLContainer" id="appSeries12"> -->
  <thead>
  <tr class="rowCustomStyle">
 
-                                                                            
+ <td>S.No </td>                                                                      
  <td>Tasks Name</td>
 
 
  </tr>
  </thead>
  <tbody>
-  <td class="taskNameTd"></td>
  </tbody>
  </table>
   
@@ -1779,20 +1778,20 @@ $('.startstoptoggler').click(startAndStopToggler);
     //$collapseTaskAreaTbody.empty();
     if (data.taskIds && data.taskIds.length) {
         var $collapseTaskAreaTbody = $('#collapseTaskArea').find('tbody');
-        var $trTask = $('<tr style="line-height:2.3"></tr>');
         $.post('../tasks',{
           taskIds:data.taskIds
         }, function(tasks) {
             var str = '';  
             for(var i=0;i<tasks.length;i++) {
-              console.log(tasks[i]);
-              str = str+tasks[i].name+'</br>';
+               var $trTask = $('<tr style="line-height:2.3"></tr>');
+                var $tdSerial = $('<td/>')
+                var $tdName = $('<td class="taskNameTd"/>');
+                $tdName.append(tasks[i].name);
+                $trTask.append($tdSerial);
+                $trTask.append($tdName);
+                $tasksDatatable.row.add($trTask).draw();
             }
-            console.log(str);
-            $collapseTaskAreaTbody.find('.taskNameTd').html(str);
-            //$trTask.append('<td scope="col" style="font-size:12px;">Task</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + taskData.name + '</td>');
         });
-        //$collapseTaskAreaTbody.append($trTask);
     }
 
 
@@ -1842,10 +1841,17 @@ $('.startstoptoggler').click(startAndStopToggler);
                 taskIds: taskIds
             }, function() {
                 var str = '';
+                $tasksDatatable.clear().draw();
                 for(var i=0;i<$selectedOptions.length;i++){
-                  str += $($selectedOptions[i]).text()+'</br>'
+                  var $trTask = $('<tr style="line-height:2.3"></tr>');
+                  var $tdSerial = $('<td/>');
+                  str = $($selectedOptions[i]).text();
+                  var $tdName = $('<td class="taskNameTd"/>');
+                  $tdName.append(str);
+                  $trTask.append($tdSerial);
+                  $trTask.append($tdName);
+                  $tasksDatatable.row.add($trTask).draw();
                 }
-                $('.taskNameTd').html(str);
                 $('#instanceTaskModal').modal('hide');
                 data.taskIds = taskIds;
             });
@@ -2365,6 +2371,26 @@ $(document).ready(function(e){
                     "bSortable": false
                 }
             ]
+
+        });
+     }
+
+  if (!$.fn.dataTable.isDataTable('#tasksLists') ){
+    //var $taskListArea = $('.taskListArea').empty();
+       $tasksDatatable =  $('#tasksLists').DataTable({
+            "pagingType": "full_numbers",
+            "aoColumns": [
+                {
+                    "bSortable": true
+                },
+                {
+                    "bSortable": false
+                }
+            ],
+          "fnRowCallback": function(nRow, aData, iDisplayIndex) {
+              $("td:first", nRow).html(iDisplayIndex + 1);
+              return nRow;
+          }
 
         });
      }
