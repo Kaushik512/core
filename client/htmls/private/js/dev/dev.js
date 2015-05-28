@@ -2867,7 +2867,7 @@
                                                     //$('.taskListFooter').text('Showing ' + totalTask + ' of ' + totalTask + ' entries');
                                                     $taskDatatable.row($(that).parents('tr')).remove().draw(false);
 
-                                                    $('a[data-taskCardIconId="' + taskId + '"]').remove();
+                                                    $('div[data-taskCardIconId="' + taskId + '"]').remove();
 
                                                 },
                                                 fail: function(msg) {
