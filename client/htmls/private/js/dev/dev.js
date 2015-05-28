@@ -1320,7 +1320,7 @@
                                                      $taskIcon.find('.taskLinkHistory').click(function(e) {
                                                          $('a[data-historyTaskId="' + taskId + '"]').click();
                                                      });
-                                                 })(tasks[ll]);
+                                                 })(tasks[ll]._id);
                                                  $taskIcon.find('img').tooltip();
                                                  $divComponentListContainer.append($taskIcon, '<br/><br/>');
                                              }
