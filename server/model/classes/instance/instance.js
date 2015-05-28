@@ -1100,7 +1100,7 @@ var InstancesDao = function() {
         return log;
     };
 
-    this.insertSSHActionLog = function(instanceId, user, timestampStarted, callback) {
+    this.insertSSHActionLog = function(instanceId, loginName, user, timestampStarted, callback) {
         logger.debug("Enter insertSSHActionLog ", instanceId, user, timestampStarted);
         var log = {
             type: ACTION_LOG_TYPES.SSH.type,
@@ -1109,6 +1109,9 @@ var InstancesDao = function() {
             success: false,
             user: user,
             timeStarted: timestampStarted,
+            actionData: {
+                'login-name': loginName
+            }
         };
         var logId = insertActionLog(instanceId, log, callback);
         log._id = logId;

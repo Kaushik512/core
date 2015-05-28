@@ -990,11 +990,19 @@
                                     var instanceId = $(this).attr('data-instanceId');
                                     $sshModal.find('.modal-body').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
                                     $sshModal.modal('show');
-                                    $.get('sshShell.html?id=' + instanceId, function(data) {
 
-                                        $sshModal.find('.modal-body').empty().append(data);
-                                        $sshModal.find('#ssh-instanceId').val(instanceId);
+
+                                    $.get('/d4dMasters/getuser',function(userData){
+                                      $.get('sshShell.html?id=' + instanceId, function(data) {
+                                        
+                                        if(userData && userData.user && userData.user.length) {
+                                          $sshModal.find('.modal-body').empty().append(data);
+                                          $sshModal.find('#ssh-instanceId').val(instanceId);
+                                          $sshModal.find('#ssh-sessionUser').val(userData.user[0].username.cn);
+                                        }
+                                      });
                                     });
+                                    
                                 }
 
                                 //adding instance to DOM by Import,Blueprint Launch and Chef-Sync

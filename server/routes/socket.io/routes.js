@@ -34,7 +34,7 @@ module.exports.setRoutes = function(socketIo) {
                     // create ssh session with the instance
                 var timestampStarted = new Date().getTime();
 
-                var actionLog = instancesDao.insertSSHActionLog(instance._id, 'superadmin', timestampStarted);
+                var actionLog = instancesDao.insertSSHActionLog(instance._id,instanceData.username, instanceData.sessionUser, timestampStarted);
 
                 var logReferenceIds = [instance._id];
 

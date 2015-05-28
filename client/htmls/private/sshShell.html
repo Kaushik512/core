@@ -39,6 +39,7 @@
 
 <form class="forms" id="ssh-login-form">
     <input type='hidden' id='ssh-instanceId'>
+    <input type='hidden' id='ssh-sessionUser'>
       <div class="col-lg-12 col-md-12 credentialSection sshStyle">
           Username<span class="control-label" style="color:Red;">&nbsp;*</span>
          <input type="text" id="ssh-username" value="" autocomplete="off" class="form-control" autofocus/>
@@ -215,6 +216,7 @@ $(function() {
         console.log('submitting form');
         var reqBody = {};
         reqBody.id = $('#ssh-instanceId').val();
+        reqBody.sessionUser = $('#ssh-sessionUser').val();
         reqBody.username = $('#ssh-username').val();
 
 
