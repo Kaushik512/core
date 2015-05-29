@@ -17,8 +17,10 @@ var chefDefaults = appConfig.chef;
 var javaSSHWrapper = require('./../model/javaSSHWrapper.js');
 var logger = require('./logger.js')(module);
 var getDefaultCookbook = require('./defaultTaskCookbook');
+var currentDirectory = __dirname;
+var fs = require('fs');
 
-var app_config
+var app_config;
 
 var Chef = function(settings) {
 
@@ -929,30 +931,68 @@ var Chef = function(settings) {
         });
     }
 
-    this.createDataBagItem = function(dataBagName,dataBagItem, callback) {
+    this.createDataBagItem = function(dataBagName,dataBagItem,isEncrypt,callback) {
         initializeChefClient(function(err, chefClient) {
             if (err) {
                 callback(err, null);
                 return;
             }
-            chefClient.post('/data/'+dataBagName, dataBagItem, function(err, chefRes, chefResBody) {
-                if (err) {
-                    callback(err, null);
+            logger.debug("isEncrypt>>>>>> ",isEncrypt);
+            if(isEncrypt){
+                var options = {
+                    cwd: settings.userChefRepoLocation + '/.chef',
+                    onError: function(err) {
+                        callback(err, null);
+                    },
+                    onClose: function(code) {
+                        callback(null, code);
+                    }
+                };
+                var targetDir = currentDirectory+"/../config/catdata/catalyst/temp/dbItem.json";
+                logger.debug("Current dir: ",targetDir);
+                fs.writeFile(targetDir,JSON.stringify(dataBagItem),function(err){
+                    if(err){
+                        logger.debug("File creation failed : ",err);
+                        callback(err,null);
+                        return;
+                    }
+                    logger.debug("File Created....");
+                var createDBItem = 'knife data bag from file '+dataBagName+" "+targetDir+' --secret '+'/home/gobinda/openssl/secret_key';
+                var procDBItem = exec(createDBItem, options, function(err, stdOut, stdErr) {
+                    if (err) {
+                        logger.debug('Failed in procDBItem', err);
+                        return;
+                    }
+                    fs.unlink(targetDir);
+                    logger.debug("File deleted successfully..");
+                    callback(null,dataBagItem);
                     return;
-                }
-                logger.debug("chef status create==> ", chefRes.statusCode);
-                if (chefRes.statusCode === 201) {
-                    callback(null, chefResBody);
-                    return;
-                }else if(chefRes.statusCode === 409){
-                    callback(null, chefRes.statusCode);
-                    return;
-                } else {
-                    callback(true, null);
-                    return;
-                }
-
+                });
+                /*var argList =[];
+                var proc = new Process(createDBItem, argList, options);
+                proc.start();*/
             });
+
+            }else{
+                chefClient.post('/data/'+dataBagName, dataBagItem, function(err, chefRes, chefResBody) {
+                    if (err) {
+                        callback(err, null);
+                        return;
+                    }
+                    logger.debug("chef status create==> ", chefRes.statusCode);
+                    if (chefRes.statusCode === 201) {
+                        callback(null, chefResBody);
+                        return;
+                    }else if(chefRes.statusCode === 409){
+                        callback(null, chefRes.statusCode);
+                        return;
+                    } else {
+                        callback(true, null);
+                        return;
+                    }
+
+                });
+            }
 
         });
 

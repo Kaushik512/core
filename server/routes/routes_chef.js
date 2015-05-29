@@ -934,7 +934,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
                 res.send(500,"Invalid Json for Data Bag item.");
                 return;
             }
-            chef.createDataBagItem(req.params.dataBagName,dataBagItem,function(err,dataBagItem){
+            chef.createDataBagItem(req.params.dataBagName,dataBagItem,req.body.isEncrypt,function(err,dataBagItem){
                 if(err){
                     logger.debug("Exit /chef/../databag/../item/create");
                     res.send(500,"Failed to create Data Bag Item on Chef.");
