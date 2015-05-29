@@ -980,9 +980,11 @@ module.exports.setRoutes = function(app, verificationFunc) {
                     return;
                 }
                 logger.debug("Exit /chef/../databag/item/list");
-                if(dataBagItems.length > 0){
-                    logger.debug(JSON.stringify(dataBagItems.split(",")));
-                    res.send(dataBagItems.split(","));
+                logger.debug(JSON.stringify(dataBagItems));
+                if(Object.keys(dataBagItems).length > 0){
+                    var responseObj = JSON.stringify(Object.keys(dataBagItems));
+                    logger.debug("response "+ responseObj);
+                    res.send(JSON.parse(responseObj));
                     return;
                 } else {
                     res.send(dataBagItems);
