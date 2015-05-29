@@ -28,6 +28,10 @@ var datBagSchema = new Schema({
 	encryptionKey:{
 		type: String,
 		required: true
+	},
+	isEncrypted:{
+		type: Boolean,
+		required: true
 	}
 
 });
@@ -56,12 +60,12 @@ datBagSchema.statics.getDataBagEncryptionInfo = function(dataBagName,dataBagItem
 			callback(err,null);
 			return;
 		}
-		callback(null,aDataBag);
+		callback(null,aDataBag[0]);
 		return;
 	});
 };
 
-imageSchema.statics.removeDataBagById = function(dataBagId, callback) {
+datBagSchema.statics.removeDataBagById = function(dataBagId, callback) {
     logger.debug("Enter removeDataBagById");
     this.remove({
         "_id": new ObjectId(dataBagId)
@@ -76,3 +80,7 @@ imageSchema.statics.removeDataBagById = function(dataBagId, callback) {
 
     });
 };
+
+var DataBagModel = mongoose.model('DataBagModel', datBagSchema);
+
+module.exports = DataBagModel;
