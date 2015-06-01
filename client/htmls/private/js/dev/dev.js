@@ -30,7 +30,7 @@
                              }
 
                              //for removing the selected blueprint in the blueprint tab
-                             function removeSelectedBlueprint() {
+                             window.removeSelectedBlueprint = function () {
                                  var blueprintId = $('.productdiv1.role-Selected1').attr('data-blueprintid');
                                  if (blueprintId) {
                                      //found now delete

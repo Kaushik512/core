@@ -47,7 +47,7 @@ var Chef = function(settings) {
     this.getNodesList = function(callback) {
         initializeChefClient(function(err, chefClient) {
             if (err) {
-                console.log(err);
+                logger.debug(err);
                 callback(err, null);
                 return;
             }
@@ -71,14 +71,14 @@ var Chef = function(settings) {
     this.getEnvironmentsList = function(callback) {
         initializeChefClient(function(err, chefClient) {
             if (err) {
-                console.log(err);
+                logger.debug(err);
                 callback(err, null);
                 return;
             }
             chefClient.get('/environments', function(err, chefRes, chefResBody) {
                 if (err) {
                     callback(err, null);
-                    return console.log(err);
+                    return logger.debug(err);
                 }
                 logger.debug("chef status", chefRes.statusCode);
                 if (chefRes.statusCode !== 200 && chefRes.statusCode !== 201) {
@@ -152,7 +152,7 @@ var Chef = function(settings) {
             chefClient.get('/nodes', function(err, chefRes, chefResBody) {
                 if (err) {
                     callback(err, null);
-                    return console.log(err);
+                    return logger.debug(err);
                 }
 
                 var environmentList = {};
@@ -163,8 +163,8 @@ var Chef = function(settings) {
                         chefClient.get('/nodes/' + nodeNames[i], function(err, chefRes, chefResBody) {
                             count++;
                             if (err) {
-                                console.log("Error getting details of node");
-                                return console.log(err);
+                                logger.debug("Error getting details of node");
+                                return logger.debug(err);
                             }
                             if (!environmentList[chefResBody.chef_environment]) {
                                 environmentList[chefResBody.chef_environment] = {};
@@ -302,7 +302,7 @@ var Chef = function(settings) {
                     callback(err, null);
                     return;
                 }
-                console.log("chef status create==> ", chefRes.statusCode);
+                logger.debug("chef status create==> ", chefRes.statusCode);
                 if (chefRes.statusCode === 201) {
                     callback(null, envName);
                 } else {
@@ -395,11 +395,11 @@ var Chef = function(settings) {
                         that.bootstrapInstance(params, callback, callbackOnStdOut, callbackOnStdErr);
                         bootstrapattemptcount++;
                     } else {
-                        console.log('Hit an error :' + data);
+                        logger.debug('Hit an error :' + data);
                         callbackOnStdErr(data);
                     }
                 } else {
-                    console.log('Hit an error :' + data);
+                    logger.debug('Hit an error :' + data);
                     callbackOnStdErr(data);
                 }
                 return;*/
@@ -485,7 +485,7 @@ var Chef = function(settings) {
         });
         procNodeDelete.on('close', function(code) {
             logger.debug('procNodeDelete closed');
-            //console.log('Command : knife ' + argList.join());
+            //logger.debug('Command : knife ' + argList.join());
             logger.debug('knife command ==> ', 'knife ' + argList.join(' '));
             var proc = new Process('knife', argList, options);
             proc.start();
@@ -519,7 +519,7 @@ var Chef = function(settings) {
                     callback(err, null);
                     return;
                 }
-                // console.log('Run List:' + runlist.join());
+                // logger.debug('Run List:' + runlist.join());
                 javaSSh.executeListOfCmds(options.cmds, callback, callbackOnStdOut, callbackOnStdErr);
             });
 
@@ -696,7 +696,7 @@ var Chef = function(settings) {
                 callback(err, null);
             },
             onClose: function(code) {
-                console.log(code);
+                logger.debug(code);
                 if (code === 0) {
                     callback(null, true);
                 } else {
@@ -751,7 +751,7 @@ var Chef = function(settings) {
                 callback(err, null);
             },
             onClose: function(code) {
-                console.log(code);
+                logger.debug(code);
                 if (code === 0) {
                     callback(null, true);
                 } else {
@@ -781,7 +781,7 @@ var Chef = function(settings) {
                 var dependecyDataToAppend = '';
                 for (var i = 0; i < dependencies.length; i++) {
                     dependecyDataToAppend = dependecyDataToAppend + "\ndepends '" + dependencies[i] + "'";
-                    console.log(dependecyDataToAppend);
+                    logger.debug(dependecyDataToAppend);
                 }
                 logger.debug(dependencies);
                 logger.debug(dependecyDataToAppend);
