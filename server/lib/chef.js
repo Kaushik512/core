@@ -932,12 +932,20 @@ var Chef = function(settings) {
         });
     }
 
-    this.createDataBagItem = function(dataBagName,dataBagItem,isEncrypt,callback) {
+    this.createDataBagItem = function(req,dataBagItem,callback) {
         initializeChefClient(function(err, chefClient) {
             if (err) {
                 callback(err, null);
                 return;
             }
+            var dataBagName = req.params.dataBagName;
+            var isEncrypt = req.body.isEncrypt;
+            var inFilePath = req.files.keyFile.path;
+            fs.readFile(inFilePath,function(err,fileData){
+                if(err){
+                    
+                }
+            });
             var dataBagData = {
                 dataBagName: dataBagName,
                 dataBagItemId: dataBagItem.id,
