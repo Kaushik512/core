@@ -1,7 +1,7 @@
 /* Copyright (C) Relevance Lab Private Limited- All Rights Reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
- * Written by Gobinda Das <gobinda.das@relevancelab.com>, 
+ * Written by Gobinda Das <gobinda.das@relevancelab.com>,
  * May 2015
  */
 
@@ -131,7 +131,11 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                     chef.deleteNode(instance.chef.chefNodeName, function(err, nodeData) {
                         if (err) {
                             logger.debug("Failed to delete node ", err);
-                            res.send(500);
+                            if (err.chefStatusCode && err.chefStatusCode === 404) {
+                                removeInstanceFromDb();
+                            } else {
+                                res.send(500);
+                            }
                         } else {
                             removeInstanceFromDb();
                             logger.debug("Successfully removed instance from db.");
@@ -217,8 +221,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         });
     });
 
-     app.delete('/instances/:instanceId/removeTask', function(req, res) { //function(instanceId, ipaddress, callback)
-        
+    app.delete('/instances/:instanceId/removeTask', function(req, res) { //function(instanceId, ipaddress, callback)
+
         instancesDao.removeTaskId(req.params.instanceId, function(err, deleteCount) {
             if (err) {
                 logger.error("Failed to taskId", err);
