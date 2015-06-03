@@ -29,6 +29,8 @@ var waitForPort = require('wait-for-port');
 var AWSProvider = require('../model/classes/masters/cloudprovider/awsCloudProvider.js');
 var AWSKeyPair = require('../model/classes/masters/cloudprovider/keyPair.js');
 var ChefClientExecution = require('../model/classes/instance/chefClientExecution/chefClientExecution.js');
+var appConfig = require('../config/app_config.js');
+var Cryptography = require('../lib/utils/cryptography');
 
 module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
@@ -949,10 +951,20 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                     if (err) {
                                         res.send(500, "Error getting to fetch Keypair.")
                                     }
+                                    var cryptoConfig = appConfig.cryptoSettings;
+                                                var cryptography = new Cryptography(cryptoConfig.algorithm, cryptoConfig.password);
+                                                var keys = [];
+                                                keys.push(aProvider.accessKey);
+                                                keys.push(aProvider.secretKey);
+                                                cryptography.decryptMultipleText(keys, cryptoConfig.decryptionEncoding, cryptoConfig.encryptionEncoding, function(err, decryptedKeys) {
+                                                    if (err) {
+                                                        res.sned(500, "Failed to decrypt accessKey or secretKey");
+                                                        return;
+                                                    }
 
                                     var ec2 = new EC2({
-                                        "access_key": aProvider.accessKey,
-                                        "secret_key": aProvider.secretKey,
+                                        "access_key": decryptedKeys[0],
+                                        "secret_key": decryptedKeys[1],
                                         "region": keyPair[0].region
                                     });
                                     ec2.stopInstance([data[0].platformId], function(err, stoppingInstances) {
@@ -1006,6 +1018,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                         });
                                         instancesDao.updateActionLog(req.params.instanceId, actionLog._id, true, timestampEnded);
 
+                                        });
                                     });
                                 });
                             });
@@ -1071,9 +1084,20 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                         timestamp: timestampStarted
                                     });
 
+                                    var cryptoConfig = appConfig.cryptoSettings;
+                                                var cryptography = new Cryptography(cryptoConfig.algorithm, cryptoConfig.password);
+                                                var keys = [];
+                                                keys.push(aProvider.accessKey);
+                                                keys.push(aProvider.secretKey);
+                                                cryptography.decryptMultipleText(keys, cryptoConfig.decryptionEncoding, cryptoConfig.encryptionEncoding, function(err, decryptedKeys) {
+                                                    if (err) {
+                                                        res.sned(500, "Failed to decrypt accessKey or secretKey");
+                                                        return;
+                                                    }
+
                                     var ec2 = new EC2({
-                                        "access_key": aProvider.accessKey,
-                                        "secret_key": aProvider.secretKey,
+                                        "access_key": decryptedKeys[0],
+                                        "secret_key": decryptedKeys[1],
                                         "region": keyPair[0].region
                                     });
                                     ec2.startInstance([data[0].platformId], function(err, startingInstances) {
@@ -1139,8 +1163,9 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                         return;
                                                     }
                                                     logger.debug('instance ip upadated');
-                                                });
-                                            }
+                                                 });
+                                                }
+                                            });
                                         });
                                     });
                                 });
@@ -1638,7 +1663,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                         return;
                     }
 
-                    logger.debug("anInstance[0].credentials>>>> ", anInstance[0].credentials);
                     //decrypting pem file
                     credentialCryptography.decryptCredential(anInstance[0].credentials, function(err, decryptedCredentials) {
                         if (err) {
