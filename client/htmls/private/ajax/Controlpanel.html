@@ -1776,25 +1776,6 @@ $('.startstoptoggler').click(startAndStopToggler);
   $cfmwareTbody.append($tr);
 
     //$collapseTaskAreaTbody.empty();
-    if (data.taskIds && data.taskIds.length) {
-        var $collapseTaskAreaTbody = $('#collapseTaskArea').find('tbody');
-        $.post('../tasks',{
-          taskIds:data.taskIds
-        }, function(tasks) {
-            var str = '';  
-            for(var i=0;i<tasks.length;i++) {
-               var $trTask = $('<tr style="line-height:2.3"></tr>');
-                var $tdSerial = $('<td/>')
-                var $tdName = $('<td class="taskNameTd"/>');
-                $tdName.append(tasks[i].name);
-                $trTask.append($tdSerial);
-                $trTask.append($tdName);
-                $tasksDatatable.row.add($trTask).draw();
-            }
-        });
-    }
-
-
     window.instanceIPForAppLink =  data.instanceIP;
     
     if (data.appUrls && data.appUrls.length) {
@@ -1803,17 +1784,59 @@ $('.startstoptoggler').click(startAndStopToggler);
         createAppUrlCardLink(data.appUrls[kk],data.instanceIP);
       }
     }
-    /*else {
-      $('#appUrlTemplateFormCreate').removeClass('hidden');
-    }*/
    
-
- 
-
     $('.loadingControlPanelIndicator').hide();
     $('#controlPanelContainer').show();
-    
 
+    if (data.taskIds && data.taskIds.length) {
+        var $collapseTaskAreaTbody = $('#collapseTaskArea').find('tbody');
+        $.post('../tasks', {
+            taskIds: data.taskIds
+        }, function(task) {
+            var str = '';
+            for (var i = 0; i < task.length; i++) {
+                var $trTask = $('<tr style="line-height:2.3"></tr>');
+                var $tdSerial = $('<td/>')
+                var $tdName = $('<td class="taskNameTd"/>');
+                $tdName.append(task[i].name);
+                $trTask.append($tdSerial);
+                $trTask.append($tdName);
+                $tasksDatatable.row.add($trTask).draw();
+                createTaskCardLink(task[i]);
+                console.log(task.length);
+            }
+        });
+    }
+
+    function createTaskCardLink(task) {
+        var $taskIcon = $('<div class="tasksBlock"><img rel="tooltip" data-taskid=' + task._id + ' data-placement="top" class="taskCardIMG" title=' + task.name + '  alt="task" style="cursor:pointer" src="img/tasks.png"/><div class="tasksLinks hidden"><a  rel="tooltip" data-placement="top" data-original-title="Execute" data-toggle="modal" href="javascript:void(0)" class="tableactionbutton taskLinkExecute"><img style="width:22px;" src="img/Execute.png" alt="execute"/></a><a style="margin-left:3px;" rel="tooltip" data-placement="top" data-original-title="History" data-toggle="modal" href="javascript:void(0)" class="tableactionbutton taskLinkHistory"><img style="width:22px" src="img/History.png" alt="History"/></a></div></div>');
+        //for showing the hover
+
+        //click for tasks
+        (function(taskId) {
+            $taskIcon.attr('data-taskCardIconId', taskId).hover(function(e) {
+                $(this).find('.tasksLinks').removeClass('hidden');
+                //$('a[data-taskId="' + taskId + '"]').click();
+
+            }, function() {
+                $(this).find('.tasksLinks').addClass('hidden');
+
+            });
+            $taskIcon.find('.taskLinkExecute').click(function(e) {
+                $('a[data-executeTaskId="' + taskId + '"]').click();
+            });
+            $taskIcon.find('.taskLinkHistory').click(function(e) {
+                $('a[data-historyTaskId="' + taskId + '"]').click();
+            });
+        })(task._id);
+        $taskIcon.find('img').tooltip();
+        $taskIcon.find('a').tooltip();
+        var $componentListTasks = $('.instance-bootstrap-list');
+        $componentListTasks.last().append($taskIcon, '<br/><br/>');
+        if ($componentListTasks.children().length > 2) {
+            $taskIcon.hide();
+        }
+    }
     $('#addTaskBtn').click(function(e) {
         var $select = $('#taskList').empty();
         var taskIds = []; 
@@ -1836,13 +1859,16 @@ $('.startstoptoggler').click(startAndStopToggler);
         var $taskSelect = $('#taskList');
         var $selectedOptions = $taskSelect.find('option:selected');
         var taskIds = $taskSelect.val();
+        var $componentListTask = $('.instance-bootstrap-list');
         if (taskIds) {
             $.post('../instances/' + data._id + '/addTask', {
                 taskIds: taskIds
             }, function() {
+              console.log(data);
                 var str = '';
                 $tasksDatatable.clear().draw();
                 for(var i=0;i<$selectedOptions.length;i++){
+                  
                   var $trTask = $('<tr style="line-height:2.3"></tr>');
                   var $tdSerial = $('<td/>');
                   str = $($selectedOptions[i]).text();
@@ -1851,8 +1877,12 @@ $('.startstoptoggler').click(startAndStopToggler);
                   $trTask.append($tdSerial);
                   $trTask.append($tdName);
                   $tasksDatatable.row.add($trTask).draw();
+                  alert('taskIds' , taskIds);
+                  createTaskCardLink(taskIds[0]);
                 }
                 $('#instanceTaskModal').modal('hide');
+                console.log(taskIds);
+
                 data.taskIds = taskIds;
             });
         } else {
@@ -2201,15 +2231,6 @@ $('.addServiceBtn').click(function(){
 });
 
 </script>
-<!--<script>
-  var containerHeight = $(".getContentWidth").height();
-  $("#wid-id-10").css("height", containerHeight );
-  //var contentWidth = containerWidth - staticIconWidth;
-  // $("#myTabContent3").css({'width': contentWidth});
-  var totalHeight = $("#content").height();
-  $(".thumbnails").css("height", totalHeight);
-  console.log(totalHeight);
-</script>-->
 
 <script type="text/javascript">
   
@@ -2254,26 +2275,24 @@ $('.addServiceBtn').click(function(){
   }
 $(document).ready(function() {
 
-  //emptying ssh container 
- 
+    //emptying ssh container 
+
     var LocalBreadCrumb = localStorage.getItem("breadcrumb");
     var splitBread = null;
-    if(LocalBreadCrumb != null && LocalBreadCrumb != 'undefined')
-    {
+    if (LocalBreadCrumb != null && LocalBreadCrumb != 'undefined') {
         localStorage.removeItem("breadcrumb");
         splitBread = LocalBreadCrumb.split('>');
-        if(splitBread.length > 0)
-        {
+        if (splitBread.length > 0) {
             $('#ribbon').find('.breadcrumb').find('li').detach();
-            for(var arraycount=0;arraycount< splitBread.length;arraycount++){
-              var liNew = document.createElement('li');
-              liNew.innerHTML = splitBread[arraycount];
-              $('#ribbon').find('.breadcrumb').append(liNew);
+            for (var arraycount = 0; arraycount < splitBread.length; arraycount++) {
+                var liNew = document.createElement('li');
+                liNew.innerHTML = splitBread[arraycount];
+                $('#ribbon').find('.breadcrumb').append(liNew);
             }
             var liCP = document.createElement('li');
             liCP.innerHTML = "Control panel";
             $('#ribbon').find('.breadcrumb').append(liCP);
-            var parentUl = $('li').filter(".referenceliClass.open").find('ul').find('li[data-envname='+splitBread[3]+']');
+            var parentUl = $('li').filter(".referenceliClass.open").find('ul').find('li[data-envname=' + splitBread[3] + ']');
             parentUl.addClass('active');
         }
     }
@@ -2301,39 +2320,6 @@ $(document).ready(function(e){
   });
 });
 </script>
-<script>
-   $(document).ready(function() {
-
-       $('.appUrlForm').submit(function(e) {
-           var $this = $(this);
-           var appUrlId = $this.find('.appUrlId').val();
-           var appUrl = $this.find('.appUrlInput').val();
-           var $div = $('.domain-roles-caption');
-           var instanceId = $div.attr('data-instanceid');
-           var instanceIP = $div.attr('data-instanceIP');
-           if (instanceId) {
-               $.post('../instances/' + instanceId + '/appUrl/' + appUrlId + '/update', {
-                   url: appUrl
-               }, function(data) {
-                   var url = appUrl.replace('$host',instanceIP); 
-                   $('.app-url[data-appUrlId="'+appUrlId+'"]').attr('href',url);
-                   $this.find('.urlsaved').removeClass('hidden');
-                   setTimeout(function() {
-                       $this.find('.urlsaved').addClass('hidden');
-                   }, (2000));
-               });
-           }
-            e.preventDefault();
-            return false;
-       });
-       
-      
-
-   });
-</script>
-<script>
- 
-</script>
 <script type="text/javascript">
   if (!$.fn.dataTable.isDataTable('#tableactionHistory')) {
       //var $taskListArea = $('.taskListArea').empty();
@@ -2356,237 +2342,208 @@ $(document).ready(function(e){
 
       });
   }
-  if (!$.fn.dataTable.isDataTable('#tableServices') ){
-    //var $taskListArea = $('.taskListArea').empty();
-       $servicesDatatable =  $('#tableServices').DataTable({
-            "pagingType": "full_numbers",
-            "aoColumns": [
-                {
-                    "bSortable": true
-                },
-                {
-                    "bSortable": false
-                },
-                {
-                    "bSortable": false
-                }
-            ]
+  if (!$.fn.dataTable.isDataTable('#tableServices')) {
+      //var $taskListArea = $('.taskListArea').empty();
+      $servicesDatatable = $('#tableServices').DataTable({
+          "pagingType": "full_numbers",
+          "aoColumns": [{
+              "bSortable": true
+          }, {
+              "bSortable": false
+          }, {
+              "bSortable": false
+          }]
 
-        });
-     }
+      });
+  }
 
-  if (!$.fn.dataTable.isDataTable('#tasksLists') ){
-    //var $taskListArea = $('.taskListArea').empty();
-       $tasksDatatable =  $('#tasksLists').DataTable({
-            "pagingType": "full_numbers",
-            "aoColumns": [
-                {
-                    "bSortable": true
-                },
-                {
-                    "bSortable": false
-                }
-            ],
+  if (!$.fn.dataTable.isDataTable('#tasksLists')) {
+      //var $taskListArea = $('.taskListArea').empty();
+      $tasksDatatable = $('#tasksLists').DataTable({
+          "pagingType": "full_numbers",
+          "aoColumns": [{
+              "bSortable": true
+          }, {
+              "bSortable": false
+          }],
           "fnRowCallback": function(nRow, aData, iDisplayIndex) {
               $("td:first", nRow).html(iDisplayIndex + 1);
               return nRow;
           }
 
-        });
-     }
+      });
+  }
 </script>
-
 <script>
-//for cloning the app Url
-              $('.addNewApp1').click(function() {
-                  $('#appSeries12').clone().find("input").val("").end().appendTo('.applicationURLContainer:last');
-
-                  var countApp = $('.applicationURLContainer').length;
-
-                  if (countApp === 2) {
-                      $(this).addClass('hidden');
-                      return;
-                  }
-
-              });
-
-</script>
-
-
-<script>
-    // var searchTemplate = "<div class='row form-inline'><label style='float: left;margin-left:15px;'>Search: <input type='text' class='form-control' placeholder='(start typing)'></label></div>"
-    // $(".table-sieve").sieve({
-    //     searchTemplate: searchTemplate
-    // });
     var searchTemplate = "<div class='row form-inline'><label style='float: left;margin-left:15px;'>Filter: <input type='text' class='form-control' placeholder='search e.g. acpid'></label></div>"
     $(".p-sieve").sieve({
         searchTemplate: searchTemplate,
         itemSelector: "p"
-    }); 
+    });
 </script>
 
 <script>
- $('#newAppSeries').click(function(e){
-   $('#appURLForm').trigger("reset");
-});
- 
-function createAppUrlTableRow(appUrlData) {
-    var $appUrlTableBody = $('#appUrlTable tbody');
-    var $row = $('<tr/>').attr('data-appUrlIdTableRow',appUrlData._id);
-    $row.data('appUrlData', appUrlData);
-    var $tdName = $('<td class="appNameTable"/>');
-    $tdName.append(appUrlData.name);
-    var url = appUrlData.url;
-    if(url){
-      url = url.replace('$host',window.instanceIPForAppLink);
-    }
-    var $tdURL = $('<td class="appUrlTable"/>').append('<a href="'+url+'" target="_blank">'+url+'</a> ');
-    var $tdAction = $('<td/>');
-    $tdAction.append('<div class="btn-group"><button class="btn btn-info pull-left btn-sg tableactionbutton appUrlEditLink" value="Update" title="Update"><i class="ace-icon fa fa-pencil bigger-120"></i></button></div>').append('<div style="margin-left:5px;" class="btn-group"><button class="btn btn-danger pull-left btn-sg tableactionbutton appUrlRemoveLink" value="Remove" title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></div>');
+ $('#newAppSeries').click(function(e) {
+     $('#appURLForm').trigger("reset");
+ });
 
-    $tdAction.find('.appUrlEditLink').click(function(){
-        var appUrlData = $row.data('appUrlData');
-        var $editModal = $('#modalAppNameURL');
-        
-        $editModal.modal('show');
-        $editModal.find('.appName').val(appUrlData.name);
-        $editModal.find('.appURL').val(appUrlData.url);
-        $editModal.find('.appUrlId').val(appUrlData._id);
-    });
-    
-    $tdAction.find('.appUrlRemoveLink').click(function() {
-        var $this = $(this);
-        var $tr = $this.parents('tr');
-        var appUrlData = $tr.data('appUrlData');
-        $.ajax({
-            url: '../instances/' + urlParams.id + '/appUrl/' + appUrlData._id,
-            method: 'DELETE',
-            success: function() {
-                $tr.remove();
-                removeAppUrlCardLink(appUrlData._id);
-                
-            },
-            fail: function() {
-                alert("Unable to delete URL please try again later");
-            }
-        });
-    });
-    $row.append($tdName).append($tdURL).append($tdAction);
-    $appUrlTableBody.append($row);
-
-}
-
-function removeAppUrlCardLink(appUrlId) {
-   var $anchor = $('a[data-appUrlId="'+appUrlId+'"]').parent();
-   if(!$anchor.length) {
-    return;
-
-   }
-   console.log($anchor.index());
-   var index = $anchor.index();
-   if(index < 3) {
-     var $nextLink;
-     if(index == 1) {
-       $nextLink  = $anchor.next().next();
-     } else {
-      $nextLink  = $anchor.next();
+ function createAppUrlTableRow(appUrlData) {
+     var $appUrlTableBody = $('#appUrlTable tbody');
+     var $row = $('<tr/>').attr('data-appUrlIdTableRow', appUrlData._id);
+     $row.data('appUrlData', appUrlData);
+     var $tdName = $('<td class="appNameTable"/>');
+     $tdName.append(appUrlData.name);
+     var url = appUrlData.url;
+     if (url) {
+         url = url.replace('$host', window.instanceIPForAppLink);
      }
-     console.log($nextLink.length);
-     $nextLink.show();
-   }
-   $anchor.remove();
-}
+     var $tdURL = $('<td class="appUrlTable"/>').append('<a href="' + url + '" target="_blank">' + url + '</a> ');
+     var $tdAction = $('<td/>');
+     $tdAction.append('<div class="btn-group"><button class="btn btn-info pull-left btn-sg tableactionbutton appUrlEditLink" value="Update" title="Update"><i class="ace-icon fa fa-pencil bigger-120"></i></button></div>').append('<div style="margin-left:5px;" class="btn-group"><button class="btn btn-danger pull-left btn-sg tableactionbutton appUrlRemoveLink" value="Remove" title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></div>');
 
-function createAppUrlCardLink(appUrlData, instanceIP) {
-    var $cardAppUrlListContanier = $('.instance-bootstrap-list');
-    var url = appUrlData.url;
-    if (url) {
-        url = url.replace('$host', instanceIP);
-    }
-    var anchor = "<span class='marginForURLCP'><a class='app-url' data-instanceIP='"+instanceIP+"' data-appUrlId='" + appUrlData._id + "' href='" + url + "'' target='_blank' title='" + appUrlData.name + "'>" + appUrlData.name + "</a></span>";
-    var $anchor = $(anchor);
-    if($cardAppUrlListContanier.children().length > 2) {
-      $anchor.hide();
-    }
-    $cardAppUrlListContanier.last().append( $anchor);
+     $tdAction.find('.appUrlEditLink').click(function() {
+         var appUrlData = $row.data('appUrlData');
+         var $editModal = $('#modalAppNameURL');
 
-}
+         $editModal.modal('show');
+         $editModal.find('.appName').val(appUrlData.name);
+         $editModal.find('.appURL').val(appUrlData.url);
+         $editModal.find('.appUrlId').val(appUrlData._id);
+     });
 
-$('#appURLForm').submit(function(e) {
-    var appUrls = []
-    var regexpURL = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
-    var appUrlData = {};
+     $tdAction.find('.appUrlRemoveLink').click(function() {
+         var $this = $(this);
+         var $tr = $this.parents('tr');
+         var appUrlData = $tr.data('appUrlData');
+         $.ajax({
+             url: '../instances/' + urlParams.id + '/appUrl/' + appUrlData._id,
+             method: 'DELETE',
+             success: function() {
+                 $tr.remove();
+                 removeAppUrlCardLink(appUrlData._id);
 
+             },
+             fail: function() {
+                 alert("Unable to delete URL please try again later");
+             }
+         });
+     });
+     $row.append($tdName).append($tdURL).append($tdAction);
+     $appUrlTableBody.append($row);
 
-    appUrlData.name = $(this).find('.appName').val();
-    appUrlData.url = $(this).find('.appURL').val();
-    if (!(appUrlData.name)) {
-        alert("Please Enter Name");
-        return false;
-    }
-    if (!(appUrlData.url)) {
-        alert('Please Enter URL');
-        return false;
-    }
+ }
 
-    if (!regexpURL.test(appUrlData.url)) {
-        alert('Please Enter a Valid URL');
-        return false;
-    }
+ function removeAppUrlCardLink(appUrlId) {
+     var $anchor = $('a[data-appUrlId="' + appUrlId + '"]').parent();
+     if (!$anchor.length) {
+         return;
 
-    var appUrlId = $(this).find('.appUrlId').val();
-    var url = '../instances/' + urlParams.id + '/appUrl';
-    var reqBody = {
-       appUrls: [appUrlData]
-    }
-    if (appUrlId) {
-        url = '../instances/' + urlParams.id + '/appUrl/' + appUrlId + '/update';
-        reqBody = {
-            url: appUrlData.url,
-            name: appUrlData.name
-        }
-    }
+     }
+     console.log($anchor.index());
+     var index = $anchor.index();
+     if (index < 3) {
+         var $nextLink;
+         if (index == 1) {
+             $nextLink = $anchor.next().next();
+         } else {
+             $nextLink = $anchor.next();
+         }
+         console.log($nextLink.length);
+         $nextLink.show();
+     }
+     $anchor.remove();
+ }
 
-    var $appUrlIdInput = $(this).find('.appUrlId');
+ function createAppUrlCardLink(appUrlData, instanceIP) {
+     var $cardAppUrlListContanier = $('.instance-bootstrap-list');
+     var url = appUrlData.url;
+     if (url) {
+         url = url.replace('$host', instanceIP);
+     }
+     var anchor = "<span class='marginForURLCP'><a class='app-url' data-instanceIP='" + instanceIP + "' data-appUrlId='" + appUrlData._id + "' href='" + url + "'' target='_blank' title='" + appUrlData.name + "'>" + appUrlData.name + "</a></span>";
+     var $anchor = $(anchor);
+     if ($cardAppUrlListContanier.children().length > 2) {
+         $anchor.hide();
+     }
+     $cardAppUrlListContanier.last().append($anchor);
 
-    $.post(url, reqBody, function(data) {
-       $appUrlIdInput.val('');
-        console.log(data);
-        if (!appUrlId) {
-            createAppUrlTableRow(data[0]);
-            createAppUrlCardLink(data[0],window.instanceIPForAppLink);
-        } else {
-          var $tr = $('tr[data-appUrlIdTableRow="'+appUrlId+'"]');
-          $tr.find('.appNameTable').text(reqBody.name);
-          var url = reqBody.url;
-          if(url){
-            url = url.replace('$host',window.instanceIPForAppLink);
-          }
-          $tr.find('.appUrlTable').html('<a href="'+url+'" target="_blank">'+url+'</a> ');
-          $tr.data('appUrlData',{
-            _id:appUrlId,
-            name:reqBody.name,
-            url:reqBody.url
-          })
+ }
 
-          var $a = $('.app-url[data-appUrlId="'+appUrlId+'"]');
-          $a.html(reqBody.name);
-          var instanceIP = $a.attr('data-instanceIP');
-          var url =  reqBody.url;
-          if(url) {
-            url = url.replace('$host', instanceIP);
-          }
-          $a.attr('href',url); 
-        }
-        $('#modalAppNameURL').modal('hide');
-        $('#appEntry').addClass('hidden');
+ $('#appURLForm').submit(function(e) {
+     var appUrls = []
+     var regexpURL = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
+     var appUrlData = {};
 
 
-    }).fail(function(){
-      $appUrlIdInput.val('');
-    });
+     appUrlData.name = $(this).find('.appName').val();
+     appUrlData.url = $(this).find('.appURL').val();
+     if (!(appUrlData.name)) {
+         alert("Please Enter Name");
+         return false;
+     }
+     if (!(appUrlData.url)) {
+         alert('Please Enter URL');
+         return false;
+     }
 
-    return false;
+     if (!regexpURL.test(appUrlData.url)) {
+         alert('Please Enter a Valid URL');
+         return false;
+     }
 
-});
+     var appUrlId = $(this).find('.appUrlId').val();
+     var url = '../instances/' + urlParams.id + '/appUrl';
+     var reqBody = {
+         appUrls: [appUrlData]
+     }
+     if (appUrlId) {
+         url = '../instances/' + urlParams.id + '/appUrl/' + appUrlId + '/update';
+         reqBody = {
+             url: appUrlData.url,
+             name: appUrlData.name
+         }
+     }
+
+     var $appUrlIdInput = $(this).find('.appUrlId');
+
+     $.post(url, reqBody, function(data) {
+         $appUrlIdInput.val('');
+         console.log(data);
+         if (!appUrlId) {
+             createAppUrlTableRow(data[0]);
+             createAppUrlCardLink(data[0], window.instanceIPForAppLink);
+         } else {
+             var $tr = $('tr[data-appUrlIdTableRow="' + appUrlId + '"]');
+             $tr.find('.appNameTable').text(reqBody.name);
+             var url = reqBody.url;
+             if (url) {
+                 url = url.replace('$host', window.instanceIPForAppLink);
+             }
+             $tr.find('.appUrlTable').html('<a href="' + url + '" target="_blank">' + url + '</a> ');
+             $tr.data('appUrlData', {
+                 _id: appUrlId,
+                 name: reqBody.name,
+                 url: reqBody.url
+             })
+
+             var $a = $('.app-url[data-appUrlId="' + appUrlId + '"]');
+             $a.html(reqBody.name);
+             var instanceIP = $a.attr('data-instanceIP');
+             var url = reqBody.url;
+             if (url) {
+                 url = url.replace('$host', instanceIP);
+             }
+             $a.attr('href', url);
+         }
+         $('#modalAppNameURL').modal('hide');
+         $('#appEntry').addClass('hidden');
+
+
+     }).fail(function() {
+         $appUrlIdInput.val('');
+     });
+
+     return false;
+
+ });
   </script>
