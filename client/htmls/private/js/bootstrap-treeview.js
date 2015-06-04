@@ -343,6 +343,9 @@
 							.attr('target',node.target)
 							.attr('nodetype',node.nodetype)
 							.attr('parent',node.parent)
+							.attr('bgId',node.bgId)
+							.attr('projId',node.projId)
+							.attr('envId',node.envId)
 							.append(node.text)
 						);
 				}
