@@ -1716,53 +1716,40 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
     function updateProjectWithEnv(projects, bodyJson) {
         for (var p = 0; p < projects.length; p++) {
-
-            var currproj = projects[p];
-            logger.debug('Project : ' + currproj);
-            d4dModelNew.d4dModelMastersProjects.findOne({
-                rowid: currproj.rowid,
-                id: '4'
-            }, function(err, data2) {
-                if (!err) {
-                    logger.debug("env rowid:>>>>>>>>>>>>>>>>>> ",data2.environmentname_rowid);
-                    logger.debug('Project JSON:' + JSON.stringify(data2));
-                    var newenv = bodyJson['rowid'];
-                    if (data2 != null && data2.environmentname_rowid != 'undefined' && data2.environmentname_rowid != '') {
-                        // logger.debug("Env Names found :========> " +data2.environmentname_rowid );
-                        // var _data2env = data2.environmentname_rowid.split(',');
-                        // if(_data2env.indexOf(envid) >= 0){
-                        //     //found an env in the list exit
-                        //        return;
-                        // }
-                        // data2.environmentname_rowid +=  ',' ;
-                        if (data2.environmentname_rowid.indexOf(bodyJson['rowid']) < 0) {
-                            newenv = data2.environmentname_rowid + ',' + bodyJson['rowid'];
+            if (projects[p].id === '4') {
+                var currproj = projects[p];
+                logger.debug('Project : ' + currproj);
+                d4dModelNew.d4dModelMastersProjects.findOne({
+                    rowid: currproj.rowid,
+                    id: '4'
+                }, function(err, data2) {
+                    if (!err) {
+                        logger.debug("data2+++++++++++++++++++++ ", JSON.stringify(data2));
+                        logger.debug('Project JSON:' + JSON.stringify(data2));
+                        var newenv = bodyJson['rowid'];
+                        if (data2 != null && data2.environmentname_rowid != 'undefined' && data2.environmentname_rowid != '') {
+                            if (data2.environmentname_rowid.indexOf(bodyJson['rowid']) < 0) {
+                                newenv = data2.environmentname_rowid + ',' + bodyJson['rowid'];
+                            }
                         }
-                    }
-                    //var newenv = data2.environmentname_rowid + envid;
-
-                    logger.debug('Newenv ====>', newenv);
-                    d4dModelNew.d4dModelMastersProjects.update({
-                        rowid: currproj.rowid,
-                        id: '4'
-                    }, {
-                        environmentname_rowid: newenv
-                    }, function(err, data1) {
-                        if (!err) {
-                            //data2.environmentname_rowid
-                            logger.debug('Updated project ' + currproj + ' with env : ' + newenv);
-                            return;
-                        } else {
-                            logger.debug('Err while updating d4dModelMastersProjects' + err);
-                            return;
-                        }
-
-                    });
-                } else {
-                    logger.debug('Err in findone updateProjectWithEnv - d4dModelMastersProjects' + err);
-                    return;
-                }
-            });
+                        
+                        logger.debug('Newenv ====>', newenv);
+                        d4dModelNew.d4dModelMastersProjects.update({
+                            rowid: currproj.rowid,
+                            id: '4'
+                        }, {
+                            environmentname_rowid: newenv
+                        }, function(err, data1) {
+                            if (err) {
+                                logger.debug('Err while updating d4dModelMastersProjects' + err);
+                                return;
+                            }
+                                logger.debug('Updated project ' + currproj + ' with env : ' + newenv);
+                                return;
+                        });
+                    } 
+                });
+            }
         }
     };
 
@@ -2489,7 +2476,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                             logger.debug("Error : ", err);
                                                         }
                                                         logger.debug("Got Teams<<<<<<<<<<<<<<<<<<<<< ", JSON.stringify(teamData));
-                                                        teamData[0].projectname = bodyJson["loginname"];
+                                                        teamData[0].projectname = bodyJson["projectname"];
                                                         teamData[0].projectname_rowid = bodyJson["rowid"];
                                                         logger.debug("Got Team<<<<<<<<<<<<<<<<<<<<< ", teamData[0].rowid);
                                                         d4dModelNew.d4dModelMastersTeams.update({
@@ -2522,7 +2509,9 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                             logger.debug('in env update');
                                             var orgId = bodyJson['orgname_rowid'];
                                             logger.debug('orgId:', orgId);
-                                            configmgmtDao.getProjectsForOrgs(orgId, function(err, projs_) {
+                                            d4dModelNew.d4dModelMastersProjects.find({
+                                                orgname_rowid : orgId
+                                            }, function(err, projs_) {
                                                 if (!err) {
                                                     logger.debug('Project found for Org ======++++++++++++++++++:' + projs_);
                                                     updateProjectWithEnv(projs_, bodyJson);
@@ -2576,7 +2565,9 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                             logger.debug('in env update');
                                             var orgId = bodyJson['orgname_rowid'];
                                             logger.debug('orgId:', orgId);
-                                            configmgmtDao.getProjectsForOrgs(orgId, function(err, projs_) {
+                                            d4dModelNew.d4dModelMastersProjects.find({
+                                                orgname_rowid : orgId
+                                            }, function(err, projs_) {
                                                 if (!err) {
                                                     logger.debug('Project found for Org ======++++++++++++++++++:' + projs_);
                                                     updateProjectWithEnv(projs_, bodyJson);
