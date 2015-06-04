@@ -900,6 +900,7 @@ function Configmgmt() {
                                 if (envdata_.length <= 0) {
                                     console.log('rowidval' + JSON.stringify(rowidval));
                                     callback(null, rowidval);
+                                    return;
                                 }
                                 
                                 envdata_.forEach(function(k, v) {
@@ -920,6 +921,7 @@ function Configmgmt() {
                                 if (userdata_.length <= 0) {
                                     console.log('rowidval' + JSON.stringify(rowidval));
                                     callback(null, rowidval);
+                                    return;
                                 }
                                 
                                 userdata_.forEach(function(k, v) {
@@ -942,6 +944,7 @@ function Configmgmt() {
                                 if (teamdata_.length <= 0) {
                                     console.log('rowidval' + JSON.stringify(rowidval));
                                     callback(null, rowidval);
+                                    return;
                                 }
                                 var i = 0;
                                 teamdata_.forEach(function(k, v) {
@@ -956,42 +959,13 @@ function Configmgmt() {
 
                                 logger.debug("End of Team.");
                                 callback(null, rowidval);
+                                return;
                             } else{
                                 logger.debug("Else in Team.");
                                 callback(null, rowidval);
+                                return;
                             }
-                                /*d4dModelNew.d4dModelMastersProviders.find({
-                                    id: "9"
-                                }, function(err, providerdata) {
-                                if (providerdata) {
-                                    var providerdata_ = JSON.parse(JSON.stringify(providerdata));
-                                    logger.debug('-----------------providerdata:' + JSON.stringify(providerdata));
-                                    if (providerdata_.length <= 0) {
-                                        console.log('rowidval' + JSON.stringify(rowidval));
-                                        callback(null, rowidval);
-                                    }
-                                    var i = 0;
-                                    providerdata_.forEach(function(k, v) {
-                                        // rowidval[k['rowid']] = k['environmentname'];
-                                        //rowidval.push('{\"' +k['rowid'] + '\" : \"' +  k['environmentname'] + '\"}');
-                                        var rid = {};
-                                        rid[k['rowid']] = k['providername'];
-                                        rowidval.push(rid);
-                                        if (i >= providerdata_.length - 1) {
-                                            //   console.log('rowidval' + JSON.stringify(rowidval));
-                                            callback(null, rowidval);
-                                        }
-                                        i++;
-                                        //  console.log(k['rowid'], k['environmentname'],envdata_.length);
-                                    });
-
-
-                                } else {
-                                    //    console.log('this called');
-                                    callback(null, rowidval);
-                                }
-
-                                });*/ //provviders
+                               
 
                             }); //teams
 
