@@ -645,6 +645,15 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                                                 name: docprojs[_prj]['projectname'],
                                                                                 environments: envs
                                                                             });
+                                                                            if (!orgTree[_i].envId) {
+                                                                                orgTree[_i].bgId = orgTree[_i]['businessGroups'][__i]['rowid'];
+                                                                                orgTree[_i].projId = docprojs[_prj]['rowid'];
+                                                                                if (envs_.length) {
+                                                                                    orgTree[_i].envId = envs_[0].rowid
+                                                                                }
+                                                                                //orgTree[_i].envId: envs[nt]
+
+                                                                            }
                                                                             var prjname = configmgmtDao.convertRowIDToValue(docprojs[_prj]['rowid'], rowidlist);
                                                                             // get features.appcard from app.config
 
@@ -704,9 +713,9 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                                 }
                                                                 logger.debug("_i: ", _i + " orgTree.length: ", orgTree.length);
                                                                 if (_i === orgTree.length - 1) {
-                                                                        logger.debug("Returned complete orgTree:>>>>>>>>>>> ", JSON.stringify(orgTree));
-                                                                        res.send(orgTree);
-                                                                        return;
+                                                                    logger.debug("Returned complete orgTree:>>>>>>>>>>> ", JSON.stringify(orgTree));
+                                                                    res.send(orgTree);
+                                                                    return;
                                                                 }
                                                             }
                                                         });
@@ -891,6 +900,15 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                                                 name: docprojs[_prj]['projectname'],
                                                                                 environments: envs
                                                                             });
+                                                                            if (!orgTree[_i].envId) {
+                                                                                orgTree[_i].bgId = orgTree[_i]['businessGroups'][__i]['rowid'];
+                                                                                orgTree[_i].projId = docprojs[_prj]['rowid'];
+                                                                                if (envs_.length) {
+                                                                                    orgTree[_i].envId = envs_[0].rowid
+                                                                                }
+                                                                                //orgTree[_i].envId: envs[nt]
+
+                                                                            }
                                                                             var prjname = configmgmtDao.convertRowIDToValue(docprojs[_prj]['rowid'], rowidlist);
                                                                             // get features.appcard from app.config
 
@@ -1791,7 +1809,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                     if (!req.body.appUrls) {
                                         req.body.appUrls = [];
                                     }
-                                  
+
 
                                     var appUrls = req.body.appUrls;
                                     if (appConfig.appUrls && appConfig.appUrls.length) {
