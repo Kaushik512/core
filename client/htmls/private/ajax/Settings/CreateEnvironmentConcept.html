@@ -93,15 +93,16 @@
 <div class="modal fade bs-example-modal-sg" id="myModalCreateChefEnv" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
   <div class="modal-dialog modal-sg">
     <div class="modal-content">
+    <form id="createenvinchefform" action="">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
         <h4 class="modal-title">Add a Chef Environment</h4>
       </div>
       <div class="modal-body" style="height:100px">
-      <section>
-        <form id="createenvinchefform" action="">
-             <div style="margin:0px;">
-                    <div class="col-lg-6">
+      
+        
+             
+                    <div class="col-lg-6 col-md-6">
                         <label for="category">Environment Name:<span style="color:red">*</span><span class="chefenvnamerequired hidden" style="color:red">&nbsp;Required</span>
                         </label>
                         
@@ -109,19 +110,20 @@
                         
                     </div>
                 </div>
-        </form>
-      </section>
+                    <div class="modal-footer">
+                        <div class="btn-group pull-right">
+                        <i id="envcreatespinner" class="fa-li fa fa-spinner fa-spin hidden" style="margin-top:9px"></i>
+                        <span id="chefenvcreatemsg" style="color:red"></span>
+                         <button type="button" class="btn btn-default btn-primary createchefenvbtn" onclick="createchefenv();" style="margin-right:11px;">
+                          <i class="fa fa-save fa-1x" ></i>&nbsp;Add</button>
+                        <a type="button" class="btn btn-primary" type="submit" data-dismiss="modal">
+                          <i class="fa fa-undo fa-1x"></i>&nbsp;Cancel</a>
+                        </div>
+                    </div>
+                
+      
       </div>
-      <div class="modal-footer">
-        <div class="btn-group pull-right">
-        <i id="envcreatespinner" class="fa-li fa fa-spinner fa-spin hidden" style="margin-top:9px"></i>
-        <span id="chefenvcreatemsg" style="color:red"></span>
-         <button type="button" class="btn btn-default btn-primary createchefenvbtn" onclick="createchefenv();" style="margin-right:11px;">
-          <i class="fa fa-save fa-1x" ></i>&nbsp;Add</button>
-        <button type="button" class="btn btn-primary" type="submit" data-dismiss="modal">
-          <i class="fa fa-undo fa-1x"></i>&nbsp;Cancel</button>
-        </div>
-      </div>
+      </form>
     </div>
   </div>
 </div>
@@ -150,10 +152,17 @@ function preprocess(){
         return(true);
 }
 function createchefenv(){
-   $('#envcreatespinner').removeClass('hidden');
+   var reqBodyEnv = {};
    var chefid =  $('#configname').find('option:selected').attr('rowid');
    var $crbtn = $('#createenvinchefform').find('#createchefenvbtn')
    $crbtn.attr('disabled','disabled');
+   var $form = $('#createenvinchefform');
+   reqBodyEnv.name= $form.find('#chefenvname').val();
+   if(!reqBodyEnv.name){
+        alert('Please Enter Environment Name');
+        return false;
+   }
+   $('#envcreatespinner').removeClass('hidden');
    //alert('in createchefenvbtn');
    if(typeof chefid != 'undefined'){
    $.post('../chef/environments/create/' + chefid,{envName:$('#chefenvname').val()},function(envname){
