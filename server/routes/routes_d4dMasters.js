@@ -21,6 +21,7 @@ var childProcess = require('child_process');
 var exec = childProcess.exec;
 var masterUtil = require('../lib/utils/masterUtil.js');
 var blueprintsDao = require('../model/dao/blueprints');
+var errorResponses = require('./error_responses.js');
 
 
 module.exports.setRoutes = function(app, sessionVerification) {
@@ -303,10 +304,10 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                     return;
                                 }
                                 logger.debug(">>>>>>>>>>>>>>>>>>>>> ",bpData.length);
-                                if(bpData.length > 0){
+                                /*if(bpData.length > 0){
                                     res.send(500,"TemplateType can't be deleted,It's used by some BluePrint.");
                                     return;
-                                }
+                                }*/
 
                                 configmgmtDao.deleteCheck(req.params.fieldvalue, tocheck, fieldname, function(err, data) {
                                     logger.debug("Delete check returned: %s", data);
@@ -1233,6 +1234,8 @@ module.exports.setRoutes = function(app, sessionVerification) {
                             // "error": err
                             // });
                             logger.debug("none found");
+                            res.send(ret);
+                            return;
                         }
                     });
                 });
@@ -2274,11 +2277,8 @@ module.exports.setRoutes = function(app, sessionVerification) {
                         logger.debug("Inside if for empty");
                         bodyJson["orgname"] = "";
                         bodyJson["orgname_rowid"] = "";
-                    }/*else if (req.params.id === '7' && bodyJson["orgname"].length === 0) {
-                        logger.debug("Inside User check for any value.");
-                        bodyJson["orgname"] = [""];
-                        bodyJson["orgname_rowid"] = [""];
-                    }*/
+                    }
+
 
                     logger.debug("Full bodyJson: ", JSON.stringify(bodyJson));
                     configmgmtDao.getDBModelFromID(req.params.id, function(err, dbtype) {
@@ -2447,6 +2447,67 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                             return;
 
                                         }
+                                            if (req.params.id === '7') {
+                                                var teamName = bodyJson["teamname"].split(",");
+                                                var rowId = bodyJson["teamname_rowid"].split(",");
+                                                for (var x = 0; x < rowId.length; x++) {
+                                                    d4dModelNew.d4dModelMastersTeams.find({
+                                                        rowid: rowId[x]
+                                                    }, function(err, teamData) {
+                                                        if (err) {
+                                                            logger.debug("Error : ", err);
+                                                        }
+                                                        logger.debug("Got Teams<<<<<<<<<<<<<<<<<<<<< ", JSON.stringify(teamData));
+                                                        teamData[0].loginname = bodyJson["loginname"];
+                                                        teamData[0].loginname_rowid = bodyJson["rowid"];
+                                                        logger.debug("Got Team<<<<<<<<<<<<<<<<<<<<< ", teamData[0].rowid);
+                                                        d4dModelNew.d4dModelMastersTeams.update({
+                                                            rowid: teamData[0].rowid
+                                                        }, {
+                                                            $set: JSON.parse(JSON.stringify(teamData[0]))
+                                                        }, {
+                                                            upsert: false
+                                                        },function(err, updatedTeam) {
+                                                            if (err) {
+                                                                logger.debug("Failed to update Team<<<<<<<<<<<<<<<< ", errorResponses.db.error);
+                                                            }
+                                                            logger.debug("Successfully Team updated with User.");
+                                                        });
+
+                                                    });
+                                                }
+                                            }
+
+                                            if (req.params.id === '4') {
+                                                var teamName = bodyJson["teamname"].split(",");
+                                                var rowId = bodyJson["teamname_rowid"].split(",");
+                                                for (var x = 0; x < rowId.length; x++) {
+                                                    d4dModelNew.d4dModelMastersTeams.find({
+                                                        rowid: rowId[x]
+                                                    }, function(err, teamData) {
+                                                        if (err) {
+                                                            logger.debug("Error : ", err);
+                                                        }
+                                                        logger.debug("Got Teams<<<<<<<<<<<<<<<<<<<<< ", JSON.stringify(teamData));
+                                                        teamData[0].projectname = bodyJson["loginname"];
+                                                        teamData[0].projectname_rowid = bodyJson["rowid"];
+                                                        logger.debug("Got Team<<<<<<<<<<<<<<<<<<<<< ", teamData[0].rowid);
+                                                        d4dModelNew.d4dModelMastersTeams.update({
+                                                            rowid: teamData[0].rowid
+                                                        }, {
+                                                            $set: JSON.parse(JSON.stringify(teamData[0]))
+                                                        }, {
+                                                            upsert: false
+                                                        },function(err, updatedTeam) {
+                                                            if (err) {
+                                                                logger.debug("Failed to update Team<<<<<<<<<<<<<<<< ", errorResponses.db.error);
+                                                            }
+                                                            logger.debug("Successfully Team updated with User.");
+                                                        });
+
+                                                    });
+                                                }
+                                            }
                                         logger.debug('New Master Saved');
                                         logger.debug(req.params.fileinputs == 'null');
                                         logger.debug('New record folderpath: % rowid %s FLD["folderpath"]:', folderpath, newrowid, folderpath);
