@@ -1464,28 +1464,48 @@ $('.startstoptoggler').click(startAndStopToggler);
       }
     });
     $('.sshShellBtn').click(function() {
-      if($(this).hasClass('isStopedInstance')){
-        return false;
-      }
+        if ($(this).hasClass('isStopedInstance')) {
+            return false;
+        }
 
-    
-      var hasConnectPermission= false;
-          if(haspermission("instanceconnect","execute")){
-            hasConnectPermission=true;
-          }
-          if(!hasConnectPermission){
+
+        var hasConnectPermission = false;
+        if (haspermission("instanceconnect", "execute")) {
+            hasConnectPermission = true;
+        }
+        if (!hasConnectPermission) {
             bootbox.alert('User has no permission to do SSH');
             return;
-          }
+        }
         var $sshModal = $('#modalSSHShellContainer');
         var instanceId = $(this).parents('.domain-roles-caption').attr('data-instanceId');
         $sshModal.find('.modal-body').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
         $sshModal.modal('show');
-        $.get('sshShell.html?id=' + instanceId, function(data) {
+        $.ajax({
 
-            $sshModal.find('.modal-body').empty().append(data);
-            $sshModal.find('#ssh-instanceId').val(instanceId);
+            type: "GET",
+            url: "/d4dMasters/getuser",
+            success: function(usrdata) {
+
+                // alert(JSON.stringify(data));
+                //$("#liuserinfo").html("<i class=\"fa fa-user\"></i>&nbsp;<b>" + usrdata[0]['loginname'] + "</b>&nbsp;[" + usrdata[0]['userrolename'] + "]");
+                var username = '';
+                if (usrdata.user && usrdata.user.length) {
+                    if (usrdata.user[0].username) {
+                        username = usrdata.user[0].username.cn;
+                    }
+                }
+                console.log(username);
+                $.get('sshShell.html?id=' + instanceId, function(data) {
+
+                    $sshModal.find('.modal-body').empty().append(data);
+                    $sshModal.find('#ssh-instanceId').val(instanceId);
+                    $sshModal.find('#ssh-sessionUser').val(username);
+                });
+            }
         });
+
+
     });
 
   function getCssClassFromStatus(status) {

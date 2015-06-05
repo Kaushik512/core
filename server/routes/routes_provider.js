@@ -1,7 +1,7 @@
 /* Copyright (C) Relevance Lab Private Limited- All Rights Reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
- * Written by Gobinda Das <gobinda.das@relevancelab.com>, 
+ * Written by Gobinda Das <gobinda.das@relevancelab.com>,
  * May 2015
  */
 
@@ -20,12 +20,12 @@ var usersDao = require('../model/users.js');
 var configmgmtDao = require('../model/d4dmasters/configmgmt.js');
 var Cryptography = require('../lib/utils/cryptography');
 var appConfig = require('../config/app_config');
-module.exports.setRoutes = function(app,sessionVerificationFunc){
-	app.all("/aws/providers/*",sessionVerificationFunc);
-  var cryptoConfig = appConfig.cryptoSettings;
-  var cryptography = new Cryptography(cryptoConfig.algorithm, cryptoConfig.password);
+module.exports.setRoutes = function(app, sessionVerificationFunc) {
+    app.all("/aws/providers/*", sessionVerificationFunc);
+    var cryptoConfig = appConfig.cryptoSettings;
+    var cryptography = new Cryptography(cryptoConfig.algorithm, cryptoConfig.password);
 
-// Create AWS Provider.
+    // Create AWS Provider.
     app.post('/aws/providers', function(req, res) {
 
         logger.debug("Enter post() for /providers.", typeof req.body.fileName);
@@ -62,7 +62,7 @@ module.exports.setRoutes = function(app,sessionVerificationFunc){
             region = req.body.region[0];
         }
         logger.debug("Final Region:  ", region)
-        
+
         var keys = [];
         keys.push(accessKey);
         keys.push(secretKey);
@@ -71,7 +71,7 @@ module.exports.setRoutes = function(app,sessionVerificationFunc){
                 res.sned(500, "Failed to encrypt accessKey or secretKey");
                 return;
             }
-            logger.debug("Returned encrypted keys: ",encryptedKeys);
+            logger.debug("Returned encrypted keys: ", encryptedKeys);
             var providerData = {
                 id: 9,
                 accessKey: encryptedKeys[0],
@@ -160,21 +160,24 @@ module.exports.setRoutes = function(app,sessionVerificationFunc){
         });
     });
 
-// Return list of all available AWS Providers.
+    // Return list of all available AWS Providers.
     app.get('/aws/providers', function(req, res) {
         logger.debug("Enter get() for /providers");
         var loggedInUser = req.session.user.cn;
         masterUtil.getLoggedInUser(loggedInUser, function(err, anUser) {
             if (err) {
                 res.send(500, "Failed to fetch User.");
+                return;
             }
             if (!anUser) {
                 res.send(500, "Invalid User.");
+                return;
             }
             if (anUser.orgname_rowid[0] === "") {
                 masterUtil.getAllActiveOrg(function(err, orgList) {
                     if (err) {
                         res.send(500, 'Not able to fetch Orgs.');
+                        return;
                     }
                     if (orgList) {
                         AWSProvider.getAWSProvidersForOrg(orgList, function(err, providers) {
@@ -185,32 +188,42 @@ module.exports.setRoutes = function(app,sessionVerificationFunc){
                             }
                             logger.debug("providers>>> ", JSON.stringify(providers));
                             var providersList = [];
-                            for (var i = 0; i < providers.length; i++) {
-                                var keys = [];
-                                keys.push(providers[i].accessKey);
-                                keys.push(providers[i].secretKey);
-                                cryptography.decryptMultipleText(keys, cryptoConfig.decryptionEncoding, cryptoConfig.encryptionEncoding, function(err, decryptedKeys) {
-                                    if (err) {
-                                        res.sned(500, "Failed to decrypt accessKey or secretKey");
-                                        return;
-                                    }
-                                    providers[i].accessKey = decryptedKeys[0];
-                                    providers[i].secretKey = decryptedKeys[1];
-                                    providersList.push(providers[i]);
-                                    logger.debug("providers>>> ", JSON.stringify(providers));
-                                    if (providers.length === providersList.length) {
-                                        res.send(providersList);
-                                        return;
-                                    }
-                                });
+
+                            if (providers.length > 0) {
+                                for (var i = 0; i < providers.length; i++) {
+                                    var keys = [];
+                                    keys.push(providers[i].accessKey);
+                                    keys.push(providers[i].secretKey);
+                                    cryptography.decryptMultipleText(keys, cryptoConfig.decryptionEncoding, cryptoConfig.encryptionEncoding, function(err, decryptedKeys) {
+                                        if (err) {
+                                            res.send(500, "Failed to decrypt accessKey or secretKey");
+                                            return;
+                                        }
+                                        providers[i].accessKey = decryptedKeys[0];
+                                        providers[i].secretKey = decryptedKeys[1];
+                                        providersList.push(providers[i]);
+                                        logger.debug("providers>>> ", JSON.stringify(providers));
+                                        if (providers.length === providersList.length) {
+                                            res.send(providersList);
+                                            return;
+                                        }
+                                    });
+                                }
+                            } else {
+                                res.send(200,[]);
+                                return;
                             }
                         });
+                    } else {
+                        res.send(200, []);
+                        return;
                     }
                 });
             } else {
                 masterUtil.getOrgs(loggedInUser, function(err, orgList) {
                     if (err) {
                         res.send(500, 'Not able to fetch Orgs.');
+                        return;
                     }
                     if (orgList) {
                         AWSProvider.getAWSProvidersForOrg(orgList, function(err, providers) {
@@ -240,13 +253,16 @@ module.exports.setRoutes = function(app,sessionVerificationFunc){
                                 });
                             }
                         });
+                    } else {
+                        res.send(200, []);
+                        return;
                     }
                 });
             }
         });
     });
 
-// Return AWS Provider respect to id.
+    // Return AWS Provider respect to id.
     app.get('/aws/providers/:providerId', function(req, res) {
         logger.debug("Enter get() for /providers/%s", req.params.providerId);
         var providerId = req.params.providerId.trim();
@@ -302,7 +318,7 @@ module.exports.setRoutes = function(app,sessionVerificationFunc){
         });
     });
 
-// Update a particular AWS Provider
+    // Update a particular AWS Provider
     app.post('/aws/providers/:providerId/update', function(req, res) {
         logger.debug("Enter post() for /providers/%s/update", req.params.providerId);
         var user = req.session.user;
@@ -414,7 +430,7 @@ module.exports.setRoutes = function(app,sessionVerificationFunc){
                                                     res.send(400);
                                                 }
                                             });
-                                        } 
+                                        }
                                     });
                                 });
                             }
@@ -425,286 +441,286 @@ module.exports.setRoutes = function(app,sessionVerificationFunc){
         });
     });
 
-// Delete a particular AWS Provider.
-app.delete('/aws/providers/:providerId', function(req, res) {
- logger.debug("Enter delete() for /providers/%s",req.params.providerId);
- var user = req.session.user;
- var category = configmgmtDao.getCategoryFromID("9");
- var permissionto = 'delete';
- var providerId = req.params.providerId.trim();
- if(typeof providerId === 'undefined' || providerId.length === 0){
-    res.send(500,"Please Enter ProviderId.");
-    return;
-}
-
-  usersDao.haspermission(user.cn, category, permissionto, null, req.session.user.permissionset, function(err, data) {
-        if (!err) {
-            logger.debug('Returned from haspermission : ' + data + ' : ' + (data == false));
-            if (data == false) {
-                logger.debug('No permission to ' + permissionto + ' on ' + category);
-                res.send(401,"You don't have permission to perform this operation.");
-                return;
-            }
-        } else {
-            logger.error("Hit and error in haspermission:", err);
-            res.send(500);
+    // Delete a particular AWS Provider.
+    app.delete('/aws/providers/:providerId', function(req, res) {
+        logger.debug("Enter delete() for /providers/%s", req.params.providerId);
+        var user = req.session.user;
+        var category = configmgmtDao.getCategoryFromID("9");
+        var permissionto = 'delete';
+        var providerId = req.params.providerId.trim();
+        if (typeof providerId === 'undefined' || providerId.length === 0) {
+            res.send(500, "Please Enter ProviderId.");
             return;
         }
 
-        masterUtil.getLoggedInUser(user.cn,function(err,anUser){
-            if(err){
-                res.send(500,"Failed to fetch User.");
+        usersDao.haspermission(user.cn, category, permissionto, null, req.session.user.permissionset, function(err, data) {
+            if (!err) {
+                logger.debug('Returned from haspermission : ' + data + ' : ' + (data == false));
+                if (data == false) {
+                    logger.debug('No permission to ' + permissionto + ' on ' + category);
+                    res.send(401, "You don't have permission to perform this operation.");
+                    return;
+                }
+            } else {
+                logger.error("Hit and error in haspermission:", err);
+                res.send(500);
+                return;
             }
-            logger.debug("LoggedIn User:>>>> ",JSON.stringify(anUser));
-            if(anUser){
-                //data == true (create permission)
-                /*if(data && anUser.orgname_rowid[0] !== ""){
+
+            masterUtil.getLoggedInUser(user.cn, function(err, anUser) {
+                if (err) {
+                    res.send(500, "Failed to fetch User.");
+                }
+                logger.debug("LoggedIn User:>>>> ", JSON.stringify(anUser));
+                if (anUser) {
+                    //data == true (create permission)
+                    /*if(data && anUser.orgname_rowid[0] !== ""){
                     logger.debug("Inside check not authorized.");
                     res.send(401,"You don't have permission to perform this operation.");
                     return;
                 }*/
 
-            VMImage.getImageByProviderId(providerId, function(err, anImage) {
-                if (err) {
-                    logger.error(err);
-                    res.send(500, errorResponses.db.error);
-                    return;
-                }
-                if (anImage) {
-                    res.send(403,"Provider already used by Some Images.To delete provider please delete respective Images first.");
-                    return;
-                }
+                    VMImage.getImageByProviderId(providerId, function(err, anImage) {
+                        if (err) {
+                            logger.error(err);
+                            res.send(500, errorResponses.db.error);
+                            return;
+                        }
+                        if (anImage) {
+                            res.send(403, "Provider already used by Some Images.To delete provider please delete respective Images first.");
+                            return;
+                        }
 
-                    AWSProvider.removeAWSProviderById(providerId, function(err, deleteCount) {
-                     if (err) {
-                         logger.error(err);
-                         res.send(500, errorResponses.db.error);
-                         return;
-                     }
-                     if (deleteCount) {
-                      logger.debug("Enter delete() for /providers/%s",req.params.providerId);
-                      res.send({
-                         deleteCount: deleteCount
-                     });
-                  } else {
-                     res.send(400);
-                    }
-                });
-            });
-          }
-      });
-    });//
-});
-
-// Delete a particular AWS Provider.
-app.delete('/aws/providers/keypairs/:keyPairId', function(req, res) {
- logger.debug("Enter delete() for /aws/providers/keypairs/%s",req.params.keyPairId);
- var user = req.session.user;
- var category = configmgmtDao.getCategoryFromID("9");
- var permissionto = 'delete';
- var keyPairId = req.params.keyPairId.trim();
- if(typeof keyPairId === 'undefined' || keyPairId.length === 0){
-    res.send(500,"Please Enter keyPairId.");
-    return;
-}
-  usersDao.haspermission(user.cn, category, permissionto, null, req.session.user.permissionset, function(err, data) {
-        if (!err) {
-            logger.debug('Returned from haspermission : ' + data + ' : ' + (data == false));
-            if (data == false) {
-                logger.debug('No permission to ' + permissionto + ' on ' + category);
-                res.send(401,"You don't have permission to perform this operation.");
-                return;
-            }
-        } else {
-            logger.error("Hit and error in haspermission:", err);
-            res.send(500);
-            return;
-        }
-
-        masterUtil.getLoggedInUser(user.cn,function(err,anUser){
-            if(err){
-                res.send(500,"Failed to fetch User.");
-            }
-            logger.debug("LoggedIn User:>>>> ",JSON.stringify(anUser));
-            if(anUser){
-                //data == true (create permission)
-                if(data && anUser.orgname_rowid[0] !== ""){
-                    logger.debug("Inside check not authorized.");
-                    res.send(401,"You don't have permission to perform this operation.");
-                    return;
-                }
-                blueprints.getBlueprintByKeyPairId(keyPairId, function(err, aBluePrint) {
-                    if (err) {
-                        logger.error(err);
-                        res.send(500, errorResponses.db.error);
-                        return;
-                    }
-                    logger.debug("BluePrints:>>>>> ",JSON.stringify(aBluePrint));
-                    if (aBluePrint.length) {
-                        res.send(403,"KeyPair already used by Some BluePrints.To delete KeyPair please delete respective BluePrints First.");
-                        return;
-                    }else{
-                            instances.getInstanceByKeyPairId(keyPairId, function(err, anInstance) {
-                             if (err) {
-                                 logger.error(err);
-                                 res.send(500, errorResponses.db.error);
-                                 return;
-                             }
-                             if (anInstance.length) {
-                              res.send(403,"KeyPair is already used by Instance.");
-                          } else {
-                              AWSKeyPair.removeAWSKeyPairById(keyPairId,function(err,deleteCount){  
-                                if (deleteCount) {
-                                  logger.debug("KeyPair deleted",keyPairId);
-                                  res.send({
+                        AWSProvider.removeAWSProviderById(providerId, function(err, deleteCount) {
+                            if (err) {
+                                logger.error(err);
+                                res.send(500, errorResponses.db.error);
+                                return;
+                            }
+                            if (deleteCount) {
+                                logger.debug("Enter delete() for /providers/%s", req.params.providerId);
+                                res.send({
                                     deleteCount: deleteCount
                                 });
-                              }
+                            } else {
+                                res.send(400);
+                            }
                         });
-                      }
-                });
-            }
+                    });
+                }
             });
-          }
-        });
-    });
-});
-// Return all available security groups from AWS.
-app.post('/aws/providers/securitygroups',function(req,res){
-  logger.debug("Enter for Provider securitygroups. %s",req.body.accessKey);
-
-      var ec2 = new EC2({
-       "access_key": req.body.accessKey,
-       "secret_key": req.body.secretKey,
-       "region"    : req.body.region
+        }); //
     });
 
-      ec2.getSecurityGroups(function(err,data){
-       if(err){
-        logger.debug("Unable to get AWS Security Groups.");
-        res.send("Unable to get AWS Security Groups.",500);
-        return;
-        }
-        logger.debug("Able to get AWS Security Groups. %s",JSON.stringify(data));
-        res.send(data);
-    });
-});
-
-// Return all available keypairs from AWS.
-app.post('/aws/providers/keypairs/list',function(req,res){
-  logger.debug("Enter for Provider keypairs.");
-
-      var ec2 = new EC2({
-       "access_key": req.body.accessKey,
-       "secret_key": req.body.secretKey,
-       "region"    : req.body.region
-    });
-
-        ec2.describeKeyPairs(function(err,data){
-           if(err){
-            logger.debug("Unable to get AWS Keypairs");
-            res.send("Invalid AccessKey or SecretKey.",500);
+    // Delete a particular AWS Provider.
+    app.delete('/aws/providers/keypairs/:keyPairId', function(req, res) {
+        logger.debug("Enter delete() for /aws/providers/keypairs/%s", req.params.keyPairId);
+        var user = req.session.user;
+        var category = configmgmtDao.getCategoryFromID("9");
+        var permissionto = 'delete';
+        var keyPairId = req.params.keyPairId.trim();
+        if (typeof keyPairId === 'undefined' || keyPairId.length === 0) {
+            res.send(500, "Please Enter keyPairId.");
             return;
-             }
-            logger.debug("Able to get AWS Keypairs. %s",JSON.stringify(data));
-            res.send(data);
-         });
-    });
-
-  // Return all available security groups from AWS for VPC.
-  app.post('/aws/providers/vpc/:vpcId/securitygroups',function(req,res){
-    logger.debug("Enter for Provider securitygroups fro vpc. %s",req.body.accessKey);
-
-        var ec2 = new EC2({
-         "access_key": req.body.accessKey,
-         "secret_key": req.body.secretKey,
-         "region"    : req.body.region
-      });
-
-        ec2.getSecurityGroupsForVPC(req.params.vpcId,function(err,data){
-         if(err){
-          logger.debug("Unable to get AWS Security Groups for VPC.");
-          res.send("Unable to get AWS Security Groups for VPC.",500);
-          return;
-          }
-          logger.debug("Able to get AWS Security Groups for VPC. %s",JSON.stringify(data));
-          res.send(data);
-      });
-  });
-
-  // Return all VPCs w.r.t. region
-    app.post('/aws/providers/describe/vpcs',function(req,res){
-        logger.debug("Enter describeVpcs ");
-            
-        var ec2 = new EC2({
-                "access_key": req.body.accessKey,
-                "secret_key": req.body.secretKey,
-                "region"    : req.body.region
-        });
-        ec2.describeVpcs(function(err,data){
-                if(err){
-                    logger.debug("Unable to describe Vpcs from AWS.",err);
-                    res.send("Unable to Describe Vpcs from AWS.",500);
+        }
+        usersDao.haspermission(user.cn, category, permissionto, null, req.session.user.permissionset, function(err, data) {
+            if (!err) {
+                logger.debug('Returned from haspermission : ' + data + ' : ' + (data == false));
+                if (data == false) {
+                    logger.debug('No permission to ' + permissionto + ' on ' + category);
+                    res.send(401, "You don't have permission to perform this operation.");
                     return;
                 }
-            logger.debug("Success to Describe Vpcs from AWS.",data);
+            } else {
+                logger.error("Hit and error in haspermission:", err);
+                res.send(500);
+                return;
+            }
+
+            masterUtil.getLoggedInUser(user.cn, function(err, anUser) {
+                if (err) {
+                    res.send(500, "Failed to fetch User.");
+                }
+                logger.debug("LoggedIn User:>>>> ", JSON.stringify(anUser));
+                if (anUser) {
+                    //data == true (create permission)
+                    if (data && anUser.orgname_rowid[0] !== "") {
+                        logger.debug("Inside check not authorized.");
+                        res.send(401, "You don't have permission to perform this operation.");
+                        return;
+                    }
+                    blueprints.getBlueprintByKeyPairId(keyPairId, function(err, aBluePrint) {
+                        if (err) {
+                            logger.error(err);
+                            res.send(500, errorResponses.db.error);
+                            return;
+                        }
+                        logger.debug("BluePrints:>>>>> ", JSON.stringify(aBluePrint));
+                        if (aBluePrint.length) {
+                            res.send(403, "KeyPair already used by Some BluePrints.To delete KeyPair please delete respective BluePrints First.");
+                            return;
+                        } else {
+                            instances.getInstanceByKeyPairId(keyPairId, function(err, anInstance) {
+                                if (err) {
+                                    logger.error(err);
+                                    res.send(500, errorResponses.db.error);
+                                    return;
+                                }
+                                if (anInstance.length) {
+                                    res.send(403, "KeyPair is already used by Instance.");
+                                } else {
+                                    AWSKeyPair.removeAWSKeyPairById(keyPairId, function(err, deleteCount) {
+                                        if (deleteCount) {
+                                            logger.debug("KeyPair deleted", keyPairId);
+                                            res.send({
+                                                deleteCount: deleteCount
+                                            });
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                    });
+                }
+            });
+        });
+    });
+    // Return all available security groups from AWS.
+    app.post('/aws/providers/securitygroups', function(req, res) {
+        logger.debug("Enter for Provider securitygroups. %s", req.body.accessKey);
+
+        var ec2 = new EC2({
+            "access_key": req.body.accessKey,
+            "secret_key": req.body.secretKey,
+            "region": req.body.region
+        });
+
+        ec2.getSecurityGroups(function(err, data) {
+            if (err) {
+                logger.debug("Unable to get AWS Security Groups.");
+                res.send("Unable to get AWS Security Groups.", 500);
+                return;
+            }
+            logger.debug("Able to get AWS Security Groups. %s", JSON.stringify(data));
+            res.send(data);
+        });
+    });
+
+    // Return all available keypairs from AWS.
+    app.post('/aws/providers/keypairs/list', function(req, res) {
+        logger.debug("Enter for Provider keypairs.");
+
+        var ec2 = new EC2({
+            "access_key": req.body.accessKey,
+            "secret_key": req.body.secretKey,
+            "region": req.body.region
+        });
+
+        ec2.describeKeyPairs(function(err, data) {
+            if (err) {
+                logger.debug("Unable to get AWS Keypairs");
+                res.send("Invalid AccessKey or SecretKey.", 500);
+                return;
+            }
+            logger.debug("Able to get AWS Keypairs. %s", JSON.stringify(data));
+            res.send(data);
+        });
+    });
+
+    // Return all available security groups from AWS for VPC.
+    app.post('/aws/providers/vpc/:vpcId/securitygroups', function(req, res) {
+        logger.debug("Enter for Provider securitygroups fro vpc. %s", req.body.accessKey);
+
+        var ec2 = new EC2({
+            "access_key": req.body.accessKey,
+            "secret_key": req.body.secretKey,
+            "region": req.body.region
+        });
+
+        ec2.getSecurityGroupsForVPC(req.params.vpcId, function(err, data) {
+            if (err) {
+                logger.debug("Unable to get AWS Security Groups for VPC.");
+                res.send("Unable to get AWS Security Groups for VPC.", 500);
+                return;
+            }
+            logger.debug("Able to get AWS Security Groups for VPC. %s", JSON.stringify(data));
+            res.send(data);
+        });
+    });
+
+    // Return all VPCs w.r.t. region
+    app.post('/aws/providers/describe/vpcs', function(req, res) {
+        logger.debug("Enter describeVpcs ");
+
+        var ec2 = new EC2({
+            "access_key": req.body.accessKey,
+            "secret_key": req.body.secretKey,
+            "region": req.body.region
+        });
+        ec2.describeVpcs(function(err, data) {
+            if (err) {
+                logger.debug("Unable to describe Vpcs from AWS.", err);
+                res.send("Unable to Describe Vpcs from AWS.", 500);
+                return;
+            }
+            logger.debug("Success to Describe Vpcs from AWS.", data);
             res.send(data);
         });
     });
 
     // Return all Subnets w.r.t. vpc
-    app.post('/aws/providers/vpc/:vpcId/subnets',function(req,res){
+    app.post('/aws/providers/vpc/:vpcId/subnets', function(req, res) {
         logger.debug("Enter describeSubnets ");
-        
+
         var ec2 = new EC2({
             "access_key": req.body.accessKey,
             "secret_key": req.body.secretKey,
-            "region"    : req.body.region
+            "region": req.body.region
         });
-        ec2.describeSubnets(req.params.vpcId,function(err,data){
-            if(err){
-                logger.debug("Unable to describeSubnets from AWS.",err);
-                res.send("Unable to describeSubnets from AWS.",500);
+        ec2.describeSubnets(req.params.vpcId, function(err, data) {
+            if (err) {
+                logger.debug("Unable to describeSubnets from AWS.", err);
+                res.send("Unable to describeSubnets from AWS.", 500);
                 return;
             }
-            logger.debug("Success to describeSubnets from AWS.",data);
+            logger.debug("Success to describeSubnets from AWS.", data);
             res.send(data);
         });
     });
 
-    app.get('/aws/providers/permission/set',function(req,res){
-      masterUtil.checkPermission(req.session.user.cn,function(err,permissionSet){
-        if(err){
-          res.send(500,"Error for permissionSet.");
-        }
-        if(permissionSet){
-          res.send(permissionSet);
-        }else{
-          res.send([]);
-        }
-      });
+    app.get('/aws/providers/permission/set', function(req, res) {
+        masterUtil.checkPermission(req.session.user.cn, function(err, permissionSet) {
+            if (err) {
+                res.send(500, "Error for permissionSet.");
+            }
+            if (permissionSet) {
+                res.send(permissionSet);
+            } else {
+                res.send([]);
+            }
+        });
     });
 
     // Return AWS Providers respect to orgid.
-app.get('/aws/providers/org/:orgId', function(req, res) {
- logger.debug("Enter get() for /providers/org/%s",req.params.orgId);
- var orgId = req.params.orgId.trim();
-     if(typeof orgId === 'undefined' || orgId.length === 0){
-        res.send(500,"Please Enter orgId.");
-        return;
-    }
-        AWSProvider.getAWSProvidersByOrgId(orgId,function(err, providers) {
-              if (err) {
-                  logger.error(err);
-                  res.send(500, errorResponses.db.error);
-                  return;
-              }
-              logger.debug("providers>>> ",   JSON.stringify(providers));
-              if (providers) {
-                  res.send(providers);
-              } else {
-                  res.send([]);
-              }
+    app.get('/aws/providers/org/:orgId', function(req, res) {
+        logger.debug("Enter get() for /providers/org/%s", req.params.orgId);
+        var orgId = req.params.orgId.trim();
+        if (typeof orgId === 'undefined' || orgId.length === 0) {
+            res.send(500, "Please Enter orgId.");
+            return;
+        }
+        AWSProvider.getAWSProvidersByOrgId(orgId, function(err, providers) {
+            if (err) {
+                logger.error(err);
+                res.send(500, errorResponses.db.error);
+                return;
+            }
+            logger.debug("providers>>> ", JSON.stringify(providers));
+            if (providers) {
+                res.send(providers);
+            } else {
+                res.send([]);
+            }
         });
-  });
+    });
 }
