@@ -445,9 +445,11 @@ module.exports.setRoutes = function(app, sessionVerification) {
         masterUtil.getLoggedInUser(loggedInUser, function(err, anUser) {
             if (err) {
                 res.send(500, "Failed to fetch User.");
+                return;
             }
             if (!anUser) {
                 res.send(500, "Invalid User.");
+                return;
             }
             logger.debug("anUser.orgname_rowid[0]:>>>>>>>>>> ", JSON.stringify(anUser));
             if (anUser.orgname_rowid[0] === "") {
@@ -469,12 +471,34 @@ module.exports.setRoutes = function(app, sessionVerification) {
                         res.send(orgTree);
                         return;
                     }
+                    logger.debug("Without settings:>>>>>>>>>>> ", JSON.stringify(objperms));
+                    logger.debug(typeof objperms[0]);
+                    if (typeof objperms[0] === 'undefined') {
+                        if (objperms.bunits.length === 0 || objperms.projects.length === 0) {
+                            res.send(orgTree);
+                            return;
+                        }
+                    }
+
                     if (JSON.stringify(objperms) === 'null') {
                         logger.debug("No Object found.");
                         res.send(orgTree);
                         return;
                     } else {
                         logger.debug(' Returned from getTeamsOrgBuProjForUser : ' + JSON.stringify(objperms));
+                        if (typeof objperms[0] === 'undefined') {
+                            if (objperms.teams.length === 0) {
+                                logger.debug("There is no Team......");
+                                res.send(orgTree);
+                                return;
+                            }
+                        } else {
+                            if (objperms[0].teams.length === 0) {
+                                logger.debug("There is no Team......");
+                                res.send(orgTree);
+                                return;
+                            }
+                        }
                         configmgmtDao.getRowids(function(err, rowidlist) {
                             d4dModelNew.d4dModelMastersOrg.find({
                                 id: 1,
@@ -486,6 +510,11 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                 /*var orgids = docorgs.map(function(docorgs1) {
                             return docorgs1.rowid;
                         });*/
+                                logger.debug("Without Org:>>>>>>>>>>>>>>> ", JSON.stringify(docorgs));
+                                if (typeof docorgs === 'undefined') {
+                                    res.send(orgTree);
+                                    return;
+                                }
                                 var orgids = [];
                                 if (docorgs) {
                                     orgids = docorgs.map(function(docorgs1) {
@@ -525,6 +554,10 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                     }
                                 }, function(err, docbgs) {
                                     logger.debug("loading bgs:>>>>>>>>>>>>>> ", JSON.stringify(docbgs));
+                                    if (docbgs.length === 0) {
+                                        res.send(orgTree);
+                                        return;
+                                    }
                                     if (!docbgs || typeof docbgs === 'undefined') { //no bgs for any org return tree
                                         logger.debug("Not found any BUs returing empty orgs");
                                         res.send(orgTree);
@@ -612,6 +645,15 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                                                 name: docprojs[_prj]['projectname'],
                                                                                 environments: envs
                                                                             });
+                                                                            if (!orgTree[_i].envId) {
+                                                                                orgTree[_i].bgId = orgTree[_i]['businessGroups'][__i]['rowid'];
+                                                                                orgTree[_i].projId = docprojs[_prj]['rowid'];
+                                                                                if (envs_.length) {
+                                                                                    orgTree[_i].envId = envs_[0].rowid
+                                                                                }
+                                                                                //orgTree[_i].envId: envs[nt]
+
+                                                                            }
                                                                             var prjname = configmgmtDao.convertRowIDToValue(docprojs[_prj]['rowid'], rowidlist);
                                                                             // get features.appcard from app.config
 
@@ -669,10 +711,10 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                                         orgTree[_i]['environments'].push(envname);
                                                                     }
                                                                 }
-                                                                if (_i >= orgTree.length - 1) {
+                                                                logger.debug("_i: ", _i + " orgTree.length: ", orgTree.length);
+                                                                if (_i === orgTree.length - 1) {
                                                                     logger.debug("Returned complete orgTree:>>>>>>>>>>> ", JSON.stringify(orgTree));
                                                                     res.send(orgTree);
-                                                                    logger.debug("Exit get() for /organizations/getTreeForbtv");
                                                                     return;
                                                                 }
                                                             }
@@ -858,6 +900,15 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                                                 name: docprojs[_prj]['projectname'],
                                                                                 environments: envs
                                                                             });
+                                                                            if (!orgTree[_i].envId) {
+                                                                                orgTree[_i].bgId = orgTree[_i]['businessGroups'][__i]['rowid'];
+                                                                                orgTree[_i].projId = docprojs[_prj]['rowid'];
+                                                                                if (envs_.length) {
+                                                                                    orgTree[_i].envId = envs_[0].rowid
+                                                                                }
+                                                                                //orgTree[_i].envId: envs[nt]
+
+                                                                            }
                                                                             var prjname = configmgmtDao.convertRowIDToValue(docprojs[_prj]['rowid'], rowidlist);
                                                                             // get features.appcard from app.config
 
@@ -1758,7 +1809,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                     if (!req.body.appUrls) {
                                         req.body.appUrls = [];
                                     }
-                                  
+
 
                                     var appUrls = req.body.appUrls;
                                     if (appConfig.appUrls && appConfig.appUrls.length) {
