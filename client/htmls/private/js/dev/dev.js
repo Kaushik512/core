@@ -904,6 +904,9 @@
                                                   clearTimeout(timeout);
                                               }
                                           });
+                                          var $parent = $('.domain-roles-caption[data-instanceId="' + instanceId + '"]');
+                                          instanceIpCard = $parent.attr('data-blueprintName');
+                                          $instanceLogModalContainer.find('.modal-title').html('Instance Logs for -&nbsp;' + instanceIpCard);
                                           $instanceLogModalContainer.find('.logsArea').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
                                           $instanceLogModalContainer.modal('show');
                                           var lastTimestamp;
@@ -987,9 +990,14 @@
                                               bootbox.alert('User has no permission to do SSH');
                                               return;
                                           }
-
                                           var $sshModal = $('#modalSSHShellContainer');
+                                          
+                                         // var $selectedCard = $('.container.role-Selectedcard').find('.domain-roles-caption');                                            
+                                          
                                           var instanceId = $(this).attr('data-instanceId');
+                                          var $parent = $('.domain-roles-caption[data-instanceId="' + instanceId + '"]');
+                                          instanceIpCard = $parent.attr('data-blueprintName');
+                                          $sshModal.find('.modal-title').html('Terminal for IP:&nbsp;' + instanceIpCard);
                                           $sshModal.find('.modal-body').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
                                           $sshModal.modal('show');
                                           $.ajax({
@@ -1691,8 +1699,10 @@
 
                                               var $parentTrNew = $('#tableinstanceview tr[data-instanceId="' + data._id + '"] td div.startstoptoggler');
                                               disableInstanceStartStopActionBtns(data._id, data.hardware.os);
-                                              $('.domain-roles').find('[data-instanceid="' + data._id + '"]').find('.startstoptoggler').removeClass('running').addClass('shutdown');
-                                              $parentTrNew.removeClass('running').addClass('shutdown');
+                                              $('.domain-roles').find('[data-instanceid="' + data._id + '"]').find('.startstoptoggler').removeClass('running').addClass('shutdown').remove();
+                                              $('.domain-roles').find('[data-instanceid="' + data._id + '"]').find('.sshBtnContainer').css('margin-left','25px');
+                                              $('.domain-roles').find('[data-instanceid="' + data._id + '"]').find('.moreInfo').css('margin-left','28px');
+                                              $parentTrNew.removeClass('running').addClass('shutdown').remove();
                                           }
                                           $startStopToggler.click(startAndStopToggler);
                                           $rowContainter.find('.startstoptoggler').off('click').on('click', startAndStopToggler);
@@ -2473,7 +2483,7 @@
                                                       },
                                                       null, {
                                                           "bSortable": false
-                                                      }
+                                                      },null
                                                   ]
 
                                               });

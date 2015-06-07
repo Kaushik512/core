@@ -859,7 +859,7 @@
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title" id="myModalLabel">
-          <i class="fa fa-terminal txt-color-blue"></i>Terminal
+          <i class="fa fa-terminal txt-color-blue"></i>
         </h4>
       </div>
       <div class="modal-body" style="height:430px">
@@ -1331,7 +1331,9 @@ $('.startstoptoggler').click(startAndStopToggler);
   }
   if(!data.providerId){
     disableInstanceStartStopActionBtns(data._id, data.hardware.os);
-    $('.domain-roles').find('[data-instanceid="'+data._id+'"]').find('.startstoptoggler').removeClass('running').addClass('shutdown');
+    $('.domain-roles').find('[data-instanceid="'+data._id+'"]').find('.startstoptoggler').removeClass('running').addClass('shutdown').remove();
+    $('.domain-roles').find('[data-instanceid="'+data._id+'"]').find('.sshContainer').css('margin-left','25px');
+    $('.domain-roles').find('[data-instanceid="'+data._id+'"]').find('.moreInfo').css('margin-left','28px');
   }
 
   if (data.docker != null) {
@@ -1478,7 +1480,10 @@ $('.startstoptoggler').click(startAndStopToggler);
             return;
         }
         var $sshModal = $('#modalSSHShellContainer');
+        var $selectedCard = $('.domain-role-thumbnail').find('.domain-roles-caption');
+        instanceIpCard = $selectedCard.attr('data-instanceIP');
         var instanceId = $(this).parents('.domain-roles-caption').attr('data-instanceId');
+        $sshModal.find('.modal-title').html('Terminal for IP:&nbsp;' + instanceIpCard);
         $sshModal.find('.modal-body').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
         $sshModal.modal('show');
         $.ajax({
@@ -2097,9 +2102,9 @@ function pollActionLogCompleteStatus(instanceId,actionLogId,$td) {
         },2000);
         actionLogsPollTimeouts.push(timeout);
       } else {
-        var status = 'failed'
+        var status = '<img src="img/indicator_stopped.png"/>'
         if (actionLog.success) {
-            status = 'success';
+            status = '<img src="img/indicator_started.png"/>';
         }
         $td.html(status);
       }
@@ -2112,17 +2117,21 @@ function addActionLogRow(actionLog) {
     $tr.append($tdName);
     
     var $tdStatus = $('<td></td>');
-    var status = 'failed';
+    //for failure
+    var status = '<img src="img/indicator_stopped.png"/>';
+
+    //for condition when polling or unknown
     if (!actionLog.completed) {
-        status = 'running';
+        status = '<img src="img/indicator_unknown.png"/>';
         //polling
       if(actionLog.type !== 8) {
         pollActionLogCompleteStatus(urlParams['id'],actionLog._id,$tdStatus);          
       }
  
+    //for success
     } else {
         if (actionLog.success) {
-            status = 'success';
+            status = '<img src="img/indicator_started.png"/>';
         }
     }
     $tdStatus.append(status);
