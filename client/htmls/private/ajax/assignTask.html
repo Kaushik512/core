@@ -800,7 +800,20 @@ $(document).ready(function() {
                         }
                         $attributeInput.val(value);
                     } else {
-                       $attributeInput = $('<input type="text" class="attribValueInput" data-attribKey="'+attributesNamesList[j]+'" value="'+value+'" data-attribName="'+displayName+'" data-attributeRequired="'+required+'"/>');
+                        var passwordField = false;
+                        var keyParts = attributesNamesList[j].split('/');
+                        if(keyParts.length) {
+                          var indexOfPassword = keyParts[keyParts.length-1].indexOf('password_');
+                          if(indexOfPassword !== -1) {
+                            passwordField = true;
+                          }
+                        }
+                        if(passwordField) {
+                            $attributeInput = $('<input type="password" class="attribValueInput" data-attribKey="'+attributesNamesList[j]+'" value="'+value+'" data-attribName="'+displayName+'" data-attributeRequired="'+required+'"/>');
+                        } else {
+                          $attributeInput = $('<input type="text" class="attribValueInput" data-attribKey="'+attributesNamesList[j]+'" value="'+value+'" data-attribName="'+displayName+'" data-attributeRequired="'+required+'"/>');     
+                        }
+                       
                     }
 
                     
@@ -851,8 +864,23 @@ $(document).ready(function() {
                             'data-attributeValue': obj[keys[i]],
                             'data-attributeName': attributes[j].name
                         }).data('jsonObj',attributes[j].jsonObj);;
+                        
+                        var passwordField = false;
+                        var passwordField = false;
+                        var keyParts = keyString.split('/');
+                        if(keyParts.length) {
+                          var indexOfPassword = keyParts[keyParts.length-1].indexOf('password_');
+                          if(indexOfPassword !== -1) {
+                            passwordField = true;
+                          }
+                        }
+
                         var $tdAttributeKey = $('<td/>').html(attributes[j].name);
-                        var $tdAttributeVal = $('<td/>').html(obj[keys[i]]);
+                        if(passwordField) {
+                            var $tdAttributeVal = $('<td/>').html("*****");
+                        } else {
+                            var $tdAttributeVal = $('<td/>').html(obj[keys[i]]);
+                        }
                         $tr.append($tdAttributeKey).append($tdAttributeVal);
                         $tbody.append($tr);
                     }
