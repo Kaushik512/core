@@ -932,7 +932,7 @@ var Chef = function(settings) {
         });
     }
 
-    this.createDataBagItem = function(req,dataBagItem,callback) {
+    this.createDataBagItem = function(req, dataBagItem, callback) {
         initializeChefClient(function(err, chefClient) {
             if (err) {
                 callback(err, null);
@@ -941,26 +941,28 @@ var Chef = function(settings) {
             var dataBagName = req.params.dataBagName;
             var isEncrypt = req.body.isEncrypt;
             var inFilePath = req.files.keyFile.path;
-            fs.readFile(inFilePath,function(err,fileData){
-                if(err){
-                    
-                }
-            });
-            var dataBagData = {
+
+            logger.debug("isEncrypt>>>>>> ", isEncrypt);
+            if (isEncrypt) {
+                fs.readFile(inFilePath, function(err, fileData) {
+                    if (err) {
+                        logger.debug("No file.");
+                        callback(err, null);
+                        return;
+                    }
+                    //});
+                    /*var dataBagData = {
                 dataBagName: dataBagName,
                 dataBagItemId: dataBagItem.id,
                 encryptionKey: '/home/gobinda/openssl/secret_key',
                 isEncrypted: isEncrypt
-            };
-            
-            logger.debug("isEncrypt>>>>>> ",isEncrypt);
-            if(isEncrypt){
-                DataBagModel.saveDataBag(dataBagData, function(err, aDataBag) {
+            };*/
+                    /*DataBagModel.saveDataBag(dataBagData, function(err, aDataBag) {
                     if(err){
                         logger.debug("Failed to save data bag.");
                         callback(err,null);
                         return;
-                    }
+                    }*/
                     var options = {
                         cwd: settings.userChefRepoLocation + '/.chef',
                         onError: function(err) {
@@ -971,33 +973,38 @@ var Chef = function(settings) {
                         }
                     };
                     var targetDir = currentDirectory + "/../config/catdata/catalyst/temp/dbItem.json";
-                    logger.debug("Current dir: ", targetDir);
-                    fs.writeFile(targetDir, JSON.stringify(dataBagItem), function(err) {
+                    var keyFileLocation = settings.userChefRepoLocation + '/.chef/secret-key.pem';
+                    fs.writeFile(keyFileLocation, fileData, function(err) {
                         if (err) {
-                            logger.debug("File creation failed : ", err);
+                            logger.debug("Key File creation failed : ", err);
                             callback(err, null);
                             return;
                         }
-                        logger.debug("File Created....");
-                        var createDBItem = 'knife data bag from file ' + dataBagName + " " + targetDir + ' --secret ' + '/home/gobinda/openssl/secret_key';
-                        var procDBItem = exec(createDBItem, options, function(err, stdOut, stdErr) {
+                        logger.debug("Current dir: ", targetDir);
+                        fs.writeFile(targetDir, JSON.stringify(dataBagItem), function(err) {
                             if (err) {
-                                logger.debug('Failed in procDBItem', err);
+                                logger.debug("File creation failed : ", err);
+                                callback(err, null);
                                 return;
                             }
-                            fs.unlink(targetDir);
-                            logger.debug("File deleted successfully..");
-                            callback(null, dataBagItem);
-                            return;
+                            logger.debug("File Created....");
+                            var createDBItem = 'knife data bag from file ' + dataBagName + " " + targetDir + ' --secret ' + keyFileLocation;
+                            var procDBItem = exec(createDBItem, options, function(err, stdOut, stdErr) {
+                                if (err) {
+                                    logger.debug('Failed in procDBItem', err);
+                                    return;
+                                }
+                                fs.unlink(targetDir);
+                                logger.debug("File deleted successfully..");
+                                callback(null, dataBagItem);
+                                return;
+                            });
                         });
-                        /*var argList =[];
-                var proc = new Process(createDBItem, argList, options);
-                proc.start();*/
                     });
                 });
 
-            }else{
-                chefClient.post('/data/'+dataBagName, dataBagItem, function(err, chefRes, chefResBody) {
+            } else {
+                chefClient.post('/data/' + dataBagName, dataBagItem, function(err, chefRes, chefResBody) {
                     if (err) {
                         callback(err, null);
                         return;
@@ -1006,7 +1013,7 @@ var Chef = function(settings) {
                     if (chefRes.statusCode === 201) {
                         callback(null, chefResBody);
                         return;
-                    }else if(chefRes.statusCode === 409){
+                    } else if (chefRes.statusCode === 409) {
                         callback(null, chefRes.statusCode);
                         return;
                     } else {
@@ -1058,9 +1065,6 @@ var Chef = function(settings) {
                         callback(null, dataBagItem);
                         return;
                     });
-                    /*var argList =[];
-                var proc = new Process(createDBItem, argList, options);
-                proc.start();*/
                 });
 
             } else {
@@ -1143,7 +1147,7 @@ var Chef = function(settings) {
                 callback(err, null);
                 return;
             }
-            DataBagModel.getDataBagEncryptionInfo(dataBagName, itemId, function(err, aDataBag) {
+            /*DataBagModel.getDataBagEncryptionInfo(dataBagName, itemId, function(err, aDataBag) {
                 if (err) {
                     logger.debug("Error to find data bag from mongo.");
                 }
@@ -1171,7 +1175,7 @@ var Chef = function(settings) {
                         return;
                     });
 
-                } else {
+                } else {*/
                     chefClient.get('/data/' + dataBagName + '/' + itemId, function(err, chefRes, chefResBody) {
                         if (err) {
                             callback(err, null);
@@ -1192,8 +1196,8 @@ var Chef = function(settings) {
                         }
 
                     });
-                }
-            });
+                /*}
+            });*/
 
         });
     }
