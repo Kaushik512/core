@@ -103,7 +103,7 @@
         
              
                     <div class="col-lg-6 col-md-6">
-                        <label for="category">Environment Name:<span style="color:red">*</span><span class="chefenvnamerequired hidden" style="color:red">&nbsp;Required</span>
+                        <label for="category">Environment Name:<span style="color:red">*</span>
                         </label>
                         
                            <input type="text" id="chefenvname" name="chefenvname" class=" form-control" tabindex='1'>
@@ -114,15 +114,15 @@
                         <div class="btn-group pull-right">
                         <i id="envcreatespinner" class="fa-li fa fa-spinner fa-spin hidden" style="margin-top:9px"></i>
                         <span id="chefenvcreatemsg" style="color:red"></span>
-                         <button type="button" class="btn btn-default btn-primary createchefenvbtn" onclick="createchefenv();" style="margin-right:11px;">
+                         <button class="btn btn-default btn-primary createchefenvbtn" style="margin-right:11px;">
                           <i class="fa fa-save fa-1x" ></i>&nbsp;Add</button>
-                        <a type="button" class="btn btn-primary" type="submit" data-dismiss="modal">
+                        <a class="btn btn-primary" data-dismiss="modal">
                           <i class="fa fa-undo fa-1x"></i>&nbsp;Cancel</a>
                         </div>
                     </div>
                 
       
-      </div>
+      
       </form>
     </div>
   </div>
@@ -135,52 +135,56 @@ $(document).ready(function() {
     //isUserTypeSuperAdmin();
 });
 
-function isUserTypeSuperAdmin(){
-    $.get('/d4dMasters/loggedInUser',function(data){
-      if(!data.isSuperAdmin){
-      $('#orgname').attr('disabled','disabled').select2();
-      }
+function isUserTypeSuperAdmin() {
+    $.get('/d4dMasters/loggedInUser', function(data) {
+        if (!data.isSuperAdmin) {
+            $('#orgname').attr('disabled', 'disabled').select2();
+        }
     });
-  }
-function preprocess(){
-    $('#createenvinchefform')[0].reset();
-    if(typeof $('#configname').find('option:selected').attr('rowid') == 'undefined'){
-        bootbox.alert('Select a Chef Server before adding an environments.');
-        return(false);
-    }
-    else
-        return(true);
 }
-function createchefenv(){
-   var reqBodyEnv = {};
-   var chefid =  $('#configname').find('option:selected').attr('rowid');
-   var $crbtn = $('#createenvinchefform').find('#createchefenvbtn')
-   $crbtn.attr('disabled','disabled');
-   var $form = $('#createenvinchefform');
-   reqBodyEnv.name= $form.find('#chefenvname').val();
-   if(!reqBodyEnv.name){
+
+function preprocess() {
+    $('#createenvinchefform')[0].reset();
+    if (typeof $('#configname').find('option:selected').attr('rowid') == 'undefined') {
+        bootbox.alert('Select a Chef Server before adding an environments.');
+        return (false);
+    } else
+        return (true);
+}
+$('#createenvinchefform').submit(function(e) {
+    var reqBodyEnv = {};
+    var chefid = $('#configname').find('option:selected').attr('rowid');
+    var $crbtn = $('#createenvinchefform').find('#createchefenvbtn')
+    $crbtn.attr('disabled', 'disabled');
+    var $form = $('#createenvinchefform');
+    reqBodyEnv.name = $form.find('#chefenvname').val();
+    if (!reqBodyEnv.name) {
         alert('Please Enter Environment Name');
         return false;
-   }
-   $('#envcreatespinner').removeClass('hidden');
-   //alert('in createchefenvbtn');
-   if(typeof chefid != 'undefined'){
-   $.post('../chef/environments/create/' + chefid,{envName:$('#chefenvname').val()},function(envname){
-            if(envname){
-            $crbtn.removeAttr('disabled');
-            $('#envcreatespinner').addClass('hidden');
-            $('#configname').change();
-            $('#myModalCreateChefEnv').modal('hide');
-            }
-            else{
+    }
+    $('#envcreatespinner').removeClass('hidden');
+    //alert('in createchefenvbtn');
+    if (typeof chefid != 'undefined') {
+        $.post('../chef/environments/create/' + chefid, {
+            envName: $('#chefenvname').val()
+        }, function(envname) {
+            if (envname) {
+                $crbtn.removeAttr('disabled');
+                $('#envcreatespinner').addClass('hidden');
+                $('#configname').change();
+                $('#myModalCreateChefEnv').modal('hide');
+                $('#environmentname').empty();
+            } else {
                 $('#chefenvcreatemsg').html('Could not complete.' + envname);
                 $crbtn.removeAttr('disabled');
                 $('#envcreatespinner').addClass('hidden');
                 $('#myModalCreateChefEnv').modal('hide');
             }
-   });
-   }
-}
+        });
+    }
+    return false;
+});
+
 function loadChefEnvs(chefID) {
     $('#myForm1').find('button').attr('disabled', 'disabled');
     $.get('../chef/servers/' + chefID + '/environments', function(envList) { //getting the list of env
@@ -400,9 +404,9 @@ function readform_todelete(formName) {
 }
 
 $.fn.getType = function() {
-    if($(this).length){
-    return this[0].tagName == "INPUT" ? this[0].type.toLowerCase() : this[0].tagName.toLowerCase();
-    }else{
+    if ($(this).length) {
+        return this[0].tagName == "INPUT" ? this[0].type.toLowerCase() : this[0].tagName.toLowerCase();
+    } else {
         return "undefined";
     }
 }
@@ -583,8 +587,7 @@ $("#id-input-file-2").change(function() {
 
 });
 
-inLineReady();
-</script>
+inLineReady(); < /script>
 <script>
 $(document).ready(function() {
     $("#environmentname").focus();
@@ -592,12 +595,12 @@ $(document).ready(function() {
         $(this).validate();
 
         if ($(this).valid) {
-            /*alert('valid form submitted'); // for demo*/
-            if (!saveform('3')) return false;
-        } else {
-            alert('invalid valid form submitted'); // for demo
-        }
-        return false; // for demo
-    });
+            / * alert('valid form submitted'); // for demo*/
+if (!saveform('3')) return false;
+} else {
+    alert('invalid valid form submitted'); // for demo
+}
+return false; // for demo
+});
 });
 </script>

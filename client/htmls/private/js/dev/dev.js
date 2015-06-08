@@ -1444,7 +1444,7 @@
                                                               $parent.find('.instance-state').removeClass().addClass('instance-state').addClass(cssClassed.textClass).html(data.instanceState);
                                                               $('.instancestatusindicator[data-instanceId="' + instanceId + '"]').removeClass().addClass('instancestatusindicator').addClass(cssClassed.tableViewStatusClass);
                                                               $parent.find('.instance-details-id strong').html(data.instanceIP).attr('instanceip', data.instanceIP);
-                                                              $parent.find('.instance-bootstrap-ActionRDP a').addClass('rdpIcon').attr('href', '/instances/rdp/' + data.instanceIP + '/3389');
+                                                              $parent.find('.instance-bootstrap-ActionRDP a').attr('href', '/instances/rdp/' + data.instanceIP + '/3389');
                                                               $('tr[data-instanceId="' + instanceId + '"] td.instanceIPCol').html(data.instanceIP);
                                                               if (data.appUrls && data.appUrls.length) {
                                                                   for (var k = 0; k < data.appUrls.length; k++) {
@@ -2471,7 +2471,9 @@
                                                       }, {
                                                           "bSortable": false
                                                       },
-                                                      null, {
+                                                      null,{
+                                                          "bSortable": false
+                                                      }, {
                                                           "bSortable": false
                                                       }
                                                   ]
@@ -2484,13 +2486,13 @@
                                                   "pagingType": "full_numbers",
                                                   "aoColumns": [
                                                       null, {
-                                                          "bSortable": false
+                                                          "bSortable": true
                                                       }, {
-                                                          "bSortable": false
+                                                          "bSortable": true
                                                       }, {
-                                                          "bSortable": false
+                                                          "bSortable": true
                                                       }, {
-                                                          "bSortable": false
+                                                          "bSortable": true
                                                       }, {
                                                           "bSortable": false
                                                       }
@@ -2515,7 +2517,14 @@
 
                                                   var instances = $outputArea.data('instances');
                                                   for (var i = 0; i < instances.length; i++) {
-                                                      var $liHeader = $('<li><a href="#tab_' + instances[i]._id + '" data-toggle="tab" data-taskInstanceId="' + instances[i]._id + '">' + instances[i].chef.chefNodeName + '</a></li>');
+                                                      var nodeName = instances[i].chef.chefNodeName;
+                                                      if (instances[i].instanceIP) {
+                                                          var nodeName = instances[i].instanceIP;
+                                                      }
+                                                      if (instances[i].name) {
+                                                          nodeName = instances[i].name;
+                                                      }
+                                                      var $liHeader = $('<li><a href="#tab_' + instances[i]._id + '" data-toggle="tab" data-taskInstanceId="' + instances[i]._id + '">' + nodeName + '</a></li>');
                                                       if (i === 4) {
                                                           var $liMoreHeader = $('<li class="dropdown dropdownlog"><a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">More... <b class="caret"></b></a><ul class="dropdown-menu"></ul></li>');
 
@@ -2743,8 +2752,19 @@
                                                           var $tdTimeEnded = $('<td></td>').append(dateEnded);
                                                           $trHistoryRow.append($tdTimeEnded);
 
-                                                          var $tdStatus = $('<td></td>').append(taskHistories[i].status);
-                                                          $trHistoryRow.append($tdStatus);
+                                                          /*var $tdStatus = $('<td></td>').append(taskHistories[i].status);
+                                                          $trHistoryRow.append($tdStatus);*/
+                                                          if (taskHistories[i].status === "success") {
+                                                              var $tdBuildStatus = $('<td></td>').append('<img rel="tooltip" data-placement="top" title="Success" src="img/indicator_started.png"/>');
+                                                              $trHistoryRow.append($tdBuildStatus);
+                                                          } else if (taskHistories[i].status === "failed") {
+                                                              var $tdBuildStatusFailure = $('<td></td>').append('<img rel="tooltip" data-placement="top" title="Failed" src="img/indicator_stopped.png"/>');
+                                                              $trHistoryRow.append($tdBuildStatusFailure);
+                                                          } else {
+                                                              var $tdBuildStatusRunning = $('<td></td>').append('<img rel="tooltip" data-placement="top" title="Running" src="img/indicator_unknown.png"/>');
+                                                              $trHistoryRow.append($tdBuildStatusRunning);
+                                                          }
+
 
                                                           var $tdMessage = $('<td style="width:42%"></td>');
                                                           $trHistoryRow.append($tdMessage);
