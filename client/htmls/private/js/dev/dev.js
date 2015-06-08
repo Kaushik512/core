@@ -2466,7 +2466,9 @@
                                                       }, {
                                                           "bSortable": false
                                                       },
-                                                      null, {
+                                                      null,{
+                                                          "bSortable": false
+                                                      }, {
                                                           "bSortable": false
                                                       },null
                                                   ]
@@ -2510,7 +2512,14 @@
 
                                                   var instances = $outputArea.data('instances');
                                                   for (var i = 0; i < instances.length; i++) {
-                                                      var $liHeader = $('<li><a href="#tab_' + instances[i]._id + '" data-toggle="tab" data-taskInstanceId="' + instances[i]._id + '">' + instances[i].chef.chefNodeName + '</a></li>');
+                                                      var nodeName = instances[i].chef.chefNodeName;
+                                                      if (instances[i].instanceIP) {
+                                                          var nodeName = instances[i].instanceIP;
+                                                      }
+                                                      if (instances[i].name) {
+                                                          nodeName = instances[i].name;
+                                                      }
+                                                      var $liHeader = $('<li><a href="#tab_' + instances[i]._id + '" data-toggle="tab" data-taskInstanceId="' + instances[i]._id + '">' + nodeName + '</a></li>');
                                                       if (i === 4) {
                                                           var $liMoreHeader = $('<li class="dropdown dropdownlog"><a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">More... <b class="caret"></b></a><ul class="dropdown-menu"></ul></li>');
 
@@ -2739,8 +2748,9 @@
                                                           var $tdTimeEnded = $('<td></td>').append(dateEnded);
                                                           $trHistoryRow.append($tdTimeEnded);
 
-                                                          //var $tdStatus = $('<td></td>').append(taskHistories[i].status);
-                                                          //$trHistoryRow.append($tdStatus);
+
+                                                          /*var $tdStatus = $('<td></td>').append(taskHistories[i].status);
+                                                          $trHistoryRow.append($tdStatus);*/
                                                           if (taskHistories[i].status === "success") {
                                                               var $tdBuildStatus = $('<td></td>').append('<img rel="tooltip" data-placement="top" title="Success" src="img/indicator_started.png"/>');
                                                               $trHistoryRow.append($tdBuildStatus);

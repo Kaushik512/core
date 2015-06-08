@@ -978,27 +978,27 @@
 </style>
 
 <script type="text/javascript">
-var urlParams ={};
-(window.onpopstate = function () {
-  var url = window.location.href;
-  var indexOfQues = url.lastIndexOf("?");
-  if(indexOfQues!=-1) {
-  var sub =  url.substring(indexOfQues+1);
-  console.log(sub);
-  var params = sub.split('&')
-  for(var i=0;i<params.length;i++) {
-    var paramParts = params[i].split('=');
-    urlParams[paramParts[0]] = paramParts[1];
-  }
- }
-     
+var urlParams = {};
+(window.onpopstate = function() {
+    var url = window.location.href;
+    var indexOfQues = url.lastIndexOf("?");
+    if (indexOfQues != -1) {
+        var sub = url.substring(indexOfQues + 1);
+        console.log(sub);
+        var params = sub.split('&')
+        for (var i = 0; i < params.length; i++) {
+            var paramParts = params[i].split('=');
+            urlParams[paramParts[0]] = paramParts[1];
+        }
+    }
+
 })();
 
- 
+
 
 
 function populateJsonData(instanceId) {
-  $('.paraHeightModal').hide();
+    $('.paraHeightModal').hide();
     $.ajax({
         type: "GET",
         url: "/instances/" + urlParams.id + "/inspect",
@@ -1015,118 +1015,119 @@ function populateJsonData(instanceId) {
             $('#paragraphs').append(temp);
         },
         failure: function(data) {
-          bootbox.alert(data.responseText);
-          $('.loadingContainerimageInspectCSS').hide();
-          $('.paraHeightModal').hide();
+            bootbox.alert(data.responseText);
+            $('.loadingContainerimageInspectCSS').hide();
+            $('.paraHeightModal').hide();
         },
-        error: function(jqxhr){
-          bootbox.alert(jqxhr.responseText);
-          $('.loadingContainerimageInspectCSS').hide();
-          $('.paraHeightModal').hide();
+        error: function(jqxhr) {
+            bootbox.alert(jqxhr.responseText);
+            $('.loadingContainerimageInspectCSS').hide();
+            $('.paraHeightModal').hide();
         }
     });
 }
 $('.inspectBtn').click(populateJsonData);
-$('.inspectBtn').click(function(){
-  $('.loadingContainerimageInspectCSS').show();
-  $('div').find('#paragraphs').empty();
+$('.inspectBtn').click(function() {
+    $('.loadingContainerimageInspectCSS').show();
+    $('div').find('#paragraphs').empty();
 });
 
 function disableSSHBtn(instanceId) {
-  var $cardViewInstanceId = $(".domain-roles-caption[data-instanceId='"+instanceId+"']");
-  $cardViewInstanceId.find('.instance-bootstrap-ActionSSH a').addClass('isStopedInstance').removeClass('sshIcon').addClass('hidden');
+    var $cardViewInstanceId = $(".domain-roles-caption[data-instanceId='" + instanceId + "']");
+    $cardViewInstanceId.find('.instance-bootstrap-ActionSSH a').addClass('isStopedInstance').removeClass('sshIcon').addClass('hidden');
 
 }
 
 
 
 
-function enableInstanceActionStartBtn(instanceId){
-  var $cardViewInstanceId = $(".domain-roles-caption[data-instanceId='"+instanceId+"']");
-  var osType = $cardViewInstanceId.attr('data-osType');
- 
-  $cardViewInstanceId.find('.instance-bootstrap-ActionChefRun a').removeClass('isStopedInstance').removeClass('actionbuttonChefClientRundisable').addClass('chefClientRunlistImageCP');
-  
-  if (osType === 'linux') {
-      $cardViewInstanceId.find('.instance-bootstrap-ActionSSH a').removeClass('isStopedInstance').removeClass('sshIcondisable').addClass('sshShellBtn');
-  }
-  else{
-    $cardViewInstanceId.find('.instance-bootstrap-ActionRDP a').removeClass('isStopedInstance').removeClass('rdpIcondisable').addClass('rdpIcon');
-  }
-  
-  $cardViewInstanceId.find('.instance-bootstrap-ActionShutdown a').removeClass('isStopedInstance').removeClass('actionbuttonShutdowndisable').addClass('actionbuttonShutdown');
-  $cardViewInstanceId.find('.instance-bootstrap-ActionStart a').addClass('isStopedInstance').removeClass('actionbuttonStart').addClass('actionbuttonStartdisable');
-}
-function enableInstanceActionStopBtn(instanceId){
-  var $cardViewInstanceId = $(".domain-roles-caption[data-instanceId='"+instanceId+"']");
+function enableInstanceActionStartBtn(instanceId) {
+    var $cardViewInstanceId = $(".domain-roles-caption[data-instanceId='" + instanceId + "']");
+    var osType = $cardViewInstanceId.attr('data-osType');
 
-  $cardViewInstanceId.find('.instance-bootstrap-ActionChefRun a').addClass('isStopedInstance').removeClass('chefClientRunlistImageCP').addClass('actionbuttonChefClientRundisable');
-  $cardViewInstanceId.find('.instance-bootstrap-ActionSSH a').addClass('isStopedInstance').removeClass('sshShellBtn').addClass('sshIcondisable');
-  //rdp
-   $cardViewInstanceId.find('.instance-bootstrap-ActionRDP a').addClass('isStopedInstance').removeClass('rdpIcon').addClass('rdpIcondisable');
-  $cardViewInstanceId.find('.instance-bootstrap-ActionShutdown a').addClass('isStopedInstance').removeClass('actionbuttonShutdown').addClass('actionbuttonShutdowndisable');
-  $cardViewInstanceId.find('.instance-bootstrap-ActionStart a').removeClass('isStopedInstance').removeClass('actionbuttonStartdisable').addClass('actionbuttonStart');
-}
-function disableInstanceActionBtns(instanceId){
-  var $cardViewInstanceId = $(".domain-roles-caption[data-instanceId='"+instanceId+"']");
+    $cardViewInstanceId.find('.instance-bootstrap-ActionChefRun a').removeClass('isStopedInstance').removeClass('actionbuttonChefClientRundisable').addClass('chefClientRunlistImageCP');
 
-  $cardViewInstanceId.find('.instance-bootstrap-ActionChefRun a').addClass('isStopedInstance').removeClass('chefClientRunlistImageCP').addClass('actionbuttonChefClientRundisable');
-  $cardViewInstanceId.find('.instance-bootstrap-ActionSSH a').addClass('isStopedInstance').removeClass('sshShellBtn').addClass('sshIcondisable');
-  //rdp
-   $cardViewInstanceId.find('.instance-bootstrap-ActionRDP a').addClass('isStopedInstance').removeClass('rdpIcon').addClass('rdpIcondisable');
-  $cardViewInstanceId.find('.instance-bootstrap-ActionShutdown a').addClass('isStopedInstance').removeClass('actionbuttonShutdown').addClass('actionbuttonShutdowndisable');
-  $cardViewInstanceId.find('.instance-bootstrap-ActionStart a').addClass('isStopedInstance').removeClass('actionbuttonStart').addClass('actionbuttonStartdisable');
+    if (osType === 'linux') {
+        $cardViewInstanceId.find('.instance-bootstrap-ActionSSH a').removeClass('isStopedInstance').removeClass('sshIcondisable').addClass('sshShellBtn');
+    } else {
+        $cardViewInstanceId.find('.instance-bootstrap-ActionRDP a').removeClass('isStopedInstance').removeClass('rdpIcondisable').addClass('rdpIcon');
+    }
+
+    $cardViewInstanceId.find('.instance-bootstrap-ActionShutdown a').removeClass('isStopedInstance').removeClass('actionbuttonShutdowndisable').addClass('actionbuttonShutdown');
+    $cardViewInstanceId.find('.instance-bootstrap-ActionStart a').addClass('isStopedInstance').removeClass('actionbuttonStart').addClass('actionbuttonStartdisable');
 }
-function disableInstanceStartStopActionBtns(instanceId){
-  var $cardViewInstanceId = $(".domain-roles-caption[data-instanceId='"+instanceId+"']");
-  var osType = $cardViewInstanceId.attr('data-osType');
-  
-  $cardViewInstanceId.find('.instance-bootstrap-ActionChefRun a').removeClass('isStopedInstance').removeClass('actionbuttonChefClientRundisable').addClass('chefClientRunlistImageCP');
-  
-  if(osType === 'linux') {
-    $cardViewInstanceId.find('.instance-bootstrap-ActionSSH a').removeClass('isStopedInstance').removeClass('sshIcondisable').addClass('sshShellBtn');
-  }
-  else{
-    $cardViewInstanceId.find('.instance-bootstrap-ActionRDP a').removeClass('isStopedInstance').removeClass('rdpIcondisable').addClass('rdpIcon');
-  }
-  
-  $cardViewInstanceId.find('.instance-bootstrap-ActionShutdown a').addClass('isStopedInstance').removeClass('actionbuttonShutdown').addClass('actionbuttonShutdowndisable');
-  $cardViewInstanceId.find('.instance-bootstrap-ActionStart a').addClass('isStopedInstance').removeClass('actionbuttonStart').addClass('actionbuttonStartdisable');
+
+function enableInstanceActionStopBtn(instanceId) {
+    var $cardViewInstanceId = $(".domain-roles-caption[data-instanceId='" + instanceId + "']");
+
+    $cardViewInstanceId.find('.instance-bootstrap-ActionChefRun a').addClass('isStopedInstance').removeClass('chefClientRunlistImageCP').addClass('actionbuttonChefClientRundisable');
+    $cardViewInstanceId.find('.instance-bootstrap-ActionSSH a').addClass('isStopedInstance').removeClass('sshShellBtn').addClass('sshIcondisable');
+    //rdp
+    $cardViewInstanceId.find('.instance-bootstrap-ActionRDP a').addClass('isStopedInstance').removeClass('rdpIcon').addClass('rdpIcondisable');
+    $cardViewInstanceId.find('.instance-bootstrap-ActionShutdown a').addClass('isStopedInstance').removeClass('actionbuttonShutdown').addClass('actionbuttonShutdowndisable');
+    $cardViewInstanceId.find('.instance-bootstrap-ActionStart a').removeClass('isStopedInstance').removeClass('actionbuttonStartdisable').addClass('actionbuttonStart');
+}
+
+function disableInstanceActionBtns(instanceId) {
+    var $cardViewInstanceId = $(".domain-roles-caption[data-instanceId='" + instanceId + "']");
+
+    $cardViewInstanceId.find('.instance-bootstrap-ActionChefRun a').addClass('isStopedInstance').removeClass('chefClientRunlistImageCP').addClass('actionbuttonChefClientRundisable');
+    $cardViewInstanceId.find('.instance-bootstrap-ActionSSH a').addClass('isStopedInstance').removeClass('sshShellBtn').addClass('sshIcondisable');
+    //rdp
+    $cardViewInstanceId.find('.instance-bootstrap-ActionRDP a').addClass('isStopedInstance').removeClass('rdpIcon').addClass('rdpIcondisable');
+    $cardViewInstanceId.find('.instance-bootstrap-ActionShutdown a').addClass('isStopedInstance').removeClass('actionbuttonShutdown').addClass('actionbuttonShutdowndisable');
+    $cardViewInstanceId.find('.instance-bootstrap-ActionStart a').addClass('isStopedInstance').removeClass('actionbuttonStart').addClass('actionbuttonStartdisable');
+}
+
+function disableInstanceStartStopActionBtns(instanceId) {
+    var $cardViewInstanceId = $(".domain-roles-caption[data-instanceId='" + instanceId + "']");
+    var osType = $cardViewInstanceId.attr('data-osType');
+
+    $cardViewInstanceId.find('.instance-bootstrap-ActionChefRun a').removeClass('isStopedInstance').removeClass('actionbuttonChefClientRundisable').addClass('chefClientRunlistImageCP');
+
+    if (osType === 'linux') {
+        $cardViewInstanceId.find('.instance-bootstrap-ActionSSH a').removeClass('isStopedInstance').removeClass('sshIcondisable').addClass('sshShellBtn');
+    } else {
+        $cardViewInstanceId.find('.instance-bootstrap-ActionRDP a').removeClass('isStopedInstance').removeClass('rdpIcondisable').addClass('rdpIcon');
+    }
+
+    $cardViewInstanceId.find('.instance-bootstrap-ActionShutdown a').addClass('isStopedInstance').removeClass('actionbuttonShutdown').addClass('actionbuttonShutdowndisable');
+    $cardViewInstanceId.find('.instance-bootstrap-ActionStart a').addClass('isStopedInstance').removeClass('actionbuttonStart').addClass('actionbuttonStartdisable');
 }
 
 var logTimeout;
 var stateTimeout;
-$.get('../instances/'+urlParams.id,function(data){
+$.get('../instances/' + urlParams.id, function(data) {
     //populateJsonData(data._id);
-   //setting tree and drawing breadcrumb
-   //alert(data.projectId)
-   var $selectedOrg = $('.orgsList').find('[data-org="'+urlParams.org+'"]');
-   // alert($selectedOrg);
+    //setting tree and drawing breadcrumb
+    //alert(data.projectId)
+    var $selectedOrg = $('.orgsList').find('[data-org="' + urlParams.org + '"]');
+    // alert($selectedOrg);
 
-   var orgid = $selectedOrg.click().attr('data-id');
-   //alert(orgid);
-   if(orgid) {
-    console.log('orgid ==>',orgid);
-    // var $li = $('.'+orgid).find('li[data-envName="'+data.envId+'"]').addClass('active');
-    // $li.parents('li').addClass('active open');
-    // $li.parents('ul').css({'display':'block'});
-    // drawBreadCrumb();
-   } 
-   
-   console.log(data);
-   
+    var orgid = $selectedOrg.click().attr('data-id');
+    //alert(orgid);
+    if (orgid) {
+        console.log('orgid ==>', orgid);
+        // var $li = $('.'+orgid).find('li[data-envName="'+data.envId+'"]').addClass('active');
+        // $li.parents('li').addClass('active open');
+        // $li.parents('ul').css({'display':'block'});
+        // drawBreadCrumb();
+    }
+
+    console.log(data);
+
 
     //fetching services list
     //alert(data.chef.serverId);
     $.get('/d4dMasters/19/chefserverid/' + data.chef.serverId, function(services) {
         $.get('/d4dMasters/19/commandtype/Service%20Command', function(servicesCmd) {
-            
+
             servicesCmd = JSON.parse(servicesCmd);
             services = JSON.parse(services);
-            for(var k=0;k<servicesCmd.length;k++) {
-              if(servicesCmd[k].chefserverid !==data.chef.serverId ) {
-                services.push(servicesCmd[k]);
-              }
+            for (var k = 0; k < servicesCmd.length; k++) {
+                if (servicesCmd[k].chefserverid !== data.chef.serverId) {
+                    services.push(servicesCmd[k]);
+                }
             }
             //alert('Out json :' + JSON.stringify(services)+ services.length);
             var $serviceList = $('#serviceList');
@@ -1183,240 +1184,242 @@ $.get('../instances/'+urlParams.id,function(data){
     }
 
     // setting up action logs
-    $.get('/instances/'+urlParams.id+'/actionLogs',function(actionLogs){
-      addActionLogsToTable(actionLogs);
+    $.get('/instances/' + urlParams.id + '/actionLogs', function(actionLogs) {
+        addActionLogsToTable(actionLogs);
     });
-    
-    var getOS=function(data){
-                        var basePath='img/osIcons/',imgPath,title='';
-                        console.log(data.hardware.os+' :: OS ::'+data.hardware.platform.toLowerCase())
-                        switch(data.hardware.platform.toLowerCase()){
-                            case "window 2008":
-                            imgPath='windows.png';
-                            break;
-                            case "centos":
-                            imgPath='centos.png';
-                            break;
-                            case "ubuntu":
-                            imgPath='ubuntu.png';
-                            break;
-                            default:
-                            imgPath='unknown.png';
-                        }
-                        title=data.hardware.platform;
-                        if(imgPath==="unknown.png"){
-                            if(data.hardware.os.toLowerCase()==="linux"){
-                                imgPath="linux.png";
-                                title=data.hardware.os;
 
-                            }else if(data.hardware.os.toLowerCase().indexOf('window')>-1){
-                                imgPath="windows.png";
-                                title=data.hardware.os;
+    var getOS = function(data) {
+            var basePath = 'img/osIcons/',
+                imgPath, title = '';
+            console.log(data.hardware.os + ' :: OS ::' + data.hardware.platform.toLowerCase())
+            switch (data.hardware.platform.toLowerCase()) {
+                case "window 2008":
+                    imgPath = 'windows.png';
+                    break;
+                case "centos":
+                    imgPath = 'centos.png';
+                    break;
+                case "ubuntu":
+                    imgPath = 'ubuntu.png';
+                    break;
+                default:
+                    imgPath = 'unknown.png';
+            }
+            title = data.hardware.platform;
+            if (imgPath === "unknown.png") {
+                if (data.hardware.os.toLowerCase() === "linux") {
+                    imgPath = "linux.png";
+                    title = data.hardware.os;
 
-                            }
+                } else if (data.hardware.os.toLowerCase().indexOf('window') > -1) {
+                    imgPath = "windows.png";
+                    title = data.hardware.os;
 
-                        }
-                        return '<span class="card_os" style="float:right;"><img src="'+basePath+imgPath +'" height="25" width="25" data-placement="top" data-original-title="'+ title.capitalizeFirstLetter() +'" rel="tooltip"/></span>'
-                    },
-                    getStartStopToggler=function(data){
-                      var title=data.instanceState=="running" ?"Stop" :data.instanceState=="stopped"?"Start":"";
-                        return '<div class="startstoptoggler '+data.instanceState+'" instanceID="'+data._id+'" style="float:left;margin-left:14px;margin-top:4px;" data-placement="top" data-original-title="'+title+'" rel="tooltip"></div>'
-                    },
-                    startAndStopToggler=function (e){
-        if($(this).hasClass('unknown') || $(this).hasClass('pending') || $(this).hasClass('stopping')){
-            console.log('pending or Unknow State');
-            return false;
+                }
+
+            }
+            return '<span class="card_os" style="float:right;"><img src="' + basePath + imgPath + '" height="25" width="25" data-placement="top" data-original-title="' + title.capitalizeFirstLetter() + '" rel="tooltip"/></span>'
+        },
+        getStartStopToggler = function(data) {
+            var title = data.instanceState == "running" ? "Stop" : data.instanceState == "stopped" ? "Start" : "";
+            return '<div class="startstoptoggler ' + data.instanceState + '" instanceID="' + data._id + '" style="float:left;margin-left:14px;margin-top:4px;" data-placement="top" data-original-title="' + title + '" rel="tooltip"></div>'
+        },
+        startAndStopToggler = function(e) {
+            if ($(this).hasClass('unknown') || $(this).hasClass('pending') || $(this).hasClass('stopping')) {
+                console.log('pending or Unknow State');
+                return false;
+            } else if ($(this).hasClass('running')) {
+                console.log('running State');
+                var hasStopPermissionCP = false;
+                if (haspermission("instancestop", "execute")) {
+                    hasStopPermissionCP = true;
+                }
+                if (!hasStopPermissionCP) {
+                    bootbox.alert('User has No Permission to Stop');
+                    return;
+                }
+                //debugger;
+                $(this).parent().find('.actionbuttonShutdown').trigger('click');
+
+            } else if ($(this).hasClass('stopped')) {
+                console.log('Stopped State');
+                var hasStartPermissionCP = false;
+                if (haspermission("instancestart", "execute")) {
+                    hasStartPermissionCP = true;
+                }
+                if (!hasStartPermissionCP) {
+                    bootbox.alert('User has No Permission to Start');
+                    return;
+                }
+                //debugger;
+                $(this).parent().find('.actionbuttonStart').trigger('click');
+            }
         }
-        else if($(this).hasClass('running')){
-            console.log('running State');
-            var hasStopPermissionCP=false;
-                if(haspermission("instancestop","execute")){
-                  hasStopPermissionCP=true;
-                }
-                if(!hasStopPermissionCP){
-                  bootbox.alert('User has No Permission to Stop');
-                  return;
-                }
-            //debugger;
-            $(this).parent().find('.actionbuttonShutdown').trigger('click');
 
-        }else if($(this).hasClass('stopped')){
-            console.log('Stopped State');
-            var hasStartPermissionCP=false;
-                if(haspermission("instancestart","execute")){
-                  hasStartPermissionCP=true;
-                }
-                if(!hasStartPermissionCP){
-                  bootbox.alert('User has No Permission to Start');
-                  return;
-                }
-            //debugger;
-            $(this).parent().find('.actionbuttonStart').trigger('click');
-        }
-}
 
-  
-   var $domainRolesCaption = $('.domain-roles-caption').attr('data-instanceId',data._id).attr('data-chefServerId',data.chef.serverId).attr('data-osType',data.hardware.os).attr('data-instanceIP',data.instanceIP).data('runlist',data.runlist).data('orgId',data.orgId).data('serviceList',data.serviceIds);
-    
-   var $divHeadingCP = $domainRolesCaption.find('.domain-roles-heading').empty();
+    var $domainRolesCaption = $('.domain-roles-caption').attr('data-instanceId', data._id).attr('data-chefServerId', data.chef.serverId).attr('data-osType', data.hardware.os).attr('data-instanceIP', data.instanceIP).data('runlist', data.runlist).data('orgId', data.orgId).data('serviceList', data.serviceIds);
 
-   if(data.blueprintData.iconPath==undefined){
-      data.blueprintData.iconPath='img/logo.png'
-   }
-   var $spanheadingLeftCP = $('<span></span>').addClass('domain-roles-icon').html('<img src="'+data.blueprintData.iconPath+'" style="width:27px;margin-right:5px;margin-top:-10px;"/>').attr('contenteditable', 'false');
+    var $divHeadingCP = $domainRolesCaption.find('.domain-roles-heading').empty();
 
-   var name = data.name;
-    if(!name) {
-      name = data.blueprintData.blueprintName;
+    if (data.blueprintData.iconPath == undefined) {
+        data.blueprintData.iconPath = 'img/logo.png'
+    }
+    var $spanheadingLeftCP = $('<span></span>').addClass('domain-roles-icon').html('<img src="' + data.blueprintData.iconPath + '" style="width:27px;margin-right:5px;margin-top:-10px;"/>').attr('contenteditable', 'false');
+
+    var name = data.name;
+    if (!name) {
+        name = data.blueprintData.blueprintName;
     }
     var $spanheadingMiddleCP = $('<span class="cardHeadingTextoverflow" rel="tooltip" data-placement="top" data-original-title="' + name + '">' + name + '</span>' + '<a href="#modalforInstanceEdit" data-backdrop="false" data-toggle="modal" class="glyphicon glyphicon-pencil editInstanceNameBtn" style="cursor:pointer;"></a></span>');
     var $spanheadingRightCP = $('<span></span>').css({
-      'float':'left','margin-top':'4px','margin-left':'8px'
+        'float': 'left',
+        'margin-top': '4px',
+        'margin-left': '8px'
     }).append($('<a href="javascript:void(0)" data-instanceId="' + data._id + '"></a>').addClass('moreInfo').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'MoreInfo'));
 
     $divHeadingCP.append($spanheadingLeftCP);
     $divHeadingCP.append($spanheadingMiddleCP);
     $divHeadingCP.append($(getOS(data)));
 
-$('.instanceActionBtnCtr').append([$(getStartStopToggler(data)),$spanheadingRightCP]);
+    $('.instanceActionBtnCtr').append([$(getStartStopToggler(data)), $spanheadingRightCP]);
     //$divHeadingCP.append($spanheadingRightCP);
     //$domainRolesCaption.append($divHeadingCP);
 
-$('.startstoptoggler').click(startAndStopToggler);
-   // .append('<img src="img/templateicons/'+data.blueprintData.templateId+'.png" style="height:20px;width:20px;margin-right:5px;">').append(data.blueprintData.blueprintName);
-  $domainRolesCaption.find('.instance-details-ip strong').html(data.instanceIP);
-  $domainRolesCaption.find('.instance-state').html(data.instanceState);
-  if(data.instanceState == 'running'){
-           $domainRolesCaption.find('.componentlistContainer').addClass('started');
-           $domainRolesCaption.find('.instance-state').html(data.instanceState).addClass('instance-state-text-started');
-  } else if(data.instanceState == 'terminated'){
-            $domainRolesCaption.find('.componentlistContainer').addClass('stopped');          
-            $domainRolesCaption.find('.instance-state').html(data.instanceState).addClass('instance-state-text-stopped');
-  } else if(data.instanceState == 'stopped'){
-            $domainRolesCaption.find('.componentlistContainer').addClass('stopped');
-            $domainRolesCaption.find('.instance-state').html(data.instanceState).addClass('instance-state-text-stopped');          
-  } else {
-            $domainRolesCaption.find('.componentlistContainer').addClass('pending');
-            $domainRolesCaption.find('.instance-state').html(data.instanceState).addClass('instance-state-text-pending');            
-  }
-
-  if(data.hardware.os !== 'linux') {
-    disableSSHBtn(data._id);
-  }
-  if(data.hardware.os === 'windows'){
-    var instanceId =  $('.domain-roles-caption').attr('data-instanceId');
-    var $cardViewInstanceId = $(".domain-roles-caption[data-instanceId='"+instanceId+"']");
-    $cardViewInstanceId.find('.instance-bootstrap-ActionRDP a').replaceWith($('<a class="rdpIcon" href="/instances/rdp/' + data.instanceIP + '/3389"></a>').attr('data-actionType', 'RDP').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'RDP'));
-  }
-  if(data.hardware.os==='linux'){
-    var instanceId =  $('.domain-roles-caption').attr('data-instanceId');
-    var $cardViewInstanceId = $(".domain-roles-caption[data-instanceId='"+instanceId+"']");
-    $cardViewInstanceId.find('.instance-bootstrap-ActionRDP a').addClass('isStopedInstance').removeClass('rdpIcon').addClass('hidden');
-  }
-
-
-
-
-  if (data.instanceState == 'stopped'){
-    enableInstanceActionStopBtn(data._id);
-  }
-  if (data.instanceState == 'running'){
-    enableInstanceActionStartBtn(data._id);
-  }
-  if (data.instanceState == 'pending' || data.instanceState == 'stopping'){
-    disableInstanceActionBtns(data._id);
-  }
-  if (data.instanceState == 'unknown'){
-    disableInstanceStartStopActionBtns(data._id);
-  }
-  if(!data.providerId){
-    disableInstanceStartStopActionBtns(data._id, data.hardware.os);
-    $('.domain-roles').find('[data-instanceid="'+data._id+'"]').find('.startstoptoggler').removeClass('running').addClass('shutdown');
-  }
-
-  if (data.docker != null) {
-      //docker image out of circle.
-    if(data.docker.dockerEngineStatus != '' && data.docker.dockerEngineStatus != null)
-    {
-      var $componentList = $('.instance-bootstrap-list');
-      var $dockerStatus = $('<img class="dockerIMG" whatever="2" alt="Docker" src="img/galleryIcons/Docker.png">');
-      $componentList.append($dockerStatus);
+    $('.startstoptoggler').click(startAndStopToggler);
+    // .append('<img src="img/templateicons/'+data.blueprintData.templateId+'.png" style="height:20px;width:20px;margin-right:5px;">').append(data.blueprintData.blueprintName);
+    $domainRolesCaption.find('.instance-details-ip strong').html(data.instanceIP);
+    $domainRolesCaption.find('.instance-state').html(data.instanceState);
+    if (data.instanceState == 'running') {
+        $domainRolesCaption.find('.componentlistContainer').addClass('started');
+        $domainRolesCaption.find('.instance-state').html(data.instanceState).addClass('instance-state-text-started');
+    } else if (data.instanceState == 'terminated') {
+        $domainRolesCaption.find('.componentlistContainer').addClass('stopped');
+        $domainRolesCaption.find('.instance-state').html(data.instanceState).addClass('instance-state-text-stopped');
+    } else if (data.instanceState == 'stopped') {
+        $domainRolesCaption.find('.componentlistContainer').addClass('stopped');
+        $domainRolesCaption.find('.instance-state').html(data.instanceState).addClass('instance-state-text-stopped');
+    } else {
+        $domainRolesCaption.find('.componentlistContainer').addClass('pending');
+        $domainRolesCaption.find('.instance-state').html(data.instanceState).addClass('instance-state-text-pending');
     }
-  }
 
-  
-  var $backRunlistContainer = $('.cardBackRunlistContaner');
-  for (var j = 0; j < data.runlist.length; j++) {
+    if (data.hardware.os !== 'linux') {
+        disableSSHBtn(data._id);
+    }
+    if (data.hardware.os === 'windows') {
+        var instanceId = $('.domain-roles-caption').attr('data-instanceId');
+        var $cardViewInstanceId = $(".domain-roles-caption[data-instanceId='" + instanceId + "']");
+        $cardViewInstanceId.find('.instance-bootstrap-ActionRDP a').replaceWith($('<a class="rdpIcon" href="/instances/rdp/' + data.instanceIP + '/3389"></a>').attr('data-actionType', 'RDP').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'RDP'));
+    }
+    if (data.hardware.os === 'linux') {
+        var instanceId = $('.domain-roles-caption').attr('data-instanceId');
+        var $cardViewInstanceId = $(".domain-roles-caption[data-instanceId='" + instanceId + "']");
+        $cardViewInstanceId.find('.instance-bootstrap-ActionRDP a').addClass('isStopedInstance').removeClass('rdpIcon').addClass('hidden');
+    }
+
+
+
+
+    if (data.instanceState == 'stopped') {
+        enableInstanceActionStopBtn(data._id);
+    }
+    if (data.instanceState == 'running') {
+        enableInstanceActionStartBtn(data._id);
+    }
+    if (data.instanceState == 'pending' || data.instanceState == 'stopping') {
+        disableInstanceActionBtns(data._id);
+    }
+    if (data.instanceState == 'unknown') {
+        disableInstanceStartStopActionBtns(data._id);
+    }
+    if (!data.providerId) {
+        disableInstanceStartStopActionBtns(data._id, data.hardware.os);
+        $('.domain-roles').find('[data-instanceid="' + data._id + '"]').find('.startstoptoggler').removeClass('running').addClass('shutdown');
+    }
+
+    if (data.docker != null) {
+        //docker image out of circle.
+        if (data.docker.dockerEngineStatus != '' && data.docker.dockerEngineStatus != null) {
+            var $componentList = $('.instance-bootstrap-list');
+            var $dockerStatus = $('<img class="dockerIMG" whatever="2" alt="Docker" src="img/galleryIcons/Docker.png">');
+            $componentList.append($dockerStatus);
+        }
+    }
+
+
+    var $backRunlistContainer = $('.cardBackRunlistContaner');
+    for (var j = 0; j < data.runlist.length; j++) {
         var $divComponentItem;
-      
-            $divComponentItem = $('<span title="' + data.runlist[j] + '" style="margin-top:8px;overflow:hidden;text-overflow:ellipsis;width:130px;color:#3a87ad;font-size:13px;"></span>').addClass('instance-details-item').append(data.runlist[j]);
+
+        $divComponentItem = $('<span title="' + data.runlist[j] + '" style="margin-top:8px;overflow:hidden;text-overflow:ellipsis;width:130px;color:#3a87ad;font-size:13px;"></span>').addClass('instance-details-item').append(data.runlist[j]);
         $backRunlistContainer.append($divComponentItem);
     }
-  pageSetUp();
+    pageSetUp();
 
-  
-  
-  var displayLog = function(e){
-         var instanceId =  $('.domain-roles-caption').attr('data-instanceId');
-         
-         if(logTimeout) {
-                clearTimeout(logTimeout);
-          }
-         var $logTabBtn = $('#controlPanelLogTab');
-         $('.logsArea').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
-         $logTabBtn.trigger('click');
-         var lastTimestamp;
-         function pollLogs(timestamp,delay,clearData) {
-         var url = '../instances/'+instanceId+'/logs';
-         if(timestamp) {
-            url = url + '?timestamp='+timestamp;
-         }
-         
-         logTimeout = setTimeout(function(){
-         $.get(url,function(data){
-            var $modalBody = $('.logsArea');
-            if(clearData) {
-               $modalBody.empty();
+
+
+    var displayLog = function(e) {
+        var instanceId = $('.domain-roles-caption').attr('data-instanceId');
+
+        if (logTimeout) {
+            clearTimeout(logTimeout);
+        }
+        var $logTabBtn = $('#controlPanelLogTab');
+        $('.logsArea').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
+        $logTabBtn.trigger('click');
+        var lastTimestamp;
+
+        function pollLogs(timestamp, delay, clearData) {
+            var url = '../instances/' + instanceId + '/logs';
+            if (timestamp) {
+                url = url + '?timestamp=' + timestamp;
             }
-            var $table = $('<table></table>');
 
-                for (var i = 0; i < data.length; i++) {
-                    var $rowDiv = $('<tr class="row rowSpacing"></tr>');
-                    var timeString = new Date().setTime(data[i].timestamp);
-                    var date = new Date(timeString).toLocaleString(); //converts to human readable strings
-                    /*$rowDiv.append($('<div class="col-lg-4 col-sm-4"></div>').append('<div>' + date + '</div>'));*/
+            logTimeout = setTimeout(function() {
+                $.get(url, function(data) {
+                    var $modalBody = $('.logsArea');
+                    if (clearData) {
+                        $modalBody.empty();
+                    }
+                    var $table = $('<table></table>');
 
-                    if (data[i].err) {
-                        $rowDiv.append($('<td class="col-lg-12 col-sm-12" style="color:red;"></td>').append('<span class="textLogs">'+ date + '</span>' + '&nbsp;&nbsp;&nbsp;' + '<span>' +data[i].log + '</span>'));
-                    } else {
-                        $rowDiv.append($('<td class="col-lg-12 col-sm-12" style="color:DarkBlue;"></td>').append('<span class="textLogs">'+ date + '</span>' + '&nbsp;&nbsp;&nbsp;'+ '<span>' + data[i].log + '</span>'));
+                    for (var i = 0; i < data.length; i++) {
+                        var $rowDiv = $('<tr class="row rowSpacing"></tr>');
+                        var timeString = new Date().setTime(data[i].timestamp);
+                        var date = new Date(timeString).toLocaleString(); //converts to human readable strings
+                        /*$rowDiv.append($('<div class="col-lg-4 col-sm-4"></div>').append('<div>' + date + '</div>'));*/
+
+                        if (data[i].err) {
+                            $rowDiv.append($('<td class="col-lg-12 col-sm-12" style="color:red;"></td>').append('<span class="textLogs">' + date + '</span>' + '&nbsp;&nbsp;&nbsp;' + '<span>' + data[i].log + '</span>'));
+                        } else {
+                            $rowDiv.append($('<td class="col-lg-12 col-sm-12" style="color:DarkBlue;"></td>').append('<span class="textLogs">' + date + '</span>' + '&nbsp;&nbsp;&nbsp;' + '<span>' + data[i].log + '</span>'));
+                        }
+
+                        $table.append($rowDiv);
+
+
                     }
 
-                    $table.append($rowDiv);
+
+                    if (data.length) {
+                        lastTimestamp = data[data.length - 1].timestamp;
+                        console.log(lastTimestamp);
+                        $modalBody.append($table);
+                        $modalBody.scrollTop($modalBody[0].scrollHeight + 100);
+                    }
 
 
-                }
-           
-           
-            if(data.length) {
-                 lastTimestamp = data[data.length -1].timestamp;
-                 console.log(lastTimestamp);
-                 $modalBody.append($table);
-                 $modalBody.scrollTop($modalBody[0].scrollHeight+100);
-            }
-           
-            
-            
-            if($logTabBtn.parent('li').hasClass('active')) {
-                   console.log('polling again');
-                   pollLogs(lastTimestamp,1000,false);
-            } else {
-                 console.log('not polling again');
-            }            
-          });
-         },delay);
+
+                    if ($logTabBtn.parent('li').hasClass('active')) {
+                        console.log('polling again');
+                        pollLogs(lastTimestamp, 1000, false);
+                    } else {
+                        console.log('not polling again');
+                    }
+                });
+            }, delay);
         }
-        pollLogs(lastTimestamp,0,true);
+        pollLogs(lastTimestamp, 0, true);
         // $.get('../instances/' + data.id, function(data) {
         //     //$('#tabInstanceStatus').hide();
         //     addInstanceToDaddInstanceToDOMOMaddInstanceToDOM(data);
@@ -1424,25 +1427,26 @@ $('.startstoptoggler').click(startAndStopToggler);
     };
 
     $('#instanceEditNew').submit(function(e) {
-     var reqBodyEdit = {};
+        var reqBodyEdit = {};
 
-     var $form = $('#instanceEditNew');
-     reqBodyEdit.name = $form.find('#instanceEditName').val();
-     var instanceId = $form.find('#instanceIDHiddenInput').val();
-     var $selectedRow = $('#tableinstanceview').find('tr.rowcustomselected');
+        var $form = $('#instanceEditNew');
+        reqBodyEdit.name = $form.find('#instanceEditName').val();
+        var instanceId = $form.find('#instanceIDHiddenInput').val();
+        var $selectedRow = $('#tableinstanceview').find('tr.rowcustomselected');
 
-     blueprintName = $selectedRow.attr('data-blueprintName');
-     $.post('/instances/' + instanceId + '/updateName', reqBodyEdit, function(data) {
+        blueprintName = $selectedRow.attr('data-blueprintName');
+        $.post('/instances/' + instanceId + '/updateName', reqBodyEdit, function(data) {
 
-         $('.domain-roles-caption[data-instanceId="' + instanceId + '"]').find('.cardHeadingTextoverflow').html(reqBodyEdit.name);
-         $('.domain-roles-caption[data-instanceId="' + instanceId + '"]').find('.cardHeadingTextoverflow').attr('rel', 'tooltip').attr('data-original-title', reqBodyEdit.name);
-         $('tr[data-instanceId="' + instanceId + '"] td.instanceBlueprintName').html(reqBodyEdit.name);
-         $('#modalforInstanceEdit').modal('hide');
-     });
+            $('.domain-roles-caption[data-instanceId="' + instanceId + '"]').find('.cardHeadingTextoverflow').html(reqBodyEdit.name);
+            $('.domain-roles-caption[data-instanceId="' + instanceId + '"]').find('.cardHeadingTextoverflow').attr('rel', 'tooltip').attr('data-original-title', reqBodyEdit.name);
+            $('tr[data-instanceId="' + instanceId + '"] td.instanceBlueprintName').html(reqBodyEdit.name);
+            $('#modalforInstanceEdit').modal('hide');
+        });
 
-     return false;
+        return false;
 
- });
+    });
+
     function editInstanceNameHandler(e) {
         $('#instanceEditNew').trigger("reset");
         $('#instanceIDHiddenInput').val(data._id);
@@ -1451,17 +1455,17 @@ $('.startstoptoggler').click(startAndStopToggler);
     }
     $('.domain-role-thumbnail').find('.editInstanceNameBtn').click(editInstanceNameHandler);
 
-  $('.moreInfo').click(displayLog);
-  $('#controlPanelLogTab').on('shown.bs.tab',displayLog);
-  
+    $('.moreInfo').click(displayLog);
+    $('#controlPanelLogTab').on('shown.bs.tab', displayLog);
+
     $('#modalSSHShellContainer').on('hide.bs.modal', function(e) {
         $('#modalSSHShellContainer').find('#ssh-terminateBtn').click();
         $('#modalSSHShellContainer').find('.modal-body').empty();
     });
     $('.rdpIcondisable').click(function() {
-      if($(this).hasClass('isStopedInstance')){
-        return false;
-      }
+        if ($(this).hasClass('isStopedInstance')) {
+            return false;
+        }
     });
     $('.sshShellBtn').click(function() {
         if ($(this).hasClass('isStopedInstance')) {
@@ -1511,58 +1515,59 @@ $('.startstoptoggler').click(startAndStopToggler);
 
     });
 
-  function getCssClassFromStatus(status) {
+    function getCssClassFromStatus(status) {
         var cssClasses = {
 
         };
-        switch(status) {
-            
+        switch (status) {
+
             case 'running':
-            cssClasses.ringClass = 'started';
-             cssClasses.textClass = 'instance-state-text-started';
-             cssClasses.tableViewStatusClass ="started";
-            break;
+                cssClasses.ringClass = 'started';
+                cssClasses.textClass = 'instance-state-text-started';
+                cssClasses.tableViewStatusClass = "started";
+                break;
 
             case 'stopped':
-             cssClasses.ringClass = 'stopped';
-             cssClasses.textClass = 'instance-state-text-stopped';
-             cssClasses.tableViewStatusClass ="stopped";
-            break;
+                cssClasses.ringClass = 'stopped';
+                cssClasses.textClass = 'instance-state-text-stopped';
+                cssClasses.tableViewStatusClass = "stopped";
+                break;
 
             case 'terminated':
-             cssClasses.ringClass = 'stopped';
-             cssClasses.textClass = 'instance-state-text-stopped';
-             cssClasses.tableViewStatusClass ="stopped";
-            break;
+                cssClasses.ringClass = 'stopped';
+                cssClasses.textClass = 'instance-state-text-stopped';
+                cssClasses.tableViewStatusClass = "stopped";
+                break;
 
-            default :
-             cssClasses.ringClass = 'pending';
-             cssClasses.textClass = 'instance-state-text-pending';
-             cssClasses.tableViewStatusClass ="pending";
+            default:
+                cssClasses.ringClass = 'pending';
+                cssClasses.textClass = 'instance-state-text-pending';
+                cssClasses.tableViewStatusClass = "pending";
 
         }
 
         return cssClasses;
-     } 
- 
+    }
 
 
-  $('.instanceActionBtn').click(function(e){
 
-   
-        if($(this).hasClass('isStopedInstance')){
-          return false;
+    $('.instanceActionBtn').click(function(e) {
+
+
+        if ($(this).hasClass('isStopedInstance')) {
+            return false;
         }
         var $this = $(this);
         var $parent = $('.domain-roles-caption');
         var instanceId = $parent.attr('data-instanceId');
         var type = $this.attr('data-actionType');
-        var url = '../instances/'+instanceId+'/startInstance';
-        if(type==='stop') {
-            url = '../instances/'+instanceId+'/stopInstance'
+        var url = '../instances/' + instanceId + '/startInstance';
+        if (type === 'stop') {
+            url = '../instances/' + instanceId + '/stopInstance'
         }
+
         function makeRequest(url) {
-           $parent.find('.moreInfo').trigger('click');
+            $parent.find('.moreInfo').trigger('click');
             $.get(url, function(data) {
                 if (data.actionLogId) {
                     $.get('../instances/' + instanceId + '/actionLogs/' + data.actionLogId, function(actionLog) {
@@ -1584,8 +1589,8 @@ $('.startstoptoggler').click(startAndStopToggler);
                     stateTimeout = setTimeout(function() {
                         $.get('../instances/' + instanceId, function(data) {
                             if (data) {
-                                title=data.instanceState=="running" ?"Stop" :data.instanceState=="stopped"?"Start":"";
-                          $('[instanceID="'+data._id+'"]').removeClass('stopped running pending stopping unknown').addClass(data.instanceState).attr('data-original-title',title);   
+                                title = data.instanceState == "running" ? "Stop" : data.instanceState == "stopped" ? "Start" : "";
+                                $('[instanceID="' + data._id + '"]').removeClass('stopped running pending stopping unknown').addClass(data.instanceState).attr('data-original-title', title);
 
                                 if (data.instanceState == 'stopped') {
 
@@ -1597,12 +1602,12 @@ $('.startstoptoggler').click(startAndStopToggler);
                                 if (data.instanceState == 'pending' || data.instanceState == 'stopping') {
                                     disableInstanceActionBtns(data._id);
                                 }
-                                if (data.instanceState == 'unknown'){
-                                  disableInstanceStartStopActionBtns(data._id);
+                                if (data.instanceState == 'unknown') {
+                                    disableInstanceStartStopActionBtns(data._id);
                                 }
-                                if(!data.providerId){
+                                if (!data.providerId) {
                                     disableInstanceStartStopActionBtns(data._id, data.hardware.os);
-                                    $('.domain-roles').find('[data-instanceid="'+data._id+'"]').find('.startstoptoggler').removeClass('running').addClass('shutdown');
+                                    $('.domain-roles').find('[data-instanceid="' + data._id + '"]').find('.startstoptoggler').removeClass('running').addClass('shutdown');
                                 }
                                 if (data.instanceState === state) {
                                     pollInstanceState(state, 5000);
@@ -1611,15 +1616,15 @@ $('.startstoptoggler').click(startAndStopToggler);
                                     var cssClassed = getCssClassFromStatus(data.instanceState);
                                     $parent.find('.componentlistContainer').removeClass().addClass('componentlistContainer').addClass(cssClassed.ringClass);
                                     $parent.find('.instance-state').removeClass().addClass('instance-state').addClass(cssClassed.textClass).html(data.instanceState);
-                                    $parent.find('instance-bootstrap-ActionRDP a').attr('href','/instances/rdp/' + data.instanceIP + '/3389');
+                                    $parent.find('instance-bootstrap-ActionRDP a').attr('href', '/instances/rdp/' + data.instanceIP + '/3389');
                                     if (data.appUrls && data.appUrls.length) {
-                                             for (var k = 0; k < data.appUrls.length; k++) {
-                                                 var url = data.appUrls[k].url;
-                                                 url = url.replace('$host', data.instanceIP);
-                                                 $('.app-url[data-appUrlId="' + data.appUrls[k]._id + '"]').attr('href', url).attr('data-instanceIP',data.instanceIP);
-                                             }
-                                      }
-                                       window.instanceIPForAppLink =  data.instanceIP;
+                                        for (var k = 0; k < data.appUrls.length; k++) {
+                                            var url = data.appUrls[k].url;
+                                            url = url.replace('$host', data.instanceIP);
+                                            $('.app-url[data-appUrlId="' + data.appUrls[k]._id + '"]').attr('href', url).attr('data-instanceIP', data.instanceIP);
+                                        }
+                                    }
+                                    window.instanceIPForAppLink = data.instanceIP;
                                 }
                             }
                         })
@@ -1638,165 +1643,165 @@ $('.startstoptoggler').click(startAndStopToggler);
 
         }
 
-        if(type==='stop') {
-          bootbox.confirm("Stop Instance ?",function(result){
-            if(result) {
-               makeRequest(url);
-            } 
-          });
+        if (type === 'stop') {
+            bootbox.confirm("Stop Instance ?", function(result) {
+                if (result) {
+                    makeRequest(url);
+                }
+            });
         } else {
-          makeRequest(url);
+            makeRequest(url);
         }
-        
-       
 
-         
+
+
+
     });
 
-  
-    $('.instanceActionBtnUpdateRunlist').click(function(e){
-        if($(this).hasClass('isStopedInstance')){
-          return false;
+
+    $('.instanceActionBtnUpdateRunlist').click(function(e) {
+        if ($(this).hasClass('isStopedInstance')) {
+            return false;
         }
-        var hasChefRunPermissionCP= false;
-          if(haspermission("instancechefclientrun","execute")){
-            hasChefRunPermissionCP=true;
-          }
-          if(!hasChefRunPermissionCP){
+        var hasChefRunPermissionCP = false;
+        if (haspermission("instancechefclientrun", "execute")) {
+            hasChefRunPermissionCP = true;
+        }
+        if (!hasChefRunPermissionCP) {
             $('.btnUpdateInstanceRunlist').addClass('disabled');
-          }
+        }
         var $this = $(this);
-         var $parent = $('.domain-roles-caption');
-         var instanceId = $parent.attr('data-instanceId');
-         var chefServerId = $parent.attr('data-chefServerId');
-         var orgId = $parent.data('orgId');
-         var runlist = $parent.data('runlist');
-         console.log(orgId);
-         var readMode = false;
-         if(localStorage.getItem('userRole') === '[Consumer]') {
-          readMode = true;
-         }
-         var $ccrs = $chefCookbookRoleSelector(urlParams.org,null,runlist,readMode);
-         var $controlPanelChefRunModalContainer = $('#controlPanelChefRunModalContainer');
-         $controlPanelChefRunModalContainer.find('.modal-body').empty().append($ccrs);
-         $controlPanelChefRunModalContainer.find('.modal-body').data('$ccrs',$ccrs);
-         $controlPanelChefRunModalContainer.modal('show');
+        var $parent = $('.domain-roles-caption');
+        var instanceId = $parent.attr('data-instanceId');
+        var chefServerId = $parent.attr('data-chefServerId');
+        var orgId = $parent.data('orgId');
+        var runlist = $parent.data('runlist');
+        console.log(orgId);
+        var readMode = false;
+        if (localStorage.getItem('userRole') === '[Consumer]') {
+            readMode = true;
+        }
+        var $ccrs = $chefCookbookRoleSelector(urlParams.org, null, runlist, readMode);
+        var $controlPanelChefRunModalContainer = $('#controlPanelChefRunModalContainer');
+        $controlPanelChefRunModalContainer.find('.modal-body').empty().append($ccrs);
+        $controlPanelChefRunModalContainer.find('.modal-body').data('$ccrs', $ccrs);
+        $controlPanelChefRunModalContainer.modal('show');
 
     });
 
     $('.btnUpdateInstanceRunlist').click(function(e) {
-      if($(this).hasClass('isStopedInstance')){
-        return false;
-      }
-      bootbox.confirm("Update runlist?", function(result) {
-        if (!result) {
-            return;
+        if ($(this).hasClass('isStopedInstance')) {
+            return false;
         }
-        var $parent = $('.domain-roles-caption');
-        var instanceId = $parent.attr('data-instanceId');
-        $chefRunModalContainer = $('#controlPanelChefRunModalContainer');
-        var $ccrs = $chefRunModalContainer.find('.modal-body').data('$ccrs');
-         
-        var runlist = $ccrs.getSelectedRunlist();
-               
-        if(!runlist.length) {
-          bootbox.alert("Runlist is empty");
-          return;
-        }
-        console.log('runlist == ',runlist);
-
-        // $.post('../instances/' + instanceId + '/updateRunlist', {
-        //     runlist: runlist
-        // }, function(data) {
-        //     $chefRunModalContainer = $('#controlPanelChefRunModalContainer').modal('hide');
-        //     var $parent = $('.domain-roles-caption[data-instanceId="' + instanceId + '"]');
-        //     $parent.find('.moreInfo').trigger('click');
-        //     console.log(data);
-        // });
-        $.post('../instances/' + instanceId + '/updateRunlist', {
-            runlist: runlist
-        }, function(data) {
-
-            $chefRunModalContainer.modal('hide');
-            var $parent = $('.domain-roles-caption[data-instanceId="' + instanceId + '"]');
-            $parent.find('.instance-bootstrap-list-image').data('runlist', runlist);
-            var $backRunlistContainer = $parent.parents('.card').find('.cardBackRunlistContaner').empty();
-            console.log($backRunlistContainer.length);
-            console.log(runlist);
-            
-            for (var j = 0; j < runlist.length; j++) {
-               var $divComponentItem;
-      
-                $divComponentItem = $('<span title="' + runlist[j] + '" style="margin-top:8px;overflow:hidden;text-overflow:ellipsis;width:130px;color:#3a87ad"></span>').addClass('instance-details-item').append(runlist[j]);
-                $backRunlistContainer.append($divComponentItem);
+        bootbox.confirm("Update runlist?", function(result) {
+            if (!result) {
+                return;
             }
-            $('.runlistInfoContainer').empty().append(runlist.join());
+            var $parent = $('.domain-roles-caption');
+            var instanceId = $parent.attr('data-instanceId');
+            $chefRunModalContainer = $('#controlPanelChefRunModalContainer');
+            var $ccrs = $chefRunModalContainer.find('.modal-body').data('$ccrs');
 
-            //$parentTr.find('.instance-bootstrap-list-image').data('runlist', runlist
-            $parent.data('runlist',runlist);
-            $parent.find('.moreInfo').trigger('click');
-            console.log(data);
-            if (data.actionLogId) {
-                $.get('../instances/' + instanceId + '/actionLogs/' + data.actionLogId, function(actionLog) {
-                    addActionLogRow(actionLog);
-                });
+            var runlist = $ccrs.getSelectedRunlist();
+
+            if (!runlist.length) {
+                bootbox.alert("Runlist is empty");
+                return;
             }
-        }).fail(function(jxObj){
-            if (jxObj.responseJSON && jxObj.responseJSON.actionLogId) {
-              $.get('../instances/' + instanceId + '/actionLogs/' + jxObj.responseJSON.actionLogId, function(actionLog) {
-                addActionLogRow(actionLog);
-              });
-            }
+            console.log('runlist == ', runlist);
+
+            // $.post('../instances/' + instanceId + '/updateRunlist', {
+            //     runlist: runlist
+            // }, function(data) {
+            //     $chefRunModalContainer = $('#controlPanelChefRunModalContainer').modal('hide');
+            //     var $parent = $('.domain-roles-caption[data-instanceId="' + instanceId + '"]');
+            //     $parent.find('.moreInfo').trigger('click');
+            //     console.log(data);
+            // });
+            $.post('../instances/' + instanceId + '/updateRunlist', {
+                runlist: runlist
+            }, function(data) {
+
+                $chefRunModalContainer.modal('hide');
+                var $parent = $('.domain-roles-caption[data-instanceId="' + instanceId + '"]');
+                $parent.find('.instance-bootstrap-list-image').data('runlist', runlist);
+                var $backRunlistContainer = $parent.parents('.card').find('.cardBackRunlistContaner').empty();
+                console.log($backRunlistContainer.length);
+                console.log(runlist);
+
+                for (var j = 0; j < runlist.length; j++) {
+                    var $divComponentItem;
+
+                    $divComponentItem = $('<span title="' + runlist[j] + '" style="margin-top:8px;overflow:hidden;text-overflow:ellipsis;width:130px;color:#3a87ad"></span>').addClass('instance-details-item').append(runlist[j]);
+                    $backRunlistContainer.append($divComponentItem);
+                }
+                $('.runlistInfoContainer').empty().append(runlist.join());
+
+                //$parentTr.find('.instance-bootstrap-list-image').data('runlist', runlist
+                $parent.data('runlist', runlist);
+                $parent.find('.moreInfo').trigger('click');
+                console.log(data);
+                if (data.actionLogId) {
+                    $.get('../instances/' + instanceId + '/actionLogs/' + data.actionLogId, function(actionLog) {
+                        addActionLogRow(actionLog);
+                    });
+                }
+            }).fail(function(jxObj) {
+                if (jxObj.responseJSON && jxObj.responseJSON.actionLogId) {
+                    $.get('../instances/' + instanceId + '/actionLogs/' + jxObj.responseJSON.actionLogId, function(actionLog) {
+                        addActionLogRow(actionLog);
+                    });
+                }
+            });
+
         });
-
     });
-  });
 
 
 
 
-  //hardware
-  var $hrdwareTbody =  $('#collapseHardware').find('tbody');
-  $hrdwareTbody.empty();
-  var $tr = $('<tr style="line-height:2.3"></tr>');
-  $tr.append('<td scope="col" style="font-size:12px;">Machine</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> '+data.hardware.architecture+'</td>');
-  $hrdwareTbody.append($tr);
-  
-  $tr = $('<tr style="line-height:2.3"></tr>');
-  $tr.append('<td scope="col" style="font-size:12px;">Total Memory</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> '+data.hardware.memory.total+'</td>');
-  $hrdwareTbody.append($tr);
+    //hardware
+    var $hrdwareTbody = $('#collapseHardware').find('tbody');
+    $hrdwareTbody.empty();
+    var $tr = $('<tr style="line-height:2.3"></tr>');
+    $tr.append('<td scope="col" style="font-size:12px;">Machine</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + data.hardware.architecture + '</td>');
+    $hrdwareTbody.append($tr);
 
-  $tr = $('<tr style="line-height:2.3"></tr>');
-  $tr.append('<td scope="col" style="font-size:12px;">Free Memory</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> '+data.hardware.memory.free+'</td>');
-  $hrdwareTbody.append($tr);
-  
+    $tr = $('<tr style="line-height:2.3"></tr>');
+    $tr.append('<td scope="col" style="font-size:12px;">Total Memory</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + data.hardware.memory.total + '</td>');
+    $hrdwareTbody.append($tr);
 
-  //software
-  var $sfwareTbody =  $('#collapseSoftware').find('tbody');
-  $sfwareTbody.empty();
-  var $tr = $('<tr style="line-height:2.3"></tr>');
-  $tr.append('<td scope="col" style="font-size:12px;">OS</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> '+data.hardware.platform+'</td>');
-  $sfwareTbody.append($tr);
-  
-  $tr = $('<tr style="line-height:2.3"></tr>');
-  $tr.append('<td scope="col" style="font-size:12px;">Version</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> '+data.hardware.platformVersion+'</td>');
-  $sfwareTbody.append($tr);
+    $tr = $('<tr style="line-height:2.3"></tr>');
+    $tr.append('<td scope="col" style="font-size:12px;">Free Memory</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + data.hardware.memory.free + '</td>');
+    $hrdwareTbody.append($tr);
 
-  //consfigManagement
-   var $cfmwareTbody =  $('#collapseConfigmgmt').find('tbody');
-  $cfmwareTbody.empty();
-  var $tr = $('<tr style="line-height:2.3"></tr>');
-  $tr.append('<td scope="col" style="font-size:12px;">Environment</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> '+data.envId+'</td>');
-  // $cfmwareTbody.append($tr); //commented as we were receiving the id instead of the name : Vinod
-  
-  $tr = $('<tr style="line-height:2.3"></tr>');
-  $tr.append('<td scope="col" style="font-size:12px;">Chef Bootstrap</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> '+data.bootStrapStatus+'</td>');
-  $cfmwareTbody.append($tr);
 
-  $tr = $('<tr style="line-height:2.3"></tr>');
-  console.log('data --runlist',data.runlist.join());
-  $tr.append('<td scope="col" style="font-size:12px;">Runlist</td><td scope="col"> : </td><td scope="col" style="font-size:12px;" class="runlistInfoContainer" > '+data.runlist.join()+'</td>');
-  $cfmwareTbody.append($tr);
+    //software
+    var $sfwareTbody = $('#collapseSoftware').find('tbody');
+    $sfwareTbody.empty();
+    var $tr = $('<tr style="line-height:2.3"></tr>');
+    $tr.append('<td scope="col" style="font-size:12px;">OS</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + data.hardware.platform + '</td>');
+    $sfwareTbody.append($tr);
+
+    $tr = $('<tr style="line-height:2.3"></tr>');
+    $tr.append('<td scope="col" style="font-size:12px;">Version</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + data.hardware.platformVersion + '</td>');
+    $sfwareTbody.append($tr);
+
+    //consfigManagement
+    var $cfmwareTbody = $('#collapseConfigmgmt').find('tbody');
+    $cfmwareTbody.empty();
+    var $tr = $('<tr style="line-height:2.3"></tr>');
+    $tr.append('<td scope="col" style="font-size:12px;">Environment</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + data.envId + '</td>');
+    // $cfmwareTbody.append($tr); //commented as we were receiving the id instead of the name : Vinod
+
+    $tr = $('<tr style="line-height:2.3"></tr>');
+    $tr.append('<td scope="col" style="font-size:12px;">Chef Bootstrap</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + data.bootStrapStatus + '</td>');
+    $cfmwareTbody.append($tr);
+
+    $tr = $('<tr style="line-height:2.3"></tr>');
+    console.log('data --runlist', data.runlist.join());
+    $tr.append('<td scope="col" style="font-size:12px;">Runlist</td><td scope="col"> : </td><td scope="col" style="font-size:12px;" class="runlistInfoContainer" > ' + data.runlist.join() + '</td>');
+    $cfmwareTbody.append($tr);
 
     //$collapseTaskAreaTbody.empty();
     window.instanceIPForAppLink =  data.instanceIP;
@@ -1854,19 +1859,19 @@ $('.startstoptoggler').click(startAndStopToggler);
     }
     $('#addTaskBtn').click(function(e) {
         var $select = $('#taskList').empty();
-        var taskIds = []; 
-        if(data.taskIds && data.taskIds.length) {
-         taskIds = data.taskIds;
+        var taskIds = [];
+        if (data.taskIds && data.taskIds.length) {
+            taskIds = data.taskIds;
         }
-        $.get('/tasks?orgId='+data.orgId+'&bgId='+data.bgId+'&projectId='+data.projectId+'&envId='+data.envId,function(taskList){
-          for(var i=0;i<taskList.length;i++) {
-                var $option = $("<option></option>").val(taskList[i]._id).html(taskList[i].name).attr('data-taskName',taskList[i].name);
-               if(taskIds.indexOf(taskList[i]._id) !== -1) {
-                $option.attr('selected','selected');
-               }
+        $.get('/tasks?orgId=' + data.orgId + '&bgId=' + data.bgId + '&projectId=' + data.projectId + '&envId=' + data.envId, function(taskList) {
+            for (var i = 0; i < taskList.length; i++) {
+                var $option = $("<option></option>").val(taskList[i]._id).html(taskList[i].name).attr('data-taskName', taskList[i].name);
+                if (taskIds.indexOf(taskList[i]._id) !== -1) {
+                    $option.attr('selected', 'selected');
+                }
                 $select.append($option);
-          }
-          $('#instanceTaskModal').modal('show');
+            }
+            $('#instanceTaskModal').modal('show');
         });
     });
 
@@ -1914,112 +1919,111 @@ $('.startstoptoggler').click(startAndStopToggler);
 
 
 function getActionBtnClass(actionType) {
-  console.log(actionType)
-   switch(actionType) {
-    case 'start' : 
-      return {
-        bg : 'frontGreen',
-        icon:'fa-play',
-        actionType:'start'
-      }
-    case 'stop' : 
-      return {
-        bg : 'frontRed',
-        icon:'fa-power-off',
-        actionType:'stop'
-      }
-    case 'restart' : 
-      return {
-        bg : 'frontRestart',
-        icon:'fa-undo',
-         actionType:'restart'
-      }
-    case 'kill' : 
-      return {
-        bg : 'frontKill',
-        icon:'fa-times-circle',
-        actionType:'kill'
-      }
-    case 'status' : 
-      return {
-        bg : 'frontKill',
-        icon:'fa-bell-o',
-        actionType:'status'
-      }
-    default: 
-     return {
-     }
+    console.log(actionType)
+    switch (actionType) {
+        case 'start':
+            return {
+                bg: 'frontGreen',
+                icon: 'fa-play',
+                actionType: 'start'
+            }
+        case 'stop':
+            return {
+                bg: 'frontRed',
+                icon: 'fa-power-off',
+                actionType: 'stop'
+            }
+        case 'restart':
+            return {
+                bg: 'frontRestart',
+                icon: 'fa-undo',
+                actionType: 'restart'
+            }
+        case 'kill':
+            return {
+                bg: 'frontKill',
+                icon: 'fa-times-circle',
+                actionType: 'kill'
+            }
+        case 'status':
+            return {
+                bg: 'frontKill',
+                icon: 'fa-bell-o',
+                actionType: 'status'
+            }
+        default:
+            return {}
 
 
-   }
+    }
 }
 
-function getCommandActionHtml(serviceId,serviceData) {
-  var commandActions = serviceData.commandaction.split(',');
-  var html ='';
-  for(var i=0;i<commandActions.length;i++) {
-    var actionBtnClass = getActionBtnClass(commandActions[i]);
-    console.log(actionBtnClass);
-     html += '<div class="container1" style="display:inline-block"><div><div class="cardGreenRedYellowBlack ' + actionBtnClass.bg + '"><div><div class=""><a rel="tooltip" data-placement="top" data-original-title="'+commandActions[i]+'" data-action-type="' + actionBtnClass.actionType + '" href="javascript:void(0)"><i class="fa ' + actionBtnClass.icon + ' fa-1x txt-color-white"></i></a></div></div></div></div></div>';
+function getCommandActionHtml(serviceId, serviceData) {
+    var commandActions = serviceData.commandaction.split(',');
+    var html = '';
+    for (var i = 0; i < commandActions.length; i++) {
+        var actionBtnClass = getActionBtnClass(commandActions[i]);
+        console.log(actionBtnClass);
+        html += '<div class="container1" style="display:inline-block"><div><div class="cardGreenRedYellowBlack ' + actionBtnClass.bg + '"><div><div class=""><a rel="tooltip" data-placement="top" data-original-title="' + commandActions[i] + '" data-action-type="' + actionBtnClass.actionType + '" href="javascript:void(0)"><i class="fa ' + actionBtnClass.icon + ' fa-1x txt-color-white"></i></a></div></div></div></div></div>';
 
-  }
-  return html;
+    }
+    return html;
 
 }
 
-function getCookbookActionHtml(serviceId,serviceData) {
-  var html = '';
-  if(serviceData.servicestart && serviceData.servicestart !== 'none') {
-    var actionBtnClass = getActionBtnClass('start');
-    console.log(actionBtnClass);
-     html += '<div class="container1" style="display:inline-block"><div><div class="cardGreenRedYellowBlack ' + actionBtnClass.bg + '"><div><div class=""><a rel="tooltip" data-placement="top" data-original-title="start" data-action-type="' + actionBtnClass.actionType + '" href="javascript:void(0)"><i class="fa ' + actionBtnClass.icon + ' fa-1x txt-color-white"></i></a></div></div></div></div></div>';
-  }
-  if(serviceData.servicestop && serviceData.servicestop !== 'none') {
-    var actionBtnClass = getActionBtnClass('stop');
-    console.log(actionBtnClass);
-     html += '<div class="container1" style="display:inline-block"><div><div class="cardGreenRedYellowBlack ' + actionBtnClass.bg + '"><div><div class=""><a rel="tooltip" data-placement="top" data-original-title="stop" data-action-type="' + actionBtnClass.actionType + '" href="javascript:void(0)"><i class="fa ' + actionBtnClass.icon + ' fa-1x txt-color-white"></i></a></div></div></div></div></div>';
-  }
+function getCookbookActionHtml(serviceId, serviceData) {
+    var html = '';
+    if (serviceData.servicestart && serviceData.servicestart !== 'none') {
+        var actionBtnClass = getActionBtnClass('start');
+        console.log(actionBtnClass);
+        html += '<div class="container1" style="display:inline-block"><div><div class="cardGreenRedYellowBlack ' + actionBtnClass.bg + '"><div><div class=""><a rel="tooltip" data-placement="top" data-original-title="start" data-action-type="' + actionBtnClass.actionType + '" href="javascript:void(0)"><i class="fa ' + actionBtnClass.icon + ' fa-1x txt-color-white"></i></a></div></div></div></div></div>';
+    }
+    if (serviceData.servicestop && serviceData.servicestop !== 'none') {
+        var actionBtnClass = getActionBtnClass('stop');
+        console.log(actionBtnClass);
+        html += '<div class="container1" style="display:inline-block"><div><div class="cardGreenRedYellowBlack ' + actionBtnClass.bg + '"><div><div class=""><a rel="tooltip" data-placement="top" data-original-title="stop" data-action-type="' + actionBtnClass.actionType + '" href="javascript:void(0)"><i class="fa ' + actionBtnClass.icon + ' fa-1x txt-color-white"></i></a></div></div></div></div></div>';
+    }
 
-  if(serviceData.servicerestart && serviceData.servicerestart !== 'none') {
-    var actionBtnClass = getActionBtnClass('restart');
-    console.log(actionBtnClass);
-     html += '<div class="container1" style="display:inline-block"><div><div class="cardGreenRedYellowBlack ' + actionBtnClass.bg + '"><div><div class=""><a rel="tooltip" data-placement="top" data-original-title="restart" data-action-type="' + actionBtnClass.actionType + '" href="javascript:void(0)"><i class="fa ' + actionBtnClass.icon + ' fa-1x txt-color-white"></i></a></div></div></div></div></div>';
-  }
-  if(serviceData.servicekill && serviceData.servicekill !== 'none') {
-    var actionBtnClass = getActionBtnClass('kill');
-    console.log(actionBtnClass);
-     html += '<div class="container1" style="display:inline-block"><div><div class="cardGreenRedYellowBlack ' + actionBtnClass.bg + '"><div><div class=""><a rel="tooltip" data-placement="top" data-original-title="kill" data-action-type="' + actionBtnClass.actionType + '" href="javascript:void(0)"><i class="fa ' + actionBtnClass.icon + ' fa-1x txt-color-white"></i></a></div></div></div></div></div>';
-  }
-  if(serviceData.servicestatus && serviceData.servicestatus !== 'none') {
-    var actionBtnClass = getActionBtnClass('status');
-    console.log(actionBtnClass);
-     html += '<div class="container1" style="display:inline-block"><div><div class="cardGreenRedYellowBlack ' + actionBtnClass.bg + '"><div><div class=""><a rel="tooltip" data-placement="top" data-original-title="status" data-action-type="' + actionBtnClass.actionType + '" href="javascript:void(0)"><i class="fa ' + actionBtnClass.icon + ' fa-1x txt-color-white"></i></a></div></div></div></div></div>';
-  }
-  pageSetUp();
-  return html;
-  //pageSetUp();
+    if (serviceData.servicerestart && serviceData.servicerestart !== 'none') {
+        var actionBtnClass = getActionBtnClass('restart');
+        console.log(actionBtnClass);
+        html += '<div class="container1" style="display:inline-block"><div><div class="cardGreenRedYellowBlack ' + actionBtnClass.bg + '"><div><div class=""><a rel="tooltip" data-placement="top" data-original-title="restart" data-action-type="' + actionBtnClass.actionType + '" href="javascript:void(0)"><i class="fa ' + actionBtnClass.icon + ' fa-1x txt-color-white"></i></a></div></div></div></div></div>';
+    }
+    if (serviceData.servicekill && serviceData.servicekill !== 'none') {
+        var actionBtnClass = getActionBtnClass('kill');
+        console.log(actionBtnClass);
+        html += '<div class="container1" style="display:inline-block"><div><div class="cardGreenRedYellowBlack ' + actionBtnClass.bg + '"><div><div class=""><a rel="tooltip" data-placement="top" data-original-title="kill" data-action-type="' + actionBtnClass.actionType + '" href="javascript:void(0)"><i class="fa ' + actionBtnClass.icon + ' fa-1x txt-color-white"></i></a></div></div></div></div></div>';
+    }
+    if (serviceData.servicestatus && serviceData.servicestatus !== 'none') {
+        var actionBtnClass = getActionBtnClass('status');
+        console.log(actionBtnClass);
+        html += '<div class="container1" style="display:inline-block"><div><div class="cardGreenRedYellowBlack ' + actionBtnClass.bg + '"><div><div class=""><a rel="tooltip" data-placement="top" data-original-title="status" data-action-type="' + actionBtnClass.actionType + '" href="javascript:void(0)"><i class="fa ' + actionBtnClass.icon + ' fa-1x txt-color-white"></i></a></div></div></div></div></div>';
+    }
+    pageSetUp();
+    return html;
+    //pageSetUp();
 
 }
 
 var $serviceTableBody = $('.servicesTbody');
 
-function addActionToServiceDom(serviceId,serviceData,$tr) {
-    console.log("sd==",serviceData);
-    $td = $tr.find('td[data-serviceId='+serviceId+']');
+function addActionToServiceDom(serviceId, serviceData, $tr) {
+    console.log("sd==", serviceData);
+    $td = $tr.find('td[data-serviceId=' + serviceId + ']');
     var commandType = serviceData.commandtype;
-    if(commandType === 'Chef Cookbook/Recipe') {
-      var html =  getCookbookActionHtml(serviceId,serviceData);
+    if (commandType === 'Chef Cookbook/Recipe') {
+        var html = getCookbookActionHtml(serviceId, serviceData);
     } else {
-       var html =  getCommandActionHtml(serviceId,serviceData);
+        var html = getCommandActionHtml(serviceId, serviceData);
     }
-    
-    
+
+
     $td.append(html);
     $td.find('a').click(function(e) {
         var actionType = $(this).attr('data-action-type');
-        $.get('../instances/' + urlParams.id + '/services/' + serviceId +'/' + actionType, function(data) {
+        $.get('../instances/' + urlParams.id + '/services/' + serviceId + '/' + actionType, function(data) {
             var $parent = $('.domain-roles-caption[data-instanceId="' + urlParams.id + '"]');
-            console.log($parent.length,$parent.find('.moreInfo').length);
+            console.log($parent.length, $parent.find('.moreInfo').length);
             $parent.find('.moreInfo').trigger('click');
             if (data.actionLogId) {
                 $.get('../instances/' + urlParams.id + '/actionLogs/' + data.actionLogId, function(actionLog) {
@@ -2027,11 +2031,11 @@ function addActionToServiceDom(serviceId,serviceData,$tr) {
                 });
             }
 
-        }).fail(function(jxhr){
-            if(jxhr.responseJSON && jxhr.responseJSON.actionLogId) {
-              $.get('../instances/'+urlParams.id+'/actionLogs/'+jxhr.responseJSON.actionLogId,function(actionLog){
-                  addActionLogRow(actionLog);
-              });
+        }).fail(function(jxhr) {
+            if (jxhr.responseJSON && jxhr.responseJSON.actionLogId) {
+                $.get('../instances/' + urlParams.id + '/actionLogs/' + jxhr.responseJSON.actionLogId, function(actionLog) {
+                    addActionLogRow(actionLog);
+                });
             }
         });
     });
@@ -2039,78 +2043,79 @@ function addActionToServiceDom(serviceId,serviceData,$tr) {
 }
 
 function addServiceToDom(serviceData) {
-  var $tr = $('<tr></tr>').attr('data-serviceId',serviceData.rowid);
-  // $('.servicesTbody').append($tr);
-  var name = serviceData.servicename;
-  if(!name) {
-    name = serviceData.commandname;
-  }
-  var $tdName = $('<td></td>').append(name);
-  $tr.append($tdName);
-  $tr.append($('<td></td>').attr('data-serviceId',serviceData.rowid))
-  
-  addActionToServiceDom(serviceData.rowid,serviceData,$tr);
-  
+    var $tr = $('<tr></tr>').attr('data-serviceId', serviceData.rowid);
+    // $('.servicesTbody').append($tr);
+    var name = serviceData.servicename;
+    if (!name) {
+        name = serviceData.commandname;
+    }
+    var $tdName = $('<td></td>').append(name);
+    $tr.append($tdName);
+    $tr.append($('<td></td>').attr('data-serviceId', serviceData.rowid))
+
+    addActionToServiceDom(serviceData.rowid, serviceData, $tr);
+
     var $tdOption = $('<td></td>').append('<div class="btn-group tableactionWidth"><button class="btn btn-danger pull-left btn-sg tableactionbutton deleteServiceBtn" rel="tooltip" data-placement="top" data-original-title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></div>');
     $tdOption.find('.deleteServiceBtn').click(function(e) {
         $.ajax({
             url: '../instances/' + urlParams.id + '/services/' + serviceData.rowid,
             type: 'DELETE',
             success: function() {
-              console.log($tr);
-              var $modalServiceList = $('.serviceNameList');
-              var $option = $modalServiceList.find('option[value='+serviceData.rowid+']');
-               $servicesDatatable.row($tr).remove().draw( false );
-              //$tr.remove();
-              $option.remove();
-               var $serviceList = $('#serviceList');
-                var $input = $serviceList.find('input[value=' +serviceData.rowid + ']');
+                console.log($tr);
+                var $modalServiceList = $('.serviceNameList');
+                var $option = $modalServiceList.find('option[value=' + serviceData.rowid + ']');
+                $servicesDatatable.row($tr).remove().draw(false);
+                //$tr.remove();
+                $option.remove();
+                var $serviceList = $('#serviceList');
+                var $input = $serviceList.find('input[value=' + serviceData.rowid + ']');
                 if ($input.length) {
                     $input.get(0).checked = false;
                     $input.parents('tr').removeClass('hidden');
                 }
-                
+
             }
         });
     });
 
-  
 
-  $tr.append($tdOption);
 
-  $servicesDatatable.row.add($tr).draw(); 
+    $tr.append($tdOption);
+
+    $servicesDatatable.row.add($tr).draw();
 
 }
 
- var actionLogsPollTimeouts = []; 
-function pollActionLogCompleteStatus(instanceId,actionLogId,$td) {
-  $.get('../instances/'+instanceId+'/actionLogs/'+actionLogId,function(actionLog){
-      if(!actionLog.completed) {
-        var timeout = setTimeout(function(){
-          pollActionLogCompleteStatus(instanceId,actionLogId,$td);
-          var indexTimeout = actionLogsPollTimeouts.indexOf(timeout);
-          if(indexTimeout) {
-            actionLogsPollTimeouts.splice(indexTimeout,1);
-          }
-        },2000);
-        actionLogsPollTimeouts.push(timeout);
-      } else {
+var actionLogsPollTimeouts = [];
+
+function pollActionLogCompleteStatus(instanceId, actionLogId, $td) {
+    $.get('../instances/' + instanceId + '/actionLogs/' + actionLogId, function(actionLog) {
+        if (!actionLog.completed) {
+            var timeout = setTimeout(function() {
+                pollActionLogCompleteStatus(instanceId, actionLogId, $td);
+                var indexTimeout = actionLogsPollTimeouts.indexOf(timeout);
+                if (indexTimeout) {
+                    actionLogsPollTimeouts.splice(indexTimeout, 1);
+                }
+            }, 2000);
+            actionLogsPollTimeouts.push(timeout);
+        } else {
         //for failure
-        var status = '<img rel="tooltip" data-placement="top" title="Failed"  src="img/indicator_stopped.png"/>'
-        if (actionLog.success) {
-          //for success
-            status = '<img rel="tooltip" data-placement="top" title="Success" src="img/indicator_started.png"/>';
-        }
-        $td.html(status);
+            var status = '<img rel="tooltip" data-placement="top" title="Failed"  src="img/indicator_stopped.png"/>'
+            if (actionLog.success) {
+                //for success
+                status = '<img rel="tooltip" data-placement="top" title="Success" src="img/indicator_started.png"/>';
+            }
+            $td.html(status);
       }
-  });
+    });
 }
 
 function addActionLogRow(actionLog) {
     var $tr = $(document.createElement('tr'));
     var $tdName = $('<td></td>').append(actionLog.name);
     $tr.append($tdName);
-    
+
     var $tdStatus = $('<td></td>');
     //for failure
     var status = '<img rel="tooltip" data-placement="top" title="Failed" src="img/indicator_stopped.png"/>';
@@ -2119,11 +2124,11 @@ function addActionLogRow(actionLog) {
     if (!actionLog.completed) {
         status = '<img rel="tooltip" data-placement="top" title="Pending" src="img/indicator_unknown.png"/>';
         //polling
-      if(actionLog.type !== 8) {
-        pollActionLogCompleteStatus(urlParams['id'],actionLog._id,$tdStatus);          
-      }
- 
-    //for success
+        if (actionLog.type !== 8) {
+            pollActionLogCompleteStatus(urlParams['id'], actionLog._id, $tdStatus);
+        }
+
+        //for success
     } else {
         if (actionLog.success) {
             status = '<img rel="tooltip" data-placement="top" title="Success" src="img/indicator_started.png"/>';
@@ -2159,7 +2164,7 @@ function addActionLogRow(actionLog) {
     var $tdMorInfo = $('<td></td>').append($('<a data-toggle="modal" href="javascript:void(0)" class="moreinfoactionHistory" rel="tooltip" data-placement="top" data-original-title="MoreInfo"></a>').data('actionLogId', actionLog._id).click(function(e) {
         var actionId = $(this).data('actionLogId');
         var $actionLogMoreInfo = $('#actionLogMoreInfo');
-        $.get('/instances/' + urlParams['id'] + '/actionLogs/' + actionId+'/logs', function(data) {
+        $.get('/instances/' + urlParams['id'] + '/actionLogs/' + actionId + '/logs', function(data) {
             var $table = $('<table></table>');
 
             for (var i = 0; i < data.length; i++) {
@@ -2169,13 +2174,13 @@ function addActionLogRow(actionLog) {
                 //$rowDiv.append($('<div class="col-lg-4 col-sm-4"></div>').append('<div>' + date + '</div>'));
 
                 if (data[i].err) {
-                              $rowDiv.append($('<td class="col-lg-12 col-sm-12" style="color:red;"></td>').append('<span class="textLogs">' + date + '</span>' + '&nbsp;&nbsp;&nbsp;' + '<span>' + data[i].log + '</span>'));
-                          } else {
-                              $rowDiv.append($('<td class="col-lg-12 col-sm-12" style="color:DarkBlue;"></td>').append('<span class="textLogs">' + date + '</span>' + '&nbsp;&nbsp;&nbsp;' + '<span>' + data[i].log + '</span>'));
-                          }
+                    $rowDiv.append($('<td class="col-lg-12 col-sm-12" style="color:red;"></td>').append('<span class="textLogs">' + date + '</span>' + '&nbsp;&nbsp;&nbsp;' + '<span>' + data[i].log + '</span>'));
+                } else {
+                    $rowDiv.append($('<td class="col-lg-12 col-sm-12" style="color:DarkBlue;"></td>').append('<span class="textLogs">' + date + '</span>' + '&nbsp;&nbsp;&nbsp;' + '<span>' + data[i].log + '</span>'));
+                }
 
                 $table.append($rowDiv);
-                
+
 
             }
 
@@ -2190,9 +2195,9 @@ function addActionLogRow(actionLog) {
 }
 
 function addActionLogsToTable(actionLogs) {
-    console.log('loadin logs',actionLogs);
-    if(!(actionLogs && actionLogs.length)) {
-      return;
+    console.log('loadin logs', actionLogs);
+    if (!(actionLogs && actionLogs.length)) {
+        return;
     }
 
     for (var i = 0; i < actionLogs.length; i++) {
@@ -2227,30 +2232,30 @@ $('.btnSaveService').click(function(e) {
 
             }
         }
-        
+
         $('#serviceModalContainer').modal('hide');
 
     });
 
 });
 
-$('.addServiceBtn').click(function(){
-  $serviceList = $('#serviceList');
-  var hasServicesPermission= false;
-    if(haspermission("instanceservices","execute")){
-      hasServicesPermission=true;
+$('.addServiceBtn').click(function() {
+    $serviceList = $('#serviceList');
+    var hasServicesPermission = false;
+    if (haspermission("instanceservices", "execute")) {
+        hasServicesPermission = true;
     }
-    if(!hasServicesPermission){
-      bootbox.alert('User has no permission to Add Services');
-      return false;
+    if (!hasServicesPermission) {
+        bootbox.alert('User has no permission to Add Services');
+        return false;
     }
-  //alert($serviceList.find('tr[data-listServiceId]:not(.hidden)').length);
-  if($serviceList.find('tr[data-listServiceId]:not(.hidden)').length === 0) {
-     
-      $serviceList.find('tr:first-child').show();
-  } else {
-    $serviceList.find('tr:first-child').hide();
-  }
+    //alert($serviceList.find('tr[data-listServiceId]:not(.hidden)').length);
+    if ($serviceList.find('tr[data-listServiceId]:not(.hidden)').length === 0) {
+
+        $serviceList.find('tr:first-child').show();
+    } else {
+        $serviceList.find('tr:first-child').hide();
+    }
 
 });
 
@@ -2258,91 +2263,121 @@ $('.addServiceBtn').click(function(){
 
 <script type="text/javascript">
   
-  $( document ).ready(function() {
-    $('#data_bag_div2').hide();
+  $(document).ready(function() {
+      $('#data_bag_div2').hide();
   });
-  $('.panel-databag').click(function(e){
+  $('.panel-databag').click(function(e) {
       $('#data_bag_div2').show();
   });
 
 
-  $( document ).ready(function() {
-    $('#data_bag_div3').hide();
+  $(document).ready(function() {
+      $('#data_bag_div3').hide();
   });
-  $('.panel-databag1').click(function(e){
+  $('.panel-databag1').click(function(e) {
       $('#data_bag_div3').show();
   });
 
-  function getInfoLi(){
-    $('#controlPanelLogTab').parent('li').removeClass('active');
-    if(logTimeout) {
-      console.log('clearint log timeout');
-      clearTimeout(logTimeout);
-    }
-    if(stateTimeout) {
-       console.log('clearint log state timeout');
-      clearTimeout(stateTimeout);
-    }
-    for(var i=0;i<actionLogsPollTimeouts.length;i++) {
-       if(actionLogsPollTimeouts[i]) {
-        console.log('clearing timeout');
-        clearTimeout(actionLogsPollTimeouts[i]);
-       }
-    }
+  function getInfoLi() {
+      $('#controlPanelLogTab').parent('li').removeClass('active');
+      if (logTimeout) {
+          console.log('clearint log timeout');
+          clearTimeout(logTimeout);
+      }
+      if (stateTimeout) {
+          console.log('clearint log state timeout');
+          clearTimeout(stateTimeout);
+      }
+      for (var i = 0; i < actionLogsPollTimeouts.length; i++) {
+          if (actionLogsPollTimeouts[i]) {
+              console.log('clearing timeout');
+              clearTimeout(actionLogsPollTimeouts[i]);
+          }
+      }
 
-   var getURL = localStorage.getItem("dataEx");
-    var x= location.href;
-    var z= x.lastIndexOf("=");
-    var ControlID = x.slice(z+1, z.length);
-    localStorage.setItem("ControlID",ControlID);
-    location.href=getURL;
+      var getURL = localStorage.getItem("dataEx");
+      var x = location.href;
+      var z = x.lastIndexOf("=");
+      var ControlID = x.slice(z + 1, z.length);
+      localStorage.setItem("ControlID", ControlID);
+      location.href = getURL;
   }
-$(document).ready(function() {
+  $(document).ready(function() {
 
-    //emptying ssh container 
+      //emptying ssh container 
 
-    var LocalBreadCrumb = localStorage.getItem("breadcrumb");
-    var splitBread = null;
-    if (LocalBreadCrumb != null && LocalBreadCrumb != 'undefined') {
-        localStorage.removeItem("breadcrumb");
-        splitBread = LocalBreadCrumb.split('>');
-        if (splitBread.length > 0) {
-            $('#ribbon').find('.breadcrumb').find('li').detach();
-            for (var arraycount = 0; arraycount < splitBread.length; arraycount++) {
-                var liNew = document.createElement('li');
-                liNew.innerHTML = splitBread[arraycount];
-                $('#ribbon').find('.breadcrumb').append(liNew);
-            }
-            var liCP = document.createElement('li');
-            liCP.innerHTML = "Control panel";
-            $('#ribbon').find('.breadcrumb').append(liCP);
-            var parentUl = $('li').filter(".referenceliClass.open").find('ul').find('li[data-envname=' + splitBread[3] + ']');
-            parentUl.addClass('active');
-        }
-    }
-});
+      var LocalBreadCrumb = localStorage.getItem("breadcrumb");
+      var splitBread = null;
+      if (LocalBreadCrumb != null && LocalBreadCrumb != 'undefined') {
+          localStorage.removeItem("breadcrumb");
+          splitBread = LocalBreadCrumb.split('>');
+          if (splitBread.length > 0) {
+              $('#ribbon').find('.breadcrumb').find('li').detach();
+              for (var arraycount = 0; arraycount < splitBread.length; arraycount++) {
+                  var liNew = document.createElement('li');
+                  liNew.innerHTML = splitBread[arraycount];
+                  $('#ribbon').find('.breadcrumb').append(liNew);
+              }
+              var liCP = document.createElement('li');
+              liCP.innerHTML = "Control panel";
+              $('#ribbon').find('.breadcrumb').append(liCP);
+              var parentUl = $('li').filter(".referenceliClass.open").find('ul').find('li[data-envname=' + splitBread[3] + ']');
+              parentUl.addClass('active');
+          }
+      }
+  });
 
 </script>
 <script type="text/javascript">
 $('.instance-details-item').click(function(e) {
-        $(this).parents('.flip-toggle').toggleClass('flip');
-        $('.front').hide();
-        $('.back').show();
-    });
+    $(this).parents('.flip-toggle').toggleClass('flip');
+    $('.front').hide();
+    $('.back').show();
+});
 
 $('.goback').click(function(e) {
-        $(this).parents('.flip-toggle').toggleClass('flip');
-        $('.front').show();
-        $('.back').hide();
-    });
+    $(this).parents('.flip-toggle').toggleClass('flip');
+    $('.front').show();
+    $('.back').hide();
+});
 </script>
 
 <script>
-$(document).ready(function(e){
-  $('span[name=editText]').click(function(e){
-      $('input[name=check]',$(this).closest('div')).focus();
-  });
+$(document).ready(function(e) {
+    $('span[name=editText]').click(function(e) {
+        $('input[name=check]', $(this).closest('div')).focus();
+    });
 });
+</script>
+<script>
+   $(document).ready(function() {
+
+       $('.appUrlForm').submit(function(e) {
+           var $this = $(this);
+           var appUrlId = $this.find('.appUrlId').val();
+           var appUrl = $this.find('.appUrlInput').val();
+           var $div = $('.domain-roles-caption');
+           var instanceId = $div.attr('data-instanceid');
+           var instanceIP = $div.attr('data-instanceIP');
+           if (instanceId) {
+               $.post('../instances/' + instanceId + '/appUrl/' + appUrlId + '/update', {
+                   url: appUrl
+               }, function(data) {
+                   var url = appUrl.replace('$host', instanceIP);
+                   $('.app-url[data-appUrlId="' + appUrlId + '"]').attr('href', url);
+                   $this.find('.urlsaved').removeClass('hidden');
+                   setTimeout(function() {
+                       $this.find('.urlsaved').addClass('hidden');
+                   }, (2000));
+               });
+           }
+           e.preventDefault();
+           return false;
+       });
+
+
+
+   });
 </script>
 <script type="text/javascript">
   if (!$.fn.dataTable.isDataTable('#tableactionHistory')) {
@@ -2402,6 +2437,21 @@ $(document).ready(function(e){
       });
   }
 </script>
+
+<script>
+//for cloning the app Url
+              $('.addNewApp1').click(function() {
+                  $('#appSeries12').clone().find("input").val("").end().appendTo('.applicationURLContainer:last');
+
+                  var countApp = $('.applicationURLContainer').length;
+
+                  if (countApp === 2) {
+                      $(this).addClass('hidden');
+                      return;
+                  }
+
+              });
+</script>
 <script>
     var searchTemplate = "<div class='row form-inline'><label style='float: left;margin-left:15px;'>Filter: <input type='text' class='form-control' placeholder='search e.g. acpid'></label></div>"
     $(".p-sieve").sieve({
@@ -2460,7 +2510,6 @@ $(document).ready(function(e){
      $appUrlTableBody.append($row);
 
  }
-
  function removeAppUrlCardLink(appUrlId) {
      var $anchor = $('a[data-appUrlId="' + appUrlId + '"]').parent();
      if (!$anchor.length) {
@@ -2531,7 +2580,6 @@ $(document).ready(function(e){
              name: appUrlData.name
          }
      }
-
      var $appUrlIdInput = $(this).find('.appUrlId');
 
      $.post(url, reqBody, function(data) {

@@ -135,21 +135,21 @@ $(document).ready(function() {
     //isUserTypeSuperAdmin();
 });
 
-function isUserTypeSuperAdmin(){
-    $.get('/d4dMasters/loggedInUser',function(data){
-      if(!data.isSuperAdmin){
-      $('#orgname').attr('disabled','disabled').select2();
-      }
+function isUserTypeSuperAdmin() {
+    $.get('/d4dMasters/loggedInUser', function(data) {
+        if (!data.isSuperAdmin) {
+            $('#orgname').attr('disabled', 'disabled').select2();
+        }
     });
-  }
-function preprocess(){
+}
+
+function preprocess() {
     $('#createenvinchefform')[0].reset();
-    if(typeof $('#configname').find('option:selected').attr('rowid') == 'undefined'){
+    if (typeof $('#configname').find('option:selected').attr('rowid') == 'undefined') {
         bootbox.alert('Select a Chef Server before adding an environments.');
-        return(false);
-    }
-    else
-        return(true);
+        return (false);
+    } else
+        return (true);
 }
  $('#createenvinchefform').submit(function(e){
    var reqBodyEnv = {};
@@ -402,9 +402,9 @@ function readform_todelete(formName) {
 }
 
 $.fn.getType = function() {
-    if($(this).length){
-    return this[0].tagName == "INPUT" ? this[0].type.toLowerCase() : this[0].tagName.toLowerCase();
-    }else{
+    if ($(this).length) {
+        return this[0].tagName == "INPUT" ? this[0].type.toLowerCase() : this[0].tagName.toLowerCase();
+    } else {
         return "undefined";
     }
 }
@@ -585,7 +585,7 @@ $("#id-input-file-2").change(function() {
 
 });
 
-inLineReady();
+inLineReady(); 
 </script>
 <script>
 $(document).ready(function() {
@@ -594,12 +594,12 @@ $(document).ready(function() {
         $(this).validate();
 
         if ($(this).valid) {
-            /*alert('valid form submitted'); // for demo*/
-            if (!saveform('3')) return false;
-        } else {
-            alert('invalid valid form submitted'); // for demo
-        }
-        return false; // for demo
-    });
+            / * alert('valid form submitted'); // for demo*/
+if (!saveform('3')) return false;
+} else {
+    alert('invalid valid form submitted'); // for demo
+}
+return false; // for demo
+});
 });
 </script>
