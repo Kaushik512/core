@@ -102,15 +102,10 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 masterUtil.getLoggedInUser(user.cn, function(err, anUser) {
                     if (err) {
                         res.send(500, "Failed to fetch User.");
+                        return;
                     }
                     logger.debug("LoggedIn User:>>>> ", JSON.stringify(anUser));
                     if (anUser) {
-                        //data == true (create permission)
-                        /*if(data && anUser.orgname_rowid[0] !== ""){
-                    logger.debug("Inside check not authorized.");
-                    res.send(401,"You don't have permission to perform this operation.");
-                    return;
-                }*/
                         ec2.describeKeyPairs(function(err, data) {
                             if (err) {
                                 logger.debug("Unable to get AWS Keypairs");
@@ -118,40 +113,53 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                 return;
                             }
                             logger.debug("Able to get AWS Keypairs. %s", JSON.stringify(data));
-                            AWSProvider.createNew(providerData, function(err, provider) {
+                            AWSProvider.getAWSProviderByName(providerData.providerName, providerData.orgId, function(err, prov) {
                                 if (err) {
+                                    logger.debug("err.....", err);
+                                }
+                                if (prov) {
+                                    logger.debug("getAWSProviderByName: ",JSON.stringify(prov));
                                     logger.debug("err.....", err);
                                     res.status(409);
                                     res.send("Provider name already exist.");
                                     return;
                                 }
-                                logger.debug("Provider id:  %s", JSON.stringify(provider._id));
-                                AWSKeyPair.createNew(req, provider._id, function(err, keyPair) {
-                                    masterUtil.getOrgById(providerData.orgId, function(err, orgs) {
-                                        if (err) {
-                                            res.send(500, "Not able to fetch org.");
-                                            return;
-                                        }
-                                        if (orgs.length > 0) {
-                                            if (keyPair) {
-                                                var dommyProvider = {
-                                                    _id: provider._id,
-                                                    id: 9,
-                                                    accessKey: provider.accessKey,
-                                                    secretKey: provider.secretKey,
-                                                    providerName: provider.providerName,
-                                                    providerType: provider.providerType,
-                                                    orgId: orgs[0].rowid,
-                                                    orgName: orgs[0].orgname,
-                                                    __v: provider.__v,
-                                                    keyPairs: keyPair
-                                                };
-                                                res.send(dommyProvider);
+                                AWSProvider.createNew(providerData, function(err, provider) {
+                                    if (err) {
+                                        logger.debug("err.....", err);
+                                        res.status(500);
+                                        res.send("Failed to create Provider.");
+                                        return;
+                                    }
+                                    logger.debug("Provider id:  %s", JSON.stringify(provider._id));
+                                    AWSKeyPair.createNew(req, provider._id, function(err, keyPair) {
+                                        masterUtil.getOrgById(providerData.orgId, function(err, orgs) {
+                                            if (err) {
+                                                res.send(500, "Not able to fetch org.");
+                                                return;
                                             }
-                                        }
-                                    })
+                                            if (orgs.length > 0) {
+                                                if (keyPair) {
+                                                    var dommyProvider = {
+                                                        _id: provider._id,
+                                                        id: 9,
+                                                        accessKey: provider.accessKey,
+                                                        secretKey: provider.secretKey,
+                                                        providerName: provider.providerName,
+                                                        providerType: provider.providerType,
+                                                        orgId: orgs[0].rowid,
+                                                        orgName: orgs[0].orgname,
+                                                        __v: provider.__v,
+                                                        keyPairs: keyPair
+                                                    };
+                                                    res.send(dommyProvider);
+                                                    return;
+                                                }
+                                            }
+                                        })
+                                    });
+                                    logger.debug("Exit post() for /providers");
                                 });
-                                logger.debug("Exit post() for /providers");
                             });
                         });
                     }
