@@ -1198,6 +1198,32 @@ var Chef = function(settings) {
         });
     }
 
+    this.deleteEnvironment = function(envName, callback) {
+        initializeChefClient(function(err, chefClient) {
+            if (err) {
+                callback(err, null);
+                return;
+            }
+            chefClient.delete('/environments/' + envName, function(err, chefRes, chefResBody) {
+                if (err) {
+                    callback(err, null);
+                    return;
+                }
+                logger.debug("chef status ", chefRes.statusCode);
+               
+                if (chefRes.statusCode === 200) {
+                    callback(null, chefRes.statusCode);
+                    return;
+                } else {
+                    callback(true, null);
+                    return;
+                }
+
+            });
+
+        });
+    }
+
 }
 
 module.exports = Chef;
