@@ -26,8 +26,7 @@ var awsProviderSchema = new Schema({
     providerName: {
         type: String,
         required: true,
-        trim: true,
-        unique: true
+        trim: true
     },
     providerType: {
         type: String,
@@ -67,6 +66,7 @@ awsProviderSchema.statics.createNew = function(providerData, callback) {
         }
         logger.debug("Exit createNew with provider present");
         callback(null, aProvider);
+        return;
     });
 };
 
@@ -83,9 +83,11 @@ awsProviderSchema.statics.getAWSProviders = function(callback) {
         if (providers.length) {
             logger.debug("Exit getAWSProviders with providers present");
             callback(null, providers);
+            return;
         } else {
             logger.debug("Exit getAWSProviders with no providers present");
             callback(null, null);
+            return;
         }
 
     });
@@ -109,9 +111,11 @@ awsProviderSchema.statics.getAWSProvidersForOrg = function(orgList,callback) {
         if (providers.length) {
             logger.debug("Exit getAWSProvidersForOrg with providers present");
             callback(null, providers);
+            return;
         } else {
             logger.debug("Exit getAWSProvidersForOrg with no providers present");
             callback(null, null);
+            return;
         }
 
     });
@@ -130,9 +134,35 @@ awsProviderSchema.statics.getAWSProviderById = function(providerId, callback) {
         if (aProvider.length) {
             logger.debug("Exit getAWSProviderById with provider present");
             callback(null, aProvider[0]);
+            return;
         } else {
             logger.debug("Exit getAWSProviderById with no provider present");
             callback(null, null);
+            return;
+        }
+
+    });
+};
+
+awsProviderSchema.statics.getAWSProviderByName = function(providerName,orgId, callback) {
+    logger.debug("Enter getAWSProviderById");
+    this.find({
+        "providerName": providerName,
+        "orgId": orgId
+    }, function(err, aProvider) {
+        if (err) {
+            logger.error(err);
+            callback(err, null);
+            return;
+        }
+        if (aProvider.length) {
+            logger.debug("Exit getAWSProviderById with provider present");
+            callback(null, aProvider[0]);
+            return;
+        } else {
+            logger.debug("Exit getAWSProviderById with no provider present");
+            callback(null, null);
+            return;
         }
 
     });
@@ -160,6 +190,7 @@ awsProviderSchema.statics.updateAWSProviderById = function(providerId, providerD
         }
         logger.debug("Exit updateAWSProviderById with update success.");
         callback(null, updateCount);
+        return;
 
     });
 };
@@ -176,6 +207,7 @@ awsProviderSchema.statics.removeAWSProviderById = function(providerId, callback)
         }
         logger.debug("Exit removeAWSProviderById with delete success.");
         callback(null, deleteCount);
+        return;
 
     });
 };
@@ -194,9 +226,11 @@ awsProviderSchema.statics.getAWSProvidersByOrgId = function(orgId,callback) {
         if (providers.length) {
             logger.debug("Exit getAWSProvidersByOrgId with providers present");
             callback(null, providers);
+            return;
         } else {
             logger.debug("Exit getAWSProvidersByOrgId with no providers present");
             callback(null, null);
+            return;
         }
 
     });
