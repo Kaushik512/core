@@ -1716,40 +1716,43 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
     function updateProjectWithEnv(projects, bodyJson) {
         for (var p = 0; p < projects.length; p++) {
-            if (projects[p].id === '4') {
-                var currproj = projects[p];
-                logger.debug('Project : ' + currproj);
-                d4dModelNew.d4dModelMastersProjects.findOne({
-                    rowid: currproj.rowid,
-                    id: '4'
-                }, function(err, data2) {
-                    if (!err) {
-                        logger.debug("data2+++++++++++++++++++++ ", JSON.stringify(data2));
-                        logger.debug('Project JSON:' + JSON.stringify(data2));
-                        var newenv = bodyJson['rowid'];
-                        if (data2 != null && data2.environmentname_rowid != 'undefined' && data2.environmentname_rowid != '') {
-                            if (data2.environmentname_rowid.indexOf(bodyJson['rowid']) < 0) {
-                                newenv = data2.environmentname_rowid + ',' + bodyJson['rowid'];
+            (function(p) {
+                if (projects[p].id === '4') {
+                    var currproj = projects[p];
+                    logger.debug('Project : ' + currproj);
+                    d4dModelNew.d4dModelMastersProjects.findOne({
+                        rowid: currproj.rowid,
+                        id: '4'
+                    }, function(err, data2) {
+                        if (!err) {
+                            logger.debug("data2+++++++++++++++++++++ ", JSON.stringify(data2));
+                            logger.debug('Project JSON:' + JSON.stringify(data2));
+                            var newenv = bodyJson['rowid'];
+                            if (data2 != null && data2.environmentname_rowid != 'undefined' && data2.environmentname_rowid != '') {
+                                if (data2.environmentname_rowid.indexOf(bodyJson['rowid']) < 0) {
+                                    newenv = data2.environmentname_rowid + ',' + bodyJson['rowid'];
+                                }
                             }
-                        }
-                        
-                        logger.debug('Newenv ====>', newenv);
-                        d4dModelNew.d4dModelMastersProjects.update({
-                            rowid: currproj.rowid,
-                            id: '4'
-                        }, {
-                            environmentname_rowid: newenv
-                        }, function(err, data1) {
-                            if (err) {
-                                logger.debug('Err while updating d4dModelMastersProjects' + err);
-                                return;
-                            }
+
+                            logger.debug('Newenv ====>', newenv);
+                            d4dModelNew.d4dModelMastersProjects.update({
+                                rowid: currproj.rowid,
+                                id: '4'
+                            }, {
+                                environmentname_rowid: newenv
+                            }, function(err, data1) {
+                                logger.debug("Update Count+++++++++++++++ ", data1);
+                                if (err) {
+                                    logger.debug('Err while updating d4dModelMastersProjects' + err);
+                                    return;
+                                }
                                 logger.debug('Updated project ' + currproj + ' with env : ' + newenv);
                                 return;
-                        });
-                    } 
-                });
-            }
+                            });
+                        }
+                    });
+                }
+            })(p);
         }
     };
 
@@ -2468,31 +2471,44 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                             if (req.params.id === '4') {
                                                 var teamName = bodyJson["teamname"].split(",");
                                                 var rowId = bodyJson["teamname_rowid"].split(",");
+                                                logger.debug("For Project+++++++++++++++++++++ ",JSON.stringify(rowId));
                                                 for (var x = 0; x < rowId.length; x++) {
-                                                    d4dModelNew.d4dModelMastersTeams.find({
-                                                        rowid: rowId[x]
-                                                    }, function(err, teamData) {
-                                                        if (err) {
-                                                            logger.debug("Error : ", err);
-                                                        }
-                                                        logger.debug("Got Teams<<<<<<<<<<<<<<<<<<<<< ", JSON.stringify(teamData));
-                                                        teamData[0].projectname = bodyJson["projectname"];
-                                                        teamData[0].projectname_rowid = bodyJson["rowid"];
-                                                        logger.debug("Got Team<<<<<<<<<<<<<<<<<<<<< ", teamData[0].rowid);
-                                                        d4dModelNew.d4dModelMastersTeams.update({
-                                                            rowid: teamData[0].rowid
-                                                        }, {
-                                                            $set: JSON.parse(JSON.stringify(teamData[0]))
-                                                        }, {
-                                                            upsert: false
-                                                        },function(err, updatedTeam) {
+                                                    (function(x) {
+                                                        d4dModelNew.d4dModelMastersTeams.find({
+                                                            rowid: rowId[x]
+                                                        }, function(err, teamData) {
                                                             if (err) {
-                                                                logger.debug("Failed to update Team<<<<<<<<<<<<<<<< ", errorResponses.db.error);
+                                                                logger.debug("Error : ", err);
                                                             }
-                                                            logger.debug("Successfully Team updated with User.");
-                                                        });
+                                                            logger.debug("Got Teams<<<<<<<<<<<<<<<<<<<<<", teamData[0].projectname_rowid);
+                                                            var newproj = bodyJson['rowid'];
+                                                            var newprojname = bodyJson["projectname"];
+                                                            if (teamData[0] != null && teamData[0].projectname_rowid !== 'undefined' && teamData[0].projectname_rowid != '') {
+                                                                if (teamData[0].projectname_rowid.indexOf(bodyJson['rowid']) < 0) {
+                                                                    newproj = teamData[0].projectname_rowid + ',' + bodyJson['rowid'];
+                                                                    newprojname = teamData[0].projectname + ',' + bodyJson["projectname"];
+                                                                }
+                                                            }
+                                                            logger.debug("newproj+++++++++++++ ",newproj);
+                                                            logger.debug("newprojname+++++++++++++ ",newprojname);
+                                                            teamData[0].projectname = newprojname;
+                                                            teamData[0].projectname_rowid = newproj;
+                                                            //logger.debug("Got New Team<<<<<<<<<<<<<<<<<<<<< ", teamData[0]);
+                                                            d4dModelNew.d4dModelMastersTeams.update({
+                                                                rowid: teamData[0].rowid
+                                                            }, {
+                                                                $set: JSON.parse(JSON.stringify(teamData[0]))
+                                                            }, {
+                                                                upsert: false
+                                                            }, function(err, updatedTeam) {
+                                                                if (err) {
+                                                                    logger.debug("Failed to update Team<<<<<<<<<<<<<<<< ", errorResponses.db.error);
+                                                                }
+                                                                logger.debug("Successfully Team updated with User.");
+                                                            });
 
-                                                    });
+                                                        });
+                                                    })(x);
                                                 }
                                             }
                                         logger.debug('New Master Saved');
