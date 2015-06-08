@@ -103,7 +103,7 @@
         
              
                     <div class="col-lg-6 col-md-6">
-                        <label for="category">Environment Name:<span style="color:red">*</span><span class="chefenvnamerequired hidden" style="color:red">&nbsp;Required</span>
+                        <label for="category">Environment Name:<span style="color:red">*</span>
                         </label>
                         
                            <input type="text" id="chefenvname" name="chefenvname" class=" form-control" tabindex='1'>
@@ -114,15 +114,15 @@
                         <div class="btn-group pull-right">
                         <i id="envcreatespinner" class="fa-li fa fa-spinner fa-spin hidden" style="margin-top:9px"></i>
                         <span id="chefenvcreatemsg" style="color:red"></span>
-                         <button type="button" class="btn btn-default btn-primary createchefenvbtn" onclick="createchefenv();" style="margin-right:11px;">
+                         <button class="btn btn-default btn-primary createchefenvbtn" style="margin-right:11px;">
                           <i class="fa fa-save fa-1x" ></i>&nbsp;Add</button>
-                        <a type="button" class="btn btn-primary" type="submit" data-dismiss="modal">
+                        <a class="btn btn-primary" data-dismiss="modal">
                           <i class="fa fa-undo fa-1x"></i>&nbsp;Cancel</a>
                         </div>
                     </div>
                 
       
-      </div>
+      
       </form>
     </div>
   </div>
@@ -151,7 +151,7 @@ function preprocess(){
     else
         return(true);
 }
-function createchefenv(){
+ $('#createenvinchefform').submit(function(e){
    var reqBodyEnv = {};
    var chefid =  $('#configname').find('option:selected').attr('rowid');
    var $crbtn = $('#createenvinchefform').find('#createchefenvbtn')
@@ -164,13 +164,14 @@ function createchefenv(){
    }
    $('#envcreatespinner').removeClass('hidden');
    //alert('in createchefenvbtn');
-   if(typeof chefid != 'undefined'){
+   if(typeof chefid != 'undefined'){         
    $.post('../chef/environments/create/' + chefid,{envName:$('#chefenvname').val()},function(envname){
             if(envname){
             $crbtn.removeAttr('disabled');
             $('#envcreatespinner').addClass('hidden');
             $('#configname').change();
             $('#myModalCreateChefEnv').modal('hide');
+            $('#environmentname').empty();
             }
             else{
                 $('#chefenvcreatemsg').html('Could not complete.' + envname);
@@ -180,7 +181,8 @@ function createchefenv(){
             }
    });
    }
-}
+   return false;
+});
 function loadChefEnvs(chefID) {
     $('#myForm1').find('button').attr('disabled', 'disabled');
     $.get('../chef/servers/' + chefID + '/environments', function(envList) { //getting the list of env

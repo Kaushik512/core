@@ -905,7 +905,7 @@
                                               }
                                           });
                                           var $parent = $('.domain-roles-caption[data-instanceId="' + instanceId + '"]');
-                                          instanceIpCard = $parent.attr('data-blueprintName');
+                                          instanceIpCard = $parent.attr('data-instanceIP');
                                           $instanceLogModalContainer.find('.modal-title').html('Instance Logs for -&nbsp;' + instanceIpCard);
                                           $instanceLogModalContainer.find('.logsArea').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
                                           $instanceLogModalContainer.modal('show');
@@ -996,7 +996,7 @@
                                           
                                           var instanceId = $(this).attr('data-instanceId');
                                           var $parent = $('.domain-roles-caption[data-instanceId="' + instanceId + '"]');
-                                          instanceIpCard = $parent.attr('data-blueprintName');
+                                          instanceIpCard = $parent.attr('data-instanceIP');
                                           $sshModal.find('.modal-title').html('Terminal for IP:&nbsp;' + instanceIpCard);
                                           $sshModal.find('.modal-body').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
                                           $sshModal.modal('show');
@@ -1062,7 +1062,7 @@
                                                   return '<div class="domain-roles"></div>';
                                               },
                                               getDomainRolesCaption: function(conf) {
-                                                  return '<div class="domain-roles-caption" data-instanceId="' + conf._id + '"' + 'data-blueprintName="' + conf.blueprintData.blueprintName + '"' + 'data-osType="' + conf.hardware.os + '"></div>';
+                                                  return '<div class="domain-roles-caption" data-instanceId="' + conf._id + '"' + 'data-instanceIP="' + conf.instanceIP + '"' + 'data-blueprintName="' + conf.blueprintData.blueprintName + '"' + 'data-osType="' + conf.hardware.os + '"></div>';
                                               },
                                               getSpanHeadingLeft: function(data) {
                                                   var imgPath;
@@ -1325,28 +1325,15 @@
                                                       if (ll == 2) {
                                                           break;
                                                       }
-                                                      var $taskIcon = $('<div class="tasksBlock"><img rel="tooltip" data-taskid=' + tasks[ll]._id + ' data-placement="top" class="taskCardIMG" title=' + tasks[ll].name + '  alt="task" style="cursor:pointer" src="img/tasks.png"/><div class="tasksLinks hidden"><a  rel="tooltip" data-placement="top" data-original-title="Execute" data-toggle="modal" href="javascript:void(0)" class="tableactionbutton taskLinkExecute"><img style="width:22px;" src="img/Execute.png" alt="execute"/></a><a style="margin-left:3px;" rel="tooltip" data-placement="top" data-original-title="History" data-toggle="modal" href="javascript:void(0)" class="tableactionbutton taskLinkHistory"><img style="width:22px" src="img/History.png" alt="History"/></a></div></div>');
-                                                      //for showing the hover
-
+                                                      var $taskIcon = $('<div class="tasksBlock"><img style="height:22px;cursor:pointer" class="taskLinkExecute taskCardIMG" rel="tooltip" data-taskid=' + tasks[ll]._id + ' data-placement="top" title=' + tasks[ll].name + '  alt="task" src="img/Execute.png"/></div>');
                                                       if (ll == 1) {
                                                           $taskIcon.find('img').attr('data-placement', 'bottom');
                                                       }
 
                                                       //click for tasks
                                                       (function(taskId) {
-                                                          $taskIcon.attr('data-taskCardIconId', taskId).hover(function(e) {
-                                                              $(this).find('.tasksLinks').removeClass('hidden');
-                                                              //$('a[data-taskId="' + taskId + '"]').click();
-
-                                                          }, function() {
-                                                              $(this).find('.tasksLinks').addClass('hidden');
-
-                                                          });
                                                           $taskIcon.find('.taskLinkExecute').click(function(e) {
                                                               $('a[data-executeTaskId="' + taskId + '"]').click();
-                                                          });
-                                                          $taskIcon.find('.taskLinkHistory').click(function(e) {
-                                                              $('a[data-historyTaskId="' + taskId + '"]').click();
                                                           });
                                                       })(tasks[ll]._id);
                                                       $taskIcon.find('img').tooltip();
@@ -1452,7 +1439,7 @@
                                                               $parent.find('.instance-state').removeClass().addClass('instance-state').addClass(cssClassed.textClass).html(data.instanceState);
                                                               $('.instancestatusindicator[data-instanceId="' + instanceId + '"]').removeClass().addClass('instancestatusindicator').addClass(cssClassed.tableViewStatusClass);
                                                               $parent.find('.instance-details-id strong').html(data.instanceIP).attr('instanceip', data.instanceIP);
-                                                              $parent.find('.instance-bootstrap-ActionRDP a').addClass('rdpIcon').attr('href', '/instances/rdp/' + data.instanceIP + '/3389');
+                                                              $parent.find('.instance-bootstrap-ActionRDP a').attr('href', '/instances/rdp/' + data.instanceIP + '/3389');
                                                               $('tr[data-instanceId="' + instanceId + '"] td.instanceIPCol').html(data.instanceIP);
                                                               if (data.appUrls && data.appUrls.length) {
                                                                   for (var k = 0; k < data.appUrls.length; k++) {
@@ -1699,10 +1686,8 @@
 
                                               var $parentTrNew = $('#tableinstanceview tr[data-instanceId="' + data._id + '"] td div.startstoptoggler');
                                               disableInstanceStartStopActionBtns(data._id, data.hardware.os);
-                                              $('.domain-roles').find('[data-instanceid="' + data._id + '"]').find('.startstoptoggler').removeClass('running').addClass('shutdown').remove();
-                                              $('.domain-roles').find('[data-instanceid="' + data._id + '"]').find('.sshBtnContainer').css('margin-left','25px');
-                                              $('.domain-roles').find('[data-instanceid="' + data._id + '"]').find('.moreInfo').css('margin-left','28px');
-                                              $parentTrNew.removeClass('running').addClass('shutdown').remove();
+                                              $('.domain-roles').find('[data-instanceid="' + data._id + '"]').find('.startstoptoggler').removeClass('running').addClass('shutdown');                                
+                                              $parentTrNew.removeClass('running').addClass('shutdown');
                                           }
                                           $startStopToggler.click(startAndStopToggler);
                                           $rowContainter.find('.startstoptoggler').off('click').on('click', startAndStopToggler);
@@ -2494,13 +2479,13 @@
                                                   "pagingType": "full_numbers",
                                                   "aoColumns": [
                                                       null, {
-                                                          "bSortable": false
+                                                          "bSortable": true
                                                       }, {
-                                                          "bSortable": false
+                                                          "bSortable": true
                                                       }, {
-                                                          "bSortable": false
+                                                          "bSortable": true
                                                       }, {
-                                                          "bSortable": false
+                                                          "bSortable": true
                                                       }, {
                                                           "bSortable": false
                                                       }
@@ -2574,6 +2559,7 @@
                                                   $liHeader.find('a').click();
                                                   var jenkinsServerId = $outputArea.data('jenkinsServerId');
                                                   var jobName = $outputArea.data('jobName');
+
                                                   var lastBuildNumber = $outputArea.data('lastBuildNumber');
                                                   var buildNumber = $outputArea.data('currentBuildNumber');
 
@@ -2753,8 +2739,18 @@
                                                           var $tdTimeEnded = $('<td></td>').append(dateEnded);
                                                           $trHistoryRow.append($tdTimeEnded);
 
-                                                          var $tdStatus = $('<td></td>').append(taskHistories[i].status);
-                                                          $trHistoryRow.append($tdStatus);
+                                                          //var $tdStatus = $('<td></td>').append(taskHistories[i].status);
+                                                          //$trHistoryRow.append($tdStatus);
+                                                          if (taskHistories[i].status === "success") {
+                                                              var $tdBuildStatus = $('<td></td>').append('<img rel="tooltip" data-placement="top" title="Success" src="img/indicator_started.png"/>');
+                                                              $trHistoryRow.append($tdBuildStatus);
+                                                          } else if (taskHistories[i].status === "failed") {
+                                                              var $tdBuildStatusFailure = $('<td></td>').append('<img rel="tooltip" data-placement="top" title="Failed" src="img/indicator_stopped.png"/>');
+                                                              $trHistoryRow.append($tdBuildStatusFailure);
+                                                          } else {
+                                                              var $tdBuildStatusRunning = $('<td></td>').append('<img rel="tooltip" data-placement="top" title="Running" src="img/indicator_unknown.png"/>');
+                                                              $trHistoryRow.append($tdBuildStatusRunning);
+                                                          }
 
                                                           var $tdMessage = $('<td style="width:42%"></td>');
                                                           $trHistoryRow.append($tdMessage);
