@@ -470,6 +470,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
                 importNodes(reqBody.selectedNodes);
             } else {
                 res.send(400);
+                return;
             }
         });
 
@@ -502,6 +503,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
                     return;
                 } else {
                     res.send(envName);
+                    return;
                 }
             });
         });
@@ -533,6 +535,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
                     return;
                 } else {
                     res.send(cookbooks);
+                    return;
                 }
             });
 
@@ -567,6 +570,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
                     return;
                 } else {
                     res.send(cookbooks);
+                    return;
                 }
             });
 
@@ -602,6 +606,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
                     return;
                 } else {
                     res.send(cookbooks);
+                    return;
                 }
             });
 
@@ -642,11 +647,13 @@ module.exports.setRoutes = function(app, verificationFunc) {
                         return;
                     } else {
                         res.send(attributesList);
+                        return;
                     }
                 });
             } else {
                 // get roles attributes
                 res.send([]);
+                return;
             }
 
 
@@ -681,6 +688,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
                     return;
                 } else {
                     res.send(cookbooks);
+                    return;
                 }
             });
 
@@ -708,6 +716,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
                 });
             } else {
                 res.send(404);
+                return;
             }
 
         });
@@ -740,8 +749,10 @@ module.exports.setRoutes = function(app, verificationFunc) {
                 } else {
                     if (success) {
                         res.send(200);
+                        return;
                     } else {
                         res.send(500);
+                        return;
                     }
                 }
             });
@@ -1099,6 +1110,39 @@ module.exports.setRoutes = function(app, verificationFunc) {
                 logger.debug("Exit /chef/../databag/../item/find");
                 logger.debug("dataBagItem:>>>>>>>>>>>> ",JSON.stringify(dataBagItem));
                 res.send(dataBagItem);
+                return;
+            });
+        });
+    });
+
+    // Delete a Data Bag Item from a Data Bag.
+    app.delete("/chef/servers/:serverId/environments/:envName",function(req,res){
+        logger.debug("Enter /chef/../environments");
+        configmgmtDao.getChefServerDetails(req.params.serverId, function(err, chefDetails) {
+            if (err) {
+                res.send(500);
+                return;
+            }
+            if (!chefDetails) {
+                res.send(404);
+                return;
+            }
+            var chef = new Chef({
+                userChefRepoLocation: chefDetails.chefRepoLocation,
+                chefUserName: chefDetails.loginname,
+                chefUserPemFile: chefDetails.userpemfile,
+                chefValidationPemFile: chefDetails.validatorpemfile,
+                hostedChefUrl: chefDetails.url,
+            });
+            logger.debug("Chef...>>>>>>>>>>>>>>>>>>> ",JSON.stringify(chef));
+            chef.deleteEnvironment(req.params.envName,function(err,env){
+                if(err){
+                    logger.debug("Exit /chef/../environments ",err);
+                    res.send(500,"Failed to delete environments on Chef.");
+                    return;
+                }
+                logger.debug("Exit /chef/../environments");
+                res.send(env);
                 return;
             });
         });
