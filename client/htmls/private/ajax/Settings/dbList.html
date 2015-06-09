@@ -2,7 +2,6 @@
 
   <div class="col-md-12">
    <div class="col-md-12">
-      <form action="" id="myForm">
          <div class="widget-box">
             <div class="widget-header">
                <h4 class="widget-margin" style="color:black;"></h4>
@@ -85,7 +84,6 @@
                </div>
             </div>
          </div>
-      </form>
    </div>
  </div>
 </div>
@@ -177,6 +175,16 @@ $.get('/d4dMasters/readmasterjsonnew/10',function(data){
     $('.widget-header').find('h4.widget-margin').html('Data Bags for ChefServer -&nbsp;' + data[i].configname);
     }
   });
+
+$('.addDB').click(function(e) {
+    $('#instanceDBName').trigger('reset');
+});
+
+$('.addList').click(function(e){
+    $('#instanceItemName').trigger('reset');
+});
+
+$(document).ready(function(e) {
     var urlParams = {};
     (window.onpopstate = function() {
         var url = window.location.href;
@@ -192,16 +200,7 @@ $.get('/d4dMasters/readmasterjsonnew/10',function(data){
         }
 
     })();
-$('.addDB').click(function(e) {
-    $('#instanceDBName').trigger('reset');
-});
 
-$('.addList').click(function(e){
-    $('#instanceItemName').trigger('reset');
-});
-
-
-$(document).ready(function(e) {
     //for getting the list of data-bags
     var chefServer = '../chef/servers/' + urlParams.id + '/databag/list';
 
@@ -235,7 +234,8 @@ $(document).ready(function(e) {
                 console.log(name);
                 var dataBagName = name;
                 console.log(dataBagName);
-
+                alert(name);
+                alert(urlParams.id);
                 $.ajax({
                     url: '../chef/servers/' + urlParams.id + '/databag/' + dataBagName + '/delete',
                     method: 'DELETE',
@@ -247,6 +247,7 @@ $(document).ready(function(e) {
                         alert("Unable to delete URL please try again later");
                     }
                 });
+                return false;
             });
 
             $tdClick.click(function(e) {
@@ -413,6 +414,7 @@ function createItemTableRow(k){
         }
         var dataBagName = $form.find('#dataBagIDHiddenInput').val();
         var itemsEditNew = $(this).find('#itemEditHiddenInput').val();
+        console.log(dataBagName);
         var url;
         var reqBody;
         if (itemsEditNew === 'edit') {
@@ -452,12 +454,7 @@ function createItemTableRow(k){
         return false;
     });
 
-
 });
-
-
-
-
 </script>
 
 
