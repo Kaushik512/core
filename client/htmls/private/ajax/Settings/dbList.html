@@ -415,7 +415,6 @@ function createItemTableRow(k){
 
     $('#instanceItemName').submit(function(e) {
         var $form = $('#instanceItemName');
-        var $checkbox = $form.find('input[type="checkbox"]:checked');
         var itemID = $form.find('.listID').val();
         
         var jsonString = $form.find('.listName').val();
