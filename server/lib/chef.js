@@ -19,7 +19,7 @@ var logger = require('./logger.js')(module);
 var getDefaultCookbook = require('./defaultTaskCookbook');
 var currentDirectory = __dirname;
 var fs = require('fs');
-//var DataBagModel = require('../model/classes/masters/databag.js');
+var DataBagModel = require('../model/classes/masters/databag.js');
 
 var app_config;
 
