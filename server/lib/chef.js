@@ -974,7 +974,7 @@ var Chef = function(settings) {
                                     return;
                                 }
                                 logger.debug("File Created....");
-                                var createDBItem = 'knife data bag from file ' + dataBagName + " " + targetDir + ' --secret ' + keyFileLocation;
+                                var createDBItem = 'knife data bag from file ' + dataBagName + " " + targetDir + ' --secret ' + readKeyFileLocation;
                                 var procDBItem = exec(createDBItem, options, function(err, stdOut, stdErr) {
                                     if (err) {
                                         logger.debug('Failed in procDBItem', err);
@@ -1100,7 +1100,7 @@ var Chef = function(settings) {
                         var targetDir = currentDirectory + "/../config/catdata/catalyst/temp/dbItem.json";
                         fs.readFile(readKeyFileLocation, function(err, existDataBag) {
                             if (err) {
-                                logger.debug("There is no file exist.");
+                                logger.debug("There is no key file exist.");
                                 callback(err, null);
                                 return;
                             }
@@ -1111,7 +1111,7 @@ var Chef = function(settings) {
                                     return;
                                 }
                                 logger.debug("File Created....");
-                                var createDBItem = 'knife data bag from file ' + dataBagName + " " + targetDir + ' --secret ' + keyFileLocation;
+                                var createDBItem = 'knife data bag from file ' + dataBagName + " " + targetDir + ' --secret ' + readKeyFileLocation;
                                 var procDBItem = exec(createDBItem, options, function(err, stdOut, stdErr) {
                                     if (err) {
                                         logger.debug('Failed in procDBItem', err);
