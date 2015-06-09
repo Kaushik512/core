@@ -951,7 +951,7 @@ var Chef = function(settings) {
                     callback(null, code);
                 }
             };
-            if(isEncrypt) {
+            if(isEncrypt===true) {
                 d4dModelNew.d4dModelMastersConfigManagement.find({
                     rowid: req.params.serverId
                 }, function(err, cmgmt) {
@@ -1043,7 +1043,7 @@ var Chef = function(settings) {
                     callback(null, code);
                 }
             };
-            if(isEncrypt) {
+            if(isEncrypt === true) {
                 d4dModelNew.d4dModelMastersConfigManagement.find({
                     rowid: req.params.serverId
                 }, function(err, cmgmt) {
