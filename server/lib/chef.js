@@ -954,7 +954,7 @@ var Chef = function(settings) {
                 }
             };
             if (isEncrypt) {
-                DataBagModel.getDataBagEncryptionInfo(dataBagName, itemId, function(err, aDataBag) {
+                DataBagModel.getDataBagEncryptionInfo(dataBagName, dataBagItem.id, function(err, aDataBag) {
                     if (err) {
                         logger.debug("Error to find data bag from mongo.");
                     }
@@ -991,8 +991,13 @@ var Chef = function(settings) {
                     } else {
                         fs.readFile(inFilePath, function(err, fileData) {
                             if (err) {
-                                logger.debug("No file.");
+                                logger.debug("Error reading key file.");
                                 callback(err, null);
+                                return;
+                            }
+                            if(!fileData){
+                                logger.debug("No key file uploaded.");
+                                callback(null, null);
                                 return;
                             }
                             var dataBagData = {
@@ -1128,8 +1133,13 @@ var Chef = function(settings) {
                     } else {
                         fs.readFile(inFilePath, function(err, fileData) {
                             if (err) {
-                                logger.debug("No file.");
+                                logger.debug("Error reading key file.");
                                 callback(err, null);
+                                return;
+                            }
+                            if(!fileData){
+                                logger.debug("No key file uploaded.");
+                                callback(null, null);
                                 return;
                             }
                             var dataBagData = {
