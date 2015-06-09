@@ -161,8 +161,9 @@ var d4dMastersConfigManagement = new mongoose.Schema(
 	userpemfile_filename: {type:String, trim:true},
 	validatorpemfile_filename: {type:String, trim:true},
 	kniferbfile_filename: {type:String, trim:true},
-	folderpath: {type:String, trim:true},
 	encryption_filename: {type:String, trim:true},
+	template_filename: {type:String, trim:true},
+	folderpath: {type:String, trim:true},
 	active: {type:Boolean, trim:true,default:true},
 	rowid:{type:String,required:true, trim:true}},{collection:'d4dmastersnew'}
 );
