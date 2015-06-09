@@ -1027,12 +1027,19 @@ module.exports.setRoutes = function(app, verificationFunc) {
             });
             logger.debug("Chef...>>>>>>>>>>>>>>>>>>> ",JSON.stringify(chef));
             var dataBagItem;
+            logger.debug("dataBagItem>>>>>>>>> ",req.body.dataBagItem);
+            if(typeof req.body.dataBagItem === 'undefined'){
+                dataBagItem = {"id":req.body.id};
+            }else{
+                dataBagItem =req.body.dataBagItem;
+                dataBagItem.id = req.body.id;
+            }
             try{
-                logger.debug("Incomming data bag item: ",JSON.stringify(req.body.dataBagItem));
-                dataBagItem = JSON.parse(JSON.stringify(req.body.dataBagItem));
+                logger.debug("Incoming data bag item: ",JSON.stringify(dataBagItem));
+                dataBagItem = JSON.parse(JSON.stringify(dataBagItem));
             }catch(e){
                 logger.debug("error: ",e);
-                res.send(400,"Invalid Json for Data Bag item.");
+                res.send(500,"Invalid Json for Data Bag item.");
                 return;
             }
             chef.updateDataBagItem(req,dataBagItem,function(err,dataBagItem){

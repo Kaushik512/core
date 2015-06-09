@@ -959,9 +959,9 @@ var Chef = function(settings) {
                         logger.debug("Error to find cmgmt from mongo.");
                     }
                     logger.debug("Config mgmt: ",JSON.stringify(cmgmt));
-                    if (cmgmt) {
-                        var readKeyFileLocation = settings.userChefRepoLocation + '/.chef/' + cmgmt.encryption_filename;
-                        var targetDir = currentDirectory + "/../config/catdata/catalyst/temp/dbItem.json";
+                    if (cmgmt[0]) {
+                        var readKeyFileLocation = settings.userChefRepoLocation + '/.chef/' + cmgmt[0].encryption_filename;
+                        var targetDir = currentDirectory + "/../catdata/catalyst/temp/dbItem.json";
                         fs.readFile(readKeyFileLocation, function(err, existFile) {
                             if (err) {
                                 logger.debug("There is no file exist.");
@@ -974,11 +974,14 @@ var Chef = function(settings) {
                                     callback(err, null);
                                     return;
                                 }
-                                logger.debug("File Created....");
-                                var createDBItem = 'knife data bag from file ' + dataBagName + " " + targetDir + ' --secret ' + readKeyFileLocation;
+                                logger.debug("File Created....on ",targetDir);
+                                var keyFileLocation = settings.userChefRepoLocation + '.chef/' + cmgmt[0].encryption_filename;
+                                logger.debug("key file location: ",keyFileLocation);
+                                var createDBItem = 'knife data bag from file ' + dataBagName + " " + targetDir + ' --secret-file ' + keyFileLocation;
                                 var procDBItem = exec(createDBItem, options, function(err, stdOut, stdErr) {
                                     if (err) {
                                         logger.debug('Failed in procDBItem', err);
+                                        callback(err, null);
                                         return;
                                     }
                                     fs.unlink(targetDir);
@@ -1047,9 +1050,9 @@ var Chef = function(settings) {
                         logger.debug("Error to find cmgmt from mongo.");
                     }
                     logger.debug("Config mgmt: ",JSON.stringify(cmgmt));
-                    if (cmgmt) {
-                        var readKeyFileLocation = settings.userChefRepoLocation + '/.chef/' + cmgmt.encryption_filename;
-                        var targetDir = currentDirectory + "/../config/catdata/catalyst/temp/dbItem.json";
+                    if (cmgmt[0]) {
+                        var readKeyFileLocation = settings.userChefRepoLocation + '/.chef/' + cmgmt[0].encryption_filename;
+                        var targetDir = currentDirectory + "/../catdata/catalyst/temp/dbItem.json";
                         fs.readFile(readKeyFileLocation, function(err, existFile) {
                             if (err) {
                                 logger.debug("There is no key file exist.");
@@ -1067,6 +1070,7 @@ var Chef = function(settings) {
                                 var procDBItem = exec(createDBItem, options, function(err, stdOut, stdErr) {
                                     if (err) {
                                         logger.debug('Failed in procDBItem', err);
+                                        callback(err, null);
                                         return;
                                     }
                                     fs.unlink(targetDir);
