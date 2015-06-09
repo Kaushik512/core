@@ -54,7 +54,7 @@
                              <a href="#modalForItems" data-backdrop="false" data-toggle="modal" style="cursor:pointer;"> <img src="img/add.png" style="float:right;" class="addList" rel="tooltip" data-placement="top" /></a>
                                 <thead>
                                     <tr class="rowCustomStyle">
-                                        <td>List of Items</td>
+                                      <td></td>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -96,7 +96,7 @@
              <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title">
-                    &nbsp;Create Data Bags
+                    &nbsp;Create Data Bag
                 </h4>
 
             </div> 
@@ -133,20 +133,22 @@
              <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title">
-                    &nbsp;Create Items
+                    &nbsp;Create Item
                 </h4>
 
             </div> 
             
             
-             <div class="modal-body" style="height:200px;">
+             <div class="modal-body" style="height:218px;">
                 <div class="col-lg-6 col-md-6">
 
                             <label for="">ID<span style="color:Red;" class="control-label">&nbsp;*</span></label>
 
                             <input type="text" name="listID" class="form-control listID" id="instanceListID" autofocus/>
+                            <input id="check_id" type="checkbox" name="encryption" value="key"> Do you want to encrypt?
                             <br/>
-                            <textarea rows="4" cols="50" name="listName" class="form-control listName" id="instanceListName" autofocus>{}</textarea>
+                            <label for="">Item Body</label>
+                            <textarea rows="5" cols="29" name="listName" class="listName" id="instanceListName" autofocus>{}</textarea>
                 </div>
                 
                 
@@ -173,16 +175,18 @@ $.get('/d4dMasters/readmasterjsonnew/10',function(data){
     for(i=0;i<data.length;i++){
     //alert(JSON.stringify(data));
     //alert(data[i].configname);
-    $('.widget-header').find('h4.widget-margin').html('Data Bags for ChefServer -&nbsp;' + data[i].configname);
+    $('.widget-header').find('h4.widget-margin').html('Data Bags for Chef Server -&nbsp;' + data[i].configname);
     }
   });
 
 $('.addDB').click(function(e) {
     $('#instanceDBName').trigger('reset');
+    $('.tableHidden').css('display','none');
 });
 
 $('.addList').click(function(e){
     $('#instanceItemName').trigger('reset');
+    $('input.listID').removeAttr('disabled');
 });
 
 $(document).ready(function(e) {
@@ -253,13 +257,18 @@ $(document).ready(function(e) {
 
             $tdClick.click(function(e) {
                 //alert('hello');
-                $('#listNameTable').find('tbody tr td.dataAvList').removeClass('hidden');
+                $('#listNameTable').find('tbody tr').empty();
                 $('.tableHidden').css('display', 'block');
-                alert(JSON.stringify(k));
+                $('#listNameTable').find('tbody tr td.dataAvList').removeClass('hidden');
+                $('#listNameTable thead').find('tr.rowCustomStyle td').html('Items for -&nbsp;' + k);
+
+                
+                //alert(JSON.stringify(k));
                 $('#dataBagIDHiddenInput').val(k);
 
                 getList(k);
-                $('#listNameTable').find('tbody tr').empty();
+                
+                
 
             });
 
@@ -335,6 +344,7 @@ $(document).ready(function(e) {
                 $('.tableHidden').css('display', 'block');
                 alert(JSON.stringify(reqBodyName.name));
                 $('#dataBagIDHiddenInput').val(reqBodyName.name);
+                $('#listNameTable thead').find('tr.rowCustomStyle td').html('Items for -&nbsp;' + reqBodyName.name);
                 getList();
             });
 
@@ -353,18 +363,24 @@ function createItemTableRow(k){
             var $this = $(this);
             var $trNew = $this.parents('tr.itemsList');
             var $editModal = $('#modalForItems');
+            $('textarea#instanceListName').val('');
             $editModal.modal('show');
             $editModal.find('.listID').val(k);
+           // $editModal.find('.listID').attr('disabled','disabled');
+            $('input.listID').attr('disabled','disabled');
             $editModal.find('.listName').val();
             $editModal.find('#itemEditHiddenInput').val('edit');
-            /*var dataBagName = $('#dataBagIDHiddenInput').val();
+            var dataBagName = $('#dataBagIDHiddenInput').val();
                 console.log(dataBagName);
                 console.log(k);
                 var itemId = k;
                 console.log(itemId);
                 $.get('../chef/servers/' + urlParams.id + '/databag/' + dataBagName + '/item/' + itemId + '/find', function(data) {
-                    alert('hello');
-                });*/
+                   // alert('hello');
+                    console.log(data);
+                    var res = JSON.stringify(data);
+                    $('#instanceListName').val(res);
+                });
         });
         //for delete
         $tdForItems.find('button.deleteRow').click(function() {
@@ -416,17 +432,25 @@ function createItemTableRow(k){
         var dataBagName = $form.find('#dataBagIDHiddenInput').val();
         var itemsEditNew = $(this).find('#itemEditHiddenInput').val();
         console.log(dataBagName);
+        var isEncrypt=false;
+        if ($('#check_id').is(":checked")) {
+            isEncrypt=true;
+        }
+        console.log($('#check_id').is(":checked"));
+        console.log(isEncrypt);
         var url;
         var reqBody;
         if (itemsEditNew === 'edit') {
             url = '../chef/servers/' + urlParams.id + '/databag/' + dataBagName + '/item/' + itemID + '/update';
             reqBody = {
+                "isEncrypt":isEncrypt,
                 "dataBagItem": jsonObj
             };
         } else {
             url = '../chef/servers/' + urlParams.id + '/databag/' + dataBagName + '/item/create';
             reqBody = {
                 "id": itemID,
+                "isEncrypt":isEncrypt,
                 "dataBagItem": jsonObj
             };
         }
@@ -437,6 +461,8 @@ function createItemTableRow(k){
             url: url,
             data: reqBody,
             success: function(data, success) {
+                
+
                 $('#listNameTable').find('tbody tr td.dataAvList').addClass('hidden');
                 $('#modalForItems').modal('hide');
                 console.log(itemsEditNew);
