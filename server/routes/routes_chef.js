@@ -945,7 +945,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
                 res.send(500,"Invalid Json for Data Bag item.");
                 return;
             }
-            chef.createDataBagItem(req.params.dataBagName,dataBagItem,function(err,dataBagItem){
+            chef.createDataBagItem(req,dataBagItem,function(err,dataBagItem){
                 if(err){
                     logger.debug("Exit /chef/../databag/../item/create");
                     res.send(500,"Failed to create Data Bag Item on Chef.");
@@ -1035,7 +1035,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
                 res.send(400,"Invalid Json for Data Bag item.");
                 return;
             }
-            chef.updateDataBagItem(req.params.dataBagName,req.params.itemId,dataBagItem,function(err,dataBagItem){
+            chef.updateDataBagItem(req,dataBagItem,function(err,dataBagItem){
                 if(err){
                     logger.debug("Exit /chef/../databag/../item/update");
                     res.send(500,"Failed to update Data Bag Item on Chef.");

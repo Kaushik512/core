@@ -53,8 +53,8 @@ datBagSchema.statics.saveDataBag = function(aDataBag,callback){
 datBagSchema.statics.getDataBagEncryptionInfo = function(dataBagName,dataBagItemId,callback){
 	logger.debug("Enter getDataBagEncryptionInfo().");
 	this.find({
-		"dataBagName" : dataBagName,
-		"dataBagItemId" : dataBagItemId
+		"dataBagName" : dataBagName/*,
+		"dataBagItemId" : dataBagItemId*/
 	},function(err,aDataBag){
 		if(err){
 			callback(err,null);
