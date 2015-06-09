@@ -941,63 +941,75 @@ var Chef = function(settings) {
             var dataBagName = req.params.dataBagName;
             var isEncrypt = req.body.isEncrypt;
             var inFilePath = req.files.keyFile.path;
-
+            var fileName = req.files.keyFile.name;
+            logger.debug("Uploaded file name: ", fileName);
             logger.debug("isEncrypt>>>>>> ", isEncrypt);
+            var options = {
+                cwd: settings.userChefRepoLocation + '/.chef',
+                onError: function(err) {
+                    callback(err, null);
+                },
+                onClose: function(code) {
+                    callback(null, code);
+                }
+            };
             if (isEncrypt) {
-                fs.readFile(inFilePath, function(err, fileData) {
+                DataBagModel.getDataBagEncryptionInfo(dataBagName, itemId, function(err, aDataBag) {
                     if (err) {
-                        logger.debug("No file.");
-                        callback(err, null);
-                        return;
+                        logger.debug("Error to find data bag from mongo.");
                     }
-                    var dataBagData = {
-                        dataBagName: dataBagName,
-                        dataBagItemId: dataBagItem.id,
-                        encryptionKey: '/home/gobinda/openssl/secret_key',
-                        isEncrypted: isEncrypt
-                    };
-                    DataBagModel.saveDataBag(dataBagData, function(err, aDataBag) {
-                        if (err) {
-                            logger.debug("Failed to save data bag.");
-                            callback(err, null);
-                            return;
-                        }
-                        var options = {
-                            cwd: settings.userChefRepoLocation + '/.chef',
-                            onError: function(err) {
-                                callback(err, null);
-                            },
-                            onClose: function(code) {
-                                callback(null, code);
-                            }
-                        };
+                    if (aDataBag.isEncrypted) {
+                        var readKeyFileLocation = settings.userChefRepoLocation + '/.chef/' + aDataBag.encryptionKey;
                         var targetDir = currentDirectory + "/../config/catdata/catalyst/temp/dbItem.json";
-                        var keyFileLocation = settings.userChefRepoLocation + '/.chef/secret-key.pem';
-                        fs.readFile(keyFileLocation, function(err, existFile) {
+                        fs.readFile(readKeyFileLocation, function(err, existDataBag) {
                             if (err) {
-                                logger.debug("Key file not present in chef location.");
+                                logger.debug("There is no file exist.");
+                                callback(err, null);
+                                return;
                             }
-                            if (existFile) {
-                                fs.writeFile(targetDir, JSON.stringify(dataBagItem), function(err) {
+                            fs.writeFile(targetDir, JSON.stringify(dataBagItem), function(err) {
+                                if (err) {
+                                    logger.debug("File creation failed : ", err);
+                                    callback(err, null);
+                                    return;
+                                }
+                                logger.debug("File Created....");
+                                var createDBItem = 'knife data bag from file ' + dataBagName + " " + targetDir + ' --secret ' + keyFileLocation;
+                                var procDBItem = exec(createDBItem, options, function(err, stdOut, stdErr) {
                                     if (err) {
-                                        logger.debug("File creation failed : ", err);
-                                        callback(err, null);
+                                        logger.debug('Failed in procDBItem', err);
                                         return;
                                     }
-                                    logger.debug("File Created....");
-                                    var createDBItem = 'knife data bag from file ' + dataBagName + " " + targetDir + ' --secret ' + keyFileLocation;
-                                    var procDBItem = exec(createDBItem, options, function(err, stdOut, stdErr) {
-                                        if (err) {
-                                            logger.debug('Failed in procDBItem', err);
-                                            return;
-                                        }
-                                        fs.unlink(targetDir);
-                                        logger.debug("File deleted successfully..");
-                                        callback(null, dataBagItem);
-                                        return;
-                                    });
+                                    fs.unlink(targetDir);
+                                    logger.debug("File deleted successfully..");
+                                    callback(null, dataBagItem);
+                                    return;
                                 });
-                            } else {
+                            });
+                        });
+
+                    } else {
+                        fs.readFile(inFilePath, function(err, fileData) {
+                            if (err) {
+                                logger.debug("No file.");
+                                callback(err, null);
+                                return;
+                            }
+                            var dataBagData = {
+                                dataBagName: dataBagName,
+                                dataBagItemId: dataBagItem.id,
+                                encryptionKey: fileName,
+                                isEncrypted: isEncrypt
+                            };
+                            DataBagModel.saveDataBag(dataBagData, function(err, aDataBag) {
+                                if (err) {
+                                    logger.debug("Failed to save data bag.");
+                                    callback(err, null);
+                                    return;
+                                }
+
+                                var targetDir = currentDirectory + "/../config/catdata/catalyst/temp/dbItem.json";
+                                var keyFileLocation = settings.userChefRepoLocation + '/.chef/' + fileName;
                                 //There is no key file in chef location so createing
                                 fs.writeFile(keyFileLocation, fileData, function(err) {
                                     if (err) {
@@ -1027,9 +1039,9 @@ var Chef = function(settings) {
                                     });
 
                                 });
-                            }
+                            });
                         });
-                    });
+                    }
                 });
 
             } else {
@@ -1063,52 +1075,78 @@ var Chef = function(settings) {
                     callback(err, null);
                     return;
                 }
-                logger.debug("isEncrypt>>>>>> ", isEncrypt);
-                var inFilePath = req.files.keyFile.path;
-                if (isEncrypt) {
-                    fs.readFile(inFilePath, function(err, fileData) {
-                        if (err) {
-                            logger.debug("No file.");
-                            callback(err, null);
-                            return;
-                        }
-                        var options = {
-                            cwd: settings.userChefRepoLocation + '/.chef',
-                            onError: function(err) {
-                                callback(err, null);
-                            },
-                            onClose: function(code) {
-                                callback(null, code);
-                            }
-                        };
+                var dataBagName = req.params.dataBagName;
+            var isEncrypt = req.body.isEncrypt;
+            var inFilePath = req.files.keyFile.path;
+            var fileName = req.files.keyFile.name;
+            logger.debug("Uploaded file name: ", fileName);
+            logger.debug("isEncrypt>>>>>> ", isEncrypt);
+            var options = {
+                cwd: settings.userChefRepoLocation + '/.chef',
+                onError: function(err) {
+                    callback(err, null);
+                },
+                onClose: function(code) {
+                    callback(null, code);
+                }
+            };
+            if (isEncrypt) {
+                DataBagModel.getDataBagEncryptionInfo(dataBagName, itemId, function(err, aDataBag) {
+                    if (err) {
+                        logger.debug("Error to find data bag from mongo.");
+                    }
+                    if (aDataBag.isEncrypted) {
+                        var readKeyFileLocation = settings.userChefRepoLocation + '/.chef/' + aDataBag.encryptionKey;
                         var targetDir = currentDirectory + "/../config/catdata/catalyst/temp/dbItem.json";
-                        logger.debug("Current dir: ", targetDir);
-                        var keyFileLocation = settings.userChefRepoLocation + '/.chef/secret-key.pem';
-                        fs.readFile(keyFileLocation, function(err, existFile) {
+                        fs.readFile(readKeyFileLocation, function(err, existDataBag) {
                             if (err) {
-                                logger.debug("Error to fetch key file from chef location.");
+                                logger.debug("There is no file exist.");
+                                callback(err, null);
+                                return;
                             }
-                            if (existFile) {
-                                fs.writeFile(targetDir, JSON.stringify(dataBagItem), function(err) {
+                            fs.writeFile(targetDir, JSON.stringify(dataBagItem), function(err) {
+                                if (err) {
+                                    logger.debug("File creation failed : ", err);
+                                    callback(err, null);
+                                    return;
+                                }
+                                logger.debug("File Created....");
+                                var createDBItem = 'knife data bag from file ' + dataBagName + " " + targetDir + ' --secret ' + keyFileLocation;
+                                var procDBItem = exec(createDBItem, options, function(err, stdOut, stdErr) {
                                     if (err) {
-                                        logger.debug("Data Bag File creation failed : ", err);
-                                        callback(err, null);
+                                        logger.debug('Failed in procDBItem', err);
                                         return;
                                     }
-                                    logger.debug("File Created....");
-                                    var createDBItem = 'knife data bag from file ' + dataBagName + " " + targetDir + ' --secret ' + keyFileLocation;
-                                    var procDBItem = exec(createDBItem, options, function(err, stdOut, stdErr) {
-                                        if (err) {
-                                            logger.debug('Failed in procDBItem', err);
-                                            return;
-                                        }
-                                        fs.unlink(targetDir);
-                                        logger.debug("File deleted successfully..");
-                                        callback(null, dataBagItem);
-                                        return;
-                                    });
+                                    fs.unlink(targetDir);
+                                    logger.debug("File deleted successfully..");
+                                    callback(null, dataBagItem);
+                                    return;
                                 });
-                            } else {
+                            });
+                        });
+
+                    } else {
+                        fs.readFile(inFilePath, function(err, fileData) {
+                            if (err) {
+                                logger.debug("No file.");
+                                callback(err, null);
+                                return;
+                            }
+                            var dataBagData = {
+                                dataBagName: dataBagName,
+                                dataBagItemId: dataBagItem.id,
+                                encryptionKey: fileName,
+                                isEncrypted: isEncrypt
+                            };
+                            DataBagModel.saveDataBag(dataBagData, function(err, aDataBag) {
+                                if (err) {
+                                    logger.debug("Failed to save data bag.");
+                                    callback(err, null);
+                                    return;
+                                }
+
+                                var targetDir = currentDirectory + "/../config/catdata/catalyst/temp/dbItem.json";
+                                var keyFileLocation = settings.userChefRepoLocation + '/.chef/' + fileName;
                                 //There is no key file in chef location so createing
                                 fs.writeFile(keyFileLocation, fileData, function(err) {
                                     if (err) {
@@ -1116,9 +1154,10 @@ var Chef = function(settings) {
                                         callback(err, null);
                                         return;
                                     }
+                                    logger.debug("Current dir: ", targetDir);
                                     fs.writeFile(targetDir, JSON.stringify(dataBagItem), function(err) {
                                         if (err) {
-                                            logger.debug("Data Bag File creation failed : ", err);
+                                            logger.debug("File creation failed : ", err);
                                             callback(err, null);
                                             return;
                                         }
@@ -1135,12 +1174,12 @@ var Chef = function(settings) {
                                             return;
                                         });
                                     });
+
                                 });
-                            }
+                            });
                         });
-                    });
-
-
+                    }
+                });
                 } else {
                     chefClient.put('/data/' + dataBagName + '/' + itemId, dataBagItem, function(err, chefRes, chefResBody) {
                         if (err) {
