@@ -29,7 +29,7 @@
 
 <div class="clearfix"></div>
 <ul class="nav nav-tabs " role="tablist">
-  <li class="active"><a href="#organiz" role="tab" data-toggle="tab">Nodes</a></li>
+  <li class="active"><a href="#organiz" role="tab" data-toggle="tab"></a></li>
 </ul>
 
 <!-- Tab panes -->
@@ -234,6 +234,12 @@ $(document).ready(function(){
       $('#buttonForIP').addClass('hidden');
    }
 });
+
+$.get('/d4dMasters/readmasterjsonnew/10',function(data){
+    for(i=0;i<data.length;i++){
+    $('.nav-tabs').find('li.active a').html('Nodes for Chef Server -&nbsp;' + data[i].configname);
+    }
+  });
 
 $('#buttonForIP').click(function(e){
   var perm = haspermission('instancelaunch','execute');
