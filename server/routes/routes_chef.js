@@ -1029,10 +1029,10 @@ module.exports.setRoutes = function(app, verificationFunc) {
             var dataBagItem;
             logger.debug("dataBagItem>>>>>>>>> ",req.body.dataBagItem);
             if(typeof req.body.dataBagItem === 'undefined'){
-                dataBagItem = {"id":req.body.id};
+                dataBagItem = {"id":req.params.itemId};
             }else{
                 dataBagItem =req.body.dataBagItem;
-                dataBagItem.id = req.body.id;
+                dataBagItem.id = req.params.itemId;
             }
             try{
                 logger.debug("Incoming data bag item: ",JSON.stringify(dataBagItem));

@@ -941,7 +941,7 @@ var Chef = function(settings) {
             }
             var dataBagName = req.params.dataBagName;
             var isEncrypt = req.body.isEncrypt;
-            logger.debug("isEncrypt>>>>>> ", isEncrypt);
+            logger.debug("isEncrypt>>>>>> ",typeof isEncrypt);
             var options = {
                 cwd: settings.userChefRepoLocation + '/.chef',
                 onError: function(err) {
@@ -951,7 +951,7 @@ var Chef = function(settings) {
                     callback(null, code);
                 }
             };
-            if(isEncrypt===true) {
+            if(isEncrypt === "true") {
                 d4dModelNew.d4dModelMastersConfigManagement.find({
                     rowid: req.params.serverId
                 }, function(err, cmgmt) {
@@ -1033,7 +1033,7 @@ var Chef = function(settings) {
             var dataBagName = req.params.dataBagName;
             var isEncrypt = req.body.isEncrypt;
             var itemId = req.params.itemId;
-            logger.debug("isEncrypt>>>>>> ", isEncrypt);
+            logger.debug("isEncrypt>>>>>> ",typeof isEncrypt);
             var options = {
                 cwd: settings.userChefRepoLocation + '/.chef',
                 onError: function(err) {
@@ -1043,7 +1043,7 @@ var Chef = function(settings) {
                     callback(null, code);
                 }
             };
-            if(isEncrypt === true) {
+            if(isEncrypt === "true") {
                 d4dModelNew.d4dModelMastersConfigManagement.find({
                     rowid: req.params.serverId
                 }, function(err, cmgmt) {
