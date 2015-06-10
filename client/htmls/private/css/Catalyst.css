@@ -7863,7 +7863,8 @@ word-break:break-word;
 tr.selectedOne:hover td, 
 tr.selectedOne td,
 tr.selectedOne td a{
-    background-color: #40baf1!important;
+    background-color: lightblue!important;
     color:black!important;
     font-weight: bold;
+    font-size: 12px;
 }

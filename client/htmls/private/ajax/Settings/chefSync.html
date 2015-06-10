@@ -235,11 +235,7 @@ $(document).ready(function(){
    }
 });
 
-$.get('/d4dMasters/readmasterjsonnew/10',function(data){
-    for(i=0;i<data.length;i++){
-    $('.nav-tabs').find('li.active a').html('Nodes for Chef Server -&nbsp;' + data[i].configname);
-    }
-  });
+
 
 $('#buttonForIP').click(function(e){
   var perm = haspermission('instancelaunch','execute');

@@ -321,8 +321,8 @@
 
  <td>S.No </td>                                                                      
  <td>Tasks Name</td>
- <td>Execute</td>
- <td>History</td>
+
+
  </tr>
  </thead>
  <tbody>
@@ -942,7 +942,7 @@
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title" id="myModalLabel">
-          <i class="fa fa-terminal txt-color-blue"></i>
+          <i class="fa fa-terminal txt-color-blue"></i>Terminal
         </h4>
       </div>
       <div class="modal-body" style="height:430px">
@@ -1565,10 +1565,7 @@ $.get('../instances/' + urlParams.id, function(data) {
             return;
         }
         var $sshModal = $('#modalSSHShellContainer');
-        var $selectedCard = $('.domain-role-thumbnail').find('.domain-roles-caption');
-        instanceIpCard = $selectedCard.attr('data-instanceIP');
         var instanceId = $(this).parents('.domain-roles-caption').attr('data-instanceId');
-        $sshModal.find('.modal-title').html('Terminal for IP:&nbsp;' + instanceIpCard);
         $sshModal.find('.modal-body').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
         $sshModal.modal('show');
         $.ajax({
@@ -2112,59 +2109,44 @@ $.get('../instances/' + urlParams.id, function(data) {
     $cfmwareTbody.append($tr);
 
     //$collapseTaskAreaTbody.empty();
-    window.instanceIPForAppLink =  data.instanceIP;
-    
-    if (data.appUrls && data.appUrls.length) {
-      for(var kk =0;kk<data.appUrls.length;kk++) {
-        createAppUrlTableRow(data.appUrls[kk]);
-        createAppUrlCardLink(data.appUrls[kk],data.instanceIP);
-      }
-    }
-   
-    $('.loadingControlPanelIndicator').hide();
-    $('#controlPanelContainer').show();
-
     if (data.taskIds && data.taskIds.length) {
         var $collapseTaskAreaTbody = $('#collapseTaskArea').find('tbody');
         $.post('../tasks', {
             taskIds: data.taskIds
-        }, function(task) {
+        }, function(tasks) {
             var str = '';
-            for (var i = 0; i < task.length; i++) {
+            for (var i = 0; i < tasks.length; i++) {
                 var $trTask = $('<tr style="line-height:2.3"></tr>');
                 var $tdSerial = $('<td/>')
                 var $tdName = $('<td class="taskNameTd"/>');
-                var $tdExecute = $('<td><img style="height:22px;cursor:pointer" src="img/Execute.png" alt="Execute" rel="tooltip" data-placement="top" data-original-title="Execute"></td>');
-                var $tdHistory = $('<td><img style="height:22px;cursor:pointer" src="img/History.png" alt="History" rel="tooltip" data-placement="top" data-original-title="History"></td>');
-                $tdName.append(task[i].name);
+                $tdName.append(tasks[i].name);
                 $trTask.append($tdSerial);
                 $trTask.append($tdName);
-                $trTask.append($tdExecute);
-                $trTask.append($tdHistory);
                 $tasksDatatable.row.add($trTask).draw();
-                createTaskCardLink(task[i]);
             }
         });
     }
 
-    function createTaskCardLink(task) {
-        var $taskIcon = $('<div class="tasksBlock"><img rel="tooltip" data-taskid=' + task._id + ' data-placement="top" class="taskCardIMG taskLinkExecute" title=' + task.name + '  alt="task" style="cursor:pointer" src="img/Execute.png"/></div>');
-        //for showing the hover
 
-        //click for tasks
-        (function(taskId) {
-            $taskIcon.find('.taskLinkExecute').click(function(e) {
-                $('a[data-executeTaskId="' + taskId + '"]').click();
-            });
-        })(task._id);
-        $taskIcon.find('img').tooltip();
-        $taskIcon.find('a').tooltip();
-        var $componentListTasks = $('.instance-bootstrap-list');
-        $componentListTasks.last().append($taskIcon, '<br/><br/>');
-        if ($componentListTasks.children().length > 2) {
-            $taskIcon.hide();
+    window.instanceIPForAppLink = data.instanceIP;
+
+    if (data.appUrls && data.appUrls.length) {
+        for (var kk = 0; kk < data.appUrls.length; kk++) {
+            createAppUrlTableRow(data.appUrls[kk]);
+            createAppUrlCardLink(data.appUrls[kk], data.instanceIP);
         }
     }
+    /*else {
+      $('#appUrlTemplateFormCreate').removeClass('hidden');
+    }*/
+
+
+
+
+    $('.loadingControlPanelIndicator').hide();
+    $('#controlPanelContainer').show();
+
+
     $('#addTaskBtn').click(function(e) {
         var $select = $('#taskList').empty();
         var taskIds = [];
@@ -2187,33 +2169,23 @@ $.get('../instances/' + urlParams.id, function(data) {
         var $taskSelect = $('#taskList');
         var $selectedOptions = $taskSelect.find('option:selected');
         var taskIds = $taskSelect.val();
-        var $componentListTask = $('.instance-bootstrap-list');
         if (taskIds) {
             $.post('../instances/' + data._id + '/addTask', {
                 taskIds: taskIds
             }, function() {
-              console.log(data);
                 var str = '';
                 $tasksDatatable.clear().draw();
-                for(var i=0;i<$selectedOptions.length;i++){
-                  
-                  var $trTask = $('<tr style="line-height:2.3"></tr>');
-                  var $tdSerial = $('<td/>');
-                  str = $($selectedOptions[i]).text();
-                  var $tdName = $('<td class="taskNameTd"/>');
-                  var $tdExecute = $('<td><img style="height:22px;cursor:pointer" src="img/Execute.png" alt="Execute" rel="tooltip" data-placement="top" data-original-title="Execute"></td>');
-                  var $tdHistory = $('<td><img style="height:22px;cursor:pointer" src="img/History.png" alt="History" rel="tooltip" data-placement="top" data-original-title="History"></td>');
-                  $tdName.append(str);
-                  $trTask.append($tdSerial);
-                  $trTask.append($tdName);
-                  $trTask.append($tdExecute);
-                  $trTask.append($tdHistory);
-                  $tasksDatatable.row.add($trTask).draw();
-                  createTaskCardLink(taskIds[0]);
+                for (var i = 0; i < $selectedOptions.length; i++) {
+                    var $trTask = $('<tr style="line-height:2.3"></tr>');
+                    var $tdSerial = $('<td/>');
+                    str = $($selectedOptions[i]).text();
+                    var $tdName = $('<td class="taskNameTd"/>');
+                    $tdName.append(str);
+                    $trTask.append($tdSerial);
+                    $trTask.append($tdName);
+                    $tasksDatatable.row.add($trTask).draw();
                 }
                 $('#instanceTaskModal').modal('hide');
-                console.log(taskIds);
-
                 data.taskIds = taskIds;
             });
         } else {
@@ -2425,7 +2397,6 @@ function addActionLogRow(actionLog) {
     $tr.append($tdName);
 
     var $tdStatus = $('<td></td>');
-    //for failure
     var status = '<img rel="tooltip" data-placement="top" title="Failed" src="img/indicator_stopped.png"/>';
 
     //for condition when polling or unknown
@@ -2568,6 +2539,15 @@ $('.addServiceBtn').click(function() {
 });
 
 </script>
+<!--<script>
+  var containerHeight = $(".getContentWidth").height();
+  $("#wid-id-10").css("height", containerHeight );
+  //var contentWidth = containerWidth - staticIconWidth;
+  // $("#myTabContent3").css({'width': contentWidth});
+  var totalHeight = $("#content").height();
+  $(".thumbnails").css("height", totalHeight);
+  console.log(totalHeight);
+</script>-->
 
 <script type="text/javascript">
   
@@ -2687,6 +2667,9 @@ $(document).ready(function(e) {
 
    });
 </script>
+<script>
+ 
+</script>
 <script type="text/javascript">
   if (!$.fn.dataTable.isDataTable('#tableactionHistory')) {
       //var $taskListArea = $('.taskListArea').empty();
@@ -2730,10 +2713,6 @@ $(document).ready(function(e) {
           "pagingType": "full_numbers",
           "aoColumns": [{
               "bSortable": true
-          },{
-              "bSortable": false
-          },{
-              "bSortable": false
           }, {
               "bSortable": false
           }],
@@ -2759,8 +2738,15 @@ $(document).ready(function(e) {
                   }
 
               });
+
 </script>
+
+
 <script>
+    // var searchTemplate = "<div class='row form-inline'><label style='float: left;margin-left:15px;'>Search: <input type='text' class='form-control' placeholder='(start typing)'></label></div>"
+    // $(".table-sieve").sieve({
+    //     searchTemplate: searchTemplate
+    // });
     var searchTemplate = "<div class='row form-inline'><label style='float: left;margin-left:15px;'>Filter: <input type='text' class='form-control' placeholder='search e.g. acpid'></label></div>"
     $(".p-sieve").sieve({
         searchTemplate: searchTemplate,
@@ -2818,6 +2804,7 @@ $(document).ready(function(e) {
      $appUrlTableBody.append($row);
 
  }
+
  function removeAppUrlCardLink(appUrlId) {
      var $anchor = $('a[data-appUrlId="' + appUrlId + '"]').parent();
      if (!$anchor.length) {
@@ -2888,6 +2875,7 @@ $(document).ready(function(e) {
              name: appUrlData.name
          }
      }
+
      var $appUrlIdInput = $(this).find('.appUrlId');
 
      $.post(url, reqBody, function(data) {
