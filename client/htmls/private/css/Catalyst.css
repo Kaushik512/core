@@ -1,3 +1,4 @@
+
 .assignedRunlists{
     border:1px solid #dddddd;
     list-style:none outside none;
@@ -1208,9 +1209,9 @@ body.container {
     margin: 30px;
 }
 .no-padding .dataTables_wrapper table, .no-padding >table {
-    border: 0!important;
+  /*  border: 0!important;*/
     margin-bottom: 0!important;
-    border-bottom-width: 0!important;
+    /*border-bottom-width: 0!important;*/
 }
 .no-padding-bottom {
     padding-bottom: 0!important;
@@ -5619,7 +5620,7 @@ table.dataTable.order-column.hover tbody tr.even:hover.selected > .sorting_3 {
   background-color: #a4b2cb;
 }
 table.dataTable.no-footer {
-  border-bottom: 1px solid #111111;
+/*  border-bottom: 1px solid #111111;*/
 }
 table.dataTable.nowrap th, table.dataTable.nowrap td {
   white-space: nowrap;
@@ -7858,4 +7859,11 @@ word-break:break-word;
     /*border-right-color: #c2e1f5;*/
     border-width: 7px;
     margin-top: -36px;
+}
+tr.selectedOne:hover td, 
+tr.selectedOne td,
+tr.selectedOne td a{
+    background-color: #40baf1!important;
+    color:black!important;
+    font-weight: bold;
 }

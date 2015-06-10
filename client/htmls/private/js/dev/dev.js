@@ -2470,7 +2470,7 @@
                                                           "bSortable": false
                                                       }, {
                                                           "bSortable": false
-                                                      },null
+                                                      }
                                                   ]
 
                                               });
