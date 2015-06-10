@@ -590,6 +590,10 @@ var Chef = function(settings) {
                 sshParamObj.password = options.password;
             }
             logger.debug('json jsonAttributes ==> ', options.jsonAttributes);
+            var lockFile = false;
+            if(options.parallel) {
+              lockFile = true;
+            }
 
             javaSSHWrapper.getNewInstance(sshParamObj, function(err, javaSSh) {
                 if (err) {
@@ -597,7 +601,7 @@ var Chef = function(settings) {
                     return;
                 }
                 logger.debug('Run List:' + runlist.join());
-                javaSSh.execChefClient(runlist.join(), overrideRunlist, options.jsonAttributes, callback, callbackOnStdOut, callbackOnStdErr);
+                javaSSh.execChefClient(runlist.join(), overrideRunlist, options.jsonAttributes,lockFile, callback, callbackOnStdOut, callbackOnStdErr);
             });
 
         } else {

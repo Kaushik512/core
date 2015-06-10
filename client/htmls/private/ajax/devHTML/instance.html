@@ -344,3 +344,114 @@
         </div>
     </div>
 </div> 
+
+<!--running chef client-->
+<div class="modal fade bs-example-modal-lg" id="chefRunModalContainer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel"><i class="fa fa-pencil-square-o txt-color-blue"></i>Update Runlist</h4>
+                <a style="font-size:14px!important;margin-top:-24px;float:right;margin-right:60px;" href="#modalForHelp" data-toggle="modal"><i class="fa fa-question"></i>&nbsp;Help</a>
+            </div>
+            <div class="modal-body" style="padding:0px !important">
+              <div class="panel-group" id="chefRunAccordion" role="tablist" aria-multiselectable="true">
+               <div class="panel panel-default">
+                <div class="panel-heading" role="tab" id="headingOne">
+                  <h4 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#chefRunAccordion" href="#chefRunAccordionRunlistArea" aria-expanded="true" aria-controls="collapseOne">
+                        Choose Runlist
+                    </a>
+                  </h4>
+                </div>
+               <div id="chefRunAccordionRunlistArea" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                <div class="panel-body">
+                    <div class="chefRunlistContainer">
+
+                   </div>
+                </div>
+              </div>
+             </div>
+             <div class="panel panel-default">
+                <div class="panel-heading" role="tab" id="headingOne">
+                  <h4 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#chefRunAccordion" href="#chefRunAccordionAttributeArea" aria-expanded="true" aria-controls="collapseOne">
+                        Attributes 
+                    </a><a class="bpEditBtn btn btn-primary editChefClientRunAttribBtn" rel="tooltip" data-placement="top" data-original-title="Edit"> <i class="ace-icon fa fa-pencil"></i> </a>
+                  </h4>
+                </div>
+               <div id="chefRunAccordionAttributeArea" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+                <div class="panel-body">
+                    <table  class="chefRunAttributesViewTable table table-striped table-bordered table-hover dataTable no-footer table-condensed tablesorter" cellpadding="5px" width="100%">
+                                         <thead>
+                                          <tr>
+                                            <th>Attributes</th>
+                                            <th>Values</th>
+                                          </tr>
+                                         </thead>
+                                         <tbody class="attributesViewTableBody">
+
+                                         </tbody>
+                                        </table>
+                    
+                </div>
+              </div>
+             </div>
+            </div> 
+            </div> 
+
+            
+               
+
+
+            
+            <div class="modal-footer" style="margin-top:0px !important;">
+                <button type="button" class="btn btn-default btn-primary btnUpdateInstanceRunlist">Update</button>
+                <button type="button" class="btn btn-default btn-primary" data-dismiss="modal">Close</button>
+            </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--execute modal-->
+<div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="chefClientRunAttributesModal" class="modal fade" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button aria-hidden="true" data-dismiss="modal" class="close" type="button">
+                    x
+                </button>
+                <h4 class="modal-title">
+                    <i class="fa fa-eraser txt-color-blue"></i>&nbsp;&nbsp;Edit Attributes
+                </h4>
+            </div>
+            <div class="modal-body no-padding">
+                <div class="loadingContainer">
+                    <img class="center-block loadingContainerimageCSS" src="img/loading.gif" />
+                </div>
+                <div class="errorMsgContainer loadingerrorMsgContainerCSS"></div> 
+                <form  class="attributesEditFormArea padding10" action="">
+                    <table class="table table-striped table-bordered table-hover dataTable no-footer table-condensed tablesorter attributesListTable" cellpadding="5px" width="100%">
+                     <thead>
+                      <tr>
+                        <th>Attributes</th>
+                        <th>Values</th>
+                      </tr>
+                     </thead>
+                     <tbody class="attributesEditTableBody">
+
+                     </tbody>
+                    </table>
+                    
+                </form>
+            </div>
+           <div class="modal-footer">
+        <button type="button" class="btn btn-primary btnSaveInstanceRunlistAttributes">Save</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        
+      </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!--/.modal-assignedExecute-->
+
