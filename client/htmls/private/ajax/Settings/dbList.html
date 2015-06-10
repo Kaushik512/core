@@ -24,7 +24,7 @@
                                     <div class="nodeListContainer"></div>
                     <div class="widget-main dataBagTable hidden" style="min-height:300px">
                         <div class="col-md-4 table-responsive" style="padding-left:0px; padding-right:0px;">
-                          <a href="#modalForDB" data-backdrop="false" data-toggle="modal" style="cursor:pointer;"> <img src="img/add.png" style="float:right;" class="addDB" rel="tooltip" data-placement="top" /></a>
+                          <a href="#modalForDB" data-backdrop="false" data-toggle="modal" style="cursor:pointer;"> <img src="img/add.png" style="float:right;" class="addDB" rel="tooltip" data-placement="top" title="Add New Data Bag"/></a>
                           <div style="height:294px;overflow-y:auto;" id="dbNameTable_wrapper" class="dataTables_wrapper no-footer">
                          <table id="dbNameTable" class="tableData table table-striped table-bordered table-hover dataTable no-footer" cellpadding="5px" width="100%" style="text-align:center;">
                              
@@ -53,7 +53,7 @@
                                  
                                   <div class="spinner hidden"><img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" /></div>
                         <div class="col-md-4 table-responsive tableHidden" id="listData" style="padding-left:10px; padding-right:0px;display:none;">
-                          <a href="#modalForItems" data-backdrop="false" data-toggle="modal" style="cursor:pointer;"> <img src="img/add.png" style="float:right;" class="addList" rel="tooltip" data-placement="top" /></a>
+                          <a href="#modalForItems" data-backdrop="false" data-toggle="modal" style="cursor:pointer;"> <img src="img/add.png" style="float:right;" class="addList" rel="tooltip" data-placement="top" title="Add New Item" /></a>
                            <div style="height:294px;overflow-y:auto;" id="dbNameTable_wrapper" class="dataTables_wrapper no-footer">
                          <table id="listNameTable" class="tableData table table-striped table-bordered table-hover dataTable no-footer" cellpadding="5px" width="100%" style="text-align:center">
                              
@@ -209,6 +209,7 @@ $('.addDB').click(function(e) {
     $('#instanceDBName').trigger('reset');
     $('.tableHidden').css('display','none');
     $('#dbNameTable tbody tr').removeClass('selectedOne');
+    $('#jsonData').css('display','none');
 });
 
 $('.addList').click(function(e){
@@ -275,7 +276,7 @@ $(document).ready(function(e) {
             var rowid = urlParams.id;
             if (rowid === data[i].rowid) {
                 console.log(data[i]);
-                $('.widget-header').find('h4.widget-margin').html('Data Bags for Chef Server -&nbsp;' + data[i].configname);
+                $('.widget-header').find('h4.widget-margin').html('Data Bags & Items for Chef Server -&nbsp;' + data[i].configname);
             }
         }
     });

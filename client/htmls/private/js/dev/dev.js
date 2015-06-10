@@ -3262,7 +3262,7 @@
                                                                var $table = $('<table></table>');
 
                                                                for (var i = 0; i < data.length; i++) {
-                                                                   var $rowDiv = $('<tr class="row"></tr>');
+                                                                   var $rowDiv = $('<tr class="row rowSpacing"></tr>');
                                                                    var timeString = new Date().setTime(data[i].timestamp);
                                                                    var date = new Date(timeString).toLocaleString(); //converts to human readable strings
 
@@ -3275,7 +3275,7 @@
                                                                    }
 
                                                                    $table.append($rowDiv);
-                                                                   $table.append('<hr/>');
+                                                                  // $table.append('<hr/>');
 
                                                                }
 
