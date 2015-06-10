@@ -965,7 +965,7 @@ var Chef = function(settings) {
                         fs.readFile(readKeyFileLocation, function(err, existFile) {
                             if (err) {
                                 logger.debug("There is no file exist.");
-                                callback(err, null);
+                                callback(null, 403);
                                 return;
                             }
                             fs.writeFile(targetDir, JSON.stringify(dataBagItem), function(err) {
@@ -1057,7 +1057,7 @@ var Chef = function(settings) {
                         fs.readFile(readKeyFileLocation, function(err, existFile) {
                             if (err) {
                                 logger.debug("There is no key file exist.");
-                                callback(err, null);
+                                callback(null, 403);
                                 return;
                             }
                             fs.writeFile(targetDir, JSON.stringify(dataBagItem), function(err) {

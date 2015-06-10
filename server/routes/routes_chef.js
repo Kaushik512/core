@@ -956,6 +956,11 @@ module.exports.setRoutes = function(app, verificationFunc) {
                     res.send(500,"Data Bag Item already exist on Chef.");
                     return;
                 }
+                if(dataBagItem === 403){
+                    logger.debug("Exit /chef/../databag/../item/create");
+                    res.send(403,"Encryption Key is not available,Please upload.");
+                    return;
+                }
                 logger.debug("Exit /chef/../databag/../item/create");
                 res.send(dataBagItem);
                 return;
@@ -1046,6 +1051,11 @@ module.exports.setRoutes = function(app, verificationFunc) {
                 if(err){
                     logger.debug("Exit /chef/../databag/../item/update");
                     res.send(500,"Failed to update Data Bag Item on Chef.");
+                    return;
+                }
+                if(dataBagItem === 403){
+                    logger.debug("Exit /chef/../databag/../item/update");
+                    res.send(403,"Encryption Key is not available,Please upload.");
                     return;
                 }
                 logger.debug("Exit /chef/../databag/../item/update");
