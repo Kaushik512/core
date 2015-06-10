@@ -733,6 +733,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                             }
                                             attributeObj = utils.mergeObjects(objectArray);
                                             console.log('json ==> ',attributeObj);
+                                        } else {
+                                            req.body.jsonAttributes = [];
                                         }
                                         jsonAttributeObj =  utils.mergeObjects([attributeObj,jsonAttributeObj]); 
                                         
@@ -795,7 +797,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                             logger.debug("knife ret code", retCode);
                                             if (retCode == 0) {
                                                 logger.debug('updating node runlist in db');
-                                                instancesDao.updateInstancesRunlist(req.params.instanceId, req.body.runlist, function(err, updateCount) {
+                                                instancesDao.updateInstancesRunlistAndAttributes(req.params.instanceId, req.body.runlist, req.body.jsonAttributes,function(err, updateCount) {
                                                     if (err) {
                                                         return;
                                                     }

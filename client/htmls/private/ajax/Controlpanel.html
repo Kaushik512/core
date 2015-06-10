@@ -598,14 +598,56 @@
          <a style="font-size:14px!important;margin-top:-24px;float:right;margin-right:60px;" href="#modalForHelp" data-toggle="modal"><i class="fa fa-question"></i>&nbsp;Help</a>
       </div>
       <div class="modal-body" style="padding:0px !important">
-        
-      </div>
+              <div class="panel-group" id="chefRunAccordion" role="tablist" aria-multiselectable="true">
+               <div class="panel panel-default">
+                <div class="panel-heading" role="tab" id="headingOne">
+                  <h4 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#chefRunAccordion" href="#chefRunAccordionRunlistArea" aria-expanded="true" aria-controls="collapseOne">
+                        Choose Runlist
+                    </a>
+                  </h4>
+                </div>
+               <div id="chefRunAccordionRunlistArea" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                <div class="panel-body">
+                    <div class="chefRunlistContainer">
+
+                   </div>
+                </div>
+              </div>
+             </div>
+             <div class="panel panel-default">
+                <div class="panel-heading" role="tab" id="headingOne">
+                  <h4 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#chefRunAccordion" href="#chefRunAccordionAttributeArea" aria-expanded="true" aria-controls="collapseOne">
+                        Attributes 
+                    </a> <a class="bpEditBtn btn btn-primary editChefClientRunAttribBtn" rel="tooltip" data-placement="top" data-original-title="Edit" > <i class="ace-icon fa fa-pencil"></i> </a>
+                  </h4>
+                </div>
+               <div id="chefRunAccordionAttributeArea" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+                <div class="panel-body">
+                    <table  class="chefRunAttributesViewTable table table-striped table-bordered table-hover dataTable no-footer table-condensed tablesorter" cellpadding="5px" width="100%">
+                                         <thead>
+                                          <tr>
+                                            <th>Attributes</th>
+                                            <th>Values</th>
+                                          </tr>
+                                         </thead>
+                                         <tbody class="attributesViewTableBody">
+
+                                         </tbody>
+                                        </table>
+                    
+                </div>
+              </div>
+             </div>
+      </div> 
       <div class="modal-footer">
-        <button type="button" class="btn btn-default btn-primary editChefClientRunAttribBtn">Edit Attributes</button>
+        <button type="button" class="btn btn-default btn-primary btnUpdateInstanceRunlist">Update</button>
         <button type="button" class="btn btn-default btn-primary" data-dismiss="modal">Close</button>
       </div>
     </div>
   </div>
+</div>
 </div>
 
 <!--execute modal-->
@@ -641,7 +683,7 @@
                 </form>
             </div>
            <div class="modal-footer">
-        <button type="button" class="btn btn-primary btnUpdateInstanceRunlist">Update</button>
+        <button type="button" class="btn btn-primary btnSaveInstanceRunlistAttributes">Save</button>
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
         
       </div>
@@ -1298,7 +1340,7 @@ $.get('../instances/' + urlParams.id, function(data) {
         }
 
 
-    var $domainRolesCaption = $('.domain-roles-caption').attr('data-instanceId', data._id).attr('data-chefServerId', data.chef.serverId).attr('data-osType', data.hardware.os).attr('data-instanceIP', data.instanceIP).data('runlist', data.runlist).data('orgId', data.orgId).data('serviceList', data.serviceIds);
+    var $domainRolesCaption = $('.domain-roles-caption').attr('data-instanceId', data._id).attr('data-chefServerId', data.chef.serverId).attr('data-osType', data.hardware.os).attr('data-instanceIP', data.instanceIP).data('runlist', data.runlist).data('orgId', data.orgId).data('serviceList', data.serviceIds).data('jsonAttributes',data.attributes);
 
     var $divHeadingCP = $domainRolesCaption.find('.domain-roles-heading').empty();
 
@@ -1722,8 +1764,13 @@ $.get('../instances/' + urlParams.id, function(data) {
         }
         var $ccrs = $chefCookbookRoleSelector(urlParams.org, null, runlist, readMode);
         var $controlPanelChefRunModalContainer = $('#controlPanelChefRunModalContainer');
-        $controlPanelChefRunModalContainer.find('.modal-body').empty().append($ccrs);
-        $controlPanelChefRunModalContainer.find('.modal-body').data('$ccrs', $ccrs);
+        $controlPanelChefRunModalContainer.find('.chefRunlistContainer').empty().append($ccrs);
+        $controlPanelChefRunModalContainer.find('.chefRunlistContainer').data('$ccrs', $ccrs);
+        $controlPanelChefRunModalContainer.find('.attributesViewTableBody').empty();
+        var attributes = $parent.data('jsonAttributes');
+        if(attributes) {
+         createAttribTableRowFromJson(attributes);
+        }
         $controlPanelChefRunModalContainer.modal('show');
 
     });
@@ -1739,7 +1786,7 @@ $.get('../instances/' + urlParams.id, function(data) {
             var $parent = $('.domain-roles-caption');
             var instanceId = $parent.attr('data-instanceId');
             $chefRunModalContainer = $('#controlPanelChefRunModalContainer');
-            var $ccrs = $chefRunModalContainer.find('.modal-body').data('$ccrs');
+            var $ccrs = $chefRunModalContainer.find('.chefRunlistContainer').data('$ccrs');
 
             var runlist = $ccrs.getSelectedRunlist();
 
@@ -1749,50 +1796,24 @@ $.get('../instances/' + urlParams.id, function(data) {
             }
             console.log('runlist == ', runlist);
 
-            var $modal = $('#chefClientRunAttributesModal');
-
-            var $tbody = $modal.find('.attributesEditTableBody');
-            var $input = $tbody.find('.attribValueInput');
+            $trAttribute = $chefRunModalContainer.find('.attributesViewTableBody tr');
             var attributes = [];
-            for (var j = 0; j < $input.length; j++) {
-                var $this = $($input[j]);
-                var attributeKey = $this.attr('data-attribKey');
-                console.log(attributeKey);
-                var attribValue = $this.val();
-                if (attribValue) {
-                    var attribPathParts = attributeKey.split('/');
-                    var attributeObj = {};
-                    var currentObj = attributeObj;
-                    for (var i = 0; i < attribPathParts.length; i++) {
-                        if (!currentObj[attribPathParts[i]]) {
-                            if (i === attribPathParts.length - 1) {
-                                currentObj[attribPathParts[i]] = attribValue;
-                                continue;
-                            } else {
-                                currentObj[attribPathParts[i]] = {};
-                            }
-                        }
-                        currentObj = currentObj[attribPathParts[i]];
-                    }
-                    attributes.push({
-                        name: $this.attr('data-attribName'),
-                        jsonObj: attributeObj
-                    });
-                } else {
-                    if ($this.attr('data-attributeRequired') === 'true') {
-                        alert("Please fill in the required attributes");
-                        return false;
-                    }
-                }
-            }
+            $trAttribute.each(function() {
+                var $tr = $(this);
+                attributes.push({
+                    name: $tr.attr('data-attributeName'),
+                    jsonObj: $tr.data('jsonObj')
+                });
+            });
             $.post('../instances/' + instanceId + '/updateRunlist', {
                 runlist: runlist,
                 jsonAttributes: attributes
             }, function(data) {
-                $modal.modal('hide'); 
+                
                 $chefRunModalContainer.modal('hide');
                 var $parent = $('.domain-roles-caption[data-instanceId="' + instanceId + '"]');
                 $parent.find('.instance-bootstrap-list-image').data('runlist', runlist);
+                $parent.find('.instance-bootstrap-list-image').data('jsonAttributes', attributes);
                 var $backRunlistContainer = $parent.parents('.card').find('.cardBackRunlistContaner').empty();
                 console.log($backRunlistContainer.length);
                 console.log(runlist);
@@ -1807,6 +1828,7 @@ $.get('../instances/' + urlParams.id, function(data) {
 
                 //$parentTr.find('.instance-bootstrap-list-image').data('runlist', runlist
                 $parent.data('runlist', runlist);
+                $parent.data('jsonAttributes', attributes);
                 $parent.find('.moreInfo').trigger('click');
                 console.log(data);
                 if (data.actionLogId) {
@@ -1827,7 +1849,7 @@ $.get('../instances/' + urlParams.id, function(data) {
 
     $('.editChefClientRunAttribBtn').click(function(e) {
         var $chefRunModalContainer = $('#controlPanelChefRunModalContainer');
-        var $ccrs = $chefRunModalContainer.find('.modal-body').data('$ccrs');
+        var $ccrs = $chefRunModalContainer.find('.chefRunlistContainer').data('$ccrs');
 
 
         var instanceId = $ccrs.find('#cookbooksrecipesselectedList').attr('data-instanceId');
@@ -1838,7 +1860,7 @@ $.get('../instances/' + urlParams.id, function(data) {
             bootbox.alert('Runlist is empty');
             return;
         }
-        $chefRunModalContainer.modal('hide');
+        
         var $modal = $('#chefClientRunAttributesModal');
         $modal.find('.attributesEditFormArea').hide();
         $modal.find('.errorMsgContainer').hide();
@@ -1878,6 +1900,9 @@ $.get('../instances/' + urlParams.id, function(data) {
         $.post('../chef/servers/' + chefServerId + '/attributes', reqBody, function(attributesList) {
             //var dataTable = $('#attributesEditListArea').DataTable();
             //dataTable.clear();
+             var $chefRunModalContainer = $('#controlPanelChefRunModalContainer');
+             var $tbodyViewAttributes = $chefRunModalContainer.find('.attributesViewTableBody');
+                                                          
             for (var i = 0; i < attributesList.length; i++) {
                 var attributesNamesList = Object.keys(attributesList[i].attributes);
                 for (var j = 0; j < attributesNamesList.length; j++) {
@@ -1895,6 +1920,10 @@ $.get('../instances/' + urlParams.id, function(data) {
                     var value = '';
                     if (attributesList[i].attributes[attributesNamesList[j]]['default']) {
                         value = attributesList[i].attributes[attributesNamesList[j]]['default'];
+                    }
+                    var $trView = $tbodyViewAttributes.find('tr[data-attributeKey="' + attributesNamesList[j] + '"]');
+                    if ($trView.length) {
+                        value = $trView.attr('data-attributeValue');
                     }
 
                     var $attributeInput;
@@ -1946,7 +1975,93 @@ $.get('../instances/' + urlParams.id, function(data) {
         });
 
     });
+    $('.btnSaveInstanceRunlistAttributes').click(function(e) {
+        var $modal = $('#chefClientRunAttributesModal');
+        var $input = $modal.find('.attribValueInput');
+        var attributes = [];
+        for (var j = 0; j < $input.length; j++) {
+            var $this = $($input[j]);
+            var attributeKey = $this.attr('data-attribKey');
+            console.log(attributeKey);
+            var attribValue = $this.val();
+            if (attribValue) {
+                var attribPathParts = attributeKey.split('/');
+                var attributeObj = {};
+                var currentObj = attributeObj;
+                for (var i = 0; i < attribPathParts.length; i++) {
+                    if (!currentObj[attribPathParts[i]]) {
+                        if (i === attribPathParts.length - 1) {
+                            currentObj[attribPathParts[i]] = attribValue;
+                            continue;
+                        } else {
+                            currentObj[attribPathParts[i]] = {};
+                        }
+                    }
+                    currentObj = currentObj[attribPathParts[i]];
+                }
+                attributes.push({
+                    name: $this.attr('data-attribName'),
+                    jsonObj: attributeObj
+                });
+            } else {
+                if ($this.attr('data-attributeRequired') === 'true') {
+                    alert("Please fill in the required attributes");
+                    return false;
+                }
+            }
+        }
 
+        //$('#attrtextarea').text(JSON.stringify(attributeObj));
+
+        
+        createAttribTableRowFromJson(attributes);
+        $modal.modal('hide');
+    });
+    function createAttribTableRowFromJson(attributes) {
+        var $chefRunModalContainer = $('#controlPanelChefRunModalContainer')
+        var $tbody = $chefRunModalContainer.find('.attributesViewTableBody').empty();
+        for (var j = 0; j < attributes.length; j++) {
+            var attributeObj = attributes[j].jsonObj;
+
+            function getVal(obj, currentKey) {
+                var keys = Object.keys(obj);
+                for (var i = 0; i < keys.length; i++) {
+                    if (typeof obj[keys[i]] === 'object') {
+                        getVal(obj[keys[i]], currentKey + '/' + keys[i]);
+                    } else {
+                        var keyString = currentKey + '/' + keys[i];
+                        keyString = keyString.substring(1);
+
+                        var $tr = $('<tr/>').attr({
+                            'data-attributeKey': keyString,
+                            'data-attributeValue': obj[keys[i]],
+                            'data-attributeName': attributes[j].name
+                        }).data('jsonObj', attributes[j].jsonObj);;
+
+                        var passwordField = false;
+                        var passwordField = false;
+                        var keyParts = keyString.split('/');
+                        if (keyParts.length) {
+                            var indexOfPassword = keyParts[keyParts.length - 1].indexOf('password_');
+                            if (indexOfPassword !== -1) {
+                                passwordField = true;
+                            }
+                        }
+
+                        var $tdAttributeKey = $('<td/>').html(attributes[j].name);
+                        if (passwordField) {
+                            var $tdAttributeVal = $('<td/>').html("*****");
+                        } else {
+                            var $tdAttributeVal = $('<td/>').html(obj[keys[i]]);
+                        }
+                        $tr.append($tdAttributeKey).append($tdAttributeVal);
+                        $tbody.append($tr);
+                    }
+                }
+            }
+            getVal(attributeObj, '');
+        }
+    }
 
 
 

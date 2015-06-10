@@ -356,17 +356,60 @@
                 <a style="font-size:14px!important;margin-top:-24px;float:right;margin-right:60px;" href="#modalForHelp" data-toggle="modal"><i class="fa fa-question"></i>&nbsp;Help</a>
             </div>
             <div class="modal-body" style="padding:0px !important">
-
-
-                <div class="chefRunlistContainer">
-
+              <div class="panel-group" id="chefRunAccordion" role="tablist" aria-multiselectable="true">
+               <div class="panel panel-default">
+                <div class="panel-heading" role="tab" id="headingOne">
+                  <h4 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#chefRunAccordion" href="#chefRunAccordionRunlistArea" aria-expanded="true" aria-controls="collapseOne">
+                        Choose Runlist
+                    </a>
+                  </h4>
                 </div>
+               <div id="chefRunAccordionRunlistArea" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                <div class="panel-body">
+                    <div class="chefRunlistContainer">
+
+                   </div>
+                </div>
+              </div>
+             </div>
+             <div class="panel panel-default">
+                <div class="panel-heading" role="tab" id="headingOne">
+                  <h4 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#chefRunAccordion" href="#chefRunAccordionAttributeArea" aria-expanded="true" aria-controls="collapseOne">
+                        Attributes 
+                    </a><a class="bpEditBtn btn btn-primary editChefClientRunAttribBtn" rel="tooltip" data-placement="top" data-original-title="Edit"> <i class="ace-icon fa fa-pencil"></i> </a>
+                  </h4>
+                </div>
+               <div id="chefRunAccordionAttributeArea" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+                <div class="panel-body">
+                    <table  class="chefRunAttributesViewTable table table-striped table-bordered table-hover dataTable no-footer table-condensed tablesorter" cellpadding="5px" width="100%">
+                                         <thead>
+                                          <tr>
+                                            <th>Attributes</th>
+                                            <th>Values</th>
+                                          </tr>
+                                         </thead>
+                                         <tbody class="attributesViewTableBody">
+
+                                         </tbody>
+                                        </table>
+                    
+                </div>
+              </div>
+             </div>
+            </div> 
+            </div> 
+
+            
+               
 
 
-            </div>
+            
             <div class="modal-footer" style="margin-top:0px !important;">
-                <button type="button" class="btn btn-default btn-primary editChefClientRunAttribBtn">Edit Attributes</button>
+                <button type="button" class="btn btn-default btn-primary btnUpdateInstanceRunlist">Update</button>
                 <button type="button" class="btn btn-default btn-primary" data-dismiss="modal">Close</button>
+            </div>
             </div>
         </div>
     </div>
@@ -405,7 +448,7 @@
                 </form>
             </div>
            <div class="modal-footer">
-        <button type="button" class="btn btn-primary btnUpdateInstanceRunlist">Update</button>
+        <button type="button" class="btn btn-primary btnSaveInstanceRunlistAttributes">Save</button>
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
         
       </div>
