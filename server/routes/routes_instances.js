@@ -756,6 +756,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                             runlist: req.body.runlist,
                                             overrideRunlist: false,
                                             jsonAttributes: JSON.stringify(jsonAttributeObj)
+                                            //parallel:true
                                         }
                                         logger.debug('decryptCredentials ==>', decryptedCredentials);
                                         if (decryptedCredentials.pemFileLocation) {
@@ -1489,6 +1490,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                 port: 22,
                                 runlist: runlist, // runing service runlist
                                 overrideRunlist: true
+                                //parallel:true
                             }
                             if (decryptedCredentials.pemFileLocation) {
                                 chefClientOptions.privateKey = decryptedCredentials.pemFileLocation;
@@ -1725,6 +1727,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                 runlist: list,
                                 overrideRunlist: false,
                                 jsonAttributes: JSON.stringify(jsonAttributeObj)
+                                //parallel:true
                             }
 
                             if (decryptedCredentials.pemFileLocation) {

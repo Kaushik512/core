@@ -217,7 +217,8 @@ chefTaskSchema.methods.execute = function(userName, baseUrl, onExecute, onComple
                                 port: 22,
                                 runlist: self.runlist, // runing service runlist
                                 jsonAttributes: jsonAttributesString,
-                                overrideRunlist: true
+                                overrideRunlist: true,
+                                parallel:true
                             }
                             if (decryptedCredentials.pemFileLocation) {
                                 chefClientOptions.privateKey = decryptedCredentials.pemFileLocation;

@@ -176,7 +176,7 @@ public class SSHExec {
 	 * @throws AuthFailedException 
 	 * @throws HostUnreachableException 
 	 */
-	public int execChefClient(String runlist,boolean overrideRunlist,String jsonAttributes,String stdOutLogFile,String stdErrLogFile) {
+	public int execChefClient(String runlist,boolean overrideRunlist,String jsonAttributes,boolean lockFile,String stdOutLogFile,String stdErrLogFile) {
 		if(runlist == null || runlist.length() == 0){
 			return -1002; //Need to think about the return codes
 		}
@@ -187,9 +187,13 @@ public class SSHExec {
 			cmd += " -r";
 		}
 		cmd += " "+runlist;
+		String timeStamp = ""+System.currentTimeMillis();
+		if(lockFile) {
+			cmd +=" --lockfile /var/tmp/catalyst_lockFile_"+timeStamp;
+		}
 		
 		String cmdWithJsonAttribute ="";
-		String jsonFileName = "chefRunjsonAttributes.json";
+		String jsonFileName = "chefRunjsonAttributes_"+timeStamp+".json";
 		System.out.println(" jsonAttribute ==> "+ jsonAttributes);
 		if(jsonAttributes != null && !jsonAttributes.isEmpty() && !jsonAttributes.equalsIgnoreCase("null")) {
 			jsonAttributes = StringEscapeUtils.escapeJava(jsonAttributes);
