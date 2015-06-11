@@ -517,7 +517,7 @@ function createItemTableRow(k){
                    // alert('hello');
                     console.log(data);
                     
-                    var res = JSON.stringify(data);
+                    var res = JSON.stringify(data, null, '\t');
                     $('#instanceListName').val(res);
                 });
                 return false;
@@ -560,7 +560,7 @@ function createItemTableRow(k){
             $.get('../chef/servers/' + urlParams.id + '/databag/' + dataBagName + '/item/' + itemId + '/find', function(data) {
                 // alert('hello');
                 console.log(data);
-                var res = JSON.stringify(data);
+                var res = JSON.stringify(data, null, '\t');
                 $('.spinnerNew').addClass('hidden');
                 $('#jsonData').css('display','block');
                 $('#listTable thead').find('tr.rowCustomStyle td').html(itemId);

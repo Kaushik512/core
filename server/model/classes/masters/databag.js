@@ -7,6 +7,8 @@
 
 // This file act as a Model which contains Data Bag related all dao methods.
 
+// Now persistance of Data Bag not required.So disabling it.
+/*
 var logger = require('../../../lib/logger')(module);
 var mongoose = require('mongoose');
 var extend = require('mongoose-schema-extend');
@@ -55,7 +57,7 @@ datBagSchema.statics.getDataBagEncryptionInfo = function(dataBagName,dataBagItem
 	this.find({
 		"dataBagName" : dataBagName/*,
 		"dataBagItemId" : dataBagItemId*/
-	},function(err,aDataBag){
+/*	},function(err,aDataBag){
 		if(err){
 			callback(err,null);
 			return;
@@ -84,3 +86,4 @@ datBagSchema.statics.removeDataBagById = function(dataBagId, callback) {
 var DataBagModel = mongoose.model('DataBagModel', datBagSchema);
 
 module.exports = DataBagModel;
+*/
