@@ -597,7 +597,7 @@ var Chef = function(settings) {
                 lockFile = true;
             }
 
-
+            /*
             javaSSHWrapper.getNewInstance(sshParamObj, function(err, javaSSh) {
                 if (err) {
                     callback(err, null);
@@ -605,10 +605,10 @@ var Chef = function(settings) {
                 }
                 logger.debug('Run List:' + runlist.join());
                 javaSSh.execChefClient(runlist.join(), overrideRunlist, options.jsonAttributes, lockFile, callback, callbackOnStdOut, callbackOnStdErr);
-            });
+            });*/
 
             // using ssh2
-            /*var cmd = '';
+            var cmd = '';
             cmd = "chef-client";
             if (overrideRunlist) {
                 cmd += " -o";
@@ -621,25 +621,24 @@ var Chef = function(settings) {
             if (lockFile) {
                 cmd += " --lockfile /var/tmp/catalyst_lockFile_" + timestamp;
             }
-            if(options.jsonAttributes) {
-                var jsonFileName = "chefRunjsonAttributes_"+timestamp+".json";
+            if (options.jsonAttributes) {
+                var jsonFileName = "chefRunjsonAttributes_" + timestamp + ".json";
                 var jsonAttributesString = JSON.stringify(options.jsonAttributes);
                 //jsonAttributesString = jsonAttributesString.split('"').join('\\\"');
                 var cmdWithJsonAttribute = '';
-                cmdWithJsonAttribute +='echo "'+jsonAttributesString +'" > '+jsonFileName + ' && sudo '+ cmd +' -j '+jsonFileName;
-                cmd  = cmdWithJsonAttribute;
+                cmdWithJsonAttribute += 'echo "' + jsonAttributesString + '" > ' + jsonFileName + ' && sudo ' + cmd + ' -j ' + jsonFileName;
+                cmd = cmdWithJsonAttribute;
             }
-            var sudoCmd = "sudo"; 
-            if(options.password) {
-                sudoCmd = "echo "+password+" | sudo -S";
+            var sudoCmd = "sudo";
+            if (options.password) {
+                sudoCmd = "echo " + password + " | sudo -S";
             }
- 
-            logger.debug("chef client cmd ==> "+cmd);
-            cmd = sudoCmd+" "+cmd;
-            
 
-              var sshExec = new SSHExec(options);
-              sshExec.exec(cmd,callback,callbackOnStdOut,callbackOnStdErr);*/
+            logger.debug("chef client cmd ==> " + cmd);
+            cmd = sudoCmd + " " + cmd;
+
+            var sshExec = new SSHExec(options);
+            sshExec.exec(cmd, callback, callbackOnStdOut, callbackOnStdErr);
 
 
         } else {

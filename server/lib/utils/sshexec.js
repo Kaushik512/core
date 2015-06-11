@@ -1,7 +1,11 @@
 var fileIo = require('./fileio');
-var sshConnection = require('ssh2');
+var sshConnection = require('ssh2').Client;
 
-
+var HOST_UNREACHABLE = -5000;
+var INVALID_CREDENTIALS = -5001;
+var JSCH_EXCEPTION = -5002;
+var UNKOWN_EXCEPTION = -5003;
+var PEM_FILE_READ_ERROR = -5004;
 
 module.exports = function(options) {
 
@@ -10,10 +14,27 @@ module.exports = function(options) {
 
     function connect(connectionParamsObj, callback) {
         con = new sshConnection();
-        con.connect(connectionParamsObj);
-        console.log("ConnectionParamsObj==>",connectionParamsObj);
+        console.log("ConnectionParamsObj==>", connectionParamsObj);
+
+        try {
+            con.connect(connectionParamsObj);
+        } catch (connectErr) {
+            console.log('errrroroorooror == >catch ==>', connectErr.message);
+            con = null;
+            // a hack to make a sycnronous call asynchronous 
+            setTimeout(function() {
+                if (connectErr.message === 'Cannot parse privateKey: Unsupported key format') {
+                    console.log('Invalid Credentioals firing');
+                    callback(connectErr, INVALID_CREDENTIALS);
+                } else {
+                    callback(connectErr, UNKOWN_EXCEPTION);
+                }
+            }, 2000);
+            return;
+        }
+
         con.on('ready', function() {
-            console.log("connected to ==>",connectionParamsObj.host);
+            console.log("connected to ==>", connectionParamsObj.host);
             isConnected = true;
             callback(null);
         });
@@ -22,10 +43,21 @@ module.exports = function(options) {
             isConnected = false;
             con = null;
             console.log('ssh error ', err);
-            callback(err);
+            console.log('keys ==>', Object.keys(err));
+
+            if (err.level === 'client-authentication') {
+
+                callback(err, INVALID_CREDENTIALS);
+            } else if (err.level === 'client-timeout') {
+                callback(err, HOST_UNREACHABLE);
+            } else {
+                callback(err, UNKOWN_EXCEPTION);
+            }
+
+
         });
 
-        /*con.on('close', function(hadError) {
+        con.on('close', function(hadError) {
             isConnected = false;
             con = null;
             console.log('ssh close ', hadError);
@@ -36,7 +68,8 @@ module.exports = function(options) {
             isConnected = false;
             con = null;
             console.log('ssh end');
-        });*/
+        });
+
     }
 
     function initialize(callback) {
@@ -54,10 +87,10 @@ module.exports = function(options) {
                 }
                 fileIo.readFile(options.privateKey, function(err, key) {
                     if (err) {
-                        callback(err, null);
+                        callback(err, PEM_FILE_READ_ERROR);
                         return;
                     }
-                    connectionParamsObj.privateKey = key;
+                    connectionParamsObj.privateKey = 'sdfsdf'; //key;
                     connect(connectionParamsObj, callback);
                 });
             } else {
@@ -73,14 +106,16 @@ module.exports = function(options) {
     this.exec = function(cmd, onComplete, onStdOut, onStdErr) {
         var execRetCode = null;
         var execSignal = null;
-        initialize(function(err) {
+        initialize(function(err, initErrorCode) {
             if (err) {
-                onComplete(err, -1);
+                onComplete(null, initErrorCode);
                 return;
             }
             if (con) {
                 console.log('executing cmd');
-                con.exec(cmd,{ pty:true}, function(err, stream) {
+                con.exec(cmd, {
+                    pty: true
+                }, function(err, stream) {
                     if (err) {
                         onComplete(err, -1);
                         return;
@@ -109,7 +144,7 @@ module.exports = function(options) {
 
                     if (typeof onStdOut === 'function') {
                         stream.on('data', function(data) {
-                           // console.log('SSH STDOUT: ' + data);
+                            // console.log('SSH STDOUT: ' + data);
                             onStdOut(data);
                         })
                     }
