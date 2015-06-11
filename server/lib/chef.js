@@ -868,6 +868,9 @@ var Chef = function(settings) {
                 } else if(chefRes.statusCode === 409){
                     callback(null, chefRes.statusCode);
                     return;
+                }else if(chefRes.statusCode === 400){
+                    callback(null, chefRes.statusCode);
+                    return;
                 }else{
                     callback(true, null);
                     return;
