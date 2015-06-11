@@ -7,7 +7,7 @@
                <h4 class="widget-margin" style="color:black;"></h4>
             </div>
             <div class="widget-body">
-               <div class="widget-main" style="min-height:200px">
+               <div class="widget-main">
                   <section id="widget-grid" class="">
                      <!-- START ROW -->
                      <div class="row">
@@ -22,10 +22,10 @@
 
                                   <div class="widget-body">
                                     <div class="nodeListContainer"></div>
-                    <div class="widget-main dataBagTable hidden" style="min-height:300px">
+                    <div class="widget-main dataBagTable hidden">
                         <div class="col-md-4 table-responsive" style="padding-left:0px; padding-right:0px;">
                           <a href="#modalForDB" data-backdrop="false" data-toggle="modal" style="cursor:pointer;"> <img src="img/add.png" style="float:right;" class="addDB" rel="tooltip" data-placement="top" title="Add New Data Bag"/></a>
-                          <div style="height:294px;overflow-y:auto;" id="dbNameTable_wrapper" class="dataTables_wrapper no-footer">
+                          <div style="height:412px;overflow-y:auto;" id="dbNameTable_wrapper" class="dataTables_wrapper no-footer">
                          <table id="dbNameTable" class="tableData table table-striped table-bordered table-hover dataTable no-footer" cellpadding="5px" width="100%" style="text-align:center;">
                              
                                 <thead>
@@ -128,7 +128,7 @@
 
                             <label for="">Name<span style="color:Red;" class="control-label">&nbsp;*</span></label>
 
-                            <input type="text" name="dbName" class="form-control dbName" id="instanceDataName" autofocus/>
+                            <input maxlength="25" type="text" name="dbName" class="form-control dbName" id="instanceDataName" autofocus/>
                 </div>
                 
                     <input type="hidden" id="serverIDHiddenInput">
@@ -210,6 +210,7 @@ $('.addDB').click(function(e) {
     $('.tableHidden').css('display','none');
     $('#dbNameTable tbody tr').removeClass('selectedOne');
     $('#jsonData').css('display','none');
+    $('#saveSpinner').addClass('hidden');
 });
 
 $('.addList').click(function(e){
@@ -249,8 +250,7 @@ $('.addList').click(function(e){
              }]
 
      });
- }
-
+ };
 
 $(document).ready(function(e) {
     var urlParams = {};
@@ -304,33 +304,32 @@ $(document).ready(function(e) {
             $tr.append($tdName);
             $dbNameList.append($tr);
             $dataBagDatatable.row.add($tr).draw();
-            $('#dbNameTable tbody tr').click(function() {
-                //alert('You clicked row ' + ($(this).index() + 1));
-                //$(this).addClass("selected").siblings().removeClass("selected");
-                $('#dbNameTable tbody tr').removeClass('selectedOne');
-                $(this).addClass('selectedOne');
-                $('#listNameTable').find('tbody tr.itemsList').empty();
-                $('.tableHidden').css('display','none');
-                $('#jsonData').css('display','none');
-            });
 
-            $tdName.find('button.deleteRow').click(function() {
+            $tdName.find('button.deleteRow').click(function(e) {
                 var $this = $(this);
-                var $tr = $this.parents('tr.dbTest');
+                var $tr = $this.parents('tr');
                 console.log(name);
                 var dataBagName = name;
                 console.log(dataBagName);
                // alert(name);
                 //alert(urlParams.id);
-                $('.tableHidden').css('display','none');
+               
                bootbox.confirm('Are you sure you want to delete Data Bag -&nbsp;' + dataBagName, function(result) {
                     if (result) {
                         $.ajax({
                             url: '../chef/servers/' + urlParams.id + '/databag/' + dataBagName + '/delete',
                             method: 'DELETE',
                             success: function() {
+                              var dataBagDatatable = $('#dbNameTable').DataTable();
                                 //$tr.remove();
-                                $dataBagDatatable.row($tr).remove().draw(false);
+                                dataBagDatatable.row($tr).remove().draw(false);
+                               // alert('deletred');
+                                var $itemsTable =  $('.tableHidden');
+                                var dataBagNameForItem = $itemsTable.data('dataBagName');
+                               
+                                if(dataBagNameForItem === dataBagName ) {
+                                    $itemsTable.hide();     
+                                }
                             },
                             fail: function() {
                                 alert("Unable to delete URL please try again later");
@@ -339,9 +338,37 @@ $(document).ready(function(e) {
                     }
                     //return false;
                 });
+              return false;
+               
             });
 
-            $tdClick.click(function(e) {
+            var dataBagDatatable = $('#dbNameTable').DataTable();
+            $tr.click(function() {
+                if ($(this).hasClass('dbTest')) {
+                    $(this).removeClass('dbTest');
+                } else {
+                    dataBagDatatable.$('tr.dbTest').removeClass('dbTest');
+                    $(this).addClass('dbTest');
+                }
+              $itemDatatable.clear().draw();
+                $('#dbNameTable tbody tr').removeClass('selectedOne');
+                $(this).addClass('selectedOne');
+                
+
+
+                //alert('You clicked row ' + ($(this).index() + 1));
+                //$(this).addClass("selected").siblings().removeClass("selected");
+
+                $('.tableHidden').css('display', 'none');
+                $('#jsonData').css('display', 'none');
+                $('.spinner').removeClass('hidden');
+                $('#dataBagIDHiddenInput').val(k);
+               // alert(k);
+                getList(k);
+                $('#listNameTable thead').find('tr.rowCustomStyle td').html('Items for -&nbsp;' + k);
+               // $('#listNameTable tbody tr:first').trigger('click');
+            });
+            /*$tdClick.click(function(e) {
                 $itemDatatable.clear().draw();
                 $('.tableHidden').css('display','none');
                 $('#jsonData').css('display','none');
@@ -352,15 +379,16 @@ $(document).ready(function(e) {
 
                 $('#listNameTable thead').find('tr.rowCustomStyle td').html('Items for -&nbsp;' + k);
                 
-            });
+            });*/
 
 
         });
+              
               console.log(">>>>>>>>>>>>>>>>>>>>>>>>");
                 $('.nodeListContainer').addClass('hidden');
                 $('.dataBagTable').removeClass('hidden');
-                //alert('You clicked row ' + ($(this).index() + 1));
-                $('#dbNameTable tbody tr:first td a').trigger('click');
+                $('#dbNameTable tbody tr:first').trigger('click');
+                //$('#listNameTable tbody tr:first').trigger('click');
 
     });
 
@@ -370,22 +398,27 @@ $(document).ready(function(e) {
         console.log(dataBagName);
         var listItems = '../chef/servers/' + urlParams.id + '/databag/' + dataBagName + '/item/list';
         $.get(listItems, function(data) {
+          console.log(typeof data);
           if(data.length > 0){
             $.each(data, function(k) {
-                console.log(data);
-                if (k) {
+                console.log(k);
+                //if (k) {
                     //$('#listNameTable').find('tbody tr td.dataAvList').addClass('hidden');
-                  }
+                  //  alert('present');
+                   // $('#listNameTable tbody tr:first').trigger('click');
+                 // }
+                   // $('#listNameTable tbody tr:first').trigger('click');
                     $('.spinner').addClass('hidden');
-                    $('.tableHidden').css('display', 'block');
+                    $('.tableHidden').css('display', 'block').data('dataBagName',dataBagName);
                     createItemTableRow(data[k]);
                     //$('#listNameTable').find('tbody tr td.dataAvList').addClass('hidden');
             });
           }
           else{
             //alert('hhh');
+            //$('#listNameTable tbody tr:first').trigger('click');
             $('.spinner').addClass('hidden');
-            $('.tableHidden').css('display', 'block');
+            $('.tableHidden').css('display', 'block').data('dataBagName',dataBagName);
             //$('#listNameTable tbody').find('tr td.dataAvList').removeClass('hidden');
           }
         });
@@ -399,7 +432,6 @@ $(document).ready(function(e) {
         var $row = $('<tr class="dbTest"/>');
         var $form = $('#instanceDBName');
         reqBodyName.name = $form.find('.dbName').val();
-        $('.dbName').focus();
         //var serverId = $form.find('#serverIDHiddenInput').val();
         if (!(reqBodyName.name)) {
             alert("Please Enter Name");
@@ -423,16 +455,6 @@ $(document).ready(function(e) {
             $('#modalForDB').modal('hide');
             $dataBagDatatable.row.add($row).draw();
 
-            $('#dbNameTable tbody tr').click(function() {
-                //alert('You clicked row ' + ($(this).index() + 1));
-                //$(this).addClass("selected").siblings().removeClass("selected");
-                $('#dbNameTable tbody tr').removeClass('selectedOne');
-                $(this).addClass('selectedOne');
-                $('#listNameTable').find('tbody tr.itemsList').empty();
-                $('.tableHidden').css('display','none');
-                $('#jsonData').css('display','none');
-            });
-
             $tdNameNew.find('button.deleteRow').click(function() {
                 var $this = $(this);
                 var $row = $this.parents('tr.dbTest');
@@ -446,8 +468,17 @@ $(document).ready(function(e) {
                             url: '../chef/servers/' + urlParams.id + '/databag/' + dataBagName + '/delete',
                             method: 'DELETE',
                             success: function() {
-                                $dataBagDatatable.row($row).remove().draw(false);
-                            },
+                              var dataBagDatatable = $('#dbNameTable').DataTable();
+                                //$tr.remove();
+                                dataBagDatatable.row($row).remove().draw(false);
+                               // alert('deletred');
+                                var $itemsTable =  $('.tableHidden');
+                                var dataBagNameForItem = $itemsTable.data('dataBagName');
+                               
+                                if(dataBagNameForItem === dataBagName ) {
+                                    $itemsTable.hide();     
+                            }
+                          },
                             fail: function() {
                                 alert("Unable to delete URL please try again later");
                             }
@@ -455,35 +486,44 @@ $(document).ready(function(e) {
                     }
                    // return false;
                 });
+                 return false;
             });
-            $tdClick.click(function(e) {
-                //alert('hello');
-
+            var dataBagDatatable = $('#dbNameTable').dataTable();
+            $row.click(function() {
+                if ($(this).hasClass('dbTest')) {
+                    $(this).removeClass('dbTest');
+                } else {
+                    dataBagDatatable.$('tr.dbTest').removeClass('dbTest');
+                    $(this).addClass('dbTest');
+                }
+                $('#dbNameTable tbody tr').removeClass('selectedOne');
+                $(this).addClass('selectedOne');
                 $itemDatatable.clear().draw();
+                
                 $('.tableHidden').css('display','none');
                 $('#jsonData').css('display','none');
+
+          
                 $('.spinner').removeClass('hidden');
                 //alert(JSON.stringify(reqBodyName.name));
                 $('#dataBagIDHiddenInput').val(reqBodyName.name);
-                $('#listNameTable thead').find('tr.rowCustomStyle td').html('Items for -&nbsp;' + reqBodyName.name);
                 getList();
+                $('#listNameTable thead').find('tr.rowCustomStyle td').html('Items for -&nbsp;' + reqBodyName.name);
             });
+            
 
         });
         return false;
     });
 
-//new function for creating items from databags
 function createItemTableRow(k){
         var itemTable = $('#listNameTable tbody');
         var $trForItems = $('<tr class="itemsList"/>');
         var $tdForItems = $('<td class="listData"/>');
         $tdForItems.append('<a style="cursor:pointer;" id="listNameClickNew">' + k + '</a>').append('<div class="btn-group" style="float:right;"><button class="editRow" value="Update" title="Update"><i class="ace-icon fa fa-pencil bigger-120"></i></button></div>').append('<div style="margin-right:10px;float:right;" class="btn-group del"><button class="deleteRow" value="Remove" title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></div>');
-
         $trForItems.append($tdForItems);
         $('#listNameTable').find('tbody').append($trForItems);
         $itemDatatable.row.add($trForItems).draw();
-
         $('#listNameTable tbody tr').click(function() {
                 //alert('You clicked row ' + ($(this).index() + 1));
                 //$(this).addClass("selected").siblings().removeClass("selected");
@@ -492,11 +532,10 @@ function createItemTableRow(k){
                 //$('#listNameTable').find('tbody tr.itemsList').empty();
                 //$('#jsonData').css('display','none');
             });
-
         
-
         //for edit
         $tdForItems.find('button.editRow').click(function() {
+            $('.jsonError').addClass('hidden');
             $('.spinnerNew').addClass('hidden');
             $('#jsonData').css('display','none');
             var $this = $(this);
@@ -517,12 +556,11 @@ function createItemTableRow(k){
                    // alert('hello');
                     console.log(data);
                     
-                    var res = JSON.stringify(data);
+                    var res = JSON.stringify(data, null, '\t');
                     $('#instanceListName').val(res);
                 });
                 return false;
         });
-
         //for delete
         $tdForItems.find('button.deleteRow').click(function() {
           $('#jsonData').css('display','none');
@@ -560,13 +598,12 @@ function createItemTableRow(k){
             $.get('../chef/servers/' + urlParams.id + '/databag/' + dataBagName + '/item/' + itemId + '/find', function(data) {
                 // alert('hello');
                 console.log(data);
-                var res = JSON.stringify(data);
+                var res = JSON.stringify(data, null, '\t');
                 $('.spinnerNew').addClass('hidden');
                 $('#jsonData').css('display','block');
                 $('#listTable thead').find('tr.rowCustomStyle td').html(itemId);
                 //$('#listTable tbody').find('tr')
                 $('#jsonListName').val(res);
-
             });
         });
     };
