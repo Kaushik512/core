@@ -82,7 +82,7 @@
                                <div class="col-lg-6">
                                  <label for=""> Image ID:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
                                  <!-- <i class="icon-append fa fa-building"></i> -->
-                                 <input name="ctl00$MainContent$orgname" Placeholder="Enter Image Identifier" id="imageidentifire" class="form-control" type="text"  cdata="catalyst" cat-validation="required,max15">
+                                 <input name="ctl00$MainContent$orgname" Placeholder="Enter Image Identifier" id="imageidentifire" class="form-control" type="text"  cdata="catalyst" cat-validation="required">
                                </div>
                              </div>
                              <div class="row">
@@ -90,16 +90,16 @@
                                  <label for=""> Admin  User Name:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
                                  <!-- <i class="icon-append fa fa-building"></i> -->
                                  <input name="ctl00$MainContent$orgname" Placeholder="Enter The Admin UserName" id="UserName" class="form-control" type="text"  cdata="catalyst" cat-validation="required,max15">
-                               </div>                               
-                                    <div class="col-lg-6 "><label for="name">Organization Name:<span style="color: Red;" class="control-label">&nbsp;*</span></label> <select
-                                      id="orgId" name="orgId" unique="true"
-                                      uniqueconditionedby="orgname" class="chooseOrganization width-100"
-                                      style="vertical-align: central" cat-validation="required"
-                                      cdata="catalyst" skiprowid="yes">
-                                      <option value="">Select Organization</option>
-                                    </select>
-                                    </div>
-                                </div>
+                               </div> 
+
+                               <div class="col-lg-6">
+                                  <label for="name">Organization Name:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+                                  <select id="orgId" name="orgId" unique="true" uniqueconditionedby="orgname"  class="chooseOrganization width-100" style="vertical-align:central"  cdata="catalyst"  cat-validation="required">
+                                   <option value="">Select Organization</option>
+                                 </select>
+                                 <span data-val-controltovalidate="domainname" id="MainContent_Req_domainname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility:hidden;">Required</span>
+                               </div>
+                              </div>
                            </fieldset>
                          </div>
                          <!-- end widget content -->
@@ -239,9 +239,9 @@
     ,url
     ,osType=$('#osType').find('option:selected').attr('ostype'),
     userName=$('#UserName').val(),
-    orgId = $('#orgId').val();
+    orgId = $('#orgId').val().trim();
     //alert(orgId);
-    if(imageIdentifier && providerId && osType && name && osName && userName){
+    if(imageIdentifier && providerId && osType && name && osName && userName && orgId){
       appendLoader();
       if(!UtilityMethods.getIdFromURL()){
         url="/vmimages";
@@ -281,7 +281,7 @@
 
   function getOrganizationList(){
   $.get('/d4dMasters/readmasterjsonnew/1',function(data){
-    var str='';
+    var str=' <option value="">Select Organization</option>',len=data.length;
     for(var i=0;i<data.length;i++){
         str=str+'<option value="'+data[i]._id+'">'+data[i].orgname+'</option>';
     }
