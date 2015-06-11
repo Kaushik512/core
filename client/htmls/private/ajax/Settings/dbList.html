@@ -323,6 +323,7 @@ $(document).ready(function(e) {
                                 if (dataBagNameForItem === dataBagName) {
                                     $itemsTable.hide();
                                 }
+                                $('#jsonData').css('display','none');
                             },
                             fail: function() {
                                 alert("Unable to delete URL please try again later");
@@ -462,6 +463,7 @@ $(document).ready(function(e) {
                                     if (dataBagNameForItem === dataBagName) {
                                         $itemsTable.hide();
                                     }
+                                    $('#jsonData').css('display','none');
                                 },
                                 fail: function() {
                                     alert("Unable to delete URL please try again later");
