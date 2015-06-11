@@ -826,6 +826,11 @@ module.exports.setRoutes = function(app, verificationFunc) {
                     res.send(500,"Data Bag already exist on Chef.");
                     return;
                 }
+                if(dataBag === 400){
+                    logger.debug("Exit /chef/../databag/create");
+                    res.send(400,"Invalid name.");
+                    return;
+                }
                 logger.debug("Exit /chef/../databag/create");
                 res.send(dataBag);
                 return;

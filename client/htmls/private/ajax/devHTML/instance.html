@@ -355,13 +355,12 @@
                 <a style="font-size:14px!important;margin-top:-24px;float:right;margin-right:60px;" href="#modalForHelp" data-toggle="modal"><i class="fa fa-question"></i>&nbsp;Help</a>
             </div>
             <div class="modal-body" style="padding:0px !important">
-              <div class="panel-group" id="chefRunAccordion" role="tablist" aria-multiselectable="true">
+              <div class="panel-group smart-accordion-default" id="chefRunAccordion" role="tablist" aria-multiselectable="true">
                <div class="panel panel-default">
                 <div class="panel-heading" role="tab" id="headingOne">
                   <h4 class="panel-title">
-                    <a data-toggle="collapse" data-parent="#chefRunAccordion" href="#chefRunAccordionRunlistArea" aria-expanded="true" aria-controls="collapseOne">
-                        Choose Runlist
-                    </a>
+                     <a data-toggle="collapse" data-parent="#chefRunAccordion" href="#chefRunAccordionRunlistArea"> <i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i>Assign Runlist</a>
+                    
                   </h4>
                 </div>
                <div id="chefRunAccordionRunlistArea" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
@@ -375,13 +374,26 @@
              <div class="panel panel-default">
                 <div class="panel-heading" role="tab" id="headingOne">
                   <h4 class="panel-title">
-                    <a data-toggle="collapse" data-parent="#chefRunAccordion" href="#chefRunAccordionAttributeArea" aria-expanded="true" aria-controls="collapseOne">
-                        Attributes 
-                    </a><a class="bpEditBtn btn btn-primary editChefClientRunAttribBtn" rel="tooltip" data-placement="top" data-original-title="Edit"> <i class="ace-icon fa fa-pencil"></i> </a>
+                     <a data-toggle="collapse" data-parent="#chefRunAccordion" href="#chefRunAccordionAttributeArea" class="collapsed"><i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i>Cookbook Attributes</a>
+                     
                   </h4>
                 </div>
                <div id="chefRunAccordionAttributeArea" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
                 <div class="panel-body">
+                    <div class="col-lg-12">
+                            <div class="smart-form margin15">
+                                <label class="marginbottom4">
+                                    <img src="img/templateicons/Select-nodes---deployment.png">
+                                    <strong>Cookbook Attributes 
+                                        <a class="bpEditBtn btn btn-primary editAttributesBtnCSS editChefClientRunAttribBtn" rel="tooltip" data-placement="top" data-original-title="Edit">
+                                            <i class="ace-icon fa fa-pencil"></i>
+                                        </a>
+                                        <span style="color:red" id="attrmessage"></span>
+                                    </strong>
+                                </label>
+                                <div class="row">
+                                    <div class="col-lg-12">
+
                     <table  class="chefRunAttributesViewTable table table-striped table-bordered table-hover dataTable no-footer table-condensed tablesorter" cellpadding="5px" width="100%">
                                          <thead>
                                           <tr>
@@ -393,6 +405,10 @@
 
                                          </tbody>
                                         </table>
+                                        </div>
+                                </div>
+                            </div>
+                        </div>
                     
                 </div>
               </div>
