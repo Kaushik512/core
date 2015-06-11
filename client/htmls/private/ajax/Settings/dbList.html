@@ -230,7 +230,7 @@ $('.addList').click(function(e){
          "paging": false,
          "bFilter":false,
          "aoColumns": [{
-                 "bSortable": false
+                 "bSortable": true
              }]
 
      });
@@ -246,7 +246,7 @@ $('.addList').click(function(e){
          "paging": false,
          "bFilter":false,
          "aoColumns": [{
-                 "bSortable": false
+                 "bSortable": true
              }]
 
      });
@@ -424,6 +424,12 @@ $(document).ready(function(e) {
         });
     };
 
+       $('#modalForDB').on('hidden.bs.modal', function () {
+          $('#dbNameTable tbody tr:first').trigger('click');
+       });
+
+    
+
     //for db submit..
     $('#instanceDBName').submit(function(e) {
         $('#saveSpinner').removeClass('hidden');
@@ -440,7 +446,30 @@ $(document).ready(function(e) {
             return false;
 
         }
-        $.post('../chef/servers/' + urlParams.id + '/databag/create', reqBodyName, function(data) {
+        $.ajax({
+        method:"POST",
+        url:'../chef/servers/' + urlParams.id + '/databag/create',
+        data: reqBodyName,
+        success: function(data,success){
+          var $tdNameNew = $('<td class="dBNameCheck"></td>');
+            var $tdClick = $('<a id="dbNameClick" style="cursor:pointer;">' + reqBodyName.name + '</a>');
+            $tdNameNew.append($tdClick);
+            $tdNameNew.append('<div class="btn-group del" style="float:right;"><button class="deleteRow" value="Remove" title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></div>');
+
+            $row.append($tdNameNew);
+            console.log(reqBodyName.name);
+            //$('#dbNameTable').find('tbody tr td.dataAv').addClass('hidden');
+            $('#saveSpinner').addClass('hidden');
+            $('#saveBTN').removeAttr('disabled');
+            $('#dbNameTable').find('tbody').append($row);
+            $('#modalForDB').modal('hide');
+            $dataBagDatatable.row.add($row).draw();
+            $('#dbNameTable tbody tr:first').trigger('click');
+       
+      //});
+
+
+        /*$.post('../chef/servers/' + urlParams.id + '/databag/create', reqBodyName, function(data) {
             var $tdNameNew = $('<td class="dBNameCheck"></td>');
             var $tdClick = $('<a id="dbNameClick" style="cursor:pointer;">' + reqBodyName.name + '</a>');
             $tdNameNew.append($tdClick);
@@ -454,6 +483,7 @@ $(document).ready(function(e) {
             $('#dbNameTable').find('tbody').append($row);
             $('#modalForDB').modal('hide');
             $dataBagDatatable.row.add($row).draw();
+            $('#dbNameTable tbody tr:first').trigger('click');*/
 
             $tdNameNew.find('button.deleteRow').click(function() {
                 var $this = $(this);
@@ -510,9 +540,19 @@ $(document).ready(function(e) {
                 getList();
                 $('#listNameTable thead').find('tr.rowCustomStyle td').html('Items for -&nbsp;' + reqBodyName.name);
             });
-            
+            },
+        error: function(jqxhr){
+          bootbox.alert(jqxhr.responseText);
+          $('#saveSpinner').addClass('hidden');
+          $('#saveBTN').removeAttr('disabled');
+        },
+        failure: function(data){
+          bootbox.alert(data.responseText);
+          $('#saveSpinner').addClass('hidden');
+          $('#saveBTN').removeAttr('disabled');
+        } 
 
-        });
+       });
         return false;
     });
 
