@@ -7,7 +7,7 @@
                <h4 class="widget-margin" style="color:black;"></h4>
             </div>
             <div class="widget-body">
-               <div class="widget-main" style="min-height:200px">
+               <div class="widget-main">
                   <section id="widget-grid" class="">
                      <!-- START ROW -->
                      <div class="row">
@@ -22,10 +22,10 @@
 
                                   <div class="widget-body">
                                     <div class="nodeListContainer"></div>
-                    <div class="widget-main dataBagTable hidden" style="min-height:300px">
+                    <div class="widget-main dataBagTable hidden">
                         <div class="col-md-4 table-responsive" style="padding-left:0px; padding-right:0px;">
                           <a href="#modalForDB" data-backdrop="false" data-toggle="modal" style="cursor:pointer;"> <img src="img/add.png" style="float:right;" class="addDB" rel="tooltip" data-placement="top" title="Add New Data Bag"/></a>
-                          <div style="height:294px;overflow-y:auto;" id="dbNameTable_wrapper" class="dataTables_wrapper no-footer">
+                          <div style="height:412px;overflow-y:auto;" id="dbNameTable_wrapper" class="dataTables_wrapper no-footer">
                          <table id="dbNameTable" class="tableData table table-striped table-bordered table-hover dataTable no-footer" cellpadding="5px" width="100%" style="text-align:center;">
                              
                                 <thead>
@@ -54,7 +54,7 @@
                                   <div class="spinner hidden"><img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" /></div>
                         <div class="col-md-4 table-responsive tableHidden" id="listData" style="padding-left:10px; padding-right:0px;display:none;">
                           <a href="#modalForItems" data-backdrop="false" data-toggle="modal" style="cursor:pointer;"> <img src="img/add.png" style="float:right;" class="addList" rel="tooltip" data-placement="top" title="Add New Item" /></a>
-                           <div style="height:294px;overflow-y:auto;" id="dbNameTable_wrapper" class="dataTables_wrapper no-footer">
+                           <div style="height:412px;overflow-y:auto;" id="dbNameTable_wrapper" class="dataTables_wrapper no-footer">
                          <table id="listNameTable" class="tableData table table-striped table-bordered table-hover dataTable no-footer" cellpadding="5px" width="100%" style="text-align:center">
                              
                                 <thead>
@@ -79,7 +79,7 @@
                               <tbody>
                                 <tr>
                                   <td>
-                            <textarea  style="width:100%" rows="10" cols="25" name="jsonName" class="jsonName" id="jsonListName"></textarea>
+                            <textarea  style="width:100%" rows="10" cols="25" name="jsonName" class="jsonName" id="jsonListName" readonly></textarea>
                           </td>
                         </tr>
                       </tbody>
@@ -128,7 +128,7 @@
 
                             <label for="">Name<span style="color:Red;" class="control-label">&nbsp;*</span></label>
 
-                            <input type="text" name="dbName" class="form-control dbName" id="instanceDataName" autofocus/>
+                            <input maxlength="25" type="text" name="dbName" class="form-control dbName" id="instanceDataName" autofocus/>
                 </div>
                 
                     <input type="hidden" id="serverIDHiddenInput">
@@ -207,50 +207,46 @@ $('.nodeListContainer').append('<img class="center-block" style="height:50px;wid
 
 $('.addDB').click(function(e) {
     $('#instanceDBName').trigger('reset');
-    $('.tableHidden').css('display','none');
-    $('#dbNameTable tbody tr').removeClass('selectedOne');
-    $('#jsonData').css('display','none');
+    $('.tableHidden').css('display', 'none');
+    $('#jsonData').css('display', 'none');
+    $('#saveSpinner').addClass('hidden');
 });
 
-$('.addList').click(function(e){
+$('.addList').click(function(e) {
     $('#instanceItemName').trigger('reset');
     $('input.listID').removeAttr('disabled');
     $('#listNameTable tbody tr').removeClass('selectedOne');
-    $('#jsonData').css('display','none');
+    $('#jsonData').css('display', 'none');
 });
 
- if (!$.fn.dataTable.isDataTable('#dbNameTable')) {
-     //var $taskListArea = $('.taskListArea').empty();
-     var $dataBagDatatable = $('#dbNameTable').DataTable({
-         "pagingType": "full_numbers",
-         "bInfo": false,
-         "bLengthChange": false,
-         //"iDisplayLength" : 7,
-         "paging": false,
-         "bFilter":false,
-         "aoColumns": [{
-                 "bSortable": false
-             }]
+if (!$.fn.dataTable.isDataTable('#dbNameTable')) {
+    //var $taskListArea = $('.taskListArea').empty();
+    var $dataBagDatatable = $('#dbNameTable').DataTable({
+        "pagingType": "full_numbers",
+        "bInfo": false,
+        "bLengthChange": false,
+        "paging": false,
+        "bFilter": false,
+        "aoColumns": [{
+            "bSortable": true
+        }]
 
-     });
- }
+    });
+}
 
- if (!$.fn.dataTable.isDataTable('#listNameTable')) {
-     //var $taskListArea = $('.taskListArea').empty();
-     var $itemDatatable = $('#listNameTable').DataTable({
-         "pagingType": "full_numbers",
-         "bInfo": false,
-         "bLengthChange": false,
-         //"iDisplayLength" : 7,
-         "paging": false,
-         "bFilter":false,
-         "aoColumns": [{
-                 "bSortable": false
-             }]
+if (!$.fn.dataTable.isDataTable('#listNameTable')) {
+    var $itemDatatable = $('#listNameTable').DataTable({
+        "pagingType": "full_numbers",
+        "bInfo": false,
+        "bLengthChange": false,
+        "paging": false,
+        "bFilter": false,
+        "aoColumns": [{
+            "bSortable": true
+        }]
 
-     });
- }
-
+    });
+};
 
 $(document).ready(function(e) {
     var urlParams = {};
@@ -269,10 +265,9 @@ $(document).ready(function(e) {
 
     })();
 
+    //for getting the chef server name
     $.get('/d4dMasters/readmasterjsonnew/10', function(data) {
         for (i = 0; i < data.length; i++) {
-            //alert(JSON.stringify(data));
-            //alert(data[i].configname);
             var rowid = urlParams.id;
             if (rowid === data[i].rowid) {
                 console.log(data[i]);
@@ -280,21 +275,20 @@ $(document).ready(function(e) {
             }
         }
     });
-   
+
 
     //for getting the list of data-bags
     var chefServer = '../chef/servers/' + urlParams.id + '/databag/list';
 
     $.get(chefServer, function(data) {
         $.each(data, function(k) {
-          
+
             var $dbNameList = $('#dbNameTableTest');
-            //alert(JSON.stringify(data));
             var dbNameIds = {};
             if (k.dbNameIds && k.dbNameIds.length) {
                 dbNameIds = k.dbNameIds;
             }
-           
+
             var name = k;
             var $tr = $('<tr class="dbTest"></tr>');
             var $tdName = $('<td class="dBNameCheck"></td>');
@@ -304,102 +298,118 @@ $(document).ready(function(e) {
             $tr.append($tdName);
             $dbNameList.append($tr);
             $dataBagDatatable.row.add($tr).draw();
-            $('#dbNameTable tbody tr').click(function() {
-                //alert('You clicked row ' + ($(this).index() + 1));
-                //$(this).addClass("selected").siblings().removeClass("selected");
-                $('#dbNameTable tbody tr').removeClass('selectedOne');
-                $(this).addClass('selectedOne');
-                $('#listNameTable').find('tbody tr.itemsList').empty();
-                $('.tableHidden').css('display','none');
-                $('#jsonData').css('display','none');
-            });
 
-            $tdName.find('button.deleteRow').click(function() {
+            //deleting row
+            $tdName.find('button.deleteRow').click(function(e) {
                 var $this = $(this);
-                var $tr = $this.parents('tr.dbTest');
+                var $tr = $this.parents('tr');
                 console.log(name);
                 var dataBagName = name;
                 console.log(dataBagName);
-               // alert(name);
-                //alert(urlParams.id);
-                $('.tableHidden').css('display','none');
-               bootbox.confirm('Are you sure you want to delete Data Bag -&nbsp;' + dataBagName, function(result) {
+
+                bootbox.confirm('Are you sure you want to delete Data Bag -&nbsp;' + dataBagName, function(result) {
                     if (result) {
                         $.ajax({
                             url: '../chef/servers/' + urlParams.id + '/databag/' + dataBagName + '/delete',
                             method: 'DELETE',
                             success: function() {
+                                var dataBagDatatable = $('#dbNameTable').DataTable();
                                 //$tr.remove();
-                                $dataBagDatatable.row($tr).remove().draw(false);
+                                dataBagDatatable.row($tr).remove().draw(false);
+                                // alert('deletred');
+                                var $itemsTable = $('.tableHidden');
+                                var dataBagNameForItem = $itemsTable.data('dataBagName');
+
+                                if (dataBagNameForItem === dataBagName) {
+                                    $itemsTable.hide();
+                                }
+                                $('#jsonData').css('display','none');
                             },
                             fail: function() {
                                 alert("Unable to delete URL please try again later");
                             }
                         });
                     }
-                    //return false;
                 });
+                return false;
+
             });
 
-            $tdClick.click(function(e) {
+            //row click
+            var dataBagDatatable = $('#dbNameTable').DataTable();
+            $tr.click(function() {
+
+                if ($(this).hasClass('dbTest')) {
+                    $(this).removeClass('dbTest');
+                } else {
+                    dataBagDatatable.$('tr.dbTest').removeClass('dbTest');
+                    $(this).addClass('dbTest');
+                }
                 $itemDatatable.clear().draw();
-                $('.tableHidden').css('display','none');
-                $('#jsonData').css('display','none');
+                $('#dbNameTable tbody tr').removeClass('selectedOne');
+                $(this).addClass('selectedOne');
+
+
+
+
+
+                $('.tableHidden').css('display', 'none');
+                $('#jsonData').css('display', 'none');
                 $('.spinner').removeClass('hidden');
                 $('#dataBagIDHiddenInput').val(k);
-                //alert(k);
-                getList(k);
+
+                getList();
 
                 $('#listNameTable thead').find('tr.rowCustomStyle td').html('Items for -&nbsp;' + k);
-                
             });
-
-
         });
-              console.log(">>>>>>>>>>>>>>>>>>>>>>>>");
-                $('.nodeListContainer').addClass('hidden');
-                $('.dataBagTable').removeClass('hidden');
-                //alert('You clicked row ' + ($(this).index() + 1));
-                $('#dbNameTable tbody tr:first td a').trigger('click');
 
+        console.log(">>>>>>>>>>>>>>>>>>>>>>>>");
+        $('.nodeListContainer').addClass('hidden');
+        $('.dataBagTable').removeClass('hidden');
+        $('#dbNameTable tbody tr:first').trigger('click');
     });
 
+    //getting item list
     function getList() {
-        
+
         var dataBagName = $('#dataBagIDHiddenInput').val();
         console.log(dataBagName);
         var listItems = '../chef/servers/' + urlParams.id + '/databag/' + dataBagName + '/item/list';
         $.get(listItems, function(data) {
-          if(data.length > 0){
-            $.each(data, function(k) {
-                console.log(data);
-                if (k) {
-                    //$('#listNameTable').find('tbody tr td.dataAvList').addClass('hidden');
-                  }
+            console.log(typeof data);
+            if (data.length > 0) {
+                $.each(data, function(k) {
+                    console.log(k);
+
+
                     $('.spinner').addClass('hidden');
-                    $('.tableHidden').css('display', 'block');
+                    $('.tableHidden').css('display', 'block').data('dataBagName', dataBagName);
                     createItemTableRow(data[k]);
-                    //$('#listNameTable').find('tbody tr td.dataAvList').addClass('hidden');
-            });
-          }
-          else{
-            //alert('hhh');
-            $('.spinner').addClass('hidden');
-            $('.tableHidden').css('display', 'block');
-            //$('#listNameTable tbody').find('tr td.dataAvList').removeClass('hidden');
-          }
+                });
+                $('#listNameTable tbody tr:first').trigger('click');
+            } else {
+                $('.spinner').addClass('hidden');
+                $('.tableHidden').css('display', 'block').data('dataBagName', dataBagName);
+            }
         });
     };
 
-    //for db submit..
+    $('#modalForDB').on('hidden.bs.modal', function() {
+        $('#dbNameTable tbody tr.selectedOne').trigger('click');
+        return false;
+    });
+
+
+
+    //for db name submit..
     $('#instanceDBName').submit(function(e) {
         $('#saveSpinner').removeClass('hidden');
-        $('#saveBTN').attr('disabled','disabled');
+        $('#saveBTN').attr('disabled', 'disabled');
         var reqBodyName = {};
         var $row = $('<tr class="dbTest"/>');
         var $form = $('#instanceDBName');
         reqBodyName.name = $form.find('.dbName').val();
-        $('.dbName').focus();
         //var serverId = $form.find('#serverIDHiddenInput').val();
         if (!(reqBodyName.name)) {
             alert("Please Enter Name");
@@ -408,124 +418,167 @@ $(document).ready(function(e) {
             return false;
 
         }
-        $.post('../chef/servers/' + urlParams.id + '/databag/create', reqBodyName, function(data) {
-            var $tdNameNew = $('<td class="dBNameCheck"></td>');
-            var $tdClick = $('<a id="dbNameClick" style="cursor:pointer;">' + reqBodyName.name + '</a>');
-            $tdNameNew.append($tdClick);
-            $tdNameNew.append('<div class="btn-group del" style="float:right;"><button class="deleteRow" value="Remove" title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></div>');
+        $.ajax({
+            method: "POST",
+            url: '../chef/servers/' + urlParams.id + '/databag/create',
+            data: reqBodyName,
+            success: function(data, success) {
+                var $tdNameNew = $('<td class="dBNameCheck"></td>');
+                var $tdClick = $('<a id="dbNameClick" style="cursor:pointer;">' + reqBodyName.name + '</a>');
+                $tdNameNew.append($tdClick);
+                $tdNameNew.append('<div class="btn-group del" style="float:right;"><button class="deleteRow" value="Remove" title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></div>');
 
-            $row.append($tdNameNew);
-            console.log(reqBodyName.name);
-            //$('#dbNameTable').find('tbody tr td.dataAv').addClass('hidden');
-            $('#saveSpinner').addClass('hidden');
-            $('#saveBTN').removeAttr('disabled');
-            $('#dbNameTable').find('tbody').append($row);
-            $('#modalForDB').modal('hide');
-            $dataBagDatatable.row.add($row).draw();
-
-            $('#dbNameTable tbody tr').click(function() {
-                //alert('You clicked row ' + ($(this).index() + 1));
-                //$(this).addClass("selected").siblings().removeClass("selected");
-                $('#dbNameTable tbody tr').removeClass('selectedOne');
-                $(this).addClass('selectedOne');
-                $('#listNameTable').find('tbody tr.itemsList').empty();
-                $('.tableHidden').css('display','none');
-                $('#jsonData').css('display','none');
-            });
-
-            $tdNameNew.find('button.deleteRow').click(function() {
-                var $this = $(this);
-                var $row = $this.parents('tr.dbTest');
+                $row.append($tdNameNew);
                 console.log(reqBodyName.name);
-                var dataBagName = reqBodyName.name;
-                console.log(dataBagName);
-                $('.tableHidden').css('display','none');
-                bootbox.confirm('Are you sure you want to Delete Data Bag -&nbsp;' + dataBagName, function(result) {
-                    if (result) {
-                        $.ajax({
-                            url: '../chef/servers/' + urlParams.id + '/databag/' + dataBagName + '/delete',
-                            method: 'DELETE',
-                            success: function() {
-                                $dataBagDatatable.row($row).remove().draw(false);
-                            },
-                            fail: function() {
-                                alert("Unable to delete URL please try again later");
-                            }
-                        });
-                    }
-                   // return false;
-                });
-            });
-            $tdClick.click(function(e) {
-                //alert('hello');
+                //$('#dbNameTable').find('tbody tr td.dataAv').addClass('hidden');
+                $('#saveSpinner').addClass('hidden');
+                $('#saveBTN').removeAttr('disabled');
+                $('#dbNameTable').find('tbody').append($row);
+                $('#modalForDB').modal('hide');
+                $dataBagDatatable.row.add($row).draw();
+                $('#dbNameTable tbody tr:first').trigger('click');
 
-                $itemDatatable.clear().draw();
-                $('.tableHidden').css('display','none');
-                $('#jsonData').css('display','none');
-                $('.spinner').removeClass('hidden');
-                //alert(JSON.stringify(reqBodyName.name));
-                $('#dataBagIDHiddenInput').val(reqBodyName.name);
-                $('#listNameTable thead').find('tr.rowCustomStyle td').html('Items for -&nbsp;' + reqBodyName.name);
-                getList();
-            });
+
+
+                $tdNameNew.find('button.deleteRow').click(function() {
+                    var $this = $(this);
+                    var $row = $this.parents('tr.dbTest');
+                    console.log(reqBodyName.name);
+                    var dataBagName = reqBodyName.name;
+                    console.log(dataBagName);
+                    $('.tableHidden').css('display', 'none');
+                    bootbox.confirm('Are you sure you want to Delete Data Bag -&nbsp;' + dataBagName, function(result) {
+                        if (result) {
+                            $.ajax({
+                                url: '../chef/servers/' + urlParams.id + '/databag/' + dataBagName + '/delete',
+                                method: 'DELETE',
+                                success: function() {
+                                    var dataBagDatatable = $('#dbNameTable').DataTable();
+                                    //$tr.remove();
+                                    dataBagDatatable.row($row).remove().draw(false);
+                                    // alert('deletred');
+                                    var $itemsTable = $('.tableHidden');
+                                    var dataBagNameForItem = $itemsTable.data('dataBagName');
+
+                                    if (dataBagNameForItem === dataBagName) {
+                                        $itemsTable.hide();
+                                    }
+                                    $('#jsonData').css('display','none');
+                                },
+                                fail: function() {
+                                    alert("Unable to delete URL please try again later");
+                                }
+                            });
+                        }
+                        // return false;
+                    });
+                    return false;
+                });
+                
+                //row click after creating a new entry
+                var dataBagDatatable = $('#dbNameTable').dataTable();
+                $row.click(function() {
+                    if ($(this).hasClass('dbTest')) {
+                        $(this).removeClass('dbTest');
+                    } else {
+                        dataBagDatatable.$('tr.dbTest').removeClass('dbTest');
+                        $(this).addClass('dbTest');
+                    }
+                    $('#dbNameTable tbody tr').removeClass('selectedOne');
+                    $(this).addClass('selectedOne');
+                    $itemDatatable.clear().draw();
+
+                    $('.tableHidden').css('display', 'none');
+                    $('#jsonData').css('display', 'none');
+
+
+                    $('.spinner').removeClass('hidden');
+                    //alert(JSON.stringify(reqBodyName.name));
+                    $('#dataBagIDHiddenInput').val(reqBodyName.name);
+                    getList();
+                    $('#listNameTable thead').find('tr.rowCustomStyle td').html('Items for -&nbsp;' + reqBodyName.name);
+                });
+            },
+            error: function(jqxhr) {
+                bootbox.alert(jqxhr.responseText);
+                $('#saveSpinner').addClass('hidden');
+                $('#saveBTN').removeAttr('disabled');
+            },
+            failure: function(data) {
+                bootbox.alert(data.responseText);
+                $('#saveSpinner').addClass('hidden');
+                $('#saveBTN').removeAttr('disabled');
+            }
 
         });
         return false;
     });
 
-//new function for creating items from databags
-function createItemTableRow(k){
+
+    //create item table
+    function createItemTableRow(k) {
         var itemTable = $('#listNameTable tbody');
         var $trForItems = $('<tr class="itemsList"/>');
         var $tdForItems = $('<td class="listData"/>');
         $tdForItems.append('<a style="cursor:pointer;" id="listNameClickNew">' + k + '</a>').append('<div class="btn-group" style="float:right;"><button class="editRow" value="Update" title="Update"><i class="ace-icon fa fa-pencil bigger-120"></i></button></div>').append('<div style="margin-right:10px;float:right;" class="btn-group del"><button class="deleteRow" value="Remove" title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></div>');
-
         $trForItems.append($tdForItems);
         $('#listNameTable').find('tbody').append($trForItems);
         $itemDatatable.row.add($trForItems).draw();
 
-        $('#listNameTable tbody tr').click(function() {
-                //alert('You clicked row ' + ($(this).index() + 1));
-                //$(this).addClass("selected").siblings().removeClass("selected");
-                $('#listNameTable tbody tr').removeClass('selectedOne');
-                $(this).addClass('selectedOne');
-                //$('#listNameTable').find('tbody tr.itemsList').empty();
-                //$('#jsonData').css('display','none');
-            });
+        //tr click for items
+        $trForItems.click(function() {
+            $('#jsonData').css('display','none');
+            $('#listNameTable tbody tr').removeClass('selectedOne');
+            $(this).addClass('selectedOne');
+            //$('#listNameTable').find('tbody tr.itemsList').empty();
+            $('.spinnerNew').removeClass('hidden');
+            $('textarea#jsonListName').val('');
+            var dataBagName = $('#dataBagIDHiddenInput').val();
+            var itemId = k;
 
-        
+            $.get('../chef/servers/' + urlParams.id + '/databag/' + dataBagName + '/item/' + itemId + '/find', function(data) {
+                // alert('hello');
+                console.log(data);
+                var res = JSON.stringify(data, null, '\t');
+                $('.spinnerNew').addClass('hidden');
+                $('#jsonData').css('display', 'block');
+                $('#listTable thead').find('tr.rowCustomStyle td').html(itemId);
+                //$('#listTable tbody').find('tr')
+                $('#jsonListName').val(res);
+            });
+        });
 
         //for edit
         $tdForItems.find('button.editRow').click(function() {
+            $('.jsonError').addClass('hidden');
             $('.spinnerNew').addClass('hidden');
-            $('#jsonData').css('display','none');
+            $('#jsonData').css('display', 'none');
             var $this = $(this);
             var $trNew = $this.parents('tr.itemsList');
             var $editModal = $('#modalForItems');
             $('textarea#instanceListName').val('');
             $editModal.modal('show');
             $editModal.find('.listID').val(k);
-            $('input.listID').attr('disabled','disabled');
+            $('input.listID').attr('disabled', 'disabled');
             $editModal.find('.listName').val();
             $editModal.find('#itemEditHiddenInput').val('edit');
             var dataBagName = $('#dataBagIDHiddenInput').val();
-                console.log(dataBagName);
-                console.log(k);
-                var itemId = k;
-                console.log(itemId);
-                $.get('../chef/servers/' + urlParams.id + '/databag/' + dataBagName + '/item/' + itemId + '/find', function(data) {
-                   // alert('hello');
-                    console.log(data);
-                    
-                    var res = JSON.stringify(data, null, '\t');
-                    $('#instanceListName').val(res);
-                });
-                return false;
-        });
+            console.log(dataBagName);
+            console.log(k);
+            var itemId = k;
+            console.log(itemId);
+            $.get('../chef/servers/' + urlParams.id + '/databag/' + dataBagName + '/item/' + itemId + '/find', function(data) {
+                // alert('hello');
+                console.log(data);
 
+                var res = JSON.stringify(data, null, '\t');
+                $('#instanceListName').val(res);
+            });
+            return false;
+        });
         //for delete
         $tdForItems.find('button.deleteRow').click(function() {
-          $('#jsonData').css('display','none');
+            $('#jsonData').css('display', 'none');
             var $this = $(this);
             var $trNew = $this.parents('tr.itemsList');
             var dataBagName = $('#dataBagIDHiddenInput').val();
@@ -541,7 +594,7 @@ function createItemTableRow(k){
                         success: function() {
                             //$trNew.remove();
                             $itemDatatable.row($trNew).remove().draw(false);
-                            
+
                         },
                         fail: function() {
                             alert("Unable to delete URL please try again later");
@@ -551,7 +604,7 @@ function createItemTableRow(k){
             });
             return false;
         });
-        $tdForItems.click(function(e){
+        /*$tdForItems.click(function(e){
           $('.spinnerNew').removeClass('hidden');
           $('textarea#jsonListName').val('');
           var dataBagName = $('#dataBagIDHiddenInput').val();
@@ -566,20 +619,19 @@ function createItemTableRow(k){
                 $('#listTable thead').find('tr.rowCustomStyle td').html(itemId);
                 //$('#listTable tbody').find('tr')
                 $('#jsonListName').val(res);
-
             });
-        });
+        });*/
     };
 
     //for list items
-    $('.addList').click(function(e){
+    $('.addList').click(function(e) {
         $('#itemEditHiddenInput').val('new');
     });
 
     //submit for Item Name
     $('#instanceItemName').submit(function(e) {
         $('#saveItemSpinner').removeClass('hidden');
-        $('#saveBTNList').attr('disabled','disabled');
+        $('#saveBTNList').attr('disabled', 'disabled');
         var $form = $('#instanceItemName');
         var itemID = $form.find('.listID').val();
         $('.listID').focus();
@@ -603,9 +655,9 @@ function createItemTableRow(k){
         var dataBagName = $form.find('#dataBagIDHiddenInput').val();
         var itemsEditNew = $(this).find('#itemEditHiddenInput').val();
         console.log(dataBagName);
-        var isEncrypt=false;
+        var isEncrypt = false;
         if ($('#check_id').is(":checked")) {
-            isEncrypt=true;
+            isEncrypt = true;
         }
         console.log($('#check_id').is(":checked"));
         console.log(isEncrypt);
@@ -614,33 +666,33 @@ function createItemTableRow(k){
         if (itemsEditNew === 'edit') {
             url = '../chef/servers/' + urlParams.id + '/databag/' + dataBagName + '/item/' + itemID + '/update';
             reqBody = {
-                "isEncrypt":isEncrypt,
+                "isEncrypt": isEncrypt,
                 "dataBagItem": jsonObj
             };
         } else {
             url = '../chef/servers/' + urlParams.id + '/databag/' + dataBagName + '/item/create';
             reqBody = {
                 "id": itemID,
-                "isEncrypt":isEncrypt,
+                "isEncrypt": isEncrypt,
                 "dataBagItem": jsonObj
             };
         }
 
-        
+
         $.ajax({
             method: "POST",
             url: url,
             data: reqBody,
             success: function(data, success) {
-                
+
                 $('#modalForItems').modal('hide');
                 $('#saveItemSpinner').addClass('hidden');
                 $('#saveBTNList').removeAttr('disabled');
                 console.log(itemsEditNew);
-                if(itemsEditNew ==='new'){
-                  console.log(itemID);
-                  createItemTableRow(itemID);
-                   $('#saveBTNList').removeAttr('disabled');
+                if (itemsEditNew === 'new') {
+                    console.log(itemID);
+                    createItemTableRow(itemID);
+                    $('#saveBTNList').removeAttr('disabled');
                 }
             },
             error: function(jqxhr) {

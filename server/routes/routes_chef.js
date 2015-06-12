@@ -821,14 +821,14 @@ module.exports.setRoutes = function(app, verificationFunc) {
                     res.send(500,"Failed to create Data Bag on Chef.");
                     return;
                 }
-                if(dataBag === 409){
+                else if(dataBag === 409){
                     logger.debug("Exit /chef/../databag/create");
                     res.send(500,"Data Bag already exist on Chef.");
                     return;
                 }
-                if(dataBag === 400){
+                else if(dataBag === 400){
                     logger.debug("Exit /chef/../databag/create");
-                    res.send(400,"Invalid name.");
+                    res.send(400,"Name can only contain lowercase letters, numbers, hyphens, and underscores.");
                     return;
                 }
                 logger.debug("Exit /chef/../databag/create");

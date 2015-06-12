@@ -616,7 +616,7 @@ function CreateTableFromJson(formID, idFieldName, createFileName) {
                     importbutton.addClass('tableactionbutton');
                 }
 
-                var dataBags = $('.rowtemplate').find('a[title="Manage DB"]');
+                var dataBags = $('.rowtemplate').find('a[title="DataBag"]');
 
                 if(dataBags && dataBags.length > 0 ) {
                     dataBags.attr("href", "#ajax/Settings/dbList.html?id=" + idFieldValue);
