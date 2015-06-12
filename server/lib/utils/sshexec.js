@@ -6,6 +6,7 @@ var INVALID_CREDENTIALS = -5001;
 var JSCH_EXCEPTION = -5002;
 var UNKOWN_EXCEPTION = -5003;
 var PEM_FILE_READ_ERROR = -5004;
+var CONNECTION_NOT_INITIALIZED = -5005;
 
 module.exports = function(options) {
 
@@ -29,7 +30,7 @@ module.exports = function(options) {
                 } else {
                     callback(connectErr, UNKOWN_EXCEPTION);
                 }
-            }, 2000);
+            }, 500);
             return;
         }
 
@@ -90,7 +91,7 @@ module.exports = function(options) {
                         callback(err, PEM_FILE_READ_ERROR);
                         return;
                     }
-                    connectionParamsObj.privateKey = 'sdfsdf'; //key;
+                    connectionParamsObj.privateKey = key;
                     connect(connectionParamsObj, callback);
                 });
             } else {
@@ -127,7 +128,7 @@ module.exports = function(options) {
 
                     });
 
-                    stream.on('close', function() {
+                    stream.on('close', function(code, signal) {
                         console.log('SSH STREAM CLOSE');
                         if (con) {
                             con.end();
@@ -135,9 +136,14 @@ module.exports = function(options) {
                         if (execRetCode !== null) {
                             onComplete(null, execRetCode);
                         } else {
-                            onComplete({
-                                err: "cmd exit error"
-                            }, -1);
+                            if (typeof code !== 'undefined' && typeof code === 'number') {
+                                execRetCode = code;
+                                execSignal = signal;
+                            } else {
+                                execRetCode = UNKOWN_EXCEPTION;
+                                execSignal = null;
+                            }
+                            onComplete(null, execRetCode);
                         }
                     });
 
@@ -157,9 +163,7 @@ module.exports = function(options) {
                     }
                 });
             } else {
-                onComplete({
-                    err: "Connection not initialized"
-                }, -1);
+                onComplete(null, CONNECTION_NOT_INITIALIZED);
             }
 
         });
