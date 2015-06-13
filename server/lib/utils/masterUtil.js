@@ -172,6 +172,8 @@ var MasterUtil = function(){
                             if (envs[envCount].id === '3') {
                                 names = configmgmtDao.convertRowIDToValue(envs[envCount].orgname_rowid, rowidlist)
                                 envs[envCount].orgname = names;
+                                names = configmgmtDao.convertRowIDToValue(envs[envCount].configname_rowid, rowidlist)
+                                envs[envCount].configname = names;
                                 envList.push(envs[envCount]);
                             }
                         })(i);
@@ -205,11 +207,24 @@ var MasterUtil = function(){
             }
             if (projects) {
                 configmgmtDao.getRowids(function(err, rowidlist) {
+                    var allEnvs ='';
                     for (var i = 0; i < projects.length; i++) {
                         (function(projectCount) {
                             if (projects[projectCount].id === '4') {
-                                names = configmgmtDao.convertRowIDToValue(projects[projectCount].orgname_rowid, rowidlist)
+                                names = configmgmtDao.convertRowIDToValue(projects[projectCount].orgname_rowid, rowidlist);
+                                bgnames = configmgmtDao.convertRowIDToValue(projects[projectCount].productgroupname_rowid, rowidlist);
+                                logger.debug("getProjects===================== ",bgnames);
                                 projects[projectCount].orgname = names;
+                                projects[projectCount].productgroupname = bgnames;
+                                //projectList.push(projects[projectCount]);
+                                var envs = projects[projectCount].environmentname_rowid.split(",");
+                                for(var e = 0;e< envs.length;e++){
+                                    logger.debug("envs:::::::::::::: ",projects[projectCount].environmentname);
+                                    envnames = configmgmtDao.convertRowIDToValue(envs[e], rowidlist);
+                                    allEnvs =allEnvs+","+envnames;
+                                }
+                                allEnvs = allEnvs.substring(1);
+                                projects[projectCount].environmentname = allEnvs;
                                 projectList.push(projects[projectCount]);
                             }
                         })(i);
@@ -688,6 +703,8 @@ var MasterUtil = function(){
                         if (teams[i].id === '21') {
                             names = configmgmtDao.convertRowIDToValue(teams[i].orgname_rowid, rowidlist)
                             teams[i].orgname = names;
+                            projectnames = configmgmtDao.convertRowIDToValue(teams[i].projectname_rowid, rowidlist)
+                            teams[i].projectname = projectnames;
                             teamList.push(teams[i]);
                         }
                     }
@@ -1024,8 +1041,20 @@ var MasterUtil = function(){
                     for (var i = 0; i < projects.length; i++) {
                         (function(projectCount) {
                             if (projects[projectCount].id === '4') {
-                                names = configmgmtDao.convertRowIDToValue(projects[projectCount].orgname_rowid, rowidlist)
+                                names = configmgmtDao.convertRowIDToValue(projects[projectCount].orgname_rowid, rowidlist);
+                                bgnames = configmgmtDao.convertRowIDToValue(projects[projectCount].productgroupname_rowid, rowidlist);
+                                logger.debug("getProjects===================== ",bgnames);
                                 projects[projectCount].orgname = names;
+                                projects[projectCount].productgroupname = bgnames;
+                                //projectList.push(projects[projectCount]);
+                                var envs = projects[projectCount].environmentname_rowid.split(",");
+                                for(var e = 0;e< envs.length;e++){
+                                    logger.debug("envs:::::::::::::: ",projects[projectCount].environmentname);
+                                    envnames = configmgmtDao.convertRowIDToValue(envs[e], rowidlist);
+                                    allEnvs =allEnvs+","+envnames;
+                                }
+                                allEnvs = allEnvs.substring(1);
+                                projects[projectCount].environmentname = allEnvs;
                                 projectList.push(projects[projectCount]);
                             }
                         })(i);

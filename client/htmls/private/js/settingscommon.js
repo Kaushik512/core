@@ -1040,7 +1040,7 @@ function readform__(formID) {
             if (ctrl.getType() == "select") {
                 ctrl.val(ctrl.attr('savedvalue'));
             }
-            if (ctrl.getType() == "div") {
+            if (ctrl.getType() == "div" && typeof ctrl.attr('savedvalue') != 'undefined') {
                 var divselect = ctrl.attr('savedvalue').split(',');
                 // alert(divselect.length);
                 for (var j = 0; j < divselect.length; j++) {
@@ -1379,7 +1379,8 @@ function readform(formID) {
                     ctrl.val(ctrl.attr('savedvalue'));
                     ctrl.trigger('change');
                 }
-                if (ctrl.getType() == "div") {
+                if (ctrl.getType() == "div" && typeof ctrl.attr('savedvalue') != 'undefined') {
+                    console.log(ctrl.attr('savedvalue'));
                     var divselect = ctrl.attr('savedvalue').split(',');
                     // alert(divselect.length);
                     for (var j = 0; j < divselect.length; j++) {
@@ -1693,7 +1694,7 @@ function readformnew(formID) {
                 if (ctrl.getType() == "select") {
                     ctrl.val(ctrl.attr('savedvalue'));
                 }
-                if (ctrl.getType() == "div") {
+                if (ctrl.getType() == "div" && typeof ctrl.attr('savedvalue') != 'undefined') {
                     var divselect = ctrl.attr('savedvalue').split(',');
                     // alert(divselect.length);
                     for (var j = 0; j < divselect.length; j++) {
