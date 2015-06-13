@@ -2591,6 +2591,15 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                             });
                                         }
 
+                                        /*if(req.params.id === '1'){
+                                            masterUtil.updateAllSettings(bodyJson['rowid'],bodyJson['orgname'],function(err,aBody){
+                                                if(err){
+                                                    logger.debug("Error on update Org.".err);
+                                                }
+                                                logger.debug("Return body: ",JSON.stringify(aBody));
+                                            });
+                                        }*/
+
                                         logger.debug('Master Data Updated: %s', saveddata);
                                         logger.debug('folderpath: %s rowid %s', folderpath, currowid);
                                         //resetting the orgname to empty string when a template type file is uploaded.
