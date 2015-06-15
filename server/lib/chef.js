@@ -679,6 +679,125 @@ var Chef = function(settings) {
 
     };
 
+    this.runChefClientInspect = function(options, callback, callbackOnStdOut, callbackOnStdErr) {
+        var runlist = options.runlist;
+        var overrideRunlist = false;
+        if (options.overrideRunlist) {
+            overrideRunlist = true;
+        }
+        if (!runlist) {
+            runlist = [];
+        }
+        //options.jsonAttributes = JSON.stringify({"A":{"B":{"passedin":"Cool Test"}}});
+
+        runlist = chefDefaults.defaultChefClientRunCookbooks.concat(runlist);
+
+        if (options.instanceOS != 'windows') {
+            var sshParamObj = {
+                host: options.host,
+                port: options.port,
+                username: options.username
+            };
+            var sudoCmd;
+            if (options.privateKey) {
+                sshParamObj.pemFilePath = options.privateKey;
+
+                if (options.passphrase) {
+                    sshParamObj.passphrase = options.passphrase;
+                }
+            } else {
+                sshParamObj.password = options.password;
+            }
+            logger.debug('json jsonAttributes ==> ', options.jsonAttributes);
+            logger.debug('type of jsonAttributes == >',typeof options.jsonAttributes);
+            var lockFile = false;
+            if (options.parallel) {
+                lockFile = true;
+            }
+
+            
+            javaSSHWrapper.getNewInstance(sshParamObj, function(err, javaSSh) {
+                if (err) {
+                    callback(err, null);
+                    return;
+                }
+                logger.debug('Run List:' + runlist.join());
+                javaSSh.execChefClient(runlist.join(), overrideRunlist, options.jsonAttributes, lockFile, callback, callbackOnStdOut, callbackOnStdErr);
+            });
+
+            /*
+            // using ssh2
+            var cmd = '';
+            cmd = "chef-client";
+            if (overrideRunlist) {
+                cmd += " -o";
+            } else {
+                cmd += " -r";
+            }
+            cmd += " " + runlist.join();
+
+            var timestamp = new Date().getTime();
+            if (lockFile) {
+                cmd += " --lockfile /var/tmp/catalyst_lockFile_" + timestamp;
+            }
+            if (options.jsonAttributes) {
+                var jsonFileName = "chefRunjsonAttributes_" + timestamp + ".json";
+                var jsonAttributesString = options.jsonAttributes;// JSON.stringify(options.jsonAttributes);
+                jsonAttributesString = jsonAttributesString.split('"').join('\\\"');
+                var cmdWithJsonAttribute = '';
+                cmdWithJsonAttribute += 'echo "' + jsonAttributesString + '" > ' + jsonFileName + ' && sudo ' + cmd + ' -j ' + jsonFileName;
+                cmd = cmdWithJsonAttribute;
+            }
+            var sudoCmd = "sudo";
+            if (options.password) {
+                sudoCmd = "echo " + password + " | sudo -S";
+            }
+
+            logger.debug("chef client cmd ==> " + cmd);
+            cmd = sudoCmd + " " + cmd;
+
+            var sshExec = new SSHExec(options);
+            sshExec.exec(cmd, callback, callbackOnStdOut, callbackOnStdErr);
+            */
+
+
+        } else {
+
+            var processOptions = {
+                cwd: settings.userChefRepoLocation,
+                onError: function(err) {
+                    callback(err, null);
+                },
+                onClose: function(code) {
+                    callback(null, code);
+                }
+            };
+            if (typeof callbackOnStdOut === 'function') {
+                processOptions.onStdOut = function(data) {
+                    callbackOnStdOut(data);
+                }
+            }
+
+            if (typeof callbackOnStdErr === 'function') {
+                processOptions.onStdErr = function(data) {
+                    callbackOnStdErr(data);
+                }
+            }
+
+            //      knife ssh 'name:<node_name>' 'chef-client -r "recipe[a]"' -x root -P pass
+            logger.debug('host name ==>', options.host);
+            //var proc = new Process('knife', ['winrm', options.host, 'chef-client ' + chefRunParamOveright + ' "' + runlist.join() + '"', '-m', '-P' + options.password, '-x' + options.username], processOptions);
+            //var proc = new Process('knife', ['winrm', options.host, ' " chef-client -o' + ' ' + runlist.join() + '"', '-m', '-P' + options.password, '-x' + options.username], processOptions);
+            if (!options.password) {
+                options.password = 'Zaq!2wsx'; // temp hack
+            }
+            var proc = new Process('knife', ['winrm', options.host, ' "chef-client -o ' + runlist.join() + '"', '-m', '-P' + options.password, '-x' + options.username], processOptions);
+            proc.start();
+            //[7:04:22 PM] Ashna Abbas:  knife winrm 54.69.130.187 'chef-client -r recipe[apache2-windows]' -P 'Zaq!2wsx' -xadministrator -m
+        }
+
+    };
+
 
     this.updateAndRunNodeRunlist = function(nodeName, params, callback, callbackOnStdOut, callbackOnStdErr) {
         var options = {
