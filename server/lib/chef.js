@@ -592,6 +592,7 @@ var Chef = function(settings) {
                 sshParamObj.password = options.password;
             }
             logger.debug('json jsonAttributes ==> ', options.jsonAttributes);
+            logger.debug('type of jsonAttributes == >',typeof options.jsonAttributes);
             var lockFile = false;
             if (options.parallel) {
                 lockFile = true;
@@ -623,8 +624,8 @@ var Chef = function(settings) {
             }
             if (options.jsonAttributes) {
                 var jsonFileName = "chefRunjsonAttributes_" + timestamp + ".json";
-                var jsonAttributesString = JSON.stringify(options.jsonAttributes);
-                //jsonAttributesString = jsonAttributesString.split('"').join('\\\"');
+                var jsonAttributesString = options.jsonAttributes;// JSON.stringify(options.jsonAttributes);
+                jsonAttributesString = jsonAttributesString.split('"').join('\\\"');
                 var cmdWithJsonAttribute = '';
                 cmdWithJsonAttribute += 'echo "' + jsonAttributesString + '" > ' + jsonFileName + ' && sudo ' + cmd + ' -j ' + jsonFileName;
                 cmd = cmdWithJsonAttribute;
