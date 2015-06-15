@@ -11,6 +11,10 @@ var taskHistorySchema = new Schema({
     taskType: String,
     runlist: [String],
     nodeIds: [String],
+    nodeIdsWithActionLog: [{
+        nodeId: String,
+        actionLogId: String
+    }],
     attributes: Schema.Types.Mixed,
     jenkinsServerId: String,
     jobName: String,

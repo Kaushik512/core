@@ -241,24 +241,29 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                 return;
                             }
                             var providersList = [];
-                            for (var i = 0; i < providers.length; i++) {
-                                var keys = [];
-                                keys.push(providers[i].accessKey);
-                                keys.push(providers[i].secretKey);
-                                cryptography.decryptMultipleText(keys, cryptoConfig.decryptionEncoding, cryptoConfig.encryptionEncoding, function(err, decryptedKeys) {
-                                    if (err) {
-                                        res.sned(500, "Failed to decrypt accessKey or secretKey");
-                                        return;
-                                    }
-                                    providers[i].accessKey = decryptedKeys[0];
-                                    providers[i].secretKey = decryptedKeys[1];
-                                    providersList.push(providers[i]);
-                                    logger.debug("providers>>> ", JSON.stringify(providers));
-                                    if (providers.length === providersList.length) {
-                                        res.send(providersList);
-                                        return;
-                                    }
-                                });
+                            if (providers.length > 0) {
+                                for (var i = 0; i < providers.length; i++) {
+                                    var keys = [];
+                                    keys.push(providers[i].accessKey);
+                                    keys.push(providers[i].secretKey);
+                                    cryptography.decryptMultipleText(keys, cryptoConfig.decryptionEncoding, cryptoConfig.encryptionEncoding, function(err, decryptedKeys) {
+                                        if (err) {
+                                            res.sned(500, "Failed to decrypt accessKey or secretKey");
+                                            return;
+                                        }
+                                        providers[i].accessKey = decryptedKeys[0];
+                                        providers[i].secretKey = decryptedKeys[1];
+                                        providersList.push(providers[i]);
+                                        logger.debug("providers>>> ", JSON.stringify(providers));
+                                        if (providers.length === providersList.length) {
+                                            res.send(providersList);
+                                            return;
+                                        }
+                                    });
+                                }
+                            } else {
+                                res.send(providersList);
+                                return;
                             }
                         });
                     } else {
