@@ -1085,7 +1085,7 @@ var MasterUtil = function(){
                 configmgmtDao.getRowids(function(err, rowidlist) {
                     for (var i = 0; i < templateTypes.length; i++) {
                         if (templateTypes[i].id === '16') {
-                            names = configmgmtDao.convertRowIDToValue(templateTypes[i].orgname_rowid, rowidlist)
+                            names = configmgmtDao.convertRowIDToValue(templateTypes[i].orgname_rowid, rowidlist);
                             templateTypes[i].orgname = names;
                             templateTypeList.push(templateTypes[i]);
                         }
@@ -1283,6 +1283,57 @@ var MasterUtil = function(){
                     });
                 });
             }); // bu
+        });
+    }
+
+    this.updateTeam = function(orgId, callback) {
+        var teamName = '';
+        var teamDescription = '';
+        configmgmtDao.getRowids(function(err, rowidlist) {
+            d4dModelNew.d4dModelMastersTeams.find({
+                orgname_rowid: orgId,
+                id: '21'
+            }, function(err, teams) {
+                if (err) {
+                    logger.debug("Error to get Settings.");
+                }
+                logger.debug("Got teams::::::::::::::: ", JSON.stringify(teams));
+
+                for (var t = 0; t < teams.length; t++) {
+                    names = configmgmtDao.convertRowIDToValue(teams[t].orgname_rowid, rowidlist);
+                    var currentTeamName = teams[t].teamname;
+                    if (currentTeamName.substr(currentTeamName.indexOf("_")) === "_Admins") {
+                        teamName = names + "_Admins";
+                        teamDescription = "Team For " + teamName;
+                    } else if (currentTeamName.substr(currentTeamName.indexOf("_")) === "_DEV") {
+                        teamName = names + "_DEV";
+                        teamDescription = "Team For " + teamName;
+                    } else if (currentTeamName.substr(currentTeamName.indexOf("_")) === "_QA") {
+                        teamName = names + "_QA";
+                        teamDescription = "Team For " + teamName;
+                    } else if (currentTeamName.substr(currentTeamName.indexOf("_")) === "_DevOps") {
+                        teamName = names + "_DevOps";
+                        teamDescription = "Team For " + teamName;
+                    }
+                    if (currentTeamName.substr(currentTeamName.indexOf("_")) === "_Admins" || currentTeamName.substr(currentTeamName.indexOf("_")) === "_DEV" || currentTeamName.substr(currentTeamName.indexOf("_")) === "_QA" || currentTeamName.substr(currentTeamName.indexOf("_")) === "_DevOps") {
+                        d4dModelNew.d4dModelMastersTeams.update({
+                            rowid: teams[t].rowid,
+                            id: '21'
+                        }, {
+                            $set: {
+                                teamname: teamName,
+                                descriptions: teamDescription
+                            }
+                        }, function(err, aBody) {
+                            if (err) {
+                                logger.debug("Error to update Settings.");
+                            }
+                            logger.debug("Settings Updated............. ", JSON.stringify(aBody));
+                        });
+                    }
+
+                }
+            });
         });
     }
 }

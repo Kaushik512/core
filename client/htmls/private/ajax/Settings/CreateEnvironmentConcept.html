@@ -164,8 +164,41 @@ function preprocess() {
    }
    $('#envcreatespinner').removeClass('hidden');
    //alert('in createchefenvbtn');
-   if(typeof chefid != 'undefined'){         
-   $.post('../chef/environments/create/' + chefid,{envName:$('#chefenvname').val()},function(envname){
+   if(typeof chefid != 'undefined'){   
+
+        $.ajax({
+            type: "Post",
+            url: '../chef/environments/create/' + chefid,
+            data: {
+                envName: $('#chefenvname').val()
+            },
+            success: function(envname) {
+                if (envname) {
+                    $crbtn.removeAttr('disabled');
+                    $('#envcreatespinner').addClass('hidden');
+                    $('#configname').change();
+                    $('#myModalCreateChefEnv').modal('hide');
+                    $('#environmentname').empty();
+                } else {
+                    $('#chefenvcreatemsg').html('Could not complete.' + envname);
+                    $crbtn.removeAttr('disabled');
+                    $('#envcreatespinner').addClass('hidden');
+                    $('#myModalCreateChefEnv').modal('hide');
+                }
+            },
+
+            error: function(jqxhr) {
+                bootbox.alert(jqxhr.responseText);
+                $crbtn.removeAttr('disabled');
+                    $('#envcreatespinner').addClass('hidden');
+                    $('#myModalCreateChefEnv').modal('hide');
+            },
+            failure: function(envname) {
+                bootbox.alert(envname.responseText);
+            }
+        });
+
+   /*$.post('../chef/environments/create/' + chefid,{envName:$('#chefenvname').val()},function(envname){
             if(envname){
             $crbtn.removeAttr('disabled');
             $('#envcreatespinner').addClass('hidden');
@@ -179,7 +212,7 @@ function preprocess() {
                 $('#envcreatespinner').addClass('hidden');
                 $('#myModalCreateChefEnv').modal('hide');
             }
-   });
+   });*/
    }
    return false;
 });

@@ -310,6 +310,8 @@ var Chef = function(settings) {
                 logger.debug("chef status create==> ", chefRes.statusCode);
                 if (chefRes.statusCode === 201) {
                     callback(null, envName);
+                }if (chefRes.statusCode === 409) {
+                    callback(null, chefRes.statusCode);
                 } else {
                     callback(true, null);
                 }

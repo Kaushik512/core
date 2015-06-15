@@ -501,6 +501,10 @@ module.exports.setRoutes = function(app, verificationFunc) {
                 if (err) {
                     res.send(500);
                     return;
+                }if (envName === 409) {
+                    logger.debug("Got 409");
+                    res.send(409,"Environment Already Exist.");
+                    return;
                 } else {
                     res.send(envName);
                     return;
