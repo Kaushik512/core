@@ -45,11 +45,6 @@ chefTaskSchema.methods.execute = function(userName, baseUrl, onExecute, onComple
 
     var attributeObj = utils.mergeObjects(objectArray);
 
-    /* var jsonAttributesString = '';
-    if (Object.keys(attributeObj).length) {
-        jsonAttributesString = JSON.stringify(attributeObj);
-    }*/
-
 
     var instanceIds = this.nodeIds;
     if (!(instanceIds && instanceIds.length)) {
@@ -62,29 +57,28 @@ chefTaskSchema.methods.execute = function(userName, baseUrl, onExecute, onComple
     }
     instancesDao.getInstances(instanceIds, function(err, instances) {
         if (err) {
-            console.log(err);
+            logger.error(err);
             if (typeof onExecute === 'function') {
                 onExecute(err, null);
             }
             return;
         }
-        if (typeof onExecute === 'function') {
-            onExecute(null, {
-                instances: instances,
-            });
-        }
+
 
         var count = 0;
         var overallStatus = 0;
         var instanceResultList = [];
         var executionIds = [];
 
-        function instanceOnCompleteHandler(err, status, instanceId, executionId) {
+        function instanceOnCompleteHandler(err, status, instanceId, executionId, actionId) {
             logger.debug('Instance onComplete fired', count, instances.length);
             count++;
             var result = {
                 instanceId: instanceId,
                 status: 'success'
+            }
+            if (actionId) {
+                result.actionId = actionId;
             }
             if (executionId) {
                 result.executionId = executionId;
@@ -114,6 +108,9 @@ chefTaskSchema.methods.execute = function(userName, baseUrl, onExecute, onComple
                 var timestampStarted = new Date().getTime();
 
                 var actionLog = instancesDao.insertOrchestrationActionLog(instance._id, self.runlist, userName, timestampStarted);
+                instance.tempActionLogId = actionLog._id;
+
+
                 var logsReferenceIds = [instance._id, actionLog._id];
                 if (!instance.instanceIP) {
                     var timestampEnded = new Date().getTime();
@@ -126,7 +123,7 @@ chefTaskSchema.methods.execute = function(userName, baseUrl, onExecute, onComple
                     instancesDao.updateActionLog(instance._id, actionLog._id, false, timestampEnded);
                     instanceOnCompleteHandler({
                         message: "Instance IP is not defined. Chef Client run failed"
-                    }, 1, instance._id);
+                    }, 1, instance._id, null, actionLog._id);
                     return;
                 }
                 configmgmtDao.getChefServerDetails(instance.chef.serverId, function(err, chefDetails) {
@@ -139,7 +136,7 @@ chefTaskSchema.methods.execute = function(userName, baseUrl, onExecute, onComple
                             timestamp: timestampEnded
                         });
                         instancesDao.updateActionLog(instance._id, actionLog._id, false, timestampEnded);
-                        instanceOnCompleteHandler(err, 1, instance._id);
+                        instanceOnCompleteHandler(err, 1, instance._id, null, actionLog._id);
                         return;
                     }
                     if (!chefDetails) {
@@ -153,7 +150,7 @@ chefTaskSchema.methods.execute = function(userName, baseUrl, onExecute, onComple
                         instancesDao.updateActionLog(instance._id, actionLog._id, false, timestampEnded);
                         instanceOnCompleteHandler({
                             message: "Chef Data Corrupted. Chef Client run failed"
-                        }, 1, instance._id);
+                        }, 1, instance._id, null, actionLog._id);
                         return;
                     }
                     //decrypting pem file
@@ -167,7 +164,7 @@ chefTaskSchema.methods.execute = function(userName, baseUrl, onExecute, onComple
                                 timestamp: timestampEnded
                             });
                             instancesDao.updateActionLog(instance._id, actionLog._id, false, timestampEnded);
-                            instanceOnCompleteHandler(err, 1, instance._id);
+                            instanceOnCompleteHandler(err, 1, instance._id, null, actionLog._id);
                             return;
                         }
 
@@ -184,7 +181,7 @@ chefTaskSchema.methods.execute = function(userName, baseUrl, onExecute, onComple
                                     timestamp: timestampEnded
                                 });
                                 instancesDao.updateActionLog(instance._id, actionLog._id, false, timestampEnded);
-                                instanceOnCompleteHandler(err, 1, instance._id);
+                                instanceOnCompleteHandler(err, 1, instance._id, null, actionLog._id);
                                 return;
                             }
 
@@ -204,7 +201,6 @@ chefTaskSchema.methods.execute = function(userName, baseUrl, onExecute, onComple
                                 chefValidationPemFile: chefDetails.validatorpemfile,
                                 hostedChefUrl: chefDetails.url,
                             });
-                            console.log('instance IP ==>', instance.instanceIP);
                             // if(self.attributesjson.toString().indexOf('"\\') <= 0)
                             // self.attributesjson = JSON.stringify(self.attributesjson);
 
@@ -218,7 +214,7 @@ chefTaskSchema.methods.execute = function(userName, baseUrl, onExecute, onComple
                                 runlist: self.runlist, // runing service runlist
                                 jsonAttributes: jsonAttributesString,
                                 overrideRunlist: true,
-                                parallel:true
+                                parallel: true
                             }
                             if (decryptedCredentials.pemFileLocation) {
                                 chefClientOptions.privateKey = decryptedCredentials.pemFileLocation;
@@ -235,9 +231,9 @@ chefTaskSchema.methods.execute = function(userName, baseUrl, onExecute, onComple
                                 if (decryptedCredentials.pemFileLocation) {
                                     fileIo.removeFile(decryptedCredentials.pemFileLocation, function(err) {
                                         if (err) {
-                                            console.log("Unable to delete temp pem file =>", err);
+                                            logger.error("Unable to delete temp pem file =>", err);
                                         } else {
-                                            console.log("temp pem file deleted =>", err);
+                                            logger.debug("temp pem file deleted");
                                         }
                                     });
                                 }
@@ -250,10 +246,9 @@ chefTaskSchema.methods.execute = function(userName, baseUrl, onExecute, onComple
                                         timestamp: timestampEnded
                                     });
                                     instancesDao.updateActionLog(instance._id, actionLog._id, false, timestampEnded);
-                                    instanceOnCompleteHandler(err, 1, instance._id, chefClientExecution.id);
+                                    instanceOnCompleteHandler(err, 1, instance._id, chefClientExecution.id, actionLog._id);
                                     return;
                                 }
-                                console.log("knife ret code", retCode);
                                 if (retCode == 0) {
                                     var timestampEnded = new Date().getTime();
                                     logsDao.insertLog({
@@ -263,9 +258,9 @@ chefTaskSchema.methods.execute = function(userName, baseUrl, onExecute, onComple
                                         timestamp: timestampEnded
                                     });
                                     instancesDao.updateActionLog(instance._id, actionLog._id, true, timestampEnded);
-                                    instanceOnCompleteHandler(null, 0, instance._id, chefClientExecution.id);
+                                    instanceOnCompleteHandler(null, 0, instance._id, chefClientExecution.id, actionLog._id);
                                 } else {
-                                    instanceOnCompleteHandler(null, retCode, instance._id, chefClientExecution.id);
+                                    instanceOnCompleteHandler(null, retCode, instance._id, chefClientExecution.id, actionLog._id);
                                     if (retCode === -5000) {
                                         logsDao.insertLog({
                                             referenceId: logsReferenceIds,
@@ -319,6 +314,12 @@ chefTaskSchema.methods.execute = function(userName, baseUrl, onExecute, onComple
 
 
             })(instances[i]);
+        }
+
+        if (typeof onExecute === 'function') {
+            onExecute(null, {
+                instances: instances,
+            });
         }
     });
 };

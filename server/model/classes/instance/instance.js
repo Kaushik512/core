@@ -199,6 +199,7 @@ var InstanceSchema = new Schema({
     actionLogs: [ActionLogSchema],
     chefClientExecutionIds: [String],
     taskIds: [String],
+    tempActionLogId: String
 
 });
 
@@ -748,8 +749,8 @@ var InstancesDao = function() {
         });
 
     };
-    this.updateInstancesRunlistAndAttributes = function(instanceId, runlist,attributes, callback) {
-        if(!(attributes && attributes.length)) {
+    this.updateInstancesRunlistAndAttributes = function(instanceId, runlist, attributes, callback) {
+        if (!(attributes && attributes.length)) {
             attributes = [];
         }
         logger.debug("Enter updateInstancesRunlistAndAttributes ", instanceId, runlist);
@@ -758,17 +759,17 @@ var InstancesDao = function() {
         }, {
             $set: {
                 "runlist": runlist,
-                "attributes":attributes
+                "attributes": attributes
             }
         }, {
             upsert: false
         }, function(err, data) {
             if (err) {
-                logger.error("Failed to updateInstancesRunlistAndAttributes ", instanceId, runlist,attributes, err);
+                logger.error("Failed to updateInstancesRunlistAndAttributes ", instanceId, runlist, attributes, err);
                 callback(err, null);
                 return;
             }
-            logger.debug("Exit updateInstancesRunlistAndAttributes ", instanceId, runlist,attributes);
+            logger.debug("Exit updateInstancesRunlistAndAttributes ", instanceId, runlist, attributes);
             callback(null, data);
         });
 
