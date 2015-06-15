@@ -621,8 +621,12 @@ var MasterUtil = function(){
         }
         logger.debug("org rowids: ", rowIds);
         d4dModelNew.d4dModelMastersUsers.find({
-            orgname_rowid: rowIds
+            orgname_rowid:{
+                $in: rowIds
+            },
+            "id" : "7"
         }, function(err, users) {
+            logger.debug("Got user+++++++++++++++++++ ",JSON.stringify(users));
             if (users) {
                 configmgmtDao.getRowids(function(err, rowidlist) {
                     for (var i = 0; i < users.length; i++) {
