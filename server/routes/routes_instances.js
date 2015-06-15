@@ -732,12 +732,12 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                 objectArray.push(req.body.jsonAttributes[i].jsonObj);
                                             }
                                             attributeObj = utils.mergeObjects(objectArray);
-                                            console.log('json ==> ',attributeObj);
+                                            console.log('json ==> ', attributeObj);
                                         } else {
                                             req.body.jsonAttributes = [];
                                         }
-                                        jsonAttributeObj =  utils.mergeObjects([attributeObj,jsonAttributeObj]); 
-                                        
+                                        jsonAttributeObj = utils.mergeObjects([attributeObj, jsonAttributeObj]);
+
 
                                         var chef = new Chef({
                                             userChefRepoLocation: chefDetails.chefRepoLocation,
@@ -798,7 +798,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                             logger.debug("knife ret code", retCode);
                                             if (retCode == 0) {
                                                 logger.debug('updating node runlist in db');
-                                                instancesDao.updateInstancesRunlistAndAttributes(req.params.instanceId, req.body.runlist, req.body.jsonAttributes,function(err, updateCount) {
+                                                instancesDao.updateInstancesRunlistAndAttributes(req.params.instanceId, req.body.runlist, req.body.jsonAttributes, function(err, updateCount) {
                                                     if (err) {
                                                         return;
                                                     }
@@ -1614,8 +1614,13 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 res.send(400);
                 return;
             }
+            var timestamp = null;
+            if (req.query.timestamp) {
+                timestamp = req.query.timestamp;
+                timestamp = parseInt(timestamp);
+            }
 
-            logsDao.getLogsByReferenceId(req.params.logId, null, function(err, data) {
+            logsDao.getLogsByReferenceId(req.params.logId, timestamp, function(err, data) {
                 if (err) {
                     logger.error("Failed to fetch Logs: ", err);
                     res.send(500);
@@ -1738,7 +1743,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                             var installedList = [];
                             var installedString;
                             var strWindows;
-                            chef.runChefClient(chefClientOptions, function(err, retCode) {
+                            chef.runChefClientInspect(chefClientOptions, function(err, retCode) {
                                 if (err) {
                                     res.send(500, "Unable to run chef-client.");
                                     return;
@@ -1767,7 +1772,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                     });
                                 }
                             }, function(stdOutData) {
-                                console.log("Return from chef client>>>>>>>>>>>>>>>>>>>: ", stdOutData);
+                                logger.debug("Return from chef client>>>>>>>>>>>>>>>>>>>: ", stdOutData);
                                 installedString = installedString + "{" + stdOutData.replace(/\s+/g, ' ') + "},";
                                 if (stdOutData === "{catalyst.inspect.stop}") {
                                     // For CentOS

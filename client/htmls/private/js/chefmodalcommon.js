@@ -124,16 +124,17 @@ function $chefCookbookRoleSelector(catorgname, callback, selectedRunlist, readMo
     //checking for tasks class(deploy,all)
     var $cookbooksFilterNew = $('<label class="radio hidden col-lg-4" style="font-size:13px;"><input class="runlistTypeSelectorRadioBtn" name="radio" type="radio" id="deployCookbooks"  value="DeployCookbooks"/><i></i>Deploy Cookbooks</label>');
     //var $allFilterNew = $('<label class="radio" style="margin: 5px;font-size:13px;"><input name="radio" type="radio" id="allNew"  value="All"/><i></i>All</label>');
-    $divFilterContainer.append($cookbooksFilterNew);
+    
     //$firstlabelinput.append($allFilterNew);
 
     var $rolesFilter = $('<label class="radio hidden col-lg-3" style="font-size:13px;"><input name="radio" class="runlistTypeSelectorRadioBtn" type="radio" id="roles"  value="Roles"/><i></i>Roles</label>');
     var $cookbooksFilter = $('<label class="radio hidden col-lg-3" style="font-size:13px;"><input name="radio" class="runlistTypeSelectorRadioBtn" type="radio" id="cookbooks"  value="Cookbooks"/><i></i>Cookbooks</label>');
     var $allFilter = $('<label class="radio hidden col-lg-3" style="font-size:13px;"><input name="radio" class="runlistTypeSelectorRadioBtn" type="radio" id="all"  value="All"/><i></i>All</label>');
 
+    $divFilterContainer.append($allFilter);
     $divFilterContainer.append($rolesFilter);
     $divFilterContainer.append($cookbooksFilter);
-    $divFilterContainer.append($allFilter);
+    $divFilterContainer.append($cookbooksFilterNew);
 
     var $searchiconappend = $("<i></i>").addClass('icon-append fa fa-search');
     var $searchinputtextbox = $('<input type="text" placeholder="Search Cookbooks/Roles" id="textbox"/>');
@@ -367,20 +368,20 @@ function $chefCookbookRoleSelector(catorgname, callback, selectedRunlist, readMo
         if (listVisible.deploy) {
             $chefItemdiv.find('#deployCookbooks').parents('label').removeClass('hidden');
             $chefItemdiv.find('#deployCookbooks').click();
-            clicked = true;
+            //clicked = false;
         }
         if (listVisible.roles) {
             $chefItemdiv.find('#roles').parents('label').removeClass('hidden');
             if (!clicked) {
                 $chefItemdiv.find('#roles').click();
-                clicked = true;
+               // clicked = false;
             }
         }
         if (listVisible.cookbooks) {
             $chefItemdiv.find('#cookbooks').parents('label').removeClass('hidden');
             if (!clicked) {
                 $chefItemdiv.find('#cookbooks').click();
-                clicked = true;
+               // clicked = false;
             }
         }
         if (listVisible.all) {

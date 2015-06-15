@@ -126,6 +126,17 @@ taskSchema.methods.execute = function(userName, baseUrl, callback, onComplete) {
 
 
         //making task history entry
+        if (taskExecuteData.instances) {
+            taskHistoryData.nodeIdsWithActionLog = [];
+            for (var i = 0; i < taskExecuteData.instances.length; i++) {
+                var obj = {
+                    nodeId: taskExecuteData.instances[i]._id,
+                    actionLogId: taskExecuteData.instances[i].tempActionLogId
+                }
+                taskHistoryData.nodeIdsWithActionLog.push(obj);
+            }
+        }
+
         taskHistoryData.status = TASK_STATUS.RUNNING;
         taskHistoryData.timestampStarted = timestamp;
         if (taskExecuteData.buildNumber) {
