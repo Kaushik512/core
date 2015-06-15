@@ -172,7 +172,7 @@ function preprocess() {
             data: {
                 envName: $('#chefenvname').val()
             },
-            success: function(envname) {
+            success: function(envname,success) {
                 if (envname) {
                     $crbtn.removeAttr('disabled');
                     $('#envcreatespinner').addClass('hidden');
@@ -185,15 +185,12 @@ function preprocess() {
                     $('#envcreatespinner').addClass('hidden');
                     $('#myModalCreateChefEnv').modal('hide');
                 }
-            },
-
-            error: function(jqxhr) {
+            },error: function(jqxhr) {
                 bootbox.alert(jqxhr.responseText);
                 $crbtn.removeAttr('disabled');
                     $('#envcreatespinner').addClass('hidden');
                     $('#myModalCreateChefEnv').modal('hide');
-            },
-            failure: function(envname) {
+            },failure: function(envname) {
                 bootbox.alert(envname.responseText);
             }
         });
@@ -224,6 +221,10 @@ function loadChefEnvs(chefID) {
             var envlist = envList.toString().split(',');
             var $envselect = $('#environmentname').addClass('envselect').addClass('form-control').addClass('width100').addClass('padding0');
             for (var j = 0; j < envList.length; j++) {
+                if($envselect.val() === envList[j]){
+                    //console.log($envselect);
+                    $envselect.html('');
+                }
                 $envselect.append('<option value="' + envList[j] + '">' + envList[j] + '</option>');
             }
             $envselect.val($envselect.attr('savedvalue'));

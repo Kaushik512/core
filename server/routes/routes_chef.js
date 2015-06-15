@@ -499,13 +499,14 @@ module.exports.setRoutes = function(app, verificationFunc) {
             });
             chef.createEnvironment(req.body.envName, function(err, envName) {
                 if (err) {
-                    res.send(500);
+                    res.send(500,"Error to create Env on chef.");
                     return;
-                }if (envName === 409) {
+                }else if (envName === 409) {
                     logger.debug("Got 409");
                     res.send(409,"Environment Already Exist.");
                     return;
                 } else {
+                    logger.debug("envName: ",envName);
                     res.send(envName);
                     return;
                 }

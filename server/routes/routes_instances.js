@@ -1767,7 +1767,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                     });
                                 }
                             }, function(stdOutData) {
-                                logger.debug("Return from chef client>>>>>>>>>>>>>>>>>>>: ", stdOutData);
+                                console.log("Return from chef client>>>>>>>>>>>>>>>>>>>: ", stdOutData);
                                 installedString = installedString + "{" + stdOutData.replace(/\s+/g, ' ') + "},";
                                 if (stdOutData === "{catalyst.inspect.stop}") {
                                     // For CentOS

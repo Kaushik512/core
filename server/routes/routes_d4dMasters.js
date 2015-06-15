@@ -578,9 +578,11 @@ module.exports.setRoutes = function(app, sessionVerification) {
         masterUtil.getLoggedInUser(loggedInUser, function(err, anUser) {
             if (err) {
                 res.send(500, "Failed to fetch User.");
+                return;
             }
             if (!anUser) {
                 res.send(500, "Invalid User.");
+                return;
             }
             if (anUser.orgname_rowid[0] === "") {
                 /*d4dModelNew.find({
