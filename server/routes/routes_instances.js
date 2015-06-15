@@ -1614,8 +1614,13 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 res.send(400);
                 return;
             }
+            var timestamp = null;
+            if(req.query.timestamp){
+                timestamp  = req.query.timestamp;
+                timestamp = parseInt(timestamp);
+            }
 
-            logsDao.getLogsByReferenceId(req.params.logId, null, function(err, data) {
+            logsDao.getLogsByReferenceId(req.params.logId, timestamp, function(err, data) {
                 if (err) {
                     logger.error("Failed to fetch Logs: ", err);
                     res.send(500);
