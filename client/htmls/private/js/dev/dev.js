@@ -2988,7 +2988,7 @@
                                                                $outputArea.data('jobName', data.jobName);
                                                                $outputArea.data('lastBuildNumber', data.lastBuildNumber);
                                                                $outputArea.data('currentBuildNumber', data.currentBuildNumber);
-                                                               $outputArea.data('timestampStarted', timestampToPoll);
+                                                               $outputArea.data('timestampStarted', data.timestamp);
                                                                showTaskLogs();
 
                                                            }).fail(function(jxhr) {
