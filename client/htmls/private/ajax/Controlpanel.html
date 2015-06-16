@@ -53,7 +53,7 @@
                                       <div class="actionbutton instance-bootstrap-ActionShutdown"style="display:none;"><a href="javascript:void(0)" class="actionbuttonShutdown instanceActionBtn" data-actiontype="stop" rel="tooltip" data-placement="top" data-original-title="Stop"></a></div>
 
                                       <div class="sshContainer actionbutton instance-bootstrap-ActionSSH">
-                                        <a href="javascript:void(0)" class='sshShellBtn cpTop' data-actiontype="SSH" data-placement="top" rel="tooltip" data-original-title="SSH">
+                                        <a href="javascript:void(0)" class='sshShellBtn cpTop sshTerminalBtn' data-actiontype="SSH" data-placement="top" rel="tooltip" data-original-title="SSH">
                                         </a>
                                       </div>
                                       <!--rdp-->
@@ -1566,9 +1566,9 @@ $.get('../instances/' + urlParams.id, function(data) {
             return false;
         }
     });
-    $('.sshShellBtn').click(function() {
+    $('.sshTerminalBtn').click(function() {
         if ($(this).hasClass('isStopedInstance')) {
-            return false;
+           return false;
         }
 
 
