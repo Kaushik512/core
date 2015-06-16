@@ -2518,8 +2518,8 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                             logger.debug("Error : ", err);
                                                         }
                                                         logger.debug("Got Teams<<<<<<<<<<<<<<<<<<<<< ", JSON.stringify(teamData));
-                                                        teamData[0].loginname = bodyJson["loginname"];
-                                                        teamData[0].loginname_rowid = bodyJson["rowid"];
+                                                        teamData[0].loginname = teamData[0].loginname+","+bodyJson["loginname"];
+                                                        teamData[0].loginname_rowid = teamData[0].loginname_rowid+","+bodyJson["rowid"];
                                                         logger.debug("Got Team<<<<<<<<<<<<<<<<<<<<< ", teamData[0].rowid);
                                                         d4dModelNew.d4dModelMastersTeams.update({
                                                             rowid: teamData[0].rowid
