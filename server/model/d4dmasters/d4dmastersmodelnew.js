@@ -216,7 +216,7 @@ var d4dModelMastersUserroles = mongoose.model('d4dModelMastersUserroles',d4dMast
 var d4dMastersDesignTemplateTypes = new mongoose.Schema(
 	{id: {type:String,required:true, trim:true},
 	name: {type:String,trim:true},
-	templatetypename: {type:String,required:true, trim:true, validate:nameValidator},
+	templatetypename: {type:String,required:true, trim:true},
 	designtemplateicon_filename: {type:String,trim:true},
 	orgname: {type:[String],required:false, trim:true},
 	orgname_rowid: {type:[String], trim:true},

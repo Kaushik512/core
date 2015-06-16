@@ -1793,6 +1793,7 @@ function resetForm(){
 	
 	
 	// }
+    if(getDesignTypeImg){
 	containerTemp += '<div class="" style="width:222px;float:left">'+
 	' <div id=grid'+i+' class="blueprintdiv appfactory" data-'+
 	'templateType="'+data[i]['templatetypename']+'">'+
@@ -1807,7 +1808,21 @@ function resetForm(){
 	//'src="/d4dMasters/image/'+getDesignTypeRowID+'__designtemplateicon__'+getDesignTypeImg+'">'+
 	'src="/d4dMasters/image/'+getDesignTypeRowID+'__designtemplateicon__'+getDesignTypeImg+'" style="height:60px;width:auto;">'+
 	'</div></div></div>';
-	
+	}else{
+        containerTemp += '<div class="" style="width:222px;float:left">'+
+    ' <div id=grid'+i+' class="blueprintdiv appfactory" data-'+
+    'templateType="'+data[i]['templatetypename']+'">'+
+    '<div style="">'+
+    '<img  style="height:25px;padding:2px" alt="" src="img/app-store-'+
+    'icons/Logoheader.png"><span style="padding-top:4px;position:absolute;'+
+    'padding-left: 4px;">'+
+    '<b>'+data[i]['templatetypename']+'</b>'+
+    '</span></div>'+
+    '<div style="padding-top:10px;padding-left:27px;">'+
+    '<img style="height:40px;width:auto;" alt="" ' +
+    'src="img/logo.png">'
+    '</div></div></div>';
+    }
 }
 
 $("#templateContent").append(containerTemp);   
@@ -1861,6 +1876,7 @@ $("#templateContent #grid0").addClass("role-Selected");
            var getTempName;
            var getRowID, getImage;
 	//alert(JSON.stringify(data));
+    //alert('check');
 	for (var z = 0; z < rowGridLength; z += 1) {
 	//iterate thhrough columns to get correct column and value
 	var selectedrow = false;
@@ -1956,6 +1972,7 @@ $("#templateContent #grid0").addClass("role-Selected");
 	'src="img/logo.png">' +
 	'</li><li style="font-size:12px;"><u><b>' + getTempName + '</b></u></li>';
 	}//If standard template
+    
 	if (getTemplateType != "Docker") {
    var cb = gettemplatescookbooks.split(',');
    var licb = '';

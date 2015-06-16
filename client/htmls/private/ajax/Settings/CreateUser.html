@@ -1,7 +1,4 @@
-<script>
-//   $(".tree-view").hide();
-   
-</script>
+
 <div class="row">
    <div class="col-md-12">
       <div class="col-md-12">
@@ -11,7 +8,7 @@
                   <h4 class="widget-margin" style="color:black;">Create User<span id="spnloginname"></span></h4>
                </div>
                <div class="widget-body">
-                  <div class="widget-main" style="min-height:420px">
+                  <div class="widget-main">
                      <div>
                         <section id="widget-grid" class="">
                            <!-- START ROW -->
@@ -49,8 +46,8 @@
                                           <label for=""><input type="checkbox" id="chkadduserldap" >&nbsp;<label for="chkadduserldap">Add User to LDAP</label></label>
                                           <label id="msgchkadduserldap" style="display:none;color:red;"></label><br/>
                                           <div id="ldappasswordsection" class="hidden">
-                                          Password: <span style="color:Red;" class="control-label">&nbsp;*</span><label id="msgpasswordmatch" style="display:none;color:red;">Passwords entered do not match or left blank</label><input name="ctl00$MainContent$orgname" value="" id="userpassword" class="form-control userpass" type="password"><br/>
-                                          Confirm Password: <span style="color:Red;" class="control-label">&nbsp;*</span><input name="ctl00$MainContent$orgname" value="" id="userpassword1" class="form-control userpass" type="password">
+                                          Password: <span style="color:Red;" class="control-label">&nbsp;*</span><label id="msgpasswordmatch" style="display:none;color:red;">Passwords entered do not match or left blank</label><input style="padding-left:5px;" name="ctl00$MainContent$orgname" value="" id="userpassword" class="form-control userpass" type="password"><br/>
+                                          Confirm Password: <span style="color:Red;" class="control-label">&nbsp;*</span><input style="padding-left:5px;" name="ctl00$MainContent$orgname" value="" id="userpassword1" class="form-control userpass" type="password">
                                         </div>
                                        </div>
                                        </div>
@@ -62,8 +59,10 @@
                                          </div>
                                          <div class="col-lg-6 col-md-6 smart-form" style="margin-top:25px;">
                                             <label for="category">Assign Teams:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
-                                              <div id="teamname" multiselect="multiselect" datatype="select" datapath="masterjson.rows.row" class="input-group from-control col-md-12 widthBox"  sourcepath="21" cdata="catalyst" cat-validation="onechecked">
+                                             <div class="col-lg-6 smart-form multiselect" style="  height: 153px;overflow-y: scroll;border:1px solid gray;padding: 0px;width:100%">     
+                                              <div id="teamname" multiselect="multiselect" datatype="select" datapath="masterjson.rows.row" class="input-group from-control col-md-12 widthBox"  sourcepath="21" cdata="catalyst" cat-validation="onechecked" style="width:99%;margin-top:-1px;border:0px;padding-left:5px;">
                                             </div>
+                                          </div>
                                           </div>
                                         </div>
                                     </div>
