@@ -7868,3 +7868,6 @@ tr.selectedOne td a{
     font-weight: bold;
     font-size: 12px;
 }
+.tasksBlock >.tooltip{
+    min-width: 65px;
+}

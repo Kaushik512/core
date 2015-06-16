@@ -1317,6 +1317,7 @@
                                                              e.preventDefault();
                                                              e.stopPropagation();
 
+
                                                              var $modal = $('#modalTableRunlist');
                                                              var $modalBody = $('#modalTableRunlist .modal-body').empty();
                                                              var runlist = $(this).parents('tr').find('.instance-bootstrap-list-image').data('runlist');
@@ -1369,7 +1370,7 @@
                                                                  if (ll == 2) {
                                                                      break;
                                                                  }
-                                                                 var $taskIcon = $('<div class="tasksBlock"><img rel="tooltip" data-taskid=' + tasks[ll]._id + ' data-placement="top" class="taskCardIMG" title=' + tasks[ll].name + '  alt="task" style="cursor:pointer" src="img/tasks.png"/><div class="tasksLinks hidden"><a  rel="tooltip" data-placement="top" data-original-title="Execute" data-toggle="modal" href="javascript:void(0)" class="tableactionbutton taskLinkExecute"><img style="width:22px;" src="img/Execute.png" alt="execute"/></a><a style="margin-left:3px;" rel="tooltip" data-placement="top" data-original-title="History" data-toggle="modal" href="javascript:void(0)" class="tableactionbutton taskLinkHistory"><img style="width:22px" src="img/History.png" alt="History"/></a></div></div>');
+                                                                 var $taskIcon = $("<div class='tasksBlock'><img rel='tooltip' data-taskid='" + tasks[ll]._id + "' class='taskCardIMG' data-original-title='" + tasks[ll].name +"'  alt='task' style='cursor:pointer' src='img/tasks.png'/><div class='tasksLinks hidden'><a rel='tooltip' data-placement='top' data-original-title='Execute' data-toggle='modal' href='javascript:void(0)'' class='tableactionbutton taskLinkExecute'><img style='width:22px;' src='img/Execute.png' alt='execute'/></a><a style='margin-left:3px;' rel='tooltip' data-placement='top' data-original-title='History' data-toggle='modal' href='javascript:void(0)' class='tableactionbutton taskLinkHistory'><img style='width:22px' src='img/History.png' alt='History'/></a></div></div>");
                                                                  //for showing the hover
 
                                                                  if (ll == 1) {
