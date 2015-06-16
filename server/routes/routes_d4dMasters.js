@@ -2521,6 +2521,16 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                         teamData[0].loginname = bodyJson["loginname"];
                                                         teamData[0].loginname_rowid = bodyJson["rowid"];
                                                         logger.debug("Got Team<<<<<<<<<<<<<<<<<<<<< ", teamData[0].rowid);
+                                                        if (teamData[0].loginname.length > 0 && teamData[0].loginname_rowid.length > 0) {
+                                                            if (teamData[0].loginname.substring(0, 1) == ',') {
+                                                                teamData[0].loginname = teamData[0].loginname.substring(1);
+                                                            }
+
+                                                            if (teamData[0].loginname_rowid.substring(0, 1) == ',') {
+                                                                teamData[0].loginname_rowid = teamData[0].loginname_rowid.substring(1);
+                                                            }
+
+                                                        }
                                                         d4dModelNew.d4dModelMastersTeams.update({
                                                             rowid: teamData[0].rowid
                                                         }, {
