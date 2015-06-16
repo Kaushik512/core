@@ -1533,10 +1533,45 @@ module.exports.setRoutes = function(app, sessionVerification) {
     });
     app.post('/d4dMasters/getListFiltered/:masterid', function(req, res) {
         logger.debug("Enter post() for  /d4dMasters/getListFiltered/%s", req.params.masterid);
+        if(req.params.masterid === "10" && typeof req.body.orgname != "undefined"){
+            logger.debug("Request body   : ",JSON.stringify(req.body));
+            var orgName = req.body.orgname;
+            d4dModelNew.d4dModelMastersOrg.find({
+                orgname : orgName,
+                id : "1",
+                active : true
+            },function(err,anOrg){
+                if(err){
+                    logger.debug("Error occored to get Org.");
+                    return;
+                }
+                logger.debug("Got Org: >>>>> ",JSON.stringify(anOrg));
+                var query = {};
+                query['id'] = req.params.masterid;
+                query['orgname_rowid'] = anOrg[0].rowid;
+                d4dModelNew.d4dModelMastersConfigManagement.find(query, function(err, d4dMasterJson) {
+                    if (err) {
+                        logger.error("Hit and error:", err);
+                    }
+                    logger.debug("getListFiltered %s", d4dMasterJson.length);
+                    if (d4dMasterJson.length > 0) {
+                        logger.debug("sent response %s", JSON.stringify(d4dMasterJson));
+                        res.send("Found");
+                        logger.debug("Exit post() for  /d4dMasters/getListFiltered/%s", req.params.masterid);
+                    } else {
+                        logger.debug("sent response %s", JSON.stringify(d4dMasterJson));
+                        res.send("Not Found");
+                    }
+
+                });
+            });
+        }else{
+
         configmgmtDao.getDBModelFromID(req.params.masterid, function(err, dbtype) {
             if (err) {
                 logger.error("Hit and error:", err);
             }
+
             if (dbtype) {
                 var query = {};
                 // query['rowid'] = {
@@ -1578,6 +1613,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 res.send(500);
             }
         });
+}
     });
 
     app.get('/d4dMasters/:masterid/:filtercolumnname/:filtercolumnvalue', function(req, res) {
