@@ -52,7 +52,7 @@
                                  
                                  
                                   <div class="spinner hidden"><img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" /></div>
-                        <div class="col-md-4 table-responsive tableHidden" id="listData" style="padding-left:10px; padding-right:0px;display:none;">
+                        <div class="col-md-4 table-responsive tableForList" id="listData" style="padding-left:10px; padding-right:0px;display:none;">
                           <a href="#modalForItems" data-backdrop="false" data-toggle="modal" style="cursor:pointer;"> <img src="img/add.png" style="float:right;" class="addList" rel="tooltip" data-placement="top" title="Add New Item" /></a>
                            <div style="height:412px;overflow-y:auto;" id="dbNameTable_wrapper" class="dataTables_wrapper no-footer">
                          <table id="listNameTable" class="tableData table table-striped table-bordered table-hover dataTable no-footer" cellpadding="5px" width="100%" style="text-align:center">
@@ -69,7 +69,7 @@
                             </table>
                           </div>
                         </div>
-                        <div class="spinnerNew hidden"><img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" /></div>
+                        <div class="spinnerList hidden"><img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" /></div>
                         <div class="col-md-4 table-responsive" id="jsonData" style="padding-right:0px;margin-top:18px;display:none;">
                           
                           <table id="listTable" class="table table-striped table-bordered table-hover dataTable no-footer" cellpadding="5px" width="100%" style="text-align:center">
@@ -208,8 +208,8 @@ $('.nodeListContainer').append('<img class="center-block" style="height:50px;wid
 
 $('.addDB').click(function(e) {
     $('#instanceDBName').trigger('reset');
-    $('.tableHidden').css('display', 'none');
-    $('#jsonData').css('display', 'none');
+    $('.tableForList').hide();
+    $('#jsonData').hide();
     $('#saveSpinner').addClass('hidden');
 });
 
@@ -217,7 +217,7 @@ $('.addList').click(function(e) {
     $('#instanceItemName').trigger('reset');
     $('input.listID').removeAttr('disabled');
     $('#listNameTable tbody tr').removeClass('selectedOne');
-    $('#jsonData').css('display', 'none');
+    $('#jsonData').hide();
 });
 
 if (!$.fn.dataTable.isDataTable('#dbNameTable')) {
@@ -323,7 +323,7 @@ $(document).ready(function(e) {
             console.log(name);
             var dataBagName = name;
             console.log(dataBagName);
-            //$('#jsonData').css('display', 'none');
+            //$('#jsonData').hide();
             bootbox.confirm('Are you sure you want to delete Data Bag -&nbsp;' + dataBagName, function(result) {
                 if (result) {
                     $.ajax({
@@ -337,13 +337,13 @@ $(document).ready(function(e) {
 
                             dataBagDatatable.row($tr).remove().draw(true);
                             // alert('deletred');
-                            var $itemsTable = $('.tableHidden');
+                            var $itemsTable = $('.tableForList');
                             var dataBagNameForItem = $itemsTable.data('dataBagName');
 
                             if (dataBagNameForItem === dataBagName) {
                                 $itemsTable.hide();
                             }
-                            $('#jsonData').css('display', 'none');
+                            $('#jsonData').hide();
                             $('#dbNameTable tbody tr:first').trigger('click');
 
                         },
@@ -367,6 +367,7 @@ $(document).ready(function(e) {
             } else {
               $itemTable.data('loading',true);
             }
+            //$('#jsonData').addClass('hidden');
             if ($(this).hasClass('dbRow')) {
                 $(this).removeClass('dbRow');
             } else {
@@ -377,8 +378,9 @@ $(document).ready(function(e) {
             
             $('#dbNameTable tbody tr').removeClass('selectedOne');
             $(this).addClass('selectedOne');
-            $('.tableHidden').css('display', 'none');
-            $('#jsonData').css('display', 'none');
+            $('.tableForList').hide();
+            $('.spinnerList').addClass('hidden');
+            $('#jsonData').hide();
             $('.spinner').removeClass('hidden');
             $('#dataBagIDHiddenInput').val(k);
 
@@ -401,7 +403,7 @@ $(document).ready(function(e) {
         var listItems = '../chef/servers/' + urlParams.id + '/databag/' + dataBagName + '/item/list';
         $.get(listItems, function(data) {
 
-            $('#listNameTable').data('loading',false);
+           
             console.log(typeof data);
             if (data.length > 0) {
                 $.each(data, function(k) {
@@ -409,13 +411,14 @@ $(document).ready(function(e) {
 
                     // alert('click');
                     $('.spinner').addClass('hidden');
-                    $('.tableHidden').css('display', 'block').data('dataBagName', dataBagName);
+                    $('.tableForList').show().data('dataBagName', dataBagName);
                     createItemTableRow(data[k]);
                 });
                 $('#listNameTable tbody tr:first').trigger('click');
             } else {
+                $('#listNameTable').data('loading',false);
                 $('.spinner').addClass('hidden');
-                $('.tableHidden').css('display', 'block').data('dataBagName', dataBagName);
+                $('.tableForList').show().data('dataBagName', dataBagName);
             }
         }).fail(function(){
            $('#listNameTable').data('loading',false);
@@ -482,32 +485,43 @@ $(document).ready(function(e) {
 
         //tr click for items
         $trForItems.click(function() {
-            $('#jsonData').css('display', 'none');
+          if($('#listNameTable').data('loadingItem')) {
+            return;
+          } else {
+            $('#listNameTable').data('loadingItem',true);
+          }
+           $('#listNameTable').data('loading',true);
+            $('#jsonData').hide();
             $('#listNameTable tbody tr').removeClass('selectedOne');
             $(this).addClass('selectedOne');
             //$('#listNameTable').find('tbody tr.itemsList').empty();
-            $('.spinnerNew').removeClass('hidden');
+            $('.spinnerList').removeClass('hidden');
             $('textarea#jsonListName').val('');
             var dataBagName = $('#dataBagIDHiddenInput').val();
             var itemId = k;
-
+              $('#listNameTable').data('loading',true);
             $.get('../chef/servers/' + urlParams.id + '/databag/' + dataBagName + '/item/' + itemId + '/find', function(data) {
                 // alert('hello');
+                 $('#listNameTable').data('loading',false);
+                $('#listNameTable').data('loadingItem',false);
                 console.log(data);
                 var res = JSON.stringify(data, null, '\t');
-                $('.spinnerNew').addClass('hidden');
-                $('#jsonData').css('display', 'block');
+                $('.spinnerList').addClass('hidden');
+                $('#jsonData').show();
                 $('#listTable thead').find('tr.rowCustomStyle td').html(itemId);
                 //$('#listTable tbody').find('tr')
                 $('#jsonListName').val(res);
+            }).fail(function(){
+                $('#listNameTable').data('loadingItem',false);
+               $('#listNameTable').data('loading',false);
             });
         });
 
         //for edit
         $tdForItems.find('button.editRow').click(function() {
             $('.jsonError').addClass('hidden');
-            $('.spinnerNew').addClass('hidden');
-            $('#jsonData').css('display', 'none');
+            $('.spinnerList').addClass('hidden');
+            $('#jsonData').hide();
             var $this = $(this);
             var $trNew = $this.parents('tr.itemsList');
             var $editModal = $('#modalForItems');
@@ -533,7 +547,7 @@ $(document).ready(function(e) {
         });
         //for delete
         $tdForItems.find('button.deleteRow').click(function() {
-            $('#jsonData').css('display', 'none');
+            $('#jsonData').hide();
             var $this = $(this);
             var $trNew = $this.parents('tr.itemsList');
             var dataBagName = $('#dataBagIDHiddenInput').val();
@@ -560,7 +574,7 @@ $(document).ready(function(e) {
             return false;
         });
         /*$tdForItems.click(function(e){
-          $('.spinnerNew').removeClass('hidden');
+          $('.spinnerList').removeClass('hidden');
           $('textarea#jsonListName').val('');
           var dataBagName = $('#dataBagIDHiddenInput').val();
           var itemId = k;
@@ -569,7 +583,7 @@ $(document).ready(function(e) {
                 // alert('hello');
                 console.log(data);
                 var res = JSON.stringify(data, null, '\t');
-                $('.spinnerNew').addClass('hidden');
+                $('.spinnerList').addClass('hidden');
                 $('#jsonData').css('display','block');
                 $('#listTable thead').find('tr.rowCustomStyle td').html(itemId);
                 //$('#listTable tbody').find('tr')
