@@ -1355,7 +1355,7 @@
                                                              var url = data.appUrls[k].url;
                                                              if (data.appUrls[k].url)
                                                                  url = url.replace('$host', data.instanceIP);
-                                                             var $anchor = "<span class='marginForURL'><a style='font-size:10px;' data-appUrlId='" + data.appUrls[k]._id + "' class='app-url' title='" + data.appUrls[k].name + "' href='" + url + "'' target='_blank' >" + data.appUrls[k].name + "</a></span>";
+                                                             var $anchor = "<span class='marginForURL'><a style='font-size:10px;' data-appUrlId='" + data.appUrls[k]._id + "' class='app-url' title='" + url + "' href='" + url + "'' target='_blank' >" + data.appUrls[k].name + "</a></span>";
                                                              $divComponentListContainer.append($anchor);
                                                              temp = temp + ' ' + $anchor;
                                                          }
