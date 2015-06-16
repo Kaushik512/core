@@ -806,12 +806,18 @@ var MasterUtil = function(){
                                 projects: [],
                                 bunits: []
                             };
+                            logger.debug("User Id: ",users[usr].rowid);
                             d4dModelNew.d4dModelMastersTeams.find({
-                                orgname_rowid: {
-                                    $in: users[usr].orgname_rowid
-                                }
+                                loginname_rowid:{
+                                    $regex : users[usr].rowid
+                                },
+                                id :"21"
                             }, function(err, team) {
                                 logger.debug("Available team: ", JSON.stringify(team));
+                                if(typeof team === 'undefined' || team.length <= 0){
+                                    callback(null,returnObj);
+                                    return;
+                                }
                                 if (team) {
                                     for (var tm = 0; tm < team.length; tm++) {
                                         if (team[tm].id === '21') {
@@ -824,8 +830,9 @@ var MasterUtil = function(){
                                 returnObj.teams = teams;
                                 d4dModelNew.d4dModelMastersOrg.find({
                                     rowid: {
-                                        $in: users[usr].orgname_rowid
+                                        $in: team[0].orgname_rowid
                                     },
+                                    id : "1",
                                     active: true
                                 }, function(err, org) {
                                     if (err) {
@@ -843,8 +850,9 @@ var MasterUtil = function(){
                                     }
                                     d4dModelNew.d4dModelMastersProjects.find({
                                         orgname_rowid: {
-                                            $in: users[usr].orgname_rowid
-                                        }
+                                            $in: team[0].orgname_rowid
+                                        },
+                                        id : "4"
                                     }, function(err, project) {
                                         if (err) {
                                             callback(err, null);
@@ -860,9 +868,10 @@ var MasterUtil = function(){
                                             returnObj.projects = projects;
                                         }
                                         d4dModelNew.d4dModelMastersProductGroup.find({
-                                            orgname_rowid: {
-                                                $in: users[usr].orgname_rowid
-                                            }
+                                            orgname_rowid:{
+                                                $in : team[0].orgname_rowid
+                                            },
+                                            id : "2"
                                         }, function(err, bg) {
                                             if (err) {
                                                 callback(err, null);
