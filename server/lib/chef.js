@@ -634,7 +634,7 @@ var Chef = function(settings) {
             }
             var sudoCmd = "sudo";
             if (options.password) {
-                sudoCmd = "echo " + password + " | sudo -S";
+                sudoCmd = "echo " + options.password + " | sudo -S";
             }
 
             logger.debug("chef client cmd ==> " + cmd);
