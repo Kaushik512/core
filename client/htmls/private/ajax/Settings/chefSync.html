@@ -198,8 +198,9 @@
       </div>
       <div class="modal-footer">
           <div class="marginForButtons">
+            <label id="saveSpinner" class="hidden"><img  style="margin-left:5px;margin-right:25px;" src="img/select2-spinner.gif"></label>
           <a type="button" class="btn btn-default" data-dismiss="modal">Close</a>
-          <button type="submit" class="btn btn-primary importNodesBtn">Import</button>
+          <button type="button" class="btn btn-primary importNodesBtn">Import</button>
         </div>
       </div>
       </form>
@@ -238,6 +239,8 @@ $(document).ready(function(){
 
 
 $('#buttonForIP').click(function(e){
+  $('#saveSpinner').addClass('hidden');
+  $('.importNodesBtn').removeAttr('disabled');
   var perm = haspermission('instancelaunch','execute');
   
   //alert(perm);
@@ -726,6 +729,8 @@ $(function() {
         }
 
         function makeRequest() {
+            $('#saveSpinner').removeClass('hidden');
+            $('.importNodesBtn').attr('disabled', 'disabled');
             console.log(reqBody);
             $.post('../chef/servers/' + urlParams.chefId + '/sync/nodes', reqBody, function(data) {
                 console.log(data);
@@ -740,6 +745,8 @@ $(function() {
                 });
 
                 $modalBody.append($progressBar).append($msgDiv);
+                $('#saveSpinner').addClass('hidden');
+
                 $('#chefImportNodesModal').modal('hide');
                 $chefResultModalContainer.modal('show');
                 var timeout;
@@ -860,7 +867,9 @@ $('.tabContent tr').find('input').on('blur', function() {
 $(document).ready(function() {
 
     $('#myForm12').submit(function() {
+      
         $(this).validate();
+
 
         if ($(this).valid) {
             /*alert('valid form submitted'); // for demo*/
