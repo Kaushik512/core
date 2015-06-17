@@ -241,6 +241,11 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                 return;
                             }
                             var providersList = [];
+                            logger.debug("Providers::::::::::::::::::: ",providers === null);
+                            if(providers === null){
+                                res.send(providersList);
+                                return;
+                            }
                             if (providers.length > 0) {
                                 for (var i = 0; i < providers.length; i++) {
                                     var keys = [];

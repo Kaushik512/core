@@ -37,8 +37,7 @@
                                           </label>
 
                                           <select id="orgname" class="chooseOrganization width-100" sourcepath="1" datapath="masterjson.rows.row" valuelinkfield="costcode" style="vertical-align:central" cdata="catalyst">
-                                          <!-- <option value="">Select an Organization</option> -->
-                                          <option value="" hidden>All</option>
+                                           <!-- <option value="">Select Organization</option>  -->
                                           </select>
 
                                       </div>
@@ -109,6 +108,13 @@
     $.get('/d4dMasters/loggedInUser',function(data){
       if(!data.isSuperAdmin){
       $('#orgname').attr('disabled','disabled').select2();
+      }else{
+        var str=' <option value="">Select Organization</option>';
+        str=str+'<option value="">All</option>';
+        $('#orgname').html(str);
+        if( $('#orgname').attr('answer')){
+          $('#orgname').val($('#orgname').attr('answer')).select2();
+        }
       }
     });
   }

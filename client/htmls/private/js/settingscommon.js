@@ -1072,7 +1072,7 @@ function readform(formID) {
                 var curSelect = $(this);
                 //  alert(JSON.stringify(tempJSON));
                 var _rowid = 0;
-                $.each(tempJSON, function(i, item) {
+                /*$.each(tempJSON, function(i, item) {
                     _rowid = item['rowid'];
 
                     $.each(item, function(k, v) { //columns
@@ -1081,7 +1081,51 @@ function readform(formID) {
                             curSelect.append('<option value="' + v + '" rowid = "' + _rowid + '">' + v + '</option>');
                         }
                     });
-                });
+                });*/
+
+                if (formID === 7) {
+                    $.ajax({
+                        url: '/d4dMasters/loggedInUser',
+                        async: false,
+                        success: function(data) {
+                            if (data.isSuperAdmin) {
+                                curSelect.append('<option value="">All</option>');
+                                $.each(tempJSON, function(i, item) {
+                                    _rowid = item['rowid'];
+                                    $.each(item, function(k, v) { //columns
+                                        //console.log('1 k:' + k + ' 1 v :' + JSON.stringify(v));
+                                        if (k == curSelect.attr("id")) {
+                                            curSelect.append('<option value="' + v + '" rowid = "' + _rowid + '">' + v + '</option>');
+                                        }
+                                    });
+                                });
+
+                            } else {
+                                $.each(tempJSON, function(i, item) {
+                                    _rowid = item['rowid'];
+                                    $.each(item, function(k, v) { //columns
+                                        //console.log('1 k:' + k + ' 1 v :' + JSON.stringify(v));
+                                        if (k == curSelect.attr("id")) {
+                                            curSelect.append('<option value="' + v + '" rowid = "' + _rowid + '">' + v + '</option>');
+                                        }
+                                    });
+                                });
+                            }
+                        }
+                    });
+                } else {
+                    $.each(tempJSON, function(i, item) {
+                        _rowid = item['rowid'];
+                        $.each(item, function(k, v) { //columns
+                            //console.log('1 k:' + k + ' 1 v :' + JSON.stringify(v));
+                            if (k == curSelect.attr("id")) {
+                                curSelect.append('<option value="' + v + '" rowid = "' + _rowid + '">' + v + '</option>');
+                            }
+                        });
+                    });
+                }
+
+
                 // $.each(eval('tempJSON.' + curSelect.attr('datapath')), function(i, item) {
                 //     //     alert(item.field[0].values.value);
                 //     // debugger;
@@ -1867,7 +1911,7 @@ function saveform(formID, operationTypes) {
     if (!orgnamecheck) {
         return (false);
     }
-   
+
     if (formID === "21") {
         var users;
         $.ajax({
@@ -1877,23 +1921,23 @@ function saveform(formID, operationTypes) {
             type: 'GET',
             success: function(data, success) {
                 users = data
-               
+
             },
             error: function(jqxhr) {},
             failure: function(data) {
 
             },
-            async:false
+            async: false
         });
         var $checkboxInput = $('#loginname').find("input");
 
-        for(var j=0;j<$checkboxInput.length;j++){
-             var $inputCkb = $($checkboxInput[j]); 
+        for (var j = 0; j < $checkboxInput.length; j++) {
+            var $inputCkb = $($checkboxInput[j]);
             if ($inputCkb.is(":checked")) {
                 console.log("users:::::::::::::: " + $inputCkb.val());
-                for(var i=0;i<users.length;i++){
-                    if($inputCkb.val() === users[i].loginname) {
-                        if(users[i].orgname_rowid[0]===""){
+                for (var i = 0; i < users.length; i++) {
+                    if ($inputCkb.val() === users[i].loginname) {
+                        if (users[i].orgname_rowid[0] === "") {
                             alert("Team can not be associated with the user which has org All.");
                             return false;
                         }
@@ -1903,7 +1947,7 @@ function saveform(formID, operationTypes) {
             }
         }
     }
-    
+
 
     var button = $("form[id*='myForm']").find("div.pull-right > button");
 
