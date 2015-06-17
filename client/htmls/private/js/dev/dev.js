@@ -2274,7 +2274,7 @@
                                                              var blueprintId = $($selectedItems.get(0)).attr('data-blueprintId');
                                                              var version = $($selectedItems.get(0)).find('.blueprintVersionDropDown').val();
                                                              // alert('launching -> ' +'../blueprints/' + blueprintId + '/launch?version=' + version);
-                                                             $.get('/blueprints/' + blueprintId + '/launch?version=' + version, function(data) {
+                                                             $.get('/blueprints/' + blueprintId + '/launch?version=' + version+'&envId='+urlParams['envid'], function(data) {
 
                                                                  var $msg = $('<div></div>').append('<h3 class=\"alert alert-success\"><b>Congratulations!</b> Blueprint Launched Successfully</h3>').append('Instance Id : ' + data.id).append('<br/>Instance Logs :- ');
 
@@ -3699,12 +3699,14 @@
                                                          console.log('success---3---4');
 
                                                          //Syncing up the tree view based on url
-                                                         initializeBlueprintArea(data.blueprints);
+                                                        
                                                          initializeTaskArea(data.tasks);
+                                                         initializeBlueprintArea(data.blueprints);
                                                          x = data.instances;
                                                          initializeInstanceArea(data.instances);
 
                                                      });
+                                                     
                                                  } else {
                                                      var $workzoneTab = $('#workZoneNew');
                                                      if ($workzoneTab.length) {

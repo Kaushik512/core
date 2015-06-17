@@ -442,7 +442,7 @@ var Chef = function(settings) {
             if (params.instanceOS == 'windows' && !params.instancePassword) {
                 argList.push('Zaq!2wsx'); // temp hack
             } else {
-                argList.push(params.instancePassword);
+                argList.push('\"'+params.instancePassword+'\"');
             }
         }
 
@@ -634,7 +634,7 @@ var Chef = function(settings) {
             }
             var sudoCmd = "sudo";
             if (options.password) {
-                sudoCmd = "echo " + options.password + " | sudo -S";
+                sudoCmd = 'echo \"' + options.password + '\" | sudo -S';
             }
 
             logger.debug("chef client cmd ==> " + cmd);

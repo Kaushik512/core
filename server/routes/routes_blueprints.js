@@ -147,6 +147,12 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         logger.debug("Enter /blueprints/%s/launch", req.params.blueprintId);
         //verifying if the user has permission
         logger.debug('Verifying User permission set for execute.');
+        if (!req.query.envId) {
+            res.send(400, {
+                "message": "Invalid Environment Id"
+            });
+            return;
+        }
         var user = req.session.user;
         var category = 'blueprints';
         var permissionto = 'execute';
@@ -186,9 +192,15 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                             }
                             logger.debug('Using Chef serverid : %s', blueprint.chefServerId);
                             //logger.debug("Using blueprint version ==>", version);
-                            configmgmtDao.getEnvNameFromEnvId(blueprint.envId, function(err, envName) {
+                            configmgmtDao.getEnvNameFromEnvId(req.query.envId, function(err, envName) {
                                 if (err) {
                                     res.send(500);
+                                    return;
+                                }
+                                if (!envName) {
+                                    res.send(500, {
+                                        "message": "Unable to find environment name from environment id"
+                                    });
                                     return;
                                 }
                                 console.log('envName', envName);
@@ -289,7 +301,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                 orgId: blueprint.orgId,
                                                                 bgId: blueprint.bgId,
                                                                 projectId: blueprint.projectId,
-                                                                envId: blueprint.envId,
+                                                                envId: req.query.envId,
                                                                 providerId: blueprint.providerId,
                                                                 keyPairId: blueprint.keyPairId,
                                                                 chefNodeName: instanceData.InstanceId,
@@ -584,7 +596,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                     }
 
 
-                                                    chef.getEnvironment(blueprint.envId, function(err, env) {
+                                                    chef.getEnvironment(req.query.envId, function(err, env) {
                                                         if (err) {
                                                             logger.error("Failed chef.getEnvironment", err);
                                                             res.send(500);
@@ -592,8 +604,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                         }
 
                                                         if (!env) {
-                                                            logger.debug("Blueprint ID = ", blueprint.envId);
-                                                            chef.createEnvironment(blueprint.envId, function(err, envName) {
+                                                            logger.debug("Blueprint env ID = ", req.query.envId);
+                                                            chef.createEnvironment(req.query.envId, function(err, envName) {
                                                                 if (err) {
                                                                     logger.error("Failed chef.createEnvironment", err);
                                                                     res.send(500);
