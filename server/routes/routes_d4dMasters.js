@@ -682,16 +682,16 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     } else if (req.params.id === '16') {
                         // For Template
                         logger.debug("Id for templateType:>> ", req.params.id);
-                        masterUtil.getTemplateTypes(orgList,function(err,templateList){
+                        /*masterUtil.getTemplateTypes(orgList,function(err,templateList){
                                 if(err){
                                     res.send(500,'Not able to fetch TemplateType.');
                                 }
                                 logger.debug("Returned TemplateType List:>>>>> ",JSON.stringify(templateList));
                                 res.send(JSON.stringify(templateList));
                                 return;
-                            });
+                            });*/
 
-                        /*d4dModelNew.d4dModelMastersDesignTemplateTypes.find({
+                        d4dModelNew.d4dModelMastersDesignTemplateTypes.find({
                             id: req.params.id
                         }, function(err, data) {
                             if (err) {
@@ -700,7 +700,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                             }
                             logger.debug("Called /d4dMasters/readmasterjsonnew/ for non superadmin.");
                             res.send(JSON.stringify(data));
-                        });*/
+                        });
 
                     } else if (req.params.id === '19') {
                         // For ServiceCommand
@@ -846,16 +846,16 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     } else if (req.params.id === '16') {
                         // For Template
                         logger.debug("Id for templateType:>> ", req.params.id);
-                        masterUtil.getTemplateTypes(orgList,function(err,templateList){
+                        /*masterUtil.getTemplateTypes(orgList,function(err,templateList){
                                 if(err){
                                     res.send(500,'Not able to fetch TemplateType.');
                                 }
                                 logger.debug("Returned TemplateType List:>>>>> ",JSON.stringify(templateList));
                                 res.send(JSON.stringify(templateList));
                                 return;
-                            });
+                            });*/
 
-                        /*d4dModelNew.d4dModelMastersDesignTemplateTypes.find({
+                        d4dModelNew.d4dModelMastersDesignTemplateTypes.find({
                             id: req.params.id
                         }, function(err, data) {
                             if (err) {
@@ -864,7 +864,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                             }
                             logger.debug("Called /d4dMasters/readmasterjsonnew/ for non superadmin.");
                             res.send(JSON.stringify(data));
-                        });*/
+                        });
 
                     } else if (req.params.id === '19') {
                         // For ServiceCommand
@@ -2518,9 +2518,20 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                             logger.debug("Error : ", err);
                                                         }
                                                         logger.debug("Got Teams<<<<<<<<<<<<<<<<<<<<< ", JSON.stringify(teamData));
-                                                        teamData[0].loginname = bodyJson["loginname"];
-                                                        teamData[0].loginname_rowid = bodyJson["rowid"];
-                                                        logger.debug("Got Team<<<<<<<<<<<<<<<<<<<<< ", teamData[0].rowid);
+                                                        teamData[0].loginname = teamData[0].loginname+","+bodyJson["loginname"];
+                                                        teamData[0].loginname_rowid = teamData[0].loginname_rowid+","+bodyJson["rowid"];
+                                                        logger.debug("Got Team before<<<<<<<<<<<<<<<<<<<<< ", teamData[0].loginname);
+                                                        if (teamData[0].loginname.length > 0 && teamData[0].loginname_rowid.length > 0) {
+                                                            if (teamData[0].loginname.substring(0, 1) == ',') {
+                                                                teamData[0].loginname = teamData[0].loginname.substring(1);
+                                                            }
+
+                                                            if (teamData[0].loginname_rowid.substring(0, 1) == ',') {
+                                                                teamData[0].loginname_rowid = teamData[0].loginname_rowid.substring(1);
+                                                            }
+
+                                                        }
+                                                        logger.debug("Got Team after <<<<<<<<<<<<<<<<<<<<< ", teamData[0].loginname);
                                                         d4dModelNew.d4dModelMastersTeams.update({
                                                             rowid: teamData[0].rowid
                                                         }, {
