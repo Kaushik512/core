@@ -740,7 +740,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
     });
 
 
-    app.post('/organizations/:orgId/businessgroups/:bgId/projects/:projectId/environments/:envId/blueprints', function(req, res) {
+    app.post('/organizations/:orgId/businessgroups/:bgId/projects/:projectId/blueprints', function(req, res) {
         logger.debug("Enter post() for /organizations/%s/businessgroups/%s/projects/%s/environments/%s/blueprints", req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId, req.params.providerId, req.params.imageId);
 
         //validating if user has permission to save a blueprint
@@ -768,9 +768,9 @@ module.exports.setRoutes = function(app, sessionVerification) {
             blueprintData.orgId = req.params.orgId;
             blueprintData.bgId = req.params.bgId;
             blueprintData.projectId = req.params.projectId;
-            blueprintData.envId = req.params.envId;
+            //blueprintData.envId = req.params.envId;
 
-            logger.debug("Enviornment ID:: ", req.params.envId);
+            //logger.debug("Enviornment ID:: ", req.params.envId);
             //blueprintData.imageId = req.body.imageId;
             // blueprintData.providerId = req.body.providerId;
             if (!blueprintData.runlist) {
@@ -893,7 +893,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                 res.send(500);
                                 return;
                             }
-                            blueprintsDao.getBlueprintsByOrgBgProjectAndEnvId(req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId, req.query.blueprintType, req.session.user.cn, function(err, blueprintsData) {
+                            blueprintsDao.getBlueprintsByOrgBgProject(req.params.orgId, req.params.bgId, req.params.projectId, req.query.blueprintType, req.session.user.cn, function(err, blueprintsData) {
                                 console.log(req.params.orgId, req.params.projectId, req.params.envId);
                                 if (err) {
                                     res.send(500);

@@ -26,12 +26,12 @@ var BlueprintSchema = new Schema({
         trim: true,
         validate: schemaValidator.projIdValidator
     },
-    envId: {
-        type: String,
-        required: true,
-        trim: true,
-        validate: schemaValidator.envIdValidator
-    },
+    // envId: {
+    //     type: String,
+    //     required: true,
+    //     trim: true,
+    //     validate: schemaValidator.envIdValidator
+    // },
     imageId: {
         type: String,
         required: true,
@@ -119,15 +119,15 @@ var BlueprintSchema = new Schema({
     }],
     instanceType: {
         type: String,
-      //  required: true
+        //  required: true
     },
     instanceOS: {
         type: String,
-       // required: true
+        // required: true
     },
     instanceAmiid: {
         type: String,
-      //  required: true
+        //  required: true
     },
     instanceUsername: {
         type: String,
@@ -297,194 +297,220 @@ var BlueprintsDao = function() {
         if (blueprintType) {
             queryObj.templateType = blueprintType;
         }
-                //Removed as a team check for the project happens at the route. - Vinod
-                // if (userName) {
-                //     queryObj.users = userName;
-                // }
+        //Removed as a team check for the project happens at the route. - Vinod
+        // if (userName) {
+        //     queryObj.users = userName;
+        // }
 
-                Blueprint.find(queryObj, function(err, data) {
+        Blueprint.find(queryObj, function(err, data) {
+            if (err) {
+                callback(err, null);
+                return;
+            }
+            logger.debug("Exit getBlueprintsByOrgBgProjectAndEnvId(%s,%s,%s, %s, %s, %s)", orgId, bgId, projectId, envId, blueprintType, userName);
+            callback(null, data);
+        });
+
+    };
+
+    this.getBlueprintsByOrgBgProject = function(orgId, bgId, projectId, blueprintType, userName, callback) {
+        logger.debug("Enter getBlueprintsByOrgBgProject(%s,%s, %s, %s, %s)", orgId, bgId, projectId, blueprintType, userName);
+        var queryObj = {
+            orgId: orgId,
+            bgId: bgId,
+            projectId: projectId,
+        }
+        if (blueprintType) {
+            queryObj.templateType = blueprintType;
+        }
+        //Removed as a team check for the project happens at the route. - Vinod
+        // if (userName) {
+        //     queryObj.users = userName;
+        // }
+
+        Blueprint.find(queryObj, function(err, data) {
+            if (err) {
+                callback(err, null);
+                return;
+            }
+            logger.debug("Exit getBlueprintsByOrgBgProject(%s,%s, %s, %s, %s)", orgId, bgId, projectId, blueprintType, userName);
+            callback(null, data);
+        });
+
+    };
+    this.createBlueprint = function(blueprintData, callback) {
+        logger.debug("Enter createBlueprint >> " + JSON.stringify(blueprintData));
+        var blueprint = new Blueprint({
+            orgId: blueprintData.orgId,
+            bgId: blueprintData.bgId,
+            projectId: blueprintData.projectId,
+            //envId: blueprintData.envId,
+            imageId: blueprintData.imageId,
+            keyPairId: blueprintData.keyPairId,
+            subnetId: blueprintData.subnetId,
+            vpcId: blueprintData.vpcId,
+            providerId: blueprintData.providerId,
+            securityGroupIds: blueprintData.securityGroupIds,
+            name: blueprintData.name,
+            appUrls: blueprintData.appUrls,
+            iconpath: blueprintData.iconpath,
+            templateId: blueprintData.templateId,
+            templateType: blueprintData.templateType,
+            dockercontainerpathstitle: blueprintData.dockercontainerpathstitle,
+            dockercontainerpaths: blueprintData.dockercontainerpaths,
+            dockerrepotags: blueprintData.dockerrepotags,
+            dockerreponame: blueprintData.dockerreponame,
+            dockerimagename: blueprintData.dockerimagename,
+            dockerlaunchparameters: blueprintData.dockerlaunchparameters,
+            templateComponents: blueprintData.templateComponents,
+            chefServerId: blueprintData.chefServerId,
+            instanceType: blueprintData.instanceType,
+            instanceOS: blueprintData.instanceOS,
+            instanceAmiid: blueprintData.instanceAmiid,
+            instanceUsername: blueprintData.instanceUsername,
+            importInstance: blueprintData.importInstance,
+            users: blueprintData.users,
+            versionsList: [{
+                ver: generateBlueprintVersionNumber(null),
+                runlist: blueprintData.runlist,
+                expirationDays: blueprintData.expirationDays,
+            }],
+            latestVersion: generateBlueprintVersionNumber(null),
+            cloudFormationStackName: blueprintData.cloudFormationStackName,
+            cloudFormationStackParameters: blueprintData.cloudFormationStackParameters
+        });
+
+        blueprint.save(function(err, data) {
+            if (err) {
+                logger.error(" !!! Failed to create Blueprint !!!", err);
+
+                callback(err, null);
+                return;
+            }
+            logger.debug("Blueprint Created " + JSON.stringify(blueprint));
+            callback(null, data);
+        });
+    };
+
+    this.updateBlueprint = function(blueprintId, updateData, callback) {
+        logger.debug("Enter updateBlueprint(%s, %s)", blueprintId, JSON.stringify(updateData));
+        this.getBlueprintById(blueprintId, function(err, data) {
+            if (err) {
+                logger.error("Exit updateBlueprint because getBlueprintById failed ", err);
+                callback(err, null);
+                return;
+            }
+            if (data.length) {
+                logger.debug("updateBlueprint: Beginning Update ");
+                var latestVersion = data[0].latestVersion;
+                var newVersion = generateBlueprintVersionNumber(latestVersion);
+                Blueprint.update({
+                    "_id": new ObjectId(blueprintId)
+                }, {
+                    $set: {
+                        latestVersion: newVersion
+                    },
+                    $push: {
+                        versionsList: {
+                            ver: newVersion,
+                            runlist: updateData.runlist,
+                            expirationDays: updateData.expirationDays,
+                        }
+                    }
+                }, {
+                    upsert: false
+                }, function(err, updatedData) {
                     if (err) {
+                        logger.error(" updateBlueprint Failed - ", err);
                         callback(err, null);
                         return;
                     }
-                    logger.debug("Exit getBlueprintsByOrgBgProjectAndEnvId(%s,%s,%s, %s, %s, %s)", orgId, bgId, projectId, envId, blueprintType, userName);
-                    callback(null, data);
+
+                    logger.debug("Exit updateBlueprint");
+                    callback(null, {
+                        version: newVersion,
+                        cout: updatedData
+                    });
                 });
-                
-            };
-            this.createBlueprint = function(blueprintData, callback) {
-                logger.debug("Enter createBlueprint >> " + JSON.stringify(blueprintData));
-                var blueprint = new Blueprint({
-                    orgId: blueprintData.orgId,
-                    bgId: blueprintData.bgId,
-                    projectId: blueprintData.projectId,
-                    envId: blueprintData.envId,
-                    imageId: blueprintData.imageId,
-                    keyPairId : blueprintData.keyPairId,
-                    subnetId : blueprintData.subnetId,
-                    vpcId : blueprintData.vpcId,
-                    providerId : blueprintData.providerId,
-                    securityGroupIds: blueprintData.securityGroupIds,
-                    name: blueprintData.name,
-                    appUrls: blueprintData.appUrls,
-                    iconpath: blueprintData.iconpath,
-                    templateId: blueprintData.templateId,
-                    templateType: blueprintData.templateType,
-                    dockercontainerpathstitle: blueprintData.dockercontainerpathstitle,
-                    dockercontainerpaths: blueprintData.dockercontainerpaths,
-                    dockerrepotags: blueprintData.dockerrepotags,
-                    dockerreponame: blueprintData.dockerreponame,
-                    dockerimagename: blueprintData.dockerimagename,
-                    dockerlaunchparameters: blueprintData.dockerlaunchparameters,
-                    templateComponents: blueprintData.templateComponents,
-                    chefServerId: blueprintData.chefServerId,
-                    instanceType: blueprintData.instanceType,
-                    instanceOS: blueprintData.instanceOS,
-                    instanceAmiid: blueprintData.instanceAmiid,
-                    instanceUsername: blueprintData.instanceUsername,
-                    importInstance: blueprintData.importInstance,
-                    users: blueprintData.users,
-                    versionsList: [{
-                        ver: generateBlueprintVersionNumber(null),
-                        runlist: blueprintData.runlist,
-                        expirationDays: blueprintData.expirationDays,
-                    }],
-                    latestVersion: generateBlueprintVersionNumber(null),
-                    cloudFormationStackName: blueprintData.cloudFormationStackName,
-                    cloudFormationStackParameters: blueprintData.cloudFormationStackParameters
-                });
-
-blueprint.save(function(err, data) {
-    if (err) {
-        logger.error(" !!! Failed to create Blueprint !!!", err);
-
-        callback(err, null);
-        return;
-    }
-    logger.debug("Blueprint Created " + JSON.stringify(blueprint));
-    callback(null, data);
-});
-};
-
-this.updateBlueprint = function(blueprintId, updateData, callback) {
-    logger.debug("Enter updateBlueprint(%s, %s)", blueprintId, JSON.stringify(updateData));
-    this.getBlueprintById(blueprintId, function(err, data) {
-        if (err) {
-            logger.error("Exit updateBlueprint because getBlueprintById failed ", err);
-            callback(err, null);
-            return;
-        }
-        if (data.length) {
-            logger.debug("updateBlueprint: Beginning Update ");
-            var latestVersion = data[0].latestVersion;
-            var newVersion = generateBlueprintVersionNumber(latestVersion);
-            Blueprint.update({
-                "_id": new ObjectId(blueprintId)
-            }, {
-                $set: {
-                    latestVersion: newVersion
-                },
-                $push: {
-                    versionsList: {
-                        ver: newVersion,
-                        runlist: updateData.runlist,
-                        expirationDays: updateData.expirationDays,
-                    }
-                }
-            }, {
-                upsert: false
-            }, function(err, updatedData) {
-                if (err) {
-                    logger.error(" updateBlueprint Failed - ", err);
-                    callback(err, null);
-                    return;
-                }
-
-                logger.debug("Exit updateBlueprint");
-                callback(null, {
-                    version: newVersion,
-                    cout: updatedData
-                });
-            });
-        } else {
-            callback(null, 0);
-        }
-    });
-};
-
-this.removeBlueprintbyId = function(blueprintId, callback) {
-    logger.debug("Enter removeBlueprintbyId(%s)", blueprintId);
-    Blueprint.remove({
-        "_id": ObjectId(blueprintId)
-    }, function(err, data) {
-        if (err) {
-            logger.error("removeBlueprintbyId Failed - ", err);
-            callback(err, null);
-            return;
-        }
-        logger.debug("Exit removeBlueprintbyId(%s)", blueprintId);
-        callback(null, data);
-    });
-}
-
-this.getBlueprintVersionData = function(blueprintId, version, callback) {
-    logger.debug("Enter getBlueprintVersionData(%s, %s)", blueprintId, version);
-    var queryObj = {
-        "_id": new ObjectId(blueprintId)
+            } else {
+                callback(null, 0);
+            }
+        });
     };
 
-    var projectionObj = {};
-    if (version) {
-        projectionObj = {
-            versionsList: {
-                $elemMatch: {
-                    ver: version
-                }
+    this.removeBlueprintbyId = function(blueprintId, callback) {
+        logger.debug("Enter removeBlueprintbyId(%s)", blueprintId);
+        Blueprint.remove({
+            "_id": ObjectId(blueprintId)
+        }, function(err, data) {
+            if (err) {
+                logger.error("removeBlueprintbyId Failed - ", err);
+                callback(err, null);
+                return;
             }
-        }
-
-        queryObj["versionsList.ver"] = version;
+            logger.debug("Exit removeBlueprintbyId(%s)", blueprintId);
+            callback(null, data);
+        });
     }
 
-    Blueprint.find(queryObj, projectionObj, function(err, data) {
-        if (err) {
-            logger.error("getBlueprintVersionData Failed - ", err);
-            callback(err, null);
-            return;
+    this.getBlueprintVersionData = function(blueprintId, version, callback) {
+        logger.debug("Enter getBlueprintVersionData(%s, %s)", blueprintId, version);
+        var queryObj = {
+            "_id": new ObjectId(blueprintId)
+        };
+
+        var projectionObj = {};
+        if (version) {
+            projectionObj = {
+                versionsList: {
+                    $elemMatch: {
+                        ver: version
+                    }
+                }
+            }
+
+            queryObj["versionsList.ver"] = version;
         }
 
-        if (data.length) {
-            logger.debug("Exit getBlueprintVersionData");
-            callback(null, data[0].versionsList);
-        } else {
-            logger.debug("Exit getBlueprintVersionData [] ");
-            callback(null, []);
-        }
-    });
-}
+        Blueprint.find(queryObj, projectionObj, function(err, data) {
+            if (err) {
+                logger.error("getBlueprintVersionData Failed - ", err);
+                callback(err, null);
+                return;
+            }
+
+            if (data.length) {
+                logger.debug("Exit getBlueprintVersionData");
+                callback(null, data[0].versionsList);
+            } else {
+                logger.debug("Exit getBlueprintVersionData [] ");
+                callback(null, []);
+            }
+        });
+    }
 
 
-this.getBlueprintByImageId = function(imageId, callback) {
-    logger.debug("Enter getBlueprintByImageId(%s)", imageId);
-    Blueprint.find({
-        "imageId": imageId
-    }, function(err, bluePrints) {
-        if (err) {
-            logger.error(err);
-            callback(err, null);
-            return;
-        }
-        if (bluePrints.length) {
-            logger.debug("Exit getBlueprintByImageId (ID = %s)", imageId);
-            callback(null, bluePrints[0]);
-        } else {
-            callback(null, null);
-        }
+    this.getBlueprintByImageId = function(imageId, callback) {
+        logger.debug("Enter getBlueprintByImageId(%s)", imageId);
+        Blueprint.find({
+            "imageId": imageId
+        }, function(err, bluePrints) {
+            if (err) {
+                logger.error(err);
+                callback(err, null);
+                return;
+            }
+            if (bluePrints.length) {
+                logger.debug("Exit getBlueprintByImageId (ID = %s)", imageId);
+                callback(null, bluePrints[0]);
+            } else {
+                callback(null, null);
+            }
 
-    });
-};
+        });
+    };
 
-this.getBlueprintByKeyPairId = function(keyPairId, callback) {
+    this.getBlueprintByKeyPairId = function(keyPairId, callback) {
         logger.debug("Enter getBlueprintByKeyPairId(%s)", keyPairId);
         Blueprint.find({
             "keyPairId": keyPairId
@@ -495,16 +521,16 @@ this.getBlueprintByKeyPairId = function(keyPairId, callback) {
                 return;
             }
             logger.debug("Exit getBlueprintByKeyPairId (ID = %s)", keyPairId);
-            if(data){
-            callback(null, data);
-            }else{
-                callback(null,null);
+            if (data) {
+                callback(null, data);
+            } else {
+                callback(null, null);
             }
 
         });
     };
 
-this.getBlueprintByTemplateType = function(templateType, callback) {
+    this.getBlueprintByTemplateType = function(templateType, callback) {
         logger.debug("Enter getBlueprintByTemplateType(%s)", templateType);
         Blueprint.find({
             "templateType": templateType
