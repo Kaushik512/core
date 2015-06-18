@@ -1103,11 +1103,11 @@ function populateJsonData(instanceId) {
         url: "/instances/" + urlParams.id + "/inspect",
         success: function(data) {
             //alert(data);
-            var jsonArray = data;
-            var dataToBeUsed = typeof jsonArray == "object" ? jsonArray : JSON.parse(jsonArray);
+            var installedSoftwareString = data.installedSoftwareString;
+            var installedSoftwareArray = installedSoftwareString.split('\r\n');
             var temp = '';
-            for (var i = 0; i < dataToBeUsed.length; i++) {
-                temp = temp + '<p><i class="fa fa-chevron-right txt-color-blue"></i>&nbsp;' + dataToBeUsed[i] + '</p>';
+            for (var i = 0; i < installedSoftwareArray.length; i++) {
+                temp = temp + '<p><i class="fa fa-chevron-right txt-color-blue"></i>&nbsp;' + installedSoftwareArray[i] + '</p>';
             }
             $('.loadingContainerimageInspectCSS').hide();
             $('.paraHeightModal').show();
