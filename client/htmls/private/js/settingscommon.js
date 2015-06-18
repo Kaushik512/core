@@ -1896,6 +1896,9 @@ function saveform(formID, operationTypes) {
     var fileNames = '';
     var orgName = $('#orgname').val().trim();
     var orgnamecheck = true;
+
+    // Not allowing team assignment for superadmin
+
     /*if (orgName === '') {
         //console.log("++++++++++::::::::::: "+$('#teamname').val());
         $('#teamname').find("input").each(function() {
@@ -1948,6 +1951,7 @@ function saveform(formID, operationTypes) {
         }
     }*/
 
+// End of Not allowing team assignment for superadmin
 
     var button = $("form[id*='myForm']").find("div.pull-right > button");
 
