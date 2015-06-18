@@ -1896,7 +1896,7 @@ function saveform(formID, operationTypes) {
     var fileNames = '';
     var orgName = $('#orgname').val().trim();
     var orgnamecheck = true;
-    if (orgName === '') {
+    /*if (orgName === '') {
         //console.log("++++++++++::::::::::: "+$('#teamname').val());
         $('#teamname').find("input").each(function() {
 
@@ -1946,7 +1946,7 @@ function saveform(formID, operationTypes) {
 
             }
         }
-    }
+    }*/
 
 
     var button = $("form[id*='myForm']").find("div.pull-right > button");
