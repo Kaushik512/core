@@ -841,14 +841,6 @@ var MasterUtil = function(){
                                 }
                                 logger.debug("Team array: ", JSON.stringify(teams));
                                 catObj.teams = teams;
-
-                                /*for (var tm1 = 0; tm1 < team.length; tm1++) {
-                                        var orgTm = team[tm1].orgname_rowid[0];
-                                        if (!orgObj[orgTm]) {
-                                            orgObj[orgTm] = true;
-                                        }
-                                    }*/
-
                                 var allObj = Object.keys(orgObj);
                                 logger.debug("orgTm>>>>>>>>>>>>>>> ", JSON.stringify(allObj));
                                 for (var tmOrg = 0; tmOrg < allObj.length; tmOrg++) {

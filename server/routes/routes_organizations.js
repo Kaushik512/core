@@ -188,6 +188,10 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                                 logger.debug("Exit get() for /organizations/getTreeNew");
                                                                 res.send(newTree);
                                                                 return;
+                                                            }else{
+                                                                // empty array
+                                                                res.send(newTree);
+                                                                return;
                                                             }
                                                         }
                                                     });
