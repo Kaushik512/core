@@ -9,12 +9,11 @@ Resource           ${COMMON RESOURCES}/catalyst_grid_node.txt
 
 
 
-
 *** Test Cases ***
-Catalyst delete the Entire Organization setup
-    [Tags]       Sanity               Smoke
+#-Catalyst delete the Entire Organization setup
+    #-[Tags]       Sanity               Smoke
 #    Catalyst Login
-    Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
-    Catalyst Delete the Organization Setup
-    Catalyst Logout                      
-    [Teardown]     Close Browser
+    #-Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
+    #-Catalyst Delete the Organization Setup
+    #-Catalyst Logout                      
+    #-[Teardown]     Close Browser
