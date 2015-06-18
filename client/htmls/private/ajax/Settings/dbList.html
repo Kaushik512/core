@@ -216,7 +216,6 @@ $('.addDB').click(function(e) {
 $('.addList').click(function(e) {
     $('#instanceItemName').trigger('reset');
     $('input.listID').removeAttr('disabled');
-    $('#listNameTable tbody tr').removeClass('selectedOne');
     $('#jsonData').hide();
 });
 
@@ -389,6 +388,7 @@ $(document).ready(function(e) {
             $('#listNameTable thead').find('tr.rowCustomStyle td').html('Items for -&nbsp;' + k);
         });
 
+      return $tr;
 
         console.log(">>>>>>>>>>>>>>>>>>>>>>>>");
 
@@ -455,7 +455,7 @@ $(document).ready(function(e) {
                 $('#modalForDB').modal('hide');
                 $('#saveSpinner').addClass('hidden');
                 $('#saveBTN').removeAttr('disabled');
-                createDataBagTable(reqBodyName.name);
+                createDataBagTable(reqBodyName.name).click();
 
 
             },
@@ -470,6 +470,11 @@ $(document).ready(function(e) {
                 $('#saveBTN').removeAttr('disabled');
             }
         });
+        return false;
+    });
+
+  $('#modalForItems').on('hidden.bs.modal', function() {
+        $('#listNameTable tbody tr.selectedOne').trigger('click');
         return false;
     });
 
@@ -516,6 +521,7 @@ $(document).ready(function(e) {
                $('#listNameTable').data('loading',false);
             });
         });
+      return $trForItems;
 
         //for edit
         $tdForItems.find('button.editRow').click(function() {
@@ -573,29 +579,9 @@ $(document).ready(function(e) {
             });
             return false;
         });
-        /*$tdForItems.click(function(e){
-          $('.spinnerList').removeClass('hidden');
-          $('textarea#jsonListName').val('');
-          var dataBagName = $('#dataBagIDHiddenInput').val();
-          var itemId = k;
-            
-            $.get('../chef/servers/' + urlParams.id + '/databag/' + dataBagName + '/item/' + itemId + '/find', function(data) {
-                // alert('hello');
-                console.log(data);
-                var res = JSON.stringify(data, null, '\t');
-                $('.spinnerList').addClass('hidden');
-                $('#jsonData').css('display','block');
-                $('#listTable thead').find('tr.rowCustomStyle td').html(itemId);
-                //$('#listTable tbody').find('tr')
-                $('#jsonListName').val(res);
-            });
-        });*/
     };
 
-    $('#modalForItems').on('hidden.bs.modal', function() {
-        $('#listNameTable tbody tr.selectedOne').trigger('click');
-        return false;
-    });
+    
 
     //for list items
     $('.addList').click(function(e) {
@@ -663,10 +649,10 @@ $(document).ready(function(e) {
                 $('#saveItemSpinner').addClass('hidden');
                 $('#saveBTNList').removeAttr('disabled');
                 console.log(itemsEditNew);
-                $('#listNameTable tbody tr:first').trigger('click');
+               // $('#listNameTable tbody tr:first').trigger('click');
                 if (itemsEditNew === 'new') {
                     console.log(itemID);
-                    createItemTableRow(itemID);
+                    createItemTableRow(itemID).click();
                     $('#saveBTNList').removeAttr('disabled');
                 }
             },
