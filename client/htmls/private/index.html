@@ -185,7 +185,8 @@ String.prototype.capitalizeFirstLetter = function() {
         <div id="content">
         </div> 
         <!--hiding the comment for no org available when the organization and environments are present-->
-        <div id="noenvwarning" style="padding-top:20px;margin-left:20px" class="hidden">Your Organization has not been fully configured yet. Use the SETTINGS tab to configure.
+        <div id="noenvwarning" class="hidden alert alert-warning noEnvWarning"><img style="width:50px;height:40px" src="img/warning.png" alt="warning"/>There are no Workzone items to display. Please check your <ul style="list-style-type:none"><li class="left-projects-links hidden" data-target="#Settings" navigation="Settings">
+                                <a class="navigationTab" href="#ajax/Settings/Dashboard.html" id="settingsNewClick"  onclick="setleftnavigation(this,'Settings');">&nbsp;SETTINGS</a></li></ul>
         </div>
         <!-- END MAIN CONTENT -->
     </div>
@@ -292,6 +293,13 @@ function setleftnavigation(toplink, breadcrumbHeader) {
         $('#Settings_nav').hide();
 
     } else if (TabID === "settingsNew") {
+        $('#tree').empty()
+        loadSettingsTree();
+        foldTreeForSetting();
+        $('#Workspace1').hide();
+        $('#Settings_nav').show();
+
+    } else if (TabID === "settingsNewClick") {
         $('#tree').empty()
         loadSettingsTree();
         foldTreeForSetting();
