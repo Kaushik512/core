@@ -230,6 +230,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
             }
             logger.debug("anUser.orgname_rowid[0]:>>>>>>>>>> ", JSON.stringify(anUser));
                 logger.debug("Tree view for non catalystAdmin");
+                var countAll = 0;
                 masterUtil.getAllSettingsForUser(loggedInUser, function(err, objperms) {
                     var orgTree = [];
                     if (err) {
@@ -322,7 +323,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                     orgname_rowid: orgTree[i]['rowid'],
                                                     productgroupname_rowid: docbgs[k]['rowid'],
                                                     rowid: {
-                                                        $in: objperms[0]    .projects
+                                                        $in: objperms[0].projects
                                                     }
                                                 }, function(err, docprojs) {
 
@@ -431,8 +432,8 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                                 }
                                                                 if (_i >= orgTree.length - 1) {
                                                                     logger.debug("Returned complete orgTree:>>>>>>>>>>> ", JSON.stringify(orgTree));
-                                                                    res.send(orgTree);
                                                                     logger.debug("Exit get() for /organizations/getTreeForbtv");
+                                                                    res.send(orgTree);
                                                                     return;
                                                                 }
                                                             }
