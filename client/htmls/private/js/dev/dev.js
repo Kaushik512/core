@@ -190,91 +190,95 @@
                                                  }
                                                  /*removing selected instance*/
                                                  //function for removing the selected instance
-                                                 function removeSelectedInstance() {
-                                                     var instanceId = null;
-                                                     var blueprintName = null;
-                                                     if ($('#divinstancescardview').is(':visible')) {
-                                                         var $selectedCard = $('.container.role-Selectedcard').find('.domain-roles-caption');
-                                                         instanceId = $selectedCard.attr('data-instanceid');
-                                                         blueprintName = $selectedCard.attr('data-blueprintName');
-                                                     } else if ($('#divinstancestableview').is(':visible')) {
-                                                         var $selectedRow = $('#tableinstanceview').find('tr.rowcustomselected');
-                                                         instanceId = $selectedRow.attr('data-instanceId');
-                                                         blueprintName = $selectedRow.attr('data-blueprintName');
-                                                     } else {
-                                                         instanceId = null;
-                                                     }
-                                                     if (instanceId) {
-                                                         //found now delete
-                                                         var dialog = bootbox.dialog({
-                                                             title: "Remove Instance",
-                                                             message: '<div class="row">  ' +
-                                                                 '<div class="col-md-12"> ' +
-                                                                 '<div id="deleteInstanceWorkingIndicator" style="display:none"><img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" /></div>' +
-                                                                 '<form id="deleteInstanceForm" class="form-horizontal"> ' +
-                                                                 '<input type="hidden" id="deleteInstanceIdInput" value="' + instanceId + '"/>' +
-                                                                 '<div class="form-group"> ' +
-                                                                 '<span class="col-md-12" for="name">Are you sure you would like to remove this instance?<br/>Note : This will not terminate the instance from the provider.</span> ' +
-                                                                 '</div>' +
-                                                                 '<div class="form-group"> ' +
-                                                                 '<label class="col-md-4 control-label forBootBox1" for="name">Name : </label> ' +
-                                                                 '<span class="col-md-4 forBootBox" for="name">' + blueprintName + '</span> ' +
-                                                                 '</div> ' +
-                                                                 '<div class="form-group"> ' +
-                                                                 '<label class="col-md-3 control-label" for="ckbChefDelete"></label> ' +
-                                                                 '<div class="col-md-8"> <div class="checkbox"> <label for="ckbChefDelete-0"> ' +
-                                                                 '<input type="checkbox" name="ckbChefDelete" id="ckbChefDelete"> ' +
-                                                                 'Delete this node from chef server </label> ' +
-                                                                 '</div>' +
-                                                                 '</div>' +
-                                                                 '</form> </div>  </div>',
-                                                             buttons: {
-                                                                 success: {
-                                                                     label: "Delete",
-                                                                     className: "btn-primary",
-                                                                     callback: function(evt, arg2) {
-                                                                         $('#deleteInstanceForm').hide();
-                                                                         $('#deleteInstanceWorkingIndicator').show();
-                                                                         $(evt.target).attr('disabled', 'disabled');
+                                                function removeSelectedInstance() {
+                                                    var instanceId = null;
+                                                    var blueprintName = null;
+                                                    if ($('#divinstancescardview').is(':visible')) {
+                                                        var $selectedCard = $('.container.role-Selectedcard').find('.domain-roles-caption');
+                                                        instanceId = $selectedCard.attr('data-instanceid');
+                                                        blueprintName = $selectedCard.attr('data-blueprintName');
+                                                    } else if ($('#divinstancestableview').is(':visible')) {
+                                                        var $selectedRow = $('#tableinstanceview').find('tr.rowcustomselected');
+                                                        instanceId = $selectedRow.attr('data-instanceId');
+                                                        blueprintName = $selectedRow.attr('data-blueprintName');
+                                                    } else {
+                                                        instanceId = null;
+                                                    }
+                                                    if (instanceId) {
+                                                        $.get('../instances/' + instanceId, function(data) {
+                                                            console.log(data);
+                                                                //found now delete
+                                                                var dialog = bootbox.dialog({
+                                                                    title: "Remove Instance",
+                                                                    message: '<div class="row">  ' +
+                                                                        '<div class="col-md-12"> ' +
+                                                                        '<div id="deleteInstanceWorkingIndicator" style="display:none"><img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" /></div>' +
+                                                                        '<form id="deleteInstanceForm" class="form-horizontal"> ' +
+                                                                        '<input type="hidden" id="deleteInstanceIdInput" value="' + instanceId + '"/>' +
+                                                                        '<div class="form-group"> ' +
+                                                                        '<span class="col-md-12" for="name">Are you sure you would like to remove this instance?<br/>Note : This will not terminate the instance from the provider.</span> ' +
+                                                                        '</div>' +
+                                                                        '<div class="form-group"> ' +
+                                                                        '<label class="col-md-4 control-label forBootBox1" for="name">Name : </label> ' +
+                                                                        '<span class="col-md-4 forBootBox" for="name">' + data.name + '</span> ' +
+                                                                        '</div> ' +
+                                                                        '<div class="form-group"> ' +
+                                                                        '<label class="col-md-3 control-label" for="ckbChefDelete"></label> ' +
+                                                                        '<div class="col-md-8"> <div class="checkbox"> <label for="ckbChefDelete-0"> ' +
+                                                                        '<input type="checkbox" name="ckbChefDelete" id="ckbChefDelete"> ' +
+                                                                        'Delete this node from chef server </label> ' +
+                                                                        '</div>' +
+                                                                        '</div>' +
+                                                                        '</form> </div>  </div>',
+                                                                    buttons: {
+                                                                        success: {
+                                                                            label: "Delete",
+                                                                            className: "btn-primary",
+                                                                            callback: function(evt, arg2) {
+                                                                                $('#deleteInstanceForm').hide();
+                                                                                $('#deleteInstanceWorkingIndicator').show();
+                                                                                $(evt.target).attr('disabled', 'disabled');
 
 
-                                                                         var url = '/instances/' + instanceId;
-                                                                         if ($('#ckbChefDelete').is(':checked')) {
-                                                                             url = url + '?chefRemove=true';
-                                                                         }
+                                                                                var url = '/instances/' + instanceId;
+                                                                                if ($('#ckbChefDelete').is(':checked')) {
+                                                                                    url = url + '?chefRemove=true';
+                                                                                }
 
-                                                                         $.ajax({
-                                                                             url: url,
-                                                                             type: 'DELETE',
-                                                                             success: function() {
-                                                                                 $('#divinstancescardview').find('.domain-roles-caption[data-instanceId=' + instanceId + ']').parents('.domain-role-thumbnailDev').remove();
-                                                                                 // serachBoxInInstance.updateData(undefined,"remove",instanceId);
+                                                                                $.ajax({
+                                                                                    url: url,
+                                                                                    type: 'DELETE',
+                                                                                    success: function() {
+                                                                                        $('#divinstancescardview').find('.domain-roles-caption[data-instanceId=' + instanceId + ']').parents('.domain-role-thumbnailDev').remove();
+                                                                                        // serachBoxInInstance.updateData(undefined,"remove",instanceId);
 
-                                                                                 var table = $('#tableinstanceview').DataTable();
-                                                                                 table.row('[data-instanceid=' + instanceId + ']').remove().draw(false);
-                                                                                 dialog.modal('hide');
-                                                                             }
-                                                                         }).fail(function() {
-                                                                             $('#deleteInstanceForm').html('Server Behaved Unexpectedly. Unable to delete instance');
-                                                                             $('#deleteInstanceWorkingIndicator').hide();
-                                                                             $('#deleteInstanceForm').show();
-                                                                         });
-                                                                         return false;
-                                                                     }
-                                                                 },
-                                                                 cancel: {
-                                                                     label: "Close",
-                                                                     className: "btn-primary",
-                                                                     callback: function() {
+                                                                                        var table = $('#tableinstanceview').DataTable();
+                                                                                        table.row('[data-instanceid=' + instanceId + ']').remove().draw(false);
+                                                                                        dialog.modal('hide');
+                                                                                    }
+                                                                                }).fail(function() {
+                                                                                    $('#deleteInstanceForm').html('Server Behaved Unexpectedly. Unable to delete instance');
+                                                                                    $('#deleteInstanceWorkingIndicator').hide();
+                                                                                    $('#deleteInstanceForm').show();
+                                                                                });
+                                                                                return false;
+                                                                            }
+                                                                        },
+                                                                        cancel: {
+                                                                            label: "Close",
+                                                                            className: "btn-primary",
+                                                                            callback: function() {
 
-                                                                     }
-                                                                 }
-                                                             }
-                                                         });
-                                                     } else {
-                                                         bootbox.alert('Please select an instance to remove.');
-                                                     }
-                                                 }
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                });
+                                                            });
+                                                            } else {
+                                                                bootbox.alert('Please select an instance to remove.');
+                                                            }
+                                                }
+
                                                  /*
             Attaching Click Event on IP Address Import, which will reset instance form.
             */

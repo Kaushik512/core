@@ -790,7 +790,10 @@ var MasterUtil = function(){
         var orgs = [];
         var projects = [];
         var bunits = [];
-        var returnObj = {};
+        var returnObj = [];
+        var catObj = {};
+        var orgObj = {};
+        var loopCount = 0;
         d4dModelNew.d4dModelMastersUsers.find({
             loginname: loggedInUser
         }, function(err, users) {
@@ -799,23 +802,28 @@ var MasterUtil = function(){
                     (function(usr) {
                         if (users[usr].id === '7') {
                             logger.debug("Got User");
-                            returnObj = {
+                            catObj = {
                                 userid: users[usr].rowid,
                                 teams: [],
                                 orgs: [],
                                 projects: [],
                                 bunits: []
                             };
-                            logger.debug("User Id: ",users[usr].rowid);
+                            logger.debug("User Id: ", users[usr].rowid);
                             d4dModelNew.d4dModelMastersTeams.find({
-                                loginname_rowid:{
-                                    $regex : users[usr].rowid
+                                loginname_rowid: {
+                                    $regex: users[usr].rowid
                                 },
-                                id :"21"
+                                id: "21"
                             }, function(err, team) {
+                                if (err) {
+                                    callback(err, null);
+                                    return;
+                                }
+
                                 logger.debug("Available team: ", JSON.stringify(team));
-                                if(typeof team === 'undefined' || team.length <= 0){
-                                    callback(null,returnObj);
+                                if (typeof team === 'undefined' || team.length <= 0) {
+                                    callback(null, returnObj);
                                     return;
                                 }
                                 if (team) {
@@ -823,77 +831,103 @@ var MasterUtil = function(){
                                         if (team[tm].id === '21') {
                                             logger.debug("Inside team : ", team[tm].rowid);
                                             teams.push(team[tm].rowid);
+
+                                            var orgTm = team[tm].orgname_rowid[0];
+                                            if (!orgObj[orgTm]) {
+                                                orgObj[orgTm] = true;
+                                            }
                                         }
                                     }
                                 }
                                 logger.debug("Team array: ", JSON.stringify(teams));
-                                returnObj.teams = teams;
-                                d4dModelNew.d4dModelMastersOrg.find({
-                                    rowid: {
-                                        $in: team[0].orgname_rowid
-                                    },
-                                    id : "1",
-                                    active: true
-                                }, function(err, org) {
-                                    if (err) {
-                                        callback(err, null);
-                                    }
-                                    if (org) {
-                                        logger.debug("Available Org: ", JSON.stringify(org));
-                                        for (var x = 0; x < org.length; x++) {
-                                            if (org[x].id === '1') {
-                                                orgs.push(org[x].rowid);
-                                                logger.debug("Orgs list rowid: ", org[x].rowid);
-                                            }
-                                        }
-                                        returnObj.orgs = orgs;
-                                    }
-                                    d4dModelNew.d4dModelMastersProjects.find({
-                                        orgname_rowid: {
-                                            $in: team[0].orgname_rowid
-                                        },
-                                        id : "4"
-                                    }, function(err, project) {
+                                catObj.teams = teams;
+                                var allObj = Object.keys(orgObj);
+                                logger.debug("orgTm>>>>>>>>>>>>>>> ", JSON.stringify(allObj));
+                                for (var tmOrg = 0; tmOrg < allObj.length; tmOrg++) {
+                                    loopCount++;
+                                    d4dModelNew.d4dModelMastersTeams.find({
+                                        orgname_rowid: allObj[tmOrg],
+                                        id: "21"
+                                    }, function(err, allTeams) {
                                         if (err) {
                                             callback(err, null);
+                                            return;
                                         }
-                                        if (project) {
-                                            logger.debug("Available project:>>>>> ", JSON.stringify(project));
-                                            for (var x1 = 0; x1 < project.length; x1++) {
-                                                if (project[x1].id === '4') {
-                                                    projects.push(project[x1].rowid);
-                                                    logger.debug("projectList:>>> ", project[x1].rowid);
+                                        logger.debug("allTeams:::::::::::::: ", JSON.stringify(allTeams));
+                                        for (var xy = 0; xy < allTeams.length; xy++) {
+
+                                            d4dModelNew.d4dModelMastersOrg.find({
+                                                rowid: {
+                                                    $in: allTeams[0].orgname_rowid
+                                                },
+                                                id: "1",
+                                                active: true
+                                            }, function(err, org) {
+                                                if (err) {
+                                                    callback(err, null);
                                                 }
-                                            }
-                                            returnObj.projects = projects;
-                                        }
-                                        d4dModelNew.d4dModelMastersProductGroup.find({
-                                            orgname_rowid:{
-                                                $in : team[0].orgname_rowid
-                                            },
-                                            id : "2"
-                                        }, function(err, bg) {
-                                            if (err) {
-                                                callback(err, null);
-                                            }
-                                            if (bg) {
-                                                for (var x2 = 0; x2 < bg.length; x2++) {
-                                                    if (bg[x2].id === '2') {
-                                                        bunits.push(bg[x2].rowid);
+                                                if (org) {
+                                                    logger.debug("Available Org: ", JSON.stringify(org));
+                                                    for (var x = 0; x < org.length; x++) {
+                                                        if (org[x].id === '1') {
+                                                            orgs.push(org[x].rowid);
+                                                            logger.debug("Orgs list rowid: ", org[x].rowid);
+                                                        }
                                                     }
+                                                    catObj.orgs = orgs;
                                                 }
-                                                returnObj.bunits = bunits;
-                                                logger.debug("returnObj: ", returnObj);
-                                                callback(null, returnObj);
-                                                return;
-                                            }
-                                        });
+                                                d4dModelNew.d4dModelMastersProjects.find({
+                                                    orgname_rowid: {
+                                                        $in: allTeams[0].orgname_rowid
+                                                    },
+                                                    id: "4"
+                                                }, function(err, project) {
+                                                    if (err) {
+                                                        callback(err, null);
+                                                    }
+                                                    if (project) {
+                                                        logger.debug("Available project:>>>>> ", JSON.stringify(project));
+                                                        for (var x1 = 0; x1 < project.length; x1++) {
+                                                            if (project[x1].id === '4') {
+                                                                projects.push(project[x1].rowid);
+                                                                logger.debug("projectList:>>> ", project[x1].rowid);
+                                                            }
+                                                        }
+                                                        catObj.projects = projects;
+                                                    }
+                                                    d4dModelNew.d4dModelMastersProductGroup.find({
+                                                        orgname_rowid: {
+                                                            $in: allTeams[0].orgname_rowid
+                                                        },
+                                                        id: "2"
+                                                    }, function(err, bg) {
+                                                        if (err) {
+                                                            callback(err, null);
+                                                        }
+                                                        if (bg) {
+                                                            for (var x2 = 0; x2 < bg.length; x2++) {
+                                                                if (bg[x2].id === '2') {
+                                                                    bunits.push(bg[x2].rowid);
+                                                                }
+                                                            }
+                                                            catObj.bunits = bunits;
+                                                            returnObj.push(catObj);
+                                                            logger.debug("returnObj: ", returnObj);
+                                                            if (allObj.length === loopCount) {
+                                                                logger.debug("Condition matched:::::::::::;");
+                                                                callback(null, returnObj);
+                                                                return;
+                                                            }
+                                                        }
+                                                    });
 
+                                                });
+                                                // }
+
+                                            });
+                                        }
                                     });
-                                    // }
-
-                                });
-                                //}
+                                } // for multiple orgs
 
                             });
 

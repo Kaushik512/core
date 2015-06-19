@@ -128,7 +128,6 @@ Vaildate the Empty config field
 Vaildate Empty Config Name
     [Arguments]    ${configname}
     Clicks on New button to Create New Config Management
-    Enters Empty Configuration name
     Enters config management user name
     Select organization for config management
     Enters config management URL
@@ -212,12 +211,12 @@ Clicks on Save Button to save the Environments
 #    Click Element    xpath=//a[contains(text(),'SETTINGS')]
 
 Clicks on DevOps Setup menu
-    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       xpath=.//*[@id='setting_tree']/ul/li[2]/a
-    Click Element    xpath=.//*[@id='setting_tree']/ul/li[2]/a
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       xpath=//a[contains(text(),'DevOps Setup')]
+    Click Element    xpath=//a[contains(text(),'DevOps Setup')]
 
 Clicks on Config Management menu
-    Wait Until Keyword Succeeds    1 minute     1 seconds    Wait Until Element Is Visible       xpath=.//*[@id='setting_tree']/ul/li[3]/a
-    Click Element    xpath=.//*[@id='setting_tree']/ul/li[3]/a
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Wait Until Element Is Visible       xpath=//a[contains(text(),'Config Management')]
+    Click Element    xpath=//a[contains(text(),'Config Management')]
     
 Clicks on New button to Create New Config Management
     Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       link=New
@@ -228,8 +227,7 @@ Enters config management name
     Input Text     id=configname      ${CONFIG MANAGEMENT NAME}
 
 Enters config management user name
-    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       id=loginname
-    Input Text     id=loginname      pcjoshi9
+    Wait Until Keyword Succeeds    1 minute     1 seconds     Input Text     id=loginname      pcjoshi9
 
 Select organization for config management
     Select From List     id=orgname      ${ORGANIZATION NAME}

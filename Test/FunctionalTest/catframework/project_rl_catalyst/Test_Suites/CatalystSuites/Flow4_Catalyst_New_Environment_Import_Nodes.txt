@@ -13,7 +13,9 @@ Resource           ${COMMON RESOURCES}/catalyst_grid_node.txt
 Catalyst new Environments setup
     [Tags]       Sanity               Smoke
 #    Catalyst Login
-    Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Test Validation of Creation of New Environments
+    Test Validation of No org,Chef,Env,Team Selected for Environment
     Catalyst Addition and Creation of New Envirorments Setup           
     Catalyst Logout                      
     [Teardown]     Close Browser
@@ -36,21 +38,6 @@ Catalyst new Environments setup
     #-Chef server nodes import
     #-Catalyst Logout
     #-[Teardown]     Close Browser
-
-
-#-Catalyst import chef server nodes by IP Address           #from IP
-    #-[Tags]       Sanity       ps
-#    Catalyst Login
-    #-Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
-    #-Chef nodes import by IP
-    #-Catalyst Logout
-    #-[Teardown]     Close Browser
-
-
-
-
-
-
 
 
 
