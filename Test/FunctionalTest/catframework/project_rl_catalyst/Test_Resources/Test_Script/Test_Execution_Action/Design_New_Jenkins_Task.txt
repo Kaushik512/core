@@ -119,16 +119,6 @@ Catalyst Delete the Node only From Catalyst
     Clicks on Config Managementt
     Clicks on Import Button Server
 
-
-   #.//*[@id='envtable']/tbody/tr/td[text()='RLChefServer']/../td[5]/div/a[3]
-    #//div[@class='domain-roles-heading'][//span[text()='52.24.73.49']]/a
-#//div[@class='domain-roles-heading']/span[@data-originaL-title='apache']
-#//div[@class='domain-roles']/div[@data-blueprintname='52.24.73.49']
-
-
-
-
-
 Catalyst Steps for Inmporting
     Sleep    1s
     Clicks on Inport By IP Button
@@ -141,7 +131,86 @@ Catalyst Steps for Inmporting
     Clicks on Import Close Button
 
 
+Catlayst Importing the Instance Chef Sync
+    Clicks on Settings
+    Sleep    5s
+    Clicks on DevOps Setupp 
+    Clicks on Config Managementt
+    Clicks on Import Nodes Button of Server for Sync
+    Find the Instance and Impoert to the Environment
+    Clicking on the Import Nodes Button in Config Mgmt Page 
+    Verfiy the Organization is Disabled
+    Select the Business Grp in Inport Nodes
+    Select the Project in Inport Nodes
+    Enters the UserName in Inport Nodes
+    Choose the Authentication as Pem in Inportnodes
+    Upload the PEM file in Inport Nodes
+    Clicks on Import Button in Import Nodes
+    Sleep    5s
+    Verify the Node Importedd
+    Clicks on Workzone
+    Sleep    10s
+    Node is Inported in the  Environment
 
+
+
+   #.//*[@id='envtable']/tbody/tr/td[text()='RLChefServer']/../td[5]/div/a[3]
+    #//div[@class='domain-roles-heading'][//span[text()='52.24.73.49']]/a
+#//div[@class='domain-roles-heading']/span[@data-originaL-title='apache']
+#//div[@class='domain-roles']/div[@data-blueprintname='52.24.73.49']
+#//div[@class='messageDiv']/div
+
+Verify the Node Importedd
+    Element Should Contain    xpath=//div[@class='messageDiv']/div    Node Imported : ${IP Centos}
+    Sleep    4s
+    Click Element    xpath=//*[text()='Close']
+
+Node is Inported in the  Environment
+    Sleep    4s
+    Element Should Contain    xpath=//div[@class='domain-roles-heading']//span[text()='{IP Centos}']
+
+
+
+Verfiy the Organization is Disabled
+    Element Should Be Disabled     xpath=.//*[@id='s2id_chefImportOrgSelect']/a
+
+Select the Business Grp in Inport Nodes
+    Click Element    xpath=.//*[@id='s2id_chefImportBgSelect']/a
+    #Input Text    xpath=.//*[@id='select2-drop']/div/input    ${BUSINESS GROUP NAME}
+    Click Element    xpath=//div[text()='Devops'] 
+
+Select the Project in Inport Nodes
+    Click Element    xpath=.//*[@id='s2id_chefImportProjectSelect']/a
+    Click Element    xpath=//div[text()='Catalyst']
+
+Enters the UserName in Inport Nodes
+    Input Text    id=importUsernameInput    ${IP USERNAME}
+
+Choose the Authentication as Pem in Inportnodes
+    Click Element    xpath=.//*[@id='s2id_pemFileDropdown2']/a
+    Click Element    xpath=//div[text()='Pem File']
+
+Upload the PEM file in Inport Nodes
+    Choose File    id=importPemfileInput    C:\\Users\\adarsh.RLINDIA\\Desktop\\caty\\Chef\\cat_instances.pem
+
+Clicks on Import Button in Import Nodes
+    Click Element    xpath=//*[text()='Import']
+
+Find the Instance and Impoert to the Environment
+    Sleep    3 minutes
+          ${maxloop} =        Set Variable     200
+    :FOR    ${INDEX}    IN RANGE    1    ${maxloop}
+\       Wait Until Keyword Succeeds    1 minute     1 seconds       Element Should Be Visible       xpath=.//*[@id='organiz']/table/tbody/tr[${INDEX}]
+\       ${VALUE}          Get Text       xpath=.//*[@id='organiz']/table/tbody/tr[${INDEX}]/td[1]
+\       Run Keyword If    '${VALUE}' == '${IP Centos}'       Click Element        xpath=.//*[@id='organiz']/table/tbody/tr[${INDEX}]/
+
+    #Click Element    xpath=//tr[@class="show-settings"][td[text()='52.24.73.49']]/td[7]/label
+    #//tr[@class="show-settings"]/td[text()='52.24.73.49']/../td[@class='chef-checkbox smart-form']/label[@class='checkbox']
+    #.//*[@id='organiz']/table/tbody/tr/td[text()='52.24.73.49']/../td[@class='chef-checkbox smart-form']
+
+Clicking on the Import Nodes Button in Config Mgmt Page
+    Click Element    id=buttonForIP
+    Sleep    2s
 
 
 
@@ -176,6 +245,10 @@ Clicks on Import Nodes Button of Chef Server
     Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()='RLChefServer']/../td[5]/div/a[3]
     Sleep    50s
     Page Should Not Contain    ${IP Centos}
+
+Clicks on Import Nodes Button of Server for Sync
+    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()='RLChefServer']/../td[5]/div/a[3]
+    Sleep    1 minutes
 
 Clicks on Import Button Server
     Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()='RLChefServer']/../td[5]/div/a[3]
