@@ -22,12 +22,12 @@
                                     <div class="row" style="margin:0px">
                                        <div class="col-lg-6 col-md-6">
                                           <label for="name">Login Name:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
-                                          <label id="msgOrgName" style="display:none;color:red;float:right;">Required</label>
+                                          
                                           <input name="ctl00$MainContent$orgname" value="" id="loginname" class="form-control" type="text"  cdata="catalyst" unique="true" cat-validation="required,nospecial" uniqueconditionedby="loginname">
                                        </div>
                                        <div class="col-lg-6 col-md-6">
                                           <label for="">Email Address:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
-                                          <label id="msgOrgName" style="display:none;color:red;float:right;">Required</label>
+  
                                           <input type="text" name="ctl00$MainContent$orgname" value="" id="email" class="form-control" type="email" cdata="catalyst" cat-validation="required,email">
                                        </div>
                                        </div>
@@ -36,7 +36,7 @@
                                           <label for="category">Organization:<span style="color:Red;" class="control-label">&nbsp;*</span>
                                           </label>
 
-                                          <select id="orgname" class="chooseOrganization width-100" sourcepath="1" datapath="masterjson.rows.row" valuelinkfield="costcode" style="vertical-align:central" cdata="catalyst">
+                                          <select id="orgname" class="chooseOrganization width-100" sourcepath="1" datapath="masterjson.rows.row" valuelinkfield="costcode" style="vertical-align:central" cdata="catalyst" cat-validation="required">
                                            <!-- <option value="">Select Organization</option>  -->
                                           </select>
 
@@ -52,8 +52,8 @@
                                        </div>
                                        <div class="row" style="margin:0px">
                                          <div class="col-lg-6 col-md-6 smart-form" style="margin-top:25px">
-                                            <label for="category">Roles:</label>
-                                            <div id="userrolename" multiselect="multiselect" datatype="select" sourcepath="6" datapath="userrolename" class="input-group from-control col-md-12" style="height:150px;overflow-y:auto;padding:2px;border:1px solid silver;width:98%"  cdata="catalyst">
+                                            <label for="category">Roles:&nbsp;</label>
+                                            <div id="userrolename" multiselect="multiselect" datatype="select" sourcepath="6" datapath="userrolename" class="input-group from-control col-md-12" style="height:150px;overflow-y:auto;padding:2px;border:1px solid silver;width:98%"  cdata="catalyst" cat-validation="onechecked">
                                             </div>
                                          </div>
                                          <div class="col-lg-6 col-md-6 smart-form" style="margin-top:25px;">
