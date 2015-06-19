@@ -1,8 +1,7 @@
 var instancesDao = require('../../model/classes/instance/instance.js');
-var javaSSHShellwrapper = require('../../model/javaSSHShellWrapper.js');
+var shellClient = require('../../lib/utils/sshshell');
 var logger = require('../../lib/logger')(module);
 var logsDao = require('../../model/dao/logsdao.js');
-
 
 
 module.exports.setRoutes = function(socketIo) {
@@ -34,7 +33,7 @@ module.exports.setRoutes = function(socketIo) {
                     // create ssh session with the instance
                 var timestampStarted = new Date().getTime();
 
-                var actionLog = instancesDao.insertSSHActionLog(instance._id,instanceData.username, instanceData.sessionUser, timestampStarted);
+                var actionLog = instancesDao.insertSSHActionLog(instance._id, instanceData.username, instanceData.sessionUser, timestampStarted);
 
                 var logReferenceIds = [instance._id];
 
@@ -46,100 +45,79 @@ module.exports.setRoutes = function(socketIo) {
                     timestamp: timestampStarted
                 });
 
-                javaSSHShellwrapper.open({
+                shellClient.open({
                     host: instance.instanceIP,
                     port: 22,
                     username: instanceData.username,
                     password: instanceData.password,
                     pemFileData: instanceData.pemFileData
-                }, function(err, shell, retCode) {
+                }, function(err, shell) {
+                    var timestampEnded = new Date().getTime();
                     if (err) {
-                        socket.emit('conErr', {
-                            message: "Unable to connect to instance",
-                            actionLogId: actionLog._id
-                        });
-                        var timestampEnded = new Date().getTime();
-                        logsDao.insertLog({
-                            referenceId: logReferenceIds,
-                            err: true,
-                            log: "Server behaved unexpectedly. SSH Shell Failed",
-                            timestamp: timestampEnded
-                        });
+                        socket.shellInstance = null;
+                        console.log("error ==>", err);
+                        if (err.errCode === -5000) {
+                            socket.emit('conErr', {
+                                message: "Host Unreachable",
+                                actionLogId: actionLog._id
+                            });
+                            logsDao.insertLog({
+                                referenceId: logReferenceIds,
+                                err: true,
+                                log: "Host Unreachable",
+                                timestamp: timestampEnded
+                            });
+                        } else if (err.errCode === -5001) {
+                            socket.emit('conErr', {
+                                message: "The username or password/pemfile you entered is incorrect",
+                                actionLogId: actionLog._id
+                            });
+                            logsDao.insertLog({
+                                referenceId: logReferenceIds,
+                                err: true,
+                                log: "The username or password/pemfile you entered is incorrect",
+                                timestamp: timestampEnded
+                            });
+                        } else {
+                            socket.emit('conErr', {
+                                message: "Unable to connect to instance, error code = " + err.errCode,
+                                actionLogId: actionLog._id
+                            });
+                            logsDao.insertLog({
+                                referenceId: logReferenceIds,
+                                err: true,
+                                log: "Unable to connect to instance, error code = " + err.errCode + ".",
+                                timestamp: timestampEnded
+                            });
+                        }
                         instancesDao.updateActionLog(instance._id, actionLog._id, false, timestampEnded);
-
                         return;
                     }
-                    if (retCode === 0) {
-                        socket.shellInstance = shell;
-                        shell.on('out', function(outData) {
-                            socket.emit('out', {
-                                res: outData
-                            });
+                    socket.shellInstance = shell;
+                    shell.on('data', function(data) {
+                        socket.emit('out', {
+                            res: data
                         });
+                    });
+                    shell.on('close', function() {
+                        socket.shellInstance = null;
+                        socket.emit('close');
+                    });
+                    shell.on('end', function() {
+                        socket.shellInstance = null;
+                        socket.emit('close');
+                    });
 
-                        shell.on('close', function() {
-                            socket.shellInstance = null;
-                            socket.emit('close');
-                        });
-
-
-                        socket.emit('opened', {
-                            actionLogId: actionLog._id
-                        });
-
-                        var timestampEnded = new Date().getTime();
-                        logsDao.insertLog({
-                            referenceId: logReferenceIds,
-                            err: false,
-                            log: "SSH Shell initiated",
-                            timestamp: timestampEnded
-                        });
-                        instancesDao.updateActionLog(instance._id, actionLog._id, true, timestampEnded);
-
-                    } else if (retCode === -5000) {
-                        socket.emit('conErr', {
-                            message: "Host Unreachable",
-                            actionLogId: actionLog._id
-                        });
-                        logsDao.insertLog({
-                            referenceId: logReferenceIds,
-                            err: true,
-                            log: "Host Unreachable",
-                            timestamp: timestampEnded
-                        });
-                    } else if (retCode === -5001) {
-                        socket.emit('conErr', {
-                            message: "The username or password/pemfile you entered is incorrect",
-                            actionLogId: actionLog._id
-                        });
-                        logsDao.insertLog({
-                            referenceId: logReferenceIds,
-                            err: true,
-                            log: "The username or password/pemfile you entered is incorrect",
-                            timestamp: timestampEnded
-                        });
-                    } else {
-                        socket.emit('conErr', {
-                            message: "Unable to connect to instance, error code = " + retCode,
-                            actionLogId: actionLog._id
-                        });
-                        logsDao.insertLog({
-                            referenceId: logReferenceIds,
-                            err: true,
-                            log: "Unable to connect to instance, error code = " + retCode + ".",
-                            timestamp: timestampEnded
-                        });
-                    }
-                    if (retCode !== 0) {
-                        var timestampEnded = new Date().getTime();
-                        logsDao.insertLog({
-                            referenceId: logReferenceIds,
-                            err: true,
-                            log: "SSH Failed",
-                            timestamp: timestampEnded
-                        });
-                        instancesDao.updateActionLog(instance._id, actionLog._id, false, timestampEnded);
-                    }
+                    socket.emit('opened', {
+                        actionLogId: actionLog._id
+                    });
+                    logsDao.insertLog({
+                        referenceId: logReferenceIds,
+                        err: false,
+                        log: "SSH Shell initiated",
+                        timestamp: timestampEnded
+                    });
+                    instancesDao.updateActionLog(instance._id, actionLog._id, true, timestampEnded);
                 });
             });
         });
@@ -159,7 +137,6 @@ module.exports.setRoutes = function(socketIo) {
         });
 
         socket.on('disconnect', function() {
-            logger.debug('Got disconnect!');
             if (socket.shellInstance) {
                 socket.shellInstance.close();
                 socket.shellInstance = null;

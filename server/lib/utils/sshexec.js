@@ -40,7 +40,7 @@ module.exports = function(options) {
         con.on('error', function(err) {
             isConnected = false;
             con = null;
-            
+            console.log("ERROR EVENT FIRED");
             if (err.level === 'client-authentication') {
 
                 callback(err, INVALID_CREDENTIALS);
@@ -49,8 +49,6 @@ module.exports = function(options) {
             } else {
                 callback(err, UNKOWN_EXCEPTION);
             }
-
-
         });
 
         con.on('close', function(hadError) {
