@@ -1070,7 +1070,7 @@ function readform(formID) {
 
                 var tempJSON = JSON.parse(JSON.stringify(readMasterJson($(this).attr('sourcepath'))));
                 var curSelect = $(this);
-                //  alert(JSON.stringify(tempJSON));
+                 // alert(JSON.stringify(tempJSON));
                 var _rowid = 0;
                 /*$.each(tempJSON, function(i, item) {
                     _rowid = item['rowid'];
@@ -1156,22 +1156,66 @@ function readform(formID) {
                     var curCtrl = $(this);
                     $.each(eval($(this).attr('linkedfields')), function(i, item) {
                         var targetCtrl = $('#' + item);
+
                         targetCtrl.html('');
                         var opts = getRelatedValues(targetCtrl.attr('sourcepath'), curCtrl.attr("id"), $('#' + curCtrl.attr('id') + ' option:selected').text(), targetCtrl.attr("id"));
                         //alert(JSON.stringify(opts));
-                        $.each(eval(opts), function(j, itm) {
-                            var itmrowid = '';
-                            if (itm.indexOf('##') > 0) {
-                                var breakid = itm.split('##');
-                                itm = breakid[0];
-                                itmrowid = breakid[1];
-                            }
-                            if (targetCtrl.attr('multiselect'))
-                                addToSelectList(itm, itmrowid, targetCtrl);
-                            else
-                                targetCtrl.append('<option rowid="' + itmrowid + '" value="' + itm + '">' + itm + '</option>');
+                        if (formID === 7) {
+                            if (opts.length === 0) {
+                                $.ajax({
+                                    url: '/d4dMasters/readmasterjsonnew/21',
+                                    async: false,
+                                    success: function(data) {
+                                        var dataForAll = [];
+                                        for(var x =0;x<data.length;x++){
+                                            dataForAll.push(data[x].teamname+"##"+data[x].rowid);
+                                        }
+                                        $.each(eval(dataForAll), function(j, itm) {
+                                            var itmrowid = '';
+                                            if (itm.indexOf('##') > 0) {
+                                            var breakid = itm.split('##');
+                                            itm = breakid[0];
+                                            itmrowid = breakid[1];
+                                             }
+                                            if (targetCtrl.attr('multiselect'))
+                                                addToSelectList(itm, itmrowid, targetCtrl);
+                                            else
+                                                targetCtrl.append('<option rowid="' + itmrowid + '" value="' + itm + '">' + itm + '</option>');
 
-                        });
+                                        });
+                                    }
+                                });
+                            } else {
+
+                                $.each(eval(opts), function(j, itm) {
+                                    var itmrowid = '';
+                                    if (itm.indexOf('##') > 0) {
+                                        var breakid = itm.split('##');
+                                        itm = breakid[0];
+                                        itmrowid = breakid[1];
+                                    }
+                                    if (targetCtrl.attr('multiselect'))
+                                        addToSelectList(itm, itmrowid, targetCtrl);
+                                    else
+                                        targetCtrl.append('<option rowid="' + itmrowid + '" value="' + itm + '">' + itm + '</option>');
+
+                                });
+                            }
+                        } else {
+                            $.each(eval(opts), function(j, itm) {
+                                    var itmrowid = '';
+                                    if (itm.indexOf('##') > 0) {
+                                        var breakid = itm.split('##');
+                                        itm = breakid[0];
+                                        itmrowid = breakid[1];
+                                    }
+                                    if (targetCtrl.attr('multiselect'))
+                                        addToSelectList(itm, itmrowid, targetCtrl);
+                                    else
+                                        targetCtrl.append('<option rowid="' + itmrowid + '" value="' + itm + '">' + itm + '</option>');
+
+                                });
+                        }
                         //fix for select2 control - Vinod 
                         if (targetCtrl.attr('multiselect') == null)
                             targetCtrl.select2();
@@ -1216,43 +1260,42 @@ function readform(formID) {
 
         }
     });
-
+    //alert($('div[datatype="select"]').length);
     $('div[datatype="select"]').each(function() {
         //debugger;
+        //alert($(this).attr('linkedto'));
 
-        if ($(this).attr('linkedfields') || ($(this).attr('linkedfields') == null && $(this).attr('linkedto') == null)) {
-            if ($(this).attr('sourcepath') && $(this).attr('datapath')) {
-
+        if (formID === 7) {
+            if ($(this).attr('sourcepath') === "21" && $(this).attr('linkedto') === "orgname") {
                 var tempJSON = JSON.parse(JSON.stringify(readMasterJson($(this).attr('sourcepath'))));
-                //   debugger;
-                //alert(JSON.stringify(tempJSON));
                 var curInput = $(this);
-                //alert(JSON.stringify(readMasterJson($(this).attr('sourcepath'))));
-                //  alert('div select ' + curInput.attr("id")); curInput.attr('datapath')
                 $.each(tempJSON, function(i, item) {
-                    //     alert(item.field[0].values.value);
-                    // debugger;
-
-                    //  if (item.field[k].name == curInput.attr("id")) {
-                    // curSelect.append('<option value="' + item.field[k].values.value + '">' + item.field[k].values.value + '</option>');
-                    // alert("Added:" + item.field[i].values.value);
-                    //  alert(item.rowid);
-                    //  alert(JSON.stringify(item[curInput.attr('id')]));
-                    //alert(JSON.stringify(item));
-                    // if(item.orgname_rowid[0]){
-                    //     alert('Disablingb');
-                    //   addToSelectList(item[curInput.attr('id')], item.rowid, curInput,true);
-                    // } else {
-                    //   addToSelectList(item[curInput.attr('id')], item.rowid, curInput);
-                    // }
                     addToSelectList(item[curInput.attr('id')], item.rowid, curInput);
-                    //   }
-
                 });
+            } else {
+
+                if ($(this).attr('linkedfields') || ($(this).attr('linkedfields') == null && $(this).attr('linkedto') == null)) {
+                    if ($(this).attr('sourcepath') && $(this).attr('datapath')) {
+                        var tempJSON = JSON.parse(JSON.stringify(readMasterJson($(this).attr('sourcepath'))));
+                        var curInput = $(this);
+                        $.each(tempJSON, function(i, item) {
+                            addToSelectList(item[curInput.attr('id')], item.rowid, curInput);
+                        });
+                    }
+                }
+            }
+        } else {
+            if ($(this).attr('linkedfields') || ($(this).attr('linkedfields') == null && $(this).attr('linkedto') == null)) {
+                if ($(this).attr('sourcepath') && $(this).attr('datapath')) {
+                    var tempJSON = JSON.parse(JSON.stringify(readMasterJson($(this).attr('sourcepath'))));
+                    var curInput = $(this);
+                    $.each(tempJSON, function(i, item) {
+                        addToSelectList(item[curInput.attr('id')], item.rowid, curInput);
+                    });
+                }
             }
         }
     });
-
     // End Prefilling dropdowns
     var formSchema = null;
     var rowid = url.substr(url.indexOf("?") + 1);
@@ -1896,7 +1939,10 @@ function saveform(formID, operationTypes) {
     var fileNames = '';
     var orgName = $('#orgname').val().trim();
     var orgnamecheck = true;
-    if (orgName === '') {
+
+    // Not allowing team assignment for superadmin
+
+    /*if (orgName === '') {
         //console.log("++++++++++::::::::::: "+$('#teamname').val());
         $('#teamname').find("input").each(function() {
 
@@ -1946,8 +1992,9 @@ function saveform(formID, operationTypes) {
 
             }
         }
-    }
+    }*/
 
+// End of Not allowing team assignment for superadmin
 
     var button = $("form[id*='myForm']").find("div.pull-right > button");
 
