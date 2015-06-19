@@ -13,7 +13,7 @@ Resource           ${COMMON RESOURCES}/catalyst_grid_node.txt
 Catalyst new Gallery Template setup
     [Tags]       Sanity               Smoke
 #    Catalyst Login
-    Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
     Test Validation of New Template Type
     Catalyst User New Design Template Type
     Test Validation of Creation of New Templates
@@ -25,7 +25,7 @@ Catalyst new Gallery Template setup
 Catalyst new Gallery Service Command setup
     [Tags]       Sanity               Smoke
 #    Catalyst Login
-    Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
     Test Validation of Creation of New Services
     Catalyst User Service Command Services
     Catalyst Logout                      
