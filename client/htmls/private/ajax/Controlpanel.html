@@ -1107,7 +1107,10 @@ function populateJsonData(instanceId) {
             var installedSoftwareArray = installedSoftwareString.split('\r\n');
             var temp = '';
             for (var i = 0; i < installedSoftwareArray.length; i++) {
-                temp = temp + '<p><i class="fa fa-chevron-right txt-color-blue"></i>&nbsp;' + installedSoftwareArray[i] + '</p>';
+              installedSoftwareArray[i] = installedSoftwareArray[i].trim();
+               if(installedSoftwareArray[i]) {
+                   temp = temp + '<p><i class="fa fa-chevron-right txt-color-blue"></i>&nbsp;' + installedSoftwareArray[i] + '</p>';
+               }
             }
             $('.loadingContainerimageInspectCSS').hide();
             $('.paraHeightModal').show();

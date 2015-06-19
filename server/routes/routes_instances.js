@@ -33,7 +33,7 @@ var appConfig = require('../config/app_config.js');
 var Cryptography = require('../lib/utils/cryptography');
 
 var utils = require('../model/classes/utils/utils.js');
-
+//var WINRM = require('../lib/utils/winrmexec');
 
 module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
@@ -1765,6 +1765,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                             });
 
                         } else {
+
+
                             var chef = new Chef({
                                 userChefRepoLocation: chefDetails.chefRepoLocation,
                                 chefUserName: chefDetails.loginname,
@@ -1785,15 +1787,24 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                             }
                             var installedSoftwareString = '';
                             chef.runKnifeWinrmCmd('Get-WmiObject -Class Win32_Product | Select-Object -Property Name', chefClientOptions, function(err, retCode) {
-                                
+
                                 if (err) {
                                     res.send(500, {
                                         "message": "Unable to winrm"
                                     });
                                     return;
                                 }
-                                logger.debug("Winrm finished with retcode ==> "+retCode );
+                                logger.debug("Winrm finished with retcode ==> " + retCode);
                                 if (retCode == 0) {
+                                    installedSoftwareString = installedSoftwareString.replace(new RegExp(anInstance[0].instanceIP, 'g'), '');
+                                    //removing first two lines of junk
+                                    var stringParts = installedSoftwareString.split('\n');
+                                    if (stringParts.length > 4) { // must be greater than 3
+                                        stringParts = stringParts.slice(4);
+                                        installedSoftwareString = stringParts.join('\r\n');
+                                    } else { //returning empty string
+                                        installedSoftwareString = '';
+                                    }
                                     res.send(200, {
                                         installedSoftwareString: installedSoftwareString
                                     });
@@ -1819,13 +1830,11 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                     return;
                                 }
                             }, function(stdOut) {
-                                installedSoftwareString = installedSoftwareString + stdOut.toString('UTF-8'); 
-                                logger.debug("out ==> "+stdOut.toString('ascii'));
-                           
-                            }, function(stdErr) {
-                                logger.debug("err ==> "+stdErr.toString('ascii'));
-                            });
+                                installedSoftwareString = installedSoftwareString + stdOut.toString('UTF-8');
 
+                            }, function(stdErr) {
+                                logger.debug("err ==> " + stdErr.toString('ascii'));
+                            });
 
                         }
                     });
