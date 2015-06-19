@@ -14,7 +14,7 @@ Resource           ${CATALYST TEST DATA}/${TESTDATA}
 Resource           ${CATALYST ACTION}/Organization_Setup_Action_Steps.txt
 Resource           ${CATALYST ACTION}/DevOps_Setup_Action_Steps.txt
 Resource           ${CATALYST ACTION}/Gallery_setup_TempService_Steps.txt
-Resource           ${CATALYST ACTION}/Users_Setup_With_New_Users.txt
+Resource           ${CATALYST ACTION}/Users_Setup_With_New_Users_and_Teams.txt
 Resource           ${CATALYST ACTION}/New_Environment_Creation.txt
 
 

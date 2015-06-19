@@ -218,7 +218,7 @@ Enters the UserName of WindowsProviders
     Input Text    id=UserName    administrator
 
 Catalyst Choose Template and Launch Setup
-    Clicks on Settings
+    #Clicks on Settings
     Clicks on Design
     Sleep    30s
     Choose the Template Type Created
@@ -243,7 +243,7 @@ Catalyst Choose Template and Launch Setup
     Enters The Blueprint Name
     Chooses The Business Group
     Chooses The Project
-    Chooses The Environment
+    #Chooses The Environment
     Clicks on Configure Application URL
     Clicks on AppNew Button
     Enters the Application URL Name
@@ -269,22 +269,39 @@ Catlayst Workzone and Status Setup
     Verfiy the SSH is Disabled
     Verfiy the STOP Button is Disabled
     Verfiy the More Info Button is Dispalyed
+    
 
 
-Catalyst Check INFORMATION Status
+
+
+
+
+    #Clicks on Edit Button of the CentosInstance Imported
+    #Enters the New Instance Name for Centos
+    #Clicks on Save Button of Edddited Instance
+    #Sleep    3s
+
+
+
+
+
+
+
+
+#-Catalyst Check INFORMATION Status
     Clicks on Workzone Button
-    Clicks on User Created Organization
-    Clicks on User Created BusinessGroup
-    Clicks on > Button to your Environment
+    #-Clicks on User Created Organization
+    #-Clicks on User Created BusinessGroup
+    #-Clicks on > Button to your Environment
     #-Clicks on your Blueeeprint
-    Clicks on Contreol Panel
-    Check Machine Status
-    Check the Total MeMory
-    Check the Free Memory
-    Check the OS
-    Check the Version
-    Check the Chef BootStrap
-    Clicks on Back To Instances
+    #-Clicks on Contreol Panel
+    #-Check Machine Status
+    #-Check the Total MeMory
+    #-Check the Free Memory
+    #-Check the OS
+    #-Check the Version
+    #-Check the Chef BootStrap
+    #-Clicks on Back To Instances
 
 
 
@@ -305,8 +322,12 @@ Catalyst Work SSH CHEFCLIENT STOP Setup after LAUNCH
     Checking THe BootStrpa Status
     Clicks on Back To Instances
     Steps To Run Chef Client
-    Steps to Run SSH
+    #Steps to Run SSH
     Steps to Run Stopping the Instance
+    Clicks on Edit Button of the CentosInstance Imported
+    Enters the New Instance Name for Centos
+    Clicks on Save Button of Edddited Instance
+    Sleep    3s
 
 
 
@@ -467,10 +488,20 @@ Catalyst Grid View Start ,Stop ,SSH ,Chef ,Client ,Log Setup
     Close the SSH Terminal
     Clicks on View Instancess Button
 
+Clicks on Edit Button of the CentosInstance Imported
+    Sleep    2s
+    Click Element    xpath=//div[@class='domain-roles-heading'][//span[text()='${BLUEPRINT NAME}']]/a
+
+Enters the New Instance Name for Centos
+    Input Text    id=instanceEditName    ${NEW BLUEPRINT NAME}
+
+Clicks on Save Button of Edddited Instance
+    Click Element    id=editSaveBTN
+
 
 Choose the Template Type Created
     Sleep    2s
-    Click Element    xpath=//div[@data-templatetype='App FactoryT']
+    Click Element    xpath=//div[@data-templatetype='AppFactory']
 
 
 
@@ -722,10 +753,10 @@ Verfiy the Ubuntu Stopped SSH is Disabled after Updation
     Wait Until Keyword Succeeds    1 minute     1 seconds    Element Should Be Visible    xpath=.//*[@id='controlPanelContainer']/div/div/ul/li[contains(.,"UbuntuApac")]/div/div/div/div/div/div[4]/div[4]/a[@class='cpTop isStopedInstance sshIcondisable']
 
 Checking THe BootStrpa Status
-    ${BOOTSTAT1}=    Get Element Attribute   xpath=//*[@id='tableactionHistory']/tbody/tr/td[2]/img@data-original-title
-    Log    ${BOOTSTAT1}
-    Should Be Equal    ${ACTBOOT1}     ${BOOTSTAT1}           #Pending
-    Sleep    5 minutes
+    #${BOOTSTAT1}=    Get Element Attribute   xpath=//*[@id='tableactionHistory']/tbody/tr/td[2]/img@title
+    #Log    ${BOOTSTAT1}
+    #Should Be Equal    ${ACTBOOT1}     ${BOOTSTAT1}           #Pending
+    Sleep    4 minutes
     ${BOOTSTAT2}=    Get Element Attribute   xpath=//*[@id='tableactionHistory']/tbody/tr/td[2]/img@title
     Log    ${BOOTSTAT2}
     Should Be Equal    ${ACTBOOT2}     ${BOOTSTAT2}           #Success
@@ -780,7 +811,7 @@ Clicks on SUBMIT Button
 
 
 Checking the BChefClient Run Status
-    #${CHEFRUN}=    Get Element Attribute    xpath=.//*[@id='tableactionHistory']/tbody/tr[2]/td[2]/img@title
+    #${CHEFRUN}=    Get Element Attribute    xpath=.//*[@id='tableactionHistory']/tbody/tr[2]/td[2]/img@data-original-title
     #Log    ${CHEFRUN}
     #Should Be Equal    ${CHEFRUN}     ${STATSYY}           
     Sleep    2 minutes
@@ -806,7 +837,7 @@ Verfiy the Table contains the Status
     
 
 Verfify the status of SSH Shell
-    Sleep    2s
+    Sleep    10s
     ${BOOTSTATUS}=    Get Element Attribute   xpath=//*[@id='tableactionHistory']/tbody/tr[3]/td[2]/img@data-original-title
     Log    ${BOOTSTATUS}
     Should Be Equal    ${ACTBOOT2}     ${BOOTSTATUS}           
@@ -966,7 +997,12 @@ Verify the Chef run icon and click on it
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[2]/div/div/div[1]/div/div/div[4]/div[1]/a
 
 Update the Run List with Cookbook
-    Wait Until Keyword Succeeds    1 minute     10 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[@value='recipe[cron]']
+    Sleep    2s
+    Click Element    xpath=.//*[@id='cookbooksrecipesselectedList']/option[text()='apache2']
+    Click Element    id=btnremoveFromRunlist
+    Click Element    xpath=.//*[@id='cookbooksrecipesselectedList']/option[text()='git']
+    Click Element    id=btnremoveFromRunlist
+    Wait Until Keyword Succeeds    1 minute     10 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[@value='recipe[a]']
     Wait Until Keyword Succeeds    1 minute     10 seconds      Click Element    id=btnaddToRunlist
 
 Clicks on Update Button of Runlist

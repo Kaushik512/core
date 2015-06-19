@@ -10,7 +10,7 @@ Resource           catalyst.txt
 
 *** Variables ***
 ${BROWSER TYPE}                   chrome              #firefox #http://54.149.39.160:3001                    #internetexplorer               #phantomjs
-${ENVIRONMENT SERVER}               http://52.11.153.131:3001/private/index.html
+${ENVIRONMENT SERVER}             http://d4d.relevancelab.com:3001/private/index.html
 #http://52.26.17.84:3001/private/index.html
 #http://d4d.relevancelab.com:3001/public/login.html 
 
@@ -90,6 +90,7 @@ ${OPERATING SYSTEM}        Cent OS
 ${INSTANCE SIZE}           t1.micro
 ${BLUEPRINT NAME}          ApacheNew
 ${BLUEPRINT NAME1}         UbuntuApac
+${NEW BLUEPRINT NAME}      ApacheNew-Edited
 ${APPNAME}                 CatalystCop                
 ${APP URL}                 http://www.google.com
 ${COOKBOOK NAME}            mongodb
@@ -120,7 +121,7 @@ ${MAT RUNLIST1}            recipe[a],recipe[cron]
 ${MAT OS1}                 ubuntu
 ${UBUNTU MEM}              1016256kB
 ${UBUNTU REC}              recipe[a],recipe[a],recipe[cron]
-${TEMPLATE TYPENAME}       App FactoryT
+${TEMPLATE TYPENAME}       AppFactory
 ${random}                  adarsh
 ${ADD}                     apache2              #tomcat-all
 ${ACTBOOT1}                 Pending
