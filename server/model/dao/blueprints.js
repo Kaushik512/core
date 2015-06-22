@@ -89,6 +89,14 @@ var BlueprintSchema = new Schema({
         required: true,
         trim: true
     },
+    dockercompose:[{
+        dockercontainerpathstitle:String,
+        dockercontainerpaths:String,
+        dockerrepotags: String,
+        dockerreponame: String,
+        dockerimagename: String,    
+        dockerlaunchparameters: String
+    }],
     dockercontainerpathstitle: {
         type: String,
         trim: true
@@ -362,6 +370,7 @@ var BlueprintsDao = function() {
             dockerreponame: blueprintData.dockerreponame,
             dockerimagename: blueprintData.dockerimagename,
             dockerlaunchparameters: blueprintData.dockerlaunchparameters,
+            dockercompose: blueprintData.dockercompose,
             templateComponents: blueprintData.templateComponents,
             chefServerId: blueprintData.chefServerId,
             instanceType: blueprintData.instanceType,

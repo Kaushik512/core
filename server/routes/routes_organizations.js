@@ -1494,8 +1494,10 @@ module.exports.setRoutes = function(app, sessionVerification) {
     });
 
     // For Docker Creation
-    app.post('/organizations/:orgId/businessgroups/:bgId/projects/:projectId/environments/:envId/blueprints/docker', function(req, res) {
-        logger.debug("Enter post() for /organizations/%s/businessgroups/%s/projects/%s/environments/%s/blueprints", req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId, req.params.providerId, req.params.imageId);
+    app.post('/organizations/:orgId/businessgroups/:bgId/projects/:projectId/environments/:envId',function(req,res){
+        logger.debug('test');
+    });
+    app.post('/organizations/:orgId/businessgroups/:bgId/projects/:projectId/blueprints/docker', function(req, res) {
         //validating if user has permission to save a blueprint
         logger.debug('Verifying User permission set');
         var user = req.session.user;

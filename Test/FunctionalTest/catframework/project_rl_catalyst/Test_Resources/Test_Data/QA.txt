@@ -10,9 +10,8 @@ Resource           catalyst.txt
 
 *** Variables ***
 ${BROWSER TYPE}                   chrome              #firefox #http://54.149.39.160:3001                    #internetexplorer               #phantomjs
-${ENVIRONMENT SERVER}             http://d4d.relevancelab.com:3001/private/index.html
-#http://52.26.17.84:3001/private/index.html
-#http://d4d.relevancelab.com:3001/public/login.html 
+${ENVIRONMENT SERVER}             http://52.27.46.167:3001/private/index.html
+ 
 
 ${ENV}                 QA.txt
 ${VALID USER}             superadmin
