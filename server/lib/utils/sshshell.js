@@ -86,7 +86,6 @@ function SSHShell(connectionParamsObj) {
         });
     });
     connection.on('error', function(err) {
-        console.log("ERRROR ==> EVENT FIRED");
         var errObj = null;
         if (err.level === 'client-authentication') {
             errObj = getErrorObj(err, INVALID_CREDENTIALS);
@@ -100,14 +99,14 @@ function SSHShell(connectionParamsObj) {
     });
 
     connection.on('close', function(hadError) {
-        console.log('Connection closed');
+      
         sshStream = null;
         connection = null;
         self.emit(EVENTS.CLOSE);
     });
 
     connection.on('end', function() {
-        console.log('Connection ended');
+        
         sshStream = null;
         connection = null;
         self.emit(EVENTS.END);
@@ -132,7 +131,7 @@ function SSHShell(connectionParamsObj) {
         }
     };
     this.close = function() {
-        console.log('Closing Connection');
+        
         if (connection) {
             connection.end();
         }
@@ -142,18 +141,30 @@ function SSHShell(connectionParamsObj) {
 util.inherits(SSHShell, EventEmitter);
 
 module.exports.open = function(options, callback) {
+    
     getConnectionParams(options, function(err, connectionParamsObj) {
+        
         if (err) {
             callback(err, null);
             return;
         }
         var shell = new SSHShell(connectionParamsObj);
+        var callbackFired = false;
         shell.on(EVENTS.ERROR, function(errObj) {
-            callback(errObj, null);
+            if (!callbackFired) {
+                callback(errObj, null);
+                callbackFired = true;
+            } else {
+                shell.emit(EVENTS.ERROR, errObj);
+                shell.close();
+            }
         });
 
         shell.on(EVENTS.READY, function() {
-            callback(null, shell);
-        })
+            if (!callbackFired) {
+                callback(null, shell);
+                callbackFired = true;
+            }
+        });
     });
 };

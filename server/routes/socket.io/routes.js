@@ -108,6 +108,44 @@ module.exports.setRoutes = function(socketIo) {
                         socket.emit('close');
                     });
 
+                    shell.on('error', function(err) {
+                        socket.shellInstance = null;
+                        if (err.errCode === -5000) {
+                            socket.emit('conErr', {
+                                message: "Host Unreachable",
+                                actionLogId: actionLog._id
+                            });
+                            logsDao.insertLog({
+                                referenceId: logReferenceIds,
+                                err: true,
+                                log: "Host Unreachable",
+                                timestamp: timestampEnded
+                            });
+                        } else if (err.errCode === -5001) {
+                            socket.emit('conErr', {
+                                message: "The username or password/pemfile you entered is incorrect",
+                                actionLogId: actionLog._id
+                            });
+                            logsDao.insertLog({
+                                referenceId: logReferenceIds,
+                                err: true,
+                                log: "The username or password/pemfile you entered is incorrect",
+                                timestamp: timestampEnded
+                            });
+                        } else {
+                            socket.emit('conErr', {
+                                message: "Something went wrong, error code = " + err.errCode,
+                                actionLogId: actionLog._id
+                            });
+                            logsDao.insertLog({
+                                referenceId: logReferenceIds,
+                                err: true,
+                                log: "Something went wrong, error code = " + err.errCode + ".",
+                                timestamp: timestampEnded
+                            });
+                        }
+                    });
+
                     socket.emit('opened', {
                         actionLogId: actionLog._id
                     });
