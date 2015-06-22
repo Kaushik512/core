@@ -1,6 +1,9 @@
 var winston = require('winston');
 var path = require('path');
 var mkdirp = require('mkdirp');
+var util = require('util');
+var events = require('events');
+
 
 // init log folder now ...Will create if one does not exist already
 var log_folder = path.normalize(__dirname+"/../logs");
@@ -15,6 +18,8 @@ var CatLogger = function(logger, calling_module){
     var exports = {};
     var methods = ["info", "debug", "warn", "error", "log"];
 
+    events.EventEmitter.call(this);
+    
     // We will modify the args we send to logger's log methods.
     // We want the file name as part of the logs !!
     function change_args(args){
@@ -36,6 +41,13 @@ var CatLogger = function(logger, calling_module){
 
     return exports;
 };
+
+util.inherits(CatLogger,events.EventEmitter);
+CatLogger.prototype.emitlog = function(data){
+    this.emit("log",data);
+}
+
+
 /**
  * This is the single logger used for logging application level logs
  */
