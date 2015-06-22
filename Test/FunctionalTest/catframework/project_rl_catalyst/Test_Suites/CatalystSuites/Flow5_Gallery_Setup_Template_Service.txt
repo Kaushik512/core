@@ -22,14 +22,14 @@ Catalyst new Gallery Template setup
     [Teardown]     Close Browser
 
 
-#-Catalyst new Gallery Service Command setup
-    #-[Tags]       Sanity               Smoke
+Catalyst new Gallery Service Command setup
+    [Tags]       Sanity               Smoke
 #    Catalyst Login
-    #-Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
-    #-Test Validation of Creation of New Services
-    #-Catalyst User Service Command Services
-    #-Catalyst Logout                      
-    #-[Teardown]     Close Browser
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Test Validation of Creation of New Services
+    Catalyst User Service Command Services
+    Catalyst Logout                      
+    [Teardown]     Close Browser
 
 
 

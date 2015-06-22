@@ -36,7 +36,7 @@ Catalyst new CENT OS DESIGN setup
     [Tags]       Sanity               Smoke
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
-    #-Catalyst Choose Template and Launch Setup 
+    Catalyst Choose Template and Launch Setup 
     Catlayst Workzone and Status Setup          
     Catalyst Logout                      
     [Teardown]     Close Browser

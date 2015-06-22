@@ -10,7 +10,7 @@ Resource           ${CATALYST ACTION}/Gallery_setup_TempService_Steps.txt
 
 
 *** Test Cases ***
-#Catalyst Import CentOS Node From Chef Server
+Catalyst Import CentOS Node From Chef Server
     [Tags]       Sanity       ps
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
@@ -20,7 +20,7 @@ Resource           ${CATALYST ACTION}/Gallery_setup_TempService_Steps.txt
     [Teardown]     Close Browser
     
 
-#Catalyst Chef Client Run on the Imported Node
+Catalyst Chef Client Run on the Imported Node
     [Tags]       Sanity       ps
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
@@ -30,7 +30,7 @@ Resource           ${CATALYST ACTION}/Gallery_setup_TempService_Steps.txt
     [Teardown]     Close Browser
 
 
-#Catalyst Check Chef Client Run on the Imported Node
+Catalyst Check Chef Client Run on the Imported Node
     [Tags]       Sanity       ps
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
@@ -39,7 +39,7 @@ Resource           ${CATALYST ACTION}/Gallery_setup_TempService_Steps.txt
     [Teardown]     Close Browser
 
 
-#Catalyst Edit the Instance Name of Inported Instance
+Catalyst Edit the Instance Name of Inported Instance
     [Tags]       Sanity       ps
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
@@ -48,7 +48,7 @@ Resource           ${CATALYST ACTION}/Gallery_setup_TempService_Steps.txt
     [Teardown]     Close Browser
 
 
-#Catalyst Verify the Instance Deleted from Chef Server
+Catalyst Verify the Instance Deleted from Chef Server
     [Tags]       Sanity       ps
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
@@ -57,22 +57,22 @@ Resource           ${CATALYST ACTION}/Gallery_setup_TempService_Steps.txt
     [Teardown]     Close Browser
 
 
-#Catalyst CentOS Instance Deleted only from Catalyst not from Chef Server
-    [Tags]       Sanity       ps
+#-Catalyst CentOS Instance Deleted only from Catalyst not from Chef Server
+    #-[Tags]       Sanity       ps
 #    Catalyst Login
-    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
-    Catalyst Delete the Node only From Catalyst
-    Catalyst Logout
-    [Teardown]     Close Browser     
+    #-Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    #-Catalyst Delete the Node only From Catalyst
+    #-Catalyst Logout
+    #-[Teardown]     Close Browser     
 
 
-Catalyst Importing Node From Chef Server
-    [Tags]       Sanity       ps
+#-Catalyst Importing Node From Chef Server
+    #-[Tags]       Sanity       ps
 #    Catalyst Login
-    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
-    Catlayst Importing the Instance Chef Sync
-    Catalyst Logout
-    [Teardown]     Close Browser     
+    #-Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    #-Catlayst Importing the Instance Chef Sync
+    #-Catalyst Logout
+    #-[Teardown]     Close Browser     
     
 
 

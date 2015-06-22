@@ -23,20 +23,20 @@ Catalyst new organization setup
 
 #-Catalyst login as OrgAdmin user     
     #-[Tags]       Sanity               Login
-    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
-    Catalyst Org Admin Verfifcation of New,Update,Delete Button disabled
-    Catalyst Logout
-    [Teardown]     Close Browser
+    #-Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    #-Catalyst Org Admin Verfifcation of New,Update,Delete Button disabled
+    #-Catalyst Logout
+    #-[Teardown]     Close Browser
 
 
 Catalyst Creation of Business Group,Projects setup
     [Tags]       Sanity               Smoke
 #    Catalyst Login
-    #Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
-    #-Create New Business Group 
-    #-Create New Projects                         
-    #-Catalyst Logout                      
-    #-[Teardown]     Close Browser
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Create New Business Group 
+    Create New Projects                         
+    Catalyst Logout                      
+    [Teardown]     Close Browser
 
 
 
