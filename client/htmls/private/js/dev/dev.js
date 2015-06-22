@@ -3785,6 +3785,7 @@
 
                                                                 var instid = $(this).closest('tr').attr('data-instanceid');
                                                                 var instbpname = $(this).closest('tr').attr('data-blueprintname');
+                                                                var amoreinfo =  $(this).closest('tr').find('.moreInfo');
                                                                 if (instid)
                                                                     var $that = $(this);
                                                                 var $td = $that.closest('td');
@@ -3797,6 +3798,8 @@
                                                                 // var repotag = $('.productdiv1.role-Selected1').find('.dockerrepotagselect').first().val();
 
                                                                 var repopath = $('.productdiv1.role-Selected1').first().attr('dockerreponame');
+                                                                if(amoreinfo)
+                                                                  amoreinfo.trigger('click');
 
                                                                 $.get('../instances/dockercompositeimagepull/' + instid + '/' + repopath + '/' + encodeURIComponent(compositedockerimage), function(data) {
                                                                     //alert(JSON.stringify(data));
