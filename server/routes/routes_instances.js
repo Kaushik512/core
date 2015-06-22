@@ -618,7 +618,294 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         });
 
     });
+    //Coposite Docker container launch 
+    app.get('/instances/dockercompositeimagepull/:instanceid/:dockerreponame/:dockercomposejson', function(req, res) {
+        var generateDockerLaunchParams  = function (runparams) {
+                     logger.debug('rcvd runparams --->',runparams);
+                     var launchparams = [];
+                     var preparams = '';
+                     var startparams = '';
+                     var execparam = '';
+                     var containername = '';
+                     var params = runparams.split(' -');
+                     for(var i = 0; i < params.length;i++){
+                      //  logger.debug('split runparams --->',params[i]);
+                         if (params[i] != '') {
+                             var itms = params[i].split(' ');
+                             if (itms.length > 0) {
+                                
+                                     if (itms[0] == 'c')
+                                         startparams += ' ' + itms[1];
+                                     if (itms[0] == 'exec')
+                                         execparam += ' ' + itms[1];
+                                     else
+                                        preparams += ' -' + params[i];
 
+                                    if (itms[0] == '-name')
+                                        {
+
+                                            containername = itms[1];
+                                        }
+                                
+                             }
+                             
+                         }
+                     }
+                     launchparams[0] = preparams;
+                     launchparams[1] = startparams;
+                     // alert(execparam);
+                     launchparams[2] = execparam;
+                     launchparams[3] = containername;
+                    //alert(launchparams);
+                  //  logger.debug('launchparams:' + launchparams.join('&&'));
+                     return (launchparams);
+        }
+
+        //:dockerreponame/:imagename/:tagname/:runparams/:startparams
+        logger.debug("Enter get() for /instances/dockercompositeimagepull");
+        var instanceid = req.params.instanceid;
+        var dockercompose = decodeURIComponent(req.params.dockercomposejson);
+        var dockercomposejson = JSON.parse(dockercompose);
+        logger.debug('DockerCompose Json rcvd: ', JSON.stringify(dockercomposejson));
+        instancesDao.getInstanceById(req.params.instanceid, function(err, data) {
+            if (err) {
+                logger.error("Instance fetch Failed >> ", err);
+                res.send(500);
+                return;
+            }
+            logger.debug(data.length + ' ' + JSON.stringify(data));
+            if (data.length) {
+                logger.debug(' Docker dockerEngineStatus : ' + data[0].docker.dockerEngineStatus);
+                if (data[0].docker.dockerEngineStatus) {
+                    if (data[0].docker.dockerEngineStatus != "success") {
+                        res.end('No Docker Found');
+                        return;
+                    }
+                } else {
+                    res.end('No Docker Found');
+                    return;
+                }
+                configmgmtDao.getMasterRow(18, 'dockerreponame', req.params.dockerreponame, function(err, data) {
+                    if (!err) {
+
+                        //  var dockerRepo = JSON.parse(data);
+                        logger.debug('Docker Repo ->', JSON.stringify(data));
+                        var dock = JSON.parse(data);
+                        // var dockkeys = Object.keys(data);
+                        logger.debug('username:', dock.dockeruserid);
+
+                        var _docker = new Docker();
+                        var stdmessages = '';
+                        var imagecount = 0; //to count the no of images started.
+                        var pullandrundocker = function(imagename,tagname,runparams,startparams,execcommand,containername,callback){
+                                    imagecount++;
+                                    var cmd = "sudo docker login -e " + dock.dockeremailid + ' -u ' + dock.dockeruserid + ' -p ' + dock.dockerpassword;
+
+                                    //cmd += ' && sudo docker pull ' + dock.dockeruserid  + '/' + decodeURIComponent(req.params.imagename);
+                                    //removing docker userID
+                                    cmd += ' && sudo docker pull ' + decodeURIComponent(imagename);
+                                    logger.debug('Intermediate cmd: ', cmd);
+                                    if (tagname != null) {
+                                        cmd += ':' + tagname;
+                                    }
+                                   
+                                    if (runparams != 'null') {
+                                        runparams = decodeURIComponent(runparams);
+                                    }
+                                    
+                                    if (startparams != 'null') {
+                                        startparams = decodeURIComponent(startparams);
+                                    } else
+                                        startparams = '/bin/bash';
+
+                                    cmd += ' && sudo docker run -i -t -d ' + runparams + ' ' + decodeURIComponent(imagename) + ':' + tagname + ' ' + startparams;
+                                    logger.debug('Docker command to be executed : ', cmd);
+                                    if(imagecount == 1){
+                                        //this would be the first image that would be run. Returning handle to browser.
+                                        logger.debug('Returning handle to browser');
+                                        res.end('OK');
+                                    }
+                                    //callback('done');
+                                    _docker.runDockerCommands(cmd, req.params.instanceid,
+                                        function(err, retCode) {
+                                            if (err) {
+                                                logsDao.insertLog({
+                                                    referenceId: instanceid,
+                                                    err: true,
+                                                    log: 'Failed to Excute Docker command: . cmd : ' + cmd + '. Error: ' + err,
+                                                    timestamp: new Date().getTime()
+                                                });
+                                                logger.error("Failed to Excute Docker command: ", err);
+                                                res.send(err);
+                                                return;
+                                            }
+
+                                            logger.debug("docker return ", retCode);
+                                            if (retCode == 0)
+                                            //if retCode == 0 //update docker status into instacne
+                                            {
+                                                logger.debug('Execcommand : --------------' + execcommand + ' ' + (execcommand != ''));
+                                                if(execcommand != '' && execcommand != 'null'){
+                                                    logger.debug('In Execute command');
+                                                    logsDao.insertLog({
+                                                    referenceId: instanceid,
+                                                    err: false,
+                                                    log: 'Starting execute command: . cmd : ' + execcommand + ' on ' + containername,
+                                                    timestamp: new Date().getTime()
+                                                    });
+                                                    //Execute command found 
+                                                    var cmd = "sudo docker exec " + containername + ' bash ' + execcommand;
+                                                    logger.debug('In docker exec ->' + cmd);
+                                                    req.params.containerid = containername;
+                                                    _docker.runDockerCommands(cmd,req.params.instanceid,function(err,retCode1){
+                                                        if(retCode1 == 0){
+                                                                
+                                                                logger.debug('runDockerCommand : in done');
+                                                                instancesDao.updateInstanceDockerStatus(instanceid, "success", '', function(data) {
+                                                                    logger.debug('Instance Docker Status set to Success');
+                                                                   // res.send(200);
+                                                                   //callback('done');
+                                                                   logsDao.insertLog({
+                                                                        referenceId: instanceid,
+                                                                        err: false,
+                                                                        log: 'Done execute command: . cmd : ' + cmd + ' on ' + containername,
+                                                                        timestamp: new Date().getTime()
+                                                                        });
+                                                                   if(imagecount < dockercomposejson.length){
+
+                                                                        var lp = generateDockerLaunchParams(dockercomposejson[imagecount]['dockerlaunchparameters']);
+                                                                        var startparams = 'null';
+                                                                        var execcommand = 'null';
+                                                                        if(lp.length > 0)
+                                                                        {
+                                                                            if(lp[1]){
+                                                                                startparams = lp[1];
+                                                                            }
+                                                                            if(lp[2]){
+                                                                                execcommand = lp[2];
+                                                                            }
+                                                                        }
+                                                                        logger.debug('Running pullandrun count:',imagecount);
+                                                                        pullandrundocker(dockercomposejson[imagecount]['dockercontainerpaths'],dockercomposejson[imagecount]['dockerrepotags'],lp[0],startparams,execcommand,lp[3]);
+                                                                   }
+                                                                });
+                                                            }
+                                                            else{
+                                                                logsDao.insertLog({
+                                                                referenceId: instanceid,
+                                                                err: true,
+                                                                log: 'Error executing command: . cmd : ' + cmd + ' on ' + containername + ' : Return Code ' + retCode1 + ' -' + err,
+                                                                timestamp: new Date().getTime()
+                                                                });
+                                                            }
+
+                                                    });
+                                                   // logger('runout :' + runout);
+                                                    
+                                                }
+                                                else //no exec commands found
+                                                {
+                                                    instancesDao.updateInstanceDockerStatus(instanceid, "success", '', function(data) {
+                                                        logger.debug('Instance Docker Status set to Success');
+                                                       // res.send(200);
+                                                       //callback('done');
+                                                       logsDao.insertLog({
+                                                            referenceId: instanceid,
+                                                            err: false,
+                                                            log: 'Done executing command: . cmd : ' + cmd,
+                                                            timestamp: new Date().getTime()
+                                                            });
+                                                       if(imagecount < dockercomposejson.length){
+                                                            
+                                                            var lp = generateDockerLaunchParams(dockercomposejson[imagecount]['dockerlaunchparameters']);
+                                                            logger.debug('lp returned from generate=======> ', lp.join(' &&'));
+                                                            var startparams = 'null';
+                                                            var execcommand = 'null';
+                                                            if(lp.length > 0)
+                                                            {
+                                                                if(lp[1]){
+                                                                    startparams = lp[1];
+                                                                }
+                                                                if(lp[2]){
+                                                                    execcommand = lp[2];
+                                                                }
+                                                            }
+                                                            logger.debug('Running pullandrun count:',imagecount);
+                                                            pullandrundocker(dockercomposejson[imagecount]['dockercontainerpaths'],dockercomposejson[imagecount]['dockerrepotags'],lp[0],startparams,execcommand,lp[3]);
+                                                       }
+                                                    });
+                                                }
+                                                //Running any execute command.
+                                            } else {
+                                                logger.debug('Failed running docker command ....');
+                                                res.end('Image pull failed check instance log for details');
+                                            }
+                                            logger.debug("Exit get() for /instances/dockerimagepull");
+
+                                        },
+                                        function(stdOutData) {
+                                            if (!stdOutData) {
+
+                                                logger.debug("SSH Stdout :" + stdOutData.toString('ascii'));
+                                                stdmessages += stdOutData.toString('ascii');
+                                            } else {
+                                                logsDao.insertLog({
+                                                    referenceId: instanceid,
+                                                    err: false,
+                                                    log: stdOutData.toString('ascii'),
+                                                    timestamp: new Date().getTime()
+                                                });
+                                                logger.debug("Docker run stdout :" + instanceid + stdOutData.toString('ascii'));
+                                                stdmessages += stdOutData.toString('ascii');
+                                            }
+                                        }, function(stdOutErr) {
+                                            logsDao.insertLog({
+                                                referenceId: instanceid,
+                                                err: true,
+                                                log: stdOutErr.toString('ascii'),
+                                                timestamp: new Date().getTime()
+                                            });
+                                            console.log("docker return ", stdOutErr);
+                                            //res.send(stdOutErr);
+
+                                        });
+                        };
+                        
+                        if(dockercomposejson.length > 0){
+                            var lp = generateDockerLaunchParams(dockercomposejson[0]['dockerlaunchparameters']);
+                           
+                            var startparams = 'null';
+                            var execcommand = 'null';
+                            if(lp.length > 0)
+                            {
+                                if(lp[1]){
+                                    startparams = lp[1];
+                                }
+                                if(lp[2]){
+                                    execcommand = lp[2];
+                                }
+                            }
+                             logger.debug('lp---->',lp[0]);
+                            pullandrundocker(dockercomposejson[0]['dockercontainerpaths'],dockercomposejson[0]['dockerrepotags'],lp[0],startparams,execcommand,lp[3]);
+                        }
+                        else{
+                            res.send('200 ' + 'No Images to pull');
+                        }
+                        
+                        
+                        
+
+
+                    } //!(err)
+                });
+            } else {
+                logger.debug('No Instance found with id : ' + instanceid);
+                res.send(500);
+                return;
+            }
+        });
+
+    });
     app.post('/instances/:instanceId/updateRunlist', function(req, res) {
         logger.debug("InstanceID>>>>>>>>>>> ", req.params.instanceId);
         if (req.session.user.rolename === 'Consumer') {

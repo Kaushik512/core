@@ -1861,6 +1861,7 @@
                                                      bindClick_LaunchBtn();
                                                      bindClick_bluePrintUpdate();
                                                      bindClick_updateInstanceRunList();
+                                                     bindClick_dockercontainertablerefreshbutton();
                                                  }
 
                                                  //setting the breadcrumb when the user clicks on the blueprint tab
@@ -2033,25 +2034,37 @@
                                                                      if (data[i].templateType == "Docker") {
                                                                          console.log("data[i}" + JSON.stringify(data[i]));
                                                                          //$selectVer = $('<select style="padding:1px;"></select>').addClass('blueprintVersionDropDown').attr('data-blueprintId', data[i]._id);
+                                                                         $img.attr('src','img/galleryIcons/Docker.png');
                                                                          $selectVer = $('<select style="padding:1px;margin-right:5px;"></select>').addClass('dockerrepotagselect').attr('data-blueprintId', data[i]._id);
                                                                          $itemBody.attr('dockerreponame', data[i].dockerreponame);
                                                                          $itemBody.attr('dockerrepotags', data[i].dockerrepotags);
                                                                          $itemBody.attr('dockercontainerpaths', data[i].dockercontainerpaths);
+                                                                         $itemBody.attr('dockercompose', JSON.stringify(data[i].dockercompose));
 
                                                                          if (data[i].dockerlaunchparameters)
                                                                              $itemBody.attr('dockerlaunchparameters', 't ' + data[i].dockerlaunchparameters);
-                                                                         var $liDockerRepoName = $('<li title="Docker Repo Name" ><i class="fa fa-check-square" style="padding-right:5px"/>' + data[i].dockerreponame + '</li>');
-                                                                         $ul.append($liDockerRepoName);
-                                                                         if (data[i].dockerrepotags && data[i].dockerrepotags != '') {
-                                                                             $selectVer.empty();
-                                                                             var dockerrepostags = data[i].dockerrepotags.split(',');
-                                                                             $.each(dockerrepostags, function(k) {
-                                                                                 $selectVer.append('<option value="' + dockerrepostags[k] + '">' + dockerrepostags[k] + '</option>');
-                                                                             });
-                                                                         }
+
+                                                                         data[i].dockercompose.forEach(function(k, v) {
+                                                                            var $liDockerRepoName = $('<li title="Docker Repo Name" class="dockerimagetext" style="text-align:left;margin-left:15px" ><i class="fa fa-check-square" style="padding-right:5px"/>' + data[i].dockercompose[v]["dockercontainerpathstitle"] + '</li>');
+                                                                            $ul.append($liDockerRepoName);
+                                                                        });
+                                                                         //Commented below to accomodate docker compose
+                                                                        // var $liDockerRepoName = $('<li title="Docker Repo Name" ><i class="fa fa-check-square" style="padding-right:5px"/>' + data[i].dockerreponame + '</li>');
+                                                                         //$ul.append($liDockerRepoName);
+                                                                         //commented to handle compose.
+                                                                         // if (data[i].dockerrepotags && data[i].dockerrepotags != '') {
+                                                                         //     $selectVer.empty();
+                                                                         //     var dockerrepostags = data[i].dockerrepotags.split(',');
+                                                                         //     $.each(dockerrepostags, function(k) {
+                                                                         //         $selectVer.append('<option value="' + dockerrepostags[k] + '">' + dockerrepostags[k] + '</option>');
+                                                                         //     });
+                                                                         // }
+                                                                         $selectVer.hide();
 
                                                                          $selectVerEdit.hide();
-                                                                         tagLabel = '<span>Tags&nbsp;</span';
+                                                                         //Commented below to accomodate docker compose
+                                                                        // tagLabel = '<span>Tags&nbsp;</span';
+                                                                         tagLabel = '';
                                                                          //alert(JSON.stringify(data[i]));
                                                                      } else {
                                                                          $selectVer = $('<select style="padding:1px;padding-left:5px;"></select>').addClass('blueprintVersionDropDown').attr('data-blueprintId', data[i]._id);
@@ -2175,10 +2188,125 @@
                     alert('Please select a blueprint to remove.');
                 }
             }*/
-
+                                                function addDockerTemplateToTable(title, repopath, tagname, reponame, launchparam) {
+                                                    var $cdt = $('#compositedockertable');
+                                                    var uniqueid = (Math.floor(Math.random() * 9000) + 1000) + '-' + (Math.floor(Math.random() * 9000) + 1000); //$.now();
+                                                    var $dockertemplaterow = '<tr class="dockerimagesrow"><td >' + $cdt.find('tr').length + '</td><td paramtype="dockercontainerpathstitle">' + title + '</td><td  paramtype="dockercontainerpaths">' + repopath + '</td><td paramtype="dockerrepotags">' + tagname + '</td><td><input type="text" paramtype="dockerlaunchparameters" id="launchparam' + uniqueid + '" class="" value="' + launchparam + '"><a uniqueid="' + uniqueid + '"  class="lnktolaunchparam" href="javascript:void(0);"><i class="icon-append fa fa-list-alt fa-lg" title="Launch Parameters"></i></a><input type="hidden" paramtype="dockerreponame" id="dockerreponame' + uniqueid + '" class="" value="' + reponame + '"></td><td ><a class="dockerimageselectorup" id="dockerimageselectorup' + uniqueid + '" uniqueid="' + uniqueid + '"  href="javascript:void(0);"><i class="fa fa-chevron-circle-up fa-lg"></i></a><a class="dockerimageselectordown" id="dockerimageselectordown' + uniqueid + '" uniqueid="' + uniqueid + '" href="javascript:void(0);" style="padding-left:5px;"><i class="fa fa-chevron-circle-down fa-lg"></i></a><button class="btn btn-xs btn-danger pull-right hidden" value="Remove" title="Remove" id="dockerimageremove' + uniqueid + '" onClick="javascript:removeimage(\'dockerimageremove\',' + uniqueid + ');"><i class="ace-icon fa fa-trash-o fa-lg"></i></button></td></tr>';
+                                                    // var $dockertemplaterow = '<tr class="dockerimagesrow"><td  paramtype="order">' + $cdt.find('tr').length + '</td><td paramtype="repotitle">' + title + '</td><td  paramtype="repopath">' + repopath + '</td><td paramtype="repotag">' + tagname + '</td><td  paramtype="launchparams"><a onclick="loadLaunchParams(\'launchparamlink' + $cdt.find('tr').length  + '\');" href="javascript:void(0);"><input type="text" id="launchparam' +  + '" class="hidden"><i class="icon-append fa fa-list-alt fa-lg" title="Launch Parameters"></i></a></td><td  paramtype="move"><a class="dockerimageselectorup" id="dockerimageselectorup' + $cdt.find('tr').length + '"  href="javascript:movetablerow(\'dockerimageselectorup\',' + $cdt.find('tr').length + ');"><i class="fa fa-chevron-circle-up fa-lg"></i></a><a class="dockerimageselectordown" id="dockerimageselectordown' + $cdt.find('tr').length + '" href="javascript:movetablerow(\'dockerimageselectordown\',' + $cdt.find('tr').length + ');" style="padding-left:5px;"><i class="fa fa-chevron-circle-down fa-lg"></i></a><button class="btn btn-xs btn-danger pull-right" value="Remove" title="Remove" id="dockerimageremove' + $cdt.find('tr').length  + '" onClick="javascript:removeimage(\'dockerimageremove\',' + $cdt.find('tr').length + ');"><i class="ace-icon fa fa-trash-o fa-lg"></i></button></td></tr>';
+                                                    $cdt.append($dockertemplaterow);
+                                                }
+                                                function bindClick_dockercontainertablerefreshbutton(){
+                                                  $('#dockercontainertablerefreshbutton').click(function(){
+                                                    $('#dockercontainertablerefreshspinner').addClass('fa-spin');
+                                                    loadContainersTable();
+                                                    
+                                                  });
+                                                }
                                                  //Launching Blueprints when the user clicks on the launch button in blueprints tab
                                                  function bindClick_LaunchBtn() {
+                                                    //Docker compose handling
+                                                   function generateDockerLaunchParams(){
+                                                        var launchparams = [];
+                                                        var preparams = '';
+                                                        var startparams = '';
+                                                        var execparam = '';
+                                                        $('[dockerparamkey]').each(function() {
+                                                            if ($(this).val() != '') {
+                                                                var itms = $(this).val().split(',');
+                                                                for (itm in itms) {
+                                                                    if ($(this).attr('dockerparamkey') != '-c' && $(this).attr('dockerparamkey') != '-exec') //checking for start parameter
+                                                                        preparams += ' ' + $(this).attr('dockerparamkey') + ' ' + itms[itm];
+                                                                    else {
+                                                                        if ($(this).attr('dockerparamkey') == '-c')
+                                                                            startparams += ' ' + itms[itm];
+                                                                        if ($(this).attr('dockerparamkey') == '-exec')
+                                                                            execparam += ' ' + itms[itm];
 
+
+                                                                    }
+                                                                }
+                                                                launchparams[0] = preparams;
+                                                                launchparams[1] = startparams;
+                                                                // alert(execparam);
+                                                                launchparams[2] = execparam;
+                                                            }
+                                                    });
+                                                    return (launchparams);
+                                                    }
+
+                                                    function renumberDockerImageTable() {
+                                                        var $cdt = $('#compositedockertable').find('tr').each(function(i) {
+                                                            $(this).find('td').first().html(i);
+                                                        });
+
+                                                    }
+
+                                                    function movetablerow(what, index) {
+                                                        //alert('hit');
+                                                        var $lnk = $('#' + what + index);
+                                                        // var $row = $lnk.parent().parent().parent(); //current row
+                                                        // if (what === "dockerimageselectorup") {
+                                                        //     $row.insertBefore($row.prev());
+                                                        // } else if (what === "dockerimageselectordown") {
+                                                        //     $row.insertAfter($row.next());
+                                                        // } 
+                                                        var row = $lnk.closest('.dockerimagesrow');
+                                                        if (what === "dockerimageselectorup") {
+                                                            var prev = row.prev();
+                                                            if (prev.is('tr.dockerimagesrow')) {
+                                                                row.detach();
+                                                                prev.before(row);
+                                                                row.fadeOut();
+                                                                row.fadeIn();
+                                                            }
+                                                        } else {
+                                                            var next = row.next();
+                                                            if (next.is('tr.dockerimagesrow')) {
+                                                                row.detach();
+                                                                next.after(row);
+                                                                row.fadeOut();
+                                                                row.fadeIn();
+                                                            }
+                                                        }
+                                                        renumberDockerImageTable();
+                                                    }
+
+                                                    function loadLaunchParams(lpinput) {
+                                                        // var lparam = $('.productdiv1.role-Selected1').first().attr('dockerlaunchparameters');
+                                                        var lparam = $('#' + lpinput).val();
+                                                        //alert(lpinput);
+                                                        if (lparam && lparam != '') {
+                                                            $('[dockerparamkey]').val(''); //clearing the popup input boxes
+                                                            //split by -c to get startup and other parameters
+                                                            var preparams = lparam.split('-c');
+                                                            var cparams = ''; //this is the startup parameters
+                                                            if (preparams.length > 1) {
+                                                                lparam = preparams[0];
+                                                                cparams = preparams[1];
+                                                            }
+                                                            lparam = lparam.replace(/  /g, " ");
+                                                            console.log(lparam + ' ' + cparams);
+                                                            var params = lparam.split(' -');
+                                                            for (para in params) {
+
+                                                                var subparam = params[para].split(' ');
+                                                                // alert(subparam.join());
+                                                                if (subparam.length > 0) {
+                                                                    $inp = $('[dockerparamkey="-' + subparam[0] + '"]').first();
+                                                                    // alert(subparam[0]);
+                                                                    if ($inp.val() != '')
+                                                                        $inp.val($inp.val() + ',' + subparam[1]);
+                                                                    else
+                                                                        $inp.val(subparam[1]);
+                                                                }
+                                                                //alert(params[para]);
+                                                            }
+                                                            //Updating the startup parameter
+                                                            $('[dockerparamkey="-c"]').first().val(cparams);
+                                                        } else
+                                                            $('[dockerparamkey]').val('');
+                                                        $('#myModalLabelDockerContainer').attr('saveto', lpinput).css('z-index', '9999').modal('show');
+                                                    };
                                                      $('.launchBtn').click(function(e) {
                                                          $('#commentForm')[0].reset();
                                                          $('#Removeonexitfield').change();
@@ -2196,75 +2324,114 @@
                                                              return;
                                                          }
                                                          if ($selectedItems.attr('data-templateType') === 'Docker') {
-                                                             var cardCount = $('.instancesList').find('.componentlistContainer:not(.stopped)').length;
+                                                              $('.oldlaunchparams').empty(); //clearing the old div for composite blue print.
+                                                            // alert('in test');
+                                                            //Force hiding the start button
+                                                            $('.dockerinstancestart').first().addClass('hidden');
+                                                            
+                                                            var cardCount = $('.instancesList').find('.componentlistContainer:not(.stopped)').length;
 
-                                                             if (cardCount === 0) {
-                                                                 bootbox.alert('No instances available.Kindly Launch one instance');
-                                                                 return;
-                                                             }
-                                                             loadLaunchParams();
-                                                             var $launchDockerInstanceSelector = $('#launchDockerInstanceSelector');
-                                                             var blueprintId = $selectedItems.attr('data-blueprintId');
-                                                             var dockerreponame = $selectedItems.attr('dockerreponame');
-                                                             $launchDockerInstanceSelector.data('blueprintId', blueprintId);
-                                                             //  $launchDockerInstanceSelector.data('blueprintId',blueprintId);
+                                                            if (cardCount === 0) {
+                                                                bootbox.alert('No instances available.Kindly Launch one instance');
+                                                                return;
+                                                            }
+                                                            //commented below to have a composite bp for docker
+                                                            // loadLaunchParams();
+                                                            //Loading table for all docker images for compose
+                                                            var dockercompose = JSON.parse($selectedItems.attr('dockercompose'));
+                                                            //alert('hit');
+                                                            $('#compositedockertable tr.dockerimagesrow').detach(); //clearing previously loaded table.
+                                                            dockercompose.forEach(function(k, v) {
+                                                                // alert(dockercompose[v]["dockercontainerpaths"]);
+                                                                addDockerTemplateToTable(dockercompose[v]["dockercontainerpathstitle"], dockercompose[v]["dockercontainerpaths"], dockercompose[v]["dockerrepotags"], dockercompose[v]["dockerreponame"], dockercompose[v]["dockerlaunchparameters"]);
+                                                            });
+                                                            //onclick="loadLaunchParams(\'launchparam' + uniqueid + '\');
+                                                            $('.lnktolaunchparam').click(function() { //binding clicks for launch params
+                                                                loadLaunchParams('launchparam' + $(this).attr('uniqueid'));
+                                                            });
+
+                                                            $('.dockerimageselectordown').click(function() {
+                                                                movetablerow('dockerimageselectordown', $(this).attr('uniqueid'));
+                                                            });
+
+                                                            $('.dockerimageselectorup').click(function() {
+                                                                movetablerow('dockerimageselectorup', $(this).attr('uniqueid'));
+                                                            });
+
+                                                            $('.btnaddDockerLaunchParams').click(function() {
+                                                                var lp = generateDockerLaunchParams();
+                                                                if (lp != '') {
+                                                                    //        launchparams[0] = preparams;
+                                                                    // launchparams[1] = startparams;
+                                                                    // // alert(execparam);
+                                                                    // launchparams[2] = execparam;
+                                                                    $('#' + $('#myModalLabelDockerContainer').attr('saveto')).val(lp[0] + ' -exec ' + lp[2] + ' -c ' + lp[1]);
+                                                                    $('#myModalLabelDockerContainer').removeAttr('saveto').modal('hide');
+                                                                }
+                                                            });
+
+                                                            var $launchDockerInstanceSelector = $('#launchDockerInstanceSelector');
+                                                            var blueprintId = $selectedItems.attr('data-blueprintId');
+                                                            var dockerreponame = $selectedItems.attr('dockerreponame');
+                                                            $launchDockerInstanceSelector.data('blueprintId', blueprintId);
+                                                            //  $launchDockerInstanceSelector.data('blueprintId',blueprintId);
 
 
 
-                                                             $('#dockerinstancesselctorview').empty().append('<span><div class=\"modal-body\"><div><div class=\"row\"><div style=\"color:;\" class=\"col-lg-12 col-sm-12\ dockerinstances"></div></div></div></div></div></span>');
-                                                             var $newinstancetable = $("<table></table>").append("<thead><tr><td>Instance Name</td><td>IP Address</td><td>Log Info</td><td class='hidden'>Add Docker Engine</td></tr></thead>");
-                                                             var $newinstancetbody = $('<tbody></tbody>');
-                                                             $newinstancetable.append($newinstancetbody);
-                                                             var $instancetable = $('#tableinstanceview').clone();
-                                                             $instancetable.find('tbody tr').each(function() {
-                                                                 var $newinstancetr = $("<tr><tr>");
-                                                                 $(this).find('td').each(function(k, v) {
-                                                                     $newinstancetr.append('<td>' + v + $(this).html() + '</td>');
-                                                                 });
-                                                                 $newinstancetbody.append($newinstancetr);
-                                                             });
+                                                            $('#dockerinstancesselctorview').empty().append('<span><div class=\"modal-body\"><div><div class=\"row\"><div style=\"color:;\" class=\"col-lg-12 col-sm-12\ dockerinstances"></div></div></div></div></div></span>');
+                                                            var $newinstancetable = $("<table></table>").append("<thead><tr><td>Instance Name</td><td>IP Address</td><td>Log Info</td><td class='hidden'>Add Docker Engine</td></tr></thead>");
+                                                            var $newinstancetbody = $('<tbody></tbody>');
+                                                            $newinstancetable.append($newinstancetbody);
+                                                            var $instancetable = $('#tableinstanceview').clone();
+                                                            $instancetable.find('tbody tr').each(function() {
+                                                                var $newinstancetr = $("<tr><tr>");
+                                                                $(this).find('td').each(function(k, v) {
+                                                                    $newinstancetr.append('<td>' + v + $(this).html() + '</td>');
+                                                                });
+                                                                $newinstancetbody.append($newinstancetr);
+                                                            });
 
-                                                             $instancetable.attr('id', 'dockerintsancestab');
-                                                             $('.dockerinstances').first().append($instancetable);
+                                                            $instancetable.attr('id', 'dockerintsancestab');
+                                                            $('.dockerinstances').first().append($instancetable);
 
-                                                             $('#dockerintsancestab thead td').each(function(k, v) {
-                                                                 if (k > 3)
-                                                                     $(this).detach();
-                                                             });
-                                                             $('#dockerintsancestab thead').append('<td>Log Info</td>');
-                                                             $('#dockerintsancestab thead tr').append('<td class="hidden" title="Select to add a docker engine">Add Engine</td>');
-                                                             $('#dockerintsancestab tbody tr').each(function(k, v) {
+                                                            $('#dockerintsancestab thead td').each(function(k, v) {
+                                                                if (k > 3)
+                                                                    $(this).detach();
+                                                            });
+                                                            $('#dockerintsancestab thead').append('<td>Log Info</td>');
+                                                            $('#dockerintsancestab thead tr').append('<td class="hidden" title="Select to add a docker engine">Add Engine</td>');
+                                                            $('#dockerintsancestab tbody tr').each(function(k, v) {
 
-                                                                 $(this).removeClass('rowcustomselected');
-                                                                 $(this).click(function() {
-                                                                     $('#dockerintsancestab tbody tr').removeClass('rowcustomselected');
-                                                                     $(this).addClass('rowcustomselected');
-                                                                 });
-                                                                 $(this).find('td').each(function(k1, v1) {
-                                                                     if (k1 > 3)
-                                                                         $(this).detach();
-                                                                     //inserting a checkbox to select instance
-                                                                     if (k1 == 0) {
-                                                                         $(this).prepend('<input type="checkbox" class="instanceselectedfordocker">&nbsp;');
-                                                                     }
-                                                                 });
-                                                                 $(this).append('<td  class=""><a data-original-title="MoreInfo" data-placement="top" rel="tooltip" href="javascript:void(0)" data-instanceid="' + $(this).attr('data-instanceid') + '" class="tableMoreInfo moreInfo dockerLeft" stlye=></a></td>');
-                                                                 $(this).append('<td  class="hidden"><input type="checkbox"></td>');
-                                                                 $(this).find('.moreInfo').click(instanceLogsHandler);
-                                                             });
-                                                             $('.launchdockerinstance').click(function() {
-                                                                 $launchResultContainer.find('.modal-body').empty().append('<span><div class=\"modal-body\"><div><h3 class=\"alert alert-success\"><b>Congratulations!</b> Blueprint Launched Successfully !!!</h3>Instance Id : 5460690c6e5c99913e37d0e4<br>Instance Logs :- </div><div class=\"logsAreaBootstrap\"><div><div class=\"row\"><div style=\"color:white;\" class=\"col-lg-12 col-sm-12\"><span>Starting instance</span></div></div></div></div></div></span>');
-                                                                 $('#myModalLabel').first().html('Launching Blueprint');
+                                                                $(this).removeClass('rowcustomselected');
+                                                                $(this).click(function() {
+                                                                    $('#dockerintsancestab tbody tr').removeClass('rowcustomselected');
+                                                                    $(this).addClass('rowcustomselected');
+                                                                });
+                                                                $(this).find('td').each(function(k1, v1) {
+                                                                    if (k1 > 3)
+                                                                        $(this).detach();
+                                                                    //inserting a checkbox to select instance
+                                                                    if (k1 == 0) {
+                                                                        $(this).prepend('<input type="checkbox" class="instanceselectedfordocker">&nbsp;');
+                                                                    }
+                                                                });
+                                                                $(this).append('<td  class=""><a data-original-title="MoreInfo" data-placement="top" rel="tooltip" href="javascript:void(0)" data-instanceid="' + $(this).attr('data-instanceid') + '" class="tableMoreInfo moreInfo dockerLeft" stlye=></a></td>');
+                                                                $(this).append('<td  class="hidden"><input type="checkbox"></td>');
+                                                                $(this).find('.moreInfo').click(instanceLogsHandler);
+                                                            });
+                                                            $('.launchdockerinstance').click(function() {
+                                                                $launchResultContainer.find('.modal-body').empty().append('<span><div class=\"modal-body\"><div><h3 class=\"alert alert-success\"><b>Congratulations!</b> Blueprint Launched Successfully !!!</h3>Instance Id : 5460690c6e5c99913e37d0e4<br>Instance Logs :- </div><div class=\"logsAreaBootstrap\"><div><div class=\"row\"><div style=\"color:white;\" class=\"col-lg-12 col-sm-12\"><span>Starting instance</span></div></div></div></div></div></span>');
+                                                                $('#myModalLabel').first().html('Launching Blueprint');
 
-                                                             });
-                                                             $('#dockerInstanceSelectionTitle').empty().append('Select Instances to pull  "' + dockerreponame + '" into');
-                                                             $launchDockerInstanceSelector.modal('show');
-                                                             $('#rootwizard').find("a[href*='tab1']").trigger('click'); //showing first tab.
-                                                             $('#dockerintsancestab thead').empty().append('<tr><td>Select Instance</td><td>Logo</td><td>Instance Name</td><td>IP Address</td><td>Log</td><td  class="hidden">Add Docker Engine</td></tr>');
-                                                             $('#dockerintsancestab').dataTable({
-                                                                 "bPaginate": false
-                                                             });
-                                                             return;
+                                                            });
+                                                            $('#dockerInstanceSelectionTitle').empty().append('Select Instances to pull  "' + dockerreponame + '" into');
+                                                            $launchDockerInstanceSelector.modal('show');
+                                                            $('#rootwizard').find("a[href*='tab1']").trigger('click'); //showing first tab.
+                                                            $('#dockerintsancestab thead').empty().append('<tr><td>Select Instance</td><td>Logo</td><td>Instance Name</td><td>IP Address</td><td>Log</td><td  class="hidden">Add Docker Engine</td></tr>');
+                                                            $('#dockerintsancestab').dataTable({
+                                                                "bPaginate": false
+                                                            });
+                                                            return;
                                                          }
 
 
@@ -3592,106 +3759,92 @@
 
 
                                                  $('.dockerinstancestart').click(function(e) {
-                                                     $('.instanceselectedfordocker').each(function() {
-                                                         if ($(this).is(':checked')) {
+                                                     function generateCompositeJsonfromtable() {
+                                                            var dockercompose = [];
+                                                            var dockerimages = {};
+                                                            console.log($('#compositedockertable').find('.dockerimagesrow').length);
+                                                            $('.dockerimagesrow').each(function() {
+                                                                dockerimages = {};
 
-                                                             var instid = $(this).closest('tr').attr('data-instanceid');
-                                                             var instbpname = $(this).closest('tr').attr('data-blueprintname');
-                                                             if (instid)
-                                                                 var $that = $(this);
-                                                             var $td = $that.closest('td');
-                                                             var tdtext = $td.text();
-                                                             $td.find('.dockerspinner').detach();
-                                                             $td.find('.dockermessage').detach();
-                                                             $td.append('<img class="dockerspinner" style="margin-left:5px" src="img/select2-spinner.gif"></img>');
-                                                             $td.attr('title', 'Pulling in Images');
-                                                             var imagename = $('.productdiv1.role-Selected1').first().attr('dockercontainerpaths');
-                                                             var repotag = $('.productdiv1.role-Selected1').find('.dockerrepotagselect').first().val();
+                                                                $(this).find('[paramtype]').each(function() {
+                                                                    console.log($(this).text() + $(this).val());
+                                                                    dockerimages[$(this).attr('paramtype')] = $(this).text() + $(this).val();
+                                                                });
+                                                                // alert(JSON.stringify(dockerimages));
+                                                                dockercompose.push(dockerimages);
+                                                            });
+                                                            return (dockercompose);
+                                                        }
+                                                        var compositedockerimage = generateCompositeJsonfromtable();
+                                                        //alert(JSON.stringify(compositedockerimage));
+                                                        compositedockerimage = JSON.stringify(compositedockerimage);
+                                                        // alert(JSON.stringify(compositedockerimage));
+                                                        //return;
+                                                        $('.instanceselectedfordocker').each(function() {
+                                                            if ($(this).is(':checked')) {
 
-                                                             var repopath = $('.productdiv1.role-Selected1').first().attr('dockerreponame');
+                                                                var instid = $(this).closest('tr').attr('data-instanceid');
+                                                                var instbpname = $(this).closest('tr').attr('data-blueprintname');
+                                                                var amoreinfo =  $(this).closest('tr').find('.moreInfo');
+                                                                if (instid)
+                                                                    var $that = $(this);
+                                                                var $td = $that.closest('td');
+                                                                var tdtext = $td.text();
+                                                                $td.find('.dockerspinner').detach();
+                                                                $td.find('.dockermessage').detach();
+                                                                $td.append('<img class="dockerspinner" style="margin-left:5px" src="img/select2-spinner.gif"></img>');
+                                                                $td.attr('title', 'Pulling in Images');
+                                                                // var imagename = $('.productdiv1.role-Selected1').first().attr('dockercontainerpaths');
+                                                                // var repotag = $('.productdiv1.role-Selected1').find('.dockerrepotagselect').first().val();
 
-                                                             // var dockerlaunchparameters = $('.productdiv1.role-Selected1').first().attr('dockerlaunchparameters');
-                                                             var dockerlaunchparameters = generateDockerLaunchParams();
-                                                             if (!dockerlaunchparameters)
-                                                                 dockerlaunchparameters = 'null';
-                                                             var lp = 'null'; //launch parameter
-                                                             var sp = 'null'; //start parameter
-                                                             var ep = 'null';
-                                                             if (dockerlaunchparameters) {
-                                                                 if (dockerlaunchparameters[0])
-                                                                     lp = dockerlaunchparameters[0];
-                                                                 if (dockerlaunchparameters[1])
-                                                                     sp = dockerlaunchparameters[1];
-                                                                 if (dockerlaunchparameters[2])
-                                                                     ep = dockerlaunchparameters[2];
-                                                             }
-                                                             // alert(lp + ' ' + sp);
-                                                             // alert('../instances/dockerimagepull/' + instid + '/' + repopath + '/' + encodeURIComponent(imagename) + '/' + repotag + '/' + encodeURIComponent(lp) + '/' + encodeURIComponent(sp));
-                                                             $.get('../instances/dockerimagepull/' + instid + '/' + repopath + '/' + encodeURIComponent(imagename) + '/' + repotag + '/' + encodeURIComponent(lp) + '/' + encodeURIComponent(sp), function(data) {
-                                                                 //alert(JSON.stringify(data));
-                                                                 if (data == "OK") {
-                                                                     var $statmessage = $td.find('.dockerspinner').parent();
+                                                                var repopath = $('.productdiv1.role-Selected1').first().attr('dockerreponame');
+                                                                if(amoreinfo)
+                                                                  amoreinfo.trigger('click');
+
+                                                                $.get('../instances/dockercompositeimagepull/' + instid + '/' + repopath + '/' + encodeURIComponent(compositedockerimage), function(data) {
+                                                                    //alert(JSON.stringify(data));
+                                                                    if (data == "OK") {
+                                                                        var $statmessage = $td.find('.dockerspinner').parent();
+                                                                        $td.find('.moreInfo').first().click(); //showing the log window.
 
 
-                                                                     if (ep == 'null') {
-                                                                         $td.find('.dockerspinner').detach();
-                                                                         $statmessage.append('<span style="margin-left:5px;text-decoration:none" class="dockermessage">Pull done </span>');
-                                                                     } else {
-                                                                         if ($('#Containernamefield').val() != '') {
-                                                                             $.get('../instances/dockerexecute/' + instid + '/' + $('#Containernamefield').val() + '/' + ep, function(data) {
-                                                                                 if (data == "OK") {
-                                                                                     $td.find('.dockerspinner').detach();
-                                                                                     $td.find('.dockermessage').detach();
-                                                                                     $statmessage.append('<span style="margin-left:5px;text-decoration:none" class="dockermessage">Pull done </span>');
+                                                                        $td.find('.dockerspinner').detach();
+                                                                        $statmessage.append('<span style="margin-left:5px;text-decoration:none" class="dockermessage"></span>');
 
-                                                                                 } else {
-                                                                                     $('.dockerspinner').detach();
-                                                                                     $td.find('.dockermessage').detach();
-                                                                                     $statmessage.append('<span style="margin-left:5px;color:red" title="' + data + '"  class="dockermessage"><i class="fa  fa-exclamation"></i></span>');
-                                                                                 }
-                                                                             }); ///instances/dockerexecute/:instanceid/:containerid/:action
-                                                                         } else {
-                                                                             $('.dockerspinner').detach();
-                                                                             $td.find('.dockermessage').detach();
-                                                                             $statmessage.append('<span style="margin-left:5px;color:red" title="' + data + '"  class="dockermessage"><i class="fa  fa-exclamation"></i></span>');
-                                                                             alert('Cannot execute parameters when no container name is provided.\nProvide a name and try again.');
-                                                                         }
-
-                                                                     }
-                                                                     //Updating instance card to show the docker icon.
-                                                                     //$dockericon = $('<img src="img/galleryIcons/Docker.png" alt="Docker" style="width:42px;height:42px;margin-left:32px;" class="dockerenabledinstacne"/>');
-                                                                     //Updated from above to move docker image out of circle.
-                                                                     $dockericon = $('<img src="img/galleryIcons/Docker.png" alt="Docker" style="width:auto;height:27px;margin-left:96px;margin-top:-105px" class="dockerenabledinstacne"/>');
-                                                                     //find the instance card - to do instance table view update
-                                                                     var $instancecard = $('div[data-instanceid="' + instid + '"]');
-                                                                     if ($instancecard.find('.dockerenabledinstacne').length <= 0) {
-                                                                         $instancecard.find('.componentlistContainer').first().append($dockericon);
-                                                                     }
-                                                                     //debugger;
-                                                                     loadContainersTable(); //Clearing and loading the containers again.
-                                                                 } else {
-                                                                     //alert(data);
-                                                                     if (data.indexOf('No Docker Found') >= 0) {
-                                                                         var $statmessage = $('.dockerspinner').parent();
-                                                                         $('.dockerspinner').detach();
-                                                                         $td.find('.dockermessage').detach();
-                                                                         $statmessage.append('<span style="margin-left:5px;color:red" title="Docker not found"  class="dockermessage"><i class="fa  fa-exclamation"></i></span>');
-                                                                         //Prompt user to execute the docker cookbook.
-                                                                         if (confirm('Docker was not found on the node : "' + instbpname + '". \nDo you wish to install it?')) {
-                                                                             //Docker launcer popup had to be hidden due to overlap issue.
-                                                                             $('#launchDockerInstanceSelector').modal('hide');
-                                                                             $('a.actionbuttonChefClientRun[data-instanceid="' + instid + '"]').first().trigger('click');
-                                                                         }
-                                                                     } else {
-                                                                         var $statmessage = $('.dockerspinner').parent();
-                                                                         $('.dockerspinner').detach();
-                                                                         $td.find('.dockermessage').detach();
-                                                                         $statmessage.append('<span style="margin-left:5px;color:red" title="' + data + '"  class="dockermessage"><i class="fa  fa-exclamation"></i></span>');
-                                                                     }
-                                                                 }
-                                                             });
-                                                         }
-                                                     });
+                                                                        //Updating instance card to show the docker icon.
+                                                                        //$dockericon = $('<img src="img/galleryIcons/Docker.png" alt="Docker" style="width:42px;height:42px;margin-left:32px;" class="dockerenabledinstacne"/>');
+                                                                        //Updated from above to move docker image out of circle.
+                                                                        $dockericon = $('<img src="img/galleryIcons/Docker.png" alt="Docker" style="width:auto;height:27px;margin-left:96px;margin-top:-105px" class="dockerenabledinstacne"/>');
+                                                                        //find the instance card - to do instance table view update
+                                                                        var $instancecard = $('div[data-instanceid="' + instid + '"]');
+                                                                        if ($instancecard.find('.dockerenabledinstacne').length <= 0) {
+                                                                            $instancecard.find('.componentlistContainer').first().append($dockericon);
+                                                                        }
+                                                                        //debugger;
+                                                                        loadContainersTable(); //Clearing and loading the containers again.
+                                                                    } else {
+                                                                        //alert(data);
+                                                                        if (data.indexOf('No Docker Found') >= 0) {
+                                                                            var $statmessage = $('.dockerspinner').parent();
+                                                                            $('.dockerspinner').detach();
+                                                                            $td.find('.dockermessage').detach();
+                                                                            $statmessage.append('<span style="margin-left:5px;color:red" title="Docker not found"  class="dockermessage"><i class="fa  fa-exclamation"></i></span>');
+                                                                            //Prompt user to execute the docker cookbook.
+                                                                            if (confirm('Docker was not found on the node : "' + instbpname + '". \nDo you wish to install it?')) {
+                                                                                //Docker launcer popup had to be hidden due to overlap issue.
+                                                                                $('#launchDockerInstanceSelector').modal('hide');
+                                                                                $('a.actionbuttonChefClientRun[data-instanceid="' + instid + '"]').first().trigger('click');
+                                                                            }
+                                                                        } else {
+                                                                            var $statmessage = $('.dockerspinner').parent();
+                                                                            $('.dockerspinner').detach();
+                                                                            $td.find('.dockermessage').detach();
+                                                                            $statmessage.append('<span style="margin-left:5px;color:red" title="' + data + '"  class="dockermessage"><i class="fa  fa-exclamation"></i></span>');
+                                                                        }
+                                                                    }
+                                                                });
+                                                            }
+                                                        });
                                                  });
 
 
@@ -3817,6 +3970,14 @@
                                                      //alert('called');
                                                      //debugger;
                                                      console.log('called');
+                                                     $('#dockercontainertablerefreshspinner').addClass('fa-spin');
+                                                     $dockercontainertable = $('#dockercontainertable tbody');
+
+                                                     $('.docctrempty').detach();
+                                                      var $docctrempty = $('#dockercontainertabletemplatetr').clone().empty().append('<td colspan="8" style="text-align:center"><img style="margin-right:30px" src="img/select2-spinner.gif"></img>Loading containers..</td>').removeClass('hidden');
+                                                      $docctrempty.addClass('docctrempty');
+                                                      $dockercontainertable.append($docctrempty);
+
                                                      //Shwoing the loader spinner and clearing the rows.
                                                      $('tr[id*="trfordockercontainer_"]').remove();
                                                      //$('.loadingimagefordockertable').removeClass('hidden');
@@ -3831,14 +3992,23 @@
                                                              $.get('/instances/dockercontainerdetails/' + instanceid, function(data) {
                                                                  if (!data) {
                                                                      $('.loadingimagefordockertable').addClass('hidden');
+                                                                     $('#dockercontainertablerefreshspinner').removeClass('fa-spin');
                                                                      return;
                                                                  }
                                                                  if (data) {
+                                                                     $('.docctrempty').detach();
                                                                      $('.loadingimagefordockertable').addClass('hidden');
+                                                                     $('#dockercontainertablerefreshspinner').removeClass('fa-spin');
                                                                  }
                                                                  var dockerContainerData = JSON.parse(data);
                                                                  //   alert(JSON.stringify(dockerContainerData));
-
+                                                                 //Setting empty message
+                                                                 if(dockerContainerData.length <= 0){
+                                                                  $('.docctrempty').detach();
+                                                                  var $docctrempty = $('#dockercontainertabletemplatetr').clone().empty().append('<td colspan="8" style="text-align:center">No Containers Found</td>').removeClass('hidden');
+                                                                  $docctrempty.addClass('docctrempty');
+                                                                  $dockercontainertable.append($docctrempty);
+                                                                 }
                                                                  $.each(dockerContainerData, function(i, item) {
                                                                      var $docctr = createdockercontainerrow(item, instanceid);
                                                                      // alert($docctr.html());

@@ -13,7 +13,7 @@ Library            Collections
 Resource           catalyst.txt
 Resource           ${CATALYST TEST DATA}/${TESTDATA}
 Resource           ${COMMON RESOURCES}/catalyst_grid_node.txt
-Resource           ${CATALYST ACTION}/Users_Setup_With_New_Users.txt
+Resource           ${CATALYST ACTION}/Users_Setup_With_New_Users_and_Teams.txt
 
 
 *** Variables ***
