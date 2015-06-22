@@ -668,13 +668,13 @@ var Chef = function(settings) {
             options.password = 'Zaq!2wsx'; // temp hack
         }
         //var proc = new Process('knife', ['winrm', options.host, ' "powershell ' + cmd + ' "', '-m', '-P', options.password, '-x', options.username], processOptions);
-        var proc = new Process('knife', ['winrm', options.host, 'powershell \"' +cmd+ '\" ', '-m', '-P', options.password, '-x', options.username], processOptions);
+        var proc = new Process('knife', ['winrm', options.host, cmd, '-m', '-P', options.password, '-x', options.username], processOptions);
         proc.start();
 
 
     }
 
-   
+
     this.updateNodeEnvironment = function(nodeName, newEnvironment, callback) {
         logger.debug('Chef Repo Location : ', settings.userChefRepoLocation)
         var options = {
