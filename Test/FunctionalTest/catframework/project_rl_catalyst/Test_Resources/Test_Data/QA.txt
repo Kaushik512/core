@@ -60,7 +60,7 @@ ${JAVA COOKBOOK}                  java
 ${APACHE COOKBOOK}            service_apache
 ${GIT COOKBOOK}                     git
 ${SERVER TIME COOKBOOK}            starter
-
+${DISABLED}           disabled
 ${CENT OS}            Cent OS
 ${UBUNTU OS}            ubuntu
 ${SUITS}                stopped
