@@ -1738,16 +1738,17 @@ $.get('../instances/' + urlParams.id, function(data) {
             });
 
         }
-
-        if (type === 'stop') {
-            bootbox.confirm("Stop Instance ?", function(result) {
-                if (result) {
-                    makeRequest(url);
-                }
-            });
-        } else {
-            makeRequest(url);
-        }
+        $.get('../instances/' + instanceId, function(data) {
+            if (type === 'stop') {
+                bootbox.confirm("Are you sure you want to Stop the Instance-&nbsp;&quot;&nbsp;<b>" + data.name + "</b>&nbsp;&quot;", function(result) {
+                    if (result) {
+                        makeRequest(url);
+                    }
+                });
+            } else {
+                makeRequest(url);
+            }
+        });
 
 
 

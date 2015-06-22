@@ -25,7 +25,7 @@
                                                  $cardViewInstanceId.find('.instance-bootstrap-ActionSSH a').addClass('isStopedInstance').removeClass('sshIcon').addClass('hidden');
                                                  $tableViewInstanceId.find('.instance-bootstrap-ActionSSH a').addClass('isStopedInstance').removeClass('sshIcon').addClass('hidden');
                                                  /*$cardViewInstanceId.find('.instance-bootstrap-ActionSSH a').addClass('isStopedInstance').removeClass('sshIcon').addClass('sshIcondisable');
-                 $tableViewInstanceId.find('.instance-bootstrap-ActionSSH a').addClass('isStopedInstance').removeClass('sshIcon').addClass('sshIcondisable');*/
+                                                 $tableViewInstanceId.find('.instance-bootstrap-ActionSSH a').addClass('isStopedInstance').removeClass('sshIcon').addClass('sshIcondisable');*/
 
                                              }
 
@@ -60,9 +60,8 @@
 
                                              $(document).ready(function() {
                                                  /*********************************Instance.js********************/
-                                                 /*
-            This is the entry method for initialising the instance in Dev.html.
-            */
+
+                                                /*This is the entry method for initialising the instance in Dev.html.*/
 
                                                  function populateOSList() {
                                                      $.ajax({
@@ -81,11 +80,6 @@
                                                                  str = str + '<option value="' + data[i]["osType"] + '" ostype="' + data[i]["os_name"] + '">' + data[i]["os_name"] + '</option>';
                                                              }
                                                              $('#importinstanceOS').html(str).select2();
-                                                             /*  
-     if($('#importinstanceOS').attr('answer')){
-      $('#importinstanceOS').val($('#importinstanceOS').attr('answer')).select2();
-    }
-*/
                                                          },
                                                          failure: function(data) {
                                                              alert(data.toString());
@@ -95,11 +89,12 @@
 
 
                                                  $('.addNewApp1').click(function() {
-                                                     $('#appSeries12').clone().find("input").val("").end().appendTo('.applicationURLContainer:last');
 
+                                                     $('#appSeries12').clone().find("input").val("").end().appendTo('.applicationURLContainer:last');
                                                      var countApp = $('.applicationURLContainer').length;
 
                                                      if (countApp === 2) {
+                                                         $('#validURL').addClass('hidden');
                                                          $(this).addClass('hidden');
                                                          return;
                                                      }
@@ -163,7 +158,7 @@
                                                          reqBodyEdit.name = $form.find('#instanceEditName').val();
 
                                                          if (!reqBodyEdit.name) {
-                                                             bootbox.alert('Please enter instance name');
+                                                             $('#requiredName').removeClass('hidden');
                                                              return false;
                                                          }
 
@@ -216,24 +211,32 @@
                                                                         '<form id="deleteInstanceForm" class="form-horizontal"> ' +
                                                                         '<input type="hidden" id="deleteInstanceIdInput" value="' + instanceId + '"/>' +
                                                                         '<div class="form-group"> ' +
-                                                                        '<span class="col-md-12" for="name">Are you sure you would like to remove this instance?<br/>Note : This will not terminate the instance from the provider.</span> ' +
+                                                                        '<span class="col-md-12" for="name">You are about to remove this instance, do you want to proceed?</span> ' +
                                                                         '</div>' +
                                                                         '<div class="form-group"> ' +
-                                                                        '<label class="col-md-4 control-label forBootBox1" for="name">Name : </label> ' +
-                                                                        '<span class="col-md-4 forBootBox" for="name">' + data.name + '</span> ' +
+                                                                        '<label class="col-md-3 forBootBox1" for="name">Instance Name:</label> ' +
+                                                                        '<strong><span class="col-md-4 forBootBox" for="name">' + data.name + '</span></strong>' +
                                                                         '</div> ' +
-                                                                        '<div class="form-group"> ' +
-                                                                        '<label class="col-md-3 control-label" for="ckbChefDelete"></label> ' +
+                                                                        '<div class="form-group" style="margin-top:-10px"> ' +
+                                                                        '<label for="ckbChefDelete"></label> ' +
                                                                         '<div class="col-md-8"> <div class="checkbox"> <label for="ckbChefDelete-0"> ' +
                                                                         '<input type="checkbox" name="ckbChefDelete" id="ckbChefDelete"> ' +
                                                                         'Delete this node from chef server </label> ' +
                                                                         '</div>' +
                                                                         '</div>' +
+                                                                        '<div style="margin-top:20px;" class="col-lg-12">Note : This will not terminate the instance from the provider.</div>' +
                                                                         '</form> </div>  </div>',
                                                                     buttons: {
+                                                                        cancel: {
+                                                                            label: "Cancel",
+                                                                            className: "btn btn-default",
+                                                                            callback: function() {
+
+                                                                            }
+                                                                        },
                                                                         success: {
                                                                             label: "Delete",
-                                                                            className: "btn-primary",
+                                                                            className: "btn btn-danger",
                                                                             callback: function(evt, arg2) {
                                                                                 $('#deleteInstanceForm').hide();
                                                                                 $('#deleteInstanceWorkingIndicator').show();
@@ -263,14 +266,8 @@
                                                                                 });
                                                                                 return false;
                                                                             }
-                                                                        },
-                                                                        cancel: {
-                                                                            label: "Close",
-                                                                            className: "btn-primary",
-                                                                            callback: function() {
-
-                                                                            }
                                                                         }
+                                                                        
                                                                     }
                                                                 });
                                                             });
@@ -279,9 +276,7 @@
                                                             }
                                                 }
 
-                                                 /*
-            Attaching Click Event on IP Address Import, which will reset instance form.
-            */
+                                                /*Attaching Click Event on IP Address Import, which will reset instance form.*/
                                                  function bindClick_ipaddressImport() {
 
                                                      $('#ipaddressimport').click(function(e) {
@@ -298,6 +293,13 @@
                                                              $('.applicationURLContainer:last').remove();
                                                              $('.addNewApp1').removeClass('hidden');
                                                          }
+                                                         $('#requiredIP').addClass('hidden');
+                                                         $('#validIP').addClass('hidden');
+                                                         $('#requiredOS').addClass('hidden');
+                                                         $('#requiredUserName').addClass('hidden');
+                                                         $('#requiredPassword').addClass('hidden');
+                                                         $('#requiredPemFile').addClass('hidden');
+                                                         $('#validURL').addClass('hidden');
                                                          $('#nodeimportipresultmsg').addClass("hidden");
                                                          $('#addInstanceForm').trigger("reset");
                                                          $('#pemFileDropdown').change();
@@ -306,9 +308,8 @@
                                                      });
                                                  }
 
-                                                 /*
-            Attaching Click event on instances tab which will set BreadCrumb for Instances
-            */
+                                                 
+                                                /*Attaching Click event on instances tab which will set BreadCrumb for Instances*/
                                                  function bindClick_instnaceTab() {
                                                      $('.Instances').click(function(e) {
                                                          var getbreadcrumbul = $('#ribbon').find('.breadcrumb').find('li:lt(5)');
@@ -427,7 +428,7 @@
 
                                                          });
                                                          if (!isAppUrlValid) {
-                                                             alert('Please enter a Valid URL');
+                                                             $('#validURL').removeClass('hidden');
                                                              e.preventDefault();
                                                              return false;
                                                          }
@@ -436,23 +437,24 @@
 
 
                                                          if (!reqBody.fqdn) {
-                                                             alert('Please enter IP');
+                                                             $('#requiredIP').removeClass('hidden');
                                                              e.preventDefault();
                                                              return false;
                                                          }
                                                          if (!reqBody.fqdn.match(ipAddresRegExp) || !reqBody.fqdn.match(hostname)) {
-                                                             alert("Please provide a valid IP Address or Hostname");
+                                                             $('#requiredIP').addClass('hidden');
+                                                             $('#validIP').removeClass('hidden');
                                                              e.preventDefault();
                                                              return false;
                                                          }
 
-                                                         /*if (!reqBody.users) {
-                             alert('Please assign atleast one user');
-                             e.preventDefault();
-                             return false;
-                         }*/
+                                                        /*if (!reqBody.users) {
+                                                             alert('Please assign atleast one user');
+                                                             e.preventDefault();
+                                                             return false;
+                                                         }*/
                                                          if (!reqBody.os) {
-                                                             alert('Please choose OS');
+                                                             $('#requiredOS').removeClass('hidden');
                                                              e.preventDefault();
                                                              return false;
                                                          }
@@ -514,12 +516,12 @@
 
                                                              var pemFileInput = $form.find('#importPemfileInput').get(0);
                                                              if (!reqBody.credentials.username) {
-                                                                 alert('Please Enter Username');
+                                                                 $('#requiredUserName').removeClass('hidden');
                                                                  e.preventDefault();
                                                                  return false;
                                                              }
                                                              if (!pemFileInput.files.length) {
-                                                                 alert('Please Choose a Pem file');
+                                                                 $('#requiredPemFile').removeClass('hidden');
                                                                  e.preventDefault();
                                                                  return false;
                                                              }
@@ -537,8 +539,13 @@
                                                              reader.readAsText(pemFileInput.files[0]);
                                                          } else {
                                                              reqBody.credentials.password = $form.find('#instancePassword').val();
+                                                             if (!reqBody.credentials.username) {
+                                                                 $('#requiredUserName').removeClass('hidden');
+                                                                 e.preventDefault();
+                                                                 return false;
+                                                             }
                                                              if (!reqBody.credentials.password) {
-                                                                 alert("Please enter password");
+                                                                 $('#requiredPassword').removeClass('hidden');
                                                                  e.preventDefault();
                                                                  return false;
                                                              }
@@ -1211,11 +1218,11 @@
                                                          $instancesList = $item.find('ul');
                                                          /*if ($instancesList.children().length === 5) {
 
-                                          $item = $(cardTemplate.getItem());
-                                          $instancesList = $(cardTemplate.getInstanceList());
-                                          $item.append($instancesList);
-                                          $divinstancescardview.append($item);
-                                      }*/
+                                                              $item = $(cardTemplate.getItem());
+                                                              $instancesList = $(cardTemplate.getInstanceList());
+                                                              $item.append($instancesList);
+                                                              $divinstancescardview.append($item);
+                                                          }*/
                                                      }
                                                      var $rowContainter = $(cardTemplate.getRowContainer(data));
 
@@ -1303,6 +1310,7 @@
                                                      $rowContainter.append('<td class="instanceBlueprintName">' + '<span>' + name.toString().substring(0, 25) + '</span>' + '<a href="#modalforInstanceEdit" data-backdrop="false" data-toggle="modal" style="margin-left:10px" class="glyphicon glyphicon-pencil editInstanceNameBtn" style="cursor:pointer;"></a></td>');
 
                                                      function editInstanceNameHandler(e) {
+                                                         $('#requiredName').addClass('hidden');
                                                          $('#instanceEditNew').trigger("reset");
                                                          $('#instanceIDHiddenInput').val(data._id);
                                                          var prevName = $divDomainRolesCaption.find('.cardHeadingTextoverflow').text();
@@ -1551,35 +1559,39 @@
                                                          if (type === 'Stop') {
                                                              url = '../instances/' + instanceId + '/stopInstance'
                                                          }
-                                                         if (type === 'Start') {
-                                                             var hasStartPermission = false;
-                                                             if (haspermission("instancestart", "execute")) {
-                                                                 hasStartPermission = true;
-                                                             }
-                                                             if (!hasStartPermission) {
-                                                                 bootbox.alert('User Has No Permission to Start an Instance').find('.bootbox-body').addClass('bootboxMODAL');
-                                                                 return;
-                                                             }
-                                                         }
-                                                         if (type === 'Stop') {
-                                                             var hasStopPermission = false;
-                                                             if (haspermission("instancestop", "execute")) {
-                                                                 hasStopPermission = true;
-                                                             }
-                                                             if (!hasStopPermission) {
-                                                                 bootbox.alert('User has No Permission to Stop an Instance').find('.bootbox-body').addClass('bootboxMODAL');
-                                                                 return;
-                                                             }
-                                                             bootbox.confirm(type + " instance?", function(result) {
-                                                                 if (!result) {
-                                                                     return;
-                                                                 }
-                                                                 makeRequest(url);
-                                                             });
-                                                         } else {
-                                                             makeRequest(url);
-                                                         }
-                                                     };
+                                                        
+                                                        if (type === 'Start') {
+                                                            var hasStartPermission = false;
+                                                            if (haspermission("instancestart", "execute")) {
+                                                                hasStartPermission = true;
+                                                            }
+                                                            if (!hasStartPermission) {
+                                                                bootbox.alert('User Has No Permission to Start an Instance').find('.bootbox-body').addClass('bootboxMODAL');
+                                                                return;
+                                                            }
+                                                        }
+                                                        $.get('../instances/' + instanceId, function(data) {
+                                                            console.log(data);
+                                                            if (type === 'Stop') {
+                                                                var hasStopPermission = false;
+                                                                if (haspermission("instancestop", "execute")) {
+                                                                    hasStopPermission = true;
+                                                                }
+                                                                if (!hasStopPermission) {
+                                                                    bootbox.alert('User has No Permission to Stop an Instance').find('.bootbox-body').addClass('bootboxMODAL');
+                                                                    return;
+                                                                }
+                                                                bootbox.confirm("Are you sure you want to&nbsp;" + type + "&nbsp;the instance&nbsp;-&nbsp;&quot;&nbsp;<b>" + data.name + "</b>&nbsp;&quot;", function(result) {
+                                                                    if (!result) {
+                                                                        return;
+                                                                    }
+                                                                    makeRequest(url);
+                                                                });
+                                                            } else {
+                                                                makeRequest(url);
+                                                            }
+                                                        });
+                                                    };
 
 
                                                      $divDomainRolesCaption.append($divComponentListContainer);
@@ -2043,11 +2055,13 @@
 
                                                                          if (data[i].dockerlaunchparameters)
                                                                              $itemBody.attr('dockerlaunchparameters', 't ' + data[i].dockerlaunchparameters);
-
-                                                                         data[i].dockercompose.forEach(function(k, v) {
-                                                                            var $liDockerRepoName = $('<li title="Docker Repo Name" class="dockerimagetext" style="text-align:left;margin-left:15px" ><i class="fa fa-check-square" style="padding-right:5px"/>' + data[i].dockercompose[v]["dockercontainerpathstitle"] + '</li>');
-                                                                            $ul.append($liDockerRepoName);
-                                                                        });
+                                                                         if(typeof data[i].dockercompose != 'undefined'){
+                                                                             data[i].dockercompose.forEach(function(k, v) {
+                                                                                var $liDockerRepoName = $('<li title="Docker Repo Name" class="dockerimagetext" style="text-align:left;margin-left:15px" ><i class="fa fa-check-square" style="padding-right:5px"/>' + data[i].dockercompose[v]["dockercontainerpathstitle"] + '</li>');
+                                                                                $ul.append($liDockerRepoName);
+                                                                            });
+                                                                         }
+                                                                        
                                                                          //Commented below to accomodate docker compose
                                                                         // var $liDockerRepoName = $('<li title="Docker Repo Name" ><i class="fa fa-check-square" style="padding-right:5px"/>' + data[i].dockerreponame + '</li>');
                                                                          //$ul.append($liDockerRepoName);
