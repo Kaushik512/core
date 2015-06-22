@@ -18,6 +18,7 @@ function getDefaultsConfig() {
         catalysHomeDirName: 'catalyst',
         instancePemFilesDirName: 'instance-pemfiles',
         tempDirName: 'temp',
+        staticUploadDir: '/var/chef/cache/uploads',
         app_run_secure_port: 443,
         cryptoSettings: {
             algorithm: "aes192",
@@ -379,7 +380,7 @@ proc.on('close', function(code) {
         console.log('creating catalyst home directory');
 
         var fsExtra = require('fs-extra');
-        fsExtra.emptydirSync(config.catalystDataDir);
+        
 
         var mkdirp = require('mkdirp');
 
@@ -391,6 +392,7 @@ proc.on('close', function(code) {
 
 
         if (options['seed-data']) {
+            fsExtra.emptydirSync(config.catalystDataDir);
             restoreSeedData(config, function() {
                 if (options['ldap-user']) {
                     setupLdapUser(config, function() {

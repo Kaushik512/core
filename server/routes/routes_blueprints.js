@@ -393,7 +393,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                         referenceId: logsReferenceIds,
                                                                         err: false,
                                                                         log: "waiting for instance state to be ok",
-                                                                        timestamp: timestampStarted
+                                                                        timestamp: new Date().getTime()
                                                                     });
                                                                     ec2.waitForEvent(instanceData.InstanceId, 'instanceStatusOk', function(err) {
                                                                         if (err) {

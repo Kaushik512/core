@@ -20,12 +20,10 @@ module.exports = function(options) {
         try {
             con.connect(connectionParamsObj);
         } catch (connectErr) {
-            console.log('errrroroorooror == >catch ==>', connectErr.message);
             con = null;
             // a hack to make a sycnronous call asynchronous 
             setTimeout(function() {
                 if (connectErr.message === 'Cannot parse privateKey: Unsupported key format') {
-                    console.log('Invalid Credentioals firing');
                     callback(connectErr, INVALID_CREDENTIALS);
                 } else {
                     callback(connectErr, UNKOWN_EXCEPTION);
@@ -35,7 +33,6 @@ module.exports = function(options) {
         }
 
         con.on('ready', function() {
-            console.log("connected to ==>", connectionParamsObj.host);
             isConnected = true;
             callback(null);
         });
@@ -43,9 +40,7 @@ module.exports = function(options) {
         con.on('error', function(err) {
             isConnected = false;
             con = null;
-            console.log('ssh error ', err);
-            console.log('keys ==>', Object.keys(err));
-
+            console.log("ERROR EVENT FIRED");
             if (err.level === 'client-authentication') {
 
                 callback(err, INVALID_CREDENTIALS);
@@ -54,8 +49,6 @@ module.exports = function(options) {
             } else {
                 callback(err, UNKOWN_EXCEPTION);
             }
-
-
         });
 
         con.on('close', function(hadError) {
