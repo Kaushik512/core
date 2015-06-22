@@ -10,9 +10,9 @@ Resource           catalyst.txt
 
 *** Variables ***
 ${BROWSER TYPE}                   chrome              #firefox #http://54.149.39.160:3001                    #internetexplorer               #phantomjs
-${ENVIRONMENT SERVER}             http://d4d.relevancelab.com:3001/private/index.html
-#http://52.26.17.84:3001/private/index.html
-#http://d4d.relevancelab.com:3001/public/login.html 
+${ENVIRONMENT SERVER}             http://d4d.relevancelab.com:3001
+#http://52.27.46.167:3001/private/index.html
+ 
 
 ${ENV}                 QA.txt
 ${VALID USER}             superadmin
@@ -61,7 +61,7 @@ ${JAVA COOKBOOK}                  java
 ${APACHE COOKBOOK}            service_apache
 ${GIT COOKBOOK}                     git
 ${SERVER TIME COOKBOOK}            starter
-
+${DISABLED}           disabled
 ${CENT OS}            Cent OS
 ${UBUNTU OS}            ubuntu
 ${SUITS}                stopped
@@ -146,6 +146,15 @@ ${PASSWD22}                 Consumer
 ${EDIT_INSTANCE_NAME}       Instance_Centos
 ${ERRORMESSAGE}             Please enter instance name
 ${MORE INFO}                 SSH Terminal
+${NO MATCH}                 No matches found
+${ENVNAME}                  QA
+
+
+
+${DESIGNER_NAME}            Designer01
+${DESIGNER_PASWD}           Designer01
+${CONSUMER_NAME}            Consumer01
+${CONSUMER_PASWD}           Consumer01
 
 #Provider
 ${PROVIDER NAME}          AWS RELPRO
@@ -443,3 +452,7 @@ ${TEMP NAMECENT}                     CentOS
 ${CENTBLUEPRINT NAME}                CentOS
 ${TEMP NAMEUBUN}                     UbuntuOS
 ${UBUNBLUEPRINT NAME}                UbuntuOS
+
+
+
+

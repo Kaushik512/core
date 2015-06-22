@@ -61,7 +61,7 @@ String.prototype.capitalizeFirstLetter = function() {
                   <ul class="nav navbar-nav" style="margin-top:20px;margin-left:28px">
                     <li class="left-projects-links hidden" data-target="#Workspace" navigation="Workspace,Workspace1">
                         <a class="active navigationTab" id="workZoneNew" style="font-size:14px!important" href="#" onclick="setleftnavigation(this,'org');">
-                            <i class="fa fa-credit-card txt-color-blue"></i>&nbsp;WORKZONE
+                            <i class="fa fa-credit-card txt-color-blue"></i>&nbsp;WORKZONE 
                         </a>
                     </li>
                     <li class="left-projects-links hidden" style="margin-left:16px;" data-target="#blueprints"  navigation="blueprints">
@@ -244,6 +244,7 @@ String.prototype.capitalizeFirstLetter = function() {
 
     <script src="js/app.js"></script>
     <script src="js/dev/dev.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
     
     
     <!-- MAIN APP JS FILE -->
@@ -668,7 +669,16 @@ function getUrlParameter(sParam) {
     return ('');
 }
 
+//Special key to bring up the logs window
 
+$(document).keypress("l",function(e) {
+  if(e.ctrlKey && e.altKey && ( String.fromCharCode(e.which) === 'l' || String.fromCharCode(e.which) === 'L' ))
+    {
+        // viewlogger();
+        // $('#myModal').modal('show');    
+        window.open('/private/catlog.html','Catalyst Log');
+    }
+});
 
 
 
@@ -823,5 +833,53 @@ foldTreeForSetting();
     <script src="js/dev/controlPanel.js"></script>
     <script src="js/dev/container.js"></script>
 -->
+
+
+<script>
+function viewlogger(){
+    var socket = io.connect();
+
+    socket.on('log',function(msg){
+        $('#logwin')
+        var _msg = JSON.parse(msg);
+        var dt = new Date(_msg.timestamp);
+
+        if(_msg.level != 'debug')
+           $('#launchcatalystlogwindow').prepend('<br/><u>' + dt.toLocaleDateString() + ' ' + dt.toLocaleTimeString()  + '</u> <br/><span style="color:red">' + _msg.message + '</span><br/>'); 
+        else
+           $('#launchcatalystlogwindow').prepend('<br/>' + '<u>' + dt.toLocaleDateString() + ' ' + dt.toLocaleTimeString()  + '</u> <br/>' + _msg.message + '<br/>'); 
+    });
+    $('#myModal').modal('show');
+    //$('#myModal').resizable();
+    // $('#launchcatalystlogwindow').draggable({
+ //      handle: ".modal-header"
+ //     });
+    //$( "#resizable" ).resizable();
+}
+</script>
+
+<div id="myModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                 <h4 class="modal-title">Catalyst Log</h4>
+
+            </div>
+            <div class="modal-body"  >
+                <div id="launchcatalystlogwindow" style="overflow:auto;height:400px;font-size:8pt;" >
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+
+
 </body>
 </html>

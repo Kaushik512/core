@@ -1353,6 +1353,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                 opts.password = decryptedCredentials.password;
                                             }
                                             logger.debug("Node OS : %s", instance.hardware.os);
+                                            logger.debug('Cleaning instance');
                                             chef.cleanChefonClient(opts, function(err, retCode) {
                                                 logger.debug("Entering chef.bootstarp");
                                                 chef.bootstrapInstance({

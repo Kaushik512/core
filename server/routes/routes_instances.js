@@ -22,7 +22,7 @@ var usersDao = require('../model/users.js');
 var credentialCryptography = require('../lib/credentialcryptography')
 var fileIo = require('../lib/utils/fileio');
 var uuid = require('node-uuid');
-var javaSSHWrapper = require('../model/javaSSHWrapper.js');
+//var javaSSHWrapper = require('../model/javaSSHWrapper.js');
 var errorResponses = require('./error_responses');
 var logger = require('../lib/logger')(module);
 var waitForPort = require('wait-for-port');
@@ -33,7 +33,7 @@ var appConfig = require('../config/app_config.js');
 var Cryptography = require('../lib/utils/cryptography');
 
 var utils = require('../model/classes/utils/utils.js');
-
+//var WINRM = require('../lib/utils/winrmexec');
 
 module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
@@ -1812,34 +1812,34 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                         };
                         var sudoCmd;
                         if (decryptedCredentials.pemFileLocation) {
-                            sshParamObj.pemFilePath = decryptedCredentials.pemFileLocation;
+                            sshParamObj.privateKey = decryptedCredentials.pemFileLocation;
                         } else {
                             sshParamObj.password = decryptedCredentials.password;
                         }
-                        //var sshConnection = new SSH(sshParamObj);
 
-                        javaSSHWrapper.getNewInstance(sshParamObj, function(err, javaSSh) {
-                            if (err) {
-                                callback(err, null);
-                                return;
+                        var serviceCmd = "service " + serviceData.command + " " + req.params.actionType;
+                        var sudoCmd = "sudo";
+                        if (options.password) {
+                            sudoCmd = 'echo \"' + options.password + '\" | sudo -S';
+                        }
+                        serviceCmd = sudoCmd + " " + serviceCmd;
+
+
+                        var sshConnection = new SSH(sshParamObj);
+
+                        sshConnection.exec(serviceCmd, function(err, ret) {
+                            if (decryptedCredentials.pemFileLocation) {
+                                fileIo.removeFile(decryptedCredentials.pemFileLocation, function(err) {
+                                    if (err) {
+                                        logger.error("Unable to delete temp pem file =>", err);
+                                    } else {
+                                        logger.error("temp pem file deleted =>", err);
+                                    }
+                                });
                             }
-                            javaSSh.runServiceCmd(serviceData.command, req.params.actionType, function(err, ret) {
-                                if (decryptedCredentials.pemFileLocation) {
-                                    fileIo.removeFile(decryptedCredentials.pemFileLocation, function(err) {
-                                        if (err) {
-                                            logger.error("Unable to delete temp pem file =>", err);
-                                        } else {
-                                            logger.error("temp pem file deleted =>", err);
-                                        }
-                                    });
-                                }
-                                onComplete(err, ret);
-                            }, onStdOut, onStdErr);
-                            logger.debug("Exit get() for /instances/%s/services/%s/%s", req.params.instanceId, req.params.serviceId, req.params.actionType);
-                            res.send(200, {
-                                actionLogId: actionLog._id
-                            });
-                        });
+                            onComplete(err, ret);
+                        }, onStdOut, onStdErr);
+
                     }
                 });
             });
@@ -1962,8 +1962,15 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 res.send(500, "Failed to fetch Instance: ");
                 return;
             }
+
             logger.debug("Return instance>>>>>>>>>>> ", JSON.stringify(anInstance));
             if (anInstance.length) {
+                if (anInstance[0].bootStrapStatus !== 'success') {
+                    res.send(400, {
+                        message: "Instance is not boostraped"
+                    });
+                    return;
+                }
                 configmgmtDao.getChefServerDetails(anInstance[0].chef.serverId, function(err, chefDetails) {
                     if (err) {
                         res.send(500);
@@ -1982,22 +1989,71 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                         }
 
                         //getting chef run execution Id 
-
-                        ChefClientExecution.createNew({
-                            instanceId: anInstance[0].id
-
-                        }, function(err, chefClientExecution) {
-                            if (err) {
-                                res.send(500, "Unable to get  execution Id .");
-                                return;
+                        if (anInstance[0].hardware.os == 'linux') {
+                            var cmd = 'dpkg --get-selections';
+                            if (anInstance[0].hardware.platform === 'centos') {
+                                cmd = 'rpm -qa';
                             }
+                            var sudoCmd = "sudo";
+                            if (decryptedCredentials.password) {
+                                sudoCmd = 'echo \"' + decryptedCredentials.password + '\" | sudo -S';
+                            }
+                            cmd = sudoCmd + " " + cmd;
 
-                            // creating json attribute for execution id
-                            var jsonAttributeObj = {
-                                catalyst_attribute_handler: {
-                                    catalystCallbackUrl: req.protocol + '://' + req.get('host') + '/chefClientExecution/' + chefClientExecution.id
+                            var sshParamObj = {
+                                username: decryptedCredentials.username,
+                                host: anInstance[0].instanceIP,
+                                port: 22
+                            }
+                            if (decryptedCredentials.pemFileLocation) {
+                                sshParamObj.privateKey = decryptedCredentials.pemFileLocation;
+                            } else {
+                                sshParamObj.password = decryptedCredentials.password;
+                            }
+                            var sshConnection = new SSH(sshParamObj);
+                            var installedSoftwareString = '';
+                            sshConnection.exec(cmd, function(err, retCode) {
+                                if (err) {
+                                    res.send(500, {
+                                        "message": "Unable to ssh"
+                                    });
+                                    return;
                                 }
-                            };
+                                if (retCode == 0) {
+                                    res.send(200, {
+                                        installedSoftwareString: installedSoftwareString
+                                    });
+                                } else if (retCode === -5000) {
+                                    res.send(500, {
+                                        "message": "Host Unreachable."
+                                    });
+                                    return;
+                                } else if (retCode === -5001) {
+                                    res.send(500, {
+                                        "message": "Invalid credentials."
+                                    });
+                                    return;
+                                } else if (retCode === -5002) {
+                                    res.send(500, {
+                                        "message": "Unknown Exeption Occured. Code : " + retCode
+                                    });
+                                    return;
+                                } else {
+                                    res.send(500, {
+                                        "message": "Unknown Exeption Occured. Code : " + retCode
+                                    });
+                                    return;
+                                }
+
+                            }, function(stdOut) {
+                                installedSoftwareString = installedSoftwareString + stdOut.toString('UTF-8');
+                            }, function(stdErr) {
+
+                            });
+
+                        } else {
+
+
                             var chef = new Chef({
                                 userChefRepoLocation: chefDetails.chefRepoLocation,
                                 chefUserName: chefDetails.loginname,
@@ -2005,21 +2061,10 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                 chefValidationPemFile: chefDetails.validatorpemfile,
                                 hostedChefUrl: chefDetails.url,
                             });
-
-                            logger.debug("Chef...>>>>>>>>>>>>>>>>>>> ", JSON.stringify(chef));
-
-                            var list = [];
-                            list.push("recipe[inspect_software]");
                             var chefClientOptions = {
-                                privateKey: decryptedCredentials.pemFileLocation,
                                 username: decryptedCredentials.username,
                                 host: anInstance[0].instanceIP,
-                                instanceOS: anInstance[0].hardware.os,
                                 port: 22,
-                                runlist: list,
-                                overrideRunlist: false,
-                                jsonAttributes: JSON.stringify(jsonAttributeObj)
-                                //parallel:true
                             }
 
                             if (decryptedCredentials.pemFileLocation) {
@@ -2027,105 +2072,58 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                             } else {
                                 chefClientOptions.password = decryptedCredentials.password;
                             }
-                            var installedList = [];
-                            var installedString;
-                            var strWindows;
-                            chef.runChefClientInspect(chefClientOptions, function(err, retCode) {
+                            var installedSoftwareString = '';
+                            chef.runKnifeWinrmCmd('Get-WmiObject -Class Win32_Product | Select-Object -Property Name', chefClientOptions, function(err, retCode) {
+
                                 if (err) {
-                                    res.send(500, "Unable to run chef-client.");
+                                    res.send(500, {
+                                        "message": "Unable to winrm"
+                                    });
                                     return;
                                 }
-                                logger.debug("retCode>>>>>>>>>>>>>>>>>>> ", retCode);
-                                if (retCode === -5000) {
-                                    res.send(1001, "Host Unreachable.");
+                                logger.debug("Winrm finished with retcode ==> " + retCode);
+                                if (retCode == 0) {
+                                    installedSoftwareString = installedSoftwareString.replace(new RegExp(anInstance[0].instanceIP, 'g'), '');
+                                    //removing first two lines of junk
+                                    var stringParts = installedSoftwareString.split('\n');
+                                    if (stringParts.length > 4) { // must be greater than 3
+                                        stringParts = stringParts.slice(4);
+                                        installedSoftwareString = stringParts.join('\r\n');
+                                    } else { //returning empty string
+                                        installedSoftwareString = '';
+                                    }
+                                    res.send(200, {
+                                        installedSoftwareString: installedSoftwareString
+                                    });
+                                } else if (retCode === -5000) {
+                                    res.send(500, {
+                                        "message": "Host Unreachable."
+                                    });
                                     return;
                                 } else if (retCode === -5001) {
-                                    res.send(401, "Invalid credentials.");
+                                    res.send(500, {
+                                        "message": "Invalid credentials."
+                                    });
                                     return;
                                 } else if (retCode === -5002) {
-                                    res.send(400, "host must not be null.");
-                                    return;
-                                } else if (retCode == 1) {
-                                    res.send(500, " Chef run process exited unsuccessfully.");
-                                    return;
-                                }
-                                if (decryptedCredentials.pemFileLocation) {
-                                    fileIo.removeFile(decryptedCredentials.pemFileLocation, function(err) {
-                                        if (err) {
-                                            logger.debug("Unable to delete temp pem file =>", err);
-                                        } else {
-                                            logger.debug("temp pem file deleted =>", err);
-                                        }
+                                    res.send(500, {
+                                        "message": "Unknown Exeption Occured while trying knife winrm. Code : " + retCode
                                     });
+                                    return;
+                                } else {
+                                    res.send(500, {
+                                        "message": "Unknown Exeption Occured while trying knife winrm. Code : " + retCode
+                                    });
+                                    return;
                                 }
-                            }, function(stdOutData) {
-                                logger.debug("Return from chef client>>>>>>>>>>>>>>>>>>>: ", stdOutData);
-                                installedString = installedString + "{" + stdOutData.replace(/\s+/g, ' ') + "},";
-                                if (stdOutData === "{catalyst.inspect.stop}") {
-                                    // For CentOS
-                                    if (anInstance[0].credentials.username === "root") {
-                                        logger.debug("CentOS Called...");
-                                        var insString = installedString.split("{Installed Packages}").pop().split("{{catalyst.inspect.stop}}").shift();
-                                        insString = insString.substr(1);
-                                        insString = insString.slice(0, -1);
-                                        res.send(insString.split(","));
-                                        return;
-                                    } else {
-                                        // For Ubuntu
-                                        logger.debug("Ubuntu Called...");
-                                        var insString;
-                                        if (stdOutData === "{{catalyst.inspect.start}}") {
-                                            insString = installedString.split("{{catalyst.inspect.start}}").pop().split("{{catalyst.inspect.stop}}").shift();
-                                        } else {
-                                            insString = installedString.split("{catalyst.inspect.start}}").pop().split("{{catalyst.inspect.stop}}").shift();
-                                        }
-                                        insString = insString.substr(1);
-                                        insString = insString.slice(0, -1);
-                                        res.send(insString.split(","));
-                                        return;
-                                    }
-                                }
-                                // For Windows
-                                if (chefClientOptions.username === "administrator" || chefClientOptions.username === "Admin") {
-                                    var insString;
-                                    var arr = [];
-                                    logger.debug("Windows Called...");
-                                    var str = stdOutData.split("\n");
-                                    for (var i = 0; i < str.length; i++) {
-                                        var actualStr = str[i].replace(/\s+/g, ' ');
-                                        strWindows = strWindows + "{" + actualStr + "},";
-                                        if (actualStr === chefClientOptions.host + " Name Version ") {
-                                            insString = strWindows.split(chefClientOptions.host + " Name Version ").pop().split(chefClientOptions.host + " {catalyst.inspect.stop}").shift();
-                                        } else if (actualStr === "{ " + chefClientOptions.host + " Name Version }") {
-                                            insString = strWindows.split("{ " + chefClientOptions.host + " Name Version }").pop().split("{" + chefClientOptions.host + " {catalyst.inspect.stop}}").shift();
-                                        } else {
-                                            insString = strWindows.split("{" + chefClientOptions.host + " Name Version }").pop().split("{" + chefClientOptions.host + " {catalyst.inspect.stop}}").shift();
-                                        }
-                                        if (str[i] === chefClientOptions.host + " {catalyst.inspect.stop}") {
-                                            insString = insString.substr(1);
-                                            insString = insString.slice(0, -1);
-                                            arr = insString.split(",");
-                                            for (var x = 0; x < arr.length; x++) {
-                                                var replaceStr;
-                                                if (arr[x].length != 0 && arr[x] !== "{}" && arr[x] !== "{" + chefClientOptions.host + "}" && arr[x] !== "{" + chefClientOptions.host + " }") {
-                                                    replaceStr = arr[x].replace("{}", '');
-                                                    installedList.push(replaceStr.replace(chefClientOptions.host, ''));
-                                                }
-                                            }
-                                            logger.debug("Exit get() for /instances/%s/inspect", req.params.instanceId);
-                                            res.send(installedList.filter(Boolean));
-                                            return;
-                                        }
-                                    }
+                            }, function(stdOut) {
+                                installedSoftwareString = installedSoftwareString + stdOut.toString('UTF-8');
 
-                                }
-
-                            }, function(stdOutErr) {
-                                logger.debug("Return error from chef client:>>>>>>>>>>>>>: ", JSON.stringify(stdOutErr));
-                                res.send(500, " Failed to execute command on Instance.");
-                                return;
+                            }, function(stdErr) {
+                                logger.debug("err ==> " + stdErr.toString('ascii'));
                             });
-                        });
+
+                        }
                     });
                 });
 
