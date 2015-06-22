@@ -40,6 +40,32 @@ Catalyst Create New Org Admin
     Assign Teams for OrgAdmin
     Clicks on USave Button
 
+Catalyst Org Admin Verfifcation of New,Update,Delete Button disabled
+    Clicks on Settings
+    Clicks on Organization image
+    Sleep    2s
+    Verify New Button is Disabled
+    Verfiy Delete Button is Disabled
+    Verify Update Button is Disabled
+
+
+
+
+Verify New Button is Disabled
+    ${NEW}=    Get Element Attribute    xpath=.//*[@id='newOrg']@disabled
+    Log    ${NEW}
+    Should Be Equal    ${NEW}    ${DISABLED}
+
+Verfiy Delete Button is Disabled
+    ${NEW1}=    Get Element Attribute    xpath=.//*[@id='envtable']/tbody/tr/td[text()='Relevance_Labs']/../td/div/button@disabled
+    Log    ${NEW1}
+    Should Be Equal    ${NEW}    ${DISABLED}    
+
+
+Verfiy Update Button is Disabled
+    ${NEW2}=    Get Element Attribute    xpath=.//*[@id='envtable']/tbody/tr/td[text()='Relevance_Labs']/../td/div/a@disabled
+    Should Be Equal    ${NEW2}    ${DISABLED}    
+
 
 
 
