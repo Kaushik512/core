@@ -13,7 +13,7 @@ Library            String
 *** Test Cases ***
 Catalyst new organization setup
     [Tags]       Sanity               Smoke
-#    Catalyst Login
+#    Catalyst Login 
     Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
     Create New Organization
     Catalyst Create New Org Admin 
@@ -21,12 +21,14 @@ Catalyst new organization setup
     [Teardown]     Close Browser
 
 
-#-Catalyst login as OrgAdmin user     
-    #-[Tags]       Sanity               Login
-    #-Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+Catalyst login as OrgAdmin user     
+    [Tags]       Sanity               Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst Creating New User and Verfiy ALL is Disabled
+    Catalyst Creation of Designer and Consumer 
     #-Catalyst Org Admin Verfifcation of New,Update,Delete Button disabled
-    #-Catalyst Logout
-    #-[Teardown]     Close Browser
+    Catalyst Logout
+    [Teardown]     Close Browser
 
 
 Catalyst Creation of Business Group,Projects setup

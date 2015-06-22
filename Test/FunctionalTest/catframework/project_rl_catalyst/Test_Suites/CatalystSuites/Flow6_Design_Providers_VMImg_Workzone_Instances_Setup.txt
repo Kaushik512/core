@@ -46,7 +46,7 @@ Catalyst new CENT OS WORKZONE setup
     [Tags]       Sanity               Smoke
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
-    Catalyst Check INFORMATION Status
+    ##Catalyst Check INFORMATION Status
     Catalyst Work SSH CHEFCLIENT STOP Setup after LAUNCH
     Catalyst Logout                      
     [Teardown]     Close Browser

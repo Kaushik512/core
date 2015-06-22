@@ -48,8 +48,56 @@ Catalyst Org Admin Verfifcation of New,Update,Delete Button disabled
     Verfiy Delete Button is Disabled
     Verify Update Button is Disabled
 
+Catalyst Creating New User and Verfiy ALL is Disabled
+    Clicks on Settings
+    Clicks on Users Setup
+    Clicks on Users
+    Clicks on New Button
+    Enters Email Address
+    Verification of Organization only with out ALL option Being Disabled
+    Sleep    1s
+    Clicks on UserCancel Button
+
+Catalyst Creation of Designer and Consumer
+    Clicks on New Button
+    Enters Login name as Designer
+    Enters Email Address
+    Select particular User Created organization
+    Add User to LDAP
+    Enters Designer Passwd
+    Enters Designer Confirm Passwd
+    Selecting the Role as Designer
+    Assign Teams for users
+    Clicks on USave Button
+    Clicks on New Button
+    Enters Login name as Consumer
+    Enters Email Address
+    Select particular User Created organization
+    Add User to LDAP
+    Enters Consumer Passwd
+    Enters Consumer Confirm Passwd
+    Selecting the Role as Consumer
+    Assign Teams for users
+    Clicks on USave Button
 
 
+
+Verification of Organization only with out ALL option Being Disabled
+    Click Element    xpath=.//*[@id='s2id_orgname']/a/span[1]
+    Sleep    1s
+    Input Text    xpath=.//*[@id='select2-drop']/div/input    ALL
+    Element Should Contain    xpath=.//*[@id='select2-drop']/ul/li    ${NO MATCH}
+    Log    ${NO MATCH}
+    Clear Element Text    xpath=.//*[@id='select2-drop']/div/input
+    Input Text    xpath=.//*[@id='select2-drop']/div/input    ${ORGANIZATION NAME}
+    Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
+
+
+Enters Login name as Designer
+    Input Text    id=loginname    ${DESIGNER_NAME}
+
+Enters Login name as Consumer
+    Input Text    id=loginname    ${CONSUMER_NAME}    
 
 Verify New Button is Disabled
     ${NEW}=    Get Element Attribute    xpath=.//*[@id='newOrg']@disabled
@@ -66,8 +114,24 @@ Verfiy Update Button is Disabled
     ${NEW2}=    Get Element Attribute    xpath=.//*[@id='envtable']/tbody/tr/td[text()='Relevance_Labs']/../td/div/a@disabled
     Should Be Equal    ${NEW2}    ${DISABLED}    
 
+Enters Designer Passwd
+    Input Text    id=userpassword    ${DESIGNER_PASWD}
+
+Enters Designer Confirm Passwd
+    Input Text    id=userpassword1    ${DESIGNER_PASWD}    
+
+Enters Consumer Passwd
+    Input Text    id=userpassword    ${CONSUMER_PASWD}
+
+Enters Consumer Confirm Passwd
+    Input Text    id=userpassword1    ${CONSUMER_PASWD}    
 
 
+Selecting the Role as Designer
+    Click Element    xpath=.//*[@id='userrolename']/label[text()='Designer']
+
+Selecting the Role as Consumer
+    Click Element    xpath=.//*[@id='userrolename']/label[text()='Consumer']    
 
 Create New Organization
       Vaildate the Organization feilds   ${Vaildate15ChrOrgName}        
@@ -78,7 +142,7 @@ Create New Organization
       Organization name Left Empty  ${VaildateEmptyErrMsg}
       Vaildate the Organizationsame feilds  ${VaildateSpecialChrOrgName}
       Organization name with special characters  ${VaildateSpecialChrErrMsg}
-      Vaildate the Organizationsame feilds    ${VaildOrgName}
+      Vaildate the Organizationsame feilds  ${VaildOrgName}
       #Vaildate the Edit Organization fields  ${VaildEditOrg}
       Vaildate the Edit Organization domain name fields  ${VaildEditOrgDomainName} 
       #Vaildate the Organization1 feilds  ${VaildateAlreadyExistChrOrgName}  
@@ -224,6 +288,7 @@ Enters organization name
     Input Text     id=orgname      ${Orgname}
 
 Enters organization domain name
+    Sleep    1s
     Input Text     id=domainname      ${ORGANIZATION DOMAIN NAME}
 
 Enters New Organization Domain Name
