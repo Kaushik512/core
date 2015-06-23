@@ -2848,7 +2848,7 @@ function isFormValid(formid) {
                     break;
                 case "nospace":
                     var str = currCtrl.val();
-                    if (str.indexOf(' ') > 0) {
+                    if (str.indexOf(' ') > 0 || str.charAt(0) === " ") {
                         isValid = false;
                         errormessageforInput(currCtrl.attr('id'), "space(s) not allowed");
                         currCtrl.focus();
