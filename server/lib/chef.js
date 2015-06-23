@@ -440,7 +440,7 @@ var Chef = function(settings) {
             }
             argList.push('-P');
             if (params.instanceOS == 'windows' && !params.instancePassword) {
-                argList.push('Zaq!2wsx'); // temp hack
+                argList.push('\"Zaq!2wsx\"'); // temp hack
             } else {
                 argList.push('\"' + params.instancePassword + '\"');
             }
@@ -511,7 +511,7 @@ var Chef = function(settings) {
             var cmds = ["rm -rf /etc/chef/", "rm -rf /var/chef/"];
             var cmdString = cmds.join(' && ');
 
-
+            cmdString = 'sudo '+cmdString;
             var sshExec = new SSHExec(options);
             sshExec.exec(cmdString, callback, callbackOnStdOut, callbackOnStdErr);
 
@@ -665,10 +665,10 @@ var Chef = function(settings) {
             }
         }
         if (!options.password) {
-            options.password = 'Zaq!2wsx'; // temp hack
+            options.password = '\"Zaq!2wsx\"'; // temp hack
         }
         //var proc = new Process('knife', ['winrm', options.host, ' "powershell ' + cmd + ' "', '-m', '-P', options.password, '-x', options.username], processOptions);
-        var proc = new Process('knife', ['winrm', options.host, cmd, '-m', '-P', options.password, '-x', options.username], processOptions);
+        var proc = new Process('knife', ['winrm', options.host, "\'" + cmd + "\'", '-m', '-P', options.password, '-x', options.username], processOptions);
         proc.start();
 
 

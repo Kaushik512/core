@@ -40,6 +40,27 @@ Catalyst Addition and Creation of New Envirorments Setup
     Assign Team2
     Clicks on Save Button to save the Environments
 
+
+
+Catalyst Addition of New Environments
+    Clicks on Settings
+    Clicks on DevOps Setup menu
+    Clicks on EEnvironments menu line
+    Clicks on New button Create New Environment
+    Select organization for Env
+    Clicks on Add Button
+    Add the New EEnvironment Named1
+    Clicks on ADD Chef Env Button
+    Select the Newly created Environments1
+    Sleep    2s
+    Assign Teams1
+    Clicks on Save Button to save the Environments
+
+
+
+
+
+
 Test Validation of Creation of New Environments
     Test Validation of No org,Chef,Env,Team Selected for Environment
     Org,Chef,Env,Team not Selected for Envirnment
@@ -88,6 +109,18 @@ Team not selected for Environment
     Element Should Contain    id=errmsg_teamname   ${REQ1} 
     Clicks on CanCancel Button
 
+Add the New EEnvironment Named1
+    ${ENVV}=    Generate Random String    3    [NUMBERS]
+    ${ENV STORE}=    Catenate  SEPARATOR=   ${ENVNAME}${ENVV}
+    Log     ${ENV STORE}
+    Set Global Variable    ${ENV STORE}
+    Input Text    id=chefenvname    ${ENV STORE}
+
+Select the Newly created Environments1
+    Click Element    xpath=.//*[@id='s2id_environmentname']/a/span[1]
+    Sleep     1s
+    Input Text    xpath=.//*[@id='select2-drop']/div/input    ${ENV STORE}
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element    xpath=.//*[@id='select2-drop']/ul/li[contains("${ENV STORE}",.)]
 
 
 Clicks on CanCancel Button
@@ -147,7 +180,7 @@ Clicks on Add Button
     Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='wid-id-3']/div/div/div[3]/a
 
 Clicks on ADD Chef Env Button
-    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='myModalCreateChefEnv']/div/div/div[3]/div/button[1]
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='createenvinchefform']/div[3]/div/button
 
 Add the Environment Named1
     Input Text    id=chefenvname    ${EnV1}

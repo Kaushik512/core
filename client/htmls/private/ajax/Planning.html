@@ -1,0 +1,43 @@
+<script>
+function viewlogger(){
+	var socket = io.connect();
+
+	socket.on('log',function(msg){
+		$('#logwin')
+        var _msg = JSON.parse(msg);
+        var dt = new Date(_msg.timestamp);
+
+        if(_msg.level != 'debug')
+		   $('#launchcatalystlogwindow').prepend('<br/><u>' + dt.toLocaleDateString() + ' ' + dt.toLocaleTimeString()  + '</u> <br/><span style="color:red">' + _msg.message + '</span><br/>'); 
+        else
+           $('#launchcatalystlogwindow').prepend('<br/>' + '<u>' + dt.toLocaleDateString() + ' ' + dt.toLocaleTimeString()  + '</u> <br/>' + _msg.message + '<br/>'); 
+	});
+	$('#myModal').modal('show');
+	//$('#myModal').resizable();
+	// $('#launchcatalystlogwindow').draggable({
+ //      handle: ".modal-header"
+ //  	});
+	//$( "#resizable" ).resizable();
+}
+</script>
+<button onclick="viewlogger();$('#myModal').modal('show');">Show</button>
+<div id="myModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                 <h4 class="modal-title">Catalyst Log</h4>
+
+            </div>
+            <div class="modal-body"  >
+                <div id="launchcatalystlogwindow" style="overflow:auto;height:400px;font-size:8pt;" >
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>

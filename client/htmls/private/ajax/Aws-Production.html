@@ -2235,7 +2235,7 @@ $("#individualTemplateNameGrid").html("");
                         var $opt = $('<option value="' + $dockerrepotitles[v] + '" repopath="' + $dockerrepopaths[v] + '">' + $dockerrepotitles[v] + '</option>');
                         $dockerrepoListInput.append($opt);
                     });
-
+                    updatecompositedockertableemptymessage();
                     //Setting the appropriate tags
                     //Attaching the change event to pull tags for the select repo
                     $dockerrepoListInput.change(function(e) {

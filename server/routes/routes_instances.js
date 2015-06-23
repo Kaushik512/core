@@ -2069,7 +2069,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                             }
                             var installedSoftwareString = '';
                             var cmd = 'Get-WmiObject -Class Win32_Product | Select-Object -Property Name';
-                            cmd = 'powershell \"' + cmd + '\" ';
+                            cmd = 'powershell \"' + cmd + '\"';
                             chef.runKnifeWinrmCmd(cmd, chefClientOptions, function(err, retCode) {
 
                                 if (err) {
@@ -2132,8 +2132,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         });
 
     });
-
-    /* app.get('/instances/:instanceId/setAsWorkStation', function(req, res) {
+    /*
+    app.get('/instances/:instanceId/setAsWorkStation', function(req, res) {
 
         instancesDao.getInstanceById(req.params.instanceId, function(err, instances) {
             if (err) {
@@ -2250,7 +2250,18 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                             var args = ['echo', fileData.toString()];
 
                             var escapedString = shellEscape(args);
-                            escapedString = escapedString + ' > ' + remotePath + fileItem.name;
+                            var sudoCmd = '';
+                            // if (instance.hardware.os === 'linux') {
+                            //     sudoCmd = "sudo sh -c \"";
+                            //     if (decryptedCredentials.password) {
+                            //         sudoCmd = 'echo \"' + decryptedCredentials.password + '\" | sudo -S ';
+                            //     }
+                            //     escapedString = sudoCmd + escapedString + ' > ' + remotePath + fileItem.name+"\"";
+                            // } else {
+                            //     escapedString = sudoCmd + escapedString + ' > ' + remotePath + fileItem.name;
+                            // }
+                            escapedString = sudoCmd + escapedString + ' > ' + remotePath + fileItem.name;
+
 
                             cmdString = cmdString + escapedString;
                             callback(null, cmdString);
@@ -2285,11 +2296,11 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                             loopFiles(fileList, '', function(cmdString) {
 
                                 if (instance.hardware.os === 'linux') {
-
-                                    var sudoCmd = "sudo";
-                                    if (decryptedCredentials.password) {
-                                        sudoCmd = 'echo \"' + decryptedCredentials.password + '\" | sudo -S';
-                                    }
+                                    var sudoCmd = '';
+                                    // var sudoCmd = "sudo";
+                                    // if (decryptedCredentials.password) {
+                                    //     sudoCmd = 'echo \"' + decryptedCredentials.password + '\" | sudo -S';
+                                    // }
                                     var cmd = sudoCmd + " mkdir -p " + remotePath + ' && ' + cmdString;
 
                                     var sshParamObj = {
@@ -2303,6 +2314,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                         sshParamObj.password = decryptedCredentials.password;
                                     }
                                     var sshConnection = new SSH(sshParamObj);
+                                    console.log(cmd);
                                     sshConnection.exec(cmd, function(err, retCode) {
                                         if (err) {
                                             res.send(500, {
@@ -2337,9 +2349,10 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                         }
 
                                     }, function(stdOut) {
+                                        console.log('err ==> ', stdOut.toString());
 
                                     }, function(stdErr) {
-
+                                        console.log('err ==> ', stdErr.toString());
                                     });
 
                                 } else { //windows
@@ -2417,6 +2430,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             });
         });
     });
+
 
 
 };
