@@ -2602,7 +2602,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                     folderpath = rowFLD["folderpath"];
                                             }
                                             //if env is saved then it should be associated with project.
-                                            if (req.params.id == '3') {
+                                            /*if (req.params.id == '3') {
                                                 logger.debug('in env update');
                                                 var orgId = bodyJson['orgname_rowid'];
                                                 logger.debug('orgId:', orgId);
@@ -2614,7 +2614,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                         updateProjectWithEnv(projs_, bodyJson);
                                                     }
                                                 });
-                                            }
+                                            }*/
                                             //resetting the orgname to empty string when a template type file is uploaded.
                                             if (req.params.id == '17') {
                                                 req.params.orgname = "undefined";
