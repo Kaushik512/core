@@ -707,8 +707,13 @@ var MasterUtil = function(){
                         if (teams[i].id === '21') {
                             names = configmgmtDao.convertRowIDToValue(teams[i].orgname_rowid, rowidlist)
                             teams[i].orgname = names;
-                            projectnames = configmgmtDao.convertRowIDToValue(teams[i].projectname_rowid, rowidlist)
-                            teams[i].projectname = projectnames;
+                            var projectName = teams[i].projectname_rowid.split(",");
+                            for(var x=0;x<projectName.length;x++){
+                                projectnames = configmgmtDao.convertRowIDToValue(projectName[x], rowidlist);
+                                if(teams[i].projectname.indexOf(projectnames) === -1){
+                                   teams[i].projectname = teams[i].projectname+","+projectnames; 
+                                }   
+                            }
                             teamList.push(teams[i]);
                         }
                     }
@@ -1381,6 +1386,30 @@ var MasterUtil = function(){
 
                 }
             });
+        });
+    }
+
+    this.getUsersForAllOrg = function(callback) {
+        logger.debug("getUsersForAllOrg called. ");
+        d4dModelNew.d4dModelMastersUsers.find({
+            id: "7",
+            orgname_rowid: {
+                $in: [""]
+            }
+        }, function(err, users) {
+            if (err) {
+                callback(err, null);
+                return;
+            }
+            logger.debug("Got users for Org All.",JSON.stringify(users));
+            if (users.length > 0) {
+                callback(null,users);
+                return;
+            } else {
+                callback(null, []);
+                return;
+            }
+
         });
     }
 }

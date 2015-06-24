@@ -1116,13 +1116,22 @@ function populateJsonData(instanceId) {
             $('.paraHeightModal').show();
             $('#paragraphs').append(temp);
         },
-        failure: function(data) {
-            bootbox.alert(data.responseText);
-            $('.loadingContainerimageInspectCSS').hide();
-            $('.paraHeightModal').hide();
-        },
+        // failure: function(data) {
+        //    var failureText = "Server Behaved Unexpectedly. Please try again later";
+        //     if(jqxhr.responseJSON && jqxhr.responseJSON.message) {
+        //         failureText = jqxhr.responseJSON.message;
+        //     }
+        //     bootbox.alert(failureText);
+        //     $('.loadingContainerimageInspectCSS').hide();
+        //     $('.paraHeightModal').hide();
+        // },
         error: function(jqxhr) {
-            bootbox.alert(jqxhr.responseText);
+          var failureText = "Server Behaved Unexpectedly. Please try again later";
+            if(jqxhr.responseJSON && jqxhr.responseJSON.message) {
+                failureText = jqxhr.responseJSON.message;
+            }
+            bootbox.alert(failureText);
+            
             $('.loadingContainerimageInspectCSS').hide();
             $('.paraHeightModal').hide();
         }

@@ -237,13 +237,16 @@ Enters config management URL
 
 
 Upload user Pem File
-    Choose File     xpath=.//*[@id='userpemfile']     C:\\Users\\adarsh.RLINDIA\\Desktop\\caty\\Chef\\pcjoshi9.pem 
+    Choose File     xpath=.//*[@id='userpemfile']     ${USERPEMFILE}
+    #C:\\Users\\adarsh.RLINDIA\\Desktop\\caty\\Chef\\pcjoshi9.pem 
 
 Upload Validator Pem File
-    Choose File     xpath=.//*[@id='validatorpemfile']     C:\\Users\\adarsh.RLINDIA\\Desktop\\caty\\Chef\\cat1-validator.pem
+    Choose File     xpath=.//*[@id='validatorpemfile']     ${VALIDATORPEMFILE}
+    #C:\\Users\\adarsh.RLINDIA\\Desktop\\caty\\Chef\\cat1-validator.pem
 
 Upload Validator Knife File
-    Choose File     xpath=.//*[@id='kniferbfile']        C:\\Users\\adarsh.RLINDIA\\Desktop\\caty\\Chef\\knife.rb     
+    Choose File     xpath=.//*[@id='kniferbfile']        ${KNIFERBFILE}
+    #C:\\Users\\adarsh.RLINDIA\\Desktop\\caty\\Chef\\knife.rb     
    
 
 Clicks on Save button to save the Environment detail
@@ -469,7 +472,8 @@ Select the nodes namely MySql_Server and WebServer
     Click Element      xpath=.//*[@id='organiz']/table/tbody/tr[2]/td[7]/label[1]/i    #//input[@data-nodename='Web_Server']
 
 Upload user NodePem File
-    Choose File    id=importPemfileInput    C:\\Users\\adarsh.RLINDIA\\Desktop\\caty\\Chef\\catalyst.pem
+    Choose File    id=importPemfileInput    ${CATALYSTPEM}
+    #C:\\Users\\adarsh.RLINDIA\\Desktop\\caty\\Chef\\catalyst.pem
    
 Click on Import nodes button on the bottom of the page
     Wait Until Keyword Succeeds    1 minute     10 seconds       Element Should Be Visible       xpath=//input[@value='Import Nodes']

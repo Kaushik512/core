@@ -33,6 +33,8 @@ var appConfig = require('../config/app_config.js');
 var Cryptography = require('../lib/utils/cryptography');
 
 var utils = require('../model/classes/utils/utils.js');
+var SCPClient = require('../lib/utils/scp');
+var shellEscape = require('shell-escape');
 //var WINRM = require('../lib/utils/winrmexec');
 
 module.exports.setRoutes = function(app, sessionVerificationFunc) {
@@ -620,45 +622,44 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
     });
     //Coposite Docker container launch 
     app.get('/instances/dockercompositeimagepull/:instanceid/:dockerreponame/:dockercomposejson', function(req, res) {
-        var generateDockerLaunchParams  = function (runparams) {
-                     logger.debug('rcvd runparams --->',runparams);
-                     var launchparams = [];
-                     var preparams = '';
-                     var startparams = '';
-                     var execparam = '';
-                     var containername = '';
-                     var params = runparams.split(' -');
-                     for(var i = 0; i < params.length;i++){
-                      //  logger.debug('split runparams --->',params[i]);
-                         if (params[i] != '') {
-                             var itms = params[i].split(' ');
-                             if (itms.length > 0) {
-                                
-                                     if (itms[0] == 'c')
-                                         startparams += ' ' + itms[1];
-                                     if (itms[0] == 'exec')
-                                         execparam += ' ' + itms[1];
-                                     else
-                                        preparams += ' -' + params[i];
+        var generateDockerLaunchParams = function(runparams) {
+            logger.debug('rcvd runparams --->', runparams);
+            var launchparams = [];
+            var preparams = '';
+            var startparams = '';
+            var execparam = '';
+            var containername = '';
+            var params = runparams.split(' -');
+            for (var i = 0; i < params.length; i++) {
+                //  logger.debug('split runparams --->',params[i]);
+                if (params[i] != '') {
+                    var itms = params[i].split(' ');
+                    if (itms.length > 0) {
 
-                                    if (itms[0] == '-name')
-                                        {
+                        if (itms[0] == 'c')
+                            startparams += ' ' + itms[1];
+                        if (itms[0] == 'exec')
+                            execparam += ' ' + itms[1];
+                        else
+                            preparams += ' -' + params[i];
 
-                                            containername = itms[1];
-                                        }
-                                
-                             }
-                             
-                         }
-                     }
-                     launchparams[0] = preparams;
-                     launchparams[1] = startparams;
-                     // alert(execparam);
-                     launchparams[2] = execparam;
-                     launchparams[3] = containername;
-                    //alert(launchparams);
-                  //  logger.debug('launchparams:' + launchparams.join('&&'));
-                     return (launchparams);
+                        if (itms[0] == '-name') {
+
+                            containername = itms[1];
+                        }
+
+                    }
+
+                }
+            }
+            launchparams[0] = preparams;
+            launchparams[1] = startparams;
+            // alert(execparam);
+            launchparams[2] = execparam;
+            launchparams[3] = containername;
+            //alert(launchparams);
+            //  logger.debug('launchparams:' + launchparams.join('&&'));
+            return (launchparams);
         }
 
         //:dockerreponame/:imagename/:tagname/:runparams/:startparams
@@ -697,203 +698,197 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                         var _docker = new Docker();
                         var stdmessages = '';
                         var imagecount = 0; //to count the no of images started.
-                        var pullandrundocker = function(imagename,tagname,runparams,startparams,execcommand,containername,callback){
-                                    imagecount++;
-                                    var cmd = "sudo docker login -e " + dock.dockeremailid + ' -u ' + dock.dockeruserid + ' -p ' + dock.dockerpassword;
+                        var pullandrundocker = function(imagename, tagname, runparams, startparams, execcommand, containername, callback) {
+                            imagecount++;
+                            var cmd = "sudo docker login -e " + dock.dockeremailid + ' -u ' + dock.dockeruserid + ' -p ' + dock.dockerpassword;
 
-                                    //cmd += ' && sudo docker pull ' + dock.dockeruserid  + '/' + decodeURIComponent(req.params.imagename);
-                                    //removing docker userID
-                                    cmd += ' && sudo docker pull ' + decodeURIComponent(imagename);
-                                    logger.debug('Intermediate cmd: ', cmd);
-                                    if (tagname != null) {
-                                        cmd += ':' + tagname;
+                            //cmd += ' && sudo docker pull ' + dock.dockeruserid  + '/' + decodeURIComponent(req.params.imagename);
+                            //removing docker userID
+                            cmd += ' && sudo docker pull ' + decodeURIComponent(imagename);
+                            logger.debug('Intermediate cmd: ', cmd);
+                            if (tagname != null) {
+                                cmd += ':' + tagname;
+                            }
+
+                            if (runparams != 'null') {
+                                runparams = decodeURIComponent(runparams);
+                            }
+
+                            if (startparams != 'null') {
+                                startparams = decodeURIComponent(startparams);
+                            } else
+                                startparams = '/bin/bash';
+
+                            cmd += ' && sudo docker run -i -t -d ' + runparams + ' ' + decodeURIComponent(imagename) + ':' + tagname + ' ' + startparams;
+                            logger.debug('Docker command to be executed : ', cmd);
+                            if (imagecount == 1) {
+                                //this would be the first image that would be run. Returning handle to browser.
+                                logger.debug('Returning handle to browser');
+                                res.end('OK');
+                            }
+                            //callback('done');
+                            _docker.runDockerCommands(cmd, req.params.instanceid,
+                                function(err, retCode) {
+                                    if (err) {
+                                        logsDao.insertLog({
+                                            referenceId: instanceid,
+                                            err: true,
+                                            log: 'Failed to Excute Docker command: . cmd : ' + cmd + '. Error: ' + err,
+                                            timestamp: new Date().getTime()
+                                        });
+                                        logger.error("Failed to Excute Docker command: ", err);
+                                        res.send(err);
+                                        return;
                                     }
-                                   
-                                    if (runparams != 'null') {
-                                        runparams = decodeURIComponent(runparams);
-                                    }
-                                    
-                                    if (startparams != 'null') {
-                                        startparams = decodeURIComponent(startparams);
-                                    } else
-                                        startparams = '/bin/bash';
 
-                                    cmd += ' && sudo docker run -i -t -d ' + runparams + ' ' + decodeURIComponent(imagename) + ':' + tagname + ' ' + startparams;
-                                    logger.debug('Docker command to be executed : ', cmd);
-                                    if(imagecount == 1){
-                                        //this would be the first image that would be run. Returning handle to browser.
-                                        logger.debug('Returning handle to browser');
-                                        res.end('OK');
-                                    }
-                                    //callback('done');
-                                    _docker.runDockerCommands(cmd, req.params.instanceid,
-                                        function(err, retCode) {
-                                            if (err) {
-                                                logsDao.insertLog({
-                                                    referenceId: instanceid,
-                                                    err: true,
-                                                    log: 'Failed to Excute Docker command: . cmd : ' + cmd + '. Error: ' + err,
-                                                    timestamp: new Date().getTime()
-                                                });
-                                                logger.error("Failed to Excute Docker command: ", err);
-                                                res.send(err);
-                                                return;
-                                            }
+                                    logger.debug("docker return ", retCode);
+                                    if (retCode == 0)
+                                    //if retCode == 0 //update docker status into instacne
+                                    {
+                                        logger.debug('Execcommand : --------------' + execcommand + ' ' + (execcommand != ''));
+                                        if (execcommand != '' && execcommand != 'null') {
+                                            logger.debug('In Execute command');
+                                            logsDao.insertLog({
+                                                referenceId: instanceid,
+                                                err: false,
+                                                log: 'Starting execute command: . cmd : ' + execcommand + ' on ' + containername,
+                                                timestamp: new Date().getTime()
+                                            });
+                                            //Execute command found 
+                                            var cmd = "sudo docker exec " + containername + ' bash ' + execcommand;
+                                            logger.debug('In docker exec ->' + cmd);
+                                            req.params.containerid = containername;
+                                            _docker.runDockerCommands(cmd, req.params.instanceid, function(err, retCode1) {
+                                                if (retCode1 == 0) {
 
-                                            logger.debug("docker return ", retCode);
-                                            if (retCode == 0)
-                                            //if retCode == 0 //update docker status into instacne
-                                            {
-                                                logger.debug('Execcommand : --------------' + execcommand + ' ' + (execcommand != ''));
-                                                if(execcommand != '' && execcommand != 'null'){
-                                                    logger.debug('In Execute command');
-                                                    logsDao.insertLog({
-                                                    referenceId: instanceid,
-                                                    err: false,
-                                                    log: 'Starting execute command: . cmd : ' + execcommand + ' on ' + containername,
-                                                    timestamp: new Date().getTime()
-                                                    });
-                                                    //Execute command found 
-                                                    var cmd = "sudo docker exec " + containername + ' bash ' + execcommand;
-                                                    logger.debug('In docker exec ->' + cmd);
-                                                    req.params.containerid = containername;
-                                                    _docker.runDockerCommands(cmd,req.params.instanceid,function(err,retCode1){
-                                                        if(retCode1 == 0){
-                                                                
-                                                                logger.debug('runDockerCommand : in done');
-                                                                instancesDao.updateInstanceDockerStatus(instanceid, "success", '', function(data) {
-                                                                    logger.debug('Instance Docker Status set to Success');
-                                                                   // res.send(200);
-                                                                   //callback('done');
-                                                                   logsDao.insertLog({
-                                                                        referenceId: instanceid,
-                                                                        err: false,
-                                                                        log: 'Done execute command: . cmd : ' + cmd + ' on ' + containername,
-                                                                        timestamp: new Date().getTime()
-                                                                        });
-                                                                   if(imagecount < dockercomposejson.length){
-
-                                                                        var lp = generateDockerLaunchParams(dockercomposejson[imagecount]['dockerlaunchparameters']);
-                                                                        var startparams = 'null';
-                                                                        var execcommand = 'null';
-                                                                        if(lp.length > 0)
-                                                                        {
-                                                                            if(lp[1]){
-                                                                                startparams = lp[1];
-                                                                            }
-                                                                            if(lp[2]){
-                                                                                execcommand = lp[2];
-                                                                            }
-                                                                        }
-                                                                        logger.debug('Running pullandrun count:',imagecount);
-                                                                        pullandrundocker(dockercomposejson[imagecount]['dockercontainerpaths'],dockercomposejson[imagecount]['dockerrepotags'],lp[0],startparams,execcommand,lp[3]);
-                                                                   }
-                                                                });
-                                                            }
-                                                            else{
-                                                                logsDao.insertLog({
-                                                                referenceId: instanceid,
-                                                                err: true,
-                                                                log: 'Error executing command: . cmd : ' + cmd + ' on ' + containername + ' : Return Code ' + retCode1 + ' -' + err,
-                                                                timestamp: new Date().getTime()
-                                                                });
-                                                            }
-
-                                                    });
-                                                   // logger('runout :' + runout);
-                                                    
-                                                }
-                                                else //no exec commands found
-                                                {
+                                                    logger.debug('runDockerCommand : in done');
                                                     instancesDao.updateInstanceDockerStatus(instanceid, "success", '', function(data) {
                                                         logger.debug('Instance Docker Status set to Success');
-                                                       // res.send(200);
-                                                       //callback('done');
-                                                       logsDao.insertLog({
+                                                        // res.send(200);
+                                                        //callback('done');
+                                                        logsDao.insertLog({
                                                             referenceId: instanceid,
                                                             err: false,
-                                                            log: 'Done executing command: . cmd : ' + cmd,
+                                                            log: 'Done execute command: . cmd : ' + cmd + ' on ' + containername,
                                                             timestamp: new Date().getTime()
-                                                            });
-                                                       if(imagecount < dockercomposejson.length){
-                                                            
+                                                        });
+                                                        if (imagecount < dockercomposejson.length) {
+
                                                             var lp = generateDockerLaunchParams(dockercomposejson[imagecount]['dockerlaunchparameters']);
-                                                            logger.debug('lp returned from generate=======> ', lp.join(' &&'));
                                                             var startparams = 'null';
                                                             var execcommand = 'null';
-                                                            if(lp.length > 0)
-                                                            {
-                                                                if(lp[1]){
+                                                            if (lp.length > 0) {
+                                                                if (lp[1]) {
                                                                     startparams = lp[1];
                                                                 }
-                                                                if(lp[2]){
+                                                                if (lp[2]) {
                                                                     execcommand = lp[2];
                                                                 }
                                                             }
-                                                            logger.debug('Running pullandrun count:',imagecount);
-                                                            pullandrundocker(dockercomposejson[imagecount]['dockercontainerpaths'],dockercomposejson[imagecount]['dockerrepotags'],lp[0],startparams,execcommand,lp[3]);
-                                                       }
+                                                            logger.debug('Running pullandrun count:', imagecount);
+                                                            pullandrundocker(dockercomposejson[imagecount]['dockercontainerpaths'], dockercomposejson[imagecount]['dockerrepotags'], lp[0], startparams, execcommand, lp[3]);
+                                                        }
+                                                    });
+                                                } else {
+                                                    logsDao.insertLog({
+                                                        referenceId: instanceid,
+                                                        err: true,
+                                                        log: 'Error executing command: . cmd : ' + cmd + ' on ' + containername + ' : Return Code ' + retCode1 + ' -' + err,
+                                                        timestamp: new Date().getTime()
                                                     });
                                                 }
-                                                //Running any execute command.
-                                            } else {
-                                                logger.debug('Failed running docker command ....');
-                                                res.end('Image pull failed check instance log for details');
-                                            }
-                                            logger.debug("Exit get() for /instances/dockerimagepull");
 
-                                        },
-                                        function(stdOutData) {
-                                            if (!stdOutData) {
+                                            });
+                                            // logger('runout :' + runout);
 
-                                                logger.debug("SSH Stdout :" + stdOutData.toString('ascii'));
-                                                stdmessages += stdOutData.toString('ascii');
-                                            } else {
+                                        } else //no exec commands found
+                                        {
+                                            instancesDao.updateInstanceDockerStatus(instanceid, "success", '', function(data) {
+                                                logger.debug('Instance Docker Status set to Success');
+                                                // res.send(200);
+                                                //callback('done');
                                                 logsDao.insertLog({
                                                     referenceId: instanceid,
                                                     err: false,
-                                                    log: stdOutData.toString('ascii'),
+                                                    log: 'Done executing command: . cmd : ' + cmd,
                                                     timestamp: new Date().getTime()
                                                 });
-                                                logger.debug("Docker run stdout :" + instanceid + stdOutData.toString('ascii'));
-                                                stdmessages += stdOutData.toString('ascii');
-                                            }
-                                        }, function(stdOutErr) {
-                                            logsDao.insertLog({
-                                                referenceId: instanceid,
-                                                err: true,
-                                                log: stdOutErr.toString('ascii'),
-                                                timestamp: new Date().getTime()
-                                            });
-                                            console.log("docker return ", stdOutErr);
-                                            //res.send(stdOutErr);
+                                                if (imagecount < dockercomposejson.length) {
 
+                                                    var lp = generateDockerLaunchParams(dockercomposejson[imagecount]['dockerlaunchparameters']);
+                                                    logger.debug('lp returned from generate=======> ', lp.join(' &&'));
+                                                    var startparams = 'null';
+                                                    var execcommand = 'null';
+                                                    if (lp.length > 0) {
+                                                        if (lp[1]) {
+                                                            startparams = lp[1];
+                                                        }
+                                                        if (lp[2]) {
+                                                            execcommand = lp[2];
+                                                        }
+                                                    }
+                                                    logger.debug('Running pullandrun count:', imagecount);
+                                                    pullandrundocker(dockercomposejson[imagecount]['dockercontainerpaths'], dockercomposejson[imagecount]['dockerrepotags'], lp[0], startparams, execcommand, lp[3]);
+                                                }
+                                            });
+                                        }
+                                        //Running any execute command.
+                                    } else {
+                                        logger.debug('Failed running docker command ....');
+                                        res.end('Image pull failed check instance log for details');
+                                    }
+                                    logger.debug("Exit get() for /instances/dockerimagepull");
+
+                                },
+                                function(stdOutData) {
+                                    if (!stdOutData) {
+
+                                        logger.debug("SSH Stdout :" + stdOutData.toString('ascii'));
+                                        stdmessages += stdOutData.toString('ascii');
+                                    } else {
+                                        logsDao.insertLog({
+                                            referenceId: instanceid,
+                                            err: false,
+                                            log: stdOutData.toString('ascii'),
+                                            timestamp: new Date().getTime()
                                         });
+                                        logger.debug("Docker run stdout :" + instanceid + stdOutData.toString('ascii'));
+                                        stdmessages += stdOutData.toString('ascii');
+                                    }
+                                }, function(stdOutErr) {
+                                    logsDao.insertLog({
+                                        referenceId: instanceid,
+                                        err: true,
+                                        log: stdOutErr.toString('ascii'),
+                                        timestamp: new Date().getTime()
+                                    });
+                                    console.log("docker return ", stdOutErr);
+                                    //res.send(stdOutErr);
+
+                                });
                         };
-                        
-                        if(dockercomposejson.length > 0){
+
+                        if (dockercomposejson.length > 0) {
                             var lp = generateDockerLaunchParams(dockercomposejson[0]['dockerlaunchparameters']);
-                           
+
                             var startparams = 'null';
                             var execcommand = 'null';
-                            if(lp.length > 0)
-                            {
-                                if(lp[1]){
+                            if (lp.length > 0) {
+                                if (lp[1]) {
                                     startparams = lp[1];
                                 }
-                                if(lp[2]){
+                                if (lp[2]) {
                                     execcommand = lp[2];
                                 }
                             }
-                             logger.debug('lp---->',lp[0]);
-                            pullandrundocker(dockercomposejson[0]['dockercontainerpaths'],dockercomposejson[0]['dockerrepotags'],lp[0],startparams,execcommand,lp[3]);
-                        }
-                        else{
+                            logger.debug('lp---->', lp[0]);
+                            pullandrundocker(dockercomposejson[0]['dockercontainerpaths'], dockercomposejson[0]['dockerrepotags'], lp[0], startparams, execcommand, lp[3]);
+                        } else {
                             res.send('200 ' + 'No Images to pull');
                         }
-                        
-                        
-                        
+
+
+
 
 
                     } //!(err)
@@ -2073,7 +2068,9 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                 chefClientOptions.password = decryptedCredentials.password;
                             }
                             var installedSoftwareString = '';
-                            chef.runKnifeWinrmCmd('Get-WmiObject -Class Win32_Product | Select-Object -Property Name', chefClientOptions, function(err, retCode) {
+                            var cmd = 'Get-WmiObject -Class Win32_Product | Select-Object -Property Name';
+                            cmd = 'powershell \"' + cmd + '\"';
+                            chef.runKnifeWinrmCmd(cmd, chefClientOptions, function(err, retCode) {
 
                                 if (err) {
                                     res.send(500, {
@@ -2135,5 +2132,305 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         });
 
     });
+    /*
+    app.get('/instances/:instanceId/setAsWorkStation', function(req, res) {
+
+        instancesDao.getInstanceById(req.params.instanceId, function(err, instances) {
+            if (err) {
+                logger.debug("Failed to fetch Instance ", err);
+                res.send(500, errorResponses.db.error);
+                return;
+            }
+            if (!instances.length) {
+                return res.send(404, {
+                    message: "Instance does not exist"
+                });
+
+            }
+
+            var instance = instances[0];
+            configmgmtDao.getChefServerDetails(instance.chef.serverId, function(err, chefDetails) {
+                if (err) {
+                    logger.debug("Failed to fetch ChefServerDetails ", err);
+                    res.send(500, errorResponses.chef.corruptChefData);
+                    return;
+                }
+                credentialCryptography.decryptCredential(instance.credentials, function(err, decryptedCredentials) {
+                    if (err) {
+                        res.send(500, {
+                            "message": "Unable to decrypt file."
+                        });
+                        return;
+                    }
+                    var params = {
+                        username: decryptedCredentials.username,
+                        host: instance.instanceIP,
+                        port: 22
+                    };
+
+                    if (decryptedCredentials.pemFileLocation) {
+                        params.privateKey = decryptedCredentials.pemFileLocation;
+                    } else {
+                        params.password = decryptedCredentials.password;
+                    }
+                    var scpClient = new SCPClient(params);
+                    scpClient.upload(chefDetails.chefRepoLocation + '/.chef/', '/home/' + decryptedCredentials.username + '/' + instance.chef.chefNodeName + '/.chef/', function(err) {
+                        if (err) {
+                            console.log(err);
+                            res.send(500, err);
+                            return;
+                        }
+                        res.send(200, {
+                            message: 'true'
+                        })
+                    });
+                });
+
+            });
+        });
+    });*/
+
+    app.get('/instances/:instanceId/setAsWorkStation', function(req, res) {
+
+        instancesDao.getInstanceById(req.params.instanceId, function(err, instances) {
+            if (err) {
+                logger.debug("Failed to fetch Instance ", err);
+                res.send(500, errorResponses.db.error);
+                return;
+            }
+            if (!instances.length) {
+                return res.send(404, {
+                    message: "Instance does not exist"
+                });
+
+            }
+
+            var instance = instances[0];
+            configmgmtDao.getChefServerDetails(instance.chef.serverId, function(err, chefDetails) {
+                if (err) {
+                    logger.debug("Failed to fetch ChefServerDetails ", err);
+                    res.send(500, errorResponses.chef.corruptChefData);
+                    return;
+                }
+                credentialCryptography.decryptCredential(instance.credentials, function(err, decryptedCredentials) {
+                    if (err) {
+                        res.send(500, {
+                            "message": "Unable to decrypt file."
+                        });
+                        return;
+                    }
+                    var params = {
+                        username: decryptedCredentials.username,
+                        host: instance.instanceIP,
+                        port: 22
+                    };
+
+                    if (decryptedCredentials.pemFileLocation) {
+                        params.privateKey = decryptedCredentials.pemFileLocation;
+                    } else {
+                        params.password = decryptedCredentials.password;
+                    }
+                    var remotePath;
+                    if (instance.hardware.os === 'linux') {
+                        remotePath = "$HOME/" + instance.chef.chefNodeName + '/.chef/';
+                    } else {
+                        remotePath = "C:\\Users\\" + params.username + '\\' + instance.chef.chefNodeName + '\\.chef\\';
+                    }
+
+                    function createCmdString(fileItem, cmdString, callback) {
+                        if (cmdString) {
+                            cmdString = cmdString + ' && '
+                        }
+                        fileIo.readFile(fileItem.fullPath, function(err, fileData) {
+                            if (err) {
+                                callback(err);
+                                return;
+                            }
+
+                            var args = ['echo', fileData.toString()];
+
+                            var escapedString = shellEscape(args);
+                            var sudoCmd = '';
+                            // if (instance.hardware.os === 'linux') {
+                            //     sudoCmd = "sudo sh -c \"";
+                            //     if (decryptedCredentials.password) {
+                            //         sudoCmd = 'echo \"' + decryptedCredentials.password + '\" | sudo -S ';
+                            //     }
+                            //     escapedString = sudoCmd + escapedString + ' > ' + remotePath + fileItem.name+"\"";
+                            // } else {
+                            //     escapedString = sudoCmd + escapedString + ' > ' + remotePath + fileItem.name;
+                            // }
+                            escapedString = sudoCmd + escapedString + ' > ' + remotePath + fileItem.name;
+
+
+                            cmdString = cmdString + escapedString;
+                            callback(null, cmdString);
+
+                        });
+                    }
+
+                    fileIo.readDir('', chefDetails.chefRepoLocation + '/.chef/', function(err, dirList, fileList) {
+                        if (err) {
+                            res.send(500, errorResponses.db.error);
+                            return;
+                        }
+                        var count = 0;
+
+                        function loopFiles(fileList, cmdString, callback) {
+
+                            if (count < fileList.length) {
+                                createCmdString(fileList[count], cmdString, function(err, cmdString) {
+                                    count++;
+                                    if (err) {
+                                        res.send(500, errorResponses.db.error);
+                                        return;
+                                    }
+                                    loopFiles(fileList, cmdString, callback);
+                                });
+                            } else {
+                                callback(cmdString);
+
+                            }
+                        }
+                        if (fileList.length) {
+                            loopFiles(fileList, '', function(cmdString) {
+
+                                if (instance.hardware.os === 'linux') {
+                                    var sudoCmd = '';
+                                    // var sudoCmd = "sudo";
+                                    // if (decryptedCredentials.password) {
+                                    //     sudoCmd = 'echo \"' + decryptedCredentials.password + '\" | sudo -S';
+                                    // }
+                                    var cmd = sudoCmd + " mkdir -p " + remotePath + ' && ' + cmdString;
+
+                                    var sshParamObj = {
+                                        username: decryptedCredentials.username,
+                                        host: instance.instanceIP,
+                                        port: 22
+                                    }
+                                    if (decryptedCredentials.pemFileLocation) {
+                                        sshParamObj.privateKey = decryptedCredentials.pemFileLocation;
+                                    } else {
+                                        sshParamObj.password = decryptedCredentials.password;
+                                    }
+                                    var sshConnection = new SSH(sshParamObj);
+                                    console.log(cmd);
+                                    sshConnection.exec(cmd, function(err, retCode) {
+                                        if (err) {
+                                            res.send(500, {
+                                                "message": "Unable to ssh"
+                                            });
+                                            return;
+                                        }
+                                        if (retCode == 0) {
+                                            res.send(200, {
+                                                "message": "true"
+                                            });
+                                        } else if (retCode === -5000) {
+                                            res.send(500, {
+                                                "message": "Host Unreachable."
+                                            });
+                                            return;
+                                        } else if (retCode === -5001) {
+                                            res.send(500, {
+                                                "message": "Invalid credentials."
+                                            });
+                                            return;
+                                        } else if (retCode === -5002) {
+                                            res.send(500, {
+                                                "message": "Unknown Exeption Occured. Code : " + retCode
+                                            });
+                                            return;
+                                        } else {
+                                            res.send(500, {
+                                                "message": "Unknown Exeption Occured. Code : " + retCode
+                                            });
+                                            return;
+                                        }
+
+                                    }, function(stdOut) {
+                                        console.log('err ==> ', stdOut.toString());
+
+                                    }, function(stdErr) {
+                                        console.log('err ==> ', stdErr.toString());
+                                    });
+
+                                } else { //windows
+
+                                    var chef = new Chef({
+                                        userChefRepoLocation: chefDetails.chefRepoLocation,
+                                        chefUserName: chefDetails.loginname,
+                                        chefUserPemFile: chefDetails.userpemfile,
+                                        chefValidationPemFile: chefDetails.validatorpemfile,
+                                        hostedChefUrl: chefDetails.url,
+                                    });
+                                    var chefClientOptions = {
+                                        username: decryptedCredentials.username,
+                                        host: instance.instanceIP,
+                                        port: 22,
+                                    }
+
+                                    if (decryptedCredentials.pemFileLocation) {
+                                        chefClientOptions.privateKey = decryptedCredentials.pemFileLocation;
+                                    } else {
+                                        chefClientOptions.password = decryptedCredentials.password;
+                                    }
+
+                                    chef.runKnifeWinrmCmd('mkdir ' + remotePath + ' && ' + cmdString, chefClientOptions, function(err, retCode) {
+
+                                        if (err) {
+                                            res.send(500, {
+                                                "message": "Unable to winrm"
+                                            });
+                                            return;
+                                        }
+                                        logger.debug("Winrm finished with retcode ==> " + retCode);
+                                        if (retCode == 0) {
+                                            res.send(200, {
+                                                "message": "true"
+                                            });
+                                        } else if (retCode === -5000) {
+                                            res.send(500, {
+                                                "message": "Host Unreachable."
+                                            });
+                                            return;
+                                        } else if (retCode === -5001) {
+                                            res.send(500, {
+                                                "message": "Invalid credentials."
+                                            });
+                                            return;
+                                        } else if (retCode === -5002) {
+                                            res.send(500, {
+                                                "message": "Unknown Exeption Occured while trying knife winrm. Code : " + retCode
+                                            });
+                                            return;
+                                        } else {
+                                            res.send(500, {
+                                                "message": "Unknown Exeption Occured while trying knife winrm. Code : " + retCode
+                                            });
+                                            return;
+                                        }
+                                    }, function(stdOut) {
+                                        installedSoftwareString = installedSoftwareString + stdOut.toString('UTF-8');
+
+                                    }, function(stdErr) {
+                                        logger.debug("err ==> " + stdErr.toString('ascii'));
+                                    });
+
+                                }
+
+                            });
+                        } else {
+                            res.send(500, errorResponses.db.error);
+                            return;
+                        }
+                    });
+                });
+
+            });
+        });
+    });
+
+
 
 };
