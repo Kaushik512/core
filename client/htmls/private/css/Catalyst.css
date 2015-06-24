@@ -7882,3 +7882,11 @@ tr.selectedOne td a{
     background-color: #fff!important;
     font-size: 16px;
 }
+
+/*hack for multilple modal in task hostory */
+.modal:nth-of-type(even) {
+    z-index: 1042 !important;
+}
+.modal-backdrop.in:nth-of-type(even) {
+    z-index: 1041 !important;
+}

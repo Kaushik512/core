@@ -3248,7 +3248,7 @@
 
                                                                      var $tdLogs = $('<td></td>').append('<a data-original-title="MoreInfo" data-placement="top" rel="tooltip" class="moreinfoBuild margin-left40per" href="javascript:void(0)" data-toggle="modal"></a>');
                                                                      $tdLogs.find('a').data('history', taskHistories[i]).data('taskId', taskId).click(function() {
-                                                                         $('#assignedTaskHistory').modal('hide');
+                                                                         //$('#assignedTaskHistory').modal('hide');
                                                                          var taskId = $(this).data('taskId');
                                                                          var $taskExecuteTabsHeaderContainer = $('#taskExecuteTabsHeader').empty();
                                                                          var $taskExecuteTabsContent = $('#taskExecuteTabsContent').empty();
