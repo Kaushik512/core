@@ -3088,6 +3088,7 @@
 
 
                                                      for (var i = 0; i < data.length; i++) {
+                                                        (function(i){
                                                          var $tr = $('<tr></tr>').attr('data-taskId', data[i]._id);
                                                          var $tdName = $('<td></td>').append(data[i].name);
                                                          $tr.append($tdName);
@@ -3399,26 +3400,32 @@
                                                              $tdOptions.find('.btnDeleteTask').addClass('hidden');
                                                          }
 
-                                                         $tdOptions.find('.btnDeleteTask').click(function(e) {
-                                                             var taskId = $(this).parents('td').attr('data-taskId');
-                                                             var that = this;
-                                                             $.ajax({
-                                                                 url: '../tasks/' + taskId,
-                                                                 method: 'DELETE',
-                                                                 success: function(data) {
-                                                                     //$(that).parents('tr').remove();
-                                                                     //var totalTask = $taskListArea.children('tr').length;
-                                                                     //$('.taskListFooter').text('Showing ' + totalTask + ' of ' + totalTask + ' entries');
-                                                                     $taskDatatable.row($(that).parents('tr')).remove().draw(false);
+                                                            $tdOptions.find('.btnDeleteTask').click(function(e) {
+                                                                var taskId = $(this).parents('td').attr('data-taskId');
+                                                                var that = this;
 
-                                                                     $('div[data-taskCardIconId="' + taskId + '"]').remove();
+                                                                bootbox.confirm('Are you sure you want to delete the Task -&nbsp;&quot;<b>' + data[i].name + '</b>&quot;', function(result) {
+                                                                    if (result) {
+                                                                        $.ajax({
+                                                                            url: '../tasks/' + taskId,
+                                                                            method: 'DELETE',
+                                                                            success: function(data) {
+                                                                                //$(that).parents('tr').remove();
+                                                                                //var totalTask = $taskListArea.children('tr').length;
+                                                                                //$('.taskListFooter').text('Showing ' + totalTask + ' of ' + totalTask + ' entries');
+                                                                                $taskDatatable.row($(that).parents('tr')).remove().draw(false);
 
-                                                                 },
-                                                                 fail: function(msg) {
-                                                                     console.log("fail ==>", msg);
-                                                                 }
-                                                             })
-                                                         });
+                                                                                $('div[data-taskCardIconId="' + taskId + '"]').remove();
+
+                                                                            },
+                                                                            fail: function(msg) {
+                                                                                console.log("fail ==>", msg);
+                                                                            }
+                                                                        })
+                                                                    }
+                                                                });
+                                                                return false;
+                                                            });
                                                          $tdOptions.find('.btnEditTask').click(function(e) {
                                                              setBreadCrumbAndViewOrchestration();
 
@@ -3439,6 +3446,7 @@
                                                          }
                                                          //     $("#sorttableheader").tablesorter();
                                                          pageSetUp();
+                                                     })(i);
 
                                                      }
 
