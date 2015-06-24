@@ -181,8 +181,8 @@
                           <div class="panel-heading">
                             <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion-configmgmt" href="#collapseConfigmgmt"> <i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i><i class="fa fa-fw fa-bar-chart-o" style="font-size:14px;"></i> <b style="color:#3a87ad;font-size:12px;"><u>Configuration Management</u></b></a></h4>
 
-                            <label id="saveSpinner" class="hidden"><img  style="margin-left:5px;margin-right:25px;" src="img/select2-spinner.gif"></label>
-                            <a class="btn btn-primary workstationBtn" data-toggle="modal" href="#workstationModalContainer" style="float: right; margin-right: 5px; margin-top: 2px;">
+                            <label id="saveSpinner" class="hidden"><img style="margin-left:400px;" src="img/select2-spinner.gif"></label>
+                            <a class="btn btn-primary workstationBtn" data-toggle="modal" style="float: right; margin-right: 5px; margin-top: 2px;">
                               <i class="fa fa-check" style="font-size:14px;"></i>
                               Convert To Workstation
                             </a>
@@ -1053,7 +1053,8 @@
              <div class="modal-body" style="height:140px;">
                 <div class="col-lg-6 col-md-6" style="margin-left:-15px">
 
-                            <label for="">Select Task</label>
+                            <label for=""><input type="checkbox" name="my_checkbox" id="my_checkbox"/>&nbsp;Select/Unselect Task</label>
+                            
 
                             <select class="form-control customNew" id="taskList" multiple> </select>
                             
@@ -1099,8 +1100,6 @@ var urlParams = {};
     }
 
 })();
-
-
 
 
 function populateJsonData(instanceId) {
@@ -2288,10 +2287,30 @@ $.get('../instances/' + urlParams.id, function(data) {
                     $option.attr('selected', 'selected');
                 }
                 $select.append($option);
+                
             }
+            
             $('#instanceTaskModal').modal('show');
         });
     });
+
+    var checkbox = $('#my_checkbox');
+    var listbox = $('#taskList');
+
+    $(checkbox).click(function() {
+        selectDeselect(listbox, checkbox);
+    });
+
+    function selectDeselect(listbox, checkbox) {
+        var select_all = $(checkbox).prop('checked') ? true : false;
+        var select = $(listbox);
+        if (select_all) {
+            var clone = select.clone();
+            $('option', clone).attr('selected', select_all);
+            var html = clone.html();
+            select.html(html);
+        } else $('option', select).removeAttr('selected');
+    }
 
     $('#saveTaskBtn').click(function() {
         var $taskSelect = $('#taskList');
@@ -2321,9 +2340,8 @@ $.get('../instances/' + urlParams.id, function(data) {
 
     });
 
-
-
 });
+
 
 
 function getActionBtnClass(actionType) {
