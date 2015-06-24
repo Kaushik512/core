@@ -51,13 +51,13 @@ var Process = function(appPath, argList, options) {
 
     this.start = function() {
         console.log(appPath + " " + argList.join(' '));
-        // proc = exec(appPath + " " + argList.join(' '), options, function(err, stdOut, stdErr) {
-        //     if (err) {
-        //         console.log(err);
-        //         return;
-        //     }
-        // });
-        proc = spawn(appPath, argList, options);
+        proc = exec(appPath + " " + argList.join(' '), options, function(err, stdOut, stdErr) {
+            if (err) {
+                console.log(err);
+                return;
+            }
+        });
+       // proc = spawn(appPath, argList, options);
         
         processRunning = true;
         if (typeof onStdOut === 'function') {
