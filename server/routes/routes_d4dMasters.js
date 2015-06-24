@@ -3285,20 +3285,14 @@ module.exports.setRoutes = function(app, sessionVerification) {
         });
     });
 
-    /*app.get('/d4dMasters/orgs/:orgId/projects/all', function(req, res) {
-        var loggedInUser = req.session.user.cn;
-        masterUtil.getProjectsForOrg(req.params.orgId, function(err, projects) {
+    app.get('/d4dMasters/orgs/all/users/7', function(req, res) {
+        logger.debug("hhhhhhh");
+        masterUtil.getUsersForAllOrg(function(err, users) {
             if (err) {
-                res.send(500, "Failed to fetch projects.");
+                res.send(500, "Failed to fetch User.");
             }
-            if (projects) {
-                res.send(projects);
-                return;
-            }else{
-                res.send([]);
-                return;
-            }
-            
+            res.send(users);
+            return;
         });
-    });*/
+    });
 }
