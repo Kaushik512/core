@@ -11,7 +11,7 @@ Resource           catalyst.txt
 *** Variables ***
 ${BROWSER TYPE}                   chrome              #firefox #http://54.149.39.160:3001                    #internetexplorer               #phantomjs
 ${ENVIRONMENT SERVER}             http://52.27.46.167:3001
-#http://52.27.46.167:3001/private/index.html
+
 
  
 
@@ -125,7 +125,7 @@ ${MAT MEM}                 604488kB
 ${MAT FREEMEM}             80476kB
 ${MAT OS}                  centos
 ${MAT BOOTSTRAP}           success
-${MAT RUNLIST}             recipe[apache2],recipe[git],recipe[cron]
+${MAT RUNLIST}             recipe[a]          #recipe[apache2],recipe[git],recipe[cron]
 ${MAT RUNLIST1}            recipe[a],recipe[cron]
 ${MAT OS1}                 ubuntu
 ${UBUNTU MEM}              1016256kB

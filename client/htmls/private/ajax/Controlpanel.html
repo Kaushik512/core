@@ -1242,6 +1242,65 @@ function disableInstanceStartStopActionBtns(instanceId) {
     $cardViewInstanceId.find('.instance-bootstrap-ActionStart a').addClass('isStopedInstance').removeClass('actionbuttonStart').addClass('actionbuttonStartdisable');
 }
 
+function pollInstanceBootstrapState(instanceId, delay) {
+
+    var timeout = setTimeout(function() {
+        $.get('../instances/' + instanceId, function(data) {
+            var title = '';
+            if (data) {
+                if (data.bootStrapStatus == 'waiting') {
+                    console.log('polling again bootStrapStatus');
+                    pollInstanceBootstrapState(instanceId, 5000);
+                } else {
+                    if (data.bootStrapStatus == 'success') {
+                        if (data.hardware.platform === 'unknown') {
+                            console.log('polling again bootStrapStatus unknown');
+                            pollInstanceBootstrapState(instanceId, 5000);
+                            return;
+                        }
+                        var $parent = $('.domain-roles-caption[data-instanceId="' + instanceId + '"]');
+                        var basePath = 'img/osIcons/',
+                            imgPath, title = '';
+                        switch (data.hardware.platform.toLowerCase()) {
+                            case "window 2008":
+                                imgPath = 'windows.png';
+                                break;
+                            case "centos":
+                                imgPath = 'centos.png';
+                                break;
+                            case "ubuntu":
+                                imgPath = 'ubuntu.png';
+                                break;
+                            default:
+                                imgPath = 'unknown.png';
+                        }
+                        title = data.hardware.platform;
+                        if (imgPath === "unknown.png") {
+                            if (data.hardware.os.toLowerCase() === "linux") {
+                                imgPath = "linux.png";
+                                title = data.hardware.os;
+
+                            } else if (data.hardware.os.toLowerCase().indexOf('window') > -1) {
+                                imgPath = "windows.png";
+                                title = data.hardware.os;
+
+                            }
+
+                        }
+                        $parent.find('.card_os').empty().append('<img src="' + basePath + imgPath + '" height="25" width="25" data-placement="top" data-original-title="' + title.capitalizeFirstLetter() + '" rel="tooltip"/>');
+
+
+                    }
+
+                }
+
+            }
+        });
+    }, delay);
+}
+
+
+
 var logTimeout;
 var stateTimeout;
 $.get('../instances/' + urlParams.id, function(data) {
@@ -1336,6 +1395,10 @@ $.get('../instances/' + urlParams.id, function(data) {
     });
 
     var getOS = function(data) {
+            if (data.bootStrapStatus === 'waiting') {
+                console.log('polling bootStrapStatus');
+                pollInstanceBootstrapState(data._id, 5000);
+            }
             var basePath = 'img/osIcons/',
                 imgPath, title = '';
             console.log(data.hardware.os + ' :: OS ::' + data.hardware.platform.toLowerCase())
@@ -2234,28 +2297,28 @@ $.get('../instances/' + urlParams.id, function(data) {
         var $taskSelect = $('#taskList');
         var $selectedOptions = $taskSelect.find('option:selected');
         var taskIds = $taskSelect.val();
-        if (taskIds) {
-            $.post('../instances/' + data._id + '/addTask', {
-                taskIds: taskIds
-            }, function() {
-                var str = '';
-                $tasksDatatable.clear().draw();
-                for (var i = 0; i < $selectedOptions.length; i++) {
-                    var $trTask = $('<tr style="line-height:2.3"></tr>');
-                    var $tdSerial = $('<td/>');
-                    str = $($selectedOptions[i]).text();
-                    var $tdName = $('<td class="taskNameTd"/>');
-                    $tdName.append(str);
-                    $trTask.append($tdSerial);
-                    $trTask.append($tdName);
-                    $tasksDatatable.row.add($trTask).draw();
-                }
-                $('#instanceTaskModal').modal('hide');
-                data.taskIds = taskIds;
-            });
-        } else {
-            $('#instanceTaskModal').modal('hide');
+        if (!taskIds) {
+            taskIds = [];
         }
+        $.post('../instances/' + data._id + '/addTask', {
+            taskIds: taskIds
+        }, function() {
+            var str = '';
+            $tasksDatatable.clear().draw();
+            for (var i = 0; i < $selectedOptions.length; i++) {
+                var $trTask = $('<tr style="line-height:2.3"></tr>');
+                var $tdSerial = $('<td/>');
+                str = $($selectedOptions[i]).text();
+                var $tdName = $('<td class="taskNameTd"/>');
+                $tdName.append(str);
+                $trTask.append($tdSerial);
+                $trTask.append($tdName);
+                $tasksDatatable.row.add($trTask).draw();
+            }
+            $('#instanceTaskModal').modal('hide');
+            data.taskIds = taskIds;
+        });
+
     });
 
 

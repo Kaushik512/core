@@ -217,7 +217,7 @@ Enters the UserName of UbuntuProviders
 Enters the UserName of WindowsProviders
     Input Text    id=UserName    administrator
 
-Catalyst Choose Template and Launch Setup
+Catalyst Choose Template and Save Setup
     #Clicks on Settings
     Clicks on Design
     Sleep    30s
@@ -322,8 +322,9 @@ Catalyst Work SSH CHEFCLIENT STOP Setup after LAUNCH
     Checking THe BootStrpa Status
     Clicks on Back To Instances
     Steps To Run Chef Client
-    #Steps to Run SSH
+    Steps to Run SSH
     Steps to Run Stopping the Instance
+    Sleep    20s
     Clicks on Edit Button of the CentosInstance Imported
     Enters the New Instance Name for Centos
     Clicks on Save Button of Edddited Instance
@@ -362,10 +363,10 @@ Steps to Run Stopping the Instance
     
 
 Catlayst verfication of Instance Stop Setup and Disable
-    Clicks on Workzone Button
-    Clicks on User Created Organization
-    Clicks on User Created BusinessGroup
-    Clicks on > Button to your Environment
+    #Clicks on Workzone Button
+    #Clicks on User Created Organization
+    #Clicks on User Created BusinessGroup
+    #Clicks on > Button to your Environment
     #-Clicks on your Blueeeprint
     Verfified the STOPPED Status
     Verify the IP Address after Launch of Instance
@@ -456,10 +457,10 @@ Catalyst Check INFORMATION Status for Ubuntu
     Clicks on Back To Instances
 
 Catalyst Grid View Start ,Stop ,SSH ,Chef ,Client ,Log Setup
-    Clicks on Workzone Button
-    Clicks on User Created Organization
-    Clicks on User Created BusinessGroup
-    Clicks on > Button to your Environment
+    #Clicks on Workzone Button
+    #Clicks on User Created Organization
+    #Clicks on User Created BusinessGroup
+    #Clicks on > Button to your Environment
     Sleep    1s
     Clicks on Instances View
     Verfiy the Name of Instance
@@ -476,17 +477,17 @@ Catalyst Grid View Start ,Stop ,SSH ,Chef ,Client ,Log Setup
     Clicks on START Button in Actions of Grid View
     Verify the STarted Status from Grid View
     Verfiy the Chef Run fron Grid View Enabled
-    Verify the SSH Enabledd fromn Grid View
-    Verfiy the STOP Toggler Enabled from Grid View
-    Chef Run With New CookBook From Grid View
-    Clicks on View All Run List
-    SSH in to the Instance from Grid view
-    Enters the Username in the Terminal
-    Select Authentication Type
-    Upload the Catalyst PEM File
-    Clicks on Terminlal Submit Button
-    Close the SSH Terminal
-    Clicks on View Instancess Button
+    #-Verify the SSH Enabledd fromn Grid View
+    #-Verfiy the STOP Toggler Enabled from Grid View
+    #-Chef Run With New CookBook From Grid View
+    #-Clicks on View All Run List
+    #-SSH in to the Instance from Grid view
+    #-Enters the Username in the Terminal
+    #-Select Authentication Type
+    #-Upload the Catalyst PEM File
+    #-Clicks on Terminlal Submit Button
+    #-Close the SSH Terminal
+    #-Clicks on View Instancess Button
 
 Clicks on Edit Button of the CentosInstance Imported
     Sleep    2s
@@ -519,9 +520,9 @@ Verify the IP in Grid View
 Clicks on View Run List and Verify the Runlists
     Click Element    xpath=.//*[@id='tableinstanceview']/tbody/tr/td[5]/div/span/a
     Sleep    1s
-    Element Should Contain    xpath=.//*[@id='modalTableRunlist']/div/div/div[2]/span[1]    recipe[apache2]
-    Element Should Contain    xpath=.//*[@id='modalTableRunlist']/div/div/div[2]/span[2]    recipe[git]
-    Element Should Contain    xpath=.//*[@id='modalTableRunlist']/div/div/div[2]/span[3]    recipe[cron]
+    #Element Should Contain    xpath=.//*[@id='modalTableRunlist']/div/div/div[2]/span[1]    recipe[apache2]
+    #Element Should Contain    xpath=.//*[@id='modalTableRunlist']/div/div/div[2]/span[2]    recipe[git]
+    #Element Should Contain    xpath=.//*[@id='modalTableRunlist']/div/div/div[2]/span[3]    recipe[a]
 
 Clicks on RunList Close Button
     Click Element    xpath=.//*[@id='modalTableRunlist']/div/div/div[3]/button
@@ -747,7 +748,7 @@ Verify the Ubuntuu Stopped CHEF Client Run after Updation
 
 
 Verfiy the Stopped SSH is Disabled after Updation
-    Wait Until Keyword Succeeds    1 minute     1 seconds    Element Should Be Visible    xpath=.//*[@id='controlPanelContainer']/div/div/ul/li[contains(.,"ApacheNew")]/div/div/div/div/div/div[4]/div[4]/a[@class='cpTop isStopedInstance sshIcondisable']
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Element Should Be Visible    xpath=.//*[@id='controlPanelContainer']/div/div/ul/li[contains(.,"ApacheNew-Edited")]/div/div/div/div/div/div[4]/div[4]/a[@class='cpTop sshTerminalBtn isStopedInstance sshIcondisable']
 
 Verfiy the Ubuntu Stopped SSH is Disabled after Updation
     Wait Until Keyword Succeeds    1 minute     1 seconds    Element Should Be Visible    xpath=.//*[@id='controlPanelContainer']/div/div/ul/li[contains(.,"UbuntuApac")]/div/div/div/div/div/div[4]/div[4]/a[@class='cpTop isStopedInstance sshIcondisable']
@@ -907,7 +908,7 @@ Verfified the Ubuntu STOPPED Status
 
 Verify the IP Address after Launch of Instance
     ${EXTRACTED}=    Get Value       xpath=//.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"ApacheNew")]/div/div/div[1]/div/div/div[3]/div/span[1]/strong[@class='instanceip']
-    Run Keyword If    '${STATS}' != '${EXTRACTED}'    Log    ${PRINTSTMT} is the IP Address
+    Run Keyword If    '${STATS}' != '${EXTRACTED}'    Log    ${PRINTSTMT}
 
 Verify the IP Address after Launch of Ubuntu Instance
     ${EXTRACTED}=    Get Value       xpath=//.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"UbuntuApac")]/div/div/div[1]/div/div/div[3]/div/span[1]/strong[@class='instanceip']
