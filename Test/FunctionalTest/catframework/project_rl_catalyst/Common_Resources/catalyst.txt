@@ -15,7 +15,7 @@ ${SERVER}                   ${ENVIRONMENT SERVER}
 ${BROWSER}                  ${BROWSER TYPE}
 ${TESTDATA}                ${ENV}.txt
 #${DELAY}             4
-${DELAY}             15
+${DELAY}               3                     #15
 #${SHORT DELAY}       1
 ${SHORT DELAY}       0
 ${DELAY SECONDS}       5 seconds
