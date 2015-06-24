@@ -180,6 +180,13 @@
                         <div class="panel panel-default">
                           <div class="panel-heading">
                             <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion-configmgmt" href="#collapseConfigmgmt"> <i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i><i class="fa fa-fw fa-bar-chart-o" style="font-size:14px;"></i> <b style="color:#3a87ad;font-size:12px;"><u>Configuration Management</u></b></a></h4>
+
+                            <label id="saveSpinner" class="hidden"><img  style="margin-left:5px;margin-right:25px;" src="img/select2-spinner.gif"></label>
+                            <a class="btn btn-primary workstationBtn" data-toggle="modal" href="#workstationModalContainer" style="float: right; margin-right: 5px; margin-top: 2px;">
+                              <i class="fa fa-check" style="font-size:14px;"></i>
+                              Convert To Workstation
+                            </a>
+
                           </div>
                           <div id="collapseConfigmgmt" class="panel-collapse collapse in">
                             <div class="panel-body">
@@ -1142,6 +1149,35 @@ $('.inspectBtn').click(function() {
     $('.loadingContainerimageInspectCSS').show();
     $('div').find('#paragraphs').empty();
 });
+
+function populateWorkstation(){
+  $('.workstationBtn').attr('disabled','disabled');
+  $('#saveSpinner').removeClass('hidden');
+  var $div = $('.domain-roles-caption');
+  var instanceId = $div.attr('data-instanceid');
+  $.ajax({
+        type: "GET",
+        url: "../instances/" + instanceId + "/setAsWorkStation",
+        success: function(data) {
+          console.log(data);
+            bootbox.alert("Your workstation has been setup successfully");
+            $('#saveSpinner').addClass('hidden');
+            $('.workstationBtn').removeAttr('disabled');
+        },
+        error: function(jqxhr) {
+          var failureText = "Server Behaved Unexpectedly. Please try again later";
+            if(jqxhr.responseJSON && jqxhr.responseJSON.message) {
+                failureText = jqxhr.responseJSON.message;
+            }
+            bootbox.alert(failureText);
+            $('#saveSpinner').addClass('hidden');
+            $('.workstationBtn').removeAttr('disabled');  
+            
+        }
+    });
+}
+
+$('.workstationBtn').click(populateWorkstation);
 
 function disableSSHBtn(instanceId) {
     var $cardViewInstanceId = $(".domain-roles-caption[data-instanceId='" + instanceId + "']");
