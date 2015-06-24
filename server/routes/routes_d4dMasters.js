@@ -2671,6 +2671,25 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                 }
                                             });
                                         }
+                                        if(req.params.id === '21'){
+                                                var projectName = bodyJson["projectname"];
+                                                logger.debug("projectName::::::::::::: ",projectName);
+                                                d4dModelNew.d4dModelMastersTeams.update({
+                                                    rowid: bodyJson["rowid"],
+                                                    id: "21"
+                                                },{
+                                                    $set:{
+                                                        projectname: projectName
+                                                    }
+                                                },{
+                                                    upsert: false
+                                                },function(err,updateCount){
+                                                    if(err){
+                                                        logger.debug("Team update Fail..",err);
+                                                    }
+                                                    logger.debug("++++++++++++++++++++ ",updateCount);
+                                                });
+                                            }
 
                                         if(req.params.id === '1'){
                                             masterUtil.updateTeam(bodyJson['rowid'],function(err,aBody){
