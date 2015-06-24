@@ -191,7 +191,8 @@ Choose the Authentication as Pem in Inportnodes
     Click Element    xpath=//div[text()='Pem File']
 
 Upload the PEM file in Inport Nodes
-    Choose File    id=importPemfileInput    C:\\Users\\adarsh.RLINDIA\\Desktop\\caty\\Chef\\cat_instances.pem
+    Choose File    id=importPemfileInput    ${CAT_INSTANCES}
+    #C:\\Users\\adarsh.RLINDIA\\Desktop\\caty\\Chef\\cat_instances.pem
 
 Clicks on Import Button in Import Nodes
     Click Element    xpath=//*[text()='Import']
@@ -397,7 +398,8 @@ Choose The Authentication Type as Pem File
 
 
 Upload the PEM File for Import By IP
-    Choose File    xpath=.//*[@id='importPemfileInput']    C:\\Users\\adarsh.RLINDIA\\Desktop\\caty\\Chef\\cat_instances.pem
+    Choose File    xpath=.//*[@id='importPemfileInput']    ${CAT_INSTANCES}
+    #C:\\Users\\adarsh.RLINDIA\\Desktop\\caty\\Chef\\cat_instances.pem
 
 Clicks on Import Button to Import an Instance
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    id=addInstanceBtn
@@ -575,10 +577,12 @@ Enters New Cent Operating System Template Name
     Input Text    id=templatename    ${TEMP NAMECENT}
 
 Chooses CentOS Icon
-    Wait Until Keyword Succeeds    1 minute     1 seconds    Choose File     xpath=.//*[@id='templatesicon']     C:\\Users\\adarsh.RLINDIA\\Desktop\\centos.jpg
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Choose File     xpath=.//*[@id='templatesicon']     ${CENTOSIMG}
+    #C:\\Users\\adarsh.RLINDIA\\Desktop\\centos.jpg
 
 Chooses UbuntuOS Icon
-    Wait Until Keyword Succeeds    1 minute     1 seconds    Choose File     xpath=.//*[@id='templatesicon']     C:\\Users\\adarsh.RLINDIA\\Desktop\\ubuntuu.jpg
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Choose File     xpath=.//*[@id='templatesicon']    ${UBUNTUIMG} 
+    #C:\\Users\\adarsh.RLINDIA\\Desktop\\ubuntuu.jpg
 
 
 Chooses the CentTemplate User Created
@@ -684,7 +688,8 @@ Enters the Application Name
     Input Text    id=applicationNameInput     RelevanceApp
 
 Upload the Application Icon
-    Choose File     xpath=applicationiconInput     C:\\Users\\adarsh.RLINDIA\\Desktop\\rel.jpg
+    Choose File     xpath=applicationiconInput     ${APPICON}
+    #C:\\Users\\adarsh.RLINDIA\\Desktop\\rel.jpg
 
 Enters the Repo URL
     Input Text    id=gitURLInputaddApp     ${REPO URL}

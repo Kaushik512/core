@@ -152,7 +152,8 @@ Enters the Design Template name
     Wait Until Keyword Succeeds    1 minute     1 seconds    Input Text    id=templatetypename    ${TEMPLATE TYPENAME}
 
 Chooses Template type Icon
-    Choose File     xpath=.//*[@id='designtemplateicon']     C:\\Users\\adarsh.RLINDIA\\Desktop\\index.jpg
+    Choose File     xpath=.//*[@id='designtemplateicon']     ${TEMPLTYPEICON}
+    #C:\\Users\\adarsh.RLINDIA\\Desktop\\index.jpg
 
 Clicks on Template Save Button
     Click Element    xpath=.//*[@id='myForm333']/div/div[3]/div/button
@@ -230,7 +231,8 @@ Enters Template Name
 
 
 Chooses Icon
-    Wait Until Keyword Succeeds    1 minute     1 seconds    Choose File     xpath=.//*[@id='templatesicon']     C:\\Users\\adarsh.RLINDIA\\Desktop\\download.jpg
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Choose File     xpath=.//*[@id='templatesicon']     ${APACHEIMG}
+    #C:\\Users\\adarsh.RLINDIA\\Desktop\\download.jpg
 
 
 Chooses Template Type
