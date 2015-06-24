@@ -7881,6 +7881,26 @@ tr.selectedOne td a{
     background-color: #fff!important;
     font-size: 14px;
 }
+.bootstrapSuccess{
+    margin-top: 150px;
+    float:left;
+    margin-left: 300px;
+    width:416px;
+    color:black!important;
+    border-color: #40baf1!important;
+    background-color: #fff!important;
+    font-size: 16px;
+}
+.bootstrapFailure{
+    margin-top: 150px;
+    float:left;
+    margin-left: 300px;
+    width:444px;
+    color:black!important;
+    border-color: #ebccd1;
+    background-color: #fff!important;
+    font-size: 16px;
+}
 .forBootBox{
     margin-left: -40px;
 }
