@@ -2197,28 +2197,28 @@ $.get('../instances/' + urlParams.id, function(data) {
         var $taskSelect = $('#taskList');
         var $selectedOptions = $taskSelect.find('option:selected');
         var taskIds = $taskSelect.val();
-        if (taskIds) {
-            $.post('../instances/' + data._id + '/addTask', {
-                taskIds: taskIds
-            }, function() {
-                var str = '';
-                $tasksDatatable.clear().draw();
-                for (var i = 0; i < $selectedOptions.length; i++) {
-                    var $trTask = $('<tr style="line-height:2.3"></tr>');
-                    var $tdSerial = $('<td/>');
-                    str = $($selectedOptions[i]).text();
-                    var $tdName = $('<td class="taskNameTd"/>');
-                    $tdName.append(str);
-                    $trTask.append($tdSerial);
-                    $trTask.append($tdName);
-                    $tasksDatatable.row.add($trTask).draw();
-                }
-                $('#instanceTaskModal').modal('hide');
-                data.taskIds = taskIds;
-            });
-        } else {
-            $('#instanceTaskModal').modal('hide');
+        if (!taskIds) {
+            taskIds = [];
         }
+        $.post('../instances/' + data._id + '/addTask', {
+            taskIds: taskIds
+        }, function() {
+            var str = '';
+            $tasksDatatable.clear().draw();
+            for (var i = 0; i < $selectedOptions.length; i++) {
+                var $trTask = $('<tr style="line-height:2.3"></tr>');
+                var $tdSerial = $('<td/>');
+                str = $($selectedOptions[i]).text();
+                var $tdName = $('<td class="taskNameTd"/>');
+                $tdName.append(str);
+                $trTask.append($tdSerial);
+                $trTask.append($tdName);
+                $tasksDatatable.row.add($trTask).draw();
+            }
+            $('#instanceTaskModal').modal('hide');
+            data.taskIds = taskIds;
+        });
+
     });
 
 
