@@ -217,6 +217,8 @@ var MasterUtil = function(){
                                 projects[projectCount].orgname = names;
                                 projects[projectCount].productgroupname = bgnames;
                                 //projectList.push(projects[projectCount]);
+                                logger.debug("pppppppppppppp: ",projects[projectCount].environmentname_rowid);
+                                /*if(typeof projects[projectCount].environmentname_rowid != "undefined"){
                                 var envs = projects[projectCount].environmentname_rowid.split(",");
                                 for(var e = 0;e< envs.length;e++){
                                     logger.debug("envs:::::::::::::: ",projects[projectCount].environmentname);
@@ -224,9 +226,10 @@ var MasterUtil = function(){
                                     allEnvs =allEnvs+","+envnames;
                                 }
                                 allEnvs = allEnvs.substring(1);
-                                projects[projectCount].environmentname = allEnvs;
+                                projects[projectCount].environmentname = allEnvs;*/
                                 projectList.push(projects[projectCount]);
                             }
+                           // }
                         })(i);
                     }
                     logger.debug("Returned Projects: ", JSON.stringify(projectList));
@@ -707,11 +710,17 @@ var MasterUtil = function(){
                         if (teams[i].id === '21') {
                             names = configmgmtDao.convertRowIDToValue(teams[i].orgname_rowid, rowidlist)
                             teams[i].orgname = names;
-                            projectnames = configmgmtDao.convertRowIDToValue(teams[i].projectname_rowid, rowidlist)
-                            teams[i].projectname = projectnames;
+                            var projectName = teams[i].projectname_rowid.split(",");
+                            for(var x=0;x<projectName.length;x++){
+                                projectnames = configmgmtDao.convertRowIDToValue(projectName[x], rowidlist);
+                                if(teams[i].projectname.indexOf(projectnames) === -1){
+                                   teams[i].projectname = teams[i].projectname+","+projectnames; 
+                                }   
+                            }
                             teamList.push(teams[i]);
                         }
                     }
+                    logger.debug("My team:???????????? ",JSON.stringify(teamList));
                     callback(null, teamList);
                     return;
                 });
