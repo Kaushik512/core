@@ -511,7 +511,13 @@ var Chef = function(settings) {
             var cmds = ["rm -rf /etc/chef/", "rm -rf /var/chef/"];
             var cmdString = cmds.join(' && ');
 
-            cmdString = 'sudo '+cmdString;
+           
+            var sudoCmd = 'sudo ';
+            if (options.password) {
+                sudoCmd = 'echo \"' + options.password + '\" | sudo -S ';
+            }
+            cmdString = sudoCmd + cmdString;
+            console.log(cmdString);
             var sshExec = new SSHExec(options);
             sshExec.exec(cmdString, callback, callbackOnStdOut, callbackOnStdErr);
 
