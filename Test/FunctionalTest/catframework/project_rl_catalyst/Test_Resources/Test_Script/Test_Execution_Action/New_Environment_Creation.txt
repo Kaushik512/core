@@ -285,7 +285,8 @@ Choose the Authentication Type for IP
 
 
 Upload the Pem File for IP
-    Choose File     xpath=.//*[@id='importPemfileInput']     C:\\Users\\adarsh.RLINDIA\\Desktop\\caty\\Chef\\catalyst.pem
+    Choose File     xpath=.//*[@id='importPemfileInput']     ${CATALYSTPEM}
+    #C:\\Users\\adarsh.RLINDIA\\Desktop\\caty\\Chef\\catalyst.pem
 
 Enters the Application Name for IP
     Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    xpath=.//*[@id='appSeries12']/div[1]/input    ${IP APPNAME}

@@ -1202,7 +1202,8 @@ Selects the Key Pair
     Click Element    xpath=.//*[@id='select2-drop']/ul/li[1]/div
 
 Uploads the Pem File for Provider
-    Choose File     xpath=.//*[@class='gui-file file']     C:\\Users\\adarsh.RLINDIA\\Desktop\\caty\\Chef\\cat_instances.pem
+    Choose File     xpath=.//*[@class='gui-file file']     ${CAT_INSTANCES}
+    #C:\\Users\\adarsh.RLINDIA\\Desktop\\caty\\Chef\\cat_instances.pem
 
 Clicks on Save Button of the Provider
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='myForm54']/div/div[3]/div/input
@@ -1290,7 +1291,8 @@ Clicks on Terminlal Submit Button
 
 
 Upload the Catalyst PEM File
-    Choose File     xpath=.//*[@id='ssh-pemfileInput']    C:\\Users\\adarsh.RLINDIA\\Desktop\\caty\\Chef\\cat_instances.pem
+    Choose File     xpath=.//*[@id='ssh-pemfileInput']    ${CAT_INSTANCES}
+    #C:\\Users\\adarsh.RLINDIA\\Desktop\\caty\\Chef\\cat_instances.pem
 
 Close the SSH Terminal
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='modalSSHShellContainer']/div/div/div[1]/button

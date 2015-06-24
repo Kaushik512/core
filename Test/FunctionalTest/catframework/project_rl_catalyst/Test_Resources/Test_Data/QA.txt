@@ -74,9 +74,17 @@ ${PHOENIX COMMERNCE WITHOUT COOKBOOK CENTOS}            Phoenix Commernce withou
 ${PHOENIX COMMERCE WITH COOKBOOK CENTOS}          Phoenix Commerce With CookBook CENTOS
 ${TASK NAME}          Test Task
 
-${USERPEMFILE}              ${ROOTPATH}/Chef/pcjoshi9.pem 
-${VALIDATORPEMFILE}      ${ROOTPATH}/Chef/pjlab-validator.pem
-${KNIFERBFILE}                ${ROOTPATH}/Chef/knife.rb
+${USERPEMFILE}              ${ROOTPATH}\\Chef\\pcjoshi9.pem 
+${VALIDATORPEMFILE}      ${ROOTPATH}\\Chef\\pjlab-validator.pem
+${KNIFERBFILE}                ${ROOTPATH}\\Chef\\knife.rb
+${CATALYSTPEM}                ${ROOTPATH}\\Chef\\catalyst.pem
+${CAT_INSTANCES}              ${ROOTPATH}\\Chef\\cat_instances.pem
+
+${CENTOSIMG}                  ${ROOTPATH}\\Images\\centos.jpg
+${UBUNTUIMG}                  ${ROOTPATH}\\Images\\ubuntuu.jpg
+${APPICON}                    ${ROOTPATH}\\Images\\rel.jpg    
+${TEMPLTYPEICON}              ${ROOTPATH}\\Images\\index.jpg           
+${APACHEIMG}                  ${ROOTPATH}\\Images\\apache.jpg
 
 ${JENKINSNAME}            JenkinsTAT
 ${JENKINS URL}               http://54.68.204.110:9091/

@@ -707,8 +707,13 @@ var MasterUtil = function(){
                         if (teams[i].id === '21') {
                             names = configmgmtDao.convertRowIDToValue(teams[i].orgname_rowid, rowidlist)
                             teams[i].orgname = names;
-                            projectnames = configmgmtDao.convertRowIDToValue(teams[i].projectname_rowid, rowidlist)
-                            teams[i].projectname = projectnames;
+                            var projectName = teams[i].projectname_rowid.split(",");
+                            for(var x=0;x<projectName.length;x++){
+                                projectnames = configmgmtDao.convertRowIDToValue(projectName[x], rowidlist);
+                                if(teams[i].projectname.indexOf(projectnames) === -1){
+                                   teams[i].projectname = teams[i].projectname+","+projectnames; 
+                                }   
+                            }
                             teamList.push(teams[i]);
                         }
                     }
