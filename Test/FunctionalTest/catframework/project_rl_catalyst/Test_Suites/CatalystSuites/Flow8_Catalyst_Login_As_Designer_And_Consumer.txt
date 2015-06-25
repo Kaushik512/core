@@ -10,6 +10,7 @@ Resource           ${CATALYST ACTION}/Catalyst_Designer_Consumer_Setup.txt
 
 
 
+
 *** Test Cases ***
 Catalyst Login as Desiner Setup
     [Tags]       Sanity               Smoke

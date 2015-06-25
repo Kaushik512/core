@@ -9,8 +9,9 @@ Resource           catalyst.txt
 
 
 *** Variables ***
-${BROWSER TYPE}                   chrome              #firefox #http://54.149.39.160:3001                    #internetexplorer               #phantomjs
-${ENVIRONMENT SERVER}             http://52.27.46.167:3001
+${BROWSER TYPE}                     chrome              #firefox                     #internetexplorer               #phantomjs
+${ENVIRONMENT SERVER}               http://52.27.46.167:3001  
+
 
 
  
