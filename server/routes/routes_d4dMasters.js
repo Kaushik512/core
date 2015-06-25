@@ -1854,6 +1854,82 @@ module.exports.setRoutes = function(app, sessionVerification) {
         }
     };
 
+    function findDeselectedItem(CurrentArray, PreviousArray) {
+        var CurrentArrSize = CurrentArray.length;
+        var PreviousArrSize = PreviousArray.length;
+        var missing = [];
+        // loop through previous array
+        for (var j = 0; j < PreviousArrSize; j++) {
+
+            // look for same thing in new array
+            if (CurrentArray.indexOf(PreviousArray[j]) == -1) {
+                missing.push(PreviousArray[j]);
+            }
+
+        }
+        return missing;
+
+    }
+
+    function dissociateProjectWithEnv(projects, bodyJson) {
+        logger.debug("==========dissociateProjectWithEnv=======",JSON.stringify(projects));
+        for (var p = 0; p < projects.length; p++) {
+            var currproj = projects[p];
+            logger.debug('Project : ' + currproj);
+            //if (!err) {
+
+            var projectIds = bodyJson['projectname_rowid'].split(",");
+            var newenv = bodyJson['rowid'];
+            var newEnvName = bodyJson['environmentname'];
+            d4dModelNew.d4dModelMastersEnvironments.find({
+                id: "3",
+                rowid: newenv
+            }, function(err, envs) {
+                if (err) {
+                    logger.debug("Failed to fetch Env.", err);
+                }
+                if (envs) {
+                    var projEnvId = envs[0].projectname_rowid;
+                    var projEnvName = envs[0].projectname;
+                    if(projEnvId.charAt(0) === ","){
+                        projEnvId = projEnvId.substr(1);
+                        projEnvName = projEnvName.substr(1);
+                    }
+                    logger.debug("+++++++++++++++++++++++++================= ",projEnvId);
+                    
+                    var PreviousArray = projEnvId.split(",");
+                    var CurrentArray = projectIds;
+                    var missing = findDeselectedItem(CurrentArray, PreviousArray);
+                    var updatedEnvName = projEnvName.replace(newEnvName, '');
+                    var updatedEnvId = projEnvId.replace(newenv, '');
+                    for (var x = 0; x < missing.length; x++) {
+
+                        d4dModelNew.d4dModelMastersProjects.update({
+                            rowid: missing[x],
+                            id: '4'
+                        }, {
+                            $set: {
+                                environmentname_rowid: updatedEnvId,
+                                environmentname: updatedEnvName
+                            }
+                        }, {
+                            upsert: false
+                        }, function(err, data1) {
+                            logger.debug("Update Count+++++++++++++++ ", data1);
+                            if (err) {
+                                logger.debug('Err while updating d4dModelMastersProjects' + err);
+                                return;
+                            }
+                            logger.debug('Updated project ' + currproj + ' with env : ' + newenv);
+                            return;
+                        });
+                    }
+                }
+            });
+            /* }
+            })(p);*/
+        }
+    };
     function saveuploadedfile(suffix, folderpath, req) {
         logger.debug(req.body);
         var fi;
@@ -2722,6 +2798,18 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                     }
                                                 });
                                             }
+
+                                            d4dModelNew.d4dModelMastersProjects.find({
+                                                    environmentname_rowid:{
+                                                        $regex: bodyJson['rowid']
+                                                    },
+                                                    id: "4"
+                                                }, function(err, projs) {
+                                                    if (!err) {
+                                                        logger.debug('Project found for Org ======++++++++++++++++++:' + projs);
+                                                        dissociateProjectWithEnv(projs, bodyJson);
+                                                    }
+                                                });
                                         }
 
                                         if(req.params.id === '21'){

@@ -223,12 +223,16 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 return;
             } else {
                 logger.debug(' Returned from getTeamsOrgBuProjForUser : ' + JSON.stringify(objperms));
+                if(objperms[0].orgs.length === 0){
+                    res.send(orgTree);
+                    return;
+                }
                 configmgmtDao.getRowids(function(err, rowidlist) {
                     d4dModelNew.d4dModelMastersOrg.find({
                         id: 1,
                         active: true,
                         rowid: {
-                            $in: objperms.orgs
+                            $in: objperms[0].orgs
                         }
                     }, function(err, docorgs) {
                         var orgids = docorgs.map(function(docorgs1) {
@@ -262,7 +266,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                 $in: orgids
                             },
                             rowid: {
-                                $in: objperms.bunits
+                                $in: objperms[0].bunits
                             }
                         }, function(err, docbgs) {
                             if (docbgs.length <= 0) { //no bgs for any org return tree
@@ -304,7 +308,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                             orgname_rowid: orgTree[i]['rowid'],
                                             productgroupname_rowid: docbgs[k]['rowid'],
                                             rowid: {
-                                                $in: objperms.projects
+                                                $in: objperms[0].projects
                                             }
                                         }, function(err, docprojs) {
                                             // console.log('Projects:' + docprojs);
