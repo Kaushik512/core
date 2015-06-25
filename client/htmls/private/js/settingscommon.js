@@ -521,6 +521,7 @@ function CreateTableFromJson(formID, idFieldName, createFileName) {
                     var imgpath = 'img/logo.png';
                     if (imageTD.html().indexOf('<img') >= 0) {
                         imageTD.html(''); //fix for image tag gettnig embedded. - Vinod
+                        imageTD.append($('<img src="' + imgpath + '" style="height:28px;width:auto"/>'));
                     } else
                         imgpath = '/d4dMasters/image/' + idFieldValue + '__' + imageTD.attr('datafieldoriginal') + '__' + imageTD.html();
 

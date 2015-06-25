@@ -207,10 +207,12 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
     // add instance task
     app.post('/instances/:instanceId/addTask', function(req, res) {
         if (!(req.body.taskIds && req.body.taskIds.length)) {
-            res.send(404, {
-                message: "Invalid Task Id"
-            });
-            return;
+            // res.send(404, {
+            //     message: "Invalid Task Id"
+            // });
+            // return;
+            
+            req.body.taskIds = [];
         }
         instancesDao.addTaskIds(req.params.instanceId, req.body.taskIds, function(err, updateCount) {
             if (err) {
