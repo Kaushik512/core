@@ -2234,7 +2234,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                     }
                     var remotePath;
                     if (instance.hardware.os === 'linux') {
-                        remotePath = "$HOME/" + instance.chef.chefNodeName + '/.chef/';
+                        remotePath = '$HOME/$HOSTNAME/.chef/';
                     } else {
                         remotePath = "C:\\Users\\" + params.username + '\\' + instance.chef.chefNodeName + '\\.chef\\';
                     }
