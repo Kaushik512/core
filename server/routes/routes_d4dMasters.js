@@ -1773,7 +1773,10 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                      envname = data2.environmentname + ',' + bodyJson['environmentname'];
                                 }
                             }
-
+                            if(newenv.charAt(0) === ","){
+                                newenv = newenv.slice(1);
+                                envname = envname.slice(1);
+                            }
                             logger.debug('Newenv ====>', newenv);
                             d4dModelNew.d4dModelMastersProjects.update({
                                 rowid: currproj.rowid,
@@ -1826,8 +1829,13 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                      envname = data2.environmentname + ',' + bodyJson['environmentname'];
                                 }
                             }
+                            logger.debug("newenv.charAt(0)==== ",newenv.charAt(0) === ",");
+                            if(newenv.charAt(0) === ","){
+                                newenv = newenv.slice(1);
+                                envname = envname.slice(1);
+                            }
 
-                            logger.debug('Newenv ====>', newenv);
+                            logger.debug('Newenv ====>', newenv.slice(1));
                             d4dModelNew.d4dModelMastersProjects.update({
                                 rowid: currproj.rowid,
                                 id: '4'
@@ -1888,12 +1896,13 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 if (err) {
                     logger.debug("Failed to fetch Env.", err);
                 }
+                logger.debug("Find Env>>>>>>>>>>>>>>>>> ",JSON.stringify(envs));
                 if (envs) {
                     var projEnvId = envs[0].projectname_rowid;
                     var projEnvName = envs[0].projectname;
                     if(projEnvId.charAt(0) === ","){
-                        projEnvId = projEnvId.substr(1);
-                        projEnvName = projEnvName.substr(1);
+                        projEnvId = projEnvId.slice(1);
+                        projEnvName = projEnvName.slice(1);
                     }
                     logger.debug("+++++++++++++++++++++++++================= ",projEnvId);
                     
@@ -1903,7 +1912,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     var updatedEnvName = projEnvName.replace(newEnvName, '');
                     var updatedEnvId = projEnvId.replace(newenv, '');
                     for (var x = 0; x < missing.length; x++) {
-
+                        (function(x){
                         d4dModelNew.d4dModelMastersProjects.update({
                             rowid: missing[x],
                             id: '4'
@@ -1923,6 +1932,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                             logger.debug('Updated project ' + currproj + ' with env : ' + newenv);
                             return;
                         });
+                        })(x);
                     }
                 }
             });
@@ -2754,6 +2764,19 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                       });
                                     }
                                 } else {
+                                    if(req.params.id === "3"){
+                                        d4dModelNew.d4dModelMastersProjects.find({
+                                                    environmentname_rowid:{
+                                                        $regex: bodyJson['rowid']
+                                                    },
+                                                    id: "4"
+                                                }, function(err, projs) {
+                                                    if (!err) {
+                                                        logger.debug('Project found for Org ======++++++++++++++++++:' + projs);
+                                                        dissociateProjectWithEnv(projs, bodyJson);
+                                                    }
+                                                });
+                                    }
                                     
                                     logger.debug("Rowid: %s", bodyJson["rowid"]);
                                     var currowid = bodyJson["rowid"];
@@ -2798,18 +2821,6 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                     }
                                                 });
                                             }
-
-                                            d4dModelNew.d4dModelMastersProjects.find({
-                                                    environmentname_rowid:{
-                                                        $regex: bodyJson['rowid']
-                                                    },
-                                                    id: "4"
-                                                }, function(err, projs) {
-                                                    if (!err) {
-                                                        logger.debug('Project found for Org ======++++++++++++++++++:' + projs);
-                                                        dissociateProjectWithEnv(projs, bodyJson);
-                                                    }
-                                                });
                                         }
 
                                         if(req.params.id === '21'){

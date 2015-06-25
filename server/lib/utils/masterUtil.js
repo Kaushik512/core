@@ -856,6 +856,9 @@ var MasterUtil = function(){
                                     loopCount++;
                                     d4dModelNew.d4dModelMastersTeams.find({
                                         orgname_rowid: allObj[tmOrg],
+                                        rowid:{
+                                            $in:catObj.teams
+                                        },
                                         id: "21"
                                     }, function(err, allTeams) {
                                         if (err) {
@@ -888,6 +891,9 @@ var MasterUtil = function(){
                                                 d4dModelNew.d4dModelMastersProjects.find({
                                                     orgname_rowid: {
                                                         $in: allTeams[0].orgname_rowid
+                                                    },
+                                                    rowid:{
+                                                        $in: allTeams[0].projectname_rowid.split(",")
                                                     },
                                                     id: "4"
                                                 }, function(err, project) {
