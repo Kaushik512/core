@@ -218,10 +218,11 @@ Enters the UserName of WindowsProviders
     Input Text    id=UserName    administrator
 
 Catalyst Choose Template and Save Setup
-    #Clicks on Settings
+    Sleep    5s
     Clicks on Design
-    Sleep    30s
+    Sleep    10s
     Choose the Template Type Created
+    Sleep    3s
     Clicks on Next Button
     Chooses the Template User Created
     Clicks on Next Button
@@ -233,13 +234,13 @@ Catalyst Choose Template and Save Setup
     Select the Key Pair
     Choose Instance Size
     Select the Security Group
-    Clicks on Configure Provider Parameters 
+    Clicks on Configure Provider Parameters
     Clicks on Configure Chef Runlist
     Chooses Organization
     #Select WorkCookBooks
     #Clicks on >>T Button
     Clicks on Configure Chef Runlist
-    Clicks on Edit Organization Parameters    
+    Clicks on Edit Organization Parameters  
     Enters The Blueprint Name
     Chooses The Business Group
     Chooses The Project
@@ -254,7 +255,7 @@ Catalyst Choose Template and Save Setup
     
 Catlayst Workzone and Status Setup           
     Clicks on Workzone Button
-    Sleep    1s
+    Sleep    5s
     #Clicks on User Created Organization
     #Clicks on User Created BusinessGroup
     #Clicks on > Button to your Environment
@@ -322,6 +323,7 @@ Catalyst Work SSH CHEFCLIENT STOP Setup after LAUNCH
     Checking THe BootStrpa Status
     Clicks on Back To Instances
     Steps To Run Chef Client
+    Sleep    3s
     Steps to Run SSH
     Steps to Run Stopping the Instance
     Sleep    20s
@@ -1279,6 +1281,7 @@ Clicks on SSH Button
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='divinstancescardview']/div/div//ul/li[contains(.,"ApacheNew")]/div/div/div[1]/div/div/div[4]/div[2]/a
 
 Enters the Username in the Terminal
+    Sleep    10s
     Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    id=ssh-username    ${TERMINAL USERNAME}
 
 Select Authentication Type
@@ -1350,7 +1353,11 @@ Chooses the Template User Created
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='individualTemplateNameGrid']/div/div/ul/li/u/b[text()="ApacRelevance"]
 
 Chooses the Operating System
-    Click Element    xpath=.//*[@id='s2id_instanceOS']/a
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Wait Until Element Is Visible       xpath=//span[./text()='Select Operating System']
+    Click Element    xpath=//span[./text()='Select Operating System']
+    #Focus    xpath=.//*[@id='s2id_instanceOS']/a/span[2]
+    #Press Key    xpath=.//*[@id='s2id_instanceOS']/a/span[2]     13
+    Sleep    3s
     Input Text    xpath=.//*[@id='select2-drop']/div/input    ${OPERATING SYSTEM1}
     Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
 

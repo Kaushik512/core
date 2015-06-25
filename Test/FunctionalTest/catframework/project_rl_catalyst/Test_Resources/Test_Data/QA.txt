@@ -9,8 +9,8 @@ Resource           catalyst.txt
 
 
 *** Variables ***
-${BROWSER TYPE}                     chrome              #firefox                     #internetexplorer               #phantomjs
-${ENVIRONMENT SERVER}               http://52.27.46.167:3001  
+${BROWSER TYPE}                     firefox              #firefox                     #internetexplorer               #phantomjs
+${ENVIRONMENT SERVER}               http://52.27.46.167:3001 
 
 
 
@@ -158,7 +158,7 @@ ${ERRORMESSAGE}             Please enter instance name
 ${MORE INFO}                 SSH Terminal
 ${NO MATCH}                 No matches found
 ${ENVNAME}                  QA
-
+${NAMEOFINSTANCE}           Instance_Centos
 
 
 ${DESIGNER_NAME}            Designer01

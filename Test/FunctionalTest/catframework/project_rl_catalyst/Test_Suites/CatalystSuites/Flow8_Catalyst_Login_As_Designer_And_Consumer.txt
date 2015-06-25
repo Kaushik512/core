@@ -31,7 +31,7 @@ Catalyst Login as Consumer Setup
 
 
 
---------------------------------------------------------
+
 #-Catalyst create CENT OS new blueprint with cookbook
     #-[Tags]       Sanity
     #-Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"

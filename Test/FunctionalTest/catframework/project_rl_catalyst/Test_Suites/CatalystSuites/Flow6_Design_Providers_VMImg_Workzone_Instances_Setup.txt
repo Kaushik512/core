@@ -71,7 +71,7 @@ Catalyst Grid View of the Stopped Instance and Restart,SSH,Chef Run,Start
     [Teardown]     Close Browser    
 
 
------------------------------------------------------------------------------------
+
 
 #-Catalyst new UBUNTU DESIGN setup
     #-[Tags]       Sanity               Smoke

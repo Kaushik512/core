@@ -24,7 +24,8 @@ Catalyst Import an CentOS Instance from Chef
     Clicks on Workzone Button
     #Clicks on User Created Organization
     #Clicks on User Created BusinessGroup
-    #Clicks on Button to your > Environment
+    Sleep    2s
+    Clicks on Button to your > Environment
     Sleep    1s
     Clicks on Inport By IP Button
     Enters the IP Address of CentOS Box
@@ -55,6 +56,8 @@ Catalyst Import By IP Chef Client run
     Clicks on Settings
     Clicks on Workzone Button
     Sleep    2s
+    Clicks on Button to your > Environment
+    Sleep    5s
     Click on Chef ClientRun    
     Clicks on CoookBooks
     Select the Apache2 CookBook
@@ -69,16 +72,20 @@ Catalyst Import By IP Chef Client run
 
 Catalyst Verify the Chef BootStrap,SSH,Status,Start,Stop
     Sleep    4s
+    Clicks on Button to your > Environment
+    Sleep    5s
     Verify the Chef Client Run is Enabled for Imported Node
     Verfiy the SSH is Enabled for Imported Node
     Verify the Stop Button is Diabled for Inported Node
-    Verfiy the More Info Button is Disabled for Imported Node
+    Verfiy the More Info Button is Enabled for Imported Node
     #Verify the IP Address of the Instance Inported
     #Verify the Status of the Imported Node
 
 
 Catalyst Check and Edit the Instance Name
     Sleep    4s
+    Clicks on Button to your > Environment
+    Sleep    10s
     Clicks on Edit Button of the Instance Imported
     Enters the Empty Edit name
     Clicks on Edit Save Button of the instance
@@ -88,13 +95,16 @@ Catalyst Check and Edit the Instance Name
     Clicks on Edit Button of the Instance Imported
     Enters the New Edit Instance Name
     Clicks on Edit Save Button of the instance
+    Sleep    1s
     #Verify Edited Name of the Instance
     Clicks on More Info Button of the Imported Node
-    Sleep    1s
-    Verify the Instance Logs Pop up is Displayed
+    ##Sleep    2s
+    ##Verify the Instance Logs Pop up is Displayed
 
 Catalyst Instance Deleted From Chef Environment
     Sleep    6s
+    Clicks on Button to your > Environment
+    Sleep    5s
     Click on the Instance To Be Deleted 
     Clicks on the Dlt Button to Delete the Instance
     Verify the Name of the Instance as IP Address
@@ -224,7 +234,7 @@ Clicks on the Dlt Button to Delete the Instance
     Click Element    id=removeInstance
 
 Verify the Name of the Instance as IP Address
-    Element Should Contain    xpath=.//*[@id='deleteInstanceForm']/div[2]/span[text()='${IP Centos}']    ${IP Centos}
+    Element Should Contain    xpath=.//*[@id='deleteInstanceForm']/div[2]/span    ${NAMEOFINSTANCE}
 
 Select the CheckBox to Delete
     Sleep    1s
@@ -261,9 +271,10 @@ Verify the Instance Logs Pop up is Displayed
 
 
 Clicks on More Info Button of the Imported Node
-    Sleep    1s
+    Sleep    5s
     Click Element    xpath=//div[@class='domain-roles-caption'][//div[//span[text()='${EDIT_INSTANCE_NAME}']]]/div[4]/span
-    Sleep    1s
+    Sleep    5s
+    Click Element    xpath=.//*[@id='instanceLogModalContainer']/div/div/div[3]/button
 
 Clicks on OK Button after the Validation of Message
     Click Element    xpath=//*[text()="OK"]
@@ -280,8 +291,8 @@ Verfiy the Message Displayed of the Instance
     Element Should Contain    xpath=//div[@class='bootbox-body']    ${ERRORMESSAGE}
 
 Clicks on Edit Button of the Instance Imported
+    Sleep    3s
     Click Element    xpath=//div[@class='domain-roles-heading'][//span[text()='${IP Centos}']]/a
-    Sleep    1s
 
 Enters the New Edit Instance Name
     Input Text    id=instanceEditName    ${EDIT_INSTANCE_NAME}
@@ -297,15 +308,15 @@ Verify Edited Name of the Instance
 
 
 Verify the Chef Client Run is Enabled for Imported Node
-    Element Should Be Visible    xpath=//div[@class='domain-roles-caption'][//div[//span[text()='${IP Centos}']]]/div[4]/div[1]
+    Element Should Be Visible    xpath=//div[@class='domain-roles-caption'][//div[//span[text()='${IP Centos}']]]/div[4]/div[1]/a
 
 Verfiy the SSH is Enabled for Imported Node
-    Element Should Be Visible    xpath=//div[@class='domain-roles-caption'][//div[//span[text()='${IP Centos}']]]/div[4]/div[2]
+    Element Should Be Visible    xpath=//div[@class='domain-roles-caption'][//div[//span[text()='${IP Centos}']]]/div[4]/div[2]/a
 
 Verify the Stop Button is Diabled for Inported Node
     Element Should Be Visible    xpath=//div[@class='domain-roles-caption'][//div[//span[text()='${IP Centos}']]]/div[4]/div[5]
 
-Verfiy the More Info Button is Disabled for Imported Node
+Verfiy the More Info Button is Enabled for Imported Node
     Element Should Be Visible    xpath=//div[@class='domain-roles-caption'][//div[//span[text()='${IP Centos}']]]/div[4]/span
 
 Verify the Operation as Chef-Client-Run
@@ -320,7 +331,7 @@ Verfiy the Chef Client Status after update
     Should Be Equal    ${STAGE}     ${ACTBOOT2} 
 
 Clicks on Button to your > Environment
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=//li[contains(., "Catalyst")]/./span[3]              #Catalyst project
+    #Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=//li[contains(., "Catalyst")]/./span[3]              #Catalyst project
     #Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='tree']/ul/li[contains(., "Catalyst")]/./span[3]
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=//*[normalize-space(text())="QA"]
     Sleep    5 seconds    
@@ -328,11 +339,11 @@ Clicks on Button to your > Environment
 
 
 Click on Chef ClientRun
-    Sleep   1s
-    Click Element    xpath=//div[@class='domain-roles-caption'][//div[//span[text()='${IP Centos}']]]/div[4]/div[1]
+    Sleep   5s
+    Click Element    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${IP Centos}")]/div/div/div/div/div/div[4]/div[1]/a
 
 Clicks on CoookBooks
-    Sleep    1s
+    Sleep    5s
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='chefRunAccordionRunlistArea']/div/div/div/div[1]/div[1]/label[3]
 
 Select the Apache2 CookBook
@@ -369,7 +380,7 @@ Verify the Operation as BootStrap
 
 Verfify the Status of the CentOAS Instance
     Sleep    50s
-    ${STATUSS}=    Get Element Attribute    xpath=.//*[@id='tableactionHistory']/tbody/tr[1]/td[2]/img@title
+    ${STATUSS}=    Get Element Attribute    xpath=.//*[@id='tableactionHistory']/tbody/tr[1]/td[2]/img@data-original-title
     Log    ${STATUSS}
     Log    ${ACTBOOT2}
     Should Be Equal    ${STATUSS}     ${ACTBOOT2} 
