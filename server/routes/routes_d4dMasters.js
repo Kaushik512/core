@@ -1763,8 +1763,6 @@ module.exports.setRoutes = function(app, sessionVerification) {
                         id: '4'
                     }, function(err, data2) {
                         if (!err) {
-                            logger.debug("data2+++++++++++++++++++++ ", JSON.stringify(data2));
-                            logger.debug('Project JSON:' + JSON.stringify(data2));
                             var newenv = bodyJson['rowid'];
                             var envname = bodyJson['environmentname'];
                             if (data2 != null && typeof data2.environmentname_rowid != 'undefined' && data2.environmentname_rowid != '') {
@@ -1815,8 +1813,6 @@ module.exports.setRoutes = function(app, sessionVerification) {
                         id: '4'
                     }, function(err, data2) {
                         if (!err) {
-                            logger.debug("data2+++++++++++++++++++++ ", JSON.stringify(data2));
-                            //logger.debug('Project JSON:' + JSON.stringify(data2));
                             var newenv = data2.environmentname_rowid;
                             var envname = data2.environmentname;
                             if(data2.environmentname_rowid === null){
@@ -1829,7 +1825,6 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                      envname = data2.environmentname + ',' + bodyJson['environmentname'];
                                 }
                             }
-                            logger.debug("newenv.charAt(0)==== ",newenv.charAt(0) === ",");
                             if(newenv.charAt(0) === ","){
                                 newenv = newenv.slice(1);
                                 envname = envname.slice(1);
@@ -1880,7 +1875,6 @@ module.exports.setRoutes = function(app, sessionVerification) {
     }
 
     function dissociateProjectWithEnv(projects, bodyJson) {
-        logger.debug("==========dissociateProjectWithEnv=======",JSON.stringify(projects));
         for (var p = 0; p < projects.length; p++) {
             var currproj = projects[p];
             logger.debug('Project : ' + currproj);
@@ -1896,7 +1890,6 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 if (err) {
                     logger.debug("Failed to fetch Env.", err);
                 }
-                logger.debug("Find Env>>>>>>>>>>>>>>>>> ",JSON.stringify(envs));
                 if (envs) {
                     var projEnvId = envs[0].projectname_rowid;
                     var projEnvName = envs[0].projectname;
