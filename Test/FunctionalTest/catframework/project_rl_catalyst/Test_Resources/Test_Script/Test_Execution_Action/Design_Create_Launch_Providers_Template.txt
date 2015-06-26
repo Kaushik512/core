@@ -143,6 +143,7 @@ Validation of Creation of New Image
             
 
 Catalyst Creation of VM Image Process for CentOS
+    Sleep    5s
     Clicks on New Button of VMImage
     Enters the Image Name for CentOS
     Choosess The Provider of Image
@@ -153,6 +154,7 @@ Catalyst Creation of VM Image Process for CentOS
     Clicks on Save Button of Providers
 
 Catalyst Creation of VM Image Process for Ubutnu
+    Sleep    5s
     Clicks on New Button of VMImage
     Enters the Image Name for Ubuntu
     Choosess The Provider of Image
@@ -163,6 +165,7 @@ Catalyst Creation of VM Image Process for Ubutnu
     Clicks on Save Button of Providers
 
 Catalyst Creation of VM Image Process for Windows
+    Sleep    5s
     Clicks on New Button of VMImage
     Enters the Image Name for Windows
     Choosess The Provider of Image

@@ -10,11 +10,11 @@ Resource           ${CATALYST ACTION}/Gallery_setup_TempService_Steps.txt
 
 
 *** Test Cases ***
-Catalyst Import CentOS Node From Chef Server
+Catalyst Import CentOS Node By IP
     [Tags]       Sanity       ps
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
-    Catalyst Import an CentOS Instance from Chef
+    Catalyst Import an CentOS Instance By IP
     Catalyst Verfication of Duplicate Node
     Catalyst Logout
     [Teardown]     Close Browser
@@ -55,7 +55,7 @@ Catalyst CentOS Instance Deleted only from Catalyst not from Chef Server
     Catalyst Delete the Node only From Catalyst
     Catalyst Logout
     [Teardown]     Close Browser  
-   
+    
 
 
 
