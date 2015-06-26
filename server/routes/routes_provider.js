@@ -39,19 +39,24 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         var orgId = req.body.orgId;
 
         if (typeof accessKey === 'undefined' || accessKey.length === 0) {
-            res.send(400, "{Please Enter AccessKey.}");
+            res.send(400, "Please Enter AccessKey.");
             return;
         }
         if (typeof secretKey === 'undefined' || secretKey.length === 0) {
-            res.send(400, "{Please Enter SecretKey.}");
+            res.send(400, "Please Enter SecretKey.");
             return;
         }
         if (typeof providerName === 'undefined' || providerName.length === 0) {
-            res.send(400, "{Please Enter Name.}");
+            res.send(400, "Please Enter Name.");
             return;
         }
         if (typeof providerType === 'undefined' || providerType.length === 0) {
-            res.send(400, "{Please Enter ProviderType.}");
+            res.send(400, "Please Enter ProviderType.");
+            return;
+        }
+        if (typeof orgId === 'undefined' || orgId.length === 0) {
+            res.status(400);
+            res.send("Please Select Any Organization.");
             return;
         }
         var region;
