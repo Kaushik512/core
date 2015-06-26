@@ -158,7 +158,7 @@ ${ERRORMESSAGE}             Please enter instance name
 ${MORE INFO}                 SSH Terminal
 ${NO MATCH}                 No matches found
 ${ENVNAME}                  QA
-
+${NAMEOFINSTANCE}           Instance_Centos
 
 
 ${DESIGNER_NAME}            Designer01

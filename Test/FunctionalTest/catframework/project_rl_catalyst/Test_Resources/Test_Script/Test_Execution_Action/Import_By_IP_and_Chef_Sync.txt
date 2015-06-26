@@ -24,6 +24,7 @@ Catalyst Import an CentOS Instance from Chef
     Clicks on Workzone Button
     #Clicks on User Created Organization
     #Clicks on User Created BusinessGroup
+
     Clicks on Button to your > Environment
     Sleep    1s
     Clicks on Inport By IP Button
@@ -56,6 +57,7 @@ Catalyst Import By IP Chef Client run
     Clicks on Workzone Button
     Sleep    2s
     Clicks on Button to your > Environment
+    Sleep    5s
     Click on Chef ClientRun    
     Clicks on CoookBooks
     Select the Apache2 CookBook
@@ -70,6 +72,8 @@ Catalyst Import By IP Chef Client run
 
 Catalyst Verify the Chef BootStrap,SSH,Status,Start,Stop
     Sleep    4s
+    Clicks on Button to your > Environment
+    Sleep    5s
     Verify the Chef Client Run is Enabled for Imported Node
     Verfiy the SSH is Enabled for Imported Node
     Verify the Stop Button is Diabled for Inported Node
@@ -272,9 +276,10 @@ Verify the Instance Logs Pop up is Displayed
 
 
 Clicks on More Info Button of the Imported Node
-    Sleep    1s
+    Sleep    5s
     Click Element    xpath=//div[@class='domain-roles-caption'][//div[//span[text()='${EDIT_INSTANCE_NAME}']]]/div[4]/span
-    Sleep    1s
+    Sleep    5s
+    Click Element    xpath=.//*[@id='instanceLogModalContainer']/div/div/div[3]/button
 
 Clicks on OK Button after the Validation of Message
     Click Element    xpath=//*[text()="OK"]
@@ -291,8 +296,8 @@ Verfiy the Message Displayed of the Instance
     Element Should Contain    xpath=//div[@class='bootbox-body']    ${ERRORMESSAGE}
 
 Clicks on Edit Button of the Instance Imported
+    Sleep    3s
     Click Element    xpath=//div[@class='domain-roles-heading'][//span[text()='${IP Centos}']]/a
-    Sleep    1s
 
 Enters the New Edit Instance Name
     Input Text    id=instanceEditName    ${EDIT_INSTANCE_NAME}
@@ -308,10 +313,10 @@ Verify Edited Name of the Instance
 
 
 Verify the Chef Client Run is Enabled for Imported Node
-    Element Should Be Visible    xpath=//div[@class='domain-roles-caption'][//div[//span[text()='${IP Centos}']]]/div[4]/div[1]
+    Element Should Be Visible    xpath=//div[@class='domain-roles-caption'][//div[//span[text()='${IP Centos}']]]/div[4]/div[1]/a
 
 Verfiy the SSH is Enabled for Imported Node
-    Element Should Be Visible    xpath=//div[@class='domain-roles-caption'][//div[//span[text()='${IP Centos}']]]/div[4]/div[2]
+    Element Should Be Visible    xpath=//div[@class='domain-roles-caption'][//div[//span[text()='${IP Centos}']]]/div[4]/div[2]/a
 
 Verify the Stop Button is Diabled for Inported Node
     Element Should Be Visible    xpath=//div[@class='domain-roles-caption'][//div[//span[text()='${IP Centos}']]]/div[4]/div[5]
@@ -342,7 +347,7 @@ Click on Chef ClientRun
     Click Element    xpath=//div[@class='domain-roles-caption'][//div[//span[text()='${IP Centos}']]]/div[4]/div[1]
 
 Clicks on CoookBooks
-    Sleep    1s
+    Sleep    5s
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='chefRunAccordionRunlistArea']/div/div/div/div[1]/div[1]/label[3]
 
 Select the Apache2 CookBook

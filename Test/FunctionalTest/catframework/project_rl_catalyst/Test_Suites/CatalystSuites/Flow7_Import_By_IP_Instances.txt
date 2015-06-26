@@ -25,10 +25,9 @@ Catalyst Chef Client Run on the Imported Node
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
     Catalyst Import By IP Chef Client run
-    Catalyst Verify the Chef BootStrap,SSH,Status,Start,Stop
+    ##Catalyst Verify the Chef BootStrap,SSH,Status,Start,Stop
     Catalyst Logout
     [Teardown]     Close Browser
-
 
 Catalyst Edit the Instance Name of Inported Instance
     [Tags]       Sanity       ps
@@ -37,6 +36,7 @@ Catalyst Edit the Instance Name of Inported Instance
     Catalyst Check and Edit the Instance Name
     Catalyst Logout
     [Teardown]     Close Browser
+
 
 
 Catalyst Verify the Instance Deleted from Chef Server
@@ -71,6 +71,39 @@ Catalyst CentOS Instance Deleted only from Catalyst not from Chef Server
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#-Catalyst CentOS Instance Deleted only from Catalyst not from Chef Server
+    #-[Tags]       Sanity       ps
+#    Catalyst Login
+    #-Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    #-Catalyst Delete the Node only From Catalyst
+    #-Catalyst Logout
+    #-[Teardown]     Close Browser     
+
+
+
 #-Catalyst Importing Node From Chef Server
     #-[Tags]       Sanity       ps
 #    Catalyst Login
@@ -78,7 +111,6 @@ Catalyst CentOS Instance Deleted only from Catalyst not from Chef Server
     #-Catlayst Importing the Instance Chef Sync
     #-Catalyst Logout
     #-[Teardown]     Close Browser     
-    
 
 
 #-Catalyst import chef server Cent OS nodes by IP Address           #from IP
