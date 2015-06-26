@@ -226,6 +226,7 @@ Catalyst Choose Template and Save Setup
     Chooses the Template User Created
     Clicks on Next Button
     Chooses the Operating System
+    Sleep    4s
     Choose the Provider
     Choose the Available Images
     Choose the Region
@@ -1030,7 +1031,9 @@ Validation of Empty Image Name
 
 Choose the Provider
     Click Element    xpath=.//*[@id='s2id_providerId']/a/span[1]
+    Sleep    1s
     Input Text    xpath=.//*[@id='select2-drop']/div/input    AWS RELPRO
+    Sleep    1s
     Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
 
 Choose the Available Images
@@ -1352,6 +1355,7 @@ Chooses the Template User Created
 Chooses the Operating System
     Click Element    xpath=.//*[@id='s2id_instanceOS']/a
     Input Text    xpath=.//*[@id='select2-drop']/div/input    ${OPERATING SYSTEM1}
+    Sleep    2s
     Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
 
 #Choose Instance Size

@@ -37,7 +37,7 @@ Catalyst new CENT OS DESIGN setup
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
     Catalyst Choose Template and Save Setup
-    Sleep    30s
+    Sleep    20s
     Catlayst Workzone and Status Setup          
     Catalyst Logout                      
     [Teardown]     Close Browser
@@ -71,7 +71,16 @@ Catalyst Grid View of the Stopped Instance and Restart,SSH,Chef Run,Start
     [Teardown]     Close Browser    
 
 
------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
 
 #-Catalyst new UBUNTU DESIGN setup
     #-[Tags]       Sanity               Smoke
