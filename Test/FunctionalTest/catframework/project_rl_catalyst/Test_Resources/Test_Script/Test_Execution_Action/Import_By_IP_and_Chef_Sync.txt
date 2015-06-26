@@ -24,7 +24,6 @@ Catalyst Import an CentOS Instance from Chef
     Clicks on Workzone Button
     #Clicks on User Created Organization
     #Clicks on User Created BusinessGroup
-
     Clicks on Button to your > Environment
     Sleep    1s
     Clicks on Inport By IP Button

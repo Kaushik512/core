@@ -54,7 +54,8 @@ Catalyst CentOS Instance Deleted only from Catalyst not from Chef Server
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
     Catalyst Delete the Node only From Catalyst
     Catalyst Logout
-    [Teardown]     Close Browser     
+    [Teardown]     Close Browser  
+   
 
 
 

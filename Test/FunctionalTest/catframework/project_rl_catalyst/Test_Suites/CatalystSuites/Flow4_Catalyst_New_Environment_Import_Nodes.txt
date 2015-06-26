@@ -25,7 +25,7 @@ Catalyst new Environments setup
 Catalyst Adding New Envirornments to the Chef          #from chef server
     [Tags]       Sanity       ps
 #    Catalyst Login
-    Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
     Catalyst Addition of New Environments
     Catalyst Logout
     [Teardown]     Close Browser
@@ -34,7 +34,7 @@ Catalyst Adding New Envirornments to the Chef          #from chef server
 Catalyst Activation of User Created Envirornments           #from chef server
     [Tags]       Sanity       ps
 #    Catalyst Login
-    Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
     Catalyst Activation of Environments in projects
     Catalyst Logout
     [Teardown]     Close Browser
