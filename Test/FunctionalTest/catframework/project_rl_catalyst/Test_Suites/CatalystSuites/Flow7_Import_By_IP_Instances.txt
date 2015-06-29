@@ -58,20 +58,55 @@ Catalyst CentOS Instance Deleted only from Catalyst not from Chef Server
     
 
 
+
+
+
+
 #-Catalyst Import Ubuntu Node By IP
     #-[Tags]       Sanity       ps
 #    Catalyst Login
     #-Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
     #-Catalyst Import an Ubuntu Instance By IP
-    #-Catalyst Verfication of Duplicate Node
+    #-Catalyst Verfication Ubuntu Duplicate Node
     #-Catalyst Logout
     #-[Teardown]     Close Browser
 
 
+#-Catalyst Chef Client Run on the UbuntuOS Imported Node
+    #-[Tags]       Sanity       ps
+#    Catalyst Login
+    #-Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    #-Catalyst Import By IP Chef Client run on Ubuntu Instance
+    ##Catalyst Verify the Chef BootStrap,SSH,Status,Start,Stop
+    #-Catalyst Logout
+    #-[Teardown]     Close Browser
 
 
+#-Catalyst Edit the Ubuntu Instance Name of Inported Instance
+    #-[Tags]       Sanity       ps
+#    Catalyst Login
+    #-Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    #-Catalyst Check and Edit the Ubuntu Instance Name
+    #-Catalyst Logout
+    #-[Teardown]     Close Browser
 
 
+#-Catalyst Verify the Instance Deleted from Chef Server
+    #-[Tags]       Sanity       ps
+#    Catalyst Login
+    #-Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    #-Catalyst Ubuntu Instance Deleted From Chef Environment
+    #-Catalyst Logout
+    #-[Teardown]     Close Browser
+
+
+#-Catalyst Ubuntu Instance Deleted only from Catalyst not from Chef Server
+    #-[Tags]       Sanity       ps
+#    Catalyst Login
+    #-Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    #-Catalyst Delete the Ubuntu Node only From Catalyst
+    #-Catalyst Logout
+    #-[Teardown]     Close Browser  
 
 
 

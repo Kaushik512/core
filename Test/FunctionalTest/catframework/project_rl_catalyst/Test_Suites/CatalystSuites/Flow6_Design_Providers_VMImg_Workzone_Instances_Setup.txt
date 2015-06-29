@@ -73,7 +73,6 @@ Catalyst Grid View of the Stopped Instance and Restart,SSH,Chef Run,Start
 
 
 
-
 #-Catalyst new UBUNTU DESIGN setup
     #-[Tags]       Sanity               Smoke
 #    Catalyst Login

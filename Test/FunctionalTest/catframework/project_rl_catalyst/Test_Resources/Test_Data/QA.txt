@@ -10,7 +10,7 @@ Resource           catalyst.txt
 
 *** Variables ***
 ${BROWSER TYPE}                     chrome              #firefox                     #internetexplorer               #phantomjs
-${ENVIRONMENT SERVER}              http://52.27.46.167:3001 
+${ENVIRONMENTSERVER}             http://52.27.46.167:3001 
 
 
 
@@ -162,12 +162,17 @@ ${ENVNAME}                  QA
 ${NAMEOFINSTANCE}           Instance_Centos
 ${IP Ubuntu}                52.10.75.4
 ${IP UBUNTUSERNAME}         ubuntu
-
-
+${EDIT_UBUNTU_INSTANCE_NAME}     Instance_Ubuntu
 ${DESIGNER_NAME}            Designer01
 ${DESIGNER_PASWD}           Designer01
 ${CONSUMER_NAME}            Consumer01
 ${CONSUMER_PASWD}           Consumer01
+${CENTOS NAME}              "Instance_Centos"
+${UBUNTU NAME}              "Instance_Ubuntu"
+
+
+
+
 
 #Provider
 ${PROVIDER NAME}          AWS RELPRO
