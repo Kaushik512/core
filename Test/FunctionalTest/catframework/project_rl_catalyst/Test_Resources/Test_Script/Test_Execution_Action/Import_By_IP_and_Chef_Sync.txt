@@ -40,6 +40,28 @@ Catalyst Import an CentOS Instance By IP
     Verfify the Status of the CentOAS Instance
     Clicks on Back To Instances
 
+Catalyst Import an Ubuntu Instance By IP
+    Clicks on Settings
+    Clicks on Workzone Button
+    #Clicks on User Created Organization
+    #Clicks on User Created BusinessGroup
+    Clicks on Button to your > Environment
+    Sleep    1s
+    Clicks on Inport By IP Button
+    Enters the IP Address of Ubuntu Box
+    Select the Operating System as Ubuntu
+    Input the Ubuntu User Name for IP
+    Choose The Authentication Type as Pem File
+    Upload the PEM File for Import By IP
+    Clicks on Import Button to Import an Instance
+    Clicks on Import Close Button
+    Clicks on Contreol Panel
+    Clicks on Action History
+    Verify the Operation as BootStrap
+    Verfify the Status of the UbuntuOS Instance
+    Clicks on Back To Instances
+
+
 Catalyst Verfication of Duplicate Node
     Clicks on Inport By IP Button
     Enters the IP Address of CentOS Box
@@ -386,8 +408,15 @@ Verfify the Status of the CentOAS Instance
     ${STATUSS}=    Get Element Attribute    xpath=.//*[@id='tableactionHistory']/tbody/tr[1]/td[2]/img@data-original-title
     Log    ${STATUSS}
     Log    ${ACTBOOT2}
-    Should Be Equal    ${STATUSS}     ${ACTBOOT2} 
+    Should Be Equal    ${STATUSS}     ${ACTBOOT2}
 
+Verfify the Status of the UbuntuOS Instance 
+    Sleep    50s
+    ${STATUSS}=    Get Element Attribute    xpath=.//*[@id='tableactionHistory']/tbody/tr[1]/td[2]/img@data-original-title
+    Log    ${STATUSS}
+    Log    ${ACTBOOT2}
+    Should Be Equal    ${STATUSS}     ${ACTBOOT2}
+    
 
 Clicks on Inport By IP Button
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    id=ipaddressimport
@@ -395,14 +424,30 @@ Clicks on Inport By IP Button
 Enters the IP Address of CentOS Box
     Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    id=instanceFQDN    ${IP Centos}
 
+Enters the IP Address of Ubuntu Box
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    id=instanceFQDN    ${IP Ubuntu}
+    
+
+
 
 Select the Operating System of the Box
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='s2id_importinstanceOS']/a/span[1]
     #-Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    xpath=.//*[@id='select2-drop']/div/input    ${OPERATING SYSTEM1}
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='select2-drop']/ul/li[2]/div
 
+Select the Operating System as Ubuntu
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='s2id_importinstanceOS']/a/span[1]
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='select2-drop']/ul/li[4]/div
+
+
+
 Input the User Name for IP
     Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    id=instanceUsername    ${IP USERNAME}
+
+Input the Ubuntu User Name for IP
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    id=instanceUsername    ${IP UBUNTUSERNAME}
+
+
 
 
 Choose The Authentication Type as Pem File

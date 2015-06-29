@@ -10,8 +10,7 @@ Resource           catalyst.txt
 
 *** Variables ***
 ${BROWSER TYPE}                     chrome              #firefox                     #internetexplorer               #phantomjs
-${ENVIRONMENT SERVER}               http://d4d.relevancelab.com:3001
-#http://52.27.46.167:3001 
+${ENVIRONMENT SERVER}              http://52.27.46.167:3001 
 
 
 
@@ -160,6 +159,8 @@ ${MORE INFO}                 SSH Terminal
 ${NO MATCH}                 No matches found
 ${ENVNAME}                  QA
 ${NAMEOFINSTANCE}           Instance_Centos
+${IP Ubuntu}                52.10.75.4
+${IP UBUNTUSERNAME}         ubuntu
 
 
 ${DESIGNER_NAME}            Designer01

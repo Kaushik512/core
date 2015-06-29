@@ -58,6 +58,15 @@ Catalyst CentOS Instance Deleted only from Catalyst not from Chef Server
     
 
 
+#-Catalyst Import Ubuntu Node By IP
+    #-[Tags]       Sanity       ps
+#    Catalyst Login
+    #-Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    #-Catalyst Import an Ubuntu Instance By IP
+    #-Catalyst Verfication of Duplicate Node
+    #-Catalyst Logout
+    #-[Teardown]     Close Browser
+
 
 
 
