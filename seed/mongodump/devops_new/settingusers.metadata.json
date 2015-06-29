@@ -1,1 +1,1 @@
-{"options":{},"indexes":[{"v":NumberInt(1),"key":{"_id":NumberInt(1)},"name":"_id_","ns":"devops_new.settingusers"},{"v":NumberInt(1),"unique":true,"key":{"userName":1},"name":"userName_1","ns":"devops_new.settingusers","background":true,"safe":null}]}
+{"options":{},"indexes":[{"v":NumberInt(1),"key":{"_id":NumberInt(1)},"name":"_id_","ns":"devops_new.settingusers"},{"v":NumberInt(1),"unique":true,"key":{"userName":1},"name":"userName_1","safe":null,"ns":"devops_new.settingusers","background":true}]}
