@@ -32,6 +32,12 @@ Catalyst new VM IMAGE setup
     [Teardown]     Close Browser
 
 
+
+
+
+
+
+
 Catalyst new CENT OS DESIGN setup
     [Tags]       Sanity               Smoke
 #    Catalyst Login
@@ -73,21 +79,27 @@ Catalyst Grid View of the Stopped Instance and Restart,SSH,Chef Run,Start
 
 
 
-#-Catalyst new UBUNTU DESIGN setup
-    #-[Tags]       Sanity               Smoke
+
+
+
+
+
+Catalyst new UBUNTU DESIGN setup
+    [Tags]       Sanity               Smoke
 #    Catalyst Login
-    #-Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
-    #-Catalyst Choose Template and Launch Setup for UBUNTU
-    #-Catlayst Workzone and Status Setup for Ubuntu       
-    #-Catalyst Logout                      
-    #-[Teardown]     Close Browser
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst Choose Template and Save Setup for UBUNTU
+    Sleep    10s
+    Catlayst Workzone and Status Setup for Ubuntu       
+    Catalyst Logout                      
+    [Teardown]     Close Browser
 
 
 #-Catalyst new UBUNTU WORKZONE setup
     #-[Tags]       Sanity               Smoke
 #    Catalyst Login
-    #-Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
-    #-Catalyst Check INFORMATION Status for Ubuntu
+    #-Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    ##Catalyst Check INFORMATION Status for Ubuntu
     #-Catalyst Work SSH CHEFCLIENT STOP Setup after LAUNCH of Ubuntu
     #-Catalyst Logout                      
     #-[Teardown]     Close Browser
@@ -96,7 +108,7 @@ Catalyst Grid View of the Stopped Instance and Restart,SSH,Chef Run,Start
 #-Catalyst UBUNTU INSTANCE CONTROL PANEL setup
     #-[Tags]       Sanity               Smoke
 #    Catalyst Login
-    #-Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
+    #-Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
     #-Catlayst verfication of Instance Stop Setup and Disable of Ubuntu
     #-Catalyst Logout                      
     #-[Teardown]     Close Browser
