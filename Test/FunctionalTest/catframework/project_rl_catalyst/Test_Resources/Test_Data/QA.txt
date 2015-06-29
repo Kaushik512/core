@@ -9,9 +9,11 @@ Resource           catalyst.txt
 
 
 *** Variables ***
-${BROWSER TYPE}                   chrome              #firefox #http://54.149.39.160:3001                    #internetexplorer               #phantomjs
-${ENVIRONMENT SERVER}             http://52.27.46.167:3001
-#http://52.27.46.167:3001/private/index.html
+${BROWSER TYPE}                     chrome              #firefox                     #internetexplorer               #phantomjs
+${ENVIRONMENT SERVER}              http://52.27.46.167:3001 
+
+
+
 
  
 
@@ -74,9 +76,17 @@ ${PHOENIX COMMERNCE WITHOUT COOKBOOK CENTOS}            Phoenix Commernce withou
 ${PHOENIX COMMERCE WITH COOKBOOK CENTOS}          Phoenix Commerce With CookBook CENTOS
 ${TASK NAME}          Test Task
 
-${USERPEMFILE}              ${ROOTPATH}/Chef/pcjoshi9.pem 
-${VALIDATORPEMFILE}      ${ROOTPATH}/Chef/pjlab-validator.pem
-${KNIFERBFILE}                ${ROOTPATH}/Chef/knife.rb
+${USERPEMFILE}              ${ROOTPATH}\\Chef\\pcjoshi9.pem 
+${VALIDATORPEMFILE}      ${ROOTPATH}\\Chef\\pjlab-validator.pem
+${KNIFERBFILE}                ${ROOTPATH}\\Chef\\knife.rb
+${CATALYSTPEM}                ${ROOTPATH}\\Chef\\catalyst.pem
+${CAT_INSTANCES}              ${ROOTPATH}\\Chef\\cat_instances.pem
+
+${CENTOSIMG}                  ${ROOTPATH}\\Images\\centos.jpg
+${UBUNTUIMG}                  ${ROOTPATH}\\Images\\ubuntuu.jpg
+${APPICON}                    ${ROOTPATH}\\Images\\rel.jpg    
+${TEMPLTYPEICON}              ${ROOTPATH}\\Images\\index.jpg           
+${APACHEIMG}                  ${ROOTPATH}\\Images\\apache.jpg
 
 ${JENKINSNAME}            JenkinsTAT
 ${JENKINS URL}               http://54.68.204.110:9091/
@@ -117,7 +127,7 @@ ${MAT MEM}                 604488kB
 ${MAT FREEMEM}             80476kB
 ${MAT OS}                  centos
 ${MAT BOOTSTRAP}           success
-${MAT RUNLIST}             recipe[apache2],recipe[git],recipe[cron]
+${MAT RUNLIST}             recipe[a]          #recipe[apache2],recipe[git],recipe[cron]
 ${MAT RUNLIST1}            recipe[a],recipe[cron]
 ${MAT OS1}                 ubuntu
 ${UBUNTU MEM}              1016256kB
@@ -149,7 +159,9 @@ ${ERRORMESSAGE}             Please enter instance name
 ${MORE INFO}                 SSH Terminal
 ${NO MATCH}                 No matches found
 ${ENVNAME}                  QA
-
+${NAMEOFINSTANCE}           Instance_Centos
+${IP Ubuntu}                52.10.75.4
+${IP UBUNTUSERNAME}         ubuntu
 
 
 ${DESIGNER_NAME}            Designer01

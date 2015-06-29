@@ -1398,6 +1398,30 @@ var MasterUtil = function(){
             });
         });
     }
+
+    this.getUsersForAllOrg = function(callback) {
+        logger.debug("getUsersForAllOrg called. ");
+        d4dModelNew.d4dModelMastersUsers.find({
+            id: "7",
+            orgname_rowid: {
+                $in: [""]
+            }
+        }, function(err, users) {
+            if (err) {
+                callback(err, null);
+                return;
+            }
+            logger.debug("Got users for Org All.",JSON.stringify(users));
+            if (users.length > 0) {
+                callback(null,users);
+                return;
+            } else {
+                callback(null, []);
+                return;
+            }
+
+        });
+    }
 }
 
 

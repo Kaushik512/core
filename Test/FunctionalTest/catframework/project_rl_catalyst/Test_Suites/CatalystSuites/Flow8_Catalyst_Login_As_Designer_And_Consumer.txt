@@ -10,6 +10,7 @@ Resource           ${CATALYST ACTION}/Catalyst_Designer_Consumer_Setup.txt
 
 
 
+
 *** Test Cases ***
 Catalyst Login as Desiner Setup
     [Tags]       Sanity               Smoke
@@ -30,7 +31,7 @@ Catalyst Login as Consumer Setup
 
 
 
---------------------------------------------------------
+
 #-Catalyst create CENT OS new blueprint with cookbook
     #-[Tags]       Sanity
     #-Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
