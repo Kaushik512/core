@@ -133,7 +133,7 @@ Catalyst Import By IP Chef Client run on Ubuntu Instance
 
 
 
-
+    
 Catalyst Verify the Chef BootStrap,SSH,Status,Start,Stop
     Sleep    4s
     Clicks on Button to your > Environment
@@ -319,10 +319,10 @@ Node is Inported in the  Environment
     Element Should Contain    xpath=//div[@class='domain-roles-heading']//span[text()='{IP Centos}']
 
 Verify the IP Address
-    Element Should Contain    xpath=.//*[@id='deleteInstanceForm']/div[2]/span    ${IP Centos}
+    Element Should Contain    xpath=.//*[@id='deleteInstanceForm']/div[2]/span    ${CENTOS NAME}
 
 Verify the Ubuntu IP Address
-    Element Should Contain    xpath=.//*[@id='deleteInstanceForm']/div[2]/span    ${IP Ubuntu}
+    Element Should Contain    xpath=.//*[@id='deleteInstanceForm']/div[2]/span    ${UBUNTU NAME}
 
 Verfiy the Organization is Disabled
     Element Should Be Disabled     xpath=.//*[@id='s2id_chefImportOrgSelect']/a
@@ -383,10 +383,10 @@ Clicks on the Dlt Button to Delete the Instance
     Click Element    id=removeInstance
 
 Verify the Name of the Instance as IP Address
-    Element Should Contain    xpath=.//*[@id='deleteInstanceForm']/div[2]/span    ${EDIT_INSTANCE_NAME}
+    Element Should Contain    xpath=.//*[@id='deleteInstanceForm']/div[2]/span    ${IP ADD CENTOS}
 
 Verify the Name of the Ubuntu Instance as IP Address
-    Element Should Contain    xpath=.//*[@id='deleteInstanceForm']/div[2]/span    ${EDIT_UBUNTU_INSTANCE_NAME}    
+    Element Should Contain    xpath=.//*[@id='deleteInstanceForm']/div[2]/span    ${IP ADD UBUNTU}    
 
 Select the CheckBox to Delete
     Sleep    1s

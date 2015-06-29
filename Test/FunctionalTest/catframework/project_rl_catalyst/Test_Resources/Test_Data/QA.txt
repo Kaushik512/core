@@ -10,7 +10,7 @@ Resource           catalyst.txt
 
 *** Variables ***
 ${BROWSER TYPE}                     chrome              #firefox                     #internetexplorer               #phantomjs
-${ENVIRONMENTSERVER}             http://52.27.46.167:3001 
+${ENVIRONMENTSERVER}         http://52.27.46.167:3001 
 
 
 
@@ -102,6 +102,7 @@ ${INSTANCE SIZE}           t1.micro
 ${BLUEPRINT NAME}          ApacheNew
 ${BLUEPRINT NAME1}         UbuntuApac
 ${NEW BLUEPRINT NAME}      ApacheNew-Edited
+${NEW UBUNTU BLUPRNT}      UbuntuNew-Edited
 ${APPNAME}                 CatalystCop                
 ${APP URL}                 http://www.google.com
 ${COOKBOOK NAME}            mongodb
@@ -169,6 +170,8 @@ ${CONSUMER_NAME}            Consumer01
 ${CONSUMER_PASWD}           Consumer01
 ${CENTOS NAME}              "Instance_Centos"
 ${UBUNTU NAME}              "Instance_Ubuntu"
+${IP ADD UBUNTU}             "52.10.75.4"
+${IP ADD CENTOS}             "52.24.73.49" 
 
 
 
