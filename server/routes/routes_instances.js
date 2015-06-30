@@ -631,19 +631,42 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             var startparams = '';
             var execparam = '';
             var containername = '';
+            
+            //eliminating any exec portion.
+            var _execp = runparams.split('-exec');
+            if(_execp.length > 0 && typeof _execp != 'undefined'){
+                execparam = _execp[1];
+                runparams = _execp[0];
+
+            }
+            if(runparams.indexOf('-c') > 0)
+            {
+                var _startparm = runparams.split('-c');
+                if(_startparm.length > 0  && typeof _startparm[1] != 'undefined')
+                {
+                    startparams = _startparm[1];
+                    runparams = _startparm[0];
+                }
+            }
+            
+            logger.debug('1 runparams: ' + runparams);
+
             var params = runparams.split(' -');
+
+
+
             for (var i = 0; i < params.length; i++) {
-                //  logger.debug('split runparams --->',params[i]);
+                //logger.debug('split runparams --->',params[i]);
                 if (params[i] != '') {
                     var itms = params[i].split(' ');
                     if (itms.length > 0) {
-
-                        if (itms[0] == 'c')
-                            startparams += ' ' + itms[1];
-                        if (itms[0] == 'exec')
-                            execparam += ' ' + itms[1];
-                        else
-                            preparams += ' -' + params[i];
+                        logger.debug('itms[0]:' + itms[0] + ';itms[1]:' + itms[1]);
+                        // if (itms[0] == 'c')
+                        //     startparams += ' ' + itms[1];
+                        // if (itms[0] == 'exec')
+                        //     execparam += ' ' + itms[1];
+                        // else
+                        preparams += ' -' + params[i];
 
                         if (itms[0] == '-name') {
 
@@ -654,6 +677,12 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
                 }
             }
+            logger.debug('execparam: ' + execparam);
+            logger.debug('runparams: ' + runparams);
+             logger.debug('preparams: ' + preparams);
+              logger.debug('startparams: ' + startparams);
+
+
             launchparams[0] = preparams;
             launchparams[1] = startparams;
             // alert(execparam);

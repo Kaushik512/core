@@ -2193,6 +2193,7 @@
                                                               var preparams = '';
                                                               var startparams = '';
                                                               var execparam = '';
+
                                                               $('[dockerparamkey]').each(function() {
                                                                   if ($(this).val() != '') {
                                                                       var itms = $(this).val().split(',');
@@ -2214,6 +2215,7 @@
                                                                       launchparams[2] = execparam;
                                                                   }
                                                               });
+                                                            //alert('generateDockerLaunchParams : ' + launchparams.join(' '));
                                                               return (launchparams);
                                                           }
 
@@ -2257,35 +2259,52 @@
                                                           function loadLaunchParams(lpinput) {
                                                               // var lparam = $('.productdiv1.role-Selected1').first().attr('dockerlaunchparameters');
                                                               var lparam = $('#' + lpinput).val();
-                                                              alert(lpinput);
+                                                              //alert(lpinput);
                                                               if (lparam && lparam != '') {
                                                                   $('[dockerparamkey]').val(''); //clearing the popup input boxes
                                                                   //split by -c to get startup and other parameters
-                                                                  var preparams = lparam.split('-c');
-                                                                  var cparams = ''; //this is the startup parameters
-                                                                  if (preparams.length > 1) {
-                                                                      lparam = preparams[0];
-                                                                      cparams = preparams[1];
-                                                                  }
-                                                                  lparam = lparam.replace(/  /g, " ");
-                                                                  console.log(lparam + ' ' + cparams);
-                                                                  var params = lparam.split(' -');
-                                                                  for (para in params) {
+                                                                  var fullparams = $('#' + lpinput).val();
+                                                                    var execparam = fullparams.split(' -exec');
+                                                                    var startupparam;
+                                                                    if(execparam.length > 0 && typeof execparam[1] != "undefined"){
+                                                                       // alert(execparam[1]);
+                                                                        $('#additionalStartupcommandfield').val(execparam[1].trim());
+                                                                        if(execparam[0].indexOf('-c') > 0) //found a startup command
+                                                                        {
+                                                                            startupparam = execparam[0].split(' -c');
+                                                                            if(startupparam.length > 0){
+                                                                                $('#Startupcommandfield').val(startupparam[1].trim());
+                                                                                fullparams = startupparam[0];
+                                                                            }
+                                                                            else{
+                                                                                fullparams = startupparam[0];
+                                                                            }
+                                                                        }
+                                                                        else
+                                                                            fullparams = execparam[0];
+                                                                    }
+                                                                    else{
+                                                                        startupparam = fullparams.split(' -c');
+                                                                        if(startupparam.length > 0){
+                                                                            $('#Startupcommandfield').val(startupparam[1].trim());
+                                                                            fullparams = startupparam[0];
+                                                                        }
+                                                                    }
 
-                                                                      var subparam = params[para].split(' ');
-                                                                      // alert(subparam.join());
-                                                                      if (subparam.length > 0) {
-                                                                          $inp = $('[dockerparamkey="-' + subparam[0] + '"]').first();
-                                                                          // alert(subparam[0]);
-                                                                          if ($inp.val() != '')
-                                                                              $inp.val($inp.val() + ',' + subparam[1]);
-                                                                          else
-                                                                              $inp.val(subparam[1]);
-                                                                      }
-                                                                      //alert(params[para]);
-                                                                  }
+
+                                                                    var params = fullparams.split(' -');
+                                                                    for (para in params) {
+                                                                        var subparam = params[para].split(' ');
+                                                                        if (subparam.length > 0) {
+                                                                           $inp = $('[dockerparamkey="-' + subparam[0] + '"]').first();
+                                                                           if ($inp.val() != '')
+                                                                               $inp.val($inp.val() + ',' + subparam[1]);
+                                                                           else
+                                                                               $inp.val(subparam[1]);
+                                                                        }
+                                                                    }
                                                                   //Updating the startup parameter
-                                                                  $('[dockerparamkey="-c"]').first().val(cparams);
+                                                                 // $('[dockerparamkey="-c"]').first().val(cparams);
                                                               } else
                                                                   $('[dockerparamkey]').val('');
                                                               $('#myModalLabelDockerContainer').attr('saveto', lpinput).css('z-index', '9999').modal('show');
@@ -2330,7 +2349,6 @@
                                                                   });
                                                                   //onclick="loadLaunchParams(\'launchparam' + uniqueid + '\');
                                                                   $('.lnktolaunchparam').click(function() { //binding clicks for launch params
-                                                                      alert('what');
                                                                       loadLaunchParams('launchparam' + $(this).attr('uniqueid'));
                                                                   });
 
@@ -2349,7 +2367,7 @@
                                                                           // launchparams[1] = startparams;
                                                                           // // alert(execparam);
                                                                           // launchparams[2] = execparam;
-                                                                          $('#' + $('#myModalLabelDockerContainer').attr('saveto')).val(lp[0] + ' -exec ' + lp[2] + ' -c ' + lp[1]);
+                                                                          $('#' + $('#myModalLabelDockerContainer').attr('saveto')).val(lp[0] + ' -c ' + lp[1] + ' -exec ' + lp[2]);
                                                                           $('#myModalLabelDockerContainer').removeAttr('saveto').modal('hide');
                                                                       }
                                                                   });
@@ -3906,9 +3924,7 @@
                                                       }
 
                                                       function loadLaunchParams() {
-                                                            alert('height');
                                                           var lparam = $('.productdiv1.role-Selected1').first().attr('dockerlaunchparameters');
-                                                          alert(lparam);
                                                           if (lparam && lparam != '') {
                                                               $('[dockerparamkey]').val(''); //clearing the popup input boxes
                                                               //split by -c to get startup and other parameters
