@@ -11,7 +11,7 @@ Documentation     A common resource file with standard directory path prefixes.
 Resource           ${CATALYST TEST DATA}/${TESTDATA}
 
 *** Variables ***
-${SERVER}                   ${ENVIRONMENT SERVER}
+${SERVER}                   ${ENVIRONMENTSERVER}
 ${BROWSER}                  ${BROWSER TYPE}
 ${TESTDATA}                ${ENV}.txt
 #${DELAY}             4

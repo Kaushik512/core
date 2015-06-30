@@ -281,10 +281,8 @@ Catlayst Workzone and Status Setup
 
 
 
-    #Clicks on Edit Button of the CentosInstance Imported
-    #Enters the New Instance Name for Centos
-    #Clicks on Save Button of Edddited Instance
-    #Sleep    3s
+
+
 
 
 
@@ -326,7 +324,7 @@ Catalyst Work SSH CHEFCLIENT STOP Setup after LAUNCH
     Clicks on Action History
     Checking THe BootStrpa Status
     Clicks on Back To Instances
-    Steps To Run Chef Client
+    Steps To Run Chef Client of Ubuntu
     Sleep    3s
     Steps to Run SSH
     Steps to Run Stopping the Instance
@@ -347,6 +345,16 @@ Steps To Run Chef Client
     Checking the BChefClient Run Status
     Clicks on Back To Instances
     
+Steps To Run Chef Client of Ubuntu
+    Click on RUNNN of Chef Client
+    Update the Run List with NewwCookbook 
+    Clicks on Update Button of Runlist
+    Clicks on Contreol Panel
+    Clicks on Action History
+    Checking the BChefClient Run Status
+    Clicks on Back To Instances
+
+
 Steps to Run SSH
     Click on Verified SSH Instance
     Enters the Username in the Terminal
@@ -396,7 +404,7 @@ Catlayst verfication of Instance Stop Setup and Disable
 
 
 
-Catalyst Choose Template and Launch Setup for UBUNTU
+Catalyst Choose Template and Save Setup for UBUNTU
     Clicks on Settings
     Clicks on Design
     Clicks on Next Button
@@ -420,7 +428,7 @@ Catalyst Choose Template and Launch Setup for UBUNTU
     Enters The ubuntu Blueprint Name
     Chooses The Business Group
     Chooses The Project
-    Chooses The Environment
+    #Chooses The Environment
     Clicks on Configure Application URL
     Clicks on AppNew Button
     Enters the Application URL Name
@@ -430,9 +438,9 @@ Catalyst Choose Template and Launch Setup for UBUNTU
 
 Catlayst Workzone and Status Setup for Ubuntu
     Clicks on Workzone Button
-    Clicks on User Created Organization
-    Clicks on User Created BusinessGroup
-    Clicks on > Button to your Environment
+    #Clicks on User Created Organization
+    #Clicks on User Created BusinessGroup
+    Clicks on the Button to the Environment
     Clicks on Blueprint Section
     Select the BlueprintUbuntu
     Clicks on Launch Button
@@ -495,12 +503,22 @@ Catalyst Grid View Start ,Stop ,SSH ,Chef ,Client ,Log Setup
     #-Close the SSH Terminal
     #-Clicks on View Instancess Button
 
+
 Clicks on Edit Button of the CentosInstance Imported
     Sleep    2s
     Click Element    xpath=//div[@class='domain-roles-heading'][//span[text()='${BLUEPRINT NAME}']]/a
 
+Clicks on Edit Button of the UbuntuInstance Imported
+    Sleep    2s
+    Click Element    xpath=//div[@class='domain-roles-heading'][//span[text()='${BLUEPRINT NAME1}']]/a
+    
+
 Enters the New Instance Name for Centos
     Input Text    id=instanceEditName    ${NEW BLUEPRINT NAME}
+
+Enters the New Instance Name for Ubuntu
+    Input Text    id=instanceEditName    ${NEW UBUNTU BLUPRNT}    
+
 
 Clicks on Save Button of Edddited Instance
     Click Element    id=editSaveBTN
@@ -510,6 +528,9 @@ Choose the Template Type Created
     Sleep    2s
     Click Element    xpath=//div[@data-templatetype='AppFactory']
 
+Clicks on the Button to the Environment
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=//*[normalize-space(text())="QA"]
+    Sleep    5 seconds
 
 
 Clicks on Instances View
@@ -605,8 +626,10 @@ Clicks on View Instancess Button
 
 
 
------------------------------------------------------------------
+
 Catalyst Work SSH CHEFCLIENT STOP Setup after LAUNCH of Ubuntu
+    Sleep    5s
+    Clicks on the Button to the Environment
     Verify the Status after Launch of Ubuntu Instance
     Verify the IP Address after Launch of Ubuntu Instance
     Verfiy the Chef Client Run of Ubuntu
@@ -618,8 +641,14 @@ Catalyst Work SSH CHEFCLIENT STOP Setup after LAUNCH of Ubuntu
     Checking THe Ubuntu BootStrpa Status
     Clicks on Back To Instances
     Steps To Run Chef Client of Ubuntu
+    Sleep    3s
     Steps to Run SSH of Ubuntu
     Steps to Run Stopping the Instance of Ubuntu
+    Sleep    20s
+    Clicks on Edit Button of the UbuntuInstance Imported
+    Enters the New Instance Name for Ubuntu
+    Clicks on Save Button of Edddited Instance
+    Sleep    3s
 
 
 Steps To Run Chef Client of Ubuntu
@@ -776,8 +805,11 @@ Checking THe BootStrpa Status
 
 Checking THe Ubuntu BootStrpa Status
     #Wait Until Keyword Succeeds    2 minute     1 seconds    Element Should Contain    xpath=.//*[@id='tableactionHistory']/tbody/tr/td[2]    ${STATS RUN}
-    Sleep    2 minutes
-    Wait Until Keyword Succeeds    2 minute     1 seconds    Element Should Contain    xpath=.//*[@id='tableactionHistory']/tbody//tr/td[normalize-space(text())="Bootstrap"]/../td[2]    ${SATSS}
+    Sleep    4 minutes
+    ${BOOTSTAT2}=    Get Element Attribute   xpath=//*[@id='tableactionHistory']/tbody/tr/td[2]/img@title
+    Log    ${BOOTSTAT2}
+    Should Be Equal    ${ACTBOOT2}     ${BOOTSTAT2}           #Success
+
 
 Clicks on Back To Instances
     Wait Until Keyword Succeeds    2 minute     1 seconds    Click Element    xpath=.//*[@id='getViewAttr']
@@ -860,7 +892,8 @@ Verfiy the More Info Button is Dispalyed
     Wait Until Keyword Succeeds    1 minute     1 seconds     Element Should Be Visible    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"ApacheNew")]/div/div/div/div/div/div[4]/span/a[@class='moreInfo']
 
 Verfiy the More Info Button is Dispalyed for Ubuntu
-    Wait Until Keyword Succeeds    1 minute     1 seconds     Element Should Be Visible    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"UbuntuApac")]/div/div/div/div/div/div[4]/span/a[@class='moreInfo']
+    Element Should Be Visible    xpath=//div[@class='domain-roles-caption'][//div[//span[text()='UbuntuApac']]]/div[4]/span
+
 
 
 Verfiy the More Info Button is Dispalyed from Control panel
@@ -883,7 +916,7 @@ Verify the STOP
     Wait Until Keyword Succeeds    1 minute     1 seconds    Element Should Be Visible    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"ApacheNew")]/div/div/div/div/div/div[4]/div[@class='startstoptoggler running']  
 
 Verify the STOP of Ubuntu
-    Wait Until Keyword Succeeds    1 minute     1 seconds    Element Should Be Visible    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"UbuntuApac")]/div/div/div/div/div/div[4]/div[@class='startstoptoggler running']  
+    Element Should Be Visible    xpath=//div[@class='domain-roles-caption'][//div[//span[text()='UbuntuApac']]]/div[4]/div[5] 
 
 
 Clicks on STOP of Verfied Instance    
@@ -936,8 +969,7 @@ Verfiy the Chef Client Run
     Wait Until Keyword Succeeds    2 minute     1 seconds    Element Should Be Visible    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"ApacheNew")]/div/div/div/div/div/div[4]/div[1]/a[@class='chefClientRunlistImage instance-bootstrap-list-image actionbuttonChefClientRun']
 
 Verfiy the Chef Client Run of Ubuntu
-    Sleep    8 seconds
-    Wait Until Keyword Succeeds    2 minute     1 seconds    Element Should Be Visible    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"UbuntuApac")]/div/div/div/div/div/div[4]/div[1]/a[@class='chefClientRunlistImage instance-bootstrap-list-image actionbuttonChefClientRun']
+    Element Should Be Visible    xpath=//div[@class='domain-roles-caption'][//div[//span[text()='UbuntuApac']]]/div[4]/div[1]/a
 
 
 
@@ -952,7 +984,7 @@ Verify the SSH
     Wait Until Keyword Succeeds    1 minute     1 seconds    Element Should Be Visible    xpath=.//*[@id='divinstancescardview']/div/div//ul/li[contains(.,"ApacheNew")]/div/div/div/div/div/div[4]/div[2]/a[@class='devTOP sshIcon']
 
 Verify the SSH of Ubuntu
-    Wait Until Keyword Succeeds    1 minute     1 seconds    Element Should Be Visible    xpath=.//*[@id='divinstancescardview']/div/div//ul/li[contains(.,"UbuntuApac")]/div/div/div/div/div/div[4]/div[2]/a[@class='devTOP sshIcon']
+    Element Should Be Visible    xpath=//div[@class='domain-roles-caption'][//div[//span[text()='UbuntuApac']]]/div[4]/div[2]/a
 
     
 Click on Verified SSH Instance
@@ -1009,6 +1041,11 @@ Update the Run List with Cookbook
     Click Element    id=btnremoveFromRunlist
     Click Element    xpath=.//*[@id='cookbooksrecipesselectedList']/option[text()='git']
     Click Element    id=btnremoveFromRunlist
+    Wait Until Keyword Succeeds    1 minute     10 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[@value='recipe[a]']
+    Wait Until Keyword Succeeds    1 minute     10 seconds      Click Element    id=btnaddToRunlist
+
+Update the Run List with NewwCookbook 
+    Sleep    3s
     Wait Until Keyword Succeeds    1 minute     10 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[@value='recipe[a]']
     Wait Until Keyword Succeeds    1 minute     10 seconds      Click Element    id=btnaddToRunlist
 
@@ -1397,7 +1434,7 @@ Select WorkCookBooks for Ubuntu
     Click Element    id=btnremoveFromRunlist
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesselectedList']/option[text()='git']
     Click Element    id=btnremoveFromRunlist
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[text()='a']
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[text()='tomcat-all']
     Click Element    id=btnaddToRunlist 
 
 
