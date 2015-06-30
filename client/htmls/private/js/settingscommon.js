@@ -521,6 +521,7 @@ function CreateTableFromJson(formID, idFieldName, createFileName) {
                     var imgpath = 'img/logo.png';
                     if (imageTD.html().indexOf('<img') >= 0) {
                         imageTD.html(''); //fix for image tag gettnig embedded. - Vinod
+                        imageTD.append($('<img src="' + imgpath + '" style="height:28px;width:auto"/>'));
                     } else
                         imgpath = '/d4dMasters/image/' + idFieldValue + '__' + imageTD.attr('datafieldoriginal') + '__' + imageTD.html();
 
@@ -1147,87 +1148,135 @@ function readform(formID) {
                 // });
             }
             // debugger;
-            if ($(this).attr('linkedfields')) {
+        if ($(this).attr('linkedfields')) {
 
-                $(this).change(function() {
-                    //  debugger;
-                    $('#content').attr('style', "opacity:1;")
+            $(this).change(function() {
+                //  debugger;
+                $('#content').attr('style', "opacity:1;")
 
-                    var curCtrl = $(this);
-                    $.each(eval($(this).attr('linkedfields')), function(i, item) {
-                        var targetCtrl = $('#' + item);
-
-                        targetCtrl.html('');
-                        var opts = getRelatedValues(targetCtrl.attr('sourcepath'), curCtrl.attr("id"), $('#' + curCtrl.attr('id') + ' option:selected').text(), targetCtrl.attr("id"));
-                        //alert(JSON.stringify(opts));
-                        if (formID === 7) {
-                            if (opts.length === 0) {
-                                $.ajax({
-                                    url: '/d4dMasters/readmasterjsonnew/21',
-                                    async: false,
-                                    success: function(data) {
-                                        var dataForAll = [];
-                                        for(var x =0;x<data.length;x++){
-                                            dataForAll.push(data[x].teamname+"##"+data[x].rowid);
-                                        }
-                                        $.each(eval(dataForAll), function(j, itm) {
-                                            var itmrowid = '';
-                                            if (itm.indexOf('##') > 0) {
+                var curCtrl = $(this);
+                var count = 0;
+                $.each(eval($(this).attr('linkedfields')), function(i, item) {
+                    var targetCtrl = $('#' + item);
+                    count++;
+                    targetCtrl.html('');
+                    var opts = getRelatedValues(targetCtrl.attr('sourcepath'), curCtrl.attr("id"), $('#' + curCtrl.attr('id') + ' option:selected').text(), targetCtrl.attr("id"));
+                    //alert(JSON.stringify(opts));
+                    if (formID === 7) {
+                        if (opts.length === 0) {
+                            $.ajax({
+                                url: '/d4dMasters/readmasterjsonnew/21',
+                                async: false,
+                                success: function(data) {
+                                    var dataForAll = [];
+                                    for (var x = 0; x < data.length; x++) {
+                                        dataForAll.push(data[x].teamname + "##" + data[x].rowid);
+                                    }
+                                    $.each(eval(dataForAll), function(j, itm) {
+                                        var itmrowid = '';
+                                        if (itm.indexOf('##') > 0) {
                                             var breakid = itm.split('##');
                                             itm = breakid[0];
                                             itmrowid = breakid[1];
-                                             }
-                                            if (targetCtrl.attr('multiselect'))
-                                                addToSelectList(itm, itmrowid, targetCtrl);
-                                            else
-                                                targetCtrl.append('<option rowid="' + itmrowid + '" value="' + itm + '">' + itm + '</option>');
+                                        }
+                                        if (targetCtrl.attr('multiselect'))
+                                            addToSelectList(itm, itmrowid, targetCtrl);
+                                        else
+                                            targetCtrl.append('<option rowid="' + itmrowid + '" value="' + itm + '">' + itm + '</option>');
 
-                                        });
-                                    }
-                                });
-                            } else {
-
-                                $.each(eval(opts), function(j, itm) {
-                                    var itmrowid = '';
-                                    if (itm.indexOf('##') > 0) {
-                                        var breakid = itm.split('##');
-                                        itm = breakid[0];
-                                        itmrowid = breakid[1];
-                                    }
-                                    if (targetCtrl.attr('multiselect'))
-                                        addToSelectList(itm, itmrowid, targetCtrl);
-                                    else
-                                        targetCtrl.append('<option rowid="' + itmrowid + '" value="' + itm + '">' + itm + '</option>');
-
-                                });
-                            }
+                                    });
+                                }
+                            });
                         } else {
+
                             $.each(eval(opts), function(j, itm) {
-                                    var itmrowid = '';
-                                    if (itm.indexOf('##') > 0) {
-                                        var breakid = itm.split('##');
-                                        itm = breakid[0];
-                                        itmrowid = breakid[1];
-                                    }
-                                    if (targetCtrl.attr('multiselect'))
-                                        addToSelectList(itm, itmrowid, targetCtrl);
-                                    else
-                                        targetCtrl.append('<option rowid="' + itmrowid + '" value="' + itm + '">' + itm + '</option>');
+                                var itmrowid = '';
+                                if (itm.indexOf('##') > 0) {
+                                    var breakid = itm.split('##');
+                                    itm = breakid[0];
+                                    itmrowid = breakid[1];
+                                }
+                                if (targetCtrl.attr('multiselect'))
+                                    addToSelectList(itm, itmrowid, targetCtrl);
+                                else
+                                    targetCtrl.append('<option rowid="' + itmrowid + '" value="' + itm + '">' + itm + '</option>');
 
-                                });
+                            });
                         }
-                        //fix for select2 control - Vinod 
-                        if (targetCtrl.attr('multiselect') == null)
-                            targetCtrl.select2();
+                    } else if (formID === 21) {
+                        var allUsers = [];
+                        $.ajax({
+                            url: '/d4dMasters/orgs/all/users/7',
+                            async: false,
+                            success: function(data) {
+                                if (count === 2) {
+                                    if (opts != "") {
+                                        for (var i = 0; i < JSON.stringify(opts).split(",").length; i++) {
+                                            allUsers.push(opts[i]);
+                                        }
+                                    }
 
-                    });
+                                    for (var x = 0; x < data.length; x++) {
+                                        allUsers.push(data[x].loginname + "##" + data[x].rowid);
+                                    }
+                                    $.each(eval(allUsers), function(j, itm) {
+                                        var itmrowid = '';
+
+                                        if (itm.indexOf('##') > 0) {
+                                            var breakid = itm.split('##');
+                                            itm = breakid[0];
+                                            itmrowid = breakid[1];
+                                        }
+                                        if (targetCtrl.attr('multiselect'))
+                                            addToSelectList(itm, itmrowid, targetCtrl);
+                                        else
+                                            targetCtrl.append('<option rowid="' + itmrowid + '" value="' + itm + '">' + itm + '</option>');
+
+                                    });
+                                } else {
+                                    $.each(eval(opts), function(j, itm) {
+                                        var itmrowid = '';
+                                        if (itm.indexOf('##') > 0) {
+                                            var breakid = itm.split('##');
+                                            itm = breakid[0];
+                                            itmrowid = breakid[1];
+                                        }
+                                        if (targetCtrl.attr('multiselect'))
+                                            addToSelectList(itm, itmrowid, targetCtrl);
+                                        else
+                                            targetCtrl.append('<option rowid="' + itmrowid + '" value="' + itm + '">' + itm + '</option>');
+
+                                    });
+                                }
+                            }
+                        });
+                    } else {
+                        $.each(eval(opts), function(j, itm) {
+                            var itmrowid = '';
+                            if (itm.indexOf('##') > 0) {
+                                var breakid = itm.split('##');
+                                itm = breakid[0];
+                                itmrowid = breakid[1];
+                            }
+                            if (targetCtrl.attr('multiselect'))
+                                addToSelectList(itm, itmrowid, targetCtrl);
+                            else
+                                targetCtrl.append('<option rowid="' + itmrowid + '" value="' + itm + '">' + itm + '</option>');
+
+                        });
+                    }
+                    //fix for select2 control - Vinod 
+                    if (targetCtrl.attr('multiselect') == null)
+                        targetCtrl.select2();
+
                 });
+            });
 
-            }
         }
+    }
 
-        //alert("Reading" + JSON.stringify(temp));
-    });
+    //alert("Reading" + JSON.stringify(temp));
+});
 
     $('input[sourcepath][cdata="catalyst"]').each(function() {
         //debugger;
@@ -2848,7 +2897,7 @@ function isFormValid(formid) {
                     break;
                 case "nospace":
                     var str = currCtrl.val();
-                    if (str.indexOf(' ') > 0) {
+                    if (str.indexOf(' ') > 0 || str.charAt(0) === " ") {
                         isValid = false;
                         errormessageforInput(currCtrl.attr('id'), "space(s) not allowed");
                         currCtrl.focus();

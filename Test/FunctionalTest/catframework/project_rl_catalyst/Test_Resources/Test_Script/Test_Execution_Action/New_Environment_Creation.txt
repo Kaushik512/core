@@ -61,6 +61,9 @@ Catalyst Addition of New Environments
 
 
 
+
+
+
 Test Validation of Creation of New Environments
     Test Validation of No org,Chef,Env,Team Selected for Environment
     Org,Chef,Env,Team not Selected for Envirnment
@@ -134,16 +137,7 @@ Catalyst Environments2 setup
     Assign Team2
     Clicks on Save Button to save the Environments
 
-Catalyst Activation of Environments
-    Clicks on Settings
-    Clicks on Org Tree Setup
-    Clicks on projects menu
-    Clicks on Edit Update Button of the Project1 Created
-    #User Activates the Environment1
-    Clicks on Save Button of Your Project
-    Clicks on Edit Update Button of the Project2 Created
-    #User Activates the Environment2
-    Clicks on Save Button of Your Project
+
 
 
 
@@ -163,7 +157,18 @@ Catalyst Activation of Environments
     #Enters the Application URL for IP
     #Clicks on Import Button for IP
 
-
+Catalyst Activation of Environments in projects
+    Clicks on Settings
+    Clicks on Org Tree Setup
+    Clicks on projects menu
+    Clicks on Edit Update Button of the Project1 Created
+    User Activates the Environment1
+    User Activates the Environment2
+    Clicks on Save Button of Your Project
+    Clicks on Edit Update Button of the Project2 Created
+    User Activates the Environment1
+    User Activates the Environment2
+    Clicks on Save Button of Your Project
 
 
 
@@ -236,17 +241,20 @@ Clicks on New button create new Environment
     Wait Until Keyword Succeeds    1 minute     2 seconds       Wait Until Element Is Visible       xpath=.//*[@id='newENV']
     Click Element    xpath=.//*[@id='newENV']
 
-Select the Environments1
-    Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element    xpath=.//div[@id="s2id_environmentname"]
-    Wait Until Keyword Succeeds    1 minute     1 seconds       Input Text    xpath=.//*[@id='select2-drop']/div/input     ${EnV1}
+Select the Environments1    
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element    xpath=.//*[@id='s2id_environmentname']/a/span[1]
+    Sleep    1s
+    Input Text    xpath=.//*[@id='select2-drop']/div/input     ${EnV1}
     Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element    xpath=.//*[@id='select2-drop']/ul/li[contains("Dev",.)]
-    #Select From List     id=chefenvname         Dev
 
-Select the Environment2
-    Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element    xpath=.//div[@id="s2id_environmentname"]
-    Wait Until Keyword Succeeds    1 minute     1 seconds       Input Text    xpath=.//*[@id='select2-drop']/div/input     ${EnV2}
+
+
+Select the Environment2 
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element    xpath=.//*[@id='s2id_environmentname']/a/span[1]
+    Sleep    1s
+    Input Text    xpath=.//*[@id='select2-drop']/div/input     ${EnV2}
     Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element    xpath=.//*[@id='select2-drop']/ul/li[contains("QA",.)]
-    #Select From List    id=chefenvname         QA                       #QA
+
 
 Assign Teams1
     Click Element    xpath=.//*[@id='teamname']/label[text()='Relevance_Labs_Admins']
@@ -285,7 +293,8 @@ Choose the Authentication Type for IP
 
 
 Upload the Pem File for IP
-    Choose File     xpath=.//*[@id='importPemfileInput']     C:\\Users\\adarsh.RLINDIA\\Desktop\\caty\\Chef\\catalyst.pem
+    Choose File     xpath=.//*[@id='importPemfileInput']     ${CATALYSTPEM}
+    #C:\\Users\\adarsh.RLINDIA\\Desktop\\caty\\Chef\\catalyst.pem
 
 Enters the Application Name for IP
     Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    xpath=.//*[@id='appSeries12']/div[1]/input    ${IP APPNAME}

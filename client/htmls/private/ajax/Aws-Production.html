@@ -663,13 +663,16 @@
  
  
  
- <div class="blueprintSaveSuccess blueprintMsgContainer">
- <h3 class="alert alert-success">Blueprint Saved.<a href="#ajax/Aws-Production.html?addnew" id="addanotherlink" style="margin-left:50px;">Add another ?</a></h3>
+ <div class="blueprintSaveSuccess blueprintMsgContainer"><div class="alert alert-success bootstrapSuccess"><img style="width:50px;height:40px" src="img/correct.png" alt="success"/>
+ <span style="margin-left:20px;">Blueprint Successfully Saved.</span>
+ <div><span style="margin-left:74px;">Do you want to add another?</span><a href="#ajax/Aws-Production.html?addnew" id="addanotherlink">&nbsp;&nbsp;Click Here</a></div>
+</div>
  </div>
 
- <div class="blueprintSaveFail blueprintMsgContainer">
+ <div class="blueprintSaveFail blueprintMsgContainer"><div class="alert alert-warning bootstrapFailure"><img style="width:50px;height:40px" src="img/warning.png" alt="warning"/>
 
- <h3 class="alert alert-danger">Unable to save blueprint. Please try again later.</h3>
+ <span style="margin-left:20px;">Unable to save blueprint. Please try again later.</span>
+ </div>
  </div>
  </div>
 
@@ -733,8 +736,7 @@
                                </div>
 
                                 <div class="col-lg-3 col-md-3">
-             <label for="">Business Group <span style="color:red">*</span>
-             </label>
+             <label for="">Business Group</label>
 
              <select id="bgListInputNew" class="chooseBGNew width-100">
 
@@ -747,7 +749,7 @@
 
          
          <div class="col-lg-3 col-md-3">
-           <label for="category">Project <span style="color:red">*</span>
+           <label for="category">Project
            </label>
 
            <select id="projectListInputNew" class="chooseProjectNew width-100">
@@ -757,8 +759,7 @@
          </div>
      
       <div class="col-lg-3 col-md-3">
- <label for="category">Environment <span style="color:red">*</span>
- </label>
+ <label for="category">Environment</label>
 
  <select  id="envListNew" class="chooseEnvNew width-100">
 
@@ -1361,7 +1362,7 @@
         }
     });
     //$('#dockerlaunchparameters').val(launchparams); //removed for compose
-
+    alert(launchparams)
     $('#' + $('#myModalLabelDockerContainer').attr('saveto')).val(launchparams);
 
     return (launchparams);
@@ -1478,19 +1479,49 @@ function movetablerow(what, index) {
 function loadLaunchParams(lpinput) {
     $('[dockerparamkey]').val('');
     if ($('#' + lpinput).val() != '') {
+        //filling in -exec and -c 
+        var fullparams = $('#' + lpinput).val();
+        var execparam = fullparams.split(' -exec');
+        var startupparam;
+        if(execparam.length > 0 && typeof execparam[1] != "undefined"){
+           // alert(execparam[1]);
+            $('#additionalStartupcommandfield').val(execparam[1]);
+            if(execparam[0].indexOf('-c') > 0) //found a startup command
+            {
+                startupparam = execparam[0].split(' -c');
+                if(startupparam.length > 0){
+                    $('#Startupcommandfield').val(startupparam[1]);
+                    fullparams = startupparam[0];
+                }
+                else{
+                    fullparams = startupparam[0];
+                }
+            }
+            else
+                fullparams = execparam[0];
+        }
+        else{
+            startupparam = fullparams.split(' -c');
+            if(startupparam.length > 0){
+                $('#Startupcommandfield').val(startupparam[1]);
+                fullparams = startupparam[0];
+            }
+        }
 
-        var params = $('#' + lpinput).val().split(' -');
+
+        var params = fullparams.split(' -');
         for (para in params) {
             var subparam = params[para].split(' ');
             if (subparam.length > 0) {
-                $inp = $('[dockerparamkey="-' + subparam[0] + '"]').first();
-                if ($inp.val() != '')
-                    $inp.val($inp.val() + ',' + subparam[1]);
-                else
-                    $inp.val(subparam[1]);
+               $inp = $('[dockerparamkey="-' + subparam[0] + '"]').first();
+               if ($inp.val() != '')
+                   $inp.val($inp.val() + ',' + subparam[1]);
+               else
+                   $inp.val(subparam[1]);
             }
         }
     }
+
     //alert(lpinput);
     $('#myModalLabelDockerContainer').attr('saveto', lpinput).modal('show');
 }

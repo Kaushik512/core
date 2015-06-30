@@ -180,6 +180,13 @@
                         <div class="panel panel-default">
                           <div class="panel-heading">
                             <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion-configmgmt" href="#collapseConfigmgmt"> <i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i><i class="fa fa-fw fa-bar-chart-o" style="font-size:14px;"></i> <b style="color:#3a87ad;font-size:12px;"><u>Configuration Management</u></b></a></h4>
+
+                            <label id="saveSpinner" class="hidden"><img style="margin-left:400px;" src="img/select2-spinner.gif"></label>
+                            <a class="btn btn-primary workstationBtn" data-toggle="modal" style="float: right; margin-right: 5px; margin-top: 2px;">
+                              <i class="fa fa-check" style="font-size:14px;"></i>
+                              Convert To Workstation
+                            </a>
+
                           </div>
                           <div id="collapseConfigmgmt" class="panel-collapse collapse in">
                             <div class="panel-body">
@@ -1046,7 +1053,8 @@
              <div class="modal-body" style="height:140px;">
                 <div class="col-lg-6 col-md-6" style="margin-left:-15px">
 
-                            <label for="">Select Task</label>
+                            <label for=""><input type="checkbox" name="my_checkbox" id="my_checkbox"/>&nbsp;Select/Unselect Task</label>
+                            
 
                             <select class="form-control customNew" id="taskList" multiple> </select>
                             
@@ -1094,8 +1102,6 @@ var urlParams = {};
 })();
 
 
-
-
 function populateJsonData(instanceId) {
     $('.paraHeightModal').hide();
     $.ajax({
@@ -1116,13 +1122,22 @@ function populateJsonData(instanceId) {
             $('.paraHeightModal').show();
             $('#paragraphs').append(temp);
         },
-        failure: function(data) {
-            bootbox.alert(data.responseText);
-            $('.loadingContainerimageInspectCSS').hide();
-            $('.paraHeightModal').hide();
-        },
+        // failure: function(data) {
+        //    var failureText = "Server Behaved Unexpectedly. Please try again later";
+        //     if(jqxhr.responseJSON && jqxhr.responseJSON.message) {
+        //         failureText = jqxhr.responseJSON.message;
+        //     }
+        //     bootbox.alert(failureText);
+        //     $('.loadingContainerimageInspectCSS').hide();
+        //     $('.paraHeightModal').hide();
+        // },
         error: function(jqxhr) {
-            bootbox.alert(jqxhr.responseText);
+          var failureText = "Server Behaved Unexpectedly. Please try again later";
+            if(jqxhr.responseJSON && jqxhr.responseJSON.message) {
+                failureText = jqxhr.responseJSON.message;
+            }
+            bootbox.alert(failureText);
+            
             $('.loadingContainerimageInspectCSS').hide();
             $('.paraHeightModal').hide();
         }
@@ -1133,6 +1148,35 @@ $('.inspectBtn').click(function() {
     $('.loadingContainerimageInspectCSS').show();
     $('div').find('#paragraphs').empty();
 });
+
+function populateWorkstation(){
+  $('.workstationBtn').attr('disabled','disabled');
+  $('#saveSpinner').removeClass('hidden');
+  var $div = $('.domain-roles-caption');
+  var instanceId = $div.attr('data-instanceid');
+  $.ajax({
+        type: "GET",
+        url: "../instances/" + instanceId + "/setAsWorkStation",
+        success: function(data) {
+          console.log(data);
+            bootbox.alert("Your workstation has been setup successfully. The .chef folder is available in Home");
+            $('#saveSpinner').addClass('hidden');
+            $('.workstationBtn').removeAttr('disabled');
+        },
+        error: function(jqxhr) {
+          var failureText = "Server Behaved Unexpectedly. Please try again later";
+            if(jqxhr.responseJSON && jqxhr.responseJSON.message) {
+                failureText = jqxhr.responseJSON.message;
+            }
+            bootbox.alert(failureText);
+            $('#saveSpinner').addClass('hidden');
+            $('.workstationBtn').removeAttr('disabled');  
+            
+        }
+    });
+}
+
+$('.workstationBtn').click(populateWorkstation);
 
 function disableSSHBtn(instanceId) {
     var $cardViewInstanceId = $(".domain-roles-caption[data-instanceId='" + instanceId + "']");
@@ -1196,6 +1240,65 @@ function disableInstanceStartStopActionBtns(instanceId) {
     $cardViewInstanceId.find('.instance-bootstrap-ActionShutdown a').addClass('isStopedInstance').removeClass('actionbuttonShutdown').addClass('actionbuttonShutdowndisable');
     $cardViewInstanceId.find('.instance-bootstrap-ActionStart a').addClass('isStopedInstance').removeClass('actionbuttonStart').addClass('actionbuttonStartdisable');
 }
+
+function pollInstanceBootstrapState(instanceId, delay) {
+
+    var timeout = setTimeout(function() {
+        $.get('../instances/' + instanceId, function(data) {
+            var title = '';
+            if (data) {
+                if (data.bootStrapStatus == 'waiting') {
+                    console.log('polling again bootStrapStatus');
+                    pollInstanceBootstrapState(instanceId, 5000);
+                } else {
+                    if (data.bootStrapStatus == 'success') {
+                        if (data.hardware.platform === 'unknown') {
+                            console.log('polling again bootStrapStatus unknown');
+                            pollInstanceBootstrapState(instanceId, 5000);
+                            return;
+                        }
+                        var $parent = $('.domain-roles-caption[data-instanceId="' + instanceId + '"]');
+                        var basePath = 'img/osIcons/',
+                            imgPath, title = '';
+                        switch (data.hardware.platform.toLowerCase()) {
+                            case "window 2008":
+                                imgPath = 'windows.png';
+                                break;
+                            case "centos":
+                                imgPath = 'centos.png';
+                                break;
+                            case "ubuntu":
+                                imgPath = 'ubuntu.png';
+                                break;
+                            default:
+                                imgPath = 'unknown.png';
+                        }
+                        title = data.hardware.platform;
+                        if (imgPath === "unknown.png") {
+                            if (data.hardware.os.toLowerCase() === "linux") {
+                                imgPath = "linux.png";
+                                title = data.hardware.os;
+
+                            } else if (data.hardware.os.toLowerCase().indexOf('window') > -1) {
+                                imgPath = "windows.png";
+                                title = data.hardware.os;
+
+                            }
+
+                        }
+                        $parent.find('.card_os').empty().append('<img src="' + basePath + imgPath + '" height="25" width="25" data-placement="top" data-original-title="' + title.capitalizeFirstLetter() + '" rel="tooltip"/>');
+
+
+                    }
+
+                }
+
+            }
+        });
+    }, delay);
+}
+
+
 
 var logTimeout;
 var stateTimeout;
@@ -1291,6 +1394,10 @@ $.get('../instances/' + urlParams.id, function(data) {
     });
 
     var getOS = function(data) {
+            if (data.bootStrapStatus === 'waiting') {
+                console.log('polling bootStrapStatus');
+                pollInstanceBootstrapState(data._id, 5000);
+            }
             var basePath = 'img/osIcons/',
                 imgPath, title = '';
             console.log(data.hardware.os + ' :: OS ::' + data.hardware.platform.toLowerCase())
@@ -1741,16 +1848,17 @@ $.get('../instances/' + urlParams.id, function(data) {
             });
 
         }
-
-        if (type === 'stop') {
-            bootbox.confirm("Stop Instance ?", function(result) {
-                if (result) {
-                    makeRequest(url);
-                }
-            });
-        } else {
-            makeRequest(url);
-        }
+        $.get('../instances/' + instanceId, function(data) {
+            if (type === 'stop') {
+                bootbox.confirm("Are you sure you want to Stop the Instance-&nbsp;&quot;&nbsp;<b>" + data.name + "</b>&nbsp;&quot;", function(result) {
+                    if (result) {
+                        makeRequest(url);
+                    }
+                });
+            } else {
+                makeRequest(url);
+            }
+        });
 
 
 
@@ -2179,42 +2287,61 @@ $.get('../instances/' + urlParams.id, function(data) {
                     $option.attr('selected', 'selected');
                 }
                 $select.append($option);
+                
             }
+            
             $('#instanceTaskModal').modal('show');
         });
     });
+
+    var checkbox = $('#my_checkbox');
+    var listbox = $('#taskList');
+
+    $(checkbox).click(function() {
+        selectDeselect(listbox, checkbox);
+    });
+
+    function selectDeselect(listbox, checkbox) {
+        var select_all = $(checkbox).prop('checked') ? true : false;
+        var select = $(listbox);
+        if (select_all) {
+            var clone = select.clone();
+            $('option', clone).attr('selected', select_all);
+            var html = clone.html();
+            select.html(html);
+        } else $('option', select).removeAttr('selected');
+    }
 
     $('#saveTaskBtn').click(function() {
         var $taskSelect = $('#taskList');
         var $selectedOptions = $taskSelect.find('option:selected');
         var taskIds = $taskSelect.val();
-        if (taskIds) {
-            $.post('../instances/' + data._id + '/addTask', {
-                taskIds: taskIds
-            }, function() {
-                var str = '';
-                $tasksDatatable.clear().draw();
-                for (var i = 0; i < $selectedOptions.length; i++) {
-                    var $trTask = $('<tr style="line-height:2.3"></tr>');
-                    var $tdSerial = $('<td/>');
-                    str = $($selectedOptions[i]).text();
-                    var $tdName = $('<td class="taskNameTd"/>');
-                    $tdName.append(str);
-                    $trTask.append($tdSerial);
-                    $trTask.append($tdName);
-                    $tasksDatatable.row.add($trTask).draw();
-                }
-                $('#instanceTaskModal').modal('hide');
-                data.taskIds = taskIds;
-            });
-        } else {
-            $('#instanceTaskModal').modal('hide');
+        if (!taskIds) {
+            taskIds = [];
         }
+        $.post('../instances/' + data._id + '/addTask', {
+            taskIds: taskIds
+        }, function() {
+            var str = '';
+            $tasksDatatable.clear().draw();
+            for (var i = 0; i < $selectedOptions.length; i++) {
+                var $trTask = $('<tr style="line-height:2.3"></tr>');
+                var $tdSerial = $('<td/>');
+                str = $($selectedOptions[i]).text();
+                var $tdName = $('<td class="taskNameTd"/>');
+                $tdName.append(str);
+                $trTask.append($tdSerial);
+                $trTask.append($tdName);
+                $tasksDatatable.row.add($trTask).draw();
+            }
+            $('#instanceTaskModal').modal('hide');
+            data.taskIds = taskIds;
+        });
+
     });
 
-
-
 });
+
 
 
 function getActionBtnClass(actionType) {
