@@ -144,11 +144,12 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                         VMImage.createNew(vmimageData, function(err, anImage) {
                                             if (err) {
                                                 logger.debug("err.....", err);
-                                                res.send(500, "Image creation fail.");
+                                                res.send(500, "Selected is already registered.");
                                                 return;
                                             }
-                                            res.send(anImage);
                                             logger.debug("Exit post() for /vmimages");
+                                            res.send(anImage);
+                                            return;
                                         });
                                     } else {
                                         res.send(500, "The image is empty for amid: " + vmimageData.imageIdentifier);

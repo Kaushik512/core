@@ -1412,6 +1412,10 @@ function readform(formID) {
     if (editMode == false) {
         return (false);
     }
+    if (formID === 3 && editMode === true) {
+        $('#orgname').attr('disabled', 'disabled').select2();
+        $('#configname').attr('disabled', 'disabled').select2();
+    }
 
     //Setting the header of the form to Edit if shown as Create
     var head = $('.widget-header').html().replace('Create', 'Edit').replace('New', 'Edit');
