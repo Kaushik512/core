@@ -530,6 +530,7 @@ Clicks on CoookBooks
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='chefRunAccordionRunlistArea']/div/div/div/div[1]/div[1]/label[3]
 
 Select the Apache2 CookBook
+    Sleep    5s
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[text()='apache2']
 
 Select the tomcatall CookBook
@@ -550,7 +551,7 @@ Clicks on Cancel Bbutoon
     Click Element    xpath=.//*[@id='addInstanceForm']/div[3]/div/a
 
 Clicks on Cloose of Update Button
-    Sleep    1s
+    Sleep    5s
     Click Element    xpath=.//*[@id='instanceLogModalContainer']/div/div/div[3]/button
 
 
@@ -627,7 +628,7 @@ Clicks on Import Button to Import an Instance
     Sleep    30s
 
 Clicks on Import Close Button
-    Sleep    1 minutes
+    Sleep    1 minute
     Click Element    xpath=.//*[@id='instanceLogModalContainer']/div/div/div[3]/button
 
 

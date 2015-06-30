@@ -177,6 +177,7 @@ Select the Organization the Admin Created
     Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
 
 Assign the User as OrgAdmin
+    Sleep    1s
     Click Element    xpath=.//*[@id='loginname']/label[text()='Rel_Admin']
 
 Assign the projects for the Team

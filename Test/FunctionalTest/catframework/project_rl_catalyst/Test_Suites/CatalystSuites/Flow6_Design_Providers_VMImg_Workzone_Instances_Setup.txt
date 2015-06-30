@@ -95,14 +95,14 @@ Catalyst new UBUNTU DESIGN setup
     [Teardown]     Close Browser
 
 
-#-Catalyst new UBUNTU WORKZONE setup
-    #-[Tags]       Sanity               Smoke
+Catalyst new UBUNTU WORKZONE setup
+    [Tags]       Sanity               Smoke
 #    Catalyst Login
-    #-Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
     ##Catalyst Check INFORMATION Status for Ubuntu
-    #-Catalyst Work SSH CHEFCLIENT STOP Setup after LAUNCH of Ubuntu
-    #-Catalyst Logout                      
-    #-[Teardown]     Close Browser
+    Catalyst Work SSH CHEFCLIENT STOP Setup after LAUNCH of Ubuntu
+    Catalyst Logout                      
+    [Teardown]     Close Browser
 
 
 #-Catalyst UBUNTU INSTANCE CONTROL PANEL setup
@@ -110,5 +110,14 @@ Catalyst new UBUNTU DESIGN setup
 #    Catalyst Login
     #-Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
     #-Catlayst verfication of Instance Stop Setup and Disable of Ubuntu
-    #-Catalyst Logout                      
+    #=Catalyst Logout                      
     #-[Teardown]     Close Browser
+
+
+#-Catalyst Ubuntu Instance Grid View of Stopped Instance and Restart,SSH,Chef Run,Start
+    #-[Tags]       Sanity               Smoke
+#    Catalyst Login
+    #-Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    #-Catalyst Grid View Start ,Stop ,SSH ,Chef ,Client ,Log Setup
+    #-Catalyst Logout                      
+    #-[Teardown]     Close Browser 
