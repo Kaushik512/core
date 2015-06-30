@@ -238,6 +238,7 @@ Chooses Icon
 Chooses Template Type
     Click Element    xpath=.//*[@id='s2id_templatetypename']/a
     Input Text    xpath=.//*[@id='select2-drop']/div/input    ${TEMPLATE TYPENAME}
+    Sleep    1s
     Click Element    xpath=.//*[@id='select2-drop']/ul/li/div      #App FactoryT
     #Click Element    xpath=.//*[@id='select2-drop']/ul/li[2]/div      #DevopsRoles
     #Click Element    xpath=.//*[@id='select2-drop']/ul/li[3]/div      #Docker
