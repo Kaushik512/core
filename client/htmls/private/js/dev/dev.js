@@ -239,7 +239,7 @@
                                                                         '</div>' +
                                                                         '<div class="form-group"> ' +
                                                                         '<label style="color:#333;" class="col-md-3 forBootBox1" for="name">Instance Name:</label> ' +
-                                                                        '<span class="col-md-4 forBootBox" for="name">&quot;' + data.name + '&quot;' + '</span>  ' +
+                                                                        '<strong><span class="col-md-4 forBootBox" for="name">' + data.name + '</span></strong>' +
                                                                         '</div> ' +
                                                                         '<div class="form-group" style="margin-top:-10px"> ' +
                                                                         '<label for="ckbChefDelete"></label> ' +
@@ -550,9 +550,6 @@
                                                                      name: appName,
                                                                      url: appURL
                                                                  });
-                                                                 if (!regexpURL.test(appURL)) {
-                                                                     isAppUrlValid = false;
-                                                                 }
                                                              }
 
                                                          });
@@ -3500,7 +3497,7 @@
                                                                 var taskId = $(this).parents('td').attr('data-taskId');
                                                                 var that = this;
 
-                                                                bootbox.confirm('Are you sure you want to delete the Task -&nbsp;&quot;<b>' + data[i].name + '</b>&quot;', function(result) {
+                                                                bootbox.confirm('Are you sure you want to delete the Task -&nbsp;<b>' + data[i].name + '</b>', function(result) {
                                                                     if (result) {
                                                                         $.ajax({
                                                                             url: '../tasks/' + taskId,
