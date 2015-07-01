@@ -513,22 +513,19 @@ function CreateTableFromJson(formID, idFieldName, createFileName) {
         imageTD = $('.rowtemplate').find("[datatype='image']");
 
         editButton = $('.rowtemplate').find("[title='Update']");
-
         if (idFieldValue) {
-            if (imageTD) {
-                if (imageTD.length > 0) {
-                    console.log("Template Icon:" + idFieldValue);
+            if (imageTD.length > 0 ) {
                     var imgpath = 'img/logo.png';
-                    if (imageTD.html().indexOf('<img') >= 0) {
+                    if (imageTD.html().indexOf('<img') >= 0 || imageTD.html().length === 0) {
                         imageTD.html(''); //fix for image tag gettnig embedded. - Vinod
                         imageTD.append($('<img src="' + imgpath + '" style="height:28px;width:auto"/>'));
-                    } else
+                        console.log(imageTD);
+                    } else{
                         imgpath = '/d4dMasters/image/' + idFieldValue + '__' + imageTD.attr('datafieldoriginal') + '__' + imageTD.html();
-
+                    }
+                        
                     imageTD.html('');
                     imageTD.append($('<img src="' + imgpath + '" style="height:28px;width:auto"/>'));
-
-                }
 
             }
             if (editButton) {

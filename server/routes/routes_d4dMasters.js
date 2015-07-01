@@ -682,16 +682,16 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     } else if (req.params.id === '16') {
                         // For Template
                         logger.debug("Id for templateType:>> ", req.params.id);
-                        /*masterUtil.getTemplateTypes(orgList,function(err,templateList){
+                        masterUtil.getTemplateTypes(orgList,function(err,templateList){
                                 if(err){
                                     res.send(500,'Not able to fetch TemplateType.');
                                 }
                                 logger.debug("Returned TemplateType List:>>>>> ",JSON.stringify(templateList));
                                 res.send(JSON.stringify(templateList));
                                 return;
-                            });*/
+                            });
 
-                        d4dModelNew.d4dModelMastersDesignTemplateTypes.find({
+                        /*d4dModelNew.d4dModelMastersDesignTemplateTypes.find({
                             id: req.params.id
                         }, function(err, data) {
                             if (err) {
@@ -700,7 +700,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                             }
                             logger.debug("Called /d4dMasters/readmasterjsonnew/ for non superadmin.");
                             res.send(JSON.stringify(data));
-                        });
+                        });*/
 
                     } else if (req.params.id === '19') {
                         // For ServiceCommand
@@ -846,16 +846,16 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     } else if (req.params.id === '16') {
                         // For Template
                         logger.debug("Id for templateType:>> ", req.params.id);
-                        /*masterUtil.getTemplateTypes(orgList,function(err,templateList){
+                        masterUtil.getTemplateTypes(orgList,function(err,templateList){
                                 if(err){
                                     res.send(500,'Not able to fetch TemplateType.');
                                 }
                                 logger.debug("Returned TemplateType List:>>>>> ",JSON.stringify(templateList));
                                 res.send(JSON.stringify(templateList));
                                 return;
-                            });*/
+                            });
 
-                        d4dModelNew.d4dModelMastersDesignTemplateTypes.find({
+                        /*d4dModelNew.d4dModelMastersDesignTemplateTypes.find({
                             id: req.params.id
                         }, function(err, data) {
                             if (err) {
@@ -864,7 +864,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                             }
                             logger.debug("Called /d4dMasters/readmasterjsonnew/ for non superadmin.");
                             res.send(JSON.stringify(data));
-                        });
+                        });*/
 
                     } else if (req.params.id === '19') {
                         // For ServiceCommand
@@ -2555,51 +2555,104 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                 res.send(500, "Failed to save Org.");
                                                 return;
                                             }
-                                            for (var x = 0; x < 4; x++) {
-                                                var teamName;
-                                                var descriptions;
-                                                if (x === 0) {
-                                                    teamName = bodyJson["orgname"] + "_Admins";
-                                                    descriptions = "Team For " + teamName;
-                                                } else if (x === 1) {
-                                                    teamName = bodyJson["orgname"] + "_DEV";
-                                                    descriptions = "Team For " + teamName;
-                                                } else if (x === 2) {
-                                                    teamName = bodyJson["orgname"] + "_QA";
-                                                    descriptions = "Team For " + teamName;
-                                                } else {
-                                                    teamName = bodyJson["orgname"] + "_DevOps";
-                                                    descriptions = "Team For " + teamName;
-                                                }
-
-                                                logger.debug("orgname_rowid>>>>>>>>>>>>>>>> ", bodyJson["rowid"]);
-
-                                                var teamData = {
-                                                    "teamname": teamName,
-                                                    "description": descriptions,
-                                                    "orgname": bodyJson["orgname"],
-                                                    "orgname_rowid": bodyJson["rowid"],
-                                                    "rowid": uuid.v4(),
-                                                    "id": "21",
-                                                    "loginname": "",
-                                                    "loginname_rowid": "",
-                                                    "projectname": "",
-                                                    "projectname_rowid": ""
-
-                                                };
-                                                logger.debug("teamData>>>>>>>>>>>>>>>>>>>>>>>> ", teamData);
-                                                var teamModel = new d4dModelNew.d4dModelMastersTeams(teamData);
-                                                teamModel.save(function(err, aTeam) {
-                                                    if (err) {
-                                                        //res.send(500,"Failed to save Team.");
-                                                        logger.debug("Failed to save Team.");
+                                            for (var x1 = 0; x1 < 6; x1++) {
+                                                (function(x1) {
+                                                    var templatetypename;
+                                                    var designtemplateicon_filename;
+                                                    var templatetype;
+                                                    if (x1 === 0) {
+                                                        templatetypename = "AppFactory";
+                                                        designtemplateicon_filename = "Appfactory.png";
+                                                        templatetype = "chef";
+                                                    } else if (x1 === 1) {
+                                                        templatetypename = "DevOpsRoles";
+                                                        designtemplateicon_filename = "DevopsRoles.png";
+                                                        templatetype = "chef";
+                                                    } else if (x1 === 2) {
+                                                        templatetypename = "CloudFormation";
+                                                        designtemplateicon_filename = "Cloudformation.png";
+                                                        templatetype = "chef";
+                                                    } else if (x1 === 3) {
+                                                        templatetypename = "Desktop";
+                                                        designtemplateicon_filename = "Desktop Provisining.png";
+                                                        templatetype = "chef";
+                                                    } else if (x1 === 4) {
+                                                        templatetypename = "Environment";
+                                                        designtemplateicon_filename = "Environment.png";
+                                                        templatetype = "chef";
+                                                    } else {
+                                                        templatetypename = "Docker";
+                                                        designtemplateicon_filename = "Docker.png";
+                                                        templatetype = "docker";
                                                     }
-                                                    logger.debug("Auto created Team:>>>>>>>> ", JSON.stringify(aTeam));
-                                                });
-                                                if (x === 3) {
-                                                    res.send(200);
-                                                    return;
-                                                }
+
+                                                    var templateTypeData = {
+                                                        "templatetypename": templatetypename,
+                                                        "orgname": bodyJson["orgname"],
+                                                        "orgname_rowid": bodyJson["rowid"],
+                                                        "rowid": uuid.v4(),
+                                                        "id": "16",
+                                                        "templatetype": templatetype
+
+                                                    };
+
+                                                    var templateTypeModel = new d4dModelNew.d4dModelMastersDesignTemplateTypes(templateTypeData);
+                                                    templateTypeModel.save(function(err, aTemplateType) {
+                                                        if (err) {
+                                                            //res.send(500,"Failed to save Team.");
+                                                            logger.debug("Failed to save TemplateType.");
+                                                        }
+                                                        logger.debug("Default TemplateType created.");
+                                                    });
+                                                })(x1);
+                                            }
+                                            for (var x = 0; x < 4; x++) {
+                                                (function(x) {
+                                                    var teamName;
+                                                    var descriptions;
+                                                    if (x === 0) {
+                                                        teamName = bodyJson["orgname"] + "_Admins";
+                                                        descriptions = "Team For " + teamName;
+                                                    } else if (x === 1) {
+                                                        teamName = bodyJson["orgname"] + "_DEV";
+                                                        descriptions = "Team For " + teamName;
+                                                    } else if (x === 2) {
+                                                        teamName = bodyJson["orgname"] + "_QA";
+                                                        descriptions = "Team For " + teamName;
+                                                    } else {
+                                                        teamName = bodyJson["orgname"] + "_DevOps";
+                                                        descriptions = "Team For " + teamName;
+                                                    }
+
+                                                    logger.debug("orgname_rowid>>>>>>>>>>>>>>>> ", bodyJson["rowid"]);
+
+                                                    var teamData = {
+                                                        "teamname": teamName,
+                                                        "description": descriptions,
+                                                        "orgname": bodyJson["orgname"],
+                                                        "orgname_rowid": bodyJson["rowid"],
+                                                        "rowid": uuid.v4(),
+                                                        "id": "21",
+                                                        "loginname": "",
+                                                        "loginname_rowid": "",
+                                                        "projectname": "",
+                                                        "projectname_rowid": ""
+
+                                                    };
+                                                    logger.debug("teamData>>>>>>>>>>>>>>>>>>>>>>>> ", teamData);
+                                                    var teamModel = new d4dModelNew.d4dModelMastersTeams(teamData);
+                                                    teamModel.save(function(err, aTeam) {
+                                                        if (err) {
+                                                            //res.send(500,"Failed to save Team.");
+                                                            logger.debug("Failed to save Team.");
+                                                        }
+                                                        logger.debug("Auto created Team:>>>>>>>> ", JSON.stringify(aTeam));
+                                                    });
+                                                    if (x === 3) {
+                                                        res.send(200);
+                                                        return;
+                                                    }
+                                                })(x);
 
                                             }
 
