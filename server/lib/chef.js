@@ -1,7 +1,7 @@
 /* Copyright (C) Relevance Lab Private Limited- All Rights Reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
- * Written by Gobinda Das <gobinda.das@relevancelab.com>, 
+ * Written by Gobinda Das <gobinda.das@relevancelab.com>,
  * May 2015
  */
 
@@ -14,11 +14,16 @@ var fileIo = require('./utils/fileio');
 var chefApi = require('chef');
 var appConfig = require('../config/app_config');
 var chefDefaults = appConfig.chef;
-var javaSSHWrapper = require('./../model/javaSSHWrapper.js');
+//var javaSSHWrapper = require('./../model/javaSSHWrapper.js');
 var logger = require('./logger.js')(module);
 var getDefaultCookbook = require('./defaultTaskCookbook');
+var currentDirectory = __dirname;
+var fs = require('fs');
+//var DataBagModel = require('../model/classes/masters/databag.js');
+var d4dModelNew = require('../model/d4dmasters/d4dmastersmodelnew.js');
+var SSHExec = require('./utils/sshexec');
 
-var app_config
+var app_config;
 
 var Chef = function(settings) {
 
@@ -29,7 +34,7 @@ var Chef = function(settings) {
     var bootstrapattemptcount = 0;
 
     function initializeChefClient(callback) {
-        logger.debug('User Pem file:' , settings.chefUserPemFile);
+        logger.debug('User Pem file:', settings.chefUserPemFile);
         if (!chefClient) {
             fileIo.readFile(settings.chefUserPemFile, function(err, key) {
                 if (err) {
@@ -54,7 +59,7 @@ var Chef = function(settings) {
             chefClient.get('/nodes', function(err, chefRes, chefResBody) {
                 if (err) {
                     callback(err, null);
-                    return ;
+                    return;
                 }
                 logger.debug("chef status", chefRes.statusCode);
                 if (chefRes.statusCode !== 200 && chefRes.statusCode !== 201) {
@@ -219,7 +224,7 @@ var Chef = function(settings) {
                 callback(err, null);
                 return;
             }
-            logger.debug('REceipe query:' , cookbookName);
+            logger.debug('REceipe query:', cookbookName);
             chefClient.get('/cookbooks/' + cookbookName + '/_latest', function(err, chefRes, chefResBody) {
                 if (err) {
                     callback(err, null);
@@ -249,7 +254,7 @@ var Chef = function(settings) {
                     return;
                 }
                 logger.debug("chef status ", chefRes.statusCode);
-               
+
                 if (chefRes.statusCode === 200) {
                     callback(null, chefResBody);
                 } else {
@@ -305,6 +310,8 @@ var Chef = function(settings) {
                 logger.debug("chef status create==> ", chefRes.statusCode);
                 if (chefRes.statusCode === 201) {
                     callback(null, envName);
+                } else if (chefRes.statusCode === 409) {
+                    callback(null, chefRes.statusCode);
                 } else {
                     callback(true, null);
                 }
@@ -380,7 +387,7 @@ var Chef = function(settings) {
         if (typeof callbackOnStdOut === 'function') {
 
             options.onStdOut = function(data) {
-                logger.debug('Process out :' , data);
+                logger.debug('Process out :', data.toString('ascii'));
                 callbackOnStdOut(data);
             }
         }
@@ -433,9 +440,9 @@ var Chef = function(settings) {
             }
             argList.push('-P');
             if (params.instanceOS == 'windows' && !params.instancePassword) {
-                argList.push('Zaq!2wsx'); // temp hack
+                argList.push('\"Zaq!2wsx\"'); // temp hack
             } else {
-                argList.push(params.instancePassword);
+                argList.push('\"' + params.instancePassword + '\"');
             }
         }
 
@@ -450,7 +457,7 @@ var Chef = function(settings) {
             argList.push('-r');
             argList.push(runlist.join());
         }
-        logger.debug('Environment : ' , params.environment);
+        logger.debug('Environment : ', params.environment);
         argList = argList.concat(['-x', params.instanceUsername, '-N', params.nodeName, '-E', params.environment]);
 
         if (chefDefaults.ohaiHints && chefDefaults.ohaiHints.length) {
@@ -499,29 +506,21 @@ var Chef = function(settings) {
     this.cleanChefonClient = function(options, callback, callbackOnStdOut, callbackOnStdErr) {
 
         if (options.instanceOS != 'windows') {
-            var sshParamObj = {
-                host: options.host,
-                port: options.port,
-                username: options.username
-            };
-            var sudoCmd;
-            if (options.privateKey) {
-                sshParamObj.pemFilePath = options.privateKey;
-                if (options.passphrase) {
-                    sshParamObj.passphrase = options.passphrase;
-                }
-            } else {
-                sshParamObj.password = options.password;
-            }
 
-            javaSSHWrapper.getNewInstance(sshParamObj, function(err, javaSSh) {
-                if (err) {
-                    callback(err, null);
-                    return;
-                }
-                // logger.debug('Run List:' + runlist.join());
-                javaSSh.executeListOfCmds(options.cmds, callback, callbackOnStdOut, callbackOnStdErr);
-            });
+            logger.debug('cleaning chef from remote host');
+            var cmds = ["rm -rf /etc/chef/", "rm -rf /var/chef/"];
+            var cmdString = cmds.join(' && ');
+
+           
+            var sudoCmd = 'sudo ';
+            if (options.password) {
+                sudoCmd = 'echo \"' + options.password + '\" | sudo -S ';
+            }
+            cmdString = sudoCmd + cmdString;
+            console.log(cmdString);
+            var sshExec = new SSHExec(options);
+            sshExec.exec(cmdString, callback, callbackOnStdOut, callbackOnStdErr);
+
 
         } else {
 
@@ -571,30 +570,47 @@ var Chef = function(settings) {
         runlist = chefDefaults.defaultChefClientRunCookbooks.concat(runlist);
 
         if (options.instanceOS != 'windows') {
-            var sshParamObj = {
-                host: options.host,
-                port: options.port,
-                username: options.username
-            };
-            var sudoCmd;
-            if (options.privateKey) {
-                sshParamObj.pemFilePath = options.privateKey;
-                if (options.passphrase) {
-                    sshParamObj.passphrase = options.passphrase;
-                }
-            } else {
-                sshParamObj.password = options.password;
-            }
-            logger.debug('json jsonAttributes ==> ', options.jsonAttributes);
 
-            javaSSHWrapper.getNewInstance(sshParamObj, function(err, javaSSh) {
-                if (err) {
-                    callback(err, null);
-                    return;
-                }
-                logger.debug('Run List:' + runlist.join());
-                javaSSh.execChefClient(runlist.join(), overrideRunlist, options.jsonAttributes, callback, callbackOnStdOut, callbackOnStdErr);
-            });
+            var lockFile = false;
+            if (options.parallel) {
+                lockFile = true;
+            }
+
+
+
+            // using ssh2
+            var cmd = '';
+            cmd = "chef-client";
+            if (overrideRunlist) {
+                cmd += " -o";
+            } else {
+                cmd += " -r";
+            }
+            cmd += " " + runlist.join();
+
+            var timestamp = new Date().getTime();
+            if (lockFile) {
+                cmd += " --lockfile /var/tmp/catalyst_lockFile_" + timestamp;
+            }
+            if (options.jsonAttributes) {
+                var jsonFileName = "chefRunjsonAttributes_" + timestamp + ".json";
+                var jsonAttributesString = options.jsonAttributes; // JSON.stringify(options.jsonAttributes);
+                jsonAttributesString = jsonAttributesString.split('"').join('\\\"');
+                var cmdWithJsonAttribute = '';
+                cmdWithJsonAttribute += 'echo "' + jsonAttributesString + '" > ' + jsonFileName + ' && sudo ' + cmd + ' -j ' + jsonFileName;
+                cmd = cmdWithJsonAttribute;
+            }
+            var sudoCmd = "sudo";
+            if (options.password) {
+                sudoCmd = 'echo \"' + options.password + '\" | sudo -S';
+            }
+
+            logger.debug("chef client cmd ==> " + cmd);
+            cmd = sudoCmd + " " + cmd;
+
+            var sshExec = new SSHExec(options);
+            sshExec.exec(cmd, callback, callbackOnStdOut, callbackOnStdErr);
+
 
         } else {
 
@@ -633,10 +649,9 @@ var Chef = function(settings) {
 
     };
 
-
-    this.updateAndRunNodeRunlist = function(nodeName, params, callback, callbackOnStdOut, callbackOnStdErr) {
-        var options = {
-            cwd: settings.chefReposLocation + settings.userChefRepoName,
+    this.runKnifeWinrmCmd = function(cmd, options, callback, callbackOnStdOut, callbackOnStdErr) {
+        var processOptions = {
+            cwd: settings.userChefRepoLocation,
             onError: function(err) {
                 callback(err, null);
             },
@@ -645,25 +660,25 @@ var Chef = function(settings) {
             }
         };
         if (typeof callbackOnStdOut === 'function') {
-            options.onStdOut = function(data) {
+            processOptions.onStdOut = function(data) {
                 callbackOnStdOut(data);
             }
         }
 
         if (typeof callbackOnStdErr === 'function') {
-            options.onStdErr = function(data) {
+            processOptions.onStdErr = function(data) {
                 callbackOnStdErr(data);
             }
         }
-        if ((!(params.runlist) || !params.runlist.length)) {
-            params.runlist = [' '];
-
+        if (!options.password) {
+            options.password = '\"Zaq!2wsx\"'; // temp hack
         }
-        //      knife ssh 'name:<node_name>' 'chef-client -r "recipe[a]"' -x root -P pass
-        logger.debug('knife ssh name:' + nodeName, 'chef-client -r "' + params.runlist.join() + '" -i' + params.pemFilePath + '-x' + params.instanceUserName + '-a' + params.instancePublicIp)
-        var proc = new Process('knife', ['ssh', 'name:' + nodeName, 'chef-client -r "' + params.runlist.join() + '"', '-i' + params.pemFilePath, '-x' + params.instanceUserName, '-a' + params.instancePublicIp], options);
+        //var proc = new Process('knife', ['winrm', options.host, ' "powershell ' + cmd + ' "', '-m', '-P', options.password, '-x', options.username], processOptions);
+        var proc = new Process('knife', ['winrm', options.host, "\'" + cmd + "\'", '-m', '-P', options.password, '-x', options.username], processOptions);
         proc.start();
-    };
+
+
+    }
 
 
     this.updateNodeEnvironment = function(nodeName, newEnvironment, callback) {
@@ -857,10 +872,13 @@ var Chef = function(settings) {
                 if (chefRes.statusCode === 201) {
                     callback(null, chefResBody);
                     return;
-                } else if(chefRes.statusCode === 409){
+                } else if (chefRes.statusCode === 409) {
                     callback(null, chefRes.statusCode);
                     return;
-                }else{
+                } else if (chefRes.statusCode === 400) {
+                    callback(null, chefRes.statusCode);
+                    return;
+                } else {
                     callback(true, null);
                     return;
                 }
@@ -874,14 +892,14 @@ var Chef = function(settings) {
     this.deleteDataBag = function(dataBagName, callback) {
         initializeChefClient(function(err, chefClient) {
             if (err) {
-                logger.debug("error1>>>>> "+err);
+                logger.debug("error1>>>>> " + err);
                 callback(err, null);
                 return;
             }
-            logger.debug(">>>>>>>>>>>>>>>>>>>>> ",dataBagName);
-            chefClient.delete('/data/'+dataBagName, function(err, chefRes, chefResBody) {
+            logger.debug(">>>>>>>>>>>>>>>>>>>>> ", dataBagName);
+            chefClient.delete('/data/' + dataBagName, function(err, chefRes, chefResBody) {
                 if (err) {
-                    logger.debug("error>>>>> "+err);
+                    logger.debug("error>>>>> " + err);
                     callback(err, null);
                     return;
                 }
@@ -889,10 +907,10 @@ var Chef = function(settings) {
                 if (chefRes.statusCode === 200) {
                     callback(null, chefRes.statusCode);
                     return;
-                }else if (chefRes.statusCode === 404) {
+                } else if (chefRes.statusCode === 404) {
                     callback(null, chefRes.statusCode);
                     return;
-                }else {
+                } else {
                     callback(true, null);
                     return;
                 }
@@ -915,7 +933,7 @@ var Chef = function(settings) {
                     return;
                 }
                 logger.debug("chef status ", chefRes.statusCode);
-               
+
                 if (chefRes.statusCode === 200) {
                     callback(null, chefResBody);
                     return;
@@ -929,74 +947,196 @@ var Chef = function(settings) {
         });
     }
 
-    this.createDataBagItem = function(dataBagName,dataBagItem, callback) {
+    this.createDataBagItem = function(req, dataBagItem, callback) {
         initializeChefClient(function(err, chefClient) {
             if (err) {
                 callback(err, null);
                 return;
             }
-            chefClient.post('/data/'+dataBagName, dataBagItem, function(err, chefRes, chefResBody) {
-                if (err) {
+            var dataBagName = req.params.dataBagName;
+            var isEncrypt = req.body.isEncrypt;
+            logger.debug("isEncrypt>>>>>> ", typeof isEncrypt);
+            var options = {
+                cwd: settings.userChefRepoLocation + '/.chef',
+                onError: function(err) {
                     callback(err, null);
-                    return;
+                },
+                onClose: function(code) {
+                    callback(null, code);
                 }
-                logger.debug("chef status create==> ", chefRes.statusCode);
-                if (chefRes.statusCode === 201) {
-                    callback(null, chefResBody);
-                    return;
-                }else if(chefRes.statusCode === 409){
-                    callback(null, chefRes.statusCode);
-                    return;
-                } else {
-                    callback(true, null);
-                    return;
-                }
+            };
+            if (isEncrypt === "true") {
+                d4dModelNew.d4dModelMastersConfigManagement.find({
+                    rowid: req.params.serverId
+                }, function(err, cmgmt) {
+                    if (err) {
+                        logger.debug("Error to find cmgmt from mongo.");
+                    }
+                    logger.debug("Config mgmt: ", JSON.stringify(cmgmt));
+                    if (cmgmt[0]) {
+                        var readKeyFileLocation = settings.userChefRepoLocation + '/.chef/' + cmgmt[0].encryption_filename;
+                        var targetDir = currentDirectory + "/../catdata/catalyst/temp/dbItem.json";
+                        fs.readFile(readKeyFileLocation, function(err, existFile) {
+                            if (err) {
+                                logger.debug("There is no file exist.");
+                                callback(null, 403);
+                                return;
+                            }
+                            fs.writeFile(targetDir, JSON.stringify(dataBagItem), function(err) {
+                                if (err) {
+                                    logger.debug("File creation failed : ", err);
+                                    callback(err, null);
+                                    return;
+                                }
+                                logger.debug("File Created....on ", targetDir);
+                                var keyFileLocation = settings.userChefRepoLocation + '.chef/' + cmgmt[0].encryption_filename;
+                                logger.debug("key file location: ", keyFileLocation);
+                                var createDBItem = 'knife data bag from file ' + dataBagName + " " + targetDir + ' --secret-file ' + keyFileLocation;
+                                var procDBItem = exec(createDBItem, options, function(err, stdOut, stdErr) {
+                                    if (err) {
+                                        logger.debug('Failed in procDBItem', err);
+                                        callback(err, null);
+                                        return;
+                                    }
+                                    fs.unlink(targetDir);
+                                    logger.debug("File deleted successfully..");
+                                    callback(null, dataBagItem);
+                                    return;
+                                });
+                            });
+                        });
 
-            });
+                    } else {
+                        logger.debug("No config management found.");
+                        callback(null, null);
+                        return;
+                    }
+                });
+
+            } else {
+                chefClient.post('/data/' + dataBagName, dataBagItem, function(err, chefRes, chefResBody) {
+                    if (err) {
+                        callback(err, null);
+                        return;
+                    }
+                    logger.debug("chef status create==> ", chefRes.statusCode);
+                    if (chefRes.statusCode === 201) {
+                        callback(null, chefResBody);
+                        return;
+                    } else if (chefRes.statusCode === 409) {
+                        callback(null, chefRes.statusCode);
+                        return;
+                    } else {
+                        callback(true, null);
+                        return;
+                    }
+
+                });
+            }
 
         });
 
     }
 
-    this.updateDataBagItem = function(dataBagName,itemId,dataBagItem, callback) {
+    this.updateDataBagItem = function(req, dataBagItem, callback) {
         initializeChefClient(function(err, chefClient) {
             if (err) {
                 callback(err, null);
                 return;
             }
-            chefClient.put('/data/'+dataBagName+'/'+itemId, dataBagItem, function(err, chefRes, chefResBody) {
-                if (err) {
+            var dataBagName = req.params.dataBagName;
+            var isEncrypt = req.body.isEncrypt;
+            var itemId = req.params.itemId;
+            logger.debug("isEncrypt>>>>>> ", typeof isEncrypt);
+            var options = {
+                cwd: settings.userChefRepoLocation + '/.chef',
+                onError: function(err) {
                     callback(err, null);
-                    return;
+                },
+                onClose: function(code) {
+                    callback(null, code);
                 }
-                logger.debug("chef status create==> ", chefRes.statusCode);
-                if (chefRes.statusCode === 200) {
-                    callback(null, chefResBody);
-                    return;
-                } else {
-                    callback(true, null);
-                    return;
-                }
+            };
+            if (isEncrypt === "true") {
+                d4dModelNew.d4dModelMastersConfigManagement.find({
+                    rowid: req.params.serverId
+                }, function(err, cmgmt) {
+                    if (err) {
+                        logger.debug("Error to find cmgmt from mongo.");
+                    }
+                    logger.debug("Config mgmt: ", JSON.stringify(cmgmt));
+                    if (cmgmt[0]) {
+                        var readKeyFileLocation = settings.userChefRepoLocation + '/.chef/' + cmgmt[0].encryption_filename;
+                        var targetDir = currentDirectory + "/../catdata/catalyst/temp/dbItem.json";
+                        fs.readFile(readKeyFileLocation, function(err, existFile) {
+                            if (err) {
+                                logger.debug("There is no key file exist.");
+                                callback(null, 403);
+                                return;
+                            }
+                            fs.writeFile(targetDir, JSON.stringify(dataBagItem), function(err) {
+                                if (err) {
+                                    logger.debug("File creation failed : ", err);
+                                    callback(err, null);
+                                    return;
+                                }
+                                logger.debug("File Created....");
+                                var createDBItem = 'knife data bag from file ' + dataBagName + " " + targetDir + ' --secret ' + readKeyFileLocation;
+                                var procDBItem = exec(createDBItem, options, function(err, stdOut, stdErr) {
+                                    if (err) {
+                                        logger.debug('Failed in procDBItem', err);
+                                        callback(err, null);
+                                        return;
+                                    }
+                                    fs.unlink(targetDir);
+                                    logger.debug("File deleted successfully..");
+                                    callback(null, dataBagItem);
+                                    return;
+                                });
+                            });
+                        });
 
-            });
+                    } else {
+                        logger.debug("No config management found.");
+                        callback(null, null);
+                        return;
+                    }
+                });
+            } else {
+                chefClient.put('/data/' + dataBagName + '/' + itemId, dataBagItem, function(err, chefRes, chefResBody) {
+                    if (err) {
+                        callback(err, null);
+                        return;
+                    }
+                    logger.debug("chef status create==> ", chefRes.statusCode);
+                    if (chefRes.statusCode === 200) {
+                        callback(null, chefResBody);
+                        return;
+                    } else {
+                        callback(true, null);
+                        return;
+                    }
+
+                });
+            }
 
         });
 
     }
 
-    this.deleteDataBagItem = function(dataBagName,itemName, callback) {
+    this.deleteDataBagItem = function(dataBagName, itemName, callback) {
         initializeChefClient(function(err, chefClient) {
             if (err) {
                 callback(err, null);
                 return;
             }
-            chefClient.delete('/data/' + dataBagName+'/'+itemName, function(err, chefRes, chefResBody) {
+            chefClient.delete('/data/' + dataBagName + '/' + itemName, function(err, chefRes, chefResBody) {
                 if (err) {
                     callback(err, null);
                     return;
                 }
                 logger.debug("chef status ", chefRes.statusCode);
-               
+
                 if (chefRes.statusCode === 200) {
                     callback(null, chefRes.statusCode);
                     return;
@@ -1022,7 +1162,7 @@ var Chef = function(settings) {
                     return;
                 }
                 logger.debug("chef status ", chefRes.statusCode);
-               
+
                 if (chefRes.statusCode === 200) {
                     callback(null, chefResBody);
                     return;
@@ -1036,24 +1176,82 @@ var Chef = function(settings) {
         });
     }
 
-    this.getDataBagItemById = function(dataBagName,itemName ,callback) {
+    this.getDataBagItemById = function(dataBagName, itemId, callback) {
         initializeChefClient(function(err, chefClient) {
             if (err) {
                 callback(err, null);
                 return;
             }
-            chefClient.get('/data/' + dataBagName+'/'+itemName, function(err, chefRes, chefResBody) {
+            /*DataBagModel.getDataBagEncryptionInfo(dataBagName, itemId, function(err, aDataBag) {
+                if (err) {
+                    logger.debug("Error to find data bag from mongo.");
+                }
+                logger.debug("Data Bag from DB: ",JSON.stringify(aDataBag));
+                logger.debug("isEncrypted: ",aDataBag.isEncrypted);
+                if (aDataBag.isEncrypted) {
+                    logger.debug("if called...")
+                    var options = {
+                        cwd: settings.userChefRepoLocation + '/.chef',
+                        onError: function(err) {
+                            callback(err, null);
+                        },
+                        onClose: function(code) {
+                            callback(null, code);
+                        }
+                    };
+                    var showDBItem = 'knife data bag show ' + dataBagName + " " + itemId + ' --secret ' + aDataBag.encryptionKey;
+                    var procDBItem = exec(showDBItem, options, function(err, stdOut, stdErr) {
+                        if (err) {
+                            logger.debug('Failed in procDBItem', err);
+                            return;
+                        }
+                        logger.debug("Decrypted Item: ",stdOut);
+                        callback(null, stdOut);
+                        return;
+                    });
+
+                } else {*/
+            chefClient.get('/data/' + dataBagName + '/' + itemId, function(err, chefRes, chefResBody) {
                 if (err) {
                     callback(err, null);
                     return;
                 }
                 logger.debug("chef status ", chefRes.statusCode);
-               
+
                 if (chefRes.statusCode === 200) {
                     callback(null, chefResBody);
                     return;
-                }if (chefRes.statusCode === 404) {
+                }
+                if (chefRes.statusCode === 404) {
                     callback(null, "{}");
+                    return;
+                } else {
+                    callback(true, null);
+                    return;
+                }
+
+            });
+            /*}
+            });*/
+
+        });
+    }
+
+    this.deleteEnvironment = function(envName, callback) {
+        initializeChefClient(function(err, chefClient) {
+            if (err) {
+                callback(err, null);
+                return;
+            }
+            chefClient.delete('/environments/' + envName, function(err, chefRes, chefResBody) {
+                if (err) {
+                    callback(err, null);
+                    return;
+                }
+                logger.debug("chef status ", chefRes.statusCode);
+
+                if (chefRes.statusCode === 200) {
+                    callback(null, chefRes.statusCode);
                     return;
                 } else {
                     callback(true, null);

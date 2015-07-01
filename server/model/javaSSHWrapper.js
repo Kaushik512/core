@@ -56,7 +56,7 @@ function JavaSSH(javaSSHInstance, options) {
     /**
      * @param: runlist, chef runlist
      */
-    this.execChefClient = function(runlist, overrideRunlist, jsonAttributes, onComplete, onStdOut, onStdErr) {
+    this.execChefClient = function(runlist, overrideRunlist, jsonAttributes,lockFile, onComplete, onStdOut, onStdErr) {
         var stdOutLogFile = options.tempDir + uuid.v4();
         var stdErrLogFile = options.tempDir + uuid.v4();
         var tailStdOut = null;
@@ -86,7 +86,7 @@ function JavaSSH(javaSSHInstance, options) {
                     tailStdErr.startTailing();
                 }
 
-                java.callMethod(javaSSHInstance, 'execChefClient', runlist, overrideRunlist, jsonAttributes, stdOutLogFile, stdErrLogFile, function(err, retCode) {
+                java.callMethod(javaSSHInstance, 'execChefClient', runlist, overrideRunlist, jsonAttributes,lockFile, stdOutLogFile, stdErrLogFile, function(err, retCode) {
                     // deleting log files
                     if (tailStdOut) {
                         tailStdOut.stopTailing();

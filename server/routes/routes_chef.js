@@ -470,6 +470,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
                 importNodes(reqBody.selectedNodes);
             } else {
                 res.send(400);
+                return;
             }
         });
 
@@ -498,10 +499,16 @@ module.exports.setRoutes = function(app, verificationFunc) {
             });
             chef.createEnvironment(req.body.envName, function(err, envName) {
                 if (err) {
-                    res.send(500);
+                    res.send(500,"Error to create Env on chef.");
+                    return;
+                }else if (envName === 409) {
+                    logger.debug("Got 409");
+                    res.send(409,"Environment Already Exist.");
                     return;
                 } else {
+                    logger.debug("envName: ",envName);
                     res.send(envName);
+                    return;
                 }
             });
         });
@@ -533,6 +540,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
                     return;
                 } else {
                     res.send(cookbooks);
+                    return;
                 }
             });
 
@@ -567,6 +575,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
                     return;
                 } else {
                     res.send(cookbooks);
+                    return;
                 }
             });
 
@@ -602,6 +611,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
                     return;
                 } else {
                     res.send(cookbooks);
+                    return;
                 }
             });
 
@@ -642,11 +652,13 @@ module.exports.setRoutes = function(app, verificationFunc) {
                         return;
                     } else {
                         res.send(attributesList);
+                        return;
                     }
                 });
             } else {
                 // get roles attributes
                 res.send([]);
+                return;
             }
 
 
@@ -681,6 +693,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
                     return;
                 } else {
                     res.send(cookbooks);
+                    return;
                 }
             });
 
@@ -708,6 +721,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
                 });
             } else {
                 res.send(404);
+                return;
             }
 
         });
@@ -740,8 +754,10 @@ module.exports.setRoutes = function(app, verificationFunc) {
                 } else {
                     if (success) {
                         res.send(200);
+                        return;
                     } else {
                         res.send(500);
+                        return;
                     }
                 }
             });
@@ -810,9 +826,14 @@ module.exports.setRoutes = function(app, verificationFunc) {
                     res.send(500,"Failed to create Data Bag on Chef.");
                     return;
                 }
-                if(dataBag === 409){
+                else if(dataBag === 409){
                     logger.debug("Exit /chef/../databag/create");
                     res.send(500,"Data Bag already exist on Chef.");
+                    return;
+                }
+                else if(dataBag === 400){
+                    logger.debug("Exit /chef/../databag/create");
+                    res.send(400,"Name can only contain lowercase letters, numbers, hyphens, and underscores.");
                     return;
                 }
                 logger.debug("Exit /chef/../databag/create");
@@ -934,7 +955,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
                 res.send(500,"Invalid Json for Data Bag item.");
                 return;
             }
-            chef.createDataBagItem(req.params.dataBagName,dataBagItem,function(err,dataBagItem){
+            chef.createDataBagItem(req,dataBagItem,function(err,dataBagItem){
                 if(err){
                     logger.debug("Exit /chef/../databag/../item/create");
                     res.send(500,"Failed to create Data Bag Item on Chef.");
@@ -943,6 +964,11 @@ module.exports.setRoutes = function(app, verificationFunc) {
                 if(dataBagItem === 409){
                     logger.debug("Exit /chef/../databag/../item/create");
                     res.send(500,"Data Bag Item already exist on Chef.");
+                    return;
+                }
+                if(dataBagItem === 403){
+                    logger.debug("Exit /chef/../databag/../item/create");
+                    res.send(403,"Encryption Key is not available,Please upload.");
                     return;
                 }
                 logger.debug("Exit /chef/../databag/../item/create");
@@ -1016,18 +1042,30 @@ module.exports.setRoutes = function(app, verificationFunc) {
             });
             logger.debug("Chef...>>>>>>>>>>>>>>>>>>> ",JSON.stringify(chef));
             var dataBagItem;
+            logger.debug("dataBagItem>>>>>>>>> ",req.body.dataBagItem);
+            if(typeof req.body.dataBagItem === 'undefined'){
+                dataBagItem = {"id":req.params.itemId};
+            }else{
+                dataBagItem =req.body.dataBagItem;
+                dataBagItem.id = req.params.itemId;
+            }
             try{
-                logger.debug("Incomming data bag item: ",JSON.stringify(req.body.dataBagItem));
-                dataBagItem = JSON.parse(JSON.stringify(req.body.dataBagItem));
+                logger.debug("Incoming data bag item: ",JSON.stringify(dataBagItem));
+                dataBagItem = JSON.parse(JSON.stringify(dataBagItem));
             }catch(e){
                 logger.debug("error: ",e);
-                res.send(400,"Invalid Json for Data Bag item.");
+                res.send(500,"Invalid Json for Data Bag item.");
                 return;
             }
-            chef.updateDataBagItem(req.params.dataBagName,req.params.itemId,dataBagItem,function(err,dataBagItem){
+            chef.updateDataBagItem(req,dataBagItem,function(err,dataBagItem){
                 if(err){
                     logger.debug("Exit /chef/../databag/../item/update");
                     res.send(500,"Failed to update Data Bag Item on Chef.");
+                    return;
+                }
+                if(dataBagItem === 403){
+                    logger.debug("Exit /chef/../databag/../item/update");
+                    res.send(403,"Encryption Key is not available,Please upload.");
                     return;
                 }
                 logger.debug("Exit /chef/../databag/../item/update");
@@ -1099,6 +1137,39 @@ module.exports.setRoutes = function(app, verificationFunc) {
                 logger.debug("Exit /chef/../databag/../item/find");
                 logger.debug("dataBagItem:>>>>>>>>>>>> ",JSON.stringify(dataBagItem));
                 res.send(dataBagItem);
+                return;
+            });
+        });
+    });
+
+    // Delete a Data Bag Item from a Data Bag.
+    app.delete("/chef/servers/:serverId/environments/:envName",function(req,res){
+        logger.debug("Enter /chef/../environments");
+        configmgmtDao.getChefServerDetails(req.params.serverId, function(err, chefDetails) {
+            if (err) {
+                res.send(500);
+                return;
+            }
+            if (!chefDetails) {
+                res.send(404);
+                return;
+            }
+            var chef = new Chef({
+                userChefRepoLocation: chefDetails.chefRepoLocation,
+                chefUserName: chefDetails.loginname,
+                chefUserPemFile: chefDetails.userpemfile,
+                chefValidationPemFile: chefDetails.validatorpemfile,
+                hostedChefUrl: chefDetails.url,
+            });
+            logger.debug("Chef...>>>>>>>>>>>>>>>>>>> ",JSON.stringify(chef));
+            chef.deleteEnvironment(req.params.envName,function(err,env){
+                if(err){
+                    logger.debug("Exit /chef/../environments ",err);
+                    res.send(500,"Failed to delete environments on Chef.");
+                    return;
+                }
+                logger.debug("Exit /chef/../environments");
+                res.send(env);
                 return;
             });
         });

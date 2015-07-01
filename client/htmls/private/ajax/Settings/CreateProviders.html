@@ -75,7 +75,7 @@ Type:<span style="color: Red;" class="control-label">&nbsp;*</span></label> <sel
 	style="color: Red;" class="control-label">&nbsp;*</span></label> <!-- <i class="icon-append fa fa-building"></i> -->
 <input name="providerName" placeholder="Enter Name of the Provider"
 	id="name" class="form-control" type="text" cdata="catalyst"
-	cat-validation="required,max15"></div>
+	cat-validation="required"></div>
 </div>
 
 <div class="row"><!-- -->
@@ -374,20 +374,17 @@ success: function(data, success) {
 
 function getOrganizationList(){
   $.get('/d4dMasters/readmasterjsonnew/1',function(data){
-    var str='';
+    var str=' <option value="">Select Organization</option>',len=data.length;
     for(var i=0;i<data.length;i++){
-      if(data[i].active){
         str=str+'<option value="'+data[i]._id+'">'+data[i].orgname+'</option>';
-      }
     }
     $('#orgId').html(str);
-    //debugger;
     if( $('#orgId').attr('answer')){
       $('#orgId').val($('#orgId').attr('answer')).select2();
     }else{
     $('#orgId').val("").select2();
     }
-  });
+  })
 }
 function getRegionList(){
   $.get('/vmimages/regions/list',function(data){

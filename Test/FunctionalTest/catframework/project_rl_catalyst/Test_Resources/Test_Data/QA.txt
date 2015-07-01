@@ -9,13 +9,22 @@ Resource           catalyst.txt
 
 
 *** Variables ***
-${BROWSER TYPE}                   chrome              #firefox #http://54.149.39.160:3001                    #internetexplorer               #phantomjs
-${ENVIRONMENT SERVER}                http://52.24.127.215:3001/public/login.html
+${BROWSER TYPE}                     chrome              #firefox                     #internetexplorer               #phantomjs
+${ENVIRONMENTSERVER}         http://52.27.46.167:3001 
+
+
+
+
+ 
+
 ${ENV}                 QA.txt
 ${VALID USER}             superadmin
 ${VALID PASSWORD}         superadmin@123
 ${ORGANIZATION NAME}         Relevance_Labs
 ${ORGANIZATION DOMAIN NAME}          http://www.google.com
+${ORG ADMIN USER}               Rel_Admin
+${ORG ADMIN PASSWORD}           RL1234
+${ORGADMN EMAILADD}             relevancelab@gmail.com
 ${BUSINESS GROUP NAME}           Devops
 ${PROJECT NAME}                  Catalyst
 ${PROJECT DESCRIPTION}           Catalyst product automation Description
@@ -36,25 +45,26 @@ ${MACHINE}         x86_64
 ${TOTAL MEMORY}     604680kB
 ${FREE MEMORY}      298024kB
 ${ENVIRONMENTSER NAME}          _default
-${NEW USER}                   Cricinfo
 ${NEW EMAIL}                  crickinfo@gmail.com
 ${AlreadyExistOrg}            Selected is already registered
 ${IPTEXT}                   undefined
 ${STATS}                    pending
+${STATSYY}                  Pending
 ${STATS RUN}                running
 ${VAR}            54.75.4.3
 ${PRINTSTMT}            The Instance has an IP Address
 ${SATSS}                         success
+${SATSSYY}                        Success
 ${APACHE WEBSERVER STACK}         Java
 ${CENTOS STACK}          CentOS
 ${LAMP STACK}       LAMP
 ${TOMCAT STACK}      Java
-
+${ret}         0
 ${JAVA COOKBOOK}                  java
 ${APACHE COOKBOOK}            service_apache
 ${GIT COOKBOOK}                     git
 ${SERVER TIME COOKBOOK}            starter
-
+${DISABLED}           disabled
 ${CENT OS}            Cent OS
 ${UBUNTU OS}            ubuntu
 ${SUITS}                stopped
@@ -66,26 +76,41 @@ ${PHOENIX COMMERNCE WITHOUT COOKBOOK CENTOS}            Phoenix Commernce withou
 ${PHOENIX COMMERCE WITH COOKBOOK CENTOS}          Phoenix Commerce With CookBook CENTOS
 ${TASK NAME}          Test Task
 
-${USERPEMFILE}              ${ROOTPATH}/Chef/pcjoshi9.pem 
-${VALIDATORPEMFILE}      ${ROOTPATH}/Chef/pjlab-validator.pem
-${KNIFERBFILE}                ${ROOTPATH}/Chef/knife.rb
+${USERPEMFILE}              ${ROOTPATH}\\Chef\\pcjoshi9.pem 
+${VALIDATORPEMFILE}      ${ROOTPATH}\\Chef\\pjlab-validator.pem
+${KNIFERBFILE}                ${ROOTPATH}\\Chef\\knife.rb
+${CATALYSTPEM}                ${ROOTPATH}\\Chef\\catalyst.pem
+${CAT_INSTANCES}              ${ROOTPATH}\\Chef\\cat_instances.pem
+
+${CENTOSIMG}                  ${ROOTPATH}\\Images\\centos.jpg
+${UBUNTUIMG}                  ${ROOTPATH}\\Images\\ubuntuu.jpg
+${APPICON}                    ${ROOTPATH}\\Images\\rel.jpg    
+${TEMPLTYPEICON}              ${ROOTPATH}\\Images\\index.jpg           
+${APACHEIMG}                  ${ROOTPATH}\\Images\\apache.jpg
 
 ${JENKINSNAME}            JenkinsTAT
-${JENKINS URL}               http://54.149.26.254:9090/
-${JENKINS USERID}         superadmin
-${JENKINS PASSWORD}       superadmin@123
+${JENKINS URL}               http://54.68.204.110:9091/
+${JENKINS USERID}         admin    
+${JENKINS PASSWORD}       admin@RL123
 ${TASK NAME}              Task1
-${JENKINS SERVER}         JenkinsTAT
+${JENKINS SERVER}         Jenkins
+${JENKINS EDIT}           Jenkins
+${JOB NAME}               catalyst_Get
+
 ${OPERATING SYSTEM}        Cent OS
 ${INSTANCE SIZE}           t1.micro
 ${BLUEPRINT NAME}          ApacheNew
 ${BLUEPRINT NAME1}         UbuntuApac
+${NEW BLUEPRINT NAME}      ApacheNew-Edited
+${NEW UBUNTU BLUPRNT}      UbuntuNew-Edited
 ${APPNAME}                 CatalystCop                
 ${APP URL}                 http://www.google.com
-${COOKBOOK NAME}           mongodb
+${COOKBOOK NAME}            mongodb
 ${TERMINAL USERNAME}       root
 ${TASK TYPE}               Jenkins
 ${TASK TYPE1}              Chef 
+${CHEF TASKNAME}           ChefTask
+
 ${REPO URL}                https://github.com/RLIndia/D4D
 ${REPO USER}               arabind 
 ${REPO PASSWORD}           Syntel$
@@ -103,34 +128,84 @@ ${MAT MEM}                 604488kB
 ${MAT FREEMEM}             80476kB
 ${MAT OS}                  centos
 ${MAT BOOTSTRAP}           success
-${MAT RUNLIST}             recipe[apache2],recipe[git],recipe[a],recipe[cron]
+${MAT RUNLIST}             recipe[a]          #recipe[apache2],recipe[git],recipe[cron]
 ${MAT RUNLIST1}            recipe[a],recipe[cron]
 ${MAT OS1}                 ubuntu
 ${UBUNTU MEM}              1016256kB
 ${UBUNTU REC}              recipe[a],recipe[a],recipe[cron]
-${TEMPLATE TYPENAME}       CatAutomation
+${TEMPLATE TYPENAME}       AppFactory
+${random}                  adarsh
+${ADD}                     apache2              #tomcat-all
+${ACTBOOT1}                 Pending
+${ACTBOOT2}                 Success
+${IP Centos}                 52.24.73.49
+${AUTHN}                    Pem File 
+${NAME}                     Bootstrap
+${DUP MSG}                  An Instance with the same IP already exists.
+${NAME1}                    Chef-Client-Run
+${TEAM1}                    Rel_Designer
+${TEAM DESCRPN1}            Designer of Catalyst
+${TEAM2}                    Rel_Consumer
+${TEAM DESCRPN2}            Consumer of Catalyst
+${LOGIN NAME1}              Designer
+${LOGIN NAME2}              Consumer
+${EMAIL ID1}                Designer@gmail.com
+${EMAIL ID2}                Consumer@gmail.com
+${PASSWD1}                  Designer
+${PASSWD2}                  Consumer
+${PASSWD11}                 Designer
+${PASSWD22}                 Consumer 
+${EDIT_INSTANCE_NAME}       Instance_Centos
+${ERRORMESSAGE}             Please enter instance name
+${MORE INFO}                 SSH Terminal
+${NO MATCH}                 No matches found
+${ENVNAME}                  QA
+${NAMEOFINSTANCE}           Instance_Centos
+${IP Ubuntu}                52.10.75.4
+${IP UBUNTUSERNAME}         ubuntu
+${EDIT_UBUNTU_INSTANCE_NAME}     Instance_Ubuntu
+${DESIGNER_NAME}            Designer01
+${DESIGNER_PASWD}           Designer01
+${CONSUMER_NAME}            Consumer01
+${CONSUMER_PASWD}           Consumer01
+${CENTOS NAME}              "Instance_Centos"
+${UBUNTU NAME}              "Instance_Ubuntu"
+${IP ADD UBUNTU}             "52.10.75.4"
+${IP ADD CENTOS}             "52.24.73.49" 
+
+
 
 
 
 #Provider
 ${PROVIDER NAME}          AWS RELPRO
 ${PROVIDERR}                 AWS
-${SECRET KEY}                         qZOZuI2Ys0/Nc7txsc0V2eMMVnsEK6+Qa03Vqiyw
-${ACCESS KEY}                  AKIAI6TVFFD23LMBJUPA
+${SECRET KEY}                  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
+${ACCESS KEY}                  AKIAI3ETOOEFHJ62G2NQ
 ${IMAGE NAME1}                 Cent OSIm
 ${IMAGE NAME2}                 UbuntuIm
 ${IMAGE NAME3}                 Windows
 ${IMAGE NAME4}                 Windows 2008Im
 ${OPERATING SYSTEM1}           Cent OS
 ${OPERATING SYSTEM2}           Ubuntu
-${OPERATING SYSTEM3}           Windows 2008
+${OPERATING SYSTEM3}           Windows
 ${IMAGE ID1}                   ami-b6bdde86
 ${IMAGE ID2}                   ami-3d50120d
 ${IMAGE ID3}                   ami-21732111
 ${USER}                        superadmin
-${COOKBOOK NAME1}              apache2
+${COOKBOOK NAME1}              service_apache       #apache2
 ${SERVICE NAME1}               Apachenew
 ${ValidEditVMImage}            Windows 2008
+
+
+#${ValidateNotExistLDAP}             0564ghs
+#${LOG1}                        AdminRL15j
+#${LOG2}                        ConsmrRL15j                        
+#${LOG3}                        DesgnrRL15j
+
+${CATE1}                   AdminRL15j
+${CATE2}                   ConsmrRL15j
+${CATE3}                   DesgnrRL15j
 
 #provider
 ${VaildNoProvider}   
@@ -176,7 +251,7 @@ ${VaildateBlankSpacesOrgName}       Relevance Labs
 ${VaildateEmptyOrgName}            
 ${VaildateSpecialChrOrgName}       RL&@Testing
 ${VaildateAlreadyExistChrOrgName}  phoenixInc
-${VaildOrgName}                    Relevance
+${VaildOrgName}                    Relevance_Labs
 ${VaildEditOrg}                    Relevance_Labs
 ${VaildEditOrgDomainName}       https://www.relevancelab.com
 
@@ -202,6 +277,7 @@ ${VaildEnvName2}                       QTest
 ${VaildEditEnvironment}                QA
 ${EnV1}                                Dev
 ${EnV2}                                QA
+${REQ}                                Required
 
 ${Vaildate15ChrErrMsg}              limited to 15 chars            
 ${VaildateBlankSpacesErrMsg}        space(s) not allowed
@@ -210,7 +286,8 @@ ${VaildateSpecialChrErrMsg}         special chars not allowed
 ${VaildateAlreadyExistErrMsg}       Selected is already registered
 ${VaildateNoOrgErrMsg}                 Required
 ${EnvironmentMsg}                      QA
-
+${REQ1}                               Atleast one required
+${KeyNAME}                            cat_instances
 
 #Business Group Name 
 ${Vaildate15ChrBGrpName}               RLTestBusinessGroup                   
@@ -242,6 +319,8 @@ ${VaildProjName1}                         Catalyst
 ${VaildProjName2}                         Quality
 ${VaildEditProject}                       Primary_Edu
 ${VaildEditDescProject}             RelevanceLab DevOps Product
+${VaildNorgProErrMsg}               Required
+${VaildNoTeamErrMsg}                Atleast one required
 
 ${Vaildate15ChrErrMsg}              limited to 15 chars            
 ${VaildateBlankSpacesErrMsg}        space(s) not allowed
@@ -301,16 +380,16 @@ ${VaildEmptyKnifeErrMsg}                Required
 
 
 #Team Names
-${TEAMNAME1}                  Development
-${TEAMNAME2}                  Scholastic
-${TEAMDESCRIPTION}            Developes the code
+${TEAMNAME1}                  Developers
+${TEAMNAME2}                  Schlostic
+${TEAMDESCRIPTION}            Developes code
 ${TEAMDESCRIPTION2}           Research on Project
 ${VaildEmptyTeamName}
 ${VaildEmptyUsers}
 ${VaildEmptyProjects}
-${EDIT TEAMNAME}                   Scholasticon
+${EDIT TEAMNAME}                   Schoolscast
 ${EDIT DESCRIPTION}               Builds and Deployment
-${Vaildate15ChrTeamName}          ScholllasticTeame
+${Vaildate15ChrTeamName}          ScholllasticTeameOrganizatn
 ${VaildateBlankSpacesTeamName}    Schola Team 
 ${VaildateSpecialChrTeamName}     Sch#21$$%#@
 
@@ -318,7 +397,7 @@ ${VaildateSpecialChrTeamName}     Sch#21$$%#@
 ${VaildEmptyTeamNameErrMsg}           Required 
 ${VaildEmptyUsersErrMsg}              Atleast one required
 ${VaildEmptyProjectsErrMsg}           Atleast one required
-${Vaildate15ChrTeamErrMsg}            limited to 15 chars
+${Vaildate15ChrTeamErrMsg}            limited to 22 chars
 ${VaildateTeamBlankSpacesErrMsg}       space(s) not allowed 
 ${VaildateTeamSpecialChrErrMsg}        special chars not allowed  
 
@@ -326,9 +405,9 @@ ${VaildateTeamSpecialChrErrMsg}        special chars not allowed
 #Users Setup
 ${VaildateEmptyUserName} 
 ${VaildateEmptyEmailName}
-${ValidateNotExistLDAP}              2532096jkap
-${ValidAldyExistLogName}             Admin
+${ValidAldyExistLogName}             userc
 ${EDIT EMAIL}                        AdminDave@gmail.com
+${NEW USER}                           newipl
 
 ${VaildateEmptyUserNameErrMsg}           Required    
 ${VaildateEmptyEmailNameErrMsg}          Required
@@ -340,18 +419,32 @@ ${ValidAldyExistLogNameErrMsg}          Selected is already registered
 ${VaildEmptyTemplateName}
 ${Vaild15ChrTemplateName}                ReelvanceLabsTemplat
 ${ValidTEditemplName}                    ApacRelevance
+${Vaild15ChrTempName}                    CatalystAutomation
+${VaildSpacesTEmpTyName}                 Catlsyt Auto
+${TEMPLATE NAME}                         ApacRelevance
+
 
 ${VaildEmptyTemplateNameErrMsg}              Required
 ${Vaild15ChrTemplateNameErrMsg}             limited to 15 chars
 ${VaildOrGErrMsg}                           Required
+${VaildEmptyTempName}                       Required
+${Vaild15ChrTempErrMsg}                     limited to 15 chars
+${VaildBlankspErrMsg}                       space(s) not allowed
+
 
 #Service Setup
 ${VaildEmptyServiceName}
 ${Vaild15ChrServiceName}                        SQLLiteRelevance
 ${ValidEditService}                              Apache2
+${VaildBlkSerName}                              Apache New
+${VaildSpclCharName}                            Apache@##$
 
 ${VaildEmptyServiceNameErrMsg}                  Required
 ${Vaild15ChrServiceNameErrMsg}                  limited to 15 chars
+${VaildServiceErrMsg}                           special chars not allowed
+${VaildBlkServiceErrMsg}                        space(s) not allowed
+${VaildSpclCharErrMsg}                          special chars not allowed
+${VaildNoOrgErrMsg}                              Required
 
 
 #Jenkins Configuration 
@@ -369,3 +462,18 @@ ${VaildEmptyJenkinsURLErrMsg}                   Please enter a valid Url
 ${VaildEmptyUserIDErrMsg}                       Required
 ${VaildEmptyPasswordErrMsg}                     Required
 ${VaildNotSelectOrg}                            Required
+
+
+
+
+
+
+#IMPORT BY IP
+${TEMP NAMECENT}                     CentOS
+${CENTBLUEPRINT NAME}                CentOS
+${TEMP NAMEUBUN}                     UbuntuOS
+${UBUNBLUEPRINT NAME}                UbuntuOS
+
+
+
+

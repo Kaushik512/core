@@ -12,7 +12,7 @@ var expressLogger = require('./lib/logger').ExpressLogger();
 var passport = require('passport');
 var passportLdapStrategy = require('./lib/ldapPassportStrategy.js');
 var passportADStrategy = require('./lib/adPassportStrategy.js');
-
+var Tail = require('tail').Tail;
 
 
 var appConfig = require('./config/app_config');
@@ -135,7 +135,33 @@ io.set('authorization', function(data, callback) {
     console.log('socket data ==>',data);
     
 });*/
+io.set('log level',1);
 
+io.sockets.on('connection',function(socket){
+   // socket.emit('log',"testing the log");
+   //  logger.debug('sent out socket message');
+   //console.log('file :' + './logs/catalyst.log.' + dt.getFullYear() + '-' + (dt.getMonth() + 1) + '-' + dt.getDate());
+   // logger.on('log',function(msg){
+   //      console.log('>>>>>>>>>>>>>' + msg); 
+   // });
+    var dt = new Date();
+    var month = dt.getMonth() + 1;
+    if(month < 10)
+        month = '0' + month;
+    console.log('file :' + './logs/catalyst.log.' + dt.getFullYear() + '-' + month + '-' + dt.getDate());
+
+    var tail;
+    if(fs.existsSync('./logs/catalyst.log.' + dt.getFullYear() + '-' + month + '-' + dt.getDate() + '.2'))
+        tail  = new Tail('./logs/catalyst.log.' + dt.getFullYear() + '-' + month + '-' + dt.getDate() + '.2'); //catalyst.log.2015-06-19
+    else if(fs.existsSync('./logs/catalyst.log.' + dt.getFullYear() + '-' + month + '-' + dt.getDate() + '.1'))
+        tail  = new Tail('./logs/catalyst.log.' + dt.getFullYear() + '-' + month + '-' + dt.getDate() + '.1'); //catalyst.log.2015-06-19
+    else
+         tail  = new Tail('./logs/catalyst.log.' + dt.getFullYear() + '-' + month + '-' + dt.getDate()); //catalyst.log.2015-06-19
+    // var tail  = new Tail('./logs/catalyst.log.2015-06-22'); //catalyst.log.2015-06-19
+    tail.on('line',function(line){
+        socket.emit('log',line);
+    });
+});
 
 server.listen(app.get('port'), function() {
     logger.debug('Express server listening on port ' + app.get('port'));

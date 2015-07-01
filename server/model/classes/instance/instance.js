@@ -132,6 +132,10 @@ var InstanceSchema = new Schema({
         trim: true
         //validate: schemaValidator.recipeValidator
     }],
+    attributes: [{
+        name: String,
+        jsonObj: {}
+    }],
     platformId: String,
     instanceIP: {
         type: String,
@@ -195,6 +199,7 @@ var InstanceSchema = new Schema({
     actionLogs: [ActionLogSchema],
     chefClientExecutionIds: [String],
     taskIds: [String],
+    tempActionLogId: String
 
 });
 
@@ -740,6 +745,31 @@ var InstancesDao = function() {
                 return;
             }
             logger.debug("Exit updateInstancesRunlist ", instanceId, runlist);
+            callback(null, data);
+        });
+
+    };
+    this.updateInstancesRunlistAndAttributes = function(instanceId, runlist, attributes, callback) {
+        if (!(attributes && attributes.length)) {
+            attributes = [];
+        }
+        logger.debug("Enter updateInstancesRunlistAndAttributes ", instanceId, runlist);
+        Instances.update({
+            "_id": new ObjectId(instanceId),
+        }, {
+            $set: {
+                "runlist": runlist,
+                "attributes": attributes
+            }
+        }, {
+            upsert: false
+        }, function(err, data) {
+            if (err) {
+                logger.error("Failed to updateInstancesRunlistAndAttributes ", instanceId, runlist, attributes, err);
+                callback(err, null);
+                return;
+            }
+            logger.debug("Exit updateInstancesRunlistAndAttributes ", instanceId, runlist, attributes);
             callback(null, data);
         });
 

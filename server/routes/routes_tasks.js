@@ -29,6 +29,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     res.send(500, err);
                     return;
                 }
+                //console.log(taskRes);
                 res.send(taskRes);
             });
         });

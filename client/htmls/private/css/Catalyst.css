@@ -1,3 +1,4 @@
+
 .assignedRunlists{
     border:1px solid #dddddd;
     list-style:none outside none;
@@ -1208,9 +1209,9 @@ body.container {
     margin: 30px;
 }
 .no-padding .dataTables_wrapper table, .no-padding >table {
-    border: 0!important;
+  /*  border: 0!important;*/
     margin-bottom: 0!important;
-    border-bottom-width: 0!important;
+    /*border-bottom-width: 0!important;*/
 }
 .no-padding-bottom {
     padding-bottom: 0!important;
@@ -5619,7 +5620,7 @@ table.dataTable.order-column.hover tbody tr.even:hover.selected > .sorting_3 {
   background-color: #a4b2cb;
 }
 table.dataTable.no-footer {
-  border-bottom: 1px solid #111111;
+/*  border-bottom: 1px solid #111111;*/
 }
 table.dataTable.nowrap th, table.dataTable.nowrap td {
   white-space: nowrap;
@@ -7858,4 +7859,98 @@ word-break:break-word;
     /*border-right-color: #c2e1f5;*/
     border-width: 7px;
     margin-top: -36px;
+}
+tr.selectedOne:hover td, 
+tr.selectedOne td,
+tr.selectedOne td a{
+    background-color: lightblue!important;
+    color:black!important;
+    font-weight: bold;
+    font-size: 12px;
+}
+.tasksBlock >.tooltip{
+    min-width: 65px;
+}
+.noEnvWarning{
+    margin-top: 150px;
+    float:left;
+    margin-left: 246px;
+    width:480px;
+    color:black!important;
+    border-color: #40baf1!important;
+    background-color: #fff!important;
+    font-size: 14px;
+}
+.bootstrapSuccess{
+    margin-top: 150px;
+    float:left;
+    margin-left: 300px;
+    width:416px;
+    color:black!important;
+    border-color: #40baf1!important;
+    background-color: #fff!important;
+    font-size: 16px;
+}
+.bootstrapFailure{
+    margin-top: 150px;
+    float:left;
+    margin-left: 300px;
+    width:444px;
+    color:black!important;
+    border-color: #ebccd1;
+    background-color: #fff!important;
+    font-size: 16px;
+}
+.forBootBox{
+    margin-left: -40px;
+}
+
+.noEnvWarningConsumerDesigner{
+    margin-top: 150px;
+    float:left;
+    margin-left: 302px;
+    width:370px;
+    color:black!important;
+    border-color: #40baf1!important;
+    background-color: #fff!important;
+    font-size: 14px;
+}
+
+/*form validations*/
+form.cmxform {
+    font-size: 1.0em;
+    color: #333;
+}
+form.cmxform legend {
+    padding-left: 0;
+}
+form.cmxform legend,
+form.cmxform label {
+    color: #333;
+}
+form.cmxform span.error,
+span.error {
+    color: red;
+    font-style: italic;
+}
+div.error {
+    display: none;
+}
+input {
+    border: 1px solid black;
+}
+input.checkbox {
+    border: none
+}
+input:focus {
+    border: 1px dotted black;
+}
+form.cmxform .gray * {
+    color: gray;
+}
+@-moz-document url-prefix()
+{
+    .form-controls{
+        padding:0px 0px!important;
+    }
 }

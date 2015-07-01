@@ -39,7 +39,7 @@
                                              <div class="col-lg-6 col-md-6" style="margin-top:25px">
                                                 <label for="link">URL:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
                                                 <!-- <i class="icon-append fa fa-building"></i> -->
-                                                <input type="text" name="ctl00$MainContent$orgname" value="" id="url" class="form-control" type="url"  name="website"  cdata="catalyst"  cat-validation="required,urlcheck">
+                                                <input type="text" unique="true" uniqueconditionedby="url" name="ctl00$MainContent$orgname" value="" id="url" class="form-control" type="url"  name="website"  cdata="catalyst"  cat-validation="required,urlcheck">
                                              </div>
                                              <div class="col-lg-6 col-md-6" style="margin-top:25px">
                                                 <label for="name">Organization:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
@@ -62,10 +62,10 @@
                                              </div>
                                              <div class="col-lg-6 col-md-6" style="margin-top:20px">
                                                 <div class="smart-forms">
-                                                   <label>Validator Pem File:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+                                                   <label>Validator Pem File:</label>
                                                    <label for="validatorpemfile" class="field file">
                                                       <div class="imgdiv" value="1"></div>
-                                                      <span class="button btn-primary">Browse</span><input id="validatorpemfile" keyfield="configname" type="file" onchange="this.nextSibling.value = this.value"  cdata="catalyst" class="gui-file" cat-validation="required"><input type="text" readonly="" class="gui-input">
+                                                      <span class="button btn-primary">Browse</span><input id="validatorpemfile" keyfield="configname" type="file" onchange="this.nextSibling.value = this.value"  cdata="catalyst" class="gui-file"><input type="text" readonly="" class="gui-input">
                                                    </label>
                                                 </div>
                                              </div>
@@ -78,6 +78,26 @@
                                                       <div class="imgdiv" value="1"></div>
                                                       <span class="button btn-primary">Browse</span><input id="kniferbfile" keyfield="configname" type="file" onchange="this.nextSibling.value = this.value" class="gui-file"  cdata="catalyst" cat-validation="required"><input type="text" readonly="" class="gui-input">
                                                       <input id="folderpath"  cdata="catalyst" type="text" value="" style="display:none"/>
+                                                   </label>
+                                                </div>
+                                             </div>
+
+                                             <div class="col-lg-6 col-md-6" style="margin-top:20px">
+                                                <div class="smart-forms">
+                                                   <label>Key File:</label>
+                                                   <label for="validatorpemfile" class="field file">
+                                                      <div class="imgdiv" value="1"></div>
+                                                      <span class="button btn-primary">Browse</span><input id="encryption" keyfield="configname" type="file" onchange="this.nextSibling.value = this.value"  cdata="catalyst" class="gui-file"><input type="text" readonly="" class="gui-input">
+                                                   </label>
+                                                </div>
+                                             </div>
+
+                                             <div class="col-lg-6 col-md-6" style="margin-top:20px">
+                                                <div class="smart-forms">
+                                                   <label>Template File:</label>
+                                                   <label for="validatorpemfile" class="field file">
+                                                      <div class="imgdiv" value="1"></div>
+                                                      <span class="button btn-primary">Browse</span><input id="template" keyfield="configname" type="file" onchange="this.nextSibling.value = this.value"  cdata="catalyst" class="gui-file"><input type="text" readonly="" class="gui-input">
                                                    </label>
                                                 </div>
                                              </div>

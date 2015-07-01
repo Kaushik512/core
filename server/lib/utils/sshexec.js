@@ -1,7 +1,12 @@
 var fileIo = require('./fileio');
-var sshConnection = require('ssh2');
+var sshConnection = require('ssh2').Client;
 
-
+var HOST_UNREACHABLE = -5000;
+var INVALID_CREDENTIALS = -5001;
+var JSCH_EXCEPTION = -5002;
+var UNKOWN_EXCEPTION = -5003;
+var PEM_FILE_READ_ERROR = -5004;
+var CONNECTION_NOT_INITIALIZED = -5005;
 
 module.exports = function(options) {
 
@@ -10,10 +15,24 @@ module.exports = function(options) {
 
     function connect(connectionParamsObj, callback) {
         con = new sshConnection();
-        con.connect(connectionParamsObj);
-        console.log("ConnectionParamsObj==>",connectionParamsObj);
+        console.log("ConnectionParamsObj==>", connectionParamsObj);
+
+        try {
+            con.connect(connectionParamsObj);
+        } catch (connectErr) {
+            con = null;
+            // a hack to make a sycnronous call asynchronous 
+            setTimeout(function() {
+                if (connectErr.message === 'Cannot parse privateKey: Unsupported key format') {
+                    callback(connectErr, INVALID_CREDENTIALS);
+                } else {
+                    callback(connectErr, UNKOWN_EXCEPTION);
+                }
+            }, 500);
+            return;
+        }
+
         con.on('ready', function() {
-            console.log("connected to ==>",connectionParamsObj.host);
             isConnected = true;
             callback(null);
         });
@@ -21,11 +40,18 @@ module.exports = function(options) {
         con.on('error', function(err) {
             isConnected = false;
             con = null;
-            console.log('ssh error ', err);
-            callback(err);
+            console.log("ERROR EVENT FIRED");
+            if (err.level === 'client-authentication') {
+
+                callback(err, INVALID_CREDENTIALS);
+            } else if (err.level === 'client-timeout') {
+                callback(err, HOST_UNREACHABLE);
+            } else {
+                callback(err, UNKOWN_EXCEPTION);
+            }
         });
 
-        /*con.on('close', function(hadError) {
+        con.on('close', function(hadError) {
             isConnected = false;
             con = null;
             console.log('ssh close ', hadError);
@@ -36,7 +62,8 @@ module.exports = function(options) {
             isConnected = false;
             con = null;
             console.log('ssh end');
-        });*/
+        });
+
     }
 
     function initialize(callback) {
@@ -54,7 +81,7 @@ module.exports = function(options) {
                 }
                 fileIo.readFile(options.privateKey, function(err, key) {
                     if (err) {
-                        callback(err, null);
+                        callback(err, PEM_FILE_READ_ERROR);
                         return;
                     }
                     connectionParamsObj.privateKey = key;
@@ -73,14 +100,16 @@ module.exports = function(options) {
     this.exec = function(cmd, onComplete, onStdOut, onStdErr) {
         var execRetCode = null;
         var execSignal = null;
-        initialize(function(err) {
+        initialize(function(err, initErrorCode) {
             if (err) {
-                onComplete(err, -1);
+                onComplete(null, initErrorCode);
                 return;
             }
             if (con) {
-                console.log('executing cmd');
-                con.exec(cmd,{ pty:true}, function(err, stream) {
+                console.log('executing cmd' + cmd);
+                con.exec('sudo ' + cmd, {
+                    pty: true
+                }, function(err, stream) {
                     if (err) {
                         onComplete(err, -1);
                         return;
@@ -92,7 +121,7 @@ module.exports = function(options) {
 
                     });
 
-                    stream.on('close', function() {
+                    stream.on('close', function(code, signal) {
                         console.log('SSH STREAM CLOSE');
                         if (con) {
                             con.end();
@@ -100,16 +129,21 @@ module.exports = function(options) {
                         if (execRetCode !== null) {
                             onComplete(null, execRetCode);
                         } else {
-                            onComplete({
-                                err: "cmd exit error"
-                            }, -1);
+                            if (typeof code !== 'undefined' && typeof code === 'number') {
+                                execRetCode = code;
+                                execSignal = signal;
+                            } else {
+                                execRetCode = UNKOWN_EXCEPTION;
+                                execSignal = null;
+                            }
+                            onComplete(null, execRetCode);
                         }
                     });
 
 
                     if (typeof onStdOut === 'function') {
                         stream.on('data', function(data) {
-                           // console.log('SSH STDOUT: ' + data);
+                            // console.log('SSH STDOUT: ' + data);
                             onStdOut(data);
                         })
                     }
@@ -122,9 +156,7 @@ module.exports = function(options) {
                     }
                 });
             } else {
-                onComplete({
-                    err: "Connection not initialized"
-                }, -1);
+                onComplete(null, CONNECTION_NOT_INITIALIZED);
             }
 
         });
