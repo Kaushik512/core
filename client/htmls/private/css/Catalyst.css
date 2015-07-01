@@ -7948,3 +7948,9 @@ input:focus {
 form.cmxform .gray * {
     color: gray;
 }
+@-moz-document url-prefix()
+{
+    .form-controls{
+        padding:0px 0px!important;
+    }
+}

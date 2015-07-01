@@ -146,33 +146,61 @@
                                                           bindSubmit_AddInstance();
                                                           bindClick_removeInstance();
                                                           populateOSList();
+                                                              
+                                                          var validator = $('#instanceEditNew').validate({
+                                                              errorPlacement: function(error, element) {
+                                                                  // Append error within linked label
+                                                                  $(element).closest("form").find("label[for='" + element.attr("id") + "']").append(error);
+
+                                                              },
+                                                              rules: {
+                                                                  instanceEditName: {
+                                                                      required: true
+                                                                  }
+                                                              },
+                                                              messages: {
+                                                                  instanceEditName: {
+                                                                      required: "Required"
+                                                                  }
+                                                              },
+                                                              onkeyup: false,
+                                                              errorClass: "error",
+                                                          });
+
+                                                          
+
 
                                                           $('#instanceEditNew').submit(function(e) {
+                                                              var isValidate = $("#instanceEditNew").valid();
+                                                              //alert(isValidate);
                                                               var reqBodyEdit = {};
+                                                              if (!isValidate) {
+                                                                  e.preventDefault();
+                                                              } else {
+                                                                  e.preventDefault();
 
-                                                              var $form = $('#instanceEditNew');
-                                                              reqBodyEdit.name = $form.find('#instanceEditName').val();
 
-                                                              if (!reqBodyEdit.name) {
-                                                                  bootbox.alert('Please enter instance name');
+                                                                  var $form = $('#instanceEditNew');
+                                                                  reqBodyEdit.name = $form.find('#instanceEditName').val();
+                                                                  var instanceId = $form.find('#instanceIDHiddenInput').val();
+                                                                  var $selectedRow = $('#tableinstanceview').find('tr.rowcustomselected');
+
+                                                                  blueprintName = $selectedRow.attr('data-blueprintName');
+                                                                  $.post('../instances/' + instanceId + '/updateName', reqBodyEdit, function(data) {
+
+                                                                      $('.domain-roles-caption[data-instanceId="' + instanceId + '"]').find('.cardHeadingTextoverflow').html(reqBodyEdit.name);
+                                                                      $('.domain-roles-caption[data-instanceId="' + instanceId + '"]').find('.cardHeadingTextoverflow').attr('rel', 'tooltip').attr('data-original-title', reqBodyEdit.name);
+                                                                      $('tr[data-instanceId="' + instanceId + '"] td.instanceBlueprintName span').html(reqBodyEdit.name);
+                                                                      $('#modalforInstanceEdit').modal('hide');
+                                                                  });
+
                                                                   return false;
                                                               }
-
-                                                              var instanceId = $form.find('#instanceIDHiddenInput').val();
-                                                              var $selectedRow = $('#tableinstanceview').find('tr.rowcustomselected');
-
-                                                              blueprintName = $selectedRow.attr('data-blueprintName');
-                                                              $.post('../instances/' + instanceId + '/updateName', reqBodyEdit, function(data) {
-
-                                                                  $('.domain-roles-caption[data-instanceId="' + instanceId + '"]').find('.cardHeadingTextoverflow').html(reqBodyEdit.name);
-                                                                  $('.domain-roles-caption[data-instanceId="' + instanceId + '"]').find('.cardHeadingTextoverflow').attr('rel', 'tooltip').attr('data-original-title', reqBodyEdit.name);
-                                                                  $('tr[data-instanceId="' + instanceId + '"] td.instanceBlueprintName span').html(reqBodyEdit.name);
-                                                                  $('#modalforInstanceEdit').modal('hide');
-                                                              });
-
-                                                              return false;
-
+                                                                $('a.editInstanceNameBtn[type="reset"]').on('click', function() {
+                                                                    validator.resetForm();
+                                                                });
                                                           });
+
 
                                                       }
 
@@ -211,7 +239,7 @@
                                                                         '</div>' +
                                                                         '<div class="form-group"> ' +
                                                                         '<label style="color:#333;" class="col-md-3 forBootBox1" for="name">Instance Name:</label> ' +
-                                                                        '<span class="col-md-4 forBootBox" for="name">&quot;' + data.name + '&quot;' + '</span>  ' +
+                                                                        '<strong><span class="col-md-4 forBootBox" for="name">' + data.name + '</span></strong>' +
                                                                         '</div> ' +
                                                                         '<div class="form-group" style="margin-top:-10px"> ' +
                                                                         '<label for="ckbChefDelete"></label> ' +
@@ -378,161 +406,231 @@
 
 
 
-                                                      //checking the IP address and form validations for Import By IP
-                                                      function bindSubmit_AddInstance() {
-                                                          /* Add Instance by IP form submission */
+                                                  //checking the IP address and form validations for Import By IP
+                                                 function bindSubmit_AddInstance() {
+                                                     /* Add Instance by IP form submission */
+                                                $(function(){
+                                                    $.validator.addMethod('IP4Checker', function(value){
+                                                        var ip = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
+                                                        return value.match(ip);
+                                                    }, 'Invalid IP address');
 
+                                                    var validator = $('#addInstanceForm').validate({
+                                                        /*errorPlacement: function(error, element){
+                                                            // Append error within linked label
+                                                            $(element).closest("form").find("label[for='" + element.attr("id") + "']").append(error);
 
-                                                          $("#addInstanceForm").submit(function(e) {
-                                                              var ipAddresRegExp = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
-                                                              var hostname = /^([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])(\.([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]{0,61}[a-zA-Z0-9]))*$/;
-                                                              var regexpURL = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
-                                                              var $spinner = $('#nodeimportipspinner').addClass('hidden');
-                                                              var $result = $('#nodeimportipresultmsg').addClass('hidden');
-                                                              var reqBody = {};
-                                                              var $form = $('#addInstanceForm');
-                                                              reqBody.fqdn = $form.find('#instanceFQDN').val().trim();
-                                                              reqBody.os = $form.find('#importinstanceOS').val();
-                                                              //reqBody.users = $('#importbyipuserListSelect').val();
-                                                              reqBody.credentials = {
-                                                                  username: $form.find('#instanceUsername').val()
-                                                              };
-                                                              var appUrls = [];
-                                                              var $appURLContainers = $('.applicationURLContainer');
-                                                              var isAppUrlValid = true;
-                                                              $appURLContainers.each(function() {
-                                                                  $this = $(this);
-                                                                  var appName = $this.find('.appName').val();
-                                                                  var appURL = $this.find('.appURL').val();
-                                                                  if (appName && appURL) {
-                                                                      appUrls.push({
-                                                                          name: appName,
-                                                                          url: appURL
-                                                                      });
-                                                                      if (!regexpURL.test(appURL)) {
-                                                                          isAppUrlValid = false;
-                                                                      }
-                                                                  }
+                                                        },*/
+                                                        rules: {
+                                                            instanceUsername: {
+                                                                required: true
+                                                            },
+                                                            instancePassword: {
+                                                                required: true
+                                                            },
+                                                            instanceFQDN: {
+                                                                required: true,
+                                                                IP4Checker: true
+                                                            },
+                                                            importPemfileInput:{
+                                                              extension:"pem"
+                                                            },
+                                                            appNameURL: {
+                                                                url: true
+                                                            },
+                                                            importinstanceOS: {
+                                                              required: true
+                                                            }
+                                                        },
+                                                        messages: {
+                                                            instanceUsername: {
+                                                                required: "Required"
+                                                            },
+                                                            instancePassword: {
+                                                                required: "Required"
+                                                            },
+                                                            importPemfileInput:{
+                                                              extension:"Only .pem files can be uploaded"
+                                                            },
+                                                            importinstanceOS:{
+                                                              required: "Required"
+                                                            }
+                                                        },
+                                                        onkeyup: false,
+                                                        errorClass: "error",
 
-                                                              });
-                                                              if (!isAppUrlValid) {
-                                                                  alert('Please enter a Valid URL');
-                                                                  e.preventDefault();
-                                                                  return false;
-                                                              }
-                                                              reqBody.appUrls = appUrls;
+                                                        //put error message behind each form element
+                                                        errorPlacement: function(error, element) {
+                                                            var elem = $(element);
+                                                            if (element.parent('.input-groups').length) {
+                                                                error.insertBefore(element.parent());
+                                                            } else {
+                                                                error.insertBefore(element);
+                                                            }
+                                                        },
 
+                                                        //When there is an error normally you just add the class to the element.
+                                                        // But in the case of select2s you must add it to a UL to make it visible.
+                                                        // The select element, which would otherwise get the class, is hidden from
+                                                        // view.
+                                                        highlight: function(element, errorClass, validClass) {
+                                                            var elem = $(element);
+                                                            if (elem.hasClass("select2-offscreen")) {
+                                                                $("#s2id_" + elem.attr("id") + " ul").addClass(errorClass);
+                                                            } else {
+                                                                elem.addClass(errorClass);
+                                                            }
+                                                        },
 
+                                                        //When removing make the same adjustments as when adding
+                                                        unhighlight: function(element, errorClass, validClass) {
+                                                            var elem = $(element);
+                                                            if (elem.hasClass("select2-offscreen")) {
+                                                                $("#s2id_" + elem.attr("id") + " ul").removeClass(errorClass);
+                                                            } else {
+                                                                elem.removeClass(errorClass);
+                                                            }
+                                                        }
+                                                    });
+                                                    $(document).on('change', '.select2-offscreen', function() {
+                                                        if (!$.isEmptyObject(validator.submitted)) {
+                                                            validator.form();
+                                                        }
+                                                    });
 
-                                                              if (!reqBody.fqdn) {
-                                                                  alert('Please enter IP');
-                                                                  e.preventDefault();
-                                                                  return false;
-                                                              }
-                                                              if (!reqBody.fqdn.match(ipAddresRegExp) || !reqBody.fqdn.match(hostname)) {
-                                                                  alert("Please provide a valid IP Address or Hostname");
-                                                                  e.preventDefault();
-                                                                  return false;
-                                                              }
-                                                              if (!reqBody.os) {
-                                                                  alert('Please choose OS');
-                                                                  e.preventDefault();
-                                                                  return false;
-                                                              }
+                                                    $('a#ipaddressimport[type="reset"]').on('click', function() {
+                                                        validator.resetForm();
+                                                    });
 
-                                                              //Adding instance by Import By IP.
-                                                              function makeRequest() {
-                                                                  $('#addInstanceBtn').attr('disabled', 'disabled');
-                                                                  $spinner.removeClass('hidden');
-                                                                  // $('#addInstanceBtn').attr('disabled','disabled');
-                                                                  $.post('../organizations/' + urlParams.org + '/businessgroups/' + urlParams['bg'] + '/projects/' + urlParams.projid + '/environments/' + urlParams.envid + '/addInstance', reqBody, function(data) {
-                                                                      $('#tabInstanceStatus').hide();
-                                                                      addInstanceToDOM(data);
-                                                                      //  serachBoxInInstance.updateData(data,"add",undefined);
-                                                                      $spinner.addClass('hidden');
-                                                                      $result.addClass('hidden');
-                                                                      $('#addInstanceBtn').removeAttr('disabled');
-                                                                      $('#addInstanceForm').get(0).reset();
-                                                                      $('#importinstanceOS').change();
-                                                                      $('#pemFileDropdown').change();
-                                                                      var $divinstancescardview = $('#divinstancescardview');
-                                                                      if ($divinstancescardview.find('li').length > 0) {
-                                                                          $divinstancescardview.find('li').first().find('.flip-toggle').trigger('click');
-                                                                      }
-                                                                      $divinstancescardview.find('.item').first().addClass('active');
-                                                                      $('#modalContainerimportInstance').modal('hide');
-                                                                      //Updating the tree
-                                                                      //loadTreeFuncNew();
-                                                                      console.log('success---3---3');
-                                                                      //selectFirstEnv();
-                                                                      //selectAnyEnviornment(urlParams.org,urlParams.envid);
-                                                                      $('.domain-roles-caption[data-instanceId="' + data._id + '"]').find('.moreInfo').click();
-                                                                  }).fail(function(jxhr) {
-                                                                      $spinner.addClass('hidden');
-                                                                      $result.empty();
-                                                                      $result.css({
-                                                                          color: 'red'
-                                                                      });
-                                                                      if (jxhr.status === 400) {
-                                                                          if (jxhr.responseJSON) {
-                                                                              $result.html(jxhr.responseJSON.message);
-                                                                          } else {
-                                                                              $result.html("Invalid request");
-                                                                          }
-                                                                      } else {
-                                                                          if (jxhr.status === 401)
-                                                                              $result.html("Inssuficient permission to perform operation.");
-                                                                          else
-                                                                              $result.html("Server Behaved Unexpectedly");
-                                                                      }
-                                                                      $result.removeClass('hidden');
-                                                                      $('#addInstanceBtn').removeAttr('disabled');
+                                                });
+                                               //If the change event fires we want to see if the form validates.
+                                              //But we don't want to check before the form has been submitted by the user
+                                              //initially.
+                                              
+ 
+                                                    $(document).on("select2-opening", function(arg) {
+                                                        var elem = $(arg.target);
+                                                        if ($("#s2id_" + elem.attr("id") + " ul").hasClass("myErrorClass")) {
+                                                            //jquery checks if the class exists before adding.
+                                                            $(".select2-drop ul").addClass("myErrorClass");
+                                                        } else {
+                                                            $(".select2-drop ul").removeClass("myErrorClass");
+                                                        }
+                                                    });
 
-                                                                  });
+                                                     $("#addInstanceForm").submit(function(e) {
+                                                         var isValidate = $("#addInstanceForm").valid();
+                                                        if (!isValidate) {
+                                                            e.preventDefault();
+                                                            return false;
+                                                        } else {
+                                                            e.preventDefault();
+                                                         
+                                                         var hostname = /^([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])(\.([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]{0,61}[a-zA-Z0-9]))*$/;
+                                                         //var regexpURL = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
+                                                         var $spinner = $('#nodeimportipspinner').addClass('hidden');
+                                                         var $result = $('#nodeimportipresultmsg').addClass('hidden');
+                                                         var reqBody = {};
+                                                         var $form = $('#addInstanceForm');
+                                                         reqBody.fqdn = $form.find('#instanceFQDN').val().trim();
+                                                         reqBody.os = $form.find('#importinstanceOS').val();
+                                                         //reqBody.users = $('#importbyipuserListSelect').val();
+                                                         reqBody.credentials = {
+                                                             username: $form.find('#instanceUsername').val()
+                                                         };
+                                                         var appUrls = [];
+                                                         var $appURLContainers = $('.applicationURLContainer');
+                                                         var isAppUrlValid = true;
+                                                         $appURLContainers.each(function() {
+                                                             $this = $(this);
+                                                             var appName = $this.find('.appName').val();
+                                                             var appURL = $this.find('.appURL').val();
+                                                             if (appName && appURL) {
+                                                                 appUrls.push({
+                                                                     name: appName,
+                                                                     url: appURL
+                                                                 });
+                                                             }
 
-                                                              }
+                                                         });
+                                                         reqBody.appUrls = appUrls;
+                                                         var $dropdown = $('#pemFileDropdown');
+                                                         if ($dropdown.val() === 'pemFile') {
 
-                                                              var $dropdown = $('#pemFileDropdown');
-                                                              if ($dropdown.val() === 'pemFile') {
+                                                             var pemFileInput = $form.find('#importPemfileInput').get(0);
+                                                             
+                                                             
+                                                             var reader = new FileReader();
+                                                             // Closure to capture the file information.
+                                                             reader.onload = function(e) {
+                                                                 // Render thumbnail.
+                                                                 reqBody.credentials.pemFileData = e.target.result;
 
-                                                                  var pemFileInput = $form.find('#importPemfileInput').get(0);
-                                                                  if (!reqBody.credentials.username) {
-                                                                      alert('Please Enter Username');
-                                                                      e.preventDefault();
-                                                                      return false;
-                                                                  }
-                                                                  if (!pemFileInput.files.length) {
-                                                                      alert('Please Choose a Pem file');
-                                                                      e.preventDefault();
-                                                                      return false;
-                                                                  }
-                                                                  var reader = new FileReader();
-                                                                  // Closure to capture the file information.
-                                                                  reader.onload = function(e) {
-                                                                      // Render thumbnail.
-                                                                      reqBody.credentials.pemFileData = e.target.result;
+                                                                 makeRequest();
 
-                                                                      makeRequest();
+                                                             };
+                                                             // Read in the image file as a data URL.
 
-                                                                  };
-                                                                  // Read in the image file as a data URL.
+                                                             reader.readAsText(pemFileInput.files[0]);
+                                                         } else {
+                                                             reqBody.credentials.password = $form.find('#instancePassword').val();
+                                                             
+                                                             makeRequest();
+                                                         }
+                                                       }
 
-                                                                  reader.readAsText(pemFileInput.files[0]);
-                                                              } else {
-                                                                  reqBody.credentials.password = $form.find('#instancePassword').val();
-                                                                  if (!reqBody.credentials.password) {
-                                                                      alert("Please enter password");
-                                                                      e.preventDefault();
-                                                                      return false;
-                                                                  }
-                                                                  makeRequest();
-                                                              }
+                                                         //Adding instance by Import By IP.
+                                                         function makeRequest() {
+                                                             $('#addInstanceBtn').attr('disabled', 'disabled');
+                                                             $spinner.removeClass('hidden');
+                                                             // $('#addInstanceBtn').attr('disabled','disabled');
+                                                             $.post('../organizations/' + urlParams.org + '/businessgroups/' + urlParams['bg'] + '/projects/' + urlParams.projid + '/environments/' + urlParams.envid + '/addInstance', reqBody, function(data) {
+                                                                 $('#tabInstanceStatus').hide();
+                                                                 addInstanceToDOM(data);
+                                                                 //  serachBoxInInstance.updateData(data,"add",undefined);
+                                                                 $spinner.addClass('hidden');
+                                                                 $result.addClass('hidden');
+                                                                 $('#addInstanceBtn').removeAttr('disabled');
+                                                                 $('#addInstanceForm').get(0).reset();
+                                                                 $('#importinstanceOS').change();
+                                                                 $('#pemFileDropdown').change();
+                                                                 var $divinstancescardview = $('#divinstancescardview');
+                                                                 if ($divinstancescardview.find('li').length > 0) {
+                                                                     $divinstancescardview.find('li').first().find('.flip-toggle').trigger('click');
+                                                                 }
+                                                                 $divinstancescardview.find('.item').first().addClass('active');
+                                                                 $('#modalContainerimportInstance').modal('hide');
+                                                                 console.log('success---3---3');
+                                                                 $('.domain-roles-caption[data-instanceId="' + data._id + '"]').find('.moreInfo').click();
+                                                             }).fail(function(jxhr) {
+                                                                 $spinner.addClass('hidden');
+                                                                 $result.empty();
+                                                                 $result.css({
+                                                                     color: 'red'
+                                                                 });
+                                                                 if (jxhr.status === 400) {
+                                                                     if (jxhr.responseJSON) {
+                                                                         $result.html(jxhr.responseJSON.message);
+                                                                     } else {
+                                                                         $result.html("Invalid request");
+                                                                     }
+                                                                 } else {
+                                                                     if (jxhr.status === 401)
+                                                                         $result.html("Inssuficient permission to perform operation.");
+                                                                     else
+                                                                         $result.html("Server Behaved Unexpectedly");
+                                                                 }
+                                                                 $result.removeClass('hidden');
+                                                                 $('#addInstanceBtn').removeAttr('disabled');
 
-                                                              e.preventDefault();
-                                                              return false;
-                                                          });
+                                                             });
 
-                                                      }
+                                                         }
+                                                         e.preventDefault();
+                                                         return false;
+                                                     });
+
+                                                 }
 
                                                       function createInstanceUI(data) {
                                                           //alert('starting');
@@ -1131,7 +1229,7 @@
                                                                   if (!name) {
                                                                       name = data.blueprintData.blueprintName;
                                                                   }
-                                                                  return '<span class="cardHeadingTextoverflow" rel="tooltip" data-placement="top" data-original-title="' + name + '">' + name + '</span>' + '<a href="#modalforInstanceEdit" data-backdrop="false" data-toggle="modal" class="glyphicon glyphicon-pencil editInstanceNameBtn" style="cursor:pointer;"></a></span>';
+                                                                  return '<span class="cardHeadingTextoverflow" rel="tooltip" data-placement="top" data-original-title="' + name + '">' + name + '</span>' + '<a type="reset" href="#modalforInstanceEdit" data-backdrop="false" data-toggle="modal" class="glyphicon glyphicon-pencil editInstanceNameBtn" style="cursor:pointer;"></a></span>';
                                                               },
                                                               getSpanHeadingRight: function(data) {
                                                                   return '<span style="float:left;margin-top:4px;margin-left:8px;"><a rel="tooltip" class="moreInfo" href="javascript:void(0)" data-instanceId="' + data._id + '" data-placement="top" data-original-title="MoreInfo"></a></span>';
@@ -3399,7 +3497,7 @@
                                                                 var taskId = $(this).parents('td').attr('data-taskId');
                                                                 var that = this;
 
-                                                                bootbox.confirm('Are you sure you want to delete the Task -&nbsp;&quot;<b>' + data[i].name + '</b>&quot;', function(result) {
+                                                                bootbox.confirm('Are you sure you want to delete the Task -&nbsp;<b>' + data[i].name + '</b>', function(result) {
                                                                     if (result) {
                                                                         $.ajax({
                                                                             url: '../tasks/' + taskId,
