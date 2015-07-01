@@ -237,6 +237,7 @@ Chooses Icon
 
 Chooses Template Type
     Click Element    xpath=.//*[@id='s2id_templatetypename']/a
+    Sleep    2s
     Input Text    xpath=.//*[@id='select2-drop']/div/input    ${TEMPLATE TYPENAME}
     Sleep    1s
     Click Element    xpath=.//*[@id='select2-drop']/ul/li/div      #App FactoryT
@@ -258,7 +259,7 @@ Select CookBooks
 
 Select New CookBooks for Template
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='templatescookbooks']/div/div[1]/div[1]/label[3]
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[text()='git']
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[text()='${CookBkName}']
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    id=btnaddToRunlist
 
 

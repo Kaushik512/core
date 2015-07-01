@@ -9,13 +9,13 @@ Resource           catalyst.txt
 
 
 *** Variables ***
-${BROWSER TYPE}                     chrome              #firefox                     #internetexplorer               #phantomjs
+${BROWSER TYPE}                    chrome             
 ${ENVIRONMENTSERVER}         http://52.27.46.167:3001 
 
 
 
 
- 
+
 
 ${ENV}                 QA.txt
 ${VALID USER}             superadmin
@@ -30,8 +30,8 @@ ${PROJECT NAME}                  Catalyst
 ${PROJECT DESCRIPTION}           Catalyst product automation Description
 ${ENVIRONMENT NAME}              Dev
 ${CONFIG MANAGEMENT NAME}             RLChefServer
-${CONFIG MANAGEMENT USER NAME}         pcjoshi9
-${CONFIG MANAGEMENT URL}         https://api.opscode.com/organizations/cat1	
+${CONFIG MANAGEMENT USER NAME}         mycatqa
+${CONFIG MANAGEMENT URL}         https://api.opscode.com/organizations/cattest
 ${PROVIDER}             Data Center
 ${ASSIGN USERS}         Designer
 ${ASSIGN USERS1}        superadmin          #Consumer
@@ -76,8 +76,8 @@ ${PHOENIX COMMERNCE WITHOUT COOKBOOK CENTOS}            Phoenix Commernce withou
 ${PHOENIX COMMERCE WITH COOKBOOK CENTOS}          Phoenix Commerce With CookBook CENTOS
 ${TASK NAME}          Test Task
 
-${USERPEMFILE}              ${ROOTPATH}\\Chef\\pcjoshi9.pem 
-${VALIDATORPEMFILE}      ${ROOTPATH}\\Chef\\pjlab-validator.pem
+${USERPEMFILE}              ${ROOTPATH}\\Chef\\mycatqa.pem 
+${VALIDATORPEMFILE}      ${ROOTPATH}\\Chef\\cattest-validator.pem
 ${KNIFERBFILE}                ${ROOTPATH}\\Chef\\knife.rb
 ${CATALYSTPEM}                ${ROOTPATH}\\Chef\\catalyst.pem
 ${CAT_INSTANCES}              ${ROOTPATH}\\Chef\\cat_instances.pem
@@ -128,7 +128,7 @@ ${MAT MEM}                 604488kB
 ${MAT FREEMEM}             80476kB
 ${MAT OS}                  centos
 ${MAT BOOTSTRAP}           success
-${MAT RUNLIST}             recipe[a]          #recipe[apache2],recipe[git],recipe[cron]
+${MAT RUNLIST}             recipe[apt]          #recipe[apache2],recipe[git],recipe[cron]
 ${MAT RUNLIST1}            recipe[a],recipe[cron]
 ${MAT OS1}                 ubuntu
 ${UBUNTU MEM}              1016256kB
@@ -172,7 +172,9 @@ ${CENTOS NAME}              "Instance_Centos"
 ${UBUNTU NAME}              "Instance_Ubuntu"
 ${IP ADD UBUNTU}             "52.10.75.4"
 ${IP ADD CENTOS}             "52.24.73.49" 
-
+${Proj1}                      Catalyst
+${Proj2}                      Primary_Edu
+${CookBkName}                 apt
 
 
 
@@ -193,7 +195,7 @@ ${IMAGE ID1}                   ami-b6bdde86
 ${IMAGE ID2}                   ami-3d50120d
 ${IMAGE ID3}                   ami-21732111
 ${USER}                        superadmin
-${COOKBOOK NAME1}              service_apache       #apache2
+${COOKBOOK NAME1}              7-zip                #service_apache       #apache2
 ${SERVICE NAME1}               Apachenew
 ${ValidEditVMImage}            Windows 2008
 
@@ -476,4 +478,8 @@ ${UBUNBLUEPRINT NAME}                UbuntuOS
 
 
 
-
+#Team Names
+${DEF TEAMNAME1}                Relevance_Labs_Admins
+${DEF TEAMNAME2}                Relevance_Labs_DEV
+${DEF TEAMNAME3}                Relevance_Labs_DevOps
+${DEF TEAMNAME4}                Relevance_Labs_QA
