@@ -217,6 +217,8 @@ var MasterUtil = function(){
                                 projects[projectCount].orgname = names;
                                 projects[projectCount].productgroupname = bgnames;
                                 //projectList.push(projects[projectCount]);
+                                logger.debug("pppppppppppppp: ",projects[projectCount].environmentname_rowid);
+                                /*if(typeof projects[projectCount].environmentname_rowid != "undefined"){
                                 var envs = projects[projectCount].environmentname_rowid.split(",");
                                 for(var e = 0;e< envs.length;e++){
                                     logger.debug("envs:::::::::::::: ",projects[projectCount].environmentname);
@@ -224,9 +226,10 @@ var MasterUtil = function(){
                                     allEnvs =allEnvs+","+envnames;
                                 }
                                 allEnvs = allEnvs.substring(1);
-                                projects[projectCount].environmentname = allEnvs;
+                                projects[projectCount].environmentname = allEnvs;*/
                                 projectList.push(projects[projectCount]);
                             }
+                           // }
                         })(i);
                     }
                     logger.debug("Returned Projects: ", JSON.stringify(projectList));
@@ -717,6 +720,7 @@ var MasterUtil = function(){
                             teamList.push(teams[i]);
                         }
                     }
+                    logger.debug("My team:???????????? ",JSON.stringify(teamList));
                     callback(null, teamList);
                     return;
                 });
@@ -852,6 +856,9 @@ var MasterUtil = function(){
                                     loopCount++;
                                     d4dModelNew.d4dModelMastersTeams.find({
                                         orgname_rowid: allObj[tmOrg],
+                                        rowid:{
+                                            $in:catObj.teams
+                                        },
                                         id: "21"
                                     }, function(err, allTeams) {
                                         if (err) {
@@ -860,10 +867,11 @@ var MasterUtil = function(){
                                         }
                                         logger.debug("allTeams:::::::::::::: ", JSON.stringify(allTeams));
                                         for (var xy = 0; xy < allTeams.length; xy++) {
-
+                                            (function(xy){
+                                            if(typeof allTeams[xy].orgname_rowid != "undefined" && typeof allTeams[xy].projectname_rowid != "undefined"){
                                             d4dModelNew.d4dModelMastersOrg.find({
                                                 rowid: {
-                                                    $in: allTeams[0].orgname_rowid
+                                                    $in: allTeams[xy].orgname_rowid
                                                 },
                                                 id: "1",
                                                 active: true
@@ -883,7 +891,10 @@ var MasterUtil = function(){
                                                 }
                                                 d4dModelNew.d4dModelMastersProjects.find({
                                                     orgname_rowid: {
-                                                        $in: allTeams[0].orgname_rowid
+                                                        $in: allTeams[xy].orgname_rowid
+                                                    },
+                                                    rowid:{
+                                                        $in: allTeams[xy].projectname_rowid.split(",")
                                                     },
                                                     id: "4"
                                                 }, function(err, project) {
@@ -902,7 +913,7 @@ var MasterUtil = function(){
                                                     }
                                                     d4dModelNew.d4dModelMastersProductGroup.find({
                                                         orgname_rowid: {
-                                                            $in: allTeams[0].orgname_rowid
+                                                            $in: allTeams[xy].orgname_rowid
                                                         },
                                                         id: "2"
                                                     }, function(err, bg) {
@@ -930,6 +941,8 @@ var MasterUtil = function(){
                                                 // }
 
                                             });
+                                            }//if
+                                        })(xy);
                                         }
                                     });
                                 } // for multiple orgs

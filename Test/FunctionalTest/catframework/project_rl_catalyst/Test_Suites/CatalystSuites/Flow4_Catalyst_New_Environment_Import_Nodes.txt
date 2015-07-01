@@ -1,5 +1,5 @@
 *** Settings ***
-Documentation     Organization_setup_Flow.txt
+Documentation     Environments_setup_Flow.txt
 
 Resource           catalyst.txt
 Resource           ${CATALYST TEST DATA}/${TESTDATA}
@@ -25,8 +25,17 @@ Catalyst new Environments setup
 Catalyst Adding New Envirornments to the Chef          #from chef server
     [Tags]       Sanity       ps
 #    Catalyst Login
-    Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
     Catalyst Addition of New Environments
+    Catalyst Logout
+    [Teardown]     Close Browser
+
+
+Catalyst Activation of User Created Envirornments           #from chef server
+    [Tags]       Sanity       ps
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst Activation of Environments in projects
     Catalyst Logout
     [Teardown]     Close Browser
 

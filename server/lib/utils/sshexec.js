@@ -106,8 +106,8 @@ module.exports = function(options) {
                 return;
             }
             if (con) {
-                console.log('executing cmd');
-                con.exec(cmd, {
+                console.log('executing cmd' + cmd);
+                con.exec('sudo ' + cmd, {
                     pty: true
                 }, function(err, stream) {
                     if (err) {

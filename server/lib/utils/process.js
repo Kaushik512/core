@@ -58,6 +58,7 @@ var Process = function(appPath, argList, options) {
             }
         });
         //proc = spawn(appPath, argList, options);
+
         
         processRunning = true;
         if (typeof onStdOut === 'function') {

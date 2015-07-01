@@ -1,5 +1,5 @@
 *** Settings ***
-Documentation     Organization_setup_Flow.txt
+Documentation     Inport_IP_setup_Flow.txt
 
 Resource           catalyst.txt
 Resource           ${CATALYST TEST DATA}/${TESTDATA}
@@ -10,11 +10,11 @@ Resource           ${CATALYST ACTION}/Gallery_setup_TempService_Steps.txt
 
 
 *** Test Cases ***
-Catalyst Import CentOS Node From Chef Server
+Catalyst Import CentOS Node By IP
     [Tags]       Sanity       ps
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
-    Catalyst Import an CentOS Instance from Chef
+    Catalyst Import an CentOS Instance By IP
     Catalyst Verfication of Duplicate Node
     Catalyst Logout
     [Teardown]     Close Browser
@@ -25,19 +25,9 @@ Catalyst Chef Client Run on the Imported Node
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
     Catalyst Import By IP Chef Client run
-    Catalyst Verify the Chef BootStrap,SSH,Status,Start,Stop
+    ##Catalyst Verify the Chef BootStrap,SSH,Status,Start,Stop
     Catalyst Logout
     [Teardown]     Close Browser
-
-
-Catalyst Check Chef Client Run on the Imported Node
-    [Tags]       Sanity       ps
-#    Catalyst Login
-    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
-    Catalyst Verify the Chef BootStrap,SSH,Status,Start,Stop
-    Catalyst Logout
-    [Teardown]     Close Browser
-
 
 Catalyst Edit the Instance Name of Inported Instance
     [Tags]       Sanity       ps
@@ -46,6 +36,7 @@ Catalyst Edit the Instance Name of Inported Instance
     Catalyst Check and Edit the Instance Name
     Catalyst Logout
     [Teardown]     Close Browser
+
 
 
 Catalyst Verify the Instance Deleted from Chef Server
@@ -57,6 +48,97 @@ Catalyst Verify the Instance Deleted from Chef Server
     [Teardown]     Close Browser
 
 
+Catalyst CentOS Instance Deleted only from Catalyst not from Chef Server
+    [Tags]       Sanity       ps
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst Delete the Node only From Catalyst
+    Catalyst Logout
+    [Teardown]     Close Browser  
+    
+
+
+
+
+
+
+Catalyst Import Ubuntu Node By IP
+    [Tags]       Sanity       ps
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst Import an Ubuntu Instance By IP
+    Catalyst Verfication Ubuntu Duplicate Node
+    Catalyst Logout
+    [Teardown]     Close Browser
+
+
+Catalyst Chef Client Run on the UbuntuOS Imported Node
+    [Tags]       Sanity       ps
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst Import By IP Chef Client run on Ubuntu Instance
+    ##Catalyst Verify the Chef BootStrap,SSH,Status,Start,Stop
+    Catalyst Logout
+    [Teardown]     Close Browser
+
+
+Catalyst Edit the Ubuntu Instance Name of Inported Instance
+    [Tags]       Sanity       ps
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst Check and Edit the Ubuntu Instance Name
+    Catalyst Logout
+    [Teardown]     Close Browser
+
+
+Catalyst Verify the Ubuntu Instance Deleted from Chef Server
+    [Tags]       Sanity       ps
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst Ubuntu Instance Deleted From Chef Environment
+    Catalyst Logout
+    [Teardown]     Close Browser
+
+
+Catalyst Ubuntu Instance Deleted only from Catalyst not from Chef Server
+    [Tags]       Sanity       ps
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst Delete the Ubuntu Node only From Catalyst
+    Catalyst Logout
+    [Teardown]     Close Browser  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #-Catalyst CentOS Instance Deleted only from Catalyst not from Chef Server
     #-[Tags]       Sanity       ps
 #    Catalyst Login
@@ -66,6 +148,7 @@ Catalyst Verify the Instance Deleted from Chef Server
     #-[Teardown]     Close Browser     
 
 
+
 #-Catalyst Importing Node From Chef Server
     #-[Tags]       Sanity       ps
 #    Catalyst Login
@@ -73,13 +156,6 @@ Catalyst Verify the Instance Deleted from Chef Server
     #-Catlayst Importing the Instance Chef Sync
     #-Catalyst Logout
     #-[Teardown]     Close Browser     
-    
-
-
-
-
-
-
 
 
 #-Catalyst import chef server Cent OS nodes by IP Address           #from IP

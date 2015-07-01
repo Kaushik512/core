@@ -1159,7 +1159,7 @@ function populateWorkstation(){
         url: "../instances/" + instanceId + "/setAsWorkStation",
         success: function(data) {
           console.log(data);
-            bootbox.alert("Your workstation has been setup successfully");
+            bootbox.alert("Your workstation has been setup successfully. The .chef folder is available in Home");
             $('#saveSpinner').addClass('hidden');
             $('.workstationBtn').removeAttr('disabled');
         },
