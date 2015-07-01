@@ -536,7 +536,10 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                     }
                                     var counter = 0;
                                     for (var k = 0; k < docbgs.length; k++) {
+                                        countAll++;
+                                        (function(k){
                                         for (var i = 0; i < orgTree.length; i++) {
+                                            (function(i){
                                             if (orgTree[i]['rowid'] == docbgs[k]['orgname_rowid']) {
                                                 var bgname = configmgmtDao.convertRowIDToValue(docbgs[k]['rowid'], rowidlist);
                                                 orgTree[i]['businessGroups'].push({
@@ -665,6 +668,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                         }, function(err, docenvs) {
                                                             logger.debug("Returned env for org:>>>>>>>>>>>>>>> ", JSON.stringify(docenvs));
                                                             for (var _i = 0; _i < orgTree.length; _i++) {
+                                                                (function(_i){
                                                                 for (var _env = 0; _env < docenvs.length; _env++) {
                                                                     logger.debug("Condition check:>>>>> ", orgTree[_i]['name'] == docenvs[_env]['orgname']);
                                                                     if (orgTree[_i]['name'] == docenvs[_env]['orgname']) {
@@ -673,12 +677,15 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                                         orgTree[_i]['environments'].push(envname);
                                                                     }
                                                                 }
-                                                                if (_i >= orgTree.length - 1) {
+                                                                if (_i === orgTree.length - 1) {
+                                                                    /*logger.debug(docbgs.length+" "+countAll);
+                                                                    if(docbgs.length === countAll){*/
                                                                     logger.debug("Returned complete orgTree:>>>>>>>>>>> ", JSON.stringify(orgTree));
                                                                     logger.debug("Exit get() for /organizations/getTreeForbtv");
                                                                     res.send(orgTree);
                                                                     return;
                                                                 }
+                                                            })(_i);
                                                             }
                                                         });
                                                     }
@@ -686,9 +693,10 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                 });
 
                                             }
+                                            })(i);
 
                                         }
-
+                                    })(k);
                                     }
                                 });
 
@@ -1122,7 +1130,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
     app.get('/organizations/:orgId/businessgroups/:bgId/projects/:projectId/environments/:envId/', function(req, res) {
         logger.debug("Enter get() for /organizations/%s/businessgroups/%s/projects/%s/environments/%s", req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId);
-        masterUtil.getAllSettingsForUser(req.session.user.cn, function(err, orgbuprojs) {
+        configmgmtDao.getTeamsOrgBuProjForUser(req.session.user.cn, function(err, orgbuprojs) {
             logger.debug('-----------------------------------------------------getTeamsOrgBuProjForUser : ' + JSON.stringify(orgbuprojs));
             if (orgbuprojs.length === 0) {
                 logger.debug('User not part of team to see project.');
