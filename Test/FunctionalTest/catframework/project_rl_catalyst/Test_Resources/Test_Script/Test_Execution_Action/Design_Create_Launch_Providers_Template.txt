@@ -1063,11 +1063,11 @@ Verify the Chef run icon and click on it
 
 Update the Run List with Cookbook
     Sleep    3s
-    Click Element    xpath=.//*[@id='cookbooksrecipesselectedList']/option[text()='apache2']
+    Click Element    xpath=.//*[@id='cookbooksrecipesselectedList']/option[text()='${COOKBOOK NAME1}']
     Click Element    id=btnremoveFromRunlist
-    Click Element    xpath=.//*[@id='cookbooksrecipesselectedList']/option[text()='git']
+    Click Element    xpath=.//*[@id='cookbooksrecipesselectedList']/option[text()='${CookBkName}']
     Click Element    id=btnremoveFromRunlist
-    Wait Until Keyword Succeeds    1 minute     10 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[@value='recipe[a]']
+    Wait Until Keyword Succeeds    1 minute     10 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[@value='recipe[${CookBkName}]']
     Wait Until Keyword Succeeds    1 minute     10 seconds      Click Element    id=btnaddToRunlist
 
 Update the Run List with Newwww Cookbook

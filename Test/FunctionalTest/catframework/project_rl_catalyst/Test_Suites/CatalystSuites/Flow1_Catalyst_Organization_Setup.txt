@@ -26,7 +26,7 @@ Catalyst login as OrgAdmin user
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
     Catalyst Creating New User and Verfiy ALL is Disabled
     Catalyst Creation of Designer and Consumer 
-    #-Catalyst Org Admin Verfifcation of New,Update,Delete Button disabled
+    ##-Catalyst Org Admin Verfifcation of New,Update,Delete Button disabled
     Catalyst Logout
     [Teardown]     Close Browser
 
@@ -44,5 +44,3 @@ Catalyst Creation of Business Group,Projects setup
 
 
 
-
-    

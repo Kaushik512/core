@@ -227,7 +227,7 @@ Enters config management name
     Input Text     id=configname      ${CONFIG MANAGEMENT NAME}
 
 Enters config management user name
-    Wait Until Keyword Succeeds    1 minute     1 seconds     Input Text     id=loginname      pcjoshi9
+    Wait Until Keyword Succeeds    1 minute     1 seconds     Input Text     id=loginname      ${CONFIG MANAGEMENT USER NAME}
 
 Select organization for config management
     Select From List     id=orgname      ${ORGANIZATION NAME}
@@ -264,8 +264,8 @@ Validate the Unique Configuration Name                       #Unique Devops Conf
     Enters config management Unique name    ${config}
 
 
-Enters config user name
-    Input Text    id=loginname    pcjoshi9
+#Enters config user name
+    #Input Text    id=loginname    pcjoshi9
 
 Enters config management Unique name
     [Arguments]    ${config}

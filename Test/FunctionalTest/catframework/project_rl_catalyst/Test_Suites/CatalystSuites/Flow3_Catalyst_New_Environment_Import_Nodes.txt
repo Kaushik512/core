@@ -15,7 +15,6 @@ Catalyst new Environments setup
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
     Test Validation of Creation of New Environments
-    Test Validation of No org,Chef,Env,Team Selected for Environment
     Catalyst Addition and Creation of New Envirorments Setup           
     Catalyst Logout                      
     [Teardown]     Close Browser
@@ -31,18 +30,24 @@ Catalyst Adding New Envirornments to the Chef          #from chef server
     [Teardown]     Close Browser
 
 
-Catalyst Activation of User Created Envirornments           #from chef server
-    [Tags]       Sanity       ps
+
+
+
+
+
+
+
+
+
+
+
+#-Catalyst Activation of User Created Envirornments           #from chef server
+    #-[Tags]       Sanity       ps
 #    Catalyst Login
-    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
-    Catalyst Activation of Environments in projects
-    Catalyst Logout
-    [Teardown]     Close Browser
-
-
-
-
-
+    #-Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    #-Catalyst Activation of Environments in projects
+    #-Catalyst Logout
+    #-[Teardown]     Close Browser
 
 
 #-Catalyst import chef server nodes            #from chef server
