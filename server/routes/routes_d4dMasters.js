@@ -2555,7 +2555,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                 res.send(500, "Failed to save Org.");
                                                 return;
                                             }
-                                            for (var x1 = 0; x1 < 6; x1++) {
+                                            for (var x1 = 0; x1 < 5; x1++) {
                                                 (function(x1) {
                                                     var templatetypename;
                                                     var designtemplateicon_filename;
@@ -2569,14 +2569,10 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                         designtemplateicon_filename = "DevopsRoles.png";
                                                         templatetype = "chef";
                                                     } else if (x1 === 2) {
-                                                        templatetypename = "CloudFormation";
-                                                        designtemplateicon_filename = "Cloudformation.png";
-                                                        templatetype = "chef";
-                                                    } else if (x1 === 3) {
                                                         templatetypename = "Desktop";
                                                         designtemplateicon_filename = "Desktop Provisining.png";
                                                         templatetype = "chef";
-                                                    } else if (x1 === 4) {
+                                                    } else if (x1 === 3) {
                                                         templatetypename = "Environment";
                                                         designtemplateicon_filename = "Environment.png";
                                                         templatetype = "chef";
