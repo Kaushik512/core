@@ -7901,6 +7901,16 @@ tr.selectedOne td a{
     background-color: #fff!important;
     font-size: 16px;
 }
+.dataBagFailure{
+    margin-top: 50px;
+    float:left;
+    margin-left: 300px;
+    width:394px;
+    color:black!important;
+    border-color: #ebccd1;
+    background-color: #fff!important;
+    font-size: 16px;
+}
 .forBootBox{
     margin-left: -40px;
 }
