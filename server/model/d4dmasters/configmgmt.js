@@ -1436,7 +1436,12 @@ function Configmgmt() {
                 //         $regex: userd[0]['rowid']
                 //     }
                 // }
-                d4dModelNew.d4dModelMastersTeams.find(qry, function(err, teamd) {
+                d4dModelNew.d4dModelMastersTeams.find({
+                    id: "21",
+                    loginname_rowid: {
+                        $regex: userd[0]['rowid']
+                    }
+                }, function(err, teamd) {
                     if (err) {
                         logger.debug('Exiting with err 1359 getTeamsOrgBuProjForUser');
                         callback(err, null);
