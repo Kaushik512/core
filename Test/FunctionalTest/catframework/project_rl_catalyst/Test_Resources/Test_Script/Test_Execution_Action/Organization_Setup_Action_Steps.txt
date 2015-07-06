@@ -317,8 +317,8 @@ Verfiy that EditedOrganization is created
 
 Verfiy that EditedOrganizationdomain is created
     [Arguments]    ${OrganizationDomainMsg}
-    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       xpath=.//*[@id='envtable']/tbody/tr/td[text()="https://www.relevancelab.com"]
-    Element Should Contain    xpath=.//*[@id='envtable']/tbody/tr/td[text()="https://www.relevancelab.com"]    ${OrganizationDomainMsg} 
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       xpath=.//*[@id='envtable']/tbody/tr/td[text()="http://www.relevancelab.com"]
+    Element Should Contain    xpath=.//*[@id='envtable']/tbody/tr/td[text()="http://www.relevancelab.com"]    ${OrganizationDomainMsg} 
 
 #Organization ends
 

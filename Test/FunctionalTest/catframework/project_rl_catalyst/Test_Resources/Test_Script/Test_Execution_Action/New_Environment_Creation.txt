@@ -198,7 +198,7 @@ Add the Environment Named2
     Input Text    id=chefenvname    ${EnV2}
 
 Clicks on Edit Update Button of the Project1 Created
-    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()="Catalyst"]/../td[6]/div/a
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()="${Proj1}"]/../td[6]/div/a
 
 User Activates the Environment1
     Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='environmentname']/label[text()='Dev']
@@ -207,7 +207,7 @@ Clicks on Save Button of Your Project
     Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='myForm3']/div/div[3]/div/button
 
 Clicks on Edit Update Button of the Project2 Created
-    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()="Primary_Edu"]/../td[6]/div/a
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()="${Proj2}"]/../td[6]/div/a
 
 User Activates the Environment2
     Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='environmentname']/label[text()='QA']
@@ -222,10 +222,10 @@ Clicks on Organization setup
     Click Element    xpath=.//*[@id='Settings']/li[1]/a/span
 
 Clicks on Edit Button of the Project Created
-    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()="Catalyst"]/../td[6]/div/a        #Catalyst
+    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()="${Proj1}"]/../td[6]/div/a        #Catalyst
 
 
-  Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()="Primary_Edu"]/../td[6]/div/a       Primary_Edu
+  Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()="${Proj2}"]/../td[6]/div/a       Primary_Edu
 
 Select organization for Env
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='s2id_orgname']/a
@@ -249,7 +249,7 @@ Select the Environments1
     Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element    xpath=.//*[@id='s2id_environmentname']/a/span[1]
     Sleep    1s
     Input Text    xpath=.//*[@id='select2-drop']/div/input     ${EnV1}
-    Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element    xpath=.//*[@id='select2-drop']/ul/li[contains("Dev",.)]
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element    xpath=.//*[@id='select2-drop']/ul/li[contains("${EnV1}",.)]
 
 
 
@@ -257,20 +257,20 @@ Select the Environment2
     Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element    xpath=.//*[@id='s2id_environmentname']/a/span[1]
     Sleep    1s
     Input Text    xpath=.//*[@id='select2-drop']/div/input     ${EnV2}
-    Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element    xpath=.//*[@id='select2-drop']/ul/li[contains("QA",.)]
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element    xpath=.//*[@id='select2-drop']/ul/li[contains("${EnV2}",.)]
 
 
 Assign Teams1
-    Click Element    xpath=.//*[@id='teamname']/label[text()='Relevance_Labs_Admins']
-    Click Element    xpath=.//*[@id='teamname']/label[text()='Relevance_Labs_DEV']
-    Click Element    xpath=.//*[@id='teamname']/label[text()='Relevance_Labs_DevOps']
-    Click Element    xpath=.//*[@id='teamname']/label[text()='Relevance_Labs_QA']
+    Click Element    xpath=.//*[@id='teamname']/label[text()='${DEF TEAMNAME1}']
+    Click Element    xpath=.//*[@id='teamname']/label[text()='${DEF TEAMNAME2}']
+    Click Element    xpath=.//*[@id='teamname']/label[text()='${DEF TEAMNAME3}']
+    Click Element    xpath=.//*[@id='teamname']/label[text()='${DEF TEAMNAME4}']
  
 Assign Team2
-    Click Element    xpath=.//*[@id='teamname']/label[text()='Relevance_Labs_Admins']
-    Click Element    xpath=.//*[@id='teamname']/label[text()='Relevance_Labs_DEV']
-    Click Element    xpath=.//*[@id='teamname']/label[text()='Relevance_Labs_DevOps']
-    Click Element    xpath=.//*[@id='teamname']/label[text()='Relevance_Labs_QA']
+    Click Element    xpath=.//*[@id='teamname']/label[text()='${DEF TEAMNAME1}']
+    Click Element    xpath=.//*[@id='teamname']/label[text()='${DEF TEAMNAME2}']
+    Click Element    xpath=.//*[@id='teamname']/label[text()='${DEF TEAMNAME3}']
+    Click Element    xpath=.//*[@id='teamname']/label[text()='${DEF TEAMNAME4}']
  
 Assign Created Project1
     Click Element    xpath=.//*[@id='projectname']/label[text()='${Proj1}']/i

@@ -168,7 +168,7 @@ Enters the New Template Name
     Input Text    id=templatename    ${templatename}
 
 Clicks on Edit Button of Temp Created
-    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()='Apac']/../td[6]/div/a
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${TEMP NME}']/../td[6]/div/a
     Sleep    2s
 
 Template Name left empty
@@ -227,7 +227,7 @@ Clicks on New Button
 
 Enters Template Name
     Wait Until Keyword Succeeds    1 minute     1 seconds    Wait Until Element Is Visible    id=templatename
-    Input Text    id=templatename    Apac
+    Input Text    id=templatename    ${TEMP NME}
 
 
 Chooses Icon
@@ -254,7 +254,7 @@ Select Chef Server
 Select CookBooks
     Sleep    1s
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='templatescookbooks']/div/div[1]/div[1]/label[3]
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[text()='apache2']
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[text()='${ADD}']
     #Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    id=btnaddToRunlist
 
 Select New CookBooks for Template
@@ -378,7 +378,7 @@ Vaildate the 15Character Service Name
     Clicks on SerSave Button
 
 Clicks on Edit Button of Service
-    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()='MongoDB']/../td[5]/div/a
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${SERVICE NAME}']/../td[5]/div/a
 
 
 
@@ -449,7 +449,7 @@ Clicks on SNew Button
 
 Enters Service Name
     Wait Until Keyword Succeeds    1 minute     1 seconds    Wait Until Element Is Visible    id=servicename
-    Input Text    id=servicename    MongoDB
+    Input Text    id=servicename    ${SERVICE NAME}
 
 
 Choose Service Command Type
