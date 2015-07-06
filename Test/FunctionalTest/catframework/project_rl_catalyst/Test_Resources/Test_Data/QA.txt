@@ -10,8 +10,7 @@ Resource           catalyst.txt
 
 *** Variables ***
 ${BROWSERTYPE}                    chrome             
-${ENVIRONMENTSERVER}         http://d4d.relevancelab.com:3001
-#http://52.26.87.125:3001/public/login.html
+${ENVIRONMENTSERVER}         http://52.26.87.125:3001/public/login.html
 
 
 
