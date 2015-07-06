@@ -125,111 +125,86 @@
  <div class="row " style="margin:0px;">
 
  <div class="col-lg-6 col-md-6">
- <label for="">Choose Operating System:<span style="color:red">*</span></label>
+ <label for="instanceOS">Choose Operating System:<span style="color:red">*</span></label>
  <div class="input-groups">
- <select id="instanceOS" class="required chooseOS width-100">
+ <select id="instanceOS" name="instanceOS" class="required chooseOS width-100">
  </select>
  </div>                                                      
  </div>
  <div class="col-lg-6 col-md-6">
- <label for="">Choose Provider:<span style="color:red">*</span></label>
+ <label for="providerId">Choose Provider:<span style="color:red">*</span></label>
  <div class="input-groups">
- <select id="providerId" class="required chooseOSProvider width-100">
+ <select id="providerId" name="providerId" class="required chooseOSProvider width-100">
  </select>
  </div>                                                      
  </div>
 
- <div class="col-lg-6 col-md-6">
- <label for="">Choose Providersasas:<span style="color:red">*</span></label>
- <div class="input-groups">
- <input type="text" name="instanceFQDN" class="required form-control" id="instanceFQDN" autofocus/>
- </div>                                                      
- </div>
-
-
-
  <div class="col-lg-6 col-md-6" style="margin-top:15px;">
- <label for="">Choose Available Images:<span style="color:red">*</span></label>
+ <label for="imageId">Choose Available Images:<span style="color:red">*</span></label>
 
-
- <select id="imageId" class="required chooseSecurity width-100">
+<div class="input-groups">
+ <select id="imageId" name="imageId" class="required chooseSecurity width-100">
  </select>
-
+</div>
  </div>
 
  <div class="col-lg-6 col-md-6" style="margin-top:15px;">
- <label for="">Choose Region:<span style="color:red">*</span></label>
+ <label for="region">Choose Region:<span style="color:red">*</span></label>
 
-
- <select id="region" class="required chooseSecurity width-100">
+<div class="input-groups">
+ <select id="region" name="region" class="required chooseSecurity width-100">
  <option value="">Select Region</option>
  </select>
-
+</div>
  </div> 
 
  <div class="col-lg-6" style="margin-top:15px;">
- <label for="">Select VPC:<span style="color:red">*</span></label>
+ <label for="vpcId">Select VPC:<span style="color:red">*</span></label>
  <label id="vpcSpinner" class="hidden"><img  style="margin-left:5px;margin-right:25px;" src="img/select2-spinner.gif"></label>
- <select id="vpcId" class="required chooseSelect chooseImage width-100">
+ <div class="input-groups">
+ <select id="vpcId" name="vpcId" class="required chooseSelect chooseImage width-100">
  <option value="">Select VPC</option>                          
- </select>                                                                                            
+ </select> 
+ </div>                                                                                           
  </div>
 
  <div class="col-lg-6" style="margin-top:15px;">
- <label for="">Select Subnet:<span style="color:red">*</span></label>
+ <label for="subnetId">Select Subnet:<span style="color:red">*</span></label>
  <label id="spinnerSubnet" class="hidden"><img  style="margin-left:5px;margin-right:25px;" src="img/select2-spinner.gif"></label>
- <select id="subnetId" class="required chooseSelect chooseImage width-100">
+ <div class="input-groups">
+ <select id="subnetId" name="subnetId" class="required chooseSelect chooseImage width-100">
  <option value="">Select Subnet</option>                          
- </select>                                                     
+ </select> 
+ </div>                                                    
  </div>
 
- <!--   <div class="col-lg-6 col-md-6" style="margin-top:15px;">
- <label for="">Choose Instance Size:<span style="color:red">*</span></label>
- 
- 
- <select id="intanceTypeControl" class="instanceType chooseInstance width-100">
- </select>
- 
- </div> -->
 
  <div class="col-lg-6 col-md-6" style="margin-top:15px;">
- <label for="">Select KeyPair :<span style="color:red">*</span></label>
- <select id="keypairId" class="required instanceType chooseInstance width-100">
+ <label for="keypairId">Select KeyPair :<span style="color:red">*</span></label>
+ <div class="input-groups">
+ <select id="keypairId" name="keypairId" class="required instanceType chooseInstance width-100">
  <option value="">Choose KeyPair </option>
  </select>
-
  </div>
-
- <!--<div class="col-lg-6" style="margin-top:15px;">
- <label for="">Select Security Group:<span style="color:red">*</span></label>
- <select id="securityGroupId" class="chooseSelect chooseImage width-100">
- <option value="">Select Security Group</option>                          
- </select>                                                                                            
  </div>
- -->
 
  <div class="col-lg-6" style="margin-top:15px;">
- <label for="name">Instance Size:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
- <select id="instancesize" unique="true" uniqueconditionedby="orgname"  class="required chooseOrganization width-100 chooseSelect" style="vertical-align:central">
+ <label for="instancesize">Instance Size:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+ <div class="input-groups">
+ <select id="instancesize" name="instancesize" class="required chooseOrganization width-100 chooseSelect" style="vertical-align:central">
  <option value="">Choose Instanace Size</option>
  </select>
- <span data-val-controltovalidate="domainname" id="MainContent_Req_domainname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility:hidden;">Required</span>
+ </div>
  </div> 
 
  <div class="col-lg-6" style="margin-top:15px;">
- <label for="category">Security Group:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+ <label for="securityGroupIds">Security Group:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
  <label id="spinnerSecurityGroup" class="hidden"><img  style="margin-left:5px;margin-right:25px;" src="img/select2-spinner.gif"></label>
  <div class="col-lg-6 smart-form multiselect" style="  height: 140px;overflow-y: scroll;border:1px solid gray;padding: 0px;width:100%">       
- <div id="securityGroupIds" multiselect="multiselect" datatype="select" datapath="" class="input-group from-control col-md-12 widthBox" style="width:99%;margin-top:-1px;border:0px" cdata="catalyst" cat-validation="onechecked">
+ <div id="securityGroupIds" name="securityGroupIds" multiselect="multiselect" datatype="select" datapath="" class="required input-group from-control col-md-12 widthBox" style="width:99%;margin-top:-1px;border:0px">
  </div>
  </div>
  </div>
- <!--<div class="col-lg-6" style="margin-top:15px;">
- <label for="">Select Security group:<span style="color:red">*</span></label>
- <select id="securityGroupIds" class="chooseSelect chooseImage width-100">
- <option value="">Select Security Group</option>                          
- </select>                                                                                            
- </div>-->
 
  <!--To add the Swipe Functionality-->                            
  </div>
@@ -247,9 +222,11 @@
  <div id="CollapseConfigurechefRunlist" class="panel-collapse collapse">
 
  <div class="col-lg-6 col-md-6" style="padding-left: 20px;">
- <label for="">Choose Organization <span style="color:red">*</span></label>
- <select id="orgnameSelect" class="chooseOrgselect2 width-100">
+ <label for="orgnameSelect">Choose Organization <span style="color:red">*</span></label>
+ <div class="input-groups">
+ <select id="orgnameSelect" name="orgnameSelect" class="required chooseOrgselect2 width-100">
  </select>
+ </div>
  </div>
 
  	<div><a style="font-size:14px!important" href="#modalForHelp" data-toggle="modal" id="dokuNew"><i class="fa fa-question"></i>&nbsp;Help</a>
@@ -455,19 +432,20 @@
  <div class="panel-body" style="padding-left: 8px;">
  <div class="row" style="margin:0px">
  <div class="col-lg-6 col-md-6">
- <label for="name">Blueprint Name:
+ <label for="blueprintNameInput">Blueprint Name:
  <span style="color:Red;" class="control-label">&nbsp;*</span></label>
- <input  id="blueprintNameInput" maxlength="25" class="required form-control" type="text" autofocus="autofocus" >
+ <div class="input-groups">
+ <input  id="blueprintNameInput" name="blueprintNameInput" maxlength="25" class="required form-control" type="text" autofocus="autofocus">
+ </div>
  </div>
 
  <div class="col-lg-6 col-md-6">
- <label for="">Business Group <span style="color:red">*</span>
+ <label for="bgListInput">Business Group <span style="color:red">*</span>
  </label>
-
- <select id="bgListInput" class="required chooseBG width-100">
-
+ <div class="input-groups">
+ <select id="bgListInput" name="bgListInput" class="required chooseBG width-100">
  </select>
-
+ </div> 
  </div>
 
 
@@ -486,13 +464,12 @@
 
  </div>
  <div class="col-lg-6 col-md-6">
- <label for="category">Project <span style="color:red">*</span>
+ <label for="projectListInput">Project <span style="color:red">*</span>
  </label>
-
- <select id="projectListInput" class="required chooseProject width-100">
-
+ <div class="input-groups">
+ <select id="projectListInput" name="projectListInput" class="required chooseProject width-100">
  </select>
-
+ </div>
  </div>
 
 
@@ -1397,7 +1374,7 @@ $(document).on("select2-opening", function(arg) {
     }
 });
 
-    
+
 
 	
 	
@@ -1413,26 +1390,26 @@ $(document).on("select2-opening", function(arg) {
  });
 
 	
-	function generateDockerLaunchParams() {
-    if ($('#Containernamefield').val() == '') {
-        $('.dockerparamrequired').removeClass('hidden');
-        return ('');
-    }
-
-    var launchparams = '';
-    $('[dockerparamkey]').each(function() {
-        if ($(this).val() != '') {
-            var itms = $(this).val().split(',');
-            for (itm in itms)
-                launchparams += ' ' + $(this).attr('dockerparamkey') + ' ' + itms[itm];
+    function generateDockerLaunchParams() {
+        if ($('#Containernamefield').val() == '') {
+            $('.dockerparamrequired').removeClass('hidden');
+            return ('');
         }
-    });
-    //$('#dockerlaunchparameters').val(launchparams); //removed for compose
-    //alert(launchparams)
-    $('#' + $('#myModalLabelDockerContainer').attr('saveto')).val(launchparams);
 
-    return (launchparams);
-}
+        var launchparams = '';
+        $('[dockerparamkey]').each(function() {
+            if ($(this).val() != '') {
+                var itms = $(this).val().split(',');
+                for (itm in itms)
+                    launchparams += ' ' + $(this).attr('dockerparamkey') + ' ' + itms[itm];
+            }
+        });
+        //$('#dockerlaunchparameters').val(launchparams); //removed for compose
+        //alert(launchparams)
+        $('#' + $('#myModalLabelDockerContainer').attr('saveto')).val(launchparams);
+
+        return (launchparams);
+    }
 
 
 function addDockerTemplateToTable(title, repopath, tagname, reponame) {
@@ -1441,7 +1418,6 @@ function addDockerTemplateToTable(title, repopath, tagname, reponame) {
     //remove any empty row message from table
     $('#dockerimageemptytr').detach();
     var $dockertemplaterow = '<tr class="dockerimagesrow"><td >' + $cdt.find('tr').length + '</td><td paramtype="dockercontainerpathstitle">' + title + '</td><td  paramtype="dockercontainerpaths">' + repopath + '</td><td paramtype="dockerrepotags">' + tagname + '</td><td><a onclick="loadLaunchParams(\'launchparam' + uniqueid + '\');" href="javascript:void(0);"><i class="icon-append fa fa-list-alt fa-lg" title="Launch Parameters"></i></a><input type="text" paramtype="dockerlaunchparameters" id="launchparam' + uniqueid + '" class=""><input type="hidden" paramtype="dockerreponame" id="dockerreponame' + uniqueid + '" class="" value="' + reponame + '"></td><td ><a class="dockerimageselectorup" id="dockerimageselectorup' + uniqueid + '"  href="javascript:movetablerow(\'dockerimageselectorup\',' + uniqueid + ');"><i class="fa fa-chevron-circle-up fa-lg"></i></a><a class="dockerimageselectordown" id="dockerimageselectordown' + uniqueid + '" href="javascript:movetablerow(\'dockerimageselectordown\',' + uniqueid + ');" style="padding-left:5px;"><i class="fa fa-chevron-circle-down fa-lg"></i></a><button class="btn btn-xs btn-danger pull-right" value="Remove" title="Remove" id="dockerimageremove' + uniqueid + '" onClick="javascript:removeimage(\'dockerimageremove\',' + uniqueid + ');"><i class="ace-icon fa fa-trash-o fa-lg"></i></button></td></tr>';
-    // var $dockertemplaterow = '<tr class="dockerimagesrow"><td  paramtype="order">' + $cdt.find('tr').length + '</td><td paramtype="repotitle">' + title + '</td><td  paramtype="repopath">' + repopath + '</td><td paramtype="repotag">' + tagname + '</td><td  paramtype="launchparams"><a onclick="loadLaunchParams(\'launchparamlink' + $cdt.find('tr').length  + '\');" href="javascript:void(0);"><input type="text" id="launchparam' +  + '" class="hidden"><i class="icon-append fa fa-list-alt fa-lg" title="Launch Parameters"></i></a></td><td  paramtype="move"><a class="dockerimageselectorup" id="dockerimageselectorup' + $cdt.find('tr').length + '"  href="javascript:movetablerow(\'dockerimageselectorup\',' + $cdt.find('tr').length + ');"><i class="fa fa-chevron-circle-up fa-lg"></i></a><a class="dockerimageselectordown" id="dockerimageselectordown' + $cdt.find('tr').length + '" href="javascript:movetablerow(\'dockerimageselectordown\',' + $cdt.find('tr').length + ');" style="padding-left:5px;"><i class="fa fa-chevron-circle-down fa-lg"></i></a><button class="btn btn-xs btn-danger pull-right" value="Remove" title="Remove" id="dockerimageremove' + $cdt.find('tr').length  + '" onClick="javascript:removeimage(\'dockerimageremove\',' + $cdt.find('tr').length + ');"><i class="ace-icon fa fa-trash-o fa-lg"></i></button></td></tr>';
 
     $cdt.append($dockertemplaterow);
 
@@ -1920,27 +1896,7 @@ function resetForm(){
 	$('select').val('').select2();
 	$('[multiselect]').empty();
 }
-/*function getRegionList(){
-  $('#providerId').on('change',function(){
 
-    var key=$(this).val();
-    if(key){
-      $.get('/aws/providers/'+key,function(data){
-        var keylist=data.keyPairs;
-
- // var regionList=$(this).find("option:selected").attr('keyPairs');
-   // regionList=regionList ?regionList.split(',') :[];
-   var str='<option value="">Select Region</option>';
-
-   for(var i=0;i<keylist.length;i++){
-    str=str+'<option value="'+keylist[i].region+'">'+keylist[i].region+'</option>';
-  }
-  $('#region').html(str).select2();
-
-});
-    }
-
-  }*/
   $(document).ready(function(){
 
     getProviderList();
@@ -1995,28 +1951,7 @@ function resetForm(){
 	$(".chooseDockerContainer").select2();
 	$(".chooseSelectExit").select2();
 	$('select').select2();
-	/*$.ajax({
-	url: "/d4dMasters/readmasterjsonnew/22",
-	dataType: "json",
-	type: "GET",
-	cache: "true",
 	
-	//async: false,
-	
-	success: function(data) {
-	//alert(data);
-	//console.log("Image Data>>>>>>>>>>>> "+data);
-	var data = JSON.parse(JSON.stringify(data));
-	//alert(data);
-	var $imgListInput = $('#imagename');
-	// console.log("Image Json>>>>>>>>>>  "+data);
-	for (var i = 0; i < data.length; i++) {
-	//alert(data[i].imagename);
-	$imgListInput.append($('<option></option>').val(data[i].rowid).html(data[i].imagename));
-	}
-	
-	}
-});*/
 	$.ajax({
    url: "/d4dMasters/readmasterjsonnew/16",
    dataType: "json",
@@ -2032,19 +1967,7 @@ function resetForm(){
 
    getDesignTypeImg= data[i]['designtemplateicon_filename'];
    getDesignTypeRowID= data[i]['rowid'];
-	// for(var x=0;x < data.masterjson.rows.row[i].field.length;x++){
-
-
-	//     if(data.masterjson.rows.row[i].field[x].name == "rowid"){
-	//       getDesignTypeRowID = data.masterjson.rows.row[i].field[x].values.value;
-	//     }
-	//  if(data.masterjson.rows.row[i].field[x].name == "designtemplateicon_filename"){
-	//       getDesignTypeImg = data.masterjson.rows.row[i].field[x].values.value;
 	
-	//     }
-	
-	
-	// }
     if(getDesignTypeImg){
 	containerTemp += '<div class="" style="width:222px;float:left">'+
 	' <div id=grid'+i+' class="blueprintdiv appfactory" data-'+
@@ -2155,47 +2078,7 @@ $("#templateContent #grid0").addClass("role-Selected");
 	dockercred = '';
 	dockeremail = '';
 	
-	//alert(JSON.stringify(data));
-	// for (var x = 0; x < data.masterjson.rows.row[z].field.length; x++) {
-	//     if (data.masterjson.rows.row[z].field[x].name == "templatesicon_filename") {
-	//         getImage = data.masterjson.rows.row[z].field[x].values.value;
-	//         //alert(getImage);
-	//     }
-	//     if (data.masterjson.rows.row[z].field[x].name == "rowid") {
-	//         getRowID = data.masterjson.rows.row[z].field[x].values.value;
-	//     }
-	//     if (data.masterjson.rows.row[z].field[x].name == "templatetypename") {
-	//         getTemplateType = data.masterjson.rows.row[z].field[x].values.value;
-	//     }
-	//     if (data.masterjson.rows.row[z].field[x].name == "templatescookbooks") {
-	//         gettemplatescookbooks = data.masterjson.rows.row[z].field[x].values.value;
-	//         //clearing additional double quotes
-	//         gettemplatescookbooks = gettemplatescookbooks.replace(/"/g, "");
-	//     }
 	
-	//     if (data.masterjson.rows.row[z].field[x].name == "templatename") {
-	//         getTempName = data.masterjson.rows.row[z].field[x].values.value;
-	//     }
-	//     if (data.masterjson.rows.row[z].field[x].name == "templatetypename") {
-	//         if (data.masterjson.rows.row[z].field[x].values.value == selectedText) {
-	//             selectedrow = true;
-	//         }
-	//     }
-	
-	//     //For docker 
-	//     if (data.masterjson.rows.row[z].field[x].name == "dockercontainerpathstitle") {
-	//         dockercontainerpathstitle = data.masterjson.rows.row[z].field[x].values.value;
-	//     }
-	//     if (data.masterjson.rows.row[z].field[x].name == "dockercontainerpaths") {
-	//         dockercontainerpaths = data.masterjson.rows.row[z].field[x].values.value;
-	//     }
-	//     if (data.masterjson.rows.row[z].field[x].name == "dockerreponame") {
-	//         dockerreponame = data.masterjson.rows.row[z].field[x].values.value;
-	//         //
-	
-	//     }
-	
-	// }
 	console.log('here end');
 	//added to the docker template adder pop-up : Vinod
     $('#dockertemplateselector').append('<option value="' + dockercontainerpaths + '" title="' + dockercontainerpaths + '" reponame="' + dockerreponame + '">' + dockercontainerpathstitle + '</option>');
@@ -2404,259 +2287,194 @@ if ($('#tab2 .role-Selected').length > 0) {
 	
 	
 } else if (index == 3) {
-    var isValid= $('#wizard-1').valid();
-    alert(isValid);
-    if (!isValid){
-        
-        return false;
-    }
-    else{
+            var isValid = $('#wizard-1').valid();
+           // alert(isValid);
+            if (!isValid) {
+                return false;
+            } else {
     
-	$("#tabheader").html('Create Blueprint');
-	var $selectedTemplateArea = $('.selectedTemplateArea');
-	var $selectedItem = $selectedTemplateArea.find('.productdiv2');
-	console.log($selectedItem.length);
-	if (!$selectedItem.length) {
-   alert('please choose a template');
-   return false;
- }
+                $("#tabheader").html('Create Blueprint');
+                var $selectedTemplateArea = $('.selectedTemplateArea');
+                var $selectedItem = $selectedTemplateArea.find('.productdiv2');
+                console.log($selectedItem.length);
+                if (!$selectedItem.length) {
+                    alert('please choose a template');
+                    return false;
+                }
 
- if ($('#orgnameSelect').val() === 'choose') {
-   alert('please choose an Organization');
-   return false;
- }
-
-
- reqBody = {};
- reqBody.templateId = $selectedItem.attr('data-templateId');
- reqBody.templateType = $selectedItem.attr('data-templateType');
- reqBody.templateComponents = $selectedItem.attr('data-templateComponent').split(',');
- reqBody.dockercontainerpathstitle = $selectedItem.attr('dockercontainerpathstitle');
- reqBody.dockercontainerpaths = $selectedItem.attr('dockercontainerpaths');
- reqBody.dockerlaunchparameters = $('#dockerlaunchparameters').val();
- reqBody.dockerreponame = $('.productdiv2.role-Selected').attr('dockerreponame');
+                if ($('#orgnameSelect').val() === 'choose') {
+                    alert('please choose an Organization');
+                    return false;
+                }
 
 
- //constructing the docker composite json.
-var dockercompose = [];
-var dockerimages = {};
-console.log($('#compositedockertable').find('.dockerimagesrow').length);
-$('.dockerimagesrow').each(function() {
-    dockerimages = {};
-    $(this).find('[paramtype]').each(function() {
-        console.log($(this).text() + $(this).val());
-        dockerimages[$(this).attr('paramtype')] = $(this).text() + $(this).val();
-    });
-    dockercompose.push(dockerimages);
-});
-//alert(JSON.stringify(dockercompose));
-reqBody.dockercompose = dockercompose;
-	//dockerreponame
-	/*if(!$('.deploymentsCookbookList').length) {
-	alert('Please wait while we are fetching cookbooks.');
-	return false;
-}*/
-	//Get all the runlist 
-	var cbs = [];
-	var $ccrs = $('.cookbookShow').data('$ccrs');
-    cbs = $ccrs.getSelectedRunlist();
-	reqBody.runlist = cbs.join(); //$('#cookbookSelect').val();
-	//reqBody.chefServerId = $('#cookbookSelect').data('chefServerId',);
-	var $ccrs = $('.cookbookShow').data('$ccrs');
-	reqBody.chefServerId = $ccrs.getChefServerId();
-	reqBody.instanceType = $('select.instanceType').val();
-	reqBody.instanceOS = $('#instanceOS').val();
-	console.log(reqBody);
-	
-	
-	console.log("reqBody ==>", reqBody);
-	if (!reqBody || reqBody == "undefined") {
-   console.log('resetting');
-   var reqBody = {};
- }
-	//reqBody.runlist = $('#cookbookSelect').val();
-	var $ccrs = $('.cookbookShow').data('$ccrs');
-	var cbs = [];
-	cbs = $ccrs.getSelectedRunlist();
-	reqBody.runlist = cbs; //$('#cookbookSelect').val();
-	//reqBody.chefServerId = $('#cookbookSelect').data('chefServerId');
-	reqBody.chefServerId = $ccrs.getChefServerId();
-	console.log("instanceType ==>", $('select.instanceType').val());
-	reqBody.instanceType = $('select.instanceType').val();
-	
-	var $instanceOsoptionsSelected = $('#instanceOS').find('option:selected');
-	console.log($('#instanceOS').val());
-	console.log($instanceOsoptionsSelected);
-	
-	reqBody.instanceOS = $instanceOsoptionsSelected.attr('data-instanceOS');
-	reqBody.instanceAmiid = $instanceOsoptionsSelected.attr('data-amiid');
-	reqBody.instanceUsername = $instanceOsoptionsSelected.attr('data-amiid-username');
-	// reqBody.instanceOS = $('#instanceOS').val();
-	reqBody.templateId = $('.productdiv2.role-Selected').attr('data-templateId');
-	reqBody.templateType = $('.productdiv2.role-Selected').attr('data-templateType');
-	reqBody.templateComponents = $('.productdiv2.role-Selected').attr('data-templateComponent').split(',');
-	
-	//    reqBody.dockercontainerpathstitle = $('.productdiv2.role-Selected').attr('dockercontainerpathstitle');
-	reqBody.dockercontainerpaths = $('#dockerrepoListInput :selected').attr('repopath'); //$('.productdiv2.role-Selected').attr('dockercontainerpaths');
-	reqBody.dockerrepotags = $('.productdiv2.role-Selected').attr('dockerrepotags');
-	reqBody.dockerimagename= $('#dockerrepoListInput').val();
-	reqBody.dockerlaunchparameters = $('#dockerlaunchparameters').val();
-	reqBody.dockerreponame = $('.productdiv2.role-Selected').attr('dockerreponame');
-	//alert(reqBody.dockerreponame);
-	reqBody.iconpath = $('.productdiv2.role-Selected').find('img[src*="__templatesicon__"]').first().attr('src');
-	reqBody.orgId = $('#orgnameSelect').val();
-	reqBody.bgId = $('#bgListInput').val();
-	reqBody.projectId = $('#projectListInput').val();
-	//reqBody.envId = $('#envList').val();
-	var imageIdentifier=$('#imageId').val();
-	var imageId=$('#imageId').find('option:selected').attr('_id');
-	var securityGroupIds=getSecurityCheckedList();
-	var providerId=$('#providerId').val();
-	var keyPairId = $('#keypairId').val();
-	var instanceType=$('#instancesize').val();
-	var vpcId=$('#vpcId').val();
-	var subnetId=$('#subnetId').val();
-	var region=$('#region').val();
- // var instanceOS=$('#instanceOS').data('instanceOS')
-
- // reqBody.providerId=providerId;
- reqBody.keyPairId=keyPairId;
- reqBody.securityGroupIds=securityGroupIds;
- reqBody.instanceType=instanceType;
- reqBody.instanceAmiid=imageIdentifier;
- reqBody.instanceUsername='root';
- reqBody.vpcId=vpcId;
- reqBody.subnetId=subnetId;
- reqBody.imageId=imageId;
- reqBody.providerId=providerId;
- //alert(reqBody.providerId);
- reqBody.name = $('#blueprintNameInput').val();
-if(($('.role-Selected').data('templatetype')).toLowerCase()!="docker"){
- /*if(!reqBody.instanceOS){
-  alert('Please Select Operating System');
-  return false;
-}*/
-
-/*if(!providerId){
- alert("Please Select Provider");
- return false;
-}*/
-
-/*if(!imageId){
- alert("Please Select Image");
- return false;
-}*/
-
-if(!region){
-  alert("Please Select Region");
-  return false;
-}
-
-if(!vpcId){
-	alert("Please Select VPC");
-	return false;
-}
+                reqBody = {};
+                reqBody.templateId = $selectedItem.attr('data-templateId');
+                reqBody.templateType = $selectedItem.attr('data-templateType');
+                reqBody.templateComponents = $selectedItem.attr('data-templateComponent').split(',');
+                reqBody.dockercontainerpathstitle = $selectedItem.attr('dockercontainerpathstitle');
+                reqBody.dockercontainerpaths = $selectedItem.attr('dockercontainerpaths');
+                reqBody.dockerlaunchparameters = $('#dockerlaunchparameters').val();
+                reqBody.dockerreponame = $('.productdiv2.role-Selected').attr('dockerreponame');
 
 
-if(!subnetId){
-  alert("Please Select Subnet");
-  return false;
-}
+                //constructing the docker composite json.
+                var dockercompose = [];
+                var dockerimages = {};
+                console.log($('#compositedockertable').find('.dockerimagesrow').length);
+                $('.dockerimagesrow').each(function() {
+                    dockerimages = {};
+                    $(this).find('[paramtype]').each(function() {
+                        console.log($(this).text() + $(this).val());
+                        dockerimages[$(this).attr('paramtype')] = $(this).text() + $(this).val();
+                    });
+                    dockercompose.push(dockerimages);
+                });
+                //alert(JSON.stringify(dockercompose));
+                reqBody.dockercompose = dockercompose;
+                
+                //Get all the runlist 
+                var cbs = [];
+                var $ccrs = $('.cookbookShow').data('$ccrs');
+                cbs = $ccrs.getSelectedRunlist();
+                reqBody.runlist = cbs.join(); //$('#cookbookSelect').val();
+                //reqBody.chefServerId = $('#cookbookSelect').data('chefServerId',);
+                var $ccrs = $('.cookbookShow').data('$ccrs');
+                reqBody.chefServerId = $ccrs.getChefServerId();
+                reqBody.instanceType = $('select.instanceType').val();
+                reqBody.instanceOS = $('#instanceOS').val();
+                console.log(reqBody);
 
-if(!keyPairId){
- alert("Please Select KeyPair");
- return false;
-}
-if(!instanceType){
-  alert("Please Select Instance Size");
-  return false;
 
-}
+                console.log("reqBody ==>", reqBody);
+                if (!reqBody || reqBody == "undefined") {
+                    console.log('resetting');
+                    var reqBody = {};
+                }
+                //reqBody.runlist = $('#cookbookSelect').val();
+                var $ccrs = $('.cookbookShow').data('$ccrs');
+                var cbs = [];
+                cbs = $ccrs.getSelectedRunlist();
+                reqBody.runlist = cbs; //$('#cookbookSelect').val();
+                //reqBody.chefServerId = $('#cookbookSelect').data('chefServerId');
+                reqBody.chefServerId = $ccrs.getChefServerId();
+                console.log("instanceType ==>", $('select.instanceType').val());
+                reqBody.instanceType = $('select.instanceType').val();
 
-if(!securityGroupIds.length){
-  alert("Please Select Security Group");
-  return false;
-}
+                var $instanceOsoptionsSelected = $('#instanceOS').find('option:selected');
+                console.log($('#instanceOS').val());
+                console.log($instanceOsoptionsSelected);
 
-}
-if (!reqBody.name) {
- alert("Please enter a blueprint name");
- return false;
- $('#blueprintNameInput').focus();
+                reqBody.instanceOS = $instanceOsoptionsSelected.attr('data-instanceOS');
+                reqBody.instanceAmiid = $instanceOsoptionsSelected.attr('data-amiid');
+                reqBody.instanceUsername = $instanceOsoptionsSelected.attr('data-amiid-username');
+                // reqBody.instanceOS = $('#instanceOS').val();
+                reqBody.templateId = $('.productdiv2.role-Selected').attr('data-templateId');
+                reqBody.templateType = $('.productdiv2.role-Selected').attr('data-templateType');
+                reqBody.templateComponents = $('.productdiv2.role-Selected').attr('data-templateComponent').split(',');
 
-}
-if (!reqBody.bgId || reqBody.bgId === 'choose') {
- alert("Please choose a business group");
- return false;
-}
-if (!reqBody.projectId || reqBody.projectId === 'choose') {
- alert("Please choose a project");
- return false;
-}
-/*
-if (!reqBody.envId || reqBody.envId === 'choose') {
- alert("Please choose an environment");
- return false;
-}*/
-$('#userListSelect').find('option').attr('selected','selected');
-reqBody.users = $('#userListSelect').val();
+                //    reqBody.dockercontainerpathstitle = $('.productdiv2.role-Selected').attr('dockercontainerpathstitle');
+                reqBody.dockercontainerpaths = $('#dockerrepoListInput :selected').attr('repopath'); //$('.productdiv2.role-Selected').attr('dockercontainerpaths');
+                reqBody.dockerrepotags = $('.productdiv2.role-Selected').attr('dockerrepotags');
+                reqBody.dockerimagename = $('#dockerrepoListInput').val();
+                reqBody.dockerlaunchparameters = $('#dockerlaunchparameters').val();
+                reqBody.dockerreponame = $('.productdiv2.role-Selected').attr('dockerreponame');
+                //alert(reqBody.dockerreponame);
+                reqBody.iconpath = $('.productdiv2.role-Selected').find('img[src*="__templatesicon__"]').first().attr('src');
+                reqBody.orgId = $('#orgnameSelect').val();
+                reqBody.bgId = $('#bgListInput').val();
+                reqBody.projectId = $('#projectListInput').val();
+                //reqBody.envId = $('#envList').val();
+                var imageIdentifier = $('#imageId').val();
+                var imageId = $('#imageId').find('option:selected').attr('_id');
+                var securityGroupIds = getSecurityCheckedList();
+                var providerId = $('#providerId').val();
+                var keyPairId = $('#keypairId').val();
+                var instanceType = $('#instancesize').val();
+                var vpcId = $('#vpcId').val();
+                var subnetId = $('#subnetId').val();
+                var region = $('#region').val();
+                // var instanceOS=$('#instanceOS').data('instanceOS')
 
-if (!reqBody.users) {
- alert("Please choose users");
- return false;
-}
-//Checking for docker blueprint images
-if ($('.productdiv2.role-Selected').first().attr('templatetype') == "Docker" && $('#dockerimageemptytr').length > 0) {
-    //no rows found add empty message
-    alert("Please add atleast one image");
-    return false;
-}
-	//alert(JSON.stringify(reqBody));
-	var appUrls = []; 
-	var $appUrlTableBody = $('#appUrlTable tbody');
-	var $trs = $appUrlTableBody.find('tr');
-	//alert($trs.length);
-	$trs.each(function(e){
-   var $this = $(this);
-   appUrls.push($this.data('appUrlData'));
- });	
-	reqBody.appUrls = appUrls;
-	
-	$('.blueprintMsgContainer').hide();
-	
-if(($('.role-Selected').data('templatetype')).toLowerCase()!="docker"){
-$.post('/organizations/'+reqBody.orgId+'/businessgroups/'+reqBody.bgId+'/projects/' + reqBody.projectId +'/blueprints', {
-   blueprintData: reqBody
- }, function(data) {
-   console.log(data);
-   $('.blueprintSaveSuccess').show();
-   var wizard = $wizard.data('bootstrapWizard');
-   wizard.disablePreviouBtn();
- }).error(function(xhr){
-   $('.blueprintSaveFail').find('h3').first().html(xhr.responseText);
-   $('.blueprintSaveFail').show();
- });
- console.log('final', reqBody);
+                // reqBody.providerId=providerId;
+                reqBody.keyPairId = keyPairId;
+                reqBody.securityGroupIds = securityGroupIds;
+                reqBody.instanceType = instanceType;
+                reqBody.instanceAmiid = imageIdentifier;
+                reqBody.instanceUsername = 'root';
+                reqBody.vpcId = vpcId;
+                reqBody.subnetId = subnetId;
+                reqBody.imageId = imageId;
+                reqBody.providerId = providerId;
+                //alert(reqBody.providerId);
+                reqBody.name = $('#blueprintNameInput').val();
+                if (($('.role-Selected').data('templatetype')).toLowerCase() != "docker") {
+ 
 
-}else{
-$.post('/organizations/'+reqBody.orgId+'/businessgroups/'+reqBody.bgId+'/projects/' + reqBody.projectId + '/blueprints/docker', {
-   blueprintData: reqBody
- }, function(data) {
-   console.log(data);
-   $('.blueprintSaveSuccess').show();
-   var wizard = $wizard.data('bootstrapWizard');
-   wizard.disablePreviouBtn();
- }).error(function(xhr){
-   $('.blueprintSaveFail').find('h3').first().html(xhr.responseText);
-   $('.blueprintSaveFail').show();
- });
- console.log('final', reqBody);
-}
-	
+                    
 
-//}	else{
-/*
-		$.post('/organizations/'+reqBody.orgId+'/businessgroups/'+reqBody.bgId+'/projects/' + reqBody.projectId + '/environments/' + reqBody.envId+'/blueprints' , {
+                }
+                
+                
+                $('#userListSelect').find('option').attr('selected', 'selected');
+                reqBody.users = $('#userListSelect').val();
+
+                if (!reqBody.users) {
+                    alert("Please choose users");
+                    return false;
+                }
+                //Checking for docker blueprint images
+                if ($('.productdiv2.role-Selected').first().attr('templatetype') == "Docker" && $('#dockerimageemptytr').length > 0) {
+                    //no rows found add empty message
+                    alert("Please add atleast one image");
+                    return false;
+                }
+                //alert(JSON.stringify(reqBody));
+                var appUrls = [];
+                var $appUrlTableBody = $('#appUrlTable tbody');
+                var $trs = $appUrlTableBody.find('tr');
+                //alert($trs.length);
+                $trs.each(function(e) {
+                    var $this = $(this);
+                    appUrls.push($this.data('appUrlData'));
+                });
+                reqBody.appUrls = appUrls;
+
+                $('.blueprintMsgContainer').hide();
+
+                if (($('.role-Selected').data('templatetype')).toLowerCase() != "docker") {
+                    $.post('/organizations/' + reqBody.orgId + '/businessgroups/' + reqBody.bgId + '/projects/' + reqBody.projectId + '/blueprints', {
+                        blueprintData: reqBody
+                    }, function(data) {
+                        console.log(data);
+                        $('.blueprintSaveSuccess').show();
+                        var wizard = $wizard.data('bootstrapWizard');
+                        wizard.disablePreviouBtn();
+                    }).error(function(xhr) {
+                        $('.blueprintSaveFail').find('h3').first().html(xhr.responseText);
+                        $('.blueprintSaveFail').show();
+                    });
+                    console.log('final', reqBody);
+
+                } else {
+                    $.post('/organizations/' + reqBody.orgId + '/businessgroups/' + reqBody.bgId + '/projects/' + reqBody.projectId + '/blueprints/docker', {
+                        blueprintData: reqBody
+                    }, function(data) {
+                        console.log(data);
+                        $('.blueprintSaveSuccess').show();
+                        var wizard = $wizard.data('bootstrapWizard');
+                        wizard.disablePreviouBtn();
+                    }).error(function(xhr) {
+                        $('.blueprintSaveFail').find('h3').first().html(xhr.responseText);
+                        $('.blueprintSaveFail').show();
+                    });
+                    console.log('final', reqBody);
+                }
+
+
+                //} else{
+                /*
+        $.post('/organizations/'+reqBody.orgId+'/businessgroups/'+reqBody.bgId+'/projects/' + reqBody.projectId + '/environments/' + reqBody.envId+'/blueprints' , {
    blueprintData: reqBody
  }, function(data) {
    console.log(data);
@@ -2670,9 +2488,8 @@ $.post('/organizations/'+reqBody.orgId+'/businessgroups/'+reqBody.bgId+'/project
  console.log('final', reqBody);
 
 }*/
-}
-}
-
+            }
+        }
 
 },
 'onPrevious': function(tab, navigation, index) {
