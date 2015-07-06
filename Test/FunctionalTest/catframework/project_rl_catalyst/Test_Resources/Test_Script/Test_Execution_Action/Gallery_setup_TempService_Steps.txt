@@ -51,6 +51,7 @@ Validate the No Organization for Template Type
     Clicks on New Template Type Button
     Enters the Design Template name
     Chooses Template type Icon
+    Select type of the template
     Clicks on Template Save Button
 
 Organization not selected ErrorMessage
@@ -63,6 +64,7 @@ Validate the 15chr Template Typee Name
     Enters the 15Chr Template type name
     Chooses Template type Icon
     Select Created organization
+    Select type of the template
     Clicks on Template Save Button
 
 
@@ -88,6 +90,7 @@ Validate the Empty Template Type Name
     Clicks on New Template Type Button
     Chooses Template type Icon
     Select Created organization
+    Select type of the template
     Clicks on Template Save Button
 
 Tempalte Type Name left Empty
@@ -106,6 +109,7 @@ Catalyst User New Design Template Type
     Enters the Design Template name
     Chooses Template type Icon
     Select Created organization
+    Select type of the template
     Clicks on Template Save Button
     
 Validate the Edit Template name
@@ -136,7 +140,10 @@ Vaildate the Empty Template Name
 Enters the 15Chr Template type name
     Input Text    id=templatetypename    ${Vaild15ChrTempName}
 
-
+Select type of the template
+    Click Element    xpath=.//*[@id='s2id_templatetype']/a/span[1]
+    Input Text    xpath=.//*[@id='select2-drop']/div/input    ${Template Type}
+    Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
 
 
 Clicks on Templat type Cancel Button
