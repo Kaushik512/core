@@ -297,6 +297,12 @@ $(document).ready(function(e) {
                 $('.nodeListContainer').addClass('hidden');
                 $('.dataBagTable').removeClass('hidden');
             }
+        }).fail(function(jxhr){
+          var msg = "Server Behaved Unexpectedly";
+          if(jxhr.responseJSON && jxhr.responseJSON.message) {
+             msg = jxhr.responseJSON.message;
+          }
+          bootbox.alert(msg);
         });
     };
 
@@ -347,8 +353,12 @@ $(document).ready(function(e) {
                             $('#dbNameTable tbody tr:first').trigger('click');
 
                         },
-                        fail: function() {
-                            alert("Unable to delete URL please try again later");
+                        fail: function(jxhr) {
+                            var msg = "Unable to delete URL please try again later";
+                            if (jxhr.responseJSON && jxhr.responseJSON.message) {
+                                msg = jxhr.responseJSON.message;
+                            }
+                            bootbox.alert(msg);
                         }
                     });
                 }
@@ -404,7 +414,7 @@ $(document).ready(function(e) {
         var listItems = '../chef/servers/' + urlParams.id + '/databag/' + dataBagName + '/item/list';
         $.get(listItems, function(data) {
 
-           
+
             console.log(typeof data);
             if (data.length > 0) {
                 $.each(data, function(k) {
@@ -417,12 +427,19 @@ $(document).ready(function(e) {
                 });
                 $('#listNameTable tbody tr:first').trigger('click');
             } else {
-                $('#listNameTable').data('loading',false);
+                $('#listNameTable').data('loading', false);
                 $('.spinner').addClass('hidden');
                 $('.tableForList').show().data('dataBagName', dataBagName);
             }
-        }).fail(function(){
-           $('#listNameTable').data('loading',false);
+        }).fail(function(jxhr) {
+            $('#listNameTable').data('loading', false);
+            var msg = "Server Behaved Unexpectedly.";
+            if (jxhr.responseJSON && jxhr.responseJSON.message) {
+                msg = jxhr.responseJSON.message;
+            }
+            bootbox.alert(msg);
+
+            
         });
     };
 
@@ -459,13 +476,22 @@ $(document).ready(function(e) {
                 createDataBagTable(reqBodyName.name).click();
 
             },
-            error: function(jqxhr) {
-                bootbox.alert(jqxhr.responseText);
+            error: function(jxhr) {
+                var msg = "Server Behaved Unexpectedly.";
+                if (jxhr.responseJSON && jxhr.responseJSON.message) {
+                    msg = jxhr.responseJSON.message;
+                }
+                bootbox.alert(msg);
                 $('#saveSpinner').addClass('hidden');
                 $('#saveBTN').removeAttr('disabled');
             },
-            failure: function(data) {
-                bootbox.alert(data.responseText);
+            failure: function(jxhr) {
+                var msg = "Server Behaved Unexpectedly.";
+                if (jxhr.responseJSON && jxhr.responseJSON.message) {
+                    msg = jxhr.responseJSON.message;
+                }
+                bootbox.alert(msg);
+                
                 $('#saveSpinner').addClass('hidden');
                 $('#saveBTN').removeAttr('disabled');
             }
@@ -502,8 +528,8 @@ $(document).ready(function(e) {
               $('#listNameTable').data('loading',true);
             $.get('../chef/servers/' + urlParams.id + '/databag/' + dataBagName + '/item/' + itemId + '/find', function(data) {
                 // alert('hello');
-                 $('#listNameTable').data('loading',false);
-                $('#listNameTable').data('loadingItem',false);
+                $('#listNameTable').data('loading', false);
+                $('#listNameTable').data('loadingItem', false);
                 console.log(data);
                 var res = JSON.stringify(data, null, '\t');
                 $('.spinnerList').addClass('hidden');
@@ -511,9 +537,15 @@ $(document).ready(function(e) {
                 $('#listTable thead').find('tr.rowCustomStyle td').html(itemId);
                 //$('#listTable tbody').find('tr')
                 $('#jsonListName').val(res);
-            }).fail(function(){
-                $('#listNameTable').data('loadingItem',false);
-               $('#listNameTable').data('loading',false);
+            }).fail(function(jxhr) {
+                $('#listNameTable').data('loadingItem', false);
+                $('#listNameTable').data('loading', false);
+                var msg = "Server Behaved Unexpectedly.";
+                if (jxhr.responseJSON && jxhr.responseJSON.message) {
+                    msg = jxhr.responseJSON.message;
+                }
+                bootbox.alert(msg);
+                
             });
         });
         
@@ -543,6 +575,13 @@ $(document).ready(function(e) {
 
                 var res = JSON.stringify(data, null, '\t');
                 $('#instanceListName').val(res);
+            }).fail(function(jxhr){
+                var msg = "Server Behaved Unexpectedly.";
+                if (jxhr.responseJSON && jxhr.responseJSON.message) {
+                    msg = jxhr.responseJSON.message;
+                }
+                bootbox.alert(msg);
+
             });
             return false;
         });
@@ -566,8 +605,12 @@ $(document).ready(function(e) {
                             $itemDatatable.row($trNew).remove().draw(false);
                             $('#listNameTable tbody tr:first').trigger('click');
                         },
-                        fail: function() {
-                            alert("Unable to delete URL please try again later");
+                        error: function(jxhr) {
+                            var msg = "Unable to delete URL please try again later";
+                            if (jxhr.responseJSON && jxhr.responseJSON.message) {
+                                msg = jxhr.responseJSON.message;
+                            }
+                            bootbox.alert(msg);
                         }
                     });
                 }
@@ -655,12 +698,21 @@ $(document).ready(function(e) {
                 }
             },
             error: function(jqxhr) {
-                bootbox.alert(jqxhr.responseText);
+                var msg = "Unable to delete URL please try again later";
+                if (jxhr.responseJSON && jxhr.responseJSON.message) {
+                    msg = jxhr.responseJSON.message;
+                }
+                bootbox.alert(msg);
                 $('#saveItemSpinner').addClass('hidden');
                 $('#saveBTNList').removeAttr('disabled');
             },
             failure: function(data) {
-                bootbox.alert(data.responseText);
+                var msg = "Unable to delete URL please try again later";
+                if (jxhr.responseJSON && jxhr.responseJSON.message) {
+                    msg = jxhr.responseJSON.message;
+                }
+                bootbox.alert(msg);
+
                 $('#saveItemSpinner').addClass('hidden');
                 //$('#saveBTNList').removeAttr('disabled');
             }
