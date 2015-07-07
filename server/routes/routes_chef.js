@@ -425,6 +425,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
                                         if (node.automatic.platform === 'windows') {
                                             openport = 5985;
                                         }
+                                        logger.debug('checking port for node with ip : '+nodeIp);
                                         waitForPort(nodeIp, openport, function(err) {
                                             if (err) {
                                                 console.log(err);
