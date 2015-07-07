@@ -51,6 +51,7 @@ Validate the No Organization for Template Type
     Clicks on New Template Type Button
     Enters the Design Template name
     Chooses Template type Icon
+    Select type of the template
     Clicks on Template Save Button
 
 Organization not selected ErrorMessage
@@ -63,6 +64,7 @@ Validate the 15chr Template Typee Name
     Enters the 15Chr Template type name
     Chooses Template type Icon
     Select Created organization
+    Select type of the template
     Clicks on Template Save Button
 
 
@@ -88,6 +90,7 @@ Validate the Empty Template Type Name
     Clicks on New Template Type Button
     Chooses Template type Icon
     Select Created organization
+    Select type of the template
     Clicks on Template Save Button
 
 Tempalte Type Name left Empty
@@ -106,6 +109,7 @@ Catalyst User New Design Template Type
     Enters the Design Template name
     Chooses Template type Icon
     Select Created organization
+    Select type of the template
     Clicks on Template Save Button
     
 Validate the Edit Template name
@@ -136,7 +140,10 @@ Vaildate the Empty Template Name
 Enters the 15Chr Template type name
     Input Text    id=templatetypename    ${Vaild15ChrTempName}
 
-
+Select type of the template
+    Click Element    xpath=.//*[@id='s2id_templatetype']/a/span[1]
+    Input Text    xpath=.//*[@id='select2-drop']/div/input    ${Template Type}
+    Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
 
 
 Clicks on Templat type Cancel Button
@@ -168,7 +175,7 @@ Enters the New Template Name
     Input Text    id=templatename    ${templatename}
 
 Clicks on Edit Button of Temp Created
-    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()='Apac']/../td[6]/div/a
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${TEMP NME}']/../td[6]/div/a
     Sleep    2s
 
 Template Name left empty
@@ -227,7 +234,7 @@ Clicks on New Button
 
 Enters Template Name
     Wait Until Keyword Succeeds    1 minute     1 seconds    Wait Until Element Is Visible    id=templatename
-    Input Text    id=templatename    Apac
+    Input Text    id=templatename    ${TEMP NME}
 
 
 Chooses Icon
@@ -237,6 +244,7 @@ Chooses Icon
 
 Chooses Template Type
     Click Element    xpath=.//*[@id='s2id_templatetypename']/a
+    Sleep    2s
     Input Text    xpath=.//*[@id='select2-drop']/div/input    ${TEMPLATE TYPENAME}
     Sleep    1s
     Click Element    xpath=.//*[@id='select2-drop']/ul/li/div      #App FactoryT
@@ -253,12 +261,12 @@ Select Chef Server
 Select CookBooks
     Sleep    1s
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='templatescookbooks']/div/div[1]/div[1]/label[3]
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[text()='apache2']
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[text()='${ADD}']
     #Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    id=btnaddToRunlist
 
 Select New CookBooks for Template
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='templatescookbooks']/div/div[1]/div[1]/label[3]
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[text()='git']
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[text()='${CookBkName}']
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    id=btnaddToRunlist
 
 
@@ -377,7 +385,7 @@ Vaildate the 15Character Service Name
     Clicks on SerSave Button
 
 Clicks on Edit Button of Service
-    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()='MongoDB']/../td[5]/div/a
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${SERVICE NAME}']/../td[5]/div/a
 
 
 
@@ -448,7 +456,7 @@ Clicks on SNew Button
 
 Enters Service Name
     Wait Until Keyword Succeeds    1 minute     1 seconds    Wait Until Element Is Visible    id=servicename
-    Input Text    id=servicename    MongoDB
+    Input Text    id=servicename    ${SERVICE NAME}
 
 
 Choose Service Command Type

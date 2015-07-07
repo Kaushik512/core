@@ -1425,6 +1425,37 @@ var MasterUtil = function(){
 
         });
     }
+
+    var getPermissionForCategory = function(category, permissionto, permissionset) {
+        var perms = [];
+        if (permissionset) {
+            for (var i = 0; i < permissionset.length; i++) {
+                var obj = permissionset[i].permissions;
+                for (var j = 0; j < obj.length; j++) {
+                    if (obj[j].category == category) {
+                        var acc = obj[j].access.toString().split(',');
+                        for (var ac in acc) {
+                            if (perms.indexOf(acc[ac]) < 0)
+                                perms.push(acc[ac]);
+                        }
+
+                    }
+                }
+            }
+            if (perms.indexOf(permissionto) >= 0) {
+                return (true);
+            } else
+                return (false);
+        } else {
+            return (false);
+        }
+    };
+
+    this.hasPermission = function(category, permissionto, sessionUser, callback) {
+        var retVal = '';
+        retVal = getPermissionForCategory(category, permissionto, sessionUser.permissionset);
+        callback(null, retVal);
+    };
 }
 
 

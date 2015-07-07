@@ -219,7 +219,7 @@ Clicks on Config Management menu
     Click Element    xpath=//a[contains(text(),'Config Management')]
     
 Clicks on New button to Create New Config Management
-    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       link=New
+        Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       link=New
     Click Element    link=New
 
 Enters config management name
@@ -227,7 +227,7 @@ Enters config management name
     Input Text     id=configname      ${CONFIG MANAGEMENT NAME}
 
 Enters config management user name
-    Wait Until Keyword Succeeds    1 minute     1 seconds     Input Text     id=loginname      pcjoshi9
+    Wait Until Keyword Succeeds    1 minute     1 seconds     Input Text     id=loginname      ${CONFIG MANAGEMENT USER NAME}
 
 Select organization for config management
     Select From List     id=orgname      ${ORGANIZATION NAME}
@@ -250,7 +250,8 @@ Upload Validator Knife File
    
 
 Clicks on Save button to save the Environment detail
-    Click Element    xpath=//button[@class='btn btn-primary btn-mini'][1]     #Devops Config Mgmt Ends
+    Click Element    xpath=//button[@class='btn btn-primary btn-mini'][1]   
+    Sleep    2s   
 
 
 #Clicks on LogOut link
@@ -264,8 +265,8 @@ Validate the Unique Configuration Name                       #Unique Devops Conf
     Enters config management Unique name    ${config}
 
 
-Enters config user name
-    Input Text    id=loginname    pcjoshi9
+#Enters config user name
+    #Input Text    id=loginname    pcjoshi9
 
 Enters config management Unique name
     [Arguments]    ${config}

@@ -252,6 +252,20 @@ if (!$.fn.dataTable.isDataTable('#listNameTable')) {
 
 $(document).ready(function(e) {
 
+    var hasCreateDataBagPermission = false;
+    if (haspermission('databag', 'create')) {
+        hasCreateDataBagPermission = true;
+    }
+    if (haspermission('databag', 'modify')) {
+        hasCreateDataBagPermission = true;
+    }
+    if (haspermission('databag', 'delete')) {
+        hasCreateDataBagPermission = true;
+    }
+    if (!hasCreateDataBagPermission) {
+        $('#modalForDB').addClass('hidden');
+    }
+
     var urlParams = {};
     (window.onpopstate = function() {
         var url = window.location.href;

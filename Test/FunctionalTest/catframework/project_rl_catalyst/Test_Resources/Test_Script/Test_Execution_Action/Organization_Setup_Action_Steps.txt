@@ -317,8 +317,8 @@ Verfiy that EditedOrganization is created
 
 Verfiy that EditedOrganizationdomain is created
     [Arguments]    ${OrganizationDomainMsg}
-    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       xpath=.//*[@id='envtable']/tbody/tr/td[text()="https://www.relevancelab.com"]
-    Element Should Contain    xpath=.//*[@id='envtable']/tbody/tr/td[text()="https://www.relevancelab.com"]    ${OrganizationDomainMsg} 
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       xpath=.//*[@id='envtable']/tbody/tr/td[text()="http://www.relevancelab.com"]
+    Element Should Contain    xpath=.//*[@id='envtable']/tbody/tr/td[text()="http://www.relevancelab.com"]    ${OrganizationDomainMsg} 
 
 #Organization ends
 
@@ -605,8 +605,8 @@ Create New Projects
      Project name with special characters  ${VaildateSpecialChrErrMsg}
      Validate the no org selected in Project  
      Organization,Projects not Selected  ${VaildNorgProErrMsg}
-     Vaildate the No Teams Selected
-     No Selection of Team in Project  ${VaildNoTeamErrMsg}
+     #Vaildate the No Teams Selected
+     #No Selection of Team in Project  ${VaildNoTeamErrMsg}
      Vaildate the Project feilds   ${VaildProjName1}
      Vaildate the Projectrev feilds   ${VaildProjName2}
      Vaildate the Edit Project Name fields  ${VaildEditProject}
@@ -649,7 +649,7 @@ Vaildate the Project feilds
     Enters new Project Description
     Select organization for project
     #Select Business Group
-    Assign Teams for Orgnaization in Projects
+    #Assign Teams for Orgnaization in Projects
     Clicks on Save button to save the Project details
 
 Vaildate the Projectrev feilds
@@ -660,7 +660,7 @@ Vaildate the Projectrev feilds
     Enters new Project Description
     Select organization for project
     #Select Business Groupn
-    Assign Teams for Orgnaization in Projects
+    #Assign Teams for Orgnaization in Projects
     Clicks on Save button to save the Project details     
 
 Vaildate the Edit Project Name fields
