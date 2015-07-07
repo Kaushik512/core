@@ -96,8 +96,9 @@ ${TASK NAME}              Task1
 ${JENKINS SERVER}         Jenkins
 ${JENKINS EDIT}           Jenkins
 ${JOB NAME}               catalyst_Get
-${RECIPE}                  recipe[apt]      
-
+${RECIPE}                  recipe[apt]     
+${RECIPE1}                 recipe[apt]
+${Template Type}           Chef
 ${OPERATING SYSTEM}        Cent OS
 ${CentosInstanceSize}           m1.small
 ${UbuntuInstanceSize}      t2.small      
@@ -136,7 +137,7 @@ ${MAT RUNLIST}             recipe[apt]          #recipe[cron]
 ${MAT RUNLIST1}            recipe[a],recipe[cron]
 ${MAT OS1}                 ubuntu
 ${UBUNTU MEM}              1016256kB
-${UBUNTU REC}              recipe[apt]
+${UBUNTU REC}              recipe[apt],recipe[apt]
 ${TEMPLATE TYPENAME}       CatAutomatn          #AppFactory
 ${random}                  adarsh
 ${ADD}                     apache2              #tomcat-all

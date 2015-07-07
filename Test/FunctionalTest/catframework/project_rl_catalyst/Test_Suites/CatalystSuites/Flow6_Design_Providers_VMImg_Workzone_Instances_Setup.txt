@@ -118,6 +118,6 @@ Catalyst Ubuntu Instance Grid View of Stopped Instance and Restart,SSH,Chef Run,
     [Tags]       Sanity               Smoke
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
-    Catalyst Grid View Start ,Stop ,SSH ,Chef ,Client ,Log Setup
+    Catalyst Grid View Start ,Stop ,SSH ,Chef ,Client ,Log Setup of Ubuntu
     Catalyst Logout                      
     [Teardown]     Close Browser 
