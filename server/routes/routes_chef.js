@@ -844,7 +844,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
                     });
                 });
             } else {
-                res.send(403, "You don't have permission to create DataBag.");
+                res.send(403, {"message":"You do't have permission to create DataBag."});
                 return;
             }
         });
@@ -923,7 +923,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
                     });
                 });
             } else {
-                res.send(403, "You don't have permission to Delete DataBag.");
+                res.send(403, {"message":"You don't have permission to Delete DataBag."});
                 return;
             }
         });
@@ -999,7 +999,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
                     });
                 });
             } else {
-                res.send(403, "You don't have permission to create DataBagItem.");
+                res.send(403, {"message":"You don't have permission to create DataBagItem."});
                 return;
             }
         });
@@ -1107,7 +1107,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
                     });
                 });
             } else {
-                res.send(403, "You don't have permission to Update DataBagItem.");
+                res.send(403, {"message":"You don't have permission to Update DataBagItem."});
                 return;
             }
         });
@@ -1149,7 +1149,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
                     });
                 });
             } else {
-                res.send(403, "You don't have permission to delete DataBagItem.");
+                res.send(403, {"message":"You don't have permission to delete DataBagItem."});
                 return;
             }
         });
