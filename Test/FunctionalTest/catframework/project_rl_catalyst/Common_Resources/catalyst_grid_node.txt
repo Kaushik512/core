@@ -49,7 +49,7 @@ Clicks on Login button
     Click Element    xpath=.//*[@id='login-form']/footer/button
 
 Browser is opened to login catalyst
-    Open Browser    ${ENVIRONMENTSERVER}    ${BROWSER TYPE}
+    Open Browser    ${ENVIRONMENTSERVER}    ${BROWSERTYPE}
 #    Open Browser in Grid Node    ${ENVIRONMENTSERVER}
     Set Selenium Speed    ${DELAY}
 #    Set Selenium Timeout    ${DELAY SECONDS}

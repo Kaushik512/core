@@ -53,6 +53,37 @@ Catalyst Creation of Users and Assign the Teams created
     Clicks on USave Button
 
 
+Catalyst assigning of the projects to the default Teams
+    Clicks on Settings
+    Clicks on Users Setup
+    Clicks on Teams
+    Sleep    3s
+    Clicks Edit Button of the Relevance_lab_Admin and Assign Project
+    Clicks on TSave button
+    Sleep    4s
+    Clicks Edit Button of the Relevance_lab_DEV and Assign Project 
+    Clicks on TSave button
+
+
+
+Clicks Edit Button of the Relevance_lab_Admin and Assign Project
+    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${ORGANIZATION NAME}_Admins']/../td[5]/div/a
+    Sleep    1s
+    Click Element    xpath=.//*[@id='projectname']/label[text()='${Proj1}']/i
+    Sleep    1s
+    Click Element    xpath=.//*[@id='projectname']/label[text()='${Proj2}']/i
+
+Clicks Edit Button of the Relevance_lab_DEV and Assign Project
+    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${ORGANIZATION NAME}_DEV']/../td[5]/div/a
+    Sleep    1s
+    Click Element    xpath=.//*[@id='projectname']/label[text()='${Proj1}']/i
+    Sleep    1s
+    Click Element    xpath=.//*[@id='projectname']/label[text()='${Proj2}']/i   
+
+
+
+
+
 Test Validation of Creation of New users
     Vaildate the Empty User Name 
     Username field left empty  ${VaildateEmptyUserNameErrMsg}

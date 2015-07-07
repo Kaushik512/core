@@ -32,6 +32,8 @@ var ChefClientExecution = require('../model/classes/instance/chefClientExecution
 var appConfig = require('../config/app_config.js');
 var Cryptography = require('../lib/utils/cryptography');
 
+
+var Task = require('../model/classes/tasks/tasks.js');
 var utils = require('../model/classes/utils/utils.js');
 var SCPClient = require('../lib/utils/scp');
 var shellEscape = require('shell-escape');
@@ -102,6 +104,69 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
     app.delete('/instances/:instanceId', function(req, res) {
         logger.debug("Enter delete() for /instances/%s", req.params.instanceId);
+        instancesDao.getInstanceById(req.params.instanceId, function(err, instances) {
+            if (err) {
+                logger.debug("Failed to fetch Instance ", err);
+                res.send(500, errorResponses.db.error);
+                return;
+            }
+            if (instances.length) {
+                var instance = instances[0];
+                Task.getTasksByNodeIds([req.params.instanceId], function(err, tasks) {
+                    if (err) {
+                        logger.debug("Failed to fetch tasks by node id ", err);
+                        res.send(500, errorResponses.db.error);
+                        return;
+                    }
+                    console.log('length ==>', tasks.length);
+                    if (tasks.length) {
+                        res.send(400, {
+                            message: "Instance is associated with task"
+                        });
+                        return;
+
+                    }
+
+                    if (req.query.chefRemove && req.query.chefRemove === 'true') {
+                        configmgmtDao.getChefServerDetails(instance.chef.serverId, function(err, chefDetails) {
+                            if (err) {
+                                logger.debug("Failed to fetch ChefServerDetails ", err);
+                                res.send(500, errorResponses.chef.corruptChefData);
+                                return;
+                            }
+                            var chef = new Chef({
+                                userChefRepoLocation: chefDetails.chefRepoLocation,
+                                chefUserName: chefDetails.loginname,
+                                chefUserPemFile: chefDetails.userpemfile,
+                                chefValidationPemFile: chefDetails.validatorpemfile,
+                                hostedChefUrl: chefDetails.url,
+                            });
+                            chef.deleteNode(instance.chef.chefNodeName, function(err, nodeData) {
+                                if (err) {
+                                    logger.debug("Failed to delete node ", err);
+                                    if (err.chefStatusCode && err.chefStatusCode === 404) {
+                                        removeInstanceFromDb();
+                                    } else {
+                                        res.send(500);
+                                    }
+                                } else {
+                                    removeInstanceFromDb();
+                                    logger.debug("Successfully removed instance from db.");
+                                }
+                            });
+
+                        });
+                    } else {
+                        removeInstanceFromDb();
+                    }
+
+                });
+            } else {
+                res.send(404, {
+                    "message": "Instance does not exist"
+                });
+            }
+        });
 
         function removeInstanceFromDb() {
             instancesDao.removeInstancebyId(req.params.instanceId, function(err, data) {
@@ -114,48 +179,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 res.send(200);
             });
         }
-        if (req.query.chefRemove && req.query.chefRemove === 'true') {
-            instancesDao.getInstanceById(req.params.instanceId, function(err, data) {
-                if (err) {
-                    logger.debug("Failed to fetch Instance ", err);
-                    res.send(500, errorResponses.db.error);
-                    return;
-                }
-                var instance = data[0];
-                configmgmtDao.getChefServerDetails(instance.chef.serverId, function(err, chefDetails) {
-                    if (err) {
-                        logger.debug("Failed to fetch ChefServerDetails ", err);
-                        res.send(500, errorResponses.chef.corruptChefData);
-                        return;
-                    }
-                    var chef = new Chef({
-                        userChefRepoLocation: chefDetails.chefRepoLocation,
-                        chefUserName: chefDetails.loginname,
-                        chefUserPemFile: chefDetails.userpemfile,
-                        chefValidationPemFile: chefDetails.validatorpemfile,
-                        hostedChefUrl: chefDetails.url,
-                    });
-                    chef.deleteNode(instance.chef.chefNodeName, function(err, nodeData) {
-                        if (err) {
-                            logger.debug("Failed to delete node ", err);
-                            if (err.chefStatusCode && err.chefStatusCode === 404) {
-                                removeInstanceFromDb();
-                            } else {
-                                res.send(500);
-                            }
-                        } else {
-                            removeInstanceFromDb();
-                            logger.debug("Successfully removed instance from db.");
-                        }
-                    });
-
-                });
-            });
-        } else {
-            removeInstanceFromDb();
-            logger.debug("Successfully removed instance from db.");
-        }
-        logger.debug("Exit delete() for /instances/%s", req.params.instanceId);
     });
 
     app.post('/instances/:instanceId/appUrl', function(req, res) { //function(instanceId, ipaddress, callback)
@@ -211,7 +234,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             //     message: "Invalid Task Id"
             // });
             // return;
-            
+
             req.body.taskIds = [];
         }
         instancesDao.addTaskIds(req.params.instanceId, req.body.taskIds, function(err, updateCount) {
@@ -631,24 +654,22 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             var startparams = '';
             var execparam = '';
             var containername = '';
-            
+
             //eliminating any exec portion.
             var _execp = runparams.split('-exec');
-            if(_execp.length > 0 && typeof _execp != 'undefined'){
+            if (_execp.length > 0 && typeof _execp != 'undefined') {
                 execparam = _execp[1];
                 runparams = _execp[0];
 
             }
-            if(runparams.indexOf('-c') > 0)
-            {
+            if (runparams.indexOf('-c') > 0) {
                 var _startparm = runparams.split('-c');
-                if(_startparm.length > 0  && typeof _startparm[1] != 'undefined')
-                {
+                if (_startparm.length > 0 && typeof _startparm[1] != 'undefined') {
                     startparams = _startparm[1];
                     runparams = _startparm[0];
                 }
             }
-            
+
             logger.debug('1 runparams: ' + runparams);
 
             var params = runparams.split(' -');
@@ -679,8 +700,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             }
             logger.debug('execparam: ' + execparam);
             logger.debug('runparams: ' + runparams);
-             logger.debug('preparams: ' + preparams);
-              logger.debug('startparams: ' + startparams);
+            logger.debug('preparams: ' + preparams);
+            logger.debug('startparams: ' + startparams);
 
 
             launchparams[0] = preparams;

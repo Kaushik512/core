@@ -224,6 +224,7 @@ var d4dMastersDesignTemplateTypes = new mongoose.Schema(
 	designtemplateicon_filename: {type:String,trim:true},
 	orgname: {type:[String],required:false, trim:true},
 	orgname_rowid: {type:[String], trim:true},
+	templatetype: {type:String,trim:true},
 	rowid:{type:String,required:true, trim:true}},{collection:'d4dmastersnew'}
 );
 var d4dModelMastersDesignTemplateTypes = mongoose.model('d4dModelMastersDesignTemplateTypes',d4dMastersDesignTemplateTypes,'d4dmastersnew');

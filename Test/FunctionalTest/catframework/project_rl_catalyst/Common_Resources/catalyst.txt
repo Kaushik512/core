@@ -12,7 +12,7 @@ Resource           ${CATALYST TEST DATA}/${TESTDATA}
 
 *** Variables ***
 ${SERVER}                   ${ENVIRONMENTSERVER}
-${BROWSER}                  ${BROWSER TYPE}
+${BROWSER}                  ${BROWSERTYPE}
 ${TESTDATA}                ${ENV}.txt
 #${DELAY}             4
 ${DELAY}               2             #15
