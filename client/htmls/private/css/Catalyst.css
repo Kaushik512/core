@@ -7882,10 +7882,10 @@ tr.selectedOne td a{
     font-size: 14px;
 }
 .bootstrapSuccess{
-    margin-top: 150px;
+    margin-top: 130px;
     float:left;
-    margin-left: 300px;
-    width:416px;
+    margin-left: 285px;
+    width:auto;
     color:black!important;
     border-color: #40baf1!important;
     background-color: #fff!important;

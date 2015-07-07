@@ -2999,7 +2999,7 @@ function enableUniqueCheckingForInputs(id) {
                     uni.html('This is already registered. Try another?');
                     $(this).focus();
                 } else {
-                  //  uni.css("color", "green");
+                    uni.css("color", "green");
                     uni.html('available');
                    // uni.append('<img style="width:18px;height:18px" src="img/correct.png" alt="success"/>');
                 }
@@ -3016,7 +3016,7 @@ function enableUniqueCheckingForInputs(id) {
                     uni.html('This Chef Server is already associated with an Organisation in Catalyst.');
                     $(this).focus();
                 } else {
-                 //   uni.css("color", "green");
+                    uni.css("color", "green");
                     uni.html('available');
                    // uni.append('<img style="width:18px;height:18px" src="img/correct.png" alt="success"/>');
                 }
