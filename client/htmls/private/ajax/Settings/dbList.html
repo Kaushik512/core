@@ -711,7 +711,7 @@ $(document).ready(function(e) {
                     $('#saveBTNList').removeAttr('disabled');
                 }
             },
-            error: function(jqxhr) {
+            error: function(jxhr) {
                 var msg = "Unable to delete URL please try again later";
                 if (jxhr.responseJSON && jxhr.responseJSON.message) {
                     msg = jxhr.responseJSON.message;
@@ -720,7 +720,7 @@ $(document).ready(function(e) {
                 $('#saveItemSpinner').addClass('hidden');
                 $('#saveBTNList').removeAttr('disabled');
             },
-            failure: function(data) {
+            failure: function(jxhr) {
                 var msg = "Unable to delete URL please try again later";
                 if (jxhr.responseJSON && jxhr.responseJSON.message) {
                     msg = jxhr.responseJSON.message;
