@@ -830,7 +830,7 @@ Checking THe BootStrpa Status
     Sleep    5s
     Clicks on Contreol Panel
     Clicks on Action History
-    ${BOOTSTRAP STATUSS}=    Get Element Attribute    xpath=.//*[@id='tableactionHistory']/tbody/tr/td[2]/img@title
+    ${BOOTSTRAP STATUSS}=    Get Element Attribute    xpath=.//*[@id='tableactionHistory']/tbody/tr/td[2]/img@data-original-title
     Log    ${BOOTSTRAP STATUSS}
     Should Be Equal    ${BOOTSTRAP STATUSS}     ${ACTBOOT2}
 
@@ -850,7 +850,7 @@ Checking THe Ubuntu BootStrpa Status
     Sleep    5s
     Clicks on Contreol Panel
     Clicks on Action History
-    ${BOOTSTAT2}=    Get Element Attribute   xpath=//*[@id='tableactionHistory']/tbody/tr/td[2]/img@title
+    ${BOOTSTAT2}=    Get Element Attribute   xpath=//*[@id='tableactionHistory']/tbody/tr/td[2]/img@data-original-title
     Log    ${BOOTSTAT2}
     Should Be Equal    ${ACTBOOT2}     ${BOOTSTAT2}           #Success
 
@@ -899,7 +899,7 @@ Checking the BChefClient Run Status
     Sleep    5s
     Clicks on Contreol Panel
     Clicks on Action History
-    ${CHEFSUCCESS}=    Get Element Attribute    xpath=.//*[@id='tableactionHistory']/tbody/tr[2]/td[2]/img@title
+    ${CHEFSUCCESS}=    Get Element Attribute    xpath=.//*[@id='tableactionHistory']/tbody/tr[2]/td[2]/img@data-original-title
     Log    ${CHEFSUCCESS}
     Should Be Equal    ${CHEFSUCCESS}     ${SATSSYY}  
 
@@ -913,7 +913,7 @@ Checking the Ubuntu BChefClient Run Status
     Sleep    5s
     Clicks on Contreol Panel
     Clicks on Action History
-    ${CHEFSUCCESS1}=    Get Element Attribute    xpath=.//*[@id='tableactionHistory']/tbody/tr[2]/td[2]/img@title
+    ${CHEFSUCCESS1}=    Get Element Attribute    xpath=.//*[@id='tableactionHistory']/tbody/tr[2]/td[2]/img@data-original-title
     Log    ${CHEFSUCCESS1}
     Should Be Equal    ${CHEFSUCCESS1}     ${SATSSYY}  
 
@@ -924,7 +924,7 @@ Verfiy the Table contains the Status
     Sleep    5s
     Clicks on Contreol Panel
     Clicks on Action History
-    ${BOTTABLE}=    Get Element Attribute   xpath=//*[@id='tableactionHistory']/tbody/tr[4]/td[2]/img@title
+    ${BOTTABLE}=    Get Element Attribute   xpath=//*[@id='tableactionHistory']/tbody/tr[4]/td[2]/img@data-original-title
     Log    ${BOTTABLE}
     Should Be Equal    ${ACTBOOT2}     ${BOTTABLE}  
     Sleep    3s         
@@ -936,7 +936,7 @@ Verfify the status of SSH Shell
     Sleep    5s
     Clicks on Contreol Panel
     Clicks on Action History
-    ${BOOTSTATUS1}=    Get Element Attribute   xpath=//*[@id='tableactionHistory']/tbody/tr[3]/td[2]/img@title
+    ${BOOTSTATUS1}=    Get Element Attribute   xpath=//*[@id='tableactionHistory']/tbody/tr[3]/td[2]/img@data-original-title
     Log    ${BOOTSTATUS1}
     Should Be Equal    ${ACTBOOT2}     ${BOOTSTATUS1}           
     Sleep    2s

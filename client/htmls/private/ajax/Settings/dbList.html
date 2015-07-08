@@ -22,6 +22,7 @@
 
                                   <div class="widget-body">
                                     <div class="nodeListContainer"></div>
+                                    <div class="alert alert-warning dataBagFailure hidden"><img style="width:50px;height:40px" src="img/warning.png" alt="warning"/><span style="margin-left:20px;">The ChefServer credentials are incorrect.</span></div>
                     <div class="widget-main dataBagTable hidden">
                         <div class="col-md-4 table-responsive" style="padding-left:0px; padding-right:0px;">
                           <a href="#modalForDB" data-backdrop="false" data-toggle="modal" style="cursor:pointer;"> <img src="img/add.png" style="float:right;" class="addDB" rel="tooltip" data-placement="top" title="Add New Data Bag"/></a>
@@ -300,12 +301,14 @@ $(document).ready(function(e) {
         $.get(chefServer, function(data) {
             // console.log(data);
             if (data) {
-                //console.log(data);
+                console.log(data);
                 $.each(data, function(k) {
                     $('.nodeListContainer').addClass('hidden');
                     $('.dataBagTable').removeClass('hidden');
                     createDataBagTable(k);
                 });
+                $('.nodeListContainer').addClass('hidden');
+                $('.dataBagTable').removeClass('hidden');
                 $('#dbNameTable tbody tr:first').trigger('click');
             } else {
                 $('.nodeListContainer').addClass('hidden');
@@ -317,6 +320,8 @@ $(document).ready(function(e) {
              msg = jxhr.responseJSON.message;
           }
           bootbox.alert(msg);
+          $('.nodeListContainer').addClass('hidden');
+          $('.dataBagFailure').removeClass('hidden');
         });
     };
 

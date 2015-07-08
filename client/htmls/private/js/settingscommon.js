@@ -2978,12 +2978,14 @@ function enableUniqueCheckingForInputs(id) {
             //alert(typeof uni);
             if (uni.length > 0)
                 uni.html('');
+                //uni.append('<img style="width:18px;height:18px" src="img/correct.png" alt="success"/>');
             else {
                 //alert("in");
                 $(this).closest('div').find('label').first().append('<span id="unique_' + $(this).attr("id") + '" style="color:red"></span>');
                 uni = $('#unique_' + $(this).attr("id"));
             }
             var queryconditionedby = $(this).attr("uniqueconditionedby");
+            var queryconditionedbyURL = $(this).attr("uniqueconditionedbyUrl");
             if (queryconditionedby) {
 
                 // alert(queryconditionedby);
@@ -2993,11 +2995,29 @@ function enableUniqueCheckingForInputs(id) {
                 //alert(getBG != "" && uni.attr("id"));
                 if (getBG != 'Not Found') { //this ensures that its present
                     uni.css("color", "red");
-                    uni.html('Selected is already registered');
+                    uni.html('This is already registered. Try another?');
                     $(this).focus();
                 } else {
                     uni.css("color", "green");
                     uni.html('available');
+                   // uni.append('<img style="width:18px;height:18px" src="img/correct.png" alt="success"/>');
+                }
+            }
+            if (queryconditionedbyURL) {
+
+                // alert(queryconditionedby);
+                var getBG = getRelatedValuesForUniqueCheck(id, queryconditionedbyURL);
+                //alert(getBG);
+                //  alert('getBG !=' + getBG);
+                //alert(getBG != "" && uni.attr("id"));
+                if (getBG != 'Not Found') { //this ensures that its present
+                    uni.css("color", "red");
+                    uni.html('This Chef Server is already associated with an Organisation in Catalyst.');
+                    $(this).focus();
+                } else {
+                    uni.css("color", "green");
+                    uni.html('available');
+                   // uni.append('<img style="width:18px;height:18px" src="img/correct.png" alt="success"/>');
                 }
             }
             $('button[onclick*="saveform"]').removeAttr('disabled');
