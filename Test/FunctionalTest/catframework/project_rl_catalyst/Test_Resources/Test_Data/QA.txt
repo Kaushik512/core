@@ -14,8 +14,6 @@ ${ENVIRONMENTSERVER}         http://52.26.87.125:3001/public/login.html
 
 
 
-
-
 ${ENV}                 QA.txt
 ${VALID USER}             superadmin
 ${VALID PASSWORD}         superadmin@123
@@ -68,6 +66,8 @@ ${CENT OS}            Cent OS
 ${UBUNTU OS}            ubuntu
 ${SUITS}                stopped
 ${UserName}             root
+${RUNLIST}              recipe[apache2]
+
 
 ${PHOENIX COMMERNCE WITHOUT COOKBOOK UBUNTUOS}            Phoenix Commernce without Cookbook UbuntuOS
 ${PHOENIX COMMERCE WITH COOKBOOK UBUNTUOS}          Phoenix Commerce With CookBook ubuntuOS
@@ -144,10 +144,12 @@ ${ADD}                     apache2              #tomcat-all
 ${ACTBOOT1}                 Pending
 ${ACTBOOT2}                 Success
 ${IP Centos}                 52.24.73.49
+${RUN}                       running
 ${AUTHN}                    Pem File 
 ${NAME}                     Bootstrap
 ${DUP MSG}                  An Instance with the same IP already exists.
 ${NAME1}                    Chef-Client-Run
+${NAME2}                    SSH-Shell
 ${TEAM1}                    Rel_Designer
 ${TEAM DESCRPN1}            Designer of Catalyst
 ${TEAM2}                    Rel_Consumer
@@ -161,25 +163,28 @@ ${PASSWD2}                  Consumer
 ${PASSWD11}                 Designer
 ${PASSWD22}                 Consumer 
 ${EDIT_INSTANCE_NAME}       Instance_Centos
-${ERRORMESSAGE}             Please enter instance name
+${ERRORMESSAGE}             Required        #Please enter instance name
 ${MORE INFO}                 SSH Terminal
 ${NO MATCH}                 No matches found
 ${ENVNAME}                  QA
 ${NAMEOFINSTANCE}           Instance_Centos
-${IP Ubuntu}                52.10.75.4
+${IP Ubuntu}                52.10.133.68
 ${IP UBUNTUSERNAME}         ubuntu
 ${EDIT_UBUNTU_INSTANCE_NAME}     Instance_Ubuntu
 ${DESIGNER_NAME}            Designer01
 ${DESIGNER_PASWD}           Designer01
 ${CONSUMER_NAME}            Consumer01
 ${CONSUMER_PASWD}           Consumer01
-${CENTOS NAME}              "Instance_Centos"
-${UBUNTU NAME}              "Instance_Ubuntu"
-${IP ADD UBUNTU}             "52.10.75.4"
-${IP ADD CENTOS}             "52.24.73.49" 
+${CENTOS NAME}              Instance_Centos
+${UBUNTU NAME}              Instance_Ubuntu
+${IP ADD UBUNTU}             52.10.133.68
+${IP ADD CENTOS}             52.24.73.49 
 ${Proj1}                      Catalyst
 ${Proj2}                      Primary_Edu
 ${CookBkName}                 apt
+${UbuntuUser}                 ubuntu
+${MAT OS1}                    ubuntu
+${RUNLIST1}                   recipe[tomcat-all]
 
 
 
