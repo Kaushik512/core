@@ -498,6 +498,31 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
 
     });
+    app.get('/instances/search/:orgid/:bgid/:projid/:envid/:querytext',function(req,res){
+        logger.debug("Enter get() for /instances/search/" + req.params.querytext);
+        //constructing the options object to narrow down search
+        req.params.querytext = req.params.querytext.replace(/\"/g, '\\"');
+        logger.debug('Query:' + req.params.querytext);
+        var options = {
+            search:req.params.querytext
+            // filter:{
+            //     orgId:'\"' + req.params.orgid + '\"',
+            //     envId:'\"' + req.params.envid + '\"',
+            //     bgId:'\"' + req.params.bgid + '\"',
+            //     projectId:'\"' + req.params.projid + '\"'
+            // },
+           // limit: 10000
+        }
+        logger.debug(JSON.stringify(options));
+       // req.params.querytext = '(\"' + req.params.querytext + '\") AND (' + req.params.orgid + ' AND ' + req.params.bgid + ' AND ' + req.params.projid +  ' AND ' + req.params.envid + ')';
+        instancesDao.searchInstances('\"' + req.params.querytext + '\"',function(err,data){
+            if(!err){
+                logger.debug('Received from search');
+                logger.debug(data);
+                res.send(data);
+            }
+        });
+    });
     app.get('/instances/dockerimagepull/:instanceid/:dockerreponame/:imagename/:tagname/:runparams/:startparams', function(req, res) {
 
         logger.debug("Enter get() for /instances/dockerimagepull");
