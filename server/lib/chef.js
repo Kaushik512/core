@@ -642,7 +642,7 @@ var Chef = function(settings) {
             if (!options.password) {
                 options.password = 'Zaq!2wsx'; // temp hack
             }
-            var proc = new Process('knife', ['winrm', options.host, ' "chef-client -o ' + runlist.join() + '"', '-m', '-P' + options.password, '-x' + options.username], processOptions);
+            var proc = new Process('knife', ['winrm', options.host, ' "chef-client -o ' + runlist.join() + '"', '-m', '-P\"' + options.password+'\"', '-x' + options.username], processOptions);
             proc.start();
             //[7:04:22 PM] Ashna Abbas:  knife winrm 54.69.130.187 'chef-client -r recipe[apache2-windows]' -P 'Zaq!2wsx' -xadministrator -m
         }
@@ -671,10 +671,10 @@ var Chef = function(settings) {
             }
         }
         if (!options.password) {
-            options.password = '\"Zaq!2wsx\"'; // temp hack
+            options.password = 'Zaq!2wsx'; // temp hack
         }
         //var proc = new Process('knife', ['winrm', options.host, ' "powershell ' + cmd + ' "', '-m', '-P', options.password, '-x', options.username], processOptions);
-        var proc = new Process('knife', ['winrm', options.host, "\'" + cmd + "\'", '-m', '-P', options.password, '-x', options.username], processOptions);
+        var proc = new Process('knife', ['winrm', options.host, "\'" + cmd + "\'", '-m', '-P\"', options.password+'\"', '-x', options.username], processOptions);
         proc.start();
 
 

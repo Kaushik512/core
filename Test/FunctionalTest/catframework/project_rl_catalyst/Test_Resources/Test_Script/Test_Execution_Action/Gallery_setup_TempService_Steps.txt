@@ -142,7 +142,9 @@ Enters the 15Chr Template type name
 
 Select type of the template
     Click Element    xpath=.//*[@id='s2id_templatetype']/a/span[1]
+    Sleep    3s
     Input Text    xpath=.//*[@id='select2-drop']/div/input    ${Template Type}
+    Sleep    4s
     Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
 
 
@@ -246,7 +248,7 @@ Chooses Template Type
     Click Element    xpath=.//*[@id='s2id_templatetypename']/a
     Sleep    2s
     Input Text    xpath=.//*[@id='select2-drop']/div/input    ${TEMPLATE TYPENAME}
-    Sleep    1s
+    Sleep    2s
     Click Element    xpath=.//*[@id='select2-drop']/ul/li/div      #App FactoryT
     #Click Element    xpath=.//*[@id='select2-drop']/ul/li[2]/div      #DevopsRoles
     #Click Element    xpath=.//*[@id='select2-drop']/ul/li[3]/div      #Docker

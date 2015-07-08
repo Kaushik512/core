@@ -7882,10 +7882,10 @@ tr.selectedOne td a{
     font-size: 14px;
 }
 .bootstrapSuccess{
-    margin-top: 150px;
+    margin-top: 130px;
     float:left;
-    margin-left: 300px;
-    width:416px;
+    margin-left: 285px;
+    width:auto;
     color:black!important;
     border-color: #40baf1!important;
     background-color: #fff!important;
@@ -7896,6 +7896,16 @@ tr.selectedOne td a{
     float:left;
     margin-left: 300px;
     width:444px;
+    color:black!important;
+    border-color: #ebccd1;
+    background-color: #fff!important;
+    font-size: 16px;
+}
+.dataBagFailure{
+    margin-top: 50px;
+    float:left;
+    margin-left: 300px;
+    width:396px;
     color:black!important;
     border-color: #ebccd1;
     background-color: #fff!important;
