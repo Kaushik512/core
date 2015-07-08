@@ -26,12 +26,17 @@
                                           <input name="ctl00$MainContent$orgname" value="" id="loginname" class="form-control" type="text"  cdata="catalyst" unique="true" cat-validation="required,max15,nospecial" uniqueconditionedby="loginname">
                                        </div>
                                        <div class="col-lg-6 col-md-6">
+                                          <label for="">Password:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+  
+                                          <input type="text" name="ctl00$MainContent$orgname" id="password" class="form-control" cdata="catalyst" cat-validation="required,min6">
+                                       </div>
+                                       </div>
+                                       <div class="row" style="margin:0px">
+                                       <div class="col-lg-6 col-md-6" style="margin-top:25px">
                                           <label for="">Email Address:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
   
                                           <input type="text" name="ctl00$MainContent$orgname" value="" id="email" class="form-control" type="email" cdata="catalyst" cat-validation="required,email">
                                        </div>
-                                       </div>
-                                       <div class="row" style="margin:0px">
                                        <div class="col-lg-6 col-md-6" style="margin-top:25px">
                                           <label for="category">Organization:<span style="color:Red;" class="control-label">&nbsp;*</span>
                                           </label>
@@ -41,14 +46,14 @@
                                           </select>
 
                                       </div>
-                                      <div class="col-lg-6 col-md-6 smart-form divldapcheckbox" style="margin-top:25px">
+                                      <!-- <div class="col-lg-6 col-md-6 smart-form divldapcheckbox" style="margin-top:25px">
                                           <label for=""><input type="checkbox" id="chkadduserldap" >&nbsp;<label for="chkadduserldap">Add User to LDAP</label></label>
                                           <label id="msgchkadduserldap" style="display:none;color:red;"></label><br/>
                                           <div id="ldappasswordsection" class="hidden">
                                           Password: <span style="color:Red;" class="control-label">&nbsp;*</span><label id="msgpasswordmatch" style="display:none;color:red;">Passwords entered do not match or left blank</label><input style="padding-left:5px;" name="ctl00$MainContent$orgname" value="" id="userpassword" class="form-control userpass" type="password"><br/>
                                           Confirm Password: <span style="color:Red;" class="control-label">&nbsp;*</span><input style="padding-left:5px;" name="ctl00$MainContent$orgname" value="" id="userpassword1" class="form-control userpass" type="password">
                                         </div>
-                                       </div>
+                                       </div> -->
                                        </div>
                                        <div class="row" style="margin:0px">
                                          <div class="col-lg-6 col-md-6 smart-form" style="margin-top:25px">
@@ -148,7 +153,7 @@
        });
        drawBreadCrumb1();
        enableUniqueCheckingForInputs(7);
-      checkusernameexistsinldap('loginname');
+      //checkusernameexistsinldap('loginname');
       //frezing login name on edit mode.
       if(typeof $('#myForm5').find('button[rowid]').first().attr('rowid') != 'undefined'){
         // $('#loginname').attr('readonly','readonly');
@@ -217,7 +222,7 @@
                     });
                     return false;
                   }
-                 createUserInLdap();
+                // createUserInLdap();
                 }
                 else{
                   if($('#unique_loginname')){

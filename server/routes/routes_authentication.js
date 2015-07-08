@@ -8,6 +8,8 @@ var logger = require('../lib/logger')(module);
 var appConfig = require('../config/app_config');
 var ldapSettings = appConfig.ldap;
 var passport = require('passport');
+var bcrypt = require('bcryptjs');
+var authUtil = require('../lib/utils/authUtil.js');
 
 module.exports.setRoutes = function(app) {
     app.post('/auth/createldapUser', function(req, res) {
@@ -40,23 +42,58 @@ module.exports.setRoutes = function(app) {
             res.send(req.body);
     });
     app.post('/auth/signin', function(req, res, next) {
-        console.log(req.body);
         if (req.body && req.body.username && req.body.pass) {
-            passport.authenticate('ldap-custom-auth', function(err, user, info) {
-                console.log('passport error ==>', err);
-                console.log('passport user ==>', user);
-                console.log('passport info ==>', info);
+            if (appConfig.authStrategy.externals) {
+                passport.authenticate('ldap-custom-auth', function(err, user, info) {
+                    logger.debug('passport error ==>', err);
+                    logger.debug('passport user ==>', user);
+                    logger.debug('passport info ==>', info);
 
-                if (err) {
-                    return next(err);
-                }
-                if (!user) {
-                    return res.redirect('/public/login.html?o=try');
-                }
+                    if (err) {
+                        return next(err);
+                    }
+                    if (!user) {
+                        return res.redirect('/public/login.html?o=try');
+                    }
+                    req.session.user = user;
+                    usersDao.getUser(user.cn, req, function(err, data) {
+                        logger.debug("User is not a Admin.");
+                        logger.debug('user ==>', data);
+                        if (err) {
+                            req.session.destroy();
+                            next(err);
+                            return;
+                        }
+                        if (data && data.length) {
+                            user.roleId = data[0].userrolename;
+
+                            logger.debug('Just before role:', data[0].userrolename);
+                            user.roleName = "Admin";
+                            user.authorizedfiles = 'Track,Workspace,blueprints,Settings';
+
+                            req.logIn(user, function(err) {
+                                if (err) {
+                                    return next(err);
+                                }
+                                return res.redirect('/private/index.html');
+                            });
+                        } else {
+                            req.session.destroy();
+                            res.redirect('/public/login.html?o=try');
+                        }
+                    });
+                })(req, res, next);
+            } else { // Local Authentication
+                var password = req.body.pass;
+                var userName = req.body.username;
+                var user = {
+                    "cn": userName,
+                    "password": password
+                };
                 req.session.user = user;
-                usersDao.getUser(user.cn, req, function(err, data) {
+                usersDao.getUser(userName, req, function(err, data) {
                     logger.debug("User is not a Admin.");
-                    console.log('user ==>', data);
+                    logger.debug('user ==>', data);
                     if (err) {
                         req.session.destroy();
                         next(err);
@@ -64,23 +101,35 @@ module.exports.setRoutes = function(app) {
                     }
                     if (data && data.length) {
                         user.roleId = data[0].userrolename;
-
-                        console.log('Just before role:', data[0].userrolename);
-                        user.roleName = "Admin";
-                        user.authorizedfiles = 'Track,Workspace,blueprints,Settings';
-
-                        req.logIn(user, function(err) {
-                            if (err) {
-                                return next(err);
+                        // check for password
+                        authUtil.checkPassword(password, data[0].password, function(err, isMatched) {
+                            if(err){
+                                req.session.destroy();
+                                next(err);
+                                return;
                             }
-                            return res.redirect('/private/index.html');
+                            if (!isMatched) {
+                                req.session.destroy();
+                                res.redirect('/public/login.html?o=try');
+                            } else {
+                                logger.debug('Just before role:', data[0].userrolename);
+                                user.roleName = "Admin";
+                                user.authorizedfiles = 'Track,Workspace,blueprints,Settings';
+
+                                req.logIn(user, function(err) {
+                                    if (err) {
+                                        return next(err);
+                                    }
+                                    return res.redirect('/private/index.html');
+                                });
+                            }
                         });
                     } else {
                         req.session.destroy();
                         res.redirect('/public/login.html?o=try');
                     }
                 });
-            })(req, res, next);
+            }
 
         } else {
             res.redirect('/public/login.html?o=try');

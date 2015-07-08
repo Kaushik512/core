@@ -2923,6 +2923,13 @@ function isFormValid(formid) {
                         currCtrl.focus();
                     }
                     break;
+                case "min6":
+                    if (currCtrl.val().length < 6) {
+                        isValid = false;
+                        errormessageforInput(currCtrl.attr('id'), "Atleast 6 characters required.");
+                        currCtrl.focus();
+                    }
+                    break;
             }
 
         });
