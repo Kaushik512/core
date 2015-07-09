@@ -43,9 +43,9 @@ Unique Devops Configuration Management
     Validate the Unique Configuration Name   ${ValidateAlrdyExistConfigName}
     Validate the Unique Organization   ${ValidateAlrdyExistOrgName}
     Clicks on Save button to save the Environment detail
-    Configuration name already exists    ${ValidateAlrdyExistConfigNameErrMsg}
-    Organization name already exists     ${ValidateAlrdyExistOrgNameErrMsg}
-    Clicks on ButtonCancel Button
+    #-Configuration name already exists    ${ValidateAlrdyExistConfigNameErrMsg}
+    #-Organization name already exists     ${ValidateAlrdyExistOrgNameErrMsg}
+    #-Clicks on ButtonCancel Button
 
 
 Devops Click on Update of Your org and Org is disabled 
