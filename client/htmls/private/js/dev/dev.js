@@ -975,7 +975,7 @@
                                                                return false;
                                                            }
                                                            var hasChefRunPermission = false;
-                                                           if (haspermission("instancechefclientrun", "execute")) {
+                                                           if (haspermission("instancechefclientrun", "modify")) {
                                                                hasChefRunPermission = true;
                                                            }
                                                            if (!hasChefRunPermission) {
@@ -2127,7 +2127,7 @@
                                                                        if (data[i].iconpath)
                                                                            $img = $('<img />').attr('src', data[i].iconpath).attr('alt', data[i].name).addClass('cardLogo');
                                                                        else
-                                                                           $img = $('<img />').attr('src', '').attr('alt', data[i].name).addClass('cardLogo');
+                                                                           $img = $('<img />').attr('src', 'img/logo.png').attr('alt', data[i].name).addClass('cardLogo');
                                                                        var $liImage = $('<li></li>').append($img);
                                                                        $ul.append($liImage);
 
