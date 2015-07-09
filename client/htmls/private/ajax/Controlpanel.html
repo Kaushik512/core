@@ -2983,8 +2983,11 @@ $(document).ready(function() {
          return;
 
      }
+     console.log($anchor);
      console.log($anchor.index());
+     //alert($anchor.index());
      var index = $anchor.index();
+     
      if (index < 3) {
          var $nextLink;
          if (index == 1) {
@@ -3006,7 +3009,7 @@ $(document).ready(function() {
      }
      var anchor = "<span class='marginForURLCP'><a class='app-url' data-instanceIP='" + instanceIP + "' data-appUrlId='" + appUrlData._id + "' href='" + url + "'' target='_blank' title='" + appUrlData.name + "'>" + appUrlData.name + "</a></span>";
      var $anchor = $(anchor);
-     if ($cardAppUrlListContanier.children().length > 2) {
+     if ($cardAppUrlListContanier.find('.marginForURLCP').length > 1) {
          $anchor.hide();
      }
      $cardAppUrlListContanier.last().append($anchor);

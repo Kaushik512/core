@@ -366,6 +366,26 @@ taskSchema.statics.updateTaskById = function(taskId, taskData, callback) {
 
 };
 
+taskSchema.statics.getTasksByNodeIds = function(nodeIds, callback) {
+    if (!nodeIds) {
+        nodeIds = [];
+    }
+    console.log("nodeids ==> ", nodeIds,typeof nodeIds[0]);
+    Tasks.find({
+        "taskConfig.nodeIds": {
+            "$in": nodeIds
+        }
+    }, function(err, tasks) {
+        if (err) {
+            callback(err, null);
+            return;
+        }
+        //console.log('data ==>', data);
+        callback(null, tasks);
+
+    });
+};
+
 
 var Tasks = mongoose.model('Tasks', taskSchema);
 

@@ -120,143 +120,233 @@
  </div>
  <div id="CollapseConfigureproviderParameter" class="panel-collapse collapse in">
  <div class="panel-body" style="padding-left: 20px;">
- <div class="widget-body no-padding">
- <form action="" id="checkout-form">
+ 
 
- <div class="row " style="margin:0px;">
+ 
 
  <div class="col-lg-6 col-md-6">
- <label for="">Choose Operating System:<span style="color:red">*</span></label>
- <select id="instanceOS" class="chooseOS width-100">
- </select>                                                      
- </div>
- <div class="col-lg-6 col-md-6">
- <label for="">Choose Provider:<span style="color:red">*</span></label>
- <select id="providerId" class="chooseOS width-100">
- <option value="">Select Provider</option>
- </select>                                                      
- </div>
-
-
-
- <div class="col-lg-6 col-md-6" style="margin-top:15px;">
- <label for="">Choose Available Images:<span style="color:red">*</span></label>
-
-
- <select id="imageId" class="chooseSecurity width-100">
- <option value="">Choose Image </option>
+ <label for="instanceOS">Choose Operating System:<span style="color:red">*</span></label>
+ <div class="input-groups">
+ <select id="instanceOS" name="instanceOS" class="required chooseOS width-100">
  </select>
-
+ </div>                                                      
+ </div>
+ <div class="col-lg-6 col-md-6">
+ <label for="providerId">Choose Provider:<span style="color:red">*</span></label>
+ <div class="input-groups">
+ <select id="providerId" name="providerId" class="required chooseOSProvider width-100">
+ </select>
+ </div>                                                      
  </div>
 
  <div class="col-lg-6 col-md-6" style="margin-top:15px;">
- <label for="">Choose Region:<span style="color:red">*</span></label>
+ <label for="imageId">Choose Available Images:<span style="color:red">*</span></label>
 
+<div class="input-groups">
+ <select id="imageId" name="imageId" class="required chooseSecurity width-100">
+ </select>
+</div>
+ </div>
 
- <select id="region" class="chooseSecurity width-100">
+ <div class="col-lg-6 col-md-6" style="margin-top:15px;">
+ <label for="region">Choose Region:<span style="color:red">*</span></label>
+
+<div class="input-groups">
+ <select id="region" name="region" class="required chooseSecurity width-100">
  <option value="">Select Region</option>
  </select>
-
+</div>
  </div> 
-
- <div class="col-lg-6" style="margin-top:15px;">
- <label for="">Select VPC:<span style="color:red">*</span></label>
- <label id="vpcSpinner" class="hidden"><img  style="margin-left:5px;margin-right:25px;" src="img/select2-spinner.gif"></label>
- <select id="vpcId" class="chooseSelect chooseImage width-100">
- <option value="">Select VPC</option>                          
- </select>                                                                                            
- </div>
-
- <div class="col-lg-6" style="margin-top:15px;">
- <label for="">Select Subnet:<span style="color:red">*</span></label>
- <label id="spinnerSubnet" class="hidden"><img  style="margin-left:5px;margin-right:25px;" src="img/select2-spinner.gif"></label>
- <select id="subnetId" class="chooseSelect chooseImage width-100">
- <option value="">Select Subnet</option>                          
- </select>                                                     
- </div>
-
- <!--   <div class="col-lg-6 col-md-6" style="margin-top:15px;">
- <label for="">Choose Instance Size:<span style="color:red">*</span></label>
- 
- 
- <select id="intanceTypeControl" class="instanceType chooseInstance width-100">
- </select>
- 
- </div> -->
 
  <div class="col-lg-6 col-md-6" style="margin-top:15px;">
- <label for="">Select KeyPair :<span style="color:red">*</span></label>
- <select id="keypairId" class="instanceType chooseInstance width-100">
+ <label for="vpcId">Select VPC:<span style="color:red">*</span></label>
+ <label id="vpcSpinner" class="hidden"><img  style="margin-left:5px;margin-right:25px;" src="img/select2-spinner.gif"></label>
+ <div class="input-groups">
+ <select id="vpcId" name="vpcId" class="required chooseSelect chooseImage width-100">
+ <option value="">Select VPC</option>                          
+ </select> 
+ </div>                                                                                           
+ </div>
+
+ <div class="col-lg-6 col-md-6" style="margin-top:15px;">
+ <label for="subnetId">Select Subnet:<span style="color:red">*</span></label>
+ <label id="spinnerSubnet" class="hidden"><img  style="margin-left:5px;margin-right:25px;" src="img/select2-spinner.gif"></label>
+ <div class="input-groups">
+ <select id="subnetId" name="subnetId" class="required chooseSelect chooseImage width-100">
+ <option value="">Select Subnet</option>                          
+ </select> 
+ </div>                                                    
+ </div>
+
+
+ <div class="col-lg-6 col-md-6" style="margin-top:15px;">
+ <label for="keypairId">Select KeyPair :<span style="color:red">*</span></label>
+ <div class="input-groups">
+ <select id="keypairId" name="keypairId" class="required instanceType chooseInstance width-100">
  <option value="">Choose KeyPair </option>
  </select>
-
+ </div>
  </div>
 
- <!--<div class="col-lg-6" style="margin-top:15px;">
- <label for="">Select Security Group:<span style="color:red">*</span></label>
- <select id="securityGroupId" class="chooseSelect chooseImage width-100">
- <option value="">Select Security Group</option>                          
- </select>                                                                                            
- </div>
- -->
-
- <div class="col-lg-6" style="margin-top:15px;">
- <label for="name">Instance Size:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
- <select id="instancesize" unique="true" uniqueconditionedby="orgname"  class="chooseOrganization width-100 chooseSelect" style="vertical-align:central"  cdata="catalyst"  cat-validation="required">
+ <div class="col-lg-6 col-md-6" style="margin-top:15px;">
+ <label for="instancesize">Instance Size:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+ <div class="input-groups">
+ <select id="instancesize" name="instancesize" class="required chooseOrganization width-100 chooseSelect" style="vertical-align:central">
  <option value="">Choose Instanace Size</option>
  </select>
- <span data-val-controltovalidate="domainname" id="MainContent_Req_domainname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility:hidden;">Required</span>
+ </div>
  </div> 
 
- <div class="col-lg-6" style="margin-top:15px;">
- <label for="category">Security Group:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+ <div class="col-lg-6 col-md-6" style="margin-top:15px;">
+ <label for="checkbox-toggle">Security Group:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
  <label id="spinnerSecurityGroup" class="hidden"><img  style="margin-left:5px;margin-right:25px;" src="img/select2-spinner.gif"></label>
- <div class="col-lg-6 smart-form multiselect" style="  height: 140px;overflow-y: scroll;border:1px solid gray;padding: 0px;width:100%">       
- <div id="securityGroupIds" multiselect="multiselect" datatype="select" datapath="" class="input-group from-control col-md-12 widthBox" style="width:99%;margin-top:-1px;border:0px" cdata="catalyst" cat-validation="onechecked">
+ <div class="col-lg-6 smart-form multiselect inputGroups" style="  height: 140px;overflow-y: scroll;border:1px solid gray;padding: 0px;width:100%">
+ <div id="securityGroupIds" name="securityGroupIds"  multiselect="multiselect" datatype="select" datapath="" class="input-group col-md-12 widthBox" style="width:99%;margin-top:-1px;border:0px">
  </div>
+</div>
  </div>
- </div>
- <!--<div class="col-lg-6" style="margin-top:15px;">
- <label for="">Select Security group:<span style="color:red">*</span></label>
- <select id="securityGroupIds" class="chooseSelect chooseImage width-100">
- <option value="">Select Security Group</option>                          
- </select>                                                                                            
- </div>-->
 
  <!--To add the Swipe Functionality-->                            
- </div>
- </form><!--end-->
- </div> 
+
+ 
  </div>
  </div>
  </div>
 
- <div class="panel panel-default divchefrunlist">
+ <!--adding organisation parameters starts here-->
+
+ <div class="panel panel-default divOrganizationParameter">
  <div class="panel-heading">
  <h4 class="panel-title">
- <a data-toggle="collapse" data-parent="#accordion-Design" href="#CollapseConfigurechefRunlist" class="collapsed"><i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i>Configure Chef Runlist</a>
+ <a data-toggle="collapse" data-parent="#accordion-Design" href="#CollapseEditorgParam" class="collapsed"><i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i>Configure Organization Parameters</a>
  </h4>
  </div>
- <div id="CollapseConfigurechefRunlist" class="panel-collapse collapse">
- <form action="" id="checkout-form">
-
- <div class="col-lg-6 col-md-6" style="padding-left: 20px;">
- <label for="">Choose Organization <span style="color:red">*</span></label>
- <select id="orgnameSelect" class="chooseOrgselect2 width-100">
+ <div id="CollapseEditorgParam" class="panel-collapse collapse">
+ <div class="panel-body" style="padding-left: 8px;">
+ 
+ <div class="col-lg-6 col-md-6">
+ <label for="orgnameSelect">Choose Organization <span style="color:red">*</span></label>
+ <div class="input-groups">
+ <select id="orgnameSelect" name="orgnameSelect" class="required chooseOrgselect2 width-100">
  </select>
  </div>
+ </div>
 
- 	<div><a style="font-size:14px!important" href="#modalForHelp" data-toggle="modal" id="dokuNew"><i class="fa fa-question"></i>&nbsp;Help</a>
-    </div>
+ <div class="col-lg-6 col-md-6">
+ <label for="blueprintNameInput">Enter Blueprint Name:
+ <span style="color:Red;" class="control-label">&nbsp;*</span></label>
+ <div class="input-groups">
+ <input  id="blueprintNameInput" name="blueprintNameInput" class="required form-control" type="text" autofocus="autofocus">
+ </div>
+ </div>
+ 
 
- <div class="col-lg-12" style="margin-top:10px;padding-left:8px">
+ 
+ <div class="col-lg-6 col-md-6" style="margin-top:15px;">
+ <label for="bgListInput">Choose Business Group <span style="color:red">*</span>
+ </label>
+ <div class="input-groups">
+ <select id="bgListInput" name="bgListInput" class="required chooseBG width-100">
+ </select>
+ </div> 
+ </div>
+
+ <div class="col-lg-6 col-md-6" style="margin-top:15px;">
+ <label for="projectListInput">Choose Project <span style="color:red">*</span>
+ </label>
+ <div class="input-groups">
+ <select id="projectListInput" name="projectListInput" class="required chooseProject width-100">
+ </select>
+ </div>
+ </div>
+ 
+ <div class="col-lg-12 notForDocker" style="margin-top:10px;padding-left:8px">
  <div class="cookbookShow">
 
  </div>
  </div>
 
+ <div class="col-lg-4 col-md-4 notForDocker" style="margin-top:15px;margin-left:8px;"><a style="font-size:14px!important" href="#modalForHelp" data-toggle="modal" id="dokuNew"><i class="fa fa-question"></i>&nbsp;Help</a>
+ </div>
 
- </form>
+ 
+
+ 
+ <div class="col-lg-6 hidden" style="margin-top:5px;">
+ <label for="">Assign Users<span style="color:red">*</span></label>
+
+ <div class="userListLoadingContainer">
+
+ </div>
+ <select class="custom-scroll width-100" multiple="" id="userListSelect" style="display:none">
+
+ </select> 
+
+ </div>
+ 
+
+
+ <!-- <div class="col-lg-6 col-md-6">
+ <label for="category">Environment <span style="color:red">*</span>
+ </label>
+
+ <select  id="envList" class="chooseEnv width-100">
+
+ </select>
+
+
+ </div>                 -->                                 
+
+
+ <div class="col-lg-6 col-md-6 forDocker dockerProjPort hidden">
+ <label for="category">Select Docker Image <span style="color:red">*</span>
+ </label>
+
+ <select id="dockerrepoListInput" class="chooseDockerContainer width-100">
+
+ </select>
+
+ </div>
+ <div class="col-lg-6 col-md-6 forDocker dockerProjPort hidden">
+ <label for="category">Available Repo Tags <span style="color:red">*</span>
+ </label>                 
+ <div id="dockerrepotagsdiv">
+
+ </div>       
+ </div>
+ <div class="col-lg-12 col-md-12 hidden">
+ <div class="col-lg-6 col-md-6 forDocker dockerProjPort dockerLEFT">
+
+ <label for="category" class="pull-left">Launch Parameters<a id="launchParamDocker" href="javascript:void(0);" onclick=""><i title="Add" class="icon-append fa fa-plus" ></i></a>
+ </label>               
+ <div class="btn-group pull-left">
+
+
+ </div> 
+
+ <input type="text" id="dockerlaunchparameters" class="form-control" disabled="disabled" title="To edit click add"/>
+
+ </div>
+ </div>
+<!-- Docker Image selection table -->
+<div class="col-lg-12 col-md-12 forDocker" style="margin-top:5px;">
+    <label for="category">Docker Images<span style="color:red">*</span>
+    </label>
+    <a class="btn btn-primary adddockertemplate pull-right" onclick="showdockertemplateadder();">Add</a>
+    <table class="table table-striped table-bordered table-hover dataTable no-footer" id="compositedockertable" cellpadding="5px" width="100%" style="text-align:center">
+        <tr>
+            <th>Order</th>
+            <th>Name</th>
+            <th>Image Path</th>
+            <th>Tag</th>
+            <th>Launch Params</th>
+            <th>Action</th>
+        </tr>
+    </table>
+</div>
+<!-- End Docker Image selection table -->
+          
+ </div>
  </div>
  </div>
 
@@ -441,127 +531,11 @@
     </div>
 </div>
 
- <div class="panel panel-default divOrganizationParameter">
- <div class="panel-heading">
- <h4 class="panel-title">
- <a data-toggle="collapse" data-parent="#accordion-Design" href="#CollapseEditorgParam" class="collapsed"><i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i>Edit Organization Parameters</a>
- </h4>
- </div>
- <div id="CollapseEditorgParam" class="panel-collapse collapse">
- <div class="panel-body" style="padding-left: 8px;">
- <form action="" id="checkout-form">
- <div class="row" style="margin:0px">
- <div class="col-lg-6 col-md-6">
- <label for="name">Blueprint Name:
- <span style="color:Red;" class="control-label">&nbsp;*</span></label>
- <input  id="blueprintNameInput" maxlength="25" class="form-control" type="text" autofocus="autofocus" >
- <span data-val-controltovalidate="orgname" id="MainContent_Req_orgname" data-val="true" data-val-initialvalue="" style="visibility:hidden;">Required</span>
- </div>
-
- <div class="col-lg-6 col-md-6">
- <label for="">Business Group <span style="color:red">*</span>
- </label>
-
- <select id="bgListInput" class="chooseBG width-100">
-
- </select>
-
- </div>
 
 
 
-
- </div>
- <div class="col-lg-6 hidden" style="margin-top:5px;">
- <label for="">Assign Users<span style="color:red">*</span></label>
-
- <div class="userListLoadingContainer">
-
- </div>
- <select class="custom-scroll width-100" multiple="" id="userListSelect" style="display:none">
-
- </select> 
-
- </div>
- <div class="col-lg-6 col-md-6">
- <label for="category">Project <span style="color:red">*</span>
- </label>
-
- <select id="projectListInput" class="chooseProject width-100">
-
- </select>
-
- </div>
-
-
- <div class="col-lg-6 col-md-6">
- <!-- <label for="category">Environment <span style="color:red">*</span>
- </label>
-
- <select  id="envList" class="chooseEnv width-100">
-
- </select> -->
-
-
- </div>                                                 
-
-
- <div class="col-lg-6 col-md-6 fordocker dockerProjPort hidden">
- <label for="category">Select Docker Image <span style="color:red">*</span>
- </label>
-
- <select id="dockerrepoListInput" class="chooseDockerContainer width-100">
-
- </select>
-
- </div>
- <div class="col-lg-6 col-md-6 fordocker dockerProjPort hidden">
- <label for="category">Available Repo Tags <span style="color:red">*</span>
- </label>                 
- <div id="dockerrepotagsdiv">
-
- </div>       
- </div>
- <div class="col-lg-12 col-md-12 hidden">
- <div class="col-lg-6 col-md-6 fordocker dockerProjPort dockerLEFT">
-
- <label for="category" class="pull-left">Launch Parameters<a id="launchParamDocker" href="javascript:void(0);" onclick=""><i title="Add" class="icon-append fa fa-plus" ></i></a>
- </label>               
- <div class="btn-group pull-left">
-
-
- </div> 
-
- <input type="text" id="dockerlaunchparameters" class="form-control" disabled="disabled" title="To edit click add"/>
-
- </div>
- </div>
-<!-- Docker Image selection table -->
-<div class="col-lg-12 col-md-12 fordocker" style="margin-top:5px;">
-    <label for="category">Docker Images<span style="color:red">*</span>
-    </label>
-    <a class="btn btn-primary adddockertemplate pull-right" onclick="showdockertemplateadder();">Add</a>
-    <table class="table table-striped table-bordered table-hover dataTable no-footer" id="compositedockertable" cellpadding="5px" width="100%" style="text-align:center">
-        <tr>
-            <th>Order</th>
-            <th>Name</th>
-            <th>Image Path</th>
-            <th>Tag</th>
-            <th>Launch Params</th>
-            <th>Action</th>
-        </tr>
-    </table>
-</div>
-<!-- End Docker Image selection table -->
-
-
-
- </form>            
- </div>
- </div>
- </div>
  <!--adding new collapse-->
- <div class="panel panel-default appSeriesNameURL notFordocker">
+ <div class="panel panel-default appSeriesNameURL notForDocker">
  <div class="panel-heading">
  <h4 class="panel-title">
  <a data-toggle="collapse" data-parent="#accordion-Design" href="#CollapseApp" class="collapsed"><i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i>Configure Application URL</a>
@@ -664,9 +638,13 @@
  
  
  <div class="blueprintSaveSuccess blueprintMsgContainer"><div class="alert alert-success bootstrapSuccess"><img style="width:50px;height:40px" src="img/correct.png" alt="success"/>
- <span style="margin-left:20px;">Blueprint Successfully Saved.</span>
- <div><span style="margin-left:74px;">Do you want to add another?</span><a href="#ajax/Aws-Production.html?addnew" id="addanotherlink">&nbsp;&nbsp;Click Here</a></div>
-</div>
+ <span class="blueprintNameSuccess" style="margin-left:20px;"></span>
+ <div style="margin-top:15px"><span style="margin-left:74px;">Here are the Blueprint Details-</span><a id="blueprintInfo" href="#modalForRead" data-toggle="modal">&nbsp;&nbsp;Click Here</a></div>
+ <div style="margin-top:24px;"><span style="margin-left:74px;">Do you want to add another Blueprint?</span><a href="#ajax/Aws-Production.html?addnew" id="addanotherlink">&nbsp;&nbsp;Add</a></div>
+ 
+ 
+ 
+ </div>
  </div>
 
  <div class="blueprintSaveFail blueprintMsgContainer"><div class="alert alert-warning bootstrapFailure"><img style="width:50px;height:40px" src="img/warning.png" alt="warning"/>
@@ -731,14 +709,14 @@
                              	<div class="col-lg-12 awsExisting">
                                <div class="col-lg-3 col-md-3">
                                  <label for="">Choose Organization <span style="color:red">*</span></label>
-                                 <select id="orgnameSelectNew" class="chooseOrgselect width-100">
+                                 <select id="orgnameSelectExisting" class="chooseOrgSelectExisting width-100">
                                  </select>
                                </div>
 
                                 <div class="col-lg-3 col-md-3">
              <label for="">Business Group</label>
 
-             <select id="bgListInputNew" class="chooseBGNew width-100">
+             <select id="bgListInputExisting" class="chooseBGExisting width-100">
 
              </select>
 
@@ -752,7 +730,7 @@
            <label for="category">Project
            </label>
 
-           <select id="projectListInputNew" class="chooseProjectNew width-100">
+           <select id="projectListInputExisting" class="chooseProjectExisting width-100">
 
            </select>
 
@@ -761,7 +739,7 @@
       <div class="col-lg-3 col-md-3">
  <label for="category">Environment</label>
 
- <select  id="envListNew" class="chooseEnvNew width-100">
+ <select  id="envListExisting" class="chooseEnvExisting width-100">
 
  </select>
 
@@ -1200,173 +1178,257 @@
     }
 
 }
- $(document).ready(function(){
+ $(document).ready(function() {
 
 
- 	//select2 call 
- 	//$('#orgnameSelectNew').val(localStorage.getItem('selectedOrgId'));
- 	$(".chooseOrgselect").select2();
-	$(".chooseBGNew").select2();
-	$(".chooseProjectNew").select2();
-	$(".chooseEnvNew").select2();
-    var $addal = $("#addanotherlink"); //#ajax/Aws-Production.html?addnew
-    if(window.url.indexOf('addnew') > 0)
-        $addal.attr('href','#ajax/Aws-Production.html?addanother');
-    else
-        $addal.attr('href','#ajax/Aws-Production.html?addnew');
+         //select2 call 
+         //$('#orgnameSelectExisting').val(localStorage.getItem('selectedOrgId'));
+         $(".chooseOrgSelectExisting").select2();
+         $(".chooseBGExisting").select2();
+         $(".chooseProjectExisting").select2();
+         $(".chooseEnvExisting").select2();
+         var $addal = $("#addanotherlink"); //#ajax/Aws-Production.html?addnew
+         if (window.url.indexOf('addnew') > 0)
+             $addal.attr('href', '#ajax/Aws-Production.html?addanother');
+         else
+             $addal.attr('href', '#ajax/Aws-Production.html?addnew');
 
 
 
- 	$.ajax({
-   type: "get",
-   dataType: "json",
+         $.ajax({
+             type: "get",
+             dataType: "json",
 
-   async: false,
-   url: "../organizations/getTreeNew",
-   success: function(data) {
-     
-     console.log(data);
-     data = JSON.parse(JSON.stringify(data));
-     var $orgListInput = $('#orgnameSelectNew');
-	$orgListInput.append($('<option></option>').val('choose').html('Choose'));
-	 var $bgList = $('#bgListInputNew');
-	 //$bgList.append($('<option></option>').val('choose').html('Choose'));
+             async: false,
+             url: "../organizations/getTreeNew",
+             success: function(data) {
 
-	var $envList = $('#envListNew');
+                 console.log(data);
+                 data = JSON.parse(JSON.stringify(data));
+                 var $orgListInput = $('#orgnameSelectExisting');
+                 $orgListInput.append($('<option></option>').val('choose').html('Choose'));
+                 var $bgList = $('#bgListInputExisting');
+                 //$bgList.append($('<option></option>').val('choose').html('Choose'));
 
-	for (var i = 0; i < data.length; i++) {
-   
-   console.log(data[i].businessGroups);
-   $orgListInput.append($('<option></option>').val(data[i].rowid).html(data[i].name).data('bglist', data[i].businessGroups).data('envList', data[i].environments));
-}
+                 var $envList = $('#envListExisting');
 
- //on change of org
- $orgListInput.change(function(e) {
-   $('#accordionAttr').addClass('hidden');
-   var orgName = $(this).val();
-   
-   if (orgName == 'choose') {
-     return;
-   }
-   var $selectedOrgOption = $(this).find(":selected");
-   $bgList.empty();
-   //$bgList.append($('<option></option>').val('choose').html('Choose'));
-	
-	var getBGs = $selectedOrgOption.data('bglist');
-	if(getBGs != null){
-   for (var i = 0; i < getBGs.length; i++) {
-     $bgList.append($('<option></option>').val(getBGs[i].rowid).html(getBGs[i].name).data('projList', getBGs[i].projects));
-   }
- }
+                 for (var i = 0; i < data.length; i++) {
 
+                     console.log(data[i].businessGroups);
+                     $orgListInput.append($('<option></option>').val(data[i].rowid).html(data[i].name).data('bglist', data[i].businessGroups).data('envList', data[i].environments));
+                 }
 
-   $envList.empty();
-	var getEnv = $selectedOrgOption.data('envList');
-	if(getEnv != null){
-	//alert(JSON.stringify(getEnv));
-	$envList.append($('<option></option>').val('choose').html('Choose'));
-	for (var i = 0; i < getEnv.length; i++) {
-   $envList.append($('<option></option>').val(getEnv[i].rowid).html(getEnv[i].name));
- }
-}
+                 //on change of org
+                 $orgListInput.change(function(e) {
+                     $('#accordionAttr').addClass('hidden');
+                     var orgName = $(this).val();
+
+                     if (orgName == 'choose') {
+                         return;
+                     }
+                     var $selectedOrgOption = $(this).find(":selected");
+                     $bgList.empty();
+                     //$bgList.append($('<option></option>').val('choose').html('Choose'));
+
+                     var getBGs = $selectedOrgOption.data('bglist');
+                     if (getBGs != null) {
+                         for (var i = 0; i < getBGs.length; i++) {
+                             $bgList.append($('<option></option>').val(getBGs[i].rowid).html(getBGs[i].name).data('projList', getBGs[i].projects));
+                         }
+                     }
 
 
-});
+                     $envList.empty();
+                     var getEnv = $selectedOrgOption.data('envList');
+                     if (getEnv != null) {
+                         //alert(JSON.stringify(getEnv));
+                         $envList.append($('<option></option>').val('choose').html('Choose'));
+                         for (var i = 0; i < getEnv.length; i++) {
+                             $envList.append($('<option></option>').val(getEnv[i].rowid).html(getEnv[i].name));
+                         }
+                     }
 
- 	
-	//project List
-	var $projectList = $('#projectListInputNew');
-	//$projectList.append($('<option></option>').val('choose').html('Choose'));
-	$bgList.change(function(e) {
-	   var bgName = $(this).val();
-	   if (bgName == 'choose') {
-	     return;
-    }
-   var $selectedOrgOption = $(this).find(":selected");
-   $projectList.empty();
-   //$projectList.append($('<option></option>').val('choose').html('Choose'));
-   var getProjs = $selectedOrgOption.data('projList');
-   for (var i = 0; i < getProjs.length; i++) {
 
-   $projectList.append($('<option></option>').val(getProjs[i].rowid).html(getProjs[i].name));
- }
+                 });
 
-});
-	//on click of environment
-	$('.chooseEnvNew').change(function(e){
-	var reqBodyNew = {};
-                 
-                 
-    reqBodyNew.orgId = $orgListInput.val();
-	reqBodyNew.bgId = $bgList.val();
-	reqBodyNew.projectId = $projectList.val();
-	reqBodyNew.envId= $envList.val();
 
-                 $.get('../organizations/' + reqBodyNew.orgId + '/businessgroups/' + reqBodyNew.bgId + '/projects/' + reqBodyNew.projectId + '/environments/' + reqBodyNew.envId + '/', function(data) {
-                     console.log('success---3---4');
-                     //alert(JSON.stringify(data));
+                 //project List
+                 var $projectList = $('#projectListInputExisting');
+                 //$projectList.append($('<option></option>').val('choose').html('Choose'));
+                 $bgList.change(function(e) {
+                     var bgName = $(this).val();
+                     if (bgName == 'choose') {
+                         return;
+                     }
+                     var $selectedOrgOption = $(this).find(":selected");
+                     $projectList.empty();
+                     //$projectList.append($('<option></option>').val('choose').html('Choose'));
+                     var getProjs = $selectedOrgOption.data('projList');
+                     for (var i = 0; i < getProjs.length; i++) {
 
-                     //Syncing up the tree view based on url
-                     initializeBlueprintAreaNew(data.blueprints);
-                     if(data.blueprints.length>0){
-                     $('#accordion-2').removeClass('hidden');
-						}
-						else{
-							bootbox.alert('No Blueprints Available. Please Create a New Blueprint');
-						}
+                         $projectList.append($('<option></option>').val(getProjs[i].rowid).html(getProjs[i].name));
+                     }
+
+                 });
+                 //on click of environment
+                 $('.chooseEnvExisting').change(function(e) {
+                     var reqBodyNew = {};
+
+
+                     reqBodyNew.orgId = $orgListInput.val();
+                     reqBodyNew.bgId = $bgList.val();
+                     reqBodyNew.projectId = $projectList.val();
+                     reqBodyNew.envId = $envList.val();
+
+                     $.get('../organizations/' + reqBodyNew.orgId + '/businessgroups/' + reqBodyNew.bgId + '/projects/' + reqBodyNew.projectId + '/environments/' + reqBodyNew.envId + '/', function(data) {
+                         console.log('success---3---4');
+                         //alert(JSON.stringify(data));
+
+                         //Syncing up the tree view based on url
+                         initializeBlueprintAreaNew(data.blueprints);
+                         if (data.blueprints.length > 0) {
+                             $('#accordion-2').removeClass('hidden');
+                         } else {
+                             bootbox.alert('No Blueprints Available. Please Create a New Blueprint');
+                         }
                      });
-                 
-});//choose env gets over
 
- $('.chooseOrgselect').change(function(e){
- //$('chooseBGNew').select2('data',null);	
- $('.chooseBGNew').change();
- $('.chooseProjectNew').select2('data',null);
- $('.chooseProjectNew').change();
- $('.chooseEnvNew').select2('data',null);
- //$('chooseEnvNew').change();
- 
- 
-});
-}
+                 }); //choose env gets over
 
-	
-});//getTreeNew gets over here
+                 $('.chooseOrgSelectExisting').change(function(e) {
+                     //$('chooseBGExisting').select2('data',null);   
+                     $('.chooseBGExisting').change();
+                     $('.chooseProjectExisting').select2('data', null);
+                     $('.chooseProjectExisting').change();
+                     $('.chooseEnvExisting').select2('data', null);
+                     //$('chooseEnvExisting').change();
 
-	
-	
+                 });
+             }
 
+
+         }); //getTreeNew gets over here
+
+    //form validation for blueprint save
+    var validator = $('#wizard-1').validate({
+        ignore: [],
+        rules:{
+            "checkbox-toggle":{
+                required:true
+            },
+            blueprintNameInput:{
+                maxlength:25
+            }
+        },
+        messages:{
+            blueprintNameInput:{
+                maxlength:"Limited to 25 characters"
+            }
+        },
+        onkeyup: false,
+        errorClass: "error",
+
+        //put error message behind each form element
+        errorPlacement: function(error, element) {
+            console.log(error, element);
+            var elem = $(element);
+            if (element.parent('.input-groups').length) {
+                error.insertBefore(element.parent());
+            } else {
+                if (element.parent('div.inputGroups')) {
+                    console.log(element);
+                    console.log(element.parent);
+                    error.insertBefore('div.inputGroups');
+                }
+
+                $("select.select2-me").each(function(index, el) {
+
+                    if ($(this).is("[data-rule-required]") &&
+                        $(this).attr("data-rule-required") == "true") {
+                        $(this).on('select2-close', function(e) {
+                            $(this).valid()
+                        });
+                    }
+                });
+            }
+        },
+
+        //When there is an error normally you just add the class to the element.
+        // But in the case of select2s you must add it to a UL to make it visible.
+        // The select element, which would otherwise get the class, is hidden from
+        // view.
+        highlight: function(element, errorClass, validClass) {
+            var elem = $(element);
+            if (elem.hasClass("select2-offscreen")) {
+                $("#s2id_" + elem.attr("id") + " ul").addClass(errorClass);
+            } else {
+                elem.addClass(errorClass);
+            }
+        },
+
+        //When removing make the same adjustments as when adding
+        unhighlight: function(element, errorClass, validClass) {
+            var elem = $(element);
+            if (elem.hasClass("select2-offscreen")) {
+                $("#s2id_" + elem.attr("id") + " ul").removeClass(errorClass);
+            } else {
+                elem.removeClass(errorClass);
+            }
+        }
+    });
+    $('a#addanotherlink').click(function(e) {
+        validator.resetForm();
+    });
+    /*$('a#workZoneNew').click(function(e){
+        alert('click');
+        validator.resetForm();
+    })*/
+    $(document).on('change', '.select2-offscreen', function() {
+        if (!$.isEmptyObject(validator.submitted)) {
+            validator.form();
+        }
+    });
+
+    $(document).on("select2-opening", function(arg) {
+        var elem = $(arg.target);
+        if ($("#s2id_" + elem.attr("id") + " ul").hasClass("myErrorClass")) {
+            //jquery checks if the class exists before adding.
+            $(".select2-drop ul").addClass("myErrorClass");
+        } else {
+            $(".select2-drop ul").removeClass("myErrorClass");
+        }
+    });
 
  });//document.ready gets over here
  //the blueprint section gets over here.
 
- $('#launchParamDocker').click(function(){
-   $('#dockerparamsform')[0].reset();
-  // loadLaunchParams(); //removed for compose
-   $('.chooseSelectExit').change();
+ $('#launchParamDocker').click(function() {
+     $('#dockerparamsform')[0].reset();
+     // loadLaunchParams(); //removed for compose
+     $('.chooseSelectExit').change();
  });
 
 	
-	function generateDockerLaunchParams() {
-    if ($('#Containernamefield').val() == '') {
-        $('.dockerparamrequired').removeClass('hidden');
-        return ('');
-    }
-
-    var launchparams = '';
-    $('[dockerparamkey]').each(function() {
-        if ($(this).val() != '') {
-            var itms = $(this).val().split(',');
-            for (itm in itms)
-                launchparams += ' ' + $(this).attr('dockerparamkey') + ' ' + itms[itm];
+    function generateDockerLaunchParams() {
+        if ($('#Containernamefield').val() == '') {
+            $('.dockerparamrequired').removeClass('hidden');
+            return ('');
         }
-    });
-    //$('#dockerlaunchparameters').val(launchparams); //removed for compose
-    //alert(launchparams)
-    $('#' + $('#myModalLabelDockerContainer').attr('saveto')).val(launchparams);
 
-    return (launchparams);
-}
+        var launchparams = '';
+        $('[dockerparamkey]').each(function() {
+            if ($(this).val() != '') {
+                var itms = $(this).val().split(',');
+                for (itm in itms)
+                    launchparams += ' ' + $(this).attr('dockerparamkey') + ' ' + itms[itm];
+            }
+        });
+        //$('#dockerlaunchparameters').val(launchparams); //removed for compose
+        //alert(launchparams)
+        $('#' + $('#myModalLabelDockerContainer').attr('saveto')).val(launchparams);
+
+        return (launchparams);
+    }
 
 
 function addDockerTemplateToTable(title, repopath, tagname, reponame) {
@@ -1375,7 +1437,6 @@ function addDockerTemplateToTable(title, repopath, tagname, reponame) {
     //remove any empty row message from table
     $('#dockerimageemptytr').detach();
     var $dockertemplaterow = '<tr class="dockerimagesrow"><td >' + $cdt.find('tr').length + '</td><td paramtype="dockercontainerpathstitle">' + title + '</td><td  paramtype="dockercontainerpaths">' + repopath + '</td><td paramtype="dockerrepotags">' + tagname + '</td><td><a onclick="loadLaunchParams(\'launchparam' + uniqueid + '\');" href="javascript:void(0);"><i class="icon-append fa fa-list-alt fa-lg" title="Launch Parameters"></i></a><input type="text" paramtype="dockerlaunchparameters" id="launchparam' + uniqueid + '" class=""><input type="hidden" paramtype="dockerreponame" id="dockerreponame' + uniqueid + '" class="" value="' + reponame + '"></td><td ><a class="dockerimageselectorup" id="dockerimageselectorup' + uniqueid + '"  href="javascript:movetablerow(\'dockerimageselectorup\',' + uniqueid + ');"><i class="fa fa-chevron-circle-up fa-lg"></i></a><a class="dockerimageselectordown" id="dockerimageselectordown' + uniqueid + '" href="javascript:movetablerow(\'dockerimageselectordown\',' + uniqueid + ');" style="padding-left:5px;"><i class="fa fa-chevron-circle-down fa-lg"></i></a><button class="btn btn-xs btn-danger pull-right" value="Remove" title="Remove" id="dockerimageremove' + uniqueid + '" onClick="javascript:removeimage(\'dockerimageremove\',' + uniqueid + ');"><i class="ace-icon fa fa-trash-o fa-lg"></i></button></td></tr>';
-    // var $dockertemplaterow = '<tr class="dockerimagesrow"><td  paramtype="order">' + $cdt.find('tr').length + '</td><td paramtype="repotitle">' + title + '</td><td  paramtype="repopath">' + repopath + '</td><td paramtype="repotag">' + tagname + '</td><td  paramtype="launchparams"><a onclick="loadLaunchParams(\'launchparamlink' + $cdt.find('tr').length  + '\');" href="javascript:void(0);"><input type="text" id="launchparam' +  + '" class="hidden"><i class="icon-append fa fa-list-alt fa-lg" title="Launch Parameters"></i></a></td><td  paramtype="move"><a class="dockerimageselectorup" id="dockerimageselectorup' + $cdt.find('tr').length + '"  href="javascript:movetablerow(\'dockerimageselectorup\',' + $cdt.find('tr').length + ');"><i class="fa fa-chevron-circle-up fa-lg"></i></a><a class="dockerimageselectordown" id="dockerimageselectordown' + $cdt.find('tr').length + '" href="javascript:movetablerow(\'dockerimageselectordown\',' + $cdt.find('tr').length + ');" style="padding-left:5px;"><i class="fa fa-chevron-circle-down fa-lg"></i></a><button class="btn btn-xs btn-danger pull-right" value="Remove" title="Remove" id="dockerimageremove' + $cdt.find('tr').length  + '" onClick="javascript:removeimage(\'dockerimageremove\',' + $cdt.find('tr').length + ');"><i class="ace-icon fa fa-trash-o fa-lg"></i></button></td></tr>';
 
     $cdt.append($dockertemplaterow);
 
@@ -1595,126 +1656,115 @@ function loadLaunchParams(lpinput) {
  $('#instanceOS').on('change',loadData);
 }
 
-/*function getImageList(){
-	$.ajax({
-   method: "GET",
-   url: "/vmimages",
-   success: function(data, success) {
-     data = typeof data ==="string" ?JSON.parse(data) :data ;
-     var str='<option value="">Choose Image</option>';
-     for(var i=0;i<data.length;i++){
-       str=str+'<option value="'+data[i]._id+'">'+data[i].name+'</option>';
-     }
-     $('#imageId').html(str).select2();
-   },
-   error: function(jqxhr) {
-     console.log(jqxhr.responseText);
-     alert(jqxhr.responseText);
-   },
-   failure: function(data) {
-     bootbox.alert(data);
-   }
- });
-} */
+
 function getSecurityCheckedList(){
   var list=[]
   $('#securityGroupIds').find('input[type="checkbox"]:checked').each(function(){
     list.push(this.value);
   });
+
   return list;
 }
 
-function getImageInstances(){
-  $('#imageId').on('change',function(){
-    $.get("/vmimages/instancesizes/all/list",function(data){
-      var vType= $('#imageId').find('option:selected').attr('vType'),str='<option value=""> Select Instance Size</option>';
-      var list=[];
+function getImageInstances() {
+    $('#imageId').on('change', function() {
+        $.get("/vmimages/instancesizes/all/list", function(data) {
+            var vType = $('#imageId').find('option:selected').attr('vType'),
+                str = '<option value=""> Select Instance Size</option>';
+            var list = [];
 
-      for(var i=0;i<data.length;i++){
-        for(var key in data[i]){
-          if(vType==key){
-            list=data[i][key];
-            break;
-          }
-        }
-      }
-      for(var i=0;i<list.length;i++){
-        str=str+'<option value="'+list[i]+'">'+list[i]+'</option>'
-      }
-      $('#instancesize').html(str).select2();
+            for (var i = 0; i < data.length; i++) {
+                for (var key in data[i]) {
+                    if (vType == key) {
+                        list = data[i][key];
+                        break;
+                    }
+                }
+            }
+            for (var i = 0; i < list.length; i++) {
+                str = str + '<option value="' + list[i] + '">' + list[i] + '</option>'
+            }
+            $('#instancesize').html(str).select2();
+
+        });
 
     });
-
-  });
 }
 var regionList;
-function getCompleteRegionList(){
-  $.get('/vmimages/regions/list',function(data){
-  regionList=data;
-    }); 
+
+function getCompleteRegionList() {
+    $.get('/vmimages/regions/list', function(data) {
+        regionList = data;
+    });
 }
 getCompleteRegionList();
 
 
-function getSecurityGroup(){
+function getSecurityGroup() {
 
-function bringAllOpenFirst(data){
-var temp,index;
-for(var i=0;i<data.length;i++){
-	if(data[i].GroupName=="all_open"){
-		temp=data[i];
-		index=i;
-		break;
-	}
-}
-if(temp){
+    function bringAllOpenFirst(data) {
+        var temp, index;
+        for (var i = 0; i < data.length; i++) {
+            if (data[i].GroupName == "all_open") {
+                temp = data[i];
+                index = i;
+                break;
+            }
+        }
+        if (temp) {
 
-data[index]=data[0];
-data[0]=temp;
-}
-return data;
-}
-
-  function populateData(){
-    var $provider=$('#providerId');
-    var accessKey=$provider.find("option:selected").attr('accessKey');
-    secretKey=$provider.find("option:selected").attr('secretKey');
-    region=$('#region').val();
-    vpcId=$('#vpcId').val();
-    var $spinnerSecurityGroup = $('#spinnerSecurityGroup').addClass('hidden');
-    if(accessKey && secretKey && region && vpcId){
-      $spinnerSecurityGroup.removeClass('hidden');
-      $.ajax({
-        url:'/aws/providers/vpc/'+vpcId+'/securitygroups',
-        method:"post",
-        data:{"accessKey":accessKey,"secretKey":secretKey,"region":region},
-        success:function(list){
-
-        var str='',getTemplate=function(val,name){
-          return '<label class="toggle font-sm" style="padding-left:4px;"><input onclick="if($(this).is(&quot;:checked&quot;)) {$(this).closest(&quot;label&quot;).'+
-          'css(&quot;background-color&quot;,&quot;#eeeeee&quot;);$(this).css(&quot;border-color&quot;,&quot;#3b9ff3&quot;);}else{$(this).closest(&quot;label&quot;).css(&quot;background-color&quot;,&quot;#ffffff&quot;);$(this).css(&quot;border-'+
-            'color&quot;,&quot;red&quot;);}" type="checkbox" name="checkbox-toggle" rowid="1ae4f099-7adc-4089-81c6-db2248774142"'+
-      'value="'+val+'" style="width:100%"><i data-swchoff-text="NO" data-swchon-text="YES"></i>'+name+'</label>';
-    },list=bringAllOpenFirst(list),len=list.length;
-    for(var i=0;i<len;i++){
-      str=str+getTemplate(list[i].GroupId,list[i].GroupId+' | '+list[i].GroupName);
+            data[index] = data[0];
+            data[0] = temp;
+        }
+        return data;
     }
-    $spinnerSecurityGroup.addClass('hidden');
-    $('#securityGroupIds').html('').append(str);
 
-  },
-  error:function(xhr){
-    bootbox.alert(xhr.responseText);
-  }
+    function populateData() {
+        var $provider = $('#providerId');
+        var accessKey = $provider.find("option:selected").attr('accessKey');
+        secretKey = $provider.find("option:selected").attr('secretKey');
+        region = $('#region').val();
+        vpcId = $('#vpcId').val();
+        var $spinnerSecurityGroup = $('#spinnerSecurityGroup').addClass('hidden');
+        if (accessKey && secretKey && region && vpcId) {
+            $spinnerSecurityGroup.removeClass('hidden');
+            $.ajax({
+                url: '/aws/providers/vpc/' + vpcId + '/securitygroups',
+                method: "post",
+                data: {
+                    "accessKey": accessKey,
+                    "secretKey": secretKey,
+                    "region": region
+                },
+                success: function(list) {
 
-});
-}
-else{
-  $('#securityGroupIds').html('');
-}
-}
+                    var str = '',
+                        getTemplate = function(val, name) {
+                            return '<label class="toggle font-sm" style="padding-left:4px;"><input onclick="if($(this).is(&quot;:checked&quot;)) {$(this).closest(&quot;label&quot;).' +
+                                'css(&quot;background-color&quot;,&quot;#eeeeee&quot;);$(this).css(&quot;border-color&quot;,&quot;#3b9ff3&quot;);}else{$(this).closest(&quot;label&quot;).css(&quot;background-color&quot;,&quot;#ffffff&quot;);$(this).css(&quot;border-' +
+                                'color&quot;,&quot;red&quot;);}" type="checkbox" id="checkbox-toggle" name="checkbox-toggle" rowid="1ae4f099-7adc-4089-81c6-db2248774142"' +
+                                'value="' + val + '" style="width:100%"><i data-swchoff-text="NO" data-swchon-text="YES"></i>' + name + '</label>';
+                        },
+                        list = bringAllOpenFirst(list),
+                        len = list.length;
+                    for (var i = 0; i < len; i++) {
+                        str = str + getTemplate(list[i].GroupId, list[i].GroupId + ' | ' + list[i].GroupName);
+                    }
+                    $spinnerSecurityGroup.addClass('hidden');
+                    $('#securityGroupIds').html('').append(str);
 
-$('#vpcId').on('change',populateData);
+                },
+                error: function(xhr) {
+                    bootbox.alert(xhr.responseText);
+                }
+
+            });
+        } else {
+            $('#securityGroupIds').html('');
+        }
+    }
+
+    $('#vpcId').on('change', populateData);
 }
 
 function getkeypairList(){
@@ -1854,27 +1904,7 @@ function resetForm(){
 	$('select').val('').select2();
 	$('[multiselect]').empty();
 }
-/*function getRegionList(){
-  $('#providerId').on('change',function(){
 
-    var key=$(this).val();
-    if(key){
-      $.get('/aws/providers/'+key,function(data){
-        var keylist=data.keyPairs;
-
- // var regionList=$(this).find("option:selected").attr('keyPairs');
-   // regionList=regionList ?regionList.split(',') :[];
-   var str='<option value="">Select Region</option>';
-
-   for(var i=0;i<keylist.length;i++){
-    str=str+'<option value="'+keylist[i].region+'">'+keylist[i].region+'</option>';
-  }
-  $('#region').html(str).select2();
-
-});
-    }
-
-  }*/
   $(document).ready(function(){
 
     getProviderList();
@@ -1919,6 +1949,7 @@ function resetForm(){
 	
 	$(".chooseOrgselect2").select2();    
 	$(".chooseOS").select2();
+    $(".chooseOSProvider").select2();
 	$(".chooseSecurity").select2();
 	$(".chooseInstance").select2();
 	//$(".chooseImage").select2();
@@ -1928,28 +1959,7 @@ function resetForm(){
 	$(".chooseDockerContainer").select2();
 	$(".chooseSelectExit").select2();
 	$('select').select2();
-	/*$.ajax({
-	url: "/d4dMasters/readmasterjsonnew/22",
-	dataType: "json",
-	type: "GET",
-	cache: "true",
 	
-	//async: false,
-	
-	success: function(data) {
-	//alert(data);
-	//console.log("Image Data>>>>>>>>>>>> "+data);
-	var data = JSON.parse(JSON.stringify(data));
-	//alert(data);
-	var $imgListInput = $('#imagename');
-	// console.log("Image Json>>>>>>>>>>  "+data);
-	for (var i = 0; i < data.length; i++) {
-	//alert(data[i].imagename);
-	$imgListInput.append($('<option></option>').val(data[i].rowid).html(data[i].imagename));
-	}
-	
-	}
-});*/
 	$.ajax({
    url: "/d4dMasters/readmasterjsonnew/16",
    dataType: "json",
@@ -1965,19 +1975,7 @@ function resetForm(){
 
    getDesignTypeImg= data[i]['designtemplateicon_filename'];
    getDesignTypeRowID= data[i]['rowid'];
-	// for(var x=0;x < data.masterjson.rows.row[i].field.length;x++){
-
-
-	//     if(data.masterjson.rows.row[i].field[x].name == "rowid"){
-	//       getDesignTypeRowID = data.masterjson.rows.row[i].field[x].values.value;
-	//     }
-	//  if(data.masterjson.rows.row[i].field[x].name == "designtemplateicon_filename"){
-	//       getDesignTypeImg = data.masterjson.rows.row[i].field[x].values.value;
 	
-	//     }
-	
-	
-	// }
     if(getDesignTypeImg){
 	containerTemp += '<div class="" style="width:222px;float:left">'+
 	' <div id=grid'+i+' class="blueprintdiv appfactory" data-'+
@@ -2088,47 +2086,7 @@ $("#templateContent #grid0").addClass("role-Selected");
 	dockercred = '';
 	dockeremail = '';
 	
-	//alert(JSON.stringify(data));
-	// for (var x = 0; x < data.masterjson.rows.row[z].field.length; x++) {
-	//     if (data.masterjson.rows.row[z].field[x].name == "templatesicon_filename") {
-	//         getImage = data.masterjson.rows.row[z].field[x].values.value;
-	//         //alert(getImage);
-	//     }
-	//     if (data.masterjson.rows.row[z].field[x].name == "rowid") {
-	//         getRowID = data.masterjson.rows.row[z].field[x].values.value;
-	//     }
-	//     if (data.masterjson.rows.row[z].field[x].name == "templatetypename") {
-	//         getTemplateType = data.masterjson.rows.row[z].field[x].values.value;
-	//     }
-	//     if (data.masterjson.rows.row[z].field[x].name == "templatescookbooks") {
-	//         gettemplatescookbooks = data.masterjson.rows.row[z].field[x].values.value;
-	//         //clearing additional double quotes
-	//         gettemplatescookbooks = gettemplatescookbooks.replace(/"/g, "");
-	//     }
 	
-	//     if (data.masterjson.rows.row[z].field[x].name == "templatename") {
-	//         getTempName = data.masterjson.rows.row[z].field[x].values.value;
-	//     }
-	//     if (data.masterjson.rows.row[z].field[x].name == "templatetypename") {
-	//         if (data.masterjson.rows.row[z].field[x].values.value == selectedText) {
-	//             selectedrow = true;
-	//         }
-	//     }
-	
-	//     //For docker 
-	//     if (data.masterjson.rows.row[z].field[x].name == "dockercontainerpathstitle") {
-	//         dockercontainerpathstitle = data.masterjson.rows.row[z].field[x].values.value;
-	//     }
-	//     if (data.masterjson.rows.row[z].field[x].name == "dockercontainerpaths") {
-	//         dockercontainerpaths = data.masterjson.rows.row[z].field[x].values.value;
-	//     }
-	//     if (data.masterjson.rows.row[z].field[x].name == "dockerreponame") {
-	//         dockerreponame = data.masterjson.rows.row[z].field[x].values.value;
-	//         //
-	
-	//     }
-	
-	// }
 	console.log('here end');
 	//added to the docker template adder pop-up : Vinod
     $('#dockertemplateselector').append('<option value="' + dockercontainerpaths + '" title="' + dockercontainerpaths + '" reponame="' + dockerreponame + '">' + dockercontainerpathstitle + '</option>');
@@ -2235,8 +2193,8 @@ $("#individualTemplateNameGrid").html("");
 	console.log('role-Selected before ==> ',$('#tab2 .role-Selected').length);
 	if ($('.productdiv2.role-Selected').length > 0) {
 	//Setting controls connected to docker to hidden
-	$('.fordocker').hide();
-	$('.notFordocker').show();
+	$('.forDocker').hide();
+	$('.notForDocker').show();
 	
 	$('.divconfigureparameterrunlist').show();
 	$('.divchefrunlist').show();
@@ -2304,8 +2262,8 @@ $("#individualTemplateNameGrid").html("");
                     //End Setting appropriate tags
                     //polulate the docker tags
                     var $dockerrepotagsul = $('#dockerrepotagsul');
-                    $('.fordocker').show();
-                    $('.notFordocker').hide();
+                    $('.forDocker').show();
+                    $('.notForDocker').hide();
                     //return (true);
 	//return (true);
 } else {
@@ -2331,275 +2289,285 @@ if ($('#tab2 .role-Selected').length > 0) {
 	//force clicking orgnameSelect
 	$('#orgnameSelect').trigger('change');
   $(".chooseBG").change();
+  $(".chooseBG").select2('data', null);
   $('.chooseProject').select2('data', null)
  // $(".chooseEnv").change();
   $(".chooseDockerContainer").change();
 	
 	
-} else if (index == 3) {
-	$("#tabheader").html('Create Blueprint');
-	var $selectedTemplateArea = $('.selectedTemplateArea');
-	var $selectedItem = $selectedTemplateArea.find('.productdiv2');
-	console.log($selectedItem.length);
-	if (!$selectedItem.length) {
-   alert('please choose a template');
-   return false;
- }
+} else if (index == 3) {            
+            if ($wizard.data('secondClick')) {
+                return true;
+            }
+            var isValid = $('#wizard-1').valid();
+            // alert(isValid);
+            if (!isValid) {
+                return false;
+            } else {
+            
+                bootbox.confirm({
+                    message:"Are you sure want to submit this Blueprint Data? Press Ok to Continue",
+                    title:"Confirm",
+                    callback: function(result) {
+                    if (result) {
 
- if ($('#orgnameSelect').val() === 'choose') {
-   alert('please choose an Organization');
-   return false;
- }
+                        $("#tabheader").html('Create Blueprint');
+                        var $selectedTemplateArea = $('.selectedTemplateArea');
+                        var $selectedItem = $selectedTemplateArea.find('.productdiv2');
+                        console.log($selectedItem.length);
+                        if (!$selectedItem.length) {
+                            alert('please choose a template');
+                            return false;
+                        }
 
-
- reqBody = {};
- reqBody.templateId = $selectedItem.attr('data-templateId');
- reqBody.templateType = $selectedItem.attr('data-templateType');
- reqBody.templateComponents = $selectedItem.attr('data-templateComponent').split(',');
- reqBody.dockercontainerpathstitle = $selectedItem.attr('dockercontainerpathstitle');
- reqBody.dockercontainerpaths = $selectedItem.attr('dockercontainerpaths');
- reqBody.dockerlaunchparameters = $('#dockerlaunchparameters').val();
- reqBody.dockerreponame = $('.productdiv2.role-Selected').attr('dockerreponame');
-
-
- //constructing the docker composite json.
-var dockercompose = [];
-var dockerimages = {};
-console.log($('#compositedockertable').find('.dockerimagesrow').length);
-$('.dockerimagesrow').each(function() {
-    dockerimages = {};
-    $(this).find('[paramtype]').each(function() {
-        console.log($(this).text() + $(this).val());
-        dockerimages[$(this).attr('paramtype')] = $(this).text() + $(this).val();
-    });
-    dockercompose.push(dockerimages);
-});
-//alert(JSON.stringify(dockercompose));
-reqBody.dockercompose = dockercompose;
-	//dockerreponame
-	/*if(!$('.deploymentsCookbookList').length) {
-	alert('Please wait while we are fetching cookbooks.');
-	return false;
-}*/
-	//Get all the runlist 
-	var cbs = [];
-	var $ccrs = $('.cookbookShow').data('$ccrs');
-    cbs = $ccrs.getSelectedRunlist();
-	reqBody.runlist = cbs.join(); //$('#cookbookSelect').val();
-	//reqBody.chefServerId = $('#cookbookSelect').data('chefServerId',);
-	var $ccrs = $('.cookbookShow').data('$ccrs');
-	reqBody.chefServerId = $ccrs.getChefServerId();
-	reqBody.instanceType = $('select.instanceType').val();
-	reqBody.instanceOS = $('#instanceOS').val();
-	console.log(reqBody);
-	
-	
-	console.log("reqBody ==>", reqBody);
-	if (!reqBody || reqBody == "undefined") {
-   console.log('resetting');
-   var reqBody = {};
- }
-	//reqBody.runlist = $('#cookbookSelect').val();
-	var $ccrs = $('.cookbookShow').data('$ccrs');
-	var cbs = [];
-	cbs = $ccrs.getSelectedRunlist();
-	reqBody.runlist = cbs; //$('#cookbookSelect').val();
-	//reqBody.chefServerId = $('#cookbookSelect').data('chefServerId');
-	reqBody.chefServerId = $ccrs.getChefServerId();
-	console.log("instanceType ==>", $('select.instanceType').val());
-	reqBody.instanceType = $('select.instanceType').val();
-	
-	var $instanceOsoptionsSelected = $('#instanceOS').find('option:selected');
-	console.log($('#instanceOS').val());
-	console.log($instanceOsoptionsSelected);
-	
-	reqBody.instanceOS = $instanceOsoptionsSelected.attr('data-instanceOS');
-	reqBody.instanceAmiid = $instanceOsoptionsSelected.attr('data-amiid');
-	reqBody.instanceUsername = $instanceOsoptionsSelected.attr('data-amiid-username');
-	// reqBody.instanceOS = $('#instanceOS').val();
-	reqBody.templateId = $('.productdiv2.role-Selected').attr('data-templateId');
-	reqBody.templateType = $('.productdiv2.role-Selected').attr('data-templateType');
-	reqBody.templateComponents = $('.productdiv2.role-Selected').attr('data-templateComponent').split(',');
-	
-	//    reqBody.dockercontainerpathstitle = $('.productdiv2.role-Selected').attr('dockercontainerpathstitle');
-	reqBody.dockercontainerpaths = $('#dockerrepoListInput :selected').attr('repopath'); //$('.productdiv2.role-Selected').attr('dockercontainerpaths');
-	reqBody.dockerrepotags = $('.productdiv2.role-Selected').attr('dockerrepotags');
-	reqBody.dockerimagename= $('#dockerrepoListInput').val();
-	reqBody.dockerlaunchparameters = $('#dockerlaunchparameters').val();
-	reqBody.dockerreponame = $('.productdiv2.role-Selected').attr('dockerreponame');
-	//alert(reqBody.dockerreponame);
-	reqBody.iconpath = $('.productdiv2.role-Selected').find('img[src*="__templatesicon__"]').first().attr('src');
-	reqBody.orgId = $('#orgnameSelect').val();
-	reqBody.bgId = $('#bgListInput').val();
-	reqBody.projectId = $('#projectListInput').val();
-	//reqBody.envId = $('#envList').val();
-	var imageIdentifier=$('#imageId').val();
-	var imageId=$('#imageId').find('option:selected').attr('_id');
-	var securityGroupIds=getSecurityCheckedList();
-	var providerId=$('#providerId').val();
-	var keyPairId = $('#keypairId').val();
-	var instanceType=$('#instancesize').val();
-	var vpcId=$('#vpcId').val();
-	var subnetId=$('#subnetId').val();
-	var region=$('#region').val();
- // var instanceOS=$('#instanceOS').data('instanceOS')
-
- // reqBody.providerId=providerId;
- reqBody.keyPairId=keyPairId;
- reqBody.securityGroupIds=securityGroupIds;
- reqBody.instanceType=instanceType;
- reqBody.instanceAmiid=imageIdentifier;
- reqBody.instanceUsername='root';
- reqBody.vpcId=vpcId;
- reqBody.subnetId=subnetId;
- reqBody.imageId=imageId;
- reqBody.providerId=providerId;
- //alert(reqBody.providerId);
- reqBody.name = $('#blueprintNameInput').val();
-if(($('.role-Selected').data('templatetype')).toLowerCase()!="docker"){
- if(!reqBody.instanceOS){
-  alert('Please Select Operating System');
-  return false;
-}
-
-if(!providerId){
- alert("Please Select Provider");
- return false;
-}
-
-if(!imageId){
- alert("Please Select Image");
- return false;
-}
-
-if(!region){
-  alert("Please Select Region");
-  return false;
-}
-
-if(!vpcId){
-	alert("Please Select VPC");
-	return false;
-}
+                        if ($('#orgnameSelect').val() === 'choose') {
+                            alert('please choose an Organization');
+                            return false;
+                        }
 
 
-if(!subnetId){
-  alert("Please Select Subnet");
-  return false;
-}
-
-if(!keyPairId){
- alert("Please Select KeyPair");
- return false;
-}
-if(!instanceType){
-  alert("Please Select Instance Size");
-  return false;
-
-}
-
-if(!securityGroupIds.length){
-  alert("Please Select Security Group");
-  return false;
-}
-
-}
-if (!reqBody.name) {
- alert("Please enter a blueprint name");
- return false;
- $('#blueprintNameInput').focus();
-
-}
-if (!reqBody.bgId || reqBody.bgId === 'choose') {
- alert("Please choose a business group");
- return false;
-}
-if (!reqBody.projectId || reqBody.projectId === 'choose') {
- alert("Please choose a project");
- return false;
-}
-/*
-if (!reqBody.envId || reqBody.envId === 'choose') {
- alert("Please choose an environment");
- return false;
-}*/
-$('#userListSelect').find('option').attr('selected','selected');
-reqBody.users = $('#userListSelect').val();
-
-if (!reqBody.users) {
- alert("Please choose users");
- return false;
-}
-//Checking for docker blueprint images
-if ($('.productdiv2.role-Selected').first().attr('templatetype') == "Docker" && $('#dockerimageemptytr').length > 0) {
-    //no rows found add empty message
-    alert("Please add atleast one image");
-    return false;
-}
-	//alert(JSON.stringify(reqBody));
-	var appUrls = []; 
-	var $appUrlTableBody = $('#appUrlTable tbody');
-	var $trs = $appUrlTableBody.find('tr');
-	//alert($trs.length);
-	$trs.each(function(e){
-   var $this = $(this);
-   appUrls.push($this.data('appUrlData'));
- });	
-	reqBody.appUrls = appUrls;
-	
-	$('.blueprintMsgContainer').hide();
-	
-if(($('.role-Selected').data('templatetype')).toLowerCase()!="docker"){
-$.post('/organizations/'+reqBody.orgId+'/businessgroups/'+reqBody.bgId+'/projects/' + reqBody.projectId +'/blueprints', {
-   blueprintData: reqBody
- }, function(data) {
-   console.log(data);
-   $('.blueprintSaveSuccess').show();
-   var wizard = $wizard.data('bootstrapWizard');
-   wizard.disablePreviouBtn();
- }).error(function(xhr){
-   $('.blueprintSaveFail').find('h3').first().html(xhr.responseText);
-   $('.blueprintSaveFail').show();
- });
- console.log('final', reqBody);
-
-}else{
-$.post('/organizations/'+reqBody.orgId+'/businessgroups/'+reqBody.bgId+'/projects/' + reqBody.projectId + '/blueprints/docker', {
-   blueprintData: reqBody
- }, function(data) {
-   console.log(data);
-   $('.blueprintSaveSuccess').show();
-   var wizard = $wizard.data('bootstrapWizard');
-   wizard.disablePreviouBtn();
- }).error(function(xhr){
-   $('.blueprintSaveFail').find('h3').first().html(xhr.responseText);
-   $('.blueprintSaveFail').show();
- });
- console.log('final', reqBody);
-}
-	
-
-//}	else{
-/*
-		$.post('/organizations/'+reqBody.orgId+'/businessgroups/'+reqBody.bgId+'/projects/' + reqBody.projectId + '/environments/' + reqBody.envId+'/blueprints' , {
-   blueprintData: reqBody
- }, function(data) {
-   console.log(data);
-   $('.blueprintSaveSuccess').show();
-   var wizard = $wizard.data('bootstrapWizard');
-   wizard.disablePreviouBtn();
- }).error(function(xhr){
-   $('.blueprintSaveFail').find('h3').first().html(xhr.responseText);
-   $('.blueprintSaveFail').show();
- });
- console.log('final', reqBody);
-
-}*/
-
-}
+                        reqBody = {};
+                        reqBody.templateId = $selectedItem.attr('data-templateId');
+                        reqBody.templateType = $selectedItem.attr('data-templateType');
+                        reqBody.templateComponents = $selectedItem.attr('data-templateComponent').split(',');
+                        reqBody.dockercontainerpathstitle = $selectedItem.attr('dockercontainerpathstitle');
+                        reqBody.dockercontainerpaths = $selectedItem.attr('dockercontainerpaths');
+                        reqBody.dockerlaunchparameters = $('#dockerlaunchparameters').val();
+                        reqBody.dockerreponame = $('.productdiv2.role-Selected').attr('dockerreponame');
 
 
-},
+                        //constructing the docker composite json.
+                        var dockercompose = [];
+                        var dockerimages = {};
+                        console.log($('#compositedockertable').find('.dockerimagesrow').length);
+                        $('.dockerimagesrow').each(function() {
+                            dockerimages = {};
+                            $(this).find('[paramtype]').each(function() {
+                                console.log($(this).text() + $(this).val());
+                                dockerimages[$(this).attr('paramtype')] = $(this).text() + $(this).val();
+                            });
+                            dockercompose.push(dockerimages);
+                        });
+                        //alert(JSON.stringify(dockercompose));
+                        reqBody.dockercompose = dockercompose;
+
+                        //Get all the runlist 
+                        var cbs = [];
+                        var $ccrs = $('.cookbookShow').data('$ccrs');
+                        cbs = $ccrs.getSelectedRunlist();
+                        reqBody.runlist = cbs.join(); //$('#cookbookSelect').val();
+                        //reqBody.chefServerId = $('#cookbookSelect').data('chefServerId',);
+                        var $ccrs = $('.cookbookShow').data('$ccrs');
+                        reqBody.chefServerId = $ccrs.getChefServerId();
+                        reqBody.instanceType = $('select.instanceType').val();
+                        reqBody.instanceOS = $('#instanceOS').val();
+                        console.log(reqBody);
+
+
+                        console.log("reqBody ==>", reqBody);
+                        if (!reqBody || reqBody == "undefined") {
+                            console.log('resetting');
+                            var reqBody = {};
+                        }
+                        //reqBody.runlist = $('#cookbookSelect').val();
+                        var $ccrs = $('.cookbookShow').data('$ccrs');
+                        var cbs = [];
+                        cbs = $ccrs.getSelectedRunlist();
+                        reqBody.runlist = cbs; //$('#cookbookSelect').val();
+                        //reqBody.chefServerId = $('#cookbookSelect').data('chefServerId');
+                        reqBody.chefServerId = $ccrs.getChefServerId();
+                        console.log("instanceType ==>", $('select.instanceType').val());
+                        reqBody.instanceType = $('select.instanceType').val();
+
+                        var $instanceOsoptionsSelected = $('#instanceOS').find('option:selected');
+                        console.log($('#instanceOS').val());
+                       // alert($('#instanceOS').val());
+                        console.log($instanceOsoptionsSelected);
+
+                        reqBody.instanceOS = $instanceOsoptionsSelected.attr('data-instanceOS');
+                        reqBody.instanceAmiid = $instanceOsoptionsSelected.attr('data-amiid');
+                        reqBody.instanceUsername = $instanceOsoptionsSelected.attr('data-amiid-username');
+                        // reqBody.instanceOS = $('#instanceOS').val();
+                        reqBody.templateId = $('.productdiv2.role-Selected').attr('data-templateId');
+                        reqBody.templateType = $('.productdiv2.role-Selected').attr('data-templateType');
+                        reqBody.templateComponents = $('.productdiv2.role-Selected').attr('data-templateComponent').split(',');
+
+                        //    reqBody.dockercontainerpathstitle = $('.productdiv2.role-Selected').attr('dockercontainerpathstitle');
+                        reqBody.dockercontainerpaths = $('#dockerrepoListInput :selected').attr('repopath'); //$('.productdiv2.role-Selected').attr('dockercontainerpaths');
+                        reqBody.dockerrepotags = $('.productdiv2.role-Selected').attr('dockerrepotags');
+                        reqBody.dockerimagename = $('#dockerrepoListInput').val();
+                        reqBody.dockerlaunchparameters = $('#dockerlaunchparameters').val();
+                        reqBody.dockerreponame = $('.productdiv2.role-Selected').attr('dockerreponame');
+                        //alert(reqBody.dockerreponame);
+                        reqBody.iconpath = $('.productdiv2.role-Selected').find('img[src*="__templatesicon__"]').first().attr('src');
+                        reqBody.orgId = $('#orgnameSelect').val();
+                        reqBody.bgId = $('#bgListInput').val();
+                        reqBody.projectId = $('#projectListInput').val();
+                        //reqBody.envId = $('#envList').val();
+                        var imageIdentifier = $('#imageId').val();
+                        var imageId = $('#imageId').find('option:selected').attr('_id');
+                        var securityGroupIds = getSecurityCheckedList();
+                        var providerId = $('#providerId').val();
+                        var keyPairId = $('#keypairId').val();
+                        var instanceType = $('#instancesize').val();
+                        var vpcId = $('#vpcId').val();
+                        var subnetId = $('#subnetId').val();
+                        var region = $('#region').val();
+                        // var instanceOS=$('#instanceOS').data('instanceOS')
+
+                        // reqBody.providerId=providerId;
+                        reqBody.keyPairId = keyPairId;
+                        reqBody.securityGroupIds = securityGroupIds;
+                        reqBody.instanceType = instanceType;
+                        reqBody.instanceAmiid = imageIdentifier;
+                        reqBody.instanceUsername = 'root';
+                        reqBody.vpcId = vpcId;
+                        reqBody.subnetId = subnetId;
+                        reqBody.imageId = imageId;
+                        reqBody.providerId = providerId;
+                        //alert(reqBody.providerId);
+                        reqBody.name = $('#blueprintNameInput').val();
+                        /*if (($('.role-Selected').data('templatetype')).toLowerCase() != "docker") {
+                           // return false;
+                        }*/
+
+
+                        $('#userListSelect').find('option').attr('selected', 'selected');
+                        reqBody.users = $('#userListSelect').val();
+
+                        if (!reqBody.users) {
+                            alert("Please choose users");
+                            return false;
+                        }
+                        //Checking for docker blueprint images
+                        if ($('.productdiv2.role-Selected').first().attr('templatetype') == "Docker" && $('#dockerimageemptytr').length > 0) {
+                            //no rows found add empty message
+                            alert("Please add atleast one image");
+                            return false;
+                        }
+                        //alert(JSON.stringify(reqBody));
+                        var appUrls = [];
+                        var $appUrlTableBody = $('#appUrlTable tbody');
+                        var $trs = $appUrlTableBody.find('tr');
+                        //alert($trs.length);
+                        $trs.each(function(e) {
+                            var $this = $(this);
+                            appUrls.push($this.data('appUrlData'));
+                        });
+                        reqBody.appUrls = appUrls;
+
+                        $('.blueprintMsgContainer').hide();
+
+                        if (($('.role-Selected').data('templatetype')).toLowerCase() != "docker") {
+                            $.post('/organizations/' + reqBody.orgId + '/businessgroups/' + reqBody.bgId + '/projects/' + reqBody.projectId + '/blueprints', {
+                                blueprintData: reqBody
+                            }, function(data) {
+                                console.log(data);
+                                    var validatorForm = $("#wizard-1").validate();
+                                    validatorForm.resetForm();
+
+                               // alert(JSON.stringify(data));
+                                $('.blueprintSaveSuccess').show();
+                                $('.blueprintNameSuccess').html('Blueprint&nbsp;&nbsp;<b>' + data.name + '</b>&nbsp;&nbsp;Saved Successfully');
+                                $wizard.data('secondClick', true);
+                                var wizard = $wizard.data('bootstrapWizard');
+                                wizard.next();
+                                wizard.disablePreviouBtn();
+
+                                $('a#blueprintInfo').click(function(e) {
+                                  //  alert('check');
+                                    var $blueprintReadContainer = $('#modalForRead');
+
+                                    $blueprintReadContainer.modal('show');
+                                    //for getting the blueprint name
+                                    $blueprintReadContainer.find('.modal-body #blueprintNameInputNew').val(data.name);
+                                    //for getting the OsName
+                                    $blueprintReadContainer.find('.modal-body #instanceOSNew').val(data.instanceOS);
+                                    //for getting the instance Size
+                                    $blueprintReadContainer.find('.modal-body #instancesizeNew').val(data.instanceType);
+                                    //for getting the version
+                                    $blueprintReadContainer.find('.modal-body #instanceVersion').val(data.latestVersion);
+                                    //for getting the SubnetId
+                                    $blueprintReadContainer.find('.modal-body #instanceSubnetId').val(data.subnetId);
+                                    //loop for getting the Security Group
+
+                                    $blueprintReadContainer.find('.modal-body #instanceSecurityGroupId').val(data.securityGroupIds);
+
+                                    $blueprintReadContainer.find('.modal-body #instanceVPC').val(data.vpcId);
+                                    // loop for getting runlist
+                                    for (var j = 0; j < data.versionsList.length; j++) {
+                                        if (data.versionsList[j].ver == data.latestVersion) {
+                                            $blueprintReadContainer.find('.modal-body #instanceRunlist').val(data.versionsList[j].runlist);
+                                        }
+
+                                    }
+                                    //for getting the image Name
+                                    $.ajax({
+                                        type: "GET",
+                                        url: "/vmimages/" + data.imageId,
+                                        success: function(data) {
+                                            console.log(data);
+                                            $blueprintReadContainer.find('.modal-body #instanceImage').val(data.name);
+                                            //alert(data.name);
+                                        }
+                                    });
+
+                                    //for getting the Provider name,Type,Region,KeyPair
+                                    $.ajax({
+                                        type: "GET",
+                                        url: "/aws/providers/" + data.providerId,
+                                        success: function(data) {
+                                            $blueprintReadContainer.find('.modal-body #instanceProviderName').val(data.providerName);
+                                            $blueprintReadContainer.find('.modal-body #instanceProviderType').val(data.providerType);
+                                            // loop for getting region and Keypair
+
+                                            for (var k = 0; k < data.keyPairs.length; k++) {
+
+                                                $blueprintReadContainer.find('.modal-body #instanceRegion').val(data.keyPairs[k].region);
+                                                $blueprintReadContainer.find('.modal-body #instancekeyPair').val(data.keyPairs[k].keyPairName);
+                                            }
+                                            //console.log(data);
+                                        },
+                                        failure: function(data) {
+                                            alert(data.toString());
+                                        }
+                                    });
+                                    //for getting the VPC
+                                    
+                                });
+                            }).error(function(xhr) {
+                                $('.blueprintSaveFail').find('h3').first().html(xhr.responseText);
+                                $('.blueprintSaveFail').show();
+                            });
+                            console.log('final', reqBody);
+
+                        } else {
+                            $.post('/organizations/' + reqBody.orgId + '/businessgroups/' + reqBody.bgId + '/projects/' + reqBody.projectId + '/blueprints/docker', {
+                                blueprintData: reqBody
+                            }, function(data) {
+                                console.log(data);
+                                var validatorFormDocker = $("#wizard-1").validate();
+                                validatorFormDocker.resetForm();
+                                $('.blueprintSaveSuccess').show();
+                                $wizard.data('secondClick', true);
+                                var wizard = $wizard.data('bootstrapWizard');
+                                wizard.disablePreviouBtn();
+                            }).error(function(xhr) {
+                                $('.blueprintSaveFail').find('h3').first().html(xhr.responseText);
+                                $('.blueprintSaveFail').show();
+                            });
+                            console.log('final', reqBody);
+                        }
+
+                    }
+                  }
+                }).find('.modal-header').css('background-color','ghostwhite');
+            }
+            return false;
+        }
+
+
+    },
 'onPrevious': function(tab, navigation, index) {
 	//console.log(index);
 	if (index === 0) {
@@ -2866,11 +2834,12 @@ $cookbookShow.append('<img class="center-block" style="height:50px;width:50px;ma
                  //the differnt template types whenever a blueprint is added
                  function initializeBlueprintAreaNew(data) {
 
-                 	
-                 	             var reqBodyNew = {};
-                               var $orgListInput = $('#orgnameSelectNew');
-                               
-                  			       reqBodyNew.orgId = $orgListInput.val();
+                    
+
+                     var reqBodyNew = {};
+                     var $orgListInput = $('#orgnameSelectExisting');
+
+                     reqBodyNew.orgId = $orgListInput.val();
 
                      var $AppFactpanelBody = $('.appFactoryPanel').find('.panel-body');
                      $AppFactpanelBody.empty();
@@ -2899,8 +2868,8 @@ $cookbookShow.append('<img class="center-block" style="height:50px;width:50px;ma
                              getDesignTypeImg = tdata[i]['designtemplateicon_filename'];
                              getDesignTypeRowID = tdata[i]['rowid'];
                              getDesignTypeName = tdata[i]['templatetypename'];
-                             
-                             
+
+
                              //Extracting the TT definitions. Add New Template types
                              var $currRolePanel = null;
                              //alert(getDesignTypeName);
@@ -2940,7 +2909,7 @@ $cookbookShow.append('<img class="center-block" style="height:50px;width:50px;ma
                                  '<i class="fa fa-fw fa-plus-circle txt-color-blue"></i> ' +
                                  '<i class="fa fa-fw fa-minus-circle txt-color-red"></i>' + getDesignTypeName + '</a>' +
                                  '</h4></div><div class="panel-collapse collapse" id="collapse' + i + '">' +
-                                 '<div class="panel-body ' + getDesignTypeName +'"></div>' +
+                                 '<div class="panel-body ' + getDesignTypeName + '"></div>' +
                                  '</div>';
                              $('#accordion-2').append($containerTempNew);
 
@@ -2948,7 +2917,7 @@ $cookbookShow.append('<img class="center-block" style="height:50px;width:50px;ma
                          }
                          //To fix template id and template type
                          // alert('in' + data.length);
-                         for (var i = 0; i < data.length; i++) {                   
+                         for (var i = 0; i < data.length; i++) {
                              //alert(JSON.stringify(data[i]));
                              //Find a panel-body with the template type class
                              var $currRolePanel = $('#accordion-2').find('.' + data[i].templateType);
@@ -2961,7 +2930,7 @@ $cookbookShow.append('<img class="center-block" style="height:50px;width:50px;ma
                                      'text-align': 'center'
                                  });
                                  var $liRead = $('<a style="float:right;margin:5px;cursor:pointer" class="readBtn"><div class="moreInfo"></div></a>').attr('data-toggle', 'tooltip').attr('data-placement', 'top').attr('title', 'More Info');
-                                 $ul.append($liRead);	
+                                 $ul.append($liRead);
                                  var $img
                                  if (data[i].iconpath)
                                      $img = $('<img />').attr('src', data[i].iconpath).attr('alt', data[i].name).addClass('cardLogo');
@@ -2973,7 +2942,7 @@ $cookbookShow.append('<img class="center-block" style="height:50px;width:50px;ma
                                  var $liCardName = $('<li title="' + data[i].name + '"></li>').addClass('Cardtextoverflow').html('<u><b>' + data[i].name + '</b></u>');
 
                                  $ul.append($liCardName);
-                                 
+
                                  var $selecteditBtnContainer = $('<div style="position:absolute;padding-left:27px;bottom:11px;"></div>');
                                  if (data[i].versionsList) {
 
@@ -3005,74 +2974,75 @@ $cookbookShow.append('<img class="center-block" style="height:50px;width:50px;ma
                                          //alert(JSON.stringify(data[i]));
                                      } else {
                                          $selectVer = $('<select style="padding:1px;padding-left:5px;"></select>').addClass('blueprintVersionDropDown').attr('data-blueprintId', data[i]._id);
-                                         
-                                         
-                                         
+
+
+
                                          //code for info about blueprints
-                                         (function(blueprint){
-                                         	$liRead.click(function(e){
+                                             (function(blueprint) {
+                                                 $liRead.click(function(e) {
 
-                                            //for getting the image Name
-                                            $.ajax({
-                                               type: "GET",
-                                               url: "/vmimages/"+blueprint.imageId,
-                                               success: function (data) {
-                                                console.log(data);
-                                                $blueprintReadContainer.find('.modal-body #instanceImage').val(data.name);
-                                                //alert(data.name);
-                                               }
-                                            });
+                                                     //for getting the image Name
+                                                     $.ajax({
+                                                         type: "GET",
+                                                         url: "/vmimages/" + blueprint.imageId,
+                                                         success: function(data) {
+                                                             console.log(data);
+                                                             $blueprintReadContainer.find('.modal-body #instanceImage').val(data.name);
+                                                             //alert(data.name);
+                                                         }
+                                                     });
 
-                                              //for getting the Provider name,Type,Region,KeyPair
-                                               $.ajax({
-                                               type: "GET",
-                                               url: "/aws/providers/"+blueprint.providerId,
-                                               success: function (data) {
-                                                $blueprintReadContainer.find('.modal-body #instanceProviderName').val(data.providerName);
-                                                $blueprintReadContainer.find('.modal-body #instanceProviderType').val(data.providerType);
-                                               // loop for getting region and Keypair
-                                               
-                                                for (var k = 0; k < data.keyPairs.length; k++){
-                                                  
-                                                  $blueprintReadContainer.find('.modal-body #instanceRegion').val(data.keyPairs[k].region);
-                                                  $blueprintReadContainer.find('.modal-body #instancekeyPair').val(data.keyPairs[k].keyPairName);
-                                                }
-                                                 //console.log(data);
-                                               },
-                                               failure: function (data) {
-                                                 alert(data.toString());
-                                               }
-                                             }); 
-                                        
-                                         	var $parent = $(this).parents('.cardimage');
-                                         	var $blueprintReadContainer = $('#modalForRead');
-                                         	var version = $parent.find('.blueprintVersionDropDown').val();
-                                         	$blueprintReadContainer.modal('show');
-                                         //for getting the blueprint name
-                                         	$blueprintReadContainer.find('.modal-body #blueprintNameInputNew').val(blueprint.name);
-                                          //for getting the OsName
-                                         	$blueprintReadContainer.find('.modal-body #instanceOSNew').val(blueprint.instanceOS);
-                                          //for getting the instance Size
-                                         	$blueprintReadContainer.find('.modal-body #instancesizeNew').val(blueprint.instanceType);
-                                          //for getting the version
-                                         	$blueprintReadContainer.find('.modal-body #instanceVersion').val(version);
-                                          //for getting the SubnetId
-                                         	$blueprintReadContainer.find('.modal-body #instanceSubnetId').val(blueprint.subnetId);
-                                          //loop for getting the Security Group
-                                        
-                                              $blueprintReadContainer.find('.modal-body #instanceSecurityGroupId').val(blueprint.securityGroupIds);
-                                            
-                                         	// loop for getting runlist
-                                         	for (var j = 0; j < blueprint.versionsList.length; j++){
-                                         		if(blueprint.versionsList[j].ver==version){
-                                         			$blueprintReadContainer.find('.modal-body #instanceRunlist').val(blueprint.versionsList[j].runlist);
-                                         		}	
-                                             
-                                         	}
-                                          //for getting the VPC
-                                          $blueprintReadContainer.find('.modal-body #instanceVPC').val(blueprint.vpcId)
-                                          
-                                         });})(data[i]);
+                                                     //for getting the Provider name,Type,Region,KeyPair
+                                                     $.ajax({
+                                                         type: "GET",
+                                                         url: "/aws/providers/" + blueprint.providerId,
+                                                         success: function(data) {
+                                                             $blueprintReadContainer.find('.modal-body #instanceProviderName').val(data.providerName);
+                                                             $blueprintReadContainer.find('.modal-body #instanceProviderType').val(data.providerType);
+                                                             // loop for getting region and Keypair
+
+                                                             for (var k = 0; k < data.keyPairs.length; k++) {
+
+                                                                 $blueprintReadContainer.find('.modal-body #instanceRegion').val(data.keyPairs[k].region);
+                                                                 $blueprintReadContainer.find('.modal-body #instancekeyPair').val(data.keyPairs[k].keyPairName);
+                                                             }
+                                                             //console.log(data);
+                                                         },
+                                                         failure: function(data) {
+                                                             alert(data.toString());
+                                                         }
+                                                     });
+
+                                                     var $parent = $(this).parents('.cardimage');
+                                                     var $blueprintReadContainer = $('#modalForRead');
+                                                     var version = $parent.find('.blueprintVersionDropDown').val();
+                                                     $blueprintReadContainer.modal('show');
+                                                     //for getting the blueprint name
+                                                     $blueprintReadContainer.find('.modal-body #blueprintNameInputNew').val(blueprint.name);
+                                                     //for getting the OsName
+                                                     $blueprintReadContainer.find('.modal-body #instanceOSNew').val(blueprint.instanceOS);
+                                                     //for getting the instance Size
+                                                     $blueprintReadContainer.find('.modal-body #instancesizeNew').val(blueprint.instanceType);
+                                                     //for getting the version
+                                                     $blueprintReadContainer.find('.modal-body #instanceVersion').val(version);
+                                                     //for getting the SubnetId
+                                                     $blueprintReadContainer.find('.modal-body #instanceSubnetId').val(blueprint.subnetId);
+                                                     //loop for getting the Security Group
+
+                                                     $blueprintReadContainer.find('.modal-body #instanceSecurityGroupId').val(blueprint.securityGroupIds);
+
+                                                     // loop for getting runlist
+                                                     for (var j = 0; j < blueprint.versionsList.length; j++) {
+                                                         if (blueprint.versionsList[j].ver == version) {
+                                                             $blueprintReadContainer.find('.modal-body #instanceRunlist').val(blueprint.versionsList[j].runlist);
+                                                         }
+
+                                                     }
+                                                     //for getting the VPC
+                                                     $blueprintReadContainer.find('.modal-body #instanceVPC').val(blueprint.vpcId)
+
+                                                 });
+                                             })(data[i]);
                                          //info ends here
 
                                          //for updating 
@@ -3096,8 +3066,8 @@ $cookbookShow.append('<img class="center-block" style="height:50px;width:50px;ma
                                                  }, versionData.runlist);
                                                  //alert(JSON.stringify(data));
                                                  $ccrs.find('#cookbooksrecipesselectedList').attr('data-blueprintId', blueprintId);
-                                                 $blueprintEditResultContainer.find('.modal-body').empty().append($ccrs).data('$ccrs',$ccrs);
-                                                 
+                                                 $blueprintEditResultContainer.find('.modal-body').empty().append($ccrs).data('$ccrs', $ccrs);
+
 
 
                                              }).error(function() {
@@ -3171,8 +3141,8 @@ $cookbookShow.append('<img class="center-block" style="height:50px;width:50px;ma
 
                  };
 
-                 //Updating blueprints
-                /* function bindClick_bluePrintUpdateNew() {
+                  //Updating blueprints
+                 /* function bindClick_bluePrintUpdateNew() {
                      $('.blueprintUpdateBtn').click(function(e) {
 
                          var $blueprintEditResultContainer = $('#blueprintEditResultContainer');
@@ -3201,8 +3171,8 @@ $cookbookShow.append('<img class="center-block" style="height:50px;width:50px;ma
                      });
                  }*/
 
-                 //Updating the blueprint Runlist
-                /* function bindClick_updateInstanceRunListNew() {
+                  //Updating the blueprint Runlist
+                 /* function bindClick_updateInstanceRunListNew() {
                      // Blueprint runtlist updation
                      $('.btnUpdateInstanceRunlist').click(function(e) {
                          bootbox.confirm("Update runlist?", function(result) {
@@ -3253,36 +3223,36 @@ $cookbookShow.append('<img class="center-block" style="height:50px;width:50px;ma
                      });
                  }*/
 
-                       //for removing the selected blueprint in the Existing Blueprints tab
-             function removeSelectedBlueprint() {
-                 var blueprintId = $('.productdiv1.role-Selected1').attr('data-blueprintid');
-                 if (blueprintId) {
-                     //found now delete
-                     bootbox.confirm("Are you sure you would like to remove this blueprint?", function(result) {
-                         if (!result) {
-                             return;
-                         }
-                         $.get('/blueprints/delete/' + blueprintId, function(data) {
-                             //  alert(data);
-                             if (data == 'OK') {
-                                 var $bcc = $('.productdiv1.role-Selected1').closest('.blueprintContainer');
-                                 $('.productdiv1.role-Selected1').parent().detach();
-                                 //Check if the closest bluprintcontainer is empty, if empty then hide it.
-                                 // alert($bcc.find('.panel-body').children().length);
-                                 if ($bcc.find('.panel-body').children().length <= 0) {
-                                     $bcc.addClass('hidden');
-                                 }
-                             } else
-                                 alert(data);
+                  //for removing the selected blueprint in the Existing Blueprints tab
+                 function removeSelectedBlueprint() {
+                     var blueprintId = $('.productdiv1.role-Selected1').attr('data-blueprintid');
+                     if (blueprintId) {
+                         //found now delete
+                         bootbox.confirm("Are you sure you would like to remove this blueprint?", function(result) {
+                             if (!result) {
+                                 return;
+                             }
+                             $.get('/blueprints/delete/' + blueprintId, function(data) {
+                                 //  alert(data);
+                                 if (data == 'OK') {
+                                     var $bcc = $('.productdiv1.role-Selected1').closest('.blueprintContainer');
+                                     $('.productdiv1.role-Selected1').parent().detach();
+                                     //Check if the closest bluprintcontainer is empty, if empty then hide it.
+                                     // alert($bcc.find('.panel-body').children().length);
+                                     if ($bcc.find('.panel-body').children().length <= 0) {
+                                         $bcc.addClass('hidden');
+                                     }
+                                 } else
+                                     alert(data);
+                             });
                          });
-                     });
-                 } else {
-                     alert('Please select a blueprint to remove.');
+                     } else {
+                         alert('Please select a blueprint to remove.');
+                     }
                  }
-             }
 
 
-                 //Launching Blueprints when the user clicks on the launch button in blueprints tab
+                  //Launching Blueprints when the user clicks on the launch button in blueprints tab
                  /*function bindClick_LaunchBtn() {
 
                      $('.launchBtn').click(function(e) {
@@ -3351,7 +3321,7 @@ $cookbookShow.append('<img class="center-block" style="height:50px;width:50px;ma
                                          $(this).detach();
                                      //inserting a checkbox to select instance
                                      if (k1 == 0) {
-                                         $(this).prepend('<input type="checkbox" class="instanceselectedfordocker">&nbsp;');
+                                         $(this).prepend('<input type="checkbox" class="instanceselectedforDocker">&nbsp;');
                                      }
                                  });
                                  $(this).append('<td  class=""><a data-original-title="MoreInfo" data-placement="top" rel="tooltip" href="javascript:void(0)" data-instanceid="' + $(this).attr('data-instanceid') + '" class="tableMoreInfo moreInfo dockerLeft" stlye=></a></td>');
@@ -3471,9 +3441,4 @@ $cookbookShow.append('<img class="center-block" style="height:50px;width:50px;ma
 
                  }
 */
-
-
-
-
-                 
   </script>

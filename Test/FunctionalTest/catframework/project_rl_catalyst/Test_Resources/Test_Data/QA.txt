@@ -13,6 +13,7 @@ ${BROWSERTYPE}                    chrome
 ${ENVIRONMENTSERVER}            http://d4d.relevancelab.com:3001 
 
 
+
 ${ENV}                 QA.txt
 ${VALID USER}             superadmin
 ${VALID PASSWORD}         superadmin@123

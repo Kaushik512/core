@@ -32,6 +32,8 @@ var chefClientExecution = require('./routes_chefClientExecutionResponse');
 
 var appConfig = require('../config/app_config');
 
+var notification = require('./routes_notification');
+
 module.exports.setRoutes = function(app) {
 
 
@@ -139,5 +141,9 @@ module.exports.setRoutes = function(app) {
         app.use('/uploads', express.static(appConfig.staticUploadDir));
 
     }
+
+    // for notification
+
+    notification.setRoutes(app,sessionVerificationFunc);
 
 }
