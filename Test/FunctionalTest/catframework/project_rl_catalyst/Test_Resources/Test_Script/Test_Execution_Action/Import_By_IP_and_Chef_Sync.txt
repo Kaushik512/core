@@ -977,7 +977,7 @@ Catalyst Creation of Jenkins Task in Environment
     Clicks on User Created Organization
     Clicks on User Created BusinessGroup
     Clicks on > Button to your Environment
-    Clicks on Orchestration Tab
+    #Clicks on Orchestration Tab
     Clicks on New Button of Jenkins
     Clicks on Choose Task Type of Jenkins
     Enter the Task Name of Jenkins
@@ -1125,7 +1125,7 @@ Clicks on Jenkins Save Button
 Clicks on Jenknis New Button
     Click  Element    xpath=.//*[@id='content']/div/div/div/div/div[1]/div/div/a[2]
 
-Clicks on Orchestration Tab
+#Clicks on Orchestration Tab
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='myTab3']/li[3]/a
 
 

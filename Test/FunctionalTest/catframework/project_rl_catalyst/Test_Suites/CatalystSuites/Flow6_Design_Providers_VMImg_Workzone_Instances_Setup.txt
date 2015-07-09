@@ -37,7 +37,6 @@ Catalyst new VM IMAGE setup
 
 
 
-
 Catalyst new CENT OS DESIGN setup
     [Tags]       Sanity               Smoke
 #    Catalyst Login
