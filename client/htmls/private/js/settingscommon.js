@@ -2995,7 +2995,7 @@ function enableUniqueCheckingForInputs(id) {
                 //alert(getBG != "" && uni.attr("id"));
                 if (getBG != 'Not Found') { //this ensures that its present
                     uni.css("color", "red");
-                    uni.html('This is already registered. Try another?');
+                    uni.html('This entry is already registered. Try another?');
                     $(this).focus();
                 } else {
                     uni.css("color", "green");
@@ -3045,7 +3045,7 @@ function checkusernameexistsinldap(inputID) {
             $.get('/auth/userexists/' + inp.val(), function(data) {
                 if (data == "false") {
                     uni.css("color", "red");
-                    uni.html('selected is NOT in LDAP.');
+                    uni.html('This entry is not available in LDAP.');
                     $(this).focus();
                 }
                 $('button[onclick*="saveform"]').removeAttr('disabled');
