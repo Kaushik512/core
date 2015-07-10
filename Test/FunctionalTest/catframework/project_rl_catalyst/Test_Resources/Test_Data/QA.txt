@@ -10,7 +10,7 @@ Resource           catalyst.txt
 
 *** Variables ***
 ${BROWSERTYPE}                    chrome             
-${ENVIRONMENTSERVER}         http://52.26.87.125:3001/public/login.html
+${ENVIRONMENTSERVER}            http://d4d.relevancelab.com:3001 
 
 
 
@@ -67,6 +67,9 @@ ${UBUNTU OS}            ubuntu
 ${SUITS}                stopped
 ${UserName}             root
 ${RUNLIST}              recipe[apache2]
+${KEYPAIRNAME}           cat_instances
+${REGION NAME}           US West (Oregon) | us-west-2
+${SUBNET NAME}           subnet-aed68ce8 (us-west-2c)
 
 
 ${PHOENIX COMMERNCE WITHOUT COOKBOOK UBUNTUOS}            Phoenix Commernce without Cookbook UbuntuOS
@@ -143,7 +146,7 @@ ${random}                  adarsh
 ${ADD}                     apache2              #tomcat-all
 ${ACTBOOT1}                 Pending
 ${ACTBOOT2}                 Success
-${IP Centos}                 52.24.73.49
+${IP Centos}                 52.26.95.17
 ${RUN}                       running
 ${AUTHN}                    Pem File 
 ${NAME}                     Bootstrap
@@ -168,7 +171,7 @@ ${MORE INFO}                 SSH Terminal
 ${NO MATCH}                 No matches found
 ${ENVNAME}                  QA
 ${NAMEOFINSTANCE}           Instance_Centos
-${IP Ubuntu}                52.10.133.68
+${IP Ubuntu}                52.26.225.223
 ${IP UBUNTUSERNAME}         ubuntu
 ${EDIT_UBUNTU_INSTANCE_NAME}     Instance_Ubuntu
 ${DESIGNER_NAME}            Designer01
@@ -177,16 +180,17 @@ ${CONSUMER_NAME}            Consumer01
 ${CONSUMER_PASWD}           Consumer01
 ${CENTOS NAME}              Instance_Centos
 ${UBUNTU NAME}              Instance_Ubuntu
-${IP ADD UBUNTU}             52.10.133.68
-${IP ADD CENTOS}             52.24.73.49 
+${IP ADD UBUNTU}             52.26.225.223
+${IP ADD CENTOS}             52.26.95.17 
 ${Proj1}                      Catalyst
 ${Proj2}                      Primary_Edu
 ${CookBkName}                 apt
 ${UbuntuUser}                 ubuntu
 ${MAT OS1}                    ubuntu
 ${RUNLIST1}                   recipe[tomcat-all]
-
-
+${RUNLIST2}                   cron 
+${RUNLIST3}                   recipe[cron]
+ 
 
 
 #Provider
