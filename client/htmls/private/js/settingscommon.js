@@ -462,6 +462,14 @@ function CreateTableFromJson(formID, idFieldName, createFileName) {
                 console.log("Value for all");
                 d4ddata[x].orgname[0] = "All";
             }
+            d4ddata[x]["cnfPassword"] = d4ddata[x].password;
+            /*if(d4ddata[x].password.length > 0){
+                //alert(d4ddata[x].password);
+                d4ddata[x] = {
+                    "cnfPassword" : d4ddata[x].password
+                };
+                //d4ddata[x].cnfPassword = d4ddata[x].password;
+            }*/
             /*else if(d4ddata[x].orgname === ""){
                     d4ddata[x].orgname = "All";
                 }*/
@@ -1416,6 +1424,25 @@ function readform(formID) {
         $('#configname').attr('disabled', 'disabled').select2();
     }
 
+    if (formID === 7 && editMode === true) {
+        //$('#password').attr('disabled', 'disabled').select2();
+        //$('#cnfPassword').attr('disabled', 'disabled').select2();
+        //document.getElementById('password').style.display = "none";
+        //document.getElementById('cnfPassword').style.display = "none";
+        $(".row1").hide();
+       // $(".editPass").hide();
+        $(".checkPass").show();
+
+        //$(".row2").show();
+        /*var checkBoxForUser = $('<input type="checkbox" id="chkadduserldap" >&nbsp;<label for="chkadduserldap">Add User to LDAP</label></label><label id="msgchkadduserldap" style="display:none;color:red;"></label><br/></div>');
+        $('body').append(checkBoxForUser);*/
+
+    }
+
+    /*if (formID === 7 && editMode === false) {
+       $(".row2").hide(); 
+    }*/
+
     //Setting the header of the form to Edit if shown as Create
     var head = $('.widget-header').html().replace('Create', 'Edit').replace('New', 'Edit');
     $('.widget-header').html(head);
@@ -1982,7 +2009,7 @@ function CreateTableFromJsonNew(formID, idFieldName, createFileName) {
 
 function saveform(formID, operationTypes) {
     //Validating the form
-
+    //alert(isFormValid(formID));
     if (isFormValid(formID) == false)
         return (false);
 
@@ -1991,7 +2018,8 @@ function saveform(formID, operationTypes) {
     var fileNames = '';
     var orgName = $('#orgname').val().trim();
     var orgnamecheck = true;
-
+    /*var password = $('#password1').val();
+    console.log(password);*/
     // Not allowing team assignment for superadmin
 
     /*if (orgName === '') {
@@ -2212,6 +2240,9 @@ function saveform(formID, operationTypes) {
             data1.append('osusername', 'ubuntu');
         }
     }
+    /*if(formID === "7" && password.length > 0){
+        data1.append('password', password);
+    }*/
     console.log(orgName);
     // alert(serviceURL + "savemasterjsonrownew/" + formID + "/" + fileNames + "/" + orgName );
     $.ajax({
@@ -2850,6 +2881,9 @@ function isFormValid(formid) {
             //There is an error message displayed. Do not save form
             isValid = false;
         }
+        var password = $('#password').val();
+        var cnfPassword = $('#cnfPassword').val();
+            
         //alert(currCtrl.attr('id'));
         $.each(valiarr, function(vali) {
             switch (valiarr[vali]) {
@@ -2927,6 +2961,13 @@ function isFormValid(formid) {
                     if (currCtrl.val().length < 6) {
                         isValid = false;
                         errormessageforInput(currCtrl.attr('id'), "Atleast 6 characters required.");
+                        currCtrl.focus();
+                    }
+                    break;
+                case "cnfPass":
+                    if (password != cnfPassword) {
+                        isValid = false;
+                        errormessageforInput(currCtrl.attr('id'), "Password does not match.");
                         currCtrl.focus();
                     }
                     break;

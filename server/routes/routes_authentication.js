@@ -44,6 +44,7 @@ module.exports.setRoutes = function(app) {
     app.post('/auth/signin', function(req, res, next) {
         if (req.body && req.body.username && req.body.pass) {
             if (appConfig.authStrategy.externals) {
+                logger.debug("LDAP Authentication>>>>>");
                 passport.authenticate('ldap-custom-auth', function(err, user, info) {
                     logger.debug('passport error ==>', err);
                     logger.debug('passport user ==>', user);
@@ -84,6 +85,8 @@ module.exports.setRoutes = function(app) {
                     });
                 })(req, res, next);
             } else { // Local Authentication
+
+                logger.debug("Local Authentication>>>>>");
                 var password = req.body.pass;
                 var userName = req.body.username;
                 var user = {
