@@ -252,7 +252,8 @@ Catalyst Choose Template and Save Setup
     Clicks on AppNew Button
     Enters the Application URL Name
     Enters the AppURL
-    Clicks on AppADD Button 
+    Clicks on AppADD Button
+    Enable the Next Button 
     Clicks on Next Button
     Clicks on Confirm OK Button
 
@@ -516,6 +517,11 @@ Catalyst Grid View Start ,Stop ,SSH ,Chef ,Client ,Log Setup of Ubuntu
     #Verify the SSH Enabledd fromn Grid View
     #Verfiy the STOP Toggler Enabled from Grid View
     Clicks on View Instancess Button
+
+
+Enable the Next Button 
+    Execute JavaScript    $('#bootstrap-wizard-1 > div.tab-content > footer > div').attr('style','display:block')
+
 
 
 Clicks on Confirm OK Button
@@ -1160,6 +1166,14 @@ Choose the Provider
     Sleep    1s
     Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
 
+
+    #Click Element    css=#s2id_providerId > .select2-choice
+    #Sleep    2s
+    #Input Text    css=#select2-search .select2-input    ${PROVIDER NAME}
+    #Sleep    1s
+    #Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
+
+
 Choose the Available Images
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='s2id_imageId']/a/span[1]
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='select2-drop']/ul/li[2]/div
@@ -1187,12 +1201,11 @@ Select the Key Pair
     Input Text    css=#select2-drop .select2-input    cat_instances
     Sleep    1s
     Click Element    xpath=//*[@id='select2-drop']/ul/li/div
-    Execute JavaScript    $('#bootstrap-wizard-1 > div.tab-content > footer > div').attr('style','display:block')
-        
+    
+    
     
 
 Choose Instance Size
-    Execute JavaScript    $('#bootstrap-wizard-1 > div.tab-content > footer > div').attr('style','display:none')
     Sleep    3s
     Log    after scroll
     Sleep    1s
@@ -1201,7 +1214,7 @@ Choose Instance Size
     Input Text    css=#select2-drop .select2-input    ${CentosInstanceSize}
     Sleep    1s
     Click Element    xpath=//*[@id='select2-drop']/ul/li/div
-    Execute JavaScript    $('#bootstrap-wizard-1 > div.tab-content > footer > div').attr('style','display:block')
+    
 
 
 
@@ -1218,20 +1231,18 @@ Choose Instance Size for Ubuntu
     Input Text    css=#select2-drop .select2-input    ${UbuntuInstanceSize}
     Sleep    1s
     Click Element    xpath=//*[@id='select2-drop']/ul/li/div
-    Execute JavaScript    $('#bootstrap-wizard-1 > div.tab-content > footer > div').attr('style','display:block')
+    
 
 Select the Security Group
-    Execute JavaScript    $('#bootstrap-wizard-1 > div.tab-content > footer > div').attr('style','display:none')
     Sleep    3s
     Log    after scroll
     Sleep    1s
-    Click Element    css=#securityGroupIds > label:nth-child(1)
+    Click Element    xpath=.//*[@id='securityGroupIds']/label[contains(.,'sg-c00ee1a5 | all_open')]/i
     Log    after click
-    Input Text    css=#select2-drop .select2-input    sg-c00ee1a5 | all_open
-    Sleep    1s
-    Click Element    xpath=//*[@id='select2-drop']/ul/li/div
-    Execute JavaScript    $('#bootstrap-wizard-1 > div.tab-content > footer > div').attr('style','display:block')    
+    
 
+#Click Element    css=#select2-drop .select2-input    sg-c00ee1a5 | all_open
+#Click Element    css=#securityGroupIds > label:nth-child(1)
 
 
 Clicks on OKX Button
@@ -1556,9 +1567,19 @@ Clicks on close of Configure Organization Parameters
 
 
 Chooses Organization
-    Click Element    xpath=.//*[@id='s2id_orgnameSelect']/a
-    Input Text    xpath=.//*[@id='select2-drop']/div/input    ${ORGANIZATION NAME}
-    Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
+    Execute JavaScript    $('#bootstrap-wizard-1 > div.tab-content > footer > div').attr('style','display:none')
+    Sleep    3s
+    Log    after scroll
+    Sleep    1s
+    Click Element    css=#s2id_orgnameSelect > .select2-choice
+    Log    after click
+    Input Text    css=#select2-drop .select2-input    ${ORGANIZATION NAME}
+    Sleep    1s
+    Click Element    xpath=//*[@id='select2-drop']/ul/li/div
+
+
+
+    
 
 #Select WorkCookBooks
     #Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[2]
@@ -1599,14 +1620,27 @@ Enters The ubuntu Blueprint Name
     Input Text    id=blueprintNameInput    ${BLUEPRINT NAME1}
 
 Chooses The Business Group
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='s2id_bgListInput']/a/span[2]/b
-    Input Text    xpath=.//*[@id='select2-drop']/div/input    ${BUSINESS GROUP NAME}       #Devops
-    Click Element    xpath=.//*[@id='select2-drop']/ul/li/div      
+    Sleep    3s
+    Log    after scroll
+    Sleep    1s
+    Click Element    css=#s2id_bgListInput > .select2-choice
+    Log    after click
+    Input Text    css=#select2-drop .select2-input    ${BUSINESS GROUP NAME}
+    Sleep    1s
+    Click Element    xpath=//*[@id='select2-drop']/ul/li/div
 
+    
 Chooses The Project
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='s2id_projectListInput']/a/span[1]    
-    Input Text    xpath=.//*[@id='select2-drop']/div/input    ${PROJECT NAME}
-    Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
+    Sleep    3s
+    Log    after scroll
+    Sleep    1s
+    Click Element    css=#s2id_projectListInput > .select2-choice
+    Log    after click
+    Input Text    css=#select2-drop .select2-input    ${PROJECT NAME}
+    Sleep    1s
+    Click Element    xpath=//*[@id='select2-drop']/ul/li/div    
+
+
 
 Chooses The Environment
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='s2id_envList']/a
