@@ -1379,6 +1379,10 @@
     $('a#addanotherlink').click(function(e) {
         validator.resetForm();
     });
+    /*$('a#workZoneNew').click(function(e){
+        alert('click');
+        validator.resetForm();
+    })*/
     $(document).on('change', '.select2-offscreen', function() {
         if (!$.isEmptyObject(validator.submitted)) {
             validator.form();
@@ -2459,6 +2463,9 @@ if ($('#tab2 .role-Selected').length > 0) {
                                 blueprintData: reqBody
                             }, function(data) {
                                 console.log(data);
+                                    var validatorForm = $("#wizard-1").validate();
+                                    validatorForm.resetForm();
+
                                // alert(JSON.stringify(data));
                                 $('.blueprintSaveSuccess').show();
                                 $('.blueprintNameSuccess').html('Blueprint&nbsp;&nbsp;<b>' + data.name + '</b>&nbsp;&nbsp;Saved Successfully');
@@ -2539,6 +2546,8 @@ if ($('#tab2 .role-Selected').length > 0) {
                                 blueprintData: reqBody
                             }, function(data) {
                                 console.log(data);
+                                var validatorFormDocker = $("#wizard-1").validate();
+                                validatorFormDocker.resetForm();
                                 $('.blueprintSaveSuccess').show();
                                 $wizard.data('secondClick', true);
                                 var wizard = $wizard.data('bootstrapWizard');
@@ -2552,7 +2561,7 @@ if ($('#tab2 .role-Selected').length > 0) {
 
                     }
                   }
-                });
+                }).find('.modal-header').css('background-color','ghostwhite');
             }
             return false;
         }

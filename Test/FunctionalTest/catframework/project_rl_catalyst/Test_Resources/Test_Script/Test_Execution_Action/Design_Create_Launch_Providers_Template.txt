@@ -221,7 +221,7 @@ Enters the UserName of WindowsProviders
     Input Text    id=UserName    administrator
 
 Catalyst Choose Template and Save Setup
-    Sleep    5s
+    Sleep    6s
     Clicks on Design
     Sleep    10s
     Choose the Template Type Created
@@ -239,15 +239,14 @@ Catalyst Choose Template and Save Setup
     Choose Instance Size
     Select the Security Group
     Clicks on Configure Provider Parameters
-    Clicks on Configure Chef Runlist
+    Clicks on Configure Organization Parameters
     Chooses Organization
-    #Select WorkCookBooks
-    #Clicks on >>T Button
-    Clicks on Configure Chef Runlist
-    Clicks on Edit Organization Parameters  
     Enters The Blueprint Name
     Chooses The Business Group
     Chooses The Project
+    #Select WorkCookBooks
+    #Clicks on >>T Button
+    Clicks on close of Configure Organization Parameters
     #Chooses The Environment
     Clicks on Configure Application URL
     Clicks on AppNew Button
@@ -255,6 +254,7 @@ Catalyst Choose Template and Save Setup
     Enters the AppURL
     Clicks on AppADD Button 
     Clicks on Next Button
+    Clicks on Confirm OK Button
 
     
 Catlayst Workzone and Status Setup           
@@ -419,15 +419,14 @@ Catalyst Choose Template and Save Setup for UBUNTU
     Select the Key Pair
     Choose Instance Size for Ubuntu
     Select the Security Group
-    Clicks on Configure Provider Parameters 
-    Clicks on Configure Chef Runlist
+    Clicks on Configure Provider Parameters
+    Clicks on Configure Organization Parameters
     Chooses Organization
-    Select WorkCookBooks for Ubuntu
-    Clicks on Configure Chef Runlist
-    Clicks on Edit Organization Parameters    
     Enters The ubuntu Blueprint Name
     Chooses The Business Group
     Chooses The Project
+    Select WorkCookBooks for Ubuntu
+    Clicks on close of Configure Organization Parameters
     #Chooses The Environment
     Clicks on Configure Application URL
     Clicks on AppNew Button
@@ -435,6 +434,7 @@ Catalyst Choose Template and Save Setup for UBUNTU
     Enters the AppURL
     Clicks on AppADD Button 
     Clicks on Next Button
+    Clicks on Confirm OK Button
 
 Catlayst Workzone and Status Setup for Ubuntu
     Clicks on Workzone Button
@@ -518,7 +518,8 @@ Catalyst Grid View Start ,Stop ,SSH ,Chef ,Client ,Log Setup of Ubuntu
     Clicks on View Instancess Button
 
 
-
+Clicks on Confirm OK Button
+    Click Element    xpath=//*[text()='OK']
 
 
 Clicks on Edit Button of the CentosInstance Imported
@@ -969,7 +970,7 @@ Clicks on Control Panel Button
     Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='l1']/footer/div/div/button
 
 Clicks on Configure Provider Parameters
-    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='accordion-Design']/div[1]/div[1]/h4/a
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='accordion-Design']/div[1]/div[1]/h4/a/i[2]
 
 
 
@@ -1155,7 +1156,7 @@ Validation of Empty Image Name
 Choose the Provider
     Click Element    xpath=.//*[@id='s2id_providerId']/a/span[1]
     Sleep    1s
-    Input Text    xpath=.//*[@id='select2-drop']/div/input    AWS RELPRO
+    Input Text    xpath=.//*[@id='select2-drop']/div/input    ${PROVIDER NAME}
     Sleep    1s
     Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
 
@@ -1165,32 +1166,72 @@ Choose the Available Images
 
 Choose the Region
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='s2id_region']/a/span[1]
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='select2-drop']/ul/li[2]/div
+    Input Text    xpath=.//*[@id='select2-drop']/div/input    ${REGION NAME}
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
+    Sleep    10s
 
 Select the Subnet
-    Sleep    1s
+    Sleep    2s
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='s2id_subnetId']/a/span[1]
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='select2-drop']/ul/li[2]/div
+    Input Text    xpath=.//*[@id='select2-drop']/div/input    ${SUBNET NAME}
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
+
 
 Select the Key Pair
-   Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element     xpath=.//*[@id='s2id_keypairId']/a/span[1]
-   Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element     xpath=.//*[@id='select2-drop']/ul/li[2]/div
+    Execute JavaScript    $('#bootstrap-wizard-1 > div.tab-content > footer > div').attr('style','display:none')
+    Sleep    3s
+    Log    after scroll
+    Sleep    1s
+    Click Element    css=#s2id_keypairId > .select2-choice
+    Log    after click
+    Input Text    css=#select2-drop .select2-input    cat_instances
+    Sleep    1s
+    Click Element    xpath=//*[@id='select2-drop']/ul/li/div
+    Execute JavaScript    $('#bootstrap-wizard-1 > div.tab-content > footer > div').attr('style','display:block')
+        
+    
 
 Choose Instance Size
-    Click Element    xpath=.//*[@id='s2id_instancesize']/a
-    Input Text    xpath=.//*[@id='select2-drop']/div/input    ${CentosInstanceSize}
+    Execute JavaScript    $('#bootstrap-wizard-1 > div.tab-content > footer > div').attr('style','display:none')
+    Sleep    3s
+    Log    after scroll
     Sleep    1s
-    Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
-    #Click Element    xpath=.//*[@id='select2-drop']/ul/li[2]/div
+    Click Element    css=#s2id_instancesize > .select2-choice
+    Log    after click
+    Input Text    css=#select2-drop .select2-input    ${CentosInstanceSize}
+    Sleep    1s
+    Click Element    xpath=//*[@id='select2-drop']/ul/li/div
+    Execute JavaScript    $('#bootstrap-wizard-1 > div.tab-content > footer > div').attr('style','display:block')
+
+
+
+
+
 
 Choose Instance Size for Ubuntu
-    Click Element    xpath=.//*[@id='s2id_instancesize']/a
-    Input Text    xpath=.//*[@id='select2-drop']/div/input    ${UbuntuInstanceSize}
+    Execute JavaScript    $('#bootstrap-wizard-1 > div.tab-content > footer > div').attr('style','display:none')
+    Sleep    3s
+    Log    after scroll
     Sleep    1s
-    Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
+    Click Element    css=#s2id_instancesize > .select2-choice
+    Log    after click
+    Input Text    css=#select2-drop .select2-input    ${UbuntuInstanceSize}
+    Sleep    1s
+    Click Element    xpath=//*[@id='select2-drop']/ul/li/div
+    Execute JavaScript    $('#bootstrap-wizard-1 > div.tab-content > footer > div').attr('style','display:block')
 
 Select the Security Group
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='securityGroupIds']/label[1]/i
+    Execute JavaScript    $('#bootstrap-wizard-1 > div.tab-content > footer > div').attr('style','display:none')
+    Sleep    3s
+    Log    after scroll
+    Sleep    1s
+    Click Element    css=#securityGroupIds > label:nth-child(1)
+    Log    after click
+    Input Text    css=#select2-drop .select2-input    sg-c00ee1a5 | all_open
+    Sleep    1s
+    Click Element    xpath=//*[@id='select2-drop']/ul/li/div
+    Execute JavaScript    $('#bootstrap-wizard-1 > div.tab-content > footer > div').attr('style','display:block')    
+
 
 
 Clicks on OKX Button
@@ -1507,8 +1548,12 @@ Chooses the Operating System
     #Input Text    xpath=.//*[@id='select2-drop']/div/input    ${INSTANCE SIZE}
     #Click Element    xpath=.//*[@id='select2-drop']/ul/li[1]/div
 
-Clicks on Configure Chef Runlist
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='accordion-Design']/div[2]/div[1]/h4/a
+Clicks on Configure Organization Parameters
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='accordion-Design']/div[2]/div[1]/h4/a/i[1]
+
+Clicks on close of Configure Organization Parameters
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='accordion-Design']/div[2]/div[1]/h4/a/i[2]
+
 
 Chooses Organization
     Click Element    xpath=.//*[@id='s2id_orgnameSelect']/a
@@ -1554,12 +1599,12 @@ Enters The ubuntu Blueprint Name
     Input Text    id=blueprintNameInput    ${BLUEPRINT NAME1}
 
 Chooses The Business Group
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='s2id_bgListInput']/a
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='s2id_bgListInput']/a/span[2]/b
     Input Text    xpath=.//*[@id='select2-drop']/div/input    ${BUSINESS GROUP NAME}       #Devops
     Click Element    xpath=.//*[@id='select2-drop']/ul/li/div      
 
 Chooses The Project
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='s2id_projectListInput']/a    
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='s2id_projectListInput']/a/span[1]    
     Input Text    xpath=.//*[@id='select2-drop']/div/input    ${PROJECT NAME}
     Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
 
@@ -1569,7 +1614,7 @@ Chooses The Environment
     Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
 
 Clicks on Configure Application URL
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='accordion-Design']/div[5]/div[1]/h4/a
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='accordion-Design']/div[4]/div[1]/h4/a/i[1]
 
 Clicks on AppNew Button
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='newAppSeries']

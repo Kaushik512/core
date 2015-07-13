@@ -137,54 +137,6 @@ Catalyst Ubuntu Instance Deleted only from Catalyst not from Chef Server
 
 
 
-
-
-
-#-Catalyst CentOS Instance Deleted only from Catalyst not from Chef Server
-    #-[Tags]       Sanity       ps
-#    Catalyst Login
-    #-Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
-    #-Catalyst Delete the Node only From Catalyst
-    #-Catalyst Logout
-    #-[Teardown]     Close Browser     
-
-
-
-#-Catalyst Importing Node From Chef Server
-    #-[Tags]       Sanity       ps
-#    Catalyst Login
-    #-Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
-    #-Catlayst Importing the Instance Chef Sync
-    #-Catalyst Logout
-    #-[Teardown]     Close Browser     
-
-
-#-Catalyst import chef server Cent OS nodes by IP Address           #from IP
-    #-[Tags]       Sanity       ps
-#    Catalyst Login
-    #-Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
-    #-Catalyst Creation of CentOS Template
-    #-Creation of CentOS Blueprint
-    #-Catalyst Launch of CentOS Blueprint
-    #Chef node import by IP CentOS Instance
-    #-Catalyst Logout
-    #-[Teardown]     Close Browser
-
- 
-
-#-Catalyst import chef server Ubuntu OS nodes by IP Address           #from IP
-    #-[Tags]       Sanity       ps
-#    Catalyst Login
-    #-Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"   
-    #-Catalyst Creation of UBuntuOS Template
-    #-Creation of UbuntuOS Blueprint
-    #-Catalyst Launch of UbuntuOS Blueprint
-    #Chef node import by IP Ubuntu Instance
-    #-Catalyst Logout
-    #-[Teardown]     Close Browser
-
-
-
 #-Catalyst new Jenkins Configuration setup
     #-[Tags]       Sanity               Smoke
 #    Catalyst Login
