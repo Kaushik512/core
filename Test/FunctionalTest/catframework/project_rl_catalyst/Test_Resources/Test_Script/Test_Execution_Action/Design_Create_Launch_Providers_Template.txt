@@ -1225,13 +1225,12 @@ Select the Security Group
     Sleep    3s
     Log    after scroll
     Sleep    1s
-    Click Element    css=#securityGroupIds > label:nth-child(1)
+    Click Element    xpath=.//*[@id='securityGroupIds']/label[contains(.,'sg-c00ee1a5 | all_open')]/i
     Log    after click
-    Input Text    css=#select2-drop .select2-input    sg-c00ee1a5 | all_open
-    Sleep    1s
-    Click Element    xpath=//*[@id='select2-drop']/ul/li/div
     Execute JavaScript    $('#bootstrap-wizard-1 > div.tab-content > footer > div').attr('style','display:block')    
 
+#Click Element    css=#select2-drop .select2-input    sg-c00ee1a5 | all_open
+#Click Element    css=#securityGroupIds > label:nth-child(1)
 
 
 Clicks on OKX Button
@@ -1556,7 +1555,7 @@ Clicks on close of Configure Organization Parameters
 
 
 Chooses Organization
-    Click Element    xpath=.//*[@id='s2id_orgnameSelect']/a
+    Click Element    xpath=.//*[@id='s2id_orgnameSelect']/a/span[1]
     Input Text    xpath=.//*[@id='select2-drop']/div/input    ${ORGANIZATION NAME}
     Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
 

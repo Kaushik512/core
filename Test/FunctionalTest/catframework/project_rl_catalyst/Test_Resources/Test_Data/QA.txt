@@ -146,7 +146,7 @@ ${random}                  adarsh
 ${ADD}                     apache2              #tomcat-all
 ${ACTBOOT1}                 Pending
 ${ACTBOOT2}                 Success
-${IP Centos}                 52.26.95.17
+${IP Centos}                 52.26.250.34
 ${RUN}                       running
 ${AUTHN}                    Pem File 
 ${NAME}                     Bootstrap
@@ -171,7 +171,7 @@ ${MORE INFO}                 SSH Terminal
 ${NO MATCH}                 No matches found
 ${ENVNAME}                  QA
 ${NAMEOFINSTANCE}           Instance_Centos
-${IP Ubuntu}                52.26.225.223
+${IP Ubuntu}                52.26.196.140
 ${IP UBUNTUSERNAME}         ubuntu
 ${EDIT_UBUNTU_INSTANCE_NAME}     Instance_Ubuntu
 ${DESIGNER_NAME}            Designer01
@@ -180,8 +180,8 @@ ${CONSUMER_NAME}            Consumer01
 ${CONSUMER_PASWD}           Consumer01
 ${CENTOS NAME}              Instance_Centos
 ${UBUNTU NAME}              Instance_Ubuntu
-${IP ADD UBUNTU}             52.26.225.223
-${IP ADD CENTOS}             52.26.95.17 
+${IP ADD UBUNTU}             52.26.196.140
+${IP ADD CENTOS}             52.26.250.34
 ${Proj1}                      Catalyst
 ${Proj2}                      Primary_Edu
 ${CookBkName}                 apt
