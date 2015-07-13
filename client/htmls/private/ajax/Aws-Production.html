@@ -2459,6 +2459,7 @@ if ($('#tab2 .role-Selected').length > 0) {
                         $('.blueprintMsgContainer').hide();
 
                         if (($('.role-Selected').data('templatetype')).toLowerCase() != "docker") {
+                            reqBody.blueprintType="instance_launch"
                             $.post('/organizations/' + reqBody.orgId + '/businessgroups/' + reqBody.bgId + '/projects/' + reqBody.projectId + '/blueprints', {
                                 blueprintData: reqBody
                             }, function(data) {
@@ -2542,6 +2543,7 @@ if ($('#tab2 .role-Selected').length > 0) {
                             console.log('final', reqBody);
 
                         } else {
+                            reqBody.blueprintType="docker"
                             $.post('/organizations/' + reqBody.orgId + '/businessgroups/' + reqBody.bgId + '/projects/' + reqBody.projectId + '/blueprints/docker', {
                                 blueprintData: reqBody
                             }, function(data) {

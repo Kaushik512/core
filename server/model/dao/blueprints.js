@@ -188,7 +188,7 @@ var BlueprintSchema = new Schema({
 
 });
 
-var Blueprint = mongoose.model('blueprints', BlueprintSchema);
+var Blueprint = mongoose.model('blueprints_old', BlueprintSchema);
 
 function generateBlueprintVersionNumber(prevVersion) {
     logger.debug("Enter generateBlueprintVersionNumber()", prevVersion);

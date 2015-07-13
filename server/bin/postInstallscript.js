@@ -9,7 +9,7 @@ console.log('Creating short links');
 var osName = os.type();
 console.log(osName + ' detected');
 
-var cmd = 'ln -s ../server _';
+var cmd = 'ln -s ../../server _pr';
 if (osName === 'Windows') {
     cmd = 'mklink /D _ ..\\server';
 }
