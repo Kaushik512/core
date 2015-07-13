@@ -386,8 +386,8 @@ ${VaildEmptyValidatorname}
 ${VaildEmptyKnifename}
 
 
-${ValidateAlrdyExistConfigNameErrMsg}    Selected is already registered
-${ValidateAlrdyExistOrgNameErrMsg}       Selected is already registered
+${ValidateAlrdyExistConfigNameErrMsg}    This is already registered. Try another?
+${ValidateAlrdyExistOrgNameErrMsg}       This is already registered. Try another?
 ${VaildEmptyURLErrMsg}                   Please enter a valid Url
 ${VaildEmptyConfignameErrMsg}           Required
 ${VaildEmptyUsernameErrMsg}             Required
