@@ -34,14 +34,15 @@
                                        <label style="margin-top:25px; margin-left:16px" for="" class="checkPass"> <input type="checkbox" id="chkadduserldap">Update Password</label>
                                        <div class="row1" style="margin:0px">
                                        <div class="col-lg-6 col-md-6 editPass" style="margin-top:25px">
-                                          <label for="">Password:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+                                          <label for="">Password:<span style="color:Red;" class="control-label">&nbsp;*</span>
+                                          <span style="color:Red;display:none" class="requiredPassword">Required</span></label>
   
-                                          <input type="text" name="ctl00$MainContent$orgname" id="password" class="form-control" cdata="catalyst" cat-validation="required,min6">
+                                          <input type="password" name="ctl00$MainContent$orgname" id="password" class="form-control" cdata="catalyst" cat-custom-validation="required">
                                        </div>
                                        <div class="col-lg-6 col-md-6 editPass" style="margin-top:25px">
-                                          <label for="">Confirm Password:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+                                          <label for="">Confirm Password:<span style="color:Red;" class="control-label">&nbsp;*</span><span style="color:Red;display:none" class="requiredCnfPassword">Required</span></label>
   
-                                          <input type="text" name="ctl00$MainContent$orgname" id="cnfPassword" class="form-control" cdata="catalyst" cat-validation="required,min6,cnfPass">
+                                          <input type="password" name="ctl00$MainContent$orgname" id="cnfPassword" class="form-control" cdata="catalyst" cat-validation="cnfPass" cat-custom-validation="required">
                                        </div>
                                        </div>
                                        <div class="row" style="margin:0px">
@@ -113,6 +114,7 @@
 <!--row ends here-->
 <!--Popup for selecting a cloud provider before proceeding-->
 <script>
+
    //Form Name
    function cancelClicked() {
        $("#popupSelectProvider").modal('hide');

@@ -2032,10 +2032,29 @@ function CreateTableFromJsonNew(formID, idFieldName, createFileName) {
 
 function saveform(formID, operationTypes) {
     //Validating the form
-    //alert(isFormValid(formID));
-    if (isFormValid(formID) == false)
-        return (false);
 
+    if (formID === "7") {
+        if (isFormValid(formID) == false || !validateUserForm(formID)) {
+            return (false);
+        }
+        if($("#chkadduserldap").is(':checked')){
+            if($('#password').val() === ''){
+                $(".requiredPassword").show();
+                return (false);
+            }else{
+                $(".requiredPassword").hide();
+            }
+            if($('#cnfPassword').val() === ''){
+                $(".requiredCnfPassword").show();
+                return (false);
+            }else{
+                $(".requiredCnfPassword").hide();
+            }
+        }
+    }else{
+        if (isFormValid(formID) == false)
+        return (false);
+    }
 
     var data1 = new FormData();
     var fileNames = '';
@@ -2878,6 +2897,49 @@ function errormessageforInput(id, msg) {
     if (uniquelbl.length > 0) {
         uniquelbl.addClass('hidden');
     }
+}
+
+function validateUserForm(formid) {
+    var isValid = true;
+    if ($('input[unique="true"], select[unique="true"]').length > 0) {
+        // alert('in isFormValid');
+        $('input[unique="true"], select[unique="true"]').each(function() {
+            $(this).trigger('blur');
+
+            if ($(this).closest('div').find('span[id*="unique_"]').length > 0 && $(this).closest('div').find('span[id*="unique_"]').text().indexOf('available') < 0) {
+                // alert('pusing isvalid false');
+                isValid = false;
+            }
+        });
+    }
+    if (location.toString().indexOf('?new') != -1) {
+        $('[cat-custom-validation]').each(function(itm) {
+            var currCtrl = $(this);
+            var valiarr = $(this).attr('cat-custom-validation').split(',');
+            //$('#unique_loginname').text().indexOf('NOT') > 0
+            if ($('#unique_' + currCtrl.attr('id')).text().indexOf('NOT') > 0) {
+                //There is an error message displayed. Do not save form
+                isValid = false;
+            }
+            var password = $('#password').val();
+            var cnfPassword = $('#cnfPassword').val();
+
+            //alert(currCtrl.attr('id'));
+            $.each(valiarr, function(vali) {
+                switch (valiarr[vali]) {
+                    case "required":
+                        if (currCtrl.val() == '') {
+                            isValid = false;
+                            errormessageforInput(currCtrl.attr('id'), "Required");
+                            currCtrl.focus();
+                        }
+                        break;
+                }
+            });
+        });
+        return (isValid);
+    }
+    return (isValid);
 }
 
 //run validation tests on inputs 

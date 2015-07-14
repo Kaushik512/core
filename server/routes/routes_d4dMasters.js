@@ -2782,7 +2782,34 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                             }
                                             logger.debug("Fetched User: ", JSON.stringify(anUser));
                                             if (anUser.length) {
-                                                if (bodyJson["password"] != anUser[0].password) {
+                                                if(bodyJson["password"] === ''){
+
+                                                    delete rowtoedit._id; //fixing the issue of 
+                                                        if (bodyJson["orgname"] === "") {
+                                                            logger.debug("Inside if for empty for update..");
+                                                            rowtoedit["orgname"] = [""];
+                                                            rowtoedit["orgname_rowid"] = [""];
+                                                        }
+                                                        rowtoedit["password"] = anUser[0].password;
+                                                        logger.debug('Rowtoedit: %s', JSON.stringify(rowtoedit));
+                                                        eval('d4dModelNew.' + dbtype).update({
+                                                            rowid: bodyJson["rowid"],
+                                                            "id" : "7"
+                                                        }, {
+                                                            $set: rowtoedit
+                                                        }, {
+                                                            upsert: false
+                                                        }, function(err, saveddata) {
+                                                            if (err) {
+                                                                logger.error('Hit Save error', err);
+                                                                res.send(500);
+                                                                return;
+                                                            }
+                                                            res.send(200);
+                                                            return;
+                                                        });
+
+                                                }else if (bodyJson["password"] != anUser[0].password) {
                                                     authUtil.hashPassword(bodyJson["password"], function(err, hashedPassword) {
                                                         if (err) {
                                                             logger.error('Hit error', err);
