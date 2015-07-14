@@ -1,4 +1,5 @@
 var blueprintsDao = require('../model/dao/blueprints');
+var Blueprints = require('_pr/model/blueprint');
 
 var instancesDao = require('../model/classes/instance/instance');
 var EC2 = require('../lib/ec2.js');
@@ -44,26 +45,72 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 res.send(500);
                 return;
             }
-            var blueprintData = req.body.blueprintData;
-
-            //All comming with blueprintData
-            /*blueprintData.orgId = req.body.orgId;
-            blueprintData.bgId = req.body.bgId;
-            blueprintData.projectId = req.body.projectId;
-            blueprintData.envId = req.body.envId;
-            blueprintData.imageId = req.body.imageId;
-            blueprintData.providerId = req.body.providerId;*/
-            if (!blueprintData.runlist) {
-                blueprintData.runlist = [];
+            if (!req.body.blueprintData.runlist) {
+                req.body.blueprintData.runlist = [];
             }
+            var blueprintData = {
+                orgId: req.body.blueprintData.orgId,
+                bgId: req.body.blueprintData.bgId,
+                projectId: req.body.blueprintData.projectId,
+                name: req.body.blueprintData.name,
+                appUrls: req.body.blueprintData.appUrls,
+                iconpath: req.body.blueprintData.iconpath,
+                templateId: req.body.blueprintData.templateId,
+                templateType: req.body.blueprintData.templateType,
+                users: req.body.blueprintData.users,
+                blueprintType: req.body.blueprintData.blueprintType
+            };
+
+            var dockerData, instanceData;
+            logger.debug('req.body.blueprintData.blueprintType ==>', req.body.blueprintData.blueprintType);
+            if (req.body.blueprintData.blueprintType === 'docker') {
+                dockerData = {
+                    dockerContainerPathsTitle: req.body.blueprintData.dockercontainerpathstitle,
+                    dockerContainerPaths: req.body.blueprintData.dockercontainerpaths,
+                    dockerLaunchParameters: req.body.blueprintData.dockerlaunchparameters,
+                    dockerRepoName: req.body.blueprintData.dockerreponame,
+                    dockerCompose: req.body.blueprintData.dockercompose,
+                    dockerRepoTags: req.body.blueprintData.dockerrepotags,
+                    dockerImageName: req.body.blueprintData.dockerimagename,
+                };
+                blueprintData.dockerData = dockerData;
+
+            } else if (req.body.blueprintData.blueprintType === 'instance_launch') {
+                logger.debug('req.body.blueprintData.blueprintType ==>', req.body.blueprintData.blueprintType);
+                instanceData = {
+                    keyPairId: req.body.blueprintData.keyPairId,
+                    securityGroupIds: req.body.blueprintData.securityGroupIds,
+                    instanceType: req.body.blueprintData.instanceType,
+                    instanceAmiid: req.body.blueprintData.instanceAmiid,
+                    instanceUsername: 'root',
+                    vpcId: req.body.blueprintData.vpcId,
+                    subnetId: req.body.blueprintData.subnetId,
+                    imageId: req.body.blueprintData.imageId,
+                    cloudProviderType: 'aws',
+                    cloudProviderId: req.body.blueprintData.providerId,
+                    infraManagerType: 'chef',
+                    infraManagerId: req.body.blueprintData.chefServerId,
+                    runlist: req.body.blueprintData.runlist
+                }
+                blueprintData.instanceData = instanceData;
+            } else {
+                res.send(400, {
+                    message: "Invalid Blueprint Type"
+                });
+            }
+
+
             if (!blueprintData.users || !blueprintData.users.length) {
                 res.send(400);
                 return;
             }
 
-            blueprintsDao.createBlueprint(blueprintData, function(err, data) {
+            Blueprints.createNew(blueprintData, function(err, data) {
                 if (err) {
-                    res.send(500);
+                    logger.error('error occured while saving blueorint', err);
+                    res.send(500, {
+                        message: "DB error"
+                    });
                     return;
                 }
                 res.send(data);
@@ -87,58 +134,63 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
         //blueprintUpdateData.runlist.splice(0, 0, 'recipe[ohai]');
 
-        logger.debug("Blueprint Data = %s", blueprintUpdateData);
-        blueprintsDao.updateBlueprint(req.params.blueprintId, blueprintUpdateData, function(err, data) {
+
+        Blueprints.getById(req.params.blueprintId, function(err, blueprint) {
             if (err) {
-                logger.error("Blueprint Updated Failed >> ", err);
-                res.send(500);
+                logger.error("Failed to get blueprint versions ", err);
+                res.send(500, errorResponses.db.error);
                 return;
             }
+            blueprint.update(blueprintUpdateData, function(err, updatedBlueprint) {
+                if (err) {
+                    logger.error("Failed to update blueprint ", err);
+                    res.send(500, errorResponses.db.error);
+                    return;
+                }
+                var latestVersionData = updatedBlueprint.getLatestVersion();
+                if (latestVersionData) {
+                    res.send({
+                        version: latestVersionData.ver
+                    });
+                } else {
+                    res.send(200);
+                }
 
-            if (!data) {
-                logger.error("Exit /blueprints/%s/update. Update Failed. No Such Blueprint", req.params.blueprintId);
-                res.send(404)
-            } else {
-                logger.debug("Exit /blueprints/%s/update. Update Successful", req.params.blueprintId);
-                res.send({
-                    version: data.version
-                });
-            }
 
+            });
         });
+
     }); // end app.post('/blueprints/:blueprintId/update' )
 
     app.get('/blueprints/:blueprintId/versions/:version', function(req, res) {
         logger.debug("Enter /blueprints/%s/versions/%s", req.params.blueprintId, req.params.version);
-        blueprintsDao.getBlueprintVersionData(req.params.blueprintId, req.params.version, function(err, data) {
+
+        Blueprints.getById(req.params.blueprintId, function(err, blueprint) {
             if (err) {
-                logger.debug("Failed to get blueprint versions ", err);
-                res.send(500);
+                logger.error("Failed to get blueprint versions ", err);
+                res.send(500, errorResponses.db.error);
                 return;
             }
+            logger.debug(blueprint);
 
-            if (!data.length) {
-                logger.error("No such blueprint or blueprint version");
-                res.send(404);
-                return;
-            }
+            var versionData = blueprint.getVersionData(req.params.version);
+            res.send(200, versionData);
 
-            logger.debug("Exit /blueprints/%s/versions/%s (Success)", req.params.blueprintId, req.params.version);
-            res.send(data[0]);
         });
+
     });
 
-    app.get('/blueprints/delete/:blueprintId', function(req, res) {
+    app.delete('/blueprints/:blueprintId', function(req, res) {
         logger.debug("Enter /blueprints/delete/%s", req.params.blueprintId);
-        blueprintsDao.removeBlueprintbyId(req.params.blueprintId, function(err, data) {
+        Blueprints.removeById(req.params.blueprintId, function(err, data) {
             if (err) {
-                logger.error("Failed to delete blueprint>>", err);
-                res.send(500);
+                logger.error("Failed to delete blueprint ", err);
+                res.send(500, errorResponses.db.error);
                 return;
             }
-
-            logger.debug("Exit /blueprints/delete/%s", req.params.blueprintId);
-            res.end('OK');
+            res.send(200, {
+                message: "deleted"
+            });
         });
     });
 
@@ -644,235 +696,5 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         }); // end haspermission
     });
 
-
-    app.post('/blueprints/:blueprintId/provision', function(req, res) {
-        logger.debug("Enter /blueprints/%s/provision", req.params.blueprintId);
-
-        blueprintsDao.getBlueprintById(req.params.blueprintId, function(err, data) {
-            if (err) {
-                logger.error("getBlueprintById Failed", err);
-                res.send(500);
-                return;
-            }
-            if (data.length) {
-                var blueprint = data[0];
-                var launchVersionNumber = blueprint.latestVersion;
-                if (req.query.version) {
-                    launchVersionNumber = req.body.version;
-                }
-                logger.debug('Launching Version ::', launchVersionNumber);
-
-                var version;
-                for (var i = 0; i < blueprint.versionsList.length; i++) {
-                    if (blueprint.versionsList[i].ver === blueprint.latestVersion) {
-                        version = blueprint.versionsList[i];
-                        break;
-                    }
-                }
-                if (!version) {
-                    logger.debug("No Blueprint Version Found");
-                    res.send(404);
-                    return;
-                }
-
-                configmgmtDao.getChefServerDetails(blueprint.chefServerId, function(err, chefDetails) {
-                    if (err) {
-                        logger.error("Unable to get Chef Server Details found in blueprint", err);
-                        res.send(500);
-                        return;
-                    }
-                    if (!chefDetails) {
-                        logger.error("No Chef Server Details in Blueprint");
-                        res.send(500);
-                        return;
-                    }
-                    var chef = new Chef({
-                        userChefRepoLocation: chefDetails.chefRepoLocation,
-                        chefUserName: chefDetails.loginname,
-                        chefUserPemFile: chefDetails.userpemfile,
-                        chefValidationPemFile: chefDetails.validatorpemfile,
-                        hostedChefUrl: chefDetails.url,
-                    });
-
-                    function provisionInstance() {
-
-                        var instance = {
-                            orgId: blueprint.projectId,
-                            projectId: blueprint.projectId,
-                            envId: blueprint.envId,
-                            chefNodeName: req.body.instanceIP,
-                            runlist: version.runlist,
-                            platformId: 'datacenter',
-                            instanceIP: req.body.instanceIP,
-                            instanceState: 'running',
-                            bootStrapStatus: 'waiting',
-                            appUrl1: blueprint.appUrl1,
-                            appUrl2: blueprint.appUrl2,
-                            users: blueprint.users,
-                            hardware: {
-                                platform: 'unknown',
-                                platformVersion: 'unknown',
-                                architecture: 'unknown',
-                                memory: {
-                                    total: 'unknown',
-                                    free: 'unknown',
-                                },
-                                os: blueprint.instanceOS
-                            },
-                            chef: {
-                                serverId: blueprint.chefServerId,
-                                chefNodeName: req.body.instanceIP
-                            },
-                            credentials: {
-                                username: req.body.username,
-                                password: req.body.password,
-                            },
-                            blueprintData: {
-                                blueprintId: blueprint._id,
-                                blueprintName: blueprint.name,
-                                templateId: blueprint.templateId,
-                                templateType: blueprint.templateType,
-                                templateComponents: blueprint.templateComponents
-                            }
-                        }
-
-                        instancesDao.createInstance(instance, function(err, data) {
-                            if (err) {
-                                logger.error("Failed to create an instance from blueprint", err);
-                                res.send(500);
-                                return;
-                            }
-                            instance.id = data._id;
-
-                            logsDao.insertLog({
-                                referenceId: instance.id,
-                                err: false,
-                                log: "Provisioning Instance",
-                                timestamp: new Date().getTime()
-                            });
-                            logsDao.insertLog({
-                                referenceId: instance.id,
-                                err: false,
-                                log: "Bootstrapping Instance",
-                                timestamp: new Date().getTime()
-                            });
-                            chef.bootstrapInstance({
-                                instanceIp: instance.instanceIP,
-                                runlist: instance.runlist,
-                                instanceUsername: instance.credentials.username,
-                                instancePassword: instance.credentials.password,
-                                nodeName: instance.chef.chefNodeName,
-                                environment: instance.envId,
-                                instanceOS: instance.hardware.os
-                            }, function(err, code) {
-
-                                logger.error('process stopped ==> ', err, code);
-                                if (err) {
-                                    logger.error("knife launch err ==>", err);
-                                    instancesDao.updateInstanceBootstrapStatus(instance.id, 'failed', function(err, updateData) {
-
-                                    });
-                                } else {
-                                    if (code == 0) {
-                                        instancesDao.updateInstanceBootstrapStatus(instance.id, 'success', function(err, updateData) {
-                                            if (err) {
-                                                logger.error("Unable to set instance bootstarp status", err);
-                                            } else {
-                                                logger.debug("Instance bootstrap status set to success");
-                                            }
-                                        });
-
-                                        chef.getNode(instance.chefNodeName, function(err, nodeData) {
-                                            if (err) {
-                                                logger.error("Unable to get Node", err);
-                                                return;
-                                            }
-                                            var hardwareData = {};
-                                            hardwareData.architecture = nodeData.automatic.kernel.machine;
-                                            hardwareData.platform = nodeData.automatic.platform;
-                                            hardwareData.platformVersion = nodeData.automatic.platform_version;
-                                            hardwareData.memory = {};
-                                            hardwareData.memory.total = nodeData.automatic.memory.total;
-                                            hardwareData.memory.free = nodeData.automatic.memory.free;
-                                            hardwareData.os = instance.hardware.os;
-                                            instancesDao.setHardwareDetails(instance.id, hardwareData, function(err, updateData) {
-                                                if (err) {
-                                                    logger.error("Unable to set instance hardware details", err);
-                                                } else {
-                                                    logger.debug("Instance hardware details set successessfully");
-                                                }
-                                            });
-                                        });
-
-                                    } else {
-                                        instancesDao.updateInstanceBootstrapStatus(instance.id, 'failed', function(err, updateData) {
-                                            if (err) {
-                                                logger.error("Unable to set instance bootstarp status", err);
-                                            } else {
-                                                logger.debug("Instance bootstrap status set to failed");
-                                            }
-                                        });
-
-                                    }
-                                }
-
-                            }, function(stdOutData) {
-
-                                logsDao.insertLog({
-                                    referenceId: instance.id,
-                                    err: false,
-                                    log: stdOutData.toString('ascii'),
-                                    timestamp: new Date().getTime()
-                                });
-
-                            }, function(stdErrData) {
-
-                                logsDao.insertLog({
-                                    referenceId: instance.id,
-                                    err: true,
-                                    log: stdErrData.toString('ascii'),
-                                    timestamp: new Date().getTime()
-                                });
-
-                            });
-
-                            res.send(200, {
-                                "id": instance.id,
-                                "message": "instance launch success"
-                            });
-                        });
-
-                    }
-
-                    chef.getEnvironment(blueprint.envId, function(err, env) {
-                        if (err) {
-                            logger.error("Error in chef.getEnvironment", err);
-                            res.send(500);
-                            return;
-                        }
-
-                        if (!env) {
-                            logger.debug(blueprint.envId);
-                            chef.createEnvironment(blueprint.envId, function(err, envName) {
-                                if (err) {
-                                    logger.error("Error in chef.createEnvironment", err);
-                                    res.send(500);
-                                    return;
-                                }
-                                provisionInstance();
-
-                            });
-                        } else {
-                            provisionInstance();
-                        }
-
-                    });
-                });
-            } else {
-                res.send(404);
-            }
-        });
-
-    });
 
 };

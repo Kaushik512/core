@@ -213,7 +213,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                         });
                     });
                 }
-            }); //getTeamsOrgBuProjForUser 
+            }); //getTeamsOrgBuProjForUser
             //} //else
         }); // getLoggedInUser()
     });
@@ -894,7 +894,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                             }
                         }
 
-                        //getting projects 
+                        //getting projects
                         masterjsonDao.getMasterJson("4", function(err, buJson) {
                             if (err) {
                                 res.send(500);
@@ -972,7 +972,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
                 });
 
-                //getting business groups  
+                //getting business groups
 
                 //res.send(orgTree);
 
@@ -1040,6 +1040,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 users: req.body.blueprintData.users,
                 blueprintType: req.body.blueprintData.blueprintType
             };
+            console.log('req== >',blueprintData);
             //var blueprintData = req.body.blueprintData;
             var dockerData, instanceData;
             logger.debug('req.body.blueprintData.blueprintType ==>', req.body.blueprintData.blueprintType);
@@ -1213,7 +1214,8 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                 res.send(500);
                                 return;
                             }
-                            blueprintsDao.getBlueprintsByOrgBgProject(req.params.orgId, req.params.bgId, req.params.projectId, req.query.blueprintType, req.session.user.cn, function(err, blueprintsData) {
+
+                            Blueprints.getBlueprintsByOrgBgProject(req.params.orgId, req.params.bgId, req.params.projectId, req.query.blueprintType, function(err, blueprintsData) {
                                 console.log(req.params.orgId, req.params.projectId, req.params.envId);
                                 if (err) {
                                     res.send(500);

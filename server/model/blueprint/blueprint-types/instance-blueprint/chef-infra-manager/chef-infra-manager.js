@@ -42,7 +42,31 @@ function generateBlueprintVersionNumber(prevVersion) {
     logger.debug("Exit generateBlueprintVersionNumber(%s) = %s.%s", prevVersion, major, minor);
     return major + '.' + minor;
 }
+// instance method 
 
+InstanceChefInfraManagerSchema.methods.update = function(updateData) {
+    var ver = generateBlueprintVersionNumber(this.latestVersion);
+    this.versionsList.push({
+        ver: ver,
+        runlist: updateData.runlist
+    });
+    this.latestVersion = ver;
+};
+
+InstanceChefInfraManagerSchema.methods.getVersionData = function(ver) {
+    for (var i = 0; i < this.versionsList.length; i++) {
+        if (this.versionsList[i].ver === ver) {
+            return this.versionsList[i];
+        }
+    }
+};
+
+InstanceChefInfraManagerSchema.methods.getLatestVersion = function() {
+    if (!this.versionsList.length) {
+        return null;
+    }
+    return this.versionsList[this.versionsList.length - 1];
+};
 
 InstanceChefInfraManagerSchema.statics.createNew = function(chefData) {
     var self = this;
@@ -51,7 +75,8 @@ InstanceChefInfraManagerSchema.statics.createNew = function(chefData) {
         versionsList: [{
             ver: generateBlueprintVersionNumber(null),
             runlist: chefData.runlist
-        }]
+        }],
+        latestVersion: generateBlueprintVersionNumber(null)
     });
     return chefInfraManager;
 };

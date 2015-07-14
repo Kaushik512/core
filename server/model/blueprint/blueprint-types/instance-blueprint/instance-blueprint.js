@@ -29,8 +29,39 @@ var InstanceBlueprintSchema = new Schema({
     infraManagerData: Schema.Types.Mixed,
 });
 
+function getInfraManagerConfigType(blueprint) {
+    var InfraManagerConfig;
+    if (blueprint.infraMangerType === INFRA_MANAGER_TYPE.CHEF) {
+        InfraManagerConfig = CHEFInfraBlueprint;
+    } else if (blueprint.infraMangerType === INFRA_MANAGER_TYPE.PUPPET) {
+        return null;
+    } else {
+        return null;
+    }
+    var infraManagerConfig = new InfraManagerConfig(blueprint.infraManagerData);
+    return infraManagerConfig;
+}
+
 InstanceBlueprintSchema.methods.launch = function(launchOptions, infraManagerOptions, callback) {
 
+
+};
+
+InstanceBlueprintSchema.methods.update = function(updateData) {
+    infraManagerConfig = getInfraManagerConfigType(this);
+    infraManagerConfig.update(updateData);
+    this.infraManagerData = infraManagerConfig;
+};
+
+InstanceBlueprintSchema.methods.getVersionData = function(ver) {
+    infraManagerConfig = getInfraManagerConfigType(this);
+    return infraManagerConfig.getVersionData(ver);
+
+};
+
+InstanceBlueprintSchema.methods.getLatestVersion = function(ver) {
+    infraManagerConfig = getInfraManagerConfigType(this);
+    return infraManagerConfig.getLatestVersion();
 
 };
 

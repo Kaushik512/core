@@ -42,11 +42,15 @@ var BlueprintSchema = new Schema({
         trim: true,
         validate: schemaValidator.blueprintNameValidator
     },
+    blueprintType: {
+        type: String,
+        required: true,
+        trim: true
+    },
     iconpath: {
         type: String,
         trim: true
     },
-
     appUrls: [{
         name: String,
         url: String
@@ -73,27 +77,73 @@ var BlueprintSchema = new Schema({
         trim: true,
         validate: schemaValidator.catalystUsernameValidator
     }],
-    dockerBlueprint: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: DockerBlueprint.modelName
-    },
-    instanceBlueprint: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: InstanceBlueprint.modelName
-    },
-
+    blueprintConfig: Schema.Types.Mixed
 });
+
+function getBlueprintConfigType(blueprint) {
+    var BlueprintConfigType;
+    if ((blueprint.blueprintType === BLUEPRINT_TYPE.INSTANCE_LAUNCH) && blueprint.blueprintConfig) {
+        BlueprintConfigType = InstanceBlueprint;
+    } else if ((blueprint.blueprintType === BLUEPRINT_TYPE.DOCKER) && blueprint.blueprintConfig) {
+        BlueprintConfigType = DockerBlueprint;
+    } else {
+        return;
+    }
+    var blueprintConfigType = new BlueprintConfigType(blueprint.blueprintConfig);
+    return blueprintConfigType;
+}
+
+// instance methods
+BlueprintSchema.methods.update = function(updateData, callback) {
+    var blueprintConfigType = getBlueprintConfigType(this);
+    if (!blueprintConfigType) {
+        process.nextTick(function() {
+            callback({
+                message: "Invalid Blueprint Type"
+            }, null);
+        });
+    }
+    blueprintConfigType.update(updateData);
+    this.blueprintConfig = blueprintConfigType;
+    this.save(function(err, updatedBlueprint) {
+        if (err) {
+            callback(err, null);
+            return;
+        }
+        callback(null, updatedBlueprint);
+    });
+};
+
+BlueprintSchema.methods.getVersionData = function(ver) {
+    var blueprintConfigType = getBlueprintConfigType(this);
+    if (!blueprintConfigType) {
+        return null;
+    }
+
+    return blueprintConfigType.getVersionData(ver);
+};
+
+BlueprintSchema.methods.getLatestVersion = function() {
+    var blueprintConfigType = getBlueprintConfigType(this);
+    if (!blueprintConfigType) {
+        return null;
+    }
+
+    return blueprintConfigType.getLatestVersion();
+};
+
+
 
 // static methods
 BlueprintSchema.statics.createNew = function(blueprintData, callback) {
-    var dockerBlueprint, instanceBlueprint;
 
-
+    var blueprintConfig, blueprintType;
     if ((blueprintData.blueprintType === BLUEPRINT_TYPE.INSTANCE_LAUNCH) && blueprintData.instanceData) {
-        logger.debug(blueprintData.blueprintType,blueprintData.instanceData);
-        instanceBlueprint = InstanceBlueprint.createNew(blueprintData.instanceData);
+        blueprintType = BLUEPRINT_TYPE.INSTANCE_LAUNCH;
+        blueprintConfig = InstanceBlueprint.createNew(blueprintData.instanceData);
     } else if ((blueprintData.blueprintType === BLUEPRINT_TYPE.DOCKER) && blueprintData.dockerData) {
-        dockerBlueprint = DockerBlueprint.createNew(blueprintData.dockerData);
+        blueprintType = BLUEPRINT_TYPE.DOCKER;
+        blueprintConfig = DockerBlueprint.createNew(blueprintData.dockerData);
     } else {
         process.nextTick(function() {
             callback({
@@ -102,7 +152,7 @@ BlueprintSchema.statics.createNew = function(blueprintData, callback) {
         });
         return;
     }
-
+    console.log('blueprin type ', blueprintData);
     var blueprintObj = {
         orgId: blueprintData.orgId,
         bgId: blueprintData.bgId,
@@ -113,8 +163,8 @@ BlueprintSchema.statics.createNew = function(blueprintData, callback) {
         templateId: blueprintData.templateId,
         templateType: blueprintData.templateType,
         users: blueprintData.users,
-        dockerBlueprint: dockerBlueprint,
-        instanceBlueprint: instanceBlueprint
+        blueprintConfig: blueprintConfig,
+        blueprintType: blueprintType
     };
 
     var blueprint = new Blueprints(blueprintObj);
@@ -131,14 +181,38 @@ BlueprintSchema.statics.createNew = function(blueprintData, callback) {
 };
 
 
-BlueprintSchema.static.getBlueprintsByOrgBgProject = function(orgId, bgId, projId, filterBlueprintType, callback) {
-    logger.debug("Enter getBlueprintsByOrgBgProject(%s,%s, %s, %s, %s)", orgId, bgId, projectId, blueprintType, userName);
+BlueprintSchema.statics.getById = function(id, callback) {
+    logger.debug('finding blueprint by id ===>' + id);
+    this.findById(id, function(err, blueprint) {
+        if (err) {
+            callback(err, null);
+            return;
+        }
+        callback(null, blueprint);
+    });
+};
+
+BlueprintSchema.statics.removeById = function(id, callback) {
+    this.remove({
+        "_id": ObjectId(id)
+    }, function(err, data) {
+        if (err) {
+            callback(err, null);
+            return;
+        }
+        callback(null, data);
+    });
+
+};
+
+BlueprintSchema.statics.getBlueprintsByOrgBgProject = function(orgId, bgId, projId, filterBlueprintType, callback) {
+    logger.debug("Enter getBlueprintsByOrgBgProject(%s,%s, %s, %s, %s)", orgId, bgId, projId, filterBlueprintType);
     var queryObj = {
         orgId: orgId,
         bgId: bgId,
         projectId: projId,
     }
-    if (blueprintType) {
+    if (filterBlueprintType) {
         queryObj.templateType = filterBlueprintType;
     }
 
@@ -147,10 +221,11 @@ BlueprintSchema.static.getBlueprintsByOrgBgProject = function(orgId, bgId, projI
             callback(err, null);
             return;
         }
-        logger.debug("Exit getBlueprintsByOrgBgProject(%s,%s, %s, %s, %s)", orgId, bgId, projectId, blueprintType, userName);
+        logger.debug("Exit getBlueprintsByOrgBgProject(%s,%s, %s, %s, %s)", orgId, bgId, projId, filterBlueprintType);
         callback(null, blueprints);
     });
 };
+
 
 
 var Blueprints = mongoose.model('blueprints', BlueprintSchema);

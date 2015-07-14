@@ -2301,8 +2301,9 @@ if ($('#tab2 .role-Selected').length > 0) {
             }
             var isValid = $('#wizard-1').valid();
             // alert(isValid);
-            if (!isValid) {
+            if (($('.role-Selected').data('templatetype')).toLowerCase() != "docker" && !isValid) {
                 return false;
+           
             } else {
             
                 bootbox.confirm({
@@ -2457,7 +2458,6 @@ if ($('#tab2 .role-Selected').length > 0) {
                         reqBody.appUrls = appUrls;
 
                         $('.blueprintMsgContainer').hide();
-
                         if (($('.role-Selected').data('templatetype')).toLowerCase() != "docker") {
                             reqBody.blueprintType="instance_launch"
                             $.post('/organizations/' + reqBody.orgId + '/businessgroups/' + reqBody.bgId + '/projects/' + reqBody.projectId + '/blueprints', {
@@ -2544,15 +2544,17 @@ if ($('#tab2 .role-Selected').length > 0) {
 
                         } else {
                             reqBody.blueprintType="docker"
-                            $.post('/organizations/' + reqBody.orgId + '/businessgroups/' + reqBody.bgId + '/projects/' + reqBody.projectId + '/blueprints/docker', {
+                            $.post('/organizations/' + reqBody.orgId + '/businessgroups/' + reqBody.bgId + '/projects/' + reqBody.projectId + '/blueprints', {
                                 blueprintData: reqBody
                             }, function(data) {
                                 console.log(data);
                                 var validatorFormDocker = $("#wizard-1").validate();
                                 validatorFormDocker.resetForm();
                                 $('.blueprintSaveSuccess').show();
+                                $('.blueprintNameSuccess').html('Blueprint&nbsp;&nbsp;<b>' + data.name + '</b>&nbsp;&nbsp;Saved Successfully');
                                 $wizard.data('secondClick', true);
                                 var wizard = $wizard.data('bootstrapWizard');
+                                wizard.next();
                                 wizard.disablePreviouBtn();
                             }).error(function(xhr) {
                                 $('.blueprintSaveFail').find('h3').first().html(xhr.responseText);
