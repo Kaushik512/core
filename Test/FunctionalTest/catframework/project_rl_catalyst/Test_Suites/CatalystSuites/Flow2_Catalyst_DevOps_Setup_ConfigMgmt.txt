@@ -16,8 +16,8 @@ Catalyst new Config management setup
     Testing All New Config Management Conditions
     Create New Config Management
     Unique Devops Configuration Management
-    #-Devops Click on Update of Your org and Org is disabled
-    #-Catlayst Unique Organization Validation 
+    Devops Click on Update of Your org and Org is disabled
+    Catlayst Unique Organization Validation 
     Catalyst Logout
     [Teardown]     Close Browser
 
