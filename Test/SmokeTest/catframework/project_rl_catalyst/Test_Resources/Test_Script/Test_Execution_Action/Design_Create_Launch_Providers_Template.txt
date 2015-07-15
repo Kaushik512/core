@@ -18,100 +18,6 @@ Resource           ${CATALYST ACTION}/New_Environment_Creation.txt
 
 
 *** Keywords ***
-Validation of Adding New Providers
-    Validation of Selecting No Provider Type          #${VaildNoProvider}
-    No Selection of Provider Type  ${VaildProviderErrMsg}
-    Validation of No Name of Provider  ${VaildNoProviderName}
-    Provider Name Left Empty  ${VaildNoNameErrMsg}
-    Validation of No Access Key  ${VaildNoAccessKey}
-    Access Field Left Empty  ${VaildAccessFieldErrMsg}
-    Validation of No Secret Key  ${VaildNoSecretKey}
-    Secret Field Left Empty  ${VaildSecretFieldErrMsg}
-
-
-
-Validation of Selecting No Provider Type
-    Clicks on New Button of Providers     
-    Enters the Name of the Provider
-    Enters the Access Key
-    Enters the Secret Key
-    Select organization now
-    Selects the Region
-    Selects the Key Pair
-    Uploads the Pem File for Provider
-    Clicks on Save Button of the Provider
-
-No Selection of Provider Type
-    [Arguments]    ${VaildProviderErrMsg}  
-    Validate the Provider field    ${VaildProviderErrMsg}
-
-Validate the Provider field    
-    [Arguments]    ${ErrMsg}
-    Element Should Contain    id=errmsg_providertype    ${ErrMsg}
-    Clicks on Provider Cancel Button
-
-Validation of No Name of Provider
-    [Arguments]    ${NoName}
-    Clicks on New Button of Providers
-    Select the Provider
-    Enters the Access Key
-    Enters the Secret Key
-    Select organization now
-    Selects the Region
-    Selects the Key Pair
-    Uploads the Pem File for Provider
-    Clicks on Save Button of the Provider
-
-Provider Name Left Empty
-    [Arguments]    ${VaildNoNameErrMsg}
-    Validate the provider name field  ${VaildNoNameErrMsg}
-
-Validate the provider name field
-    [Arguments]    ${ErrMsg}
-    Element Should Contain    id=errmsg_name    ${ErrMsg}
-    Clicks on Provider Cancel Button
-
-Validation of No Access Key
-    [Arguments]    ${NoAccessKey}
-    Clicks on New Button of Providers
-    Select the Provider
-    Enters the Name of the Provider
-    Enters the Secret Key
-    Select organization now
-    Selects the Region
-    Uploads the Pem File for Provider
-    Clicks on Save Button of the Provider
-
-Access Field Left Empty  
-    [Arguments]    ${VaildAccessFieldErrMsg}
-    Validate the no access Key  ${VaildAccessFieldErrMsg}
-
-Validate the no access Key
-    [Arguments]    ${ErrMsg}
-    Element Should Contain    id=errmsg_accessKey    ${ErrMsg}
-    Clicks on Provider Cancel Button
-
-Validation of No Secret Key
-    [Arguments]    ${NoSecretKey}
-    Clicks on New Button of Providers
-    Select the Provider
-    Enters the Name of the Provider
-    Enters the Access Key
-    Select organization now
-    Selects the Region
-    Uploads the Pem File for Provider
-    Clicks on Save Button of the Provider
-
-Secret Field Left Empty
-    [Arguments]    ${VaildSecretFieldErrMsg}
-    Validate No Secret Key  ${VaildSecretFieldErrMsg}
-
-Validate No Secret Key
-    [Arguments]    ${ErrMsg}
-    Element Should contain    id=errmsg_secretKey    ${ErrMsg}
-    Clicks on Provider Cancel Button
-
-
 Catalyst Creation of Providers Setup 
     Clicks on Settings
     Clicks on DevOps Setup menu
@@ -128,19 +34,13 @@ Catalyst Creation of Providers Setup
     Clicks on Save Button of the Provider
 
 
+Catalyst navigates to VMImage page
+    Clicks on Settings
+    Clicks on Gallery Setup
+    Clicks on VMImage
 
-Validation of Creation of New Image
-    Validation of Empty Image Name  ${ValidEmptyImageName}
-    Image Name Left Empty  ${ValidEmptImgNameErrMsg}
-    Validation of No Selection Provider  ${ValidEmptyNoProvider}
-    Provider field Name Left Empty  ${ValidEmptyProviderErrMsg}
-    Validation of No Operating System  ${ValidEmptyNoOperatingSys}
-    Operating System Left Empty  ${ValidEmptyNoOSErrMsg}
-    Validation of No Image ID  ${ValidEmptyImageID}
-    Image ID Left Empty  ${ValidEmptImgIDErrMsg}
-    Validation of Image No User Name  ${ValidEmptyIUserName}
-    Image User Name Left Empty  ${ValidEmptyIUserNameErrMsg}
-            
+
+     
 
 Catalyst Creation of VM Image Process for CentOS
     Sleep    5s
@@ -173,13 +73,6 @@ Catalyst Creation of VM Image Process for Windows
     Enters the Image ID for Windows
     Enters the UserName of WindowsProviders
     Select the Organizatn to Create Windows Img
-    Clicks on Save Button of Providers
-    Validate the Edit of VM Image
-
-Validate the Edit of VM Image
-    Clicks on Edit Button of Windows Image
-    Enters the New Image name for Windows
-    Enters the UserName of WindowsProviders
     Clicks on Save Button of Providers
 
 Select organization now
@@ -221,7 +114,7 @@ Enters the UserName of WindowsProviders
     Input Text    id=UserName    administrator
 
 Catalyst Choose Template and Save Setup
-    Sleep    6s
+    Sleep    5s
     Clicks on Design
     Sleep    10s
     Choose the Template Type Created
@@ -244,18 +137,16 @@ Catalyst Choose Template and Save Setup
     Enters The Blueprint Name
     Chooses The Business Group
     Chooses The Project
-    #Select WorkCookBooks
-    #Clicks on >>T Button
-    Clicks on close of Configure Organization Parameters
-    #Chooses The Environment
+    Clicks on Configure Organization Parameters
+    #Clicks on Configure Chef Runlist
+    #Clicks on Edit Organization Parameters  
     Clicks on Configure Application URL
     Clicks on AppNew Button
     Enters the Application URL Name
     Enters the AppURL
-    Clicks on AppADD Button
-    Enable the Next Button 
+    Clicks on AppADD Button 
     Clicks on Next Button
-    Clicks on Confirm OK Button
+    Clicks on OK button in Confirm popup window
 
     
 Catlayst Workzone and Status Setup           
@@ -408,7 +299,7 @@ Catalyst Choose Template and Save Setup for UBUNTU
     Clicks on Design
     Sleep    5s
     Choose the Template Type Created
-    Sleep    3s
+    Sleep    5s
     Clicks on Next Button
     Chooses the Template User Created
     Clicks on Next Button
@@ -426,16 +317,16 @@ Catalyst Choose Template and Save Setup for UBUNTU
     Enters The ubuntu Blueprint Name
     Chooses The Business Group
     Chooses The Project
+    #Clicks on Configure Chef Runlist
     Select WorkCookBooks for Ubuntu
-    Clicks on close of Configure Organization Parameters
-    #Chooses The Environment
+    Clicks on Configure Organization Parameters
     Clicks on Configure Application URL
     Clicks on AppNew Button
     Enters the Application URL Name
     Enters the AppURL
     Clicks on AppADD Button 
     Clicks on Next Button
-    Clicks on Confirm OK Button
+    Clicks on OK button in Confirm popup window
 
 Catlayst Workzone and Status Setup for Ubuntu
     Clicks on Workzone Button
@@ -519,13 +410,7 @@ Catalyst Grid View Start ,Stop ,SSH ,Chef ,Client ,Log Setup of Ubuntu
     Clicks on View Instancess Button
 
 
-Enable the Next Button 
-    Execute JavaScript    $('#bootstrap-wizard-1 > div.tab-content > footer > div').attr('style','display:block')
 
-
-
-Clicks on Confirm OK Button
-    Click Element    xpath=//*[text()='OK']
 
 
 Clicks on Edit Button of the CentosInstance Imported
@@ -750,7 +635,7 @@ Catlayst verfication of Instance Stop Setup and Disable of Ubuntu
     #Verify the Free Memory from CntrlPanel
     Verfiy the Ubuntu OS Frm ContrlPanel
     Verfify the Chef Bootstrap frm ContrlPanel
-    Verify the Runlist for Ubuntu from CntrlPanel
+    #Verify the Runlist for Ubuntu from CntrlPanel
 
 
 
@@ -976,7 +861,7 @@ Clicks on Control Panel Button
     Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='l1']/footer/div/div/button
 
 Clicks on Configure Provider Parameters
-    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='accordion-Design']/div[1]/div[1]/h4/a/i[2]
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='accordion-Design']/div[1]/div[1]/h4/a
 
 
 
@@ -1123,8 +1008,8 @@ Update the Run List with Cookbook
     Sleep    3s
     Click Element    xpath=.//*[@id='cookbooksrecipesselectedList']/option[text()='${COOKBOOK NAME1}']
     Click Element    id=btnremoveFromRunlist
-    Click Element    xpath=.//*[@id='cookbooksrecipesselectedList']/option[text()='${CookBkName}']
-    Click Element    id=btnremoveFromRunlist
+    #Click Element    xpath=.//*[@id='cookbooksrecipesselectedList']/option[text()='${CookBkName}']
+    #Click Element    id=btnremoveFromRunlist
     Wait Until Keyword Succeeds    1 minute     10 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[@value='recipe[${CookBkName}]']
     Wait Until Keyword Succeeds    1 minute     10 seconds      Click Element    id=btnaddToRunlist
 
@@ -1132,8 +1017,8 @@ Update the Run List with Newwww Cookbook
     Sleep    3s
     Click Element    xpath=.//*[@id='cookbooksrecipesselectedList']/option[text()='${COOKBOOK NAME1}']
     Click Element    id=btnremoveFromRunlist
-    Click Element    xpath=.//*[@id='cookbooksrecipesselectedList']/option[text()='${CookBkName}']
-    Click Element    id=btnremoveFromRunlist
+    #Click Element    xpath=.//*[@id='cookbooksrecipesselectedList']/option[text()='${CookBkName}']
+    #Click Element    id=btnremoveFromRunlist
     Wait Until Keyword Succeeds    1 minute     10 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[@value='recipe[${CookBkName}]']
     Wait Until Keyword Succeeds    1 minute     10 seconds      Click Element    id=btnaddToRunlist
 
@@ -1166,84 +1051,41 @@ Choose the Provider
     Sleep    1s
     Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
 
-
-    #Click Element    css=#s2id_providerId > .select2-choice
-    #Sleep    2s
-    #Input Text    css=#select2-search .select2-input    ${PROVIDER NAME}
-    #Sleep    1s
-    #Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
-
-
 Choose the Available Images
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='s2id_imageId']/a/span[1]
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='select2-drop']/ul/li[2]/div
 
 Choose the Region
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='s2id_region']/a/span[1]
-    Input Text    xpath=.//*[@id='select2-drop']/div/input    ${REGION NAME}
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
-    Sleep    10s
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='select2-drop']/ul/li[2]/div
 
 Select the Subnet
-    Sleep    2s
+    Sleep    3s
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='s2id_subnetId']/a/span[1]
-    Input Text    xpath=.//*[@id='select2-drop']/div/input    ${SUBNET NAME}
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
-
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='select2-drop']/ul/li[2]/div
 
 Select the Key Pair
-    Execute JavaScript    $('#bootstrap-wizard-1 > div.tab-content > footer > div').attr('style','display:none')
-    Sleep    3s
-    Log    after scroll
-    Sleep    1s
-    Click Element    css=#s2id_keypairId > .select2-choice
-    Log    after click
-    Input Text    css=#select2-drop .select2-input    cat_instances
-    Sleep    1s
-    Click Element    xpath=//*[@id='select2-drop']/ul/li/div
-    
-    
-    
+   Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element     xpath=.//*[@id='s2id_keypairId']/a/span[1]
+   Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element     xpath=.//*[@id='select2-drop']/ul/li[2]/div
 
 Choose Instance Size
-    Sleep    3s
-    Log    after scroll
+    Click Element    xpath=.//*[@id='s2id_instancesize']/a
+    Input Text    xpath=.//*[@id='select2-drop']/div/input    ${CentosInstanceSize}
     Sleep    1s
-    Click Element    css=#s2id_instancesize > .select2-choice
-    Log    after click
-    Input Text    css=#select2-drop .select2-input    ${CentosInstanceSize}
-    Sleep    1s
-    Click Element    xpath=//*[@id='select2-drop']/ul/li/div
-    
-
-
-
-
-
+    Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
+    #Click Element    xpath=.//*[@id='select2-drop']/ul/li[2]/div
 
 Choose Instance Size for Ubuntu
-    Execute JavaScript    $('#bootstrap-wizard-1 > div.tab-content > footer > div').attr('style','display:none')
-    Sleep    3s
-    Log    after scroll
+    Click Element    xpath=.//*[@id='s2id_instancesize']/a
+    Input Text    xpath=.//*[@id='select2-drop']/div/input    ${UbuntuInstanceSize}
     Sleep    1s
-    Click Element    css=#s2id_instancesize > .select2-choice
-    Log    after click
-    Input Text    css=#select2-drop .select2-input    ${UbuntuInstanceSize}
-    Sleep    1s
-    Click Element    xpath=//*[@id='select2-drop']/ul/li/div
-    
+    Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
 
 Select the Security Group
-    Sleep    3s
-    Log    after scroll
-    Sleep    1s
-    Click Element    xpath=.//*[@id='securityGroupIds']/label[contains(.,'sg-c00ee1a5 | all_open')]/i
-    Log    after click
-    
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='securityGroupIds']/label[9]/i
 
-#Click Element    css=#select2-drop .select2-input    sg-c00ee1a5 | all_open
-#Click Element    css=#securityGroupIds > label:nth-child(1)
-
+Clicks on Configure Organization Parameters
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='accordion-Design']/div[2]/div[1]/h4/a
 
 Clicks on OKX Button
     Click Element     xpath=.//*[@id='btnsubmit']
@@ -1559,27 +1401,13 @@ Chooses the Operating System
     #Input Text    xpath=.//*[@id='select2-drop']/div/input    ${INSTANCE SIZE}
     #Click Element    xpath=.//*[@id='select2-drop']/ul/li[1]/div
 
-Clicks on Configure Organization Parameters
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='accordion-Design']/div[2]/div[1]/h4/a/i[1]
-
-Clicks on close of Configure Organization Parameters
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='accordion-Design']/div[2]/div[1]/h4/a/i[2]
-
+Clicks on Configure Chef Runlist
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='accordion-Design']/div[2]/div[1]/h4/a
 
 Chooses Organization
-    Execute JavaScript    $('#bootstrap-wizard-1 > div.tab-content > footer > div').attr('style','display:none')
-    Sleep    3s
-    Log    after scroll
-    Sleep    1s
-    Click Element    css=#s2id_orgnameSelect > .select2-choice
-    Log    after click
-    Input Text    css=#select2-drop .select2-input    ${ORGANIZATION NAME}
-    Sleep    1s
-    Click Element    xpath=//*[@id='select2-drop']/ul/li/div
-
-
-
-    
+    Click Element    xpath=.//*[@id='s2id_orgnameSelect']/a
+    Input Text    xpath=.//*[@id='select2-drop']/div/input    ${ORGANIZATION NAME}
+    Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
 
 #Select WorkCookBooks
     #Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[2]
@@ -1592,13 +1420,20 @@ Chooses Organization
     #Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[@value='recipe[a]']
 
 Select WorkCookBooks for Ubuntu
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='checkout-form']/div[3]/div/div/div[1]/div[1]/label[3]
+    #Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='checkout-form']/div[3]/div/div/div[1]/div[1]/label[3]
+
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesselectedList']/option[text()='${ADD}']
     Click Element    id=btnremoveFromRunlist
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesselectedList']/option[text()='${CookBkName}']
+
+    #Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesselectedList']/option[text()='${CookBkName}']
     Click Element    id=btnremoveFromRunlist
+
+    Input Text    id=textbox     ${CookBkName}
+    Sleep    10s
+
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[text()='${CookBkName}']
     Click Element    id=btnaddToRunlist
+
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[text()='${ADD}']
     Click Element    id=btnaddToRunlist
 
@@ -1620,27 +1455,14 @@ Enters The ubuntu Blueprint Name
     Input Text    id=blueprintNameInput    ${BLUEPRINT NAME1}
 
 Chooses The Business Group
-    Sleep    3s
-    Log    after scroll
-    Sleep    1s
-    Click Element    css=#s2id_bgListInput > .select2-choice
-    Log    after click
-    Input Text    css=#select2-drop .select2-input    ${BUSINESS GROUP NAME}
-    Sleep    1s
-    Click Element    xpath=//*[@id='select2-drop']/ul/li/div
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='s2id_bgListInput']/a
+    Input Text    xpath=.//*[@id='select2-drop']/div/input    ${BUSINESS GROUP NAME1}       #Devops
+    Click Element    xpath=.//*[@id='select2-drop']/ul/li/div      
 
-    
 Chooses The Project
-    Sleep    3s
-    Log    after scroll
-    Sleep    1s
-    Click Element    css=#s2id_projectListInput > .select2-choice
-    Log    after click
-    Input Text    css=#select2-drop .select2-input    ${PROJECT NAME}
-    Sleep    1s
-    Click Element    xpath=//*[@id='select2-drop']/ul/li/div    
-
-
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='s2id_projectListInput']/a    
+    Input Text    xpath=.//*[@id='select2-drop']/div/input    ${PROJECT NAME1}
+    Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
 
 Chooses The Environment
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='s2id_envList']/a
@@ -1648,7 +1470,7 @@ Chooses The Environment
     Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
 
 Clicks on Configure Application URL
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='accordion-Design']/div[4]/div[1]/h4/a/i[1]
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='accordion-Design']/div[4]/div[1]/h4/a
 
 Clicks on AppNew Button
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='newAppSeries']
@@ -1661,4 +1483,9 @@ Enters the AppURL
 
 Clicks on AppADD Button
     Click Element    xpath=.//*[@id='addAppBtn'] 
+
+
+Clicks on OK button in Confirm popup window
+    Sleep    4s
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=//*[text()='OK']
     

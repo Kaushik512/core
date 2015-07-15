@@ -16,15 +16,19 @@ Resource           ${CATALYST ACTION}/Organization_Setup_Action_Steps.txt
 *** Variables ***
 
 *** Keywords ***
-Testing All New Config Management Conditions
-    Vaildate the Empty URL field  ${VaildEmptyURL}
-    URL field left Empty  ${VaildEmptyURLErrMsg} 
-    Vaildate Empty Config Name  ${VaildEmptyConfigname}
-    Config Name left empty  ${VaildEmptyConfignameErrMsg}
-    Vaildate Empty User Name  ${VaildEmptyUsername}
-    User Name left empty  ${VaildEmptyUsernameErrMsg}
-    Vaildate Empty User Pem and Validator Pem and Knife File 
+#Testing All New Config Management Conditions
+ #   Vaildate the Empty URL field  ${VaildEmptyURL}
+ #   URL field left Empty  ${VaildEmptyURLErrMsg} 
+ #   Vaildate Empty Config Name  ${VaildEmptyConfigname}
+ #   Config Name left empty  ${VaildEmptyConfignameErrMsg}
+ #   Vaildate Empty User Name  ${VaildEmptyUsername}
+ #   User Name left empty  ${VaildEmptyUsernameErrMsg}
+ #   Vaildate Empty User Pem and Validator Pem and Knife File 
 
+Navigates to Config Management page
+    Clicks on Settings
+    Clicks on DevOps Setup menu
+    Clicks on Config Management menu
 
 Create New Config Management
     Clicks on New button to Create New Config Management
@@ -38,141 +42,141 @@ Create New Config Management
     Clicks on Save button to save the Environment detail
 
 
-Unique Devops Configuration Management
-    Clicks on New button to Create New Config Management
-    Validate the Unique Configuration Name   ${ValidateAlrdyExistConfigName}
-    Validate the Unique Organization   ${ValidateAlrdyExistOrgName}
-    Clicks on Save button to save the Environment detail
-    Configuration name already exists    ${ValidateAlrdyExistConfigNameErrMsg}
-    Organization name already exists     ${ValidateAlrdyExistOrgNameErrMsg}
-    Clicks on ButtonCancel Button
+#Unique Devops Configuration Management
+ #   Clicks on New button to Create New Config Management
+ #   Validate the Unique Configuration Name   ${ValidateAlrdyExistConfigName}
+ #   Validate the Unique Organization   ${ValidateAlrdyExistOrgName}
+ #   Clicks on Save button to save the Environment detail
+ #   Configuration name already exists    ${ValidateAlrdyExistConfigNameErrMsg}
+ #   Organization name already exists     ${ValidateAlrdyExistOrgNameErrMsg}
+ #   Clicks on ButtonCancel Button
 
 
-Devops Click on Update of Your org and Org is disabled 
-    Devops click on Created Config Mgmt
-    Organization is Disabled
-    Verify the Organziation
-    Clicks on Save button to save the Environment detail
+#Devops Click on Update of Your org and Org is disabled 
+#    Devops click on Created Config Mgmt
+#    Organization is Disabled
+#    Verify the Organziation
+#    Clicks on Save button to save the Environment detail
 
-Catlayst Unique Organization Validation
-    Clicks on New button to Create New Config Management
-    Enters New Configrtn Name to check
-    Enters config management user name
-    Enters config management URL
-    Select organization for config management
-    Upload user Pem File
-    Upload Validator Pem File
-    Upload Validator Knife File
-    Clicks on Save button to save the Environment detail
-    Validate the Organization of Already Created
+#Catlayst Unique Organization Validation
+#    Clicks on New button to Create New Config Management
+#    Enters New Configrtn Name to check
+#    Enters config management user name
+#    Enters config management URL
+#    Select organization for config management
+#    Upload user Pem File
+#    Upload Validator Pem File
+#    Upload Validator Knife File
+#    Clicks on Save button to save the Environment detail
+#    Validate the Organization of Already Created
 
 Enters New Configrtn Name to check
     Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    id=configname    CatServer
 
-Validate the Organization of Already Created
-    Element Should Contain    id=unique_orgname    ${AlreadyExistOrg}
-    Clicks on Config Cancel Button
+#Validate the Organization of Already Created
+#    Element Should Contain    id=unique_orgname    ${AlreadyExistOrg}
+#    Clicks on Config Cancel Button
 
     
-Vaildate Empty User Pem and Validator Pem and Knife File
-    Clicks on New button to Create New Config Management
-    Enters config management name
-    Enters config management user name
-    Select organization for config management
-    Enters config management URL
-    Clicks on Save button to save the Environment detail
-    Clicks on Config Cancel Button
+#Vaildate Empty User Pem and Validator Pem and Knife File
+#    Clicks on New button to Create New Config Management
+#    Enters config management name
+#    Enters config management user name
+#    Select organization for config management
+#    Enters config management URL
+#    Clicks on Save button to save the Environment detail
+#    Clicks on Config Cancel Button
 
 
-Vaildate Empty User Name
-    [Arguments]    ${loginname}
-    Clicks on New button to Create New Config Management
-    Enters config management name
-    Enters Empty User Name
-    Select organization for config management
-    Enters config management URL
-    Upload user Pem File
-    Upload Validator Pem File
-    Upload Validator Knife File
-    Clicks on Save button to save the Environment detail
+#Vaildate Empty User Name
+#    [Arguments]    ${loginname}
+#    Clicks on New button to Create New Config Management
+#    Enters config management name
+#    Enters Empty User Name
+#    Select organization for config management
+#    Enters config management URL
+#    Upload user Pem File
+#    Upload Validator Pem File
+#    Upload Validator Knife File
+#    Clicks on Save button to save the Environment detail
 
 
-Enters Empty User Name
-    Input Text    id=loginname    ${loginname}
+#Enters Empty User Name
+#    Input Text    id=loginname    ${loginname}
 
-User Name left empty  
-    [Arguments]    ${VaildEmptyUsernameErrMsg}
-    Vaildate the Empty username field    ${VaildEmptyUsernameErrMsg}
-
-
-Vaildate the Empty username field 
-    [Arguments]    ${ErrMsg}
-    Element Should Contain    id=errmsg_loginname    ${ErrMsg} 
-    Clicks on Config Cancel Button
+#User Name left empty  
+#    [Arguments]    ${VaildEmptyUsernameErrMsg}
+#    Vaildate the Empty username field    ${VaildEmptyUsernameErrMsg}
 
 
-
-
-Config Name left empty  
-    [Arguments]    ${VaildEmptyConfignameErrMsg}
-    Vaildate the Empty config field    ${VaildEmptyConfignameErrMsg}
-
-
-Vaildate the Empty config field 
-    [Arguments]    ${ErrMsg}
-    Element Should Contain    id=errmsg_configname    ${ErrMsg} 
-    Clicks on Config Cancel Button
-
-
-
-Vaildate Empty Config Name
-    [Arguments]    ${configname}
-    Clicks on New button to Create New Config Management
-    Enters config management user name
-    Select organization for config management
-    Enters config management URL
-    Upload user Pem File
-    Upload Validator Pem File
-    Upload Validator Knife File
-    Clicks on Save button to save the Environment detail
-
-
-Enters Empty Configuration name
-    Input Text   id=configname    ${configname}
-
-Vaildate the Empty URL field
-    [Arguments]    ${url}
-    Clicks on Settings
-    Clicks on DevOps Setup menu
-    Clicks on Config Management menu
-    Clicks on New button to Create New Config Management
-    Enters config management name
-    Enters config management user name
-    Select organization for config management
-    Enters empty config management URL
-    Upload user Pem File
-    Upload Validator Pem File
-    Upload Validator Knife File
-    Clicks on Save button to save the Environment detail
-
-
-Enters empty config management URL
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    id=url    ${url}
+#Vaildate the Empty username field 
+#    [Arguments]    ${ErrMsg}
+#    Element Should Contain    id=errmsg_loginname    ${ErrMsg} 
+#    Clicks on Config Cancel Button
 
 
 
 
-URL field left Empty
-    [Arguments]    ${VaildEmptyURLErrMsg}
-    Vaildate the Empty field      ${VaildEmptyURLErrMsg}
+#Config Name left empty  
+#    [Arguments]    ${VaildEmptyConfignameErrMsg}
+#    Vaildate the Empty config field    ${VaildEmptyConfignameErrMsg}
 
-Vaildate the Empty field    
-    [Arguments]    ${ErrMsg}
-    Element Should Contain    id=errmsg_url    ${ErrMsg}
-    Clicks on Config Cancel Button
 
-Clicks on Config Cancel Button
-    Click Element    xpath=.//*[@id='btncancel']
+#Vaildate the Empty config field 
+#    [Arguments]    ${ErrMsg}
+#    Element Should Contain    id=errmsg_configname    ${ErrMsg} 
+#    Clicks on Config Cancel Button
+
+
+
+#Vaildate Empty Config Name
+#    [Arguments]    ${configname}
+#    Clicks on New button to Create New Config Management
+#    Enters config management user name
+#    Select organization for config management
+#    Enters config management URL
+#    Upload user Pem File
+#    Upload Validator Pem File
+#    Upload Validator Knife File
+#    Clicks on Save button to save the Environment detail
+
+
+#Enters Empty Configuration name
+#    Input Text   id=configname    ${configname}
+
+#Vaildate the Empty URL field
+#    [Arguments]    ${url}
+#    Clicks on Settings
+#    Clicks on DevOps Setup menu
+#    Clicks on Config Management menu
+#    Clicks on New button to Create New Config Management
+#    Enters config management name
+#    Enters config management user name
+#    Select organization for config management
+#    Enters empty config management URL
+#    Upload user Pem File
+#    Upload Validator Pem File
+#    Upload Validator Knife File
+#    Clicks on Save button to save the Environment detail
+
+
+#Enters empty config management URL
+#    Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    id=url    ${url}
+
+
+
+
+#URL field left Empty
+#    [Arguments]    ${VaildEmptyURLErrMsg}
+#    Vaildate the Empty field      ${VaildEmptyURLErrMsg}
+
+#Vaildate the Empty field    
+#    [Arguments]    ${ErrMsg}
+#    Element Should Contain    id=errmsg_url    ${ErrMsg}
+#    Clicks on Config Cancel Button
+
+#Clicks on Config Cancel Button
+#    Click Element    xpath=.//*[@id='btncancel']
 
 
     
@@ -219,7 +223,7 @@ Clicks on Config Management menu
     Click Element    xpath=//a[contains(text(),'Config Management')]
     
 Clicks on New button to Create New Config Management
-        Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       link=New
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       link=New
     Click Element    link=New
 
 Enters config management name
@@ -250,8 +254,7 @@ Upload Validator Knife File
    
 
 Clicks on Save button to save the Environment detail
-    Click Element    xpath=//button[@class='btn btn-primary btn-mini'][1]   
-    Sleep    2s   
+    Click Element    xpath=//button[@class='btn btn-primary btn-mini'][1]     #Devops Config Mgmt Ends
 
 
 #Clicks on LogOut link
@@ -265,8 +268,8 @@ Validate the Unique Configuration Name                       #Unique Devops Conf
     Enters config management Unique name    ${config}
 
 
-#Enters config user name
-    #Input Text    id=loginname    pcjoshi9
+Enters config user name
+    Input Text    id=loginname    ${CONFIG MANAGEMENT USER NAME}
 
 Enters config management Unique name
     [Arguments]    ${config}
