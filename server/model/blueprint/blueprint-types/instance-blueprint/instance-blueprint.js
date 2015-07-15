@@ -42,9 +42,23 @@ function getInfraManagerConfigType(blueprint) {
     return infraManagerConfig;
 }
 
-InstanceBlueprintSchema.methods.launch = function(launchOptions, infraManagerOptions, callback) {
+function getCloudProviderConfigType(blueprint) {
+    var CloudProviderConfig;
+    if (blueprint.cloudProviderType === CLOUD_PROVIDER_TYPE.AWS) {
+        CloudProviderConfig = AWSBlueprint;
+    } else if (blueprint.infraMangerType === CLOUD_PROVIDER_TYPE.azure) {
+        return null;
+    } else {
+        return null;
+    }
+    var cloudProviderConfig = new CloudProviderConfig(blueprint.cloudProviderData);
+    return cloudProviderConfig;
+}
 
-
+InstanceBlueprintSchema.methods.launch = function(launchOptions, callback) {
+    cloudProviderConfig = getCloudProviderConfigType(this);
+    cloudProviderConfig.launch(updateData);
+    this.infraManagerData = infraManagerConfig;
 };
 
 InstanceBlueprintSchema.methods.update = function(updateData) {

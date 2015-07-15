@@ -114,6 +114,8 @@ BlueprintSchema.methods.update = function(updateData, callback) {
     });
 };
 
+
+
 BlueprintSchema.methods.getVersionData = function(ver) {
     var blueprintConfigType = getBlueprintConfigType(this);
     if (!blueprintConfigType) {
@@ -132,7 +134,19 @@ BlueprintSchema.methods.getLatestVersion = function() {
     return blueprintConfigType.getLatestVersion();
 };
 
+BlueprintSchema.methods.launch = function(envId, ver, callback) {
+    var blueprintConfigType = getBlueprintConfigType(this);
+    blueprintConfigType.launch({
+        orgId: this.orgId,
+        bgId: this.bgId,
+        projectId.this.projectId,
+        envId: envId,
+        ver: ver,
+        name: this.name
+    }, function(err, null) {
 
+    });
+};
 
 // static methods
 BlueprintSchema.statics.createNew = function(blueprintData, callback) {
