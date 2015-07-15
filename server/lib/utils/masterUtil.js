@@ -1451,6 +1451,7 @@ var MasterUtil = function(){
         }
     };
 
+    // Check wheather permission is there for user or not.
     this.hasPermission = function(category, permissionto, sessionUser, callback) {
         var retVal = '';
         retVal = getPermissionForCategory(category, permissionto, sessionUser.permissionset);

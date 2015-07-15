@@ -193,6 +193,7 @@ var d4dModelMastersDockerConfig = mongoose.model('d4dModelMastersDockerConfig',d
 var d4dMastersUsers = new mongoose.Schema(
 	{id: {type:String, trim:true},
 	loginname: {type:String, trim:true, validate:nameValidator},
+	password: {type:String},
 	email: {type:String, trim:true},
 	userrolename: {type:String, trim:true},
 	orgname: {type:[String],required:false, trim:true},
