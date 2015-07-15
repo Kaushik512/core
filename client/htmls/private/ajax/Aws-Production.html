@@ -260,7 +260,7 @@
  </div>
  </div>
  
- <div class="col-lg-12 notForDocker" style="margin-top:10px;padding-left:8px">
+ <div class="col-lg-12 notForDocker" style="margin-top:10px;padding-left:8px;overflow:hidden">
  <div class="cookbookShow">
 
  </div>
@@ -639,8 +639,8 @@
  
  <div class="blueprintSaveSuccess blueprintMsgContainer"><div class="alert alert-success bootstrapSuccess"><img style="width:50px;height:40px" src="img/correct.png" alt="success"/>
  <span class="blueprintNameSuccess" style="margin-left:20px;"></span>
- <div style="margin-top:15px"><span style="margin-left:74px;">Here are the Blueprint Details-</span><a id="blueprintInfo" href="#modalForRead" data-toggle="modal">&nbsp;&nbsp;Click Here</a></div>
- <div style="margin-top:24px;"><span style="margin-left:74px;">Do you want to add another Blueprint?</span><a href="#ajax/Aws-Production.html?addnew" id="addanotherlink">&nbsp;&nbsp;Add</a></div>
+ <div style="margin-top:24px;"><button class="btn btn-primary"><a style="color:white;text-decoration:none" href="#ajax/Aws-Production.html?addnew" id="addanotherlink">&nbsp;&nbsp;Add New Blueprint</a></button>
+</div>
  
  
  
@@ -2468,7 +2468,7 @@ if ($('#tab2 .role-Selected').length > 0) {
 
                                // alert(JSON.stringify(data));
                                 $('.blueprintSaveSuccess').show();
-                                $('.blueprintNameSuccess').html('Blueprint&nbsp;&nbsp;<b>' + data.name + '</b>&nbsp;&nbsp;Saved Successfully');
+                                $('.blueprintNameSuccess').html('Blueprint&nbsp;&nbsp;<a id="blueprintInfo" href="#modalForRead" data-toggle="modal">' + data.name + '</a>&nbsp;&nbsp;Saved Successfully');
                                 $wizard.data('secondClick', true);
                                 var wizard = $wizard.data('bootstrapWizard');
                                 wizard.next();
