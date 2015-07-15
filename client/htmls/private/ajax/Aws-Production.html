@@ -1973,6 +1973,7 @@ function resetForm(){
      var getDesignTypeRowID;
 	//alert(JSON.stringify(data)); 
 	for(var i=0; i<rowLength; i+=1){
+                getDesignTypeImg = data[i]['designtemplateicon_filename'];
 
                 switch (data[i].templatetypename) {
                     case "AppFactory":
@@ -1995,10 +1996,13 @@ function resetForm(){
                                 break;*/
                 }
 
-  // getDesignTypeImg= data[i]['designtemplateicon_filename'];
+   //getDesignTypeImg= data[i]['designtemplateicon_filename'];
    getDesignTypeRowID= data[i]['rowid'];
 	
     if(getDesignTypeImg){
+    	if(getDesignTypeImg.indexOf('/d4dMasters/image') === -1){
+    		getDesignTypeImg = "/d4dMasters/image/"+getDesignTypeRowID+"__designtemplateicon__"+getDesignTypeImg;
+    	}
 	containerTemp += '<div class="" style="width:222px;float:left">'+
 	' <div id=grid'+i+' class="blueprintdiv appfactory" data-'+
 	'templateType="'+data[i]['templatetypename']+'">'+
@@ -2011,8 +2015,10 @@ function resetForm(){
 	'<div style="padding-top:10px;padding-left:27px;">'+
 	'<img alt="JBoss Stack" '+
 	//'src="/d4dMasters/image/'+getDesignTypeRowID+'__designtemplateicon__'+getDesignTypeImg+'">'+
-	'src="'+getDesignTypeImg+'" style="height:60px;width:auto;">'+
-	'</div></div></div>';
+	/*'src="/d4dMasters/image/'+getDesignTypeRowID+'__designtemplateicon__'+getDesignTypeImg+'" style="height:60px;width:auto;">'+
+	'</div></div></div>';*/
+
+	'src="'+getDesignTypeImg+'" style="height:60px;width:auto;">'+'</div></div></div>';
 	}else{
         containerTemp += '<div class="" style="width:222px;float:left">'+
     ' <div id=grid'+i+' class="blueprintdiv appfactory" data-'+
