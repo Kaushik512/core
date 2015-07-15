@@ -1,7 +1,7 @@
 var Jenkins = require('../lib/jenkins');
 var configmgmtDao = require('../model/d4dmasters/configmgmt');
 var errorResponses = require('./error_responses');
-var logger = require('../lib/logger')(module);
+var logger = require('_pr/logger')(module);
 var url = require('url');
 
 module.exports.setRoutes = function(app, verificationFunc) {

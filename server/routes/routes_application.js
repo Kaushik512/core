@@ -1,6 +1,6 @@
 var Application = require('../model/classes/application/application');
 
-var logger = require('../lib/logger')(module);
+var logger = require('_pr/logger')(module);
 
 module.exports.setRoutes = function(app, sessionVerification) {
     app.all('/applications/*', sessionVerification);

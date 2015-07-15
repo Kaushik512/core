@@ -8,8 +8,8 @@ var Blueprints = require('_pr/model/blueprint');
 
 var usersDao = require('../model/users.js');
 var instancesDao = require('../model/classes/instance/instance');
-var appConfig = require('../config/app_config');
-var logger = require('../lib/logger')(module);
+var appConfig = require('_pr/config');
+var logger = require('_pr/logger')(module);
 var uuid = require('node-uuid');
 var fileIo = require('../lib/utils/fileio');
 var logsDao = require('../model/dao/logsdao.js');

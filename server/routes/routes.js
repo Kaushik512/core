@@ -30,7 +30,7 @@ var vmimage = require('./routes_vmImages');
 
 var chefClientExecution = require('./routes_chefClientExecutionResponse');
 
-var appConfig = require('../config/app_config');
+var appConfig = require('_pr/config');
 
 var notification = require('./routes_notification');
 

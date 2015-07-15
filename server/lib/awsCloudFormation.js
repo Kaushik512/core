@@ -1,5 +1,5 @@
 var aws = require('aws-sdk');
-var logger = require('../lib/logger')(module);
+var logger = require('_pr/logger')(module);
 
 
 if (process.env.http_proxy) {

@@ -7,15 +7,15 @@ var https = require("https");
 var fs = require('fs');
 var childProcess = require('child_process');
 var io = require('socket.io');
-var logger = require('./lib/logger')(module);
-var expressLogger = require('./lib/logger').ExpressLogger();
+var logger = require('_pr/logger')(module);
+var expressLogger = require('_pr/logger').ExpressLogger();
 var passport = require('passport');
 var passportLdapStrategy = require('./lib/ldapPassportStrategy.js');
 var passportADStrategy = require('./lib/adPassportStrategy.js');
 var Tail = require('tail').Tail;
 
 
-var appConfig = require('./config/app_config');
+var appConfig = require('_pr/config');
 
 var RedisStore = require('connect-redis')(express);
 var MongoStore = require('connect-mongo')(express.session);

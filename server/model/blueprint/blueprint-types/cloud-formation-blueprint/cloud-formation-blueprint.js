@@ -5,40 +5,29 @@ var ObjectId = require('mongoose').Types.ObjectId;
 
 var Schema = mongoose.Schema;
 
+var INFRA_MANAGER_TYPE = {
+    CHEF: 'chef',
+    PUPPET: 'puppet'
+};
 
-var DockerBlueprintSchema = new Schema({
-    dockercompose: [{
-        dockercontainerpathstitle: String,
-        dockercontainerpaths: String,
-        dockerrepotags: String,
-        dockerreponame: String,
-        dockerimagename: String,
-        dockerlaunchparameters: String
+
+var CloudFormationBlueprintSchema = new Schema({
+    cloudProviderId: String,
+    infraMangerType: String,
+    infraManagerId: String,
+    infraManagerData: Schema.Types.Mixed,
+    templateFile: String,
+    stackParameters: [{
+        ParameterKey: {
+            type: String,
+            trim: true
+        },
+        ParameterValue: {
+            type: String,
+            trim: true
+        }
     }],
-    dockercontainerpathstitle: {
-        type: String,
-        trim: true
-    },
-    dockercontainerpaths: {
-        type: String,
-        trim: true
-    },
-    dockerrepotags: {
-        type: String,
-        trim: true
-    },
-    dockerreponame: {
-        type: String,
-        trim: true
-    },
-    dockerlaunchparameters: {
-        type: String,
-        trim: true
-    },
-    dockerimagename: {
-        type: String,
-        trim: true
-    }
+    stackName: String
 });
 
 AWSInstanceBlueprintSchema.methods.launch = function(launchOptions, infraManagerOptions, callback) {

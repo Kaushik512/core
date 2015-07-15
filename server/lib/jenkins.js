@@ -1,5 +1,5 @@
 var jenkinsApi = require('jenkins-api');
-var logger = require('./logger')(module);
+var logger = require('_pr/logger')(module);
 var url = require('url');
 
 

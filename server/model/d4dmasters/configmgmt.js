@@ -4,9 +4,9 @@ var d4dModelNew = require('./d4dmastersmodelnew.js');
 
 
 var codelist = require('../../codelist.json');
-var appConfig = require('../../config/app_config');
+var appConfig = require('_pr/config');
 var chefSettings = appConfig.chef;
-var logger = require('../../lib/logger')(module);
+var logger = require('_pr/logger')(module);
 var blueprintdao = require('../dao/blueprints.js');
 var instancedao = require('../classes/instance/instance.js');
 
