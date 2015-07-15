@@ -41,10 +41,14 @@ var AWSInstanceBlueprintSchema = new Schema({
     instanceUsername: {
         type: String,
         required: true
+    },
+    imageId: {
+        type: String,
+        required: true
     }
 });
 
-AWSInstanceBlueprintSchema.methods.launch = function(launchOptions, infraManagerOptions, callback) {
+AWSInstanceBlueprintSchema.methods.launch = function(ver, callback) {
 
 
 };

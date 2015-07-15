@@ -125,6 +125,8 @@ BlueprintSchema.methods.getVersionData = function(ver) {
     return blueprintConfigType.getVersionData(ver);
 };
 
+
+
 BlueprintSchema.methods.getLatestVersion = function() {
     var blueprintConfigType = getBlueprintConfigType(this);
     if (!blueprintConfigType) {
@@ -134,17 +136,30 @@ BlueprintSchema.methods.getLatestVersion = function() {
     return blueprintConfigType.getLatestVersion();
 };
 
+BlueprintSchema.methods.getInfraManagerData = function() {
+    var blueprintConfigType = getBlueprintConfigType(this);
+    if (!blueprintConfigType) {
+        return null;
+    }
+
+    return blueprintConfigType.getInfraManagerData();
+
+}
+
+BlueprintSchema.methods.getCloudProviderData = function() {
+    var blueprintConfigType = getBlueprintConfigType(this);
+    if (!blueprintConfigType) {
+        return null;
+    }
+
+    return blueprintConfigType.getCloudProviderData();
+
+}
+
 BlueprintSchema.methods.launch = function(envId, ver, callback) {
     var blueprintConfigType = getBlueprintConfigType(this);
-    blueprintConfigType.launch({
-        orgId: this.orgId,
-        bgId: this.bgId,
-        projectId.this.projectId,
-        envId: envId,
-        ver: ver,
-        name: this.name
-    }, function(err, null) {
-
+    blueprintConfigType.launch(ver, function(err, launchData) {
+        callback(err, launchData);
     });
 };
 

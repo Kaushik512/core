@@ -2151,28 +2151,30 @@
 
                                                                         $ul.append($liCardName);
                                                                         var $selecteditBtnContainer = $('<div style="position:absolute;padding-left:27px;bottom:11px;"></div>');
-                                                                        if (data[i].blueprintConfig.infraManagerData && data[i].blueprintConfig.infraManagerData.versionsList) {
+                                                                       // if (data[i].blueprintConfig.infraManagerData && data[i].blueprintConfig.infraManagerData.versionsList) {
 
                                                                             var $selectVerEdit = $('<a style="padding:0px 4px;margin-left:3px;border-radius:5px;" class="bpEditBtn"><i class="ace-icon fa fa-pencil"></i></a>').addClass('btn btn-primary').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'Edit');
                                                                             var $selectVer = null;
                                                                             var tagLabel = '';
                                                                             //Docker Check
+                                                                           
                                                                             if (data[i].templateType == "Docker") {
-                                                                                console.log("data[i}" + JSON.stringify(data[i]));
+                                                                               
+                                                                                console.log("docker" ,data[i].blueprintConfig);
                                                                                 //$selectVer = $('<select style="padding:1px;"></select>').addClass('blueprintVersionDropDown').attr('data-blueprintId', data[i]._id);
                                                                                 $img.attr('src', 'img/galleryIcons/Docker.png');
                                                                                 $selectVer = $('<select style="padding:1px;margin-right:5px;"></select>').addClass('dockerrepotagselect').attr('data-blueprintId', data[i]._id);
-                                                                                $itemBody.attr('dockerreponame', data[i].dockerreponame);
-                                                                                $itemBody.attr('dockerrepotags', data[i].dockerrepotags);
-                                                                                $itemBody.attr('dockercontainerpaths', data[i].dockercontainerpaths);
-                                                                                $itemBody.attr('dockercompose', JSON.stringify(data[i].dockercompose));
+                                                                                $itemBody.attr('dockerreponame', data[i].blueprintConfig.dockerRepoName);
+                                                                                $itemBody.attr('dockerrepotags', data[i].blueprintConfig.dockerRepoTags);
+                                                                                $itemBody.attr('dockercontainerpaths', data[i].blueprintConfig.dockerContainerPaths);
+                                                                                $itemBody.attr('dockercompose', JSON.stringify(data[i].blueprintConfig.dockerCompose));
 
                                                                                 if (data[i].dockerlaunchparameters)
-                                                                                    $itemBody.attr('dockerlaunchparameters', 't ' + data[i].dockerlaunchparameters);
+                                                                                    $itemBody.attr('dockerlaunchparameters', 't ' + data[i].blueprintConfig.dockerLaunchParameters);
 
-                                                                                if (typeof data[i].dockercompose != 'undefined') {
-                                                                                    data[i].dockercompose.forEach(function(k, v) {
-                                                                                        var $liDockerRepoName = $('<li title="Docker Repo Name" class="dockerimagetext" style="text-align:left;margin-left:15px" ><i class="fa fa-check-square" style="padding-right:5px"/>' + data[i].dockercompose[v]["dockercontainerpathstitle"] + '</li>');
+                                                                                if (typeof data[i].blueprintConfig.dockerCompose != 'undefined') {
+                                                                                    data[i].blueprintConfig.dockerCompose.forEach(function(k, v) {
+                                                                                        var $liDockerRepoName = $('<li title="Docker Repo Name" class="dockerimagetext" style="text-align:left;margin-left:15px" ><i class="fa fa-check-square" style="padding-right:5px"/>' + data[i].blueprintConfig.dockerCompose[v]["dockercontainerpathstitle"] + '</li>');
                                                                                         $ul.append($liDockerRepoName);
                                                                                     });
                                                                                 }
@@ -2245,7 +2247,7 @@
                                                                             }
                                                                             $selecteditBtnContainer.append($li);
 
-                                                                        }
+                                                                        //}
                                                                         $itemBody.append($ul);
                                                                         $itemBody.append($selecteditBtnContainer);
                                                                         $itemContainer.append($itemBody);
@@ -2441,6 +2443,7 @@
                                                                     return;
                                                                 }
                                                                 if ($selectedItems.attr('data-templateType') === 'Docker') {
+//debugger;
                                                                     $('.oldlaunchparams').empty(); //clearing the old div for composite blue print.
                                                                     // alert('in test');
                                                                     //Force hiding the start button
@@ -2455,6 +2458,7 @@
                                                                     //commented below to have a composite bp for docker
                                                                     // loadLaunchParams();
                                                                     //Loading table for all docker images for compose
+                                                                   
                                                                     var dockercompose = JSON.parse($selectedItems.attr('dockercompose'));
                                                                     //alert('hit');
                                                                     $('#compositedockertable tr.dockerimagesrow').detach(); //clearing previously loaded table.
@@ -2493,7 +2497,7 @@
                                                                     $launchDockerInstanceSelector.data('blueprintId', blueprintId);
                                                                     //  $launchDockerInstanceSelector.data('blueprintId',blueprintId);
 
-
+                        
 
                                                                     $('#dockerinstancesselctorview').empty().append('<span><div class=\"modal-body\"><div><div class=\"row\"><div style=\"color:;\" class=\"col-lg-12 col-sm-12\ dockerinstances"></div></div></div></div></div></span>');
                                                                     var $newinstancetable = $("<table></table>").append("<thead><tr><td>Instance Name</td><td>IP Address</td><td>Log Info</td><td class='hidden'>Add Docker Engine</td></tr></thead>");

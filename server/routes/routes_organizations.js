@@ -1071,7 +1071,8 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     cloudProviderId: req.body.blueprintData.providerId,
                     infraManagerType: 'chef',
                     infraManagerId: req.body.blueprintData.chefServerId,
-                    runlist: req.body.blueprintData.runlist
+                    runlist: req.body.blueprintData.runlist,
+                    instanceOS:req.body.blueprintData.instanceOS
                 }
                 blueprintData.instanceData = instanceData;
             } else {

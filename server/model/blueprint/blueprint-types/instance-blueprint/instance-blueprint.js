@@ -55,10 +55,9 @@ function getCloudProviderConfigType(blueprint) {
     return cloudProviderConfig;
 }
 
-InstanceBlueprintSchema.methods.launch = function(launchOptions, callback) {
+InstanceBlueprintSchema.methods.launch = function(version, callback) {
     cloudProviderConfig = getCloudProviderConfigType(this);
-    cloudProviderConfig.launch(updateData);
-    this.infraManagerData = infraManagerConfig;
+    cloudProviderConfig.launch(version, callback);
 };
 
 InstanceBlueprintSchema.methods.update = function(updateData) {
@@ -73,11 +72,28 @@ InstanceBlueprintSchema.methods.getVersionData = function(ver) {
 
 };
 
-InstanceBlueprintSchema.methods.getLatestVersion = function(ver) {
+InstanceBlueprintSchema.methods.getLatestVersion = function() {
     infraManagerConfig = getInfraManagerConfigType(this);
     return infraManagerConfig.getLatestVersion();
 
 };
+
+InstanceBlueprintSchema.methods.getInfraManagerData = function() {
+    return {
+        infraMangerType: this.infraManagerType,
+        infraManagerId: this.infraManagerId,
+        infraManagerData: this.infraManagerData
+    };
+};
+
+InstanceBlueprintSchema.methods.getCloudProviderData = function() {
+    return {
+        cloudProviderType: this.cloudProviderType,
+        cloudProviderId: this.cloudProviderId,
+        cloudProviderData: this.cloudProviderData
+    };
+};
+
 
 // static methods
 InstanceBlueprintSchema.statics.createNew = function(data) {
@@ -94,6 +110,7 @@ InstanceBlueprintSchema.statics.createNew = function(data) {
             vpcId: data.vpcId,
             subnetId: data.subnetId,
             imageId: data.imageId,
+            instanceOS: data.instanceOS
         });
     } else if (data.cloudProviderType === CLOUD_PROVIDER_TYPE.AZURE) {
         providerType = CLOUD_PROVIDER_TYPE.AZURE;
