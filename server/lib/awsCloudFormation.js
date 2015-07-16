@@ -97,3 +97,5 @@ var AWSCloudFormation = function(awsSettings) {
 
 
 };
+
+module.exports = AWSCloudFormation;

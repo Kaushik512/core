@@ -8,6 +8,7 @@ var uniqueValidator = require('mongoose-unique-validator');
 
 var DockerBlueprint = require('./blueprint-types/docker-blueprint/docker-blueprint');
 var InstanceBlueprint = require('./blueprint-types/instance-blueprint/instance-blueprint');
+var CloudFormationBlueprint = require('./blueprint-types/cloud-formation-blueprint/cloud-formation-blueprint');
 
 var BLUEPRINT_TYPE = {
     DOCKER: 'docker',
@@ -86,6 +87,8 @@ function getBlueprintConfigType(blueprint) {
         BlueprintConfigType = InstanceBlueprint;
     } else if ((blueprint.blueprintType === BLUEPRINT_TYPE.DOCKER) && blueprint.blueprintConfig) {
         BlueprintConfigType = DockerBlueprint;
+    } else if ((blueprint.blueprintType === BLUEPRINT_TYPE.AWS_CLOUDFORMATION) && blueprint.blueprintConfig) {
+        BlueprintConfigType = CloudFormationBlueprint;
     } else {
         return;
     }
@@ -165,7 +168,7 @@ BlueprintSchema.methods.launch = function(envId, ver, callback) {
 
 // static methods
 BlueprintSchema.statics.createNew = function(blueprintData, callback) {
-
+    logger.debug('blueprintData.blueprintType ==>',blueprintData.cloudFormationData);
     var blueprintConfig, blueprintType;
     if ((blueprintData.blueprintType === BLUEPRINT_TYPE.INSTANCE_LAUNCH) && blueprintData.instanceData) {
         blueprintType = BLUEPRINT_TYPE.INSTANCE_LAUNCH;
@@ -173,10 +176,13 @@ BlueprintSchema.statics.createNew = function(blueprintData, callback) {
     } else if ((blueprintData.blueprintType === BLUEPRINT_TYPE.DOCKER) && blueprintData.dockerData) {
         blueprintType = BLUEPRINT_TYPE.DOCKER;
         blueprintConfig = DockerBlueprint.createNew(blueprintData.dockerData);
-    } else {
+    } else if ((blueprintData.blueprintType === BLUEPRINT_TYPE.AWS_CLOUDFORMATION) && blueprintData.cloudFormationData) {
+        blueprintType = BLUEPRINT_TYPE.AWS_CLOUDFORMATION;
+        blueprintConfig = CloudFormationBlueprint.createNew(blueprintData.cloudFormationData);
+    }  else {
         process.nextTick(function() {
             callback({
-                message: "Invalid Blueprint Type"
+                message: "Invalid Blueprint Type sdds"
             }, null);
         });
         return;

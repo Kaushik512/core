@@ -1040,7 +1040,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 users: req.body.blueprintData.users,
                 blueprintType: req.body.blueprintData.blueprintType
             };
-            console.log('req== >',blueprintData);
+            console.log('req== >', blueprintData);
             //var blueprintData = req.body.blueprintData;
             var dockerData, instanceData;
             logger.debug('req.body.blueprintData.blueprintType ==>', req.body.blueprintData.blueprintType);
@@ -1072,13 +1072,26 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     infraManagerType: 'chef',
                     infraManagerId: req.body.blueprintData.chefServerId,
                     runlist: req.body.blueprintData.runlist,
-                    instanceOS:req.body.blueprintData.instanceOS
+                    instanceOS: req.body.blueprintData.instanceOS
                 }
                 blueprintData.instanceData = instanceData;
+            } else if (req.body.blueprintData.blueprintType === 'aws_cf') {
+                console.log('templateFile ==> ',req.body.blueprintData.cftTemplateFile);
+                cloudFormationData = {
+                    cloudProviderId: req.body.blueprintData.cftProviderId,
+                    infraManagerType: 'chef',
+                    infraManagerId: req.body.blueprintData.chefServerId,
+                    runlist: req.body.blueprintData.runlist,
+                    stackParameters: req.body.blueprintData.cftStackParameters,
+                    stackName: req.body.blueprintData.stackName,
+                    templateFile: req.body.blueprintData.cftTemplateFile
+                }
+                blueprintData.cloudFormationData = cloudFormationData;
             } else {
                 res.send(400, {
                     message: "Invalid Blueprint Type"
                 });
+                return;
             }
 
             //logger.debug("Enviornment ID:: ", req.params.envId);
