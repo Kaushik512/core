@@ -16,8 +16,14 @@
                                             </h4>
 
 
+
+                                
                                 <span class="pull-right swap-view">
-                                    
+                                    <span class="pull-right importButton">
+                                    <a type="reset" id="ipaddressimport" data-original-title="Import Instance" data-placement="top" title="Import By IP" rel="tooltip" href="#modalContainerimportInstance" data-backdrop="false" data-toggle="modal">
+                                     <i class="fa fa-th fa-2x fa-laptop"/>
+                                    </a>
+                                    </span>
                                     <a class="btn1" id="defaultViewButton" style="" onclick="showHideControl(this.id)"> <i class="fa fa-th fa-2x txt-color-deactive font-size18" title="Card View"/></a>&nbsp;
                                     <a id="instanceview" class="btn1" onclick="showHideControl(this.id)"> <i class="fa fa-align-justify fa-2x txt-color-deactive font-size18" title="Table View"/></a></span>
                                         </div>
@@ -90,10 +96,7 @@
                             <a class="btn pull-right btn-danger right-button" title="Remove Instance" id="removeInstance" >
                                 <i class="fa fa-trash-o"></i>
                             </a>&nbsp;
-                            <a type="reset" class="btn pull-right btn-info right-button" id="ipaddressimport" data-original-title="Import Instance" data-placement="top" title="Import By IP" rel="tooltip" href="#modalContainerimportInstance" data-backdrop="false" data-toggle="modal">
-                                <i class="fa fa-laptop"/>
-                            </a>
-
+                            
                             &nbsp;&nbsp;<a  data-toggle="modal" href="#mybootstrapandimport" class="btn pull-right btn-primary hidden" title="Bootstrap & Import" onClick="$('#bootstrapandimportnode').modal('show');" style="margin-right:10px;"> <i class="fa fa-plug"></i></a>
 
                         </div>
@@ -130,7 +133,7 @@
 <div class="modal fade" id="modalforInstanceEdit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog " style="">
         <div class="modal-content"> 
-            <form role="form" class="class="cmxform"" id="instanceEditNew">
+            <form role="form" class="cmxform" id="instanceEditNew">
              <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title">
