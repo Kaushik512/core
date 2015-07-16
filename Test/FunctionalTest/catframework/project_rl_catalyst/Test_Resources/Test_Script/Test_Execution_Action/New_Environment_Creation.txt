@@ -21,6 +21,7 @@ Catalyst Addition and Creation of New Envirorments Setup
     #Clicks on Settings
     #Clicks on DevOps Setup menu
     #Clicks on EEnvironments menu line
+    Sleep    1s
     Clicks on New button Create New Environment
     Select organization for Env
     #Select the Configuration name
@@ -31,6 +32,7 @@ Catalyst Addition and Creation of New Envirorments Setup
     #Assign Teams1
     Assign Created Project1
     Clicks on Save Button to save the Environments
+    Sleep    1s
     Clicks on New button Create New Environment
     Select organization for Env
     #Select the Configuration name
@@ -53,6 +55,7 @@ Catalyst Addition of New Environments
     Clicks on Add Button
     Add the New EEnvironment Named1
     Clicks on ADD Chef Env Button
+    Sleep    1s
     Select the Newly created Environments1
     Sleep    2s
     #Assign Teams1
@@ -63,25 +66,18 @@ Catalyst Addition of New Environments
 
 
 
-
-
-
-
 Test Validation of Creation of New Environments
     Test Validation of No org,Chef,Env,Proj Selected for Environment
     Org,Chef,Env,Team not Selected for Envirnment
     Test Validation of no Environment Selected
     Environment not Selected ErrorMessage  
-    #Test Validation of No Teams Selected
-    #Team not selected for Environment  
+    
 
 Test Validation of No org,Chef,Env,Proj Selected for Environment
     Clicks on Settings
     Clicks on DevOps Setup menu
     Clicks on EEnvironments menu line
     Clicks on New button Create New Environment
-    #Select the Environments1
-    #Assign Teams1
     Sleep    1s
     Clicks on Save Button to save the Environments
 
@@ -90,20 +86,18 @@ Org,Chef,Env,Team not Selected for Envirnment
     Element Should Contain    id=errmsg_orgname    ${REQ}
     Element Should Contain    id=errmsg_configname    ${REQ}
     Element Should Contain    id=errmsg_environmentname    ${REQ}
-    #Element Should Contain    id=errmsg_teamname    ${REQ1}
-    Clicks on CanCancel Button
+    
 
 
 Test Validation of no Environment Selected
-    Clicks on New button Create New Environment
     Select organization for Env
     Sleep    1s
-    #Assign Teams1
     Clicks on Save Button to save the Environments
 
 Environment not Selected ErrorMessage
-    Element Should Contain    id=errmsg_environmentname   ${REQ} 
-    Clicks on CanCancel Button    
+    Element Should Contain    id=errmsg_environmentname   ${REQ}
+    Click Element    id=btncancel 
+        
 
 Test Validation of No Teams Selected
     Clicks on New button Create New Environment
@@ -124,10 +118,11 @@ Add the New EEnvironment Named1
     Input Text    id=chefenvname    ${ENV STORE}
 
 Select the Newly created Environments1
-    Click Element    xpath=.//*[@id='s2id_environmentname']/a/span[1]
+    Click Element    css=#s2id_environmentname > a > span.select2-chosen
     Sleep     1s
-    Input Text    xpath=.//*[@id='select2-drop']/div/input    ${ENV STORE}
+    Input Text    css=#select2-drop > div > input    ${ENV STORE}
     Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element    xpath=.//*[@id='select2-drop']/ul/li[contains("${ENV STORE}",.)]
+
 
 
 Clicks on CanCancel Button

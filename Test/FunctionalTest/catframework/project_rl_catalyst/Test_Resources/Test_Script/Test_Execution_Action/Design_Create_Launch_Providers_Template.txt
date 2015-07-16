@@ -234,6 +234,7 @@ Catalyst Choose Template and Save Setup
     Choose the Provider
     Choose the Available Images
     Choose the Region
+    Select the VPC
     Select the Subnet
     Select the Key Pair
     Choose Instance Size
@@ -1190,6 +1191,17 @@ Select the Subnet
     Input Text    xpath=.//*[@id='select2-drop']/div/input    ${SUBNET NAME}
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
 
+Select the VPC
+    Sleep    5s
+    Click Element    css=#s2id_vpcId > a > span.select2-chosen
+    Sleep    1s
+    Input Text    css=#select2-drop > div > input    ${VPC}
+    Sleep    1s
+    Click Element    css=ul > li > div
+
+
+
+
 
 Select the Key Pair
     Execute JavaScript    $('#bootstrap-wizard-1 > div.tab-content > footer > div').attr('style','display:none')
@@ -1237,7 +1249,10 @@ Select the Security Group
     Sleep    3s
     Log    after scroll
     Sleep    1s
-    Click Element    xpath=.//*[@id='securityGroupIds']/label[contains(.,'sg-c00ee1a5 | all_open')]/i
+    Click Element    xpath=.//*[@id='securityGroupIds']/label[contains(.,'${SECRTY GRP1}')]/i
+    Click Element    xpath=.//*[@id='securityGroupIds']/label[contains(.,'${SECRTY GRP2}')]/i
+    Click Element    xpath=.//*[@id='securityGroupIds']/label[contains(.,'${SECRTY GRP3}')]/i
+    Click Element    xpath=.//*[@id='securityGroupIds']/label[contains(.,'${SECRTY GRP4}')]/i
     Log    after click
     
 
