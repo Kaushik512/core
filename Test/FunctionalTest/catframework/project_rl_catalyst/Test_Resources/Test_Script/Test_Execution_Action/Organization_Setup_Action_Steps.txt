@@ -13,6 +13,7 @@ Library            Collections
 Resource           catalyst.txt
 Resource           ${CATALYST TEST DATA}/${TESTDATA}
 Resource           ${COMMON RESOURCES}/catalyst_grid_node.txt
+Resource           ${CATALYST ACTION}/Users_Setup_With_New_Users_and_Teams.txt
 
 
 *** Variables ***
@@ -25,6 +26,113 @@ Catalyst Login
     Enters catalyst password
     Clicks on Login button
 
+Catalyst Create New Org Admin 
+    Clicks on Users Setup
+    Clicks on Users
+    Clicks on New Button
+    Enters the Org Admin Login Name
+    Enters the Org Admin Email Address
+    Select The Organization of the OrgAdmin created
+    Add User to LDAP
+    Enters the LDAP Org Admin Password
+    Enters the Confirm LDAP Password
+    Assign the Roles as Admin
+    Assign Teams for OrgAdmin
+    Clicks on USave Button
+
+Catalyst Org Admin Verfifcation of New,Update,Delete Button disabled
+    Clicks on Settings
+    Clicks on Organization image
+    Sleep    2s
+    Verify New Button is Disabled
+    Verfiy Delete Button is Disabled
+    Verify Update Button is Disabled
+
+Catalyst Creating New User and Verfiy ALL is Disabled
+    Clicks on Settings
+    Clicks on Users Setup
+    Clicks on Users
+    Clicks on New Button
+    Enters Email Address
+    Verification of Organization only with out ALL option Being Disabled
+    Sleep    1s
+    Clicks on UserCancel Button
+
+Catalyst Creation of Designer and Consumer
+    Clicks on New Button
+    Enters Login name as Designer
+    Enters Email Address
+    Select particular User Created organization
+    Add User to LDAP
+    Enters Designer Passwd
+    Enters Designer Confirm Passwd
+    Selecting the Role as Designer
+    Assign Teams for users
+    Clicks on USave Button
+    Clicks on New Button
+    Enters Login name as Consumer
+    Enters Email Address
+    Select particular User Created organization
+    Add User to LDAP
+    Enters Consumer Passwd
+    Enters Consumer Confirm Passwd
+    Selecting the Role as Consumer
+    Assign Teams for users
+    Clicks on USave Button
+
+
+
+Verification of Organization only with out ALL option Being Disabled
+    Click Element    xpath=.//*[@id='s2id_orgname']/a/span[1]
+    Sleep    1s
+    Input Text    xpath=.//*[@id='select2-drop']/div/input    ALL
+    Element Should Contain    xpath=.//*[@id='select2-drop']/ul/li    ${NO MATCH}
+    Log    ${NO MATCH}
+    Clear Element Text    xpath=.//*[@id='select2-drop']/div/input
+    Input Text    xpath=.//*[@id='select2-drop']/div/input    ${ORGANIZATION NAME}
+    Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
+
+
+Enters Login name as Designer
+    Input Text    id=loginname    ${DESIGNER_NAME}
+
+Enters Login name as Consumer
+    Input Text    id=loginname    ${CONSUMER_NAME}    
+
+Verify New Button is Disabled
+    ${NEW}=    Get Element Attribute    xpath=.//*[@id='newOrg']@disabled
+    Log    ${NEW}
+    Should Be Equal    ${NEW}    ${DISABLED}
+
+Verfiy Delete Button is Disabled
+    ${NEW1}=    Get Element Attribute    xpath=.//*[@id='envtable']/tbody/tr/td[text()='Relevance_Labs']/../td/div/button@disabled
+    Log    ${NEW1}
+    Should Be Equal    ${NEW}    ${DISABLED}    
+
+
+Verfiy Update Button is Disabled
+    ${NEW2}=    Get Element Attribute    xpath=.//*[@id='envtable']/tbody/tr/td[text()='Relevance_Labs']/../td/div/a@disabled
+    Should Be Equal    ${NEW2}    ${DISABLED}    
+
+Enters Designer Passwd
+    Input Text    id=userpassword    ${DESIGNER_PASWD}
+
+Enters Designer Confirm Passwd
+    Input Text    id=userpassword1    ${DESIGNER_PASWD}    
+
+Enters Consumer Passwd
+    Input Text    id=userpassword    ${CONSUMER_PASWD}
+
+Enters Consumer Confirm Passwd
+    Input Text    id=userpassword1    ${CONSUMER_PASWD}    
+
+
+Selecting the Role as Designer
+    Click Element    xpath=.//*[@id='userrolename']/label[text()='Designer']
+
+Selecting the Role as Consumer
+    Click Element    xpath=.//*[@id='userrolename']/label[text()='Consumer']    
+
 Create New Organization
       Vaildate the Organization feilds   ${Vaildate15ChrOrgName}        
       Organization name with more than 15 characters   ${Vaildate15ChrErrMsg}   
@@ -34,11 +142,67 @@ Create New Organization
       Organization name Left Empty  ${VaildateEmptyErrMsg}
       Vaildate the Organizationsame feilds  ${VaildateSpecialChrOrgName}
       Organization name with special characters  ${VaildateSpecialChrErrMsg}
-      Vaildate the Organizationsame feilds    ${VaildOrgName}
-      Vaildate the Edit Organization fields  ${VaildEditOrg}
+      Vaildate the Organizationsame feilds  ${VaildOrgName}
+      #Vaildate the Edit Organization fields  ${VaildEditOrg}
       Vaildate the Edit Organization domain name fields  ${VaildEditOrgDomainName} 
       #Vaildate the Organization1 feilds  ${VaildateAlreadyExistChrOrgName}  
       #Organization name already exists  ${VaildateAlreadyExistErrMsg}
+
+
+Addition of Random Numbers to Unique Names
+    Generation of New Unique Numbers1
+    Generation of New Unique Numbers2
+    Generation of New Unique Numbers3
+    Not Exits in LDAP
+
+Generation of New Unique Numbers1
+    ${GEN}=    Generate Random String    3    [NUMBERS]
+    ${LOG1}=   Catenate  SEPARATOR=   ${CATE1}${GEN}
+    Log    ${LOG1}
+    Set Global Variable    ${LOG1}
+
+Generation of New Unique Numbers2
+    ${GEN}=    Generate Random String    3    [NUMBERS]
+    ${LOG2}=   Catenate  SEPARATOR=   ${CATE2}${GEN}
+    Log    ${LOG2}
+    Set Global Variable    ${LOG2}
+
+Generation of New Unique Numbers3
+    ${GEN}=    Generate Random String    3    [NUMBERS]
+    ${LOG3}=   Catenate  SEPARATOR=   ${CATE3}${GEN}
+    Log    ${LOG3}
+    Set Global Variable    ${LOG3}
+
+Not Exits in LDAP
+    ${ValidateNotExistLDAP}=    Generate Random String
+    Log    ${ValidateNotExistLDAP}
+    Set Global Variable    ${ValidateNotExistLDAP}   
+
+
+Enters the Org Admin Login Name
+    Sleep    1s
+    Input Text    id=loginname    ${ORG ADMIN USER}
+    Log    ${ORG ADMIN USER}
+
+Enters the Org Admin Email Address
+    Input Text    id=email    ${ORGADMN EMAILADD}
+   
+Select The Organization of the OrgAdmin created
+    Click Element    xpath=.//*[@id='s2id_orgname']/a/span[1]
+    Input Text    xpath=.//*[@id='select2-drop']/div/input    ${ORGANIZATION NAME}
+    Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
+    
+Enters the LDAP Org Admin Password
+    Input Text    id=userpassword    ${ORG ADMIN PASSWORD}
+
+Enters the Confirm LDAP Password
+    Input Text    id=userpassword1    ${ORG ADMIN PASSWORD}
+
+Assign the Roles as Admin
+    Click Element    xpath=.//*[@id='userrolename']/label[text()='Admin']
+
+Assign Teams for OrgAdmin
+    Click Element    xpath=.//*[@id='teamname']/label[text()='Relevance_Labs_Admins']
 
 
 #organization validation                                                           #organization start
@@ -111,9 +275,9 @@ Clicks on Settings
 
 
 Clicks on Organization image
-    Click Element    xpath=.//*[@id='setting_tree']/ul/li[1]/a
-    Click element    xpath=.//*[@id='setting_tree']/ul/li[2]/a
-
+    Click Element    xpath=//a[contains(text(),'Organization Setup')]
+    Click element    xpath=//a[contains(text(),'Organizations')]
+    
 Clicks on New button to Create New Organization
     Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       link=New
     Click Element    link=New
@@ -124,6 +288,7 @@ Enters organization name
     Input Text     id=orgname      ${Orgname}
 
 Enters organization domain name
+    Sleep    1s
     Input Text     id=domainname      ${ORGANIZATION DOMAIN NAME}
 
 Enters New Organization Domain Name
@@ -142,6 +307,7 @@ Clicks on Update Button of OrganizationNew Created
     Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()="Relevance_Labs"]/../td[4]/div/a
 
 Enters New Edit Organization Name
+    Sleep    1s
     Input Text    id=orgname    ${VaildEditOrg}
 
 Verfiy that EditedOrganization is created
@@ -151,8 +317,8 @@ Verfiy that EditedOrganization is created
 
 Verfiy that EditedOrganizationdomain is created
     [Arguments]    ${OrganizationDomainMsg}
-    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       xpath=.//*[@id='envtable']/tbody/tr/td[text()="https://www.relevancelab.com"]
-    Element Should Contain    xpath=.//*[@id='envtable']/tbody/tr/td[text()="https://www.relevancelab.com"]    ${OrganizationDomainMsg} 
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       xpath=.//*[@id='envtable']/tbody/tr/td[text()="http://www.relevancelab.com"]
+    Element Should Contain    xpath=.//*[@id='envtable']/tbody/tr/td[text()="http://www.relevancelab.com"]    ${OrganizationDomainMsg} 
 
 #Organization ends
 
@@ -351,6 +517,8 @@ Vaildate the Business Group namenoorg feilds
   
 Vaildate the Business Group feilds
     [Arguments]    ${productgroupname}
+    Clicks on Settings
+    Clicks on Organzatin Tree 
     Clicks on Business Groups menu
     Validate Busgrp path
 
@@ -366,7 +534,7 @@ Validate Busgrp2 path
 
 Vaildate the Business Group1 feilds
     [Arguments]    ${productgroupname}
-    Click element    xpath=.//*[@id='setting_tree']/ul/li[3]/a
+    Click Element    xpath=.//*[@id='setting_tree']/ul/li[3]/a
     Validate Busgrp path
     
 Validate Busgrp path
@@ -383,12 +551,14 @@ Vaildate the Edit Business Group fields
     Verfiy that Edited Business Group is created  ${ProductGroupName}
 
 
-
+Clicks on Organzatin Tree 
+    Click Element    xpath=.//*[@id='setting_tree']/ul/li/a[text()='Organization Setup']
+    
 
 
 Clicks on Business Groups menu
-    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       xpath=.//*[@id='setting_tree']/ul/li[3]/a
-    Click Element    xpath=.//*[@id='setting_tree']/ul/li[3]/a
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       xpath=//a[contains(text(),'Business Groups')]
+    Click Element    xpath=//a[contains(text(),'Business Groups')]
 
 Clicks on New button to create new Business Group
     Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       link=New
@@ -433,6 +603,10 @@ Create New Projects
      Project name Left Empty  ${VaildateEmptyErrMsg}
      Vaildate the Project feilds  ${VaildateSpecialChrProjName}
      Project name with special characters  ${VaildateSpecialChrErrMsg}
+     Validate the no org selected in Project  
+     Organization,Projects not Selected  ${VaildNorgProErrMsg}
+     #Vaildate the No Teams Selected
+     #No Selection of Team in Project  ${VaildNoTeamErrMsg}
      Vaildate the Project feilds   ${VaildProjName1}
      Vaildate the Projectrev feilds   ${VaildProjName2}
      Vaildate the Edit Project Name fields  ${VaildEditProject}
@@ -465,6 +639,7 @@ Project name with special characters
 Vaildate the Project name feilds
     [Arguments]    ${ErrorMsg}
     Element Should Contain    id=errmsg_projectname     ${ErrorMsg}
+    Clicks on Cancel Button
   
 Vaildate the Project feilds
     [Arguments]    ${projectname}
@@ -473,7 +648,8 @@ Vaildate the Project feilds
     Enters new Project name    ${projectname}
     Enters new Project Description
     Select organization for project
-    Select Business Group
+    #Select Business Group
+    #Assign Teams for Orgnaization in Projects
     Clicks on Save button to save the Project details
 
 Vaildate the Projectrev feilds
@@ -483,7 +659,8 @@ Vaildate the Projectrev feilds
     Enters new Project name    ${projectname}
     Enters new Project Description
     Select organization for project
-    Select Business Groupn
+    #Select Business Groupn
+    #Assign Teams for Orgnaization in Projects
     Clicks on Save button to save the Project details     
 
 Vaildate the Edit Project Name fields
@@ -500,11 +677,45 @@ Vaildate the Edit Project Description fields
     Clicks on Save button to save the Project details 
     Verify that EditedProjectDesc is created  ${Description}
 
+Validate the no org selected in Project
+    Clicks on New button to create new project
+    Enters new Project name    ${projectname}
+    Enters new Project Description
+    #Assign Teams for Orgnaization in Projects
+    Clicks on Save button to save the Project details  
+
+Vaildate the No Teams Selected
+    Clicks on New button to create new project
+    Enters new Project name    ${projectname}
+    Enters new Project Description
+    Select organization for project
+    Clicks on Save button to save the Project details 
+
+Organization,Projects not Selected
+    [Arguments]    ${ErrMsg}
+    Element Should Contain    id=errmsg_orgname    ${ErrMsg}
+    Element Should Contain    id=errmsg_productgroupname    ${ErrMsg}
+    Clicks on Cancel Button
+
+No Selection of Team in Project
+    [Arguments]    ${ErrMsg}
+    Element Should Contain    id=errmsg_teamname    ${ErrMsg}
+    Clicks on Cancel Button
+
+
+
+Assign Teams for Orgnaization in Projects
+    Click Element    xpath=.//*[@id='teamname']/label[text()='Relevance_Labs_Admins']
+    Click Element    xpath=.//*[@id='teamname']/label[text()='Relevance_Labs_DEV']
+    #Click Element    xpath=.//*[@id='teamname']/label[text()='Relevance_Labs_QA']
+    #Click Element    xpath=.//*[@id='teamname']/label[text()='Relevance_Labs_DevOps']
+
+
 
 
 Clicks on projects menu
-    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       xpath=.//*[@id='setting_tree']/ul/li[4]/a
-    Click Element    xpath=.//*[@id='setting_tree']/ul/li[4]/a
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       xpath=//a[contains(text(),'Projects')]
+    Click Element    xpath=//a[contains(text(),'Projects')]
 
 Clicks on New button to create new project
     Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       link=New

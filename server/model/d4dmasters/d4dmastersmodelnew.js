@@ -92,8 +92,10 @@ var d4dMastersEnvironments = new mongoose.Schema(
 	//Included as a concept to be regularized after approval
 	configname: {type:String, trim:true},
 	configname_rowid: {type:String, trim:true},
-	teamname: {type:String, trim:true},
-	teamname_rowid: {type:String, trim:true},
+	/*teamname: {type:String, trim:true},
+	teamname_rowid: {type:String, trim:true},*/
+	projectname: {type:String, trim:true},
+	projectname_rowid: {type:String,trim:true},
 	//end of concept
 	rowid:{type:String,required:true, trim:true}},{collection:'d4dmastersnew'}
 );
@@ -126,6 +128,8 @@ var d4dMastersTeams = new mongoose.Schema(
 	projectname_rowid: {type:String,trim:true},
 	orgname: {type:[String],required:false, trim:true},
 	orgname_rowid: {type:[String], trim:true},
+	/*environmentname: {type:String, trim:true},
+	environmentname_rowid: {type:String, trim:true},*/
 	description: {type:String, trim:true, validate:descValidator},
 	rowid:{type:String,required:true, trim:true}},{collection:'d4dmastersnew'}
 );
@@ -143,8 +147,8 @@ var d4dMastersProjects = new mongoose.Schema(
 	environmentname_rowid: {type:String, trim:true},
 	description: {type:String, trim:true, validate:descValidator},
 	active: {type:Boolean, trim:true,default:true},
-	teamname: {type:String, trim:true},
-	teamname_rowid: {type:String, trim:true},
+	/*teamname: {type:String, trim:true},
+	teamname_rowid: {type:String, trim:true},*/
 	rowid:{type:String,required:true, trim:true}},{collection:'d4dmastersnew'}
 );
 var d4dModelMastersProjects = mongoose.model('d4dModelMastersProjects',d4dMastersProjects,'d4dmastersnew');
@@ -189,6 +193,7 @@ var d4dModelMastersDockerConfig = mongoose.model('d4dModelMastersDockerConfig',d
 var d4dMastersUsers = new mongoose.Schema(
 	{id: {type:String, trim:true},
 	loginname: {type:String, trim:true, validate:nameValidator},
+	password: {type:String},
 	email: {type:String, trim:true},
 	userrolename: {type:String, trim:true},
 	orgname: {type:[String],required:false, trim:true},
@@ -220,6 +225,7 @@ var d4dMastersDesignTemplateTypes = new mongoose.Schema(
 	designtemplateicon_filename: {type:String,trim:true},
 	orgname: {type:[String],required:false, trim:true},
 	orgname_rowid: {type:[String], trim:true},
+	templatetype: {type:String,trim:true},
 	rowid:{type:String,required:true, trim:true}},{collection:'d4dmastersnew'}
 );
 var d4dModelMastersDesignTemplateTypes = mongoose.model('d4dModelMastersDesignTemplateTypes',d4dMastersDesignTemplateTypes,'d4dmastersnew');
@@ -238,6 +244,7 @@ var d4dMastersTemplatesList = new mongoose.Schema(
 	templatescookbooks: {type:String, trim:true},
 	orgname: {type:[String],required:false, trim:true},
 	orgname_rowid: {type:[String], trim:true},
+	template_filename: {type:String, trim:true},
 	active: {type:Boolean, trim:true,default:true},
 	rowid:{type:String,required:true, trim:true}},{collection:'d4dmastersnew'}
 );

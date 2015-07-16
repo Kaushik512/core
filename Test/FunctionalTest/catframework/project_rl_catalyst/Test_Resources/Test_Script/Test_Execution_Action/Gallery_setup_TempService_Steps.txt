@@ -37,7 +37,12 @@ Catalyst User New Template Creation
 Test Validation of New Template Type
     Validate the No Organization for Template Type
     Organization not selected ErrorMessage  ${VaildOrGErrMsg}
-
+    Validate the Empty Template Type Name  
+    Tempalte Type Name left Empty  ${VaildEmptyTempName}
+    Validate the 15chr Template Typee Name 
+    Template type Name more than 15chr  ${Vaild15ChrTempErrMsg}
+    #-Validate the Blank Spaces Template Type Name
+    #-Template Type Name with Blank Spaces  ${VaildBlankspErrMsg}
 
 Validate the No Organization for Template Type
     Clicks on Settings
@@ -46,6 +51,7 @@ Validate the No Organization for Template Type
     Clicks on New Template Type Button
     Enters the Design Template name
     Chooses Template type Icon
+    Select type of the template
     Clicks on Template Save Button
 
 Organization not selected ErrorMessage
@@ -53,12 +59,57 @@ Organization not selected ErrorMessage
     Element Should Contain    id=errmsg_orgname    ${ErrMsg}
     Clicks on Templat type Cancel Button
     
+Validate the 15chr Template Typee Name
+    Clicks on New Template Type Button
+    Enters the 15Chr Template type name
+    Chooses Template type Icon
+    Select Created organization
+    Select type of the template
+    Clicks on Template Save Button
+
+
+Validate the Blank Spaces Template Type Name
+    Clicks on New Template Type Button
+    Enters the Blank Spaces Temp Type Name
+    Chooses Template type Icon
+    Select Created organization
+    Clicks on Template Save Button
+
+Template Type Name with Blank Spaces
+    [Arguments]    ${ErrMsg}
+    Element Should Contain    id=errmsg_templatetypename    ${ErrMsg}
+    Clicks on Templat type Cancel Button
+   
+
+
+
+
+
+
+Validate the Empty Template Type Name
+    Clicks on New Template Type Button
+    Chooses Template type Icon
+    Select Created organization
+    Select type of the template
+    Clicks on Template Save Button
+
+Tempalte Type Name left Empty
+    [Arguments]    ${ErrMsg}
+    Element Should Contain    id=errmsg_templatetypename    ${ErrMsg}
+    Clicks on Templat type Cancel Button
+
+Template type Name more than 15chr
+    [Arguments]    ${ErrMsg}
+    Element Should Contain    id=errmsg_templatetypename    ${ErrMsg}
+    Clicks on Templat type Cancel Button
+
 
 Catalyst User New Design Template Type
     Clicks on New Template Type Button
     Enters the Design Template name
     Chooses Template type Icon
     Select Created organization
+    Select type of the template
     Clicks on Template Save Button
     
 Validate the Edit Template name
@@ -68,7 +119,8 @@ Validate the Edit Template name
     Select New CookBooks for Template
     Clicks on Save Button
 
-
+Enters the Blank Spaces Temp Type Name
+    Input Text    id=templatetypename    ${VaildSpacesTEmpTyName}
 
 
 Vaildate the Empty Template Name
@@ -85,21 +137,32 @@ Vaildate the Empty Template Name
     Clicks on >> Button
     Clicks on Save Button
 
+Enters the 15Chr Template type name
+    Input Text    id=templatetypename    ${Vaild15ChrTempName}
+
+Select type of the template
+    Click Element    xpath=.//*[@id='s2id_templatetype']/a/span[1]
+    Sleep    3s
+    Input Text    xpath=.//*[@id='select2-drop']/div/input    ${Template Type}
+    Sleep    4s
+    Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
+
 
 Clicks on Templat type Cancel Button
     Click Element    xpath=.//*[@id='btncancel'] 
 
 Clicks on Template Type
-    Click Element    xpath=.//*[@id='setting_tree']/ul/li[5]/a
+    Click Element    xpath=//a[contains(text(),'Template Types')]
 
 Clicks on New Template Type Button
     Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    id=addnewitem
 
 Enters the Design Template name
-    Input Text    id=templatetypename    ${TEMPLATE TYPENAME}
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Input Text    id=templatetypename    ${TEMPLATE TYPENAME}
 
 Chooses Template type Icon
-    Choose File     xpath=.//*[@id='designtemplateicon']     C:\\Users\\adarsh.RLINDIA\\Desktop\\index.jpg
+    Choose File     xpath=.//*[@id='designtemplateicon']     ${TEMPLTYPEICON}
+    #C:\\Users\\adarsh.RLINDIA\\Desktop\\index.jpg
 
 Clicks on Template Save Button
     Click Element    xpath=.//*[@id='myForm333']/div/div[3]/div/button
@@ -114,7 +177,8 @@ Enters the New Template Name
     Input Text    id=templatename    ${templatename}
 
 Clicks on Edit Button of Temp Created
-    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()='Apac']/../td[6]/div/a
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${TEMP NME}']/../td[6]/div/a
+    Sleep    2s
 
 Template Name left empty
     [Arguments]    ${VaildEmptyTemplateNameErrMsg}
@@ -159,11 +223,11 @@ Vaildate 15chr Template
 
 
 Clicks on Gallery Setup
-    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       xpath=.//*[@id='setting_tree']/ul/li[4]/a
-    Click Element    xpath=.//*[@id='setting_tree']/ul/li[4]/a
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       xpath=//a[contains(text(),'Gallery Setup')]
+    Click Element    xpath=//a[contains(text(),'Gallery Setup')]
 
 Clicks on Templates
-    Click Element    xpath=.//*[@id='setting_tree']/ul/li[6]/a
+    Click Element    xpath=//a[contains(text(),'Templates')]
 
 Clicks on New Button
     Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       xpath=.//*[@id='newTemplate']
@@ -172,16 +236,20 @@ Clicks on New Button
 
 Enters Template Name
     Wait Until Keyword Succeeds    1 minute     1 seconds    Wait Until Element Is Visible    id=templatename
-    Input Text    id=templatename    Apac
+    Input Text    id=templatename    ${TEMP NME}
 
 
 Chooses Icon
-    Wait Until Keyword Succeeds    1 minute     1 seconds    Choose File     xpath=.//*[@id='templatesicon']     C:\\Users\\adarsh.RLINDIA\\Desktop\\download.jpg
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Choose File     xpath=.//*[@id='templatesicon']     ${APACHEIMG}
+    #C:\\Users\\adarsh.RLINDIA\\Desktop\\download.jpg
 
 
 Chooses Template Type
     Click Element    xpath=.//*[@id='s2id_templatetypename']/a
-    Click Element    xpath=.//*[@id='select2-drop']/ul/li[1]/div      #AppFactory
+    Sleep    2s
+    Input Text    xpath=.//*[@id='select2-drop']/div/input    ${TEMPLATE TYPENAME}
+    Sleep    2s
+    Click Element    xpath=.//*[@id='select2-drop']/ul/li/div      #App FactoryT
     #Click Element    xpath=.//*[@id='select2-drop']/ul/li[2]/div      #DevopsRoles
     #Click Element    xpath=.//*[@id='select2-drop']/ul/li[3]/div      #Docker
     #Click Element    xpath=.//*[@id='select2-drop']/ul/li[4]/div      #CloudFormation
@@ -193,11 +261,14 @@ Select Chef Server
 
 
 Select CookBooks
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[text()='apache2']
+    Sleep    1s
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='templatescookbooks']/div/div[1]/div[1]/label[3]
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[text()='${ADD}']
     #Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    id=btnaddToRunlist
 
 Select New CookBooks for Template
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[text()='git']
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='templatescookbooks']/div/div[1]/div[1]/label[3]
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[text()='${CookBkName}']
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    id=btnaddToRunlist
 
 
@@ -226,6 +297,12 @@ Test Validation of Creation of New Services
     Service Name left empty  ${VaildEmptyServiceNameErrMsg}
     Vaildate the 15Character Service Name    ${Vaild15ChrTemplateName} 
     Service Name more than 15characters      ${Vaild15ChrTemplateNameErrMsg}
+    Validate the BlankSpaces Service name  ${VaildBlkSerName}  
+    Service Name with BlankSpaces  ${VaildBlkServiceErrMsg}
+    Vaildate the Special Chars ServiceName  ${VaildSpclCharName}
+    Service Name with Special Characters  ${VaildSpclCharErrMsg}
+    Vaildate the No Org Selected in Services
+    Service Name with no Organziatn Selected
 
 
 Catalyst User Service Command Services
@@ -247,6 +324,57 @@ Validate the Edit Service command
     Select the Edit Actions
     Clicks on SerSave Button
 
+Validate the BlankSpaces Service name 
+    [Arguments]   ${Servicename}
+    Clicks on SNew Button
+    Select Created organization
+    Enters the BlanksSpace Service name
+    Choose Service Command Type
+    Select Chef Server
+    Select Service CookBooks
+    Select the Actions
+    Clicks on SerSave Button
+
+Vaildate the Special Chars ServiceName
+    [Arguments]   ${Servicename}
+    Clicks on SNew Button
+    Select Created organization
+    Enters Special Chars Service Name
+    Choose Service Command Type
+    Select Chef Server
+    Select Service CookBooks
+    Select the Actions
+    Clicks on SerSave Button
+
+Vaildate the No Org Selected in Services
+    Clicks on SNew Button
+    Enters Service Name
+    Choose Service Command Type
+    Select Chef Server
+    Select Service CookBooks
+    Select the Actions
+    Clicks on SerSave Button
+
+
+Enters Special Chars Service Name
+    Input Text    id=servicename    ${Servicename}
+
+
+Service Name with BlankSpaces
+    [Arguments]     ${ErrMsg}
+    Element Should Contain    id=errmsg_servicename    ${Errmsg}
+    Clicks on Service Cancel Button
+
+Service Name with Special Characters
+    [Arguments]     ${ErrMsg}
+    Element Should Contain    id=errmsg_servicename    ${Errmsg}
+    Clicks on Service Cancel Button
+
+Service Name with no Organziatn Selected
+    Element Should Contain    id=errmsg_orgname    ${VaildNoOrgErrMsg}
+    Clicks on Service Cancel Button
+
+
 Vaildate the 15Character Service Name
     [Arguments]   ${Servicename}
     Clicks on SNew Button
@@ -259,11 +387,14 @@ Vaildate the 15Character Service Name
     Clicks on SerSave Button
 
 Clicks on Edit Button of Service
-    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()='MongoDB']/../td[5]/div/a
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${SERVICE NAME}']/../td[5]/div/a
 
 
 
 Enters 15Chr Service Name
+   Input Text    id=servicename    ${Servicename}
+
+Enters the BlanksSpace Service name
    Input Text    id=servicename    ${Servicename}
 
 Service Name more than 15characters
@@ -297,6 +428,7 @@ Enters Empty Service Name
     Input Text    id=servicename    ${servicename}
 
 Enters New Service Name
+    Sleep    1s
     Input Text    id=servicename    ${SERVICE NAME1}
 
 Service Name left empty
@@ -315,8 +447,8 @@ Clicks on Service Cancel Button
 
 
 Clicks on Service Command
-    Wait Until Keyword Succeeds    1 minute     1 seconds    Wait Until Element Is Visible    xpath=.//*[@id='setting_tree']/ul/li[7]/a
-    Click Element    xpath=.//*[@id='setting_tree']/ul/li[7]/a
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Wait Until Element Is Visible    xpath=//a[contains(text(),'Service Command')]
+    Click Element    xpath=//a[contains(text(),'Service Command')]
 
 
 Clicks on SNew Button
@@ -326,7 +458,7 @@ Clicks on SNew Button
 
 Enters Service Name
     Wait Until Keyword Succeeds    1 minute     1 seconds    Wait Until Element Is Visible    id=servicename
-    Input Text    id=servicename    MongoDB
+    Input Text    id=servicename    ${SERVICE NAME}
 
 
 Choose Service Command Type

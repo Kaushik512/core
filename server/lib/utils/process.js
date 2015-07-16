@@ -50,40 +50,6 @@ var Process = function(appPath, argList, options) {
     }
 
     this.start = function() {
-        /*console.log(appPath+" "+argList.join());
-		proc = exec(appPath+" "+argList.join(), options,function(err,stdOut,stdErr){
-			if(err) {
-				if (typeof onError === 'function') {
-				
-				 processRunning = false;
-				 console.log("Error is spawning process");
-				console.log(error);
-				onError(error);
-				};
-				return;
-			}
-			if (typeof onStdOut === 'function') {
-				stdOut.on('data', function(data) {
-				//console.log('stdout: ==> ' + data);
-				onStdOut(data);
-			  });
-			}
-
-		if (typeof onStdErr === 'function') {
-			proc.stderr.on('data', function(errData) {
-				//console.log('stderr: ==> ' + errData);
-				onStdErr(errData);
-			});
-		}
-
-
-
-		   }
-		});
-	
-		processRunning = true;
-*/
-        //proc = spawn(appPath, argList, options);
         console.log(appPath + " " + argList.join(' '));
         proc = exec(appPath + " " + argList.join(' '), options, function(err, stdOut, stdErr) {
             if (err) {
@@ -91,6 +57,9 @@ var Process = function(appPath, argList, options) {
                 return;
             }
         });
+        //proc = spawn(appPath, argList, options);
+
+        
         processRunning = true;
         if (typeof onStdOut === 'function') {
             proc.stdout.on('data', function(data) {

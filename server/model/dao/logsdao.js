@@ -14,7 +14,7 @@ var Logs = mongoose.model('logs', LogSchema);
 var LogsDao = function() {
 
     this.insertLog = function(logData, callback) {
-        logger.debug("Enter insertLog");
+        //logger.debug("Enter insertLog");
         var log = new Logs(logData);
         log.save(function(err, data) {
             if (err) {
@@ -25,7 +25,7 @@ var LogsDao = function() {
                 return;
             }
 
-            logger.debug("Exit insertLog", logData);
+            //logger.debug("Exit insertLog", logData);
             if (typeof callback === 'function') {
                 callback(null, data);
             }

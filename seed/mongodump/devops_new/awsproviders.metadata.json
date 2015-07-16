@@ -1,1 +1,1 @@
-{"options":{},"indexes":[{"v":NumberInt(1),"key":{"_id":NumberInt(1)},"name":"_id_","ns":"devops_new.awsproviders"},{"v":NumberInt(1),"unique":true,"key":{"providerName":1},"name":"providerName_1","ns":"devops_new.awsproviders","background":true,"safe":null}]}
+{"options":{},"indexes":[{"v":NumberInt(1),"key":{"_id":NumberInt(1)},"name":"_id_","ns":"devops_new.awsproviders"}]}

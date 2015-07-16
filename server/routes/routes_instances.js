@@ -22,7 +22,7 @@ var usersDao = require('../model/users.js');
 var credentialCryptography = require('../lib/credentialcryptography')
 var fileIo = require('../lib/utils/fileio');
 var uuid = require('node-uuid');
-var javaSSHWrapper = require('../model/javaSSHWrapper.js');
+//var javaSSHWrapper = require('../model/javaSSHWrapper.js');
 var errorResponses = require('./error_responses');
 var logger = require('../lib/logger')(module);
 var waitForPort = require('wait-for-port');
@@ -32,8 +32,12 @@ var ChefClientExecution = require('../model/classes/instance/chefClientExecution
 var appConfig = require('../config/app_config.js');
 var Cryptography = require('../lib/utils/cryptography');
 
-var utils = require('../model/classes/utils/utils.js');
 
+var Task = require('../model/classes/tasks/tasks.js');
+var utils = require('../model/classes/utils/utils.js');
+var SCPClient = require('../lib/utils/scp');
+var shellEscape = require('shell-escape');
+//var WINRM = require('../lib/utils/winrmexec');
 
 module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
@@ -100,6 +104,69 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
     app.delete('/instances/:instanceId', function(req, res) {
         logger.debug("Enter delete() for /instances/%s", req.params.instanceId);
+        instancesDao.getInstanceById(req.params.instanceId, function(err, instances) {
+            if (err) {
+                logger.debug("Failed to fetch Instance ", err);
+                res.send(500, errorResponses.db.error);
+                return;
+            }
+            if (instances.length) {
+                var instance = instances[0];
+                Task.getTasksByNodeIds([req.params.instanceId], function(err, tasks) {
+                    if (err) {
+                        logger.debug("Failed to fetch tasks by node id ", err);
+                        res.send(500, errorResponses.db.error);
+                        return;
+                    }
+                    console.log('length ==>', tasks.length);
+                    if (tasks.length) {
+                        res.send(400, {
+                            message: "Instance is associated with task"
+                        });
+                        return;
+
+                    }
+
+                    if (req.query.chefRemove && req.query.chefRemove === 'true') {
+                        configmgmtDao.getChefServerDetails(instance.chef.serverId, function(err, chefDetails) {
+                            if (err) {
+                                logger.debug("Failed to fetch ChefServerDetails ", err);
+                                res.send(500, errorResponses.chef.corruptChefData);
+                                return;
+                            }
+                            var chef = new Chef({
+                                userChefRepoLocation: chefDetails.chefRepoLocation,
+                                chefUserName: chefDetails.loginname,
+                                chefUserPemFile: chefDetails.userpemfile,
+                                chefValidationPemFile: chefDetails.validatorpemfile,
+                                hostedChefUrl: chefDetails.url,
+                            });
+                            chef.deleteNode(instance.chef.chefNodeName, function(err, nodeData) {
+                                if (err) {
+                                    logger.debug("Failed to delete node ", err);
+                                    if (err.chefStatusCode && err.chefStatusCode === 404) {
+                                        removeInstanceFromDb();
+                                    } else {
+                                        res.send(500);
+                                    }
+                                } else {
+                                    removeInstanceFromDb();
+                                    logger.debug("Successfully removed instance from db.");
+                                }
+                            });
+
+                        });
+                    } else {
+                        removeInstanceFromDb();
+                    }
+
+                });
+            } else {
+                res.send(404, {
+                    "message": "Instance does not exist"
+                });
+            }
+        });
 
         function removeInstanceFromDb() {
             instancesDao.removeInstancebyId(req.params.instanceId, function(err, data) {
@@ -112,48 +179,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 res.send(200);
             });
         }
-        if (req.query.chefRemove && req.query.chefRemove === 'true') {
-            instancesDao.getInstanceById(req.params.instanceId, function(err, data) {
-                if (err) {
-                    logger.debug("Failed to fetch Instance ", err);
-                    res.send(500, errorResponses.db.error);
-                    return;
-                }
-                var instance = data[0];
-                configmgmtDao.getChefServerDetails(instance.chef.serverId, function(err, chefDetails) {
-                    if (err) {
-                        logger.debug("Failed to fetch ChefServerDetails ", err);
-                        res.send(500, errorResponses.chef.corruptChefData);
-                        return;
-                    }
-                    var chef = new Chef({
-                        userChefRepoLocation: chefDetails.chefRepoLocation,
-                        chefUserName: chefDetails.loginname,
-                        chefUserPemFile: chefDetails.userpemfile,
-                        chefValidationPemFile: chefDetails.validatorpemfile,
-                        hostedChefUrl: chefDetails.url,
-                    });
-                    chef.deleteNode(instance.chef.chefNodeName, function(err, nodeData) {
-                        if (err) {
-                            logger.debug("Failed to delete node ", err);
-                            if (err.chefStatusCode && err.chefStatusCode === 404) {
-                                removeInstanceFromDb();
-                            } else {
-                                res.send(500);
-                            }
-                        } else {
-                            removeInstanceFromDb();
-                            logger.debug("Successfully removed instance from db.");
-                        }
-                    });
-
-                });
-            });
-        } else {
-            removeInstanceFromDb();
-            logger.debug("Successfully removed instance from db.");
-        }
-        logger.debug("Exit delete() for /instances/%s", req.params.instanceId);
     });
 
     app.post('/instances/:instanceId/appUrl', function(req, res) { //function(instanceId, ipaddress, callback)
@@ -205,10 +230,12 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
     // add instance task
     app.post('/instances/:instanceId/addTask', function(req, res) {
         if (!(req.body.taskIds && req.body.taskIds.length)) {
-            res.send(404, {
-                message: "Invalid Task Id"
-            });
-            return;
+            // res.send(404, {
+            //     message: "Invalid Task Id"
+            // });
+            // return;
+
+            req.body.taskIds = [];
         }
         instancesDao.addTaskIds(req.params.instanceId, req.body.taskIds, function(err, updateCount) {
             if (err) {
@@ -618,7 +645,314 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         });
 
     });
+    //Coposite Docker container launch 
+    app.get('/instances/dockercompositeimagepull/:instanceid/:dockerreponame/:dockercomposejson', function(req, res) {
+        var generateDockerLaunchParams = function(runparams) {
+            logger.debug('rcvd runparams --->', runparams);
+            var launchparams = [];
+            var preparams = '';
+            var startparams = '';
+            var execparam = '';
+            var containername = '';
 
+            //eliminating any exec portion.
+            var _execp = runparams.split('-exec');
+            if (_execp.length > 0 && typeof _execp != 'undefined') {
+                execparam = _execp[1];
+                runparams = _execp[0];
+
+            }
+            if (runparams.indexOf('-c') > 0) {
+                var _startparm = runparams.split('-c');
+                if (_startparm.length > 0 && typeof _startparm[1] != 'undefined') {
+                    startparams = _startparm[1];
+                    runparams = _startparm[0];
+                }
+            }
+
+            logger.debug('1 runparams: ' + runparams);
+
+            var params = runparams.split(' -');
+
+
+
+            for (var i = 0; i < params.length; i++) {
+                //logger.debug('split runparams --->',params[i]);
+                if (params[i] != '') {
+                    var itms = params[i].split(' ');
+                    if (itms.length > 0) {
+                        logger.debug('itms[0]:' + itms[0] + ';itms[1]:' + itms[1]);
+                        // if (itms[0] == 'c')
+                        //     startparams += ' ' + itms[1];
+                        // if (itms[0] == 'exec')
+                        //     execparam += ' ' + itms[1];
+                        // else
+                        preparams += ' -' + params[i];
+
+                        if (itms[0] == '-name') {
+
+                            containername = itms[1];
+                        }
+
+                    }
+
+                }
+            }
+            logger.debug('execparam: ' + execparam);
+            logger.debug('runparams: ' + runparams);
+            logger.debug('preparams: ' + preparams);
+            logger.debug('startparams: ' + startparams);
+
+
+            launchparams[0] = preparams;
+            launchparams[1] = startparams;
+            // alert(execparam);
+            launchparams[2] = execparam;
+            launchparams[3] = containername;
+            //alert(launchparams);
+            //  logger.debug('launchparams:' + launchparams.join('&&'));
+            return (launchparams);
+        }
+
+        //:dockerreponame/:imagename/:tagname/:runparams/:startparams
+        logger.debug("Enter get() for /instances/dockercompositeimagepull");
+        var instanceid = req.params.instanceid;
+        var dockercompose = decodeURIComponent(req.params.dockercomposejson);
+        var dockercomposejson = JSON.parse(dockercompose);
+        logger.debug('DockerCompose Json rcvd: ', JSON.stringify(dockercomposejson));
+        instancesDao.getInstanceById(req.params.instanceid, function(err, data) {
+            if (err) {
+                logger.error("Instance fetch Failed >> ", err);
+                res.send(500);
+                return;
+            }
+            logger.debug(data.length + ' ' + JSON.stringify(data));
+            if (data.length) {
+                logger.debug(' Docker dockerEngineStatus : ' + data[0].docker.dockerEngineStatus);
+                if (data[0].docker.dockerEngineStatus) {
+                    if (data[0].docker.dockerEngineStatus != "success") {
+                        res.end('No Docker Found');
+                        return;
+                    }
+                } else {
+                    res.end('No Docker Found');
+                    return;
+                }
+                configmgmtDao.getMasterRow(18, 'dockerreponame', req.params.dockerreponame, function(err, data) {
+                    if (!err) {
+
+                        //  var dockerRepo = JSON.parse(data);
+                        logger.debug('Docker Repo ->', JSON.stringify(data));
+                        var dock = JSON.parse(data);
+                        // var dockkeys = Object.keys(data);
+                        logger.debug('username:', dock.dockeruserid);
+
+                        var _docker = new Docker();
+                        var stdmessages = '';
+                        var imagecount = 0; //to count the no of images started.
+                        var pullandrundocker = function(imagename, tagname, runparams, startparams, execcommand, containername, callback) {
+                            imagecount++;
+                            var cmd = "sudo docker login -e " + dock.dockeremailid + ' -u ' + dock.dockeruserid + ' -p ' + dock.dockerpassword;
+
+                            //cmd += ' && sudo docker pull ' + dock.dockeruserid  + '/' + decodeURIComponent(req.params.imagename);
+                            //removing docker userID
+                            cmd += ' && sudo docker pull ' + decodeURIComponent(imagename);
+                            logger.debug('Intermediate cmd: ', cmd);
+                            if (tagname != null) {
+                                cmd += ':' + tagname;
+                            }
+
+                            if (runparams != 'null') {
+                                runparams = decodeURIComponent(runparams);
+                            }
+
+                            if (startparams != 'null') {
+                                startparams = decodeURIComponent(startparams);
+                            } else
+                                startparams = '/bin/bash';
+
+                            cmd += ' && sudo docker run -i -t -d ' + runparams + ' ' + decodeURIComponent(imagename) + ':' + tagname + ' ' + startparams;
+                            logger.debug('Docker command to be executed : ', cmd);
+                            if (imagecount == 1) {
+                                //this would be the first image that would be run. Returning handle to browser.
+                                logger.debug('Returning handle to browser');
+                                res.end('OK');
+                            }
+                            //callback('done');
+                            _docker.runDockerCommands(cmd, req.params.instanceid,
+                                function(err, retCode) {
+                                    if (err) {
+                                        logsDao.insertLog({
+                                            referenceId: instanceid,
+                                            err: true,
+                                            log: 'Failed to Excute Docker command: . cmd : ' + cmd + '. Error: ' + err,
+                                            timestamp: new Date().getTime()
+                                        });
+                                        logger.error("Failed to Excute Docker command: ", err);
+                                        res.send(err);
+                                        return;
+                                    }
+
+                                    logger.debug("docker return ", retCode);
+                                    if (retCode == 0)
+                                    //if retCode == 0 //update docker status into instacne
+                                    {
+                                        logger.debug('Execcommand : --------------' + execcommand + ' ' + (execcommand != ''));
+                                        if (execcommand != '' && execcommand != 'null') {
+                                            logger.debug('In Execute command');
+                                            logsDao.insertLog({
+                                                referenceId: instanceid,
+                                                err: false,
+                                                log: 'Starting execute command: . cmd : ' + execcommand + ' on ' + containername,
+                                                timestamp: new Date().getTime()
+                                            });
+                                            //Execute command found 
+                                            var cmd = "sudo docker exec " + containername + ' bash ' + execcommand;
+                                            logger.debug('In docker exec ->' + cmd);
+                                            req.params.containerid = containername;
+                                            _docker.runDockerCommands(cmd, req.params.instanceid, function(err, retCode1) {
+                                                if (retCode1 == 0) {
+
+                                                    logger.debug('runDockerCommand : in done');
+                                                    instancesDao.updateInstanceDockerStatus(instanceid, "success", '', function(data) {
+                                                        logger.debug('Instance Docker Status set to Success');
+                                                        // res.send(200);
+                                                        //callback('done');
+                                                        logsDao.insertLog({
+                                                            referenceId: instanceid,
+                                                            err: false,
+                                                            log: 'Done execute command: . cmd : ' + cmd + ' on ' + containername,
+                                                            timestamp: new Date().getTime()
+                                                        });
+                                                        if (imagecount < dockercomposejson.length) {
+
+                                                            var lp = generateDockerLaunchParams(dockercomposejson[imagecount]['dockerlaunchparameters']);
+                                                            var startparams = 'null';
+                                                            var execcommand = 'null';
+                                                            if (lp.length > 0) {
+                                                                if (lp[1]) {
+                                                                    startparams = lp[1];
+                                                                }
+                                                                if (lp[2]) {
+                                                                    execcommand = lp[2];
+                                                                }
+                                                            }
+                                                            logger.debug('Running pullandrun count:', imagecount);
+                                                            pullandrundocker(dockercomposejson[imagecount]['dockercontainerpaths'], dockercomposejson[imagecount]['dockerrepotags'], lp[0], startparams, execcommand, lp[3]);
+                                                        }
+                                                    });
+                                                } else {
+                                                    logsDao.insertLog({
+                                                        referenceId: instanceid,
+                                                        err: true,
+                                                        log: 'Error executing command: . cmd : ' + cmd + ' on ' + containername + ' : Return Code ' + retCode1 + ' -' + err,
+                                                        timestamp: new Date().getTime()
+                                                    });
+                                                }
+
+                                            });
+                                            // logger('runout :' + runout);
+
+                                        } else //no exec commands found
+                                        {
+                                            instancesDao.updateInstanceDockerStatus(instanceid, "success", '', function(data) {
+                                                logger.debug('Instance Docker Status set to Success');
+                                                // res.send(200);
+                                                //callback('done');
+                                                logsDao.insertLog({
+                                                    referenceId: instanceid,
+                                                    err: false,
+                                                    log: 'Done executing command: . cmd : ' + cmd,
+                                                    timestamp: new Date().getTime()
+                                                });
+                                                if (imagecount < dockercomposejson.length) {
+
+                                                    var lp = generateDockerLaunchParams(dockercomposejson[imagecount]['dockerlaunchparameters']);
+                                                    logger.debug('lp returned from generate=======> ', lp.join(' &&'));
+                                                    var startparams = 'null';
+                                                    var execcommand = 'null';
+                                                    if (lp.length > 0) {
+                                                        if (lp[1]) {
+                                                            startparams = lp[1];
+                                                        }
+                                                        if (lp[2]) {
+                                                            execcommand = lp[2];
+                                                        }
+                                                    }
+                                                    logger.debug('Running pullandrun count:', imagecount);
+                                                    pullandrundocker(dockercomposejson[imagecount]['dockercontainerpaths'], dockercomposejson[imagecount]['dockerrepotags'], lp[0], startparams, execcommand, lp[3]);
+                                                }
+                                            });
+                                        }
+                                        //Running any execute command.
+                                    } else {
+                                        logger.debug('Failed running docker command ....');
+                                        res.end('Image pull failed check instance log for details');
+                                    }
+                                    logger.debug("Exit get() for /instances/dockerimagepull");
+
+                                },
+                                function(stdOutData) {
+                                    if (!stdOutData) {
+
+                                        logger.debug("SSH Stdout :" + stdOutData.toString('ascii'));
+                                        stdmessages += stdOutData.toString('ascii');
+                                    } else {
+                                        logsDao.insertLog({
+                                            referenceId: instanceid,
+                                            err: false,
+                                            log: stdOutData.toString('ascii'),
+                                            timestamp: new Date().getTime()
+                                        });
+                                        logger.debug("Docker run stdout :" + instanceid + stdOutData.toString('ascii'));
+                                        stdmessages += stdOutData.toString('ascii');
+                                    }
+                                }, function(stdOutErr) {
+                                    logsDao.insertLog({
+                                        referenceId: instanceid,
+                                        err: true,
+                                        log: stdOutErr.toString('ascii'),
+                                        timestamp: new Date().getTime()
+                                    });
+                                    console.log("docker return ", stdOutErr);
+                                    //res.send(stdOutErr);
+
+                                });
+                        };
+
+                        if (dockercomposejson.length > 0) {
+                            var lp = generateDockerLaunchParams(dockercomposejson[0]['dockerlaunchparameters']);
+
+                            var startparams = 'null';
+                            var execcommand = 'null';
+                            if (lp.length > 0) {
+                                if (lp[1]) {
+                                    startparams = lp[1];
+                                }
+                                if (lp[2]) {
+                                    execcommand = lp[2];
+                                }
+                            }
+                            logger.debug('lp---->', lp[0]);
+                            pullandrundocker(dockercomposejson[0]['dockercontainerpaths'], dockercomposejson[0]['dockerrepotags'], lp[0], startparams, execcommand, lp[3]);
+                        } else {
+                            res.send('200 ' + 'No Images to pull');
+                        }
+
+
+
+
+
+                    } //!(err)
+                });
+            } else {
+                logger.debug('No Instance found with id : ' + instanceid);
+                res.send(500);
+                return;
+            }
+        });
+
+    });
     app.post('/instances/:instanceId/updateRunlist', function(req, res) {
         logger.debug("InstanceID>>>>>>>>>>> ", req.params.instanceId);
         if (req.session.user.rolename === 'Consumer') {
@@ -1525,34 +1859,34 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                         };
                         var sudoCmd;
                         if (decryptedCredentials.pemFileLocation) {
-                            sshParamObj.pemFilePath = decryptedCredentials.pemFileLocation;
+                            sshParamObj.privateKey = decryptedCredentials.pemFileLocation;
                         } else {
                             sshParamObj.password = decryptedCredentials.password;
                         }
-                        //var sshConnection = new SSH(sshParamObj);
 
-                        javaSSHWrapper.getNewInstance(sshParamObj, function(err, javaSSh) {
-                            if (err) {
-                                callback(err, null);
-                                return;
+                        var serviceCmd = "service " + serviceData.command + " " + req.params.actionType;
+                        var sudoCmd = "sudo";
+                        if (options.password) {
+                            sudoCmd = 'echo \"' + options.password + '\" | sudo -S';
+                        }
+                        serviceCmd = sudoCmd + " " + serviceCmd;
+
+
+                        var sshConnection = new SSH(sshParamObj);
+
+                        sshConnection.exec(serviceCmd, function(err, ret) {
+                            if (decryptedCredentials.pemFileLocation) {
+                                fileIo.removeFile(decryptedCredentials.pemFileLocation, function(err) {
+                                    if (err) {
+                                        logger.error("Unable to delete temp pem file =>", err);
+                                    } else {
+                                        logger.error("temp pem file deleted =>", err);
+                                    }
+                                });
                             }
-                            javaSSh.runServiceCmd(serviceData.command, req.params.actionType, function(err, ret) {
-                                if (decryptedCredentials.pemFileLocation) {
-                                    fileIo.removeFile(decryptedCredentials.pemFileLocation, function(err) {
-                                        if (err) {
-                                            logger.error("Unable to delete temp pem file =>", err);
-                                        } else {
-                                            logger.error("temp pem file deleted =>", err);
-                                        }
-                                    });
-                                }
-                                onComplete(err, ret);
-                            }, onStdOut, onStdErr);
-                            logger.debug("Exit get() for /instances/%s/services/%s/%s", req.params.instanceId, req.params.serviceId, req.params.actionType);
-                            res.send(200, {
-                                actionLogId: actionLog._id
-                            });
-                        });
+                            onComplete(err, ret);
+                        }, onStdOut, onStdErr);
+
                     }
                 });
             });
@@ -1675,8 +2009,15 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 res.send(500, "Failed to fetch Instance: ");
                 return;
             }
+
             logger.debug("Return instance>>>>>>>>>>> ", JSON.stringify(anInstance));
             if (anInstance.length) {
+                if (anInstance[0].bootStrapStatus !== 'success') {
+                    res.send(400, {
+                        message: "Instance is not boostraped"
+                    });
+                    return;
+                }
                 configmgmtDao.getChefServerDetails(anInstance[0].chef.serverId, function(err, chefDetails) {
                     if (err) {
                         res.send(500);
@@ -1695,22 +2036,71 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                         }
 
                         //getting chef run execution Id 
-
-                        ChefClientExecution.createNew({
-                            instanceId: anInstance[0].id
-
-                        }, function(err, chefClientExecution) {
-                            if (err) {
-                                res.send(500, "Unable to get  execution Id .");
-                                return;
+                        if (anInstance[0].hardware.os == 'linux') {
+                            var cmd = 'dpkg --get-selections';
+                            if (anInstance[0].hardware.platform === 'centos') {
+                                cmd = 'rpm -qa';
                             }
+                            var sudoCmd = "sudo";
+                            if (decryptedCredentials.password) {
+                                sudoCmd = 'echo \"' + decryptedCredentials.password + '\" | sudo -S';
+                            }
+                            cmd = sudoCmd + " " + cmd;
 
-                            // creating json attribute for execution id
-                            var jsonAttributeObj = {
-                                catalyst_attribute_handler: {
-                                    catalystCallbackUrl: req.protocol + '://' + req.get('host') + '/chefClientExecution/' + chefClientExecution.id
+                            var sshParamObj = {
+                                username: decryptedCredentials.username,
+                                host: anInstance[0].instanceIP,
+                                port: 22
+                            }
+                            if (decryptedCredentials.pemFileLocation) {
+                                sshParamObj.privateKey = decryptedCredentials.pemFileLocation;
+                            } else {
+                                sshParamObj.password = decryptedCredentials.password;
+                            }
+                            var sshConnection = new SSH(sshParamObj);
+                            var installedSoftwareString = '';
+                            sshConnection.exec(cmd, function(err, retCode) {
+                                if (err) {
+                                    res.send(500, {
+                                        "message": "Unable to ssh"
+                                    });
+                                    return;
                                 }
-                            };
+                                if (retCode == 0) {
+                                    res.send(200, {
+                                        installedSoftwareString: installedSoftwareString
+                                    });
+                                } else if (retCode === -5000) {
+                                    res.send(500, {
+                                        "message": "Host Unreachable."
+                                    });
+                                    return;
+                                } else if (retCode === -5001) {
+                                    res.send(500, {
+                                        "message": "Invalid credentials."
+                                    });
+                                    return;
+                                } else if (retCode === -5002) {
+                                    res.send(500, {
+                                        "message": "Unknown Exeption Occured. Code : " + retCode
+                                    });
+                                    return;
+                                } else {
+                                    res.send(500, {
+                                        "message": "Unknown Exeption Occured. Code : " + retCode
+                                    });
+                                    return;
+                                }
+
+                            }, function(stdOut) {
+                                installedSoftwareString = installedSoftwareString + stdOut.toString('UTF-8');
+                            }, function(stdErr) {
+
+                            });
+
+                        } else {
+
+
                             var chef = new Chef({
                                 userChefRepoLocation: chefDetails.chefRepoLocation,
                                 chefUserName: chefDetails.loginname,
@@ -1718,21 +2108,10 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                 chefValidationPemFile: chefDetails.validatorpemfile,
                                 hostedChefUrl: chefDetails.url,
                             });
-
-                            logger.debug("Chef...>>>>>>>>>>>>>>>>>>> ", JSON.stringify(chef));
-
-                            var list = [];
-                            list.push("recipe[inspect_software]");
                             var chefClientOptions = {
-                                privateKey: decryptedCredentials.pemFileLocation,
                                 username: decryptedCredentials.username,
                                 host: anInstance[0].instanceIP,
-                                instanceOS: anInstance[0].hardware.os,
                                 port: 22,
-                                runlist: list,
-                                overrideRunlist: false,
-                                jsonAttributes: JSON.stringify(jsonAttributeObj)
-                                //parallel:true
                             }
 
                             if (decryptedCredentials.pemFileLocation) {
@@ -1740,105 +2119,60 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                             } else {
                                 chefClientOptions.password = decryptedCredentials.password;
                             }
-                            var installedList = [];
-                            var installedString;
-                            var strWindows;
-                            chef.runChefClientInspect(chefClientOptions, function(err, retCode) {
+                            var installedSoftwareString = '';
+                            var cmd = 'Get-WmiObject -Class Win32_Product | Select-Object -Property Name';
+                            cmd = 'powershell \"' + cmd + '\"';
+                            chef.runKnifeWinrmCmd(cmd, chefClientOptions, function(err, retCode) {
+
                                 if (err) {
-                                    res.send(500, "Unable to run chef-client.");
+                                    res.send(500, {
+                                        "message": "Unable to winrm"
+                                    });
                                     return;
                                 }
-                                logger.debug("retCode>>>>>>>>>>>>>>>>>>> ", retCode);
-                                if (retCode === -5000) {
-                                    res.send(1001, "Host Unreachable.");
+                                logger.debug("Winrm finished with retcode ==> " + retCode);
+                                if (retCode == 0) {
+                                    installedSoftwareString = installedSoftwareString.replace(new RegExp(anInstance[0].instanceIP, 'g'), '');
+                                    //removing first two lines of junk
+                                    var stringParts = installedSoftwareString.split('\n');
+                                    if (stringParts.length > 4) { // must be greater than 3
+                                        stringParts = stringParts.slice(4);
+                                        installedSoftwareString = stringParts.join('\r\n');
+                                    } else { //returning empty string
+                                        installedSoftwareString = '';
+                                    }
+                                    res.send(200, {
+                                        installedSoftwareString: installedSoftwareString
+                                    });
+                                } else if (retCode === -5000) {
+                                    res.send(500, {
+                                        "message": "Host Unreachable."
+                                    });
                                     return;
                                 } else if (retCode === -5001) {
-                                    res.send(401, "Invalid credentials.");
+                                    res.send(500, {
+                                        "message": "Invalid credentials."
+                                    });
                                     return;
                                 } else if (retCode === -5002) {
-                                    res.send(400, "host must not be null.");
-                                    return;
-                                } else if (retCode == 1) {
-                                    res.send(500, " Chef run process exited unsuccessfully.");
-                                    return;
-                                }
-                                if (decryptedCredentials.pemFileLocation) {
-                                    fileIo.removeFile(decryptedCredentials.pemFileLocation, function(err) {
-                                        if (err) {
-                                            logger.debug("Unable to delete temp pem file =>", err);
-                                        } else {
-                                            logger.debug("temp pem file deleted =>", err);
-                                        }
+                                    res.send(500, {
+                                        "message": "Unknown Exeption Occured while trying knife winrm. Code : " + retCode
                                     });
+                                    return;
+                                } else {
+                                    res.send(500, {
+                                        "message": "Unknown Exeption Occured while trying knife winrm. Code : " + retCode
+                                    });
+                                    return;
                                 }
-                            }, function(stdOutData) {
-                                logger.debug("Return from chef client>>>>>>>>>>>>>>>>>>>: ", stdOutData);
-                                installedString = installedString + "{" + stdOutData.replace(/\s+/g, ' ') + "},";
-                                if (stdOutData === "{catalyst.inspect.stop}") {
-                                    // For CentOS
-                                    if (anInstance[0].credentials.username === "root") {
-                                        logger.debug("CentOS Called...");
-                                        var insString = installedString.split("{Installed Packages}").pop().split("{{catalyst.inspect.stop}}").shift();
-                                        insString = insString.substr(1);
-                                        insString = insString.slice(0, -1);
-                                        res.send(insString.split(","));
-                                        return;
-                                    } else {
-                                        // For Ubuntu
-                                        logger.debug("Ubuntu Called...");
-                                        var insString;
-                                        if (stdOutData === "{{catalyst.inspect.start}}") {
-                                            insString = installedString.split("{{catalyst.inspect.start}}").pop().split("{{catalyst.inspect.stop}}").shift();
-                                        } else {
-                                            insString = installedString.split("{catalyst.inspect.start}}").pop().split("{{catalyst.inspect.stop}}").shift();
-                                        }
-                                        insString = insString.substr(1);
-                                        insString = insString.slice(0, -1);
-                                        res.send(insString.split(","));
-                                        return;
-                                    }
-                                }
-                                // For Windows
-                                if (chefClientOptions.username === "administrator" || chefClientOptions.username === "Admin") {
-                                    var insString;
-                                    var arr = [];
-                                    logger.debug("Windows Called...");
-                                    var str = stdOutData.split("\n");
-                                    for (var i = 0; i < str.length; i++) {
-                                        var actualStr = str[i].replace(/\s+/g, ' ');
-                                        strWindows = strWindows + "{" + actualStr + "},";
-                                        if (actualStr === chefClientOptions.host + " Name Version ") {
-                                            insString = strWindows.split(chefClientOptions.host + " Name Version ").pop().split(chefClientOptions.host + " {catalyst.inspect.stop}").shift();
-                                        } else if (actualStr === "{ " + chefClientOptions.host + " Name Version }") {
-                                            insString = strWindows.split("{ " + chefClientOptions.host + " Name Version }").pop().split("{" + chefClientOptions.host + " {catalyst.inspect.stop}}").shift();
-                                        } else {
-                                            insString = strWindows.split("{" + chefClientOptions.host + " Name Version }").pop().split("{" + chefClientOptions.host + " {catalyst.inspect.stop}}").shift();
-                                        }
-                                        if (str[i] === chefClientOptions.host + " {catalyst.inspect.stop}") {
-                                            insString = insString.substr(1);
-                                            insString = insString.slice(0, -1);
-                                            arr = insString.split(",");
-                                            for (var x = 0; x < arr.length; x++) {
-                                                var replaceStr;
-                                                if (arr[x].length != 0 && arr[x] !== "{}" && arr[x] !== "{" + chefClientOptions.host + "}" && arr[x] !== "{" + chefClientOptions.host + " }") {
-                                                    replaceStr = arr[x].replace("{}", '');
-                                                    installedList.push(replaceStr.replace(chefClientOptions.host, ''));
-                                                }
-                                            }
-                                            logger.debug("Exit get() for /instances/%s/inspect", req.params.instanceId);
-                                            res.send(installedList.filter(Boolean));
-                                            return;
-                                        }
-                                    }
+                            }, function(stdOut) {
+                                installedSoftwareString = installedSoftwareString + stdOut.toString('UTF-8');
 
-                                }
-
-                            }, function(stdOutErr) {
-                                logger.debug("Return error from chef client:>>>>>>>>>>>>>: ", JSON.stringify(stdOutErr));
-                                res.send(500, " Failed to execute command on Instance.");
-                                return;
+                            }, function(stdErr) {
+                                logger.debug("err ==> " + stdErr.toString('ascii'));
                             });
-                        });
+
+                        }
                     });
                 });
 
@@ -1850,5 +2184,305 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         });
 
     });
+    /*
+    app.get('/instances/:instanceId/setAsWorkStation', function(req, res) {
+
+        instancesDao.getInstanceById(req.params.instanceId, function(err, instances) {
+            if (err) {
+                logger.debug("Failed to fetch Instance ", err);
+                res.send(500, errorResponses.db.error);
+                return;
+            }
+            if (!instances.length) {
+                return res.send(404, {
+                    message: "Instance does not exist"
+                });
+
+            }
+
+            var instance = instances[0];
+            configmgmtDao.getChefServerDetails(instance.chef.serverId, function(err, chefDetails) {
+                if (err) {
+                    logger.debug("Failed to fetch ChefServerDetails ", err);
+                    res.send(500, errorResponses.chef.corruptChefData);
+                    return;
+                }
+                credentialCryptography.decryptCredential(instance.credentials, function(err, decryptedCredentials) {
+                    if (err) {
+                        res.send(500, {
+                            "message": "Unable to decrypt file."
+                        });
+                        return;
+                    }
+                    var params = {
+                        username: decryptedCredentials.username,
+                        host: instance.instanceIP,
+                        port: 22
+                    };
+
+                    if (decryptedCredentials.pemFileLocation) {
+                        params.privateKey = decryptedCredentials.pemFileLocation;
+                    } else {
+                        params.password = decryptedCredentials.password;
+                    }
+                    var scpClient = new SCPClient(params);
+                    scpClient.upload(chefDetails.chefRepoLocation + '/.chef/', '/home/' + decryptedCredentials.username + '/' + instance.chef.chefNodeName + '/.chef/', function(err) {
+                        if (err) {
+                            console.log(err);
+                            res.send(500, err);
+                            return;
+                        }
+                        res.send(200, {
+                            message: 'true'
+                        })
+                    });
+                });
+
+            });
+        });
+    });*/
+
+    app.get('/instances/:instanceId/setAsWorkStation', function(req, res) {
+
+        instancesDao.getInstanceById(req.params.instanceId, function(err, instances) {
+            if (err) {
+                logger.debug("Failed to fetch Instance ", err);
+                res.send(500, errorResponses.db.error);
+                return;
+            }
+            if (!instances.length) {
+                return res.send(404, {
+                    message: "Instance does not exist"
+                });
+
+            }
+
+            var instance = instances[0];
+            configmgmtDao.getChefServerDetails(instance.chef.serverId, function(err, chefDetails) {
+                if (err) {
+                    logger.debug("Failed to fetch ChefServerDetails ", err);
+                    res.send(500, errorResponses.chef.corruptChefData);
+                    return;
+                }
+                credentialCryptography.decryptCredential(instance.credentials, function(err, decryptedCredentials) {
+                    if (err) {
+                        res.send(500, {
+                            "message": "Unable to decrypt file."
+                        });
+                        return;
+                    }
+                    var params = {
+                        username: decryptedCredentials.username,
+                        host: instance.instanceIP,
+                        port: 22
+                    };
+
+                    if (decryptedCredentials.pemFileLocation) {
+                        params.privateKey = decryptedCredentials.pemFileLocation;
+                    } else {
+                        params.password = decryptedCredentials.password;
+                    }
+                    var remotePath;
+                    if (instance.hardware.os === 'linux') {
+                        remotePath = '$HOME/$HOSTNAME/.chef/';
+                    } else {
+                        remotePath = "C:\\Users\\" + params.username + '\\' + instance.chef.chefNodeName + '\\.chef\\';
+                    }
+
+                    function createCmdString(fileItem, cmdString, callback) {
+                        if (cmdString) {
+                            cmdString = cmdString + ' && '
+                        }
+                        fileIo.readFile(fileItem.fullPath, function(err, fileData) {
+                            if (err) {
+                                callback(err);
+                                return;
+                            }
+
+                            var args = ['echo', fileData.toString()];
+
+                            var escapedString = shellEscape(args);
+                            var sudoCmd = '';
+                            // if (instance.hardware.os === 'linux') {
+                            //     sudoCmd = "sudo sh -c \"";
+                            //     if (decryptedCredentials.password) {
+                            //         sudoCmd = 'echo \"' + decryptedCredentials.password + '\" | sudo -S ';
+                            //     }
+                            //     escapedString = sudoCmd + escapedString + ' > ' + remotePath + fileItem.name+"\"";
+                            // } else {
+                            //     escapedString = sudoCmd + escapedString + ' > ' + remotePath + fileItem.name;
+                            // }
+                            escapedString = sudoCmd + escapedString + ' > ' + remotePath + fileItem.name;
+
+
+                            cmdString = cmdString + escapedString;
+                            callback(null, cmdString);
+
+                        });
+                    }
+
+                    fileIo.readDir('', chefDetails.chefRepoLocation + '/.chef/', function(err, dirList, fileList) {
+                        if (err) {
+                            res.send(500, errorResponses.db.error);
+                            return;
+                        }
+                        var count = 0;
+
+                        function loopFiles(fileList, cmdString, callback) {
+
+                            if (count < fileList.length) {
+                                createCmdString(fileList[count], cmdString, function(err, cmdString) {
+                                    count++;
+                                    if (err) {
+                                        res.send(500, errorResponses.db.error);
+                                        return;
+                                    }
+                                    loopFiles(fileList, cmdString, callback);
+                                });
+                            } else {
+                                callback(cmdString);
+
+                            }
+                        }
+                        if (fileList.length) {
+                            loopFiles(fileList, '', function(cmdString) {
+
+                                if (instance.hardware.os === 'linux') {
+                                    var sudoCmd = '';
+                                    // var sudoCmd = "sudo";
+                                    // if (decryptedCredentials.password) {
+                                    //     sudoCmd = 'echo \"' + decryptedCredentials.password + '\" | sudo -S';
+                                    // }
+                                    var cmd = sudoCmd + " mkdir -p " + remotePath + ' && ' + cmdString;
+
+                                    var sshParamObj = {
+                                        username: decryptedCredentials.username,
+                                        host: instance.instanceIP,
+                                        port: 22
+                                    }
+                                    if (decryptedCredentials.pemFileLocation) {
+                                        sshParamObj.privateKey = decryptedCredentials.pemFileLocation;
+                                    } else {
+                                        sshParamObj.password = decryptedCredentials.password;
+                                    }
+                                    var sshConnection = new SSH(sshParamObj);
+                                    console.log(cmd);
+                                    sshConnection.exec(cmd, function(err, retCode) {
+                                        if (err) {
+                                            res.send(500, {
+                                                "message": "Unable to ssh"
+                                            });
+                                            return;
+                                        }
+                                        if (retCode == 0) {
+                                            res.send(200, {
+                                                "message": "true"
+                                            });
+                                        } else if (retCode === -5000) {
+                                            res.send(500, {
+                                                "message": "Host Unreachable."
+                                            });
+                                            return;
+                                        } else if (retCode === -5001) {
+                                            res.send(500, {
+                                                "message": "Invalid credentials."
+                                            });
+                                            return;
+                                        } else if (retCode === -5002) {
+                                            res.send(500, {
+                                                "message": "Unknown Exeption Occured. Code : " + retCode
+                                            });
+                                            return;
+                                        } else {
+                                            res.send(500, {
+                                                "message": "Unknown Exeption Occured. Code : " + retCode
+                                            });
+                                            return;
+                                        }
+
+                                    }, function(stdOut) {
+                                        console.log('err ==> ', stdOut.toString());
+
+                                    }, function(stdErr) {
+                                        console.log('err ==> ', stdErr.toString());
+                                    });
+
+                                } else { //windows
+
+                                    var chef = new Chef({
+                                        userChefRepoLocation: chefDetails.chefRepoLocation,
+                                        chefUserName: chefDetails.loginname,
+                                        chefUserPemFile: chefDetails.userpemfile,
+                                        chefValidationPemFile: chefDetails.validatorpemfile,
+                                        hostedChefUrl: chefDetails.url,
+                                    });
+                                    var chefClientOptions = {
+                                        username: decryptedCredentials.username,
+                                        host: instance.instanceIP,
+                                        port: 22,
+                                    }
+
+                                    if (decryptedCredentials.pemFileLocation) {
+                                        chefClientOptions.privateKey = decryptedCredentials.pemFileLocation;
+                                    } else {
+                                        chefClientOptions.password = decryptedCredentials.password;
+                                    }
+
+                                    chef.runKnifeWinrmCmd('mkdir ' + remotePath + ' && ' + cmdString, chefClientOptions, function(err, retCode) {
+
+                                        if (err) {
+                                            res.send(500, {
+                                                "message": "Unable to winrm"
+                                            });
+                                            return;
+                                        }
+                                        logger.debug("Winrm finished with retcode ==> " + retCode);
+                                        if (retCode == 0) {
+                                            res.send(200, {
+                                                "message": "true"
+                                            });
+                                        } else if (retCode === -5000) {
+                                            res.send(500, {
+                                                "message": "Host Unreachable."
+                                            });
+                                            return;
+                                        } else if (retCode === -5001) {
+                                            res.send(500, {
+                                                "message": "Invalid credentials."
+                                            });
+                                            return;
+                                        } else if (retCode === -5002) {
+                                            res.send(500, {
+                                                "message": "Unknown Exeption Occured while trying knife winrm. Code : " + retCode
+                                            });
+                                            return;
+                                        } else {
+                                            res.send(500, {
+                                                "message": "Unknown Exeption Occured while trying knife winrm. Code : " + retCode
+                                            });
+                                            return;
+                                        }
+                                    }, function(stdOut) {
+                                        installedSoftwareString = installedSoftwareString + stdOut.toString('UTF-8');
+
+                                    }, function(stdErr) {
+                                        logger.debug("err ==> " + stdErr.toString('ascii'));
+                                    });
+
+                                }
+
+                            });
+                        } else {
+                            res.send(500, errorResponses.db.error);
+                            return;
+                        }
+                    });
+                });
+
+            });
+        });
+    });
+
+
 
 };

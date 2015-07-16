@@ -1428,6 +1428,7 @@ function Configmgmt() {
                 //callback(null,userd);
                 var qry = {};
                 qry['id'] = '21';
+                qry['loginname_rowid'] = userd[0]['rowid'];
                 /*if(userd[0]['userrolename'] != 'Admin')
                 qry['loginname_rowid'] = {$regex:userd[0]['rowid']};*/
                 // {
@@ -1435,7 +1436,12 @@ function Configmgmt() {
                 //         $regex: userd[0]['rowid']
                 //     }
                 // }
-                d4dModelNew.d4dModelMastersTeams.find(qry, function(err, teamd) {
+                d4dModelNew.d4dModelMastersTeams.find({
+                    id: "21",
+                    loginname_rowid: {
+                        $regex: userd[0]['rowid']
+                    }
+                }, function(err, teamd) {
                     if (err) {
                         logger.debug('Exiting with err 1359 getTeamsOrgBuProjForUser');
                         callback(err, null);
@@ -1492,7 +1498,7 @@ function Configmgmt() {
                                                         logger.debug('Came to the last project');
                                                         logger.debug('Exiting getTeamsOrgBuProjForUser');
                                                         // logger.debug('Printing outJ : ' + JSON.stringify(outJ));
-                                                        callback(null, outJ[0]);
+                                                        callback(null, outJ);
                                                     }
                                                 }
 

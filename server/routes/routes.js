@@ -30,6 +30,10 @@ var vmimage = require('./routes_vmImages');
 
 var chefClientExecution = require('./routes_chefClientExecutionResponse');
 
+var appConfig = require('../config/app_config');
+
+var notification = require('./routes_notification');
+
 module.exports.setRoutes = function(app) {
 
 
@@ -123,5 +127,23 @@ module.exports.setRoutes = function(app) {
     app.use('/private', express.static(path.join(path.dirname(path.dirname(__dirname)), 'client/htmls/private')));
 
 
+    // for upload dir
+    if (appConfig.staticUploadDir) {
+        app.all('/uploads/*', function(req, res, next) {
+            if (req.session && req.session.user) {
+                next();
+            } else {
+                res.send(403);
+
+            }
+        });
+
+        app.use('/uploads', express.static(appConfig.staticUploadDir));
+
+    }
+
+    // for notification
+
+    notification.setRoutes(app,sessionVerificationFunc);
 
 }

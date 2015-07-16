@@ -217,6 +217,8 @@ var MasterUtil = function(){
                                 projects[projectCount].orgname = names;
                                 projects[projectCount].productgroupname = bgnames;
                                 //projectList.push(projects[projectCount]);
+                                logger.debug("pppppppppppppp: ",projects[projectCount].environmentname_rowid);
+                                /*if(typeof projects[projectCount].environmentname_rowid != "undefined"){
                                 var envs = projects[projectCount].environmentname_rowid.split(",");
                                 for(var e = 0;e< envs.length;e++){
                                     logger.debug("envs:::::::::::::: ",projects[projectCount].environmentname);
@@ -224,9 +226,10 @@ var MasterUtil = function(){
                                     allEnvs =allEnvs+","+envnames;
                                 }
                                 allEnvs = allEnvs.substring(1);
-                                projects[projectCount].environmentname = allEnvs;
+                                projects[projectCount].environmentname = allEnvs;*/
                                 projectList.push(projects[projectCount]);
                             }
+                           // }
                         })(i);
                     }
                     logger.debug("Returned Projects: ", JSON.stringify(projectList));
@@ -707,11 +710,17 @@ var MasterUtil = function(){
                         if (teams[i].id === '21') {
                             names = configmgmtDao.convertRowIDToValue(teams[i].orgname_rowid, rowidlist)
                             teams[i].orgname = names;
-                            projectnames = configmgmtDao.convertRowIDToValue(teams[i].projectname_rowid, rowidlist)
-                            teams[i].projectname = projectnames;
+                            var projectName = teams[i].projectname_rowid.split(",");
+                            for(var x=0;x<projectName.length;x++){
+                                projectnames = configmgmtDao.convertRowIDToValue(projectName[x], rowidlist);
+                                if(teams[i].projectname.indexOf(projectnames) === -1){
+                                   teams[i].projectname = teams[i].projectname+","+projectnames; 
+                                }   
+                            }
                             teamList.push(teams[i]);
                         }
                     }
+                    logger.debug("My team:???????????? ",JSON.stringify(teamList));
                     callback(null, teamList);
                     return;
                 });
@@ -841,20 +850,15 @@ var MasterUtil = function(){
                                 }
                                 logger.debug("Team array: ", JSON.stringify(teams));
                                 catObj.teams = teams;
-
-                                /*for (var tm1 = 0; tm1 < team.length; tm1++) {
-                                        var orgTm = team[tm1].orgname_rowid[0];
-                                        if (!orgObj[orgTm]) {
-                                            orgObj[orgTm] = true;
-                                        }
-                                    }*/
-
                                 var allObj = Object.keys(orgObj);
                                 logger.debug("orgTm>>>>>>>>>>>>>>> ", JSON.stringify(allObj));
                                 for (var tmOrg = 0; tmOrg < allObj.length; tmOrg++) {
                                     loopCount++;
                                     d4dModelNew.d4dModelMastersTeams.find({
                                         orgname_rowid: allObj[tmOrg],
+                                        rowid:{
+                                            $in:catObj.teams
+                                        },
                                         id: "21"
                                     }, function(err, allTeams) {
                                         if (err) {
@@ -863,10 +867,11 @@ var MasterUtil = function(){
                                         }
                                         logger.debug("allTeams:::::::::::::: ", JSON.stringify(allTeams));
                                         for (var xy = 0; xy < allTeams.length; xy++) {
-
+                                            (function(xy){
+                                            if(typeof allTeams[xy].orgname_rowid != "undefined" && typeof allTeams[xy].projectname_rowid != "undefined"){
                                             d4dModelNew.d4dModelMastersOrg.find({
                                                 rowid: {
-                                                    $in: allTeams[0].orgname_rowid
+                                                    $in: allTeams[xy].orgname_rowid
                                                 },
                                                 id: "1",
                                                 active: true
@@ -886,7 +891,10 @@ var MasterUtil = function(){
                                                 }
                                                 d4dModelNew.d4dModelMastersProjects.find({
                                                     orgname_rowid: {
-                                                        $in: allTeams[0].orgname_rowid
+                                                        $in: allTeams[xy].orgname_rowid
+                                                    },
+                                                    rowid:{
+                                                        $in: allTeams[xy].projectname_rowid.split(",")
                                                     },
                                                     id: "4"
                                                 }, function(err, project) {
@@ -905,7 +913,7 @@ var MasterUtil = function(){
                                                     }
                                                     d4dModelNew.d4dModelMastersProductGroup.find({
                                                         orgname_rowid: {
-                                                            $in: allTeams[0].orgname_rowid
+                                                            $in: allTeams[xy].orgname_rowid
                                                         },
                                                         id: "2"
                                                     }, function(err, bg) {
@@ -933,6 +941,8 @@ var MasterUtil = function(){
                                                 // }
 
                                             });
+                                            }//if
+                                        })(xy);
                                         }
                                     });
                                 } // for multiple orgs
@@ -1391,6 +1401,62 @@ var MasterUtil = function(){
             });
         });
     }
+
+    this.getUsersForAllOrg = function(callback) {
+        logger.debug("getUsersForAllOrg called. ");
+        d4dModelNew.d4dModelMastersUsers.find({
+            id: "7",
+            orgname_rowid: {
+                $in: [""]
+            }
+        }, function(err, users) {
+            if (err) {
+                callback(err, null);
+                return;
+            }
+            logger.debug("Got users for Org All.",JSON.stringify(users));
+            if (users.length > 0) {
+                callback(null,users);
+                return;
+            } else {
+                callback(null, []);
+                return;
+            }
+
+        });
+    }
+
+    var getPermissionForCategory = function(category, permissionto, permissionset) {
+        var perms = [];
+        if (permissionset) {
+            for (var i = 0; i < permissionset.length; i++) {
+                var obj = permissionset[i].permissions;
+                for (var j = 0; j < obj.length; j++) {
+                    if (obj[j].category == category) {
+                        var acc = obj[j].access.toString().split(',');
+                        for (var ac in acc) {
+                            if (perms.indexOf(acc[ac]) < 0)
+                                perms.push(acc[ac]);
+                        }
+
+                    }
+                }
+            }
+            if (perms.indexOf(permissionto) >= 0) {
+                return (true);
+            } else
+                return (false);
+        } else {
+            return (false);
+        }
+    };
+
+    // Check wheather permission is there for user or not.
+    this.hasPermission = function(category, permissionto, sessionUser, callback) {
+        var retVal = '';
+        retVal = getPermissionForCategory(category, permissionto, sessionUser.permissionset);
+        callback(null, retVal);
+    };
 }
 
 

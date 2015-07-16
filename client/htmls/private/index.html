@@ -4,8 +4,6 @@
     <head>
         <meta charset="utf-8">
         <!--<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">-->
-        <link rel="shortcut icon" href="../img/favicon.ico" type="image/x-icon">
-        
         <title>Catalyst</title>
         <meta name="description" content="">
         <meta name="author" content="">
@@ -61,7 +59,7 @@ String.prototype.capitalizeFirstLetter = function() {
                   <ul class="nav navbar-nav" style="margin-top:20px;margin-left:28px">
                     <li class="left-projects-links hidden" data-target="#Workspace" navigation="Workspace,Workspace1">
                         <a class="active navigationTab" id="workZoneNew" style="font-size:14px!important" href="#" onclick="setleftnavigation(this,'org');">
-                            <i class="fa fa-credit-card txt-color-blue"></i>&nbsp;WORKZONE
+                            <i class="fa fa-credit-card txt-color-blue"></i>&nbsp;WORKZONE 
                         </a>
                     </li>
                     <li class="left-projects-links hidden" style="margin-left:16px;" data-target="#blueprints"  navigation="blueprints">
@@ -185,8 +183,14 @@ String.prototype.capitalizeFirstLetter = function() {
         <div id="content">
         </div> 
         <!--hiding the comment for no org available when the organization and environments are present-->
-        <div id="noenvwarning" style="padding-top:20px;margin-left:20px" class="hidden">Your Organization has not been fully configured yet. Use the SETTINGS tab to configure.
+        <div id="noenvwarning" class="hidden alert alert-warning noEnvWarning"><img style="width:50px;height:40px" src="img/warning.png" alt="warning"/><span style="margin-left:20px;">There are no Workzone items to display. Please check your </span><ul style="list-style-type:none;text-align:center"><li class="left-projects-links hidden" data-target="#Settings" navigation="Settings">
+                                <a class="navigationTab" href="#ajax/Settings/Dashboard.html" id="settingsNewClick"  onclick="setleftnavigation(this,'Settings');">&nbsp;SETTINGS</a></li></ul>
         </div>
+
+        <!--noEnv Error for consumer and designer-->
+        <div id="noEnvError" class="hidden alert alert-warning noEnvWarningConsumerDesigner"><img style="width:50px;height:40px" src="img/warning.png" alt="warning"/><span style="margin-left:20px;">There are no Workzone items to display.</span>
+        </div>
+        <!--error ends-->
         <!-- END MAIN CONTENT -->
     </div>
     <!-- END MAIN PANEL -->
@@ -222,7 +226,6 @@ String.prototype.capitalizeFirstLetter = function() {
     <script src="js/libs/jquery-2.0.2.min.js"></script>
     <script src="js/libs/jquery-ui-1.10.3.min.js"></script>
     <script src="js/libs/modernizr-2.5.3.min.js"></script>
-    
     <script src="js/select2.min.js"></script>
     <script src="js/bootstrap-treeview.js"></script>
     
@@ -237,12 +240,13 @@ String.prototype.capitalizeFirstLetter = function() {
     <script src="/private/js/jquery.dataTables.min.js"></script>
     <script src="js/jquery.tablesorter.min.js"></script>
     <script src="js/jquery.validate.min.js"></script>
-   <!-- <script src="js/additional-methods.min.js"></script>
+    <script src="js/additional-methods.min.js"></script>
 
-    <script src="js/plugin/modalcollapse/modalcollapse.js"></script>-->
+   <!-- <script src="js/plugin/modalcollapse/modalcollapse.js"></script>-->
 
     <script src="js/app.js"></script>
     <script src="js/dev/dev.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
     
     
     <!-- MAIN APP JS FILE -->
@@ -255,6 +259,8 @@ $(document).ready(function() {
     }
     if (!hasSettingsPermission) {
         $('#settingsNew').addClass('hidden');
+        $('#noenvwarning').addClass('hidden');
+        $('#noEnvError').removeClass('hidden');
     }
 
     var hasDesignPermission = false;
@@ -298,6 +304,13 @@ function setleftnavigation(toplink, breadcrumbHeader) {
         $('#Workspace1').hide();
         $('#Settings_nav').show();
 
+    } else if (TabID === "settingsNewClick") {
+        $('#tree').empty()
+        loadSettingsTree();
+        foldTreeForSetting();
+        $('#Workspace1').hide();
+        $('#Settings_nav').show();
+
     }
 
     if ($(toplink).hasClass('active')) {
@@ -331,6 +344,7 @@ function setleftnavigation(toplink, breadcrumbHeader) {
         //Reverting the warning message when no org present
         $('#content').removeClass('hidden');
         $('#noenvwarning').addClass('hidden');
+        $('#noEnvError').addClass('hidden');
         $('ol.breadcrumb').removeClass('hidden');
         window.selectedOrgName = breadcrumbHeader;
     }
@@ -660,7 +674,16 @@ function getUrlParameter(sParam) {
     return ('');
 }
 
+//Special key to bring up the logs window
 
+$(document).keypress("l",function(e) {
+  if(e.ctrlKey && e.altKey && ( String.fromCharCode(e.which) === 'l' || String.fromCharCode(e.which) === 'L' ))
+    {
+        // viewlogger();
+        // $('#myModal').modal('show');    
+        window.open('/private/catlog.html','Catalyst Log');
+    }
+});
 
 
 
@@ -766,7 +789,6 @@ function selectEnv() {
         $('ol.breadcrumb').addClass('hidden');
     } else {
         $('#content').removeClass('hidden');
-        $('#noenvwarning').addClass('hidden');
     }
 
 
@@ -815,5 +837,53 @@ foldTreeForSetting();
     <script src="js/dev/controlPanel.js"></script>
     <script src="js/dev/container.js"></script>
 -->
+
+
+<script>
+function viewlogger(){
+    var socket = io.connect();
+
+    socket.on('log',function(msg){
+        $('#logwin')
+        var _msg = JSON.parse(msg);
+        var dt = new Date(_msg.timestamp);
+
+        if(_msg.level != 'debug')
+           $('#launchcatalystlogwindow').prepend('<br/><u>' + dt.toLocaleDateString() + ' ' + dt.toLocaleTimeString()  + '</u> <br/><span style="color:red">' + _msg.message + '</span><br/>'); 
+        else
+           $('#launchcatalystlogwindow').prepend('<br/>' + '<u>' + dt.toLocaleDateString() + ' ' + dt.toLocaleTimeString()  + '</u> <br/>' + _msg.message + '<br/>'); 
+    });
+    $('#myModal').modal('show');
+    //$('#myModal').resizable();
+    // $('#launchcatalystlogwindow').draggable({
+ //      handle: ".modal-header"
+ //     });
+    //$( "#resizable" ).resizable();
+}
+</script>
+
+<div id="myModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                 <h4 class="modal-title">Catalyst Log</h4>
+
+            </div>
+            <div class="modal-body"  >
+                <div id="launchcatalystlogwindow" style="overflow:auto;height:400px;font-size:8pt;" >
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+
+
 </body>
 </html>

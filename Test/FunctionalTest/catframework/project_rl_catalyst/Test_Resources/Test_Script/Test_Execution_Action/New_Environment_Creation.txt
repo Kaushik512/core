@@ -18,9 +18,9 @@ Resource           ${CATALYST ACTION}/Design_Create_Launch_Providers_Template.tx
 
 *** Keywords ***
 Catalyst Addition and Creation of New Envirorments Setup
-    Clicks on Settings
-    Clicks on DevOps Setup menu
-    Clicks on EEnvironments menu line
+    #Clicks on Settings
+    #Clicks on DevOps Setup menu
+    #Clicks on EEnvironments menu line
     Clicks on New button Create New Environment
     Select organization for Env
     #Select the Configuration name
@@ -28,7 +28,8 @@ Catalyst Addition and Creation of New Envirorments Setup
     #-Add the Environment Named1
     #-Clicks on ADD Chef Env Button
     Select the Environments1
-    Assign Teams1
+    #Assign Teams1
+    Assign Created Project1
     Clicks on Save Button to save the Environments
     Clicks on New button Create New Environment
     Select organization for Env
@@ -37,8 +38,100 @@ Catalyst Addition and Creation of New Envirorments Setup
     #-Add the Environment Named2
     #-Clicks on ADD Chef Env Button
     Select the Environment2
-    Assign Team2
+    #Assign Team2
+    Assign Created Project2
     Clicks on Save Button to save the Environments
+
+
+
+Catalyst Addition of New Environments
+    Clicks on Settings
+    Clicks on DevOps Setup menu
+    Clicks on EEnvironments menu line
+    Clicks on New button Create New Environment
+    Select organization for Env
+    Clicks on Add Button
+    Add the New EEnvironment Named1
+    Clicks on ADD Chef Env Button
+    Select the Newly created Environments1
+    Sleep    2s
+    #Assign Teams1
+    Assign Created Project2
+    Clicks on Save Button to save the Environments
+
+
+
+
+
+
+
+
+
+Test Validation of Creation of New Environments
+    Test Validation of No org,Chef,Env,Proj Selected for Environment
+    Org,Chef,Env,Team not Selected for Envirnment
+    Test Validation of no Environment Selected
+    Environment not Selected ErrorMessage  
+    #Test Validation of No Teams Selected
+    #Team not selected for Environment  
+
+Test Validation of No org,Chef,Env,Proj Selected for Environment
+    Clicks on Settings
+    Clicks on DevOps Setup menu
+    Clicks on EEnvironments menu line
+    Clicks on New button Create New Environment
+    #Select the Environments1
+    #Assign Teams1
+    Sleep    1s
+    Clicks on Save Button to save the Environments
+
+
+Org,Chef,Env,Team not Selected for Envirnment
+    Element Should Contain    id=errmsg_orgname    ${REQ}
+    Element Should Contain    id=errmsg_configname    ${REQ}
+    Element Should Contain    id=errmsg_environmentname    ${REQ}
+    #Element Should Contain    id=errmsg_teamname    ${REQ1}
+    Clicks on CanCancel Button
+
+
+Test Validation of no Environment Selected
+    Clicks on New button Create New Environment
+    Select organization for Env
+    Sleep    1s
+    #Assign Teams1
+    Clicks on Save Button to save the Environments
+
+Environment not Selected ErrorMessage
+    Element Should Contain    id=errmsg_environmentname   ${REQ} 
+    Clicks on CanCancel Button    
+
+Test Validation of No Teams Selected
+    Clicks on New button Create New Environment
+    Select organization for Env
+    Sleep    1s
+    Select the Environments1
+    Clicks on Save Button to save the Environments
+
+Team not selected for Environment
+    Element Should Contain    id=errmsg_teamname   ${REQ1} 
+    Clicks on CanCancel Button
+
+Add the New EEnvironment Named1
+    ${ENVV}=    Generate Random String    3    [NUMBERS]
+    ${ENV STORE}=    Catenate  SEPARATOR=   ${ENVNAME}${ENVV}
+    Log     ${ENV STORE}
+    Set Global Variable    ${ENV STORE}
+    Input Text    id=chefenvname    ${ENV STORE}
+
+Select the Newly created Environments1
+    Click Element    xpath=.//*[@id='s2id_environmentname']/a/span[1]
+    Sleep     1s
+    Input Text    xpath=.//*[@id='select2-drop']/div/input    ${ENV STORE}
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element    xpath=.//*[@id='select2-drop']/ul/li[contains("${ENV STORE}",.)]
+
+
+Clicks on CanCancel Button
+    Click Element    xpath=.//*[@id='btncancel']
 
 Catalyst Environments2 setup
     Clicks on New button Create New Environment
@@ -48,36 +141,38 @@ Catalyst Environments2 setup
     Assign Team2
     Clicks on Save Button to save the Environments
 
-Catalyst Activation of Environments
+
+
+
+
+#Chef nodes import by IP
+    #Clicks on Settings
+    #Clicks on Workzone Button
+    #Clicks on User Created Organization
+    #Clicks on User Created BusinessGroup
+    #Clicks on > Button to your Environment
+    #Clicks on Import By IP Button
+    #Enters the IP Address for IP
+    #Choose the Operating System for IP
+    #Enters the UserName for IP
+    #Choose the Authentication Type for IP
+    #Upload the Pem File for IP
+    #Enters the Application Name for IP
+    #Enters the Application URL for IP
+    #Clicks on Import Button for IP
+
+Catalyst Activation of Environments in projects
     Clicks on Settings
     Clicks on Org Tree Setup
     Clicks on projects menu
     Clicks on Edit Update Button of the Project1 Created
-    #User Activates the Environment1
+    User Activates the Environment1
+    User Activates the Environment2
     Clicks on Save Button of Your Project
     Clicks on Edit Update Button of the Project2 Created
-    #User Activates the Environment2
+    User Activates the Environment1
+    User Activates the Environment2
     Clicks on Save Button of Your Project
-
-
-
-Chef nodes import by IP
-    Clicks on Settings
-    Clicks on Workzone Button
-    Clicks on User Created Organization
-    Clicks on User Created BusinessGroup
-    Clicks on > Button to your Environment
-    Clicks on Import By IP Button
-    Enters the IP Address for IP
-    Choose the Operating System for IP
-    Enters the UserName for IP
-    Choose the Authentication Type for IP
-    Upload the Pem File for IP
-    Enters the Application Name for IP
-    Enters the Application URL for IP
-    Clicks on Import Button for IP
-
-
 
 
 
@@ -94,7 +189,7 @@ Clicks on Add Button
     Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='wid-id-3']/div/div/div[3]/a
 
 Clicks on ADD Chef Env Button
-    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='myModalCreateChefEnv']/div/div/div[3]/div/button[1]
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='createenvinchefform']/div[3]/div/button
 
 Add the Environment Named1
     Input Text    id=chefenvname    ${EnV1}
@@ -103,7 +198,7 @@ Add the Environment Named2
     Input Text    id=chefenvname    ${EnV2}
 
 Clicks on Edit Update Button of the Project1 Created
-    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()="Catalyst"]/../td[6]/div/a
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()="${Proj1}"]/../td[6]/div/a
 
 User Activates the Environment1
     Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='environmentname']/label[text()='Dev']
@@ -112,7 +207,7 @@ Clicks on Save Button of Your Project
     Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='myForm3']/div/div[3]/div/button
 
 Clicks on Edit Update Button of the Project2 Created
-    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()="Primary_Edu"]/../td[6]/div/a
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()="${Proj2}"]/../td[6]/div/a
 
 User Activates the Environment2
     Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='environmentname']/label[text()='QA']
@@ -127,10 +222,10 @@ Clicks on Organization setup
     Click Element    xpath=.//*[@id='Settings']/li[1]/a/span
 
 Clicks on Edit Button of the Project Created
-    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()="Catalyst"]/../td[6]/div/a        #Catalyst
+    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()="${Proj1}"]/../td[6]/div/a        #Catalyst
 
 
-  Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()="Primary_Edu"]/../td[6]/div/a       Primary_Edu
+  Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()="${Proj2}"]/../td[6]/div/a       Primary_Edu
 
 Select organization for Env
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='s2id_orgname']/a
@@ -142,32 +237,48 @@ Select the EConfiguration name
 
 #Environment start
 Clicks on EEnvironments menu line
-    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       xpath=.//*[@id='setting_tree']/ul/li[4]/a
-    Click Element    xpath=.//*[@id='setting_tree']/ul/li[4]/a
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       xpath=//a[contains(text(),'Environments')]
+    Click Element    xpath=//a[contains(text(),'Environments')]
 
 
 Clicks on New button create new Environment
     Wait Until Keyword Succeeds    1 minute     2 seconds       Wait Until Element Is Visible       xpath=.//*[@id='newENV']
     Click Element    xpath=.//*[@id='newENV']
 
-Select the Environments1
-    Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element    xpath=.//div[@id="s2id_environmentname"]
-    Wait Until Keyword Succeeds    1 minute     1 seconds       Input Text    xpath=.//*[@id='select2-drop']/div/input     ${EnV1}
-    Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element    xpath=.//*[@id='select2-drop']/ul/li[contains("Dev",.)]
-    #Select From List     id=chefenvname         Dev
+Select the Environments1    
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element    xpath=.//*[@id='s2id_environmentname']/a/span[1]
+    Sleep    1s
+    Input Text    xpath=.//*[@id='select2-drop']/div/input     ${EnV1}
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element    xpath=.//*[@id='select2-drop']/ul/li[contains("${EnV1}",.)]
 
-Select the Environment2
-    Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element    xpath=.//div[@id="s2id_environmentname"]
-    Wait Until Keyword Succeeds    1 minute     1 seconds       Input Text    xpath=.//*[@id='select2-drop']/div/input     ${EnV2}
-    Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element    xpath=.//*[@id='select2-drop']/ul/li[contains("QA",.)]
-    #Select From List    id=chefenvname         QA                       #QA
+
+
+Select the Environment2 
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element    xpath=.//*[@id='s2id_environmentname']/a/span[1]
+    Sleep    1s
+    Input Text    xpath=.//*[@id='select2-drop']/div/input     ${EnV2}
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element    xpath=.//*[@id='select2-drop']/ul/li[contains("${EnV2}",.)]
+
 
 Assign Teams1
-    Click Element    xpath=.//*[@id='teamname']/label[text()="Development"]/i              #Development Team
-
+    Click Element    xpath=.//*[@id='teamname']/label[text()='${DEF TEAMNAME1}']
+    Click Element    xpath=.//*[@id='teamname']/label[text()='${DEF TEAMNAME2}']
+    Click Element    xpath=.//*[@id='teamname']/label[text()='${DEF TEAMNAME3}']
+    Click Element    xpath=.//*[@id='teamname']/label[text()='${DEF TEAMNAME4}']
+ 
 Assign Team2
-    Click Element    xpath=.//*[@id='teamname']/label[text()="Scholasticon"]/i                #Scholastic Team
- #Environment End
+    Click Element    xpath=.//*[@id='teamname']/label[text()='${DEF TEAMNAME1}']
+    Click Element    xpath=.//*[@id='teamname']/label[text()='${DEF TEAMNAME2}']
+    Click Element    xpath=.//*[@id='teamname']/label[text()='${DEF TEAMNAME3}']
+    Click Element    xpath=.//*[@id='teamname']/label[text()='${DEF TEAMNAME4}']
+ 
+Assign Created Project1
+    Click Element    xpath=.//*[@id='projectname']/label[text()='${Proj1}']/i
+    Click Element    xpath=.//*[@id='projectname']/label[text()='${Proj2}']/i
+
+Assign Created Project2
+    Click Element    xpath=.//*[@id='projectname']/label[text()='${Proj1}']/i
+    Click Element    xpath=.//*[@id='projectname']/label[text()='${Proj2}']/i
 
 
  #Import By IP
@@ -192,7 +303,8 @@ Choose the Authentication Type for IP
 
 
 Upload the Pem File for IP
-    Choose File     xpath=.//*[@id='importPemfileInput']     C:\\Users\\adarsh.RLINDIA\\Desktop\\caty\\Chef\\catalyst.pem
+    Choose File     xpath=.//*[@id='importPemfileInput']     ${CATALYSTPEM}
+    #C:\\Users\\adarsh.RLINDIA\\Desktop\\caty\\Chef\\catalyst.pem
 
 Enters the Application Name for IP
     Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    xpath=.//*[@id='appSeries12']/div[1]/input    ${IP APPNAME}

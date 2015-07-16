@@ -128,7 +128,6 @@ Vaildate the Empty config field
 Vaildate Empty Config Name
     [Arguments]    ${configname}
     Clicks on New button to Create New Config Management
-    Enters Empty Configuration name
     Enters config management user name
     Select organization for config management
     Enters config management URL
@@ -212,15 +211,15 @@ Clicks on Save Button to save the Environments
 #    Click Element    xpath=//a[contains(text(),'SETTINGS')]
 
 Clicks on DevOps Setup menu
-    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       xpath=.//*[@id='setting_tree']/ul/li[2]/a
-    Click Element    xpath=.//*[@id='setting_tree']/ul/li[2]/a
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       xpath=//a[contains(text(),'DevOps Setup')]
+    Click Element    xpath=//a[contains(text(),'DevOps Setup')]
 
 Clicks on Config Management menu
-    Wait Until Keyword Succeeds    1 minute     1 seconds    Wait Until Element Is Visible       xpath=.//*[@id='setting_tree']/ul/li[3]/a
-    Click Element    xpath=.//*[@id='setting_tree']/ul/li[3]/a
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Wait Until Element Is Visible       xpath=//a[contains(text(),'Config Management')]
+    Click Element    xpath=//a[contains(text(),'Config Management')]
     
 Clicks on New button to Create New Config Management
-    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       link=New
+        Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       link=New
     Click Element    link=New
 
 Enters config management name
@@ -228,8 +227,7 @@ Enters config management name
     Input Text     id=configname      ${CONFIG MANAGEMENT NAME}
 
 Enters config management user name
-    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       id=loginname
-    Input Text     id=loginname      pcjoshi9
+    Wait Until Keyword Succeeds    1 minute     1 seconds     Input Text     id=loginname      ${CONFIG MANAGEMENT USER NAME}
 
 Select organization for config management
     Select From List     id=orgname      ${ORGANIZATION NAME}
@@ -239,17 +237,21 @@ Enters config management URL
 
 
 Upload user Pem File
-    Choose File     xpath=.//*[@id='userpemfile']     C:\\Users\\adarsh.RLINDIA\\Desktop\\caty\\Chef\\pcjoshi9.pem 
+    Choose File     xpath=.//*[@id='userpemfile']     ${USERPEMFILE}
+    #C:\\Users\\adarsh.RLINDIA\\Desktop\\caty\\Chef\\pcjoshi9.pem 
 
 Upload Validator Pem File
-    Choose File     xpath=.//*[@id='validatorpemfile']     C:\\Users\\adarsh.RLINDIA\\Desktop\\caty\\Chef\\cat1-validator.pem
+    Choose File     xpath=.//*[@id='validatorpemfile']     ${VALIDATORPEMFILE}
+    #C:\\Users\\adarsh.RLINDIA\\Desktop\\caty\\Chef\\cat1-validator.pem
 
 Upload Validator Knife File
-    Choose File     xpath=.//*[@id='kniferbfile']        C:\\Users\\adarsh.RLINDIA\\Desktop\\caty\\Chef\\knife.rb     
+    Choose File     xpath=.//*[@id='kniferbfile']        ${KNIFERBFILE}
+    #C:\\Users\\adarsh.RLINDIA\\Desktop\\caty\\Chef\\knife.rb     
    
 
 Clicks on Save button to save the Environment detail
-    Click Element    xpath=//button[@class='btn btn-primary btn-mini'][1]     #Devops Config Mgmt Ends
+    Click Element    xpath=//button[@class='btn btn-primary btn-mini'][1]   
+    Sleep    2s   
 
 
 #Clicks on LogOut link
@@ -263,8 +265,8 @@ Validate the Unique Configuration Name                       #Unique Devops Conf
     Enters config management Unique name    ${config}
 
 
-Enters config user name
-    Input Text    id=loginname    pcjoshi9
+#Enters config user name
+    #Input Text    id=loginname    pcjoshi9
 
 Enters config management Unique name
     [Arguments]    ${config}
@@ -471,7 +473,8 @@ Select the nodes namely MySql_Server and WebServer
     Click Element      xpath=.//*[@id='organiz']/table/tbody/tr[2]/td[7]/label[1]/i    #//input[@data-nodename='Web_Server']
 
 Upload user NodePem File
-    Choose File    id=importPemfileInput    C:\\Users\\adarsh.RLINDIA\\Desktop\\caty\\Chef\\catalyst.pem
+    Choose File    id=importPemfileInput    ${CATALYSTPEM}
+    #C:\\Users\\adarsh.RLINDIA\\Desktop\\caty\\Chef\\catalyst.pem
    
 Click on Import nodes button on the bottom of the page
     Wait Until Keyword Succeeds    1 minute     10 seconds       Element Should Be Visible       xpath=//input[@value='Import Nodes']

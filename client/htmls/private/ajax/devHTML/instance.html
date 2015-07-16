@@ -13,13 +13,17 @@
                                         <div class="panel-heading">
                                             <h4 class="panel-title">
                                             <a data-toggle="collapse">Instances</a>
-                                          <!--  <input type="text" placeholder="Search Here.." id="instanceSearch" class="instancesearch" style="margin:6px;padding:4px;"/>
-                                            <button id="search">Go</button>-->
                                             </h4>
 
 
+
+                                
                                 <span class="pull-right swap-view">
-                                    
+                                    <span class="pull-right importButton">
+                                    <a type="reset" id="ipaddressimport" data-original-title="Import Instance" data-placement="top" title="Import By IP" rel="tooltip" href="#modalContainerimportInstance" data-backdrop="false" data-toggle="modal">
+                                     <i class="fa fa-th fa-2x fa-laptop"/>
+                                    </a>
+                                    </span>
                                     <a class="btn1" id="defaultViewButton" style="" onclick="showHideControl(this.id)"> <i class="fa fa-th fa-2x txt-color-deactive font-size18" title="Card View"/></a>&nbsp;
                                     <a id="instanceview" class="btn1" onclick="showHideControl(this.id)"> <i class="fa fa-align-justify fa-2x txt-color-deactive font-size18" title="Table View"/></a></span>
                                         </div>
@@ -68,11 +72,8 @@
                                                         <!-- Slide 1 -->
 
                                                     </div>
-                                                    <!-- <a class="left carousel-control" href="#divinstancescardview" data-slide="prev"> <span class="glyphicon glyphicon-chevron-left txt-color-blue"></span> </a>
-                                                    <a class="right carousel-control" href="#divinstancescardview" data-slide="next"> <span class="glyphicon glyphicon-chevron-right txt-color-blue"></span> </a> -->
                                                 </div>
                                             </div>
-
                                         </div>
                                     </div>
                                 </div>
@@ -95,10 +96,7 @@
                             <a class="btn pull-right btn-danger right-button" title="Remove Instance" id="removeInstance" >
                                 <i class="fa fa-trash-o"></i>
                             </a>&nbsp;
-                            <a class="btn pull-right btn-info right-button" id="ipaddressimport" data-original-title="Import Instance" data-placement="top" title="Import By IP" rel="tooltip" href="#modalContainerimportInstance" data-backdrop="false" data-toggle="modal">
-                                <i class="fa fa-laptop"/>
-                            </a>
-
+                            
                             &nbsp;&nbsp;<a  data-toggle="modal" href="#mybootstrapandimport" class="btn pull-right btn-primary hidden" title="Bootstrap & Import" onClick="$('#bootstrapandimportnode').modal('show');" style="margin-right:10px;"> <i class="fa fa-plug"></i></a>
 
                         </div>
@@ -135,7 +133,7 @@
 <div class="modal fade" id="modalforInstanceEdit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog " style="">
         <div class="modal-content"> 
-            <form role="form" id="instanceEditNew">
+            <form role="form" class="cmxform" id="instanceEditNew">
              <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title">
@@ -148,9 +146,10 @@
              <div class="modal-body" style="height:78px;">
                 <div class="col-lg-6 col-md-6">
 
-                            <label for="">Name<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+                    <label for="instanceEditName">Name<span style="color:Red;" class="control-label">&nbsp;*</span></label>
 
-                            <input type="text" name="editName" class="form-control" id="instanceEditName" autofocus/>
+                    <input type="text" name="instanceEditName" class="form-control" id="instanceEditName" autofocus/>
+
                 </div>
                 
                     <input type="hidden" id="instanceIDHiddenInput">
@@ -172,7 +171,7 @@
 <div class="modal fade" id="modalContainerimportInstance" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form role="form" id="addInstanceForm" autocomplete="off">
+            <form role="form" class="cmxform" id="addInstanceForm" autocomplete="off">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
                         &times;
@@ -187,32 +186,29 @@
 
                         <span id="spanforshefserverfound">
                         <div class="col-lg-6 col-md-6">
-
-                            <label for="">Enter IP Address<span style="color:Red;" class="control-label">&nbsp;*</span></label>
-
-                            <input type="text" name="ipaddressInput" class="form-control" id="instanceFQDN" autofocus/>
-                            <b class="tooltip tooltip-top-right">
-                                <i class="fa fa-user txt-color-teal"></i>Please enter IP Address/FQDN</b>
-
-
+                            
+                            <label for="instanceFQDN">Enter IP Address<span style="color:Red;" class="control-label">&nbsp;*</span>
+                                </label>
+                                <div class="input-groups">
+                            <input type="text" name="instanceFQDN" class="form-control" id="instanceFQDN" autofocus/>
+                        </div>
                         </div>
                         <div class="col-lg-6 col-md-6">
-
-                            <label for="">Choose Operating System<span style="color:Red;">&nbsp;*</span></label>
-                            <select id="importinstanceOS"  class="width-100" >
+                            
+                            <label for="importinstanceOS">Choose Operating System<span style="color:Red;">&nbsp;*</span></label>
+                            <div class="input-groups">
+                            <select id="importinstanceOS" name="importinstanceOS"  class="width-100" >
                             </select>
-
+                        </div>
                         </div>
                     
                     
                         <div class="col-lg-6 col-md-6" style="margin-top:15px">
-
-                            <label for="">Username<span style="color:Red;" class="control-label">&nbsp;*</span></label>
-
-                            <input type="text" name="usernameInput" class="form-control" id="instanceUsername">
-                            <b class="tooltip tooltip-top-right">
-                                <i class="fa fa-user txt-color-teal"></i> Please enter Username</b>
-
+                            
+                            <label for="instanceUsername">Username<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+                                <div class="input-groups">
+                            <input type="text" name="instanceUsername" class="form-control" id="instanceUsername">
+                        </div>
 
                         </div>
                         <div class="col-lg-6 col-md-6" style="margin-top:15px">
@@ -227,58 +223,38 @@
                     
                     <div class="col-lg-12 ipLEFT">
                         <div class="col-lg-6 col-md-6 authPassword ipWidth">
-
-                            <label for="">Password<span style="color:Red;" class="control-label">&nbsp;*</span></label>
-
-                            <input type="password" class="form-control" id="instancePassword" />
-                            <b class="tooltip tooltip-top-right">
-                                <i class="fa fa-lock txt-color-teal"></i> Please enter Password</b>
-
-
+                            <label for="instancePassword">Password<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+                                <div class="input-groups">
+                            <input type="password" name="instancePassword" class="form-control" id="instancePassword" />
                         </div>
+                    </div>
                     </div>
                     <div class="col-lg-12 ipLEFT">
                         <div class="col-lg-6 col-md-6 authPemFile ipWidth">
-                            <div class="smart-forms">
-                                <label for="">Pem File<span style="color:Red;" class="control-label">&nbsp;*</span></label>
-                                <label for="templatesicon" name="field" class="file">
-                                    <span class="button btn-primary btn-importbyIP">Browse</span>
-                                    <input id="importPemfileInput" type="file" class="gui-file">
-                                    <input type="text" readonly="" class="gui-input">
-                                </label>
+                            
+                                <label for="importPemfileInput">Pem File<span style="color:Red;" class="control-label">&nbsp;*</span><span style="color:Red;" id="requiredPemFile" class="hidden">&nbsp;Required</span></label>
+                                <div class="input-groups">
+                                    <input id="importPemfileInput" class="required form-control form-controls" multiple extension="pem" name="importPemfileInput" type="file">
                             </div>
                         </div>
                     </div>
-                        <div class="col-lg-6 hidden" style="margin-top:15px;">
-                            <label class="">Assign Users<span style="color:Red;" class="control-label">&nbsp;*</span></label>
-
-                            <div class="userListLoadingContainer"></div>
-                            <select class="custom-scroll" multiple="" id="importbyipuserListSelect" style="display:none" cat-validation="required">
-                            </select>
-
-                        </div>
                         <!--app series-->
                         <div class="applicationURLContainer" id="appSeries12"> 
-                                                <div class="col-lg-6 col-md-6" style="margin-top:15px;">
+                            <div class="col-lg-6 col-md-6" style="margin-top:15px;">
 
-                                                <label for="">Application Name</label>
+                            <label for="">Application Name</label>
 
-                                                <input placeholder="AppName" maxlength="8" type="text" name="appNameInput" class="form-control appName">
-                                                <b class="tooltip tooltip-top-right">
-                                                    <i class="fa fa-user txt-color-teal"></i> Please enter Application</b>
+                            <input placeholder="AppName" maxlength="8" type="text" name="appNameInput" class="form-control appName">
+                           </div>
 
+                           <div class="col-lg-6 col-md-6" style="margin-top:15px">
 
-                                               </div>
-
-                                               <div class="col-lg-6 col-md-6" style="margin-top:15px">
-
-                                                <label for="">Application URL</label>
-                                                
-                                                <input type="url" name="appNameURL" class="form-control appURL" placeholder="http://$host[:port]/appname">
-                                                <b class="tooltip tooltip-top-right">
-                                                    <i class="fa fa-user txt-color-teal"></i> Please enter URL</b>
-                                              </div>
-                                            </div>
+                            <label for="appNameURL">Application URL<span style="color:Red;" id="validURL" class="hidden">&nbsp;Please Enter a Valid URL</span></label>
+                            <div class="input-groups">
+                            <input type="text" id="appNameURL" name="appNameURL" class="form-control appURL" placeholder="http://$host[:port]/appname">
+                          </div>
+                      </div>
+                        </div>
                         <a href="javascript:void(0)" class="clearfix pull-right addNewApp1 appDesignNew" data-backdrop="false" data-toggle="modal">Add Application URL</a>
 
 
@@ -287,12 +263,12 @@
                     <label id="nodeimportipspinner" class=" hidden"><img  style="margin-left:5px;margin-right:25px;" src="img/select2-spinner.gif"></label>
                     <label id="nodeimportipresultmsg" class=" hidden"></label>
                     <div class="marginForButtons">
+                        <a class="btn btn-default" type="submit" data-dismiss="modal">
+                            <i class="fa fa-undo fa-1x"></i>&nbsp;Cancel
+                        </a>
                         <button id="addInstanceBtn" class="btn btn-primary" type="submit">
                             <i class="fa fa-upload fa-1x"></i>&nbsp;Import
                         </button>
-                        <a class="btn btn-primary" type="submit" data-dismiss="modal">
-                            <i class="fa fa-undo fa-1x"></i>&nbsp;Cancel
-                        </a>
                     </div>
                 </div>
             </form>
