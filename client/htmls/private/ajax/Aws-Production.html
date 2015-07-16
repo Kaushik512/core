@@ -260,7 +260,7 @@
  </div>
  </div>
  
- <div class="col-lg-12 notForDocker" style="margin-top:10px;padding-left:8px">
+ <div class="col-lg-12 notForDocker" style="margin-top:10px;padding-left:8px;overflow:hidden">
  <div class="cookbookShow">
 
  </div>
@@ -639,8 +639,8 @@
  
  <div class="blueprintSaveSuccess blueprintMsgContainer"><div class="alert alert-success bootstrapSuccess"><img style="width:50px;height:40px" src="img/correct.png" alt="success"/>
  <span class="blueprintNameSuccess" style="margin-left:20px;"></span>
- <div style="margin-top:15px"><span style="margin-left:74px;">Here are the Blueprint Details-</span><a id="blueprintInfo" href="#modalForRead" data-toggle="modal">&nbsp;&nbsp;Click Here</a></div>
- <div style="margin-top:24px;"><span style="margin-left:74px;">Do you want to add another Blueprint?</span><a href="#ajax/Aws-Production.html?addnew" id="addanotherlink">&nbsp;&nbsp;Add</a></div>
+ <div style="margin-top:24px;text-align:center;"><button class="btn btn-primary"><a style="color:white;text-decoration:none" href="#ajax/Aws-Production.html?addnew" id="addanotherlink">&nbsp;&nbsp;Add New Blueprint</a></button>
+</div>
  
  
  
@@ -1969,14 +1969,40 @@ function resetForm(){
      var rowLength = JSON.stringify(data.length);
      var containerTemp = "";
      var selectedrow = false;
-     var getDesignTypeImg; var getDesignTypeRowID;
-	//alert(JSON.stringify(data));
+     var getDesignTypeImg; 
+     var getDesignTypeRowID;
+	//alert(JSON.stringify(data)); 
 	for(var i=0; i<rowLength; i+=1){
+                getDesignTypeImg = data[i]['designtemplateicon_filename'];
 
-   getDesignTypeImg= data[i]['designtemplateicon_filename'];
+                switch (data[i].templatetypename) {
+                    case "AppFactory":
+                        getDesignTypeImg = '/d4dMasters/image/16ae9c94-19f6-485a-8c17-9af7a0f5f23d__designtemplateicon__Appfactory.png';
+                        break;
+                    case "DevOpsRoles":
+                        getDesignTypeImg = '/d4dMasters/image/9d14d362-493e-4d62-b029-a6761610b017__designtemplateicon__DevopsRoles.png';
+                        break;
+                    case "Docker":
+                        getDesignTypeImg = '/d4dMasters/image/b02de7dd-6101-4f0e-a95e-68d74cec86c0__designtemplateicon__Docker.png';
+                        break;
+                    case "Desktop":
+                        getDesignTypeImg = '/d4dMasters/image/02fcfdaf-0d35-42c7-aef4-ac0019911e21__designtemplateicon__Desktop Provisining.png';
+                        break;
+                    case "Environment":
+                        getDesignTypeImg = '/d4dMasters/image/71e62952-b464-4980-b76b-482a129f5627__designtemplateicon__Environment.png';
+                        break;
+                        /*case "CloudFormation":
+                                getDesignTypeImg = '/d4dMasters/image/4fdda07b-c1bd-4bad-b1f4-aca3a3d7ebd9__designtemplateicon__Cloudformation.png';
+                                break;*/
+                }
+
+   //getDesignTypeImg= data[i]['designtemplateicon_filename'];
    getDesignTypeRowID= data[i]['rowid'];
 	
     if(getDesignTypeImg){
+    	if(getDesignTypeImg.indexOf('/d4dMasters/image') === -1){
+    		getDesignTypeImg = "/d4dMasters/image/"+getDesignTypeRowID+"__designtemplateicon__"+getDesignTypeImg;
+    	}
 	containerTemp += '<div class="" style="width:222px;float:left">'+
 	' <div id=grid'+i+' class="blueprintdiv appfactory" data-'+
 	'templateType="'+data[i]['templatetypename']+'">'+
@@ -1989,8 +2015,10 @@ function resetForm(){
 	'<div style="padding-top:10px;padding-left:27px;">'+
 	'<img alt="JBoss Stack" '+
 	//'src="/d4dMasters/image/'+getDesignTypeRowID+'__designtemplateicon__'+getDesignTypeImg+'">'+
-	'src="/d4dMasters/image/'+getDesignTypeRowID+'__designtemplateicon__'+getDesignTypeImg+'" style="height:60px;width:auto;">'+
-	'</div></div></div>';
+	/*'src="/d4dMasters/image/'+getDesignTypeRowID+'__designtemplateicon__'+getDesignTypeImg+'" style="height:60px;width:auto;">'+
+	'</div></div></div>';*/
+
+	'src="'+getDesignTypeImg+'" style="height:60px;width:auto;">'+'</div></div></div>';
 	}else{
         containerTemp += '<div class="" style="width:222px;float:left">'+
     ' <div id=grid'+i+' class="blueprintdiv appfactory" data-'+
@@ -2468,7 +2496,7 @@ if ($('#tab2 .role-Selected').length > 0) {
 
                                // alert(JSON.stringify(data));
                                 $('.blueprintSaveSuccess').show();
-                                $('.blueprintNameSuccess').html('Blueprint&nbsp;&nbsp;<b>' + data.name + '</b>&nbsp;&nbsp;Saved Successfully');
+                                $('.blueprintNameSuccess').html('Blueprint&nbsp;&nbsp;<a id="blueprintInfo" href="#modalForRead" data-toggle="modal">' + data.name + '</a>&nbsp;&nbsp;Saved Successfully');
                                 $wizard.data('secondClick', true);
                                 var wizard = $wizard.data('bootstrapWizard');
                                 wizard.next();
