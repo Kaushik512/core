@@ -217,7 +217,7 @@ $('.addDB').click(function(e) {
 $('.addList').click(function(e) {
     $('#instanceItemName').trigger('reset');
     $('input.listID').removeAttr('disabled');
-    //$('#listNameTable tbody tr').removeClass('selectedOne');
+
     $('#jsonData').hide();
 });
 
@@ -426,6 +426,7 @@ $(document).ready(function(e) {
         });
         return $tr;
 
+      return $tr;
 
         console.log(">>>>>>>>>>>>>>>>>>>>>>>>");
 
@@ -503,6 +504,7 @@ $(document).ready(function(e) {
                 $('#saveBTN').removeAttr('disabled');
                 createDataBagTable(reqBodyName.name).click();
 
+
             },
             error: function(jxhr) {
                 var msg = "Server Behaved Unexpectedly.";
@@ -528,6 +530,11 @@ $(document).ready(function(e) {
                 $('#saveBTN').removeAttr('disabled');
             }
         });
+        return false;
+    });
+
+  $('#modalForItems').on('hidden.bs.modal', function() {
+        $('#listNameTable tbody tr.selectedOne').trigger('click');
         return false;
     });
 
@@ -582,7 +589,8 @@ $(document).ready(function(e) {
                 
             });
         });
-        
+      return $trForItems;
+
 
         //for edit
         $tdForItems.find('button.editRow').click(function() {
@@ -658,10 +666,7 @@ $(document).ready(function(e) {
         return $trForItems;
     };
 
-    $('#modalForItems').on('hidden.bs.modal', function() {
-        $('#listNameTable tbody tr.selectedOne').trigger('click');
-        return false;
-    });
+    
 
     //for list items
     $('.addList').click(function(e) {
@@ -729,6 +734,7 @@ $(document).ready(function(e) {
                 $('#saveItemSpinner').addClass('hidden');
                 $('#saveBTNList').removeAttr('disabled');
                 console.log(itemsEditNew);
+
                 if (itemsEditNew === 'new') {
                     console.log(itemID);
                     createItemTableRow(itemID).click();
