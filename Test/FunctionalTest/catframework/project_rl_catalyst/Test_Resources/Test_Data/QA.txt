@@ -10,7 +10,9 @@ Resource           catalyst.txt
 
 *** Variables ***
 ${BROWSERTYPE}                    chrome             
-${ENVIRONMENTSERVER}            http://d4d.relevancelab.com:3001 
+${ENVIRONMENTSERVER}             http://d4d.relevancelab.com:3001 
+#http://10.0.1.206:3002/private/index.html#ajax/Settings/Dashboard.html
+ 
 
 
 
@@ -27,8 +29,8 @@ ${PROJECT NAME}                  Catalyst
 ${PROJECT DESCRIPTION}           Catalyst product automation Description
 ${ENVIRONMENT NAME}              Dev
 ${CONFIG MANAGEMENT NAME}             RLChefServer
-${CONFIG MANAGEMENT USER NAME}         mycatqa
-${CONFIG MANAGEMENT URL}         https://api.opscode.com/organizations/cattest
+${CONFIG MANAGEMENT USER NAME}         pcjoshi9
+${CONFIG MANAGEMENT URL}         https://api.opscode.com/organizations/cat1
 ${PROVIDER}             Data Center
 ${ASSIGN USERS}         Designer
 ${ASSIGN USERS1}        superadmin          #Consumer
@@ -43,7 +45,7 @@ ${TOTAL MEMORY}     604680kB
 ${FREE MEMORY}      298024kB
 ${ENVIRONMENTSER NAME}          _default
 ${NEW EMAIL}                  crickinfo@gmail.com
-${AlreadyExistOrg}            Selected is already registered
+${AlreadyExistOrg}            This entry is already registered. Try another?
 ${IPTEXT}                   undefined
 ${STATS}                    pending
 ${STATSYY}                  Pending
@@ -69,8 +71,8 @@ ${UserName}             root
 ${RUNLIST}              recipe[apache2]
 ${KEYPAIRNAME}           cat_instances
 ${REGION NAME}           US West (Oregon) | us-west-2
-${SUBNET NAME}           subnet-aed68ce8 (us-west-2c)
-
+${SUBNET NAME}           subnet-3b1c1e4f (us-west-2a) public_cat_subnet
+${NEW CONFIG NAME}       catserver
 
 ${PHOENIX COMMERNCE WITHOUT COOKBOOK UBUNTUOS}            Phoenix Commernce without Cookbook UbuntuOS
 ${PHOENIX COMMERCE WITH COOKBOOK UBUNTUOS}          Phoenix Commerce With CookBook ubuntuOS
@@ -79,8 +81,8 @@ ${PHOENIX COMMERNCE WITHOUT COOKBOOK CENTOS}            Phoenix Commernce withou
 ${PHOENIX COMMERCE WITH COOKBOOK CENTOS}          Phoenix Commerce With CookBook CENTOS
 ${TASK NAME}          Test Task
 
-${USERPEMFILE}              ${ROOTPATH}\\Chef\\mycatqa.pem 
-${VALIDATORPEMFILE}      ${ROOTPATH}\\Chef\\cattest-validator.pem
+${USERPEMFILE}              ${ROOTPATH}\\Chef\\pcjoshi9.pem
+${VALIDATORPEMFILE}      ${ROOTPATH}\\Chef\\cat1-validator.pem
 ${KNIFERBFILE}                ${ROOTPATH}\\Chef\\knife.rb
 ${CATALYSTPEM}                ${ROOTPATH}\\Chef\\catalyst.pem
 ${CAT_INSTANCES}              ${ROOTPATH}\\Chef\\cat_instances.pem
@@ -190,7 +192,14 @@ ${MAT OS1}                    ubuntu
 ${RUNLIST1}                   recipe[tomcat-all]
 ${RUNLIST2}                   cron 
 ${RUNLIST3}                   recipe[cron]
- 
+${ALL}                        ALL
+${REQ}                        Required
+${VPC}                        vpc-f432d791 (10.0.0.0/16) Prod-Catalyst-VPC
+${SECRTY GRP1}                sg-0e8b496a | ICMP
+${SECRTY GRP2}                sg-c06faca4 | HTTP&S_SG
+${SECRTY GRP3}                sg-038f4d67 | SSH_SG
+${SECRTY GRP4}                sg-ab6faccf | Tomcat
+
 
 
 #Provider
@@ -267,7 +276,7 @@ ${VaildateBlankSpacesOrgName}       Relevance Labs
 ${VaildateEmptyOrgName}            
 ${VaildateSpecialChrOrgName}       RL&@Testing
 ${VaildateAlreadyExistChrOrgName}  phoenixInc
-${VaildOrgName}                    Relevance_Labs
+${VaildOrgName}                    Relevance
 ${VaildEditOrg}                    Relevance_Labs
 ${VaildEditOrgDomainName}       http://www.relevancelab.com
 
@@ -386,8 +395,8 @@ ${VaildEmptyValidatorname}
 ${VaildEmptyKnifename}
 
 
-${ValidateAlrdyExistConfigNameErrMsg}    This is already registered. Try another?
-${ValidateAlrdyExistOrgNameErrMsg}       This is already registered. Try another?
+${ValidateAlrdyExistConfigNameErrMsg}    This entry is already registered. Try another?
+${ValidateAlrdyExistOrgNameErrMsg}       This entry is already registered. Try another?
 ${VaildEmptyURLErrMsg}                   Please enter a valid Url
 ${VaildEmptyConfignameErrMsg}           Required
 ${VaildEmptyUsernameErrMsg}             Required
