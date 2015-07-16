@@ -3036,15 +3036,18 @@
                                                                var $taskDatatable = $('#tableOrchestration').DataTable({
                                                                    "pagingType": "full_numbers",
                                                                    "aaSorting": [[ 0, "desc" ]],
+                                                                   "aLengthMenu": [[40, 80, -1], [40, 80, "All"]],
+                                                                  "iDisplayLength": 40,
                                                                    "aoColumns": [
                                                                        null, {
-                                                                           "bSortable": true
+                                                                           "bSortable": false
+                                                                       }, {
+                                                                           "bSortable": false
                                                                        }, {
                                                                            "bSortable": false
                                                                        }, {
                                                                            "bSortable": false
-                                                                       },
-                                                                       null, {
+                                                                       }, {
                                                                            "bSortable": false
                                                                        }, {
                                                                            "bSortable": false
@@ -3225,9 +3228,9 @@
                                                                    var $tdName = $('<td style="vertical-align:inherit;text-align:center;"></td>').append(data[i].name);
                                                                    $tr.append($tdName);
                                                                    if (data[i].taskType === 'chef') {
-                                                                   var $tdType = $('<td style="vertical-align:inherit;text-align:center;"></td>').append("<img style='width:31px;margin-left:-18px;' src='img/chef.png' alt='chef'>&nbsp;&nbsp;<span style='font-size:14px;'>" + data[i].taskType + '</span>');
+                                                                   var $tdType = $('<td style="vertical-align:inherit;text-align:center;"></td>').append("<img style='width:31px;margin-left:-18px;' src='img/chef.png' alt='chef'>&nbsp;&nbsp;<span style='font-size:14px;'>" + data[i].taskType + "</span>");
                                                                  }else{
-                                                                  var $tdType = $('<td style="vertical-align:inherit;text-align:center;"></td>').append("<img style='width:25px;' src='img/jenkins.png' alt='jenkins'>&nbsp;&nbsp;<span style='font-size:14px;'>" + data[i].taskType + '</span>');
+                                                                  var $tdType = $('<td style="vertical-align:inherit;text-align:center;"></td>').append("<img style='width:22px;' src='img/jenkins.png' alt='jenkins'>&nbsp;&nbsp;<span style='font-size:14px;'>" + data[i].taskType + "</span>");
                                                                  }
                                                                    $tr.append($tdType);
 
@@ -3235,7 +3238,7 @@
                                                                    $tr.append($tdDescription);
 
                                                                    if (data[i].taskType === 'chef') {
-                                                                       var $tdNodeList = $('<td style="vertical-align:inherit;text-align:center;"></td>').append('<div style="margin-top:10px;">Nodes: &nbsp;&nbsp; <a rel="tooltip" data-placement="top" data-original-title="Assigned Nodes" style="cursor:pointer" data-toggle="modal"><i style="font-size:18px" class="ace-icon fa fa-sitemap assignedNodesList"></i></a></div>').append('<br/><div>Runlists: &nbsp;&nbsp; <a style="margin-top:5px;margin-right:9px;" rel="tooltip" data-placement="top" data-original-title="Assigned Runlists" data-toggle="modal" href="#assignedRunlist"><i style="font-size:16px" class="ace-icon fa fa-list-ul assignedRunlistTable"></i></a></div>');
+                                                                       var $tdNodeList = $('<td style="vertical-align:inherit;text-align:center;"></td>').append('<div style="margin-top:10px;">Nodes: &nbsp;&nbsp; <a rel="tooltip" data-placement="top" data-original-title="Assigned Nodes" style="cursor:pointer" data-toggle="modal"><i style="font-size:20px" class="ace-icon fa fa-sitemap assignedNodesList"></i></a></div>').append('<br/><div>Runlists: &nbsp;&nbsp; <a style="margin-top:5px;margin-right:9px;" rel="tooltip" data-placement="top" data-original-title="Assigned Runlists" data-toggle="modal" href="#assignedRunlist"><i style="font-size:20px" class="ace-icon fa fa-list-ul assignedRunlistTable"></i></a></div>');
                                                                        $tdNodeList.find('i.assignedNodesList').data('nodeList', data[i].taskConfig.nodeIds).click(function(e) {
                                                                            $.post('../instances/', {
                                                                                instanceIds: $(this).data('nodeList')
@@ -3283,7 +3286,11 @@
                                                                            $('#assignedRunlist').modal('show');
                                                                        });
                                                                    } else {
-                                                                       var $tdNodeList = $('<td style="vertical-align:inherit;text-align:center;"></td>').append('Name -&nbsp;' + data[i].taskConfig.jobName).append('<br/><div style="margin-top:10px">Result -&nbsp;<a href="'+ data[i].taskConfig.jobResultURL +'" target="_blank">'+ data[i].taskConfig.jobResultURL +'</a></div>');
+                                                                       var url = data[i].taskConfig.jobResultURL;
+                                                                      /*if (url) {
+                                                                          url = url.replace('$BN', number);
+                                                                      }*/
+                                                                       var $tdNodeList = $('<td style="vertical-align:inherit;text-align:center;"></td>').append('Name -&nbsp;<a style="word-break: break-all;" href="'+ data[i].taskConfig.jobName +'" target="_blank">' + data[i].taskConfig.jobName + '</a>').append('<br/><div style="margin-top:10px">Result -&nbsp;<a style="word-break: break-all;" href="'+ url +'" target="_blank">'+ url +'</a></div>');
                                                                    }
                                                                    $tr.append($tdNodeList);
                                                                    /*if (data[i].taskType === 'chef') {
@@ -3496,7 +3503,7 @@
                                                                     $tdHistory.find('a').data('taskId', data[i]._id).attr('data-historyTaskId', data[i]._id).click(function(e) {
                                                                             //var $taskHistoryContent = $('#taskHistoryContent').show();
                                                                             var taskId = $(this).data('taskId');
-                                                                            alert('ch');
+                                                                           
                                                                             var $modal = $('#assignedTaskHistoryForJenkins');
                                                                             $modal.find('.loadingContainer').show();
                                                                             $modal.find('.outputArea').hide();
@@ -3544,8 +3551,8 @@
                                                                                     })($tdMessage)
 
 
-                                                                                    var $tdUser = $('<td></td>').append(taskHistories[i].user);
-                                                                                    $trHistoryRow.append($tdUser);
+                                                                                    /*var $tdUser = $('<td></td>').append(taskHistories[i].user);
+                                                                                    $trHistoryRow.append($tdUser);*/
 
                                                                                     var $tdLogs = $('<td></td>').append('<a data-original-title="MoreInfo" data-placement="top" rel="tooltip" class="moreinfoBuild margin-left40per" href="javascript:void(0)" data-toggle="modal"></a>');
                                                                                     $tdLogs.find('a').data('history', taskHistories[i]).data('taskId', taskId).click(function() {

@@ -619,6 +619,7 @@ $(document).ready(function() {
     function loadUIData(taskData) {
         console.log(taskData);
         if (taskData) {
+         $('.widget-header').find('.widget-margin').html('Edit Job');
             //alert(JSON.stringify(taskData));
             //debugger;
             $('.inputTaskName').val(taskData.name);
@@ -810,7 +811,7 @@ $(document).ready(function() {
         var taskData = {};
 
         taskData.taskType = taskType;
-        //alert('value:' + $('#attrtextarea').val());
+        
         if (taskType === 'chef') {
             var taskName = $('#chefTaskName').val();
             if (!taskName) {
@@ -887,8 +888,14 @@ $(document).ready(function() {
             taskData.jobName = jenkinsJobName;
             taskData.description = jenkinsJobDescription;
             taskData.jobResultURL = jenkinsResultUrl;
-           // taskData.jobURL = jobURL;
+            
             taskData.users = usersList;
+
+
+            $.get(taskData.url + '/job/' + taskData.jobName + '/lastBuild/api/json', function(data){
+               alert(JSON.stringify(data));
+            });
+        //alert('value:' + $('#attrtextarea').val());
 
         } else {
             return false;
