@@ -3035,9 +3035,10 @@
                                                                //var $taskListArea = $('.taskListArea').empty();
                                                                var $taskDatatable = $('#tableOrchestration').DataTable({
                                                                    "pagingType": "full_numbers",
+                                                                   "aaSorting": [[ 0, "desc" ]],
                                                                    "aoColumns": [
                                                                        null, {
-                                                                           "bSortable": false
+                                                                           "bSortable": true
                                                                        }, {
                                                                            "bSortable": false
                                                                        }, {
@@ -3218,7 +3219,7 @@
 
 
                                                            for (var i = 0; i < data.length; i++) {
-                                                            //alert(JSON.stringify(data));
+                                                           // alert(JSON.stringify(data));
                                                                (function(i) {
                                                                    var $tr = $('<tr></tr>').attr('data-taskId', data[i]._id);
                                                                    var $tdName = $('<td style="vertical-align:inherit;text-align:center;"></td>').append(data[i].name);
@@ -3230,7 +3231,7 @@
                                                                  }
                                                                    $tr.append($tdType);
 
-                                                                   var $tdDescription = $('<td style="vertical-align:inherit;text-align:center;"></td>').html("");
+                                                                   var $tdDescription = $('<td style="vertical-align:inherit;text-align:center;"></td>').append(data[i].description);
                                                                    $tr.append($tdDescription);
 
                                                                    if (data[i].taskType === 'chef') {
@@ -3282,7 +3283,7 @@
                                                                            $('#assignedRunlist').modal('show');
                                                                        });
                                                                    } else {
-                                                                       var $tdNodeList = $('<td style="vertical-align:inherit;text-align:center;"></td>').append("Type:&nbsp;&nbsp;<span style='font-size:14px'>" + data[i].taskType + '</span>');
+                                                                       var $tdNodeList = $('<td style="vertical-align:inherit;text-align:center;"></td>').append('Name -&nbsp;' + data[i].taskConfig.jobName).append('<br/><div style="margin-top:10px">Result -&nbsp;<a href="'+ data[i].taskConfig.jobResultURL +'" target="_blank">'+ data[i].taskConfig.jobResultURL +'</a></div>');
                                                                    }
                                                                    $tr.append($tdNodeList);
                                                                    /*if (data[i].taskType === 'chef') {

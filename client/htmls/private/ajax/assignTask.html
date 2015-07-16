@@ -174,15 +174,17 @@
                                           <tbody>
                                              <tr>
                                                 <td>
-                                                   <div class="col-lg-12 col-md-12">
+                                                   
                                                       <div class="col-lg-6 col-md-6">
                                                          <label>Job Result Url:</label>
                                                          <input id="jobResultUrl" type="url" placeholder="http://www.example.com/$BN" class="form-control inputJobResultUrl" name="jobResultUrl">
                                                       </div>
-                                                     <div class="col-lg-6 col-md-6">
-                                                      <label>Job Url:</label>
+                                                   
+                                                     <div class="col-lg-12 col-md-12 margintop15">
+                                                      <label>Job Url:
+                                                      <div class="jenkinsJobURL" style="margin-top:6px"></label>
 
-                                                      <div class="jenkinsJobURL" style="margin-top:6px">
+                                                      
 
                                                       
                                                     </div>
@@ -625,6 +627,9 @@ $(document).ready(function() {
             $('#taskType').attr('disabled', 'disabled');
            // $('#tableRunlist').removeClass('hidden');
             //$('#taskType').val(taskData.taskType);
+            $('textarea#chefDescription').val(taskData.description);
+            $('textarea#jenkinsDescription').val(taskData.description);
+            $('#jobResultUrl').val(taskData.taskConfig.jobResultURL);
             if(taskData.taskConfig.runlist && taskData.taskConfig.runlist.length){
                createRunlistTable(taskData.taskConfig.runlist);
             }
@@ -749,8 +754,8 @@ $(document).ready(function() {
                     $('.jenkinsJobURL').empty();
                     $.get('/jenkins/' + jenkinsServerId + '/jobs/' + jobName, function(jobsList) {
                         //for (var i = 0; i < jobsList.length; i++) {
-                        alert(JSON.stringify(jobsList));
-                        var $anchor = "<span class='marginForURL'><a style='font-size:13px;word-wrap:break-word;' title='" + jobsList.url + "' href='" + jobsList.url + "'' target='_blank' >" + jobsList.url + "</a></span>";
+                       // alert(JSON.stringify(jobsList));
+                        var $anchor = "<span><a style='font-size:13px;word-wrap:break-word;' title='" + jobsList.url + "' href='" + jobsList.url + "'' target='_blank' >" + jobsList.url + "</a></span>";
                         $jobUrlList.append($anchor);
                         //}
                     });
@@ -813,8 +818,10 @@ $(document).ready(function() {
                 return false;
             }
             taskData.name = taskName;
+            console.log($('textarea#chefDescription').val());
+            var chefJobDescription = $('textarea#chefDescription').val();
 
-            var chefJobDescription = $('textarea#chefDescription').val('');
+            taskData.description = chefJobDescription;
             var $selectedNodes = $('#selectedNodesChefTask input[type=checkbox]');
            // var $addParameters = $('#addParameters input[type=checkbox]');
 
@@ -840,7 +847,6 @@ $(document).ready(function() {
             }
             taskData.nodeIds = nodesList;
             taskData.runlist = runlist;
-            taskData.description = chefJobDescription;
             //taskData.attributesjson = $('#attrtextarea').val().trim();
             $trAttribute = $('#attributesViewListTable').find('tbody tr');
             var attributes = [];
@@ -870,7 +876,7 @@ $(document).ready(function() {
                 alert('Please Choose a Jenkins Server');
                 return false;
             }
-            var jenkinsJobDescription = $('textarea#jenkinsDescription').val('');
+            var jenkinsJobDescription = $('textarea#jenkinsDescription').val();
             var usersList = [].concat($('#jenkinsUserList').val());
             if (!usersList.length) {
                 alert('Please Choose a users');
@@ -879,9 +885,9 @@ $(document).ready(function() {
             var jenkinsResultUrl = $('#jobResultUrl').val(); 
             taskData.jenkinsServerId = jenkinsServerId;
             taskData.jobName = jenkinsJobName;
-            //taskData.description = jenkinsJobDescription;
-            //taskData.jobResultURL = jobResultURL;
-            //taskData.jobURL = jobURL;
+            taskData.description = jenkinsJobDescription;
+            taskData.jobResultURL = jenkinsResultUrl;
+           // taskData.jobURL = jobURL;
             taskData.users = usersList;
 
         } else {
