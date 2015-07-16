@@ -7,7 +7,7 @@ Resource           ${CATALYST ACTION}/DevOps_Setup_Action_Steps.txt
 Resource           ${COMMON RESOURCES}/catalyst_grid_node.txt
 Resource           ${CATALYST ACTION}/Organization_Setup_Action_Steps.txt
 
-
+	
 *** Test Cases ***
 Catalyst new Config management setup
     [Tags]       Sanity
