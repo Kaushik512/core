@@ -127,6 +127,7 @@ Catalyst Choose Template and Save Setup
     Choose the Provider
     Choose the Available Images
     Choose the Region
+    Select the VPC
     Select the Subnet
     Select the Key Pair
     Choose Instance Size
@@ -145,6 +146,7 @@ Catalyst Choose Template and Save Setup
     Enters the Application URL Name
     Enters the AppURL
     Clicks on AppADD Button 
+    Enable the Next Button
     Clicks on Next Button
     Clicks on OK button in Confirm popup window
 
@@ -307,6 +309,7 @@ Catalyst Choose Template and Save Setup for UBUNTU
     Choose the Provider
     Choose the Available Images
     Choose the Region
+    Select the VPC
     Select the Subnet
     Select the Key Pair
     Choose Instance Size for Ubuntu
@@ -325,6 +328,7 @@ Catalyst Choose Template and Save Setup for UBUNTU
     Enters the Application URL Name
     Enters the AppURL
     Clicks on AppADD Button 
+    Enable the Next Button
     Clicks on Next Button
     Clicks on OK button in Confirm popup window
 
@@ -409,6 +413,14 @@ Catalyst Grid View Start ,Stop ,SSH ,Chef ,Client ,Log Setup of Ubuntu
     #Verfiy the STOP Toggler Enabled from Grid View
     Clicks on View Instancess Button
 
+
+Enable the Next Button 
+    Execute JavaScript    $('#bootstrap-wizard-1 > div.tab-content > footer > div').attr('style','display:block')
+
+
+
+Clicks on Confirm OK Button
+    Click Element    xpath=//*[text()='OK']
 
 
 
@@ -1057,32 +1069,68 @@ Choose the Available Images
 
 Choose the Region
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='s2id_region']/a/span[1]
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='select2-drop']/ul/li[2]/div
+    Input Text    xpath=.//*[@id='select2-drop']/div/input    ${REGION NAME}
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
+    Sleep    10s
+
+Select the VPC
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='s2id_vpcId']/a/span[1]
+    Input Text    xpath=.//*[@id='select2-drop']/div/input    ${VPC NAME}
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
 
 Select the Subnet
-    Sleep    3s
+    Sleep    2s
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='s2id_subnetId']/a/span[1]
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='select2-drop']/ul/li[2]/div
+    Input Text    xpath=.//*[@id='select2-drop']/div/input    ${SUBNET NAME}
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
+
 
 Select the Key Pair
-   Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element     xpath=.//*[@id='s2id_keypairId']/a/span[1]
-   Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element     xpath=.//*[@id='select2-drop']/ul/li[2]/div
+    Execute JavaScript    $('#bootstrap-wizard-1 > div.tab-content > footer > div').attr('style','display:none')
+    Sleep    3s
+    Log    after scroll
+    Sleep    1s
+    Click Element    css=#s2id_keypairId > .select2-choice
+    Log    after click
+    Input Text    css=#select2-drop .select2-input    cat_instances
+    Sleep    1s
+    Click Element    xpath=//*[@id='select2-drop']/ul/li/div
 
 Choose Instance Size
-    Click Element    xpath=.//*[@id='s2id_instancesize']/a
-    Input Text    xpath=.//*[@id='select2-drop']/div/input    ${CentosInstanceSize}
+    Sleep    3s
+    Log    after scroll
     Sleep    1s
-    Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
-    #Click Element    xpath=.//*[@id='select2-drop']/ul/li[2]/div
+    Click Element    css=#s2id_instancesize > .select2-choice
+    Log    after click
+    Input Text    css=#select2-drop .select2-input    ${CentosInstanceSize}
+    Sleep    1s
+    Click Element    xpath=//*[@id='select2-drop']/ul/li/div
 
 Choose Instance Size for Ubuntu
-    Click Element    xpath=.//*[@id='s2id_instancesize']/a
-    Input Text    xpath=.//*[@id='select2-drop']/div/input    ${UbuntuInstanceSize}
+    Execute JavaScript    $('#bootstrap-wizard-1 > div.tab-content > footer > div').attr('style','display:none')
+    Sleep    3s
+    Log    after scroll
     Sleep    1s
-    Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
+    Click Element    css=#s2id_instancesize > .select2-choice
+    Log    after click
+    Input Text    css=#select2-drop .select2-input    ${UbuntuInstanceSize}
+    Sleep    1s
+    Click Element    xpath=//*[@id='select2-drop']/ul/li/div
+    
 
 Select the Security Group
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='securityGroupIds']/label[9]/i
+    Sleep    3s
+    Log    after scroll
+    Sleep    1s
+    Click Element    xpath=.//*[@id='securityGroupIds']/label[contains(.,'${SECRTY GRP1}')]/i
+    Click Element    xpath=.//*[@id='securityGroupIds']/label[contains(.,'${SECRTY GRP2}')]/i
+    Click Element    xpath=.//*[@id='securityGroupIds']/label[contains(.,'${SECRTY GRP3}')]/i
+    Click Element    xpath=.//*[@id='securityGroupIds']/label[contains(.,'${SECRTY GRP4}')]/i
+    Log    after click
+
+#Click Element    css=#select2-drop .select2-input    sg-c00ee1a5 | all_open
+#Click Element    css=#securityGroupIds > label:nth-child(1)
+
 
 Clicks on Configure Organization Parameters
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='accordion-Design']/div[2]/div[1]/h4/a
@@ -1488,4 +1536,5 @@ Clicks on AppADD Button
 Clicks on OK button in Confirm popup window
     Sleep    4s
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=//*[text()='OK']
+
     

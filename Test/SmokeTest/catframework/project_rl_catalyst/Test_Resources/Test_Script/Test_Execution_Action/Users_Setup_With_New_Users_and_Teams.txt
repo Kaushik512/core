@@ -18,38 +18,46 @@ Catalyst creates new org admin
     Clicks on New Button
     Enters new orgadmin login name
     Enters new orgadmin email address
+    Enters new orgadmin password
+    Enters new orgadmin confirm password
     Select the Organization the Admin Created
-    Add User to LDAP
-    Enters LDAP Password for new org admin
-    Enters Confirm LDAP Password for new org admin
     Assign Roles for org admin
     Assign Teams for organization admin
     Clicks on USave button
+
+    #Add User to LDAP
+    #Enters LDAP Password for new org admin
+    #Enters Confirm LDAP Password for new org admin
 
 Catalyst creates new org designer
     Clicks on New Button
     Enters new designer login name
     Enters new designer email address
+    Enters new designer password
+    Enters new designer confirm password
     Select the Organization the Admin Created
-    Add User to LDAP
-    Enters LDAP Password for new org designer
-    Enters Confirm LDAP Password for new org designer
     Assign Roles for org designer
     Assign Teams for organization designer
     Clicks on USave button
+
+    #Add User to LDAP
+    #Enters LDAP Password for new org designer
+    #Enters Confirm LDAP Password for new org designer
 
 Catalyst creates new org consumer
     Clicks on New Button
     Enters new Consumer login name
     Enters new Consumer email address
+    Enters new consumer password
+    Enters new designer confirm password
     Select the Organization the Admin Created
-    Add User to LDAP
-    Enters LDAP Password for new org Consumer
-    Enters Confirm LDAP Password for new org Consumer
     Assign Roles for org Consumer
     Assign Teams for organization Consumer
     Clicks on USave button
 
+    #Add User to LDAP
+    #Enters LDAP Password for new org Consumer
+    #Enters Confirm LDAP Password for new org Consumer
 
 Catalyst creates New Teams
     Clicks on Settings
@@ -83,6 +91,12 @@ Enters new orgadmin login name
 Enters new orgadmin email address
     Input Text    id=email    ${Org_ Admin1_EMAIL_ID}
 
+Enters new orgadmin password
+    Input Text    id=password    ${Orgadmin1_PASSWD}
+
+Enters new orgadmin confirm password
+    Input Text    id=cnfPassword    ${Orgadmin1_CONFPASSWD}
+
 Select the Organization the Admin Created
     Click Element    xpath=.//*[@id='s2id_orgname']/a/span[1]
     Input Text    xpath=.//*[@id='select2-drop']/div/input    ${ORGANIZATION NAME}
@@ -112,7 +126,13 @@ Enters new designer login name
 
 Enters new designer email address
     Input Text    id=email    ${Org_Design_EMAIL_ID}
- 
+
+Enters new designer password
+    Input Text    id=password    ${Orgdesigner_PASSWD}
+
+Enters new designer confirm password
+    Input Text    id=cnfPassword    ${Orgdesigner_PASSWD}
+
 Enters LDAP Password for new org designer
     Input Text    id=userpassword    ${Orgdesigner_PASSWD}
 
@@ -131,8 +151,17 @@ Enters new consumer login name
 Enters new consumer email address
     Input Text    id=email    ${Org_consumer_EMAIL_ID}
  
+
+Enters new consumer password
+    Input Text    id=password    ${Orgconsumer_CONFPASSWD}
+
+Enters new consumer confirm password
+    Input Text    id=cnfPassword    ${Orgconsumer_CONFPASSWD}
+
+
 Enters LDAP Password for new org consumer
     Input Text    id=userpassword    ${Orgconsumer_PASSWD}
+
 
 Enters Confirm LDAP Password for new org consumer
     Input Text    id=userpassword1    ${Orgconsumer_CONFPASSWD}
