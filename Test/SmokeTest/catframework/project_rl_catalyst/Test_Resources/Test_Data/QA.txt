@@ -10,7 +10,7 @@ Resource           catalyst.txt
 
 *** Variables ***
 ${BROWSER TYPE}                     chrome              #firefox                     #internetexplorer               #phantomjs
-${ENVIRONMENT SERVER}               http://d4d.relevancelab.com:3001/public/login.html
+${ENVIRONMENT SERVER}               http://10.0.1.206:3002/public/login.html
 
 
 
@@ -20,7 +20,7 @@ ${ENV}                 QA.txt
 ${VALID USER}             superadmin
 ${VALID PASSWORD}         superadmin@123
 ${ORGANIZATION NAME}         Smoke_Rel_Org
-${ORGANIZATION DOMAIN NAME}          http://www.relevancelab.com
+${ORGANIZATION DOMAIN NAME}          www.relevancelab.com
 ${ORG ADMIN USER}               smoke_admin
 ${ORG ADMIN PASSWORD}           smoke_admin
 ${ORGADMN EMAILADD}             relevancelab@gmail.com
@@ -92,6 +92,14 @@ ${TASK TYPE1}              Chef
 ${CHEF TASKNAME}           ChefTask
 ${SERVICE NAME}             MongoDB		
 ${TEMP NME}                 Apac
+${REGION NAME}           US West (Oregon) | us-west-2
+${VPC NAME}              vpc-f432d791 (10.0.0.0/16) Prod-Catalyst-VPC
+${SUBNET NAME}           subnet-3b1c1e4f (us-west-2a) public_cat_subnet
+${SECRTY GRP1}                sg-0e8b496a | ICMP
+${SECRTY GRP2}                sg-c06faca4 | HTTP&S_SG
+${SECRTY GRP3}                sg-038f4d67 | SSH_SG
+${SECRTY GRP4}                sg-ab6faccf | Tomcat
+
 
 
 ${IP ADDRESS}             52.10.69.55
@@ -126,7 +134,7 @@ ${TEAM1}                    Rel_Designer
 ${TEAM DESCRPN1}            Designer of Catalyst
 ${TEAM2}                    Rel_Consumer
 ${TEAM DESCRPN2}            Consumer of Catalyst
-${Org_Admin1}               smoke_orgadmin
+${Org_Admin1}               smoke_orgadmin1
 ${Org_ Admin1_EMAIL_ID}     admin@gmail.com
 ${Orgadmin1_PASSWD}         password1
 ${Orgadmin1_CONFPASSWD}     password1
