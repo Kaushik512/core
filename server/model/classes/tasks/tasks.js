@@ -356,7 +356,8 @@ taskSchema.statics.updateTaskById = function(taskId, taskData, callback) {
         $set: {
             name: taskData.name,
             taskConfig: taskConfig,
-            taskType: taskData.taskType
+            taskType: taskData.taskType,
+            description: taskData.description
         }
     }, {
         upsert: false
