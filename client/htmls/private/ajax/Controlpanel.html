@@ -2556,10 +2556,10 @@ function pollActionLogCompleteStatus(instanceId, actionLogId, $td) {
             actionLogsPollTimeouts.push(timeout);
         } else {
         //for failure
-            var status = '<img rel="tooltip" data-placement="top" title="Failed"  src="img/indicator_stopped.png"/>'
+            var status = '<img title="Failed"  src="img/indicator_stopped.png"/>'
             if (actionLog.success) {
                 //for success
-                status = '<img rel="tooltip" data-placement="top" title="Success" src="img/indicator_started.png"/>';
+                status = '<img title="Success" src="img/indicator_started.png"/>';
             }
             $td.html(status);
       }
@@ -2572,11 +2572,11 @@ function addActionLogRow(actionLog) {
     $tr.append($tdName);
 
     var $tdStatus = $('<td></td>');
-    var status = '<img rel="tooltip" data-placement="top" title="Failed" src="img/indicator_stopped.png"/>';
+    var status = '<img title="Failed" src="img/indicator_stopped.png"/>';
 
     //for condition when polling or unknown
     if (!actionLog.completed) {
-        status = '<img rel="tooltip" data-placement="top" title="Pending" src="img/indicator_unknown.png"/>';
+        status = '<img title="Pending" src="img/indicator_unknown.png"/>';
         //polling
         if (actionLog.type !== 8) {
             pollActionLogCompleteStatus(urlParams['id'], actionLog._id, $tdStatus);
@@ -2585,7 +2585,7 @@ function addActionLogRow(actionLog) {
         //for success
     } else {
         if (actionLog.success) {
-            status = '<img rel="tooltip" data-placement="top" title="Success" src="img/indicator_started.png"/>';
+            status = '<img title="Success" src="img/indicator_started.png"/>';
         }
     }
     $tdStatus.append(status);
