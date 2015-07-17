@@ -32,13 +32,16 @@ Catalyst Create New Org Admin
     Clicks on New Button
     Enters the Org Admin Login Name
     Enters the Org Admin Email Address
+    Enters password for Org Admin
+    Enters confirm password for Org Admin
     Select The Organization of the OrgAdmin created
-    Add User to LDAP
-    Enters the LDAP Org Admin Password
-    Enters the Confirm LDAP Password
     Assign the Roles as Admin
     Assign Teams for OrgAdmin
     Clicks on USave Button
+
+    #Add User to LDAP
+    #Enters the LDAP Org Admin Password
+    #Enters the Confirm LDAP Password
 
 Catalyst Org Admin Verfifcation of New,Update,Delete Button disabled
     Clicks on Settings
@@ -186,7 +189,14 @@ Enters the Org Admin Login Name
 
 Enters the Org Admin Email Address
     Input Text    id=email    ${ORGADMN EMAILADD}
-   
+
+Enters password for Org Admin
+    Input Text    id=password    ${ORG ADMIN PASSWORD}
+
+Enters confirm password for Org Admin
+    Input Text    id=cnfPassword    ${ORG ADMIN PASSWORD}
+
+    
 Select The Organization of the OrgAdmin created
     Click Element    xpath=.//*[@id='s2id_orgname']/a/span[1]
     Input Text    xpath=.//*[@id='select2-drop']/div/input    ${ORGANIZATION NAME}
