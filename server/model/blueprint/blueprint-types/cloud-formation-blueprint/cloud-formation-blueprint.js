@@ -141,6 +141,8 @@ CloudFormationBlueprintSchema.statics.createNew = function(data) {
 };
 
 
+
+
 var CloudFormationBlueprint = mongoose.model('CloudFormationBlueprint', CloudFormationBlueprintSchema);
 
 module.exports = CloudFormationBlueprint;

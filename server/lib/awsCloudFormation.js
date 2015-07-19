@@ -39,7 +39,7 @@ var AWSCloudFormation = function(awsSettings) {
         });
     };
 
-    this.deleteStack = function(stackNameOrId) {
+    this.deleteStack = function(stackNameOrId, callback) {
         cloudFormation.deleteStack({
             StackName: stackNameOrId
         }, function(err, deleteData) {

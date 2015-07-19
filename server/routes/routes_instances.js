@@ -26,7 +26,7 @@ var uuid = require('node-uuid');
 var errorResponses = require('./error_responses');
 var logger = require('_pr/logger')(module);
 var waitForPort = require('wait-for-port');
-var AWSProvider = require('../model/classes/masters/cloudprovider/awsCloudProvider.js');
+var AWSProvider = require('_pr/model/classes/masters/cloudprovider/awsCloudProvider.js');
 var AWSKeyPair = require('../model/classes/masters/cloudprovider/keyPair.js');
 var ChefClientExecution = require('../model/classes/instance/chefClientExecution/chefClientExecution.js');
 

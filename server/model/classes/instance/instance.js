@@ -415,6 +415,23 @@ var InstancesDao = function() {
         });
     };
 
+    this.getInstancesByCloudformationId = function(cfId, callback) {
+        logger.debug("Enter getInstancesByCloudformationId (%s)", cfId);
+        var queryObj = {
+            cloudFormationId: cfId
+        }
+        Instances.find(queryObj, function(err, data) {
+            if (err) {
+                logger.debug("Failed to getInstancesByCloudformationId (%s)", cfId, err);
+                callback(err, null);
+                return;
+            }
+            logger.debug("Exit getInstancesByCloudformationId (%s)", cfId);
+            callback(null, data);
+        });
+
+    };
+
 
 
     this.createInstance = function(instanceData, callback) {
@@ -706,7 +723,22 @@ var InstancesDao = function() {
             logger.debug("Exit removeInstancebyId (%s)", instanceId);
             callback(null, data);
         });
-    }
+    };
+
+    this.removeInstancebyCloudFormationId = function(cfId, callback) {
+        logger.debug("Enter removeInstancebyCloudFormationId (%s)", cfId);
+        Instances.remove({
+            cloudFormationId: cfId
+        }, function(err, data) {
+            if (err) {
+                logger.error("Failed to removeInstancebyCloudFormationId (%s)", cfId, err);
+                callback(err, null);
+                return;
+            }
+            logger.debug("Exit removeInstancebyCloudFormationId (%s)", cfId);
+            callback(null, data);
+        });
+    };
 
     this.updateInstanceLog = function(instanceId, log, callback) {
         logger.debug("Enter updateInstanceLog ", instanceId, log);
