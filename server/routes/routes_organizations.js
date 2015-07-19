@@ -30,6 +30,8 @@ var Application = require('../model/classes/application/application');
 var Task = require('../model/classes/tasks/tasks.js');
 var masterUtil = require('../lib/utils/masterUtil.js');
 
+var CloudFormation = require('_pr/model/cloud-formation');
+
 module.exports.setRoutes = function(app, sessionVerification) {
     app.all('/organizations/*', sessionVerification);
 
@@ -1076,15 +1078,17 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 }
                 blueprintData.instanceData = instanceData;
             } else if (req.body.blueprintData.blueprintType === 'aws_cf') {
-                console.log('templateFile ==> ',req.body.blueprintData.cftTemplateFile);
+                console.log('templateFile ==> ', req.body.blueprintData.cftTemplateFile);
                 cloudFormationData = {
                     cloudProviderId: req.body.blueprintData.cftProviderId,
                     infraManagerType: 'chef',
                     infraManagerId: req.body.blueprintData.chefServerId,
                     runlist: req.body.blueprintData.runlist,
                     stackParameters: req.body.blueprintData.cftStackParameters,
-                    stackName: req.body.blueprintData.stackName,
-                    templateFile: req.body.blueprintData.cftTemplateFile
+                    //stackName: req.body.blueprintData.stackName,
+                    templateFile: req.body.blueprintData.cftTemplateFile,
+                    region: req.body.blueprintData.region,
+                    instanceUsername: req.body.blueprintData.cftInstanceUserName
                 }
                 blueprintData.cloudFormationData = cloudFormationData;
             } else {
@@ -1235,11 +1239,22 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                     res.send(500);
                                     return;
                                 }
-                                res.send({
-                                    tasks: tasksData,
-                                    instances: instancesData,
-                                    blueprints: blueprintsData
+                                CloudFormation.findByOrgBgProjectAndEnvId(req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId, function(err, stacks) {
+                                    if (err) {
+                                        res.send(500);
+                                        return;
+                                    }
+
+                                    res.send({
+                                        tasks: tasksData,
+                                        instances: instancesData,
+                                        blueprints: blueprintsData,
+                                        stacks: stacks
+                                    });
                                 });
+
+
+
                                 logger.debug("Exit get() for /organizations/%s/businessgroups/%s/projects/%s/environments/%s", req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId);
                             });
 

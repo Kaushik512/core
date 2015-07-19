@@ -17,9 +17,13 @@
                 <li class="pull-left Orchestration">
                     <a href="#l3" style="display:block!important" data-toggle="tab"><i class="fa fa-indent"></i>&nbsp;Orchestration</a>
                 </li>
+                <li class="pull-left CloudFormation">
+                    <a href="#l5" style="display:block!important" data-toggle="tab"><i class="fa fa-indent"></i>&nbsp;CloudFormation</a>
+                </li>
                 <li class="pull-left Containers">
                     <a href="#l4" style="display:block!important" data-toggle="tab"><i class="fa fa-briefcase"></i>&nbsp;Containers</a>
                 </li>
+
             </ul>
  <div id="myTabContent3" class="nav tab-content">
 
@@ -69,59 +73,7 @@
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
-<!-- Modal for desktop provisioning-->
-<div class="modal fade" id="modalDesktopProvisioningLaunch" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                    &times;
-                </button>
-                <h4 class="modal-title">
-                    Enter instance details
-                </h4>
-            </div>
-            <div class="modal-body no-padding">
-                <form role="form" class="smart-form1">
-                    <fieldset>
-                        <div class="">
-                            <section class="col col-12">
-                                <div class="form-group">
-                                    <label for="exampleInputEmail1">Instance IP</label>
-                                    <div class="">
-                                        <input type="text" id="instanceIPInput">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="exampleInputEmail1">Instance Username</label>
-                                    <div class="">
-                                        <input type="text" id="instanceUsernameInput">
-                                    </div>
-                                </div>
 
-                                <div class="form-group">
-                                    <label for="exampleInputEmail1">Instance Password</label>
-                                    <div class="">
-                                        <input type="password" id="instancePasswordInput">
-                                    </div>
-                                </div>
-                            </section>
-
-                        </div>
-
-                    </fieldset>
-                </form>
-
-
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default btn-primary desktopProvisioningLaunchBtn">Provision</button>
-                <button type="button" class="btn btn-default btn-primary" data-dismiss="modal">Close</button>
-            </div>
-
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
 
     </article>
 </div>
@@ -135,6 +87,7 @@ var htmlTabs={
 docker:'docker.html',
 blueprint:'blueprint.html',
 instance:'instance.html',
+cloudformation:'cloudformation.html',
 orchestration:'orchestration.html'
 };
 window.count=0;
@@ -142,7 +95,7 @@ window.count=0;
 /**/
 $(document).on('devPagesLoaded',function(){
 window.count++;
-if(window.count===3){
+if(window.count===4){
 /*var el=document.createElement('script');
 el.setAttribute('src','js/dev/dev.js');
 $('head').append(el);
@@ -162,6 +115,7 @@ var callback=function(){
 loadHTMLFile(basePath+htmlTabs.instance,$('#myTabContent3'));
 loadHTMLFile(basePath+htmlTabs.blueprint,$('#myTabContent3'));
 loadHTMLFile(basePath+htmlTabs.orchestration,$('#myTabContent3'));
+loadHTMLFile(basePath+htmlTabs.cloudformation,$('#myTabContent3'));
 loadHTMLFile(basePath+htmlTabs.docker,$('#myTabContent3'));
 
 function loadHTMLFile(url,parentToAppend){

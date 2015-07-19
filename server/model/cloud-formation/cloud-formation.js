@@ -60,7 +60,9 @@ var CloudFormationSchema = new Schema({
     stackName: String,
     stackId: String,
     status: String,
-    users: [String]
+    users: [String],
+    region: String,
+    instanceUsername: String
 
 });
 
@@ -127,7 +129,9 @@ CloudFormationSchema.statics.createNew = function(cfData, callback) {
         infraManagerId: cfData.infraManagerId,
         infraManagerData: infraManager,
         infraManagerType: infraManagerType,
-        stackParameters: cfData.stackParameters
+        stackParameters: cfData.stackParameters,
+        region: cfData.region,
+        instanceUsername: cfData.instanceUsername
     };
 
     var that = this;
@@ -139,7 +143,7 @@ CloudFormationSchema.statics.createNew = function(cfData, callback) {
             callback(err, null);
             return;
         }
-        callback(null, task);
+        callback(null, data);
     });
 };
 

@@ -2332,66 +2332,86 @@
                             data = typeof data == "string" ? JSON.parse(data) : data;
                             console.log(data);
                             var providerStr = '<option value="">Select Provider</option>';
-                             for(var i=0;i<data.length;i++) {
-                                if(data[i].providerType === 'AWS') {
-                                    providerStr= providerStr+'<option value="'+data[i]._id+'">'+data[i].providerName+'</option>';
+                            for (var i = 0; i < data.length; i++) {
+                                if (data[i].providerType === 'AWS') {
+                                    providerStr = providerStr + '<option value="' + data[i]._id + '">' + data[i].providerName + '</option>';
                                 }
-                             }   
-                             var $providerInput = $('<select id="cftProviderInput" class="form-control"></select>').append(providerStr);
-                             var $providerInputContainer = $('<div class="col-lg-6 col-md-6" style="margin-top: 10px;"><label class="cftParameterLabelContainer" for=""><span class="cftParameterLabel">Choose Provider</span></label><div class="input-groups"></div></div>');
-                             $providerInputContainer.find('.input-groups').append($providerInput);
+                            }
+                            var $providerInput = $('<select id="cftProviderInput" class="form-control"></select>').append(providerStr);
+                            var $providerInputContainer = $('<div class="col-lg-6 col-md-6" style="margin-top: 10px;"><label class="cftParameterLabelContainer" for=""><span class="cftParameterLabel">Choose Provider</span></label><div class="input-groups"></div></div>');
+                            $providerInputContainer.find('.input-groups').append($providerInput);
 
-                            $.get('/d4dMasters/cftTemplate?templateFile=' + cftTemplateFileName, function(data) {
+                            $.get('/vmimages/regions/list', function(regionList) {
 
-                                var templateData = {};
-                                try {
-                                    templateData = JSON.parse(data);
-                                } catch (err) {
-                                    console.log(err);
-                                    bootbox.alert("Invalid template file");
-                                    // var wizard = $wizard.data('bootstrapWizard');
-                                    // wizard.disableNextBtn();
-                                    return;
+                                regionList = typeof regionList == "string" ? JSON.parse(regionList) : regionList;
+                                var regionOptStr = '<option value="">Select Region</option>';
+                                for (var i = 0; i < regionList.length; i++) {
+                                    regionOptStr = regionOptStr + '<option value="' + regionList[i].region + '">' + regionList[i].region_name + '</option>';
+
                                 }
-                                var formHtmlDivHtml = '<div class="col-lg-6 col-md-6" style="margin-top: 10px;"><label for="">Enter Stack Name:<span style="color:Red;" class="control-label">&nbsp;*</span></label><div class="input-groups"><input id="cftStackNameInput" name="cftStackNameInput" class="form-control" type="text" autofocus="autofocus" aria-required="true"></div></div>';
+                                var $regionInput = $('<select id="cftRegionInput" class="form-control"></select>').append(regionOptStr);
+                                var $regionInputContainer = $('<div class="col-lg-6 col-md-6" style="margin-top: 10px;"><label class="cftParameterLabelContainer" for=""><span class="cftParameterLabel">Choose Region</span></label><div class="input-groups"></div></div>');
+                                $regionInputContainer.find('.input-groups').append($regionInput);
 
-                                $panelBody.empty().append(formHtmlDivHtml).append($providerInputContainer).append('<input type="hidden" id="cftTemplateFileInput" value="'+cftTemplateFileName+'"/>');
 
 
-                                var parameters = templateData.Parameters;
-                                if (parameters) {
-                                    var keys = Object.keys(parameters);
-                                    for (var i = 0; i < keys.length; i++) {
-                                        var parameter = parameters[keys[i]];
-                                        var $parameterInput;
-                                        if (parameter.AllowedValues) {
-                                            $parameterInput = $('<select class="cftParameterInput form-control"></select>');
-                                            for (var j = 0; j < parameter.AllowedValues.length; j++) {
-                                                var $option = $('<option></option>').val(parameter.AllowedValues[j]).html(parameter.AllowedValues[j]);
-                                                $parameterInput.append($option);
-                                            }
-                                        } else {
-                                            $parameterInput = $('<input class="cftParameterInput form-control" type="text" autofocus="autofocus">');
-                                        }
-                                        if (parameter.Default) {
-                                            $parameterInput.val(parameter.Default);
-                                        }
-                                        $parameterInput.attr('data-cftParameter-type', parameter.type);
-                                        $parameterInput.attr('data-cftParameter-name', keys[i]);
+                                $.get('/d4dMasters/cftTemplate?templateFile=' + cftTemplateFileName, function(data) {
 
-                                        var $inputContainer = $('<div class="col-lg-6 col-md-6" style="margin-top: 10px;"><label class="cftParameterLabelContainer" for=""><span class="cftParameterLabel"></span></label><div class="input-groups"></div></div>');
-                                        $inputContainer.find('.input-groups').append($parameterInput);
-                                        $inputContainer.find('.cftParameterLabel').append(keys[i]);
-
-                                        if (parameter.Description) {
-                                            var $desc = $('<span></span>').attr('title', parameter.Description).append('&nbsp;&nbsp;<i class="fa fa-question"/>');
-                                            $inputContainer.find('.cftParameterLabelContainer').append($desc);
-                                        }
-                                        $panelBody.append($inputContainer);
-
+                                    var templateData = {};
+                                    try {
+                                        templateData = JSON.parse(data);
+                                    } catch (err) {
+                                        console.log(err);
+                                        bootbox.alert("Invalid template file");
+                                        // var wizard = $wizard.data('bootstrapWizard');
+                                        // wizard.disableNextBtn();
+                                        return;
                                     }
-                                }
+                                    var formHtmlDivHtml = '<div class="col-lg-6 col-md-6" style="margin-top: 10px;"><label for="">Instance Username: <span style="color:Red;" class="control-label">&nbsp;*</span></label><div class="input-groups"><input id="cftStackInstanceUsernameInput" class="form-control" type="text" autofocus="autofocus" aria-required="true"></div></div>';
+
+                                    //                                $panelBody.empty().append(formHtmlDivHtml).append($providerInputContainer).append('<input type="hidden" id="cftTemplateFileInput" value="'+cftTemplateFileName+'"/>');
+                                    $panelBody.empty().append($regionInputContainer).append($providerInputContainer).append(formHtmlDivHtml).append('<input type="hidden" id="cftTemplateFileInput" value="' + cftTemplateFileName + '"/>');
+
+
+
+                                    var parameters = templateData.Parameters;
+                                    if (parameters) {
+                                        var keys = Object.keys(parameters);
+                                        for (var i = 0; i < keys.length; i++) {
+                                            var parameter = parameters[keys[i]];
+                                            var $parameterInput;
+                                            if (parameter.AllowedValues) {
+                                                $parameterInput = $('<select class="cftParameterInput form-control"></select>');
+                                                for (var j = 0; j < parameter.AllowedValues.length; j++) {
+                                                    var $option = $('<option></option>').val(parameter.AllowedValues[j]).html(parameter.AllowedValues[j]);
+                                                    $parameterInput.append($option);
+                                                }
+                                            } else {
+                                                $parameterInput = $('<input class="cftParameterInput form-control" type="text" autofocus="autofocus">');
+                                            }
+                                            if (parameter.Default) {
+                                                $parameterInput.val(parameter.Default);
+                                            }
+                                            $parameterInput.attr('data-cftParameter-type', parameter.type);
+                                            $parameterInput.attr('data-cftParameter-name', keys[i]);
+
+                                            var $inputContainer = $('<div class="col-lg-6 col-md-6" style="margin-top: 10px;"><label class="cftParameterLabelContainer" for=""><span class="cftParameterLabel"></span></label><div class="input-groups"></div></div>');
+                                            $inputContainer.find('.input-groups').append($parameterInput);
+                                            $inputContainer.find('.cftParameterLabel').append(keys[i]);
+
+                                            if (parameter.Description) {
+                                                var $desc = $('<span></span>').attr('title', parameter.Description).append('&nbsp;&nbsp;<i class="fa fa-question"/>');
+                                                $inputContainer.find('.cftParameterLabelContainer').append($desc);
+                                            }
+                                            $panelBody.append($inputContainer);
+
+                                        }
+                                    }
+                                });
+
                             });
+
+
                         },
                         failure: function(data) {
                             alert(data.toString());
@@ -2598,8 +2618,9 @@
                              reqBody.appUrls = appUrls;
 
                              // for cft templates
-                             reqBody.stackName = $('#cftStackNameInput').val();
+                             //reqBody.stackName = $('#cftStackNameInput').val();
                              reqBody.cftProviderId = $('#cftProviderInput').val();
+                             reqBody.region=$('#cftRegionInput').val();
                              var cftParameters = []; 
                              $('.cftParameterInput').each(function(){
                                 var $this = $(this);
@@ -2612,6 +2633,7 @@
                              });
                              reqBody.cftStackParameters = cftParameters;
                              reqBody.cftTemplateFile = $('#cftTemplateFileInput').val();
+                             reqBody.cftInstanceUserName = $('#cftStackInstanceUsernameInput').val();
 
 
 

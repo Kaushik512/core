@@ -30,8 +30,10 @@ var CloudFormationBlueprintSchema = new Schema({
             trim: true
         }
     }],
-    stackName: String,
-    templateFile: String
+    //stackName: String,
+    templateFile: String,
+    region: String,
+    instanceUsername: String
 });
 
 function getInfraManagerConfigType(blueprint) {
@@ -128,8 +130,10 @@ CloudFormationBlueprintSchema.statics.createNew = function(data) {
         infraManagerId: data.infraManagerId,
         infraManagerData: infraManagerBlueprint,
         stackParameters: stackParameters,
-        stackName: data.stackName,
-        templateFile: data.templateFile
+        //stackName: data.stackName,
+        templateFile: data.templateFile,
+        region: data.region,
+        instanceUsername: data.instanceUsername
     });
 
 

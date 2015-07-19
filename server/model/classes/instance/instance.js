@@ -199,7 +199,8 @@ var InstanceSchema = new Schema({
     actionLogs: [ActionLogSchema],
     chefClientExecutionIds: [String],
     taskIds: [String],
-    tempActionLogId: String
+    tempActionLogId: String,
+    cloudFormationId: String
 
 });
 

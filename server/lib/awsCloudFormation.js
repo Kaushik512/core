@@ -35,7 +35,7 @@ var AWSCloudFormation = function(awsSettings) {
                 callback(err, null);
                 return;
             }
-            callback(stackData);
+            callback(null, stackData);
         });
     };
 
@@ -57,12 +57,12 @@ var AWSCloudFormation = function(awsSettings) {
         cloudFormation.describeStacks({
             StackName: stackNameOrId,
             NextToken: nextToken
-        }, function(err, stacks) {
+        }, function(err, res) {
             if (err) {
                 callback(err, null);
                 return;
             };
-            callback(null, stacks);
+            callback(null, res.Stacks);
 
 
         });
@@ -94,8 +94,76 @@ var AWSCloudFormation = function(awsSettings) {
 
     };
 
+    this.waitForStackCompleteStatus = function(stackId, callback) {
+        var self = this;
+        console.log('Checking status ==>');
+        this.getStack(stackId, function(err, stack) {
+            if (err) {
+                callback(err, null);
+                return;
+            }
+            console.log('status ==>', stack.StackStatus);
+            switch (stack.StackStatus) {
+                case 'CREATE_IN_PROGRESS':
+                    setTimeout(function() {
+                        self.waitForStackCompleteStatus(stackId, callback);
+                    }, 3000);
+                    break;
+                case 'CREATE_FAILED':
+                    callback({
+                        stackStatus: stack.StackStatus
+                    }, null);
+                    break;
+                case 'CREATE_COMPLETE':
+                    callback(null, stack);
+                    break;
+                default:
+                    callback({
+                        stackStatus: stack.StackStatus
+                    }, null);
+                    return;
+            }
 
+        });
+
+    };
+
+    function listStackResources(stackNameOrId, nextToken, callback) {
+        cloudFormation.listStackResources({
+            StackName: stackNameOrId,
+            NextToken: nextToken
+        }, function(err, res) {
+            if (err) {
+                callback(err, null);
+                return;
+            };
+            callback(null, res);
+        });
+    }
+
+    this.listAllStackResources = function(stackNameOrId, callback) {
+        var self = this;
+        var resources = [];
+
+        function listResources(nextToken, callback) {
+            listStackResources(stackNameOrId, nextToken, function(err, res) {
+                if (err) {
+                    callback(err, null);
+                    return;
+                }
+                resources = resources.concat(res.StackResourceSummaries);
+                if (res.NextToken) {
+                    listResources(res.NextToken, callback);
+                } else {
+                    callback(null, resources);
+                }
+
+            });
+        }
+        listResources(null, callback);
+    };
 
 };
+
 
 module.exports = AWSCloudFormation;
