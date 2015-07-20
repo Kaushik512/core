@@ -244,6 +244,7 @@ var d4dMastersTemplatesList = new mongoose.Schema(
 	templatescookbooks: {type:String, trim:true},
 	orgname: {type:[String],required:false, trim:true},
 	orgname_rowid: {type:[String], trim:true},
+	template_filename: {type:String, trim:true},
 	active: {type:Boolean, trim:true,default:true},
 	rowid:{type:String,required:true, trim:true}},{collection:'d4dmastersnew'}
 );
