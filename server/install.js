@@ -262,7 +262,7 @@ function getConfig(config, options) {
 
 function installPackageJson() {
     console.log("Installing node packages from pacakge.json");
-    var procInstall = spawn('npm', ['install']);
+    var procInstall = spawn('npm', ['install','--unsafe-perm']);
     procInstall.stdout.on('data', function(data) {
         console.log("" + data);
     });
