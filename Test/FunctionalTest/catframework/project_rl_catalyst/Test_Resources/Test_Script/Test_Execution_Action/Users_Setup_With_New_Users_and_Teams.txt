@@ -81,6 +81,11 @@ Clicks Edit Button of the Relevance_lab_DEV and Assign Project
     Click Element    xpath=.//*[@id='projectname']/label[text()='${Proj2}']/i   
 
 
+ No roles assigned for user
+     [Arguments]    ${ErrMsg}
+     Element Should Contain    id=errmsg_userrolename    ${ErrMsg}
+     Clicks on UserCancel Button
+
 
 
 
@@ -89,9 +94,10 @@ Test Validation of Creation of New users
     Username field left empty  ${VaildateEmptyUserNameErrMsg}
     Vaildate the Empty Email Address
     Email field left empty  ${VaildateEmptyEmailNameErrMsg}
-    Vaildate the User Not in LDAP  ${ValidateNotExistLDAP}
-    Login Name with LDAP User  ${ValidNotLDAPExistErrMsg}
-
+    Validate the No Roles Selected in Users setup
+    No roles assigned for user  ${VaildNoRolesErrMsg}
+    #-Validate the No Teams Selected in Users setup
+    #-No Teams assigned for user  ${VaildNoTeamsErrMsg}
 
 Devops Config Management New Users
     Users Setup With New Users1
@@ -130,10 +136,6 @@ Validate the New User and Add Setup
 Test Validation of Creation of New Teams
     Vaildate the Empty Team Name
     Team name field left empty  ${VaildEmptyTeamNameErrMsg}
-    Vaildate the No Users Selected
-    Users left empty  ${VaildEmptyUsersErrMsg}
-    #Vaildate the No Projects Selected
-    #Projects left empty  ${VaildEmptyProjectsErrMsg}
     Vaildate the 22chrTeam Name feilds   ${Vaildate15ChrTeamName}        
     Team name with more than 15 characters   ${Vaildate15ChrTeamErrMsg}   
     Vaildate the Team Name Blankspace feilds  ${VaildateBlankSpacesTeamName}
@@ -165,16 +167,16 @@ Enters Email Address Login Name2
     Input Text    id=email    ${EMAIL ID2}    
 
 Enters LDAP Password for Login Name1
-    Input Text    id=userpassword    ${PASSWD1}
+    Input Text    id=password    ${PASSWD1}
 
 Enters LDAP Password for Login Name2
-    Input Text    id=userpassword    ${PASSWD2}    
+    Input Text    id=password    ${PASSWD2}    
 
 Enters Confirm LDAP Password for Login Name1
-    Input Text    id=userpassword1    ${PASSWD11}    
+    Input Text    id=cnfPassword    ${PASSWD11}    
 
 Enters Confirm LDAP Password for Login Name2
-    Input Text    id=userpassword1    ${PASSWD22}    
+    Input Text    id=cnfPassword    ${PASSWD22}    
 
 
 Assign Roles for Login Name1
@@ -355,7 +357,6 @@ Vaildate the User Not in LDAP
     Enters the UserLogname not in LDAP
     Enters Email Address
     Assign Roles
-    Add User to LDAP
     Enters LDAP Password
     Enters Confirm LDAP Password
     Assign Teams for users
@@ -385,7 +386,6 @@ Validate the Already existing Login Name
     Sleep    1s
     Enters Email Address
     Assign Roles
-    Add User to LDAP
     Enters LDAP Password
     Enters Confirm LDAP Password
     Assign Teams for users
@@ -410,9 +410,7 @@ Clicks on Teams
     Click Element    xpath=//a[contains(text(),'Teams')]       #Teams
 
 Assign Users
-    Click Element    xpath=.//*[@id='loginname']/label[text()="${LOG2}"]/i         #Designer
-    Click Element    xpath=.//*[@id='loginname']/label[text()="${LOG1}"]/i            #Admin
-    Click Element    xpath=.//*[@id='loginname']/label[text()="${LOG3}"]/i        #Consumer
+    Click Element    xpath=.//*[@id='loginname']/label[text()="${DESIGNER_NAME}"]/i         
 
 Assign Users2
     Click Element    xpath=.//*[@id='loginname']/label[text()="${LOG3}"]/i         #Designer
@@ -461,7 +459,7 @@ Enters the Team2 Description
     Input Text    id=description    ${TEAMDESCRIPTION2}
 
 Enters Login Name
-    Wait Until keyword Succeeds    1 minute     1 seconds    Input Text     id=loginname     ${LOG1}
+    Wait Until keyword Succeeds    1 minute     1 seconds    Input Text     id=loginname     ${UserLoginName}
      
 
 Enters Email Address
@@ -480,11 +478,11 @@ Add User to LDAP
     Click Element    id=chkadduserldap
 
 Enters LDAP Password
-    Wait Until keyword Succeeds    1 minute     1 seconds      Input Text    id=userpassword    Designer
+    Wait Until keyword Succeeds    1 minute     1 seconds      Input Text    id=password    Designer
 
 Enters Confirm LDAP Password
-    Wait Until keyword Succeeds    1 minute     1 seconds    Wait Until Element Is Visible    id=userpassword1
-    Input Text    id=userpassword1    Designer
+    Wait Until keyword Succeeds    1 minute     1 seconds    Wait Until Element Is Visible    id=cnfPassword
+    Input Text    id=cnfPassword    Designer
 
 Clicks on USave Button                                       
     Click Element    css=div.btn-group.pull-right > button      
@@ -570,14 +568,20 @@ Vaildate the Empty Email Address
     Clicks on New Button
     Enters Login Name
     Assign Roles
-    Add User to LDAP
     Enters LDAP Password
     Enters Confirm LDAP Password
-    Select org as ANY
     Assign Teams for users
     Clicks on USave Button
     
-    
+Validate the No Roles Selected in Users setup
+    Clicks on New Button
+    Enters Login Name
+    Enters Email Address
+    Enters LDAP Password
+    Enters Confirm LDAP Password
+    Assign Teams for users
+    Clicks on USave Button
+
 
 Vaildate the Empty User Name
     Clicks on USettings
@@ -586,10 +590,8 @@ Vaildate the Empty User Name
     Clicks on New Button
     Enters Email Address
     Assign Roles
-    Add User to LDAP
     Enters LDAP Password
     Enters Confirm LDAP Password
-    Select org as ANY
     Assign Teams for users
     Clicks on USave Button
 

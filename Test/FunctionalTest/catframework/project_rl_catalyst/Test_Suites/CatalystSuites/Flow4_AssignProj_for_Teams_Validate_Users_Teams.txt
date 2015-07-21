@@ -1,5 +1,5 @@
 *** Settings ***
-Documentation     Users_Teams_Flow.txt
+Documentation     Assign_Teams_For_Proj_Validate_sUsers_Teams_Flow.txt
 
 Resource           catalyst.txt
 Resource           ${CATALYST TEST DATA}/${TESTDATA}
@@ -11,28 +11,36 @@ Resource           ${CATALYST ACTION}/Organization_Setup_Action_Steps.txt
 
 
 *** Test Cases ***
-Catalyst new users setup
+Catalyst Edit the Teams Setup and Assign Projects
     [Tags]       Sanity               Smoke
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
-    Catalyst creates new org admin
-    Catalyst creates new org designer
-    Catalyst creates new org consumer
-        #-Sleep    1s
-    #-Addition of Random Numbers to Unique Names
-    #-Test Validation of Creation of New users
-    #-Devops Config Management New Users
-    #Devops Edit Users Setup               
+    Sleep    1s
+    Catalyst assigning of the projects to the default Teams         
     Catalyst Logout                      
     [Teardown]     Close Browser
 
-Catalyst new teams setup
+
+
+
+Catalyst Validate Users Setup
+    [Tags]       Sanity               Smoke
+#    Catalyst Login
+    Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
+    Sleep    1s
+    Test Validation of Creation of New users
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+
+
+
+Catalyst Validate Teams Setup
     [Tags]       Sanity               Smoke
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
-    #-Test Validation of Creation of New Teams
-    Catalyst creates New Teams  
-    #-Devops Edit Teams Setup             
+    Test Validation of Creation of New Teams
     Catalyst Logout                      
     [Teardown]     Close Browser
 

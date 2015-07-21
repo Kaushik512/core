@@ -9,12 +9,30 @@ Resource           ${CATALYST ACTION}/Organization_Setup_Action_Steps.txt
 
 	
 *** Test Cases ***
-Catalyst new Config management setup
+Catalyst Validation of ConfigManagement
     [Tags]       Sanity
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
 #    Catalyst Login
     Testing All New Config Management Conditions
+    Catalyst Logout
+    [Teardown]     Close Browser
+
+
+
+Catalyst Create New Config management setup
+    [Tags]       Sanity
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+#    Catalyst Login
     Create New Config Management
+    Catalyst Logout
+    [Teardown]     Close Browser
+
+
+
+Catalyst Verify Unique ChefServer,Organization and Org Disabled
+    [Tags]       Sanity
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+#    Catalyst Login
     Unique Devops Configuration Management
     Devops Click on Update of Your org and Org is disabled
     Catlayst Unique Organization Validation 
