@@ -213,7 +213,9 @@ taskSchema.statics.createNew = function(taskData, callback) {
             jobName: taskData.jobName,
             jobResultURL: taskData.jobResultURL,
             jobURL: taskData.jobURL,
-            autoSyncFlag: taskData.autoSyncFlag
+            autoSyncFlag: taskData.autoSyncFlag,
+            isParameterized: taskData.isParameterized,
+            parameterized: taskData.parameterized
         });
     } else if (taskData.taskType === TASK_TYPE.CHEF_TASK) {
         var attrJson = null;
@@ -335,7 +337,9 @@ taskSchema.statics.updateTaskById = function(taskId, taskData, callback) {
             jobName: taskData.jobName,
             jobResultURL: taskData.jobResultURL,
             jobURL: taskData.jobURL,
-            autoSyncFlag: taskData.autoSyncFlag
+            autoSyncFlag: taskData.autoSyncFlag,
+            isParameterized: taskData.isParameterized,
+            parameterized: taskData.parameterized
         });
     } else if (taskData.taskType === TASK_TYPE.CHEF_TASK) {
 

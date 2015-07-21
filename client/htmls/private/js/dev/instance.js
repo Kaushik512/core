@@ -388,11 +388,11 @@
              e.preventDefault();
              return false;
          }
-         if (!reqBody.fqdn.match(ipAddresRegExp) || !reqBody.fqdn.match(hostname)) {
-             alert("Please provide a valid IP Address or Hostname");
-             e.preventDefault();
-             return false;
-         }
+         // if (!reqBody.fqdn.match(ipAddresRegExp) || !reqBody.fqdn.match(hostname)) {
+         //     alert("Please provide a valid IP Address or Hostname");
+         //     e.preventDefault();
+         //     return false;
+         // }
 
          if (!reqBody.users) {
              alert('Please assign atleast one user');
