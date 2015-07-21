@@ -111,6 +111,17 @@ var Jenkins = function(options) {
         });
     };
 
+    this.getJobsBuildNumber = function(jobName,callback) {
+        jenkins.last_build_info(jobName, function(err, data) {
+            if (err) {
+                logger.error(err);
+                callback(err, null);
+                return;
+            }
+            callback(null, data);
+        });
+    };
+
 
 
 

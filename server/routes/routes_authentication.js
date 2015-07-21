@@ -104,29 +104,34 @@ module.exports.setRoutes = function(app) {
                     }
                     if (data && data.length) {
                         user.roleId = data[0].userrolename;
-                        // check for password
-                        authUtil.checkPassword(password, data[0].password, function(err, isMatched) {
-                            if(err){
-                                req.session.destroy();
-                                next(err);
-                                return;
-                            }
-                            if (!isMatched) {
-                                req.session.destroy();
-                                res.redirect('/public/login.html?o=try');
-                            } else {
-                                logger.debug('Just before role:', data[0].userrolename);
-                                user.roleName = "Admin";
-                                user.authorizedfiles = 'Track,Workspace,blueprints,Settings';
+                        if (typeof data[0].password != 'undefined') {
+                            // check for password
+                            authUtil.checkPassword(password, data[0].password, function(err, isMatched) {
+                                if (err) {
+                                    req.session.destroy();
+                                    next(err);
+                                    return;
+                                }
+                                if (!isMatched) {
+                                    req.session.destroy();
+                                    res.redirect('/public/login.html?o=try');
+                                } else {
+                                    logger.debug('Just before role:', data[0].userrolename);
+                                    user.roleName = "Admin";
+                                    user.authorizedfiles = 'Track,Workspace,blueprints,Settings';
 
-                                req.logIn(user, function(err) {
-                                    if (err) {
-                                        return next(err);
-                                    }
-                                    return res.redirect('/private/index.html');
-                                });
-                            }
-                        });
+                                    req.logIn(user, function(err) {
+                                        if (err) {
+                                            return next(err);
+                                        }
+                                        return res.redirect('/private/index.html');
+                                    });
+                                }
+                            });
+                        } else {
+                            req.session.destroy();
+                            res.redirect('/public/login.html?o=try');
+                        }
                     } else {
                         req.session.destroy();
                         res.redirect('/public/login.html?o=try');

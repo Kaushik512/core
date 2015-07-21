@@ -115,5 +115,25 @@ module.exports.setRoutes = function(app, verificationFunc) {
 
     });
 
+    app.get('/jenkins/:jenkinsId/job/:jobName/lastBuild', function(req, res) {
+        var jenkinsData = req.CATALYST.jenkins;
+
+        var jenkins = new Jenkins({
+            url: jenkinsData.jenkinsurl,
+            username: jenkinsData.jenkinsusername,
+            password: jenkinsData.jenkinspassword
+        });
+        jenkins.getJobsBuildNumber(req.params.jobName, function(err, jobOutput) {
+            if (err) {
+                logger.error('jenkins jobs fetch error', err);
+                res.send(500, errorResponses.jenkins.serverError);
+                return;
+            }
+            res.send(jobOutput);
+        });
+
+
+    });
+
 
 }

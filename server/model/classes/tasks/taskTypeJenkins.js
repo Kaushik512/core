@@ -12,6 +12,8 @@ var taskTypeSchema = require('./taskTypeSchema');
 var jenkinsTaskSchema = taskTypeSchema.extend({
     jenkinsServerId: String,
     jobName: String,
+    jobResultURL: String,
+    jobURL: String
 });
 
 // Instance Method :- run task
