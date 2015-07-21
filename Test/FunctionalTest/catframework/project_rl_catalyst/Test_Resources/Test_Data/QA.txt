@@ -10,8 +10,12 @@ Resource           catalyst.txt
 
 *** Variables ***
 ${BROWSERTYPE}                    chrome             
-${ENVIRONMENTSERVER}             http://d4d.relevancelab.com:3001 
-#http://10.0.1.206:3002/private/index.html#ajax/Settings/Dashboard.html
+${ENVIRONMENTSERVER}              http://10.0.1.206:3002/private/index.html#ajax/Settings/Dashboard.html
+#http://d4d.relevancelab.com:3001                
+
+
+             
+
  
 
 
@@ -71,7 +75,7 @@ ${UserName}             root
 ${RUNLIST}              recipe[apache2]
 ${KEYPAIRNAME}           cat_instances
 ${REGION NAME}           US West (Oregon) | us-west-2
-${SUBNET NAME}           subnet-3b1c1e4f (us-west-2a) public_cat_subnet
+${SUBNET NAME}           subnet-aed68ce8 (us-west-2c)
 ${NEW CONFIG NAME}       catserver
 
 ${PHOENIX COMMERNCE WITHOUT COOKBOOK UBUNTUOS}            Phoenix Commernce without Cookbook UbuntuOS
@@ -81,17 +85,17 @@ ${PHOENIX COMMERNCE WITHOUT COOKBOOK CENTOS}            Phoenix Commernce withou
 ${PHOENIX COMMERCE WITH COOKBOOK CENTOS}          Phoenix Commerce With CookBook CENTOS
 ${TASK NAME}          Test Task
 
-${USERPEMFILE}              ${ROOTPATH}\\Chef\\pcjoshi9.pem
-${VALIDATORPEMFILE}      ${ROOTPATH}\\Chef\\cat1-validator.pem
-${KNIFERBFILE}                ${ROOTPATH}\\Chef\\knife.rb
-${CATALYSTPEM}                ${ROOTPATH}\\Chef\\catalyst.pem
-${CAT_INSTANCES}              ${ROOTPATH}\\Chef\\cat_instances.pem
+${USERPEMFILE}              ${ROOTPATH}//Chef//pcjoshi9.pem
+${VALIDATORPEMFILE}      ${ROOTPATH}//Chef//cat1-validator.pem
+${KNIFERBFILE}                ${ROOTPATH}//Chef//knife.rb
+${CATALYSTPEM}                ${ROOTPATH}//Chef//catalyst.pem
+${CAT_INSTANCES}              ${ROOTPATH}//Chef//cat_instances.pem
 
-${CENTOSIMG}                  ${ROOTPATH}\\Images\\centos.jpg
-${UBUNTUIMG}                  ${ROOTPATH}\\Images\\ubuntuu.jpg
-${APPICON}                    ${ROOTPATH}\\Images\\rel.jpg    
-${TEMPLTYPEICON}              ${ROOTPATH}\\Images\\index.jpg           
-${APACHEIMG}                  ${ROOTPATH}\\Images\\apache.jpg
+${CENTOSIMG}                  ${ROOTPATH}//Images//centos.jpg
+${UBUNTUIMG}                  ${ROOTPATH}//Images//ubuntuu.jpg
+${APPICON}                    ${ROOTPATH}//Images//rel.jpg    
+${TEMPLTYPEICON}              ${ROOTPATH}//Images//index.jpg           
+${APACHEIMG}                  ${ROOTPATH}//Images//apache.jpg
 
 ${JENKINSNAME}            JenkinsTAT
 ${JENKINS URL}               http://54.68.204.110:9091/
@@ -194,8 +198,8 @@ ${RUNLIST2}                   cron
 ${RUNLIST3}                   recipe[cron]
 ${ALL}                        ALL
 ${REQ}                        Required
-${VPC}                        vpc-f432d791 (10.0.0.0/16) Prod-Catalyst-VPC
-${SECRTY GRP1}                sg-0e8b496a | ICMP
+${VPC}                        vpc-b1f3ecd3 (172.31.0.0/16) Default
+${SECRTY GRP1}                sg-c00ee1a5 | all_open
 ${SECRTY GRP2}                sg-c06faca4 | HTTP&S_SG
 ${SECRTY GRP3}                sg-038f4d67 | SSH_SG
 ${SECRTY GRP4}                sg-ab6faccf | Tomcat
@@ -433,11 +437,13 @@ ${VaildateEmptyEmailName}
 ${ValidAldyExistLogName}             userc
 ${EDIT EMAIL}                        AdminDave@gmail.com
 ${NEW USER}                           newipl
+${UserLoginName}                         JohnsonM
 
 ${VaildateEmptyUserNameErrMsg}           Required    
 ${VaildateEmptyEmailNameErrMsg}          Required
 ${ValidNotLDAPExistErrMsg}              selected is NOT in LDAP.
 ${ValidAldyExistLogNameErrMsg}          Selected is already registered
+${VaildNoRolesErrMsg}                     Atleast one required
 
 
 #Gallery Setup
