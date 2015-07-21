@@ -1188,6 +1188,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
         taskData.bgId = req.params.bgId;
         taskData.projectId = req.params.projectId;
         taskData.envId = req.params.envId;
+        taskData.autoSyncFlag = req.body.taskData.autoSyncFlag;
         Task.createNew(taskData, function(err, task) {
             if (err) {
                 logger.err(err);

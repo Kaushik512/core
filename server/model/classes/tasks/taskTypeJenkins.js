@@ -12,6 +12,7 @@ var taskTypeSchema = require('./taskTypeSchema');
 var jenkinsTaskSchema = taskTypeSchema.extend({
     jenkinsServerId: String,
     jobName: String,
+    autoSyncFlag: String,
     jobResultURL: String,
     jobURL: String
 });

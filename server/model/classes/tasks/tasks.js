@@ -212,7 +212,8 @@ taskSchema.statics.createNew = function(taskData, callback) {
             jenkinsServerId: taskData.jenkinsServerId,
             jobName: taskData.jobName,
             jobResultURL: taskData.jobResultURL,
-            jobURL: taskData.jobURL
+            jobURL: taskData.jobURL,
+            autoSyncFlag: taskData.autoSyncFlag
         });
     } else if (taskData.taskType === TASK_TYPE.CHEF_TASK) {
         var attrJson = null;
@@ -333,7 +334,8 @@ taskSchema.statics.updateTaskById = function(taskId, taskData, callback) {
             jenkinsServerId: taskData.jenkinsServerId,
             jobName: taskData.jobName,
             jobResultURL: taskData.jobResultURL,
-            jobURL: taskData.jobURL
+            jobURL: taskData.jobURL,
+            autoSyncFlag: taskData.autoSyncFlag
         });
     } else if (taskData.taskType === TASK_TYPE.CHEF_TASK) {
 

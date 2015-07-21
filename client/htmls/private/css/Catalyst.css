@@ -7979,17 +7979,10 @@ form.cmxform .gray * {
     }
 }
 
-.containerTable { 
-    
-    
-    
-    
-    }
-
-    .nodesTable{
-        margin-left: -13px;
-        width:110%;
-    }
+.nodesTable{
+    margin-left: -13px;
+    width:110%;    
+}
 
 .widthForButton{
     width:75%;
@@ -8001,5 +7994,32 @@ form.cmxform .gray * {
     float:left!important;
     margin-top:3px;
     margin-right:14px;
+}
+#jobParamTable>tbody>tr>td.jobParam{
+    width:23%!important;
+    padding-top: 17px!important;
+}
+#jobParamTable td{
+    border-top:none;
+}
+#booleanTable>tbody>tr>td.booleanParam{
+    width:20%!important;
+    padding-top: 17px!important;
+}
+#booleanTable td{
+    border-top:none;
+}
+#booleanTable thead th.headParamTable{
+    width:26%!important;
+}
+#stringTable>tbody>tr>td.stringParam{
+    width:20%!important;
+    padding-top: 17px!important;
+}
+#stringTable thead th.headStringTable{
+    width:26%!important;
+}
+#stringTable td{
+    border-top:none;
 }
 
