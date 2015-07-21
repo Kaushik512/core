@@ -11,15 +11,20 @@ Resource           ${CATALYST ACTION}/Organization_Setup_Action_Steps.txt
 
 
 *** Test Cases ***
-Catalyst Create on OrgAdmin as a User
+Catalyst Edit the Teams Setup and Assign Projects
     [Tags]       Sanity               Smoke
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
     Sleep    1s
-    Catalyst Creation of Team and assign to the User
-    Catalyst Creation of Users and Assign the Teams created           
+    #Catalyst Creation of Team and assign to the User
+    #Catalyst Creation of Users and Assign the Teams created
+    Catalyst assigning of the projects to the default Teams         
     Catalyst Logout                      
     [Teardown]     Close Browser
+
+
+
+
 
 
 

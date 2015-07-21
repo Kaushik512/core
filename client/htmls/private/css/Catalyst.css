@@ -62,8 +62,9 @@
 .selectedNodesChefTaskCSS{
     border:1px solid #dddddd;
     list-style:none outside none;
-    height:200px;
+    height:153px;
     overflow-y:auto;
+    margin-top: 5px!important;
 }
 .selectedNodesCustomTaskCSS{
     border:1px solid #dddddd;
@@ -1188,6 +1189,7 @@ label {
     position: relative;
     left: 0;
     height:91.6%!important;
+    height: calc(100% - 98px) !important;
     overflow-y:auto;
     overflow-x:hidden;
 }
@@ -4331,7 +4333,7 @@ float: left;
     display:inline-block;
 }
 .swap-view{
-    margin:5px;
+    margin:2px;
 }
 
 .chefCookbookList {
@@ -7881,21 +7883,44 @@ tr.selectedOne td a{
     background-color: #fff!important;
     font-size: 14px;
 }
+@media(min-width:1201px){
 .bootstrapSuccess{
-    margin-top: 150px;
+    margin-top: 130px;
     float:left;
-    margin-left: 300px;
-    width:416px;
+    margin-left: 285px;
+    width:auto;
     color:black!important;
     border-color: #40baf1!important;
     background-color: #fff!important;
     font-size: 16px;
+}
+}
+@media (min-width:768px) and (max-width:1200px){
+    .bootstrapSuccess{
+    margin-top: 105px;
+    float:left;
+    margin-left: 140px;
+    color:black!important;
+    border-color: #40baf1!important;
+    background-color: #fff!important;
+    font-size: 16px;
+    }
 }
 .bootstrapFailure{
     margin-top: 150px;
     float:left;
     margin-left: 300px;
     width:444px;
+    color:black!important;
+    border-color: #ebccd1;
+    background-color: #fff!important;
+    font-size: 16px;
+}
+.dataBagFailure{
+    margin-top: 50px;
+    float:left;
+    margin-left: 300px;
+    width:396px;
     color:black!important;
     border-color: #ebccd1;
     background-color: #fff!important;
@@ -7947,4 +7972,55 @@ input:focus {
 }
 form.cmxform .gray * {
     color: gray;
+}
+@-moz-document url-prefix()
+{
+    .form-controls{
+        padding:0px 0px!important;
+    }
+}
+
+.containerTable { 
+    
+    
+    
+    
+    }
+
+    .nodesTable{
+        margin-left: -13px;
+        width:110%;
+    }
+
+.widthForButton{
+    width:75%;
+}
+.marginLeft50{
+    margin-left: 50px;
+}
+.importButton{
+    float:left!important;
+    margin-top:3px;
+    margin-right:14px;
+}
+
+.instanceloaderspinner{
+    background-color: #fff;
+    border: 1px solid black;
+    height: 50px;
+    left: 50%;
+    padding-top: 14px;
+    position: fixed;
+    text-align: center;
+    top: 50%;
+    width: 200px;
+    z-index: 99999;
+}
+.instanceloaderspinner>img{
+    margin-right: 5px;
+}
+#tabInstanceStatus{
+    font-size: small;
+    margin-top: 21px;
+    text-align: center;
 }

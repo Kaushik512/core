@@ -462,6 +462,14 @@ function CreateTableFromJson(formID, idFieldName, createFileName) {
                 console.log("Value for all");
                 d4ddata[x].orgname[0] = "All";
             }
+            d4ddata[x]["cnfPassword"] = d4ddata[x].password;
+            /*if(d4ddata[x].password.length > 0){
+                //alert(d4ddata[x].password);
+                d4ddata[x] = {
+                    "cnfPassword" : d4ddata[x].password
+                };
+                //d4ddata[x].cnfPassword = d4ddata[x].password;
+            }*/
             /*else if(d4ddata[x].orgname === ""){
                     d4ddata[x].orgname = "All";
                 }*/
@@ -513,23 +521,45 @@ function CreateTableFromJson(formID, idFieldName, createFileName) {
         imageTD = $('.rowtemplate').find("[datatype='image']");
 
         editButton = $('.rowtemplate').find("[title='Update']");
-
         if (idFieldValue) {
             if (imageTD) {
                 if (imageTD.length > 0) {
-                    console.log("Template Icon:" + idFieldValue);
                     var imgpath = 'img/logo.png';
-                    if (imageTD.html().indexOf('<img') >= 0) {
+                    if (imageTD.html().indexOf('<img') >= 0 || imageTD.html().length === 0) {
                         imageTD.html(''); //fix for image tag gettnig embedded. - Vinod
                         imageTD.append($('<img src="' + imgpath + '" style="height:28px;width:auto"/>'));
-                    } else
+                        console.log(imageTD);
+                    } else {
                         imgpath = '/d4dMasters/image/' + idFieldValue + '__' + imageTD.attr('datafieldoriginal') + '__' + imageTD.html();
+                    }
+
+                    if(item.id === "16"){
+                        switch(item.templatetypename){
+                            case "AppFactory":
+                                imgpath = '/d4dMasters/image/16ae9c94-19f6-485a-8c17-9af7a0f5f23d__designtemplateicon__Appfactory.png';
+                                break;
+                            case "DevOpsRoles":
+                                imgpath = '/d4dMasters/image/9d14d362-493e-4d62-b029-a6761610b017__designtemplateicon__DevopsRoles.png';
+                                break;
+                            case "Docker":
+                                imgpath = '/d4dMasters/image/b02de7dd-6101-4f0e-a95e-68d74cec86c0__designtemplateicon__Docker.png';
+                                break;
+                            case "Desktop":
+                                imgpath = '/d4dMasters/image/02fcfdaf-0d35-42c7-aef4-ac0019911e21__designtemplateicon__Desktop Provisining.png';
+                                break;
+                            case "Environment":
+                                imgpath = '/d4dMasters/image/71e62952-b464-4980-b76b-482a129f5627__designtemplateicon__Environment.png';
+                                break;
+                            /*case "CloudFormation":
+                                imgpath = '/d4dMasters/image/4fdda07b-c1bd-4bad-b1f4-aca3a3d7ebd9__designtemplateicon__Cloudformation.png';
+                                break;*/
+                        }
+                    }
 
                     imageTD.html('');
                     imageTD.append($('<img src="' + imgpath + '" style="height:28px;width:auto"/>'));
 
                 }
-
             }
             if (editButton) {
                 editButton.attr("href", "#ajax/Settings/" + createFileName + "?" + idFieldValue);
@@ -1417,6 +1447,25 @@ function readform(formID) {
         $('#configname').attr('disabled', 'disabled').select2();
     }
 
+    if (formID === 7 && editMode === true) {
+        //$('#password').attr('disabled', 'disabled').select2();
+        //$('#cnfPassword').attr('disabled', 'disabled').select2();
+        //document.getElementById('password').style.display = "none";
+        //document.getElementById('cnfPassword').style.display = "none";
+        $(".row1").hide();
+       // $(".editPass").hide();
+        $(".checkPass").show();
+
+        //$(".row2").show();
+        /*var checkBoxForUser = $('<input type="checkbox" id="chkadduserldap" >&nbsp;<label for="chkadduserldap">Add User to LDAP</label></label><label id="msgchkadduserldap" style="display:none;color:red;"></label><br/></div>');
+        $('body').append(checkBoxForUser);*/
+
+    }
+
+    /*if (formID === 7 && editMode === false) {
+       $(".row2").hide(); 
+    }*/
+
     //Setting the header of the form to Edit if shown as Create
     var head = $('.widget-header').html().replace('Create', 'Edit').replace('New', 'Edit');
     $('.widget-header').html(head);
@@ -1984,15 +2033,35 @@ function CreateTableFromJsonNew(formID, idFieldName, createFileName) {
 function saveform(formID, operationTypes) {
     //Validating the form
 
-    if (isFormValid(formID) == false)
+    if (formID === "7") {
+        if (isFormValid(formID) == false || !validateUserForm(formID)) {
+            return (false);
+        }
+        if($("#chkadduserldap").is(':checked')){
+            if($('#password').val() === ''){
+                $(".requiredPassword").show();
+                return (false);
+            }else{
+                $(".requiredPassword").hide();
+            }
+            if($('#cnfPassword').val() === ''){
+                $(".requiredCnfPassword").show();
+                return (false);
+            }else{
+                $(".requiredCnfPassword").hide();
+            }
+        }
+    }else{
+        if (isFormValid(formID) == false)
         return (false);
-
+    }
 
     var data1 = new FormData();
     var fileNames = '';
     var orgName = $('#orgname').val().trim();
     var orgnamecheck = true;
-
+    /*var password = $('#password1').val();
+    console.log(password);*/
     // Not allowing team assignment for superadmin
 
     /*if (orgName === '') {
@@ -2213,6 +2282,9 @@ function saveform(formID, operationTypes) {
             data1.append('osusername', 'ubuntu');
         }
     }
+    /*if(formID === "7" && password.length > 0){
+        data1.append('password', password);
+    }*/
     console.log(orgName);
     // alert(serviceURL + "savemasterjsonrownew/" + formID + "/" + fileNames + "/" + orgName );
     $.ajax({
@@ -2827,6 +2899,49 @@ function errormessageforInput(id, msg) {
     }
 }
 
+function validateUserForm(formid) {
+    var isValid = true;
+    if ($('input[unique="true"], select[unique="true"]').length > 0) {
+        // alert('in isFormValid');
+        $('input[unique="true"], select[unique="true"]').each(function() {
+            $(this).trigger('blur');
+
+            if ($(this).closest('div').find('span[id*="unique_"]').length > 0 && $(this).closest('div').find('span[id*="unique_"]').text().indexOf('available') < 0) {
+                // alert('pusing isvalid false');
+                isValid = false;
+            }
+        });
+    }
+    if (location.toString().indexOf('?new') != -1) {
+        $('[cat-custom-validation]').each(function(itm) {
+            var currCtrl = $(this);
+            var valiarr = $(this).attr('cat-custom-validation').split(',');
+            //$('#unique_loginname').text().indexOf('NOT') > 0
+            if ($('#unique_' + currCtrl.attr('id')).text().indexOf('NOT') > 0) {
+                //There is an error message displayed. Do not save form
+                isValid = false;
+            }
+            var password = $('#password').val();
+            var cnfPassword = $('#cnfPassword').val();
+
+            //alert(currCtrl.attr('id'));
+            $.each(valiarr, function(vali) {
+                switch (valiarr[vali]) {
+                    case "required":
+                        if (currCtrl.val() == '') {
+                            isValid = false;
+                            errormessageforInput(currCtrl.attr('id'), "Required");
+                            currCtrl.focus();
+                        }
+                        break;
+                }
+            });
+        });
+        return (isValid);
+    }
+    return (isValid);
+}
+
 //run validation tests on inputs 
 function isFormValid(formid) {
     var isValid = true;
@@ -2851,6 +2966,9 @@ function isFormValid(formid) {
             //There is an error message displayed. Do not save form
             isValid = false;
         }
+        var password = $('#password').val();
+        var cnfPassword = $('#cnfPassword').val();
+            
         //alert(currCtrl.attr('id'));
         $.each(valiarr, function(vali) {
             switch (valiarr[vali]) {
@@ -2924,6 +3042,20 @@ function isFormValid(formid) {
                         currCtrl.focus();
                     }
                     break;
+                case "min6":
+                    if (currCtrl.val().length < 6) {
+                        isValid = false;
+                        errormessageforInput(currCtrl.attr('id'), "Atleast 6 characters required.");
+                        currCtrl.focus();
+                    }
+                    break;
+                case "cnfPass":
+                    if (password != cnfPassword) {
+                        isValid = false;
+                        errormessageforInput(currCtrl.attr('id'), "Password does not match.");
+                        currCtrl.focus();
+                    }
+                    break;
             }
 
         });
@@ -2979,12 +3111,14 @@ function enableUniqueCheckingForInputs(id) {
             //alert(typeof uni);
             if (uni.length > 0)
                 uni.html('');
+                //uni.append('<img style="width:18px;height:18px" src="img/correct.png" alt="success"/>');
             else {
                 //alert("in");
                 $(this).closest('div').find('label').first().append('<span id="unique_' + $(this).attr("id") + '" style="color:red"></span>');
                 uni = $('#unique_' + $(this).attr("id"));
             }
             var queryconditionedby = $(this).attr("uniqueconditionedby");
+            var queryconditionedbyURL = $(this).attr("uniqueconditionedbyUrl");
             if (queryconditionedby) {
 
                 // alert(queryconditionedby);
@@ -2994,11 +3128,29 @@ function enableUniqueCheckingForInputs(id) {
                 //alert(getBG != "" && uni.attr("id"));
                 if (getBG != 'Not Found') { //this ensures that its present
                     uni.css("color", "red");
-                    uni.html('Selected is already registered');
+                    uni.html('This entry is already registered. Try another?');
                     $(this).focus();
                 } else {
                     uni.css("color", "green");
                     uni.html('available');
+                   // uni.append('<img style="width:18px;height:18px" src="img/correct.png" alt="success"/>');
+                }
+            }
+            if (queryconditionedbyURL) {
+
+                // alert(queryconditionedby);
+                var getBG = getRelatedValuesForUniqueCheck(id, queryconditionedbyURL);
+                //alert(getBG);
+                //  alert('getBG !=' + getBG);
+                //alert(getBG != "" && uni.attr("id"));
+                if (getBG != 'Not Found') { //this ensures that its present
+                    uni.css("color", "red");
+                    uni.html('This Chef Server is already associated with an Organisation in Catalyst.');
+                    $(this).focus();
+                } else {
+                    uni.css("color", "green");
+                    uni.html('available');
+                   // uni.append('<img style="width:18px;height:18px" src="img/correct.png" alt="success"/>');
                 }
             }
             $('button[onclick*="saveform"]').removeAttr('disabled');
@@ -3026,7 +3178,7 @@ function checkusernameexistsinldap(inputID) {
             $.get('/auth/userexists/' + inp.val(), function(data) {
                 if (data == "false") {
                     uni.css("color", "red");
-                    uni.html('selected is NOT in LDAP.');
+                    uni.html('This entry is not available in LDAP.');
                     $(this).focus();
                 }
                 $('button[onclick*="saveform"]').removeAttr('disabled');

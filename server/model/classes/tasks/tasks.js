@@ -61,6 +61,9 @@ var taskSchema = new Schema({
         required: true,
         trim: true
     },
+    description: {
+        type: String
+    },
     taskConfig: Schema.Types.Mixed,
     lastTaskStatus: String,
     lastRunTimestamp: Number,
@@ -207,7 +210,9 @@ taskSchema.statics.createNew = function(taskData, callback) {
         taskConfig = new JenkinsTask({
             taskType: TASK_TYPE.JENKINS_TASK,
             jenkinsServerId: taskData.jenkinsServerId,
-            jobName: taskData.jobName
+            jobName: taskData.jobName,
+            jobResultURL: taskData.jobResultURL,
+            jobURL: taskData.jobURL
         });
     } else if (taskData.taskType === TASK_TYPE.CHEF_TASK) {
         var attrJson = null;
@@ -326,7 +331,9 @@ taskSchema.statics.updateTaskById = function(taskId, taskData, callback) {
         taskConfig = new JenkinsTask({
             taskType: TASK_TYPE.JENKINS_TASK,
             jenkinsServerId: taskData.jenkinsServerId,
-            jobName: taskData.jobName
+            jobName: taskData.jobName,
+            jobResultURL: taskData.jobResultURL,
+            jobURL: taskData.jobURL
         });
     } else if (taskData.taskType === TASK_TYPE.CHEF_TASK) {
 
@@ -349,7 +356,8 @@ taskSchema.statics.updateTaskById = function(taskId, taskData, callback) {
         $set: {
             name: taskData.name,
             taskConfig: taskConfig,
-            taskType: taskData.taskType
+            taskType: taskData.taskType,
+            description: taskData.description
         }
     }, {
         upsert: false
@@ -364,6 +372,26 @@ taskSchema.statics.updateTaskById = function(taskId, taskData, callback) {
 
     });
 
+};
+
+taskSchema.statics.getTasksByNodeIds = function(nodeIds, callback) {
+    if (!nodeIds) {
+        nodeIds = [];
+    }
+    console.log("nodeids ==> ", nodeIds,typeof nodeIds[0]);
+    Tasks.find({
+        "taskConfig.nodeIds": {
+            "$in": nodeIds
+        }
+    }, function(err, tasks) {
+        if (err) {
+            callback(err, null);
+            return;
+        }
+        //console.log('data ==>', data);
+        callback(null, tasks);
+
+    });
 };
 
 

@@ -37,7 +37,8 @@
         "passport-strategy": "1.0.0",
         "activedirectory": "0.6.3",
         "scp2": "0.2.2",
-        "shell-escape": "0.2.0"
+        "shell-escape": "0.2.0",
+        "bcryptjs": "2.2.0"
     },
     "devDependencies": {
         "grunt": "0.4.5",

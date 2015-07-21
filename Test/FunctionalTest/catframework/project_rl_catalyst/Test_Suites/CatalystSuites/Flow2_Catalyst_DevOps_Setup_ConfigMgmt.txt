@@ -1,0 +1,34 @@
+*** Settings ***
+Documentation     Devops_Configmgmt_setup_Flow.txt
+
+Resource           catalyst.txt
+Resource           ${CATALYST TEST DATA}/${TESTDATA}
+Resource           ${CATALYST ACTION}/DevOps_Setup_Action_Steps.txt
+Resource           ${COMMON RESOURCES}/catalyst_grid_node.txt
+Resource           ${CATALYST ACTION}/Organization_Setup_Action_Steps.txt
+
+	
+*** Test Cases ***
+Catalyst new Config management setup
+    [Tags]       Sanity
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+#    Catalyst Login
+    Testing All New Config Management Conditions
+    Create New Config Management
+    Unique Devops Configuration Management
+    Devops Click on Update of Your org and Org is disabled
+    Catlayst Unique Organization Validation 
+    Catalyst Logout
+    [Teardown]     Close Browser
+
+
+
+
+
+
+
+
+
+
+
+

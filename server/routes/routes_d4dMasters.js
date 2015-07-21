@@ -22,6 +22,8 @@ var exec = childProcess.exec;
 var masterUtil = require('../lib/utils/masterUtil.js');
 var blueprintsDao = require('../model/dao/blueprints');
 var errorResponses = require('./error_responses.js');
+var bcrypt = require('bcryptjs');
+var authUtil = require('../lib/utils/authUtil.js');
 
 
 module.exports.setRoutes = function(app, sessionVerification) {
@@ -682,16 +684,16 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     } else if (req.params.id === '16') {
                         // For Template
                         logger.debug("Id for templateType:>> ", req.params.id);
-                        /*masterUtil.getTemplateTypes(orgList,function(err,templateList){
+                        masterUtil.getTemplateTypes(orgList,function(err,templateList){
                                 if(err){
                                     res.send(500,'Not able to fetch TemplateType.');
                                 }
                                 logger.debug("Returned TemplateType List:>>>>> ",JSON.stringify(templateList));
                                 res.send(JSON.stringify(templateList));
                                 return;
-                            });*/
+                            });
 
-                        d4dModelNew.d4dModelMastersDesignTemplateTypes.find({
+                        /*d4dModelNew.d4dModelMastersDesignTemplateTypes.find({
                             id: req.params.id
                         }, function(err, data) {
                             if (err) {
@@ -700,7 +702,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                             }
                             logger.debug("Called /d4dMasters/readmasterjsonnew/ for non superadmin.");
                             res.send(JSON.stringify(data));
-                        });
+                        });*/
 
                     } else if (req.params.id === '19') {
                         // For ServiceCommand
@@ -846,16 +848,16 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     } else if (req.params.id === '16') {
                         // For Template
                         logger.debug("Id for templateType:>> ", req.params.id);
-                        /*masterUtil.getTemplateTypes(orgList,function(err,templateList){
+                        masterUtil.getTemplateTypes(orgList,function(err,templateList){
                                 if(err){
                                     res.send(500,'Not able to fetch TemplateType.');
                                 }
                                 logger.debug("Returned TemplateType List:>>>>> ",JSON.stringify(templateList));
                                 res.send(JSON.stringify(templateList));
                                 return;
-                            });*/
+                            });
 
-                        d4dModelNew.d4dModelMastersDesignTemplateTypes.find({
+                        /*d4dModelNew.d4dModelMastersDesignTemplateTypes.find({
                             id: req.params.id
                         }, function(err, data) {
                             if (err) {
@@ -864,7 +866,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                             }
                             logger.debug("Called /d4dMasters/readmasterjsonnew/ for non superadmin.");
                             res.send(JSON.stringify(data));
-                        });
+                        });*/
 
                     } else if (req.params.id === '19') {
                         // For ServiceCommand
@@ -2555,66 +2557,121 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                 res.send(500, "Failed to save Org.");
                                                 return;
                                             }
-                                            for (var x = 0; x < 4; x++) {
-                                                var teamName;
-                                                var descriptions;
-                                                if (x === 0) {
-                                                    teamName = bodyJson["orgname"] + "_Admins";
-                                                    descriptions = "Team For " + teamName;
-                                                } else if (x === 1) {
-                                                    teamName = bodyJson["orgname"] + "_DEV";
-                                                    descriptions = "Team For " + teamName;
-                                                } else if (x === 2) {
-                                                    teamName = bodyJson["orgname"] + "_QA";
-                                                    descriptions = "Team For " + teamName;
-                                                } else {
-                                                    teamName = bodyJson["orgname"] + "_DevOps";
-                                                    descriptions = "Team For " + teamName;
-                                                }
-
-                                                logger.debug("orgname_rowid>>>>>>>>>>>>>>>> ", bodyJson["rowid"]);
-
-                                                var teamData = {
-                                                    "teamname": teamName,
-                                                    "description": descriptions,
-                                                    "orgname": bodyJson["orgname"],
-                                                    "orgname_rowid": bodyJson["rowid"],
-                                                    "rowid": uuid.v4(),
-                                                    "id": "21",
-                                                    "loginname": "",
-                                                    "loginname_rowid": "",
-                                                    "projectname": "",
-                                                    "projectname_rowid": ""
-
-                                                };
-                                                logger.debug("teamData>>>>>>>>>>>>>>>>>>>>>>>> ", teamData);
-                                                var teamModel = new d4dModelNew.d4dModelMastersTeams(teamData);
-                                                teamModel.save(function(err, aTeam) {
-                                                    if (err) {
-                                                        //res.send(500,"Failed to save Team.");
-                                                        logger.debug("Failed to save Team.");
+                                            for (var x1 = 0; x1 < 5; x1++) {
+                                                (function(x1) {
+                                                    var templatetypename;
+                                                    var designtemplateicon_filename;
+                                                    var templatetype;
+                                                    if (x1 === 0) {
+                                                        templatetypename = "AppFactory";
+                                                        designtemplateicon_filename = "Appfactory.png";
+                                                        templatetype = "chef";
+                                                    } else if (x1 === 1) {
+                                                        templatetypename = "DevOpsRoles";
+                                                        designtemplateicon_filename = "DevopsRoles.png";
+                                                        templatetype = "chef";
+                                                    } else if (x1 === 2) {
+                                                        templatetypename = "Desktop";
+                                                        designtemplateicon_filename = "Desktop Provisining.png";
+                                                        templatetype = "chef";
+                                                    } else if (x1 === 3) {
+                                                        templatetypename = "Environment";
+                                                        designtemplateicon_filename = "Environment.png";
+                                                        templatetype = "chef";
+                                                    } else {
+                                                        templatetypename = "Docker";
+                                                        designtemplateicon_filename = "Docker.png";
+                                                        templatetype = "docker";
                                                     }
-                                                    logger.debug("Auto created Team:>>>>>>>> ", JSON.stringify(aTeam));
-                                                });
-                                                if (x === 3) {
-                                                    res.send(200);
-                                                    return;
-                                                }
+
+                                                    var templateTypeData = {
+                                                        "templatetypename": templatetypename,
+                                                        "orgname": bodyJson["orgname"],
+                                                        "orgname_rowid": bodyJson["rowid"],
+                                                        "rowid": uuid.v4(),
+                                                        "id": "16",
+                                                        "templatetype": templatetype
+
+                                                    };
+
+                                                    var templateTypeModel = new d4dModelNew.d4dModelMastersDesignTemplateTypes(templateTypeData);
+                                                    templateTypeModel.save(function(err, aTemplateType) {
+                                                        if (err) {
+                                                            //res.send(500,"Failed to save Team.");
+                                                            logger.debug("Failed to save TemplateType.");
+                                                        }
+                                                        logger.debug("Default TemplateType created.");
+                                                    });
+                                                })(x1);
+                                            }
+                                            for (var x = 0; x < 4; x++) {
+                                                (function(x) {
+                                                    var teamName;
+                                                    var descriptions;
+                                                    if (x === 0) {
+                                                        teamName = bodyJson["orgname"] + "_Admins";
+                                                        descriptions = "Team For " + teamName;
+                                                    } else if (x === 1) {
+                                                        teamName = bodyJson["orgname"] + "_DEV";
+                                                        descriptions = "Team For " + teamName;
+                                                    } else if (x === 2) {
+                                                        teamName = bodyJson["orgname"] + "_QA";
+                                                        descriptions = "Team For " + teamName;
+                                                    } else {
+                                                        teamName = bodyJson["orgname"] + "_DevOps";
+                                                        descriptions = "Team For " + teamName;
+                                                    }
+
+                                                    logger.debug("orgname_rowid>>>>>>>>>>>>>>>> ", bodyJson["rowid"]);
+
+                                                    var teamData = {
+                                                        "teamname": teamName,
+                                                        "description": descriptions,
+                                                        "orgname": bodyJson["orgname"],
+                                                        "orgname_rowid": bodyJson["rowid"],
+                                                        "rowid": uuid.v4(),
+                                                        "id": "21",
+                                                        "loginname": "",
+                                                        "loginname_rowid": "",
+                                                        "projectname": "",
+                                                        "projectname_rowid": ""
+
+                                                    };
+                                                    logger.debug("teamData>>>>>>>>>>>>>>>>>>>>>>>> ", teamData);
+                                                    var teamModel = new d4dModelNew.d4dModelMastersTeams(teamData);
+                                                    teamModel.save(function(err, aTeam) {
+                                                        if (err) {
+                                                            //res.send(500,"Failed to save Team.");
+                                                            logger.debug("Failed to save Team.");
+                                                        }
+                                                        logger.debug("Auto created Team:>>>>>>>> ", JSON.stringify(aTeam));
+                                                    });
+                                                    if (x === 3) {
+                                                        res.send(200);
+                                                        return;
+                                                    }
+                                                })(x);
 
                                             }
 
                                         });
-                                    } else {
-                                        logger.debug("FLD>>>>>>>>>>>>> ", FLD);
-                                        eval('var mastersrdb =  new d4dModelNew.' + dbtype + '({' + JSON.parse(FLD) + '})');
-                                        mastersrdb.save(function(err, data) {
+                                    } else if (req.params.id === '7') {                                        
+                                        authUtil.hashPassword(bodyJson["password"], function(err, hashedPassword) {
                                             if (err) {
-                                                logger.error('Hit Save error', err);
+                                                logger.error('Hit error', err);
                                                 res.send(500);
                                                 return;
-
                                             }
-                                            if (req.params.id === '7') {
+                                            logger.debug("hashedPassword: ", hashedPassword);
+                                            bodyJson["password"] = hashedPassword;
+                                            var userModel = new d4dModelNew.d4dModelMastersUsers(bodyJson);
+                                            userModel.save(function(err, data) {
+                                                if (err) {
+                                                    logger.error('Hit Save error', err);
+                                                    res.send(500);
+                                                    return;
+
+                                                }
                                                 var teamName = bodyJson["teamname"].split(",");
                                                 var rowId = bodyJson["teamname_rowid"].split(",");
                                                 for (var x = 0; x < rowId.length; x++) {
@@ -2653,70 +2710,24 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                         });
 
                                                     });
+                                                    if(x=== rowId.length-1){
+                                                        res.send(200);
+                                                        return;
+                                                    }
                                                 }
+                                            });
+                                        });
+
+                                    } else {
+                                        logger.debug("FLD>>>>>>>>>>>>> ", FLD);
+                                        eval('var mastersrdb =  new d4dModelNew.' + dbtype + '({' + JSON.parse(FLD) + '})');
+                                        mastersrdb.save(function(err, data) {
+                                            if (err) {
+                                                logger.error('Hit Save error', err);
+                                                res.send(500);
+                                                return;
+
                                             }
-
-                                            /*if(req.params.id === '21'){
-                                                var projectName = bodyJson["projectname"];
-                                                d4dModelNew.d4dModelMastersTeams.update({
-                                                    rowid: bodyJson["rowid"],
-                                                    id: "21"
-                                                },{
-                                                    $set:{
-                                                        projectname: projectName
-                                                    }
-                                                },{
-                                                    upsert: false
-                                                },function(err,updateCount){
-                                                    if(err){
-                                                        logger.debug("Team update Fail..",err);
-                                                    }
-                                                });
-                                            }*/
-
-                                            /*if (req.params.id === '4') {
-                                                var teamName = bodyJson["teamname"].split(",");
-                                                var rowId = bodyJson["teamname_rowid"].split(",");
-                                                logger.debug("For Project+++++++++++++++++++++ ", JSON.stringify(rowId));
-                                                for (var x = 0; x < rowId.length; x++) {
-                                                    (function(x) {
-                                                        d4dModelNew.d4dModelMastersTeams.find({
-                                                            rowid: rowId[x]
-                                                        }, function(err, teamData) {
-                                                            if (err) {
-                                                                logger.debug("Error : ", err);
-                                                            }
-                                                            logger.debug("Got Teams<<<<<<<<<<<<<<<<<<<<<", teamData[0].projectname_rowid);
-                                                            var newproj = bodyJson['rowid'];
-                                                            var newprojname = bodyJson["projectname"];
-                                                            if (teamData[0] != null && teamData[0].projectname_rowid !== 'undefined' && teamData[0].projectname_rowid != '') {
-                                                                if (teamData[0].projectname_rowid.indexOf(bodyJson['rowid']) < 0) {
-                                                                    newproj = teamData[0].projectname_rowid + ',' + bodyJson['rowid'];
-                                                                    newprojname = teamData[0].projectname + ',' + bodyJson["projectname"];
-                                                                }
-                                                            }
-                                                            logger.debug("newproj+++++++++++++ ", newproj);
-                                                            logger.debug("newprojname+++++++++++++ ", newprojname);
-                                                            teamData[0].projectname = newprojname;
-                                                            teamData[0].projectname_rowid = newproj;
-                                                            //logger.debug("Got New Team<<<<<<<<<<<<<<<<<<<<< ", teamData[0]);
-                                                            d4dModelNew.d4dModelMastersTeams.update({
-                                                                rowid: teamData[0].rowid
-                                                            }, {
-                                                                $set: JSON.parse(JSON.stringify(teamData[0]))
-                                                            }, {
-                                                                upsert: false
-                                                            }, function(err, updatedTeam) {
-                                                                if (err) {
-                                                                    logger.debug("Failed to update Team<<<<<<<<<<<<<<<< ", errorResponses.db.error);
-                                                                }
-                                                                logger.debug("Successfully Team updated with User.");
-                                                            });
-
-                                                        });
-                                                    })(x);
-                                                }
-                                            }*/
                                         logger.debug('New Master Saved');
                                         logger.debug(req.params.fileinputs == 'null');
                                         logger.debug('New record folderpath: % rowid %s FLD["folderpath"]:', folderpath, newrowid, folderpath);
@@ -2757,6 +2768,112 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                         });
                                     }
                                 } else {
+
+                                    // Update settings
+                                    if (req.params.id === "7") {
+                                        d4dModelNew.d4dModelMastersUsers.find({
+                                            "id": req.params.id,
+                                            loginname: bodyJson["loginname"]
+                                        }, function(err, anUser) {
+                                            if (err) {
+                                                logger.debug("Error to fetch user.");
+                                                res.send(500, "Error to fetch User.");
+                                                return;
+                                            }
+                                            logger.debug("Fetched User: ", JSON.stringify(anUser));
+                                            if (anUser.length) {
+                                                if(bodyJson["password"] === ''){
+
+                                                    delete rowtoedit._id; //fixing the issue of 
+                                                        if (bodyJson["orgname"] === "") {
+                                                            logger.debug("Inside if for empty for update..");
+                                                            rowtoedit["orgname"] = [""];
+                                                            rowtoedit["orgname_rowid"] = [""];
+                                                        }
+                                                        rowtoedit["password"] = anUser[0].password;
+                                                        logger.debug('Rowtoedit: %s', JSON.stringify(rowtoedit));
+                                                        eval('d4dModelNew.' + dbtype).update({
+                                                            rowid: bodyJson["rowid"],
+                                                            "id" : "7"
+                                                        }, {
+                                                            $set: rowtoedit
+                                                        }, {
+                                                            upsert: false
+                                                        }, function(err, saveddata) {
+                                                            if (err) {
+                                                                logger.error('Hit Save error', err);
+                                                                res.send(500);
+                                                                return;
+                                                            }
+                                                            res.send(200);
+                                                            return;
+                                                        });
+
+                                                }else if (bodyJson["password"] != anUser[0].password) {
+                                                    authUtil.hashPassword(bodyJson["password"], function(err, hashedPassword) {
+                                                        if (err) {
+                                                            logger.error('Hit error', err);
+                                                            res.send(500);
+                                                            return;
+                                                        }
+                                                        logger.debug("hashedPassword: ", hashedPassword);
+                                                        delete rowtoedit._id; //fixing the issue of 
+                                                        if (bodyJson["orgname"] === "") {
+                                                            logger.debug("Inside if for empty for update..");
+                                                            rowtoedit["orgname"] = [""];
+                                                            rowtoedit["orgname_rowid"] = [""];
+                                                        }
+                                                        rowtoedit["password"] = hashedPassword;
+                                                        logger.debug('Rowtoedit: %s', JSON.stringify(rowtoedit));
+                                                        eval('d4dModelNew.' + dbtype).update({
+                                                            rowid: bodyJson["rowid"],
+                                                            "id" : "7"
+                                                        }, {
+                                                            $set: rowtoedit
+                                                        }, {
+                                                            upsert: false
+                                                        }, function(err, saveddata) {
+                                                            if (err) {
+                                                                logger.error('Hit Save error', err);
+                                                                res.send(500);
+                                                                return;
+                                                            }
+                                                            res.send(200);
+                                                            return;
+                                                        });
+                                                    });
+                                                }else{
+                                                    delete rowtoedit._id; //fixing the issue of 
+                                                    if (bodyJson["orgname"] === "") {
+                                                            logger.debug("Inside if for empty for update..");
+                                                            rowtoedit["orgname"] = [""];
+                                                            rowtoedit["orgname_rowid"] = [""];
+                                                        }
+                                                        logger.debug('Rowtoedit: %s', JSON.stringify(rowtoedit));
+                                                        eval('d4dModelNew.' + dbtype).update({
+                                                            rowid: bodyJson["rowid"],
+                                                            "id" : "7"
+                                                        }, {
+                                                            $set: rowtoedit
+                                                        }, {
+                                                            upsert: false
+                                                        }, function(err, saveddata) {
+                                                            if (err) {
+                                                                logger.error('Hit Save error', err);
+                                                                res.send(500);
+                                                                return;
+                                                            }
+                                                            res.send(200);
+                                                            return;
+                                                        });
+                                                }
+                                            }else{
+                                                res.send(404);
+                                                return;
+                                            }
+                                        });
+                                    }
+
                                     if(req.params.id === "3"){
                                         d4dModelNew.d4dModelMastersProjects.find({
                                                     environmentname_rowid:{
@@ -2774,11 +2891,6 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                     logger.debug("Rowid: %s", bodyJson["rowid"]);
                                     var currowid = bodyJson["rowid"];
                                     delete rowtoedit._id; //fixing the issue of 
-                                    if (req.params.id === '7' && bodyJson["orgname"] === "") {
-                                        logger.debug("Inside if for empty for update..");
-                                        rowtoedit["orgname"] = [""];
-                                        rowtoedit["orgname_rowid"] = [""];
-                                    }
                                     logger.debug('Rowtoedit: %s', JSON.stringify(rowtoedit));
                                     eval('d4dModelNew.' + dbtype).update({
                                         rowid: bodyJson["rowid"]

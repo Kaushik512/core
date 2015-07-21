@@ -374,20 +374,17 @@ success: function(data, success) {
 
 function getOrganizationList(){
   $.get('/d4dMasters/readmasterjsonnew/1',function(data){
-    var str='';
+    var str=' <option value="">Select Organization</option>',len=data.length;
     for(var i=0;i<data.length;i++){
-      if(data[i].active){
         str=str+'<option value="'+data[i]._id+'">'+data[i].orgname+'</option>';
-      }
     }
     $('#orgId').html(str);
-    //debugger;
     if( $('#orgId').attr('answer')){
       $('#orgId').val($('#orgId').attr('answer')).select2();
     }else{
     $('#orgId').val("").select2();
     }
-  });
+  })
 }
 function getRegionList(){
   $.get('/vmimages/regions/list',function(data){

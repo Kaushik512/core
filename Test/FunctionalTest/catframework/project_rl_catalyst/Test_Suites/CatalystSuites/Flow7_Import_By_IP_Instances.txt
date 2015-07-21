@@ -20,14 +20,15 @@ Catalyst Import CentOS Node By IP
     [Teardown]     Close Browser
     
 
-Catalyst Chef Client Run on the Imported Node
+Catalyst Chef Client Run-SSH,Verification on the Imported Node
     [Tags]       Sanity       ps
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
-    Catalyst Import By IP Chef Client run
-    ##Catalyst Verify the Chef BootStrap,SSH,Status,Start,Stop
+    Catalyst Import By IP Chef Client run,SSH,Stop,Start
+    Catalyst Verfication of IP,Status,Chef,SSH,MoreInfo and frm Ctrlpanel
     Catalyst Logout
     [Teardown]     Close Browser
+
 
 Catalyst Edit the Instance Name of Inported Instance
     [Tags]       Sanity       ps
@@ -61,7 +62,6 @@ Catalyst CentOS Instance Deleted only from Catalyst not from Chef Server
 
 
 
-
 Catalyst Import Ubuntu Node By IP
     [Tags]       Sanity       ps
 #    Catalyst Login
@@ -72,12 +72,13 @@ Catalyst Import Ubuntu Node By IP
     [Teardown]     Close Browser
 
 
-Catalyst Chef Client Run on the UbuntuOS Imported Node
+
+Catalyst Chef Client Run-SSH,Verification on the Ubuntu Imported Node
     [Tags]       Sanity       ps
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
-    Catalyst Import By IP Chef Client run on Ubuntu Instance
-    ##Catalyst Verify the Chef BootStrap,SSH,Status,Start,Stop
+    Catalyst Import By IP Chef Client run,SSH,Stop,Start on Ubuntu Instance
+    Catalyst Verfication of IP,Status,Chef,SSH,MoreInfo on UbuntuIns frm Ctrlpanel
     Catalyst Logout
     [Teardown]     Close Browser
 
@@ -133,54 +134,6 @@ Catalyst Ubuntu Instance Deleted only from Catalyst not from Chef Server
 
 
 
-
-
-
-
-
-
-#-Catalyst CentOS Instance Deleted only from Catalyst not from Chef Server
-    #-[Tags]       Sanity       ps
-#    Catalyst Login
-    #-Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
-    #-Catalyst Delete the Node only From Catalyst
-    #-Catalyst Logout
-    #-[Teardown]     Close Browser     
-
-
-
-#-Catalyst Importing Node From Chef Server
-    #-[Tags]       Sanity       ps
-#    Catalyst Login
-    #-Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
-    #-Catlayst Importing the Instance Chef Sync
-    #-Catalyst Logout
-    #-[Teardown]     Close Browser     
-
-
-#-Catalyst import chef server Cent OS nodes by IP Address           #from IP
-    #-[Tags]       Sanity       ps
-#    Catalyst Login
-    #-Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
-    #-Catalyst Creation of CentOS Template
-    #-Creation of CentOS Blueprint
-    #-Catalyst Launch of CentOS Blueprint
-    #Chef node import by IP CentOS Instance
-    #-Catalyst Logout
-    #-[Teardown]     Close Browser
-
- 
-
-#-Catalyst import chef server Ubuntu OS nodes by IP Address           #from IP
-    #-[Tags]       Sanity       ps
-#    Catalyst Login
-    #-Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"   
-    #-Catalyst Creation of UBuntuOS Template
-    #-Creation of UbuntuOS Blueprint
-    #-Catalyst Launch of UbuntuOS Blueprint
-    #Chef node import by IP Ubuntu Instance
-    #-Catalyst Logout
-    #-[Teardown]     Close Browser
 
 
 

@@ -9,13 +9,12 @@ Resource           catalyst.txt
 
 
 *** Variables ***
-${BROWSER TYPE}                     chrome              #firefox                     #internetexplorer               #phantomjs
-${ENVIRONMENTSERVER}         http://52.27.46.167:3001 
-
-
-
-
+${BROWSERTYPE}                    chrome             
+${ENVIRONMENTSERVER}             http://d4d.relevancelab.com:3001 
+#http://10.0.1.206:3002/private/index.html#ajax/Settings/Dashboard.html
  
+
+
 
 ${ENV}                 QA.txt
 ${VALID USER}             superadmin
@@ -31,7 +30,7 @@ ${PROJECT DESCRIPTION}           Catalyst product automation Description
 ${ENVIRONMENT NAME}              Dev
 ${CONFIG MANAGEMENT NAME}             RLChefServer
 ${CONFIG MANAGEMENT USER NAME}         pcjoshi9
-${CONFIG MANAGEMENT URL}         https://api.opscode.com/organizations/cat1	
+${CONFIG MANAGEMENT URL}         https://api.opscode.com/organizations/cat1
 ${PROVIDER}             Data Center
 ${ASSIGN USERS}         Designer
 ${ASSIGN USERS1}        superadmin          #Consumer
@@ -46,7 +45,7 @@ ${TOTAL MEMORY}     604680kB
 ${FREE MEMORY}      298024kB
 ${ENVIRONMENTSER NAME}          _default
 ${NEW EMAIL}                  crickinfo@gmail.com
-${AlreadyExistOrg}            Selected is already registered
+${AlreadyExistOrg}            This entry is already registered. Try another?
 ${IPTEXT}                   undefined
 ${STATS}                    pending
 ${STATSYY}                  Pending
@@ -68,6 +67,12 @@ ${DISABLED}           disabled
 ${CENT OS}            Cent OS
 ${UBUNTU OS}            ubuntu
 ${SUITS}                stopped
+${UserName}             root
+${RUNLIST}              recipe[apache2]
+${KEYPAIRNAME}           cat_instances
+${REGION NAME}           US West (Oregon) | us-west-2
+${SUBNET NAME}           subnet-3b1c1e4f (us-west-2a) public_cat_subnet
+${NEW CONFIG NAME}       catserver
 
 ${PHOENIX COMMERNCE WITHOUT COOKBOOK UBUNTUOS}            Phoenix Commernce without Cookbook UbuntuOS
 ${PHOENIX COMMERCE WITH COOKBOOK UBUNTUOS}          Phoenix Commerce With CookBook ubuntuOS
@@ -76,8 +81,8 @@ ${PHOENIX COMMERNCE WITHOUT COOKBOOK CENTOS}            Phoenix Commernce withou
 ${PHOENIX COMMERCE WITH COOKBOOK CENTOS}          Phoenix Commerce With CookBook CENTOS
 ${TASK NAME}          Test Task
 
-${USERPEMFILE}              ${ROOTPATH}\\Chef\\pcjoshi9.pem 
-${VALIDATORPEMFILE}      ${ROOTPATH}\\Chef\\pjlab-validator.pem
+${USERPEMFILE}              ${ROOTPATH}\\Chef\\pcjoshi9.pem
+${VALIDATORPEMFILE}      ${ROOTPATH}\\Chef\\cat1-validator.pem
 ${KNIFERBFILE}                ${ROOTPATH}\\Chef\\knife.rb
 ${CATALYSTPEM}                ${ROOTPATH}\\Chef\\catalyst.pem
 ${CAT_INSTANCES}              ${ROOTPATH}\\Chef\\cat_instances.pem
@@ -96,9 +101,12 @@ ${TASK NAME}              Task1
 ${JENKINS SERVER}         Jenkins
 ${JENKINS EDIT}           Jenkins
 ${JOB NAME}               catalyst_Get
-
+${RECIPE}                  recipe[apt]     
+${RECIPE1}                 recipe[apt]
+${Template Type}           Chef
 ${OPERATING SYSTEM}        Cent OS
-${INSTANCE SIZE}           t1.micro
+${CentosInstanceSize}           m1.small
+${UbuntuInstanceSize}      t2.small      
 ${BLUEPRINT NAME}          ApacheNew
 ${BLUEPRINT NAME1}         UbuntuApac
 ${NEW BLUEPRINT NAME}      ApacheNew-Edited
@@ -110,6 +118,8 @@ ${TERMINAL USERNAME}       root
 ${TASK TYPE}               Jenkins
 ${TASK TYPE1}              Chef 
 ${CHEF TASKNAME}           ChefTask
+${SERVICE NAME}             MongoDB
+${TEMP NME}                 Apac
 
 ${REPO URL}                https://github.com/RLIndia/D4D
 ${REPO USER}               arabind 
@@ -128,21 +138,23 @@ ${MAT MEM}                 604488kB
 ${MAT FREEMEM}             80476kB
 ${MAT OS}                  centos
 ${MAT BOOTSTRAP}           success
-${MAT RUNLIST}             recipe[a]          #recipe[apache2],recipe[git],recipe[cron]
+${MAT RUNLIST}             recipe[apt]          #recipe[cron]
 ${MAT RUNLIST1}            recipe[a],recipe[cron]
 ${MAT OS1}                 ubuntu
 ${UBUNTU MEM}              1016256kB
-${UBUNTU REC}              recipe[a],recipe[a],recipe[cron]
-${TEMPLATE TYPENAME}       AppFactory
+${UBUNTU REC}              recipe[apt],recipe[apt]
+${TEMPLATE TYPENAME}       CatAutomatn          #AppFactory
 ${random}                  adarsh
 ${ADD}                     apache2              #tomcat-all
 ${ACTBOOT1}                 Pending
 ${ACTBOOT2}                 Success
-${IP Centos}                 52.24.73.49
+${IP Centos}                 52.26.250.34
+${RUN}                       running
 ${AUTHN}                    Pem File 
 ${NAME}                     Bootstrap
 ${DUP MSG}                  An Instance with the same IP already exists.
 ${NAME1}                    Chef-Client-Run
+${NAME2}                    SSH-Shell
 ${TEAM1}                    Rel_Designer
 ${TEAM DESCRPN1}            Designer of Catalyst
 ${TEAM2}                    Rel_Consumer
@@ -156,24 +168,37 @@ ${PASSWD2}                  Consumer
 ${PASSWD11}                 Designer
 ${PASSWD22}                 Consumer 
 ${EDIT_INSTANCE_NAME}       Instance_Centos
-${ERRORMESSAGE}             Please enter instance name
+${ERRORMESSAGE}             Required        #Please enter instance name
 ${MORE INFO}                 SSH Terminal
 ${NO MATCH}                 No matches found
 ${ENVNAME}                  QA
 ${NAMEOFINSTANCE}           Instance_Centos
-${IP Ubuntu}                52.10.75.4
+${IP Ubuntu}                52.26.196.140
 ${IP UBUNTUSERNAME}         ubuntu
 ${EDIT_UBUNTU_INSTANCE_NAME}     Instance_Ubuntu
 ${DESIGNER_NAME}            Designer01
 ${DESIGNER_PASWD}           Designer01
 ${CONSUMER_NAME}            Consumer01
 ${CONSUMER_PASWD}           Consumer01
-${CENTOS NAME}              "Instance_Centos"
-${UBUNTU NAME}              "Instance_Ubuntu"
-${IP ADD UBUNTU}             "52.10.75.4"
-${IP ADD CENTOS}             "52.24.73.49" 
-
-
+${CENTOS NAME}              Instance_Centos
+${UBUNTU NAME}              Instance_Ubuntu
+${IP ADD UBUNTU}             52.26.196.140
+${IP ADD CENTOS}             52.26.250.34
+${Proj1}                      Catalyst
+${Proj2}                      Primary_Edu
+${CookBkName}                 apt
+${UbuntuUser}                 ubuntu
+${MAT OS1}                    ubuntu
+${RUNLIST1}                   recipe[tomcat-all]
+${RUNLIST2}                   cron 
+${RUNLIST3}                   recipe[cron]
+${ALL}                        ALL
+${REQ}                        Required
+${VPC}                        vpc-f432d791 (10.0.0.0/16) Prod-Catalyst-VPC
+${SECRTY GRP1}                sg-0e8b496a | ICMP
+${SECRTY GRP2}                sg-c06faca4 | HTTP&S_SG
+${SECRTY GRP3}                sg-038f4d67 | SSH_SG
+${SECRTY GRP4}                sg-ab6faccf | Tomcat
 
 
 
@@ -193,8 +218,8 @@ ${IMAGE ID1}                   ami-b6bdde86
 ${IMAGE ID2}                   ami-3d50120d
 ${IMAGE ID3}                   ami-21732111
 ${USER}                        superadmin
-${COOKBOOK NAME1}              service_apache       #apache2
-${SERVICE NAME1}               Apachenew
+${COOKBOOK NAME1}              apache2                #service_apache       #apache2
+${SERVICE NAME1}               ApacheServce
 ${ValidEditVMImage}            Windows 2008
 
 
@@ -251,9 +276,9 @@ ${VaildateBlankSpacesOrgName}       Relevance Labs
 ${VaildateEmptyOrgName}            
 ${VaildateSpecialChrOrgName}       RL&@Testing
 ${VaildateAlreadyExistChrOrgName}  phoenixInc
-${VaildOrgName}                    Relevance_Labs
+${VaildOrgName}                    Relevance
 ${VaildEditOrg}                    Relevance_Labs
-${VaildEditOrgDomainName}       https://www.relevancelab.com
+${VaildEditOrgDomainName}       http://www.relevancelab.com
 
 
 ${Vaildate15ChrErrMsg}            limited to 15 chars
@@ -262,7 +287,7 @@ ${VaildateEmptyErrMsg}            Required
 ${VaildateSpecialChrErrMsg}       special chars not allowed
 ${VaildateAlreadyExistErrMsg}     Selected is already registered
 ${OrganizationMsg}                Relevance_Labs
-${OrganizationDomainMsg}        https://www.relevancelab.com
+${OrganizationDomainMsg}        http://www.relevancelab.com
 
 
 #Environment Name
@@ -370,8 +395,8 @@ ${VaildEmptyValidatorname}
 ${VaildEmptyKnifename}
 
 
-${ValidateAlrdyExistConfigNameErrMsg}    Selected is already registered
-${ValidateAlrdyExistOrgNameErrMsg}       Selected is already registered
+${ValidateAlrdyExistConfigNameErrMsg}    This entry is already registered. Try another?
+${ValidateAlrdyExistOrgNameErrMsg}       This entry is already registered. Try another?
 ${VaildEmptyURLErrMsg}                   Please enter a valid Url
 ${VaildEmptyConfignameErrMsg}           Required
 ${VaildEmptyUsernameErrMsg}             Required
@@ -421,7 +446,7 @@ ${Vaild15ChrTemplateName}                ReelvanceLabsTemplat
 ${ValidTEditemplName}                    ApacRelevance
 ${Vaild15ChrTempName}                    CatalystAutomation
 ${VaildSpacesTEmpTyName}                 Catlsyt Auto
-${TEMPLATE NAME}                         ApacRelevance
+${TEMPLATE NAME}                        ApacRelevance
 
 
 ${VaildEmptyTemplateNameErrMsg}              Required
@@ -435,7 +460,7 @@ ${VaildBlankspErrMsg}                       space(s) not allowed
 #Service Setup
 ${VaildEmptyServiceName}
 ${Vaild15ChrServiceName}                        SQLLiteRelevance
-${ValidEditService}                              Apache2
+${ValidEditService}                              MongoDB
 ${VaildBlkSerName}                              Apache New
 ${VaildSpclCharName}                            Apache@##$
 
@@ -476,4 +501,8 @@ ${UBUNBLUEPRINT NAME}                UbuntuOS
 
 
 
-
+#Team Names
+${DEF TEAMNAME1}                Relevance_Labs_Admins
+${DEF TEAMNAME2}                Relevance_Labs_DEV
+${DEF TEAMNAME3}                Relevance_Labs_DevOps
+${DEF TEAMNAME4}                Relevance_Labs_QA

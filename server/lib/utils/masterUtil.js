@@ -867,10 +867,11 @@ var MasterUtil = function(){
                                         }
                                         logger.debug("allTeams:::::::::::::: ", JSON.stringify(allTeams));
                                         for (var xy = 0; xy < allTeams.length; xy++) {
-
+                                            (function(xy){
+                                            if(typeof allTeams[xy].orgname_rowid != "undefined" && typeof allTeams[xy].projectname_rowid != "undefined"){
                                             d4dModelNew.d4dModelMastersOrg.find({
                                                 rowid: {
-                                                    $in: allTeams[0].orgname_rowid
+                                                    $in: allTeams[xy].orgname_rowid
                                                 },
                                                 id: "1",
                                                 active: true
@@ -890,10 +891,10 @@ var MasterUtil = function(){
                                                 }
                                                 d4dModelNew.d4dModelMastersProjects.find({
                                                     orgname_rowid: {
-                                                        $in: allTeams[0].orgname_rowid
+                                                        $in: allTeams[xy].orgname_rowid
                                                     },
                                                     rowid:{
-                                                        $in: allTeams[0].projectname_rowid.split(",")
+                                                        $in: allTeams[xy].projectname_rowid.split(",")
                                                     },
                                                     id: "4"
                                                 }, function(err, project) {
@@ -912,7 +913,7 @@ var MasterUtil = function(){
                                                     }
                                                     d4dModelNew.d4dModelMastersProductGroup.find({
                                                         orgname_rowid: {
-                                                            $in: allTeams[0].orgname_rowid
+                                                            $in: allTeams[xy].orgname_rowid
                                                         },
                                                         id: "2"
                                                     }, function(err, bg) {
@@ -940,6 +941,8 @@ var MasterUtil = function(){
                                                 // }
 
                                             });
+                                            }//if
+                                        })(xy);
                                         }
                                     });
                                 } // for multiple orgs
@@ -1422,6 +1425,38 @@ var MasterUtil = function(){
 
         });
     }
+
+    var getPermissionForCategory = function(category, permissionto, permissionset) {
+        var perms = [];
+        if (permissionset) {
+            for (var i = 0; i < permissionset.length; i++) {
+                var obj = permissionset[i].permissions;
+                for (var j = 0; j < obj.length; j++) {
+                    if (obj[j].category == category) {
+                        var acc = obj[j].access.toString().split(',');
+                        for (var ac in acc) {
+                            if (perms.indexOf(acc[ac]) < 0)
+                                perms.push(acc[ac]);
+                        }
+
+                    }
+                }
+            }
+            if (perms.indexOf(permissionto) >= 0) {
+                return (true);
+            } else
+                return (false);
+        } else {
+            return (false);
+        }
+    };
+
+    // Check wheather permission is there for user or not.
+    this.hasPermission = function(category, permissionto, sessionUser, callback) {
+        var retVal = '';
+        retVal = getPermissionForCategory(category, permissionto, sessionUser.permissionset);
+        callback(null, retVal);
+    };
 }
 
 

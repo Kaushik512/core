@@ -37,7 +37,6 @@ Catalyst new VM IMAGE setup
 
 
 
-
 Catalyst new CENT OS DESIGN setup
     [Tags]       Sanity               Smoke
 #    Catalyst Login
@@ -105,19 +104,19 @@ Catalyst new UBUNTU WORKZONE setup
     [Teardown]     Close Browser
 
 
-#-Catalyst UBUNTU INSTANCE CONTROL PANEL setup
-    #-[Tags]       Sanity               Smoke
+Catalyst UBUNTU INSTANCE CONTROL PANEL setup
+    [Tags]       Sanity               Smoke
 #    Catalyst Login
-    #-Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
-    #-Catlayst verfication of Instance Stop Setup and Disable of Ubuntu
-    #=Catalyst Logout                      
-    #-[Teardown]     Close Browser
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catlayst verfication of Instance Stop Setup and Disable of Ubuntu
+    Catalyst Logout                      
+    [Teardown]     Close Browser
 
 
-#-Catalyst Ubuntu Instance Grid View of Stopped Instance and Restart,SSH,Chef Run,Start
-    #-[Tags]       Sanity               Smoke
+Catalyst Ubuntu Instance Grid View of Stopped Instance and Restart,SSH,Chef Run,Start
+    [Tags]       Sanity               Smoke
 #    Catalyst Login
-    #-Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
-    #-Catalyst Grid View Start ,Stop ,SSH ,Chef ,Client ,Log Setup
-    #-Catalyst Logout                      
-    #-[Teardown]     Close Browser 
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst Grid View Start ,Stop ,SSH ,Chef ,Client ,Log Setup of Ubuntu
+    Catalyst Logout                      
+    [Teardown]     Close Browser 

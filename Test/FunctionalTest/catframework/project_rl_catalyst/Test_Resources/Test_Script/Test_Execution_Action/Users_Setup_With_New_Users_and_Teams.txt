@@ -53,6 +53,37 @@ Catalyst Creation of Users and Assign the Teams created
     Clicks on USave Button
 
 
+Catalyst assigning of the projects to the default Teams
+    Clicks on Settings
+    Clicks on Users Setup
+    Clicks on Teams
+    Sleep    3s
+    Clicks Edit Button of the Relevance_lab_Admin and Assign Project
+    Clicks on TSave button
+    Sleep    4s
+    Clicks Edit Button of the Relevance_lab_DEV and Assign Project 
+    Clicks on TSave button
+
+
+
+Clicks Edit Button of the Relevance_lab_Admin and Assign Project
+    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${ORGANIZATION NAME}_Admins']/../td[5]/div/a
+    Sleep    1s
+    Click Element    xpath=.//*[@id='projectname']/label[text()='${Proj1}']/i
+    Sleep    1s
+    Click Element    xpath=.//*[@id='projectname']/label[text()='${Proj2}']/i
+
+Clicks Edit Button of the Relevance_lab_DEV and Assign Project
+    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${ORGANIZATION NAME}_DEV']/../td[5]/div/a
+    Sleep    1s
+    Click Element    xpath=.//*[@id='projectname']/label[text()='${Proj1}']/i
+    Sleep    1s
+    Click Element    xpath=.//*[@id='projectname']/label[text()='${Proj2}']/i   
+
+
+
+
+
 Test Validation of Creation of New users
     Vaildate the Empty User Name 
     Username field left empty  ${VaildateEmptyUserNameErrMsg}
@@ -172,9 +203,7 @@ Enters the New Team2 Description for OrgAdmin
 
 
 Select the Organization the Admin Created
-    Click Element    xpath=.//*[@id='s2id_orgname']/a/span[1]
-    Input Text    xpath=.//*[@id='select2-drop']/div/input    ${ORGANIZATION NAME}
-    Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
+    Select From List     id=orgname      ${ORGANIZATION NAME} 
 
 Assign the User as OrgAdmin
     Sleep    1s
@@ -396,7 +425,7 @@ Assign Projects2
     Click Element    xpath=.//*[@id='projectname']/label[text()="Primary_Edu"]/i      #Primary_Edu
 
 Clicks on TSave Button
-    Click Element    xpath=.//*[@id='myForm3']/div/div[3]/div/button       #Save 
+    Click Element    css=div.btn-group.pull-right > button       #Save 
 
 
 Clicks on USettings                                                     #User setup new users start
@@ -411,8 +440,8 @@ Clicks on Users
     Click Element    xpath=//a[contains('Users',.)]
     
 Clicks on New Button
-    Wait Until keyword Succeeds    1 minute     1 seconds    Wait Until Element Is Visible    xpath=.//*[@id='newUser']
-    Click Element    xpath=.//*[@id='newUser']
+    Wait Until keyword Succeeds    1 minute     1 seconds    Wait Until Element Is Visible    css=#newUser
+    Click Element    css=#newUser
 
 Clicks on New Team Button
     Wait Until keyword Succeeds    1 minute     1 seconds    Wait Until Element Is Visible    xpath=.//*[@id='newTeam']
@@ -458,7 +487,8 @@ Enters Confirm LDAP Password
     Input Text    id=userpassword1    Designer
 
 Clicks on USave Button                                       
-    Click Element    xpath=.//*[@id='myForm5']/div/div[3]/div/button       
+    Click Element    css=div.btn-group.pull-right > button      
+
 
 
 Users setup Login processCont

@@ -13,11 +13,12 @@ Catalyst new Config management setup
     [Tags]       Sanity
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
 #    Catalyst Login
-    Testing All New Config Management Conditions
+     Navigates to Config Management page
+#    Testing All New Config Management Conditions
     Create New Config Management
-    Unique Devops Configuration Management
-    Devops Click on Update of Your org and Org is disabled
-    Catlayst Unique Organization Validation 
+#    Unique Devops Configuration Management
+#    Devops Click on Update of Your org and Org is disabled
+#    Catlayst Unique Organization Validation 
     Catalyst Logout
     [Teardown]     Close Browser
 

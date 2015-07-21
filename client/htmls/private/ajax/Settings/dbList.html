@@ -22,6 +22,7 @@
 
                                   <div class="widget-body">
                                     <div class="nodeListContainer"></div>
+                                    <div class="alert alert-warning dataBagFailure hidden"><img style="width:50px;height:40px" src="img/warning.png" alt="warning"/><span style="margin-left:20px;">The ChefServer credentials are incorrect.</span></div>
                     <div class="widget-main dataBagTable hidden">
                         <div class="col-md-4 table-responsive" style="padding-left:0px; padding-right:0px;">
                           <a href="#modalForDB" data-backdrop="false" data-toggle="modal" style="cursor:pointer;"> <img src="img/add.png" style="float:right;" class="addDB" rel="tooltip" data-placement="top" title="Add New Data Bag"/></a>
@@ -216,7 +217,7 @@ $('.addDB').click(function(e) {
 $('.addList').click(function(e) {
     $('#instanceItemName').trigger('reset');
     $('input.listID').removeAttr('disabled');
-    //$('#listNameTable tbody tr').removeClass('selectedOne');
+
     $('#jsonData').hide();
 });
 
@@ -251,6 +252,20 @@ if (!$.fn.dataTable.isDataTable('#listNameTable')) {
 
 $(document).ready(function(e) {
 
+    var hasCreateDataBagPermission = false;
+    if (haspermission('databag', 'create')) {
+        hasCreateDataBagPermission = true;
+    }
+    if (haspermission('databag', 'modify')) {
+        hasCreateDataBagPermission = true;
+    }
+    if (haspermission('databag', 'delete')) {
+        hasCreateDataBagPermission = true;
+    }
+    if (!hasCreateDataBagPermission) {
+        $('#modalForDB').addClass('hidden');
+    }
+
     var urlParams = {};
     (window.onpopstate = function() {
         var url = window.location.href;
@@ -282,21 +297,36 @@ $(document).ready(function(e) {
 
     function getDataBagList() {
         //for getting the list of data-bags
+        if(!urlParams.id) {
+          return;
+        }
         var chefServer = '../chef/servers/' + urlParams.id + '/databag/list';
         $.get(chefServer, function(data) {
             // console.log(data);
             if (data) {
-                //console.log(data);
+                console.log(data);
                 $.each(data, function(k) {
                     $('.nodeListContainer').addClass('hidden');
                     $('.dataBagTable').removeClass('hidden');
                     createDataBagTable(k);
                 });
+                $('.nodeListContainer').addClass('hidden');
+                $('.dataBagTable').removeClass('hidden');
                 $('#dbNameTable tbody tr:first').trigger('click');
             } else {
                 $('.nodeListContainer').addClass('hidden');
                 $('.dataBagTable').removeClass('hidden');
             }
+        }).fail(function(jxhr){
+          var msg = "Server Behaved Unexpectedly";
+            if (jxhr.responseJSON && jxhr.responseJSON.message) {
+                msg = jxhr.responseJSON.message;
+            } else if (jxhr.responseText) {
+                msg = jxhr.responseText;
+            }
+          bootbox.alert(msg);
+          $('.nodeListContainer').addClass('hidden');
+          $('.dataBagFailure').removeClass('hidden');
         });
     };
 
@@ -347,8 +377,14 @@ $(document).ready(function(e) {
                             $('#dbNameTable tbody tr:first').trigger('click');
 
                         },
-                        fail: function() {
-                            alert("Unable to delete URL please try again later");
+                        fail: function(jxhr) {
+                            var msg = "Unable to delete URL please try again later";
+                            if (jxhr.responseJSON && jxhr.responseJSON.message) {
+                                msg = jxhr.responseJSON.message;
+                            } else if (jxhr.responseText) {
+                                msg = jxhr.responseText;
+                            }
+                            bootbox.alert(msg);
                         }
                     });
                 }
@@ -390,6 +426,7 @@ $(document).ready(function(e) {
         });
         return $tr;
 
+      return $tr;
 
         console.log(">>>>>>>>>>>>>>>>>>>>>>>>");
 
@@ -404,7 +441,7 @@ $(document).ready(function(e) {
         var listItems = '../chef/servers/' + urlParams.id + '/databag/' + dataBagName + '/item/list';
         $.get(listItems, function(data) {
 
-           
+
             console.log(typeof data);
             if (data.length > 0) {
                 $.each(data, function(k) {
@@ -417,12 +454,21 @@ $(document).ready(function(e) {
                 });
                 $('#listNameTable tbody tr:first').trigger('click');
             } else {
-                $('#listNameTable').data('loading',false);
+                $('#listNameTable').data('loading', false);
                 $('.spinner').addClass('hidden');
                 $('.tableForList').show().data('dataBagName', dataBagName);
             }
-        }).fail(function(){
-           $('#listNameTable').data('loading',false);
+        }).fail(function(jxhr) {
+            $('#listNameTable').data('loading', false);
+            var msg = "Server Behaved Unexpectedly.";
+            if (jxhr.responseJSON && jxhr.responseJSON.message) {
+                msg = jxhr.responseJSON.message;
+            } else if (jxhr.responseText) {
+                msg = jxhr.responseText;
+            }
+            bootbox.alert(msg);
+
+            
         });
     };
 
@@ -458,18 +504,37 @@ $(document).ready(function(e) {
                 $('#saveBTN').removeAttr('disabled');
                 createDataBagTable(reqBodyName.name).click();
 
+
             },
-            error: function(jqxhr) {
-                bootbox.alert(jqxhr.responseText);
+            error: function(jxhr) {
+                var msg = "Server Behaved Unexpectedly.";
+                if (jxhr.responseJSON && jxhr.responseJSON.message) {
+                    msg = jxhr.responseJSON.message;
+                } else if(jxhr.responseText) {
+                  msg = jxhr.responseText;
+                }
+                bootbox.alert(msg);
                 $('#saveSpinner').addClass('hidden');
                 $('#saveBTN').removeAttr('disabled');
             },
-            failure: function(data) {
-                bootbox.alert(data.responseText);
+            failure: function(jxhr) {
+                var msg = "Server Behaved Unexpectedly.";
+                if (jxhr.responseJSON && jxhr.responseJSON.message) {
+                    msg = jxhr.responseJSON.message;
+                } else if(jxhr.responseText) {
+                  msg = jxhr.responseText;
+                }
+                bootbox.alert(msg);
+                
                 $('#saveSpinner').addClass('hidden');
                 $('#saveBTN').removeAttr('disabled');
             }
         });
+        return false;
+    });
+
+  $('#modalForItems').on('hidden.bs.modal', function() {
+        $('#listNameTable tbody tr.selectedOne').trigger('click');
         return false;
     });
 
@@ -502,8 +567,8 @@ $(document).ready(function(e) {
               $('#listNameTable').data('loading',true);
             $.get('../chef/servers/' + urlParams.id + '/databag/' + dataBagName + '/item/' + itemId + '/find', function(data) {
                 // alert('hello');
-                 $('#listNameTable').data('loading',false);
-                $('#listNameTable').data('loadingItem',false);
+                $('#listNameTable').data('loading', false);
+                $('#listNameTable').data('loadingItem', false);
                 console.log(data);
                 var res = JSON.stringify(data, null, '\t');
                 $('.spinnerList').addClass('hidden');
@@ -511,12 +576,21 @@ $(document).ready(function(e) {
                 $('#listTable thead').find('tr.rowCustomStyle td').html(itemId);
                 //$('#listTable tbody').find('tr')
                 $('#jsonListName').val(res);
-            }).fail(function(){
-                $('#listNameTable').data('loadingItem',false);
-               $('#listNameTable').data('loading',false);
+            }).fail(function(jxhr) {
+                $('#listNameTable').data('loadingItem', false);
+                $('#listNameTable').data('loading', false);
+                var msg = "Server Behaved Unexpectedly.";
+                if (jxhr.responseJSON && jxhr.responseJSON.message) {
+                    msg = jxhr.responseJSON.message;
+                } else if (jxhr.responseText) {
+                    msg = jxhr.responseText;
+                }
+                bootbox.alert(msg);
+                
             });
         });
-        
+      return $trForItems;
+
 
         //for edit
         $tdForItems.find('button.editRow').click(function() {
@@ -543,6 +617,15 @@ $(document).ready(function(e) {
 
                 var res = JSON.stringify(data, null, '\t');
                 $('#instanceListName').val(res);
+            }).fail(function(jxhr){
+                var msg = "Server Behaved Unexpectedly.";
+                if (jxhr.responseJSON && jxhr.responseJSON.message) {
+                    msg = jxhr.responseJSON.message;
+                } else if (jxhr.responseText) {
+                    msg = jxhr.responseText;
+                }
+                bootbox.alert(msg);
+
             });
             return false;
         });
@@ -566,8 +649,14 @@ $(document).ready(function(e) {
                             $itemDatatable.row($trNew).remove().draw(false);
                             $('#listNameTable tbody tr:first').trigger('click');
                         },
-                        fail: function() {
-                            alert("Unable to delete URL please try again later");
+                        error: function(jxhr) {
+                            var msg = "Unable to delete URL please try again later";
+                            if (jxhr.responseJSON && jxhr.responseJSON.message) {
+                                msg = jxhr.responseJSON.message;
+                            } else if (jxhr.responseText) {
+                                msg = jxhr.responseText;
+                            }
+                            bootbox.alert(msg);
                         }
                     });
                 }
@@ -577,10 +666,7 @@ $(document).ready(function(e) {
         return $trForItems;
     };
 
-    $('#modalForItems').on('hidden.bs.modal', function() {
-        $('#listNameTable tbody tr.selectedOne').trigger('click');
-        return false;
-    });
+    
 
     //for list items
     $('.addList').click(function(e) {
@@ -648,21 +734,38 @@ $(document).ready(function(e) {
                 $('#saveItemSpinner').addClass('hidden');
                 $('#saveBTNList').removeAttr('disabled');
                 console.log(itemsEditNew);
+
                 if (itemsEditNew === 'new') {
                     console.log(itemID);
                     createItemTableRow(itemID).click();
                     $('#saveBTNList').removeAttr('disabled');
                 }
             },
-            error: function(jqxhr) {
-                bootbox.alert(jqxhr.responseText);
+            error: function(jxhr) {
+              console.log(jxhr);
+                var msg = "Server Behaved Unexpectedly";
+                if (jxhr.responseJSON && jxhr.responseJSON.message) {
+                    msg = jxhr.responseJSON.message;
+                } else if (jxhr.responseText) {
+                    msg = jxhr.responseText;
+                }
+                bootbox.alert(msg);
+
                 $('#saveItemSpinner').addClass('hidden');
                 $('#saveBTNList').removeAttr('disabled');
             },
-            failure: function(data) {
-                bootbox.alert(data.responseText);
+            failure: function(jxhr) {
+              console.log(jxhr);
+                var msg = "Server Behaved Unexpectedly";
+                if (jxhr.responseJSON && jxhr.responseJSON.message) {
+                    msg = jxhr.responseJSON.message;
+                } else if(jxhr.responseText) {
+                  msg = jxhr.responseText;
+                }
+                bootbox.alert(msg);
+
                 $('#saveItemSpinner').addClass('hidden');
-                //$('#saveBTNList').removeAttr('disabled');
+                $('#saveBTNList').removeAttr('disabled');
             }
         });
         return false;
