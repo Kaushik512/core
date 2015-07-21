@@ -1189,6 +1189,7 @@ label {
     position: relative;
     left: 0;
     height:91.6%!important;
+    height: calc(100% - 98px) !important;
     overflow-y:auto;
     overflow-x:hidden;
 }
@@ -8003,3 +8004,23 @@ form.cmxform .gray * {
     margin-right:14px;
 }
 
+.instanceloaderspinner{
+    background-color: #fff;
+    border: 1px solid black;
+    height: 50px;
+    left: 50%;
+    padding-top: 14px;
+    position: fixed;
+    text-align: center;
+    top: 50%;
+    width: 200px;
+    z-index: 99999;
+}
+.instanceloaderspinner>img{
+    margin-right: 5px;
+}
+#tabInstanceStatus{
+    font-size: small;
+    margin-top: 21px;
+    text-align: center;
+}

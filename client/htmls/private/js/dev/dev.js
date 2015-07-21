@@ -225,7 +225,7 @@
                                                            }
                                                            if (instanceId) {
                                                                $.get('../instances/' + instanceId, function(data) {
-                                                                   console.log(data);
+                                                                   console.log('Got ' + data.length + ' instances');
                                                                    //found now delete
                                                                    var dialog = bootbox.dialog({
                                                                        title: "Remove Instance",
@@ -671,13 +671,24 @@
                                                                });
                                                            }
 
-
+                                                           //alert(data.length);
+                                                           if(data.length <= 0)
+                                                              {
+                                                                $('.instanceloaderspinner').addClass('hidden');
+                                                                $('#tabInstanceStatus').html('No Instances found.').show()
+                                                              }
+                                                         
                                                            for (var i = 0; i < data.length; i++) {
-
+                                                              
                                                                addInstanceToDOM(data[i]);
-
+                                                               console.log('Loaded ' + i + ' Data Length ' + data.length);
+                                                                console.log($('.instanceloaderspinner').attr('class'));
+                                                               if(i >= data.length - 1)
+                                                                { console.log('Hit Boundary');
+                                                                  $('.instanceloaderspinner').addClass('hidden');
+                                                                }
                                                            }
-
+                                                           //$('.instanceloaderspinner').addClass('hidden');
 
 
                                                            $('#tableinstanceview tbody tr').eq(0).addClass("rowcustomselected");
@@ -748,23 +759,30 @@
                                                            }
                                                            // serachBoxInInstance.initData(data);
                                                            a = createInstanceUI;
-                                                           localStorage.setItem("instanceData", JSON.stringify(data));
+
+                                                           
+                                                           //alert('about to set');
+                                                           $('body').data("instanceData", JSON.stringify(data));
+                                                          // localStorage.setItem("instanceData", JSON.stringify(data));
                                                            var pageset = 15;
                                                            data = data.splice(0, 15);
                                                            localStorage.lastinstanceshown = pageset;
                                                            createInstanceUI(data);
-                                                           $('#accordion-1').scrollTop(0);
-                                                           $('#accordion-1').bind('scroll', function() {
+                                                           $('#content').scrollTop(0);
+                                                           $('#content').bind('scroll', function() {
+                                                              
                                                                if ($(this).scrollTop() + $(this).innerHeight() >= this.scrollHeight) {
+                                                                   $('.instanceloaderspinner').removeClass('hidden');
                                                                    $('#instanceSpinner').removeClass('hidden');
                                                                    //alert('end reached ' + localStorage.lastinstanceshown + ' ' + pageset + ' ' + localStorage.instanceData.length);
                                                                    //loading next 15 if available
-                                                                   data = JSON.parse(localStorage.instanceData).splice(parseInt(localStorage.lastinstanceshown), pageset);
+                                                                   data = JSON.parse($('body').data("instanceData")).splice(parseInt(localStorage.lastinstanceshown), pageset);
                                                                    localStorage.lastinstanceshown = parseInt(localStorage.lastinstanceshown) + pageset;
                                                                    //alert(JSON.stringify(data));
                                                                    createInstanceUI(data);
                                                                    $('#instanceSpinner').addClass('hidden');
                                                                }
+
                                                            });
                                                        }
 
@@ -1188,6 +1206,7 @@
                                                            //var dataTable = $('#tableinstanceview').DataTable()
                                                            // TEMP Hack for the multiple cards issue.
                                                            // Import also needs to be fixed as it inserts 2 records in the db..
+
                                                            var cardTemplate = {
                                                                getItem: function() {
                                                                    return '<div class="item"></div>';
@@ -1876,6 +1895,7 @@
                                                                }
                                                            }, 3);
                                                            $('#divinstancescardview .carousel-inner .item').eq(0).addClass('active');
+
                                                        }
 
                                                        function startAndStopToggler(e) {
@@ -3967,7 +3987,7 @@
 
                                                        if (orgId && urlParams['bg'] && projectId && envId) {
 
-
+                                                            $('.instanceloaderspinner').removeClass('hidden');
                                                            $.get('../organizations/' + orgId + '/businessgroups/' + urlParams['bg'] + '/projects/' + projectId + '/environments/' + envId + '/', function(data) {
                                                                console.log('success---3---4');
 
