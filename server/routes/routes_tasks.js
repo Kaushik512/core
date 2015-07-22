@@ -99,8 +99,8 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 return;
             }
             if (task) {
-
-                if(task.taskType === 'jenkins' && task.taskConfig.autoSyncFlag){
+                logger.debug("=================== ",task.taskConfig.autoSyncFlag);
+                if(task.taskType === 'jenkins' && task.taskConfig.autoSyncFlag === "true"){
                     var jenkins = new Jenkins({
                         url: "http://54.67.35.103",
                         username: "admin",

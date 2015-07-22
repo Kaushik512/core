@@ -3071,6 +3071,8 @@
                                                                            "bSortable": false
                                                                        }, {
                                                                            "bSortable": false
+                                                                       }, {
+                                                                           "bSortable": false
                                                                        }
                                                                    ]
 
@@ -3080,6 +3082,7 @@
                                                                //var $taskListArea = $('.taskListArea').empty();
                                                                var $taskHistoryDatatable = $('#tablehistoryTask').DataTable({
                                                                    "pagingType": "full_numbers",
+
                                                                    "aoColumns": [
                                                                        null, {
                                                                            "bSortable": true
@@ -3104,15 +3107,16 @@
                                                                //var $taskListArea = $('.taskListArea').empty();
                                                                var $taskHistoryDatatableJenkins = $('#tablehistoryTaskForJenkins').DataTable({
                                                                    "pagingType": "full_numbers",
+                                                                   "order": [[ 0, "desc" ]],
                                                                    "aoColumns": [
                                                                        null, {
-                                                                           "bSortable": true
+                                                                           "bSortable": false
                                                                        }, {
-                                                                           "bSortable": true
+                                                                           "bSortable": false
                                                                        }, {
-                                                                           "bSortable": true
+                                                                           "bSortable": false
                                                                        }, {
-                                                                           "bSortable": true
+                                                                           "bSortable": false
                                                                        }, {
                                                                            "bSortable": false
                                                                        }
@@ -3313,7 +3317,7 @@
                                                                       /*if (url) {
                                                                           url = url.replace('lastBuild', );
                                                                       }*/
-                                                                       var $tdNodeList = $('<td style="vertical-align:inherit;text-align:center;"></td>').append('Jenkins Job -&nbsp;<a style="word-break: break-all;text-decoration:none" title="'+ url +'" href="'+ url +'" target="_blank">' + data[i].taskConfig.jobName + '</a>');
+                                                                       var $tdNodeList = $('<td style="vertical-align:inherit;text-align:center;"></td>').append('Job -&nbsp;<a style="word-break: break-all;text-decoration:none" title="'+ url +'" href="'+ url +'" target="_blank">' + data[i].taskConfig.jobName + '</a>');
                                                                    }
                                                                    $tr.append($tdNodeList);
                                                                    /*if (data[i].taskType === 'chef') {
@@ -3682,10 +3686,9 @@
 
                                                                               console.log('Fetching build history from Data Lake..');
 
-                                                                              var dataLakeHost = "http://192.168.101.60:8080";
+                                                                              
 
-                                                                              var jobName = $(this).data('jobName');
-                                                                              var url = dataLakeHost + '/EnterpriseDataLake/rest/getBuildHealthByJob?jobname=' + jobName;
+                                                                              
 
                                                                               console.log('BuildHistory API', url);
 
