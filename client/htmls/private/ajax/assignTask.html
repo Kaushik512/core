@@ -207,21 +207,18 @@
                                                 <tr>
                                                    <td>
                                                       <div class="col-lg-12 col-md-12">
-                                                         <table id="jobParamTable" class="table" cellpadding="5px" width="100%">
+                                                         <table id="jobParamTable" class="table" style="margin-top:20px;" cellpadding="5px" width="100%">
                                                             <thead>
-                                                               <tr>
-                                                                  <th></th>
-                                                                  <th></th>
-                                                               </tr>
+                                                               
                                                             </thead>
                                                             <tbody>
                                                                <tr>
                                                                   <td class="jobParam">Job Result Url:</td>
-                                                                  <td><div class="col-lg-12 col-md-12"><input id="jobResultUrl" type="url" placeholder="http://<jenkins_url>/<lastBuild>" class="form-control inputJobResultUrl" name="jobResultUrl"></div></td>
+                                                                  <td><div class="col-lg-12 col-md-12"><input id="jobResultUrl" type="text" placeholder="http://<jenkins_url>/<lastBuild>" class="form-control inputJobResultUrl" name="jobResultUrl"></div></td>
                                                                </tr>
                                                                <tr>
                                                                   <td class="jobParam">Job Url:</td>
-                                                                  <td><div class="col-lg-12 col-md-12"><div class="jenkinsJobURL" style="margin-top:9px"></div></div></td>
+                                                                  <td><div class="col-lg-12 col-md-12"><span id="spinnerForUrl" class="hidden"><img  style="margin-left:5px;margin-right:25px;" src="img/select2-spinner.gif"></span><div class="jenkinsJobURL" style="margin-top:9px"></div></div></td>
                                                                </tr>
                                                                <tr>
                                                                   <td class="jobParam">Auto sync:</td>
@@ -266,10 +263,10 @@
                                                       <!--dropdown ends here-->
                                                       <!--boolean parameters-->
                                                       <div class="col-lg-12 col-md-12 margintop15">
-                                                         <table id="booleanTable" class="table hidden" cellpadding="5px" width="100%">
+                                                         <table id="booleanTable" class="table tableLength hidden" cellpadding="5px" width="100%">
                                                             <thead>
                                                                <tr>
-                                                                  <th class="headParamTable">Boolean Parameter</th>
+                                                                  <th class="headParamTable"><input id="booleanParameter" type="hidden"/>Boolean Parameter</th>
                                                                   <th></th>
                                                                </tr>
                                                             </thead>
@@ -292,10 +289,10 @@
                                                       <!--boolean parameters ends here-->
                                                       <!--string parameters-->
                                                       <div class="col-lg-12 col-md-12 margintop15">
-                                                         <table id="stringTable" class="table hidden" cellpadding="5px" width="100%">
+                                                         <table id="stringTable" class="table tableLength hidden" cellpadding="5px" width="100%">
                                                             <thead>
                                                                <tr>
-                                                                  <th class="headStringTable">String Parameter</th>
+                                                                  <th class="headStringTable"><input type="hidden" id="stringParameter">String Parameter</th>
                                                                   <th></th>
                                                                </tr>
                                                             </thead>
@@ -671,6 +668,18 @@ if (!$.fn.dataTable.isDataTable('#tableRunlist')) {
     });
 }
 
+var UtilityMethods = {
+    initTooltip: function() {
+        var $tool = $("[rel=tooltip]");
+        if ($tool.length) {
+            $tool.tooltip();
+        }
+    },
+    getRandomNumber: function() {
+        return parseInt(Math.random() * 10000000000);
+    }
+}
+
 
 var urlParams = {};
 (window.onpopstate = function() {
@@ -740,7 +749,10 @@ $(document).ready(function() {
             $('#jobResultUrl').val(taskData.taskConfig.jobResultURL);
             if(taskData.taskConfig.runlist &&  taskData.taskConfig.runlist.length){
               // alert(taskData.taskConfig.runlist);
-               createRunlistTable(taskData.taskConfig.runlist);
+                if (taskData.taskConfig.runlist.length > 0) {
+                  alert(taskData.taskConfig.runlist.length);
+                    createRunlistTable(taskData.taskConfig.runlist);
+                }
             }
             if (taskData.taskConfig.attributes && taskData.taskConfig.attributes.length) {
                 //$('#attrtextarea').text(JSON.stringify(taskData.taskConfig.attributesjson));
@@ -759,7 +771,39 @@ $(document).ready(function() {
                 }
 
             }
-            // $('#attrtextarea').setValue(JSON.stringify(taskData.taskConfig.attributesjson));
+            //condition for parameterized build while edit
+            console.log("check>>>>>>>>>>>" + JSON.stringify(taskData));
+            if (taskData && taskData.taskType === 'jenkins' && taskData.taskConfig.parameterized) {
+
+                console.log('reading parameterized flag as:', taskData.taskConfig.parameterized);
+              //  alert(taskData.taskConfig.parameterized.length);
+                if (taskData.taskConfig.parameterized.length > 0) {
+                  //alert(taskData.parameterized.length);
+                    for (var j = 0; j < taskData.taskConfig.parameterized.length; j++) {
+                        //$('input:radio[class=test1][id=test2]').prop('checked', true);
+                        $("input[type='checkbox'][name='addParams'][id='addParameters']").prop('checked', true);
+                        $('.addParameters').removeClass('hidden');
+                        if(taskData.taskConfig.parameterized[j].parameterName ==='Boolean Parameter'){
+                           alert('boolean');
+                            $('#booleanTable').removeClass('hidden');
+                            $('#booleanName').val(taskData.taskConfig.parameterized[j].name);
+                            $("input[type='checkbox'][name='booleanValue'][id='booleanValue']").prop('checked',true);
+                            $('#booleanValue').val(taskData.taskConfig.parameterized[j].defaultValue);
+                            $('#booleanDescription').val(taskData.taskConfig.parameterized[j].description);
+                        } else if(taskData.taskConfig.parameterized[j].parameterName === 'String Parameter') {
+                           alert('string');
+                            $('#stringTable').removeClass('hidden');
+                            $('#stringName').val(taskData.taskConfig.parameterized[j].name);
+                            $('#stringValue').val(taskData.taskConfig.parameterized[j].defaultValue);
+                            $('#stringDescription').val(taskData.taskConfig.parameterized[j].description);
+                        }
+                    }
+                } else {
+                    $("input[type='checkbox'][name='addParams'][id='addParameters']").prop('checked', false);
+                }
+
+            }
+            
         }
 
 
@@ -860,10 +904,12 @@ $(document).ready(function() {
 
             });
             var $jobsList = $('#jobListJenkins');
+            var $spinnerJobForUrl = $('#spinnerForUrl').addClass('hidden');
             $jobsList.change(function(e) {
                 var jobName = $('#jobListJenkins').val();
                 console.log("giobiobibio" + jobName);
                 var jenkinsServerId;
+                $spinnerJobForUrl.removeClass('hidden');
                 for (var i = 0; i < jenkinsList.length; i++) {
                     var keys = Object.keys(jenkinsList[i]);
                     console.log("=========== " + JSON.stringify(jenkinsList[i][keys[0]]));
@@ -873,16 +919,21 @@ $(document).ready(function() {
 
                 var $jobUrlList = $('.jenkinsJobURL');
                 if (jobName) {
+                  
                     $('.jenkinsJobURL').empty();
                     $.get('/jenkins/' + jenkinsServerId + '/jobs/' + jobName, function(jobsList) {
                         //for (var i = 0; i < jobsList.length; i++) {
                        // alert(JSON.stringify(jobsList));
+                       $spinnerJobForUrl.addClass('hidden');
                         var $anchor = "<span><a style='font-size:13px;word-wrap:break-word;' title='" + jobsList.url + "' href='" + jobsList.url + "'' target='_blank' >" + jobsList.url + "</a></span>";
                         $jobUrlList.append($anchor);
                         //}
-                    });
+                    });   
                 }
+
+                
             });
+
 
             if (taskData && taskData.taskType === 'jenkins') {
                 $jenkinsServerListDropdown.val(taskData.taskConfig.jenkinsServerId);
@@ -924,7 +975,7 @@ $(document).ready(function() {
         loadUIData();
     }
 
-
+    //save form for jenkins and chef
     $('#taskForm').submit(function(e) {
      //   alert('check');
        // alert('breaking');
@@ -1005,6 +1056,12 @@ $(document).ready(function() {
                 return false;
             }
             var jenkinsResultUrl = $('#jobResultUrl').val(); 
+            var regexpURL = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
+            if(!regexpURL.test(jenkinsResultUrl)){
+               alert('Please Enter a valid URL');
+               e.preventDefault();
+               return false;
+            }
             /*var url = jenkinsResultUrl;
             $.get('/jenkins/' + jenkinsServerId + '/job/' + jenkinsJobName + '/lastBuild', function(data){
              
@@ -1025,10 +1082,69 @@ $(document).ready(function() {
             //alert(taskData.jobResultURL);
             
             taskData.users = usersList;
-            var auto_sync_flag = $("input[type='radio'][name='auto_sync']:checked").val();
-            console.log('auto_sync_flag:', auto_sync_flag);
-            taskData.autoSyncFlag = auto_sync_flag;
-        //alert('value:' + $('#attrtextarea').val());
+            
+            var autoSyncFlag = $("input[type='radio'][name='auto_sync']:checked").val();
+            console.log('autoSyncFlag:', autoSyncFlag);
+            taskData.autoSyncFlag = autoSyncFlag;
+
+            //check for build parameters. 
+            var isParameterized = false;
+            if ($('#addParameters').is(":checked")) {
+                isParameterized = true;
+                var parameterized = [];
+                var countForParameter = 0;
+                if($('#booleanTable').is(':visible')){
+                  countForParameter++;  
+                } 
+                if($('#stringTable').is(':visible')) {
+                  countForParameter++;  
+                } 
+                //alert(countForParameter);
+                
+                   
+
+
+                        for (j = 0; j < countForParameter; j++) {
+
+                            var parameterType = $('#parametersSelect').val();
+                            if (parameterType === "boolean") {
+                                var parameterizedObj = {
+                                    parameterName: String,
+                                    name: String,
+                                    defaultValue: String,
+                                    description: String
+                                };
+                                parameterizedObj.parameterName = "Boolean Parameter";
+                                parameterizedObj.name = $('#booleanName').val();
+                                parameterizedObj.defaultValue = $('#booleanValue').val();
+                                parameterizedObj.description = $('#booleanDescription').val();
+                                console.log(parameterizedObj.parameterName);
+                                parameterized.push(parameterizedObj);
+                                //alert(parameterized);
+                                console.log(parameterized);
+
+                            } else {
+                                var parameterizedObj = {
+                                    parameterName: String,
+                                    name: String,
+                                    defaultValue: String,
+                                    description: String
+                                };
+                                parameterizedObj.parameterName = "String Parameter";
+                                parameterizedObj.name = $('#stringName').val();
+                                parameterizedObj.defaultValue = $('#stringValue').val();
+                                parameterizedObj.description = $('#stringDescription').val();
+                                parameterized.push(parameterizedObj);
+                            }
+                        }
+                   
+                
+                taskData.isParameterized = isParameterized;
+                taskData.parameterized =parameterized;
+                console.log(taskData.parameterized);
+            }
+            console.log($('#addParameters').is(":checked"));
+            console.log(isParameterized);
 
 
         } else {
@@ -1110,18 +1226,21 @@ $(document).ready(function() {
             console.log(runlist);        
             return runlist;
         });
-        $tasksRunlist.clear().draw();
+       // $tasksRunlist.clear().draw();
         for (i = 0; i < runlist.length; i++) {
          //alert('check');
-               console.log(runlist[i].substring(runlist[i].lastIndexOf("[")+1,runlist[i].lastIndexOf("]")));
-            var $runlistList = $('#tableRunlist');
-            var $tr = $('<tr class="runlistRow"></tr>');
-            var $tdName = $('<td class="runlistDescription"></td>');
+            if (runlist.length > 0) {
+               alert('ch');
+                console.log(runlist[i].substring(runlist[i].lastIndexOf("[") + 1, runlist[i].lastIndexOf("]")));
+                var $runlistList = $('#tableRunlist');
+                var $tr = $('<tr class="runlistRow"></tr>');
+                var $tdName = $('<td class="runlistDescription"></td>');
 
-            $tdName.append(runlist[i].substring(runlist[i].lastIndexOf("[")+1,runlist[i].lastIndexOf("]")));
-            $tr.append($tdName);
-            $runlistList.append($tr);
-            $tasksRunlist.row.add($tr).draw();
+                $tdName.append(runlist[i].substring(runlist[i].lastIndexOf("[") + 1, runlist[i].lastIndexOf("]")));
+                $tr.append($tdName);
+                $runlistList.append($tr);
+                $tasksRunlist.row.add($tr).draw();
+            }
         }
     }
 
