@@ -18,6 +18,7 @@ Resource           ${CATALYST ACTION}/Gallery_setup_TempService_Steps.txt
 
 *** Variables ***
 
+
 *** Keywords ***
 Catalyst Import an CentOS Instance By IP
     Clicks on Settings
