@@ -9,6 +9,7 @@ var errorResponses = require('./error_responses.js');
 var Tasks = require('../model/classes/tasks/tasks.js');
 var Application = require('../model/classes/application/application');
 var instancesDao = require('../model/classes/instance/instance');
+var TaskHistory = require('../model/classes/tasks/taskHistory');
 
 
 var logger = require('../lib/logger')(module);
@@ -98,13 +99,87 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 return;
             }
             if (task) {
-                task.getHistory(function(err, tHistories) {
-                    if (err) {
-                        res.send(500, errorResponses.db.error);
-                        return;
-                    }
-                    res.send(tHistories);
-                });
+
+                if(task.taskType === 'jenkins' && task.taskConfig.autoSyncFlag){
+                    var jenkins = new Jenkins({
+                        url: "http://54.67.35.103",
+                        username: "admin",
+                        password: "admin@RL123"
+                    });
+                    TaskHistory.getLast100HistoriesByTaskId(req.params.taskId,function(err, histories) {
+                            if (err) {
+                            res.send(500, errorResponses.db.error);
+                            return;
+                        }
+                        logger.debug("TaskHistory>>>>>>>>>>> ",JSON.stringify(histories));
+                        var historyResult = [];
+                        var jobResult =[];
+                        if(histories){
+                            for(var i=0;i<histories.length;i++){
+                                    historyResult.push(histories[i].buildNumber);
+                                }
+                        }
+                        jenkins.getJobInfo(histories[0].jobName, function(err, job) {
+                            if (err) {
+                                logger.error('jenkins jobs fetch error', err);
+                                
+                            }
+                            
+                            if(job){
+                                for(var j=0;j<job.builds.length;j++){
+                                    jobResult.push(job.builds[j].number);
+                                }
+                            }
+                            
+                            if(jobResult){
+                                for (var x=0 ; x < jobResult.length; x++ ) {
+                                    if ( historyResult.indexOf(jobResult[x]) == -1 ){
+                                        logger.debug("------------------ ",jobResult[x]);
+                                        var hData = {
+                                            "taskId": req.params.taskId,
+                                            "taskType": "jenkins",
+                                            "user": req.session.user.cn,
+                                            "jenkinsServerId": task.taskConfig.jenkinsServerId,
+                                            "jobName": histories[0].jobName,
+                                            "status": "success",
+                                            "timestampStarted": new Date().getTime(),
+                                            "buildNumber": jobResult[x],
+                                            "__v": 1,
+                                            "timestampEnded": new Date().getTime(),
+                                            "executionResults": [],
+                                            "nodeIdsWithActionLog": [],
+                                            "nodeIds": [],
+                                            "runlist": []
+            
+                                        };
+                                        TaskHistory.createNew(hData, function(err, taskHistoryEntry) {
+                                            if (err) {
+                                                logger.error("Unable to make task history entry", err);
+                                                return;
+                                            }
+                                            logger.debug("Task history created");
+                                        });
+                                    }
+                                }
+                            }
+                                    task.getHistory(function(err, tHistories) {
+                                        if (err) {
+                                            res.send(500, errorResponses.db.error);
+                                            return;
+                                        }
+                                        res.send(tHistories);
+                                    });
+                        });
+                    });
+                }else{
+                    task.getHistory(function(err, tHistories) {
+                        if (err) {
+                            res.send(500, errorResponses.db.error);
+                            return;
+                        }
+                        res.send(tHistories);
+                    });
+                }
             } else {
                 res.send(404);
             }
@@ -154,6 +229,16 @@ module.exports.setRoutes = function(app, sessionVerification) {
             } else {
                 res.send(400);
             }
+        });
+    });
+
+    app.get('/tasks/history/list/all', function(req, res) {
+        TaskHistory.listHistory(function(err, tHistories) {
+            if (err) {
+                res.send(500, errorResponses.db.error);
+                return;
+            }
+            res.send(tHistories);
         });
     });
 
