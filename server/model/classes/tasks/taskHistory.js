@@ -66,6 +66,30 @@ taskHistorySchema.statics.getHistoryByTaskId = function(taskId, callback) {
     });
 };
 
+taskHistorySchema.statics.getLast100HistoriesByTaskId = function(taskId, callback) {
+
+    this.find({
+        taskId: taskId
+    }, function(err, tHistories) {
+        if (err) {
+            callback(err, null);
+            return;
+        }
+        callback(null, tHistories);
+    }).sort({$natural: -1}).limit(100);
+};
+
+taskHistorySchema.statics.listHistory = function(callback) {
+
+    this.find(function(err, tHistories) {
+        if (err) {
+            callback(err, null);
+            return;
+        }
+        callback(null, tHistories);
+    });
+};
+
 var TaskHistory = mongoose.model('taskHistory', taskHistorySchema);
 
 module.exports = TaskHistory;

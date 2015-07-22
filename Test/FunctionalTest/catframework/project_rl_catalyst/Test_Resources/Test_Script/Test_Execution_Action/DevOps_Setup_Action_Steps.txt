@@ -27,7 +27,10 @@ Testing All New Config Management Conditions
 
 
 Create New Config Management
-    Sleep    1s
+    Clicks on Settings
+    Clicks on DevOps Setup menu
+    Clicks on Config Management menu
+    Sleep    2s
     Clicks on New button to Create New Config Management
     Enters config management name
     Enters config management user name
@@ -37,10 +40,14 @@ Create New Config Management
     Upload Validator Pem File
     Upload Validator Knife File
     Clicks on Save button to save the ConfigMgmt detail
+    Verfiy the ChefServer is Created in the Table
 
 
 Unique Devops Configuration Management
-    Sleep    1s
+    Clicks on Settings
+    Clicks on DevOps Setup menu
+    Clicks on Config Management menu
+    Sleep    2s
     Clicks on New button to Create New Config Management
     Validate the Unique Configuration Name   ${ValidateAlrdyExistConfigName}
     Validate the Unique Organization   ${ValidateAlrdyExistOrgName}
@@ -74,6 +81,11 @@ Enters New Configrtn Name to check
 Validate the Organization of Already Created
     Element Should Contain    id=unique_orgname    ${AlreadyExistOrg}
     Clicks on Config Cancel Button
+
+Verfiy the ChefServer is Created in the Table
+    Sleep    2s
+    Element Should Contain    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${CONFIG MANAGEMENT NAME}']    ${CONFIG MANAGEMENT NAME}
+    Log    ${CONFIG MANAGEMENT NAME} Chef Server is Created
 
     
 Vaildate Empty User Pem and Validator Pem and Knife File

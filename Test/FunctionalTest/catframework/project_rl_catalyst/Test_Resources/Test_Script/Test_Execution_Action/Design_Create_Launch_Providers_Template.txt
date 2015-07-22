@@ -472,7 +472,7 @@ Catalyst Check INFORMATION Status for Ubuntu
     Check the Chef BootStrap
     Clicks on Back To Instances
 
-Catalyst Grid View Start ,Stop ,SSH ,Chef ,Client ,Log Setup
+Catalyst Grid View Verify Start ,Stop ,SSH ,Chef ,Client ,Log Setup
     #Clicks on Workzone Button
     #Clicks on User Created Organization
     #Clicks on User Created BusinessGroup
@@ -497,7 +497,7 @@ Catalyst Grid View Start ,Stop ,SSH ,Chef ,Client ,Log Setup
     #Verfiy the STOP Toggler Enabled from Grid View
     Clicks on View Instancess Button
 
-Catalyst Grid View Start ,Stop ,SSH ,Chef ,Client ,Log Setup of Ubuntu
+Catalyst Grid View Verify Start ,Stop ,SSH ,Chef ,Client ,Log Setup of Ubuntu
     Clicks on the Button to the Environment
     Sleep    1s
     Clicks on Instances View
@@ -838,7 +838,7 @@ Checking THe BootStrpa Status
     Sleep    5s
     Clicks on Contreol Panel
     Clicks on Action History
-    ${BOOTSTRAP STATUSS}=    Get Element Attribute    xpath=.//*[@id='tableactionHistory']/tbody/tr/td[2]/img@data-original-title
+    ${BOOTSTRAP STATUSS}=    Get Element Attribute    xpath=.//*[@id='tableactionHistory']/tbody/tr/td[2]/img@title
     Log    ${BOOTSTRAP STATUSS}
     Should Be Equal    ${BOOTSTRAP STATUSS}     ${ACTBOOT2}
 
@@ -858,7 +858,7 @@ Checking THe Ubuntu BootStrpa Status
     Sleep    5s
     Clicks on Contreol Panel
     Clicks on Action History
-    ${BOOTSTAT2}=    Get Element Attribute   xpath=//*[@id='tableactionHistory']/tbody/tr/td[2]/img@data-original-title
+    ${BOOTSTAT2}=    Get Element Attribute   xpath=//*[@id='tableactionHistory']/tbody/tr/td[2]/img@title
     Log    ${BOOTSTAT2}
     Should Be Equal    ${ACTBOOT2}     ${BOOTSTAT2}           #Success
 
@@ -907,7 +907,7 @@ Checking the BChefClient Run Status
     Sleep    5s
     Clicks on Contreol Panel
     Clicks on Action History
-    ${CHEFSUCCESS}=    Get Element Attribute    xpath=.//*[@id='tableactionHistory']/tbody/tr[2]/td[2]/img@data-original-title
+    ${CHEFSUCCESS}=    Get Element Attribute    xpath=.//*[@id='tableactionHistory']/tbody/tr[2]/td[2]/img@title
     Log    ${CHEFSUCCESS}
     Should Be Equal    ${CHEFSUCCESS}     ${SATSSYY}  
 
@@ -921,7 +921,7 @@ Checking the Ubuntu BChefClient Run Status
     Sleep    5s
     Clicks on Contreol Panel
     Clicks on Action History
-    ${CHEFSUCCESS1}=    Get Element Attribute    xpath=.//*[@id='tableactionHistory']/tbody/tr[2]/td[2]/img@data-original-title
+    ${CHEFSUCCESS1}=    Get Element Attribute    xpath=.//*[@id='tableactionHistory']/tbody/tr[2]/td[2]/img@title
     Log    ${CHEFSUCCESS1}
     Should Be Equal    ${CHEFSUCCESS1}     ${SATSSYY}  
 
@@ -932,7 +932,7 @@ Verfiy the Table contains the Status
     Sleep    5s
     Clicks on Contreol Panel
     Clicks on Action History
-    ${BOTTABLE}=    Get Element Attribute   xpath=//*[@id='tableactionHistory']/tbody/tr[4]/td[2]/img@data-original-title
+    ${BOTTABLE}=    Get Element Attribute   xpath=//*[@id='tableactionHistory']/tbody/tr[4]/td[2]/img@title
     Log    ${BOTTABLE}
     Should Be Equal    ${ACTBOOT2}     ${BOTTABLE}  
     Sleep    3s         
@@ -944,7 +944,7 @@ Verfify the status of SSH Shell
     Sleep    5s
     Clicks on Contreol Panel
     Clicks on Action History
-    ${BOOTSTATUS1}=    Get Element Attribute   xpath=//*[@id='tableactionHistory']/tbody/tr[3]/td[2]/img@data-original-title
+    ${BOOTSTATUS1}=    Get Element Attribute   xpath=//*[@id='tableactionHistory']/tbody/tr[3]/td[2]/img@title
     Log    ${BOOTSTATUS1}
     Should Be Equal    ${ACTBOOT2}     ${BOOTSTATUS1}           
     Sleep    2s
@@ -1250,9 +1250,9 @@ Select the Security Group
     Log    after scroll
     Sleep    1s
     Click Element    xpath=.//*[@id='securityGroupIds']/label[contains(.,'${SECRTY GRP1}')]/i
-    Click Element    xpath=.//*[@id='securityGroupIds']/label[contains(.,'${SECRTY GRP2}')]/i
-    Click Element    xpath=.//*[@id='securityGroupIds']/label[contains(.,'${SECRTY GRP3}')]/i
-    Click Element    xpath=.//*[@id='securityGroupIds']/label[contains(.,'${SECRTY GRP4}')]/i
+    #Click Element    xpath=.//*[@id='securityGroupIds']/label[contains(.,'${SECRTY GRP2}')]/i
+    #Click Element    xpath=.//*[@id='securityGroupIds']/label[contains(.,'${SECRTY GRP3}')]/i
+    #Click Element    xpath=.//*[@id='securityGroupIds']/label[contains(.,'${SECRTY GRP4}')]/i
     Log    after click
     
 
