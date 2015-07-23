@@ -207,7 +207,7 @@
                         <!--Application URL-->
                         <div class="panel panel-default">
                           <div class="panel-heading">
-                            <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion-configmgmt" href="#collapseAppURL"> <i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i><i class="fa fa-fw fa-bar-chart-o" style="font-size:14px;"></i> <b style="color:#3a87ad;font-size:12px;"><u>Additional Parameters</u></b></a></h4>
+                            <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion-configmgmt" href="#collapseAppURL"> <i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i><i class="fa fa-fw fa-list-ul" style="font-size:14px;"></i> <b style="color:#3a87ad;font-size:12px;"><u>Additional Parameters</u></b></a></h4>
                           </div>
                           <div id="collapseAppURL" class="panel-collapse collapse in">
                             <div class="panel-body">
@@ -219,7 +219,7 @@
  <div class="widget-box">
  <div class="widget-header">
  <h5 class="widget-title" style="color:#4e5964;">
- <strong>Application URL</strong>
+ <strong>Application URLs</strong>
  </h5>
  <div class="widget-toolbar no-border">
 
@@ -242,8 +242,8 @@
  <tr class="rowCustomStyle">
 
                                                                             
- <td style="width:20%">Name</td>
- <td style="width:40%">URL</td>
+ <td style="width:20%">S.No</td>
+ <td style="width:40%">Name</td>
  <td style="width:20%" class="">Action</td>
 
  </tr>
@@ -284,7 +284,7 @@
                         <!--tasks start here-->
                          <div class="panel panel-default">
                           <div class="panel-heading">
-                            <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion-configmgmt" href="#collapseTaskArea"> <i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i><i class="fa fa-fw fa-bar-chart-o" style="font-size:14px;"></i> <b style="color:#3a87ad;font-size:12px;"><u>Task</u></b></a></h4>
+                            <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion-configmgmt" href="#collapseTaskArea"> <i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i><i class="fa fa-fw fa-newspaper-o" style="font-size:14px;"></i> <b style="color:#3a87ad;font-size:12px;"><u>Tasks</u></b></a></h4>
                           </div>
                           <div id="collapseTaskArea" class="panel-collapse collapse in">
                             <div class="panel-body">
@@ -1050,15 +1050,59 @@
             </div> 
             
             
-             <div class="modal-body" style="height:140px;">
-                <div class="col-lg-6 col-md-6" style="margin-left:-15px">
-
-                            <label for=""><input type="checkbox" name="my_checkbox" id="my_checkbox"/>&nbsp;Select/Unselect Task</label>
-                            
-
-                            <select class="form-control customNew" id="taskList" multiple> </select>
-                            
+             <div class="modal-body" style="min-height:300px;">
+              <div>
+                <div class="col-lg-6">
+                  <div class="input-group width100">
+                    <label class="input searchTaskLabel">
+                      <strong class="fontsize13">Available Task</strong>
+                    </label>
+                    <div class="btn-group selectTasksdiv">
+                      <div class="loadingContainerGap" style="display: none;">
+                      </div>
+                      <select multiple="multiple" size="10" id="selectavailbleTaskList" class="btn-group selectavailbleTask">
+                        <option style="display:block" value="recipe[7-zip]" class="taskimg">
+                          Hi
+                        </option>
+                        <option style="display:block" value="recipe[7-zip]" class="taskimg">
+                          GO
+                        </option>
+                      </select>
+                    </div>
+                    <div class="btn-group marginleft5">
+                      <button type="button" id="btnaddToTasklist" class="btn btn-default btn-primary anchorAdd">
+                        <i class="fa fa-chevron-right anchorAddi"></i>
+                      </button>
+                      <div class="clearfix"></div>
+                      <button type="button" id="btnremoveFromTasklist" class="btn btn-default btn-primary anchorRemove">
+                        <i class="fa fa-chevron-left anchorRemovei"></i>
+                      </button>
+                    </div>
+                  </div>
                 </div>
+                <div class="col-lg-6">
+                  <div class="input-group width100">
+                    <label class="input searchTaskLabel">
+                      <strong class="fontsize13">Selected Task</strong>
+                    </label>
+                    <div class="btn-group selectTasksdiv">
+                      <select multiple="multiple" size="10" id="selectedTaskList" class="btn-group selectavailbleTask">
+
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+                <!-- <div class="col-lg-6 col-md-6" style="margin-left:-15px">
+
+                  <label for="">
+                    <input type="checkbox" name="my_checkbox" id="my_checkbox"/>&nbsp;Select/Unselect Task
+                  </label>
+                  
+
+                  <select class="form-control customNew" id="taskList" multiple> </select>
+                            
+                </div> -->
                 
                 
 
@@ -1085,6 +1129,47 @@
 </style>
 
 <script type="text/javascript">
+$(document).ready(function(){
+        //To Add
+        $('#selectavailbleTaskList').on('dblclick','option',function(){
+            var $this = $(this);
+            var $selectedList = $("#selectedTaskList");
+            $selectedList.append($this.clone());
+            $this.hide();
+        });
+        //To Remove
+        $('#selectedTaskList').on('dblclick','option',function(){
+            var $instanceCookbookList = $('#selectavailbleTaskList');
+            var $this = $(this);
+            var value = $this.val();
+            $this.remove();
+            $instanceCookbookList.find('option[value="'+value+'"]').show();
+        });
+    });
+
+    //To add the wizard
+    $("#btnaddToTasklist").on('click', function () {
+        var $options = $('#selectavailbleTaskList option:selected');
+        var $selectedList = $("#selectedTaskList");
+        $options.each(function(){
+            var $this = $(this);
+            $selectedList.append($this.clone());
+            $this.hide();
+        });
+    });
+
+    $("#btnremoveFromTasklist").on('click', function () {
+        var $instanceCookbookList = $('#selectavailbleTaskList');
+
+        $("#selectedTaskList option:selected").each(function(){
+           var $this = $(this);
+           var value = $this.val();
+           $this.remove();
+           $instanceCookbookList.find('option[value="'+value+'"]').show();
+
+        });
+        //$("#cookbooksrecipesselectedList option:selected").remove();
+    });
 var urlParams = {};
 (window.onpopstate = function() {
     var url = window.location.href;
@@ -2304,18 +2389,50 @@ $.get('../instances/' + urlParams.id, function(data) {
 
 
     $('#addTaskBtn').click(function(e) {
-        var $select = $('#taskList').empty();
+        // var $select = $('#taskList').empty();
+        // var taskIds = [];
+        // if (data.taskIds && data.taskIds.length) {
+        //     taskIds = data.taskIds;
+        // }
+        // $.get('/tasks?orgId=' + data.orgId + '&bgId=' + data.bgId + '&projectId=' + data.projectId + '&envId=' + data.envId, function(taskList) {
+        //     for (var i = 0; i < taskList.length; i++) {
+        //         var $option = $("<option></option>").val(taskList[i]._id).html(taskList[i].name).attr('data-taskName', taskList[i].name);
+        //         if (taskIds.indexOf(taskList[i]._id) !== -1) {
+        //             $option.attr('selected', 'selected');
+        //         }
+        //         $select.append($option);
+                
+        //     }
+            
+        //     $('#instanceTaskModal').modal('show');
+        // });
+        var $select = $('#selectavailbleTaskList').empty();
         var taskIds = [];
         if (data.taskIds && data.taskIds.length) {
             taskIds = data.taskIds;
         }
         $.get('/tasks?orgId=' + data.orgId + '&bgId=' + data.bgId + '&projectId=' + data.projectId + '&envId=' + data.envId, function(taskList) {
+            var selectedArry = new Array();
+            $("#selectedTaskList option").each(function(i){
+              selectedArry.push($(this).val());
+            });
             for (var i = 0; i < taskList.length; i++) {
-                var $option = $("<option></option>").val(taskList[i]._id).html(taskList[i].name).attr('data-taskName', taskList[i].name);
-                if (taskIds.indexOf(taskList[i]._id) !== -1) {
-                    $option.attr('selected', 'selected');
-                }
+                var $option = $("<option></option>").val(taskList[i]._id).html(taskList[i].name).attr('data-taskName', taskList[i].name).addClass('taskimg');
+                // if (taskIds.indexOf(taskList[i]._id) !== -1) {
+                //     $option.attr('selected', 'selected');
+                // }
+
+                // if($("#selectedTaskList").find('option[value="'+taskList[i]._id+'"]') === $option.find('option[value="'+taskList[i]._id+'"]')) {
+                //   $option.find('option[value="'+taskList[i]._id+'"]').hide();
+                //     alert("Hello");
+                // }
                 $select.append($option);
+
+                if(jQuery.inArray(taskList[i]._id,selectedArry) > -1){
+                  $option.hide();
+                }
+                
+
                 
             }
             
@@ -2323,27 +2440,27 @@ $.get('../instances/' + urlParams.id, function(data) {
         });
     });
 
-    var checkbox = $('#my_checkbox');
-    var listbox = $('#taskList');
+    // var checkbox = $('#my_checkbox');
+    // var listbox = $('#taskList');
 
-    $(checkbox).click(function() {
-        selectDeselect(listbox, checkbox);
-    });
+    // $(checkbox).click(function() {
+    //     selectDeselect(listbox, checkbox);
+    // });
 
-    function selectDeselect(listbox, checkbox) {
-        var select_all = $(checkbox).prop('checked') ? true : false;
-        var select = $(listbox);
-        if (select_all) {
-            var clone = select.clone();
-            $('option', clone).attr('selected', select_all);
-            var html = clone.html();
-            select.html(html);
-        } else $('option', select).removeAttr('selected');
-    }
+    // function selectDeselect(listbox, checkbox) {
+    //     var select_all = $(checkbox).prop('checked') ? true : false;
+    //     var select = $(listbox);
+    //     if (select_all) {
+    //         var clone = select.clone();
+    //         $('option', clone).attr('selected', select_all);
+    //         var html = clone.html();
+    //         select.html(html);
+    //     } else $('option', select).removeAttr('selected');
+    // }
 
     $('#saveTaskBtn').click(function() {
-        var $taskSelect = $('#taskList');
-        var $selectedOptions = $taskSelect.find('option:selected');
+        var $taskSelect = $('#selectedTaskList');
+        var $selectedOptions = $taskSelect.find('option');
         var taskIds = $taskSelect.val();
         if (!taskIds) {
             taskIds = [];
@@ -2933,15 +3050,19 @@ $(document).ready(function() {
 
  function createAppUrlTableRow(appUrlData) {
      var $appUrlTableBody = $('#appUrlTable tbody');
+
+     var $index=$('#appUrlTable tbody').find('tr');
      var $row = $('<tr/>').attr('data-appUrlIdTableRow', appUrlData._id);
      $row.data('appUrlData', appUrlData);
-     var $tdName = $('<td class="appNameTable"/>');
-     $tdName.append(appUrlData.name);
+
+     var $tdName = $('<td class="appNameIndex"/>');
+     $tdName.append($index.length+1);
+
      var url = appUrlData.url;
      if (url) {
          url = url.replace('$host', window.instanceIPForAppLink);
      }
-     var $tdURL = $('<td class="appUrlTable"/>').append('<a style="word-break:break-word" href="' + url + '" target="_blank">' + url + '</a> ');
+     var $tdURL = $('<td class="appUrlTable"/>').append('<a style="word-break:break-word" href="' + url + '" target="_blank">' + appUrlData.name + '</a> ');
      var $tdAction = $('<td/>');
      $tdAction.append('<div class="btn-group"><button class="btn btn-info pull-left btn-sg tableactionbutton appUrlEditLink" value="Update" title="Update"><i class="ace-icon fa fa-pencil bigger-120"></i></button></div>').append('<div style="margin-left:5px;" class="btn-group"><button class="btn btn-danger pull-left btn-sg tableactionbutton appUrlRemoveLink" value="Remove" title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></div>');
 
@@ -2990,7 +3111,7 @@ $(document).ready(function() {
      
      if (index < 3) {
          var $nextLink;
-         if (index == 1) {
+         if (index == 1) {console.log(data[0]);
              $nextLink = $anchor.next().next();
          } else {
              $nextLink = $anchor.next();
@@ -3027,8 +3148,9 @@ $(document).ready(function() {
          e.preventDefault();
          var appUrls = []
          var appUrlData = {};
-
-
+         //alert($('#appUrlTable tbody').find('tr').length);
+         var rowIndex = $('#appUrlTable tbody').find('tr').length;
+         appUrlData.Index = rowIndex;
          appUrlData.name = $(this).find('.appName').val();
          appUrlData.url = $(this).find('.appURL').val();
          var appUrlId = $(this).find('.appUrlId').val();
@@ -3040,26 +3162,33 @@ $(document).ready(function() {
              url = '../instances/' + urlParams.id + '/appUrl/' + appUrlId + '/update';
              reqBody = {
                  url: appUrlData.url,
-                 name: appUrlData.name
+                 name: appUrlData.name,
+                 index: appUrlData.Index
              }
          }
 
          var $appUrlIdInput = $(this).find('.appUrlId');
 
          $.post(url, reqBody, function(data) {
+          //console.log("URL ====>"+url);
+          //console.log("reqBody ====>"+reqBody);
              $appUrlIdInput.val('');
              console.log(data);
              if (!appUrlId) {
+                //alert("appUrlId ====>"+appUrlId);
+                //console.log(data[0]);
                  createAppUrlTableRow(data[0]);
                  createAppUrlCardLink(data[0], window.instanceIPForAppLink);
              } else {
+                //When edit button clicked in a row it's executed.
                  var $tr = $('tr[data-appUrlIdTableRow="' + appUrlId + '"]');
-                 $tr.find('.appNameTable').text(reqBody.name);
+                 //$tr.find('.appNameTable').text(reqBody.name);
+                 $tr.find('.appNameIndex').text(reqBody.index);
                  var url = reqBody.url;
                  if (url) {
                      url = url.replace('$host', window.instanceIPForAppLink);
                  }
-                 $tr.find('.appUrlTable').html('<a href="' + url + '" target="_blank">' + url + '</a> ');
+                 $tr.find('.appUrlTable').html('<a href="' + url + '" target="_blank">' + reqBody.name + '</a> ');
                  $tr.data('appUrlData', {
                      _id: appUrlId,
                      name: reqBody.name,
