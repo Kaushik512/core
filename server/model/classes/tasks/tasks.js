@@ -113,6 +113,7 @@ taskSchema.methods.execute = function(userName, baseUrl, callback, onComplete) {
         logger.debug("Task last run timestamp updated",JSON.stringify(taskExecuteData));
         self.lastRunTimestamp = timestamp;
         self.lastTaskStatus = TASK_STATUS.RUNNING;
+        //logger.debug("========================= ",JSON.stringify(self));
         self.save(function(err, data) {
             if (err) {
                 logger.error("Unable to update task timestamp");
@@ -123,8 +124,6 @@ taskSchema.methods.execute = function(userName, baseUrl, callback, onComplete) {
             
 
         });
-        taskHistoryData.jobResultURL = self.taskConfig.jobResultURL;
-        //logger.debug("========================= ",JSON.stringify(self));
         if (!taskExecuteData) {
             taskExecuteData = {};
         }
@@ -149,6 +148,37 @@ taskSchema.methods.execute = function(userName, baseUrl, callback, onComplete) {
         if (taskExecuteData.buildNumber) {
             taskHistoryData.buildNumber = taskExecuteData.buildNumber;
         }
+        var arrStr;
+        var x;
+        var acUrl="";
+        if(self.taskConfig.jobResultURL != ""){
+            arrStr = self.taskConfig.jobResultURL.split("-");
+            x = taskExecuteData.buildNumber+"/"+arrStr[2].substr(arrStr[2].lastIndexOf("/")+1);
+            acUrl = arrStr[0]+"-"+arrStr[1]+"-"+x;
+        }
+        //self.taskConfig.jobResultURL = acUrl;
+        if (taskHistoryData.taskType === TASK_TYPE.JENKINS_TASK) {
+            var taskConfig = self.taskConfig;
+            taskConfig.jobResultURL = acUrl;
+            Tasks.update({
+                "_id": new ObjectId(self._id)
+            },{
+            $set: {
+                taskConfig: taskConfig
+            }
+            }, {
+            upsert: false
+            },function(err, data) {
+                if (err) {
+                    logger.error("Unable to update task jobResultURL");
+                    return;
+                }
+                logger.debug("Task jobResultURL updated");
+                
+            });
+        }
+        
+        taskHistoryData.jobResultURL = acUrl;
         TaskHistory.createNew(taskHistoryData, function(err, taskHistoryEntry) {
             if (err) {
                 logger.error("Unable to make task history entry", err);
