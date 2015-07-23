@@ -52,7 +52,6 @@ Catalyst new CENT OS WORKZONE setup
     [Tags]       Sanity               Smoke
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
-    ##Catalyst Check INFORMATION Status
     Catalyst Work SSH CHEFCLIENT STOP Setup after LAUNCH
     Catalyst Logout                      
     [Teardown]     Close Browser
@@ -71,7 +70,7 @@ Catalyst Grid View of the Stopped Instance and Restart,SSH,Chef Run,Start
     [Tags]       Sanity               Smoke
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
-    Catalyst Grid View Start ,Stop ,SSH ,Chef ,Client ,Log Setup
+    Catalyst Grid View Verify Start ,Stop ,SSH ,Chef ,Client ,Log Setup
     Catalyst Logout                      
     [Teardown]     Close Browser    
 
@@ -98,7 +97,6 @@ Catalyst new UBUNTU WORKZONE setup
     [Tags]       Sanity               Smoke
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
-    ##Catalyst Check INFORMATION Status for Ubuntu
     Catalyst Work SSH CHEFCLIENT STOP Setup after LAUNCH of Ubuntu
     Catalyst Logout                      
     [Teardown]     Close Browser
@@ -117,6 +115,6 @@ Catalyst Ubuntu Instance Grid View of Stopped Instance and Restart,SSH,Chef Run,
     [Tags]       Sanity               Smoke
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
-    Catalyst Grid View Start ,Stop ,SSH ,Chef ,Client ,Log Setup of Ubuntu
+    Catalyst Grid View Verify Start ,Stop ,SSH ,Chef ,Client ,Log Setup of Ubuntu
     Catalyst Logout                      
     [Teardown]     Close Browser 

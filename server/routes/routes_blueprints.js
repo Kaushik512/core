@@ -251,7 +251,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                 keys.push(aProvider.secretKey);
                                                 cryptography.decryptMultipleText(keys, cryptoConfig.decryptionEncoding, cryptoConfig.encryptionEncoding, function(err, decryptedKeys) {
                                                     if (err) {
-                                                        res.sned(500, "Failed to decrypt accessKey or secretKey");
+                                                        res.send(500, "Failed to decrypt accessKey or secretKey");
                                                         return;
                                                     }
 

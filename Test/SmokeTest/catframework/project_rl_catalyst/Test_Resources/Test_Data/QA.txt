@@ -18,7 +18,7 @@ ${ENVIRONMENT SERVER}              http://d4d.relevancelab.com:3001/public/login
  
 
 ${ENV}                 QA.txt
-${VALID USER}             superadmin
+${VALID USER}             superadminF
 ${VALID PASSWORD}         superadmin@123
 ${ORGANIZATION NAME}         Smoke_Rel_Org
 ${ORGANIZATION DOMAIN NAME}          www.relevancelab.com
@@ -62,17 +62,17 @@ ${SUITS}                stopped
 ${UserName}             root
 
 
-${USERPEMFILE}             	  ${ROOTPATH}\\Chef\\mycatqa.pem
-${VALIDATORPEMFILE}          ${ROOTPATH}\\Chef\\cattest-validator.pem
-${KNIFERBFILE}                ${ROOTPATH}\\Chef\\knife.rb
-${CATALYSTPEM}                ${ROOTPATH}\\Chef\\catalyst.pem
-${CAT_INSTANCES}              ${ROOTPATH}\\Chef\\cat_instances.pem
+${USERPEMFILE}              ${ROOTPATH}//Chef//mycatqa.pem
+${VALIDATORPEMFILE}      ${ROOTPATH}//Chef//cattest-validator.pem
+${KNIFERBFILE}                ${ROOTPATH}//Chef//knife.rb
+${CATALYSTPEM}                ${ROOTPATH}//Chef//catalyst.pem
+${CAT_INSTANCES}              ${ROOTPATH}//Chef//cat_instances.pem
 
-${CENTOSIMG}                  ${ROOTPATH}\\Images\\centos.jpg
-${UBUNTUIMG}                  ${ROOTPATH}\\Images\\ubuntuu.jpg
-${APPICON}                    ${ROOTPATH}\\Images\\rel.jpg    
-${TEMPLTYPEICON}              ${ROOTPATH}\\Images\\index.jpg           
-${APACHEIMG}                  ${ROOTPATH}\\Images\\apache.jpg
+${CENTOSIMG}                  ${ROOTPATH}//Images//centos.jpg
+${UBUNTUIMG}                  ${ROOTPATH}//Images//ubuntuu.jpg
+${APPICON}                    ${ROOTPATH}//Images//rel.jpg    
+${TEMPLTYPEICON}              ${ROOTPATH}//Images//index.jpg           
+${APACHEIMG}                  ${ROOTPATH}//Images//apache.jpg
 
 ${RECIPE}                  recipe[apt]     		
 ${RECIPE1}                 recipe[apt]

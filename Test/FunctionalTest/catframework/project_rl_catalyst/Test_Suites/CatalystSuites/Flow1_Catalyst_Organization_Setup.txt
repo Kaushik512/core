@@ -11,36 +11,86 @@ Library            String
 
 
 *** Test Cases ***
-Catalyst new organization setup
+Catalyst Validation and Creation of New Organization 
     [Tags]       Sanity               Smoke
 #    Catalyst Login 
     Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
-    Create New Organization
+    Validation and Creation of New Organization
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+
+Catalyst Edit the Organization and Domain Name  
+    [Tags]       Sanity               Smoke
+#    Catalyst Login 
+    Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
+    Catalyst Editing the Organization and Domain name
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+
+Catalyst Creation of New Org Admin 
+    [Tags]       Sanity               Smoke
+#    Catalyst Login 
+    Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
     Catalyst Create New Org Admin 
     Catalyst Logout                      
     [Teardown]     Close Browser
 
 
-Catalyst login as OrgAdmin user     
-    [Tags]       Sanity               Login
+
+Catalyst login as OrgAdmin user and ALL option disabled    
+    [Tags]       Sanity               Smoke
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
-    Catalyst Creating New User and Verfiy ALL is Disabled
-    Catalyst Creation of Designer and Consumer 
-    ##-Catalyst Org Admin Verfifcation of New,Update,Delete Button disabled
+    Catalyst Verfiy ALL is Disabled for OrgAdmin
     Catalyst Logout
     [Teardown]     Close Browser
 
 
-Catalyst Creation of Business Group,Projects setup
+Catalyst Creation of New Designer and Consumer    
+    [Tags]       Sanity               Smoke
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst Creation of Designer and Consumer
+    Catalyst Logout
+    [Teardown]     Close Browser
+
+
+
+Catalyst Validation and Creation of New Business Group
     [Tags]       Sanity               Smoke
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
-    Create New Business Group 
-    Create New Projects                         
+    Validation and Creation of New Business Groups 
     Catalyst Logout                      
     [Teardown]     Close Browser
 
 
 
+Catalyst Edit the BusinessGroup Name 
+    [Tags]       Sanity               Smoke
+#    Catalyst Login 
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst Editing the BusinessGroup Created
+    Catalyst Logout                      
+    [Teardown]     Close Browser
 
 
+
+Catalyst Validation and Creation of New Projects
+    [Tags]       Sanity               Smoke
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Validation and Creation of New Projects                        
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+Catalyst Edit the ProjectName and Description Name 
+    [Tags]       Sanity               Smoke
+#    Catalyst Login 
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst Editing the Proj and Descrptn Created
+    Catalyst Logout                      
+    [Teardown]     Close Browser    
