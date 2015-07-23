@@ -24,7 +24,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 res.send(500, errorResponses.db.error);
                 return;
             }
-            if(task){
+            if (task) {
                 configmgmtDao.getJenkinsDataFromId(task.taskConfig.jenkinsServerId, function(err, jenkinsData) {
                     if (err) {
                         logger.error('jenkins list fetch error', err);
@@ -41,7 +41,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                         next();
                     }
                 });
-            }else{
+            } else {
                 res.send(404);
                 return;
             }
@@ -137,94 +137,129 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 return;
             }
             if (task) {
-                if(task.taskType === 'jenkins' && task.taskConfig.autoSyncFlag === "true"){
-                    TaskHistory.getLast100HistoriesByTaskId(req.params.taskId,function(err, histories) {
-                            if (err) {
-                                logger.debug(errorResponses.db.error);
+                var flag = false;
+                logger.debug("task.taskConfig.autoSyncFlag==== ", typeof task.taskConfig.autoSyncFlag);
+                if (task.taskConfig.autoSyncFlag === "true") {
+                    flag = true;
+                }
+                if (task.taskType === 'jenkins' && flag) {
+                    logger.debug("Inside flag true");
+                    TaskHistory.getLast100HistoriesByTaskId(req.params.taskId, function(err, histories) {
+                        if (err) {
+                            logger.debug(errorResponses.db.error);
                             res.send(500, errorResponses.db.error);
                             return;
                         }
-                        
+                        //logger.debug("---------");
                         var historyResult = [];
-                        var jobResult =[];
-                        if(histories.length > 0){
-                            for(var i=0;i<histories.length;i++){
-                                    historyResult.push(histories[i].buildNumber);
-                                }
+                        var jobResult = [];
+                        if (histories.length > 0) {
+                            for (var i = 0; i < histories.length; i++) {
+                                historyResult.push(histories[i].buildNumber);
+                            }
                             jenkins.getJobInfo(task.taskConfig.jobName, function(err, job) {
                                 if (err) {
                                     logger.error('jenkins jobs fetch error', err);
-                                    
-                                }
-                                
-                                if(job){
-                                    for(var j=0;j<job.builds.length;j++){
-                                        jobResult.push(job.builds[j].number);
-                                    }
-                                }
-                                var count= 0;
-                                if(jobResult){
-                                    for (var x=0 ; x < jobResult.length; x++ ) {
-                                        count++;
-                                        if ( historyResult.indexOf(jobResult[x]) == -1 ){
-                                            logger.debug("------------------ ",jobResult[x]);
-                                            var hData = {
-                                                "taskId": req.params.taskId,
-                                                "taskType": "jenkins",
-                                                "user": req.session.user.cn,
-                                                "jenkinsServerId": task.taskConfig.jenkinsServerId,
-                                                "jobName": task.taskConfig.jobName,
-                                                "status": "success",
-                                                "timestampStarted": new Date().getTime(),
-                                                "buildNumber": jobResult[x],
-                                                "__v": 1,
-                                                "timestampEnded": new Date().getTime(),
-                                                "executionResults": [],
-                                                "nodeIdsWithActionLog": [],
-                                                "nodeIds": [],
-                                                "runlist": []
-                
-                                            };
-                                            TaskHistory.createNew(hData, function(err, taskHistoryEntry) {
-                                                if (err) {
-                                                    logger.error("Unable to make task history entry", err);
-                                                    return;
-                                                }
-                                                logger.debug("Task history created");
-                                            });
-                                        }
-                                        if(count === jobResult.length){
-                                            task.getHistory(function(err, tHistories) {
-                                                if (err) {
-                                                    res.send(500, errorResponses.db.error);
-                                                    return;
-                                                }
-                                                res.send(tHistories);
-                                            });
-                                        }
-                                    }
-                                }
-                                        
-                            });
-                        }else{
 
-                            var jobResult =[];
-                            jenkins.getJobInfo(task.taskConfig.jobName, function(err, job) {
-                                if (err) {
-                                    logger.error('jenkins jobs fetch error', err);
-                                    
                                 }
-                                
-                                if(job){
-                                    for(var j=0;j<job.builds.length;j++){
+
+                                if (job) {
+                                    for (var j = 0; j < job.builds.length; j++) {
                                         jobResult.push(job.builds[j].number);
                                     }
                                 }
-                                var count =0;
-                                if(jobResult){
-                                    for (var x=0 ; x < jobResult.length; x++ ) {
-                                        count++;
-                                            logger.debug("------------------ ",jobResult[x]);
+                                var count = 0;
+                                if (jobResult.length > 0) {
+
+                                    for (var x = 0; x < jobResult.length; x++) {
+                                        (function(x) {
+                                            count++;
+                                            //logger.debug("------+++++---");
+                                            if (historyResult.indexOf(jobResult[x]) == -1) {
+                                                //logger.debug("------------------ ", jobResult[x]);
+                                                var hData = {
+                                                    "taskId": req.params.taskId,
+                                                    "taskType": "jenkins",
+                                                    "user": req.session.user.cn,
+                                                    "jenkinsServerId": task.taskConfig.jenkinsServerId,
+                                                    "jobName": task.taskConfig.jobName,
+                                                    "status": "success",
+                                                    "timestampStarted": new Date().getTime(),
+                                                    "buildNumber": jobResult[x],
+                                                    "__v": 1,
+                                                    "timestampEnded": new Date().getTime(),
+                                                    "executionResults": [],
+                                                    "nodeIdsWithActionLog": [],
+                                                    "nodeIds": [],
+                                                    "runlist": []
+
+                                                };
+                                                TaskHistory.createNew(hData, function(err, taskHistoryEntry) {
+                                                    //count++;
+                                                    if (err) {
+                                                        logger.error("Unable to make task history entry", err);
+                                                        return;
+                                                    }
+                                                    //logger.debug("Task history created");
+                                                    logger.debug("Task history created====== ", count + " " + jobResult.length);
+                                                    if (count === jobResult.length) {
+                                                        task.getHistory(function(err, tHistories) {
+                                                            if (err) {
+                                                                res.send(500, errorResponses.db.error);
+                                                                return;
+                                                            }
+                                                            res.send(tHistories);
+                                                            return;
+                                                        });
+                                                    }
+                                                });
+                                            } else {
+                                                if (count === jobResult.length) {
+                                                    task.getHistory(function(err, tHistories) {
+                                                        if (err) {
+                                                            res.send(500, errorResponses.db.error);
+                                                            return;
+                                                        }
+                                                        res.send(tHistories);
+                                                        return;
+                                                    });
+                                                }
+                                            }
+                                        })(x);
+
+                                    }
+                                } else {
+                                    task.getHistory(function(err, tHistories) {
+                                        if (err) {
+                                            res.send(500, errorResponses.db.error);
+                                            return;
+                                        }
+                                        res.send(tHistories);
+                                        return;
+                                    });
+                                }
+
+                            });
+                        } else {
+
+                            var jobResult = [];
+                            jenkins.getJobInfo(task.taskConfig.jobName, function(err, job) {
+                                if (err) {
+                                    logger.error('jenkins jobs fetch error', err);
+
+                                }
+
+                                if (job) {
+                                    for (var j = 0; j < job.builds.length; j++) {
+                                        jobResult.push(job.builds[j].number);
+                                    }
+                                }
+                                var count1 = 0;
+                                if (jobResult) {
+                                    for (var x = 0; x < jobResult.length; x++) {
+                                        (function(x) {
+                                            //count1++;
+                                            //logger.debug("------------------ ", jobResult[x]);
                                             var hData = {
                                                 "taskId": req.params.taskId,
                                                 "taskType": "jenkins",
@@ -240,31 +275,35 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                 "nodeIdsWithActionLog": [],
                                                 "nodeIds": [],
                                                 "runlist": []
-                
+
                                             };
                                             TaskHistory.createNew(hData, function(err, taskHistoryEntry) {
+                                                count1++;
                                                 if (err) {
                                                     logger.error("Unable to make task history entry", err);
                                                     return;
                                                 }
-                                                logger.debug("Task history created");
-                                            });
-                                        if(count === jobResult.length){
-                                            task.getHistory(function(err, tHistories) {
-                                                if (err) {
-                                                    res.send(500, errorResponses.db.error);
-                                                    return;
+                                                logger.debug("Task history created====== ", count1 + " " + jobResult.length);
+                                                if (count1 === jobResult.length) {
+                                                    task.getHistory(function(err, tHistories) {
+                                                        if (err) {
+                                                            res.send(500, errorResponses.db.error);
+                                                            return;
+                                                        }
+                                                        res.send(tHistories);
+                                                        return;
+                                                    });
                                                 }
-                                                res.send(tHistories);
                                             });
-                                        }
+                                        })(x);
                                     }
                                 }
-                                    
+
                             });
                         }
                     });
-                }else{
+                } else {
+                    logger.debug("Else part...");
                     task.getHistory(function(err, tHistories) {
                         if (err) {
                             res.send(500, errorResponses.db.error);
@@ -278,6 +317,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
             }
         });
     });
+
 
     app.post('/tasks', function(req, res) {
         Tasks.getTaskByIds(req.body.taskIds, function(err, data) {

@@ -55,11 +55,12 @@ taskHistorySchema.statics.createNew = function(historyData, callback) {
 };
 
 taskHistorySchema.statics.getHistoryByTaskId = function(taskId, callback) {
-    logger.debug("=============",typeof taskId);
-    var query = {
+    this.find({ 
+        $query : {
         taskId: taskId
-    }
-    this.find({ $query : query ,$orderby :{"buildNumber" : -1}}, function(err, tHistories) {
+    } ,$orderby :{
+        "buildNumber" : -1
+    }}, function(err, tHistories) {
         if (err) {
             callback(err, null);
             return;

@@ -3585,7 +3585,6 @@
                                                                                                 var url;
 
                                                                                                 if (taskHistories[i].buildNumber === job.nextBuildNumber) {
-                                                                                                    alert("pela");
                                                                                                     if (typeof job.builds[job.nextBuildNumber - 1] === "undefined") {
                                                                                                         var $tdJobName = $('<td/>').html('Current Job is still pending');
                                                                                                         $trHistoryRow.append($tdJobName);
