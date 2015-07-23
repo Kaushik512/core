@@ -17,6 +17,37 @@ var logger = require('../lib/logger')(module);
 module.exports.setRoutes = function(app, sessionVerification) {
     app.all('/tasks/*', sessionVerification);
 
+    app.all('/tasks/:taskId/*', function(req, res, next) {
+        Tasks.getTaskById(req.params.taskId, function(err, task) {
+            if (err) {
+                logger.error(err);
+                res.send(500, errorResponses.db.error);
+                return;
+            }
+            if(task){
+                configmgmtDao.getJenkinsDataFromId(task.taskConfig.jenkinsServerId, function(err, jenkinsData) {
+                    if (err) {
+                        logger.error('jenkins list fetch error', err);
+                        res.send(500, errorResponses.db.error);
+                        return;
+                    } else {
+                        if (!(jenkinsData && jenkinsData.length)) {
+                            res.send(404, errorResponses.jenkins.notFound);
+                            return;
+                        }
+                        req.CATALYST = {
+                            jenkins: jenkinsData[0]
+                        };
+                        next();
+                    }
+                });
+            }else{
+                res.send(404);
+                return;
+            }
+        });
+    });
+
     app.get('/tasks/:taskId/run', function(req, res) {
         Tasks.getTaskById(req.params.taskId, function(err, task) {
             if (err) {
@@ -92,6 +123,12 @@ module.exports.setRoutes = function(app, sessionVerification) {
     });
 
     app.get('/tasks/:taskId/history', function(req, res) {
+        var jenkinsData = req.CATALYST.jenkins;
+        var jenkins = new Jenkins({
+            url: jenkinsData.jenkinsurl,
+            username: jenkinsData.jenkinsusername,
+            password: jenkinsData.jenkinspassword
+        });
 
         Tasks.getTaskById(req.params.taskId, function(err, task) {
             if (err) {
@@ -99,19 +136,9 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 res.send(500, errorResponses.db.error);
                 return;
             }
-            logger.debug("llllll",JSON.stringify(task));
             if (task) {
-
-                logger.debug("=================== ",task.taskConfig.autoSyncFlag);
                 if(task.taskType === 'jenkins' && task.taskConfig.autoSyncFlag === "true"){
-
-                    var jenkins = new Jenkins({
-                        url: "http://54.67.35.103",
-                        username: "admin",
-                        password: "admin@RL123"
-                    });
                     TaskHistory.getLast100HistoriesByTaskId(req.params.taskId,function(err, histories) {
-                        logger.debug("TaskHistory>>>>>>>>>>> ",JSON.stringify(histories));
                             if (err) {
                                 logger.debug(errorResponses.db.error);
                             res.send(500, errorResponses.db.error);

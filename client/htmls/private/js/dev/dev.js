@@ -3342,13 +3342,14 @@
 
                                                                    var $tdExecute = $('<td style="vertical-align:inherit;text-align:center;"></td>').append('<a rel="tooltip" data-placement="top" data-original-title="Execute" data-toggle="modal" href="javascript:void(0)" class="btn btn-primary btn-sg tableactionbutton"><i class="ace-icon fa fa-play bigger-120"></i></a>');
                                                                    $tdExecute.find('a').data('taskId', data[i]._id).attr('data-executeTaskId', data[i]._id).click(function(e) {
+                                                                    var taskId = $(this).data('taskId');
                                                                     bootbox.confirm({
                                                                         message: "Are you sure yuou want to execute this Job?",
                                                                         title: "Confirmation",
                                                                         callback: function(result) {
                                                                             if (result) {
 
-                                                                                var taskId = $(this).data('taskId');
+                                                                                
                                                                                 var $taskExecuteTabsHeaderContainer = $('#taskExecuteTabsHeader').empty();
                                                                                 var $taskExecuteTabsContent = $('#taskExecuteTabsContent').empty();
                                                                                 var $modal = $('#assignedExecute');
