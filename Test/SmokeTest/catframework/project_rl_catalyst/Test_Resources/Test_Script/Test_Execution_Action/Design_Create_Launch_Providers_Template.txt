@@ -1266,11 +1266,12 @@ Clicks on New Button of Providers
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='addnewitem']
 
 Select the Provider
+    Sleep    3s
     Click Element    css=#s2id_providertype > .select2-choice
     Log    after click
-    Input Text    css=#select2-drop .select2-input    AWS
-    Sleep    3s
-    Click Element    xpath=//*[@id='select2-drop']/ul/li/div
+    Input Text    css=#select2-drop .select2-input    ${PROVIDERR}
+    Sleep    4s
+    Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
 
 Enters the Name of the Provider
     Sleep    1s
