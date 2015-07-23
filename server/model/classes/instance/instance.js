@@ -140,6 +140,7 @@ var InstanceSchema = new Schema({
     platformId: String,
     instanceIP: {
         type: String,
+        index: true,
         trim: true
     },
     appUrls: [{
@@ -172,6 +173,18 @@ var InstanceSchema = new Schema({
         },
         chefNodeName: String
     },
+    software:[
+        {
+            name: {
+                type: String,
+                trim: true
+            },
+            version: {
+                type: String,
+                trim: true
+            }
+        }
+    ],
     credentials: {
         username: {
             type: String,
@@ -206,9 +219,10 @@ var InstanceSchema = new Schema({
 
 InstanceSchema.plugin(uniqueValidator);
 InstanceSchema.plugin(textSearch);
+//InstanceSchema.index({ instanceIP: 'text' });
 
 var Instances = mongoose.model('instances', InstanceSchema);
-
+mongoose.set('debug',true);
 
 
 var InstancesDao = function() {
@@ -216,11 +230,14 @@ var InstancesDao = function() {
         logger.debug("Enter searchInstances query - (%s)", searchquery);
         Instances.textSearch(searchquery,function(err,data){
             if(!err){
+                logger.debug(data.length);
                 callback(null,data);
+                return;
             }
             else{
                 logger.debug('Error in search:' + err);
                 callback(err,null);
+                return;
             }
         });
     };

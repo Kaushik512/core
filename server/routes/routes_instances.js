@@ -538,10 +538,10 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         }
         logger.debug(JSON.stringify(options));
        // req.params.querytext = '(\"' + req.params.querytext + '\") AND (' + req.params.orgid + ' AND ' + req.params.bgid + ' AND ' + req.params.projid +  ' AND ' + req.params.envid + ')';
-        instancesDao.searchInstances('\"' + req.params.querytext + '\"',function(err,data){
+        instancesDao.searchInstances(req.params.querytext,options,function(err,data){
             if(!err){
                 logger.debug('Received from search');
-                logger.debug(data);
+               logger.debug(data.length);
                 res.send(data);
             }
         });
