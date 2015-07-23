@@ -192,7 +192,7 @@ taskSchema.methods.getChefTaskNodes = function() {
 };
 
 taskSchema.methods.getHistory = function(callback) {
-    TaskHistory.getHistoryByTaskId(this._id, function(err, tHistories) {
+    TaskHistory.getHistoryByTaskId(this.id, function(err, tHistories) {
         callback(err, tHistories);
     });
 };
