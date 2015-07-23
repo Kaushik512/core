@@ -222,7 +222,7 @@ InstanceSchema.plugin(textSearch);
 //InstanceSchema.index({ instanceIP: 'text' });
 
 var Instances = mongoose.model('instances', InstanceSchema);
-mongoose.set('debug',true);
+//mongoose.set('debug',true);
 
 
 var InstancesDao = function() {
@@ -230,8 +230,17 @@ var InstancesDao = function() {
         logger.debug("Enter searchInstances query - (%s)", searchquery);
         Instances.textSearch(searchquery,function(err,data){
             if(!err){
-                logger.debug(data.length);
-                callback(null,data);
+               // logger.debug(data.length);
+                var data1 = {
+                    "tasks":[],
+                    instances:[],
+                    queryduration:''
+                }
+                for(var i = 0; i < data.results.length; i++){
+                    data1.instances.push(data.results[i].obj);
+                }
+                data1.queryduration = (data.stats.timeMicros/1000000);
+                callback(null,data1);
                 return;
             }
             else{

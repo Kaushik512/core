@@ -145,6 +145,7 @@
                                                            bindChange_importPemFile();
                                                            bindSubmit_AddInstance();
                                                            bindClick_removeInstance();
+                                                           bindClick_searchInstances();
                                                            populateOSList();
 
                                                            var validator = $('#instanceEditNew').validate({
@@ -328,6 +329,19 @@
 
                                                            });
                                                        }
+
+                                                       /* Attaching Click event for search box using text search */
+
+                                                       function bindClick_searchInstances(){
+                                                        $('#instancesearch').click(function(e){
+                                                            //alert(urlParams.projid);
+                                                            $.get('/instances/search/' + urlParams.org + '/' + urlParams['bg'] + '/' + urlParams.projid + '/' +  urlParams.envid + '/' + encodeURIComponent($('#instanceSearchQuery').val()),function(data){
+                                                              console.log(JSON.stringify(data));
+                                                              createInstanceUI(data.instances);
+                                                            });
+                                                        });
+                                                       }
+
 
                                                        /*Attaching Click event on instances tab which will set BreadCrumb for Instances*/
                                                        function bindClick_instnaceTab() {
@@ -4609,6 +4623,7 @@
                                                        disableImportLaunch();
                                                        disableTaskLink();
                                                        initializeInstance();
+
                                                        initializeBluePrints();
                                                        initializeContainer();
                                                        registerEventsForPemFile();
