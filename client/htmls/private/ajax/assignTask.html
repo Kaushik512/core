@@ -213,8 +213,8 @@
                                                             </thead>
                                                             <tbody>
                                                                <tr>
-                                                                  <td class="jobParam">Job Result Url:</td>
-                                                                  <td><div class="col-lg-12 col-md-12"><div id="jobResultUrl" type="text" placeholder="http://<url>/<$buildNumber>" class="form-control inputJobResultUrl" name="jobResultUrl"></div></div></td>
+                                                                  <td class="jobParam">Job Result Pattern:</td>
+                                                                  <td><div class="col-lg-12 col-md-12"><input id="jobResultUrl" type="text" placeholder=" ex:http://{host:port}/<TestResult>/<lastBuild>/log.html" class="form-control inputJobResultUrl" name="jobResultUrl"></div><i><span style="margin-left:29px;">ex:http://{host:port}/TestResult/lastBuild/log.html</span><i></td>
                                                                </tr>
                                                                <tr>
                                                                   <td class="jobParam">Job Url:</td>
@@ -920,18 +920,18 @@ $(document).ready(function() {
                 var $jobUrlList = $('.jenkinsJobURL');
                 var $jobOutputUtl = $('#jobResultUrl');
                 if (jobName) {
-                    $.get('/jenkins/' + jenkinsServerId + '/job/' + jobName + '/lastBuild', function(data) {
+                   // $.get('/jenkins/' + jenkinsServerId + '/job/' + jobName + '/lastBuild', function(data) {
 
                         /*var url = taskData.jobResultURL;
                         if (url) {
                             url = url.replace('lastBuild', data.number);
                         }*/
-                        var url = "http://54.67.35.103:8000/Catalyst_Test_Results/jenkins-"+jobName+"-"+data.number+"/log.html";
+                      /*  var url = "http://54.67.35.103:8000/Catalyst_Test_Results/jenkins-"+jobName+"-"+data.number+"/log.html";
                         //alert(url);
                         var $anchor = "<span><a style='font-size:13px;word-wrap:break-word;' title='" + url + "' href='" + url + "'' target='_blank' >" + url + "</a></span>";
-                        $jobOutputUtl.append($anchor);
+                        $jobOutputUtl.append($anchor);*/
                         //taskData.jobResultURL = url;
-                    });
+                    //});
                     $('.jenkinsJobURL').empty();
                     $.get('/jenkins/' + jenkinsServerId + '/jobs/' + jobName, function(jobsList) {
                         //for (var i = 0; i < jobsList.length; i++) {
@@ -1196,9 +1196,12 @@ $(document).ready(function() {
             if (taskType === 'jenkins') {
                 $.get('/jenkins/' + taskData.jenkinsServerId + '/job/' + taskData.jobName + '/lastBuild', function(data) {
                     var url = taskData.jobResultURL;
+                    
                     if (url) {
-                        url = url.replace('lastBuild', data.number);
+                        url = url.replace('-lastBuild/', data.number);
+                        
                     }
+                    
                     taskData.jobResultURL = url;
                     var reqBody = {
                         taskData: taskData

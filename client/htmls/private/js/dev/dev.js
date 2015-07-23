@@ -3317,7 +3317,7 @@
                                                                       /*if (url) {
                                                                           url = url.replace('lastBuild', );
                                                                       }*/
-                                                                       var $tdNodeList = $('<td style="vertical-align:inherit;text-align:center;"></td>').append('Job -&nbsp;<a style="word-break: break-all;text-decoration:none" title="'+ url +'" href="'+ url +'" target="_blank">' + data[i].taskConfig.jobName + '</a>');
+                                                                       var $tdNodeList = $('<td style="vertical-align:inherit;text-align:center;"></td>').append('Job Result -&nbsp;<a style="word-break: break-all;text-decoration:none" title="'+ url +'" href="'+ url +'" target="_blank">' + data[i].taskConfig.jobName + '</a>');
                                                                    }
                                                                    $tr.append($tdNodeList);
                                                                    /*if (data[i].taskType === 'chef') {
@@ -3572,7 +3572,6 @@
                                                                                                 var url;
 
                                                                                                 if (taskHistories[i].buildNumber === job.nextBuildNumber) {
-                                                                                                    alert("pela");
                                                                                                     if (typeof job.builds[job.nextBuildNumber - 1] === "undefined") {
                                                                                                         var $tdJobName = $('<td/>').html('Current Job is still pending');
                                                                                                         $trHistoryRow.append($tdJobName);

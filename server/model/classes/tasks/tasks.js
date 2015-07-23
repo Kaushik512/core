@@ -154,7 +154,8 @@ taskSchema.methods.execute = function(userName, baseUrl, callback, onComplete) {
             taskHistory = taskHistoryEntry;
             logger.debug("Task history created");
         });
-    //});
+
+
 
         callback(null, taskExecuteData);
     }, function(err, status, resultData) {
@@ -193,7 +194,7 @@ taskSchema.methods.getChefTaskNodes = function() {
 };
 
 taskSchema.methods.getHistory = function(callback) {
-    TaskHistory.getHistoryByTaskId(this._id, function(err, tHistories) {
+    TaskHistory.getHistoryByTaskId(this.id, function(err, tHistories) {
         callback(err, tHistories);
     });
 };
