@@ -127,7 +127,7 @@ CloudFormationSchema.statics.createNew = function(cfData, callback) {
         templateFile: cfData.templateFile,
         cloudProviderId: cfData.cloudProviderId,
         infraManagerId: cfData.infraManagerId,
-        infraManagerData: infraManager,
+        //infraManagerData: infraManager,
         infraManagerType: infraManagerType,
         stackParameters: cfData.stackParameters,
         region: cfData.region,

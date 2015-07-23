@@ -111,7 +111,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                     //stackName: req.body.blueprintData.stackName,
                     templateFile: req.body.blueprintData.cftTemplateFile,
                     region: req.body.blueprintData.region,
-                    instanceUsername: req.body.blueprintData.cftInstanceUserName
+                    //instanceUsername: req.body.blueprintData.cftInstanceUserName
+                    instances: req.body.blueprintData.cftInstances
                 }
                 blueprintData.cloudFormationData = cloudFormationData;
             } else {
@@ -252,13 +253,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                             return;
                         }
 
-                        var version = blueprint.getVersionData(req.query.version);
-                        if (!version) {
-                            res.send(400, {
-                                message: "No blueprint version available"
-                            });
-                            return;
-                        }
+
 
                         var infraManager = blueprint.getInfraManagerData();
                         configmgmtDao.getEnvNameFromEnvId(req.query.envId, function(err, envName) {
@@ -295,6 +290,13 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                 logger.debug('Chef Repo Location = ', chefDetails.chefRepoLocation);
                                 var cloudProvider = blueprint.getCloudProviderData();
                                 if (blueprint.blueprintType === 'instance_launch') {
+                                    var version = blueprint.getVersionData(req.query.version);
+                                    if (!version) {
+                                        res.send(400, {
+                                            message: "No blueprint version available"
+                                        });
+                                        return;
+                                    }
 
                                     VMImage.getImageById(cloudProvider.cloudProviderData.imageId, function(err, anImage) {
                                         if (err) {
@@ -776,7 +778,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                     templateFile: blueprint.blueprintConfig.templateFile,
                                                                     cloudProviderId: blueprint.blueprintConfig.cloudProviderId,
                                                                     infraManagerId: infraManager.infraManagerId,
-                                                                    runlist: version.runlist,
+                                                                    //runlist: version.runlist,
                                                                     infraManagerType: 'chef',
                                                                     stackName: stackName,
                                                                     stackId: stackData.StackId,
@@ -822,12 +824,15 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
 
                                                                             var ec2 = new EC2(awsSettings);
-                                                                            var instanceIds = [];
+                                                                            var stackResources = {};
                                                                             for (var i = 0; i < resources.length; i++) {
                                                                                 if (resources[i].ResourceType === 'AWS::EC2::Instance') {
-                                                                                    instanceIds.push(resources[i].PhysicalResourceId);
+                                                                                    //instanceIds.push(resources[i].PhysicalResourceId);
+                                                                                    stackResources[resources[i].PhysicalResourceId] = resources[i].LogicalResourceId;
                                                                                 }
                                                                             }
+                                                                            var instanceIds = Object.keys(stackResources);
+
                                                                             console.log("instanceIDS length ==>", instanceIds.length);
                                                                             if (instanceIds.length) {
 
@@ -851,7 +856,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                                         console.log('INstances length ==>', instances.length, instanceIds);
                                                                                         console.log(awsRes);
                                                                                         for (var i = 0; i < instances.length; i++) {
-                                                                                            
+
                                                                                             (function(instanceData) {
                                                                                                 var keyPairName = instanceData.KeyName;
                                                                                                 AWSKeyPair.getAWSKeyPairByProviderIdAndKeyPairName(cloudFormation.cloudProviderId, keyPairName, function(err, keyPairs) {
@@ -886,6 +891,18 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                                                             }
                                                                                                         }
 
+                                                                                                        var runlist = [];
+                                                                                                        var instanceUsername;
+                                                                                                        var logicalId = stackResources[instanceData.InstanceId];
+
+                                                                                                        for (var count = 0; count < blueprint.blueprintConfig.instances.length; count++) {
+                                                                                                            if (logicalId === blueprint.blueprintConfig.instances[count].logicalId) {
+                                                                                                                instanceUsername = blueprint.blueprintConfig.instances[count].username;
+                                                                                                                runlist = blueprint.blueprintConfig.instances[count].runlist;
+                                                                                                                break;
+                                                                                                            }
+                                                                                                        }
+
                                                                                                         var instance = {
                                                                                                             name: instanceName,
                                                                                                             orgId: blueprint.orgId,
@@ -895,7 +912,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                                                             providerId: cloudFormation.cloudProviderId,
                                                                                                             keyPairId: keyPair._id,
                                                                                                             chefNodeName: instanceData.InstanceId,
-                                                                                                            runlist: version.runlist,
+                                                                                                            runlist: runlist,
                                                                                                             platformId: instanceData.InstanceId,
                                                                                                             appUrls: appUrls,
                                                                                                             instanceIP: instanceData.PublicIpAddress,
@@ -913,7 +930,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                                                                 os: os
                                                                                                             },
                                                                                                             credentials: {
-                                                                                                                username: cloudFormation.instanceUsername,
+                                                                                                                username: instanceUsername,
                                                                                                                 pemFileLocation: encryptedPemFileLocation,
                                                                                                             },
                                                                                                             chef: {

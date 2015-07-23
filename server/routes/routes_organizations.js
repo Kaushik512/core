@@ -1088,7 +1088,8 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     //stackName: req.body.blueprintData.stackName,
                     templateFile: req.body.blueprintData.cftTemplateFile,
                     region: req.body.blueprintData.region,
-                    instanceUsername: req.body.blueprintData.cftInstanceUserName
+                    //instanceUsername: req.body.blueprintData.cftInstanceUserName
+                    instances:req.body.blueprintData.cftInstances
                 }
                 blueprintData.cloudFormationData = cloudFormationData;
             } else {

@@ -17,7 +17,6 @@ var CloudFormationBlueprintSchema = new Schema({
     cloudProviderId: String,
     infraMangerType: String,
     infraManagerId: String,
-    infraManagerData: Schema.Types.Mixed,
     templateFile: String,
     stackParameters: [{
         _id: false,
@@ -30,10 +29,15 @@ var CloudFormationBlueprintSchema = new Schema({
             trim: true
         }
     }],
+    instances: [{
+        _id: false,
+        logicalId: String,
+        username: String,
+        runlist: [String]
+    }],
     //stackName: String,
     templateFile: String,
     region: String,
-    instanceUsername: String
 });
 
 function getInfraManagerConfigType(blueprint) {
@@ -55,22 +59,25 @@ CloudFormationBlueprintSchema.methods.launch = function(launchOptions, infraMana
 };
 
 CloudFormationBlueprintSchema.methods.update = function(updateData) {
-    infraManagerConfig = getInfraManagerConfigType(this);
-    infraManagerConfig.update(updateData);
-    this.infraManagerData = infraManagerConfig;
+    // infraManagerConfig = getInfraManagerConfigType(this);
+    // infraManagerConfig.update(updateData);
+    // this.infraManagerData = infraManagerConfig;
+
 };
 
 
 CloudFormationBlueprintSchema.methods.getVersionData = function(ver) {
-    infraManagerConfig = getInfraManagerConfigType(this);
-    return infraManagerConfig.getVersionData(ver);
+    // infraManagerConfig = getInfraManagerConfigType(this);
+    // return infraManagerConfig.getVersionData(ver);
+    return null;
 };
 
 
 
 CloudFormationBlueprintSchema.methods.getLatestVersion = function() {
-    infraManagerConfig = getInfraManagerConfigType(this);
-    return infraManagerConfig.getLatestVersion();
+    // infraManagerConfig = getInfraManagerConfigType(this);
+    // return infraManagerConfig.getLatestVersion();
+    return null;
 };
 
 
@@ -85,8 +92,8 @@ CloudFormationBlueprintSchema.methods.getCloudProviderData = function() {
 CloudFormationBlueprintSchema.methods.getInfraManagerData = function() {
     return {
         infraMangerType: this.infraManagerType,
-        infraManagerId: this.infraManagerId,
-        infraManagerData: this.infraManagerData
+        infraManagerId: this.infraManagerId
+        //   infraManagerData: this.infraManagerData
     };
 };
 
@@ -99,9 +106,9 @@ CloudFormationBlueprintSchema.statics.createNew = function(data) {
     var infraManagerType;
     if (data.infraManagerType === INFRA_MANAGER_TYPE.CHEF) {
         infraManagerType = INFRA_MANAGER_TYPE.CHEF;
-        infraManagerBlueprint = CHEFInfraBlueprint.createNew({
-            runlist: data.runlist
-        });
+        // infraManagerBlueprint = CHEFInfraBlueprint.createNew({
+        //     runlist: data.runlist
+        // });
 
     } else if (data.infraManagerType === INFRA_MANAGER_TYPE.PUPPET) {
         infraManagerType = INFRA_MANAGER_TYPE.PUPPET;
@@ -128,12 +135,13 @@ CloudFormationBlueprintSchema.statics.createNew = function(data) {
         cloudProviderId: data.cloudProviderId,
         infraMangerType: infraManagerType,
         infraManagerId: data.infraManagerId,
-        infraManagerData: infraManagerBlueprint,
+        /*infraManagerData: infraManagerBlueprint,*/
         stackParameters: stackParameters,
         //stackName: data.stackName,
         templateFile: data.templateFile,
         region: data.region,
-        instanceUsername: data.instanceUsername
+        instances: data.instances
+        // instanceUsername: data.instanceUsername
     });
 
 
