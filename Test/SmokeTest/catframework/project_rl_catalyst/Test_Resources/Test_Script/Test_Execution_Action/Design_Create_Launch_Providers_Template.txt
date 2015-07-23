@@ -76,9 +76,12 @@ Catalyst Creation of VM Image Process for Windows
     Clicks on Save Button of Providers
 
 Select organization now
-    Click Element    xpath=.//*[@id='s2id_orgId']/a/span[1]
-    Input Text    xpath=.//*[@id='select2-drop']/div/input     ${ORGANIZATION NAME}
-    Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
+    Sleep    4s
+    Click Element    css=#s2id_orgId > .select2-choice
+    Log    after click
+    Input Text    css=#select2-drop .select2-input    ${ORGANIZATION NAME}
+    Sleep    4s
+    Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
 
 Clicks on Edit Button of Windows Image
     Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()='Windows']/../td[6]/div/a[2]
