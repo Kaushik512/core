@@ -117,10 +117,11 @@ taskSchema.methods.execute = function(userName, baseUrl, callback, onComplete) {
                 logger.error("Unable to update task timestamp");
                 return;
             }
-            logger.debug("Task last run timestamp updated",JSON.stringify(data));
-            taskHistoryData.jobResultURL = data.taskConfig.jobResultURL;
+            logger.debug("Task last run timestamp updated");
+            
         });
-
+        taskHistoryData.jobResultURL = self.taskConfig.jobResultURL;
+        //logger.debug("========================= ",JSON.stringify(self));
         if (!taskExecuteData) {
             taskExecuteData = {};
         }
