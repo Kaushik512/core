@@ -92,84 +92,150 @@ module.exports.setRoutes = function(app, sessionVerification) {
     });
 
     app.get('/tasks/:taskId/history', function(req, res) {
+
         Tasks.getTaskById(req.params.taskId, function(err, task) {
             if (err) {
                 logger.error(err);
                 res.send(500, errorResponses.db.error);
                 return;
             }
+            logger.debug("llllll",JSON.stringify(task));
             if (task) {
+
                 logger.debug("=================== ",task.taskConfig.autoSyncFlag);
                 if(task.taskType === 'jenkins' && task.taskConfig.autoSyncFlag === "true"){
+
                     var jenkins = new Jenkins({
                         url: "http://54.67.35.103",
                         username: "admin",
                         password: "admin@RL123"
                     });
                     TaskHistory.getLast100HistoriesByTaskId(req.params.taskId,function(err, histories) {
+                        logger.debug("TaskHistory>>>>>>>>>>> ",JSON.stringify(histories));
                             if (err) {
+                                logger.debug(errorResponses.db.error);
                             res.send(500, errorResponses.db.error);
                             return;
                         }
-                        logger.debug("TaskHistory>>>>>>>>>>> ",JSON.stringify(histories));
+                        
                         var historyResult = [];
                         var jobResult =[];
-                        if(histories){
+                        if(histories.length > 0){
                             for(var i=0;i<histories.length;i++){
                                     historyResult.push(histories[i].buildNumber);
                                 }
-                        }
-                        jenkins.getJobInfo(histories[0].jobName, function(err, job) {
-                            if (err) {
-                                logger.error('jenkins jobs fetch error', err);
-                                
-                            }
-                            
-                            if(job){
-                                for(var j=0;j<job.builds.length;j++){
-                                    jobResult.push(job.builds[j].number);
+                            jenkins.getJobInfo(task.taskConfig.jobName, function(err, job) {
+                                if (err) {
+                                    logger.error('jenkins jobs fetch error', err);
+                                    
                                 }
-                            }
-                            
-                            if(jobResult){
-                                for (var x=0 ; x < jobResult.length; x++ ) {
-                                    if ( historyResult.indexOf(jobResult[x]) == -1 ){
-                                        logger.debug("------------------ ",jobResult[x]);
-                                        var hData = {
-                                            "taskId": req.params.taskId,
-                                            "taskType": "jenkins",
-                                            "user": req.session.user.cn,
-                                            "jenkinsServerId": task.taskConfig.jenkinsServerId,
-                                            "jobName": histories[0].jobName,
-                                            "status": "success",
-                                            "timestampStarted": new Date().getTime(),
-                                            "buildNumber": jobResult[x],
-                                            "__v": 1,
-                                            "timestampEnded": new Date().getTime(),
-                                            "executionResults": [],
-                                            "nodeIdsWithActionLog": [],
-                                            "nodeIds": [],
-                                            "runlist": []
-            
-                                        };
-                                        TaskHistory.createNew(hData, function(err, taskHistoryEntry) {
-                                            if (err) {
-                                                logger.error("Unable to make task history entry", err);
-                                                return;
-                                            }
-                                            logger.debug("Task history created");
-                                        });
+                                
+                                if(job){
+                                    for(var j=0;j<job.builds.length;j++){
+                                        jobResult.push(job.builds[j].number);
                                     }
                                 }
-                            }
-                                    task.getHistory(function(err, tHistories) {
-                                        if (err) {
-                                            res.send(500, errorResponses.db.error);
-                                            return;
+                                var count= 0;
+                                if(jobResult){
+                                    for (var x=0 ; x < jobResult.length; x++ ) {
+                                        count++;
+                                        if ( historyResult.indexOf(jobResult[x]) == -1 ){
+                                            logger.debug("------------------ ",jobResult[x]);
+                                            var hData = {
+                                                "taskId": req.params.taskId,
+                                                "taskType": "jenkins",
+                                                "user": req.session.user.cn,
+                                                "jenkinsServerId": task.taskConfig.jenkinsServerId,
+                                                "jobName": task.taskConfig.jobName,
+                                                "status": "success",
+                                                "timestampStarted": new Date().getTime(),
+                                                "buildNumber": jobResult[x],
+                                                "__v": 1,
+                                                "timestampEnded": new Date().getTime(),
+                                                "executionResults": [],
+                                                "nodeIdsWithActionLog": [],
+                                                "nodeIds": [],
+                                                "runlist": []
+                
+                                            };
+                                            TaskHistory.createNew(hData, function(err, taskHistoryEntry) {
+                                                if (err) {
+                                                    logger.error("Unable to make task history entry", err);
+                                                    return;
+                                                }
+                                                logger.debug("Task history created");
+                                            });
                                         }
-                                        res.send(tHistories);
-                                    });
-                        });
+                                        if(count === jobResult.length){
+                                            task.getHistory(function(err, tHistories) {
+                                                if (err) {
+                                                    res.send(500, errorResponses.db.error);
+                                                    return;
+                                                }
+                                                res.send(tHistories);
+                                            });
+                                        }
+                                    }
+                                }
+                                        
+                            });
+                        }else{
+
+                            var jobResult =[];
+                            jenkins.getJobInfo(task.taskConfig.jobName, function(err, job) {
+                                if (err) {
+                                    logger.error('jenkins jobs fetch error', err);
+                                    
+                                }
+                                
+                                if(job){
+                                    for(var j=0;j<job.builds.length;j++){
+                                        jobResult.push(job.builds[j].number);
+                                    }
+                                }
+                                var count =0;
+                                if(jobResult){
+                                    for (var x=0 ; x < jobResult.length; x++ ) {
+                                        count++;
+                                            logger.debug("------------------ ",jobResult[x]);
+                                            var hData = {
+                                                "taskId": req.params.taskId,
+                                                "taskType": "jenkins",
+                                                "user": req.session.user.cn,
+                                                "jenkinsServerId": task.taskConfig.jenkinsServerId,
+                                                "jobName": task.taskConfig.jobName,
+                                                "status": "success",
+                                                "timestampStarted": new Date().getTime(),
+                                                "buildNumber": jobResult[x],
+                                                "__v": 1,
+                                                "timestampEnded": new Date().getTime(),
+                                                "executionResults": [],
+                                                "nodeIdsWithActionLog": [],
+                                                "nodeIds": [],
+                                                "runlist": []
+                
+                                            };
+                                            TaskHistory.createNew(hData, function(err, taskHistoryEntry) {
+                                                if (err) {
+                                                    logger.error("Unable to make task history entry", err);
+                                                    return;
+                                                }
+                                                logger.debug("Task history created");
+                                            });
+                                        if(count === jobResult.length){
+                                            task.getHistory(function(err, tHistories) {
+                                                if (err) {
+                                                    res.send(500, errorResponses.db.error);
+                                                    return;
+                                                }
+                                                res.send(tHistories);
+                                            });
+                                        }
+                                    }
+                                }
+                                    
+                            });
+                        }
                     });
                 }else{
                     task.getHistory(function(err, tHistories) {

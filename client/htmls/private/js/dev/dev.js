@@ -3108,6 +3108,8 @@
                                                                var $taskHistoryDatatableJenkins = $('#tablehistoryTaskForJenkins').DataTable({
                                                                    "pagingType": "full_numbers",
                                                                    "order": [[ 0, "desc" ]],
+                                                                   "aLengthMenu": [[40, 80, -1], [40, 80, "All"]],
+                                                                   "iDisplayLength": 40,
                                                                    "aoColumns": [
                                                                        null, {
                                                                            "bSortable": false
@@ -3342,42 +3344,53 @@
 
                                                                    var $tdExecute = $('<td style="vertical-align:inherit;text-align:center;"></td>').append('<a rel="tooltip" data-placement="top" data-original-title="Execute" data-toggle="modal" href="javascript:void(0)" class="btn btn-primary btn-sg tableactionbutton"><i class="ace-icon fa fa-play bigger-120"></i></a>');
                                                                    $tdExecute.find('a').data('taskId', data[i]._id).attr('data-executeTaskId', data[i]._id).click(function(e) {
-                                                                       var taskId = $(this).data('taskId');
-                                                                       var $taskExecuteTabsHeaderContainer = $('#taskExecuteTabsHeader').empty();
-                                                                       var $taskExecuteTabsContent = $('#taskExecuteTabsContent').empty();
-                                                                       var $modal = $('#assignedExecute');
-                                                                       $modal.find('.loadingContainer').show();
-                                                                       $modal.find('.errorMsgContainer').hide();
-                                                                       $modal.find('.outputArea').hide();
-                                                                       $modal.modal('show');
-                                                                       var timestampToPoll = new Date().getTime();
-                                                                       $.get('../tasks/' + taskId + '/run', function(data) {
-                                                                           var date = new Date().setTime(data.timestamp);
-                                                                           var taskTimestamp = new Date(date).toLocaleString(); //converts to human readable strings
-                                                                           $('tr[data-taskId="' + taskId + '"] .taskrunTimestamp').html(taskTimestamp);
+                                                                    bootbox.confirm({
+                                                                        message: "Are you sure yuou want to execute this Job?",
+                                                                        title: "Confirmation",
+                                                                        callback: function(result) {
+                                                                            if (result) {
 
-                                                                           var $outputArea = $modal.find('.outputArea');
+                                                                                var taskId = $(this).data('taskId');
+                                                                                var $taskExecuteTabsHeaderContainer = $('#taskExecuteTabsHeader').empty();
+                                                                                var $taskExecuteTabsContent = $('#taskExecuteTabsContent').empty();
+                                                                                var $modal = $('#assignedExecute');
+                                                                                $modal.find('.loadingContainer').show();
+                                                                                $modal.find('.errorMsgContainer').hide();
+                                                                                $modal.find('.outputArea').hide();
+                                                                                $modal.modal('show');
+                                                                                var timestampToPoll = new Date().getTime();
+                                                                                $.get('../tasks/' + taskId + '/run', function(data) {
+                                                                                    var date = new Date().setTime(data.timestamp);
+                                                                                    var taskTimestamp = new Date(date).toLocaleString(); //converts to human readable strings
+                                                                                    $('tr[data-taskId="' + taskId + '"] .taskrunTimestamp').html(taskTimestamp);
 
-                                                                           $outputArea.data('taskType', data.taskType);
-                                                                           $outputArea.data('instances', data.instances);
-                                                                           $outputArea.data('jenkinsServerId', data.jenkinsServerId);
-                                                                           $outputArea.data('jobName', data.jobName);
-                                                                           $outputArea.data('lastBuildNumber', data.lastBuildNumber);
-                                                                           $outputArea.data('currentBuildNumber', data.currentBuildNumber);
-                                                                           $outputArea.data('timestampStarted', data.timestamp);
-                                                                           showTaskLogs();
+                                                                                    var $outputArea = $modal.find('.outputArea');
 
-                                                                       }).fail(function(jxhr) {
-                                                                           $modal.find('.loadingContainer').hide();
-                                                                           $modal.find('.outputArea').hide();
-                                                                           var $errorContainer = $modal.find('.errorMsgContainer').show();
-                                                                           if (jxhr.responseJSON && jxhr.responseJSON.message) {
-                                                                               $errorContainer.html(jxhr.responseJSON.message);
-                                                                           } else {
-                                                                               $errorContainer.html("Server Behaved Unexpectedly");
-                                                                           }
-                                                                       });
-                                                                   });
+                                                                                    $outputArea.data('taskType', data.taskType);
+                                                                                    $outputArea.data('instances', data.instances);
+                                                                                    $outputArea.data('jenkinsServerId', data.jenkinsServerId);
+                                                                                    $outputArea.data('jobName', data.jobName);
+                                                                                    $outputArea.data('lastBuildNumber', data.lastBuildNumber);
+                                                                                    $outputArea.data('currentBuildNumber', data.currentBuildNumber);
+                                                                                    $outputArea.data('timestampStarted', data.timestamp);
+                                                                                    showTaskLogs();
+
+                                                                                }).fail(function(jxhr) {
+                                                                                    $modal.find('.loadingContainer').hide();
+                                                                                    $modal.find('.outputArea').hide();
+                                                                                    var $errorContainer = $modal.find('.errorMsgContainer').show();
+                                                                                    if (jxhr.responseJSON && jxhr.responseJSON.message) {
+                                                                                        $errorContainer.html(jxhr.responseJSON.message);
+                                                                                    } else {
+                                                                                        $errorContainer.html("Server Behaved Unexpectedly");
+                                                                                    }
+                                                                                });
+
+                                                                            }
+                                                                        }
+                                                                    });
+
+                                                                });
                                                                    $tr.append($tdExecute);
 
                                                                    //History starts here
@@ -3528,6 +3541,7 @@
                                                                   } else{
                                                                     var $tdHistory = $('<td style="vertical-align:inherit;text-align:center;"></td>').append('<a rel="tooltip" data-placement="top" data-original-title="History" data-toggle="modal" href="javascript:void(0)" class="btn btn-primary btn-sg tableactionbutton"><i class="ace-icon fa fa-header bigger-120"></i></a>');
                                                                     $tdHistory.find('a').data('taskId', data[i]._id).data('autosyncFlag', data[i].taskConfig.autoSyncFlag).attr('data-historyTaskId', data[i]._id).click(function(e) {
+                                                                            
                                                                             //var $taskHistoryContent = $('#taskHistoryContent').show();
                                                                             var taskId = $(this).data('taskId');
                                                                            /*$.get('../jenkins/' + serverId + '/jobs/' + jobName,function(data){
