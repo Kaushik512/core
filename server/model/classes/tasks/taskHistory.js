@@ -23,6 +23,7 @@ var taskHistorySchema = new Schema({
     user: String,
     timestampStarted: Number,
     timestampEnded: Number,
+    jobResultURL: String,
     executionResults: [Schema.Types.Mixed]
 });
 
