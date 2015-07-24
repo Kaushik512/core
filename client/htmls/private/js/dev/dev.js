@@ -3565,39 +3565,42 @@
                                                                                   (function(i){
                                                                                     var $trHistoryRow = $('<tr/>');
                                                                                     
-                                                                                    
+                                                                                    //condition to get the jobname as per the particular build number..
                                                                                         $.get('../jenkins/' + taskHistories[i].jenkinsServerId + '/jobs/' + taskHistories[i].jobName, function(job) {
                                                                                             console.log(JSON.stringify(job));
                                                                                             for (var k = 0; k < job.builds.length; k++) {
-                                                                                                //alert("oooo");
+                                                                                                
                                                                                                 var url;
+                                                                                               // alert(taskHistories[i].buildNumber);
+                                                                                               // alert(job.nextBuildNumber);
+                                                                                              if (taskHistories[i].buildNumber === job.nextBuildNumber) {
+                                                                                                  if (typeof job.builds[job.nextBuildNumber - 1] === "undefined") {
+                                                                                                      var $tdJobName = $('<td/>').append('Current Job is still pending');
+                                                                                                      $trHistoryRow.append($tdJobName);
+                                                                                                  } else {
 
-                                                                                                if (taskHistories[i].buildNumber === job.nextBuildNumber) {
-                                                                                                    if (typeof job.builds[job.nextBuildNumber - 1] === "undefined") {
-                                                                                                        var $tdJobName = $('<td/>').html('Current Job is still pending');
-                                                                                                        $trHistoryRow.append($tdJobName);
-                                                                                                    } else {
 
-                                                                                                        //   alert(taskHistories[i].jobName);
-                                                                                                        url = job.builds[job.nextBuildNumber - 1].url;
-                                                                                                        alert(url);
-                                                                                                        var $tdJobName = $('<td/>').append('<a style="word-break: break-all;" href="' + taskHistories[i].jobResultURL + '" target="_blank">' + taskHistories[i].jobName + '</a>');
-                                                                                                        $trHistoryRow.append($tdJobName);
-                                                                                                    }
-                                                                                                } else if (taskHistories[i].buildNumber === job.builds[k].number) {
-                                                                                                    //alert(job.builds[k].url);
-                                                                                                    url = job.builds[k].url;
-                                                                                                    var $tdBuildNumber = $('<td/>').append('<a style="word-break: break-all;" href="' + url + '" title="' + url +'" target="_blank">' + taskHistories[i].buildNumber + '</a>');
-                                                                                                    $trHistoryRow.append($tdBuildNumber);
-                                                                                                    alert(taskHistories[i].jobResultURL);
-                                                                                                    if(taskHistories[i].jobResultURL){
-                                                                                                    var $tdJobName = $('<td/>').append('<a style="word-break: break-all;" href="' + taskHistories[i].jobResultURL + '" title="' + taskHistories[i].jobResultURL +'" target="_blank">View Results</a>');
-                                                                                                    $trHistoryRow.append($tdJobName);
-                                                                                                  }else{
-                                                                                                    var $tdJobName = $('<td/>').append('Not available');
-                                                                                                    $trHistoryRow.append($tdJobName);
+                                                                                                      url = job.builds[job.nextBuildNumber - 1].url;
+                                                                                                     // alert(url);
+                                                                                                      var $tdJobName = $('<td/>').append('<a style="word-break: break-all;" href="' + taskHistories[i].jobResultURL + '" target="_blank">' + taskHistories[i].jobName + '</a>');
+                                                                                                      $trHistoryRow.append($tdJobName);
                                                                                                   }
-                                                                                                }
+                                                                                              } else if (taskHistories[i].buildNumber === job.builds[k].number) {
+
+                                                                                                  url = job.builds[k].url;
+                                                                                                 // alert(url);
+                                                                                                  var $tdBuildNumber = $('<td/>').append('<a style="word-break: break-all;" href="' + url + '" title="' + url + '" target="_blank">' + taskHistories[i].buildNumber + '</a>');
+                                                                                                  $trHistoryRow.append($tdBuildNumber);
+                                                                                                 
+
+                                                                                                  if (taskHistories[i].jobResultURL) {
+                                                                                                      var $tdJobName = $('<td/>').append('<a style="word-break: break-all;" href="' + taskHistories[i].jobResultURL + '" title="' + taskHistories[i].jobResultURL + '" target="_blank">View Results</a>');
+                                                                                                      $trHistoryRow.append($tdJobName);
+                                                                                                  } else {
+                                                                                                      var $tdJobName = $('<td/>').append('Not available');
+                                                                                                      $trHistoryRow.append($tdJobName);
+                                                                                                  }
+                                                                                              }
                                                                                             }
                                                                                                   if (taskHistories[i].status === "success") {
                                                                                                       var $tdBuildStatus = $('<td></td>').append('<img rel="tooltip" data-placement="top" title="Success" src="img/indicator_started.png"/>');
