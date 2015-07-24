@@ -110,6 +110,7 @@ taskSchema.methods.execute = function(userName, baseUrl, callback, onComplete) {
             callback(err, null);
             return;
         }
+        logger.debug("Task last run timestamp updated",JSON.stringify(taskExecuteData));
         self.lastRunTimestamp = timestamp;
         self.lastTaskStatus = TASK_STATUS.RUNNING;
         //logger.debug("========================= ",JSON.stringify(self));
@@ -118,8 +119,10 @@ taskSchema.methods.execute = function(userName, baseUrl, callback, onComplete) {
                 logger.error("Unable to update task timestamp");
                 return;
             }
+
             logger.debug("Task last run timestamp updated");
             
+
         });
         if (!taskExecuteData) {
             taskExecuteData = {};
@@ -184,6 +187,8 @@ taskSchema.methods.execute = function(userName, baseUrl, callback, onComplete) {
             taskHistory = taskHistoryEntry;
             logger.debug("Task history created");
         });
+
+
 
         callback(null, taskExecuteData);
     }, function(err, status, resultData) {

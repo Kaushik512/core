@@ -7997,7 +7997,7 @@ form.cmxform .gray * {
     margin-right:14px;
 }
 #jobParamTable>tbody>tr>td.jobParam{
-    width:23%!important;
+    width:24%!important;
     padding-top: 17px!important;
 }
 #jobParamTable td{
@@ -8043,4 +8043,8 @@ form.cmxform .gray * {
     font-size: small;
     margin-top: 21px;
     text-align: center;
+}
+.popover.left{
+    margin-left:-73px!important;
+    margin-top:44px!important;
 }
