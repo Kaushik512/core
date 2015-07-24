@@ -18,10 +18,11 @@ Resource           ${CATALYST ACTION}/Gallery_setup_TempService_Steps.txt
 
 *** Variables ***
 
+
 *** Keywords ***
 Catalyst Import an CentOS Instance By IP
-    #Clicks on Settings
-    #Clicks on Workzone Button
+    Clicks on Settings
+    Clicks on Workzone Button
     #Clicks on User Created Organization
     #Clicks on User Created BusinessGroup
     Clicks on Button to your > Environment
@@ -41,8 +42,8 @@ Catalyst Import an CentOS Instance By IP
     Clicks on Back To Instances
 
 Catalyst Import an Ubuntu Instance By IP
-    #Clicks on Settings
-    #Clicks on Workzone Button
+    Clicks on Settings
+    Clicks on Workzone Button
     #Clicks on User Created Organization
     #Clicks on User Created BusinessGroup
     Clicks on Button to your > Environment
@@ -98,7 +99,7 @@ Catalyst Import By IP Chef Client run,SSH,Stop,Start
     Sleep    5s
     Click on Chef ClientRun    
     Clicks on CoookBooks
-    Select the Apt CookBook
+    Select the Apache2 CookBook
     Clicks on ADD To RunList
     Clicks on Update Button Of the a Runlist
     Clicks on Cloose of Update Button
@@ -130,16 +131,16 @@ Catalyst Verfication of IP,Status,Chef,SSH,MoreInfo and frm Ctrlpanel
     Verfication of SSH from card view
     Verification of Stop toggler disabled
     Verfication of MoreInfo from card view
-    #Clicks on Contreol Panel
-    #Sleep    4s
-    #Verfication of Machine status from control panel
-    #Getting the Total Memory of the Machine from control panel
-    #Getting the Free Memory of the Machine from control panel
-    #Verfiying the OS the Machine from control panel
-    #Getting the Version of the Machine from control panel
-    #Verfiying Bootstrap status from control panel
-    #Verfiying the Runlist from control panel
-    #Clicks on Back To Instances
+    Clicks on Contreol Panel
+    Sleep    4s
+    Verfication of Machine status from control panel
+    Getting the Total Memory of the Machine from control panel
+    Getting the Free Memory of the Machine from control panel
+    Verfiying the OS the Machine from control panel
+    Getting the Version of the Machine from control panel
+    Verfiying Bootstrap status from control panel
+    Verfiying the Runlist from control panel
+    Clicks on Back To Instances
 
 
 Catalyst Import By IP Chef Client run,SSH,Stop,Start on Ubuntu Instance
@@ -150,7 +151,7 @@ Catalyst Import By IP Chef Client run,SSH,Stop,Start on Ubuntu Instance
     Sleep    5s
     Click on Chef ClientRun of Ubuntu Instance   
     Clicks on CoookBooks
-    Select the Apt CookBook
+    Select the tomcatall CookBook
     Clicks on ADD To RunList
     Clicks on Update Button Of the a Runlist
     Clicks on Cloose of Update Button
@@ -183,16 +184,16 @@ Catalyst Verfication of IP,Status,Chef,SSH,MoreInfo on UbuntuIns frm Ctrlpanel
     Verfication of SSH from card view
     Verification of Stop toggler disabled
     Verfication of MoreInfo from card view
-    #Clicks on Contreol Panel
-    #Sleep    4s
-    #Verfication of Machine status from control panel
-    #Getting the Total Memory of the Machine from control panel
-    #Getting the Free Memory of the Machine from control panel
-    #Verfiying the UbuntuOS the Machine from control panel
-    #Getting the Version of the Machine from control panel
-    #Verfiying Bootstrap status from control panel
-    #Verfiying the ubuntu Runlist from control panel
-    #Clicks on Back To Instances
+    Clicks on Contreol Panel
+    Sleep    4s
+    Verfication of Machine status from control panel
+    Getting the Total Memory of the Machine from control panel
+    Getting the Free Memory of the Machine from control panel
+    Verfiying the UbuntuOS the Machine from control panel
+    Getting the Version of the Machine from control panel
+    Verfiying Bootstrap status from control panel
+    Verfiying the ubuntu Runlist from control panel
+    Clicks on Back To Instances
 
 
 
@@ -217,11 +218,11 @@ Catalyst Check and Edit the Instance Name
     Sleep    4s
     Clicks on Edit Button of the Instance Imported
     Enters the Empty Edit name
-    #Clicks on Edit Save Button of the instance
-    #Verfiy the Message Displayed of the Instance
+    Clicks on Edit Save Button of the instance
+    Verfiy the Message Displayed of the Instance
     Sleep    2s
     Enters the New Edit Instance Name
-    Clicks on Edit Save Button of the instances
+    Clicks on Edit Save Button of the instance
 
 
 
@@ -236,7 +237,7 @@ Catalyst Check and Edit the Ubuntu Instance Name
     Verfiy the Message Displayed of the Instance
     Sleep    2s
     Enters the New Edit Ubuntu Instance Name
-    Clicks on Edit Save Button of the instances
+    Clicks on Edit Save Button of the instance
     
 
 
@@ -426,15 +427,11 @@ Clicks on Close the Terminal
     Sleep    2s
     Click Element    xpath=.//*[@id='modalSSHShellContainer']/div/div/div[1]/button
 
-Clicks on Edit Save Button of the instances
-    Sleep    2s
-    Click Element    id=editSaveBTN
-
 
 Input the Usrname in Terminal
     Input Text    id=ssh-username    ${UserName}
 
-Input the Ubuntu Usrname in Terminalf
+Input the Ubuntu Usrname in Terminal
     Input Text    id=ssh-username    ${UbuntuUser}    
 
 Select Authenticationtype as PEM
@@ -687,9 +684,9 @@ Clicks on CoookBooks
     Sleep    5s
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='chefRunAccordionRunlistArea']/div/div/div/div[1]/div[1]/label[3]
 
-Select the Apt CookBook
+Select the Apache2 CookBook
     Sleep    5s
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[text()='apt']
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[text()='apache2']
 
 Select the tomcatall CookBook
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[text()='tomcat-all']
@@ -726,25 +723,18 @@ Verify the Operation as BootStrap
 
 Verfify the Status of the CentOAS Instance
     Sleep    50s
-    #${STATUSS}=    Get Element Attribute    xpath=.//*[@id='tableactionHistory']/tbody/tr[1]/td[2]/img@title
-    #Log    ${STATUSS}
-    #Log    ${ACTBOOT2}
-    #Should Be Equal    ${STATUSS}     ${ACTBOOT2}
-    
-    ${Centos_IMP_IP_SUCCESS}=    Get Element Attribute    xpath=.//*[@id='tableactionHistory']/tbody/tr[1]/td[2]/img@title
-    Log    ${Centos_IMP_IP_SUCCESS}
-    Should Be Equal    ${Centos_IMP_IP_SUCCESS}     ${SATSSYY}
+    ${STATUSS}=    Get Element Attribute    xpath=.//*[@id='tableactionHistory']/tbody/tr[1]/td[2]/img@title
+    Log    ${STATUSS}
+    Log    ${ACTBOOT2}
+    Should Be Equal    ${STATUSS}     ${ACTBOOT2}
 
 Verfify the Status of the UbuntuOS Instance 
     Sleep    50s
-    #${STATUSS}=    Get Element Attribute    xpath=.//*[@id='tableactionHistory']/tbody/tr[1]/td[2]/img@title
-    #Log    ${STATUSS}
-    #Log    ${ACTBOOT2}
-    #Should Be Equal    ${STATUSS}     ${ACTBOOT2}
+    ${STATUSS}=    Get Element Attribute    xpath=.//*[@id='tableactionHistory']/tbody/tr[1]/td[2]/img@title
+    Log    ${STATUSS}
+    Log    ${ACTBOOT2}
+    Should Be Equal    ${STATUSS}     ${ACTBOOT2}
     
-    ${Ubuntu_IMP_IP_SUCCESS}=    Get Element Attribute    xpath=.//*[@id='tableactionHistory']/tbody/tr[1]/td[2]/img@title
-    Log     ${Ubuntu_IMP_IP_SUCCESS}
-    Should Be Equal    ${Ubuntu_IMP_IP_SUCCESS}     ${SATSSYY}
 
 Clicks on Inport By IP Button
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    id=ipaddressimport
@@ -988,7 +978,7 @@ Catalyst Creation of Jenkins Task in Environment
     Clicks on User Created Organization
     Clicks on User Created BusinessGroup
     Clicks on > Button to your Environment
-    Clicks on Orchestration Tab
+    #Clicks on Orchestration Tab
     Clicks on New Button of Jenkins
     Clicks on Choose Task Type of Jenkins
     Enter the Task Name of Jenkins
@@ -1136,7 +1126,7 @@ Clicks on Jenkins Save Button
 Clicks on Jenknis New Button
     Click  Element    xpath=.//*[@id='content']/div/div/div/div/div[1]/div/div/a[2]
 
-Clicks on Orchestration Tab
+#Clicks on Orchestration Tab
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='myTab3']/li[3]/a
 
 
