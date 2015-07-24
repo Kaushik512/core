@@ -16,10 +16,12 @@ var jenkinsTaskSchema = taskTypeSchema.extend({
     jobResultURL: String,
     jobURL: String,
     isParameterized: Boolean,
-    parameterized:[{
-        parameterName: String,
+    parameterDefinitions:[{
+        defaultParameterValue:{
+            name: String
+        },
+        type: String,
         name: String,
-        defaultValue: String,
         description: String
     }]
 });
