@@ -139,7 +139,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
             if (task) {
                 var flag = false;
                 logger.debug("task.taskConfig.autoSyncFlag==== ", typeof task.taskConfig.autoSyncFlag);
-                if (task.taskConfig.autoSyncFlag === "true") {
+                if (task.taskConfig.autoSyncFlag === "true" || task.taskConfig.autoSyncFlag === true) {
                     flag = true;
                 }
                 if (task.taskType === 'jenkins' && flag) {
