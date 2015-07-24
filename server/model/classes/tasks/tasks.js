@@ -11,7 +11,7 @@ var JenkinsTask = require('./taskTypeJenkins');
 var TaskHistory = require('./taskHistory');
 var configmgmtDao = require('../../../model/d4dmasters/configmgmt');
 var Jenkins = require('../../../lib/jenkins');
-var js2xmlparser = require("js2xmlparser");
+//var js2xmlparser = require("js2xmlparser");
 //var url = require('url');
 
 

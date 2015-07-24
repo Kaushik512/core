@@ -246,7 +246,7 @@
                                                          </div> -->
                                                          <!--div for paremeters-->
                                                          
-                                                            <div class="col-lg-12">
+                                                            <div class="col-lg-12 hidden">
                                                                <input style="margin-left:5px;" id="addParameters" type="checkbox" name="addParams" value="This build is parameterized"/>&nbsp;&nbsp;This build is parameterized
                                                             </div>
                                                          
@@ -761,7 +761,7 @@ $(document).ready(function() {
             if(taskData.taskConfig.runlist &&  taskData.taskConfig.runlist.length){
               // alert(taskData.taskConfig.runlist);
                 if (taskData.taskConfig.runlist.length > 0) {
-                  alert(taskData.taskConfig.runlist);
+                //  alert(taskData.taskConfig.runlist);
                     createRunlistTable(taskData.taskConfig.runlist);
                 }
             }
@@ -795,14 +795,14 @@ $(document).ready(function() {
                         $("input[type='checkbox'][name='addParams'][id='addParameters']").prop('checked', true);
                         $('.addParameters').removeClass('hidden');
                         if(taskData.taskConfig.parameterized[j].parameterName ==='Boolean Parameter'){
-                           alert('boolean');
+                       //    alert('boolean');
                             $('#booleanTable').removeClass('hidden');
                             $('#booleanName').val(taskData.taskConfig.parameterized[j].name);
                             $("input[type='checkbox'][name='booleanValue'][id='booleanValue']").prop('checked',true);
                             $('#booleanValue').val(taskData.taskConfig.parameterized[j].defaultValue);
                             $('#booleanDescription').val(taskData.taskConfig.parameterized[j].description);
                         } else if(taskData.taskConfig.parameterized[j].parameterName === 'String Parameter') {
-                           alert('string');
+                          // alert('string');
                             $('#stringTable').removeClass('hidden');
                             $('#stringName').val(taskData.taskConfig.parameterized[j].name);
                             $('#stringValue').val(taskData.taskConfig.parameterized[j].defaultValue);
