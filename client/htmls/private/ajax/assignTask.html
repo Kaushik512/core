@@ -729,6 +729,8 @@ $(document).ready(function() {
 
     function loadUIData(taskData) {
         console.log(taskData);
+     //   alert(JSON.stringify(taskData));
+        
         if (taskData) {
          $('.widget-header').find('.widget-margin').html('Edit Job');
             //alert(JSON.stringify(taskData));
@@ -741,11 +743,25 @@ $(document).ready(function() {
             //$('#taskType').val(taskData.taskType);
             $('textarea#chefDescription').val(taskData.description);
             $('textarea#jenkinsDescription').val(taskData.description);
-            $('#jobResultUrl').val(taskData.taskConfig.jobResultURL);
+            if(taskData.taskType==='jenkins'){
+                $.get('../tasks/' + taskData._id + '/history', function(data) {
+                    // alert(data[0].buildNumber);
+                    if (data.length>0) {
+                        var jobURL = taskData.taskConfig.jobResultURL;
+                        //    alert(taskData.taskConfig.jobResultURL);  
+                        if (jobURL) {
+                            jobURL = jobURL.replace("-" + data[0].buildNumber, '-$buildNumber');
+                            $('#jobResultUrl').val(jobURL);
+                        }
+                    }
+                });
+            }
+            
+            
             if(taskData.taskConfig.runlist &&  taskData.taskConfig.runlist.length){
               // alert(taskData.taskConfig.runlist);
                 if (taskData.taskConfig.runlist.length > 0) {
-                 // alert(taskData.taskConfig.runlist.length);
+                  alert(taskData.taskConfig.runlist);
                     createRunlistTable(taskData.taskConfig.runlist);
                 }
             }
@@ -1192,16 +1208,43 @@ $(document).ready(function() {
         //alert(JSON.stringify(taskData.name));
 
         if (urlParams.taskId) {
-            $.post('../tasks/' + urlParams.taskId + '/update', reqBody, function(data) {
-                console.log(data);
-                $('.btnBack').click();
-                bootbox.alert({
-                    message: 'Job&nbsp;&nbsp;<b>' + taskData.name + '</b>&nbsp;&nbsp;has been updated successfully',
-                    title: "Success"
+            if (taskType === 'jenkins') {
+                $.get('/jenkins/' + taskData.jenkinsServerId + '/job/' + taskData.jobName + '/lastBuild', function(data) {
+                    //alert(JSON.stringify(taskData));
+                    var url = taskData.jobResultURL;
+
+                    if (url) {
+                        url = url.replace('$buildNumber', data.number);
+
+                    }
+                    taskData.jobResultURL = url;
+                    $.post('../tasks/' + urlParams.taskId + '/update', reqBody, function(data) {
+                        console.log(data);
+
+                        $('.btnBack').click();
+                        bootbox.alert({
+                            message: 'Job&nbsp;&nbsp;<b>' + taskData.name + '</b>&nbsp;&nbsp;has been updated successfully',
+                            title: "Success"
+                        });
+
+                    });
                 });
 
-            });
-            return false;
+                return false;
+            } else{
+             //  alert(JSON.stringify(reqBody));
+                $.post('../tasks/' + urlParams.taskId + '/update', reqBody, function(data) {
+                    console.log(data);
+
+                    $('.btnBack').click();
+                    bootbox.alert({
+                        message: 'Job&nbsp;&nbsp;<b>' + taskData.name + '</b>&nbsp;&nbsp;has been updated successfully',
+                        title: "Success"
+                    });
+
+                });
+                return false;
+            }
         } else {
             if (taskType === 'jenkins') {
                 $.get('/jenkins/' + taskData.jenkinsServerId + '/job/' + taskData.jobName + '/lastBuild', function(data) {
@@ -1249,21 +1292,24 @@ $(document).ready(function() {
     });
 
     function createRunlistTable(runlist) {
-        //alert('here');
+        //alert(runlist.length);
         //$('#tableRunlist').removeClass('hidden');
         var $options = $('#cookbooksrecipesselectedList').find('option');
-        var runlist = [];
-        $options.each(function() {
-            var $option = $(this);
-            runlist.push($option.val());
-            console.log(runlist);        
-            return runlist;
-        });
-       // $tasksRunlist.clear().draw();
+        if (runlist.length == 0) {
+            var runlist = [];
+            $options.each(function() {
+                var $option = $(this);
+                runlist.push($option.val());
+                console.log(runlist);
+                return runlist;
+            });
+        }
+        $tasksRunlist.clear().draw();
+       // alert(runlist.length);
         for (i = 0; i < runlist.length; i++) {
          //alert('check');
             if (runlist.length > 0) {
-             //  alert('ch');
+               //alert('ch');
                 console.log(runlist[i].substring(runlist[i].lastIndexOf("[") + 1, runlist[i].lastIndexOf("]")));
                 var $runlistList = $('#tableRunlist');
                 var $tr = $('<tr class="runlistRow"></tr>');

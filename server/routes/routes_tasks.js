@@ -25,22 +25,27 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 return;
             }
             if (task) {
-                configmgmtDao.getJenkinsDataFromId(task.taskConfig.jenkinsServerId, function(err, jenkinsData) {
-                    if (err) {
-                        logger.error('jenkins list fetch error', err);
-                        res.send(500, errorResponses.db.error);
-                        return;
-                    } else {
-                        if (!(jenkinsData && jenkinsData.length)) {
-                            res.send(404, errorResponses.jenkins.notFound);
+                if (task.taskType === 'jenkins') {
+                    configmgmtDao.getJenkinsDataFromId(task.taskConfig.jenkinsServerId, function(err, jenkinsData) {
+                        if (err) {
+                            logger.error('jenkins list fetch error', err);
+                            res.send(500, errorResponses.db.error);
                             return;
+                        } else {
+                            if (!(jenkinsData && jenkinsData.length)) {
+                                res.send(404, errorResponses.jenkins.notFound);
+                                return;
+                            }
+                            req.CATALYST = {
+                                jenkins: jenkinsData[0]
+                            };
+                            next();
                         }
-                        req.CATALYST = {
-                            jenkins: jenkinsData[0]
-                        };
-                        next();
-                    }
-                });
+                    });
+                } else {
+                    next();
+                    return;
+                }
             } else {
                 res.send(404);
                 return;
@@ -49,19 +54,22 @@ module.exports.setRoutes = function(app, sessionVerification) {
     });
 
     app.get('/tasks/:taskId/run', function(req, res) {
+
         Tasks.getTaskById(req.params.taskId, function(err, task) {
+
             if (err) {
                 logger.error(err);
                 res.send(500, errorResponses.db.error);
                 return;
             }
+
             task.execute(req.session.user.cn, req.protocol + '://' + req.get('host'), function(err, taskRes) {
                 if (err) {
                     logger.error(err);
                     res.send(500, err);
                     return;
                 }
-                //console.log(taskRes);
+
                 res.send(taskRes);
             });
         });
@@ -123,12 +131,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
     });
 
     app.get('/tasks/:taskId/history', function(req, res) {
-        var jenkinsData = req.CATALYST.jenkins;
-        var jenkins = new Jenkins({
-            url: jenkinsData.jenkinsurl,
-            username: jenkinsData.jenkinsusername,
-            password: jenkinsData.jenkinspassword
-        });
+
 
         Tasks.getTaskById(req.params.taskId, function(err, task) {
             if (err) {
@@ -143,6 +146,12 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     flag = true;
                 }
                 if (task.taskType === 'jenkins' && flag) {
+                    var jenkinsData = req.CATALYST.jenkins;
+                    var jenkins = new Jenkins({
+                        url: jenkinsData.jenkinsurl,
+                        username: jenkinsData.jenkinsusername,
+                        password: jenkinsData.jenkinspassword
+                    });
                     logger.debug("Inside flag true");
                     TaskHistory.getLast100HistoriesByTaskId(req.params.taskId, function(err, histories) {
                         if (err) {
