@@ -24,13 +24,13 @@ Resource           ${CATALYST TEST DATA}/${TESTDATA}
 
 Catalyst User New Template Creation
     Clicks on Templates
-    Clicks on New Button
+    Clicks on New Button to create template
     Enters Template Name
     Chooses Icon
     Chooses Template Type
     Select Created organization
     Select CookBooks
-    Clicks on >> Button
+    #Clicks on >> Button
     Clicks on Save Button
     #Validate the Edit Template name  ${ValidTEditemplName}
 
@@ -232,7 +232,7 @@ Clicks on Gallery Setup
 Clicks on Templates
     Click Element    xpath=//a[contains(text(),'Templates')]
 
-Clicks on New Button
+Clicks on New Button to create template
     Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       xpath=.//*[@id='newTemplate']
     Click Element    xpath=.//*[@id='newTemplate']
 
@@ -263,9 +263,11 @@ Select Chef Server
 
 Select CookBooks
     Sleep    1s
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='templatescookbooks']/div/div[1]/div[1]/label[3]
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[text()='apache2']
-    #Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    id=btnaddToRunlist
+    #Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='templatescookbooks']/div/div[1]/div[1]/label[3]
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[text()='${COOKBOOK NAME1}']
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    id=btnaddToRunlist
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[text()='${COOKBOOK NAME2}']
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    id=btnaddToRunlist
 
 Select New CookBooks for Template
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='templatescookbooks']/div/div[1]/div[1]/label[3]

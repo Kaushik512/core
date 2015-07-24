@@ -15,7 +15,7 @@ Catalyst Import CentOS Node By IP
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
     Catalyst Import an CentOS Instance By IP
-    Catalyst Verfication of Duplicate Node
+    #Catalyst Verfication of Duplicate Node
     Catalyst Logout
     [Teardown]     Close Browser
     
@@ -67,7 +67,7 @@ Catalyst Import Ubuntu Node By IP
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
     Catalyst Import an Ubuntu Instance By IP
-    Catalyst Verfication Ubuntu Duplicate Node
+    #Catalyst Verfication Ubuntu Duplicate Node
     Catalyst Logout
     [Teardown]     Close Browser
 
