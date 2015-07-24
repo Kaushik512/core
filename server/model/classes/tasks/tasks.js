@@ -9,6 +9,10 @@ var ChefTask = require('./taskTypeChef');
 var JenkinsTask = require('./taskTypeJenkins');
 
 var TaskHistory = require('./taskHistory');
+var configmgmtDao = require('../../../model/d4dmasters/configmgmt');
+var Jenkins = require('../../../lib/jenkins');
+var js2xmlparser = require("js2xmlparser");
+//var url = require('url');
 
 
 var Schema = mongoose.Schema;
@@ -251,7 +255,7 @@ taskSchema.statics.createNew = function(taskData, callback) {
             jobURL: taskData.jobURL,
             autoSyncFlag: taskData.autoSyncFlag,
             isParameterized: taskData.isParameterized,
-            parameterized: taskData.parameterized
+            parameterDefinitions: taskData.parameterDefinitions
         });
     } else if (taskData.taskType === TASK_TYPE.CHEF_TASK) {
         var attrJson = null;
@@ -283,6 +287,60 @@ taskSchema.statics.createNew = function(taskData, callback) {
         }
         callback(null, task);
     });
+   /* if (taskConfig.isParameterized) {
+    logger.debug("inside isParameterized>>>>>>>>>>>>>>>>>>>>>>>");
+    configmgmtDao.getJenkinsDataFromId(taskConfig.jenkinsServerId, function(err, jenkinsData) {
+        if (err) {
+            logger.error('jenkins list fetch error', err);
+            res.send(500, errorResponses.db.error);
+            return;
+        } else {
+            if (!(jenkinsData && jenkinsData.length)) {
+                res.send(404, errorResponses.jenkins.notFound);
+                return;
+            }
+
+            logger.debug("jenkins date:   ",JSON.stringify(jenkinsData));
+            logger.debug("type of url::: ",typeof jenkinsData[0].jenkinsurl);
+
+            var jenkins = new Jenkins({
+                url: jenkinsData[0].jenkinsurl,
+                username: jenkinsData[0].jenkinsusername,
+                password: jenkinsData[0].jenkinspassword
+            });
+
+            jenkins.getJobInfo(taskConfig.jobName,function(err,jobData){
+                if(err){
+                    logger.debug("Failed to get Job Data.");
+                }
+                var obj ={
+                    defaultParameterValue : {
+                    "name" : "HeapSize1",
+                    "value" : "255MB"
+                },
+                "description" : "Heapsize1",
+                "name" : "HeapSize1",
+                "type" : "StringParameterDefinition"
+                };
+                /*for(var i=0;i<taskConfig.parameterDefinitions.length;i++){
+                    jobData.property[1].parameterDefinitions.push(taskConfig.parameterDefinitions[i]);
+                }*/
+                /*jobData.property[1].parameterDefinitions.push(obj);
+                var config = js2xmlparser("freeStyleProject",jobData);
+                logger.debug("Parsed data::::::::::: ",JSON.stringify(config));
+                jenkins.updateJob(jobData.name,config,function(err,data){
+                    if(err){
+                        logger.debug("Not able to update Jenkins Job",err);
+                    }
+                    logger.debug("job updated in jenkins: ",JSON.stringify(data));
+
+                });
+            });
+
+        }
+    });
+}*/
+
 };
 
 // creates a new task
@@ -375,7 +433,7 @@ taskSchema.statics.updateTaskById = function(taskId, taskData, callback) {
             jobURL: taskData.jobURL,
             autoSyncFlag: taskData.autoSyncFlag,
             isParameterized: taskData.isParameterized,
-            parameterized: taskData.parameterized
+            parameterDefinitions: taskData.parameterDefinitions
         });
     } else if (taskData.taskType === TASK_TYPE.CHEF_TASK) {
 

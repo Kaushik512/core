@@ -54,7 +54,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 } else {
                     logger.debug('Objperms:' + JSON.stringify(objperms));
                     configmgmtDao.getRowids(function(err, rowidlist) {
-                        logger.debug("Rowid List /organizations/getTreeNew -->%s", rowidlist);
+                        //logger.debug("Rowid List /organizations/getTreeNew -->%s", rowidlist);
                         d4dModelNew.d4dModelMastersOrg.find({
                             id: 1,
                             active: true,
@@ -113,7 +113,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                 productgroupname_rowid: docbgs[k]['rowid']
                                                 //,rowid: {$in: objperms.projects}
                                             }, function(err, docprojs) {
-                                                logger.debug("Projects:%s", JSON.stringify(docprojs));
+                                                //logger.debug("Projects:%s", JSON.stringify(docprojs));
 
                                                 var prjids = docprojs.map(function(docprojs1) {
                                                     return docprojs1.rowid;
@@ -122,8 +122,8 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                 for (var _i = 0; _i < orgTree.length; _i++) {
                                                     logger.debug("Orgid:%s", orgTree[_i]['rowid']);
                                                     for (var __i = 0; __i < orgTree[_i]['businessGroups'].length; __i++) {
-                                                        logger.debug("businessGroups rowid:%s%s", orgTree[_i]['businessGroups'], [__i]['rowid']);
-                                                        logger.debug("docprojs.length:%s", docprojs.length);
+                                                        //logger.debug("businessGroups rowid:%s%s", orgTree[_i]['businessGroups'], [__i]['rowid']);
+                                                        //logger.debug("docprojs.length:%s", docprojs.length);
                                                         for (var _bg = 0; _bg < docprojs.length; _bg++) {
 
                                                             if (docprojs[_bg]['orgname_rowid'] == orgTree[_i]['rowid'] && docprojs[_bg]['productgroupname_rowid'] == orgTree[_i]['businessGroups'][__i]['rowid']) {
@@ -154,7 +154,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                         }
                                                     }
                                                 }
-                                                logger.debug("OrgTree:%s", JSON.stringify(orgTree));
+                                                //logger.debug("OrgTree:%s", JSON.stringify(orgTree));
                                                 if (counter >= docbgs.length - 1) {
                                                     d4dModelNew.d4dModelMastersEnvironments.find({
                                                         id: 3,
@@ -184,7 +184,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                                         newTree.push(orgTree[y]);
                                                                     //}
                                                                 }
-                                                                logger.debug("Returned orgTree:####>>>>> ", JSON.stringify(newTree));
+                                                                //logger.debug("Returned orgTree:####>>>>> ", JSON.stringify(newTree));
                                                                 logger.debug("Exit get() for /organizations/getTreeNew");
                                                                 res.send(newTree);
                                                                 return;
@@ -461,7 +461,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
         logger.debug("Enter get() for /organizations/getTreeForbtv");
         //console.log("Enter /organizations/getTreeForbtv");
         var loggedInUser = req.session.user.cn;
-        logger.debug("LoggedInUser:>>>>>>>>>>>>>> ", loggedInUser);
+        //logger.debug("LoggedInUser:>>>>>>>>>>>>>> ", loggedInUser);
         masterUtil.getLoggedInUser(loggedInUser, function(err, anUser) {
             if (err) {
                 res.send(500, "Failed to fetch User.");
@@ -486,7 +486,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                         res.send(orgTree);
                         return;
                     } else {
-                        logger.debug(' Returned from getAllSettingsForUser : ' + JSON.stringify(objperms));
+                        //logger.debug(' Returned from getAllSettingsForUser : ' + JSON.stringify(objperms));
                         configmgmtDao.getRowids(function(err, rowidlist) {
                             d4dModelNew.d4dModelMastersOrg.find({
                                 id: 1,
@@ -578,9 +578,9 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                     });
                                                     logger.debug("Projects found:%s", prjids.length);
                                                     for (var _i = 0; _i < orgTree.length; _i++) {
-                                                        logger.debug("Orgnames:%s", orgTree[_i]['name']);
+                                                        //logger.debug("Orgnames:%s", orgTree[_i]['name']);
                                                         for (var __i = 0; __i < orgTree[_i]['businessGroups'].length; __i++) {
-                                                            logger.debug("businessGroups:%s%s and docprojs.length:%s", orgTree[_i]['businessGroups'], [__i]['name'], docprojs.length);
+                                                            //logger.debug("businessGroups:%s%s and docprojs.length:%s", orgTree[_i]['businessGroups'], [__i]['name'], docprojs.length);
                                                             for (var _bg = 0; _bg < docprojs.length; _bg++) {
 
                                                                 if (docprojs[_bg]['orgname_rowid'] == orgTree[_i]['rowid'] && docprojs[_bg]['productgroupname_rowid'] == orgTree[_i]['businessGroups'][__i]['rowid']) {
@@ -658,7 +658,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                         }
                                                     }
                                                     logger.debug("OrgTree:%s", JSON.stringify(orgTree.length));
-                                                    logger.debug("All orgIds:>>>>>>>>>>>>>>>>>>>>>>>> ", orgids);
+                                                    //logger.debug("All orgIds:>>>>>>>>>>>>>>>>>>>>>>>> ", orgids);
                                                     if (counter >= docbgs.length - 1) {
                                                         d4dModelNew.d4dModelMastersEnvironments.find({
                                                             id: 3,
@@ -666,21 +666,21 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                                 $in: orgids
                                                             }
                                                         }, function(err, docenvs) {
-                                                            logger.debug("Returned env for org:>>>>>>>>>>>>>>> ", JSON.stringify(docenvs));
+                                                            //logger.debug("Returned env for org:>>>>>>>>>>>>>>> ", JSON.stringify(docenvs));
                                                             for (var _i = 0; _i < orgTree.length; _i++) {
                                                                 (function(_i){
                                                                 for (var _env = 0; _env < docenvs.length; _env++) {
                                                                     logger.debug("Condition check:>>>>> ", orgTree[_i]['name'] == docenvs[_env]['orgname']);
                                                                     if (orgTree[_i]['name'] == docenvs[_env]['orgname']) {
                                                                         var envname = configmgmtDao.convertRowIDToValue(docenvs[_env]['rowid'], rowidlist);
-                                                                        logger.debug("My env>>>>>>>>>>> ", envname);
+                                                                        //logger.debug("My env>>>>>>>>>>> ", envname);
                                                                         orgTree[_i]['environments'].push(envname);
                                                                     }
                                                                 }
                                                                 if (_i === orgTree.length - 1) {
                                                                     /*logger.debug(docbgs.length+" "+countAll);
                                                                     if(docbgs.length === countAll){*/
-                                                                    logger.debug("Returned complete orgTree:>>>>>>>>>>> ", JSON.stringify(orgTree));
+                                                                    //logger.debug("Returned complete orgTree:>>>>>>>>>>> ", JSON.stringify(orgTree));
                                                                     logger.debug("Exit get() for /organizations/getTreeForbtv");
                                                                     res.send(orgTree);
                                                                     return;
@@ -1131,7 +1131,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
     app.get('/organizations/:orgId/businessgroups/:bgId/projects/:projectId/environments/:envId/', function(req, res) {
         logger.debug("Enter get() for /organizations/%s/businessgroups/%s/projects/%s/environments/%s", req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId);
         configmgmtDao.getTeamsOrgBuProjForUser(req.session.user.cn, function(err, orgbuprojs) {
-            logger.debug('-----------------------------------------------------getTeamsOrgBuProjForUser : ' + JSON.stringify(orgbuprojs));
+            //logger.debug('-----------------------------------------------------getTeamsOrgBuProjForUser : ' + JSON.stringify(orgbuprojs));
             if (orgbuprojs.length === 0) {
                 logger.debug('User not part of team to see project.');
                 res.send(401, "User not part of team to see project.");
