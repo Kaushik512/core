@@ -228,7 +228,7 @@ var Instances = mongoose.model('instances', InstanceSchema);
 var InstancesDao = function() {
     this.searchInstances = function(searchquery,options,callback){
         logger.debug("Enter searchInstances query - (%s)", searchquery);
-        Instances.textSearch(searchquery,function(err,data){
+        Instances.textSearch(searchquery,options,function(err,data){
             if(!err){
                // logger.debug(data.length);
                 var data1 = {
@@ -239,7 +239,7 @@ var InstancesDao = function() {
                 for(var i = 0; i < data.results.length; i++){
                     data1.instances.push(data.results[i].obj);
                 }
-                data1.queryduration = (data.stats.timeMicros/1000000);
+                data1.queryduration = (data.stats.timeMicros/100000);
                 callback(null,data1);
                 return;
             }

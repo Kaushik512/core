@@ -333,11 +333,22 @@
                                                        /* Attaching Click event for search box using text search */
 
                                                        function bindClick_searchInstances(){
+                                                        
                                                         $('#instancesearch').click(function(e){
                                                             //alert(urlParams.projid);
+                                                            //Clearing instances screen
+                                                            $('.item.active ul').find('li').detach();
+                                                            $('#tableinstanceview').dataTable().fnClearTable();
+                                                            $('#tabInstanceStatus').hide();
+                                                            $('.instanceloaderspinner').removeClass('hidden');
+                                                            $('#instancesearchmessage').html('');
+
                                                             $.get('/instances/search/' + urlParams.org + '/' + urlParams['bg'] + '/' + urlParams.projid + '/' +  urlParams.envid + '/' + encodeURIComponent($('#instanceSearchQuery').val()),function(data){
-                                                              console.log(JSON.stringify(data));
-                                                              createInstanceUI(data.instances);
+                                                              console.log(JSON.stringify(data.instances.length));
+                                                              //display statistics
+                                                              //$('#instancesearchmessage').html('Returned ' + data.instances.length + ' results (' + data.queryduration + ' seconds)');
+                                                              $('#instancesearchmessage').html('Returned ' + data.instances.length + ' result(s)');
+                                                              initializeInstanceArea(data.instances);
                                                             });
                                                         });
                                                        }
@@ -685,13 +696,14 @@
                                                                });
                                                            }
 
+
                                                            //alert(data.length);
                                                            if(data.length <= 0)
                                                               {
                                                                 $('.instanceloaderspinner').addClass('hidden');
-                                                                $('#tabInstanceStatus').html('No Instances found.').show()
+                                                                $('#tabInstanceStatus').html('No Instances found.').show();
                                                               }
-                                                         
+                                                           
                                                            for (var i = 0; i < data.length; i++) {
                                                               
                                                                addInstanceToDOM(data[i]);
