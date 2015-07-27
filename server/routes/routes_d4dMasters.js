@@ -610,7 +610,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                         res.send(500, 'Not able to fetch Orgs.');
                         return;
                     } else if (req.params.id === '1') {
-                        logger.debug("Returned Org List:>>>> ", JSON.stringify(orgList));
+                        //logger.debug("Returned Org List:>>>> ", JSON.stringify(orgList));
                         res.send(orgList);
                         return;
                     }
@@ -622,7 +622,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                             if (err) {
                                 res.send(500, 'Not able to fetch BG.');
                             }
-                            logger.debug("Returned BG List:>>>> ", JSON.stringify(bgList));
+                            //logger.debug("Returned BG List:>>>> ", JSON.stringify(bgList));
                             res.send(bgList);
                             return;
                         });
@@ -632,7 +632,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                             if (err) {
                                 res.send(500, 'Not able to fetch ENV.');
                             }
-                            logger.debug("Returned ENV List:>>>>> ", JSON.stringify(envList));
+                            //logger.debug("Returned ENV List:>>>>> ", JSON.stringify(envList));
                             res.send(envList);
                             return;
                         });
@@ -642,7 +642,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                             if (err) {
                                 res.send(500, 'Not able to fetch Project.');
                             }
-                            logger.debug("Returned Project List:>>>>> ", JSON.stringify(projectList));
+                            //logger.debug("Returned Project List:>>>>> ", JSON.stringify(projectList));
                             res.send(projectList);
                             return;
                         })
@@ -652,7 +652,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                             if (err) {
                                 res.send(500, 'Not able to fetch ConfigManagement.');
                             }
-                            logger.debug("Returned ConfigManagement List:>>>>> ", configMgmtList);
+                            //logger.debug("Returned ConfigManagement List:>>>>> ", configMgmtList);
                             res.send(configMgmtList);
                             return;
                         });
@@ -664,7 +664,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                             if (err) {
                                 res.send(500, 'Not able to fetch Dockers.');
                             }
-                            logger.debug("Returned Dockers List:>>>>> ", JSON.stringify(dockerList));
+                            //logger.debug("Returned Dockers List:>>>>> ", JSON.stringify(dockerList));
                             res.send(dockerList);
                             return;
                         });
@@ -676,7 +676,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                             if (err) {
                                 res.send(500, 'Not able to fetch Template.');
                             }
-                            logger.debug("Returned Template List:>>>>> ", JSON.stringify(templateList));
+                            //logger.debug("Returned Template List:>>>>> ", JSON.stringify(templateList));
                             res.send(templateList);
                             return;
                         });
@@ -688,7 +688,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                 if(err){
                                     res.send(500,'Not able to fetch TemplateType.');
                                 }
-                                logger.debug("Returned TemplateType List:>>>>> ",JSON.stringify(templateList));
+                                //logger.debug("Returned TemplateType List:>>>>> ",JSON.stringify(templateList));
                                 res.send(JSON.stringify(templateList));
                                 return;
                             });
@@ -710,7 +710,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                             if (err) {
                                 res.send(500, 'Not able to fetch ServiceCommand.');
                             }
-                            logger.debug("Returned ServiceCommand List:>>>>> ", JSON.stringify(serviceCommandList));
+                            //logger.debug("Returned ServiceCommand List:>>>>> ", JSON.stringify(serviceCommandList));
                             res.send(serviceCommandList);
                             return;
                         });
@@ -721,7 +721,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                             if (err) {
                                 res.send(500, 'Not able to fetch Jenkins.');
                             }
-                            logger.debug("Returned Jenkins List:>>>>> ", JSON.stringify(jenkinList));
+                            //logger.debug("Returned Jenkins List:>>>>> ", JSON.stringify(jenkinList));
                             res.send(jenkinList);
                             return;
                         });
@@ -732,7 +732,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                             if (err) {
                                 res.send(500, 'Not able to fetch UserRole.');
                             }
-                            logger.debug("Returned UserRole List:>>>>> ", JSON.stringify(userRoleList));
+                            //logger.debug("Returned UserRole List:>>>>> ", JSON.stringify(userRoleList));
                             res.send(userRoleList);
                             return;
                         });
@@ -743,7 +743,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                             if (err) {
                                 res.send(500, 'Not able to fetch User.');
                             }
-                            logger.debug("Returned User List:>>>>> ", JSON.stringify(userList));
+                            //logger.debug("Returned User List:>>>>> ", JSON.stringify(userList));
                             res.send(userList);
                             return;
                         });
@@ -754,7 +754,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                             if (err) {
                                 res.send(500, 'Not able to fetch Team.');
                             }
-                            logger.debug("Returned Team List:>>>>> ", JSON.stringify(teamList));
+                            //logger.debug("Returned Team List:>>>>> ", JSON.stringify(teamList));
                             res.send(teamList);
                             return;
                         });
@@ -774,7 +774,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                         res.send(500, 'Not able to fetch Orgs.');
                         return;
                     } else if (req.params.id === '1') {
-                        logger.debug("Returned Org List:>>>> ", JSON.stringify(orgList));
+                        //logger.debug("Returned Org List:>>>> ", JSON.stringify(orgList));
                         res.send(orgList);
                         return;
                     }
@@ -786,7 +786,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                             if (err) {
                                 res.send(500, 'Not able to fetch BG.');
                             }
-                            logger.debug("Returned BG List:>>>> ", JSON.stringify(bgList));
+                            //logger.debug("Returned BG List:>>>> ", JSON.stringify(bgList));
                             res.send(bgList);
                             return;
                         });
@@ -796,7 +796,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                             if (err) {
                                 res.send(500, 'Not able to fetch ENV.');
                             }
-                            logger.debug("Returned ENV List:>>>>> ", JSON.stringify(envList));
+                            //logger.debug("Returned ENV List:>>>>> ", JSON.stringify(envList));
                             res.send(envList);
                             return;
                         });
@@ -806,7 +806,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                             if (err) {
                                 res.send(500, 'Not able to fetch Project.');
                             }
-                            logger.debug("Returned Project List:>>>>> ", JSON.stringify(projectList));
+                            //logger.debug("Returned Project List:>>>>> ", JSON.stringify(projectList));
                             res.send(projectList);
                             return;
                         })
@@ -816,7 +816,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                             if (err) {
                                 res.send(500, 'Not able to fetch ConfigManagement.');
                             }
-                            logger.debug("Returned ConfigManagement List:>>>>> ", configMgmtList);
+                            //logger.debug("Returned ConfigManagement List:>>>>> ", configMgmtList);
                             res.send(configMgmtList);
                             return;
                         });
@@ -828,7 +828,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                             if (err) {
                                 res.send(500, 'Not able to fetch Dockers.');
                             }
-                            logger.debug("Returned Dockers List:>>>>> ", JSON.stringify(dockerList));
+                            //logger.debug("Returned Dockers List:>>>>> ", JSON.stringify(dockerList));
                             res.send(dockerList);
                             return;
                         });
@@ -840,7 +840,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                             if (err) {
                                 res.send(500, 'Not able to fetch Template.');
                             }
-                            logger.debug("Returned Template List:>>>>> ", JSON.stringify(templateList));
+                            //logger.debug("Returned Template List:>>>>> ", JSON.stringify(templateList));
                             res.send(templateList);
                             return;
                         });
@@ -852,7 +852,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                 if(err){
                                     res.send(500,'Not able to fetch TemplateType.');
                                 }
-                                logger.debug("Returned TemplateType List:>>>>> ",JSON.stringify(templateList));
+                                //logger.debug("Returned TemplateType List:>>>>> ",JSON.stringify(templateList));
                                 res.send(JSON.stringify(templateList));
                                 return;
                             });
@@ -874,7 +874,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                             if (err) {
                                 res.send(500, 'Not able to fetch ServiceCommand.');
                             }
-                            logger.debug("Returned ServiceCommand List:>>>>> ", JSON.stringify(serviceCommandList));
+                            //logger.debug("Returned ServiceCommand List:>>>>> ", JSON.stringify(serviceCommandList));
                             res.send(serviceCommandList);
                             return;
                         });
@@ -885,7 +885,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                             if (err) {
                                 res.send(500, 'Not able to fetch Jenkins.');
                             }
-                            logger.debug("Returned Jenkins List:>>>>> ", JSON.stringify(jenkinList));
+                            //logger.debug("Returned Jenkins List:>>>>> ", JSON.stringify(jenkinList));
                             res.send(jenkinList);
                             return;
                         });
@@ -896,7 +896,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                             if (err) {
                                 res.send(500, 'Not able to fetch UserRole.');
                             }
-                            logger.debug("Returned UserRole List:>>>>> ", JSON.stringify(userRoleList));
+                            //logger.debug("Returned UserRole List:>>>>> ", JSON.stringify(userRoleList));
                             res.send(userRoleList);
                             return;
                         });
@@ -907,7 +907,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                             if (err) {
                                 res.send(500, 'Not able to fetch User.');
                             }
-                            logger.debug("Returned User List:>>>>> ", JSON.stringify(userList));
+                            //logger.debug("Returned User List:>>>>> ", JSON.stringify(userList));
                             res.send(userList);
                             return;
                         });
@@ -918,7 +918,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                             if (err) {
                                 res.send(500, 'Not able to fetch Team.');
                             }
-                            logger.debug("Returned Team List:>>>>> ", JSON.stringify(teamList));
+                            //logger.debug("Returned Team List:>>>>> ", JSON.stringify(teamList));
                             res.send(teamList);
                             return;
                         });

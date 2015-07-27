@@ -219,7 +219,7 @@ var InstanceSchema = new Schema({
 
 InstanceSchema.plugin(uniqueValidator);
 InstanceSchema.plugin(textSearch);
-//InstanceSchema.index({ instanceIP: 'text' });
+InstanceSchema.index( { "$**": "text" });
 
 var Instances = mongoose.model('instances', InstanceSchema);
 //mongoose.set('debug',true);
