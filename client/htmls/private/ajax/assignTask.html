@@ -1250,10 +1250,10 @@ $(document).ready(function() {
                 $.get('/jenkins/' + taskData.jenkinsServerId + '/job/' + taskData.jobName + '/lastBuild', function(data) {
                     var url = taskData.jobResultURL;
                     
-                    if (url) {
+                    /*if (url) {
                         url = url.replace('$buildNumber', data.number);
                         
-                    }
+                    }*/
                     
                     taskData.jobResultURL = url;
                     var reqBody = {

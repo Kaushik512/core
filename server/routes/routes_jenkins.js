@@ -14,7 +14,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
                 'encoding': 'utf8'
             });
 
-            jenkinVversion = JSON.parese(jenkinVversion);
+            jenkinVversion = JSON.parse(jenkinVversion);
 
         } catch (err) {
             logger.error(err);
