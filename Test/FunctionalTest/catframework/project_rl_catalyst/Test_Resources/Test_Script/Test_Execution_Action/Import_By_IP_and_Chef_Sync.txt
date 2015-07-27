@@ -40,6 +40,7 @@ Catalyst Import an CentOS Instance By IP
     Verify the Operation as BootStrap
     Verfify the Status of the CentOAS Instance
     Clicks on Back To Instances
+    Sleep    5s
 
 Catalyst Import an Ubuntu Instance By IP
     Clicks on Settings
@@ -64,7 +65,7 @@ Catalyst Import an Ubuntu Instance By IP
 
 
 Catalyst Verfication of Duplicate Node
-    Clicks on Inport By IP Button
+    Clicks on Inport New IP Button
     Enters the IP Address of CentOS Box
     Select the Operating System of the Box
     Input the User Name for IP
@@ -362,6 +363,15 @@ Catlayst Importing the Instance Chef Sync
 #//div[@class='domain-roles-heading']/span[@data-originaL-title='apache']
 #//div[@class='domain-roles']/div[@data-blueprintname='52.24.73.49']
 #//div[@class='messageDiv']/div
+
+
+Clicks on Inport New IP Button
+    Sleep    1s
+    Execute JavaScript    $('#divinstancescardview').attr('style','display:none')
+    Sleep    1s
+    Click Element    id=ipaddressimport
+    
+
 
 
 Verfication of IP Address from card view
@@ -707,7 +717,7 @@ Clicks on Cancel Bbutoon
 
 Clicks on Cloose of Update Button
     Sleep    5s
-    Click Element    xpath=.//*[@id='instanceLogModalContainer']/div/div/div[3]/button
+    Wait Until Keyword Succeeds    1 minute     5 seconds      Click Element    xpath=.//*[@id='instanceLogModalContainer']/div/div/div[3]/button      #close
 
 
 
