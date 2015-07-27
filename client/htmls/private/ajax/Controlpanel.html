@@ -2941,7 +2941,7 @@ $(document).ready(function() {
      if (url) {
          url = url.replace('$host', window.instanceIPForAppLink);
      }
-     var $tdURL = $('<td class="appUrlTable"/>').append('<a style="word-break:break-word" href="' + url + '" target="_blank">' + url + '</a> ');
+     var $tdURL = $('<td class="appUrlTable"/>').append('<a style="word-break:break-word;" href="' + url + '" target="_blank">' + url + '</a> ');
      var $tdAction = $('<td/>');
      $tdAction.append('<div class="btn-group"><button class="btn btn-info pull-left btn-sg tableactionbutton appUrlEditLink" value="Update" title="Update"><i class="ace-icon fa fa-pencil bigger-120"></i></button></div>').append('<div style="margin-left:5px;" class="btn-group"><button class="btn btn-danger pull-left btn-sg tableactionbutton appUrlRemoveLink" value="Remove" title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></div>');
 
@@ -3059,7 +3059,7 @@ $(document).ready(function() {
                  if (url) {
                      url = url.replace('$host', window.instanceIPForAppLink);
                  }
-                 $tr.find('.appUrlTable').html('<a href="' + url + '" target="_blank">' + url + '</a> ');
+                 $tr.find('.appUrlTable').html('<a style="word-break:break-word;" href="' + url + '" target="_blank">' + url + '</a> ');
                  $tr.data('appUrlData', {
                      _id: appUrlId,
                      name: reqBody.name,

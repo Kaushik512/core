@@ -21,7 +21,8 @@ var RedisStore = require('connect-redis')(express);
 var MongoStore = require('connect-mongo')(express.session);
 
 var mongoDbConnect = require('./lib/mongodb');
-var newrelic = require( "newrelic-node" );
+//var newrelic = require( "newrelic-node" );
+
 
 logger.debug('Starting Catalyst');
 logger.debug('Logger Initialized');

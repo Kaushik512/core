@@ -18,7 +18,7 @@ ${ENVIRONMENT SERVER}              http://d4d.relevancelab.com:3001/public/login
  
 
 ${ENV}                 QA.txt
-${VALID USER}             superadminF
+${VALID USER}             superadmin
 ${VALID PASSWORD}         superadmin@123
 ${ORGANIZATION NAME}         Smoke_Rel_Org
 ${ORGANIZATION DOMAIN NAME}          www.relevancelab.com

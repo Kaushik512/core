@@ -76,9 +76,12 @@ Catalyst Creation of VM Image Process for Windows
     Clicks on Save Button of Providers
 
 Select organization now
-    Click Element    xpath=.//*[@id='s2id_orgId']/a/span[1]
-    Input Text    xpath=.//*[@id='select2-drop']/div/input     ${ORGANIZATION NAME}
-    Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
+    Sleep    4s
+    Click Element    css=#s2id_orgId > .select2-choice
+    Log    after click
+    Input Text    css=#select2-drop .select2-input    ${ORGANIZATION NAME}
+    Sleep    4s
+    Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
 
 Clicks on Edit Button of Windows Image
     Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()='Windows']/../td[6]/div/a[2]
@@ -1266,9 +1269,12 @@ Clicks on New Button of Providers
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='addnewitem']
 
 Select the Provider
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='s2id_providertype']
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    xpath=.//*[@id='select2-drop']/div/input    ${PROVIDERR}
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
+    Sleep    3s
+    Click Element    css=#s2id_providertype > .select2-choice
+    Log    after click
+    Input Text    css=#select2-drop .select2-input    ${PROVIDERR}
+    Sleep    4s
+    Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
 
 Enters the Name of the Provider
     Sleep    1s
@@ -1281,9 +1287,13 @@ Enters the Secret Key
     Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    id=secretKey    ${SECRET KEY}
 
 Selects the Region   
-    Wait Until Keyword Succeeds    2 minute     1 seconds      Click Element    xpath=//span[./text()='Select Region']
-    Input Text    xpath=.//*[@id='select2-drop']/div/input     US West (Oregon) | us-west-2
-    Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
+    Sleep    4s
+    Click Element    css=.region > .select2-choice
+    Log    after click
+    Input Text    css=#select2-drop .select2-input    ${REGION NAME}
+    Sleep    4s
+    Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
+    
     #Select From List By Value    xpath=.//*[contains(text(), "US West (Oregon) | us-west-2")]     ${REG}
     #Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='select2-drop']/ul/li[3]/div
     #Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    name=region
@@ -1291,9 +1301,16 @@ Selects the Region
      #//select/option[@value = "us-west-1"]
      
 Selects the Key Pair
-    Wait Until Keyword Succeeds    2 minute     1 seconds      Click Element    xpath=//span[./text()='Choose Any Key Pair']
-    Input Text    xpath=.//*[@id='select2-drop']/div/input    ${KeyNAME}
-    Click Element    xpath=.//*[@id='select2-drop']/ul/li[1]/div
+    Sleep    4s
+    Click Element    css=div.row.pemrow > div:first-child > div > a > span:nth-of-type(1)
+    Log    after click
+    Input Text    css=#select2-drop .select2-input    ${KeyNAME}
+    Sleep    4s
+    Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
+
+    #Wait Until Keyword Succeeds    2 minute     1 seconds      Click Element    xpath=//span[./text()='Choose Any Key Pair']
+    #Input Text    xpath=.//*[@id='select2-drop']/div/input    ${KeyNAME}
+    #Click Element    xpath=.//*[@id='select2-drop']/ul/li[1]/div
 
 Uploads the Pem File for Provider
     Choose File     xpath=.//*[@class='gui-file file']     ${CAT_INSTANCES}
