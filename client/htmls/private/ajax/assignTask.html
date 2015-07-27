@@ -266,7 +266,7 @@
                                                          <table id="booleanTable" class="table tableLength hidden" cellpadding="5px" width="100%">
                                                             <thead>
                                                                <tr>
-                                                                  <th class="headParamTable"><input id="booleanParameter" type="hidden"/>Boolean Parameter</th>
+                                                                  <th class="headParamTable"><input id="booleanParameter" type="hidden"/>BooleanParameterDefinition</th>
                                                                   <th></th>
                                                                </tr>
                                                             </thead>
@@ -292,7 +292,7 @@
                                                          <table id="stringTable" class="table tableLength hidden" cellpadding="5px" width="100%">
                                                             <thead>
                                                                <tr>
-                                                                  <th class="headStringTable"><input type="hidden" id="stringParameter">String Parameter</th>
+                                                                  <th class="headStringTable"><input type="hidden" id="stringParameter">StringParameterDefinition</th>
                                                                   <th></th>
                                                                </tr>
                                                             </thead>
@@ -1160,7 +1160,7 @@ $(document).ready(function() {
                                     defaultValue: String,
                                     description: String
                                 };
-                                parameterizedObj.parameterName = "Boolean Parameter";
+                                parameterizedObj.parameterName = "BooleanParameterDefinition";
                                 parameterizedObj.name = $('#booleanName').val();
                                 parameterizedObj.defaultValue = $('#booleanValue').val();
                                 parameterizedObj.description = $('#booleanDescription').val();
@@ -1176,7 +1176,7 @@ $(document).ready(function() {
                                     defaultValue: String,
                                     description: String
                                 };
-                                parameterizedObj.parameterName = "String Parameter";
+                                parameterizedObj.parameterName = "StringParameterDefinition";
                                 parameterizedObj.name = $('#stringName').val();
                                 parameterizedObj.defaultValue = $('#stringValue').val();
                                 parameterizedObj.description = $('#stringDescription').val();
@@ -1250,10 +1250,10 @@ $(document).ready(function() {
                 $.get('/jenkins/' + taskData.jenkinsServerId + '/job/' + taskData.jobName + '/lastBuild', function(data) {
                     var url = taskData.jobResultURL;
                     
-                    if (url) {
+                    /*if (url) {
                         url = url.replace('$buildNumber', data.number);
                         
-                    }
+                    }*/
                     
                     taskData.jobResultURL = url;
                     var reqBody = {
