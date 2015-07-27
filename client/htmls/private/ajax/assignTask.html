@@ -1,436 +1,679 @@
-<div class="col-lg-12">
-    <div class="col-lg-4 paddingleft0">
-        <label>
-            <strong>Select Task Type</strong>
-        </label>
-        <div class="row">
-            <div class="col-lg-7 paddingright0">
-                <select id="taskType" class="chooseTasktype width-100">
-                    <option id="Chef" value="chef">Chef</option>
-                    <option id="Jenkins" value="jenkins">Jenkins</option>
-                   <!-- <option id="Custom" value="custom">Custom</option>-->
-                </select>
-            </div>  
-        </div>
-    </div>
-</div>
-        
-    
-
-<div id="chef-dropdown">
-    <div class="col-lg-3 paddingleftright0">
-        <div class="col-lg-12 margintop15">
-                <label>
-                    <strong>Task Name <span style="color:red">*</span></strong>
-                </label>
-                <div class="row">
-                    <div class="col-lg-10">
-                        
-                            <input id="chefTaskName" type="text" cat-validation="required,nospecial" cdata="catalyst" class="form-control inputTaskName" name="ctl00$MainContent$orgname" autofocus>
-                        
-                    </div>  
-                </div>
-        </div>
-        <div class="col-lg-12 margintop15">
-            <label>
-                <strong>Chef Server Name</strong>
-            </label>
-            <div class="row">
-                <div class="col-lg-10">
-                    
-                        
-                        <input type="text" class="form-control chefServerName" placeholder="" disabled>
-                    
-                </div>  
-            </div>
-        </div>
-        <div class="col-lg-12 margintop15">
-            <div class="smart-form marginleft15">
-                <label>
-                    <img src="img/templateicons/Select-nodes---deployment.png">
-                    <strong>Select Nodes <span style="color:red">*</span></strong>
-                </label>
-                <div class="row">
-                    <div class="col-lg-9">
-                        <ul id="selectedNodesChefTask" class="deploymentNodeList selectedNodesChefTaskCSS">
-                         
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-lg-9 paddingleftright0">
-        <div class="col-lg-12 paddingleftright0 margintop-56">
-            <div class="panel-group smart-accordion-default" id="accordion-assigntask">
-                <div class="panel panel-default divconfigureparameterrunlist">
-                  <div class="panel-heading">
-                      <h4 class="panel-title">
-                        <a data-toggle="collapse" data-parent="#accordion-assigntask" href="#CollapseassignRunlist"> <i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i>Assign Runlist</a>
-                      </h4>
-                  </div>
-                  <div id="CollapseassignRunlist" class="panel-collapse collapse in">
-                    <div style="float:right;margin-right:60px;"><a style="font-size:14px!important" href="#modalForHelp" data-toggle="modal"><i class="fa fa-question"></i>&nbsp;Help</a>
-                    </div>
-                    <div class="col-lg-12 runlistContainer">
-                        
-                    </div>
-                  </div>
-                  <!--modal for help-->
-
-<div class="modal fade" id="modalForHelp" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-    <div class="modal-dialog " style="">
-        <div class="modal-content"> 
-            
-             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">
-                    &nbsp;CookBook Information
-                </h4>
-
-            </div> 
-            
-            
-             <div class="modal-body" style="height:400px;overflow-y:auto">
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                        <th>CookBook Name</th>
-                        <th>Description</th>
-                        <tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                        <td>apache2-windows</td>
-                        <td>Installation &amp; Configuration of Apache Server</td>
-                        </tr>
-                            <tr>
-                                <td>apache2</td>
-                                <td>Installation &amp; Configuration of Apache Server</td>
-                            </tr>
-                        <!--2nd set-->
-                        <tr>
-                        <td>cassandra</td>
-                        <td>Installation and configuration of Cassandra Server</td>
-                        </tr>
-                            <tr>
-                                <td>eclipse_windows</td>
-                                <td>Installtion of Eclispe on Windows</td>
-                            </tr>   
-                            <!--3rd set-->
-
-                        <tr>
-                        <td>visualstudio_windows</td>
-                        <td>Installation of Visual Studio</td>
-                        </tr>
-                            <tr>
-                                <td>iis</td>
-                                <td>Installation and configuration of IIS Server</td>
-                            </tr>
-                            <!--4th set-->
-                        <tr>
-                        <td>jboss7</td>
-                        <td>Installation and Configuration of JBOSS7 Server</td>
-                        </tr>
-                            <tr>
-                                <td>tomcat</td>
-                                <td>Installs and configures Tomcat, Java servlet engine and webserver</td>
-                            </tr>
-                            <!--5th set-->
-                            <tr>
-                        <td>weblogic</td>
-                        <td>Installation and Configuration of weblogic</td>
-                        </tr>
-                            <tr>
-                                <td>java</td>
-                                <td>Installation of Java</td>
-                            </tr>
-                            <!--6th set-->
-                            <tr>
-                        <td>java_windows</td>
-                        <td>Installation of Java</td>
-                        </tr>
-                            <tr>
-                                <td>nodejs</td>
-                                <td>Installation of NodeJS and npm package</td>
-                            </tr>   
-                            <!--7th set-->
-
-                            <tr>
-                        <td>php</td>
-                        <td>Installation and Configuration of PHP</td>
-                        </tr>
-                            <tr>
-                                <td>lamp_role</td>
-                                <td>Installation and Configuration of LAMP stack</td>
-                            </tr>   
-
-                            <!--8th set-->
-                            <tr>
-                        <td>mysql-windows</td>
-                        <td>Installation and Configuration of Mysql</td>
-                        </tr>
-                            <tr>
-                                <td>mysql</td>
-                                <td>Installation and Configuration of Mysql</td>
-                            </tr>   
-                            <!--9th set-->
-
-                            <tr>
-                        <td>oracle_windows</td>
-                        <td>Installation and Configuration of Oracle</td>
-                        </tr>
-                            <tr>
-                                <td>postgresql</td>
-                                <td>Installation and Configurationof postgresql</td>
-                            </tr>   
-                            <!--10th set-->
-                            <tr>
-                        <td>service_apache</td>
-                        <td>Service cookbook for apache server</td>
-                        </tr>
-                            <tr>
-                                <td>service_iptables</td>
-                                <td>Service cookbook for firewall</td>
-                            </tr>   
-
-                            <!--11th set-->
-                            <tr>
-                        <td>service_jboss</td>
-                        <td>Service cookbook for Jboss server</td>
-                        </tr>
-                            <tr>
-                                <td>service_mysql</td>
-                                <td>Service cookbook for Mysql</td>
-                            </tr>   
-                            <!--12th set-->
-                            <tr>
-                        <td>service_nginx</td>
-                        <td>Service cookbook for nginx </td>
-                        </tr>
-                            <tr>
-                                <td>service_tomcat</td>
-                                <td>Service cookbook for tomcat</td>
-                            </tr>   
-                            <!--13th set-->
-                            <tr>
-                        <td>service_weblogic</td>
-                        <td>service cookbook for weblogic</td>
-                        </tr>
-                            <tr>
-                                <td>seven_zip</td>
-                                <td>Installation of 7Zip</td>
-                            </tr>
-                            <!--14th set-->
-                            <tr>
-                        <td>git</td>
-                        <td>Installs git and optionally sets up a git server as a daemon under runit</td>
-                        </tr>
-                            <tr>
-                                <td>wget_windows</td>
-                                <td>Installs wget on windows</td>
-                            </tr>
-                            <!--15th set-->
-                            <tr>
-                        <td>toad_windows</td>
-                        <td>Installation and Configuration of TOAD</td>
-                        </tr>
-                            <tr>
-                                <td>docker</td>
-                                <td>Installation and Configuration of docker engine</td>
-                            </tr>   
-                            <tr>
-                                <td>jenkins</td>
-                                <td>Installs and configures Jenkins CI master &amp; node slaves.</td>
-                            </tr>   
-                    </tbody>
-                </table>
-
-            </div>
-            
-                <div class="modal-footer">
-        
-                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-                </div>   
-  
-         </div>
-    </div>
-</div>
-                </div>
-
-                <div class="panel panel-default divchefrunlist">
-                    <div class="panel-heading">
-                      <h4 class="panel-title">
-                        <a data-toggle="collapse" data-parent="#accordion-assigntask" href="#CollapsecookbookAttributes" class="collapsed"><i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i>Cookbook Attributes</a>
-                      </h4>
-                    </div>
-                    <div id="CollapsecookbookAttributes" class="panel-collapse collapse">
-                        <div class="col-lg-12">
-                            <div class="smart-form margin15">
-                                <label class="marginbottom4">
-                                    <img src="img/templateicons/Select-nodes---deployment.png">
-                                    <strong>Cookbook Attributes 
-                                        <a id="editAttributesBtn" class="bpEditBtn btn btn-primary editAttributesBtnCSS" rel="tooltip" data-placement="top" data-original-title="Edit">
-                                            <i class="ace-icon fa fa-pencil"></i>
-                                        </a>
-                                        <span style="color:red" id="attrmessage"></span>
-                                    </strong>
-                                </label>
-                                <div class="row">
-                                    <div class="col-lg-12">
-                                        <textarea id="attrtextarea" style="width:100%;display:none" rows="6" onfocus="$('#attrmessage').html('');" onblur="validatejson($(this));" disabled> </textarea>
-                                        <table id="attributesViewListTable" class="table table-striped table-bordered table-hover dataTable no-footer table-condensed tablesorter" cellpadding="5px" width="100%">
-                                         <thead>
-                                          <tr>
-                                            <th>Attributes</th>
-                                            <th>Values</th>
-                                          </tr>
-                                         </thead>
-                                         <tbody class="attributesViewTableBody">
-
-                                         </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-        
-</div>
-<div id="Jenkins-dropdown">
-    <div class="col-lg-3 paddingleftright0">
-        <div class="col-lg-12 margintop15">
-            <label><b>Task Name</b><span style="color:red">*</span>
-            </label>
-            <div class="row">
-                <div class="col-lg-10">
-                    <input id="jenkinsTaskName" type="text" cat-validation="required,nospecial" cdata="catalyst" class="form-control inputTaskName" autofocus>                       
-                </div>
-            </div>              
-        </div>
-        <div class="col-lg-12 margintop15">
-            <label><b>Select Jenkins Server</b><span style="color:red">*</span>
-            </label>
-            <div class="row">
-                <div class="col-lg-10">
-                    <select id="jenkinsServerList" class="width-100">
-                        <option value="choose">Choose</option>
-                        
-                    </select>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-12 margintop15">
-            <label><b>Select Job</b><span style="color:red">*</span></label>
-            <div class="row">
-                <div class="col-lg-10">
-                    <select id="jobListJenkins" class="width-100" disabled>
-                        
-                    </select>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!--
-<div id="Custom-dropdown">
-    <div class="col-lg-3 paddingleftright0">
-        <div class="col-lg-12 margintop15">
-            <label for="category"><b>Task Name</b><span style="color:red">*</span>
-            </label>
-            <div class="row">
-                <div class="col-lg-10">
-                    <input id="tasknameCustom" type="text" cat-validation="required,nospecial" cdata="catalyst" class="form-control inputTaskName" autofocus>
-                </div>
-            </div>             
-        </div>
-        
-        <div class="col-lg-12 margintop15">
-            <div class="smart-form marginleft15">
-                    <label>
-                        <img src="img/templateicons/Select-nodes---deployment.png">
-                        <strong>Select Nodes <span style="color:red">*</span></strong>
-                    </label>
-                    <div class="row">
-                        <div class="col-lg-9">
-                            <ul id="selectedNodesCustomTask" class="deploymentNodeList">
-                             
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-        </div>
-    </div>
-    <div class="col-lg-9 paddingleftright0">
-        <div class="col-lg-12 margintop15">
-            <label><strong>Command Line</strong></label>
-            <textarea rows="15" class="custom-scroll bordersolidgrey"></textarea> 
-        </div>
-    </div>
-</div>-->
 <div class="row">
-        <div class="col-md-10 col-sm-12 col-xs-12 footerfixed">
-            <div class="clearfix form-actions text-align-center">
-                <div class="btn-group">
-                    <a class="btn pull-left btn-primary btnSaveTask marginleft5px">
-                        <i class="ace-icon fa fa-check bigger-110"></i>
-                        Save Task
-                    </a>  
-                    <a class="btn pull-left btn-primary btnBack marginleft5px" onclick="window.history.back()">
-                        <i class="ace-icon fa fa-rotate-left  bigger-110"></i>
-                        Cancel
-                    </a>                                     
-                     
-                </div>
-            </div>
-        </div>
+   <div class="col-md-12">
+      <div class="col-md-12">
+         <form action="" id="taskForm">
+            <div class="widget-box">
+               <div class="widget-header">
+                  <h4 class="widget-margin" style="color:black;">Create New Job</h4>
+               </div>
+               <div class="widget-body">
+                  <div class="widget-main" style="min-height:200px">
+                     <section id="widget-grid" class="">
+                        <!-- START ROW -->
+                        <div class="row">
+                           <!-- Widget ID (each widget will need unique ID)-->
+                           <div class="jarviswidget" id="wid-id-3" data-widget-editbutton="false" data-widget-custombutton="false">
+                              <!-- widget div-->
+                              <div>
+                                 <!-- widget content -->
+                                 <div class="widget-body no-padding">
+                                    <div class="containerTable col-lg-5 col-md-5">
+                                       <!--table 1 -->
+                                       <table class="table table-bordered">
+                                          <thead>
+                                             <tr>
+                                                <th style="text-align:center">Job Details</th>
+                                             </tr>
+                                          </thead>
+                                          <tbody>
+                                             <tr>
+                                                <td>
+                                                   <div class="col-lg-6 col-md-6" style="margin-top:5px;">
+                                                      <label>
+                                                      Select Job Type
+                                                      </label>
+                                                      <select id="taskType" class="chooseTasktype width-100">
+                                                         <option id="Chef" value="chef">Chef</option>
+                                                         <option id="Jenkins" value="jenkins">Jenkins</option>
+                                                      </select>
+                                                   </div>
+                                                   <!--chef dropdown starts here-->
+                                                   
+                                                      <div id="chef-dropdown">
+                                                         <div class="col-lg-6 col-md-6" style="margin-top:5px;">
+                                                            <label>
+                                                            Job Name <span style="color:red">*</span>
+                                                            </label>
+                                                            <input id="chefTaskName" type="text" class="form-control inputTaskName" name="ctl00$MainContent$orgname">
+                                                         </div>
+                                                         <!--div for description for task type-->
+                                                         <div class="col-lg-12 col-md-12 margintop15">
+                                                            <label>Job Description</label>
+                                                            <textarea id="chefDescription" style="width:100%" rows="9" cols="15" name="description"></textarea>
+                                                         </div>
+                                                      </div>
+                                                   
+                                                      <!--chef dropdown ends here-->
+                                                      <!--jenkins dropdown starts here-->
+                                                      <div id="Jenkins-dropdown">
+                                                         <div class="col-lg-6 col-md-6" style="margin-top:5px;">
+                                                            <label>Job Name<span style="color:red">*</span>
+                                                            </label>
+                                                            <input id="jenkinsTaskName" type="text" cat-validation="required,nospecial" cdata="catalyst" class="form-control inputTaskName" autofocus>                       
+                                                         </div>
+                                                         <div class="col-lg-6 col-md-6 margintop15">
+                                                            <label>Select Jenkins Server<span style="color:red">*</span>
+                                                            </label>
+                                                            <select id="jenkinsServerList" class="width-100">
+                                                               <option value="choose">Choose</option>
+                                                            </select>
+                                                         </div>
+                                                         <div class="col-lg-6 col-md-6 margintop15">
+                                                            <label>Select Job<span style="color:red">*</span></label>
+                                                            <label id="spinnerForJob" class="hidden"><img  style="margin-left:5px;margin-right:25px;" src="img/select2-spinner.gif"></label>
+                                                            <select id="jobListJenkins" class="width-100" disabled>
+                                                              
+                                                            </select>
+                                                         </div>
+                                                         <div class="col-lg-12 col-md-12 margintop15">
+                                                            <label>Job Description</label>
+                                                            <textarea id="jenkinsDescription"  style="width:100%" rows="8" cols="15" name="description"></textarea>
+                                                         </div>
+                                                      </div>
+                                                      <!--jenkins dropdown ends here-->
+                                                </td>
+                                             </tr>
+                                          </tbody>
+                                       </table>
+                                       </div>
+                                       <!--chef task type details-->
+                                       <div class="containerTable chefTaskType col-lg-7 col-md-7">
+                                          <!--table 2 -->
+                                          <table class="table table-bordered">
+                                             <thead>
+                                                <tr>
+                                                   <th style="text-align:center" class="chefServerName"></th>
+                                                </tr>
+                                             </thead>
+                                             <tbody>
+                                                <tr>
+                                                   <td>
+                                                      <div class="col-lg-6 col-md-6" style="margin-top:5px;">
+                                                         <!-- <label>
+                                                            Chef Server Name
+                                                            </label> -->
+                                                         <!-- <input type="text" class="form-control chefServerName" placeholder="" disabled> -->
+                                                         <div class="col-lg-12 nodesTable">
+                                                            <div class="smart-form">
+                                                               <label>
+                                                               <img style="margin-top:-5px;" src="img/templateicons/Select-nodes---deployment.png">
+                                                               Select Nodes <span style="color:red">*</span>
+                                                               </label>
+                                                               <ul id="selectedNodesChefTask" class="deploymentNodeList selectedNodesChefTaskCSS">
+                                                               </ul>
+                                                            </div>
+                                                         </div>
+                                                      </div>
+                                                      <div class="col-lg-6 col-md-6" style="margin-top:5px;">
+                                                         <label>
+                                                         <i style="color:#40baf1;font-size:16px;" class="ace-icon fa fa-list-ul"></i>   
+                                                         Edit Runlist <span style="color:red">*</span>
+                                                         </label>
+                                                         <a href="#chefRunlistModal" data-backdrop="false" data-toggle="modal" style="cursor:pointer;"> <img src="img/add.png" style="float:right;margin-top:6px;" class="addList" rel="tooltip" data-placement="top" title="Edit Runlist" /></a>
+                                                         <div style="height:146px;overflow-y:auto;" id="dbNameTable_wrapper" class="dataTables_wrapper no-footer">
+                                                            <table id="tableRunlist" class="table table-striped table-bordered table-hover dataTable no-footer" cellpadding="5px" width="100%" style="text-align:center";>
+                                                               <thead>
+                                                                  <tr class="rowCustomStyle">
+                                                                     <th style="text-align:center">View Runlist</th>
+                                                                  </tr>
+                                                               </thead>
+                                                               <tbody>
+                                                               </tbody>
+                                                            </table>
+                                                         </div>
+                                                      </div>
+                                                      <div class="col-lg-12 col-md-12" style="margin-top:22px;">
+                                                         <!-- <a href="#chefRunlistModal" data-backdrop="false" data-toggle="modal" style="cursor:pointer;"> <img src="img/add.png" style="float:right;" class="addList" rel="tooltip" data-placement="top" title="Edit Runlist" /></a>
+                                                            <!-- <div style="height:200px;overflow-y:auto;" id="dbNameTable_wrapper" class="dataTables_wrapper no-footer"> -->
+                                                         <!-- <table id="tableRunlist" class="table table-striped table-bordered table-hover dataTable no-footer" cellpadding="5px" width="100%" style="text-align:center";>
+                                                            <thead>
+                                                               <tr class="rowCustomStyle">
+                                                                  <th style="text-align:center">View Runlist</th>
+                                                               </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                            </tbody>
+                                                            </table -->
+                                                         <label>
+                                                         <i style="color:#40baf1;font-size:16px;" class="ace-icon fa fa-list-ul"></i>   
+                                                         Cookbook Attributes <a href="#editAttributesModalContainer" id="editAttributesBtn" class="bpEditBtn btn btn-primary editAttributesBtnCSS" rel="tooltip" data-placement="top" data-original-title="Edit">
+                                                         <i class="ace-icon fa fa-pencil"></i>
+                                                         </a>
+                                                         </label>
+                                                         <textarea id="attrtextarea" style="width:100%;display:none" rows="6" onfocus="$('#attrmessage').html('');" onblur="validatejson($(this));" disabled> </textarea>
+                                                         <table id="attributesViewListTable" class="table table-striped table-bordered table-hover dataTable no-footer table-condensed tablesorter" cellpadding="5px" width="100%">
+                                                            <thead>
+                                                               <tr>
+                                                                  <th>Attributes</th>
+                                                                  <th>Values</th>
+                                                               </tr>
+                                                            </thead>
+                                                            <tbody class="attributesViewTableBody">
+                                                            </tbody>
+                                                         </table>
+                                                      </div>
+                                                      <!-- <div class="margintop15 marginLeft50">
+                                                         <a class="btn btn-info widthForButton" style="text-decoration:none;" href="#chefRunlistModal" data-toggle="modal">Edit Runlist</a>
+                                                         </div> -->
+                                                      <!-- <div class="margintop15 marginLeft50">
+                                                         <a class="btn btn-info widthForButton" style="text-decoration:none;" id="editAttributesBtn" href="#editAttributesModalContainer" data-toggle="modal">Cookbook Attributes</a>
+                                                         </div> -->
+                                                      <!-- <div class="margintop15 marginLeft50">
+                                                         <a class="btn btn-info widthForButton" style="text-decoration:none;" href="#modalForHelp" data-toggle="modal">&nbsp;Cookbook Information</a>
+                                                         </div> -->
+                                                      <!--  <div class="col-lg-6 col-md-6" style="margin-top:31px;">
+                                                         <textarea id="attrtextarea" style="width:100%;display:none" rows="6" onfocus="$('#attrmessage').html('');" onblur="validatejson($(this));" disabled> </textarea>
+                                                         <table id="attributesViewListTable" class="table table-striped table-bordered table-hover dataTable no-footer table-condensed tablesorter hidden" cellpadding="5px" width="100%">
+                                                          <thead>
+                                                           <tr>
+                                                             <th>Attributes</th>
+                                                             <th>Values</th>
+                                                           </tr>
+                                                          </thead>
+                                                          <tbody class="attributesViewTableBody">
+                                                         
+                                                          </tbody>
+                                                         </table>
+                                                         
+                                                         <!-- </div>-->
+                                                      <!-- </div> -->
+                                                   </td>
+                                                </tr>
+                                             </tbody>
+                                          </table>
+                                          <!--table 2 ends -->
+                                       </div>
+                                       <!--chef task type details ends here-->
+                                       <!--jenkins details for url and parameters-->
+                                       <div class="containerTable jenkinsTaskType col-lg-7 col-md-7">
+                                          <!--table 2 -->
+                                          <table class="table table-bordered">
+                                             <thead>
+                                                <tr>
+                                                   <th style="text-align:center" class="">Jenkins</th>
+                                                </tr>
+                                             </thead>
+                                             <tbody>
+                                                <tr>
+                                                   <td>
+                                                      <div class="col-lg-12 col-md-12">
+                                                         <table id="jobParamTable" class="table" style="margin-top:20px;" cellpadding="5px" width="100%">
+                                                            <thead>
+                                                               
+                                                            </thead>
+                                                            <tbody>
+                                                               <tr>
+                                                                  <td class="jobParam">Job Result Pattern:</td>
+                                                                  <td><div class="col-lg-11 col-md-11"><input id="jobResultUrl" autocomplete="off" type="text" title="ex:http://{host:port}/TestResult/$buildNumber/log.html" alt="ex:http://{host:port}/TestResult/$buildNumber/log.html" placeholder=" ex:http://{host:port}/<TestResult>/<$buildNumber>/log.html" class="form-control inputJobResultUrl" name="jobResultUrl"></div><div class="col-lg-1 col-md-1"><img style="width:16px;height:16px;margin-top:8px;" data-toggle="popover" tabindex="50" data-placement="left" data-original-title="Help" data-content="This is a URL pattern for the JOB Result or Job Output" src="img/help.png"/></div><i><span style="margin-left:29px;">ex:http://{host:port}/TestResult/$buildNumber/log.html</span><i></td>
+                                                               </tr>
+                                                               <tr>
+                                                                  <td class="jobParam">Job Url:</td>
+                                                                  <td><div class="col-lg-11 col-md-11"><span id="spinnerForUrl" class="hidden"><img  style="margin-left:5px;margin-right:25px;" src="img/select2-spinner.gif"></span><input type="text" disabled class="jenkinsJobURL form-control hidden" style="margin-top:4px"></div><div class="col-lg-1 col-md-1"><img style="width:16px;height:16px;margin-top:8px;" id="helpImage" tabindex="50" class="hidden" data-toggle="popover" data-placement="left" data-original-title="Help" data-content="This is the URL for a particular JOB selected by the User available in the Jenkins Server" src="img/help.png"/></div></td>
+                                                               </tr>
+                                                               <tr>
+                                                                  <td class="jobParam">Auto sync:</td>
+                                                                  <td style="padding-top:16px;"><div class="col-lg-11 col-md-11"><input type="radio" id="radio_yes" name="auto_sync" value="true" /> Yes
+                                                                  <input style="margin-left:15px;" type="radio" id="radio_no" name="auto_sync" value="false" checked="checked" /> No</div><div class="col-lg-1 col-md-1"><img tabindex="50" style="width:16px;height:16px;margin-top:2px;" data-toggle="popover" data-placement="left" data-original-title="Help" data-content="This feature fetches the entire Jenkins Job history for the particular job." src="img/help.png"/></div></td>
+                                                               </tr>
+                                                            </tbody>
+                                                         </table>
+                                                      </div>
+                                                         <!-- <label>Job Result Url:</label>
+                                                         <input id="jobResultUrl" type="url" placeholder="http://www.example.com/$BN" class="form-control inputJobResultUrl" name="jobResultUrl">
+                                                      </div>
+                                                      <div class="col-lg-12 col-md-12 margintop15">
+                                                         <label>
+                                                            Job Url:
+                                                            
+                                                         </label>
+                                                         <div class="jenkinsJobURL" style="margin-top:6px">
+                                                         </div> -->
+                                                         <!-- <div class="col-lg-12 margintop15">
+                                                            <label>Auto sync<span style="color:red">*</span></label>
+                                                            <input type="radio" id="radio_yes" name="auto_sync" value="Yes" /> Yes
+                                                            <input style="margin-left:15px;" type="radio" id="radio_no" name="auto_sync" value="No"
+                                                               checked="checked" /> No
+                                                         </div> -->
+                                                         <!--div for paremeters-->
+                                                         
+                                                            <div class="col-lg-12 hidden">
+                                                               <input style="margin-left:5px;" id="addParameters" type="checkbox" name="addParams" value="This build is parameterized"/>&nbsp;&nbsp;This build is parameterized
+                                                            </div>
+                                                         
+                                                      <!-- </div> -->
+                                                      <!--div for paremeter chekboc ends here-->
+                                                      <!--dropdown for paremeters-->
+                                                      <div class="col-lg-6 col-md-6" style="margin-top:10px;">
+                                                         <select id="parametersSelect" class="addParameters width-100 hidden">
+                                                            <option value="">Add Parameter</option>
+                                                            <option value="boolean">Boolean Parameter</option>
+                                                            <option value="string">String Parameter</option>
+                                                         </select>
+                                                      </div>
+                                                      <!--dropdown ends here-->
+                                                      <!--boolean parameters-->
+                                                      <div class="col-lg-12 col-md-12 margintop15">
+                                                         <table id="booleanTable" class="table tableLength hidden" cellpadding="5px" width="100%">
+                                                            <thead>
+                                                               <tr>
+                                                                  <th class="headParamTable"><input id="booleanParameter" type="hidden"/>Boolean Parameter</th>
+                                                                  <th></th>
+                                                               </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                               <tr>
+                                                                  <td class="booleanParam">Name:</td>
+                                                                  <td><input id="booleanName" type="text" class="form-control" name="booleanName"></td>
+                                                               </tr>
+                                                               <tr>
+                                                                  <td class="booleanParam">Default Value:</td>
+                                                                  <td><input id="booleanValue" style="margin-top:10px;" type="checkbox" name="booleanValue"></td>
+                                                               </tr>
+                                                               <tr>
+                                                                  <td class="booleanParam">Description:</td>
+                                                                  <td><input id="booleanDescription" type="text" class="form-control" name="booleanDescription"></td>
+                                                               </tr>
+                                                            </tbody>
+                                                         </table>
+                                                      </div>
+                                                      <!--boolean parameters ends here-->
+                                                      <!--string parameters-->
+                                                      <div class="col-lg-12 col-md-12 margintop15">
+                                                         <table id="stringTable" class="table tableLength hidden" cellpadding="5px" width="100%">
+                                                            <thead>
+                                                               <tr>
+                                                                  <th class="headStringTable"><input type="hidden" id="stringParameter">String Parameter</th>
+                                                                  <th></th>
+                                                               </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                               <tr>
+                                                                  <td class="stringParam">Name:</td>
+                                                                  <td><input id="stringName" type="text" class="form-control" name="stringName"></td>
+                                                               </tr>
+                                                               <tr>
+                                                                  <td class="stringParam">Default Value:</td>
+                                                                  <td><input id="stringValue" type="text" class="form-control" name="stringValue"></td>
+                                                               </tr>
+                                                               <tr>
+                                                                  <td class="stringParam">Description:</td>
+                                                                  <td><input id="stringDescription" type="text" class="form-control" name="stringDescription"></td>
+                                                               </tr>
+                                                            </tbody>
+                                                         </table>
+                                                      </div>
+                                                      <!--string parameters ends here-->
+                                       
+                                       </td>
+                                       </tr>
+                                       </tbody>
+                                       </table>
+                                       <!--table 2 ends -->
+                                    </div>
+                                    <!--jenkins paremeters ends here-->
+                                    <!-- <div class="col-lg-9 paddingleftright0">
+                                       <div class="col-lg-12 paddingleftright0 margintop-56">
+                                           <div class="panel-group smart-accordion-default" id="accordion-assigntask">
+                                               <div class="panel panel-default divconfigureparameterrunlist">
+                                                 
+                                                 
+                                       
+                                               </div>
+                                       
+                                       
+                                       
+                                               <div class="panel panel-default divchefrunlist">
+                                                   <div class="panel-heading">
+                                                     <h4 class="panel-title">
+                                                       <a data-toggle="collapse" data-parent="#accordion-assigntask" href="#CollapsecookbookAttributes" class="collapsed"><i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i>Cookbook Attributes</a>
+                                                     </h4>
+                                                   </div>
+                                                   <div id="CollapsecookbookAttributes" class="panel-collapse collapse">
+                                                       <div class="col-lg-12">
+                                                           <div class="smart-form margin15">
+                                                               <label class="marginbottom4">
+                                                                   <img src="img/templateicons/Select-nodes---deployment.png">
+                                                                   <strong>Cookbook Attributes 
+                                                                       <a id="editAttributesBtn" class="bpEditBtn btn btn-primary editAttributesBtnCSS" rel="tooltip" data-placement="top" data-original-title="Edit">
+                                                                           <i class="ace-icon fa fa-pencil"></i>
+                                                                       </a>
+                                                                       <span style="color:red" id="attrmessage"></span>
+                                                                   </strong>
+                                                               </label>
+                                                               <div class="row">
+                                                                   <div class="col-lg-12">
+                                                                       <textarea id="attrtextarea" style="width:100%;display:none" rows="6" onfocus="$('#attrmessage').html('');" onblur="validatejson($(this));" disabled> </textarea>
+                                                                       <table id="attributesViewListTable" class="table table-striped table-bordered table-hover dataTable no-footer table-condensed tablesorter" cellpadding="5px" width="100%">
+                                                                        <thead>
+                                                                         <tr>
+                                                                           <th>Attributes</th>
+                                                                           <th>Values</th>
+                                                                         </tr>
+                                                                        </thead>
+                                                                        <tbody class="attributesViewTableBody">
+                                       
+                                                                        </tbody>
+                                                                       </table>
+                                                                   </div>
+                                                               </div>
+                                                           </div>
+                                                       </div>
+                                                   </div>
+                                               </div>
+                                           </div>
+                                       </div>
+                                       </div> -->
+                                 </div>
+                                 <!-- <div class="row">
+                                    <div class="col-md-10 col-sm-12 col-xs-12 footerfixed">
+                                        <div class="clearfix form-actions text-align-center">
+                                            <div class="btn-group">
+                                                <a class="btn pull-left btn-primary btnSaveTask marginleft5px">
+                                                    <i class="ace-icon fa fa-check bigger-110"></i>
+                                                    Save Task
+                                                </a>  
+                                                <a class="btn pull-left btn-primary btnBack marginleft5px" onclick="window.history.back()">
+                                                    <i class="ace-icon fa fa-rotate-left  bigger-110"></i>
+                                                    Cancel
+                                                </a>                                     
+                                                 
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </div> -->
+                                 <!-- end widget content -->
+                              </div>
+                              <!-- end widget div -->
+                           </div>
+                           <!-- end widget -->
+                        </div>
+                        <!-- END ROW -->
+                     </section>
+                     <!-- end widget grid -->
+                  </div>
+               </div>
+               <!--assign runlist modal-->
+               <div class="modal fade" id="chefRunlistModal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+                  <div class="modal-dialog">
+                     <div class="modal-content" style="width:800px">
+         <form role="form" class="cmxform" id="chefTaskRunlist" autocomplete="off">
+         <div class="modal-header">
+         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+         &times;
+         </button>
+         <h4 class="modal-title">
+         <i class="fa fa-th-list txt-color-blue"></i>&nbsp;&nbsp;Edit Runlist
+         </h4>
+         </div>
+         <div class="modal-body modal-height">
+         <div class="col-lg-12 runlistContainer">
+         </div>
+         </div>
+         <div class="modal-footer">
+         <a type="button" class="btn btn-default" data-dismiss="modal">Close</a>
+         <input type="submit" class="btn btn-primary" id="saveRunlist" value="Update Runlist">  
+         </div>   
+         </form>
+         </div><!-- /.modal-content -->
+         </div><!-- /.modal-dialog -->
+         </div>
+         <!--modal for runlist ends here-->
+         <!--modal for help -->
+         <div class="modal fade" id="modalForHelp" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+         <div class="modal-dialog">
+         <div class="modal-content"> 
+         <div class="modal-header">
+         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+         <h4 class="modal-title">
+         &nbsp;CookBook Information
+         </h4>
+         </div> 
+         <div class="modal-body" style="height:400px;overflow-y:auto">
+         <table class="table table-bordered">
+         <thead>
+         <tr>
+         <th>CookBook Name</th>
+         <th>Description</th>
+         <tr>
+         </thead>
+         <tbody>
+         <tr>
+         <td>apache2-windows</td>
+         <td>Installation &amp; Configuration of Apache Server</td>
+         </tr>
+         <tr>
+         <td>apache2</td>
+         <td>Installation &amp; Configuration of Apache Server</td>
+         </tr>
+         <!--2nd set-->
+         <tr>
+         <td>cassandra</td>
+         <td>Installation and configuration of Cassandra Server</td>
+         </tr>
+         <tr>
+         <td>eclipse_windows</td>
+         <td>Installtion of Eclispe on Windows</td>
+         </tr>   
+         <!--3rd set-->
+         <tr>
+         <td>visualstudio_windows</td>
+         <td>Installation of Visual Studio</td>
+         </tr>
+         <tr>
+         <td>iis</td>
+         <td>Installation and configuration of IIS Server</td>
+         </tr>
+         <!--4th set-->
+         <tr>
+         <td>jboss7</td>
+         <td>Installation and Configuration of JBOSS7 Server</td>
+         </tr>
+         <tr>
+         <td>tomcat</td>
+         <td>Installs and configures Tomcat, Java servlet engine and webserver</td>
+         </tr>
+         <!--5th set-->
+         <tr>
+         <td>weblogic</td>
+         <td>Installation and Configuration of weblogic</td>
+         </tr>
+         <tr>
+         <td>java</td>
+         <td>Installation of Java</td>
+         </tr>
+         <!--6th set-->
+         <tr>
+         <td>java_windows</td>
+         <td>Installation of Java</td>
+         </tr>
+         <tr>
+         <td>nodejs</td>
+         <td>Installation of NodeJS and npm package</td>
+         </tr>   
+         <!--7th set-->
+         <tr>
+         <td>php</td>
+         <td>Installation and Configuration of PHP</td>
+         </tr>
+         <tr>
+         <td>lamp_role</td>
+         <td>Installation and Configuration of LAMP stack</td>
+         </tr>   
+         <!--8th set-->
+         <tr>
+         <td>mysql-windows</td>
+         <td>Installation and Configuration of Mysql</td>
+         </tr>
+         <tr>
+         <td>mysql</td>
+         <td>Installation and Configuration of Mysql</td>
+         </tr>   
+         <!--9th set-->
+         <tr>
+         <td>oracle_windows</td>
+         <td>Installation and Configuration of Oracle</td>
+         </tr>
+         <tr>
+         <td>postgresql</td>
+         <td>Installation and Configurationof postgresql</td>
+         </tr>   
+         <!--10th set-->
+         <tr>
+         <td>service_apache</td>
+         <td>Service cookbook for apache server</td>
+         </tr>
+         <tr>
+         <td>service_iptables</td>
+         <td>Service cookbook for firewall</td>
+         </tr>   
+         <!--11th set-->
+         <tr>
+         <td>service_jboss</td>
+         <td>Service cookbook for Jboss server</td>
+         </tr>
+         <tr>
+         <td>service_mysql</td>
+         <td>Service cookbook for Mysql</td>
+         </tr>   
+         <!--12th set-->
+         <tr>
+         <td>service_nginx</td>
+         <td>Service cookbook for nginx </td>
+         </tr>
+         <tr>
+         <td>service_tomcat</td>
+         <td>Service cookbook for tomcat</td>
+         </tr>   
+         <!--13th set-->
+         <tr>
+         <td>service_weblogic</td>
+         <td>service cookbook for weblogic</td>
+         </tr>
+         <tr>
+         <td>seven_zip</td>
+         <td>Installation of 7Zip</td>
+         </tr>
+         <!--14th set-->
+         <tr>
+         <td>git</td>
+         <td>Installs git and optionally sets up a git server as a daemon under runit</td>
+         </tr>
+         <tr>
+         <td>wget_windows</td>
+         <td>Installs wget on windows</td>
+         </tr>
+         <!--15th set-->
+         <tr>
+         <td>toad_windows</td>
+         <td>Installation and Configuration of TOAD</td>
+         </tr>
+         <tr>
+         <td>docker</td>
+         <td>Installation and Configuration of docker engine</td>
+         </tr>   
+         <tr>
+         <td>jenkins</td>
+         <td>Installs and configures Jenkins CI master &amp; node slaves.</td>
+         </tr>   
+         </tbody>
+         </table>
+         </div>
+         <div class="modal-footer">
+         <a class="btn btn-primary" data-dismiss="modal">Close</a>
+         </div>   
+         </div>
+         </div>
+         </div>
+         <!--modal for help ends-->
+         <!--execute modal starts here-->
+         <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="editAttributesModalContainer" class="modal fade" data-backdrop="static">
+         <div class="modal-dialog">
+         <div class="modal-content">
+         <div class="modal-header">
+         <button aria-hidden="true" data-dismiss="modal" class="close" type="button">
+         x
+         </button>
+         <h4 class="modal-title">
+         <i class="fa fa-eraser txt-color-blue"></i>&nbsp;&nbsp;Edit Attributes
+         </h4>
+         </div>
+         <div class="modal-body no-padding">
+         <div class="loadingContainer">
+         <img class="center-block loadingContainerimageCSS" src="img/loading.gif" />
+         </div>
+         <div class="errorMsgContainer loadingerrorMsgContainerCSS"></div> 
+         <form  class="attributesEditFormArea padding10" action="">
+         <table id="attributesEditListArea" class="table table-striped table-bordered table-hover dataTable no-footer table-condensed tablesorter" cellpadding="5px" width="100%">
+         <thead>
+         <tr>
+         <th>Attributes</th>
+         <th>Values</th>
+         </tr>
+         </thead>
+         <tbody class="attributesEditTableBody">
+         </tbody>
+         </table>
+         </form>
+         </div>
+         <div class="modal-footer">
+         <a class="btn btn-default" data-dismiss="modal">Close</a>
+         <a type="submit" class="btn btn-primary saveAttribBtn">Save</a>
+         </div>
+         </div><!-- /.modal-content -->
+         </div><!-- /.modal-dialog -->
+         </div><!--/.modal-assignedExecute-->
+         <div class="widget-toolbox clearfix">
+         <div class="btn-group pull-right">
+         <button type="submit" class="btn btn-primary btnSaveTask btn-mini" style="margin-right:11px;">
+         <i class="ace-icon fa fa-check bigger-110"></i>
+         Save
+         </button>
+         <a class="btn btn-primary btn-mini btnBack" onclick="window.history.back();" id="btncancel">
+         <i class="ace-icon fa fa-undo bigger-110"></i>
+         Cancel
+         </a>
+         </div>
+         </div>
+         </div>
+         </form>
+      </div>
+   </div>
 </div>
 
-<!--execute modal-->
-<div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="editAttributesModalContainer" class="modal fade" data-backdrop="static">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button aria-hidden="true" data-dismiss="modal" class="close" type="button">
-                    x
-                </button>
-                <h4 class="modal-title">
-                    <i class="fa fa-eraser txt-color-blue"></i>&nbsp;&nbsp;Edit Attributes
-                </h4>
-            </div>
-            <div class="modal-body no-padding">
-                <div class="loadingContainer">
-                    <img class="center-block loadingContainerimageCSS" src="img/loading.gif" />
-                </div>
-                <div class="errorMsgContainer loadingerrorMsgContainerCSS"></div> 
-                <form  class="attributesEditFormArea padding10" action="">
-                    <table id="attributesEditListArea" class="table table-striped table-bordered table-hover dataTable no-footer table-condensed tablesorter" cellpadding="5px" width="100%">
-                     <thead>
-                      <tr>
-                        <th>Attributes</th>
-                        <th>Values</th>
-                      </tr>
-                     </thead>
-                     <tbody class="attributesEditTableBody">
 
-                     </tbody>
-                    </table>
-                    
-                </form>
-            </div>
-           <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary saveAttribBtn">Save</button>
-      </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div><!--/.modal-assignedExecute-->
 
 <script type="text/javascript">
+
+if (!$.fn.dataTable.isDataTable('#tableRunlist')) {
+    //var $taskListArea = $('.taskListArea').empty();
+    $tasksRunlist = $('#tableRunlist').DataTable({
+        "pagingType": "full_numbers",
+        "bInfo": false,
+        "bLengthChange": false,
+        "paging": false,
+        "bFilter": false,
+        "aoColumns": [{
+            "bSortable": false
+        }]
+    });
+}
+
+$(document).ready(function() {
+    $('[data-toggle="popover"]').popover({
+       trigger: 'focus'
+    });
+});
+
 
 
 var urlParams = {};
@@ -449,13 +692,13 @@ var urlParams = {};
 
 })();
 
-function validatejson(attrctrl){
-    try{
-        if(attrctrl.val().trim() != '')
+function validatejson(attrctrl) {
+    try {
+        if (attrctrl.val().trim() != '')
             var attrjson = $.parseJSON(attrctrl.val());
-    }catch(err){
+    } catch (err) {
         $('#attrmessage').html('Invalid JSON');
-        $('#attrmessage').attr('title','Error:' + err);
+        $('#attrmessage').attr('title', 'Error:' + err);
     }
 }
 
@@ -463,50 +706,136 @@ $(document).ready(function() {
     $(".chooseTasktype").select2();
     $("#jenkinsServerList").select2();
     $("#jobListJenkins").select2();
+    $("#parametersSelect").select2();
     $(".assignuserListJenkins").select2();
 
-    
+
     $(document).on('shown.bs.modal', function(e) {
         $('[autofocus]', e.target).focus();
     });
+
+    var $addParameters = $('#addParameters');
+
+    $addParameters.change(function() {
+        if ($(this).is(":checked")) {
+            $('.addParameters').removeClass('hidden');
+        } else {
+            $('.addParameters').addClass('hidden');
+            $('#booleanTable').addClass('hidden');
+            $('#stringTable').addClass('hidden');
+        }
+
+    });
+
     function loadUIData(taskData) {
         console.log(taskData);
-        if(taskData) {
-         //   alert(JSON.stringify(taskData));
+     //   alert(JSON.stringify(taskData));
+        
+        if (taskData) {
+         $('.widget-header').find('.widget-margin').html('Edit Job');
+            //alert(JSON.stringify(taskData));
             //debugger;
             $('.inputTaskName').val(taskData.name);
             $('#taskType').val(taskData.taskType);
             $('#taskType').change();
-            $('#taskType').attr('disabled','disabled');
+            $('#taskType').attr('disabled', 'disabled');
+           // $('#tableRunlist').removeClass('hidden');
             //$('#taskType').val(taskData.taskType);
-            if(taskData.taskConfig.attributes  && taskData.taskConfig.attributes.length)
-                {
-                    //$('#attrtextarea').text(JSON.stringify(taskData.taskConfig.attributesjson));
-                     createAttribTableRowFromJson(taskData.taskConfig.attributes);
-                      //createAttribTableRowFromJson([]);
+            $('textarea#chefDescription').val(taskData.description);
+            $('textarea#jenkinsDescription').val(taskData.description);
+            if(taskData.taskType==='jenkins'){
+                $.get('../tasks/' + taskData._id + '/history', function(data) {
+                    // alert(data[0].buildNumber);
+                    if (data.length>0) {
+                        var jobURL = taskData.taskConfig.jobResultURL;
+                        //    alert(taskData.taskConfig.jobResultURL);  
+                        if (jobURL) {
+                            jobURL = jobURL.replace("-" + data[0].buildNumber, '-$buildNumber');
+                            $('#jobResultUrl').val(jobURL);
+                        }
+                    }
+                });
+            }
+            
+            
+            if(taskData.taskConfig.runlist &&  taskData.taskConfig.runlist.length){
+              // alert(taskData.taskConfig.runlist);
+                if (taskData.taskConfig.runlist.length > 0) {
+                //  alert(taskData.taskConfig.runlist);
+                    createRunlistTable(taskData.taskConfig.runlist);
                 }
-           // $('#attrtextarea').setValue(JSON.stringify(taskData.taskConfig.attributesjson));
+            }
+            if (taskData.taskConfig.attributes && taskData.taskConfig.attributes.length) {
+                //$('#attrtextarea').text(JSON.stringify(taskData.taskConfig.attributesjson));
+                createAttribTableRowFromJson(taskData.taskConfig.attributes);
+                //createAttribTableRowFromJson([]);
+            }
+            if (taskData && taskData.taskType === 'jenkins' && taskData.taskConfig.autoSyncFlag) {
+
+                console.log('reading auto sync flag as:', taskData.taskConfig.autoSyncFlag);
+
+                if (taskData.taskConfig.autoSyncFlag === 'true') {
+                    //$('input:radio[class=test1][id=test2]').prop('checked', true);
+                    $("input[type='radio'][name='auto_sync'][id='radio_yes']").prop('checked', true);
+                } else {
+                    $("input[type='radio'][name='auto_sync'][id='radio_no']").prop('checked', true);
+                }
+
+            }
+            //condition for parameterized build while edit
+            console.log("check>>>>>>>>>>>" + JSON.stringify(taskData));
+            if (taskData && taskData.taskType === 'jenkins' && taskData.taskConfig.parameterized) {
+
+                console.log('reading parameterized flag as:', taskData.taskConfig.parameterized);
+              //  alert(taskData.taskConfig.parameterized.length);
+                if (taskData.taskConfig.parameterized.length > 0) {
+                  //alert(taskData.parameterized.length);
+                    for (var j = 0; j < taskData.taskConfig.parameterized.length; j++) {
+                        //$('input:radio[class=test1][id=test2]').prop('checked', true);
+                        $("input[type='checkbox'][name='addParams'][id='addParameters']").prop('checked', true);
+                        $('.addParameters').removeClass('hidden');
+                        if(taskData.taskConfig.parameterized[j].parameterName ==='Boolean Parameter'){
+                       //    alert('boolean');
+                            $('#booleanTable').removeClass('hidden');
+                            $('#booleanName').val(taskData.taskConfig.parameterized[j].name);
+                            $("input[type='checkbox'][name='booleanValue'][id='booleanValue']").prop('checked',true);
+                            $('#booleanValue').val(taskData.taskConfig.parameterized[j].defaultValue);
+                            $('#booleanDescription').val(taskData.taskConfig.parameterized[j].description);
+                        } else if(taskData.taskConfig.parameterized[j].parameterName === 'String Parameter') {
+                          // alert('string');
+                            $('#stringTable').removeClass('hidden');
+                            $('#stringName').val(taskData.taskConfig.parameterized[j].name);
+                            $('#stringValue').val(taskData.taskConfig.parameterized[j].defaultValue);
+                            $('#stringDescription').val(taskData.taskConfig.parameterized[j].description);
+                        }
+                    }
+                } else {
+                    $("input[type='checkbox'][name='addParams'][id='addParameters']").prop('checked', false);
+                }
+
+            }
+            
         }
 
-        
-        $.get('../organizations/' + urlParams.org + '/businessgroups/'+urlParams['bg']+'/projects/' + urlParams.projid + '/environments/' + urlParams.envid + '/instances', function(data) {
+
+        $.get('../organizations/' + urlParams.org + '/businessgroups/' + urlParams['bg'] + '/projects/' + urlParams.projid + '/environments/' + urlParams.envid + '/instances', function(data) {
             var $deploymentNodeList = $('.deploymentNodeList').empty();
             for (var i = 0; i < data.length; i++) {
-                if (data[i].instanceState == 'running' || data[i].instanceState == 'pending' ||  data[i].instanceState == 'unknown') {
+                if (data[i].instanceState == 'running' || data[i].instanceState == 'pending' || data[i].instanceState == 'unknown') {
                     var checked = false;
-                    if (taskData && taskData.taskType==='chef' && taskData.taskConfig.nodeIds && taskData.taskConfig.nodeIds.length) {
+                    if (taskData && taskData.taskType === 'chef' && taskData.taskConfig.nodeIds && taskData.taskConfig.nodeIds.length) {
                         if (taskData.taskConfig.nodeIds.indexOf(data[i]._id) !== -1) {
                             checked = true;
                         }
                     }
                     var nodeName = data[i].chef.chefNodeName;
-                    if(data[i].instanceIP) {
+                    if (data[i].instanceIP) {
                         nodeName = data[i].instanceIP;
                     }
-                    if(data[i].blueprintData && data[i].blueprintData.blueprintName) {
+                    if (data[i].blueprintData && data[i].blueprintData.blueprintName) {
                         nodeName = data[i].blueprintData.blueprintName;
                     }
-                    if(data[i].name) {
+                    if (data[i].name) {
                         nodeName = data[i].name;
                     }
 
@@ -523,59 +852,126 @@ $(document).ready(function() {
 
 
         var runlist = null;
-        if(taskData && taskData.taskType==='chef') {
+        if (taskData && taskData.taskType === 'chef') {
             runlist = taskData.taskConfig.runlist;
         }
         var $ccrs = $chefCookbookRoleSelector(urlParams.org, function(data) {
 
-        }, runlist,false,{
-            deploy:true,
-            all:true,
-            roles:false,
-            cookbooks:false
+        }, runlist, false, {
+            deploy: true,
+            all: true,
+            roles: false,
+            cookbooks: false
         });
 
-        $.get('/organizations/'+urlParams.org+'/chefserver',function(data){
-           console.log('chef logs ==> ',data);
-           if(data && data.configname) {
-            $('.chefServerName').val(data.configname);
-           }
+        $.get('/organizations/' + urlParams.org + '/chefserver', function(data) {
+            console.log('chef logs ==> ', data);
+            if (data && data.configname) {
+                $('table').find('.chefServerName').html('Chef Server Details for -&nbsp;' + data.configname);
+            }
         });
         $('.runlistContainer').append($ccrs);
         $('#loadimageandtextlabel').find('.fontsize13').after("<span style='color:red'>*</span>");
-        $('.runlistContainer').data('$ccrs',$ccrs);
+        $('.runlistContainer').data('$ccrs', $ccrs);
 
         // jenkins 
 
         $.get('/jenkins/', function(jenkinsList) {
             jenkinsList = JSON.parse(jenkinsList);
+            console.log("ffffffffffffffffff"+jenkinsList);
             var $jenkinsServerListDropdown = $('#jenkinsServerList');
             for (var i = 0; i < jenkinsList.length; i++) {
-             var keys = Object.keys(jenkinsList[i]);   
-             var $option = $('<option></option>').val(jenkinsList[i][keys[0]]).html(keys[0]);
-             $jenkinsServerListDropdown.append($option); 
+                var keys = Object.keys(jenkinsList[i]);
+                var $option = $('<option></option>').val(jenkinsList[i][keys[0]]).html(keys[0]);
+                $jenkinsServerListDropdown.append($option);
             }
             //$jenkinsServerListDropdown.trigger();
-           
-            $jenkinsServerListDropdown.change(function(e){
-                var jenkinsServerId = $(this).val();
-                var $jobsList = $('#jobListJenkins').empty();
-               $jobsList.prop("disabled", true);
-                $.get('/jenkins/'+jenkinsServerId+'/jobs',function(jobsList){
-                  for (var i = 0; i < jobsList.length; i++) {
-                    var $option = $('<option></option>').val(jobsList[i].name).html(jobsList[i].name);
-                    $jobsList.append($option);
-                  }
-                    $jobsList.prop("disabled", false);
-                    if (taskData && taskData.taskType === 'jenkins') {
-                        $jobsList.val(taskData.taskConfig.jobName);
-                        $jobsList.change();
-                    }
-                });
+            var $spinnerJob = $('#spinnerForJob').addClass('hidden');
+            $jenkinsServerListDropdown.change(function(e) {
+                    if ($(this).val() == 'choose') {
+                        $spinnerJob.addClass('hidden');
+                        $jobsList.prop("disabled", true);
+                    }else{
+                    var jenkinsServerId = $(this).val();
 
+                    console.log(jenkinsServerId);
+                    
+                    $spinnerJob.removeClass('hidden');
+                    $jobsList.prop("disabled", true);
+
+                    //this is a condition for getting the list of jenkins job for a particular jenkins server..
+                    $.get('/jenkins/' + jenkinsServerId + '/jobs', function(jobsList) {
+                        if (jobsList) {
+                            $jobsList.append('<option value="">Select Job</option>');
+                            for (var i = 0; i < jobsList.length; i++) {
+                                var $option = $('<option></option>').val(jobsList[i].name).html(jobsList[i].name);
+                                $jobsList.append($option);
+                            }
+
+
+
+                            $jobsList.prop("disabled", false);
+                            if (taskData && taskData.taskType === 'jenkins') {
+                                $jobsList.val(taskData.taskConfig.jobName);
+                                $jobsList.change();
+
+                            }
+                            $spinnerJob.addClass('hidden');
+                        }
+                    });
+
+                }
             });
 
-            if(taskData && taskData.taskType==='jenkins') {
+            //condition for getting the job url for a particular job in jenkins...
+            var $jobsList = $('#jobListJenkins');
+            var $spinnerJobForUrl = $('#spinnerForUrl').addClass('hidden');
+            $jobsList.change(function(e) {
+                var jobName = $('#jobListJenkins').val();
+                console.log("giobiobibio" + jobName);
+                var jenkinsServerId;
+                $spinnerJobForUrl.removeClass('hidden');
+                for (var i = 0; i < jenkinsList.length; i++) {
+                    var keys = Object.keys(jenkinsList[i]);
+                    console.log("=========== " + JSON.stringify(jenkinsList[i][keys[0]]));
+                    jenkinsServerId = jenkinsList[i][keys[0]];
+                }
+                //alert(JSON.stringify($option));
+
+                var $jobUrlList = $('.jenkinsJobURL').val();
+                
+                if (jobName) {
+                   // $.get('/jenkins/' + jenkinsServerId + '/job/' + jobName + '/lastBuild', function(data) {
+
+                        /*var url = taskData.jobResultURL;
+                        if (url) {
+                            url = url.replace('lastBuild', data.number);
+                        }*/
+                      /*  var url = "http://54.67.35.103:8000/Catalyst_Test_Results/jenkins-"+jobName+"-"+data.number+"/log.html";
+                        //alert(url);
+                        var $anchor = "<span><a style='font-size:13px;word-wrap:break-word;' title='" + url + "' href='" + url + "'' target='_blank' >" + url + "</a></span>";
+                        $jobOutputUtl.append($anchor);*/
+                        //taskData.jobResultURL = url;
+                    //});
+                    $('.jenkinsJobURL').empty();
+                    $.get('/jenkins/' + jenkinsServerId + '/jobs/' + jobName, function(jobsList) {
+                        //for (var i = 0; i < jobsList.length; i++) {
+                       // alert(JSON.stringify(jobsList));
+                       $spinnerJobForUrl.addClass('hidden');
+                       $('.jenkinsJobURL').removeClass('hidden');
+                       $('#helpImage').removeClass('hidden');
+                        var $anchor = "<span><a style='font-size:13px;word-wrap:break-word;' title='" + jobsList.url + "' href='" + jobsList.url + "'' target='_blank' >" + jobsList.url + "</a></span>";
+                        //alert($anchor);
+                        $('.jenkinsJobURL').val(jobsList.url);
+                        //}
+                    });   
+                }
+
+                
+            });
+
+
+            if (taskData && taskData.taskType === 'jenkins') {
                 $jenkinsServerListDropdown.val(taskData.taskConfig.jenkinsServerId);
                 $jenkinsServerListDropdown.change();
             }
@@ -595,7 +991,7 @@ $(document).ready(function() {
                 if (keyA[0] > keyB[0]) return 1;
                 return 0;
             });
-            
+
             for (var i = 0; i < userList.length; i++) {
                 var keys = Object.keys(userList[i]);
                 var $option = $('<option></option>').append(keys[0]).val(keys[0]);
@@ -608,29 +1004,35 @@ $(document).ready(function() {
     }
 
     if (urlParams.taskId) {
-        $.get('../tasks/'+urlParams.taskId, function(taskData) {
+        $.get('../tasks/' + urlParams.taskId, function(taskData) {
             loadUIData(taskData);
         });
     } else {
         loadUIData();
     }
-    
 
-    $('.btnSaveTask').click(function(e) {
-
+    //save form for jenkins and chef
+    $('#taskForm').submit(function(e) {
+     //   alert('check');
+       // alert('breaking');
         var taskType = $('#taskType').val();
         var taskData = {};
-        
+
         taskData.taskType = taskType;
-        //alert('value:' + $('#attrtextarea').val());
+        
         if (taskType === 'chef') {
             var taskName = $('#chefTaskName').val();
             if (!taskName) {
                 alert('Please enter a Task-Name');
-                return;
+                return false;
             }
             taskData.name = taskName;
+            console.log($('textarea#chefDescription').val());
+            var chefJobDescription = $('textarea#chefDescription').val();
+
+            taskData.description = chefJobDescription;
             var $selectedNodes = $('#selectedNodesChefTask input[type=checkbox]');
+           // var $addParameters = $('#addParameters input[type=checkbox]');
 
             console.log($selectedNodes.length);
             var nodesList = [];
@@ -641,102 +1043,323 @@ $(document).ready(function() {
             });
             if (!nodesList.length) {
                 alert('Please choose nodes');
-                return;
+                return false;
             }
-            
+
             var $ccrs = $('.runlistContainer').data('$ccrs');
             var runlist = $ccrs.getSelectedRunlist();
-            
+
 
             if (!runlist.length) {
                 alert('Please choose runlist');
-                return;
+                return false;
             }
             taskData.nodeIds = nodesList;
             taskData.runlist = runlist;
             //taskData.attributesjson = $('#attrtextarea').val().trim();
             $trAttribute = $('#attributesViewListTable').find('tbody tr');
             var attributes = [];
-            $trAttribute.each(function(){
-              var $tr = $(this);
-              attributes.push({
-                name : $tr.attr('data-attributeName'),
-                jsonObj : $tr.data('jsonObj')
-              });
+            $trAttribute.each(function() {
+                var $tr = $(this);
+                attributes.push({
+                    name: $tr.attr('data-attributeName'),
+                    jsonObj: $tr.data('jsonObj')
+                });
             });
             taskData.attributes = attributes;
         } else if (taskType === 'jenkins') {
             var taskName = $('#jenkinsTaskName').val();
             if (!taskName) {
                 alert('Please enter a Task-Name');
-                return;
+                return false;
             }
             taskData.name = taskName;
-           var jenkinsServerId = $('#jenkinsServerList').val();
-           if(!jenkinsServerId) {
-              alert('Please Choose a Jenkins Server');
-              return;
-           }
+            var jenkinsServerId = $('#jenkinsServerList').val();
+            if (!jenkinsServerId) {
+                alert('Please Choose a Jenkins Server');
+                return false;
+            }
 
-           var jenkinsJobName = $('#jobListJenkins').val();
-           if(!jenkinsJobName && jenkinsJobName === 'choose') {
-              alert('Please Choose a Jenkins Server');
-              return;
-           }
-           var usersList = [].concat($('#jenkinsUserList').val());
-           if(!usersList.length) {
-              alert('Please Choose a users');
-              return;
-           }
-          taskData.jenkinsServerId =  jenkinsServerId;
-          taskData.jobName =  jenkinsJobName;
-          taskData.users = usersList;
-         
+            var jenkinsJobName = $('#jobListJenkins').val();
+            if (!jenkinsJobName && jenkinsJobName === 'choose') {
+                alert('Please Choose a Jenkins Server');
+                return false;
+            }
+            var jenkinsJobDescription = $('textarea#jenkinsDescription').val();
+            var usersList = [].concat($('#jenkinsUserList').val());
+            if (!usersList.length) {
+                alert('Please Choose a users');
+                return false;
+            }
+            var jobUrl = $('.jenkinsJobURL').val();
+            var jenkinsResultUrl = $('#jobResultUrl').val(); 
+            var regexpURL = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
+            if(jenkinsResultUrl != ""){
+               if(!regexpURL.test(jenkinsResultUrl)){
+               alert('Please Enter a valid URL');
+               e.preventDefault();
+               return false;
+               }
+            }
+            
+            /*var url = jenkinsResultUrl;
+            $.get('/jenkins/' + jenkinsServerId + '/job/' + jenkinsJobName + '/lastBuild', function(data){
+             
+              
+               //alert(JSON.stringify(url));
+
+               if(url){
+                  url = url.replace('lastBuild' , data.number);
+                  alert(JSON.stringify(url));
+                 
+               }
+            });*/
+            
+            taskData.jenkinsServerId = jenkinsServerId;
+            taskData.jobName = jenkinsJobName;
+            taskData.description = jenkinsJobDescription;
+            taskData.jobResultURL = jenkinsResultUrl;
+            taskData.jobURL = jobUrl;
+            //alert(taskData.jobResultURL);
+            
+            taskData.users = usersList;
+            
+            var autoSyncFlag = $("input[type='radio'][name='auto_sync']:checked").val();
+            console.log('autoSyncFlag:', autoSyncFlag);
+            if(autoSyncFlag === "true"){
+               taskData.autoSyncFlag = true;
+            }else{
+               taskData.autoSyncFlag = false;
+            }
+            
+
+            //check for build parameters. 
+            var isParameterized = false;
+            if ($('#addParameters').is(":checked")) {
+                isParameterized = true;
+                var parameterized = [];
+                var countForParameter = 0;
+                if($('#booleanTable').is(':visible')){
+                  countForParameter++;  
+                } 
+                if($('#stringTable').is(':visible')) {
+                  countForParameter++;  
+                } 
+                //alert(countForParameter);
+                
+                   
+
+
+                        for (j = 0; j < countForParameter; j++) {
+
+                            var parameterType = $('#parametersSelect').val();
+                            if (parameterType === "boolean") {
+                                var parameterizedObj = {
+                                    parameterName: String,
+                                    name: String,
+                                    defaultValue: String,
+                                    description: String
+                                };
+                                parameterizedObj.parameterName = "Boolean Parameter";
+                                parameterizedObj.name = $('#booleanName').val();
+                                parameterizedObj.defaultValue = $('#booleanValue').val();
+                                parameterizedObj.description = $('#booleanDescription').val();
+                                console.log(parameterizedObj.parameterName);
+                                parameterized.push(parameterizedObj);
+                                //alert(parameterized);
+                                console.log(parameterized);
+
+                            } else {
+                                var parameterizedObj = {
+                                    parameterName: String,
+                                    name: String,
+                                    defaultValue: String,
+                                    description: String
+                                };
+                                parameterizedObj.parameterName = "String Parameter";
+                                parameterizedObj.name = $('#stringName').val();
+                                parameterizedObj.defaultValue = $('#stringValue').val();
+                                parameterizedObj.description = $('#stringDescription').val();
+                                parameterized.push(parameterizedObj);
+                            }
+                        }
+                   
+                
+                taskData.isParameterized = isParameterized;
+                taskData.parameterized =parameterized;
+                console.log(taskData.parameterized);
+            }
+            console.log($('#addParameters').is(":checked"));
+            console.log(isParameterized);
+
+
         } else {
-            return;
+            return false;
         }
 
-        
-        
+
+
 
         var reqBody = {
             taskData: taskData
         };
         console.log(reqBody);
+        //alert(JSON.stringify(reqBody));
+        //alert(JSON.stringify(taskData.name));
 
-        if(urlParams.taskId) {
-           $.post('../tasks/'+urlParams.taskId+'/update',reqBody,function(data){
-                console.log(data);
-                $('.btnBack').click();
-           });
+        if (urlParams.taskId) {
+            if (taskType === 'jenkins') {
+                $.get('/jenkins/' + taskData.jenkinsServerId + '/job/' + taskData.jobName + '/lastBuild', function(data) {
+                    //alert(JSON.stringify(taskData));
+                    var url = taskData.jobResultURL;
+
+                    if (url) {
+                        url = url.replace('$buildNumber', data.number);
+
+                    }
+                    taskData.jobResultURL = url;
+                    $.post('../tasks/' + urlParams.taskId + '/update', reqBody, function(data) {
+                        console.log(data);
+
+                        $('.btnBack').click();
+                        bootbox.alert({
+                            message: 'Job&nbsp;&nbsp;<b>' + taskData.name + '</b>&nbsp;&nbsp;has been updated successfully',
+                            title: "Success"
+                        });
+
+                    });
+                });
+
+                return false;
+            } else{
+             //  alert(JSON.stringify(reqBody));
+                $.post('../tasks/' + urlParams.taskId + '/update', reqBody, function(data) {
+                    console.log(data);
+
+                    $('.btnBack').click();
+                    bootbox.alert({
+                        message: 'Job&nbsp;&nbsp;<b>' + taskData.name + '</b>&nbsp;&nbsp;has been updated successfully',
+                        title: "Success"
+                    });
+
+                });
+                return false;
+            }
         } else {
-          $.post('../organizations/' + urlParams.org + '/businessgroups/'+urlParams['bg']+'/projects/' + urlParams.projid + '/environments/' + urlParams.envid + '/tasks', reqBody, function(data) {
-            console.log(data);
-            $('.btnBack').click();
-          });
-       }
+            if (taskType === 'jenkins') {
+                $.get('/jenkins/' + taskData.jenkinsServerId + '/job/' + taskData.jobName + '/lastBuild', function(data) {
+                    var url = taskData.jobResultURL;
+                    
+                    if (url) {
+                        url = url.replace('$buildNumber', data.number);
+                        
+                    }
+                    
+                    taskData.jobResultURL = url;
+                    var reqBody = {
+                        taskData: taskData
+                    };
+                    $.post('../organizations/' + urlParams.org + '/businessgroups/' + urlParams['bg'] + '/projects/' + urlParams.projid + '/environments/' + urlParams.envid + '/tasks', reqBody, function(data) {
+                        console.log(data);
+                        $('.btnBack').click();
+                        bootbox.alert({
+                            message: 'Job&nbsp;&nbsp;<b>' + data.name + '</b>&nbsp;&nbsp;has been successfully created',
+                            title: "Success"
+                        });
+
+                    });
+                });
+                return false;
+            }else{
+                var reqBody = {
+                    taskData: taskData
+                };
+                $.post('../organizations/' + urlParams.org + '/businessgroups/' + urlParams['bg'] + '/projects/' + urlParams.projid + '/environments/' + urlParams.envid + '/tasks', reqBody, function(data) {
+                    console.log(data);
+                    $('.btnBack').click();
+                    $(".alert-message").alert();
+                    window.setTimeout(function() {
+                        $(".alert-message").alert('close');
+                    }, 4000);
+                    bootbox.alert({
+                     message:'Job&nbsp;&nbsp;<b>' + data.name + '</b>&nbsp;&nbsp;has been successfully created',
+                     title:"Success"
+                    });
+                });
+                return false;
+            }
+        }
+    });
+
+    function createRunlistTable(runlist) {
+        //alert(runlist.length);
+        //$('#tableRunlist').removeClass('hidden');
+        var $options = $('#cookbooksrecipesselectedList').find('option');
+        if (runlist.length == 0) {
+            var runlist = [];
+            $options.each(function() {
+                var $option = $(this);
+                runlist.push($option.val());
+                console.log(runlist);
+                return runlist;
+            });
+        }
+        $tasksRunlist.clear().draw();
+       // alert(runlist.length);
+        for (i = 0; i < runlist.length; i++) {
+         //alert('check');
+            if (runlist.length > 0) {
+               //alert('ch');
+                console.log(runlist[i].substring(runlist[i].lastIndexOf("[") + 1, runlist[i].lastIndexOf("]")));
+                var $runlistList = $('#tableRunlist');
+                var $tr = $('<tr class="runlistRow"></tr>');
+                var $tdName = $('<td class="runlistDescription"></td>');
+
+                $tdName.append(runlist[i].substring(runlist[i].lastIndexOf("[") + 1, runlist[i].lastIndexOf("]")));
+                $tr.append($tdName);
+                $runlistList.append($tr);
+                $tasksRunlist.row.add($tr).draw();
+            }
+        }
+    }
+
+    $('#saveRunlist').click(function(e) {
+        var $ccrs = $('.runlistContainer').data('$ccrs');
+        // alert($ccrs);
+        console.log($ccrs);
+        console.log($ccrs.getSelectedRunlist());
+        var runlist = $ccrs.getSelectedRunlist();
+        if (!runlist.length) {
+            alert('Please choose a runlist first');
+            return false;
+        } else {
+            // alert('here');
+            createRunlistTable(runlist);
+            $('#chefRunlistModal').modal('hide');
+            return false;
+        }
 
     });
 
-    $('#editAttributesBtn').click(function(e){
+    $('#editAttributesBtn').click(function(e) {
         var $ccrs = $('.runlistContainer').data('$ccrs');
         var runlist = $ccrs.getSelectedRunlist();
-        if(!runlist.length) {
-           alert('Please choose a runlist first');
-           return false;
+        if (!runlist.length) {
+            alert('Please choose a runlist first');
+            return false;
         }
         var $modal = $('#editAttributesModalContainer');
         $modal.find('.attributesEditFormArea').hide();
         $modal.find('.errorMsgContainer').hide();
         $modal.find('.loadingContainer').show();
         $modal.modal('show');
-        
+
         var reqBody = {
             cookbooks: [],
             roles: []
         }
         for (var i = 0; i < runlist.length; i++) {
-           
+
             if (runlist[i].indexOf('recipe') === 0) {
                 className = 'cookbook';
             } else {
@@ -756,7 +1379,7 @@ $(document).ready(function() {
             } else {
                 reqBody.roles.push(name);
             }
-          
+
         }
         //var chefServerId = $chefCookbookRoleSelector.getChefServerId();
         var $ccrs = $('.runlistContainer').data('$ccrs');
@@ -769,63 +1392,63 @@ $(document).ready(function() {
             var $tbodyViewAttributes = $('#attributesViewListTable').find('tbody');
             for (var i = 0; i < attributesList.length; i++) {
                 var attributesNamesList = Object.keys(attributesList[i].attributes);
-                for (var j = 0; j < attributesNamesList.length;j++) {
+                for (var j = 0; j < attributesNamesList.length; j++) {
                     var $tr = $('<tr/>');
                     var displayName = attributesNamesList[j];
-                    if( attributesList[i].attributes[attributesNamesList[j]].display_name) {
+                    if (attributesList[i].attributes[attributesNamesList[j]].display_name) {
                         displayName = attributesList[i].attributes[attributesNamesList[j]].display_name;
                     }
                     var $tdAttribName = $('<td/>').html(displayName);
                     var required = false;
-                    if(attributesList[i].attributes[attributesNamesList[j]]['required'] === 'required'){
-                       $tdAttribName.append('<span class="control-label" style="color:Red;">&nbsp;*</span>');
-                       required = true;
+                    if (attributesList[i].attributes[attributesNamesList[j]]['required'] === 'required') {
+                        $tdAttribName.append('<span class="control-label" style="color:Red;">&nbsp;*</span>');
+                        required = true;
                     }
                     var value = '';
-                    if(attributesList[i].attributes[attributesNamesList[j]]['default']) {
-                      value =  attributesList[i].attributes[attributesNamesList[j]]['default'];
+                    if (attributesList[i].attributes[attributesNamesList[j]]['default']) {
+                        value = attributesList[i].attributes[attributesNamesList[j]]['default'];
                     }
-                    var $trView = $tbodyViewAttributes.find('tr[data-attributeKey="'+attributesNamesList[j]+'"]');
-                    if($trView.length) {
+                    var $trView = $tbodyViewAttributes.find('tr[data-attributeKey="' + attributesNamesList[j] + '"]');
+                    if ($trView.length) {
                         value = $trView.attr('data-attributeValue');
                     }
-                    
+
                     var $attributeInput;
                     var choices = attributesList[i].attributes[attributesNamesList[j]].choice;
                     if (choices && choices.length) {
-                        $attributeInput = $('<select class="attribValueInput" data-attribKey="'+attributesNamesList[j]+'" data-attribName="'+displayName+'" data-attributeRequired="'+required+'"></select>');
+                        $attributeInput = $('<select class="attribValueInput" data-attribKey="' + attributesNamesList[j] + '" data-attribName="' + displayName + '" data-attributeRequired="' + required + '"></select>');
                         for (var k = 0; k < choices.length; k++) {
-                           var $option = $('<option></option>').val(choices[k]).html(choices[k]);
-                           $attributeInput.append($option);
+                            var $option = $('<option></option>').val(choices[k]).html(choices[k]);
+                            $attributeInput.append($option);
                         }
                         $attributeInput.val(value);
                     } else {
                         var passwordField = false;
                         var keyParts = attributesNamesList[j].split('/');
-                        if(keyParts.length) {
-                          var indexOfPassword = keyParts[keyParts.length-1].indexOf('password_');
-                          if(indexOfPassword !== -1) {
-                            passwordField = true;
-                          }
+                        if (keyParts.length) {
+                            var indexOfPassword = keyParts[keyParts.length - 1].indexOf('password_');
+                            if (indexOfPassword !== -1) {
+                                passwordField = true;
+                            }
                         }
-                        if(passwordField) {
-                            $attributeInput = $('<input type="password" class="attribValueInput" data-attribKey="'+attributesNamesList[j]+'" value="'+value+'" data-attribName="'+displayName+'" data-attributeRequired="'+required+'"/>');
+                        if (passwordField) {
+                            $attributeInput = $('<input type="password" class="attribValueInput" data-attribKey="' + attributesNamesList[j] + '" value="' + value + '" data-attribName="' + displayName + '" data-attributeRequired="' + required + '"/>');
                         } else {
-                          $attributeInput = $('<input type="text" class="attribValueInput" data-attribKey="'+attributesNamesList[j]+'" value="'+value+'" data-attribName="'+displayName+'" data-attributeRequired="'+required+'"/>');     
+                            $attributeInput = $('<input type="text" class="attribValueInput" data-attribKey="' + attributesNamesList[j] + '" value="' + value + '" data-attribName="' + displayName + '" data-attributeRequired="' + required + '"/>');
                         }
-                       
+
                     }
 
-                    
-                    
 
-                    
+
+
+
                     var $tdAttribEditor = $('<td/>').append($attributeInput);
-                     var desc = attributesList[i].attributes[attributesNamesList[j]]['description'];
-                     if(desc) {
-                      var $tooltipAnchor = $('<a href="#" data-toggle="tooltip" title="'+desc+'!" style="margin-left:15px"><i class="fa fa-info"></i></a>');
-                      $tooltipAnchor.tooltip();
-                      $tdAttribEditor.append($tooltipAnchor);
+                    var desc = attributesList[i].attributes[attributesNamesList[j]]['description'];
+                    if (desc) {
+                        var $tooltipAnchor = $('<a href="#" data-toggle="tooltip" title="' + desc + '!" style="margin-left:15px"><i class="fa fa-info"></i></a>');
+                        $tooltipAnchor.tooltip();
+                        $tdAttribEditor.append($tooltipAnchor);
                     }
                     $tr.append($tdAttribName).append($tdAttribEditor);
                     //dataTable.row.add($tr).draw();
@@ -835,8 +1458,8 @@ $(document).ready(function() {
             $modal.find('.errorMsgContainer').hide();
             $modal.find('.loadingContainer').hide();
             $modal.find('.attributesEditFormArea').show();
-            
-        }).fail(function(e){
+
+        }).fail(function(e) {
             $modal.find('.errorMsgContainer').html('Unable to fetch attributes. Please try again later').show();
             $modal.find('.loadingContainer').hide();
             $modal.find('.attributesEditFormArea').hide();
@@ -845,11 +1468,12 @@ $(document).ready(function() {
     });
 
     function createAttribTableRowFromJson(attributes) {
-        var $table = $('#attributesViewListTable');
+        var $table = $('#attributesViewListTable').removeClass('hidden');
         var $tbody = $table.find('tbody').empty();
         console.log(attributes);
         for (var j = 0; j < attributes.length; j++) {
-             var attributeObj = attributes[j].jsonObj;
+            var attributeObj = attributes[j].jsonObj;
+
             function getVal(obj, currentKey) {
                 var keys = Object.keys(obj);
                 for (var i = 0; i < keys.length; i++) {
@@ -858,25 +1482,25 @@ $(document).ready(function() {
                     } else {
                         var keyString = currentKey + '/' + keys[i];
                         keyString = keyString.substring(1);
-                        
+
                         var $tr = $('<tr/>').attr({
                             'data-attributeKey': keyString,
                             'data-attributeValue': obj[keys[i]],
                             'data-attributeName': attributes[j].name
-                        }).data('jsonObj',attributes[j].jsonObj);;
-                        
+                        }).data('jsonObj', attributes[j].jsonObj);;
+
                         var passwordField = false;
                         var passwordField = false;
                         var keyParts = keyString.split('/');
-                        if(keyParts.length) {
-                          var indexOfPassword = keyParts[keyParts.length-1].indexOf('password_');
-                          if(indexOfPassword !== -1) {
-                            passwordField = true;
-                          }
+                        if (keyParts.length) {
+                            var indexOfPassword = keyParts[keyParts.length - 1].indexOf('password_');
+                            if (indexOfPassword !== -1) {
+                                passwordField = true;
+                            }
                         }
 
                         var $tdAttributeKey = $('<td/>').html(attributes[j].name);
-                        if(passwordField) {
+                        if (passwordField) {
                             var $tdAttributeVal = $('<td/>').html("*****");
                         } else {
                             var $tdAttributeVal = $('<td/>').html(obj[keys[i]]);
@@ -896,7 +1520,7 @@ $(document).ready(function() {
         var $input = $tbody.find('.attribValueInput');
         var attributes = [];
         for (var j = 0; j < $input.length; j++) {
-          var $this = $($input[j]);
+            var $this = $($input[j]);
             var attributeKey = $this.attr('data-attribKey');
             console.log(attributeKey);
             var attribValue = $this.val();
@@ -920,13 +1544,13 @@ $(document).ready(function() {
                     jsonObj: attributeObj
                 });
             } else {
-                if($this.attr('data-attributeRequired') === 'true') {
+                if ($this.attr('data-attributeRequired') === 'true') {
                     alert("Please fill in the required attributes");
                     return false;
                 }
             }
         }
-       
+
         console.log('attributeObj ==>', attributes);
         //$('#attrtextarea').text(JSON.stringify(attributeObj));
         createAttribTableRowFromJson(attributes);
@@ -937,37 +1561,33 @@ $(document).ready(function() {
 
 
     $("#Jenkins-dropdown").hide();
-   // $("#Custom-dropdown").hide();
+    $('.jenkinsTaskType').hide();
+    // $("#Custom-dropdown").hide();
 
     $('#taskType').change(function(e) {
         if (this.value == "chef") {
             $("#Jenkins-dropdown").hide();
-           // $("#Custom-dropdown").hide();
+            // $("#Custom-dropdown").hide();
             $("#chef-dropdown").show();
+            $('.chefTaskType').show();
+            $('.jenkinsTaskType').hide();
         } else if (this.value == "jenkins") {
             $("#Jenkins-dropdown").show();
-           // $("#Custom-dropdown").hide();
+            $('.jenkinsTaskType').show();
+            $('.chefTaskType').hide();
             $("#chef-dropdown").hide();
-        }/* else {
-            $("#Jenkins-dropdown").hide();
-            $("#Custom-dropdown").show();
-            $("#chef-dropdown").hide();
-        }*/
+        }
     });
-
-    /*if (!$.fn.dataTable.isDataTable('#attributesEditListArea')) {
-        //var $taskListArea = $('.taskListArea').empty();
-        $taskDatatable = $('#attributesEditListArea').DataTable({
-            "pagingType": "full_numbers",
-            "aoColumns": [
-                null, {
-                    "bSortable": false
-                }
-            ]
-
-        });
-    }*/
-
+    $('#parametersSelect').change(function(e){
+      if(this.value == "boolean"){
+         $("#booleanTable").removeClass('hidden');
+      } else if(this.value == ""){
+         $("#stringTable").addClass('hidden');
+         $("#booleanTable").addClass('hidden');
+      } else{
+         $("#stringTable").removeClass('hidden');
+      }
+    })
 });
 
 

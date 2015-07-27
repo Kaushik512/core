@@ -12,8 +12,16 @@ var taskTypeSchema = require('./taskTypeSchema');
 var jenkinsTaskSchema = taskTypeSchema.extend({
     jenkinsServerId: String,
     jobName: String,
+    autoSyncFlag: String,
     jobResultURL: String,
-    jobURL: String
+    jobURL: String,
+    isParameterized: Boolean,
+    parameterized:[{
+        parameterName: String,
+        name: String,
+        defaultValue: String,
+        description: String
+    }]
 });
 
 // Instance Method :- run task

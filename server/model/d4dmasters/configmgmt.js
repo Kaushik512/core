@@ -1447,14 +1447,14 @@ function Configmgmt() {
                         callback(err, null);
                         return;
                     }
-                    logger.debug("Team....... ",JSON.stringify(teamd));
+                    //logger.debug("Team....... ",JSON.stringify(teamd));
                     if (teamd.length > 0) {
                         // logger.debug('In d4dModelMastersTeams teadd :' + JSON.stringify(teamd));
                         teamd.forEach(function(k, v) {
-                            console.log(">>>>>>>>>>>>>>>>>>>>>>>>>> ", k['projectname_rowid']);
+                            //console.log(">>>>>>>>>>>>>>>>>>>>>>>>>> ", k['projectname_rowid']);
                             if (typeof k['projectname_rowid'] != "undefined") {
-                                console.log("Called..... >>>>>>>>> ", k['projectname_rowid']);
-                                logger.debug('k:' + k + 'v:' + v);
+                                //console.log("Called..... >>>>>>>>> ", k['projectname_rowid']);
+                                //logger.debug('k:' + k + 'v:' + v);
                                 outJ[0].teams.push(k['rowid']);
                                 var projs = k['projectname_rowid'].split(',');
                                 for (var i = 0; i < projs.length; i++) {

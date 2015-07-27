@@ -1,4 +1,4 @@
-    *** Settings ***
+*** Settings ***
 Documentation      A resource file with reusable keywords and variables.
 ...
 ...                This file is part of a prototype automated test suite designed to

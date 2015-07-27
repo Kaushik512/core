@@ -76,9 +76,12 @@ Catalyst Creation of VM Image Process for Windows
     Clicks on Save Button of Providers
 
 Select organization now
-    Click Element    xpath=.//*[@id='s2id_orgId']/a/span[1]
-    Input Text    xpath=.//*[@id='select2-drop']/div/input     ${ORGANIZATION NAME}
-    Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
+    Sleep    4s
+    Click Element    css=#s2id_orgId > .select2-choice
+    Log    after click
+    Input Text    css=#select2-drop .select2-input    ${ORGANIZATION NAME}
+    Sleep    4s
+    Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
 
 Clicks on Edit Button of Windows Image
     Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()='Windows']/../td[6]/div/a[2]
@@ -297,15 +300,16 @@ Catlayst verfication of Instance Stop Setup and Disable
 
 
 Catalyst Choose Template and Save Setup for UBUNTU
-    Clicks on Settings
+    Sleep    5s
     Clicks on Design
-    Sleep    5s
+    Sleep    10s
     Choose the Template Type Created
-    Sleep    5s
+    Sleep    3s
     Clicks on Next Button
     Chooses the Template User Created
     Clicks on Next Button
     Chooses the Operating System as Ubuntu
+    Sleep    4s
     Choose the Provider
     Choose the Available Images
     Choose the Region
@@ -320,8 +324,7 @@ Catalyst Choose Template and Save Setup for UBUNTU
     Enters The ubuntu Blueprint Name
     Chooses The Business Group
     Chooses The Project
-    #Clicks on Configure Chef Runlist
-    Select WorkCookBooks for Ubuntu
+    #Select WorkCookBooks for Ubuntu
     Clicks on Configure Organization Parameters
     Clicks on Configure Application URL
     Clicks on AppNew Button
@@ -386,10 +389,8 @@ Catalyst Grid View Start ,Stop ,SSH ,Chef ,Client ,Log Setup
     Verify the Start Button is Enabled in Grid View
     Clicks on START Button in Actions of Grid View
     Verify the STarted Status from Grid View
-    #Verfiy the Chef Run fron Grid View Enabled
-    #Verify the SSH Enabledd fromn Grid View
-    #Verfiy the STOP Toggler Enabled from Grid View
-    Clicks on View Instancess Button
+    Sleep    4s
+    #-Clicks on View Instancess Button
 
 Catalyst Grid View Start ,Stop ,SSH ,Chef ,Client ,Log Setup of Ubuntu
     Clicks on the Button to the Environment
@@ -411,7 +412,8 @@ Catalyst Grid View Start ,Stop ,SSH ,Chef ,Client ,Log Setup of Ubuntu
     #Verfiy the Chef Run fron Grid View Enabled
     #Verify the SSH Enabledd fromn Grid View
     #Verfiy the STOP Toggler Enabled from Grid View
-    Clicks on View Instancess Button
+    Sleep    4s
+    #-Clicks on View Instancess Button
 
 
 Enable the Next Button 
@@ -455,18 +457,19 @@ Clicks on the Button to the Environment
 
 
 Clicks on Instances View
-    Sleep    1s
+    Sleep    3s
     Click Element    xpath=.//*[@id='instanceview']/i
 
 Verfiy the Name of Instance
     Element Should Contain    xpath=.//*[@id='tableinstanceview']/tbody/tr/td[3]/span    ${BLUEPRINT NAME}
 
 Verfiy the Name of Ubuntu Instance
+    Sleep    3s
     Element Should Contain    xpath=.//*[@id='tableinstanceview']/tbody/tr/td[3]/span    ${NEW UBUNTU BLUPRNT}
 
 
 Verify the IP in Grid View
-    ${IP VALUE}=    Get Value    xpath=.//*[@id='tableinstanceview']/tbody/tr/td[4]
+    ${IP VALUE}=    Get Text    xpath=.//*[@id='tableinstanceview']/tbody/tr/td[4]
     Log    ${IP VALUE}
 
 Clicks on View Run List and Verify the Runlists
@@ -555,12 +558,12 @@ SSH in to the Instance from Grid view
     Sleep    1s
 
 Clicks on View Instancess Button
-    Click Element    id=defaultViewButton
-    Sleep    3s
-    Click Element    id=removeInstance
-    Sleep    1s
-    Click Element    id=ckbChefDelete
-    Sleep    1s
+    #-Click Element    id=defaultViewButton
+    Sleep    5s
+    Click Element    css=#removeInstance
+    Sleep    5s
+    #Click Element    id=ckbChefDelete
+    #Sleep    4s
     Click Element    xpath=//*[text()='Delete']
 
 
@@ -679,16 +682,20 @@ Clicks on your Ubuntu Blueeeprint
 
 
 Verify the Machine status from CntrlPanel
-    Wait Until Keyword Succeeds    2 minute     1 seconds    Element Should Contain    xpath=.//*[@id='collapseHardware']/div/table/tbody/tr[1]/td[3]    ${MAT STAT}
+     ${MACHINE STATUS1}=    Get Text    xpath=.//*[@id='collapseHardware']/div/table/tbody/tr[1]/td[3]
+     Log    ${MACHINE STATUS1}
 
 Verify the Total Memory from CntrlPanel
-    Wait Until Keyword Succeeds    2 minute     1 seconds    Element Should Contain    xpath=.//*[@id='collapseHardware']/div/table/tbody/tr[2]/td[3]    ${MAT MEM}
+    ${TOTAL MEM1}=    Get Text    xpath=.//*[@id='collapseHardware']/div/table/tbody/tr[2]/td[3]
+    Log    ${TOTAL MEM1} 
 
 Verify the UBUNTU Total Memory from CntrlPanel
-    Wait Until Keyword Succeeds    2 minute     1 seconds    Element Should Contain    xpath=.//*[@id='collapseHardware']/div/table/tbody/tr[2]/td[3]    ${UBUNTU MEM}
+    ${TOTAL MEM2}=    Get Text    xpath=.//*[@id='collapseHardware']/div/table/tbody/tr[2]/td[3]
+    Log    ${TOTAL MEM2}
 
 Verify the Free Memory from CntrlPanel
-    Wait Until Keyword Succeeds    2 minute     1 seconds    Element Should Contain    xpath=.//*[@id='collapseHardware']/div/table/tbody/tr[3]/td[3]    ${MAT FREEMEM}
+    ${FREE MEM1}=    Get Text    xpath=.//*[@id='collapseHardware']/div/table/tbody/tr[3]/td[3]
+    Log    ${FREE MEM1} 
 
 Verfiy the OS Frm ContrlPanel
     Wait Until Keyword Succeeds    2 minute     1 seconds    Element Should Contain    xpath=.//*[@id='collapseSoftware']/div/table/tbody/tr[1]/td[3]    ${MAT OS}
@@ -734,7 +741,9 @@ Checking THe BootStrpa Status
     Sleep    5s
     Clicks on Contreol Panel
     Clicks on Action History
-    ${BOOTSTRAP STATUSS}=    Get Element Attribute    xpath=.//*[@id='tableactionHistory']/tbody/tr/td[2]/img@data-original-title
+    ${BOOTSTRAP STATUSS}=    Get Element Attribute    xpath=.//*[@id='tableactionHistory']/tbody/tr/td[2]/img@title
+    
+    #${BOOTSTRAP STATUSS}=    Get Element Attribute    xpath=.//*[@id='tableactionHistory']/tbody/tr/td[2]/img@data-original-title
     Log    ${BOOTSTRAP STATUSS}
     Should Be Equal    ${BOOTSTRAP STATUSS}     ${ACTBOOT2}
 
@@ -754,7 +763,8 @@ Checking THe Ubuntu BootStrpa Status
     Sleep    5s
     Clicks on Contreol Panel
     Clicks on Action History
-    ${BOOTSTAT2}=    Get Element Attribute   xpath=//*[@id='tableactionHistory']/tbody/tr/td[2]/img@data-original-title
+    ${BOOTSTAT2}=    Get Element Attribute   xpath=//*[@id='tableactionHistory']/tbody/tr/td[2]/img@title
+    #${BOOTSTAT2}=    Get Element Attribute   xpath=//*[@id='tableactionHistory']/tbody/tr/td[2]/img@data-original-title
     Log    ${BOOTSTAT2}
     Should Be Equal    ${ACTBOOT2}     ${BOOTSTAT2}           #Success
 
@@ -803,7 +813,8 @@ Checking the BChefClient Run Status
     Sleep    5s
     Clicks on Contreol Panel
     Clicks on Action History
-    ${CHEFSUCCESS}=    Get Element Attribute    xpath=.//*[@id='tableactionHistory']/tbody/tr[2]/td[2]/img@data-original-title
+    ${CHEFSUCCESS}=    Get Element Attribute    xpath=.//*[@id='tableactionHistory']/tbody/tr[2]/td[2]/img@title
+    #${CHEFSUCCESS}=    Get Element Attribute    xpath=.//*[@id='tableactionHistory']/tbody/tr[2]/td[2]/img@data-original-title
     Log    ${CHEFSUCCESS}
     Should Be Equal    ${CHEFSUCCESS}     ${SATSSYY}  
 
@@ -817,7 +828,7 @@ Checking the Ubuntu BChefClient Run Status
     Sleep    5s
     Clicks on Contreol Panel
     Clicks on Action History
-    ${CHEFSUCCESS1}=    Get Element Attribute    xpath=.//*[@id='tableactionHistory']/tbody/tr[2]/td[2]/img@data-original-title
+    ${CHEFSUCCESS1}=    Get Element Attribute    xpath=.//*[@id='tableactionHistory']/tbody/tr[2]/td[2]/img@title
     Log    ${CHEFSUCCESS1}
     Should Be Equal    ${CHEFSUCCESS1}     ${SATSSYY}  
 
@@ -828,7 +839,7 @@ Verfiy the Table contains the Status
     Sleep    5s
     Clicks on Contreol Panel
     Clicks on Action History
-    ${BOTTABLE}=    Get Element Attribute   xpath=//*[@id='tableactionHistory']/tbody/tr[4]/td[2]/img@data-original-title
+    ${BOTTABLE}=    Get Element Attribute   xpath=//*[@id='tableactionHistory']/tbody/tr[4]/td[2]/img@title
     Log    ${BOTTABLE}
     Should Be Equal    ${ACTBOOT2}     ${BOTTABLE}  
     Sleep    3s         
@@ -840,7 +851,8 @@ Verfify the status of SSH Shell
     Sleep    5s
     Clicks on Contreol Panel
     Clicks on Action History
-    ${BOOTSTATUS1}=    Get Element Attribute   xpath=//*[@id='tableactionHistory']/tbody/tr[3]/td[2]/img@data-original-title
+    ${BOOTSTATUS1}=    Get Element Attribute   xpath=//*[@id='tableactionHistory']/tbody/tr[3]/td[2]/img@title
+    #${BOOTSTATUS1}=    Get Element Attribute   xpath=//*[@id='tableactionHistory']/tbody/tr[3]/td[2]/img@data-original-title
     Log    ${BOOTSTATUS1}
     Should Be Equal    ${ACTBOOT2}     ${BOOTSTATUS1}           
     Sleep    2s
@@ -1020,18 +1032,22 @@ Update the Run List with Cookbook
     Sleep    3s
     Click Element    xpath=.//*[@id='cookbooksrecipesselectedList']/option[text()='${COOKBOOK NAME1}']
     Click Element    id=btnremoveFromRunlist
-    #Click Element    xpath=.//*[@id='cookbooksrecipesselectedList']/option[text()='${CookBkName}']
-    #Click Element    id=btnremoveFromRunlist
-    Wait Until Keyword Succeeds    1 minute     10 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[@value='recipe[${CookBkName}]']
+    Sleep    2s
+    Click Element    xpath=.//*[@id='cookbooksrecipesselectedList']/option[text()='${COOKBOOK NAME2}']
+    Click Element    id=btnremoveFromRunlist
+    Sleep    2s
+    Wait Until Keyword Succeeds    1 minute     10 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[@value='recipe[${COOKBOOK NAME1}]']
     Wait Until Keyword Succeeds    1 minute     10 seconds      Click Element    id=btnaddToRunlist
 
 Update the Run List with Newwww Cookbook
     Sleep    3s
     Click Element    xpath=.//*[@id='cookbooksrecipesselectedList']/option[text()='${COOKBOOK NAME1}']
     Click Element    id=btnremoveFromRunlist
-    #Click Element    xpath=.//*[@id='cookbooksrecipesselectedList']/option[text()='${CookBkName}']
-    #Click Element    id=btnremoveFromRunlist
-    Wait Until Keyword Succeeds    1 minute     10 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[@value='recipe[${CookBkName}]']
+    Sleep    2s
+    Click Element    xpath=.//*[@id='cookbooksrecipesselectedList']/option[text()='${COOKBOOK NAME2}']
+    Click Element    id=btnremoveFromRunlist
+    Sleep    2s
+    Wait Until Keyword Succeeds    1 minute     10 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[@value='recipe[${COOKBOOK NAME1}]']
     Wait Until Keyword Succeeds    1 minute     10 seconds      Click Element    id=btnaddToRunlist
 
 Clicks on Update Button of Runlist
@@ -1074,9 +1090,12 @@ Choose the Region
     Sleep    10s
 
 Select the VPC
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='s2id_vpcId']/a/span[1]
-    Input Text    xpath=.//*[@id='select2-drop']/div/input    ${VPC NAME}
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
+    Sleep    5s         
+    Click Element    css=#s2id_vpcId > a > span.select2-chosen          
+    Sleep    1s         
+    Input Text    css=#select2-drop > div > input    ${VPC NAME}         
+    Sleep    1s         
+    Click Element    css=ul > li > div
 
 Select the Subnet
     Sleep    2s
@@ -1123,9 +1142,9 @@ Select the Security Group
     Log    after scroll
     Sleep    1s
     Click Element    xpath=.//*[@id='securityGroupIds']/label[contains(.,'${SECRTY GRP1}')]/i
-    Click Element    xpath=.//*[@id='securityGroupIds']/label[contains(.,'${SECRTY GRP2}')]/i
-    Click Element    xpath=.//*[@id='securityGroupIds']/label[contains(.,'${SECRTY GRP3}')]/i
-    Click Element    xpath=.//*[@id='securityGroupIds']/label[contains(.,'${SECRTY GRP4}')]/i
+    #Click Element    xpath=.//*[@id='securityGroupIds']/label[contains(.,'${SECRTY GRP2}')]/i
+    #Click Element    xpath=.//*[@id='securityGroupIds']/label[contains(.,'${SECRTY GRP3}')]/i
+    #Click Element    xpath=.//*[@id='securityGroupIds']/label[contains(.,'${SECRTY GRP4}')]/i
     Log    after click
 
 #Click Element    css=#select2-drop .select2-input    sg-c00ee1a5 | all_open
@@ -1250,9 +1269,12 @@ Clicks on New Button of Providers
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='addnewitem']
 
 Select the Provider
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='s2id_providertype']
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    xpath=.//*[@id='select2-drop']/div/input    ${PROVIDERR}
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
+    Sleep    3s
+    Click Element    css=#s2id_providertype > .select2-choice
+    Log    after click
+    Input Text    css=#select2-drop .select2-input    ${PROVIDERR}
+    Sleep    4s
+    Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
 
 Enters the Name of the Provider
     Sleep    1s
@@ -1265,9 +1287,13 @@ Enters the Secret Key
     Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    id=secretKey    ${SECRET KEY}
 
 Selects the Region   
-    Wait Until Keyword Succeeds    2 minute     1 seconds      Click Element    xpath=//span[./text()='Select Region']
-    Input Text    xpath=.//*[@id='select2-drop']/div/input     US West (Oregon) | us-west-2
-    Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
+    Sleep    4s
+    Click Element    css=.region > .select2-choice
+    Log    after click
+    Input Text    css=#select2-drop .select2-input    ${REGION NAME}
+    Sleep    4s
+    Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
+    
     #Select From List By Value    xpath=.//*[contains(text(), "US West (Oregon) | us-west-2")]     ${REG}
     #Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='select2-drop']/ul/li[3]/div
     #Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    name=region
@@ -1275,9 +1301,16 @@ Selects the Region
      #//select/option[@value = "us-west-1"]
      
 Selects the Key Pair
-    Wait Until Keyword Succeeds    2 minute     1 seconds      Click Element    xpath=//span[./text()='Choose Any Key Pair']
-    Input Text    xpath=.//*[@id='select2-drop']/div/input    ${KeyNAME}
-    Click Element    xpath=.//*[@id='select2-drop']/ul/li[1]/div
+    Sleep    4s
+    Click Element    css=div.row.pemrow > div:first-child > div > a > span:nth-of-type(1)
+    Log    after click
+    Input Text    css=#select2-drop .select2-input    ${KeyNAME}
+    Sleep    4s
+    Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
+
+    #Wait Until Keyword Succeeds    2 minute     1 seconds      Click Element    xpath=//span[./text()='Choose Any Key Pair']
+    #Input Text    xpath=.//*[@id='select2-drop']/div/input    ${KeyNAME}
+    #Click Element    xpath=.//*[@id='select2-drop']/ul/li[1]/div
 
 Uploads the Pem File for Provider
     Choose File     xpath=.//*[@class='gui-file file']     ${CAT_INSTANCES}
@@ -1504,11 +1537,12 @@ Enters The ubuntu Blueprint Name
 
 Chooses The Business Group
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='s2id_bgListInput']/a
-    Input Text    xpath=.//*[@id='select2-drop']/div/input    ${BUSINESS GROUP NAME1}       #Devops
-    Click Element    xpath=.//*[@id='select2-drop']/ul/li/div      
+    Input Text    xpath=.//*[@id='select2-drop']/div/input    ${BUSINESS GROUP NAME1}
+    Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
 
+    
 Chooses The Project
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='s2id_projectListInput']/a    
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='s2id_projectListInput']/a
     Input Text    xpath=.//*[@id='select2-drop']/div/input    ${PROJECT NAME1}
     Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
 

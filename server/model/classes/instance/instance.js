@@ -4,6 +4,7 @@ var schemaValidator = require('./../../dao/schema-validator');
 var uniqueValidator = require('mongoose-unique-validator');
 var logger = require('_pr/logger')(module);
 var ChefClientExecution = require('./chefClientExecution/chefClientExecution');
+var textSearch = require('mongoose-text-search');
 
 var Schema = mongoose.Schema;
 
@@ -205,11 +206,25 @@ var InstanceSchema = new Schema({
 });
 
 InstanceSchema.plugin(uniqueValidator);
+InstanceSchema.plugin(textSearch);
 
 var Instances = mongoose.model('instances', InstanceSchema);
 
-var InstancesDao = function() {
 
+
+var InstancesDao = function() {
+    this.searchInstances = function(searchquery,options,callback){
+        logger.debug("Enter searchInstances query - (%s)", searchquery);
+        Instances.textSearch(searchquery,function(err,data){
+            if(!err){
+                callback(null,data);
+            }
+            else{
+                logger.debug('Error in search:' + err);
+                callback(err,null);
+            }
+        });
+    };
     this.getInstanceById = function(instanceId, callback) {
         logger.debug("Enter getInstanceById (%s)", instanceId);
 

@@ -9,51 +9,72 @@ Resource           ${COMMON RESOURCES}/catalyst_grid_node.txt
 
 
 
+
 *** Test Cases ***
-Catalyst new PROVIDERS setup
-    [Tags]       Sanity               Smoke
-#    Catalyst Login
-    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
-    Catalyst Creation of Providers Setup 
-    Validation of Adding New Providers
-    Catalyst Logout                      
-    [Teardown]     Close Browser
-
-
-Catalyst new VM IMAGE setup
-    [Tags]       Sanity               Smoke
-#    Catalyst Login
-    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
-    Validation of Creation of New Image
-    Catalyst Creation of VM Image Process for CentOS
-    Catalyst Creation of VM Image Process for Ubutnu
-    Catalyst Creation of VM Image Process for Windows      
-    Catalyst Logout                      
-    [Teardown]     Close Browser
-
-
-
-
-
-
-
-Catalyst new CENT OS DESIGN setup
+Catalyst new CENT OS Create Blueprint setup
     [Tags]       Sanity               Smoke
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
     Catalyst Choose Template and Save Setup
-    Sleep    20s
-    Catlayst Workzone and Status Setup          
+    Sleep    2s
     Catalyst Logout                      
     [Teardown]     Close Browser
     
 
-Catalyst new CENT OS WORKZONE setup
+Catalyst new CENT OS Launch Blueprint setup
     [Tags]       Sanity               Smoke
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
-    ##Catalyst Check INFORMATION Status
-    Catalyst Work SSH CHEFCLIENT STOP Setup after LAUNCH
+    Sleep    3s
+    Catlayst Workzone and Status Setup          
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+
+Catalyst new CENT OS Verfication and Bootstrap setup
+    [Tags]       Sanity               Smoke
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst Verfication and BootStrap Instance
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+
+Catalyst new CENT OS CHEFCLIENT setup
+    [Tags]       Sanity               Smoke
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst CHEF CLIENT on CentOS Instance
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+
+Catalyst new CENT OS SSH setup
+    [Tags]       Sanity               Smoke
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst SSH on CentOS Instance
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+Catalyst new CENT OS STOP setup
+    [Tags]       Sanity               Smoke
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst STOP on CentOS Instance
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+Catalyst new CENT OS EDIT NAME setup
+    [Tags]       Sanity               Smoke
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst EDIT Instance Name of CentOS Instance
     Catalyst Logout                      
     [Teardown]     Close Browser
 
@@ -71,7 +92,7 @@ Catalyst Grid View of the Stopped Instance and Restart,SSH,Chef Run,Start
     [Tags]       Sanity               Smoke
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
-    Catalyst Grid View Start ,Stop ,SSH ,Chef ,Client ,Log Setup
+    Catalyst Grid View Verify Start ,Stop ,SSH ,Chef ,Client ,Log Setup and Delete
     Catalyst Logout                      
     [Teardown]     Close Browser    
 
@@ -83,25 +104,86 @@ Catalyst Grid View of the Stopped Instance and Restart,SSH,Chef Run,Start
 
 
 
-Catalyst new UBUNTU DESIGN setup
+
+Catalyst new UBUNTU Create Blueprint setup
     [Tags]       Sanity               Smoke
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
     Catalyst Choose Template and Save Setup for UBUNTU
-    Sleep    10s
+    Sleep    2s    
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+
+Catalyst new UBUNTU Launch Blueprint setup
+    [Tags]       Sanity               Smoke
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Sleep    3s
     Catlayst Workzone and Status Setup for Ubuntu       
     Catalyst Logout                      
     [Teardown]     Close Browser
 
 
-Catalyst new UBUNTU WORKZONE setup
+
+Catalyst new UBUNTU Verfication and Bootstrap setup
     [Tags]       Sanity               Smoke
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
-    ##Catalyst Check INFORMATION Status for Ubuntu
-    Catalyst Work SSH CHEFCLIENT STOP Setup after LAUNCH of Ubuntu
+    Catalyst Ubuntu Instance Verfication and BootStrap steps
     Catalyst Logout                      
     [Teardown]     Close Browser
+
+
+
+Catalyst new UBUNTU CHEFCLIENT setup
+    [Tags]       Sanity               Smoke
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst CHEFCLIENT on Ubuntu Instance
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+Catalyst new UBUNTU SSH setup
+    [Tags]       Sanity               Smoke
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst SSH on the Ubuntu Instance
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+Catalyst new UBUNTU STOP setup
+    [Tags]       Sanity               Smoke
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst STOP on the Ubuntu Instance
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+Catalyst new UBUNTU EDIT NAME setup
+    [Tags]       Sanity               Smoke
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst EDIT Name of Ubuntu Instance
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 Catalyst UBUNTU INSTANCE CONTROL PANEL setup
@@ -117,6 +199,6 @@ Catalyst Ubuntu Instance Grid View of Stopped Instance and Restart,SSH,Chef Run,
     [Tags]       Sanity               Smoke
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
-    Catalyst Grid View Start ,Stop ,SSH ,Chef ,Client ,Log Setup of Ubuntu
+    Catalyst Grid View Verify Start ,Stop ,SSH ,Chef ,Client ,Log ,Del Setup of Ubuntu
     Catalyst Logout                      
     [Teardown]     Close Browser 

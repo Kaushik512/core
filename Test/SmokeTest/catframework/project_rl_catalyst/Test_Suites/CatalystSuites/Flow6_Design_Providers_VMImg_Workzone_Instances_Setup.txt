@@ -76,13 +76,7 @@ Catalyst Grid View of the Stopped Instance and Restart,SSH,Chef Run,Start
     Catalyst Logout                      
     [Teardown]     Close Browser
 
-
-
-
-
-
-
-
+#--------------------Ubuntu blueprint launch Scenarios------------------
 
 Catalyst new UBUNTU DESIGN setup
     [Tags]       Sanity               Smoke

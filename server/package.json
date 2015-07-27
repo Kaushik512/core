@@ -1,4 +1,5 @@
 {
+
     "name": "Catalyst",
     "version": "0.0.1",
     "description": "DevOps Platform for DevOps",
@@ -41,7 +42,9 @@
         "activedirectory": "0.6.3",
         "scp2": "0.2.2",
         "shell-escape": "0.2.0",
-        "bcryptjs": "2.2.0"
+        "bcryptjs": "2.2.0",
+        "mongoose-text-search": "0.0.2",
+    "newrelic-node": "0.3.7"
     },
     "devDependencies": {
         "grunt": "0.4.5",
@@ -62,3 +65,4 @@
         "url": "https://github.com/RLIndia/D4D"
     }
 }
+
