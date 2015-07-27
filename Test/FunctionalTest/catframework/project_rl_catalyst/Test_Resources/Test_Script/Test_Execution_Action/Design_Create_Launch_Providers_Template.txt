@@ -112,6 +112,66 @@ Validate No Secret Key
     Clicks on Provider Cancel Button
 
 
+Catalyst Creation of New Blueprint and Delete
+    #Verify the Blurprint Saved Successfully message
+    Clicks on Add New Blueprint Button
+    Choose the Template Type Created
+    Sleep    3s
+    Clicks on Next Button
+    Chooses the Template User Created
+    Clicks on Next Button
+    Chooses the Operating System
+    Sleep    4s
+    Choose the Provider
+    Choose the Available Images
+    Choose the Region
+    Select the VPC
+    Select the Subnet
+    Select the Key Pair
+    Choose Instance Size
+    Select the Security Group
+    Clicks on Configure Provider Parameters
+    Clicks on Configure Organization Parameters
+    Chooses Organization
+    Enters The Testing Blueprint Name
+    Chooses The Business Group
+    Chooses The Project
+    #Select WorkCookBooks
+    #Clicks on >>T Button
+    Clicks on close of Configure Organization Parameters
+    #Chooses The Environment
+    Clicks on Configure Application URL
+    Clicks on AppNew Button
+    Enters the Application URL Name
+    Enters the AppURL
+    Clicks on AppADD Button
+    Enable the Next Button 
+    Clicks on Next Button
+    Clicks on Confirm OK Button
+    Clicks on Workzone Button
+    Sleep    5s
+    Clicks on Blueprint Section
+    Select the CentosTesingBlueprint
+    Deleting the Testing Blueprint
+
+
+
+
+Verify the Blurprint Saved Successfully message
+    Sleep    1s
+    Element Text Should Be    css=.blueprintNameSuccess    Blueprint  ApacheNew  Saved Successfully
+
+
+Clicks on Add New Blueprint Button 
+    Click Element    css=div.alert.alert-success.bootstrapSuccess > div > button.btn.btn-primary
+    Sleep    3s
+
+Deleting the Testing Blueprint
+    Click Element    css=button.btn.pull-right.btn-danger.right-button
+    Sleep    1s
+    Click Element    xpath=//*[text()='OK']   
+
+
 Catalyst Creation of Providers Setup 
     Clicks on Settings
     Clicks on DevOps Setup menu
@@ -121,6 +181,7 @@ Catalyst Creation of Providers Setup
     Enters the Name of the Provider
     Enters the Access Key
     Enters the Secret Key
+    Sleep    3s
     Select organization now
     Selects the Region
     Selects the Key Pair
@@ -183,9 +244,12 @@ Validate the Edit of VM Image
     Clicks on Save Button of Providers
 
 Select organization now
-    Click Element    xpath=.//*[@id='s2id_orgId']/a/span[1]
-    Input Text    xpath=.//*[@id='select2-drop']/div/input     ${ORGANIZATION NAME}
-    Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
+    Sleep    4s
+    Click Element    css=#s2id_orgId > .select2-choice
+    Log    after click
+    Input Text    css=#select2-drop .select2-input    ${ORGANIZATION NAME}
+    Sleep    4s
+    Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
 
 Clicks on Edit Button of Windows Image
     Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()='Windows']/../td[6]/div/a[2]
@@ -219,6 +283,73 @@ Enters the UserName of UbuntuProviders
 
 Enters the UserName of WindowsProviders
     Input Text    id=UserName    administrator
+
+
+
+Catalyst Form validation of Blueprint
+    Sleep    6s
+    Clicks on Design
+    Sleep    10s
+    Choose the Template Type Created
+    Sleep    3s
+    Clicks on Next Button
+    Chooses the Template User Created
+    Clicks on Next Button
+    Sleep    1s
+    Clicks on Next Button
+    Verify the No Operating System selected Error Message
+    Verify the No Provider Error selected Message
+    Verify the No Available Images selected Error Message
+    Verify the No Region selected Error Message
+    Verify the No VPC selected Error Message
+    Verify the No Subnet selected Error Message
+    Verify the No KeyPair selected Error Message
+    Verify the No Instance Size selected Error Message
+    Clicks on Configure Provider Parameters
+    Clicks on Configure Organization Parameters
+    Verify the No Blueprint Name Error Message
+    Verify the No BusinessGroup selected Error Message
+    Verify the No Project selected Error Message
+    Sleep    3s
+
+
+
+
+Verify the No Operating System selected Error Message
+    Element should Contain    id=instanceOS-error    ${ERRROR MESSAGE}
+
+Verify the No Provider Error selected Message
+    Element should Contain    id=providerId-error    ${ERRROR MESSAGE}
+
+Verify the No Available Images selected Error Message
+    Element should Contain    id=imageId-error    ${ERRROR MESSAGE}
+
+Verify the No Region selected Error Message
+    Element should Contain    id=region-error    ${ERRROR MESSAGE}
+
+Verify the No VPC selected Error Message
+    Element should Contain    id=vpcId-error    ${ERRROR MESSAGE}
+
+Verify the No Subnet selected Error Message
+    Element should Contain    id=subnetId-error    ${ERRROR MESSAGE}
+
+Verify the No KeyPair selected Error Message
+    Element should Contain    id=keypairId-error    ${ERRROR MESSAGE}
+
+
+Verify the No Instance Size selected Error Message
+    Element should Contain    id=instancesize-error    ${ERRROR MESSAGE}
+
+Verify the No Blueprint Name Error Message
+    Element should Contain    id=blueprintNameInput-error    ${ERRROR MESSAGE}
+
+Verify the No BusinessGroup selected Error Message
+    Element should Contain    id=bgListInput-error    ${ERRROR MESSAGE}
+
+Verify the No Project selected Error Message
+    Element should Contain    id=projectListInput-error    ${ERRROR MESSAGE}
+
+
 
 Catalyst Choose Template and Save Setup
     Sleep    6s
@@ -319,7 +450,7 @@ Catlayst Workzone and Status Setup
 #Clicks on SUBMIT Button
 
 
-Catalyst Work SSH CHEFCLIENT STOP Setup after LAUNCH
+Catalyst Verfication and BootStrap Instance
     Verify the Status after Launch of Instance
     Verify the IP Address after Launch of Instance
     Verfiy the Chef Client Run 
@@ -330,15 +461,34 @@ Catalyst Work SSH CHEFCLIENT STOP Setup after LAUNCH
     Clicks on Action History
     Checking THe BootStrpa Status
     Clicks on Back To Instances
+    Sleep    4s
+
+
+Catalyst CHEF CLIENT Action on CentOS Instance
+    Sleep    3s
     Steps To Run Chef Client
     Sleep    3s
+
+
+Catalyst SSH Action on CentOS Instance
+    Sleep    3s
     Steps to Run SSH
+    Sleep    4s
+
+
+Catalyst STOP Action on CentOS Instance
+    Sleep    3s
     Steps to Run Stopping the Instance
     Sleep    20s
+
+Catalyst EDIT Instance Name of CentOS Instance
+    Sleep    4s
     Clicks on Edit Button of the CentosInstance Imported
     Enters the New Instance Name for Centos
     Clicks on Save Button of Edddited Instance
     Sleep    3s
+
+
 
 
 
@@ -417,6 +567,7 @@ Catalyst Choose Template and Save Setup for UBUNTU
     Choose the Provider
     Choose the Available Images
     Choose the Region
+    Select the VPC
     Select the Subnet
     Select the Key Pair
     Choose Instance Size for Ubuntu
@@ -434,7 +585,8 @@ Catalyst Choose Template and Save Setup for UBUNTU
     Clicks on AppNew Button
     Enters the Application URL Name
     Enters the AppURL
-    Clicks on AppADD Button 
+    Clicks on AppADD Button
+    Enable the Next Button 
     Clicks on Next Button
     Clicks on Confirm OK Button
 
@@ -472,7 +624,7 @@ Catalyst Check INFORMATION Status for Ubuntu
     Check the Chef BootStrap
     Clicks on Back To Instances
 
-Catalyst Grid View Verify Start ,Stop ,SSH ,Chef ,Client ,Log Setup
+Catalyst Grid View Verify Start ,Stop ,SSH ,Chef ,Client ,Log Setup and Delete
     #Clicks on Workzone Button
     #Clicks on User Created Organization
     #Clicks on User Created BusinessGroup
@@ -497,7 +649,7 @@ Catalyst Grid View Verify Start ,Stop ,SSH ,Chef ,Client ,Log Setup
     #Verfiy the STOP Toggler Enabled from Grid View
     Clicks on View Instancess Button
 
-Catalyst Grid View Verify Start ,Stop ,SSH ,Chef ,Client ,Log Setup of Ubuntu
+Catalyst Grid View Verify Start ,Stop ,SSH ,Chef ,Client ,Log ,Del Setup of Ubuntu
     Clicks on the Button to the Environment
     Sleep    1s
     Clicks on Instances View
@@ -570,7 +722,7 @@ Verfiy the Name of Ubuntu Instance
 
 
 Verify the IP in Grid View
-    ${IP VALUE}=    Get Value    xpath=.//*[@id='tableinstanceview']/tbody/tr/td[4]
+    ${IP VALUE}=    Get Text    xpath=.//*[@id='tableinstanceview']/tbody/tr/td[4]
     Log    ${IP VALUE}
 
 Clicks on View Run List and Verify the Runlists
@@ -671,7 +823,7 @@ Clicks on View Instancess Button
 
 
 
-Catalyst Work SSH CHEFCLIENT STOP Setup after LAUNCH of Ubuntu
+Catalyst Ubuntu Instance Verfication and BootStrap steps
     Sleep    5s
     Clicks on the Button to the Environment
     Verify the Status after Launch of Ubuntu Instance
@@ -684,11 +836,33 @@ Catalyst Work SSH CHEFCLIENT STOP Setup after LAUNCH of Ubuntu
     Clicks on Action History
     Checking THe Ubuntu BootStrpa Status
     Clicks on Back To Instances
+    Sleep    3s
+
+Catalyst CHEFCLIENT Action on Ubuntu Instance
+    Sleep    5s
+    Clicks on the Button to the Environment
     Steps To Run Chef Client of Ubuntu
     Sleep    3s
+
+
+Catalyst SSH Action on the Ubuntu Instance
+    Sleep    5s
+    Clicks on the Button to the Environment
     Steps to Run SSH of Ubuntu
+    Sleep    3s
+
+
+Catalyst STOP Action on the Ubuntu Instance
+    Sleep    5s
+    Clicks on the Button to the Environment
     Steps to Run Stopping the Instance of Ubuntu
     Sleep    20s
+
+
+
+Catalyst EDIT Name of Ubuntu Instance
+    Sleep    5s
+    Clicks on the Button to the Environment
     Clicks on Edit Button of the UbuntuInstance Imported
     Enters the New Instance Name for Ubuntu
     Clicks on Save Button of Edddited Instance
@@ -783,16 +957,21 @@ Clicks on your Ubuntu Blueeeprint
 
 
 Verify the Machine status from CntrlPanel
-    Wait Until Keyword Succeeds    2 minute     1 seconds    Element Should Contain    xpath=.//*[@id='collapseHardware']/div/table/tbody/tr[1]/td[3]    ${MAT STAT}
+    ${MACHINE STATUS1}=    Get Text    xpath=.//*[@id='collapseHardware']/div/table/tbody/tr[1]/td[3]
+    Log    ${MACHINE STATUS1}
+
 
 Verify the Total Memory from CntrlPanel
-    Wait Until Keyword Succeeds    2 minute     1 seconds    Element Should Contain    xpath=.//*[@id='collapseHardware']/div/table/tbody/tr[2]/td[3]    ${MAT MEM}
+    ${TOTAL MEM1}=    Get Text    xpath=.//*[@id='collapseHardware']/div/table/tbody/tr[2]/td[3]
+    Log    ${TOTAL MEM1}  
 
 Verify the UBUNTU Total Memory from CntrlPanel
-    Wait Until Keyword Succeeds    2 minute     1 seconds    Element Should Contain    xpath=.//*[@id='collapseHardware']/div/table/tbody/tr[2]/td[3]    ${UBUNTU MEM}
+    ${TOTAL MEM2}=    Get Text    xpath=.//*[@id='collapseHardware']/div/table/tbody/tr[2]/td[3]
+    Log    ${TOTAL MEM2}  
 
 Verify the Free Memory from CntrlPanel
-    Wait Until Keyword Succeeds    2 minute     1 seconds    Element Should Contain    xpath=.//*[@id='collapseHardware']/div/table/tbody/tr[3]/td[3]    ${MAT FREEMEM}
+    ${FREE MEM1}=    Get Text    xpath=.//*[@id='collapseHardware']/div/table/tbody/tr[3]/td[3]
+    Log    ${FREE MEM1}     
 
 Verfiy the OS Frm ContrlPanel
     Wait Until Keyword Succeeds    2 minute     1 seconds    Element Should Contain    xpath=.//*[@id='collapseSoftware']/div/table/tbody/tr[1]/td[3]    ${MAT OS}
@@ -1234,7 +1413,6 @@ Choose Instance Size
 
 
 Choose Instance Size for Ubuntu
-    Execute JavaScript    $('#bootstrap-wizard-1 > div.tab-content > footer > div').attr('style','display:none')
     Sleep    3s
     Log    after scroll
     Sleep    1s
@@ -1372,12 +1550,18 @@ Clicks on Providers
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='setting_tree']/ul/li[7]/a
 
 Clicks on New Button of Providers
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='addnewitem']
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    id=addnewitem
 
 Select the Provider
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='s2id_providertype']
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    xpath=.//*[@id='select2-drop']/div/input    ${PROVIDERR}
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
+    Sleep    4s
+    Click Element    css=#s2id_providertype > .select2-choice
+    Log    after click
+    Input Text    css=#select2-drop .select2-input    ${PROVIDERR}
+    Sleep    3s
+    Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
+
+
+
 
 Enters the Name of the Provider
     Sleep    1s
@@ -1390,9 +1574,17 @@ Enters the Secret Key
     Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    id=secretKey    ${SECRET KEY}
 
 Selects the Region   
-    Wait Until Keyword Succeeds    2 minute     1 seconds      Click Element    xpath=//span[./text()='Select Region']
-    Input Text    xpath=.//*[@id='select2-drop']/div/input     US West (Oregon) | us-west-2
-    Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
+    Sleep    4s
+    Click Element    css=.region > .select2-choice
+    Log    after click
+    Input Text    css=#select2-drop .select2-input    ${REGION NAME}
+    Sleep    4s
+    Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
+
+
+    #Wait Until Keyword Succeeds    2 minute     1 seconds      Click Element    xpath=//span[./text()='Select Region']
+    #Input Text    xpath=.//*[@id='select2-drop']/div/input     US West (Oregon) | us-west-2
+    #Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
     #Select From List By Value    xpath=.//*[contains(text(), "US West (Oregon) | us-west-2")]     ${REG}
     #Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='select2-drop']/ul/li[3]/div
     #Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    name=region
@@ -1400,9 +1592,19 @@ Selects the Region
      #//select/option[@value = "us-west-1"]
      
 Selects the Key Pair
-    Wait Until Keyword Succeeds    2 minute     1 seconds      Click Element    xpath=//span[./text()='Choose Any Key Pair']
-    Input Text    xpath=.//*[@id='select2-drop']/div/input    ${KeyNAME}
-    Click Element    xpath=.//*[@id='select2-drop']/ul/li[1]/div
+    Sleep    4s
+    Click Element    css=div.row.pemrow > div:first-child > div > a > span:nth-of-type(1)
+    Log    after click
+    Input Text    css=#select2-drop .select2-input    ${KeyNAME}
+    Sleep    4s
+    Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
+
+
+
+
+    #Wait Until Keyword Succeeds    2 minute     1 seconds      Click Element    xpath=//span[./text()='Choose Any Key Pair']
+    #Input Text    xpath=.//*[@id='select2-drop']/div/input    ${KeyNAME}
+    #Click Element    xpath=.//*[@id='select2-drop']/ul/li[1]/div
 
 Uploads the Pem File for Provider
     Choose File     xpath=.//*[@class='gui-file file']     ${CAT_INSTANCES}
@@ -1536,6 +1738,11 @@ Select the CentosBlueprint
     Click Element    xpath=//*[text()='${BLUEPRINT NAME}']
     #Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='collapse5']/div/div/div/ul/li/u/b[text()="${BLUEPRINT NAME}"]
 
+Select the CentosTesingBlueprint
+    Click Element    xpath=//*[text()='${BLUEPRINT TESTNAME}']
+
+
+
 Select the BlueprintUbuntu
     #Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='checkout-form']/div[2]/div/div/div[1]/div[1]/label[3]
     Click Element    xpath=//*[text()='${BLUEPRINT NAME1}']
@@ -1597,6 +1804,8 @@ Chooses Organization
     
 
 #Select WorkCookBooks
+    Sleep    1s
+    Click Element    id=btnRunlistItemUp
     #Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[2]
     #Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='checkout-form']/div[3]/div/div/div[1]/div[1]/label[3]
     #Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesselectedList']/option[1]
@@ -1607,7 +1816,6 @@ Chooses Organization
     #Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[@value='recipe[a]']
 
 Select WorkCookBooks for Ubuntu
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='checkout-form']/div[3]/div/div/div[1]/div[1]/label[3]
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesselectedList']/option[text()='${ADD}']
     Click Element    id=btnremoveFromRunlist
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesselectedList']/option[text()='${CookBkName}']
@@ -1630,6 +1838,9 @@ Clicks on Edit Organization Parameters
 
 Enters The Blueprint Name
     Input Text    id=blueprintNameInput    ${BLUEPRINT NAME}
+
+Enters The Testing Blueprint Name
+    Input Text    id=blueprintNameInput    ${BLUEPRINT TESTNAME}    
 
 Enters The ubuntu Blueprint Name
     Input Text    id=blueprintNameInput    ${BLUEPRINT NAME1}

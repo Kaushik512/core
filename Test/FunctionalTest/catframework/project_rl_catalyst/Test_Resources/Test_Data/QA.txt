@@ -9,9 +9,10 @@ Resource           catalyst.txt
 
 
 *** Variables ***
-${BROWSERTYPE}                    chrome             
-${ENVIRONMENTSERVER}              http://10.0.1.206:3002/private/index.html#ajax/Settings/Dashboard.html
-#http://d4d.relevancelab.com:3001                
+${BROWSERTYPE}                    firefox              #chrome             
+${ENVIRONMENTSERVER}              http://d4d.relevancelab.com:3001                
+#http://10.0.1.206:3002/private/index.html#ajax/Settings/Dashboard.html
+
 
 
              
@@ -77,6 +78,10 @@ ${KEYPAIRNAME}           cat_instances
 ${REGION NAME}           US West (Oregon) | us-west-2
 ${SUBNET NAME}           subnet-aed68ce8 (us-west-2c)
 ${NEW CONFIG NAME}       catserver
+${REGION NAME}            US West (Oregon) | us-west-2
+${BLUEPRINT TESTNAME}          TestingNew
+
+
 
 ${PHOENIX COMMERNCE WITHOUT COOKBOOK UBUNTUOS}            Phoenix Commernce without Cookbook UbuntuOS
 ${PHOENIX COMMERCE WITH COOKBOOK UBUNTUOS}          Phoenix Commerce With CookBook ubuntuOS
@@ -85,17 +90,17 @@ ${PHOENIX COMMERNCE WITHOUT COOKBOOK CENTOS}            Phoenix Commernce withou
 ${PHOENIX COMMERCE WITH COOKBOOK CENTOS}          Phoenix Commerce With CookBook CENTOS
 ${TASK NAME}          Test Task
 
-${USERPEMFILE}              ${ROOTPATH}//Chef//pcjoshi9.pem
-${VALIDATORPEMFILE}      ${ROOTPATH}//Chef//cat1-validator.pem
-${KNIFERBFILE}                ${ROOTPATH}//Chef//knife.rb
-${CATALYSTPEM}                ${ROOTPATH}//Chef//catalyst.pem
-${CAT_INSTANCES}              ${ROOTPATH}//Chef//cat_instances.pem
+${USERPEMFILE}              ${ROOTPATH}/Chef/pcjoshi9.pem
+${VALIDATORPEMFILE}      ${ROOTPATH}/Chef/cat1-validator.pem
+${KNIFERBFILE}                ${ROOTPATH}/Chef/knife.rb
+${CATALYSTPEM}                ${ROOTPATH}/Chef/catalyst.pem
+${CAT_INSTANCES}              ${ROOTPATH}/Chef/cat_instances.pem
 
-${CENTOSIMG}                  ${ROOTPATH}//Images//centos.jpg
-${UBUNTUIMG}                  ${ROOTPATH}//Images//ubuntuu.jpg
-${APPICON}                    ${ROOTPATH}//Images//rel.jpg    
-${TEMPLTYPEICON}              ${ROOTPATH}//Images//index.jpg           
-${APACHEIMG}                  ${ROOTPATH}//Images//apache.jpg
+${CENTOSIMG}                  ${ROOTPATH}/Images/centos.jpg
+${UBUNTUIMG}                  ${ROOTPATH}/Images/ubuntuu.jpg
+${APPICON}                    ${ROOTPATH}/Images/rel.jpg    
+${TEMPLTYPEICON}              ${ROOTPATH}/Images/index.jpg           
+${APACHEIMG}                  ${ROOTPATH}/Images/apache.jpg
 
 ${JENKINSNAME}            JenkinsTAT
 ${JENKINS URL}               http://54.68.204.110:9091/
@@ -152,7 +157,6 @@ ${random}                  adarsh
 ${ADD}                     apache2              #tomcat-all
 ${ACTBOOT1}                 Pending
 ${ACTBOOT2}                 Success
-${IP Centos}                 52.26.250.34
 ${RUN}                       running
 ${AUTHN}                    Pem File 
 ${NAME}                     Bootstrap
@@ -177,7 +181,6 @@ ${MORE INFO}                 SSH Terminal
 ${NO MATCH}                 No matches found
 ${ENVNAME}                  QA
 ${NAMEOFINSTANCE}           Instance_Centos
-${IP Ubuntu}                52.26.196.140
 ${IP UBUNTUSERNAME}         ubuntu
 ${EDIT_UBUNTU_INSTANCE_NAME}     Instance_Ubuntu
 ${DESIGNER_NAME}            Designer01
@@ -186,8 +189,12 @@ ${CONSUMER_NAME}            Consumer01
 ${CONSUMER_PASWD}           Consumer01
 ${CENTOS NAME}              Instance_Centos
 ${UBUNTU NAME}              Instance_Ubuntu
-${IP ADD UBUNTU}             52.26.196.140
-${IP ADD CENTOS}             52.26.250.34
+${IP ADD UBUNTU}            54.68.147.50
+${IP Ubuntu}                54.68.147.50
+
+${IP ADD CENTOS}              52.24.178.71
+${IP Centos}                  52.24.178.71
+
 ${Proj1}                      Catalyst
 ${Proj2}                      Primary_Edu
 ${CookBkName}                 apt
@@ -232,9 +239,9 @@ ${ValidEditVMImage}            Windows 2008
 #${LOG2}                        ConsmrRL15j                        
 #${LOG3}                        DesgnrRL15j
 
-${CATE1}                   AdminRL15j
-${CATE2}                   ConsmrRL15j
-${CATE3}                   DesgnrRL15j
+#${CATE1}                   AdminRL15j
+#${CATE2}                   ConsmrRL15j
+#${CATE3}                   DesgnrRL15j
 
 #provider
 ${VaildNoProvider}   
@@ -512,3 +519,7 @@ ${DEF TEAMNAME1}                Relevance_Labs_Admins
 ${DEF TEAMNAME2}                Relevance_Labs_DEV
 ${DEF TEAMNAME3}                Relevance_Labs_DevOps
 ${DEF TEAMNAME4}                Relevance_Labs_QA
+
+
+#Blueprint Validation
+${ERRROR MESSAGE}              Required.
