@@ -1,3 +1,37 @@
+.menuAppTask {    
+    /*position: relative;
+    margin-top: 40px;
+    background: #ffffff;
+    border: 2px solid #40baf1;
+    width:300px !important;
+    min-height:100px;*/
+    position: relative;
+    margin-top: 40px;
+    left:6px;
+    background: #ffffff;
+    border: 2px solid #40baf1;
+    min-height:100px;
+} 
+.menuAppTask:after, .menuAppTask:before {
+    bottom: 100%;
+    left: 86%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+} .menuAppTask:after {
+    border-color: rgba(136, 183, 213, 0);
+    border-bottom-color: #ffffff;
+    border-width: 15px;
+    margin-left: -15px;
+} .menuAppTask:before { 
+    border-color: rgba(194, 225, 245, 0);
+    border-bottom-color: #40baf1;
+    border-width: 18px;
+    margin-left: -18px;
+}
 #tasksLists_length{
     display: none;
 }
@@ -3789,7 +3823,9 @@ body
 }
 .instance-bootstrap-list {
     font-size: 10px;
-    padding-top: 14px;
+    /*Arabinda commented when App Url and Task link added.
+    padding-top: 14px;*/
+    padding-top: 20px;
 
     text-align: center;
 
