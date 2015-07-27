@@ -16,7 +16,7 @@ var jenkinsTaskSchema = taskTypeSchema.extend({
     jobResultURL: String,
     jobURL: String,
     isParameterized: Boolean,
-    parameterized:[{
+    parameterized: [{
         parameterName: String,
         name: String,
         defaultValue: String,
@@ -61,172 +61,155 @@ jenkinsTaskSchema.methods.execute = function(userName, baseUrl, onExecute, onCom
                 }
                 // running the job
                 if (!jobInfo.inQueue) {
-                    if(self.isParameterized){
+                    if (typeof self.isParameterized != 'undefined' && self.isParameterized) {
                         logger.debug("parameterized executing.....");
-                       var params = self.parameterized;
-                       var parameterDefinitions =[];
-                       var param = {
-                            "parameterDefinitions": []
-                       };
-                       var obj ={
-                            "defaultParameterValue":{
-                                "name": "",
-                                "value": false
-                            },
-                            "description" : "",
-                            "name" : "",
-                            "type" : ""
-                       };
-                        if(params.length>0){
-                            for(var i=0;i<params.length;i++){
-                                obj.defaultParameterValue.name = params[i].name;
-                                obj.defaultParameterValue.value = params[i].defaultValue;
-                                obj.description = params[i].description;
-                                obj.name = params[i].name;
-                                obj.type = params[i].parameterName;
-                                parameterDefinitions.push(obj);
+                        var params = self.parameterized;
+
+                        if (params.length > 0) {
+                            for (var i = 0; i < params.length; i++) {
+                                var param = new Object();
+                                param[params[i].name] = params[i].defaultValue;
                             }
-                            param.parameterDefinitions = parameterDefinitions;
-                        }else{
+                        } else {
                             onExecute({
                                 message: "No Parameter available for job:- " + self.jobName
                             });
                         }
-                        logger.debug("param object>>>>>>>>>>> ",JSON.stringify(param));
-                        jenkins.buildJobWithParams(self.jobName,param, function(err, buildRes) {
-                        if (err) {
-                            logger.error(err);
+                        logger.debug("param object>>>>>>>>>>> ", JSON.stringify(param));
+                        var dummyObj = {
+                            "Catalyst_Setup": "testValAnshul",
+                            "mybool": false
+                        };
+                        jenkins.buildJobWithParams(self.jobName, param, function(err, buildRes) {
+                            if (err) {
+                                logger.error(err);
+                                if (typeof onExecute === 'function') {
+                                    onExecute({
+                                        message: "Unable to Build job :- " + self.jobName
+                                    });
+                                }
+                                return;
+                            }
+                            logger.debug("buildRes ==> ", JSON.stringify(buildRes));
                             if (typeof onExecute === 'function') {
-                                onExecute({
-                                    message: "Unable to Build job :- " + self.jobName
+                                onExecute(null, {
+                                    buildNumber: jobInfo.nextBuildNumber,
+                                    jenkinsServerId: self.jenkinsServerId,
+                                    jobName: self.jobName,
+                                    lastBuildNumber: jobInfo.lastBuild.number,
+                                    nextBuildNumber: jobInfo.nextBuildNumber
                                 });
                             }
-                            return;
-                        }
-                        logger.debug("buildRes ==> ",JSON.stringify(buildRes));
-                        if (typeof onExecute === 'function') {
-                            onExecute(null, {
-                                buildNumber: jobInfo.nextBuildNumber,
-                                jenkinsServerId: self.jenkinsServerId,
-                                jobName: self.jobName,
-                                lastBuildNumber: jobInfo.lastBuild.number,
-                                nextBuildNumber: jobInfo.nextBuildNumber
-                            });
-                        }
 
-                        // polling for job status
-                        function pollBuildStarted() {
-                            jenkins.getJobInfo(self.jobName, function(err, latestJobInfo) {
-                                if (err) {
-                                    logger.error(err);
-                                    if (typeof onComplete === 'function') {
-                                        onComplete(err, 1);
+                            // polling for job status
+                            function pollBuildStarted() {
+                                jenkins.getJobInfo(self.jobName, function(err, latestJobInfo) {
+                                    if (err) {
+                                        logger.error(err);
+                                        if (typeof onComplete === 'function') {
+                                            onComplete(err, 1);
+                                        }
+                                        return;
                                     }
-                                    return;
-                                }
-                                if (jobInfo.nextBuildNumber <= latestJobInfo.lastBuild.number) {
-                                    function pollBuildStatus() {
-                                        jenkins.getBuildInfo(self.jobName, jobInfo.nextBuildNumber, function(err, buildInfo) {
-                                            if (err) {
-                                                logger.error(err);
-                                                if (typeof onComplete === 'function') {
-                                                    onComplete(err, 1);
+                                    if (jobInfo.nextBuildNumber <= latestJobInfo.lastBuild.number) {
+                                        function pollBuildStatus() {
+                                            jenkins.getBuildInfo(self.jobName, jobInfo.nextBuildNumber, function(err, buildInfo) {
+                                                if (err) {
+                                                    logger.error(err);
+                                                    if (typeof onComplete === 'function') {
+                                                        onComplete(err, 1);
+                                                    }
+                                                    return;
                                                 }
-                                                return;
-                                            }
-                                            if (buildInfo.building) {
-                                                pollBuildStatus();
-                                            } else {
-                                                var status = 1;
-                                                if (buildInfo.result === 'SUCCESS') {
-                                                    status = 0;
+                                                if (buildInfo.building) {
+                                                    pollBuildStatus();
+                                                } else {
+                                                    var status = 1;
+                                                    if (buildInfo.result === 'SUCCESS') {
+                                                        status = 0;
+                                                    }
+                                                    if (typeof onComplete === 'function') {
+                                                        onComplete(null, status);
+                                                    }
                                                 }
-                                                if (typeof onComplete === 'function') {
-                                                    onComplete(null, status);
-                                                }
-                                            }
-                                        });
+                                            });
+                                        }
+                                        pollBuildStatus();
+                                    } else {
+                                        pollBuildStarted();
                                     }
-                                    pollBuildStatus();
-                                } else {
-                                    pollBuildStarted();
-                                }
-                            });
-                        }
-                        pollBuildStarted();
-
-
-
-
-                    });
-                    }else{
+                                });
+                            }
+                            pollBuildStarted();
+                        });
+                    } else {
                         jenkins.buildJob(self.jobName, function(err, buildRes) {
-                        if (err) {
-                            logger.error(err);
+                            if (err) {
+                                logger.error(err);
+                                if (typeof onExecute === 'function') {
+                                    onExecute({
+                                        message: "Unable to Build job :- " + self.jobName
+                                    });
+                                }
+                                return;
+                            }
+                            //console.log('buildRes ==> ', buildRes);
+                            logger.debug("buildRes ==> ", JSON.stringify(buildRes));
                             if (typeof onExecute === 'function') {
-                                onExecute({
-                                    message: "Unable to Build job :- " + self.jobName
+                                onExecute(null, {
+                                    buildNumber: jobInfo.nextBuildNumber,
+                                    jenkinsServerId: self.jenkinsServerId,
+                                    jobName: self.jobName,
+                                    lastBuildNumber: jobInfo.lastBuild.number,
+                                    nextBuildNumber: jobInfo.nextBuildNumber
                                 });
                             }
-                            return;
-                        }
-                        //console.log('buildRes ==> ', buildRes);
-                        logger.debug("buildRes ==> ",JSON.stringify(buildRes));
-                        if (typeof onExecute === 'function') {
-                            onExecute(null, {
-                                buildNumber: jobInfo.nextBuildNumber,
-                                jenkinsServerId: self.jenkinsServerId,
-                                jobName: self.jobName,
-                                lastBuildNumber: jobInfo.lastBuild.number,
-                                nextBuildNumber: jobInfo.nextBuildNumber
-                            });
-                        }
 
-                        // polling for job status
-                        function pollBuildStarted() {
-                            jenkins.getJobInfo(self.jobName, function(err, latestJobInfo) {
-                                if (err) {
-                                    logger.error(err);
-                                    if (typeof onComplete === 'function') {
-                                        onComplete(err, 1);
+                            // polling for job status
+                            function pollBuildStarted() {
+                                jenkins.getJobInfo(self.jobName, function(err, latestJobInfo) {
+                                    if (err) {
+                                        logger.error(err);
+                                        if (typeof onComplete === 'function') {
+                                            onComplete(err, 1);
+                                        }
+                                        return;
                                     }
-                                    return;
-                                }
-                                if (jobInfo.nextBuildNumber <= latestJobInfo.lastBuild.number) {
-                                    function pollBuildStatus() {
-                                        jenkins.getBuildInfo(self.jobName, jobInfo.nextBuildNumber, function(err, buildInfo) {
-                                            if (err) {
-                                                logger.error(err);
-                                                if (typeof onComplete === 'function') {
-                                                    onComplete(err, 1);
+                                    if (jobInfo.nextBuildNumber <= latestJobInfo.lastBuild.number) {
+                                        function pollBuildStatus() {
+                                            jenkins.getBuildInfo(self.jobName, jobInfo.nextBuildNumber, function(err, buildInfo) {
+                                                if (err) {
+                                                    logger.error(err);
+                                                    if (typeof onComplete === 'function') {
+                                                        onComplete(err, 1);
+                                                    }
+                                                    return;
                                                 }
-                                                return;
-                                            }
-                                            if (buildInfo.building) {
-                                                pollBuildStatus();
-                                            } else {
-                                                var status = 1;
-                                                if (buildInfo.result === 'SUCCESS') {
-                                                    status = 0;
+                                                if (buildInfo.building) {
+                                                    pollBuildStatus();
+                                                } else {
+                                                    var status = 1;
+                                                    if (buildInfo.result === 'SUCCESS') {
+                                                        status = 0;
+                                                    }
+                                                    if (typeof onComplete === 'function') {
+                                                        onComplete(null, status);
+                                                    }
                                                 }
-                                                if (typeof onComplete === 'function') {
-                                                    onComplete(null, status);
-                                                }
-                                            }
-                                        });
+                                            });
+                                        }
+                                        pollBuildStatus();
+                                    } else {
+                                        pollBuildStarted();
                                     }
-                                    pollBuildStatus();
-                                } else {
-                                    pollBuildStarted();
-                                }
-                            });
-                        }
-                        pollBuildStarted();
+                                });
+                            }
+                            pollBuildStarted();
 
 
 
 
-                    });
+                        });
                     }
                 } else {
                     if (typeof onExecute === 'function') {
