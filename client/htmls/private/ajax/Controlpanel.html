@@ -2412,28 +2412,17 @@ $.get('../instances/' + urlParams.id, function(data) {
             taskIds = data.taskIds;
         }
         $.get('/tasks?orgId=' + data.orgId + '&bgId=' + data.bgId + '&projectId=' + data.projectId + '&envId=' + data.envId, function(taskList) {
-            var selectedArry = new Array();
-            $("#selectedTaskList option").each(function(i){
-              selectedArry.push($(this).val());
-            });
             for (var i = 0; i < taskList.length; i++) {
-                var $option = $("<option></option>").val(taskList[i]._id).html(taskList[i].name).attr('data-taskName', taskList[i].name).addClass('taskimg');
-                // if (taskIds.indexOf(taskList[i]._id) !== -1) {
-                //     $option.attr('selected', 'selected');
-                // }
-
-                // if($("#selectedTaskList").find('option[value="'+taskList[i]._id+'"]') === $option.find('option[value="'+taskList[i]._id+'"]')) {
-                //   $option.find('option[value="'+taskList[i]._id+'"]').hide();
-                //     alert("Hello");
-                // }
-                $select.append($option);
-
-                if(jQuery.inArray(taskList[i]._id,selectedArry) > -1){
-                  $option.hide();
-                }
-                
-
-                
+              var $option = $("<option></option>").val(taskList[i]._id).html(taskList[i].name).attr('data-taskName', taskList[i].name).addClass('taskimg');
+              // if (taskIds.indexOf(taskList[i]._id) !== -1) {
+              //     $option.attr('selected', 'selected');
+              // }
+              var $selectedOptionsValues = $('#selectedTaskList option[value="'+ taskList[i]._id +'"]').length;
+              $select.append($option);
+              if($selectedOptionsValues){
+                alert("Ia ma in True");
+                $('#selectavailbleTaskList option[value="'+ taskList[i]._id +'"]').hide();
+              }                
             }
             
             $('#instanceTaskModal').modal('show');
@@ -2461,7 +2450,8 @@ $.get('../instances/' + urlParams.id, function(data) {
     $('#saveTaskBtn').click(function() {
         var $taskSelect = $('#selectedTaskList');
         var $selectedOptions = $taskSelect.find('option');
-        var taskIds = $taskSelect.val();
+        var taskIds = $selectedOptions.val();
+        alert("Task ID:"+taskIds);
         if (!taskIds) {
             taskIds = [];
         }
@@ -2482,6 +2472,7 @@ $.get('../instances/' + urlParams.id, function(data) {
             }
             $('#instanceTaskModal').modal('hide');
             data.taskIds = taskIds;
+            alert("data with Task ID"+data.taskIds);
         });
 
     });
