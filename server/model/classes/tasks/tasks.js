@@ -9,6 +9,10 @@ var ChefTask = require('./taskTypeChef');
 var JenkinsTask = require('./taskTypeJenkins');
 
 var TaskHistory = require('./taskHistory');
+var configmgmtDao = require('../../../model/d4dmasters/configmgmt');
+var Jenkins = require('../../../lib/jenkins');
+//var js2xmlparser = require("js2xmlparser");
+//var url = require('url');
 
 
 var Schema = mongoose.Schema;
@@ -110,17 +114,20 @@ taskSchema.methods.execute = function(userName, baseUrl, callback, onComplete) {
             callback(err, null);
             return;
         }
+        logger.debug("Task last run timestamp updated",JSON.stringify(taskExecuteData));
         self.lastRunTimestamp = timestamp;
         self.lastTaskStatus = TASK_STATUS.RUNNING;
+        //logger.debug("========================= ",JSON.stringify(self));
         self.save(function(err, data) {
             if (err) {
                 logger.error("Unable to update task timestamp");
                 return;
             }
+
             logger.debug("Task last run timestamp updated");
+            
+
         });
-
-
         if (!taskExecuteData) {
             taskExecuteData = {};
         }
@@ -145,6 +152,39 @@ taskSchema.methods.execute = function(userName, baseUrl, callback, onComplete) {
         if (taskExecuteData.buildNumber) {
             taskHistoryData.buildNumber = taskExecuteData.buildNumber;
         }
+        var arrStr;
+        var x;
+        var acUrl="";
+        if(self.taskConfig.jobResultURL != ""){
+            arrStr = self.taskConfig.jobResultURL.split("-");
+            if(arrStr.length === 3){
+                x = taskExecuteData.buildNumber+"/"+arrStr[2].substr(arrStr[2].lastIndexOf("/")+1);
+                acUrl = arrStr[0]+"-"+arrStr[1]+"-"+x;
+            }
+        }
+        //self.taskConfig.jobResultURL = acUrl;
+        if (taskHistoryData.taskType === TASK_TYPE.JENKINS_TASK) {
+            var taskConfig = self.taskConfig;
+            taskConfig.jobResultURL = acUrl;
+            Tasks.update({
+                "_id": new ObjectId(self._id)
+            },{
+            $set: {
+                taskConfig: taskConfig
+            }
+            }, {
+            upsert: false
+            },function(err, data) {
+                if (err) {
+                    logger.error("Unable to update task jobResultURL");
+                    return;
+                }
+                logger.debug("Task jobResultURL updated");
+                
+            });
+        }
+        
+        taskHistoryData.jobResultURL = acUrl;
         TaskHistory.createNew(taskHistoryData, function(err, taskHistoryEntry) {
             if (err) {
                 logger.error("Unable to make task history entry", err);
@@ -153,6 +193,8 @@ taskSchema.methods.execute = function(userName, baseUrl, callback, onComplete) {
             taskHistory = taskHistoryEntry;
             logger.debug("Task history created");
         });
+
+
 
         callback(null, taskExecuteData);
     }, function(err, status, resultData) {
@@ -191,7 +233,7 @@ taskSchema.methods.getChefTaskNodes = function() {
 };
 
 taskSchema.methods.getHistory = function(callback) {
-    TaskHistory.getHistoryByTaskId(this._id, function(err, tHistories) {
+    TaskHistory.getHistoryByTaskId(this.id, function(err, tHistories) {
         callback(err, tHistories);
     });
 };
@@ -212,7 +254,10 @@ taskSchema.statics.createNew = function(taskData, callback) {
             jenkinsServerId: taskData.jenkinsServerId,
             jobName: taskData.jobName,
             jobResultURL: taskData.jobResultURL,
-            jobURL: taskData.jobURL
+            jobURL: taskData.jobURL,
+            autoSyncFlag: taskData.autoSyncFlag,
+            isParameterized: taskData.isParameterized,
+            parameterized: taskData.parameterized
         });
     } else if (taskData.taskType === TASK_TYPE.CHEF_TASK) {
         var attrJson = null;
@@ -333,7 +378,10 @@ taskSchema.statics.updateTaskById = function(taskId, taskData, callback) {
             jenkinsServerId: taskData.jenkinsServerId,
             jobName: taskData.jobName,
             jobResultURL: taskData.jobResultURL,
-            jobURL: taskData.jobURL
+            jobURL: taskData.jobURL,
+            autoSyncFlag: taskData.autoSyncFlag,
+            isParameterized: taskData.isParameterized,
+            parameterized: taskData.parameterized
         });
     } else if (taskData.taskType === TASK_TYPE.CHEF_TASK) {
 

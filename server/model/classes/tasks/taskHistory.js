@@ -23,6 +23,7 @@ var taskHistorySchema = new Schema({
     user: String,
     timestampStarted: Number,
     timestampEnded: Number,
+    jobResultURL: String,
     executionResults: [Schema.Types.Mixed]
 });
 
@@ -54,10 +55,36 @@ taskHistorySchema.statics.createNew = function(historyData, callback) {
 };
 
 taskHistorySchema.statics.getHistoryByTaskId = function(taskId, callback) {
+    this.find({ 
+        $query : {
+        taskId: taskId
+    } ,$orderby :{
+        "buildNumber" : -1
+    }}, function(err, tHistories) {
+        if (err) {
+            callback(err, null);
+            return;
+        }
+        callback(null, tHistories);
+    });
+};
+
+taskHistorySchema.statics.getLast100HistoriesByTaskId = function(taskId, callback) {
 
     this.find({
         taskId: taskId
     }, function(err, tHistories) {
+        if (err) {
+            callback(err, null);
+            return;
+        }
+        callback(null, tHistories);
+    }).sort({$natural: -1}).limit(100);
+};
+
+taskHistorySchema.statics.listHistory = function(callback) {
+
+    this.find(function(err, tHistories) {
         if (err) {
             callback(err, null);
             return;
