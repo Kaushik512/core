@@ -61,6 +61,7 @@
 
                                                                       window.removeStack = function() {
                                                                           var $selectedCard = $('.productdiv1.role-Selected1');
+                                                                          
                                                                           var stackId = $selectedCard.attr('data-stackId');
                                                                           if (stackId) {
                                                                               //found now delete
@@ -91,7 +92,7 @@
 
                                                                               });
                                                                           } else {
-                                                                              alert('Please select a blueprint to remove.');
+                                                                              alert('Please select a stack to remove.');
                                                                           }
                                                                       }
 
@@ -2460,6 +2461,7 @@
                                                                                       $('[dockerparamkey]').val('');
                                                                                   $('#myModalLabelDockerContainer').attr('saveto', lpinput).css('z-index', '9999').modal('show');
                                                                               };
+
                                                                               $('.launchBtn').click(function(e) {
                                                                                   $('#commentForm')[0].reset();
                                                                                   $('#Removeonexitfield').change();
@@ -2607,11 +2609,11 @@
 
                                                                                               var msgStr = 'Instance Id : ';
                                                                                               if (blueprintType === 'aws_cf') {
-                                                                                                  msgStr = 'Stack Id : ' + data.stackId;
+                                                                                                  msgStr = 'Stack Id : ' + data.stackId +'. You can view your stack in cloudformation tab';
                                                                                               } else {
-                                                                                                  msgStr = 'Instance Id : ' + data.stackId + '<br/>Instance Logs :- ';
+                                                                                                  msgStr = 'Instance Id : ' + data.id + '<br/>Instance Logs :- ';
                                                                                               }
-                                                                                              var $msg = $('<div></div>').append('<h3 class=\"alert alert-success\"><b>Congratulations!</b> Blueprint Launched Successfully</h3>').append(msgStr);
+                                                                                              var $msg = $('<div></div>').append('<h3 class=\"alert alert-success\">Blueprint Launched Successfully</h3>').append(msgStr);
 
                                                                                               $launchResultContainer.find('.modal-body').empty();
                                                                                               $launchResultContainer.find('.modal-body').append($msg);
@@ -2700,7 +2702,7 @@
                                                                                       }
 
                                                                                       if (blueprintType === 'aws_cf') {
-                                                                                          bootbox.prompt("Stack Name?", function(result) {
+                                                                                          bootbox.prompt("Please Enter Unique Stack Name?", function(result) {
                                                                                               if (result) {
                                                                                                   launchBP(result);
                                                                                               }
@@ -3102,7 +3104,7 @@
                                                                           }
 
                                                                           function addStackToDom(stack) {
-                                                                              var $clonedDiv = $(' <div class="productdiv4"><div class="productdiv1 cardimage" ><ul class="list-unstyled system-prop" style="text-align: center;"><li><img src="img/cf-icon.png" alt="stack" class="cardLogo"></li><li title="" class="Cardtextoverflow"><u><b class="stackNameContainer"></b></u></li></ul><div class="stack-details-list"><span class="stack-details">Id : <strong class="stackId"></strong></span><span class="stack-details">status : <span class="stackStatus"></span></span></div></div></div>');
+                                                                              var $clonedDiv = $(' <div class="productdiv4"><div class="productdiv1 cardimage" ><ul class="list-unstyled system-prop" style="text-align: center;"><li><img src="img/cf-icon.png" alt="stack" class="cardLogo"></li><li title="" class="Cardtextoverflow"><u><b class="stackNameContainer"></b></u></li></ul><div class="stack-details-list"><span class="stack-details"><strong class="stackId"></strong></span><span class="stack-details">status : <span class="stackStatus"></span></span></div></div></div>');
                                                                               var $cftStackContainer = $('#cftStackContainer');
 
                                                                               $clonedDiv.find('.productdiv1').attr({
@@ -3110,7 +3112,7 @@
                                                                                   'data-stackName': stack.stackName
                                                                               });
                                                                               $clonedDiv.find('.stackNameContainer').append(stack.stackName);
-                                                                              $clonedDiv.find('.stackId').append(stack.stackId);
+                                                                              //$clonedDiv.find('.stackId').append(stack.stackId);
                                                                               switch (stack.status) {
                                                                                   case 'CREATE_IN_PROGRESS':
                                                                                       $clonedDiv.find('.stackStatus').html(stack.status);
@@ -3138,6 +3140,10 @@
                                                                               if (stack.status === 'CREATE_IN_PROGRESS') {
                                                                                   pollStackStatus(stack._id);
                                                                               }
+                                                                              $clonedDiv.find('.stackCardDiv').click(function(){
+                                                                                $('.role-Selected1').removeClass('role-Selected1');
+                                                                                $(this).addClass('role-Selected1');
+                                                                              });
 
                                                                           }
 
