@@ -145,6 +145,7 @@
                                                               bindChange_importPemFile();
                                                               bindSubmit_AddInstance();
                                                               bindClick_removeInstance();
+                                                              bindClick_searchInstances();
                                                               populateOSList();
 
                                                               var validator = $('#instanceEditNew').validate({
@@ -328,6 +329,29 @@
 
                                                               });
                                                           }
+                                                          /* Attaching Click event for search box using text search */
+
+                                                         function bindClick_searchInstances(){
+                                                          
+                                                          $('#instancesearch').click(function(e){
+                                                              //alert(urlParams.projid);
+                                                              //Clearing instances screen
+                                                              $('.item.active ul').find('li').detach();
+                                                              $('#tableinstanceview').dataTable().fnClearTable();
+                                                              $('#tabInstanceStatus').hide();
+                                                              $('.instanceloaderspinner').removeClass('hidden');
+                                                              $('#instancesearchmessage').html('');
+
+                                                              $.get('/instances/search/' + urlParams.org + '/' + urlParams['bg'] + '/' + urlParams.projid + '/' +  urlParams.envid + '/' + encodeURIComponent($('#instanceSearchQuery').val()),function(data){
+                                                                console.log(JSON.stringify(data.instances.length));
+                                                                //display statistics
+                                                                //$('#instancesearchmessage').html('Returned ' + data.instances.length + ' results (' + data.queryduration + ' seconds)');
+                                                                $('#instancesearchmessage').html('Returned ' + data.instances.length + ' result(s)');
+                                                                initializeInstanceArea(data.instances);
+                                                              });
+                                                          });
+                                                         }
+
 
                                                           /*Attaching Click event on instances tab which will set BreadCrumb for Instances*/
                                                           function bindClick_instnaceTab() {
