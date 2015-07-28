@@ -3435,11 +3435,16 @@
                                                                           $tdHistory.find('a').data('taskId', data[i]._id).attr('data-historyTaskId', data[i]._id).click(function(e) {
                                                                               //var $taskHistoryContent = $('#taskHistoryContent').show();
                                                                               var taskId = $(this).data('taskId');
-                                                                              var $modal = $('#assignedTaskHistory');
+                                                                              var $modal = $('#chefJobHistory');
                                                                               $modal.find('.loadingContainer').show();
                                                                               $modal.find('.outputArea').hide();
                                                                               $modal.find('.errorMsgContainer').hide();
-                                                                              $modal.modal('show');
+                                                                              $modal.removeClass('hidden');
+                                                                            $('#orchestrationTable').hide();
+                                                                            $('.hideChefJob').click(function(e) {
+                                                                                $modal.addClass('hidden');
+                                                                                $('#orchestrationTable').show();
+                                                                            });
                                                                               $taskHistoryDatatable.clear().draw();
                                                                               $.get('../tasks/' + taskId + '/history', function(taskHistories) {
                                                                                   for (var i = 0; i < taskHistories.length; i++) {
@@ -3500,6 +3505,7 @@
 
                                                                                       var $tdLogs = $('<td></td>').append('<a data-original-title="MoreInfo" data-placement="top" rel="tooltip" class="moreinfoBuild margin-left40per" href="javascript:void(0)" data-toggle="modal"></a>');
                                                                                       $tdLogs.find('a').data('history', taskHistories[i]).data('taskId', taskId).click(function() {
+                                                                                        
                                                                                           //$('#assignedTaskHistory').modal('hide');
                                                                                           var taskId = $(this).data('taskId');
                                                                                           var $taskExecuteTabsHeaderContainer = $('#taskExecuteTabsHeader').empty();
@@ -3584,11 +3590,16 @@
                                                                            });*/
 
 
-                                                                              var $modal = $('#assignedTaskHistoryForJenkins');
+                                                                              var $modal = $('#jenkinsJobHistory');
                                                                               $modal.find('.loadingContainer').show();
                                                                               $modal.find('.outputArea').hide();
                                                                               $modal.find('.errorMsgContainer').hide();
-                                                                              $modal.modal('show');
+                                                                              $modal.removeClass('hidden');
+                                                                              $('#orchestrationTable').hide();
+                                                                            $('.hideJenkinsJob').click(function(e) {
+                                                                                $modal.addClass('hidden');
+                                                                                $('#orchestrationTable').show();
+                                                                            });
                                                                               $taskHistoryDatatableJenkins.clear().draw();
 
                                                                               var autoSyncFlag = $(this).data('autosyncFlag');
@@ -3657,13 +3668,13 @@
                                                                                               }
 
                                                                                               if (taskHistories[i].status === "success") {
-                                                                                                  var $tdBuildStatus = $('<td></td>').append('<img rel="tooltip" data-placement="top" title="Success" src="img/indicator_started.png"/>');
+                                                                                                  var $tdBuildStatus = $('<td style="background-color:#1c9951;"></td>').append('<span style="color:#fff">SUCCESS</span>');
                                                                                                   $trHistoryRow.append($tdBuildStatus);
                                                                                               } else if (taskHistories[i].status === "failed") {
-                                                                                                  var $tdBuildStatusFailure = $('<td></td>').append('<img rel="tooltip" data-placement="top" title="Failed" src="img/indicator_stopped.png"/>');
+                                                                                                  var $tdBuildStatusFailure = $('<td style="background-color:red;"></td>').append('<span style="color:#fff;">FAILURE</span>');
                                                                                                   $trHistoryRow.append($tdBuildStatusFailure);
                                                                                               } else {
-                                                                                                  var $tdBuildStatusRunning = $('<td></td>').append('<img rel="tooltip" data-placement="top" title="Running" src="img/indicator_unknown.png"/>');
+                                                                                                  var $tdBuildStatusRunning = $('<td style="background-color:gray;"></td>').append('<span style="color:#fff;">PENDING</span>');
                                                                                                   $trHistoryRow.append($tdBuildStatusRunning);
                                                                                               }
                                                                                               var $tdLogs = $('<td></td>').append('<a data-original-title="MoreInfo" data-placement="top" rel="tooltip" class="moreinfoBuild margin-left40per" href="javascript:void(0)" data-toggle="modal"></a>');

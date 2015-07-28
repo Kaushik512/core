@@ -2,7 +2,7 @@
 <!--orchestration tab starts here-->
 
                 <div class="tab-pane" id="l3">
-                    <div class="row">
+                    <div id="orchestrationTable" class="row">
                         <div class="col-md-12">
                             <div class="col-md-12">
 
@@ -52,7 +52,114 @@
                         </div>
                     </div>
 
-                </div> <!--orchestration tab ends here-->
+                    <div id="jenkinsJobHistory" class="row hidden">
+                        <div class="col-md-12">
+                            <div class="col-md-12">
+
+                                <div class="widget-box">
+                                    <div class="widget-header">
+                                        <h5 class="widget-title" style="color:#4e5964;">
+                                            <strong>Jenkins Job History</strong>
+                                        </h5>
+                                        <div class="widget-toolbar no-border">
+                                            <div>
+                                                <button class="btn btn-minier btn-primary hideJenkinsJob" href="javascript:void(0)">
+                                                    
+                                                    Close
+                                                </button>
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="widget-body">
+                                        <div class="widget-main" style="min-height:300px">
+                                        <div class="loadingContainer"><img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" /></div>
+                                        <div class="errorMsgContainer" style="font-size: 14px;height: 100px;padding-top: 10px;text-align: center;"></div> 
+                                        <div class="outputArea">
+                                            <div class="col-md-12 table-responsive">
+                                                <table id="tablehistoryTaskForJenkins" class="table table-striped table-bordered table-hover dataTable no-footer text-align-center table-condensed tablesorter" cellpadding="5px" width="100%">
+                                                    <thead>
+                                                    <tr class="rowCustomStyle">
+                                                        <td>Job Number</td>
+                                                        <td>Job Output</td>
+                                                        <td>Status</td>
+                                                        
+                                                        <td>Logs</td>
+                                                        <td>Start Time</td>
+                                                        <td>End Time</td>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--chef history starts here-->
+                    <div id="chefJobHistory" class="row hidden">
+                        <div class="col-md-12">
+                            <div class="col-md-12">
+
+                                <div class="widget-box">
+                                    <div class="widget-header">
+                                        <h5 class="widget-title" style="color:#4e5964;">
+                                            <strong>Chef History</strong>
+                                        </h5>
+                                        <div class="widget-toolbar no-border">
+                                            <div>
+                                                <button class="btn btn-minier btn-primary hideChefJob" href="javascript:void(0)">
+                                                    
+                                                    Close
+                                                </button>
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="widget-body">
+                                        <div class="widget-main" style="min-height:300px">
+                                        <div class="loadingContainer"><img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" /></div>
+                                        <div class="errorMsgContainer" style="font-size: 14px;height: 100px;padding-top: 10px;text-align: center;"></div> 
+                                        <div class="outputArea">
+                                            <div class="col-md-12 table-responsive">
+                                                <table id="tablehistoryTask" class="table table-striped table-bordered table-hover dataTable no-footer text-align-center table-condensed tablesorter" cellpadding="5px" width="100%">
+                                                    <thead>
+                                                    <tr class="rowCustomStyle">
+                                                        <td>Start Time</td>
+                                                        <td>End Time</td>
+                                                        <td>Status</td>
+                                                        <td style="width: 42%">Message</td>
+                                                        <td>User</td>
+                                                        <td>Logs</td>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--chef history ends here-->
+
+                </div> <!--l3 tab ends here-->
 
 <!--/.modal-assignedNode-->
 <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="assignedNode" class="modal fade" data-backdrop="static">
@@ -194,7 +301,7 @@
 </div><!--/.modal-assignedExecute-->
 
 <!--execute modal-->
-<div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="assignedTaskHistory" class="modal fade" data-backdrop="static">
+<!-- <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="assignedTaskHistory" class="modal fade" data-backdrop="static">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -241,12 +348,12 @@
                 </button>
             </div>
         </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div><!--/.modal-History-->
+    <!-- </div>/.modal-dialog
+</div> --> <!--/.modal-History-->
 
 <!--task history for jenkins job-->
 <!--execute modal-->
-<div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="assignedTaskHistoryForJenkins" class="modal fade" data-backdrop="static">
+<!-- <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="assignedTaskHistoryForJenkins" class="modal fade" data-backdrop="static">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -294,7 +401,7 @@
                 </button>
             </div>
         </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div><!--/.modal-History-->
+    <!-- </div>/.modal-dialog
+</div> --> <!--/.modal-History-->
 
 <!--task history for jenkins job ends here-->
