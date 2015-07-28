@@ -1577,7 +1577,7 @@ Selects the Region
     Sleep    4s
     Click Element    css=.region > .select2-choice
     Log    after click
-    Input Text    css=#select2-drop .select2-input    ${REGION NAME}
+    Input Text    css=#select2-drop .select2-input    US West (Oregon) | us-west-2
     Sleep    4s
     Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
 
