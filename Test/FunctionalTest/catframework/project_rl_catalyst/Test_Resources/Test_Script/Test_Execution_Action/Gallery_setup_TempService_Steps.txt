@@ -48,6 +48,7 @@ Validate the No Organization for Template Type
     Clicks on Settings
     Clicks on Gallery Setup
     Clicks on Template Type
+    Sleep    2s
     Clicks on New Template Type Button
     Enters the Design Template name
     Chooses Template type Icon
@@ -60,6 +61,7 @@ Organization not selected ErrorMessage
     Clicks on Templat type Cancel Button
     
 Validate the 15chr Template Typee Name
+    Sleep    2s
     Clicks on New Template Type Button
     Enters the 15Chr Template type name
     Chooses Template type Icon
@@ -69,6 +71,7 @@ Validate the 15chr Template Typee Name
 
 
 Validate the Blank Spaces Template Type Name
+    Sleep    2s
     Clicks on New Template Type Button
     Enters the Blank Spaces Temp Type Name
     Chooses Template type Icon
@@ -87,6 +90,7 @@ Template Type Name with Blank Spaces
 
 
 Validate the Empty Template Type Name
+    Sleep    2s
     Clicks on New Template Type Button
     Chooses Template type Icon
     Select Created organization
@@ -105,6 +109,7 @@ Template type Name more than 15chr
 
 
 Catalyst User New Design Template Type
+    Sleep    2s
     Clicks on New Template Type Button
     Enters the Design Template name
     Chooses Template type Icon
