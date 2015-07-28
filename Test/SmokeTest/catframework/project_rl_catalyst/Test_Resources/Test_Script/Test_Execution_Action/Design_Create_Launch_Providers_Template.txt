@@ -1576,11 +1576,6 @@ Clicks on Instance Close Button
     Wait Until Keyword Succeeds    2 minute     1 seconds      Click Element    xpath=.//*[@id='launchResultContainer']/div/div/div[3]/button
 
 
-
-Clicks on Design
-    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       xpath=.//*[@id='designNew']
-    Click Element    xpath=.//*[@id='designNew']
-
 Chooses the Template Type
     Click Element    xpath=.//*[@id='grid0']           #AppFactory
 

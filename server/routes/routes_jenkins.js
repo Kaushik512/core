@@ -18,6 +18,8 @@ module.exports.setRoutes = function(app, verificationFunc) {
 
         } catch (err) {
             logger.error(err);
+            res.send({});
+            return;
         }
         res.send(jenkinVversion);
         return;
@@ -34,7 +36,6 @@ module.exports.setRoutes = function(app, verificationFunc) {
             logger.debug(jenkinsList);
             res.send(jenkinsList);
         });
-
     });
 
     app.all('/jenkins/:jenkinsId/*', function(req, res, next) {
