@@ -39,7 +39,9 @@ Create New Config Management
     Upload user Pem File
     Upload Validator Pem File
     Upload Validator Knife File
+    Sleep    4s
     Clicks on Save button to save the ConfigMgmt detail
+    Sleep    2s
     Verfiy the ChefServer is Created in the Table
 
 
@@ -278,6 +280,7 @@ Upload Validator Knife File
    
 
 Clicks on Save button to save the ConfigMgmt detail
+    Sleep    3s
     Click Element    css=div.btn-group.pull-right > button
     Sleep    2s   
 
