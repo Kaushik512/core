@@ -13,7 +13,7 @@ var jenkinsTaskSchema = taskTypeSchema.extend({
     jenkinsServerId: String,
     jobName: String,
     autoSyncFlag: String,
-    jobResultURL: String,
+    jobResultURL: [String],
     jobURL: String,
     isParameterized: Boolean,
     parameterized: [{

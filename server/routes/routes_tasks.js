@@ -189,14 +189,16 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                 }
                                 var count = 0;
                                 if (jobResult.length > 0) {
-                                    var resultUrl;
+                                    var resultUrl = [];
                                     for (var x = 0; x < jobResult.length; x++) {
                                         (function(x) {
                                             count++;
                                             //logger.debug("------+++++---");
                                             if (historyResult.indexOf(jobResult[x]) == -1) {
                                                 //logger.debug("------------------ ", jobResult[x]);
-                                               
+                                                for (var i = 0; i < task.jobResultURLPattern.length; i++) {
+                                                    resultUrl.push(task.jobResultURLPattern[i].replace("$buildNumber", jobResult[x]));
+                                                }
                                                 var hData = {
                                                     "taskId": req.params.taskId,
                                                     "taskType": "jenkins",
@@ -279,11 +281,13 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                 }
                                 var count1 = 0;
                                 if (jobResult) {
-                                    var resultUrl;
+                                    var resultUrl = [];
                                     for (var x = 0; x < jobResult.length; x++) {
                                         (function(x) {
-                                             resultUrl = task.jobResultURLPattern.replace("$buildNumber", jobResult[x]);
-                                                //logger.debug("==================================== ",resultUrl);
+                                            for (var i = 0; i < task.jobResultURLPattern.length; i++) {
+                                                resultUrl.push(task.jobResultURLPattern[i].replace("$buildNumber", jobResult[x]));
+                                            }
+                                            //logger.debug("==================================== ",resultUrl);
                                             var hData = {
                                                 "taskId": req.params.taskId,
                                                 "taskType": "jenkins",
