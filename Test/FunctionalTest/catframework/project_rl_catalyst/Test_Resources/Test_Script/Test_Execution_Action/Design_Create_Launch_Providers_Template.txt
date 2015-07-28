@@ -249,7 +249,7 @@ Select organization now
     Log    after click
     Input Text    css=#select2-drop .select2-input    ${ORGANIZATION NAME}
     Sleep    4s
-    Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
+    Click Element    css=.select2-result-label
 
 Clicks on Edit Button of Windows Image
     Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()='Windows']/../td[6]/div/a[2]
