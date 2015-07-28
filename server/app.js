@@ -80,7 +80,7 @@ var mongoStore = new MongoStore({
 app.set('port', process.env.PORT || appConfig.app_run_port);
 app.set('sport', appConfig.app_run_secure_port);
 app.use(express.compress());
-app.use(express.favicon());
+app.use(express.favicon(__dirname + '/private/img/favicons/favicon-32x32.png?v=4'));
 app.use(express.logger({
     format: 'dev',
     stream: {
