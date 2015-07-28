@@ -25,7 +25,7 @@ Catalyst Import an CentOS Instance By IP
     #Clicks on User Created Organization
     #Clicks on User Created BusinessGroup
     Clicks on Button to your > Environment
-    Sleep    1s
+    Sleep    4s
     Clicks on Inport By IP Button
     Enters the IP Address of CentOS Box
     Select the Operating System of the Box
@@ -46,7 +46,7 @@ Catalyst Import an Ubuntu Instance By IP
     #Clicks on User Created Organization
     #Clicks on User Created BusinessGroup
     Clicks on Button to your > Environment
-    Sleep    1s
+    Sleep    4s
     Clicks on Inport By IP Button
     Enters the IP Address of Ubuntu Box
     Select the Operating System as Ubuntu
@@ -217,12 +217,9 @@ Catalyst Check and Edit the Instance Name
     Sleep    4s
     Clicks on Edit Button of the Instance Imported
     Enters the Empty Edit name
-    #Clicks on Edit Save Button of the instance
-    #Verfiy the Message Displayed of the Instance
     Sleep    2s
     Enters the New Edit Instance Name
     Clicks on Edit Save Button of the instances
-
 
 
 Catalyst Check and Edit the Ubuntu Instance Name
@@ -232,77 +229,10 @@ Catalyst Check and Edit the Ubuntu Instance Name
     Sleep    4s
     Clicks on Edit Button of the UbuntuIns Imported
     Enters the Empty Edit name
-    Clicks on Edit Save Button of the instance
-    Verfiy the Message Displayed of the Instance
     Sleep    2s
     Enters the New Edit Ubuntu Instance Name
     Clicks on Edit Save Button of the instances
     
-
-
-
-
-Catalyst Instance Deleted From Chef Environment
-    Sleep    6s
-    Clicks on Workzone Button
-    Clicks on Button to your > Environment
-    Sleep    4s
-    Click on the Instance To Be Deleted 
-    Clicks on the Dlt Button to Delete the Instance
-    Verify the IP Address
-    Select the CheckBox to Delete
-    Clicks on the Delete Button to Delete the Instance
-    Clicks on Settings
-    Sleep    5s
-    Clicks on DevOps Setupp 
-    Clicks on Config Managementt
-    Clicks on Import Nodes Button of Chef Server
-
-
-Catalyst Ubuntu Instance Deleted From Chef Environment
-    Sleep    6s
-    Clicks on Workzone Button
-    Clicks on Button to your > Environment
-    Sleep    4s
-    Click on the Ubuntu Instance To Be Deleted 
-    Clicks on the Dlt Button to Delete the Instance
-    Verify the Ubuntu IP Address
-    Select the CheckBox to Delete
-    Clicks on the Delete Button to Delete the Instance
-    Clicks on Settings
-    Sleep    5s
-    Clicks on DevOps Setupp 
-    Clicks on Config Managementt
-    Clicks on Import Nodes Button and verify Ubuntu instance deleted
-
-
-Catalyst Delete the Node only From Catalyst
-    Sleep    5s
-    Catalyst Steps for Inmporting
-    Sleep    15s
-    Clicks on the Dlt Button to Delete the Instance
-    Verify the Name of the Instance as IP Address
-    Clicks on the Delete Button to Delete the Instance
-    Clicks on Settings
-    Sleep    5s
-    Clicks on DevOps Setupp 
-    Clicks on Config Managementt
-    Clicks on Import Button Server
-
-Catalyst Delete the Ubuntu Node only From Catalyst
-    Sleep    5s
-    Catalyst Steps for Inport by IP Ubuntu
-    Sleep    15s
-    Clicks on the Dlt Button to Delete the Instance
-    Verify the Name of the Ubuntu Instance as IP Address
-    Clicks on the Delete Button to Delete the Instance
-    Clicks on Settings
-    Sleep    5s
-    Clicks on DevOps Setupp 
-    Clicks on Config Managementt
-    Clicks on Import Button Server and Verfiy the Ubuntu Instance
-
-
 
 Catalyst Steps for Inport by IP Ubuntu
     Clicks on Workzone Button
@@ -332,35 +262,6 @@ Catalyst Steps for Inmporting
     Clicks on Import Button to Import an Instance
     Clicks on Import Close Button
 
-
-Catlayst Importing the Instance Chef Sync
-    Clicks on Settings
-    Sleep    5s
-    Clicks on DevOps Setupp 
-    Clicks on Config Managementt
-    Clicks on Import Nodes Button of Server for Sync
-    Find the Instance and Impoert to the Environment
-    Clicking on the Import Nodes Button in Config Mgmt Page 
-    Verfiy the Organization is Disabled
-    Select the Business Grp in Inport Nodes
-    Select the Project in Inport Nodes
-    Enters the UserName in Inport Nodes
-    Choose the Authentication as Pem in Inportnodes
-    Upload the PEM file in Inport Nodes
-    Clicks on Import Button in Import Nodes
-    Sleep    5s
-    Verify the Node Importedd
-    Clicks on Workzone
-    Sleep    10s
-    Node is Inported in the  Environment
-
-
-
-   #.//*[@id='envtable']/tbody/tr/td[text()='RLChefServer']/../td[5]/div/a[3]
-    #//div[@class='domain-roles-heading'][//span[text()='52.24.73.49']]/a
-#//div[@class='domain-roles-heading']/span[@data-originaL-title='apache']
-#//div[@class='domain-roles']/div[@data-blueprintname='52.24.73.49']
-#//div[@class='messageDiv']/div
 
 
 Verfication of IP Address from card view
@@ -434,7 +335,7 @@ Clicks on Edit Save Button of the instances
 Input the Usrname in Terminal
     Input Text    id=ssh-username    ${UserName}
 
-Input the Ubuntu Usrname in Terminalf
+Input the Ubuntu Usrname in Terminal
     Input Text    id=ssh-username    ${UbuntuUser}    
 
 Select Authenticationtype as PEM
@@ -513,9 +414,7 @@ Clicks on SSH for ubuntu instance
 
 
 
-Click on the Instance To Be Deleted
-    Sleep    2s
-    Click Element    xpath=//div[@class='domain-roles']/div[@data-blueprintname='${IP Centos}']
+
 
 Click on the Ubuntu Instance To Be Deleted 
     Sleep    2s
@@ -598,9 +497,6 @@ Clicks on Close Button after Validation
 Enters the Empty Edit name
     Input Text    id=instanceEditName    ${Empty}
 
-Verfiy the Message Displayed of the Instance
-    Sleep    1s
-    Element Should Contain    xpath=.//*[@id='instanceEditName-error']    ${ERRORMESSAGE}
 
 Clicks on Edit Button of the Instance Imported
     Sleep    3s
@@ -618,9 +514,6 @@ Enters the New Edit Ubuntu Instance Name
     Input Text    id=instanceEditName    ${EDIT_UBUNTU_INSTANCE_NAME}
 
 
-
-Clicks on Edit Save Button of the instance
-    Click Element    id=editSaveBTN
 
 Verify Edited Name of the Instance
     Element Should Contain    xpath=//div[@class='domain-roles-heading']/span[@data-originaL-title='${EDIT_INSTANCE_NAME}']
@@ -1365,3 +1258,18 @@ Clicks on Jenkins New Button
 
 Clicks on Jenkins Cancel Button
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='btncancel']
+
+
+
+Catalyst deletes Centos Imported node
+    Clicks on the Button to the Environment
+    Click on Remove button
+    Selects Delete this node from chef server Checkbox
+    Clicks on Delete button in Remove Instance window
+
+
+Catalyst deletes Ubuntu Imported node
+    Clicks on the Button to the Environment
+    Click on Remove button
+    Selects Delete this node from chef server Checkbox
+    Clicks on Delete button in Remove Instance window
