@@ -94,9 +94,9 @@ ${TASK NAME}          Test Task
 
 
 
-${CONFIG MANAGEMENT USER NAME}            mycatqa       #pcjoshi9
+${CONFIG MANAGEMENT USER NAME}              mycatqa             
 ${CONFIG MANAGEMENT URL}             https://api.opscode.com/organizations/cattest
-#https://api.opscode.com/organizations/cat1
+
 
 
 
