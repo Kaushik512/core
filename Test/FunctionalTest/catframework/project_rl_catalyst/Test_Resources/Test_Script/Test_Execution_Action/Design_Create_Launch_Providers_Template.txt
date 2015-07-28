@@ -1360,7 +1360,7 @@ Choose the Available Images
 
 Choose the Region
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='s2id_region']/a/span[1]
-    Input Text    xpath=.//*[@id='select2-drop']/div/input    ${REGION NAME}
+    Input Text    xpath=.//*[@id='select2-drop']/div/input    US West (Oregon) | us-west-2
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
     Sleep    10s
 
