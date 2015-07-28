@@ -1,4 +1,4 @@
-    *** Settings ***
+*** Settings ***
 Documentation      A resource file with reusable keywords and variables.
 ...
 ...                This file is part of a prototype automated test suite designed to
@@ -26,7 +26,7 @@ Catalyst Login
     Enters catalyst password
     Clicks on Login button
 
-Catalyst Create New Org Admin 
+Creates New Org Admin 
     Clicks on Users Setup
     Clicks on Users
     Clicks on New Button
@@ -37,11 +37,7 @@ Catalyst Create New Org Admin
     Select The Organization of the OrgAdmin created
     Assign the Roles as Admin
     Assign Teams for OrgAdmin
-    Clicks on USave Button
-
-    #Add User to LDAP
-    #Enters the LDAP Org Admin Password
-    #Enters the Confirm LDAP Password
+    Clicks on Save button in Users Page
 
 Catalyst Org Admin Verfifcation of New,Update,Delete Button disabled
     Clicks on Settings
@@ -60,29 +56,6 @@ Catalyst Creating New User and Verfiy ALL is Disabled
     Verification of Organization only with out ALL option Being Disabled
     Sleep    1s
     Clicks on UserCancel Button
-
-Catalyst Creation of Designer and Consumer
-    Clicks on New Button
-    Enters Login name as Designer
-    Enters Email Address
-    Select particular User Created organization
-    Add User to LDAP
-    Enters Designer Passwd
-    Enters Designer Confirm Passwd
-    Selecting the Role as Designer
-    Assign Teams for users
-    Clicks on USave Button
-    Clicks on New Button
-    Enters Login name as Consumer
-    Enters Email Address
-    Select particular User Created organization
-    Add User to LDAP
-    Enters Consumer Passwd
-    Enters Consumer Confirm Passwd
-    Selecting the Role as Consumer
-    Assign Teams for users
-    Clicks on USave Button
-
 
 
 Verification of Organization only with out ALL option Being Disabled
@@ -136,20 +109,9 @@ Selecting the Role as Designer
 Selecting the Role as Consumer
     Click Element    xpath=.//*[@id='userrolename']/label[text()='Consumer']    
 
-Create New Organization
-      #Vaildate the Organization feilds   ${Vaildate15ChrOrgName}        
-      #Organization name with more than 15 characters   ${Vaildate15ChrErrMsg}   
-      #Vaildate the Organizationsame feilds  ${VaildateBlankSpacesOrgName}
-      #Organization name with Blankspaces  ${VaildateBlankSpacesErrMsg}
-      #Vaildate the Organizationsame feilds  ${VaildateEmptyOrgName}
-      #Organization name Left Empty  ${VaildateEmptyErrMsg}
-      #Vaildate the Organizationsame feilds  ${VaildateSpecialChrOrgName}
-      #Organization name with special characters  ${VaildateSpecialChrErrMsg}
-      Vaildate the Organization feilds  ${ORGANIZATION NAME}
-      #Vaildate the Edit Organization fields  ${VaildEditOrg}
-      #Vaildate the Edit Organization domain name fields  ${VaildEditOrgDomainName} 
-      #Vaildate the Organization1 feilds  ${VaildateAlreadyExistChrOrgName}  
-      #Organization name already exists  ${VaildateAlreadyExistErrMsg}
+Creates New Organization
+      Vaildate the Organization feilds    ${ORGANIZATION NAME}
+
 
 
 Addition of Random Numbers to Unique Names
@@ -215,41 +177,11 @@ Assign Teams for OrgAdmin
     Click Element    xpath=.//*[@id='teamname']/label[text()='${ORGANIZATION NAME}_Admins']
 
 
-#organization validation                                                           #organization start
-Organization name with more than 15 characters
-    [Arguments]    ${Vaildate15ChrErrMsg}     
-    Vaildate the Organization name feilds       ${Vaildate15ChrErrMsg}         
-
-Organization name with Blankspaces
-    [Arguments]    ${VaildateBlankSpacesErrMsg}
-    Vaildate the Organization name feilds           ${VaildateBlankSpacesErrMsg}
-
-Organization name Left Empty
-    [Arguments]    ${VaildateEmptyErrMsg}
-    Vaildate the Organization name feilds     ${VaildateEmptyErrMsg}
-
-Organization name with special characters 
-    [Arguments]    ${VaildateSpecialChrErrMsg}
-    Vaildate the Organization name feilds      ${VaildateSpecialChrErrMsg}
-
-#Organization name already exists  
-    [Arguments]    ${VaildateAlreadyExistErrMsg}
-    #Vaildate the Organization name feilds      ${VaildateAlreadyExistErrMsg} 
-
-#Vaildate the Organization name feilds
-    [Arguments]    ${ErrorMsg}
-    Element Should Contain    id=errmsg_orgname     ${ErrorMsg}
-
 Vaildate the Organization feilds
     [Arguments]    ${Orgname}
     Clicks on Settings
     Clicks on Organization image
     Validate Org same path
-
-#Vaildate the Organizationsame feilds
-    #[Arguments]    ${OrgName}
-    #Click Element    xpath=.//*[@id='setting_tree']/ul/li[2]/a
-    #Validate Org remaining path
 
 Validate Org same path
     Clicks on New button to Create New Organization
@@ -270,27 +202,19 @@ Validate Org remaining path
     #Clicks on Save button to save the Organization details 
     #Verfiy that EditedOrganization is created  ${Orgname}
 
-#Vaildate the Edit Organization domain name fields
-    [Arguments]    ${Domainname}
-    #Clicks on Update Button of OrganizationNew Created
-    #Enters New Organization Domain Name
-    #Clicks on Save button to save the Organization details 
-    #Verfiy that EditedOrganizationdomain is created  ${Domainname}
 
 Clicks on Settings      
-    Wait Until Element Is Visible      xpath=//a[contains(text(),'SETTINGS')]      1 seconds
-    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible    xpath=//a[contains(text(),'SETTINGS')]
-    Click Element    xpath=//a[contains(text(),'SETTINGS')]
-
-
+    Wait Until Element Is Visible      css=#settingsNew      1 seconds
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible    css=#settingsNew
+    Click Element    css=#settingsNew
 
 Clicks on Organization image
-    Click Element    xpath=//a[contains(text(),'Organization Setup')]
-    Click element    xpath=//a[contains(text(),'Organizations')]
+    Click Element    css=ul.list-group > li:first-child > a
+    Click element    css=ul.list-group > li:nth-of-type(2) > a
     
 Clicks on New button to Create New Organization
-    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       link=New
-    Click Element    link=New
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       css=#newOrg
+    Click Element    css=#newOrg
     
 Enters organization name
     [Arguments]    ${Orgname}
@@ -301,24 +225,9 @@ Enters organization domain name
     Sleep    1s
     Input Text     id=domainname      ${ORGANIZATION DOMAIN NAME}
 
-#Enters New Organization Domain Name
-    #Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is #Visible     id=domainname
-    #Input Text     id=domainname    ${VaildEditOrgDomainName}
-
 Clicks on Save button to save the Organization details
-    Click Element     xpath=.//*[@id='myForm']/div/div[3]/div/button                    #organization end
+    Click Element     css=div.btn-group.pull-right > button
 
-#Clicks on Update Button of Organization Created
-    #Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is #Visible       xpath=.//*[@id='envtable']/tbody/tr/td[text()="Relevance"]/../td[4]/div/a
-    #Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()="Relevance"]/../td[4]/div/a
-
-#Clicks on Update Button of OrganizationNew Created
-    #Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is #Visible       xpath=.//*[@id='envtable']/tbody/tr/td[text()="Relevance_Labs"]/../td[4]/div/a
-    #Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()="Relevance_Labs"]/../td[4]/div/a
-
-#Enters New Edit Organization Name
-    #Sleep    1s
-    #Input Text    id=orgname    ${VaildEditOrg}
 
 #Verfiy that EditedOrganization is created
     #[Arguments]    ${OrganizationMsg}
@@ -337,59 +246,8 @@ Clicks on Save button to save the Organization details
 Create New Environments
      Clicks on Settings
      Clicks on Environments Wrapper
-     #Vaildate the Environment feilds   ${Vaildate15ChrEnvName}        
-     #Environment name with more than 15 characters   ${Vaildate15ChrErrMsg}   
-     #Vaildate the Environmentname feilds  ${VaildateBlankSpacesEnvName}
-     #Environment name with Blankspaces  ${VaildateBlankSpacesErrMsg}
-     #Vaildate the Environmentname feilds  ${VaildateEmptyEnvName}
-     #Environment name Left Empty  ${VaildateEmptyErrMsg}
-     #Vaildate the Environmentname feilds  ${VaildateSpecialChrEnvName}
-     #Environment name with special characters  ${VaildateSpecialChrErrMsg}
-     #Vaildate the Environmentsame feilds  ${VaildateNoOrgEName}
-     #Environment name and not selecting Org  ${VaildateNoOrgErrMsg}
      Vaildate the Environmentname feilds  ${VaildEnvName1}
      Vaildate the Environmentname feilds  ${VaildEnvName2}
-     #Vaildate the Edit Environmentname fields  ${VaildEditEnvironment}
-     #Vaildate the Environmentname feilds  ${VaildateAlreadyExistChrEnvName}  
-     #Environment name already exists  ${VaildateAlreadyExistErrMsg}
-
-
-
-#Environment Validation                                                            #environment starts
-#Environment name with more than 15 characters   
-  #   [Arguments]    ${Vaildate15ChrErrMsg}
-  #   Vaildate the Environment namereg feilds      ${Vaildate15ChrErrMsg}
-
-#Environment name with Blankspaces  
- #    [Arguments]    ${VaildateBlankSpacesErrMsg}
- #    Vaildate the Environment namereg feilds      ${VaildateBlankSpacesErrMsg}
-
-#Environment name Left Empty  
- #    [Arguments]    ${VaildateEmptyErrMsg}
- #    Vaildate the Environment namereg feilds      ${VaildateEmptyErrMsg}
-    
-#Environment name with special characters  
- #    [Arguments]    ${Vaildate15ChrErrMsg}
- #    Vaildate the Environment namereg feilds      ${Vaildate15ChrErrMsg}
-   
-#Environment name already exists  
-     #[Arguments]    ${VaildateAlreadyExistErrMsg}
-     #Vaildate the Environment namereg feilds      ${VaildateAlreadyExistErrMsg}
-
-#Environment name and not selecting Org  
-#     [Arguments]    ${VaildateNoOrgErrMsg}
-#     Vaildate the Environment namesp feilds      ${VaildateNoOrgErrMsg}
-
-#Vaildate the Environment namesp feilds
- #    [Arguments]    ${ErrorMsg}
- #    Element Should Contain    id=errmsg_orgname     ${ErrorMsg}
- #    Clicks on Cancel Button
-
-
-#Vaildate the Environment namereg feilds
-#     [Arguments]    ${ErrorMsg}
-#     Element Should Contain    id=errmsg_environmentname     ${ErrorMsg}
-#     Clicks on Cancel Button
 
 Vaildate the Environmentname feilds
     [Arguments]    ${environmentname}
@@ -398,8 +256,6 @@ Vaildate the Environmentname feilds
 Vaildate the Environmentsame feilds
     [Arguments]    ${environmentname}
     Validate Env2 path
-
-
 
 Validate Env2 path
     Clicks on New button to create new Environment
@@ -475,23 +331,8 @@ Verfiy that EditedEnvironment is created
 
     
 Create New Business Group                                                        
-     #Vaildate the Business group feilds   ${Vaildate15ChrBGrpName}        
-     #Business group name with more than 15 characters   ${Vaildate15ChrErrMsg}   
-     #Vaildate the Business group1 feilds  ${VaildateBlankSpacesBGrpName}
-     #Business group name with Blankspaces  ${VaildateBlankSpacesErrMsg}
-     #Vaildate the Business group1 feilds  ${VaildateEmptyBGrpName}
-     #Business group name Left Empty  ${VaildateEmptyErrMsg}
-     #Vaildate the Business group1 feilds  ${VaildateSpecialChrBGrpName}
-     #Business group name with special characters  ${VaildateSpecialChrErrMsg}
-     #Vaildate the Business group2 feilds   ${VaildateNoOrgBName}
-     #Business group name with no org name selected   ${VaildateNoOrgBErrMsg}
-     #Vaildate the Business group1 feilds  ${VaildBGrpName1}
-     #Vaildate the Business group1 feilds  ${VaildBGrpName2}
-     #Vaildate the Edit Business Group fields  ${VaildEditBusinessGroup}
-     #Vaildate the Business group1 feilds  ${VaildateAlreadyExistChrBGrpName}  
-     #Business group name already exists  ${VaildateAlreadyExistErrMsg}    
-     Catalyst creates new business group1
-     Catalyst creates new business group2
+    Catalyst creates new business group1
+    Catalyst creates new business group2
 
 Catalyst creates new business group1    
     Clicks on Settings
@@ -511,37 +352,6 @@ Catalyst creates new business group2
  
 
 #Business Group Validation                                                 #business group start
-#Business Group name with more than 15 characters
-   # [Arguments]    ${Vaildate15ChrErrMsg}     
-   # Vaildate the Business Group name feilds       ${Vaildate15ChrErrMsg}         
-
-#Business Group name with Blankspaces
-   # [Arguments]    ${VaildateBlankSpacesErrMsg}
-    #Vaildate the Business Group name feilds           ${VaildateBlankSpacesErrMsg}
-
-#Business Group name Left Empty
-   # [Arguments]    ${VaildateEmptyErrMsg}
-   # Vaildate the Business Group name feilds     ${VaildateEmptyErrMsg}
-
-#Business Group name with special characters 
-   # [Arguments]    ${VaildateSpecialChrErrMsg}
-   # Vaildate the Business Group name feilds      ${VaildateSpecialChrErrMsg}
-
-#Business Group name already exists  
-    #[Arguments]    ${VaildateAlreadyExistErrMsg}
-    #Vaildate the Business Group name feilds      ${VaildateAlreadyExistErrMsg}
-    
-#Business group name with no org name selected
-   # [Arguments]    ${VaildateNoOrgBErrMsg}
-   # Vaildate the Business Group namenoorg feilds      ${VaildateNoOrgBErrMsg}
-
-#Vaildate the Business Group namenoorg feilds
-  #  [Arguments]    ${ErrorMsg}
-  #  Element Should Contain    id=errmsg_orgname     ${ErrorMsg}
-  
-# Vaildate the Business Group name feilds
- #   [Arguments]    ${ErrorMsg}
-  #  Element Should Contain    id=errmsg_productgroupname     ${ErrorMsg}
   
 Vaildate the Business Group feilds
     [Arguments]    ${productgroupname}
@@ -553,47 +363,19 @@ Vaildate the Business Group feilds
     Select organization for business group
     Clicks on Save button to save the Business group details
 
-Vaildate the Business Group2 feilds
-    [Arguments]    ${productgroupname}
-    Clicks on Business Groups menu
-    Validate Busgrp2 path
-
-Validate Busgrp2 path
-    Clicks on New button to create new Business Group
-    Enters new business group name    ${productgroupname}
-    Clicks on Save button to save the Business group details   
-
-Vaildate the Business Group1 feilds
-    [Arguments]    ${productgroupname}
-    Click Element    xpath=.//*[@id='setting_tree']/ul/li[3]/a
-    Validate Busgrp path
     
-#Validate Busgrp path
-    Clicks on New button to create new Business Group
-    Enters new business group name    ${productgroupname}
-    Select organization for business group
-    Clicks on Save button to save the Business group details   
-
-#Vaildate the Edit Business Group fields
- #   [Arguments]    ${ProductGroupName}
-  #  Clicks on Update Button of Business Group Created
-  #  Enters New Edit BusinessGroup Name
-  #  Clicks on Save button to save the Business group details 
-  #  Verfiy that Edited Business Group is created  ${ProductGroupName}
-
-
 Clicks on Organzatin Tree 
-    Click Element    xpath=.//*[@id='setting_tree']/ul/li/a[text()='Organization Setup']
+    Click Element    css=ul.list-group > li:first-child > a
     
 
 
 Clicks on Business Groups menu
-    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       xpath=//a[contains(text(),'Business Groups')]
-    Click Element    xpath=//a[contains(text(),'Business Groups')]
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       css=ul.list-group > li:nth-of-type(3) > a
+    Click Element    css=ul.list-group > li:nth-of-type(3) > a
 
 Clicks on New button to create new Business Group
-    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       link=New
-    Click Element    link=New
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       css=#newProd
+    Click Element    css=#newProd
 
 Enters new business group name1
    # [Arguments]     ${VaildBGrpName1}
@@ -609,15 +391,7 @@ Select organization for business group
     Select From List     id=orgname      ${ORGANIZATION NAME}
 
 Clicks on Save button to save the Business group details
-    Click Element    xpath=.//*[@id='myForm2']/div/div[3]/div/button   
-
-#Clicks on Update Button of Business Group Created
- #   Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible    xpath=.//*[@id='envtable']/tbody/tr/td[text()="EduSymantics"]/../td[3]/div/a
-    # Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()="EduSymantics"]/../td[3]/div/a
-
-#Enters New Edit BusinessGroup Name
- #   Wait Until Keyword Succeeds    1 minute     1 seconds    Wait Until Element Is Visible    id=productgroupname
-  #  Input Text    id=productgroupname    ${VaildEditBusinessGroup}
+    Click Element    css=div.btn-group.pull-right > button   
 
 
 #Verfiy that Edited Business Group is created
@@ -631,53 +405,12 @@ Clicks on Save button to save the Business group details
 
 
 Create New Projects                                                                  
-    # Vaildate the Project feilds   ${Vaildate15ChrProjName}        
-    # Project name with more than 15 characters   ${Vaildate15ChrErrMsg}   
-    # Vaildate the Project feilds  ${VaildateBlankSpacesProjName}
-    # Project name with Blankspaces  ${VaildateBlankSpacesErrMsg}
-    # Vaildate the Project feilds  ${VaildateEmptyProjName}
-    # Project name Left Empty  ${VaildateEmptyErrMsg}
-    # Vaildate the Project feilds  ${VaildateSpecialChrProjName}
-    # Project name with special characters  ${VaildateSpecialChrErrMsg}
-    # Validate the no org selected in Project  
-    # Organization,Projects not Selected  ${VaildNorgProErrMsg}
-    # Vaildate the No Teams Selected
-    # No Selection of Team in Project  ${VaildNoTeamErrMsg}
-     Vaildate the Project feilds   ${PROJECT NAME1}
-     Vaildate the Projectrev feilds   ${PROJECT NAME2} 
-    # Vaildate the Edit Project Name fields  ${VaildEditProject}
-    # Vaildate the Edit Project Description fields  ${VaildEditDescProject}
-     #Vaildate the Project feilds  ${VaildateAlreadyExistChrProjName}  
-     #Project name already exists  ${VaildateAlreadyExistErrMsg}
+     Creates project 1   ${PROJECT NAME1}
+     Creates project 2   ${PROJECT NAME2}
 
 
-#Project Validation                                                               #project start
-#Project name with more than 15 characters
-#    [Arguments]    ${Vaildate15ChrErrMsg}     
-#    Vaildate the Project name feilds       ${Vaildate15ChrErrMsg}         
-
-#Project name with Blankspaces
- #   [Arguments]    ${VaildateBlankSpacesErrMsg}
-  #  Vaildate the Project name feilds           ${VaildateBlankSpacesErrMsg}
-
-#Project name Left Empty
- #   [Arguments]    ${VaildateEmptyErrMsg}
-  #  Vaildate the Project name feilds     ${VaildateEmptyErrMsg}
-
-#Project name with special characters 
- #   [Arguments]    ${VaildateSpecialChrErrMsg}
-  #  Vaildate the Project name feilds      ${VaildateSpecialChrErrMsg}
-
-#Project name already exists  
-    #[Arguments]    ${VaildateAlreadyExistErrMsg}
-    #Vaildate the Project name feilds      ${VaildateAlreadyExistErrMsg} 
-
-#Vaildate the Project name feilds
- #   [Arguments]    ${ErrorMsg}
-  #  Element Should Contain    id=errmsg_projectname     ${ErrorMsg}
-   # Clicks on Cancel Button
-  
-Vaildate the Project feilds
+ 
+Creates project 1
     [Arguments]    ${projectname}
     Clicks on projects menu
     Clicks on New button to create new project
@@ -688,7 +421,7 @@ Vaildate the Project feilds
     #Assign Teams for Orgnaization in Projects
     Clicks on Save button to save the Project details
 
-Vaildate the Projectrev feilds
+Creates project 2
     [Arguments]    ${projectname}
     Clicks on projects menu
     Clicks on New button to create new project
@@ -698,56 +431,6 @@ Vaildate the Projectrev feilds
     #Select Business Groupn
     #Assign Teams for Orgnaization in Projects
     Clicks on Save button to save the Project details     
-
-#Vaildate the Edit Project Name fields
- #   [Arguments]    ${ProjectName}
- #   Clicks on Update Button of Project Created
- #   Enters New Edit Project Name
- #   Clicks on Save button to save the Project details 
- #   Verfiy that EditedProject is created  ${ProjectName}
-
-#Vaildate the Edit Project Description fields 
- #   [Arguments]    ${Description}
- #   Clicks on Update Button of ProjectNew Created
- #   Enters New Edit Project Description
- #   Clicks on Save button to save the Project details 
- #   Verify that EditedProjectDesc is created  ${Description}
-
-#Validate the no org selected in Project
-#    Clicks on New button to create new project
- #   Enters new Project name    ${projectname}
- #   Enters new Project Description
-    #Assign Teams for Orgnaization in Projects
-#    Clicks on Save button to save the Project details  
-
-#Vaildate the No Teams Selected
- #   Clicks on New button to create new project
- #   Enters new Project name    ${projectname}
- #   Enters new Project Description
- #   Select organization for project
- #   Clicks on Save button to save the Project details 
-
-#Organization,Projects not Selected
- #   [Arguments]    ${ErrMsg}
- #   Element Should Contain    id=errmsg_orgname    ${ErrMsg}
- #   Element Should Contain    id=errmsg_productgroupname    ${ErrMsg}
- #   Clicks on Cancel Button
-
-#No Selection of Team in Project
- #   [Arguments]    ${ErrMsg}
- #   Element Should Contain    id=errmsg_teamname    ${ErrMsg}
- #   Clicks on Cancel Button
-
-
-
-#Assign Teams for Orgnaization in Projects
-    #Click Element    xpath=.//*[@id='teamname']/label[text()='${ORGANIZATION NAME}_Admins']
-    #Click Element    xpath=.//*[@id='teamname']/label[text()='${ORGANIZATION NAME}_DEV']
-    #Click Element    xpath=.//*[@id='teamname']/label[text()='${ORGANIZATION NAME}_QA']
-    #Click Element    xpath=.//*[@id='teamname']/label[text()='${ORGANIZATION NAME}_DevOps']
-
-
-
 
 Clicks on projects menu
     Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       xpath=//a[contains(text(),'Projects')]
@@ -792,53 +475,14 @@ Clicks on Save button to save the Project details
     Click Element    xpath=.//*[@id='myForm3']/div/div[3]/div/button                     
 
 
-#Clicks on Update Button of Project Created
-#    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       xpath=.//*[@id='envtable']/tbody/tr/td[text()="Quality"]/../td[6]/div/a
- #   Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()="Quality"]/../td[6]/div/a
-
-#Clicks on Update Button of ProjectNew Created
-#    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       xpath=.//*[@id='envtable']/tbody/tr/td[text()="Primary_Edu"]/../td[6]/div/a
-#    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()="Primary_Edu"]/../td[6]/div/a
-
-
-#Enters New Edit Project Name
-#    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible    id=projectname
-#    Input Text    id=projectname    ${VaildEditProject}
-
-#Enters New Edit Project Description
-#    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible    id=description
-#    Input Text    id=description    ${VaildEditDescProject}
-
-
 #Verfiy that EditedProject is created
 #    [Arguments]    ${ProjectMsg}
 #    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       xpath=.//*[@id='envtable']/tbody/tr/td[text()="Primary_Edu"]
 #    Element Should Contain    xpath=.//*[@id='envtable']/tbody/tr/td[text()="Primary_Edu"]    ${ProjectMsg}       
 
-#Verify that EditedProjectDesc is created
-#    [Arguments]    ${ProjectEditDescMsg}
-#    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       xpath=.//*[@id='envtable']/tbody/tr/td[text()="RelevanceLab DevOps Product"]
-#    Element Should Contain    xpath=.//*[@id='envtable']/tbody/tr/td[text()="RelevanceLab DevOps Product"]    ${ProjectEditDescMsg}    
-
                                                                              #project ends
 Catalyst Logout
     Clicks on LogOut link
-
-#Browser is opened to login catalyst
-##    Open Browser    ${ENVIRONMENT SERVER}    ${BROWSER TYPE}
-#    Open Browser in Grid Node    ${ENVIRONMENT SERVER}
-#    Set Selenium Speed    ${DELAY}
-#    Set Selenium Timeout    ${DELAY SECONDS}
-#    Maximize Browser Window
-
-
-#Enters catalyst User Name
-    #Input Text     xpath=//input[@name='username']      ${VALID USER}
-#Enters catalyst password
-    #Input Text     xpath=//input[@name='pass']      ${VALID PASSWORD}
-#Clicks on Login button
-    #Click Element    xpath=.//*[@id='login-form']/footer/button
-
 
 Clicks on LogOut link
     Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       xpath=.//*[@id='logout']/span/a/i

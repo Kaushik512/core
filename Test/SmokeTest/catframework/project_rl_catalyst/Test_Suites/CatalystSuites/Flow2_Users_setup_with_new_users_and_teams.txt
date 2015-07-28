@@ -11,28 +11,21 @@ Resource           ${CATALYST ACTION}/Organization_Setup_Action_Steps.txt
 
 
 *** Test Cases ***
-Catalyst new users setup
+Catalyst New Users Setup
     [Tags]       Sanity               Smoke
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
-    Catalyst creates new org admin
+    Catalyst Org Admin creates new org user
     Catalyst creates new org designer
-    Catalyst creates new org consumer
-        #-Sleep    1s
-    #-Addition of Random Numbers to Unique Names
-    #-Test Validation of Creation of New users
-    #-Devops Config Management New Users
-    #Devops Edit Users Setup               
+    Catalyst creates new org consumer    
     Catalyst Logout                      
     [Teardown]     Close Browser
 
-Catalyst new teams setup
+Catalyst New Teams Setup
     [Tags]       Sanity               Smoke
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
-    #-Test Validation of Creation of New Teams
-    Catalyst creates New Teams  
-    #-Devops Edit Teams Setup             
+    Catalyst Creates New Teams             
     Catalyst Logout                      
     [Teardown]     Close Browser
 

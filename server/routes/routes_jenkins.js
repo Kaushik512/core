@@ -3,8 +3,27 @@ var configmgmtDao = require('../model/d4dmasters/configmgmt');
 var errorResponses = require('./error_responses');
 var logger = require('../lib/logger')(module);
 var url = require('url');
+var fs = require('fs');
+var currentDirectory = __dirname;
 
 module.exports.setRoutes = function(app, verificationFunc) {
+    app.get('/jenkins/version', function(req, res) {
+        var jenkinVversion;
+        try {
+            jenkinVversion = fs.readFileSync(currentDirectory + '/../../version.json', {
+                'encoding': 'utf8'
+            });
+
+            jenkinVversion = JSON.parse(jenkinVversion);
+
+        } catch (err) {
+            logger.error(err);
+            res.send({});
+            return;
+        }
+        res.send(jenkinVversion);
+        return;
+    });
     app.all('/jenkins/*', verificationFunc);
 
     app.get('/jenkins/', function(req, res) {
@@ -17,7 +36,6 @@ module.exports.setRoutes = function(app, verificationFunc) {
             logger.debug(jenkinsList);
             res.send(jenkinsList);
         });
-
     });
 
     app.all('/jenkins/:jenkinsId/*', function(req, res, next) {
@@ -124,6 +142,27 @@ module.exports.setRoutes = function(app, verificationFunc) {
             password: jenkinsData.jenkinspassword
         });
         jenkins.getJobsBuildNumber(req.params.jobName, function(err, jobOutput) {
+            if (err) {
+                logger.error('jenkins jobs fetch error', err);
+                res.send(500, errorResponses.jenkins.serverError);
+                return;
+            }
+            res.send(jobOutput);
+        });
+
+
+    });
+
+    app.get('/jenkins/:jenkinsId/job/:jobName/update/parameter', function(req, res) {
+        var jenkinsData = req.CATALYST.jenkins;
+
+        var jenkins = new Jenkins({
+            url: jenkinsData.jenkinsurl,
+            username: jenkinsData.jenkinsusername,
+            password: jenkinsData.jenkinspassword
+        });
+
+        jenkins.updateJob(req.params.jobName, function(err, jobOutput) {
             if (err) {
                 logger.error('jenkins jobs fetch error', err);
                 res.send(500, errorResponses.jenkins.serverError);

@@ -9,8 +9,9 @@ Resource           catalyst.txt
 
 
 *** Variables ***
-${BROWSER TYPE}                     chrome              #firefox                     #internetexplorer               #phantomjs
-${ENVIRONMENT SERVER}               http://10.0.1.206:3002/public/login.html
+${BROWSER TYPE}                   firefox                                                                     #internetexplorer               #phantomjs
+${ENVIRONMENT SERVER}              http://d4d.relevancelab.com:3001/public/login.html
+
 
 
 
@@ -19,7 +20,7 @@ ${ENVIRONMENT SERVER}               http://10.0.1.206:3002/public/login.html
 ${ENV}                 QA.txt
 ${VALID USER}             superadmin
 ${VALID PASSWORD}         superadmin@123
-${ORGANIZATION NAME}         Smoke_Rel_Org
+${ORGANIZATION NAME}         Smoke_Rel_Org1
 ${ORGANIZATION DOMAIN NAME}          www.relevancelab.com
 ${ORG ADMIN USER}               smoke_admin
 ${ORG ADMIN PASSWORD}           smoke_admin
@@ -61,17 +62,17 @@ ${SUITS}                stopped
 ${UserName}             root
 
 
-${USERPEMFILE}              ${ROOTPATH}//Chef//mycatqa.pem
-${VALIDATORPEMFILE}      ${ROOTPATH}//Chef//cattest-validator.pem
-${KNIFERBFILE}                ${ROOTPATH}//Chef//knife.rb
-${CATALYSTPEM}                ${ROOTPATH}//Chef//catalyst.pem
-${CAT_INSTANCES}              ${ROOTPATH}//Chef//cat_instances.pem
+${USERPEMFILE}              ${ROOTPATH}\\Chef\\mycatqa.pem
+${VALIDATORPEMFILE}      ${ROOTPATH}\\Chef\\cattest-validator.pem
+${KNIFERBFILE}                ${ROOTPATH}\\Chef\\knife.rb
+${CATALYSTPEM}                ${ROOTPATH}\\Chef\\catalyst.pem
+${CAT_INSTANCES}              ${ROOTPATH}\\Chef\\cat_instances.pem
 
-${CENTOSIMG}                  ${ROOTPATH}//Images//centos.jpg
-${UBUNTUIMG}                  ${ROOTPATH}//Images//ubuntuu.jpg
-${APPICON}                    ${ROOTPATH}//Images//rel.jpg    
-${TEMPLTYPEICON}              ${ROOTPATH}//Images//index.jpg           
-${APACHEIMG}                  ${ROOTPATH}//Images//apache.jpg
+${CENTOSIMG}                  ${ROOTPATH}\\Images\\centos.jpg
+${UBUNTUIMG}                  ${ROOTPATH}\\Images\\ubuntuu.jpg
+${APPICON}                    ${ROOTPATH}\\Images\\rel.jpg    
+${TEMPLTYPEICON}              ${ROOTPATH}\\Images\\index.jpg           
+${APACHEIMG}                  ${ROOTPATH}\\Images\\apache.jpg
 
 ${RECIPE}                  recipe[apt]     		
 ${RECIPE1}                 recipe[apt]
@@ -83,19 +84,20 @@ ${BLUEPRINT NAME}          ApacheNew
 ${BLUEPRINT NAME1}         UbuntuApac
 ${NEW BLUEPRINT NAME}      ApacheNew-Edited
 ${NEW UBUNTU BLUPRNT}      UbuntuNew-Edited
-${APPNAME}                 CatalystCop                
-${APP URL}                 http://www.google.com
+${APPNAME}                 Catalyst              
+${APP URL}                 http://www.relevancelab.com
 ${COOKBOOK NAME}            mongodb
 ${TERMINAL USERNAME}       root
 ${TASK TYPE}               Jenkins
 ${TASK TYPE1}              Chef 
-${CHEF TASKNAME}           ChefTask
+${CHEF TASKNAME}           apache2deploy
 ${SERVICE NAME}             MongoDB		
 ${TEMP NME}                 Apac
 ${REGION NAME}           US West (Oregon) | us-west-2
-${VPC NAME}              vpc-f432d791 (10.0.0.0/16) Prod-Catalyst-VPC
-${SUBNET NAME}           subnet-3b1c1e4f (us-west-2a) public_cat_subnet
-${SECRTY GRP1}                sg-0e8b496a | ICMP
+${VPC NAME}              vpc-b1f3ecd3 (172.31.0.0/16) Default
+${SUBNET NAME}           subnet-aed68ce8 (us-west-2c)
+${Key_Pair}               cat_instances
+${SECRTY GRP1}                sg-c00ee1a5 | all_open
 ${SECRTY GRP2}                sg-c06faca4 | HTTP&S_SG
 ${SECRTY GRP3}                sg-038f4d67 | SSH_SG
 ${SECRTY GRP4}                sg-ab6faccf | Tomcat
@@ -125,24 +127,25 @@ ${random}                  adarsh
 ${ADD}                     apache2              #tomcat-all
 ${ACTBOOT1}                 Pending
 ${ACTBOOT2}                 Success
-${IP Centos}                 52.26.250.34
+${IP Centos}                 52.24.178.71
 ${AUTHN}                    Pem File 
 ${NAME}                     Bootstrap
 ${DUP MSG}                  An Instance with the same IP already exists.
 ${NAME1}                    Chef-Client-Run
+${NAME2}                    SSH-Shell
 ${TEAM1}                    Rel_Designer
 ${TEAM DESCRPN1}            Designer of Catalyst
 ${TEAM2}                    Rel_Consumer
 ${TEAM DESCRPN2}            Consumer of Catalyst
-${Org_Admin1}               smoke_orgadmin1
+${Org_Admin1}               smoke_orgadmin2
 ${Org_ Admin1_EMAIL_ID}     admin@gmail.com
 ${Orgadmin1_PASSWD}         password1
 ${Orgadmin1_CONFPASSWD}     password1
-${Org_Designer}             smoke_orgdes
+${Org_Designer}             smoke_orgdes1
 ${Org_Design_EMAIL_ID}      designer@gmail.com
 ${Orgdesigner_PASSWD}       password1
 ${Orgdesigner_CONFPASSWD}   password1
-${Org_Consumer}             smoke_orgcons
+${Org_Consumer}             smoke_orgcons1
 ${Org_consumer_EMAIL_ID}    consumer@gmail.com
 ${Orgconsumer_PASSWD}       password1
 ${Orgconsumer_CONFPASSWD}   password1
@@ -155,17 +158,19 @@ ${NO MATCH}                 No matches found
 ${ENVNAME}                  QA
 ${NAMEOFINSTANCE}           Instance_Centos
 
-${IP Ubuntu}                52.26.196.140		
-${IP UBUNTUSERNAME}         ubuntu		
+${IP Ubuntu}                54.68.147.50		
+${IP UBUNTUSERNAME}         ubuntu
 ${EDIT_UBUNTU_INSTANCE_NAME}     Instance_Ubuntu
 
 ${CENTOS NAME}              Instance_Centos		
 ${UBUNTU NAME}              Instance_Ubuntu		
-${IP ADD UBUNTU}             52.26.225.223		
-${IP ADD CENTOS}             52.11.157.179 		
+${IP ADD UBUNTU}             54.68.147.50		
+${IP ADD CENTOS}             52.24.178.71 		
 ${Proj1}                      Catalyst		
 ${Proj2}                      Primary_Edu		
 ${CookBkName}                apt
+${UbuntuUser}                 ubuntu
+${RUN}                       running
 
 ${DESIGNER_NAME}            Designer01
 ${DESIGNER_PASWD}           Designer01
@@ -188,7 +193,8 @@ ${IMAGE ID1}                   ami-b6bdde86
 ${IMAGE ID2}                   ami-3d50120d
 ${IMAGE ID3}                   ami-21732111
 ${USER}                        superadmin
-${COOKBOOK NAME1}              apache2     #service_apache
+${COOKBOOK NAME1}              apt
+${COOKBOOK NAME2}              apache2
 ${SERVICE NAME1}               ApacheServ
 ${ValidEditVMImage}            Windows 2008
 
@@ -351,6 +357,9 @@ ${EDIT DESCRIPTION}               Builds and Deployment
 ${Vaildate15ChrTeamName}          ScholllasticTeameOrganizatn
 ${VaildateBlankSpacesTeamName}    Schola Team 
 ${VaildateSpecialChrTeamName}     Sch#21$$%#@
+
+
+${VPC}                        vpc-b1f3ecd3 (172.31.0.0/16) Default
 
 
 ${VaildEmptyTeamNameErrMsg}           Required 
