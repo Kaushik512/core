@@ -1249,11 +1249,6 @@ $(document).ready(function() {
                 $.get('/jenkins/' + taskData.jenkinsServerId + '/job/' + taskData.jobName + '/lastBuild', function(data) {
                     //alert(JSON.stringify(taskData));
                     var url = taskData.jobResultURL;
-
-                    if (url) {
-                        url = url.replace('$buildNumber', data.number);
-
-                    }
                     taskData.jobResultURL = url;
                     $.post('../tasks/' + urlParams.taskId + '/update', reqBody, function(data) {
                         console.log(data);
@@ -1287,12 +1282,8 @@ $(document).ready(function() {
                 $.get('/jenkins/' + taskData.jenkinsServerId + '/job/' + taskData.jobName + '/lastBuild', function(data) {
                     var url = taskData.jobResultURL;
                     
-                    /*if (url) {
-                        url = url.replace('$buildNumber', data.number);
-                        
-                    }*/
-                    
-                    taskData.jobResultURL = url;
+                    taskData.jobResultURLPattern = taskData.jobResultURL;
+                    //alert(taskData.jobResultURLPattern);
                     var reqBody = {
                         taskData: taskData
                     };
