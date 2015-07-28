@@ -1204,7 +1204,8 @@ function devCall() {
             //var dataTable = $('#tableinstanceview').DataTable()
             // TEMP Hack for the multiple cards issue.
             // Import also needs to be fixed as it inserts 2 records in the db..
-
+            var menuAppTaskLI = '';
+            var menuTaskListLI = '';
             var cardTemplate = {
                 getItem: function() {
                     return '<div class="item"></div>';
@@ -1250,16 +1251,51 @@ function devCall() {
                     if (!name) {
                         name = data.blueprintData.blueprintName;
                     }
-                    return '<span class="cardHeadingTextoverflow" rel="tooltip" data-placement="top" data-original-title="' + name + '">' + name + '</span>' + '<a type="reset" href="#modalforInstanceEdit" data-backdrop="false" data-toggle="modal" class="glyphicon glyphicon-pencil editInstanceNameBtn" style="cursor:pointer;"></a></span>';
+                    return '<span class="cardHeadingTextoverflow" rel="tooltip" data-placement="top" data-original-title="' + name + '">' + name + '</span>' + '<a type="reset" href="#modalforInstanceEdit" data-backdrop="false" data-toggle="modal" class="glyphicon glyphicon-pencil editInstanceNameBtn glyphiconNew" style="cursor:pointer;"></a></span>';
                 },
                 // getSpanHeadingRight: function(data) {
                 //     return '<span style="float:left;margin-top:4px;margin-left:8px;"><a rel="tooltip" class="moreInfo" href="javascript:void(0)" data-instanceId="' + data._id + '" data-placement="top" data-original-title="MoreInfo"></a></span>';
                 // },
                 getSpanHeadingRight: function(data) {
                     //return '<span style="float:left;margin-top:4px;margin-left:8px;"><a rel="tooltip" class="moreInfo" href="javascript:void(0)" data-instanceId="' + data._id + '" data-placement="top" data-original-title="MoreInfo"></a></span>';
-                    // <div class="menu1" style="display: none;"><span style="color: rgb(44, 55, 66); font-weight: bold; padding: 10px; font-size: 12px;">App Links</span><ul style="padding-left: 32px;"><li style="color: rgb(44, 55, 66);"><a href="javascript:voi(0)" style="font-size: 11px;">App Perf</a></li><li style="color: rgb(44, 55, 66);"><a href="javascript:voi(0)" style="font-size: 11px;">App Logs</a></li style="color: rgb(44, 55, 66);"></ul><span style="color: rgb(44, 55, 66); font-weight: bold; padding: 10px; font-size: 12px;">Task Links</span><ul style="padding-left: 32px;"><li style="color: rgb(44, 55, 66);"><a href="javascript:voi(0)" style="font-size: 11px;">Deploy Task</a></li><li style="color: rgb(44, 55, 66);"><a href="javascript:voi(0)" style="font-size: 11px;">Build Task</a></li style="color: rgb(44, 55, 66);"></ul></div>
-                    // return '<div id="showmenuAppTask"><a class="btn1"  style="background-color: #ffffff;border-color:#40baf1; background-repeat: no-repeat; float: left; border-radius: 50%; height: 26px; width: 26px; margin-left: 10px; margin-top: 4px;"><i class="fa fa-ellipsis-h" style="color:#40baf1 ! important;font-size: 16px;margin-top: 3px;"></i></a></div>';
-                    return '<div id="showmenuAppTask"><a class="btn1"  style="background-color: #ffffff;border-color:#40baf1; background-repeat: no-repeat; float: left; border-radius: 50%; height: 26px; width: 26px; margin-left: 10px; margin-top: 4px;"><i class="fa fa-ellipsis-h" style="color:#40baf1 ! important;font-size: 16px;margin-top: 3px;"></i></a></div><div class="menuAppTask" style="display: none;"><span style="color: rgb(44, 55, 66); font-weight: bold; padding: 10px; font-size: 12px;">App Links</span><ul style="padding-left: 32px;"><li style="color: rgb(44, 55, 66);"><a href="javascript:voi(0)" style="font-size: 11px;">App Perf</a></li><li style="color: rgb(44, 55, 66);"><a href="javascript:voi(0)" style="font-size: 11px;">App Logs</a></li style="color: rgb(44, 55, 66);"></ul><span style="color: rgb(44, 55, 66); font-weight: bold; padding: 10px; font-size: 12px;">Task Links</span><ul style="padding-left: 32px;"><li style="color: rgb(44, 55, 66);"><a href="javascript:voi(0)" style="font-size: 11px;">Deploy Task</a></li><li style="color: rgb(44, 55, 66);"><a href="javascript:voi(0)" style="font-size: 11px;">Build Task</a></li style="color: rgb(44, 55, 66);"></ul></div>';
+                    return '<div class="showmenuAppTask"><a class="btn1 showmenuAppTaskAnchor"><i class="fa fa-ellipsis-h showmenuAppTaskAnchorI"></i></a></div>';
+                    //return '<div class="showmenuAppTask"><a class="btn1 showmenuAppTaskAnchor"><i class="fa fa-ellipsis-h showmenuAppTaskAnchorI"></i></a></div><div class="menuAppTask" style="display: none;"><span class="menuAppTaskSpan">App Links</span><ul class="paddingleft32"><li><a href="javascript:voi(0)" class="fontsize11">App Perf</a></li><li><a href="javascript:voi(0)" class="fontsize11">App Logs</a></li></ul><span class="menuAppTaskSpan">Task Links</span><ul class="paddingleft32"><li><a href="javascript:voi(0)" class="fontsize11">Deploy Task</a></li><li><a href="javascript:voi(0)" class="fontsize11">Build Task</a></li></ul></div>';
+                },
+                getmenuAppTask: function(data){
+                    var menuAppTaskLI1 = '';
+                    if (data.appUrls && data.appUrls.length) {
+                        for (var k = 0; k < data.appUrls.length; k++) {
+                            // if (k == 2) {
+                            //     break;
+                            // }
+                            var url = data.appUrls[k].url;
+                            if (data.appUrls[k].url){
+                                 url = url.replace('$host', data.instanceIP);
+                            }
+                           var tempApp = "<li><a style='font-size:10px;' data-appUrlId='" + data.appUrls[k]._id + "' class='app-url' title='" + url + "' href='" + url + "'' target='_blank' >" + data.appUrls[k].name + "</a></li>";
+                            menuAppTaskLI = menuAppTaskLI + tempApp;
+                        }
+                    }
+                    $rowContainter.append('<td>' + menuAppTaskLI + '</td>');
+                    
+                    if (data.taskIds && data.taskIds.length) {
+                        
+                        $.post('../tasks', {
+                            taskIds: data.taskIds
+                        }, function(tasks) {
+                            var $ul = $('.domain-roles-caption[data-instanceId="' + data._id + '"]').find('.instanceTaskListUL');
+                            
+                            for (var ll = 0; ll < tasks.length; ll++) {
+                                var $taskLi = $("<li><a style='font-size:10px;' href='javascript:void(0)' data-taskId='"+tasks[ll]._id+"'>" + tasks[ll].name + "</a></li>");
+                                $taskLi.find('a').click(function(e){
+                                    var taskId = $(this).attr('data-taskId');
+                                    $('a[data-executeTaskId="' + taskId + '"]').click();
+                                });
+                                $ul.append($taskLi);
+                            }
+                        });
+                    }                    
+                    return '<div class="menuAppTask" style="display: none;"><span class="menuAppLinkSpan">App Links</span><ul class="paddingleft32">'+ menuAppTaskLI +'</ul><span class="menuTaskSpan">Task Links</span><ul class="paddingleft32 instanceTaskListUL"></ul></div>';
                 },
                 getDomainRolesHeading: function(data) {
                     return '<div class="domain-roles-heading">' + this.getSpanHeadingLeft(data) + this.getSpanHeadingMiddle(data) + this.getOS(data) + '</div>';
@@ -1329,10 +1365,7 @@ function devCall() {
                     return '<div style="height:30px;width:152px;" class="instanceActionBtnCtr" data-instanceId="' + data._id + '"></div>';
                 }
             }
-              $('#showmenuAppTask').click(function() {
-                alert("I am here");
-                  $('.menuAppTask').toggle("click");
-              });
+             
             if (data && data._id) { // instanceId
                 var alreadyAddedInCarousel = $(".carousel-inner").find("div[data-instanceid='" + data._id + "']").length;
                 if (alreadyAddedInCarousel)
@@ -1353,7 +1386,7 @@ function devCall() {
                 $divinstancescardview.append($item);
             } else {
                 $item = $($carouselItemContainers.get($carouselItemContainers.length - 1));
-                $instancesList = $item.find('ul');
+                $instancesList = $item.find('.instancesList');
                 /*if ($instancesList.children().length === 5) {
 
                   $item = $(cardTemplate.getItem());
@@ -1368,9 +1401,9 @@ function devCall() {
 
             var $container = $(cardTemplate.getContainer(data));
 
-            var $card = $(cardTemplate.getCard(data));
+            // var $card = $(cardTemplate.getCard(data));
 
-            var $front = $(cardTemplate.getFront(data));
+            // var $front = $(cardTemplate.getFront(data));
 
             var $div = $(cardTemplate.getDomainRoles(data));
 
@@ -1499,72 +1532,65 @@ function devCall() {
             $rowContainter.append($('<td></td>').append($tableRunlistDiv));
             $rowContainter.append($tableInstanceStatusIndicator);
 
-            var temp = '';
-            if (data.appUrls && data.appUrls.length) {
-                for (var k = 0; k < data.appUrls.length; k++) {
-                    if (k == 2) {
-                        break;
-                    }
-                    var url = data.appUrls[k].url;
-                    if (data.appUrls[k].url)
-                        url = url.replace('$host', data.instanceIP);
-                    var $anchor = "<span class='marginForURL'><a style='font-size:10px;' data-appUrlId='" + data.appUrls[k]._id + "' class='app-url' title='" + url + "' href='" + url + "'' target='_blank' >" + data.appUrls[k].name + "</a></span>";
-                    $divComponentListContainer.append($anchor);
-                    temp = temp + ' ' + $anchor;
-                }
-            }
+            //App URL and Task.
+            // var temp = '';
+            // if (data.appUrls && data.appUrls.length) {
+            //     for (var k = 0; k < data.appUrls.length; k++) {
+            //         if (k == 2) {
+            //             break;
+            //         }
+            //         var url = data.appUrls[k].url;
+            //         if (data.appUrls[k].url)
+            //             url = url.replace('$host', data.instanceIP);
+            //         var $anchor = "<span class='marginForURL'><a style='font-size:10px;' data-appUrlId='" + data.appUrls[k]._id + "' class='app-url' title='" + url + "' href='" + url + "'' target='_blank' >" + data.appUrls[k].name + "</a></span>";
+            //         $divComponentListContainer.append($anchor);
+            //         temp = temp + ' ' + $anchor;
+            //     }
+            // }
+            // if (data.taskIds && data.taskIds.length) {
+            //     $.post('../tasks', {
+            //         taskIds: data.taskIds
+            //     }, function(tasks) {
+            //         var str = '';
+            //         for (var ll = 0; ll < tasks.length; ll++) {
+            //             if (ll == 2) {
+            //                 break;
+            //             }
+            //             var $taskIcon = $("<div class='tasksBlock'><img rel='tooltip' data-taskid='" + tasks[ll]._id + "' class='taskCardIMG' data-original-title='" + tasks[ll].name + "'  alt='task' style='cursor:pointer' src='img/tasks.png'/><div class='tasksLinks hidden'><a rel='tooltip' data-placement='top' data-original-title='Execute' data-toggle='modal' href='javascript:void(0)'' class='tableactionbutton taskLinkExecute'><img style='width:22px;' src='img/Execute.png' alt='execute'/></a><a style='margin-left:3px;' rel='tooltip' data-placement='top' data-original-title='History' data-toggle='modal' href='javascript:void(0)' class='tableactionbutton taskLinkHistory'><img style='width:22px' src='img/History.png' alt='History'/></a></div></div>");
+            //             //for showing the hover
 
-            if (data.taskIds && data.taskIds.length) {
-                $.post('../tasks', {
-                    taskIds: data.taskIds
-                }, function(tasks) {
-                    var str = '';
-                    for (var ll = 0; ll < tasks.length; ll++) {
-                        if (ll == 2) {
-                            break;
-                        }
-                        var $taskIcon = $("<div class='tasksBlock'><img rel='tooltip' data-taskid='" + tasks[ll]._id + "' class='taskCardIMG' data-original-title='" + tasks[ll].name + "'  alt='task' style='cursor:pointer' src='img/tasks.png'/><div class='tasksLinks hidden'><a rel='tooltip' data-placement='top' data-original-title='Execute' data-toggle='modal' href='javascript:void(0)'' class='tableactionbutton taskLinkExecute'><img style='width:22px;' src='img/Execute.png' alt='execute'/></a><a style='margin-left:3px;' rel='tooltip' data-placement='top' data-original-title='History' data-toggle='modal' href='javascript:void(0)' class='tableactionbutton taskLinkHistory'><img style='width:22px' src='img/History.png' alt='History'/></a></div></div>");
-                        //for showing the hover
+            //             if (ll == 1) {
+            //                 $taskIcon.find('img').attr('data-placement', 'bottom');
+            //             }
 
-                        if (ll == 1) {
-                            $taskIcon.find('img').attr('data-placement', 'bottom');
-                        }
+            //             //click for tasks
+            //             (function(taskId) {
+            //                 $taskIcon.attr('data-taskCardIconId', taskId).hover(function(e) {
+            //                     $(this).find('.tasksLinks').removeClass('hidden');
+            //                     //$('a[data-taskId="' + taskId + '"]').click();
 
-                        //click for tasks
-                        (function(taskId) {
-                            $taskIcon.attr('data-taskCardIconId', taskId).hover(function(e) {
-                                $(this).find('.tasksLinks').removeClass('hidden');
-                                //$('a[data-taskId="' + taskId + '"]').click();
+            //                 }, function() {
+            //                     $(this).find('.tasksLinks').addClass('hidden');
 
-                            }, function() {
-                                $(this).find('.tasksLinks').addClass('hidden');
+            //                 });
+            //                 $taskIcon.find('.taskLinkExecute').click(function(e) {
+            //                     $('a[data-executeTaskId="' + taskId + '"]').click();
+            //                 });
+            //                 $taskIcon.find('.taskLinkHistory').click(function(e) {
+            //                     $('a[data-historyTaskId="' + taskId + '"]').click();
+            //                 });
+            //             })(tasks[ll]._id);
+            //             $taskIcon.find('img').tooltip();
+            //             $taskIcon.find('a').tooltip();
+            //             $divComponentListContainer.append($taskIcon, '<br/><br/>');
+            //         }
+            //     });
+            // }
 
-                            });
-                            $taskIcon.find('.taskLinkExecute').click(function(e) {
-                                $('a[data-executeTaskId="' + taskId + '"]').click();
-                            });
-                            $taskIcon.find('.taskLinkHistory').click(function(e) {
-                                $('a[data-historyTaskId="' + taskId + '"]').click();
-                            });
-                        })(tasks[ll]._id);
-                        $taskIcon.find('img').tooltip();
-                        $taskIcon.find('a').tooltip();
-                        $divComponentListContainer.append($taskIcon, '<br/><br/>');
-                    }
-                });
-            }
+           
+            
 
-            //for task icon on card
-            if (data.taskIds && data.taskIds.length) {
-                for (var ll = 0; ll < data.taskIds.length; ll++) {
-
-                }
-
-
-
-            }
-
-            $rowContainter.append('<td>' + temp + '</td>');
+            // $rowContainter.append('<td>' + temp + '</td>');
 
             $rowContainter.append('<td><a class="tableMoreInfo moreInfo" data-instanceId="' + data._id + '" href="javascript:void(0)" rel="tooltip" data-placement="top" data-original-title="MoreInfo"></a></td>');
 
@@ -1788,47 +1814,53 @@ function devCall() {
             // $divActionBtnContainer.append($startStopToggler);
 
             //  $divActionBtnContainer.append(cardTemplate.getSpanHeadingRight(data));
-            var $back = $('<div></div>').addClass('back card-backflip');
-            var $backRunlistContainer = $('<div></div>').addClass('cardBackRunlistContaner');
+            // var $back = $('<div></div>').addClass('back card-backflip');
+            // var $backRunlistContainer = $('<div></div>').addClass('cardBackRunlistContaner');
 
-            var $backdiv = $('<span></span>').addClass('card-backflip-margin');
-            var $backdiva = $('<a style="color:#333;"></a>');
-            var $backdivai = $('<i></i>').addClass('fa fa-lg fa-fw fa-book txt-color-blue');
+            // var $backdiv = $('<span></span>').addClass('card-backflip-margin');
+            // var $backdiva = $('<a style="color:#333;"></a>');
+            // var $backdivai = $('<i></i>').addClass('fa fa-lg fa-fw fa-book txt-color-blue');
 
-            var $backdivaspan = $('<span style="font-size:12px;font-family:Open sans;padding-left:5px;color:#333"></span>').addClass('menu-item-parent').html('Runlists');
-            var $backhr = $('<hr>');
-            $backdiva.append($backdivai);
-            $backdiva.append($backdivaspan);
-            $backdiv.append($backdiva);
+            // var $backdivaspan = $('<span style="font-size:12px;font-family:Open sans;padding-left:5px;color:#333"></span>').addClass('menu-item-parent').html('Runlists');
+            // var $backhr = $('<hr>');
+            // $backdiva.append($backdivai);
+            // $backdiva.append($backdivaspan);
+            // $backdiv.append($backdiva);
 
-            $back.append($backdiv);
+            // $back.append($backdiv);
 
-            for (var j = 0; j < data.runlist.length; j++) {
-                var $divComponentItem;
+            // for (var j = 0; j < data.runlist.length; j++) {
+            //     var $divComponentItem;
 
-                $divComponentItem = $('<span title="' + data.runlist[j] + '" style="margin-top:8px;overflow:hidden;text-overflow:ellipsis;width:130px;color:#3a87ad"></span>').addClass('instance-details-item').append(data.runlist[j]);
-                $backRunlistContainer.append($divComponentItem);
-            }
+            //     $divComponentItem = $('<span title="' + data.runlist[j] + '" style="margin-top:8px;overflow:hidden;text-overflow:ellipsis;width:130px;color:#3a87ad"></span>').addClass('instance-details-item').append(data.runlist[j]);
+            //     $backRunlistContainer.append($divComponentItem);
+            // }
 
-            $back.append($backRunlistContainer);
-            $backdiv.append($backhr);
+            // $back.append($backRunlistContainer);
+            // $backdiv.append($backhr);
 
 
-            var $flipbackdivaspanhr = $('<hr>');
-            $back.append($flipbackdivaspanhr);
-            var $flipbackdivaspan = $('<span style="width:160px;text-align:center;display:block;margin-top:8px"></span>').append($('<a style="color:#333"></a>').attr('href', 'javascript:void(0)').append("Go Back"));
-            $flipbackdivaspan.click(function(e) {
-                $(this).parents('.flip-toggle').toggleClass('flip');
-            });
-            $back.append($flipbackdivaspan);
+            // var $flipbackdivaspanhr = $('<hr>');
+            // $back.append($flipbackdivaspanhr);
+            // var $flipbackdivaspan = $('<span style="width:160px;text-align:center;display:block;margin-top:8px"></span>').append($('<a style="color:#333"></a>').attr('href', 'javascript:void(0)').append("Go Back"));
+            // $flipbackdivaspan.click(function(e) {
+            //     $(this).parents('.flip-toggle').toggleClass('flip');
+            // });
+            // $back.append($flipbackdivaspan);
             var $tableActionBtnContainer = $divActionBtnContainer.clone();
 
             $divDomainRolesCaption.append($divActionBtnContainer);
-            $front.append($div);
-            $card.append([$front, $back]);
+
+            //Add Showmenu div for Toggle
+            $divDomainRolesCaption.append(cardTemplate.getmenuAppTask(data));
+
+
+            //$front.append($div);
+            //$front.append(cardTemplate.getmenuAppTask(data));
+            //$card.append([$front, $back]);
             // $card.append($front);
             //$card.append($back);
-            $container.append($card);
+            $container.append($div);
             $li.append($container);
             $div.append($divDomainRolesCaption);
 
@@ -1869,6 +1901,17 @@ function devCall() {
 
             $rowContainter.find('.tableMoreInfo').click(instanceLogsHandler);
             $li.find('.moreInfo').click(instanceLogsHandler);
+
+            $li.find('.showmenuAppTask').click(function(){
+                //alert("I am Here");
+                var $menu = $li.find('.menuAppTask');
+                if($menu.is(':visible')) {
+                    $menu.hide();
+                } else {
+                    $('.menuAppTask').hide();
+                    $menu.show();
+                }
+            });
 
             var $cardContainer = $li.find('.container').click(function(e) {
                 $('.container').removeClass('role-Selectedcard');
@@ -3564,7 +3607,6 @@ function devCall() {
                         var taskId = $(this).parents('td').attr('data-taskId');
 
                         window.location.href = 'index.html#ajax/assignTask.html?org=' + urlParams.org + '&bg=' + urlParams['bg'] + '&projid=' + urlParams['projid'] + '&envid=' + urlParams['envid'] + '&taskId=' + taskId;
-
                     });
                     $tr.append($tdOptions);
 

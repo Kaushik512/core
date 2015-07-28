@@ -1,5 +1,39 @@
-.domain-role-thumbnailDev{
-    min-height: 400px !important;
+.showmenuAppTaskAnchor{
+    background-color: #ffffff;
+    border-color:#40baf1 !important;
+    background-repeat: no-repeat; 
+    float: left; 
+    border-radius: 50% !important; 
+    height: 26px; 
+    width: 26px; 
+    margin-left: 10px; 
+    margin-top: 4px;
+}
+.showmenuAppTaskAnchorI{
+   color:#40baf1 ! important;
+   font-size: 16px;
+   margin-top: 3px; 
+}
+.menuAppLinkSpan{
+    color: rgb(44, 55, 66); 
+    font-weight: bold; 
+    padding: 10px; 
+    font-size: 12px;
+}
+.menuTaskSpan{
+    color: rgb(44, 55, 66); 
+    font-weight: bold; 
+    padding: 10px; 
+    font-size: 12px;
+}
+.paddingleft32{
+    padding-left: 32px;
+}
+.fontsize11{
+    font-size: 11px;
+}
+.glyphiconNew{
+    /*font-size: 18px !important*/
 }
 .menuAppTask {    
     /*position: relative;
@@ -9,15 +43,18 @@
     width:300px !important;
     min-height:100px;*/
     position: relative;
-    margin-top: 40px;
-    left:6px;
+    z-index: 1;
+    /*margin-top: 40px;*/
+    margin-top: 15px;
+    /*left:6px;*/
     background: #ffffff;
     border: 2px solid #40baf1;
-    min-height:100px;
+    min-height:100px;;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 } 
 .menuAppTask:after, .menuAppTask:before {
     bottom: 100%;
-    left: 86%;
+    left: 88%;
     border: solid transparent;
     content: " ";
     height: 0;
