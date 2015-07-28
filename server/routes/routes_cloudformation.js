@@ -156,5 +156,60 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         });
     });
 
+    app.get('/cloudformation/:cfId/events', function(req, res) {
+        CloudFormation.getById(req.params.cfId, function(err, cloudFormation) {
+            if (err) {
+                res.send(500, errorResponses.db.error);
+                return;
+            }
+            if (cloudFormation) {
+                AWSProvider.getAWSProviderById(cloudFormation.cloudProviderId, function(err, aProvider) {
+                    if (err) {
+                        logger.error("Unable to fetch provide", err);
+                        res.send(500, errorResponses.db.error);
+                    }
+                    var cryptoConfig = appConfig.cryptoSettings;
+                    var cryptography = new Cryptography(cryptoConfig.algorithm, cryptoConfig.password);
+                    var keys = [];
+                    keys.push(aProvider.accessKey);
+                    keys.push(aProvider.secretKey);
+
+                    cryptography.decryptMultipleText(keys, cryptoConfig.decryptionEncoding, cryptoConfig.encryptionEncoding, function(err, decryptedKeys) {
+                        if (err) {
+                            res.send(500, {
+                                message: "Failed to decrypt accessKey or secretKey"
+                            });
+                            return;
+                        }
+
+
+                        var awsSettings = {
+                            "access_key": decryptedKeys[0],
+                            "secret_key": decryptedKeys[1],
+                            "region": cloudFormation.region,
+                        };
+                        var awsCF = new AWSCloudFormation(awsSettings);
+                        var nextToken = req.query.nextToken;
+                        awsCF.getStackEvents(cloudFormation.stackId, nextToken, function(err, data) {
+                            
+                            if (err) {
+                                res.send(500, {
+                                    message: "Failed to fetch stack events from aws"
+                                });
+                                return;
+                            }
+                            res.send(200, data);
+                        });
+                    });
+                });
+            } else {
+                res.send(404, {
+                    message: "stack not found"
+                });
+            }
+
+        });
+    });
+
 
 };

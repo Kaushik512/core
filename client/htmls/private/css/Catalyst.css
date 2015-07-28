@@ -8080,3 +8080,19 @@ form.cmxform .gray * {
     margin-left:-73px!important;
     margin-top:44px!important;
 }
+
+.stackInfo{
+    background: url(../img/sprites.png) no-repeat;
+    background-position: -15px -12px ;
+    width: 25px;
+    height: 25px;
+    background-repeat:no-repeat;
+    float: left;
+    margin-top:0px;
+}
+.stackLogo {
+   height: 52px;
+  padding-top: 11px;
+  margin-top: 9px;
+  margin-left: 44px;
+}

@@ -163,6 +163,29 @@ var AWSCloudFormation = function(awsSettings) {
         listResources(null, callback);
     };
 
+    this.getStackEvents = function(stackNameOrId, nextToken, callback) {
+        var params = {
+            StackName: stackNameOrId
+        };
+        if (nextToken) {
+            params.NextToken = nextToken;
+        }
+        
+        cloudFormation.describeStackEvents(params, function(err, data) {
+
+            if (err) {
+                callback(err, null);
+                return;
+            }
+       
+            callback(null, {
+                events: data.StackEvents,
+                nextToken: data.NextToken
+            });
+        });
+
+    };
+
 };
 
 
