@@ -1248,14 +1248,16 @@ $(document).ready(function() {
         } else {
             if (taskType === 'jenkins') {
                 $.get('/jenkins/' + taskData.jenkinsServerId + '/job/' + taskData.jobName + '/lastBuild', function(data) {
-                    var url = taskData.jobResultURL;
+                    //var url = taskData.jobResultURL;
                     
                     /*if (url) {
                         url = url.replace('$buildNumber', data.number);
                         
                     }*/
                     
-                    taskData.jobResultURL = url;
+                    //taskData.jobResultURL = url;
+                    taskData.jobResultURLPattern = taskData.jobResultURL;
+                    //alert(taskData.jobResultURLPattern);
                     var reqBody = {
                         taskData: taskData
                     };

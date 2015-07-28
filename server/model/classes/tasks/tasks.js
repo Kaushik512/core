@@ -68,6 +68,9 @@ var taskSchema = new Schema({
     description: {
         type: String
     },
+    jobResultURLPattern: {
+        type: String
+    },
     taskConfig: Schema.Types.Mixed,
     lastTaskStatus: String,
     lastRunTimestamp: Number,
@@ -162,7 +165,7 @@ taskSchema.methods.execute = function(userName, baseUrl, callback, onComplete) {
                 x = taskExecuteData.buildNumber+"/"+arrStr[2].substr(arrStr[2].lastIndexOf("/")+1);
                 acUrl = arrStr[0]+"-"+arrStr[1]+"-"+x;
             }*/
-            acUrl = self.taskConfig.jobResultURL.replace("$buildNumber",taskExecuteData.buildNumber);
+            acUrl = self.jobResultURLPattern.replace("$buildNumber",taskExecuteData.buildNumber);
         }
         //self.taskConfig.jobResultURL = acUrl;
         logger.debug(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ",acUrl);
