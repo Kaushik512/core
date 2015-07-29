@@ -159,13 +159,13 @@ taskSchema.methods.execute = function(userName, baseUrl, callback, onComplete) {
         //var x;
         logger.debug("+++++++++++++++++++++++ ",self.taskConfig.jobResultURL);
         var acUrl=[];
-        if(self.taskConfig.jobResultURL.length > 0){
+        if(self.jobResultURLPattern.length > 0){
             /*arrStr = self.taskConfig.jobResultURL.split("-");
             if(arrStr.length === 3){
                 x = taskExecuteData.buildNumber+"/"+arrStr[2].substr(arrStr[2].lastIndexOf("/")+1);
                 acUrl = arrStr[0]+"-"+arrStr[1]+"-"+x;
             }*/
-            for(var i=0;i< self.taskConfig.jobResultURLPattern.length;i++){
+            for(var i=0;i< self.jobResultURLPattern.length;i++){
                 acUrl.push(self.jobResultURLPattern[i].replace("$buildNumber",taskExecuteData.buildNumber));
             }
         }
