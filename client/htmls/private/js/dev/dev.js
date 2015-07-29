@@ -3342,7 +3342,7 @@
                                                                               $('#assignedRunlist').modal('show');
                                                                           });
                                                                       } else {
-                                                                          var url = data[i].taskConfig.jobResultURL;
+                                                                          //var url = data[i].taskConfig.jobResultURL;
                                                                           //alert(JSON.stringify(url));
                                                                           var jobURLS = data[i].taskConfig.jobURL;
                                                                           //alert(jobURLS);
@@ -3350,9 +3350,7 @@
                                                                           /*if (url) {
                                                                           url = url.replace('lastBuild', );
                                                                       }*/
-                                                                          if (url) {
-                                                                              var $tdNodeList = $('<td style="vertical-align:inherit;text-align:center;"></td>').append('<span style="margin-left:-11px;"><img style="width:20px;" src="img/joburl.jpg">&nbsp;<a style="word-break: break-all;text-decoration:none" title="' + jobURLS + '" href="' + jobURLS + '" target="_blank">Job URL</a></span>').append('<span style="margin-left:4px;"><img style="width:18px;margin-left:6px;" src="img/joboutput.jpg">&nbsp;<a style="word-break: break-all;text-decoration:none" title="' + url + '" href="' + url + '" target="_blank">Job Result</a></span>');
-                                                                          } else {
+                                                                          if (jobURLS) {
                                                                               var $tdNodeList = $('<td style="vertical-align:inherit;text-align:center;"></td>').append('<span><img style="width:20px;" src="img/joburl.jpg">&nbsp;<a style="word-break: break-all;text-decoration:none" title="' + jobURLS + '" href="' + jobURLS + '" target="_blank">Job URL</a></span>');
                                                                           }
                                                                       }

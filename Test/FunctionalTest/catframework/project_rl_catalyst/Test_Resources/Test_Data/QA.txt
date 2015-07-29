@@ -35,9 +35,7 @@ ${PROJECT DESCRIPTION}           Catalyst product automation Description
 ${ENVIRONMENT NAME}              Dev
 ${CONFIG MANAGEMENT NAME}             RLChefServer
 
-${CONFIG MANAGEMENT USER NAME}         mycatqa             #pcjoshi9
-${CONFIG MANAGEMENT URL}            https://api.opscode.com/organizations/cattest
-#https://api.opscode.com/organizations/cat1
+
 
 
 ${PROVIDER}             Data Center
@@ -93,6 +91,15 @@ ${PHOENIX COMMERCE WITH COOKBOOK UBUNTUOS}          Phoenix Commerce With CookBo
 ${PHOENIX COMMERNCE WITHOUT COOKBOOK CENTOS}            Phoenix Commernce without Cookbook CENTOS
 ${PHOENIX COMMERCE WITH COOKBOOK CENTOS}          Phoenix Commerce With CookBook CENTOS
 ${TASK NAME}          Test Task
+
+
+
+${CONFIG MANAGEMENT USER NAME}              mycatqa             
+${CONFIG MANAGEMENT URL}             https://api.opscode.com/organizations/cattest
+
+
+
+
 
 ${USERPEMFILE}              ${ROOTPATH}/Chef/mycatqa.pem
 ${VALIDATORPEMFILE}      ${ROOTPATH}/Chef/cattest-validator.pem
