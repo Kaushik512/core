@@ -3147,8 +3147,6 @@
                                                                               "bSortable": false
                                                                           }, {
                                                                               "bSortable": false
-                                                                          }, {
-                                                                              "bSortable": false
                                                                           }
                                                                       ]
 
@@ -3342,7 +3340,7 @@
                                                                               $('#assignedRunlist').modal('show');
                                                                           });
                                                                       } else {
-                                                                          var url = data[i].taskConfig.jobResultURL;
+                                                                          //var url = data[i].taskConfig.jobResultURL;
                                                                           //alert(JSON.stringify(url));
                                                                           var jobURLS = data[i].taskConfig.jobURL;
                                                                           //alert(jobURLS);
@@ -3350,9 +3348,8 @@
                                                                           /*if (url) {
                                                                           url = url.replace('lastBuild', );
                                                                       }*/
-                                                                          if (url) {
-                                                                              var $tdNodeList = $('<td style="vertical-align:inherit;text-align:center;"></td>').append('<span style="margin-left:-11px;"><img style="width:20px;" src="img/joburl.jpg">&nbsp;<a style="word-break: break-all;text-decoration:none" title="' + jobURLS + '" href="' + jobURLS + '" target="_blank">Job URL</a></span>').append('<span style="margin-left:4px;"><img style="width:18px;margin-left:6px;" src="img/joboutput.jpg">&nbsp;<a style="word-break: break-all;text-decoration:none" title="' + url + '" href="' + url + '" target="_blank">Job Result</a></span>');
-                                                                          } else {
+                                                                          if (jobURLS) {
+                                                                          
                                                                               var $tdNodeList = $('<td style="vertical-align:inherit;text-align:center;"></td>').append('<span><img style="width:20px;" src="img/joburl.jpg">&nbsp;<a style="word-break: break-all;text-decoration:none" title="' + jobURLS + '" href="' + jobURLS + '" target="_blank">Job URL</a></span>');
                                                                           }
                                                                       }
@@ -3637,10 +3634,11 @@
 
                                                                                               } else {
                                                                                                   for (var k = 0; k < job.builds.length; k++) {
-
-
+                                                                                                    //alert(JSON.stringify(job.builds));
+                                                                                                       
                                                                                                       console.log(taskHistories[i].buildNumber, "  ---  ", job.nextBuildNumber);
                                                                                                       // alert(job.nextBuildNumber);
+                                                                                                      //var $tdJobName='';
                                                                                                       if (taskHistories[i].buildNumber === job.builds[k].number) {
 
                                                                                                           url = job.builds[k].url;
@@ -3648,17 +3646,15 @@
                                                                                                           var $tdBuildNumber = $('<td/>').append('<a style="word-break: break-all;" href="' + url + '" title="' + url + '" target="_blank">' + taskHistories[i].buildNumber + '</a>');
                                                                                                           $trHistoryRow.append($tdBuildNumber);
 
+                                                                                                          //alert(taskHistories[i].jobResultURL);
+                                                                
 
-                                                                                                          if (taskHistories[i].jobResultURL) {
-                                                                                                              var $tdJobName = $('<td/>').append('<a style="word-break: break-all;" href="' + taskHistories[i].jobResultURL + '" title="' + taskHistories[i].jobResultURL + '" target="_blank">View Results</a>');
-                                                                                                              $trHistoryRow.append($tdJobName);
-                                                                                                          } else {
-                                                                                                              var $tdJobName = $('<td/>').append('Not available');
-                                                                                                              $trHistoryRow.append($tdJobName);
-                                                                                                          }
+                                                                                                         
                                                                                                           buildFound = true;
-                                                                                                          break;
+                                                                                                         break;
                                                                                                       }
+                                                                                                  
+                                                                                                  
                                                                                                   }
 
                                                                                               }
@@ -3667,6 +3663,88 @@
 
                                                                                               }
 
+                                                                                                for (var p = 0; p < taskHistories[i].jobResultURL.length; p++) {
+
+                                                                                                    var $tdJobName;
+
+                                                                                                
+                                                                                                     //alert(taskHistories[i].jobResultURL);
+                                                                                                    //alert(taskHistories[i].jobResultURL.length);
+                                                                                                    if (taskHistories[i].jobResultURL.length === 1) {
+                                                                                                        $tdJobName = $('<td/>').append('<a class="btn btn-primary btn-sg tableactionbutton marginleftright7" style="word-break: break-all;" href="' + taskHistories[i].jobResultURL[x] + '" title="' + taskHistories[i].jobResultURL[p] + '" target="_blank"><i class="ace-icon fa fa-file-text bigger-120"></i></a>').append('<a data-original-title="MoreInfo" data-placement="top" rel="tooltip" class="moreinfoBuild" href="javascript:void(0)" data-toggle="modal"></a>');
+                                                                                                        //$trHistoryRow.append($tdJobName);
+                                                                                                    } else if (taskHistories[i].jobResultURL.length === 2) {
+
+                                                                                                        $tdJobName = $('<td/>').append('<a class="btn btn-primary btn-sg tableactionbutton marginleftright7" style="word-break: break-all;" href="' + taskHistories[i].jobResultURL[p] + '" title="' + taskHistories[i].jobResultURL[p] + '" target="_blank"><i class="ace-icon fa fa-file-text bigger-120"></i></a>').append('<a class="btn btn-primary btn-sg tableactionbutton" style="word-break: break-all;margin-left:5p" href="' + taskHistories[i].jobResultURL[p] + '" title="' + taskHistories[i].jobResultURL[p] + '" target="_blank"><i class="ace-icon fa fa-file-text bigger-120"></i></a>').append('<a data-original-title="MoreInfo" data-placement="top" rel="tooltip" class="moreinfoBuild" href="javascript:void(0)" data-toggle="modal"></a>');
+                                                                                                        // $trHistoryRow.append($tdJobName);
+                                                                                                        //alert($tdJobName);
+                                                                                                    } else if (taskHistories[i].jobResultURL.length === 3) {
+                                                                                                        $tdJobName = $('<td/>').append('<a class="btn btn-primary btn-sg tableactionbutton marginleftright7" style="word-break: break-all;" href="' + taskHistories[i].jobResultURL[p] + '" title="' + taskHistories[i].jobResultURL[p] + '" target="_blank"><i class="ace-icon fa fa-file-text bigger-120"></i></a>').append('<a class="btn btn-primary btn-sg tableactionbutton" style="word-break: break-all;" href="' + taskHistories[i].jobResultURL[p] + '" title="' + taskHistories[i].jobResultURL[p] + '" target="_blank"><i class="ace-icon fa fa-file-text bigger-120"></i></a>').append('<a class="btn btn-primary btn-sg tableactionbutton" style="word-break: break-all;" href="' + taskHistories[i].jobResultURL[p] + '" title="' + taskHistories[i].jobResultURL[p] + '" target="_blank"><i class="ace-icon fa fa-file-text bigger-120"></i></a>').append('<a data-original-title="MoreInfo" data-placement="top" rel="tooltip" class="moreinfoBuild margin-left40per" href="javascript:void(0)" data-toggle="modal"></a>');
+                                                                                                        // $trHistoryRow.append($tdJobName);
+                                                                                                    } else if (taskHistories[i].jobResultURL.length === 4) {
+
+                                                                                                        $tdJobName = $('<td/>').append('<a class="btn btn-primary btn-sg tableactionbutton marginleftright7" style="word-break: break-all;" href="' + taskHistories[i].jobResultURL[p] + '" title="' + taskHistories[i].jobResultURL[p] + '" target="_blank"><i class="ace-icon fa fa-file-text bigger-120"></i></a>').append('<a class="btn btn-primary btn-sg tableactionbutton" style="word-break: break-all;" href="' + taskHistories[i].jobResultURL[p] + '" title="' + taskHistories[i].jobResultURL[p] + '" target="_blank"><i class="ace-icon fa fa-file-text bigger-120"></i></a>').append('<a class="btn btn-primary btn-sg tableactionbutton" style="word-break: break-all;" href="' + taskHistories[i].jobResultURL[p] + '" title="' + taskHistories[i].jobResultURL[p] + '" target="_blank"><i class="ace-icon fa fa-file-text bigger-120"></i></a>').append('<a class="btn btn-primary btn-sg tableactionbutton" style="word-break: break-all;" href="' + taskHistories[i].jobResultURL[p] + '" title="' + taskHistories[i].jobResultURL[p] + '" target="_blank"><i class="ace-icon fa fa-file-text bigger-120"></i></a>').append('<a data-original-title="MoreInfo" data-placement="top" rel="tooltip" class="moreinfoBuild margin-left40per" href="javascript:void(0)" data-toggle="modal"></a>');;
+                                                                                                        // $trHistoryRow.append($tdJobName);
+                                                                                                    }
+                                                                                                    $tdJobName.find('a.moreinfoBuild').data('history', taskHistories[i]).data('taskId', taskId).click(function() {
+                                                                                                        //$('#assignedTaskHistory').modal('hide');
+                                                                                                        var taskId = $(this).data('taskId');
+                                                                                                        var $taskExecuteTabsHeaderContainer = $('#taskExecuteTabsHeader').empty();
+                                                                                                        var $taskExecuteTabsContent = $('#taskExecuteTabsContent').empty();
+                                                                                                        var $modal = $('#assignedExecute');
+                                                                                                        $modal.find('.loadingContainer').show();
+                                                                                                        $modal.find('.errorMsgContainer').hide();
+                                                                                                        $modal.find('.outputArea').hide();
+                                                                                                        $modal.modal('show');
+                                                                                                        var $outputArea = $modal.find('.outputArea');
+                                                                                                        var history = $(this).data('history');
+
+                                                                                                        $outputArea.data('taskType', history.taskType);
+                                                                                                        $outputArea.data('jenkinsServerId', history.jenkinsServerId);
+                                                                                                        $outputArea.data('jobName', history.jobName);
+                                                                                                        $outputArea.data('lastBuildNumber', history.lastBuildNumber);
+                                                                                                        $outputArea.data('currentBuildNumber', history.buildNumber);
+                                                                                                        $outputArea.data('timestampStarted', history.timestampStarted);
+                                                                                                        $outputArea.data('timestampEnded', history.timestampEnded);
+
+                                                                                                        if (history.nodeIdsWithActionLog && history.nodeIdsWithActionLog.length) {
+                                                                                                            var ids = [];
+                                                                                                            for (var kk = 0; kk < history.nodeIdsWithActionLog.length; kk++) {
+                                                                                                                ids.push(history.nodeIdsWithActionLog[kk].nodeId)
+                                                                                                            }
+                                                                                                            $.post('../instances', {
+                                                                                                                instanceIds: ids
+                                                                                                            }, function(instances) {
+                                                                                                                for (var kk = 0; kk < instances.length; kk++) {
+                                                                                                                    for (var jj = 0; jj < history.nodeIdsWithActionLog.length; jj++) {
+                                                                                                                        if (instances[kk]._id === history.nodeIdsWithActionLog[jj].nodeId) {
+                                                                                                                            instances[kk].tempActionLogId = history.nodeIdsWithActionLog[jj].actionLogId;
+                                                                                                                        }
+                                                                                                                    }
+                                                                                                                }
+                                                                                                                $outputArea.data('instances', instances);
+                                                                                                                showTaskLogs();
+                                                                                                            });
+
+                                                                                                        } else {
+                                                                                                            if (history.nodeIds && history.nodeIds.length) {
+                                                                                                                $.post('../instances', {
+                                                                                                                    instanceIds: history.nodeIds
+                                                                                                                }, function(instances) {
+                                                                                                                    $outputArea.data('instances', instances);
+                                                                                                                    showTaskLogs();
+                                                                                                                });
+                                                                                                            } else {
+                                                                                                                showTaskLogs();
+                                                                                                            }
+                                                                                                        }
+
+
+                                                                                                    });
+                                                                                                    
+
+                                                                                                }
+                                                                                                $trHistoryRow.append($tdJobName);
                                                                                               if (taskHistories[i].status === "success") {
                                                                                                   var $tdBuildStatus = $('<td style="background-color:#1c9951;"></td>').append('<span style="color:#fff">SUCCESS</span>');
                                                                                                   $trHistoryRow.append($tdBuildStatus);
@@ -3677,65 +3755,10 @@
                                                                                                   var $tdBuildStatusRunning = $('<td style="background-color:gray;"></td>').append('<span style="color:#fff;">PENDING</span>');
                                                                                                   $trHistoryRow.append($tdBuildStatusRunning);
                                                                                               }
-                                                                                              var $tdLogs = $('<td></td>').append('<a data-original-title="MoreInfo" data-placement="top" rel="tooltip" class="moreinfoBuild margin-left40per" href="javascript:void(0)" data-toggle="modal"></a>');
-                                                                                              $tdLogs.find('a').data('history', taskHistories[i]).data('taskId', taskId).click(function() {
-                                                                                                  //$('#assignedTaskHistory').modal('hide');
-                                                                                                  var taskId = $(this).data('taskId');
-                                                                                                  var $taskExecuteTabsHeaderContainer = $('#taskExecuteTabsHeader').empty();
-                                                                                                  var $taskExecuteTabsContent = $('#taskExecuteTabsContent').empty();
-                                                                                                  var $modal = $('#assignedExecute');
-                                                                                                  $modal.find('.loadingContainer').show();
-                                                                                                  $modal.find('.errorMsgContainer').hide();
-                                                                                                  $modal.find('.outputArea').hide();
-                                                                                                  $modal.modal('show');
-                                                                                                  var $outputArea = $modal.find('.outputArea');
-                                                                                                  var history = $(this).data('history');
-
-                                                                                                  $outputArea.data('taskType', history.taskType);
-                                                                                                  $outputArea.data('jenkinsServerId', history.jenkinsServerId);
-                                                                                                  $outputArea.data('jobName', history.jobName);
-                                                                                                  $outputArea.data('lastBuildNumber', history.lastBuildNumber);
-                                                                                                  $outputArea.data('currentBuildNumber', history.buildNumber);
-                                                                                                  $outputArea.data('timestampStarted', history.timestampStarted);
-                                                                                                  $outputArea.data('timestampEnded', history.timestampEnded);
-
-                                                                                                  if (history.nodeIdsWithActionLog && history.nodeIdsWithActionLog.length) {
-                                                                                                      var ids = [];
-                                                                                                      for (var kk = 0; kk < history.nodeIdsWithActionLog.length; kk++) {
-                                                                                                          ids.push(history.nodeIdsWithActionLog[kk].nodeId)
-                                                                                                      }
-                                                                                                      $.post('../instances', {
-                                                                                                          instanceIds: ids
-                                                                                                      }, function(instances) {
-                                                                                                          for (var kk = 0; kk < instances.length; kk++) {
-                                                                                                              for (var jj = 0; jj < history.nodeIdsWithActionLog.length; jj++) {
-                                                                                                                  if (instances[kk]._id === history.nodeIdsWithActionLog[jj].nodeId) {
-                                                                                                                      instances[kk].tempActionLogId = history.nodeIdsWithActionLog[jj].actionLogId;
-                                                                                                                  }
-                                                                                                              }
-                                                                                                          }
-                                                                                                          $outputArea.data('instances', instances);
-                                                                                                          showTaskLogs();
-                                                                                                      });
-
-                                                                                                  } else {
-                                                                                                      if (history.nodeIds && history.nodeIds.length) {
-                                                                                                          $.post('../instances', {
-                                                                                                              instanceIds: history.nodeIds
-                                                                                                          }, function(instances) {
-                                                                                                              $outputArea.data('instances', instances);
-                                                                                                              showTaskLogs();
-                                                                                                          });
-                                                                                                      } else {
-                                                                                                          showTaskLogs();
-                                                                                                      }
-                                                                                                  }
-
-
-                                                                                              });
-
+                                                                                              /*var $tdLogs = $('<td></td>').append('<a data-original-title="MoreInfo" data-placement="top" rel="tooltip" class="moreinfoBuild margin-left40per" href="javascript:void(0)" data-toggle="modal"></a>');
+                                                                                              
                                                                                               $trHistoryRow.append($tdLogs);
-
+*/
 
 
                                                                                               var dateStarted = new Date().setTime(taskHistories[i].timestampStarted);

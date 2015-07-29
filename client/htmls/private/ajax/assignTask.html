@@ -184,7 +184,7 @@
                                                                   <td class="jobParam">Job Url:</td>
                                                                   <td><div class="col-lg-11 col-md-11"><span id="spinnerForUrl" class="hidden"><img  style="margin-left:5px;margin-right:25px;" src="img/select2-spinner.gif"></span><input type="text" disabled class="jenkinsJobURL form-control hidden" style="margin-top:4px"></div><div class="col-lg-1 col-md-1"><img style="width:16px;height:16px;margin-top:8px;" id="helpImage" tabindex="50" class="hidden" data-toggle="popover" data-placement="left" data-content="This is the URL for a particular JOB selected by the User available in the Jenkins Server" src="img/help.png"/></div></td>
                                                                </tr>
-                                                               <tr class="jobLinks" id="jobLinksClone">
+                                                               <tr>
                                                                   <td class="jobParam" id="jobTD" style="padding-top:26px!important">Job Links:</td>
                                                                   <td><div class="col-lg-11 col-md-11 jobTable" style="margin-top:1px"><!-- <img src="img/add.png" style="float:right;margin-top:-16px;margin-right:-1px;" class="addJobLink" rel="tooltip" data-placement="top" title="Add New Job Link" /><input id="jobResultUrl" autocomplete="off" type="text" title="ex:http://{host:port}/TestResult/$buildNumber/log.html" alt="ex:http://{host:port}/TestResult/$buildNumber/log.html" placeholder=" ex:http://{host:port}/<TestResult>/<$buildNumber>/log.html" class="form-control inputJobResultUrl" name="jobResultUrl"> -->
                                                                     <a href="#jobResultModal" data-backdrop="false" data-toggle="modal" style="cursor:pointer;"> <img src="img/add.png" style="float:right;" class="addList" rel="tooltip" data-placement="top" title="Add Job Links" /></a>
@@ -686,29 +686,40 @@ $(document).ready(function() {
     });
 });
 
-   
-
-$('#jobLinkCreate').submit(function(e) {
-    var regexpURL = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
-    
-   // alert('chchch');
-    var jobUrl = $(this).find('.jobLinkCreate').val();
-    if (!regexpURL.test(jobUrl)) {
-        alert('Please Enter a Valid URL');
-        return false;
-    }
+function createJobLinksTable(jobResultURL) {
     var $jobListTable = $('#jobListSave');
     var $tr = $('<tr class="jobResultRow"></tr>');
     var $tdName = $('<td class="jobResultDescription" style="word-break: break-word;"></td>');
 
-    $tdName.append(jobUrl);
-    var $tdAction =$('<td/>');
-    $tdAction.append('<div style="margin-right:17px;float:right;" class="btn-group del"><button class="deleteRow" value="Remove" title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></div>');
-    $tr.append($tdName).append($tdAction);
-    $jobListTable.append($tr);
-    $jobList.row.add($tr).draw();
-    $('#jobResultModal').modal('hide');
-    return false;
+    
+             $tr.data('jobUrlData', jobResultURL);
+        
+            $tdName.append(jobResultURL);
+            var $tdAction = $('<td/>');
+            $tdAction.append('<div style="margin-right:17px;float:right;" class="btn-group del"><button class="deleteRow" value="Remove" title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></div>');
+            $tr.append($tdName).append($tdAction);
+            $jobListTable.append($tr);
+            $jobList.row.add($tr).draw();
+       
+    
+
+}
+
+   
+
+$('#jobLinkCreate').submit(function(e) {
+    var regexpURL = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
+
+    // alert('chchch');
+    var jobResultURL = $(this).find('.jobLinkCreate').val();
+    if (!regexpURL.test(jobResultURL)) {
+        alert('Please Enter a Valid URL');
+        return false;
+    } else {
+        createJobLinksTable(jobResultURL)
+        $('#jobResultModal').modal('hide');
+        return false;
+    }
 });
 
 
@@ -780,7 +791,7 @@ $(document).ready(function() {
             //$('#taskType').val(taskData.taskType);
             $('textarea#chefDescription').val(taskData.description);
             $('textarea#jenkinsDescription').val(taskData.description);
-            if(taskData.taskType==='jenkins'){
+            /*if(taskData.taskType==='jenkins'){
                 $.get('../tasks/' + taskData._id + '/history', function(data) {
                     // alert(data[0].buildNumber);
                     if (data.length>0) {
@@ -792,7 +803,7 @@ $(document).ready(function() {
                         }
                     }
                 });
-            }
+            }*/
             
             
             if(taskData.taskConfig.runlist &&  taskData.taskConfig.runlist.length){
@@ -800,6 +811,13 @@ $(document).ready(function() {
                 if (taskData.taskConfig.runlist.length > 0) {
                 //  alert(taskData.taskConfig.runlist);
                     createRunlistTable(taskData.taskConfig.runlist);
+                }
+            }
+            if(taskData.taskConfig.jobResultURL &&  taskData.taskConfig.jobResultURL.length){
+              // alert(taskData.taskConfig.runlist);
+                if (taskData.taskConfig.jobResultURL.length > 0) {
+                //  alert(taskData.taskConfig.runlist);
+                    createJobLinksTable(taskData.taskConfig.jobResultURL);
                 }
             }
             if (taskData.taskConfig.attributes && taskData.taskConfig.attributes.length) {
@@ -978,18 +996,7 @@ $(document).ready(function() {
                 var $jobUrlList = $('.jenkinsJobURL').val();
                 
                 if (jobName) {
-                   // $.get('/jenkins/' + jenkinsServerId + '/job/' + jobName + '/lastBuild', function(data) {
-
-                        /*var url = taskData.jobResultURL;
-                        if (url) {
-                            url = url.replace('lastBuild', data.number);
-                        }*/
-                      /*  var url = "http://54.67.35.103:8000/Catalyst_Test_Results/jenkins-"+jobName+"-"+data.number+"/log.html";
-                        //alert(url);
-                        var $anchor = "<span><a style='font-size:13px;word-wrap:break-word;' title='" + url + "' href='" + url + "'' target='_blank' >" + url + "</a></span>";
-                        $jobOutputUtl.append($anchor);*/
-                        //taskData.jobResultURL = url;
-                    //});
+                   
                     $('.jenkinsJobURL').empty();
                     $.get('/jenkins/' + jenkinsServerId + '/jobs/' + jobName, function(jobsList) {
                         //for (var i = 0; i < jobsList.length; i++) {
@@ -1129,33 +1136,22 @@ $(document).ready(function() {
                 return false;
             }
             var jobUrl = $('.jenkinsJobURL').val();
-            var jenkinsResultUrl = $('#jobResultUrl').val(); 
-            var regexpURL = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
-            if(jenkinsResultUrl != ""){
-               if(!regexpURL.test(jenkinsResultUrl)){
-               alert('Please Enter a valid URL');
-               e.preventDefault();
-               return false;
-               }
-            }
-            
-            /*var url = jenkinsResultUrl;
-            $.get('/jenkins/' + jenkinsServerId + '/job/' + jenkinsJobName + '/lastBuild', function(data){
-             
-              
-               //alert(JSON.stringify(url));
-
-               if(url){
-                  url = url.replace('lastBuild' , data.number);
-                  alert(JSON.stringify(url));
-                 
-               }
-            });*/
-            
+            var jobResultURL = [];
+            var $jobUrlTableBody = $('#tableJobList tbody');
+            var $trs = $jobUrlTableBody.find('tr');
+            //alert($trs);
+            //alert($trs.length);
+            $trs.each(function(e) {
+                var $this = $(this);
+                 jobResultURL.push($this.data('jobUrlData'));
+            });
+            //alert(jobUrlResult);            
             taskData.jenkinsServerId = jenkinsServerId;
             taskData.jobName = jenkinsJobName;
             taskData.description = jenkinsJobDescription;
-            taskData.jobResultURL = jenkinsResultUrl;
+            
+            taskData.jobResultURL= jobResultURL;
+          //  console.log(JSON.stringify(taskData.jobResultURL));
             taskData.jobURL = jobUrl;
             //alert(taskData.jobResultURL);
             
