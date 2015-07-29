@@ -1607,7 +1607,7 @@ Selects the Key Pair
     #Click Element    xpath=.//*[@id='select2-drop']/ul/li[1]/div
 
 Uploads the Pem File for Provider
-    Choose File     xpath=.//*[@class='gui-file file']     ${CAT_INSTANCES}
+    Choose File     xpath=//span[@class='button btn-primary btn-importbyIP']     ${CAT_INSTANCES}
     #C:\\Users\\adarsh.RLINDIA\\Desktop\\caty\\Chef\\cat_instances.pem
 
 Clicks on Save Button of the Provider
