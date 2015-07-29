@@ -1641,11 +1641,21 @@ function loadLaunchParams(lpinput) {
   function loadData(){
     var providerVal=$('#providerId').val();
     if(providerVal){
+     //alert('in');
      $.get("/vmimages/providers/"+providerVal,function(data){
       var str=' <option value="">Select Image</option>',data=getFilteredList(data,$('#instanceOS').val()),
       len=data.length;
       str=str + helperConstructOption(data,['providerId','vType','osType','_id'],'name','imageIdentifier');
-      $('#imageId').html(str).select2().trigger('change');
+      $('#imageId').html(str);
+
+      //setting image value for ami type and disabling it- vn
+      if($('.productdiv2.role-Selected').first().attr('templatetype') == 'ami')
+      {
+        var vmimage = JSON.parse($('.productdiv2.role-Selected').first().attr('imagedata'));
+        $('#imageId').val(vmimage.imageIdentifier).attr('disabled','disabled');
+      }
+      //setting the selection
+      $('#imageId').select2().trigger('change');
     });
    }else{
      $('#imageId').html('<option value="">Select Image</option>').select2().trigger('change');
@@ -1971,7 +1981,7 @@ function resetForm(){
      var selectedrow = false;
      var getDesignTypeImg; 
      var getDesignTypeRowID;
-    alert(JSON.stringify(data)); 
+    //alert(JSON.stringify(data)); 
     for(var i=0; i<rowLength; i+=1){
                 getDesignTypeImg = data[i]['designtemplateicon_filename'];
 
@@ -2080,10 +2090,10 @@ $("#templateContent #grid0").addClass("role-Selected");
        var getID = parseInt($clone.attr("id").replace("grid", ""), 10); 
        
        var gallerytype = $clone.attr("data-gallerytype");
-       alert(gallerytype);
+      // alert(gallerytype);
        var templateurl = "/d4dMasters/readmasterjsonnew/17";
        if(gallerytype == 'ami'){
-        alert('to build a new selection by updating the url');
+       // alert('to build a new selection by updating the url');
         templateurl = '/vmimages';
        }
 
@@ -2097,33 +2107,35 @@ $("#templateContent #grid0").addClass("role-Selected");
            var getIndividualData = "";
            var getTempName;
            var getRowID, getImage;
-    alert(JSON.stringify(data));
+    //alert(JSON.stringify(data));
     //alert('check');
     for (var z = 0; z < rowGridLength; z += 1) {
         if(gallerytype == 'ami'){
-            getRowID = data[z]['_id'];
-            getImage = '/d4dMasters/image/5bcb81d9-9c6b-472a-b255-6b1cd0a6bbdc__templatesicon__appFact3.png';
-            getTemplateType = data[z]['osType'];
-            getTempName = data[z]['name'];
 
+            getRowID = data[z]['_id'];
+            
+            getTemplateType = data[z]['osType'];
+            getImage = 'img/osIcons/' + getTemplateType + '.png';
+            getTempName = data[z]['name'];
+            getImageData = '\'' + JSON.stringify(data[z]) + '\'';
+            //alert(getImageData);
             getIndividualData += '<div class="col-sm-3 col-lg-2 col-md-3">' +
                 '<div class="productdiv2" data-templateId="' + getTempName + '" data-' +
                 'templateComponent="component' + z + '" ' +
-                'dockercontainerpathstitle="' +  + '" ' +
-                'dockercontainerpaths="' +  + '" ' +
-                'dockerreponame="' +  + '" ' +
+                'imagedata=' + getImageData  +
                 'data-templateName="' + getTempName + '" data-' +
-                'templateType="' + getTemplateType + '" templatetype="' + getTemplateType + '" templatename="' + getTempName + '" templatescookbooks="">' +
+                'templateType="' + getTemplateType + '" templatetype="' + gallerytype + '" templatename="' + getTempName + '" templatescookbooks="">' +
                 '<ul class="list-unstyled system-prop" style="text-align:center;">' +
                 '<li><img style="height:40px;width:auto;" alt="" ' +
                 'src="' + getImage + '">' +
-                '</li><li style="font-size:12px;"><u><b>' + getTempName + '</b></u></li>';
-            if(z >= rowGridLength)
+                '</li><li style="font-size:12px;"><u><b>' + getTempName + '</b></u></li></ul></div></div>';
+            if(z >= rowGridLength -1)
             {
-                getIndividualData += '</ul></div></div>';
+                $('#individualTemplateNameGrid').show();
             }
             continue;
         }
+
     //iterate thhrough columns to get correct column and value
     var selectedrow = false;
     var currField = null;
@@ -2207,6 +2219,7 @@ getIndividualData += licb + '</ul></div></div>';
 
 }
 $("#individualTemplateNameGrid").html("");
+    
     //$("#individualTemplateNameGrid").append(getParent);
     $("#individualTemplateNameGrid").append(getIndividualData).find('.productdiv2').first().click();
     //$("#grid0").addClass("role-Selected");
@@ -2240,7 +2253,7 @@ $("#individualTemplateNameGrid").html("");
     //     return false;
     
     // }
-    alert('kickin 2');
+    //alert('kickin 2');
     
     //If a docker type of template selected then select the Org 
     var $selectedItem = $('.role-Selected');
@@ -2327,10 +2340,25 @@ $("#individualTemplateNameGrid").html("");
                     var $dockerrepotagsul = $('#dockerrepotagsul');
                     $('.forDocker').show();
                     $('.notForDocker').hide();
+
+                    
                     //return (true);
     //return (true);
 } else {
-    
+    //setting view restrictions for ami type
+    if($('.productdiv2.role-Selected').first().attr('templatetype') == "ami"){
+        var vmimage = JSON.parse($('.productdiv2.role-Selected').first().attr('imagedata'));
+        $('#instanceOS').val(vmimage.osName);
+        $('#instanceOS').change().attr('disabled','disabled');
+        $('#providerId').val(vmimage.providerId);
+        $('#providerId').change().attr('disabled','disabled');
+        $('#orgnameSelect').attr('disabled','disabled');
+    }
+    else{
+        $('#instanceOS').removeAttr('disabled');
+        $('#providerId').removeAttr('disabled');
+        $('#orgnameSelect').removeAttr('disabled');
+    }
     if(!$('#CollapseConfigureproviderParameter').hasClass('in')){
         $('a[href="#CollapseConfigureproviderParameter"]').click();
     }
