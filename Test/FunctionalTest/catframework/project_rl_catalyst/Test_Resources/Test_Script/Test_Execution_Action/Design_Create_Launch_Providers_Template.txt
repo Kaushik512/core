@@ -1577,10 +1577,9 @@ Enters the Secret Key
 Selects the Region
     Sleep    4s
     Click Element    css=.region > .select2-choice
-    Sleep    1s
-    Input Text    css=#select2-drop .select2-input    US West (Oregon) | us-west-2
     Sleep    4s
-    Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
+    Click Element xpath=.//*[@id='select2-drop']/ul/li/div[text()='US West (Oregon) | us-west-2']
+    Sleep 1s
     
    #Wait Until Keyword Succeeds    2 minute     1 seconds      Click Element    xpath=//span[./text()='Select Region']
     #Input Text    xpath=.//*[@id='select2-drop']/div/input     US West (Oregon) | us-west-2
