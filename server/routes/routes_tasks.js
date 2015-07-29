@@ -17,6 +17,16 @@ var logger = require('../lib/logger')(module);
 module.exports.setRoutes = function(app, sessionVerification) {
     app.all('/tasks/*', sessionVerification);
 
+    app.get('/tasks/history/list/all', function(req, res) {
+        TaskHistory.listHistory(function(err, tHistories) {
+            if (err) {
+                res.send(500, errorResponses.db.error);
+                return;
+            }
+            res.send(tHistories);
+        });
+    });
+
     app.all('/tasks/:taskId/*', function(req, res, next) {
         Tasks.getTaskById(req.params.taskId, function(err, task) {
             if (err) {
@@ -179,13 +189,14 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                 }
                                 var count = 0;
                                 if (jobResult.length > 0) {
-
+                                    var resultUrl;
                                     for (var x = 0; x < jobResult.length; x++) {
                                         (function(x) {
                                             count++;
                                             //logger.debug("------+++++---");
                                             if (historyResult.indexOf(jobResult[x]) == -1) {
                                                 //logger.debug("------------------ ", jobResult[x]);
+                                               
                                                 var hData = {
                                                     "taskId": req.params.taskId,
                                                     "taskType": "jenkins",
@@ -200,9 +211,12 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                     "executionResults": [],
                                                     "nodeIdsWithActionLog": [],
                                                     "nodeIds": [],
-                                                    "runlist": []
+                                                    "runlist": [],
+                                                    "jobResultURL": resultUrl
 
                                                 };
+
+                                                //logger.debug("hData+++++++++++++++++++++++++ ",hData);
                                                 TaskHistory.createNew(hData, function(err, taskHistoryEntry) {
                                                     //count++;
                                                     if (err) {
@@ -265,10 +279,11 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                 }
                                 var count1 = 0;
                                 if (jobResult) {
+                                    var resultUrl;
                                     for (var x = 0; x < jobResult.length; x++) {
                                         (function(x) {
-                                            //count1++;
-                                            //logger.debug("------------------ ", jobResult[x]);
+                                             resultUrl = task.jobResultURLPattern.replace("$buildNumber", jobResult[x]);
+                                                //logger.debug("==================================== ",resultUrl);
                                             var hData = {
                                                 "taskId": req.params.taskId,
                                                 "taskType": "jenkins",
@@ -283,9 +298,11 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                 "executionResults": [],
                                                 "nodeIdsWithActionLog": [],
                                                 "nodeIds": [],
-                                                "runlist": []
+                                                "runlist": [],
+                                                "jobResultURL": resultUrl
 
                                             };
+                                            //logger.debug("hData+++++++++++++++++++++++++ ",hData);
                                             TaskHistory.createNew(hData, function(err, taskHistoryEntry) {
                                                 count1++;
                                                 if (err) {
@@ -371,16 +388,6 @@ module.exports.setRoutes = function(app, sessionVerification) {
             } else {
                 res.send(400);
             }
-        });
-    });
-
-    app.get('/tasks/history/list/all', function(req, res) {
-        TaskHistory.listHistory(function(err, tHistories) {
-            if (err) {
-                res.send(500, errorResponses.db.error);
-                return;
-            }
-            res.send(tHistories);
         });
     });
 
