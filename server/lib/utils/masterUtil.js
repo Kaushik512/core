@@ -7,7 +7,7 @@
 
 // This file act as a Util class which contains Settings related all business logics.
 
-var logger = require('../../lib/logger')(module);
+var logger = require('_pr/logger')(module);
 var d4dModelNew = require('../../model/d4dmasters/d4dmastersmodelnew.js');
 var ObjectId = require('mongoose').Types.ObjectId;
 var permissionsetDao = require('../../model/dao/permissionsetsdao');

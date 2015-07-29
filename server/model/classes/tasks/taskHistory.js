@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 var ObjectId = require('mongoose').Types.ObjectId;
 var validate = require('mongoose-validator');
-var logger = require('../../../lib/logger')(module);
+var logger = require('_pr/logger')(module);
 var schemaValidator = require('../../dao/schema-validator');
 
 var Schema = mongoose.Schema;
@@ -23,7 +23,7 @@ var taskHistorySchema = new Schema({
     user: String,
     timestampStarted: Number,
     timestampEnded: Number,
-    jobResultURL: String,
+    jobResultURL: [String],
     executionResults: [Schema.Types.Mixed]
 });
 

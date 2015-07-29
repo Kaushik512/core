@@ -1550,6 +1550,7 @@ Clicks on Providers
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='setting_tree']/ul/li[7]/a
 
 Clicks on New Button of Providers
+    Sleep    4s
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    id=addnewitem
 
 Select the Provider
@@ -1573,16 +1574,14 @@ Enters the Access Key
 Enters the Secret Key
     Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    id=secretKey    ${SECRET KEY}
 
-Selects the Region   
+Selects the Region
     Sleep    4s
     Click Element    css=.region > .select2-choice
-    Log    after click
-    Input Text    css=#select2-drop .select2-input    US West (Oregon) | us-west-2
     Sleep    4s
-    Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
-
-
-    #Wait Until Keyword Succeeds    2 minute     1 seconds      Click Element    xpath=//span[./text()='Select Region']
+    Click Element xpath=.//*[@id='select2-drop']/ul/li/div[text()='US West (Oregon) | us-west-2']
+    Sleep 1s
+    
+   #Wait Until Keyword Succeeds    2 minute     1 seconds      Click Element    xpath=//span[./text()='Select Region']
     #Input Text    xpath=.//*[@id='select2-drop']/div/input     US West (Oregon) | us-west-2
     #Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
     #Select From List By Value    xpath=.//*[contains(text(), "US West (Oregon) | us-west-2")]     ${REG}
@@ -1607,7 +1606,7 @@ Selects the Key Pair
     #Click Element    xpath=.//*[@id='select2-drop']/ul/li[1]/div
 
 Uploads the Pem File for Provider
-    Choose File     xpath=.//*[@class='gui-file file']     ${CAT_INSTANCES}
+    Choose File     xpath=//span[@class='button btn-primary btn-importbyIP']     ${CAT_INSTANCES}
     #C:\\Users\\adarsh.RLINDIA\\Desktop\\caty\\Chef\\cat_instances.pem
 
 Clicks on Save Button of the Provider

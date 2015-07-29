@@ -1,7 +1,7 @@
 var d4dModel = require('./d4dmastersmodel.js');
 var uuid = require('node-uuid');
 var d4dModelNew = require('./d4dmastersmodelnew.js');
-var logger = require('./../../lib/logger')(module);
+var logger = require('_pr/logger')(module);
 
 
 function Env() {
