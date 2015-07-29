@@ -687,21 +687,22 @@ $(document).ready(function() {
 });
 
 function createJobLinksTable(jobResultURL) {
+    // alert(jobResultURL);
     var $jobListTable = $('#jobListSave');
     var $tr = $('<tr class="jobResultRow"></tr>');
     var $tdName = $('<td class="jobResultDescription" style="word-break: break-word;"></td>');
 
-    
-             $tr.data('jobUrlData', jobResultURL);
-        
-            $tdName.append(jobResultURL);
-            var $tdAction = $('<td/>');
-            $tdAction.append('<div style="margin-right:17px;float:right;" class="btn-group del"><button class="deleteRow" value="Remove" title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></div>');
-            $tr.append($tdName).append($tdAction);
-            $jobListTable.append($tr);
-            $jobList.row.add($tr).draw();
-       
-    
+
+    $tr.data('jobUrlData', jobResultURL);
+
+    $tdName.append(jobResultURL);
+    var $tdAction = $('<td/>');
+    $tdAction.append('<div style="margin-right:17px;float:right;" class="btn-group del"><button class="deleteRow" value="Remove" title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></div>');
+    $tr.append($tdName).append($tdAction);
+    $jobListTable.append($tr);
+    $jobList.row.add($tr).draw();
+
+
 
 }
 
@@ -813,11 +814,14 @@ $(document).ready(function() {
                     createRunlistTable(taskData.taskConfig.runlist);
                 }
             }
-            if(taskData.taskConfig.jobResultURL &&  taskData.taskConfig.jobResultURL.length){
-              // alert(taskData.taskConfig.runlist);
-                if (taskData.taskConfig.jobResultURL.length > 0) {
-                //  alert(taskData.taskConfig.runlist);
-                    createJobLinksTable(taskData.taskConfig.jobResultURL);
+
+             console.log('urls ===> ',taskData.taskConfig.jobResultURL);
+
+            if (taskData.taskConfig.jobResultURL && taskData.taskConfig.jobResultURL.length) {
+                // alert(taskData.taskConfig.runlist);
+                for (var z = 0; z < taskData.taskConfig.jobResultURL.length; z++) {
+                    console.log('urls ===> ',taskData.taskConfig.jobResultURL);
+                    createJobLinksTable(taskData.taskConfig.jobResultURL[z]);
                 }
             }
             if (taskData.taskConfig.attributes && taskData.taskConfig.attributes.length) {
