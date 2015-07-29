@@ -3,7 +3,7 @@ var mkdirp = require('mkdirp');
 var fs = require('fs');
 var currentDirectory = __dirname;
 var path = require('path');
-var logger = require('../lib/logger')(module);
+var logger = require('_pr/logger')(module);
 
 
 var configJson;
