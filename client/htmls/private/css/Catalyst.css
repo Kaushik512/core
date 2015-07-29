@@ -8155,3 +8155,8 @@ form.cmxform .gray * {
     margin-left:-73px!important;
     margin-top:44px!important;
 }
+
+.marginleftright7 {
+  margin-left: 7px;
+  margin-right: 7px;
+}

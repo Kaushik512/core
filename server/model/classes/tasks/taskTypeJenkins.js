@@ -13,7 +13,7 @@ var jenkinsTaskSchema = taskTypeSchema.extend({
     jenkinsServerId: String,
     jobName: String,
     autoSyncFlag: String,
-    jobResultURL: String,
+    jobResultURL: [String],
     jobURL: String,
     isParameterized: Boolean,
     parameterized: [{
@@ -64,10 +64,9 @@ jenkinsTaskSchema.methods.execute = function(userName, baseUrl, onExecute, onCom
                     if (typeof self.isParameterized != 'undefined' && self.isParameterized) {
                         logger.debug("parameterized executing.....");
                         var params = self.parameterized;
-
+                        var param = {};
                         if (params.length > 0) {
                             for (var i = 0; i < params.length; i++) {
-                                var param = new Object();
                                 param[params[i].name] = params[i].defaultValue;
                             }
                         } else {
@@ -77,7 +76,7 @@ jenkinsTaskSchema.methods.execute = function(userName, baseUrl, onExecute, onCom
                         }
                         logger.debug("param object>>>>>>>>>>> ", JSON.stringify(param));
                         var dummyObj = {
-                            "Catalyst_Setup": "testValAnshul",
+                            "Catalyst_Setup": "testValGobinda",
                             "mybool": false
                         };
                         jenkins.buildJobWithParams(self.jobName, param, function(err, buildRes) {
