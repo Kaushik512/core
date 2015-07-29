@@ -1550,6 +1550,7 @@ Clicks on Providers
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='setting_tree']/ul/li[7]/a
 
 Clicks on New Button of Providers
+    Sleep    4s
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    id=addnewitem
 
 Select the Provider
