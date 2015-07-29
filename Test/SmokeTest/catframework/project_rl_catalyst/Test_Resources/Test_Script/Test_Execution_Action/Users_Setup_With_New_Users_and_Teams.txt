@@ -11,7 +11,7 @@ Resource           ${COMMON RESOURCES}/catalyst_grid_node.txt
 
 *** Keywords ***
 
-Catalyst creates new org admin
+Catalyst Org Admin creates new org user
     Clicks on Settings
     Clicks on Users Setup 
     Clicks on Users
@@ -23,11 +23,8 @@ Catalyst creates new org admin
     Select the Organization the Admin Created
     Assign Roles for org admin
     Assign Teams for organization admin
-    Clicks on USave button
+    Clicks on Save button in Users Page
 
-    #Add User to LDAP
-    #Enters LDAP Password for new org admin
-    #Enters Confirm LDAP Password for new org admin
 
 Catalyst creates new org designer
     Clicks on New Button
@@ -38,11 +35,7 @@ Catalyst creates new org designer
     Select the Organization the Admin Created
     Assign Roles for org designer
     Assign Teams for organization designer
-    Clicks on USave button
-
-    #Add User to LDAP
-    #Enters LDAP Password for new org designer
-    #Enters Confirm LDAP Password for new org designer
+    Clicks on Save button in Users Page
 
 Catalyst creates new org consumer
     Clicks on New Button
@@ -53,13 +46,10 @@ Catalyst creates new org consumer
     Select the Organization the Admin Created
     Assign Roles for org Consumer
     Assign Teams for organization Consumer
-    Clicks on USave button
+    Clicks on Save button in Users Page
 
-    #Add User to LDAP
-    #Enters LDAP Password for new org Consumer
-    #Enters Confirm LDAP Password for new org Consumer
 
-Catalyst creates New Teams
+Catalyst Creates New Teams
     Clicks on Settings
     Clicks on Users Setup
     Clicks on Teams
@@ -69,10 +59,9 @@ Catalyst creates New Teams
     Select particular User Created organization
     Assign Users
     Assign Projects
-    Clicks on TSave Button
+    Clicks on Save button in Teams Page
 
-
-
+on
 Clicks on Users Setup
     Wait Until keyword Succeeds    1 minute     1 seconds    Wait Until Element Is Visible    xpath=//a[contains(text(),'Users Setup')]
     Click Element    xpath=//a[contains(text(),'Users Setup')]
@@ -98,9 +87,7 @@ Enters new orgadmin confirm password
     Input Text    id=cnfPassword    ${Orgadmin1_CONFPASSWD}
 
 Select the Organization the Admin Created
-    Click Element    xpath=.//*[@id='s2id_orgname']/a/span[1]
-    Input Text    xpath=.//*[@id='select2-drop']/div/input    ${ORGANIZATION NAME}
-    Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
+    Select From List     id=orgname      ${ORGANIZATION NAME}
      
 Add User to LDAP
     Click Element    id=chkadduserldap
@@ -117,8 +104,8 @@ Assign Roles for org admin
 Assign Teams for organization admin
     Click Element    xpath=.//*[@id='teamname']/label[text()='${ORGANIZATION NAME}_Admins']
 
-Clicks on USave button
-    Click Element    xpath=.//*[@id='myForm5']/div/div[3]/div/button
+Clicks on Save button in Users Page
+    Click Element    css=div.btn-group.pull-right > button
 
 
 Enters new designer login name
@@ -178,8 +165,8 @@ Clicks on Teams
     Click Element    xpath=//a[contains(text(),'Teams')] 
 
 Clicks on New Team Button
-    Wait Until keyword Succeeds    1 minute     1 seconds    Wait Until Element Is Visible    xpath=.//*[@id='newTeam']
-    Click Element    xpath=.//*[@id='newTeam']
+    Wait Until keyword Succeeds    1 minute     1 seconds    Wait Until Element Is Visible    css=#newTeam
+    Click Element    css=#newTeam
 
 Enters the Team Name
     Wait Until keyword Succeeds    1 minute     1 seconds    Input Text    id=teamname    ${TEAMNAME1}
@@ -200,5 +187,5 @@ Assign Projects
     Click Element    xpath=.//*[@id='projectname']/label[text()="${PROJECT NAME1}"]/i
     Click Element    xpath=.//*[@id='projectname']/label[text()="${PROJECT NAME2}"]/i
 
-Clicks on TSave Button
-    Click Element    xpath=.//*[@id='myForm3']/div/div[3]/div/button
+Clicks on Save button in Teams Page
+    Click Element    css=div.btn-group.pull-right > button

@@ -3,11 +3,9 @@
 current_dir = File.dirname(__FILE__)
 log_level                :info
 log_location             STDOUT
-node_name                "pcjoshi9"
-client_key               "#{current_dir}/pcjoshi9.pem"
-validation_client_name   "cat1-validator"
-validation_key           "#{current_dir}/cat1-validator.pem"
-chef_server_url          "https://api.opscode.com/organizations/cat1"
-cache_type               'BasicFile'
-cache_options( :path => "#{ENV['HOME']}/.chef/checksums" )
+node_name                "mycatqa"
+client_key               "#{current_dir}/mycatqa.pem"
+validation_client_name   "cattest-validator"
+validation_key           "#{current_dir}/cattest-validator.pem"
+chef_server_url          "https://api.opscode.com/organizations/cattest"
 cookbook_path            ["#{current_dir}/../cookbooks"]

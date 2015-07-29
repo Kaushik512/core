@@ -10,26 +10,28 @@ Resource           ${COMMON RESOURCES}/catalyst_grid_node.txt
 
 
 *** Test Cases ***
-Catalyst new Gallery Template setup
+Catalyst Gallery Template Type Creation
     [Tags]       Sanity               Smoke
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
-    #Test Validation of New Template Type
-    Catalyst navigates to Template Type page
-    Catalyst User New Design Template Type
-    Catalyst navigates to Templates page
-    #Test Validation of Creation of New Templates
+    Catalyst User Creates New Template Type
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+Catalyst Gallery Templates Creation
+    [Tags]       Sanity               Smoke
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
     Catalyst User New Template Creation
     Catalyst Logout                      
     [Teardown]     Close Browser
 
 
-Catalyst new Gallery Service Command setup
+
+Catalyst Gallery Service Command Creation
     [Tags]       Sanity               Smoke
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
-    #Test Validation of Creation of New Services
-    Catalyst navigates to Service command page
     Catalyst User Creates Service Command
     Catalyst Logout                      
     [Teardown]     Close Browser

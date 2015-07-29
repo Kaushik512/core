@@ -140,6 +140,7 @@ var InstanceSchema = new Schema({
     platformId: String,
     instanceIP: {
         type: String,
+        index: true,
         trim: true
     },
     appUrls: [{
@@ -172,6 +173,18 @@ var InstanceSchema = new Schema({
         },
         chefNodeName: String
     },
+    software:[
+        {
+            name: {
+                type: String,
+                trim: true
+            },
+            version: {
+                type: String,
+                trim: true
+            }
+        }
+    ],
     credentials: {
         username: {
             type: String,
@@ -207,21 +220,34 @@ var InstanceSchema = new Schema({
 
 InstanceSchema.plugin(uniqueValidator);
 InstanceSchema.plugin(textSearch);
+InstanceSchema.index( { "$**": "text" });
 
 var Instances = mongoose.model('instances', InstanceSchema);
-
+//mongoose.set('debug',true);
 
 
 var InstancesDao = function() {
     this.searchInstances = function(searchquery,options,callback){
         logger.debug("Enter searchInstances query - (%s)", searchquery);
-        Instances.textSearch(searchquery,function(err,data){
+        Instances.textSearch(searchquery,options,function(err,data){
             if(!err){
-                callback(null,data);
+               // logger.debug(data.length);
+                var data1 = {
+                    "tasks":[],
+                    instances:[],
+                    queryduration:''
+                }
+                for(var i = 0; i < data.results.length; i++){
+                    data1.instances.push(data.results[i].obj);
+                }
+                data1.queryduration = (data.stats.timeMicros/100000);
+                callback(null,data1);
+                return;
             }
             else{
                 logger.debug('Error in search:' + err);
                 callback(err,null);
+                return;
             }
         });
     };

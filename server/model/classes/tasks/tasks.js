@@ -68,6 +68,9 @@ var taskSchema = new Schema({
     description: {
         type: String
     },
+    jobResultURLPattern: {
+        type: [String]
+    },
     taskConfig: Schema.Types.Mixed,
     lastTaskStatus: String,
     lastRunTimestamp: Number,
@@ -152,17 +155,23 @@ taskSchema.methods.execute = function(userName, baseUrl, callback, onComplete) {
         if (taskExecuteData.buildNumber) {
             taskHistoryData.buildNumber = taskExecuteData.buildNumber;
         }
-        var arrStr;
-        var x;
-        var acUrl="";
-        if(self.taskConfig.jobResultURL != ""){
-            arrStr = self.taskConfig.jobResultURL.split("-");
+        //var arrStr;
+        //var x;
+        logger.debug("+++++++++++++++++++++++ ",self.taskConfig.jobResultURL);
+        var acUrl=[];
+        if(self.jobResultURLPattern.length > 0){
+            /*arrStr = self.taskConfig.jobResultURL.split("-");
             if(arrStr.length === 3){
                 x = taskExecuteData.buildNumber+"/"+arrStr[2].substr(arrStr[2].lastIndexOf("/")+1);
                 acUrl = arrStr[0]+"-"+arrStr[1]+"-"+x;
+            }*/
+            for(var i=0;i< self.jobResultURLPattern.length;i++){
+                acUrl.push(self.jobResultURLPattern[i].replace("$buildNumber",taskExecuteData.buildNumber));
             }
         }
         //self.taskConfig.jobResultURL = acUrl;
+        logger.debug(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ",acUrl);
+        taskHistoryData.jobResultURL = acUrl;
         if (taskHistoryData.taskType === TASK_TYPE.JENKINS_TASK) {
             var taskConfig = self.taskConfig;
             taskConfig.jobResultURL = acUrl;
@@ -183,8 +192,6 @@ taskSchema.methods.execute = function(userName, baseUrl, callback, onComplete) {
                 
             });
         }
-        
-        taskHistoryData.jobResultURL = acUrl;
         TaskHistory.createNew(taskHistoryData, function(err, taskHistoryEntry) {
             if (err) {
                 logger.error("Unable to make task history entry", err);

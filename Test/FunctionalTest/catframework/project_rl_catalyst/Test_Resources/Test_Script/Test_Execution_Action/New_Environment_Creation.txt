@@ -23,6 +23,7 @@ Catalyst Addition and Creation of New Envirorments Setup
     #Clicks on EEnvironments menu line
     Sleep    1s
     Clicks on New button Create New Environment
+    Sleep    2s
     Select organization for Env
     #Select the Configuration name
     #-Clicks on Add Button
@@ -51,6 +52,7 @@ Catalyst Addition of New Environments
     Clicks on DevOps Setup menu
     Clicks on EEnvironments menu line
     Clicks on New button Create New Environment
+    Sleep    2s
     Select organization for Env
     Clicks on Add Button
     Add the New EEnvironment Named1

@@ -527,21 +527,21 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         req.params.querytext = req.params.querytext.replace(/\"/g, '\\"');
         logger.debug('Query:' + req.params.querytext);
         var options = {
-            search:req.params.querytext
-            // filter:{
-            //     orgId:'\"' + req.params.orgid + '\"',
-            //     envId:'\"' + req.params.envid + '\"',
-            //     bgId:'\"' + req.params.bgid + '\"',
-            //     projectId:'\"' + req.params.projid + '\"'
-            // },
-           // limit: 10000
+            search:req.params.querytext,
+            filter:{
+                 orgId:req.params.orgid,
+                envId:req.params.envid,
+                bgId:req.params.bgid ,
+                projectId:req.params.projid
+            },
+           limit: 10000
         }
         logger.debug(JSON.stringify(options));
        // req.params.querytext = '(\"' + req.params.querytext + '\") AND (' + req.params.orgid + ' AND ' + req.params.bgid + ' AND ' + req.params.projid +  ' AND ' + req.params.envid + ')';
-        instancesDao.searchInstances('\"' + req.params.querytext + '\"',function(err,data){
+        instancesDao.searchInstances(req.params.querytext,options,function(err,data){
             if(!err){
                 logger.debug('Received from search');
-                logger.debug(data);
+               logger.debug(data.length);
                 res.send(data);
             }
         });
