@@ -1,4 +1,84 @@
-
+.carousel-inner{
+    overflow: auto !important;
+    min-height:400px !important;
+}
+.showmenuAppTaskAnchor{
+    background-color: #ffffff;
+    border-color:#40baf1 !important;
+    background-repeat: no-repeat; 
+    float: left; 
+    border-radius: 50% !important; 
+    height: 26px; 
+    width: 26px; 
+    margin-left: 10px; 
+    margin-top: 4px;
+}
+.showmenuAppTaskAnchorI{
+   color:#40baf1 ! important;
+   font-size: 16px;
+   margin-top: 3px; 
+}
+.menuAppLinkSpan{
+    color: rgb(44, 55, 66); 
+    font-weight: bold; 
+    padding: 10px; 
+    font-size: 12px;
+}
+.menuTaskSpan{
+    color: rgb(44, 55, 66); 
+    font-weight: bold; 
+    padding: 10px; 
+    font-size: 12px;
+}
+.paddingleft32{
+    padding-left: 32px;
+}
+.fontsize11{
+    font-size: 11px;
+}
+.glyphiconNew{
+    /*font-size: 18px !important*/
+}
+.menuAppTask {    
+    /*position: relative;
+    margin-top: 40px;
+    background: #ffffff;
+    border: 2px solid #40baf1;
+    width:300px !important;
+    min-height:100px;*/
+    position: relative;
+    z-index: 1;
+    /*margin-top: 40px;*/
+    margin-top: 15px;
+    /*left:6px;*/
+    background: #ffffff;
+    border: 2px solid #40baf1;
+    min-height:100px;;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+} 
+.menuAppTask:after, .menuAppTask:before {
+    bottom: 100%;
+    left: 88%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+} .menuAppTask:after {
+    border-color: rgba(136, 183, 213, 0);
+    border-bottom-color: #ffffff;
+    border-width: 15px;
+    margin-left: -15px;
+} .menuAppTask:before { 
+    border-color: rgba(194, 225, 245, 0);
+    border-bottom-color: #40baf1;
+    border-width: 18px;
+    margin-left: -18px;
+}
+#tasksLists_length{
+    display: none;
+}
 .assignedRunlists{
     border:1px solid #dddddd;
     list-style:none outside none;
@@ -109,6 +189,10 @@
     width:80%;
     margin-bottom: 8px !important;
 }
+.searchTaskLabel{
+    width:80%;
+    margin-bottom: 8px !important;
+}
 .runlistLabel{
     font-size: 16px;
     margin-bottom:20px !important;
@@ -116,7 +200,19 @@
 .selectCookbooksandRecipesdiv{
     width: 80%;
 }
+.selectTasksdiv{
+    width:80%;
+}
 .selectCookbooksandRecipes{
+    height: 250px !important;
+    width:100% !important;
+    margin-bottom: 10px !important;
+    border-width:1px 1px 1px 2px; 
+    border-style:solid; 
+    border-color:#ccc !important;
+    /*border: 1px solid #ccc !important;*/
+}
+.selectavailbleTask{
     height: 250px !important;
     width:100% !important;
     margin-bottom: 10px !important;
@@ -140,6 +236,15 @@
     background-repeat: no-repeat;
     height: 24px;
     padding-left: 34px !important; 
+    padding-top: 6px !important;
+    background-position:4px 2px;
+    font-size: 12px;
+}
+.taskimg{
+    background: url("../img/tasksmall.png");
+    background-repeat: no-repeat;
+    height: 24px;
+    padding-left: 36px !important; 
     padding-top: 6px !important;
     background-position:4px 2px;
     font-size: 12px;
@@ -3762,7 +3867,9 @@ body
 }
 .instance-bootstrap-list {
     font-size: 10px;
-    padding-top: 14px;
+    /*Arabinda commented when App Url and Task link added.
+    padding-top: 14px;*/
+    padding-top: 20px;
 
     text-align: center;
 
