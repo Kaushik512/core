@@ -1305,6 +1305,24 @@ $(document).ready(function() {
             $jobList.row($tr).remove().draw(true);
         });
 
+        
+        if(urlParams.taskId){
+            $tdAction.find('.deleteRow').click(function() {
+
+                bootbox.confirm('Are you sure you want to Delete Job Output', function(result) {
+                    if (result) {
+                     var reqBody={
+                        resultURL: "http://54.67.35.103:8000/Catalyst_Test_Results/jenkins-CAT_FT_START-$buildNumber/log.html"
+                     };
+
+                        $.post('../tasks/' + urlParams.taskId + '/resultUrl/remove', reqBody, function(data) {
+                                $jobList.row($tr).remove().draw(true);
+                        });
+                    }
+                });
+                return false;
+            });
+        }
         $tr.append($tdName).append($tdAction);
         $jobListTable.append($tr);
         $jobList.row.add($tr).draw();

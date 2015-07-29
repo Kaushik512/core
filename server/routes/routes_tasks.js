@@ -399,7 +399,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
         });
     });
 
-    app.delete('/tasks/:taskId/resultUrl/remove', function(req, res) {
+    app.post('/tasks/:taskId/resultUrl/remove', function(req, res) {
         Tasks.getTaskById(req.params.taskId, function(err, data) {
             if (err) {
                 logger.error(err);
