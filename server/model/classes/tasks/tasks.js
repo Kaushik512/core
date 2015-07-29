@@ -449,6 +449,26 @@ taskSchema.statics.getTasksByNodeIds = function(nodeIds, callback) {
     });
 };
 
+taskSchema.statics.updateJobUrl = function(taskId,taskConfig, callback) {
+    Tasks.update({
+        "_id": new ObjectId(taskId)
+    }, {
+        $set: {
+            taskConfig: taskConfig
+        }
+    }, {
+        upsert: false
+    }, function(err, updateCount) {
+        if (err) {
+            callback(err, null);
+            return;
+        }
+        logger.debug('Updated task:' + JSON.stringify(Tasks));
+        callback(null, updateCount);
+
+    });
+};
+
 
 var Tasks = mongoose.model('Tasks', taskSchema);
 

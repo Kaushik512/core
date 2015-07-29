@@ -399,4 +399,41 @@ module.exports.setRoutes = function(app, sessionVerification) {
         });
     });
 
+    app.delete('/tasks/:taskId/resultUrl/remove', function(req, res) {
+        Tasks.getTaskById(req.params.taskId, function(err, data) {
+            if (err) {
+                logger.error(err);
+                res.send(500, errorResponses.db.error);
+                return;
+            }
+            if (data) {
+                logger.debug("result URL: ", req.body.resultURL);
+                var result = data.taskConfig.jobResultURL;
+                var index = result.indexOf(req.body.resultURL);
+                if (index != -1) {
+                    result.splice(index, 1);
+                    logger.debug("Updated JobResultURL: ", JSON.stringify(result));
+                    var taskConfig = data.taskConfig.jobResult;
+                        taskConfig = result;
+                    Tasks.updateJobUrl(req.params.taskId, taskConfig, function(err, updateCount) {
+                        if (err) {
+                            logger.error(err);
+                            res.send(500, errorResponses.db.error);
+                            return;
+                        }
+                        if (updateCount) {
+                            res.send({
+                                updateCount: updateCount
+                            });
+                        } else {
+                            res.send(400);
+                        }
+                    });
+                }
+            } else {
+                res.send(404);
+            }
+        });
+    });
+
 };
