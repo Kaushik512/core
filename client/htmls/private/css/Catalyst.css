@@ -8131,6 +8131,38 @@ form.cmxform .gray * {
     border-top:none;
 }
 
+.stack-details-list {
+    font-size: 10px;
+    padding-bottom: 0px;
+    padding-top: 5px;
+    text-align: center;
+    /*border-top: 1px solid;
+    font-size: 10px;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    text-align: center;*/
+    }
+.stack-details {
+    display: block;
+}
+.stackId {
+  width: 100px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.stackCardDiv {
+        position: relative;
+        /*padding: 15px 15px 15px;*/
+        /*margin: 15px;*/
+        /*background-color: #ffffff;
+        border-color: #e5e5e5 #eee #eee;
+        border-style: solid;*/
+        border-width: 1px;
+        /*height: 100px;
+        min-height: 150px;*/
+}
+
 .instanceloaderspinner{
     background-color: #fff;
     border: 1px solid black;
@@ -8154,6 +8186,22 @@ form.cmxform .gray * {
 .popover.left{
     margin-left:-73px!important;
     margin-top:44px!important;
+}
+
+.stackInfo{
+    background: url(../img/sprites.png) no-repeat;
+    background-position: -15px -12px ;
+    width: 25px;
+    height: 25px;
+    background-repeat:no-repeat;
+    float: left;
+    margin-top:0px;
+}
+.stackLogo {
+   height: 52px;
+  padding-top: 11px;
+  margin-top: 9px;
+  margin-left: 44px;
 }
 
 .marginleftright7 {

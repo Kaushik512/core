@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 var ObjectId = require('mongoose').Types.ObjectId;
 var schemaValidator = require('./../../dao/schema-validator');
 var uniqueValidator = require('mongoose-unique-validator');
-var logger = require('../../../lib/logger')(module);
+var logger = require('_pr/logger')(module);
 var ChefClientExecution = require('./chefClientExecution/chefClientExecution');
 var textSearch = require('mongoose-text-search');
 
@@ -213,7 +213,8 @@ var InstanceSchema = new Schema({
     actionLogs: [ActionLogSchema],
     chefClientExecutionIds: [String],
     taskIds: [String],
-    tempActionLogId: String
+    tempActionLogId: String,
+    cloudFormationId: String
 
 });
 
@@ -453,6 +454,23 @@ var InstancesDao = function() {
             logger.debug("Exit getInstanceByProjectId (%s)", ProjectId);
             callback(null, data);
         });
+    };
+
+    this.getInstancesByCloudformationId = function(cfId, callback) {
+        logger.debug("Enter getInstancesByCloudformationId (%s)", cfId);
+        var queryObj = {
+            cloudFormationId: cfId
+        }
+        Instances.find(queryObj, function(err, data) {
+            if (err) {
+                logger.debug("Failed to getInstancesByCloudformationId (%s)", cfId, err);
+                callback(err, null);
+                return;
+            }
+            logger.debug("Exit getInstancesByCloudformationId (%s)", cfId);
+            callback(null, data);
+        });
+
     };
 
 
@@ -746,7 +764,22 @@ var InstancesDao = function() {
             logger.debug("Exit removeInstancebyId (%s)", instanceId);
             callback(null, data);
         });
-    }
+    };
+
+    this.removeInstancebyCloudFormationId = function(cfId, callback) {
+        logger.debug("Enter removeInstancebyCloudFormationId (%s)", cfId);
+        Instances.remove({
+            cloudFormationId: cfId
+        }, function(err, data) {
+            if (err) {
+                logger.error("Failed to removeInstancebyCloudFormationId (%s)", cfId, err);
+                callback(err, null);
+                return;
+            }
+            logger.debug("Exit removeInstancebyCloudFormationId (%s)", cfId);
+            callback(null, data);
+        });
+    };
 
     this.updateInstanceLog = function(instanceId, log, callback) {
         logger.debug("Enter updateInstanceLog ", instanceId, log);

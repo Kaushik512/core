@@ -12,7 +12,7 @@ var instancesDao = require('../model/classes/instance/instance');
 var TaskHistory = require('../model/classes/tasks/taskHistory');
 
 
-var logger = require('../lib/logger')(module);
+var logger = require('_pr/logger')(module);
 
 module.exports.setRoutes = function(app, sessionVerification) {
     app.all('/tasks/*', sessionVerification);

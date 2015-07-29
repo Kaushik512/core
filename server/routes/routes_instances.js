@@ -17,19 +17,19 @@ var logsDao = require('../model/dao/logsdao.js');
 var configmgmtDao = require('../model/d4dmasters/configmgmt');
 var Docker = require('../model/docker.js');
 var SSH = require('../lib/utils/sshexec');
-var appConfig = require('../config/app_config.js');
+var appConfig = require('_pr/config');
 var usersDao = require('../model/users.js');
 var credentialCryptography = require('../lib/credentialcryptography')
 var fileIo = require('../lib/utils/fileio');
 var uuid = require('node-uuid');
 //var javaSSHWrapper = require('../model/javaSSHWrapper.js');
 var errorResponses = require('./error_responses');
-var logger = require('../lib/logger')(module);
+var logger = require('_pr/logger')(module);
 var waitForPort = require('wait-for-port');
-var AWSProvider = require('../model/classes/masters/cloudprovider/awsCloudProvider.js');
+var AWSProvider = require('_pr/model/classes/masters/cloudprovider/awsCloudProvider.js');
 var AWSKeyPair = require('../model/classes/masters/cloudprovider/keyPair.js');
 var ChefClientExecution = require('../model/classes/instance/chefClientExecution/chefClientExecution.js');
-var appConfig = require('../config/app_config.js');
+
 var Cryptography = require('../lib/utils/cryptography');
 
 
