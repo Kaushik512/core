@@ -187,7 +187,7 @@
                                                                <tr>
                                                                   <td class="jobParam" id="jobTD" style="padding-top:26px!important">Job Links:</td>
                                                                   <td><div class="col-lg-11 col-md-11 jobTable" style="margin-top:1px"><!-- <img src="img/add.png" style="float:right;margin-top:-16px;margin-right:-1px;" class="addJobLink" rel="tooltip" data-placement="top" title="Add New Job Link" /><input id="jobResultUrl" autocomplete="off" type="text" title="ex:http://{host:port}/TestResult/$buildNumber/log.html" alt="ex:http://{host:port}/TestResult/$buildNumber/log.html" placeholder=" ex:http://{host:port}/<TestResult>/<$buildNumber>/log.html" class="form-control inputJobResultUrl" name="jobResultUrl"> -->
-                                                                    <a href="#jobResultModal" id="imageLink" data-backdrop="false" data-toggle="modal" style="cursor:pointer;"> <img src="img/add.png" style="float:right;" class="addList" rel="tooltip" data-placement="top" title="Add Job Links" /></a>
+                                                                    <a href="#jobResultModal" id="imageLink" data-backdrop="false" data-toggle="modal" style="cursor:pointer;"> <img src="img/add.png" style="float:right;" class="addListUrl" rel="tooltip" data-placement="top" title="Add Job Links" /></a>
                                                          <div style="height:auto;overflow-y:auto;" id="dbNameTable_wrapper" class="dataTables_wrapper no-footer">
                                                             <table id="tableJobList" class="table table-striped table-bordered table-hover dataTable no-footer" cellpadding="5px" width="100%" style="text-align:center";>
                                                                <thead>
@@ -683,6 +683,11 @@ if (!$.fn.dataTable.isDataTable('#tableJobList')) {
 $(document).ready(function() {
     $('[data-toggle="popover"]').popover({
        trigger: 'focus'
+    });
+
+    $('.addListUrl').click(function(e) {
+        $('#jobLinkCreate').trigger("reset");
+
     });
 });
 
@@ -1247,6 +1252,7 @@ $(document).ready(function() {
             }
         } else {
             if (taskType === 'jenkins') {
+               alert('jenkins');
                 $.get('/jenkins/' + taskData.jenkinsServerId + '/job/' + taskData.jobName + '/lastBuild', function(data) {
                     var url = taskData.jobResultURL;
                     

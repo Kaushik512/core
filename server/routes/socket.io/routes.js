@@ -1,6 +1,6 @@
 var instancesDao = require('../../model/classes/instance/instance.js');
 var shellClient = require('../../lib/utils/sshshell');
-var logger = require('../../lib/logger')(module);
+var logger = require('_pr/logger')(module);
 var logsDao = require('../../model/dao/logsdao.js');
 
 

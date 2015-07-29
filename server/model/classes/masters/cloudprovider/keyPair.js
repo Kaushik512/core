@@ -1,13 +1,13 @@
 /* Copyright (C) Relevance Lab Private Limited- All Rights Reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
- * Written by Gobinda Das <gobinda.das@relevancelab.com>, 
+ * Written by Gobinda Das <gobinda.das@relevancelab.com>,
  * May 2015
  */
 
 // This file act as a Model which contains key pair schema and all dao methods.
 
-var logger = require('../../../../lib/logger')(module);
+var logger = require('_pr/logger')(module);
 var mongoose = require('mongoose');
 var extend = require('mongoose-schema-extend');
 var ObjectId = require('mongoose').Types.ObjectId;
@@ -20,8 +20,7 @@ var Schema = mongoose.Schema;
 
 var awsKeyPairSchema = new Schema({
     id: {
-        type: Number
-        ,
+        type: Number,
         required: true,
         trim: true
     },
@@ -52,80 +51,80 @@ var awsKeyPairSchema = new Schema({
 // Static methods :- 
 
 // creates a new Provider
-awsKeyPairSchema.statics.createNew = function(req,providerId,callback) {
+awsKeyPairSchema.statics.createNew = function(req, providerId, callback) {
     logger.debug("Enter createNew for keyPair.");
     var keyPairs = [];
     var keyPairNames = req.body.keyPairName;
     var regions = req.body.region;
     var fileNames = req.body.fileName;
-    if(typeof keyPairNames === "object"){
+    if (typeof keyPairNames === "object") {
         logger.debug("Inside array>>>>");
-        for(var p=0; p< keyPairNames.length; p++){
-            var keyPairs1= {
-            keyPairName: keyPairNames[p],
-            region: regions[p],
-            fileName: fileNames[p]
-          };
-          keyPairs.push(keyPairs1);
+        for (var p = 0; p < keyPairNames.length; p++) {
+            var keyPairs1 = {
+                keyPairName: keyPairNames[p],
+                region: regions[p],
+                fileName: fileNames[p]
+            };
+            keyPairs.push(keyPairs1);
         }
-    }else{
-    var keyPairs1= {
-        keyPairName: req.body.keyPairName,
-        region: req.body.region,
-        fileName: req.body.fileName
+    } else {
+        var keyPairs1 = {
+            keyPairName: req.body.keyPairName,
+            region: req.body.region,
+            fileName: req.body.fileName
         };
         keyPairs.push(keyPairs1);
     }
-    logger.debug("Create Keypair called:>>>> %s",keyPairs);
+    logger.debug("Create Keypair called:>>>> %s", keyPairs);
     var returnKeyPair = [];
     var files = [];
-    var count =0;
-    if(keyPairs){
-        logger.debug("Inside if>>>> ",typeof keyPairs);
+    var count = 0;
+    if (keyPairs) {
+        logger.debug("Inside if>>>> ", typeof keyPairs);
         var inFiles = req.files.fileObject;
-        console.log("Incomming files:  ",typeof inFiles.length);
-        if(typeof inFiles.length === 'undefined'){
+        console.log("Incomming files:  ", typeof inFiles.length);
+        if (typeof inFiles.length === 'undefined') {
             logger.debug("Inside undefined...")
             files.push(inFiles);
-        }else{
-            for(var x=0; x< inFiles.length; x++){
+        } else {
+            for (var x = 0; x < inFiles.length; x++) {
                 files.push(inFiles[x]);
             }
         }
-        logger.debug("Files>>>>>>>>>>>>>>>>>> ",JSON.stringify(files));
+        logger.debug("Files>>>>>>>>>>>>>>>>>> ", JSON.stringify(files));
         var that = this;
-        for(var i=0;i< keyPairs.length;i++){
-            (function (count1){
-            var keyPairObj = keyPairs[count1];
-            keyPairObj.providerId = providerId;
-            keyPairObj.id = 99;
-            
-            var keyPair = new that(keyPairObj);
-            keyPair.save(function(err, aKeyPair) {
-                logger.debug("Save called......");
-                if (err) {
-                    logger.error(err);
-                    callback(err, null);
-                    return ;
-                }
-                logger.debug("created kepair::::::::::",JSON.stringify(aKeyPair));
+        for (var i = 0; i < keyPairs.length; i++) {
+            (function(count1) {
+                var keyPairObj = keyPairs[count1];
+                keyPairObj.providerId = providerId;
+                keyPairObj.id = 99;
 
-                returnKeyPair.push(keyPair);
-                count++;
-                ProviderUtil.saveAwsPemFiles(keyPair,files[count1],function(err,flag){
-                    if(err){
-                        logger.debug("Unable to save pem files.");
-                        res.send(500,"Unable to save pem files.");
+                var keyPair = new that(keyPairObj);
+                keyPair.save(function(err, aKeyPair) {
+                    logger.debug("Save called......");
+                    if (err) {
+                        logger.error(err);
+                        callback(err, null);
                         return;
                     }
+                    logger.debug("created kepair::::::::::", JSON.stringify(aKeyPair));
+
+                    returnKeyPair.push(keyPair);
+                    count++;
+                    ProviderUtil.saveAwsPemFiles(keyPair, files[count1], function(err, flag) {
+                        if (err) {
+                            logger.debug("Unable to save pem files.");
+                            res.send(500, "Unable to save pem files.");
+                            return;
+                        }
+                    });
+
+                    if (keyPairs.length === count) {
+                        logger.debug("Exit createNew with keyPair present");
+                        callback(null, returnKeyPair);
+                    }
                 });
-                
-                if(keyPairs.length === count){
-                    logger.debug("Exit createNew with keyPair present");
-                    callback(null,returnKeyPair);
-                }
-            });
-          })(i);
+            })(i);
         }
     }
 };
@@ -134,7 +133,7 @@ awsKeyPairSchema.statics.createNew = function(req,providerId,callback) {
 awsKeyPairSchema.statics.getKeyPairs = function(callback) {
     logger.debug("get all KeyPair.");
     this.find({
-        "id" : 99
+        "id": 99
     }, function(err, keyPairs) {
         if (err) {
             logger.error(err);
@@ -190,6 +189,29 @@ awsKeyPairSchema.statics.getAWSKeyPairByProviderId = function(providerId, callba
             callback(null, aKeyPair);
         } else {
             logger.debug("Exit getAWSKeyPairByProviderId with no keyPair present");
+            callback(null, []);
+        }
+
+    });
+};
+
+awsKeyPairSchema.statics.getAWSKeyPairByProviderIdAndKeyPairName = function(providerId, keyPairName, callback) {
+    logger.debug("Enter getAWSKeyPairByProviderIdAndKeyPairName");
+    this.find({
+        "providerId": new ObjectId(providerId),
+        'keyPairName': keyPairName
+    }, function(err, aKeyPair) {
+        if (err) {
+            logger.error(err);
+            logger.debug("Exit getAWSKeyPairByProviderIdAndKeyPairName with error");
+            callback(err, null);
+            return;
+        }
+        if (aKeyPair.length) {
+            logger.debug("Exit getAWSKeyPairByProviderIdAndKeyPairName with keyPair present");
+            callback(null, aKeyPair);
+        } else {
+            logger.debug("Exit getAWSKeyPairByProviderIdAndKeyPairName with no keyPair present");
             callback(null, []);
         }
 

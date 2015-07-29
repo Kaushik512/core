@@ -10,7 +10,7 @@
 var mongoose = require('mongoose');
 var uuid = require('node-uuid'); //used for generating unique id
 var validate = require('mongoose-validator');
-var logger  = require('../../lib/logger')(module);
+var logger  = require('_pr/logger')(module);
 
 var extend = require('mongoose-validator').extend;
 extend('is_ValidName', function (val) {

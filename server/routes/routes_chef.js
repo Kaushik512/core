@@ -15,7 +15,7 @@ var environmentsDao = require('../model/d4dmasters/environments.js');
 var logsDao = require('../model/dao/logsdao.js');
 var configmgmtDao = require('../model/d4dmasters/configmgmt');
 var fileIo = require('../lib/utils/fileio');
-var appConfig = require('../config/app_config');
+var appConfig = require('_pr/config');
 var uuid = require('node-uuid');
 var taskStatusModule = require('../model/taskstatus');
 var credentialCryptography = require('../lib/credentialcryptography');
@@ -23,7 +23,7 @@ var Curl = require('../lib/utils/curl.js');
 
 var errorResponses = require('./error_responses');
 var waitForPort = require('wait-for-port');
-var logger = require('../lib/logger')(module);
+var logger = require('_pr/logger')(module);
 var masterUtil = require('../lib/utils/masterUtil.js');
 
 module.exports.setRoutes = function(app, verificationFunc) {
