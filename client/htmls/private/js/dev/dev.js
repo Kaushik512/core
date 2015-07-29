@@ -3349,7 +3349,6 @@
                                                                           url = url.replace('lastBuild', );
                                                                       }*/
                                                                           if (jobURLS) {
-                                                                          
                                                                               var $tdNodeList = $('<td style="vertical-align:inherit;text-align:center;"></td>').append('<span><img style="width:20px;" src="img/joburl.jpg">&nbsp;<a style="word-break: break-all;text-decoration:none" title="' + jobURLS + '" href="' + jobURLS + '" target="_blank">Job URL</a></span>');
                                                                           }
                                                                       }
@@ -3582,11 +3581,7 @@
                                                                           $tdHistory.find('a').data('taskId', data[i]._id).data('autosyncFlag', data[i].taskConfig.autoSyncFlag).attr('data-historyTaskId', data[i]._id).click(function(e) {
                                                                               //var $taskHistoryContent = $('#taskHistoryContent').show();
                                                                               var taskId = $(this).data('taskId');
-                                                                              /*$.get('../jenkins/' + serverId + '/jobs/' + jobName,function(data){
-
-                                                                           });*/
-
-
+                                                                              
                                                                               var $modal = $('#jenkinsJobHistory');
                                                                               $modal.find('.loadingContainer').show();
                                                                               $modal.find('.outputArea').hide();
@@ -3745,6 +3740,11 @@
 
                                                                                                 }
                                                                                                 $trHistoryRow.append($tdJobName);
+                                                                                                if (taskHistories[i].jobResultURL.length == 0) {
+                                                                                                    
+                                                                                                    $tdJobName = $('<td/>').append('Not Available');
+                                                                                                }
+                                                                                                $trHistoryRow.append($tdJobName);
                                                                                               if (taskHistories[i].status === "success") {
                                                                                                   var $tdBuildStatus = $('<td style="background-color:#1c9951;"></td>').append('<span style="color:#fff">SUCCESS</span>');
                                                                                                   $trHistoryRow.append($tdBuildStatus);
@@ -3755,10 +3755,7 @@
                                                                                                   var $tdBuildStatusRunning = $('<td style="background-color:gray;"></td>').append('<span style="color:#fff;">PENDING</span>');
                                                                                                   $trHistoryRow.append($tdBuildStatusRunning);
                                                                                               }
-                                                                                              /*var $tdLogs = $('<td></td>').append('<a data-original-title="MoreInfo" data-placement="top" rel="tooltip" class="moreinfoBuild margin-left40per" href="javascript:void(0)" data-toggle="modal"></a>');
-                                                                                              
-                                                                                              $trHistoryRow.append($tdLogs);
-*/
+ 
 
 
                                                                                               var dateStarted = new Date().setTime(taskHistories[i].timestampStarted);

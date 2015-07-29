@@ -367,8 +367,8 @@ Catlayst Importing the Instance Chef Sync
 
 Clicks on Inport New IP Button
     Sleep    1s
-    Execute JavaScript    $('#divinstancescardview').attr('style','display:none')
-    Sleep    1s
+    #Execute JavaScript    $('#divinstancescardview').attr('style','display:none')
+    #Sleep    1s
     Click Element    id=ipaddressimport
     
 
