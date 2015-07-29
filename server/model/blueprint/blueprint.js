@@ -72,12 +72,6 @@ var BlueprintSchema = new Schema({
         required: true,
         trim: true
     },
-    users: [{
-        type: String,
-        required: true,
-        trim: true,
-        validate: schemaValidator.catalystUsernameValidator
-    }],
     blueprintConfig: Schema.Types.Mixed
 });
 
