@@ -2029,12 +2029,14 @@
                                                                            var getDesignTypeImg;
                                                                            var getDesignTypeRowID;
                                                                            var getDesignTypeName;
+                                                                           var getDesignType;
                                                                            $('#accordion-2').empty();
                                                                            console.log(tdata);
                                                                            for (var i = 0; i < rowLength; i += 1) {
                                                                                getDesignTypeImg = tdata[i]['designtemplateicon_filename'];
                                                                                getDesignTypeRowID = tdata[i]['rowid'];
                                                                                getDesignTypeName = tdata[i]['templatetypename'];
+                                                                               getDesignType = tdata[i]['templatetype'];
                                                                                // for (var x = 0; x < tdata.masterjson.rows.row[i].field.length; x++) {
                                                                                //     if (tdata.masterjson.rows.row[i].field[x].name == "rowid") {
                                                                                //         getDesignTypeRowID = tdata.masterjson.rows.row[i].field[x].values.value;
@@ -2050,22 +2052,26 @@
                                                                                // }
                                                                                //Extracting the TT definitions. Add New Template types
                                                                                var $currRolePanel = null;
-                                                                               //alert(getDesignTypeName);
-                                                                               switch (getDesignTypeName) {
+                                                                               switch (getDesignType) {
                                                                                    case "AppFactory":
-                                                                                       $AppFactpanelBody = $('<div class="panel-body AppFactory"></div>');
+                                                                                   case "chef":
+                                                                                       $AppFactpanelBody = $('<div class="panel-body AppFactory chef"></div>');
                                                                                        $currRolePanel = $AppFactpanelBody;
                                                                                        break;
                                                                                    case "DevopsRoles":
-                                                                                       $DevopsRolespanelBody = $('<div class="panel-body DevopsRoles"></div>');
+                                                                                   case "ami":
+                                                                                       alert('yep');
+                                                                                       $DevopsRolespanelBody = $('<div class="panel-body DevopsRoles ami"></div>');
                                                                                        $currRolePanel = $DevopsRolespanelBody;
                                                                                        break;
                                                                                    case "CloudFormation":
-                                                                                       $CloudFormationBody = $('<div class="panel-body CloudFormation"></div>');
+                                                                                   case "cft":
+                                                                                       $CloudFormationBody = $('<div class="panel-body CloudFormation cft"></div>');
                                                                                        $currRolePanel = $CloudFormationBody;
                                                                                        break;
                                                                                    case "Docker":
-                                                                                       $DockerpanelBody = $('<div class="panel-body Docker"></div>');
+                                                                                   case "docker":
+                                                                                       $DockerpanelBody = $('<div class="panel-body Docker docker"></div>');
                                                                                        $currRolePanel = $DockerpanelBody;
                                                                                        break;
                                                                                    case "Desktop":
@@ -2076,6 +2082,7 @@
                                                                                        $EnvironmentpanelBody = $('<div class="panel-body Environment"></div>');
                                                                                        $currRolePanel = $EnvironmentpanelBody;
                                                                                        break;
+                                                                                   
 
                                                                                }
 
@@ -2088,13 +2095,14 @@
                                                                                    '<i class="fa fa-fw fa-plus-circle txt-color-blue"></i> ' +
                                                                                    '<i class="fa fa-fw fa-minus-circle txt-color-red"></i>' + getDesignTypeName + '</a>' +
                                                                                    '</h4></div><div class="panel-collapse collapse" id="collapse' + i + '">' +
-                                                                                   '<div class="panel-body ' + getDesignTypeName + '"></div>' +
+                                                                                   '<div class="panel-body ' + getDesignType + '"></div>' +
                                                                                    '</div>';
                                                                                $('#accordion-2').append($containerTemp);
 
                                                                            }
                                                                            //To fix template id and template type
                                                                            // alert('in' + data.length);
+                                                                           //alert(JSON.stringify(data));
                                                                            for (var i = 0; i < data.length; i++) {
                                                                                //alert(JSON.stringify(data[i]));
                                                                                //Find a panel-body with the template type class
@@ -2126,7 +2134,7 @@
                                                                                    var tagLabel = '';
                                                                                    //Docker Check
 
-                                                                                   if (data[i].templateType == "Docker") {
+                                                                                   if (data[i].templateType == "Docker" ) {
 
                                                                                        console.log("docker", data[i].blueprintConfig);
                                                                                        //$selectVer = $('<select style="padding:1px;"></select>').addClass('blueprintVersionDropDown').attr('data-blueprintId', data[i]._id);
