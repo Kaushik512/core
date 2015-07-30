@@ -628,6 +628,7 @@
          </div><!--/.modal-assignedExecute-->
          <div class="widget-toolbox clearfix">
          <div class="btn-group pull-right">
+         <label id="spinnerForSave" class="hidden"><img  style="margin-left:5px;margin-right:25px;" src="img/select2-spinner.gif"></label>
          <button type="submit" class="btn btn-primary btnSaveTask btn-mini" style="margin-right:11px;">
          <i class="ace-icon fa fa-check bigger-110"></i>
          Save
@@ -1042,6 +1043,7 @@ $(document).ready(function() {
         taskData.taskType = taskType;
         
         if (taskType === 'chef') {
+            var $saveSpinner = $('#spinnerForSave');
             var taskName = $('#chefTaskName').val();
             if (!taskName) {
                 alert('Please enter a Task-Name');
@@ -1088,7 +1090,10 @@ $(document).ready(function() {
                 });
             });
             taskData.attributes = attributes;
+            $('.btnSaveTask').attr('disabled','disabled');
         } else if (taskType === 'jenkins') {
+            var $saveSpinner = $('#spinnerForSave');
+            
             var taskName = $('#jenkinsTaskName').val();
             if (!taskName) {
                 alert('Please enter a Task-Name');
@@ -1102,8 +1107,8 @@ $(document).ready(function() {
             }
 
             var jenkinsJobName = $('#jobListJenkins').val();
-            if (!jenkinsJobName && jenkinsJobName === 'choose') {
-                alert('Please Choose a Jenkins Server');
+            if (!jenkinsJobName) {
+                alert('Please Choose a Jenkins Job');
                 return false;
             }
             var jenkinsJobDescription = $('textarea#jenkinsDescription').val();
@@ -1122,6 +1127,7 @@ $(document).ready(function() {
                 var $this = $(this);
                  jobResultURL.push($this.data('jobUrlData'));
             });
+            $('.btnSaveTask').attr('disabled','disabled');
             //alert(jobUrlResult);            
             taskData.jenkinsServerId = jenkinsServerId;
             taskData.jobName = jenkinsJobName;
@@ -1219,6 +1225,7 @@ $(document).ready(function() {
 
         if (urlParams.taskId) {
             if (taskType === 'jenkins') {
+               $saveSpinner.removeClass('hidden');
                 $.get('/jenkins/' + taskData.jenkinsServerId + '/job/' + taskData.jobName + '/lastBuild', function(data) {
                     //alert(JSON.stringify(taskData));
                     var url = taskData.jobResultURL;
@@ -1234,6 +1241,8 @@ $(document).ready(function() {
 
                     });
                 });
+                $saveSpinner.addClass('hidden');
+                $('.btnSaveTask').removeAttr('disabled');
 
                 return false;
             } else{
@@ -1248,11 +1257,14 @@ $(document).ready(function() {
                     });
 
                 });
+                $saveSpinner.addClass('hidden');
+                $('.btnSaveTask').removeAttr('disabled');
                 return false;
             }
         } else {
             if (taskType === 'jenkins') {
-               alert('jenkins');
+               $saveSpinner.removeClass('hidden');
+               //alert('jenkins');
                 $.get('/jenkins/' + taskData.jenkinsServerId + '/job/' + taskData.jobName + '/lastBuild', function(data) {
                     var url = taskData.jobResultURL;
                     
@@ -1261,8 +1273,10 @@ $(document).ready(function() {
                     var reqBody = {
                         taskData: taskData
                     };
+                    
                     $.post('../organizations/' + urlParams.org + '/businessgroups/' + urlParams['bg'] + '/projects/' + urlParams.projid + '/environments/' + urlParams.envid + '/tasks', reqBody, function(data) {
                         console.log(data);
+                       //alert('spinner');
                         $('.btnBack').click();
                         bootbox.alert({
                             message: 'Job&nbsp;&nbsp;<b>' + data.name + '</b>&nbsp;&nbsp;has been successfully created',
@@ -1270,9 +1284,13 @@ $(document).ready(function() {
                         });
 
                     });
+                    $saveSpinner.addClass('hidden');
+                    $('.btnSaveTask').removeAttr('disabled');
                 });
                 return false;
             }else{
+               $saveSpinner.removeClass('hidden');
+               //alert('chef');
                 var reqBody = {
                     taskData: taskData
                 };
@@ -1287,7 +1305,10 @@ $(document).ready(function() {
                      message:'Job&nbsp;&nbsp;<b>' + data.name + '</b>&nbsp;&nbsp;has been successfully created',
                      title:"Success"
                     });
+                    $saveSpinner.addClass('hidden');
+                    $('.btnSaveTask').removeAttr('disabled');
                 });
+
                 return false;
             }
         }
