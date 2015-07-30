@@ -1320,6 +1320,7 @@
                  $('.chooseProjectExisting').select2('data', null);
                  $('.chooseProjectExisting').change();
                  $('.chooseEnvExisting').select2('data', null);
+                 //alert($('chooseEnvExisting').html());
                  //$('chooseEnvExisting').change();
 
              });
@@ -1481,7 +1482,7 @@
      $('#btnaddDockerTemplateToTable').attr('disabled', 'disabled');
      $('#dockertemplateSpinner').removeClass('hidden');
      $('#dockertemplatetagselector').empty().select2('val', '');
-     $.get('/d4dmasters/getdockertags/' + encodeURIComponent($('#dockertemplateselector').val()) + '/' + $('#dockertemplateselector option:selected').attr('reponame'), function(data) {
+     $.get('/d4dmasters/getdockertags/' + encodeURIComponent($('#dockertemplateselector').val().replace(/\//g, "$$$")) + '/' + $('#dockertemplateselector option:selected').attr('reponame'), function(data) {
          //Sample json given below
          //[{"layer": "cddde0cd", "name": "latest"}, {"layer": "3baf8932", "name": "6.4"}, {"layer": "d1c0a07f", "name": "6.5"}, {"layer": "a9dd9e89", "name": "centos5"}, {"layer": "02398e09", "name": "centos6"}, {"layer": "4e5b3b2f", "name": "centos7"}]
          $('#dockertemplateSpinner').addClass('hidden');
@@ -2038,7 +2039,7 @@
                          'padding-left: 4px;">' +
                          '<b>' + data[i]['templatetypename'] + '</b>' +
                          '</span></div>' +
-                         '<div style="padding-top:10px;padding-left:27px;">' +
+                         '<div style="padding-top:10px;padding-left:0px;text-align:center;">' +
                          '<img alt="JBoss Stack" ' +
                      //'src="/d4dMasters/image/'+getDesignTypeRowID+'__designtemplateicon__'+getDesignTypeImg+'">'+
                      /*'src="/d4dMasters/image/'+getDesignTypeRowID+'__designtemplateicon__'+getDesignTypeImg+'" style="height:60px;width:auto;">'+
@@ -2055,7 +2056,7 @@
                          'padding-left: 4px;">' +
                          '<b>' + data[i]['templatetypename'] + '</b>' +
                          '</span></div>' +
-                         '<div style="padding-top:10px;padding-left:27px;">' +
+                         '<div style="padding-top:10px;padding-left:0px;text-align:center;">' +
                          '<img style="height:40px;width:auto;" alt="" ' +
                          'src="img/logo.png">' +
                          '</div></div></div>';
@@ -3208,12 +3209,14 @@
          var getDesignTypeImg;
          var getDesignTypeRowID;
          var getDesignTypeName;
+         var getDesignType;
          $('#accordion-2').empty();
          //alert(JSON.stringify(tdata));
          for (var i = 0; i < rowLength; i += 1) {
              getDesignTypeImg = tdata[i]['designtemplateicon_filename'];
              getDesignTypeRowID = tdata[i]['rowid'];
              getDesignTypeName = tdata[i]['templatetypename'];
+             getDesignType = tdata[i]['templatetype'];
 
 
              //Extracting the TT definitions. Add New Template types
@@ -3247,6 +3250,7 @@
 
              }
              console.log(tdata);
+             //alert(getDesignTypeName);
              $containerTempNew = '<div class="panel panel-default blueprintContainer hidden">' +
                  '<div class="panel-heading">' +
 
@@ -3255,7 +3259,7 @@
                  '<i class="fa fa-fw fa-plus-circle txt-color-blue"></i> ' +
                  '<i class="fa fa-fw fa-minus-circle txt-color-red"></i>' + getDesignTypeName + '</a>' +
                  '</h4></div><div class="panel-collapse collapse" id="collapse' + i + '">' +
-                 '<div class="panel-body ' + getDesignTypeName + '"></div>' +
+                 '<div class="panel-body ' + getDesignType + '"></div>' +
                  '</div>';
              $('#accordion-2').append($containerTempNew);
 
@@ -3266,6 +3270,7 @@
          for (var i = 0; i < data.length; i++) {
              //alert(JSON.stringify(data[i]));
              //Find a panel-body with the template type class
+            // alert(data[i].templateType);
              var $currRolePanel = $('#accordion-2').find('.' + data[i].templateType);
              //   alert($currRolePanel.length);
              if ($currRolePanel.length > 0) {
@@ -3279,7 +3284,14 @@
                  $ul.append($liRead);
                  var $img
                  if (data[i].iconpath)
-                     $img = $('<img />').attr('src', data[i].iconpath).attr('alt', data[i].name).addClass('cardLogo');
+
+                     {
+                        if (data[i].templateType == "Docker" || data[i].templateType == "docker") {
+                             $img = $('<img />').attr('src', 'img/galleryIcons/Docker.png').attr('alt', data[i].name).addClass('cardLogo');
+                        }
+                        else
+                            $img = $('<img />').attr('src', data[i].iconpath).attr('alt', data[i].name).addClass('cardLogo');
+                    }
                  else
                      $img = $('<img />').attr('src', '').attr('alt', data[i].name).addClass('cardLogo');
                  var $liImage = $('<li></li>').append($img);
@@ -3296,7 +3308,7 @@
                      var $selectVer = null;
                      var tagLabel = '';
                      //Docker Check
-                     if (data[i].templateType == "Docker") {
+                     if (data[i].templateType == "Docker" || data[i].templateType == "docker") {
                          console.log("data[i}" + JSON.stringify(data[i]));
                          $selectVer = $('<select style="padding:1px;margin-right:5px;"></select>').addClass('dockerrepotagselect').attr('data-blueprintId', data[i]._id);
                          $itemBody.attr('dockerreponame', data[i].dockerreponame);

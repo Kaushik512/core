@@ -2060,7 +2060,7 @@
                                                                                        break;
                                                                                    case "DevopsRoles":
                                                                                    case "ami":
-                                                                                       alert('yep');
+                                                                                       
                                                                                        $DevopsRolespanelBody = $('<div class="panel-body DevopsRoles ami"></div>');
                                                                                        $currRolePanel = $DevopsRolespanelBody;
                                                                                        break;
@@ -2134,7 +2134,7 @@
                                                                                    var tagLabel = '';
                                                                                    //Docker Check
 
-                                                                                   if (data[i].templateType == "Docker" ) {
+                                                                                   if (data[i].templateType == "Docker" ||  data[i].templateType == "docker" ) {
 
                                                                                        console.log("docker", data[i].blueprintConfig);
                                                                                        //$selectVer = $('<select style="padding:1px;"></select>').addClass('blueprintVersionDropDown').attr('data-blueprintId', data[i]._id);
@@ -2428,7 +2428,7 @@
                                                                                $modalDesktopProvisioning.modal('show');
                                                                                return;
                                                                            }
-                                                                           if ($selectedItems.attr('data-templateType') === 'Docker') {
+                                                                           if ($selectedItems.attr('data-templateType') === 'Docker' || $selectedItems.attr('data-templateType') === 'docker') {
 
                                                                                $('.oldlaunchparams').empty(); //clearing the old div for composite blue print.
                                                                                // alert('in test');

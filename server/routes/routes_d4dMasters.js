@@ -97,9 +97,10 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
                 var dockerRepo = JSON.parse(data);
                 logger.debug("Docker Repo ->%s", JSON.stringify(dockerRepo));
+                logger.debug("Docker Repopath ->%s", req.params.repopath);
                 var cmd = '';
                 //Below is for public repository
-                cmd = 'curl -v -H "Accept: application/json" -X GET https://' + dockerRepo.dockeruserid + ':' + dockerRepo.dockerpassword + '@index.docker.io/v1/repositories/' + req.params.repopath + '/tags';
+                cmd = 'curl -v -H "Accept: application/json" -X GET https://' + dockerRepo.dockeruserid + ':' + dockerRepo.dockerpassword + '@index.docker.io/v1/repositories/' + req.params.repopath.replace(/\$\$/g, '/') + '/tags';
                 //Below is for private repository
                 //cmd = 'curl --user ' + dockerRepo.dockeruserid + ':' + dockerRepo.dockerpassword + ' -X GET https://index.docker.io/v1/' + dockerRepo.dockerrepopath + '/' + req.params.repopath +  '/tags';
                 logger.debug("executing - %s", cmd);
