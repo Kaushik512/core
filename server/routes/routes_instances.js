@@ -521,27 +521,27 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
 
     });
-    app.get('/instances/search/:orgid/:bgid/:projid/:envid/:querytext',function(req,res){
+    app.get('/instances/search/:orgid/:bgid/:projid/:envid/:querytext', function(req, res) {
         logger.debug("Enter get() for /instances/search/" + req.params.querytext);
         //constructing the options object to narrow down search
         req.params.querytext = req.params.querytext.replace(/\"/g, '\\"');
         logger.debug('Query:' + req.params.querytext);
         var options = {
-            search:req.params.querytext,
-            filter:{
-                 orgId:req.params.orgid,
-                envId:req.params.envid,
-                bgId:req.params.bgid ,
-                projectId:req.params.projid
+            search: req.params.querytext,
+            filter: {
+                orgId: req.params.orgid,
+                envId: req.params.envid,
+                bgId: req.params.bgid,
+                projectId: req.params.projid
             },
-           limit: 10000
+            limit: 10000
         }
         logger.debug(JSON.stringify(options));
-       // req.params.querytext = '(\"' + req.params.querytext + '\") AND (' + req.params.orgid + ' AND ' + req.params.bgid + ' AND ' + req.params.projid +  ' AND ' + req.params.envid + ')';
-        instancesDao.searchInstances(req.params.querytext,options,function(err,data){
-            if(!err){
+        // req.params.querytext = '(\"' + req.params.querytext + '\") AND (' + req.params.orgid + ' AND ' + req.params.bgid + ' AND ' + req.params.projid +  ' AND ' + req.params.envid + ')';
+        instancesDao.searchInstances(req.params.querytext, options, function(err, data) {
+            if (!err) {
                 logger.debug('Received from search');
-               logger.debug(data.length);
+                logger.debug(data.length);
                 res.send(data);
             }
         });
@@ -648,7 +648,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                     logger.debug("Docker run stdout :" + instanceid + stdOutData.toString('ascii'));
                                     stdmessages += stdOutData.toString('ascii');
                                 }
-                            }, function(stdOutErr) {
+                            },
+                            function(stdOutErr) {
                                 logsDao.insertLog({
                                     referenceId: instanceid,
                                     err: true,
@@ -932,7 +933,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                         logger.debug("Docker run stdout :" + instanceid + stdOutData.toString('ascii'));
                                         stdmessages += stdOutData.toString('ascii');
                                     }
-                                }, function(stdOutErr) {
+                                },
+                                function(stdOutErr) {
                                     logsDao.insertLog({
                                         referenceId: instanceid,
                                         err: true,
@@ -1115,7 +1117,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                             runlist: req.body.runlist,
                                             overrideRunlist: false,
                                             jsonAttributes: JSON.stringify(jsonAttributeObj)
-                                            //parallel:true
+                                                //parallel:true
                                         }
                                         logger.debug('decryptCredentials ==>', decryptedCredentials);
                                         if (decryptedCredentials.pemFileLocation) {
@@ -1849,7 +1851,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                 port: 22,
                                 runlist: runlist, // runing service runlist
                                 overrideRunlist: true
-                                //parallel:true
+                                    //parallel:true
                             }
                             if (decryptedCredentials.pemFileLocation) {
                                 chefClientOptions.privateKey = decryptedCredentials.pemFileLocation;
@@ -2508,6 +2510,24 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         });
     });
 
+    app.get('/instances/:instanceId/status', function(req, res) {
+        logger.debug("Enter get() for /instances/%s/actionLogs", req.params.instanceId);
+        instancesDao.getAllActionLogs(req.params.instanceId, function(err, actionLogs) {
+            if (err) {
+                logger.error("Failed to fetch ActionLogs: ", err);
+                res.send(500);
+                return;
+            }
 
+            if (actionLogs && actionLogs.length) {
+                logger.debug("Enter get() for /instances/%s/actionLogs", req.params.instanceId);
+                res.send(actionLogs);
+            } else {
+                logger.debug("Exit get() for /instances/%s/actionLogs", req.params.instanceId);
+                res.send([]);
+            }
 
+        });
+
+    });
 };
