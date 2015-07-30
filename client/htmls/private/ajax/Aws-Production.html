@@ -260,13 +260,32 @@
  </div>
  </div>
  
- <div class="col-lg-12 notForDocker notforCFT" style="margin-top:10px;padding-left:8px;overflow:hidden">
+ <!-- <div class="col-lg-12 notForDocker notforCFT" style="margin-top:10px;padding-left:8px;overflow:hidden">
  <div class="cookbookShow">
 
  </div>
- </div>
+ </div> -->
+<div class="col-lg-6 col-md-6 notForDocker notforCFT" style="margin-top:19px">
+    <label>
+     <i style="color:#40baf1;font-size:16px;" class="ace-icon fa fa-list-ul"></i>   
+     Edit Runlist <span style="color:red">*</span>
+     </label>
+     <a href="#chefRunlistModal" data-backdrop="false" data-toggle="modal" style="cursor:pointer;"> <img src="img/add.png" style="float:right;margin-top:6px;" class="addList" rel="tooltip" data-placement="top" title="Edit Runlist" /></a>
+     <div style="height:146px;overflow-y:auto;" id="dbNameTable_wrapper" class="dataTables_wrapper no-footer">
+        <table id="tableRunlistForBlueprint" class="table table-striped table-bordered table-hover dataTable no-footer" cellpadding="5px" width="100%" style="text-align:center";>
+           <thead>
+              <tr class="rowCustomStyle">
+                 <th style="text-align:center">View Runlist</th>
+              </tr>
+           </thead>
+           <tbody>
+           </tbody>
+        </table>
+     </div>
+</div>
 
- <div class="col-lg-4 col-md-4 notForDocker notforCFT" style="margin-top:15px;margin-left:8px;"><a style="font-size:14px!important" href="#modalForHelp" data-toggle="modal" id="dokuNew"><i class="fa fa-question"></i>&nbsp;Help</a>
+
+ <div class="col-lg-4 col-md-4 notForDocker notforCFT" style="margin-top:25px;margin-left:2px;"><a style="font-size:14px!important" href="#modalForHelp" data-toggle="modal" id="dokuNew"><i class="fa fa-question"></i>&nbsp;Help</a>
  </div>
 
  
@@ -350,6 +369,34 @@
  </div>
  </div>
  </div>
+
+ <!--assign runlist modal-->
+   <div class="modal fade" id="chefRunlistModal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+      <div class="modal-dialog">
+         <div class="modal-content" style="width:800px">
+         <form role="form" class="cmxform" id="chefTaskRunlist" autocomplete="off">
+         <div class="modal-header">
+         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+         &times;
+         </button>
+         <h4 class="modal-title">
+         <i class="fa fa-th-list txt-color-blue"></i>&nbsp;&nbsp;Edit Runlist
+         </h4>
+         </div>
+         <div class="modal-body modal-height">
+          <div class="cookbookShow">
+
+          </div>
+         </div>
+         <div class="modal-footer">
+         <a type="button" class="btn btn-default" data-dismiss="modal">Close</a>
+         <button type="submit" class="btn btn-primary" id="saveRunlist">Update Runlist</button>  
+         </div>   
+         </form>
+         </div><!-- /.modal-content -->
+         </div><!-- /.modal-dialog -->
+         </div>
+         <!--modal for runlist ends here-->
 
  <!--modal for help-->
 
@@ -1190,6 +1237,72 @@
 
 
  <script type="text/javascript">
+
+ if (!$.fn.dataTable.isDataTable('#tableRunlistForBlueprint')) {
+     //var $taskListArea = $('.taskListArea').empty();
+     $tasksRunlist = $('#tableRunlistForBlueprint').DataTable({
+         "pagingType": "full_numbers",
+         "bInfo": false,
+         "bLengthChange": false,
+         "paging": false,
+         "bFilter": false,
+         "aoColumns": [{
+             "bSortable": false
+         }]
+     });
+ }
+
+ function createRunlistTable(runlist) {
+     //alert(runlist.length);
+     //$('#tableRunlist').removeClass('hidden');
+     var $options = $('#cookbooksrecipesselectedList').find('option');
+     if (runlist.length == 0) {
+         var runlist = [];
+         $options.each(function() {
+             var $option = $(this);
+             runlist.push($option.val());
+             console.log(runlist);
+             return runlist;
+         });
+     }
+     $tasksRunlist.clear().draw();
+     // alert(runlist.length);
+     for (i = 0; i < runlist.length; i++) {
+         //alert('check');
+         if (runlist.length > 0) {
+             //alert('ch');
+             console.log(runlist[i].substring(runlist[i].lastIndexOf("[") + 1, runlist[i].lastIndexOf("]")));
+             var $runlistList = $('#tableRunlistForBlueprint');
+             var $tr = $('<tr class="runlistRow"></tr>');
+             var $tdName = $('<td class="runlistDescription"></td>');
+
+             $tdName.append(runlist[i].substring(runlist[i].lastIndexOf("[") + 1, runlist[i].lastIndexOf("]")));
+             $tr.append($tdName);
+             $runlistList.append($tr);
+             $tasksRunlist.row.add($tr).draw();
+         }
+     }
+ }
+
+ $('#saveRunlist').click(function(e) {
+     var $ccrs = $('.cookbookShow').data('$ccrs');
+     // alert($ccrs);
+     console.log($ccrs);
+     console.log($ccrs.getSelectedRunlist());
+     var runlist = $ccrs.getSelectedRunlist();
+     // alert(runlist);
+     if (!runlist.length) {
+         alert('Please choose a runlist first');
+         return false;
+     } else {
+         // alert('here');
+         createRunlistTable(runlist);
+         $('#chefRunlistModal').modal('hide');
+         return false;
+     }
+
+ });
+
  function updatecompositedockertableemptymessage() {
      if ($('#compositedockertable').find('tr').length <= 1) {
          //no rows found add empty message
@@ -2749,6 +2862,7 @@
                                      blueprintData: reqBody
                                  }, function(data) {
                                      console.log(data);
+                                     alert(JSON.stringify(data));
                                      var validatorForm = $("#wizard-1").validate();
                                      validatorForm.resetForm();
 
@@ -2761,8 +2875,12 @@
                                      wizard.disablePreviouBtn();
 
                                      $('a#blueprintInfo').click(function(e) {
+                                        alert(data.instanceOS);
+                                        alert(data.instanceType);
                                          //  alert('check');
                                          var $blueprintReadContainer = $('#modalForRead');
+
+                                         //condition for getting the OS,instanceType,version...
 
                                          $blueprintReadContainer.modal('show');
                                          //for getting the blueprint name
@@ -2781,12 +2899,12 @@
 
                                          $blueprintReadContainer.find('.modal-body #instanceVPC').val(data.vpcId);
                                          // loop for getting runlist
-                                         for (var j = 0; j < data.versionsList.length; j++) {
+                                         /*for (var j = 0; j < data.versionsList.length; j++) {
                                              if (data.versionsList[j].ver == data.latestVersion) {
                                                  $blueprintReadContainer.find('.modal-body #instanceRunlist').val(data.versionsList[j].runlist);
                                              }
 
-                                         }
+                                         }*/
                                          //for getting the image Name
                                          $.ajax({
                                              type: "GET",

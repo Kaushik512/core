@@ -33,12 +33,16 @@
                                                               if (blueprintId) {
                                                                   //found now delete
                                                                   bootbox.confirm("Are you sure you would like to remove this blueprint?", function(result) {
+                                                                  //  alert(result);
                                                                       if (!result) {
                                                                           return;
-                                                                      }
-                                                                      $.get('/blueprints/delete/' + blueprintId, function(data) {
-                                                                          //  alert(data);
-                                                                          if (data == 'OK') {
+                                                                      }else{
+                                                                        //alert(result);
+                                                                        $.ajax({
+                                                                          url: '/blueprints/' + blueprintId,
+                                                                          type: 'DELETE',
+                                                                          success: function(data){
+                                                                          if (data) {
                                                                               var $bcc = $('.productdiv1.role-Selected1').closest('.blueprintContainer');
                                                                               $('.productdiv1.role-Selected1').parent().detach();
                                                                               //Check if the closest bluprintcontainer is empty, if empty then hide it.
@@ -48,12 +52,16 @@
                                                                               }
                                                                           } else
                                                                               alert(data);
+                                                                            }
                                                                       });
+                                                                    }
                                                                   });
                                                               } else {
                                                                   alert('Please select a blueprint to remove.');
                                                               }
                                                           }
+
+                                                          //for removing stack in cloud formation...
                                                           window.removeStack = function() {
                                                               var $selectedCard = $('.productdiv1.role-Selected1');
 
@@ -3202,7 +3210,9 @@
                                                                         ],
                                                                         "iDisplayLength": 40,
                                                                         "aoColumns": [
-                                                                            null, {
+                                                                            {
+                                                                                "bSortable": true
+                                                                            }, {
                                                                                 "bSortable": false
                                                                             }, {
                                                                                 "bSortable": false
@@ -3394,18 +3404,23 @@
                                                                     // alert(JSON.stringify(data));
                                                                     (function(i) {
                                                                         var $tr = $('<tr></tr>').attr('data-taskId', data[i]._id);
-                                                                        var $tdName = $('<td style="vertical-align:inherit;text-align:center;"></td>').append(data[i].name);
-                                                                        $tr.append($tdName);
+                                                                        //method for getting the type of job.. 
                                                                         if (data[i].taskType === 'chef') {
-                                                                            var $tdType = $('<td style="vertical-align:inherit;text-align:center;"></td>').append("<img style='width:31px;margin-left:-18px;' src='img/chef.png' alt='chef'>&nbsp;&nbsp;<span style='font-size:14px;'>" + data[i].taskType + "</span>");
+                                                                            var $tdType = $('<td style="vertical-align:inherit;text-align:center;"></td>').append("<img style='width:31px;' src='img/chef.png' alt='chef'>&nbsp;&nbsp;<span style='font-size:14px;'></span>");
                                                                         } else {
-                                                                            var $tdType = $('<td style="vertical-align:inherit;text-align:center;"></td>').append("<img style='width:22px;' src='img/jenkins.png' alt='jenkins'>&nbsp;&nbsp;<span style='font-size:14px;'>" + data[i].taskType + "</span>");
+                                                                            var $tdType = $('<td style="vertical-align:inherit;text-align:center;"></td>').append("<img style='width:22px;' src='img/jenkins.png' alt='jenkins'>&nbsp;&nbsp;<span style='font-size:14px;'></span>");
                                                                         }
                                                                         $tr.append($tdType);
 
+                                                                        //method for getting the job which has been created..either jenkins or chef.
+                                                                        var $tdName = $('<td style="vertical-align:inherit;text-align:center;"></td>').append(data[i].name);
+                                                                        $tr.append($tdName);
+
+                                                                        //method for getting the decsription for chef or jenkins job.
                                                                         var $tdDescription = $('<td style="vertical-align:inherit;text-align:center;"></td>').append(data[i].description);
                                                                         $tr.append($tdDescription);
 
+                                                                        //if job type is chef show runlists and nodes.
                                                                         if (data[i].taskType === 'chef') {
                                                                             var $tdNodeList = $('<td style="vertical-align:inherit;text-align:center;"></td>').append('<i style="font-size:20px;color:#40baf1" class="ace-icon fa fa-sitemap"></i><a rel="tooltip" data-placement="top" data-original-title="View Nodes" style="cursor:pointer;text-decoration:none;" data-toggle="modal"><span class="assignedNodesList" style="margin-top:10px;margin-left:8px;">Nodes&nbsp; </span></a>').append('<i style="font-size:20px;color:#40baf1;margin-left:5px;" class="ace-icon fa fa-list-ul"></i><a style="margin-top:5px;text-decoration:none" rel="tooltip" data-placement="top" data-original-title="Assigned Runlists" data-toggle="modal" href="#assignedRunlist"><span class="assignedRunlistTable" style="margin-left:10px;">View Runlist&nbsp;</span> </a>');
                                                                             $tdNodeList.find('span.assignedNodesList').data('nodeList', data[i].taskConfig.nodeIds).click(function(e) {
@@ -3455,39 +3470,16 @@
                                                                                 $('#assignedRunlist').modal('show');
                                                                             });
                                                                         } else {
-                                                                            //var url = data[i].taskConfig.jobResultURL;
-                                                                            //alert(JSON.stringify(url));
+                                                                            //if job type is jenkins show job url..
                                                                             var jobURLS = data[i].taskConfig.jobURL;
-                                                                            //alert(jobURLS);
-
-                                                                            /*if (url) {
-                                                                          url = url.replace('lastBuild', );
-                                                                      }*/
+                                                                            
                                                                             if (jobURLS) {
                                                                                 var $tdNodeList = $('<td style="vertical-align:inherit;text-align:center;"></td>').append('<span><img style="width:20px;" src="img/joburl.jpg">&nbsp;<a style="word-break: break-all;text-decoration:none" title="' + jobURLS + '" href="' + jobURLS + '" target="_blank">Job URL</a></span>');
                                                                             }
                                                                         }
                                                                         $tr.append($tdNodeList);
-                                                                        /*if (data[i].taskType === 'chef') {
-                                                                       var $tdRunlist = $('<td></td>').append('<a rel="tooltip" data-placement="top" data-original-title="Assigned Runlists" data-toggle="modal" href="#assignedRunlist" class="btn btn-primary btn-sg tableactionbutton"><i class="ace-icon fa fa-list-ul bigger-120"></i></a>');
-                                                                       $tdRunlist.find('a').data('taskRunlist', data[i].taskConfig.runlist).click(function(e) {
-                                                                           var $taskRunListContainer = $('.taskRunListContainer').empty();
-                                                                           var runlist = $(this).data('taskRunlist');
-                                                                           if (runlist && runlist.length) {
-                                                                               for (var i = 0; i < runlist.length; i++) {
-                                                                                   $li = $('<li></li>').append(runlist[i]).css({
-                                                                                       "font-size": "12px"
-                                                                                   });
-                                                                                   $taskRunListContainer.append($li);
-                                                                               }
-                                                                           }
-                                                                           $('#assignedRunlist').modal('show');
-                                                                       });
-                                                                   } else {
-                                                                       var $tdRunlist = $('<td> - </td>');
-                                                                   }
-                                                                   $tr.append($tdRunlist);*/
-
+                                                                        
+                                                                        //method for executing the chef and jenkins job...
                                                                         var $tdExecute = $('<td style="vertical-align:inherit;text-align:center;"></td>').append('<a rel="tooltip" data-placement="top" data-original-title="Execute" data-toggle="modal" href="javascript:void(0)" class="btn btn-primary btn-sg tableactionbutton"><i class="ace-icon fa fa-play bigger-120"></i></a>');
                                                                         $tdExecute.find('a').data('taskId', data[i]._id).attr('data-executeTaskId', data[i]._id).click(function(e) {
                                                                             var taskId = $(this).data('taskId');
@@ -3540,7 +3532,7 @@
                                                                         });
                                                                         $tr.append($tdExecute);
 
-                                                                        //History starts here
+                                                                        //method for history starts here. depending upon the job type whether it is chef or jenkins....
                                                                         if (data[i].taskType === 'chef') {
                                                                             var $tdHistory = $('<td style="vertical-align:inherit;text-align:center;"></td>').append('<a rel="tooltip" data-placement="top" data-original-title="History" data-toggle="modal" href="javascript:void(0)" class="btn btn-primary btn-sg tableactionbutton"><i class="ace-icon fa fa-header bigger-120"></i></a>');
                                                                             $tdHistory.find('a').data('taskId', data[i]._id).attr('data-historyTaskId', data[i]._id).click(function(e) {
@@ -3694,6 +3686,7 @@
 
                                                                             });
                                                                         } else {
+                                                                          //hostory for jenkins job type...description mentioned above..
                                                                             var $tdHistory = $('<td style="vertical-align:inherit;text-align:center;"></td>').append('<a rel="tooltip" data-placement="top" data-original-title="History" data-toggle="modal" href="javascript:void(0)" class="btn btn-primary btn-sg tableactionbutton"><i class="ace-icon fa fa-header bigger-120"></i></a>');
                                                                             $tdHistory.find('a').data('taskId', data[i]._id).data('autosyncFlag', data[i].taskConfig.autoSyncFlag).attr('data-historyTaskId', data[i]._id).click(function(e) {
                                                                                 //var $taskHistoryContent = $('#taskHistoryContent').show();
@@ -3715,6 +3708,7 @@
 
                                                                                 console.log('autoSyncFlag', autoSyncFlag);
 
+                                                                                //for getting the entire history related to a particular job...
                                                                                 $.get('../tasks/' + taskId + '/history', function(taskHistories) {
                                                                                     console.log(taskHistories);
 
@@ -3728,6 +3722,7 @@
                                                                                                 var url;
                                                                                                 var buildFound = false
 
+                                                                                                //method for getting the build number..
                                                                                                 if (taskHistories[i].buildNumber === job.nextBuildNumber) {
                                                                                                     var $tdBuildNumber = $('<td/>').append('<a style="word-break: break-all;" href="' + url + '" title="' + url + '" target="_blank">' + taskHistories[i].buildNumber + '</a>');
                                                                                                     $trHistoryRow.append($tdBuildNumber);
@@ -3749,18 +3744,13 @@
                                                                                                         //alert(JSON.stringify(job.builds));
 
                                                                                                         console.log(taskHistories[i].buildNumber, "  ---  ", job.nextBuildNumber);
-                                                                                                        // alert(job.nextBuildNumber);
-                                                                                                        //var $tdJobName='';
+                                                                                                        
                                                                                                         if (taskHistories[i].buildNumber === job.builds[k].number) {
 
                                                                                                             url = job.builds[k].url;
                                                                                                             // alert(url);
                                                                                                             var $tdBuildNumber = $('<td/>').append('<a style="word-break: break-all;" href="' + url + '" title="' + url + '" target="_blank">' + taskHistories[i].buildNumber + '</a>');
                                                                                                             $trHistoryRow.append($tdBuildNumber);
-
-                                                                                                            //alert(taskHistories[i].jobResultURL);
-
-
 
                                                                                                             buildFound = true;
                                                                                                             break;
@@ -3848,7 +3838,7 @@
 
 
 
-
+                                                                                                //method for showing the status of the job that is getting executed or the job already executed..
                                                                                                 $trHistoryRow.append($tdJobName);
                                                                                                 if (taskHistories[i].status === "success") {
                                                                                                     var $tdBuildStatus = $('<td style="background-color:#1c9951;"></td>').append('<span style="color:#fff">SUCCESS</span>');
@@ -3862,7 +3852,7 @@
                                                                                                 }
 
 
-
+                                                                                                //method for getting the start time and end time for a job..
                                                                                                 var dateStarted = new Date().setTime(taskHistories[i].timestampStarted);
                                                                                                 dateStarted = new Date(dateStarted).toLocaleString(); //converts to human readable strings
                                                                                                 var $tdTimeStarted = $('<td></td>').append(dateStarted);
@@ -4018,10 +4008,11 @@
                                                                             timestamp = new Date(date).toLocaleString(); //converts to human readable strings
                                                                         }
 
-
+                                                                        //method for getting the last run job time.....
                                                                         var $tdTime = $('<td style="vertical-align:inherit;text-align:center;"></td>').append(timestamp).addClass('taskrunTimestamp');
                                                                         $tr.append($tdTime);
 
+                                                                        //method for edit and delete of jobs from orchestration table.
                                                                         var $tdOptions = $('<td style="vertical-align:inherit;text-align:center;"></td>').append('<div class="btn-group tableactionWidth"><a rel="tooltip" data-placement="top" data-original-title="Delete" class="btn btn-danger pull-left btn-sg tableactionbutton btnDeleteTask"><i class="ace-icon fa fa-trash-o bigger-120"></i></a><a class="btn btn-info pull-left tableactionbutton btnEditTask tableactionbuttonpadding btn-sg" data-original-title="Edit" data-placement="top" rel="tooltip"><i class="ace-icon fa fa-pencil bigger-120"></i></a></div>').attr('data-taskId', data[i]._id);
                                                                         //permission set for editing and deleting for ChefTask
 
