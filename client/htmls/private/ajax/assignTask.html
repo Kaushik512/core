@@ -187,7 +187,7 @@
                                                                <tr>
                                                                   <td class="jobParam" id="jobTD" style="padding-top:26px!important">Job Links:</td>
                                                                   <td><div class="col-lg-11 col-md-11 jobTable" style="margin-top:1px"><!-- <img src="img/add.png" style="float:right;margin-top:-16px;margin-right:-1px;" class="addJobLink" rel="tooltip" data-placement="top" title="Add New Job Link" /><input id="jobResultUrl" autocomplete="off" type="text" title="ex:http://{host:port}/TestResult/$buildNumber/log.html" alt="ex:http://{host:port}/TestResult/$buildNumber/log.html" placeholder=" ex:http://{host:port}/<TestResult>/<$buildNumber>/log.html" class="form-control inputJobResultUrl" name="jobResultUrl"> -->
-                                                                    <a href="#jobResultModal" data-backdrop="false" data-toggle="modal" style="cursor:pointer;"> <img src="img/add.png" style="float:right;" class="addList" rel="tooltip" data-placement="top" title="Add Job Links" /></a>
+                                                                    <a href="#jobResultModal" id="imageLink" data-backdrop="false" data-toggle="modal" style="cursor:pointer;"> <img src="img/add.png" style="float:right;" class="addListUrl" rel="tooltip" data-placement="top" title="Add Job Links" /></a>
                                                          <div style="height:auto;overflow-y:auto;" id="dbNameTable_wrapper" class="dataTables_wrapper no-footer">
                                                             <table id="tableJobList" class="table table-striped table-bordered table-hover dataTable no-footer" cellpadding="5px" width="100%" style="text-align:center";>
                                                                <thead>
@@ -628,6 +628,7 @@
          </div><!--/.modal-assignedExecute-->
          <div class="widget-toolbox clearfix">
          <div class="btn-group pull-right">
+         <label id="spinnerForSave" class="hidden"><img  style="margin-left:5px;margin-right:25px;" src="img/select2-spinner.gif"></label>
          <button type="submit" class="btn btn-primary btnSaveTask btn-mini" style="margin-right:11px;">
          <i class="ace-icon fa fa-check bigger-110"></i>
          Save
@@ -684,43 +685,14 @@ $(document).ready(function() {
     $('[data-toggle="popover"]').popover({
        trigger: 'focus'
     });
+
+    $('.addListUrl').click(function(e) {
+        $('#jobLinkCreate').trigger("reset");
+
+    });
 });
 
-function createJobLinksTable(jobResultURL) {
-    var $jobListTable = $('#jobListSave');
-    var $tr = $('<tr class="jobResultRow"></tr>');
-    var $tdName = $('<td class="jobResultDescription" style="word-break: break-word;"></td>');
 
-    
-             $tr.data('jobUrlData', jobResultURL);
-        
-            $tdName.append(jobResultURL);
-            var $tdAction = $('<td/>');
-            $tdAction.append('<div style="margin-right:17px;float:right;" class="btn-group del"><button class="deleteRow" value="Remove" title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></div>');
-            $tr.append($tdName).append($tdAction);
-            $jobListTable.append($tr);
-            $jobList.row.add($tr).draw();
-       
-    
-
-}
-
-   
-
-$('#jobLinkCreate').submit(function(e) {
-    var regexpURL = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
-
-    // alert('chchch');
-    var jobResultURL = $(this).find('.jobLinkCreate').val();
-    if (!regexpURL.test(jobResultURL)) {
-        alert('Please Enter a Valid URL');
-        return false;
-    } else {
-        createJobLinksTable(jobResultURL)
-        $('#jobResultModal').modal('hide');
-        return false;
-    }
-});
 
 
 
@@ -813,11 +785,17 @@ $(document).ready(function() {
                     createRunlistTable(taskData.taskConfig.runlist);
                 }
             }
-            if(taskData.taskConfig.jobResultURL &&  taskData.taskConfig.jobResultURL.length){
-              // alert(taskData.taskConfig.runlist);
-                if (taskData.taskConfig.jobResultURL.length > 0) {
-                //  alert(taskData.taskConfig.runlist);
-                    createJobLinksTable(taskData.taskConfig.jobResultURL);
+
+            // console.log('urls ===> ',taskData.taskConfig.jobResultURL);
+
+            if (taskData.taskConfig.jobResultURL && taskData.taskConfig.jobResultURL.length) {
+                // alert(taskData.taskConfig.runlist);
+                //alert('edit mode');
+                for (var z = 0; z < taskData.taskConfig.jobResultURL.length; z++) {
+                    console.log('urls ===> ',taskData.taskConfig.jobResultURL);
+                    createJobLinksTable(taskData.taskConfig.jobResultURL[z]);
+                   
+
                 }
             }
             if (taskData.taskConfig.attributes && taskData.taskConfig.attributes.length) {
@@ -1065,6 +1043,7 @@ $(document).ready(function() {
         taskData.taskType = taskType;
         
         if (taskType === 'chef') {
+            var $saveSpinner = $('#spinnerForSave');
             var taskName = $('#chefTaskName').val();
             if (!taskName) {
                 alert('Please enter a Task-Name');
@@ -1111,7 +1090,10 @@ $(document).ready(function() {
                 });
             });
             taskData.attributes = attributes;
+            $('.btnSaveTask').attr('disabled','disabled');
         } else if (taskType === 'jenkins') {
+            var $saveSpinner = $('#spinnerForSave');
+            
             var taskName = $('#jenkinsTaskName').val();
             if (!taskName) {
                 alert('Please enter a Task-Name');
@@ -1125,8 +1107,8 @@ $(document).ready(function() {
             }
 
             var jenkinsJobName = $('#jobListJenkins').val();
-            if (!jenkinsJobName && jenkinsJobName === 'choose') {
-                alert('Please Choose a Jenkins Server');
+            if (!jenkinsJobName) {
+                alert('Please Choose a Jenkins Job');
                 return false;
             }
             var jenkinsJobDescription = $('textarea#jenkinsDescription').val();
@@ -1145,6 +1127,7 @@ $(document).ready(function() {
                 var $this = $(this);
                  jobResultURL.push($this.data('jobUrlData'));
             });
+            $('.btnSaveTask').attr('disabled','disabled');
             //alert(jobUrlResult);            
             taskData.jenkinsServerId = jenkinsServerId;
             taskData.jobName = jenkinsJobName;
@@ -1242,6 +1225,7 @@ $(document).ready(function() {
 
         if (urlParams.taskId) {
             if (taskType === 'jenkins') {
+               $saveSpinner.removeClass('hidden');
                 $.get('/jenkins/' + taskData.jenkinsServerId + '/job/' + taskData.jobName + '/lastBuild', function(data) {
                     //alert(JSON.stringify(taskData));
                     var url = taskData.jobResultURL;
@@ -1257,6 +1241,8 @@ $(document).ready(function() {
 
                     });
                 });
+                $saveSpinner.addClass('hidden');
+                $('.btnSaveTask').removeAttr('disabled');
 
                 return false;
             } else{
@@ -1271,10 +1257,14 @@ $(document).ready(function() {
                     });
 
                 });
+                $saveSpinner.addClass('hidden');
+                $('.btnSaveTask').removeAttr('disabled');
                 return false;
             }
         } else {
             if (taskType === 'jenkins') {
+               $saveSpinner.removeClass('hidden');
+               //alert('jenkins');
                 $.get('/jenkins/' + taskData.jenkinsServerId + '/job/' + taskData.jobName + '/lastBuild', function(data) {
                     var url = taskData.jobResultURL;
                     
@@ -1283,8 +1273,10 @@ $(document).ready(function() {
                     var reqBody = {
                         taskData: taskData
                     };
+                    
                     $.post('../organizations/' + urlParams.org + '/businessgroups/' + urlParams['bg'] + '/projects/' + urlParams.projid + '/environments/' + urlParams.envid + '/tasks', reqBody, function(data) {
                         console.log(data);
+                       //alert('spinner');
                         $('.btnBack').click();
                         bootbox.alert({
                             message: 'Job&nbsp;&nbsp;<b>' + data.name + '</b>&nbsp;&nbsp;has been successfully created',
@@ -1292,9 +1284,13 @@ $(document).ready(function() {
                         });
 
                     });
+                    $saveSpinner.addClass('hidden');
+                    $('.btnSaveTask').removeAttr('disabled');
                 });
                 return false;
             }else{
+               $saveSpinner.removeClass('hidden');
+               //alert('chef');
                 var reqBody = {
                     taskData: taskData
                 };
@@ -1309,9 +1305,72 @@ $(document).ready(function() {
                      message:'Job&nbsp;&nbsp;<b>' + data.name + '</b>&nbsp;&nbsp;has been successfully created',
                      title:"Success"
                     });
+                    $saveSpinner.addClass('hidden');
+                    $('.btnSaveTask').removeAttr('disabled');
                 });
+
                 return false;
             }
+        }
+    });
+
+    function createJobLinksTable(jobResultURL) {
+
+           // alert(jobResultURL);
+        var $jobListTable = $('#jobListSave');
+        var $tr = $('<tr class="jobResultRow"></tr>');
+        var $tdName = $('<td class="jobResultDescription" style="word-break: break-word;"></td>');
+
+
+        $tr.data('jobUrlData', jobResultURL);
+
+        $tdName.append(jobResultURL);
+        var $tdAction = $('<td/>');
+        $tdAction.append('<div style="margin-right:17px;float:right;" class="btn-group"><button class="deleteRow" value="Remove" title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></div>');
+
+        $tdAction.find('.deleteRow').click(function() {
+            $jobList.row($tr).remove().draw(true);
+        });
+
+        
+        if(urlParams.taskId){
+            $tdAction.find('.deleteRow').click(function() {
+
+                bootbox.confirm('Are you sure you want to Delete Job Output', function(result) {
+                    if (result) {
+                     var reqBody={
+                        resultURL: "http://54.67.35.103:8000/Catalyst_Test_Results/jenkins-CAT_FT_START-$buildNumber/log.html"
+                     };
+
+                        $.post('../tasks/' + urlParams.taskId + '/resultUrl/remove', reqBody, function(data) {
+                                $jobList.row($tr).remove().draw(true);
+                        });
+                    }
+                });
+                return false;
+            });
+        }
+        $tr.append($tdName).append($tdAction);
+        $jobListTable.append($tr);
+        $jobList.row.add($tr).draw();
+    }
+
+    ///tasks/:taskId/resultUrl/remove
+
+
+
+    $('#jobLinkCreate').submit(function(e) {
+        var regexpURL = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
+
+        // alert('chchch');
+        var jobResultURL = $(this).find('.jobLinkCreate').val();
+        if (!regexpURL.test(jobResultURL)) {
+            alert('Please Enter a Valid URL');
+            return false;
+        } else {
+            createJobLinksTable(jobResultURL)
+            $('#jobResultModal').modal('hide');
+            return false;
         }
     });
 
