@@ -1573,11 +1573,11 @@ Enters the Access Key
 Enters the Secret Key
     Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    id=secretKey    ${SECRET KEY}
 
-Selects the Region   
+Selects the Region
     Sleep    4s
     Click Element    css=.region > .select2-choice
     Log    after click
-    Input Text    css=#select2-drop .select2-input    ${REGION NAME}
+    Input Text    css=#select2-drop .select2-input    US West (Oregon) | us-west-2
     Sleep    4s
     Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
 
@@ -1607,8 +1607,14 @@ Selects the Key Pair
     #Click Element    xpath=.//*[@id='select2-drop']/ul/li[1]/div
 
 Uploads the Pem File for Provider
-    Choose File     xpath=.//*[@class='gui-file file']     ${CAT_INSTANCES}
+    Sleep    4s
+    Choose File     xpath=.//*[@class='gui-file file']    ${CAT_INSTANCES}
+    Sleep    1s
+    
+
+    #css=div > label.file > input.gui-input.filename     ${CAT_INSTANCES}
     #C:\\Users\\adarsh.RLINDIA\\Desktop\\caty\\Chef\\cat_instances.pem
+    #//span[@class='button btn-primary btn-importbyIP']
 
 Clicks on Save Button of the Provider
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='myForm54']/div/div[3]/div/input
