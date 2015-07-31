@@ -6,6 +6,7 @@ var logger = require('_pr/logger')(module);
 var ChefClientExecution = require('./chefClientExecution/chefClientExecution');
 var textSearch = require('mongoose-text-search');
 
+
 var Schema = mongoose.Schema;
 
 
@@ -131,7 +132,7 @@ var InstanceSchema = new Schema({
     runlist: [{
         type: String,
         trim: true
-        //validate: schemaValidator.recipeValidator
+            //validate: schemaValidator.recipeValidator
     }],
     attributes: [{
         name: String,
@@ -173,18 +174,16 @@ var InstanceSchema = new Schema({
         },
         chefNodeName: String
     },
-    software:[
-        {
-            name: {
-                type: String,
-                trim: true
-            },
-            version: {
-                type: String,
-                trim: true
-            }
+    software: [{
+        name: {
+            type: String,
+            trim: true
+        },
+        version: {
+            type: String,
+            trim: true
         }
-    ],
+    }],
     credentials: {
         username: {
             type: String,
@@ -220,33 +219,34 @@ var InstanceSchema = new Schema({
 
 InstanceSchema.plugin(uniqueValidator);
 InstanceSchema.plugin(textSearch);
-InstanceSchema.index( { "$**": "text" });
+InstanceSchema.index({
+    "$**": "text"
+});
 
 var Instances = mongoose.model('instances', InstanceSchema);
 //mongoose.set('debug',true);
 
 
 var InstancesDao = function() {
-    this.searchInstances = function(searchquery,options,callback){
+    this.searchInstances = function(searchquery, options, callback) {
         logger.debug("Enter searchInstances query - (%s)", searchquery);
-        Instances.textSearch(searchquery,options,function(err,data){
-            if(!err){
-               // logger.debug(data.length);
+        Instances.textSearch(searchquery, options, function(err, data) {
+            if (!err) {
+                // logger.debug(data.length);
                 var data1 = {
-                    "tasks":[],
-                    instances:[],
-                    queryduration:''
+                    "tasks": [],
+                    instances: [],
+                    queryduration: ''
                 }
-                for(var i = 0; i < data.results.length; i++){
+                for (var i = 0; i < data.results.length; i++) {
                     data1.instances.push(data.results[i].obj);
                 }
-                data1.queryduration = (data.stats.timeMicros/100000);
-                callback(null,data1);
+                data1.queryduration = (data.stats.timeMicros / 100000);
+                callback(null, data1);
                 return;
-            }
-            else{
+            } else {
                 logger.debug('Error in search:' + err);
-                callback(err,null);
+                callback(err, null);
                 return;
             }
         });
@@ -1294,8 +1294,20 @@ var InstancesDao = function() {
         });
     };
 
+    this.getAllInstances = function(callback) {
+        logger.debug("Enter getAllInstances");
 
+        Instances.find(function(err, data) {
+            if (err) {
+                logger.error("Failed getAllInstances", err);
+                callback(err, null);
+                return;
+            }
+            logger.debug("Exit getAllInstances");
+            callback(null, data);
 
+        });
+    };
 };
 
 module.exports = new InstancesDao();

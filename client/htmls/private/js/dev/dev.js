@@ -4586,18 +4586,28 @@
                                                                    if (orgId && urlParams['bg'] && projectId && envId) {
 
                                                                        $('.instanceloaderspinner').removeClass('hidden');
-                                                                       $.get('../organizations/' + orgId + '/businessgroups/' + urlParams['bg'] + '/projects/' + projectId + '/environments/' + envId + '/', function(data) {
-                                                                           console.log('success---3---4');
+                                                                       function getInstances() {
+                                                                            $.get('../organizations/' + orgId + '/businessgroups/' + urlParams['bg'] + '/projects/' + projectId + '/environments/' + envId + '/', function(data) {
+                                                                                console.log('success---3---4');
+                                                                                //Syncing up the tree view based on url
+                                                                                if (data.instances.length > 0) {
+                                                                                    for (var x = 0; x < data.instances.length; x++) {
 
-                                                                           //Syncing up the tree view based on url
+                                                                                        pollInstanceState(data.instances[x]._id, data.instances[x].instanceState, 10000);
 
-                                                                           initializeTaskArea(data.tasks);
-                                                                           initializeBlueprintArea(data.blueprints);
-                                                                           x = data.instances;
-                                                                           initializeInstanceArea(data.instances);
-                                                                           initializeStackArea(data.stacks);
+                                                                                    }
+                                                                                }
 
-                                                                       });
+                                                                                initializeTaskArea(data.tasks);
+                                                                                initializeBlueprintArea(data.blueprints);
+                                                                                x = data.instances;
+                                                                                initializeInstanceArea(data.instances);
+                                                                                initializeStackArea(data.stacks);
+
+                                                                            });
+                                                                            setTimeout(getInstances, 100000);
+                                                                        }
+                                                                        getInstances();
 
                                                                    } else {
                                                                        var $workzoneTab = $('#workZoneNew');
