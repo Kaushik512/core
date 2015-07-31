@@ -1,4 +1,4 @@
-var logger = require('../../../lib/logger')(module);
+var logger = require('_pr/logger')(module);
 var mongoose = require('mongoose');
 var extend = require('mongoose-schema-extend');
 var ObjectId = require('mongoose').Types.ObjectId;
@@ -69,7 +69,7 @@ var taskSchema = new Schema({
         type: String
     },
     jobResultURLPattern: {
-        type: String
+        type: [String]
     },
     taskConfig: Schema.Types.Mixed,
     lastTaskStatus: String,
@@ -158,14 +158,16 @@ taskSchema.methods.execute = function(userName, baseUrl, callback, onComplete) {
         //var arrStr;
         //var x;
         logger.debug("+++++++++++++++++++++++ ",self.taskConfig.jobResultURL);
-        var acUrl="";
-        if(self.taskConfig.jobResultURL != ""){
+        var acUrl=[];
+        if(self.jobResultURLPattern.length > 0){
             /*arrStr = self.taskConfig.jobResultURL.split("-");
             if(arrStr.length === 3){
                 x = taskExecuteData.buildNumber+"/"+arrStr[2].substr(arrStr[2].lastIndexOf("/")+1);
                 acUrl = arrStr[0]+"-"+arrStr[1]+"-"+x;
             }*/
-            acUrl = self.jobResultURLPattern.replace("$buildNumber",taskExecuteData.buildNumber);
+            for(var i=0;i< self.jobResultURLPattern.length;i++){
+                acUrl.push(self.jobResultURLPattern[i].replace("$buildNumber",taskExecuteData.buildNumber));
+            }
         }
         //self.taskConfig.jobResultURL = acUrl;
         logger.debug(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ",acUrl);
@@ -443,6 +445,26 @@ taskSchema.statics.getTasksByNodeIds = function(nodeIds, callback) {
         }
         //console.log('data ==>', data);
         callback(null, tasks);
+
+    });
+};
+
+taskSchema.statics.updateJobUrl = function(taskId,taskConfig, callback) {
+    Tasks.update({
+        "_id": new ObjectId(taskId)
+    }, {
+        $set: {
+            taskConfig: taskConfig
+        }
+    }, {
+        upsert: false
+    }, function(err, updateCount) {
+        if (err) {
+            callback(err, null);
+            return;
+        }
+        logger.debug('Updated task:' + updateCount);
+        callback(null, updateCount);
 
     });
 };

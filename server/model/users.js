@@ -3,7 +3,7 @@ var d4dModelNew = require('../model/d4dmasters/d4dmastersmodelnew.js');
 var d4dModelNew = require('../model/d4dmasters/d4dmastersmodelnew.js');
 var permissionsetDao = require('../model/dao/permissionsetsdao');
 var Schema = mongoose.Schema;
-var logger = require('../lib/logger')(module);
+var logger = require('_pr/logger')(module);
 
 var UserSchema = new Schema({
   username: String,

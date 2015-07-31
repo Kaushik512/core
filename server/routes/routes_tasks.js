@@ -12,7 +12,7 @@ var instancesDao = require('../model/classes/instance/instance');
 var TaskHistory = require('../model/classes/tasks/taskHistory');
 
 
-var logger = require('../lib/logger')(module);
+var logger = require('_pr/logger')(module);
 
 module.exports.setRoutes = function(app, sessionVerification) {
     app.all('/tasks/*', sessionVerification);
@@ -189,14 +189,18 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                 }
                                 var count = 0;
                                 if (jobResult.length > 0) {
-                                    var resultUrl;
+                                    
                                     for (var x = 0; x < jobResult.length; x++) {
                                         (function(x) {
                                             count++;
+                                            var resultUrl = [];
                                             //logger.debug("------+++++---");
                                             if (historyResult.indexOf(jobResult[x]) == -1) {
                                                 //logger.debug("------------------ ", jobResult[x]);
-                                               
+                                                for (var i = 0; i < task.jobResultURLPattern.length; i++) {
+                                                    var urlPattern= task.jobResultURLPattern[i];
+                                                    resultUrl.push(urlPattern.replace("$buildNumber", jobResult[x]));
+                                                }
                                                 var hData = {
                                                     "taskId": req.params.taskId,
                                                     "taskType": "jenkins",
@@ -279,11 +283,15 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                 }
                                 var count1 = 0;
                                 if (jobResult) {
-                                    var resultUrl;
+                                    
                                     for (var x = 0; x < jobResult.length; x++) {
                                         (function(x) {
-                                             resultUrl = task.jobResultURLPattern.replace("$buildNumber", jobResult[x]);
-                                                //logger.debug("==================================== ",resultUrl);
+                                            var resultUrl = [];
+                                            for (var i = 0; i < task.jobResultURLPattern.length; i++) {
+                                                var urlPattern= task.jobResultURLPattern[i];
+                                                resultUrl.push(urlPattern.replace("$buildNumber", jobResult[x]));
+                                            }
+                                            //logger.debug("==================================== ",resultUrl);
                                             var hData = {
                                                 "taskId": req.params.taskId,
                                                 "taskType": "jenkins",
@@ -387,6 +395,43 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 });
             } else {
                 res.send(400);
+            }
+        });
+    });
+
+    app.post('/tasks/:taskId/resultUrl/remove', function(req, res) {
+        Tasks.getTaskById(req.params.taskId, function(err, data) {
+            if (err) {
+                logger.error(err);
+                res.send(500, errorResponses.db.error);
+                return;
+            }
+            if (data) {
+                logger.debug("result URL: ", req.body.resultURL);
+                var result = data.taskConfig.jobResultURL;
+                var index = result.indexOf(req.body.resultURL);
+                if (index != -1) {
+                    result.splice(index, 1);
+                    logger.debug("Updated JobResultURL: ", JSON.stringify(result));
+                    var tConfig = data.taskConfig;
+                    tConfig.jobResultURL = result;
+                    Tasks.updateJobUrl(req.params.taskId, tConfig, function(err, updateCount) {
+                        if (err) {
+                            logger.error(err);
+                            res.send(500, errorResponses.db.error);
+                            return;
+                        }
+                        if (updateCount) {
+                            res.send({
+                                updateCount: updateCount
+                            });
+                        } else {
+                            res.send(400);
+                        }
+                    });
+                }
+            } else {
+                res.send(404);
             }
         });
     });

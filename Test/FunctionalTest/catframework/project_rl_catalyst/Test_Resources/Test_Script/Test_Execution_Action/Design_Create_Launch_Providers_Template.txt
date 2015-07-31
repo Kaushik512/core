@@ -1360,7 +1360,7 @@ Choose the Available Images
 
 Choose the Region
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='s2id_region']/a/span[1]
-    Input Text    xpath=.//*[@id='select2-drop']/div/input    ${REGION NAME}
+    Input Text    xpath=.//*[@id='select2-drop']/div/input    US West (Oregon) | us-west-2
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
     Sleep    10s
 
@@ -1550,6 +1550,7 @@ Clicks on Providers
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='setting_tree']/ul/li[7]/a
 
 Clicks on New Button of Providers
+    Sleep    4s
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    id=addnewitem
 
 Select the Provider
@@ -1576,13 +1577,13 @@ Enters the Secret Key
 Selects the Region
     Sleep    4s
     Click Element    css=.region > .select2-choice
-    Log    after click
-    Input Text    css=#select2-drop .select2-input    US West (Oregon) | us-west-2
+    Log    After Click
+    Input Text    css=#select2-drop .select2-input    US West
     Sleep    4s
-    Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
-
-
-    #Wait Until Keyword Succeeds    2 minute     1 seconds      Click Element    xpath=//span[./text()='Select Region']
+    Click Element    xpath=css=#select2-drop > ul > li:nth-child(1) > div > span
+    Sleep 1s
+    
+   #Wait Until Keyword Succeeds    2 minute     1 seconds      Click Element    xpath=//span[./text()='Select Region']
     #Input Text    xpath=.//*[@id='select2-drop']/div/input     US West (Oregon) | us-west-2
     #Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
     #Select From List By Value    xpath=.//*[contains(text(), "US West (Oregon) | us-west-2")]     ${REG}
@@ -1608,13 +1609,11 @@ Selects the Key Pair
 
 Uploads the Pem File for Provider
     Sleep    4s
-    Choose File     xpath=.//*[@class='gui-file file']    ${CAT_INSTANCES}
+    Choose File    xpath=.//*[@class='gui-file file']    ${CAT_INSTANCES}
     Sleep    1s
     
 
-    #css=div > label.file > input.gui-input.filename     ${CAT_INSTANCES}
-    #C:\\Users\\adarsh.RLINDIA\\Desktop\\caty\\Chef\\cat_instances.pem
-    #//span[@class='button btn-primary btn-importbyIP']
+    
 
 Clicks on Save Button of the Provider
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='myForm54']/div/div[3]/div/input

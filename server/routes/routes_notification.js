@@ -6,9 +6,14 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
     app.post('/notifications/aws/notify', function(req, res) {
         console.log('POST request');
         var notificationType = req.headers['x-amz-sns-message-type'];
+        console.log('body ===> ',req.body);
+        console.log('req ===> ',req);
+        
         if (notificationType) {
             if (notificationType === 'SubscriptionConfirmation') { // confirmation notification
                 var confirmationURL = req.body.SubscribeURL;
+                console.log('url ===> ',confirmationURL);
+        
                 if (confirmationURL) {
                     https.get(confirmationURL, function(res) {
                         console.log("Got response: " + res.statusCode);
@@ -29,7 +34,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         } else {
             res.send(400);
         }
-        console.log(req.headers);
         res.send(200);
 
     });
