@@ -5,7 +5,7 @@
  * July 2015
  */
 
-var logger = require('../logger')(module);
+var logger = require('_pr/logger')(module);
 var bcrypt = require('bcryptjs');
 
 // This file act as a Util class which contains methods to hash password and authentication logic.

@@ -2,8 +2,8 @@
  * Created by anshul on 2/1/15.
  */
 var EC2 = require('../lib/ec2.js');
-var appConfig = require('../config/app_config');
-var logger = require('../lib/logger')(module);
+var appConfig = require('_pr/config');
+var logger = require('_pr/logger')(module);
 
 module.exports.setRoutes = function(app, verifySession) {
 

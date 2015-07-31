@@ -73,6 +73,11 @@ String.prototype.capitalizeFirstLetter = function() {
                   <ul class="nav navbar-nav navbar-right" style="font-size:14px!important;margin-top:20px">
                     <li class="left-projects-links active" id="liuserinfo" style="color:white;margin-right:16px;"></li>
                     <!-- <li class="left-projects-links"></li> -->
+                    <!--track-->
+                    <li class="left-projects-links hidden" style="margin-left:16px;margin-right:16px;" data-target="#Track" navigation="Track">
+                                <a class="dropdown-toggle navigationTab" style="font-size:14px!important" href="#ajax/Tracker.html" id="trackNew"  onclick="setleftnavigation(this,'Track');"><i class="fa fa-anchor"></i>&nbsp;TRACK</a>
+                            </li>
+                    <!--Settings tab-->
                     <li class="left-projects-links hidden" data-target="#Settings"   navigation="Settings">
                                 <a class="dropdown-toggle navigationTab" style="font-size:14px!important" href="#ajax/Settings/Dashboard.html" id="settingsNew"  onclick="setleftnavigation(this,'Settings');"><i class="fa fa-cog"></i>&nbsp;SETTINGS</a>
                             </li>
@@ -126,9 +131,38 @@ String.prototype.capitalizeFirstLetter = function() {
                 
                 
             </ul>
-            <ul class="menu-item-parentdemo hidden" id="Track">
-                
-                
+           <ul class="menu-item-parentdemo hidden" id="Track">
+             <li class="active open">
+                <a href="#" style="background-color:#40baf1;margin-right:1px;"><i class="fa fa-lg fa-fw fa-sitemap"></i><span class="menu-item-parent" style="font-weight:bold">TRACK</span> </a>
+                     <ul style="display:block">
+                <li>
+                    
+                  
+                    <a href="ajax/Tracker.html">
+                        <div>
+                            <i class="fa fa-cubes fa-2x"></i>
+                            <span class="trackAlign">Kibana Logs</span>
+                        </div>
+                    </a>
+                </li>
+                <li style="margin-top:10px;">
+                    <a href="ajax/Zabbix.html">
+                        <div>
+                            <i class="fa fa-reorder fa-2x"></i>
+                            <span style="margin-left:5px" class="trackAlign1">Zabbix</span>
+                        </div>
+                    </a>
+                </li>
+                <li style="margin-top:10px;">
+                    <a href="ajax/jobs.html">
+                        <div>
+                            <i class="fa fa-tasks fa-2x"></i>
+                            <span style="margin-left:5px" class="trackAlign2">Jobs</span>
+                        </div>
+                    </a>
+                </li> 
+            </li>
+                </ul>                       
             </ul>
             <ul class="menu-item-parentdemo hidden" id="blueprints">
                 <li class="active open">
@@ -183,9 +217,9 @@ String.prototype.capitalizeFirstLetter = function() {
         <div id="content">
         </div> 
         <!--hiding the comment for no org available when the organization and environments are present-->
-        <div id="noenvwarning" class="hidden alert alert-warning noEnvWarning"><img style="width:50px;height:40px" src="img/warning.png" alt="warning"/><span style="margin-left:20px;">There are no Workzone items to display. Please check your </span><ul style="list-style-type:none;text-align:center"><li class="left-projects-links hidden" data-target="#Settings" navigation="Settings">
+        <!-- <div id="noenvwarning" class="hidden alert alert-warning noEnvWarning"><img style="width:50px;height:40px" src="img/warning.png" alt="warning"/><span style="margin-left:20px;">There are no Workzone items to display. Please check your </span><ul style="list-style-type:none;text-align:center"><li class="left-projects-links hidden" data-target="#Settings" navigation="Settings">
                                 <a class="navigationTab" href="#ajax/Settings/Dashboard.html" id="settingsNewClick"  onclick="setleftnavigation(this,'Settings');">&nbsp;SETTINGS</a></li></ul>
-        </div>
+        </div> -->
 
         <!--noEnv Error for consumer and designer-->
         <div id="noEnvError" class="hidden alert alert-warning noEnvWarningConsumerDesigner"><img style="width:50px;height:40px" src="img/warning.png" alt="warning"/><span style="margin-left:20px;">There are no Workzone items to display.</span>
@@ -252,6 +286,8 @@ String.prototype.capitalizeFirstLetter = function() {
     <!-- MAIN APP JS FILE -->
     <script type="text/javascript">
 
+
+
 $(document).ready(function() {
     var hasSettingsPermission = false;
     if (haspermission("settings", "read")) {
@@ -304,12 +340,16 @@ function setleftnavigation(toplink, breadcrumbHeader) {
         $('#Workspace1').hide();
         $('#Settings_nav').show();
 
-    } else if (TabID === "settingsNewClick") {
+    } /*else if (TabID === "settingsNewClick") {
         $('#tree').empty()
         loadSettingsTree();
         foldTreeForSetting();
         $('#Workspace1').hide();
         $('#Settings_nav').show();
+
+    }*/ else if (TabID === "trackNew") {
+        $('#Workspace1').hide();
+        $('#Settings_nav').hide();
 
     }
 

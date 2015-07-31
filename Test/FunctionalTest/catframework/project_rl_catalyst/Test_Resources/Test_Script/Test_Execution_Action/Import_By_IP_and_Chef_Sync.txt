@@ -76,7 +76,7 @@ Catalyst Verfication of Duplicate Node
     Clicks on Cancel Bbutoon
 
 Catalyst Verfication Ubuntu Duplicate Node
-    Clicks on Inport By IP Button
+    Clicks on Inport New IP Button
     Enters the IP Address of Ubuntu Box
     Select the Operating System as Ubuntu
     Input the Ubuntu User Name for IP
@@ -367,8 +367,8 @@ Catlayst Importing the Instance Chef Sync
 
 Clicks on Inport New IP Button
     Sleep    1s
-    Execute JavaScript    $('#divinstancescardview').attr('style','display:none')
-    Sleep    1s
+    #Execute JavaScript    $('#divinstancescardview').attr('style','display:none')
+    #Sleep    1s
     Click Element    id=ipaddressimport
     
 
