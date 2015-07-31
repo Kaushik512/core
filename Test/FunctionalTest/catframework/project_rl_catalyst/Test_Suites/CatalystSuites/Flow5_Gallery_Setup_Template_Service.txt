@@ -25,7 +25,7 @@ Catalyst Validation And Creation of New Template
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
     Test Validation of Creation of New Templates
-    Catalyst User New Template Creation
+        
     Catalyst Logout                      
     [Teardown]     Close Browser
 
