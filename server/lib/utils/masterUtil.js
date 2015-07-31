@@ -7,7 +7,7 @@
 
 // This file act as a Util class which contains Settings related all business logics.
 
-var logger = require('../../lib/logger')(module);
+var logger = require('_pr/logger')(module);
 var d4dModelNew = require('../../model/d4dmasters/d4dmastersmodelnew.js');
 var ObjectId = require('mongoose').Types.ObjectId;
 var permissionsetDao = require('../../model/dao/permissionsetsdao');
@@ -1425,6 +1425,38 @@ var MasterUtil = function(){
 
         });
     }
+
+    var getPermissionForCategory = function(category, permissionto, permissionset) {
+        var perms = [];
+        if (permissionset) {
+            for (var i = 0; i < permissionset.length; i++) {
+                var obj = permissionset[i].permissions;
+                for (var j = 0; j < obj.length; j++) {
+                    if (obj[j].category == category) {
+                        var acc = obj[j].access.toString().split(',');
+                        for (var ac in acc) {
+                            if (perms.indexOf(acc[ac]) < 0)
+                                perms.push(acc[ac]);
+                        }
+
+                    }
+                }
+            }
+            if (perms.indexOf(permissionto) >= 0) {
+                return (true);
+            } else
+                return (false);
+        } else {
+            return (false);
+        }
+    };
+
+    // Check wheather permission is there for user or not.
+    this.hasPermission = function(category, permissionto, sessionUser, callback) {
+        var retVal = '';
+        retVal = getPermissionForCategory(category, permissionto, sessionUser.permissionset);
+        callback(null, retVal);
+    };
 }
 
 

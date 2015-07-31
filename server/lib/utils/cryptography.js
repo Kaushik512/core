@@ -13,7 +13,7 @@
 
 var crypto = require('crypto');
 var fs = require('fs');
-var logger = require('../../lib/logger')(module);
+var logger = require('_pr/logger')(module);
 
 function Cryptography(algorithm, password) {
 

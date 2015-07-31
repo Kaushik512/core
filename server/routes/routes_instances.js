@@ -17,19 +17,19 @@ var logsDao = require('../model/dao/logsdao.js');
 var configmgmtDao = require('../model/d4dmasters/configmgmt');
 var Docker = require('../model/docker.js');
 var SSH = require('../lib/utils/sshexec');
-var appConfig = require('../config/app_config.js');
+var appConfig = require('_pr/config');
 var usersDao = require('../model/users.js');
 var credentialCryptography = require('../lib/credentialcryptography')
 var fileIo = require('../lib/utils/fileio');
 var uuid = require('node-uuid');
 //var javaSSHWrapper = require('../model/javaSSHWrapper.js');
 var errorResponses = require('./error_responses');
-var logger = require('../lib/logger')(module);
+var logger = require('_pr/logger')(module);
 var waitForPort = require('wait-for-port');
-var AWSProvider = require('../model/classes/masters/cloudprovider/awsCloudProvider.js');
+var AWSProvider = require('_pr/model/classes/masters/cloudprovider/awsCloudProvider.js');
 var AWSKeyPair = require('../model/classes/masters/cloudprovider/keyPair.js');
 var ChefClientExecution = require('../model/classes/instance/chefClientExecution/chefClientExecution.js');
-var appConfig = require('../config/app_config.js');
+
 var Cryptography = require('../lib/utils/cryptography');
 
 
@@ -521,6 +521,31 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
 
     });
+    app.get('/instances/search/:orgid/:bgid/:projid/:envid/:querytext', function(req, res) {
+        logger.debug("Enter get() for /instances/search/" + req.params.querytext);
+        //constructing the options object to narrow down search
+        req.params.querytext = req.params.querytext.replace(/\"/g, '\\"');
+        logger.debug('Query:' + req.params.querytext);
+        var options = {
+            search: req.params.querytext,
+            filter: {
+                orgId: req.params.orgid,
+                envId: req.params.envid,
+                bgId: req.params.bgid,
+                projectId: req.params.projid
+            },
+            limit: 10000
+        }
+        logger.debug(JSON.stringify(options));
+        // req.params.querytext = '(\"' + req.params.querytext + '\") AND (' + req.params.orgid + ' AND ' + req.params.bgid + ' AND ' + req.params.projid +  ' AND ' + req.params.envid + ')';
+        instancesDao.searchInstances(req.params.querytext, options, function(err, data) {
+            if (!err) {
+                logger.debug('Received from search');
+                logger.debug(data.length);
+                res.send(data);
+            }
+        });
+    });
     app.get('/instances/dockerimagepull/:instanceid/:dockerreponame/:imagename/:tagname/:runparams/:startparams', function(req, res) {
 
         logger.debug("Enter get() for /instances/dockerimagepull");
@@ -623,7 +648,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                     logger.debug("Docker run stdout :" + instanceid + stdOutData.toString('ascii'));
                                     stdmessages += stdOutData.toString('ascii');
                                 }
-                            }, function(stdOutErr) {
+                            },
+                            function(stdOutErr) {
                                 logsDao.insertLog({
                                     referenceId: instanceid,
                                     err: true,
@@ -907,7 +933,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                         logger.debug("Docker run stdout :" + instanceid + stdOutData.toString('ascii'));
                                         stdmessages += stdOutData.toString('ascii');
                                     }
-                                }, function(stdOutErr) {
+                                },
+                                function(stdOutErr) {
                                     logsDao.insertLog({
                                         referenceId: instanceid,
                                         err: true,
@@ -1090,7 +1117,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                             runlist: req.body.runlist,
                                             overrideRunlist: false,
                                             jsonAttributes: JSON.stringify(jsonAttributeObj)
-                                            //parallel:true
+                                                //parallel:true
                                         }
                                         logger.debug('decryptCredentials ==>', decryptedCredentials);
                                         if (decryptedCredentials.pemFileLocation) {
@@ -1824,7 +1851,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                 port: 22,
                                 runlist: runlist, // runing service runlist
                                 overrideRunlist: true
-                                //parallel:true
+                                    //parallel:true
                             }
                             if (decryptedCredentials.pemFileLocation) {
                                 chefClientOptions.privateKey = decryptedCredentials.pemFileLocation;
@@ -2483,6 +2510,24 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         });
     });
 
+    app.get('/instances/:instanceId/status', function(req, res) {
+        logger.debug("Enter get() for /instances/%s/actionLogs", req.params.instanceId);
+        instancesDao.getAllActionLogs(req.params.instanceId, function(err, actionLogs) {
+            if (err) {
+                logger.error("Failed to fetch ActionLogs: ", err);
+                res.send(500);
+                return;
+            }
 
+            if (actionLogs && actionLogs.length) {
+                logger.debug("Enter get() for /instances/%s/actionLogs", req.params.instanceId);
+                res.send(actionLogs);
+            } else {
+                logger.debug("Exit get() for /instances/%s/actionLogs", req.params.instanceId);
+                res.send([]);
+            }
 
+        });
+
+    });
 };

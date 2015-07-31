@@ -10,7 +10,7 @@
 var mongoose = require('mongoose');
 var uuid = require('node-uuid'); //used for generating unique id
 var validate = require('mongoose-validator');
-var logger  = require('../../lib/logger')(module);
+var logger  = require('_pr/logger')(module);
 
 var extend = require('mongoose-validator').extend;
 extend('is_ValidName', function (val) {
@@ -193,6 +193,7 @@ var d4dModelMastersDockerConfig = mongoose.model('d4dModelMastersDockerConfig',d
 var d4dMastersUsers = new mongoose.Schema(
 	{id: {type:String, trim:true},
 	loginname: {type:String, trim:true, validate:nameValidator},
+	password: {type:String},
 	email: {type:String, trim:true},
 	userrolename: {type:String, trim:true},
 	orgname: {type:[String],required:false, trim:true},
@@ -243,6 +244,7 @@ var d4dMastersTemplatesList = new mongoose.Schema(
 	templatescookbooks: {type:String, trim:true},
 	orgname: {type:[String],required:false, trim:true},
 	orgname_rowid: {type:[String], trim:true},
+	template_filename: {type:String, trim:true},
 	active: {type:Boolean, trim:true,default:true},
 	rowid:{type:String,required:true, trim:true}},{collection:'d4dmastersnew'}
 );

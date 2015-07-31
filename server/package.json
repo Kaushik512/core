@@ -1,8 +1,12 @@
 {
-    "name": "Devops4Devops",
+
+    "name": "Catalyst",
     "version": "0.0.1",
-    "description": "Devops Platform for DevOps",
+    "description": "DevOps Platform for DevOps",
     "main": "app.js",
+    "config": {
+        "unsafe-perm": true
+    },
     "dependencies": {
         "aws-sdk": "2.1.22",
         "connect": "2.12.0",
@@ -37,27 +41,29 @@
         "passport-strategy": "1.0.0",
         "activedirectory": "0.6.3",
         "scp2": "0.2.2",
-        "shell-escape": "0.2.0"
+        "shell-escape": "0.2.0",
+        "bcryptjs": "2.2.0",
+        "mongoose-text-search": "0.0.2",
+        "newrelic-node": "0.3.7",
+        "node-crontab": "0.0.8"
     },
     "devDependencies": {
         "grunt": "0.4.5",
         "grunt-contrib-jshint": "0.10.0"
     },
     "scripts": {
+        "install": "node bin/postInstallscript",
+        "start": "node app.js",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "keywords": [
         "DevOps4Devops"
     ],
-    "author": "Errol Dsilva",
+    "author": "Anshul Srivastava",
     "license": "ISC",
     "repository": {
         "type": "git",
-        "url": "https://github.com/erroldsilva/Devops4Devops"
-    },
-    "bugs": {
-        "url": "https://github.com/erroldsilva/Devops4Devops/issues"
-    },
-    "homepage": "https://github.com/erroldsilva/Devops4Devops"
+        "url": "https://github.com/RLIndia/D4D"
+    }
 }
 

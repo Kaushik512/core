@@ -1,4 +1,84 @@
-
+.carousel-inner{
+    overflow: auto !important;
+    min-height:400px !important;
+}
+.showmenuAppTaskAnchor{
+    background-color: #ffffff;
+    border-color:#40baf1 !important;
+    background-repeat: no-repeat; 
+    float: left; 
+    border-radius: 50% !important; 
+    height: 26px; 
+    width: 26px; 
+    margin-left: 10px; 
+    margin-top: 4px;
+}
+.showmenuAppTaskAnchorI{
+   color:#40baf1 ! important;
+   font-size: 16px;
+   margin-top: 3px; 
+}
+.menuAppLinkSpan{
+    color: rgb(44, 55, 66); 
+    font-weight: bold; 
+    padding: 10px; 
+    font-size: 12px;
+}
+.menuTaskSpan{
+    color: rgb(44, 55, 66); 
+    font-weight: bold; 
+    padding: 10px; 
+    font-size: 12px;
+}
+.paddingleft32{
+    padding-left: 32px;
+}
+.fontsize11{
+    font-size: 11px;
+}
+.glyphiconNew{
+    /*font-size: 18px !important*/
+}
+.menuAppTask {    
+    /*position: relative;
+    margin-top: 40px;
+    background: #ffffff;
+    border: 2px solid #40baf1;
+    width:300px !important;
+    min-height:100px;*/
+    position: relative;
+    z-index: 1;
+    /*margin-top: 40px;*/
+    margin-top: 15px;
+    /*left:6px;*/
+    background: #ffffff;
+    border: 2px solid #40baf1;
+    min-height:100px;;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+} 
+.menuAppTask:after, .menuAppTask:before {
+    bottom: 100%;
+    left: 88%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+} .menuAppTask:after {
+    border-color: rgba(136, 183, 213, 0);
+    border-bottom-color: #ffffff;
+    border-width: 15px;
+    margin-left: -15px;
+} .menuAppTask:before { 
+    border-color: rgba(194, 225, 245, 0);
+    border-bottom-color: #40baf1;
+    border-width: 18px;
+    margin-left: -18px;
+}
+#tasksLists_length{
+    display: none;
+}
 .assignedRunlists{
     border:1px solid #dddddd;
     list-style:none outside none;
@@ -62,8 +142,9 @@
 .selectedNodesChefTaskCSS{
     border:1px solid #dddddd;
     list-style:none outside none;
-    height:200px;
+    height:153px;
     overflow-y:auto;
+    margin-top: 5px!important;
 }
 .selectedNodesCustomTaskCSS{
     border:1px solid #dddddd;
@@ -108,6 +189,10 @@
     width:80%;
     margin-bottom: 8px !important;
 }
+.searchTaskLabel{
+    width:80%;
+    margin-bottom: 8px !important;
+}
 .runlistLabel{
     font-size: 16px;
     margin-bottom:20px !important;
@@ -115,7 +200,19 @@
 .selectCookbooksandRecipesdiv{
     width: 80%;
 }
+.selectTasksdiv{
+    width:80%;
+}
 .selectCookbooksandRecipes{
+    height: 250px !important;
+    width:100% !important;
+    margin-bottom: 10px !important;
+    border-width:1px 1px 1px 2px; 
+    border-style:solid; 
+    border-color:#ccc !important;
+    /*border: 1px solid #ccc !important;*/
+}
+.selectavailbleTask{
     height: 250px !important;
     width:100% !important;
     margin-bottom: 10px !important;
@@ -139,6 +236,15 @@
     background-repeat: no-repeat;
     height: 24px;
     padding-left: 34px !important; 
+    padding-top: 6px !important;
+    background-position:4px 2px;
+    font-size: 12px;
+}
+.taskimg{
+    background: url("../img/tasksmall.png");
+    background-repeat: no-repeat;
+    height: 24px;
+    padding-left: 36px !important; 
     padding-top: 6px !important;
     background-position:4px 2px;
     font-size: 12px;
@@ -1188,6 +1294,7 @@ label {
     position: relative;
     left: 0;
     height:91.6%!important;
+    height: calc(100% - 98px) !important;
     overflow-y:auto;
     overflow-x:hidden;
 }
@@ -3760,7 +3867,9 @@ body
 }
 .instance-bootstrap-list {
     font-size: 10px;
-    padding-top: 14px;
+    /*Arabinda commented when App Url and Task link added.
+    padding-top: 14px;*/
+    padding-top: 20px;
 
     text-align: center;
 
@@ -4331,7 +4440,7 @@ float: left;
     display:inline-block;
 }
 .swap-view{
-    margin:5px;
+    margin:2px;
 }
 
 .chefCookbookList {
@@ -7881,21 +7990,44 @@ tr.selectedOne td a{
     background-color: #fff!important;
     font-size: 14px;
 }
+@media(min-width:1201px){
 .bootstrapSuccess{
-    margin-top: 150px;
+    margin-top: 130px;
     float:left;
-    margin-left: 300px;
-    width:416px;
+    margin-left: 285px;
+    width:auto;
     color:black!important;
     border-color: #40baf1!important;
     background-color: #fff!important;
     font-size: 16px;
+}
+}
+@media (min-width:768px) and (max-width:1200px){
+    .bootstrapSuccess{
+    margin-top: 105px;
+    float:left;
+    margin-left: 140px;
+    color:black!important;
+    border-color: #40baf1!important;
+    background-color: #fff!important;
+    font-size: 16px;
+    }
 }
 .bootstrapFailure{
     margin-top: 150px;
     float:left;
     margin-left: 300px;
     width:444px;
+    color:black!important;
+    border-color: #ebccd1;
+    background-color: #fff!important;
+    font-size: 16px;
+}
+.dataBagFailure{
+    margin-top: 50px;
+    float:left;
+    margin-left: 300px;
+    width:396px;
     color:black!important;
     border-color: #ebccd1;
     background-color: #fff!important;
@@ -7954,3 +8086,132 @@ form.cmxform .gray * {
         padding:0px 0px!important;
     }
 }
+
+.nodesTable{
+    margin-left: -13px;
+    width:110%;    
+}
+
+.widthForButton{
+    width:75%;
+}
+.marginLeft50{
+    margin-left: 50px;
+}
+.importButton{
+    float:left!important;
+    margin-top:3px;
+    margin-right:14px;
+}
+#jobParamTable>tbody>tr>td.jobParam{
+    width:24%!important;
+    padding-top: 17px!important;
+}
+#jobParamTable td{
+    border-top:none;
+}
+#booleanTable>tbody>tr>td.booleanParam{
+    width:20%!important;
+    padding-top: 17px!important;
+}
+#booleanTable td{
+    border-top:none;
+}
+#booleanTable thead th.headParamTable{
+    width:26%!important;
+}
+#stringTable>tbody>tr>td.stringParam{
+    width:20%!important;
+    padding-top: 17px!important;
+}
+#stringTable thead th.headStringTable{
+    width:26%!important;
+}
+#stringTable td{
+    border-top:none;
+}
+
+.stack-details-list {
+    font-size: 10px;
+    padding-bottom: 0px;
+    padding-top: 5px;
+    text-align: center;
+    /*border-top: 1px solid;
+    font-size: 10px;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    text-align: center;*/
+    }
+.stack-details {
+    display: block;
+}
+.stackId {
+  width: 100px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.stackCardDiv {
+        position: relative;
+        /*padding: 15px 15px 15px;*/
+        /*margin: 15px;*/
+        /*background-color: #ffffff;
+        border-color: #e5e5e5 #eee #eee;
+        border-style: solid;*/
+        border-width: 1px;
+        /*height: 100px;
+        min-height: 150px;*/
+}
+
+.instanceloaderspinner{
+    background-color: #fff;
+    border: 1px solid black;
+    height: 50px;
+    left: 50%;
+    padding-top: 14px;
+    position: fixed;
+    text-align: center;
+    top: 50%;
+    width: 200px;
+    z-index: 99999;
+}
+.instanceloaderspinner>img{
+    margin-right: 5px;
+}
+#tabInstanceStatus{
+    font-size: small;
+    margin-top: 21px;
+    text-align: center;
+}
+.popover.left{
+    margin-left:-73px!important;
+    margin-top:44px!important;
+}
+
+.stackInfo{
+    background: url(../img/sprites.png) no-repeat;
+    background-position: -15px -12px ;
+    width: 25px;
+    height: 25px;
+    background-repeat:no-repeat;
+    float: left;
+    margin-top:0px;
+}
+.stackLogo {
+   height: 52px;
+  padding-top: 11px;
+  margin-top: 9px;
+  margin-left: 44px;
+}
+
+.marginleftright7 {
+  margin-left: 7px;
+  margin-right: 7px;
+}
+
+.serviceClass{
+    float:left;
+    margin-top:7px;
+    margin-left:20px;
+}
+

@@ -23,10 +23,14 @@ Testing All New Config Management Conditions
     Config Name left empty  ${VaildEmptyConfignameErrMsg}
     Vaildate Empty User Name  ${VaildEmptyUsername}
     User Name left empty  ${VaildEmptyUsernameErrMsg}
-    Vaildate Empty User Pem and Validator Pem and Knife File 
+    #Vaildate Empty User Pem and Validator Pem and Knife File 
 
 
 Create New Config Management
+    Clicks on Settings
+    Clicks on DevOps Setup menu
+    Clicks on Config Management menu
+    Sleep    2s
     Clicks on New button to Create New Config Management
     Enters config management name
     Enters config management user name
@@ -35,14 +39,21 @@ Create New Config Management
     Upload user Pem File
     Upload Validator Pem File
     Upload Validator Knife File
-    Clicks on Save button to save the Environment detail
+    Sleep    4s
+    Clicks on Save button to save the ConfigMgmt detail
+    Sleep    2s
+    Verfiy the ChefServer is Created in the Table
 
 
 Unique Devops Configuration Management
+    Clicks on Settings
+    Clicks on DevOps Setup menu
+    Clicks on Config Management menu
+    Sleep    2s
     Clicks on New button to Create New Config Management
     Validate the Unique Configuration Name   ${ValidateAlrdyExistConfigName}
     Validate the Unique Organization   ${ValidateAlrdyExistOrgName}
-    Clicks on Save button to save the Environment detail
+    Clicks on Save button to save the ConfigMgmt detail
     Configuration name already exists    ${ValidateAlrdyExistConfigNameErrMsg}
     Organization name already exists     ${ValidateAlrdyExistOrgNameErrMsg}
     Clicks on ButtonCancel Button
@@ -52,7 +63,7 @@ Devops Click on Update of Your org and Org is disabled
     Devops click on Created Config Mgmt
     Organization is Disabled
     Verify the Organziation
-    Clicks on Save button to save the Environment detail
+    Clicks on Save button to save the ConfigMgmt detail
 
 Catlayst Unique Organization Validation
     Clicks on New button to Create New Config Management
@@ -63,15 +74,20 @@ Catlayst Unique Organization Validation
     Upload user Pem File
     Upload Validator Pem File
     Upload Validator Knife File
-    Clicks on Save button to save the Environment detail
+    Clicks on Save button to save the ConfigMgmt detail
     Validate the Organization of Already Created
 
 Enters New Configrtn Name to check
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    id=configname    CatServer
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    id=configname    ${NEW CONFIG NAME}
 
 Validate the Organization of Already Created
     Element Should Contain    id=unique_orgname    ${AlreadyExistOrg}
     Clicks on Config Cancel Button
+
+Verfiy the ChefServer is Created in the Table
+    Sleep    2s
+    Element Should Contain    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${CONFIG MANAGEMENT NAME}']    ${CONFIG MANAGEMENT NAME}
+    Log    ${CONFIG MANAGEMENT NAME} Chef Server is Created
 
     
 Vaildate Empty User Pem and Validator Pem and Knife File
@@ -80,7 +96,9 @@ Vaildate Empty User Pem and Validator Pem and Knife File
     Enters config management user name
     Select organization for config management
     Enters config management URL
-    Clicks on Save button to save the Environment detail
+    Clicks on Save button to save the ConfigMgmt detail
+    Sleep    2s
+    Confirming Userpem and Knife files are mandatory
     Clicks on Config Cancel Button
 
 
@@ -94,7 +112,19 @@ Vaildate Empty User Name
     Upload user Pem File
     Upload Validator Pem File
     Upload Validator Knife File
-    Clicks on Save button to save the Environment detail
+    Clicks on Save button to save the ConfigMgmt detail
+
+
+Confirming Userpem and Knife files are mandatory
+    ${USER PEM MANDATORY}=    Get Text    xpath=.//*[@id='userpemfile'][@cat-validation]
+    Log    ${USER KNIFE}
+    Should Be Equal    ${USER KNIFE}    ${REQ}
+    ${KNIFE PEM MANDATORY}=    Get Text    xpath=.//*[@id='kniferbfile'][@cat-validation]
+    Log    ${KNIFE PEM MANDATORY}
+    Should Be Equal    ${KNIFE PEM MANDATORY}    ${REQ}
+
+
+
 
 
 Enters Empty User Name
@@ -134,7 +164,7 @@ Vaildate Empty Config Name
     Upload user Pem File
     Upload Validator Pem File
     Upload Validator Knife File
-    Clicks on Save button to save the Environment detail
+    Clicks on Save button to save the ConfigMgmt detail
 
 
 Enters Empty Configuration name
@@ -153,7 +183,7 @@ Vaildate the Empty URL field
     Upload user Pem File
     Upload Validator Pem File
     Upload Validator Knife File
-    Clicks on Save button to save the Environment detail
+    Clicks on Save button to save the ConfigMgmt detail
 
 
 Enters empty config management URL
@@ -172,7 +202,7 @@ Vaildate the Empty field
     Clicks on Config Cancel Button
 
 Clicks on Config Cancel Button
-    Click Element    xpath=.//*[@id='btncancel']
+    Click Element    css=#btncancel
 
 
     
@@ -249,8 +279,9 @@ Upload Validator Knife File
     #C:\\Users\\adarsh.RLINDIA\\Desktop\\caty\\Chef\\knife.rb     
    
 
-Clicks on Save button to save the Environment detail
-    Click Element    xpath=//button[@class='btn btn-primary btn-mini'][1]   
+Clicks on Save button to save the ConfigMgmt detail
+    Sleep    3s
+    Click Element    css=div.btn-group.pull-right > button
     Sleep    2s   
 
 
@@ -297,7 +328,7 @@ Validate the ConOrganization name
 
 
 Clicks on ButtonCancel Button
-    Click Element    xpath=.//*[@id='btncancel']   
+    Click Element    css=#btncancel
 
 
 Devops click on Created Config Mgmt
@@ -309,8 +340,8 @@ Organization is Disabled
      Element Should Be Disabled       id=orgname
 
 Verify the Organziation
-    Get Text    xpath=.//*[@id='s2id_orgname']/a/span[1]
-    Element Should Contain    xpath=.//*[@id='s2id_orgname']/a/span[1]    ${ORGANIZATION NAME}    
+    Get Text    css=#s2id_orgname > a > span.select2-chosen
+    Element Should Contain    css=#s2id_orgname > a > span.select2-chosen    ${ORGANIZATION NAME}    
 #Unique Devops Config name Ends
 
 #Environments setup starts
