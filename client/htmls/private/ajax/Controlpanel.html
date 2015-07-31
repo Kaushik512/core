@@ -1268,7 +1268,18 @@ function populateWorkstation(){
     });
 }
 
-$('.workstationBtn').click(populateWorkstation);
+//bootbox alert for setting it as a workstation..
+$('.workstationBtn').click(function() {
+    bootbox.confirm({
+        message: "Are you sure you want to Convert this to a Workstation?",
+        title: "Confirmation",
+        callback: function(result) {
+            if (result) {
+              populateWorkstation();
+            }
+        }
+    });
+});
 
 function disableSSHBtn(instanceId) {
     var $cardViewInstanceId = $(".domain-roles-caption[data-instanceId='" + instanceId + "']");
@@ -3064,7 +3075,7 @@ $(document).ready(function() {
      }
      var $tdURL = $('<td class="appUrlTable"/>').append('<a style="word-break:break-word" href="' + url + '" target="_blank">' + appUrlData.name + '</a> ');
      var $tdAction = $('<td/>');
-     $tdAction.append('<div class="btn-group"><button class="btn btn-info pull-left btn-sg tableactionbutton appUrlEditLink" value="Update" title="Update"><i class="ace-icon fa fa-pencil bigger-120"></i></button></div>').append('<div style="margin-left:5px;" class="btn-group"><button class="btn btn-danger pull-left btn-sg tableactionbutton appUrlRemoveLink" value="Remove" title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></div>');
+     $tdAction.append('<div class="btn-group"><button class="btn btn-info pull-left btn-sg tableactionbutton appUrlEditLink" data-placement="top" value="Update" title="Edit"><i class="ace-icon fa fa-pencil bigger-120"></i></button></div>').append('<div style="margin-left:5px;" class="btn-group"><button class="btn btn-danger pull-left btn-sg tableactionbutton appUrlRemoveLink" data-placement="top" value="Remove" title="Delete"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></div>');
 
      $tdAction.find('.appUrlEditLink').click(function() {
          var appUrlData = $row.data('appUrlData');

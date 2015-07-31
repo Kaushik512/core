@@ -386,6 +386,7 @@
 
                                                                            $.get('/instances/search/' + urlParams.org + '/' + urlParams['bg'] + '/' + urlParams.projid + '/' + urlParams.envid + '/' + encodeURIComponent($('#instanceSearchQuery').val()), function(data) {
                                                                                console.log(JSON.stringify(data.instances.length));
+
                                                                                //display statistics
                                                                                //$('#instancesearchmessage').html('Returned ' + data.instances.length + ' results (' + data.queryduration + ' seconds)');
                                                                                $('#instancesearchmessage').html('Returned ' + data.instances.length + ' result(s)');
@@ -4060,7 +4061,7 @@
                                                                         $tr.append($tdTime);
 
                                                                         //method for edit and delete of jobs from orchestration table.
-                                                                        var $tdOptions = $('<td style="vertical-align:inherit;text-align:center;"></td>').append('<div class="btn-group tableactionWidth"><a rel="tooltip" data-placement="top" data-original-title="Delete" class="btn btn-danger pull-left btn-sg tableactionbutton btnDeleteTask"><i class="ace-icon fa fa-trash-o bigger-120"></i></a><a class="btn btn-info pull-left tableactionbutton btnEditTask tableactionbuttonpadding btn-sg" data-original-title="Edit" data-placement="top" rel="tooltip"><i class="ace-icon fa fa-pencil bigger-120"></i></a></div>').attr('data-taskId', data[i]._id);
+                                                                        var $tdOptions = $('<td style="vertical-align:inherit;text-align:center;"></td>').append('<div class="btn-group tableactionWidth"><a class="btn btn-info pull-left tableactionbutton btnEditTask btn-sg" data-original-title="Edit" data-placement="top" rel="tooltip"><i class="ace-icon fa fa-pencil bigger-120"></i></a><a style="margin-left:5px;" rel="tooltip" data-placement="top" data-original-title="Delete" class="btn btn-danger pull-left btn-sg tableactionbutton btnDeleteTask"><i class="ace-icon fa fa-trash-o bigger-120"></i></a></div>').attr('data-taskId', data[i]._id);
                                                                         //permission set for editing and deleting for ChefTask
 
                                                                         var hasEditChefTaskPermission = false;
