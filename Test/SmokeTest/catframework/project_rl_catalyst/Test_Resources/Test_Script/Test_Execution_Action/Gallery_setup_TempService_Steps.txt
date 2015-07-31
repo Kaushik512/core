@@ -108,7 +108,7 @@ Select Chef Server
 Select CookBooks
     Sleep   4s
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[text()='${COOKBOOK NAME1}']
-    Sleep   2s
+    Sleep   4s
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    id=btnaddToRunlist
     Sleep   2s
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[text()='${COOKBOOK NAME2}']
