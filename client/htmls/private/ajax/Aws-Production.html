@@ -841,147 +841,148 @@
                     </footer><!--Launch div ends here-->
                 </div> <!--tab-pane l2 gets over -->
 
-                <!--modal for launching the blueprint-->
-        <div class="modal fade" id="launchResultContainer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
-
-        <div class="modal-dialog">
-        <div class="modal-content">
-        <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-        <h4 class="modal-title" id="myModalLabel">Launching Blueprint</h4>
-        </div>
-        <div class="modal-body">
-        
-        </div>
-        <div class="modal-footer">
-        <button type="button" class="btn btn-default btn-primary" data-dismiss="modal">Close</button>
-        </div>
-        </div>
-        </div>
-        </div>
+                
 <!--modal for blueprint read-->
 <div class="modal fade bs-example-modal-lg" id="modalForRead" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
                 <h4 class="modal-title" id="myModalLabel">Blueprint Information</h4>
             </div>
-            <div class="modal-body">
+            <div class="modal-body" style="height:534px;overflow-y:auto;">
             	<!--os and the 1st tier-->
-            	
- <div class="panel-group smart-accordion-default" id="accordion-DesignNew">
- <div class="panel panel-default">
- <div class="panel-heading">
- <h4 class="panel-title">
- <a data-toggle="collapse" data-parent="#accordion-DesignNew" href="#CollapseBlueprintDetails"> <i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i>Blueprint Details</a>
- </h4>
- </div>
- <div id="CollapseBlueprintDetails" class="panel-collapse collapse in">
- <div class="panel-body">
- <div class="widget-body no-padding">
- <form class="projectRepo" action="" id="checkout-formNew">
-
- 
- <div class="col-lg-4 col-md-4">
- <label for="name">Blueprint Name:</label>
+ <table class="table table-bordered">
+    <thead>
+        <th style="width:11%;text-align:center">Parameters</th>
+        <th style="width:27%;text-align:center">Values</th>
+    </thead>
+    <tbody>
+        <tr>
+            <td style="padding-left: 18px;padding-top:16px;">Blueprint Name:</td>
+<td>
+    
  <input  id="blueprintNameInputNew" disabled="disabled" class="form-control">
- </div>
- <div class="col-lg-4 col-md-4">
- <label for="">Operating System:</label>
- <input id="instanceOSNew" class="form-control width-100" disabled="disabled">                                                      
- </div>
+ 
+</td>
+</tr>
+<tr>
+<td style="padding-left: 18px;padding-top:16px;">Operating System:</td>
+<td>
 
- <div class="col-lg-4 col-md-4">
- <label for="name">Instance Size:</label>
- <input id="instancesizeNew" disabled="disabled" class="form-control width-100">
- </div> 
-</form>
-</div>
-</div>
-</div>
-</div>
-<div class="panel panel-default">
- <div class="panel-heading">
- <h4 class="panel-title">
- <a data-toggle="collapse" data-parent="#accordion-DesignNew" href="#CollapseproviderParameterNew"> <i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i>Provider Parameters</a>
- </h4>
- </div>
- <div id="CollapseproviderParameterNew" class="panel-collapse collapse">
- <div class="panel-body">
- <div class="widget-body no-padding">
-<form class="projectRepo">
- <div class="col-lg-4 col-md-4">
- <label for="name">Provider Type:</label>
- <input id="instanceProviderType" disabled="disabled" class="form-control width-100">
- </div> 
+    
+ <input id="instanceOSNew" class="form-control" disabled="disabled">                                                      
+ 
+</td>
+</tr>
 
-  <div class="col-lg-4 col-md-4">
- <label for="name">Provider Name:</label>
- <input id="instanceProviderName" disabled="disabled" class="form-control width-100">
- </div> 
-
-  <div class="col-lg-4 col-md-4">
- <label for="name">Region:</label>
- <input id="instanceRegion" disabled="disabled" class="form-control width-100">
- </div> 
-
-  <div class="col-lg-4 col-md-4 projectRepo">
- <label for="name">Image:</label>
- <input id="instanceImage" disabled="disabled" class="form-control width-100">
- </div> 
-
-  <div class="col-lg-4 col-md-4 projectRepo">
- <label for="name">Keypair:</label>
- <input id="instancekeyPair" disabled="disabled" class="form-control width-100">
- </div> 
-
- <div class="col-lg-4 col-md-4 projectRepo">
- <label for="">VPC ID:</label>
- <input id="instanceVPC" class="form-control width-100" disabled="disabled">                                                      
- </div>
-   <div class="col-lg-4 col-md-4 projectRepo">
- <label for="">Subnet:</label>
- <input id="instanceSubnetId" class="form-control width-100" disabled="disabled">                                                      
- </div>
- <div class="col-lg-4 col-md-4 projectRepo">
-  <label for="">Security Group:</label>
-  <input id="instanceSecurityGroupId" class="form-control width-100" disabled="disabled">
-</div>
-</form>
-</div>
-</div>
-</div>
-</div>
-<div class="panel panel-default">
- <div class="panel-heading">
- <h4 class="panel-title">
- <a data-toggle="collapse" data-parent="#accordion-DesignNew" href="#CollapseRunlist"> <i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i>Runlist Details</a>
- </h4>
- </div>
- <div id="CollapseRunlist" class="panel-collapse collapse">
- <div class="panel-body">
- <div class="widget-body no-padding">
-<form class="projectRepo">
- <div class="col-lg-4 col-md-4">
- <label for="">Version:</label>
- <input id="instanceVersion" class="form-control width-100" disabled="disabled">                                                      
- </div>
- <div class="col-lg-4 col-md-4">
- <label for="">Runlist:</label>
- <input id="instanceRunlist" class="form-control width-100" disabled="disabled">                                                      
- </div>
+<tr>
+    <td style="padding-left: 18px;padding-top:16px;">Instance Size:</td>
+<td>
   
-                           
+ <input id="instancesizeNew" disabled="disabled" class="form-control">
  
- </form><!--end-->
-</div>
-</div>
-</div>
-</div>
- 
-            </div>	<!-- 1st tier ends here-->
-            
+</td>
+</tr>
+
+<tr>
+    <td style="padding-left: 18px;padding-top:16px;">Provider Type:</td>
+<td>
+
+ <input id="instanceProviderType" disabled="disabled" class="form-control">
+
+</td>
+</tr>
+
+<tr>
+    <td style="padding-left: 18px;padding-top:16px;">Provider Name:</td>
+
+    <td>
+ <input id="instanceProviderName" disabled="disabled" class="form-control">
+  
+ </td>
+</tr>
+
+<tr>
+    <td style="padding-left: 18px;padding-top:16px;">Region:</td>
+<td>
+ <input id="instanceRegion" disabled="disabled" class="form-control">
+
+ </td>
+</tr>
+
+
+<tr>
+    <td style="padding-left: 18px;padding-top:16px;">Image:</td>
+<td>
+
+ <input id="instanceImage" disabled="disabled" class="form-control">
+
+ </td>
+</tr>
+
+<tr>
+    <td style="padding-left: 18px;padding-top:16px;">Keypair:</td>
+<td> 
+
+ <input id="instancekeyPair" disabled="disabled" class="form-control">
+
+ </td>
+</tr>
+
+<tr>
+    <td style="padding-left: 18px;padding-top:16px;">VPC ID:</td>
+
+<td>
+ <input id="instanceVPC" class="form-control" disabled="disabled">                                               
+
+  </td>
+</tr>
+
+<tr>
+    <td style="padding-left: 18px;padding-top:16px;">Subnet:</td>
+
+ <td>
+
+
+ <input id="instanceSubnetId" class="form-control" disabled="disabled">                                          
+
+ </td>
+</tr>
+
+<tr>
+    <td style="padding-left: 18px;padding-top:16px;">Security Group:</td>
+
+<td>
+
+  <input id="instanceSecurityGroupId" class="form-control" disabled="disabled">
+
+</td>
+</tr>
+
+<tr>
+    <td style="padding-left: 18px;padding-top:16px;">Version:</td>
+
+<td>
+
+ <input id="instanceVersion" class="form-control" disabled="disabled">                                    
+
+</td>
+</tr>
+
+<tr>
+    <td style="padding-left: 18px;padding-top:16px;">Runlist:</td>
+
+ <td>
+
+
+ <input id="instanceRunlist" class="form-control" disabled="disabled">                                           
+
+</td>
+</tr>
+
+            </tbody>
+           </table> 
             <div class="modal-footer">
                 <button type="button" class="btn btn-default btn-primary" data-dismiss="modal">Close</button>
             </div>
@@ -2862,7 +2863,7 @@
                                      blueprintData: reqBody
                                  }, function(data) {
                                      console.log(data);
-                                     alert(JSON.stringify(data));
+                                   //  alert(JSON.stringify(data));
                                      var validatorForm = $("#wizard-1").validate();
                                      validatorForm.resetForm();
 
@@ -2875,10 +2876,11 @@
                                      wizard.disablePreviouBtn();
 
                                      $('a#blueprintInfo').click(function(e) {
-                                        alert(data.instanceOS);
-                                        alert(data.instanceType);
+                                       
                                          //  alert('check');
                                          var $blueprintReadContainer = $('#modalForRead');
+
+                                       
 
                                          //condition for getting the OS,instanceType,version...
 
@@ -2886,29 +2888,29 @@
                                          //for getting the blueprint name
                                          $blueprintReadContainer.find('.modal-body #blueprintNameInputNew').val(data.name);
                                          //for getting the OsName
-                                         $blueprintReadContainer.find('.modal-body #instanceOSNew').val(data.instanceOS);
+                                         $blueprintReadContainer.find('.modal-body #instanceOSNew').val(data.blueprintConfig.cloudProviderData.instanceOS);
                                          //for getting the instance Size
-                                         $blueprintReadContainer.find('.modal-body #instancesizeNew').val(data.instanceType);
+                                         $blueprintReadContainer.find('.modal-body #instancesizeNew').val(data.blueprintConfig.cloudProviderData.instanceType);
                                          //for getting the version
-                                         $blueprintReadContainer.find('.modal-body #instanceVersion').val(data.latestVersion);
+                                         $blueprintReadContainer.find('.modal-body #instanceVersion').val(data.blueprintConfig.infraManagerData.latestVersion);
                                          //for getting the SubnetId
-                                         $blueprintReadContainer.find('.modal-body #instanceSubnetId').val(data.subnetId);
+                                         $blueprintReadContainer.find('.modal-body #instanceSubnetId').val(data.blueprintConfig.cloudProviderData.subnetId);
                                          //loop for getting the Security Group
 
-                                         $blueprintReadContainer.find('.modal-body #instanceSecurityGroupId').val(data.securityGroupIds);
+                                         $blueprintReadContainer.find('.modal-body #instanceSecurityGroupId').val(data.blueprintConfig.cloudProviderData.securityGroupIds);
 
-                                         $blueprintReadContainer.find('.modal-body #instanceVPC').val(data.vpcId);
+                                         $blueprintReadContainer.find('.modal-body #instanceVPC').val(data.blueprintConfig.cloudProviderData.vpcId);
                                          // loop for getting runlist
-                                         /*for (var j = 0; j < data.versionsList.length; j++) {
-                                             if (data.versionsList[j].ver == data.latestVersion) {
-                                                 $blueprintReadContainer.find('.modal-body #instanceRunlist').val(data.versionsList[j].runlist);
-                                             }
+                                         for (var j = 0; j < data.blueprintConfig.infraManagerData.versionsList.length; j++) {
+                                             
+                                                 $blueprintReadContainer.find('.modal-body #instanceRunlist').val(data.blueprintConfig.infraManagerData.versionsList[j].runlist);
+                                             
 
-                                         }*/
+                                         }
                                          //for getting the image Name
                                          $.ajax({
                                              type: "GET",
-                                             url: "/vmimages/" + data.imageId,
+                                             url: "/vmimages/" + data.blueprintConfig.cloudProviderData.imageId,
                                              success: function(data) {
                                                  console.log(data);
                                                  $blueprintReadContainer.find('.modal-body #instanceImage').val(data.name);
@@ -2919,7 +2921,7 @@
                                          //for getting the Provider name,Type,Region,KeyPair
                                          $.ajax({
                                              type: "GET",
-                                             url: "/aws/providers/" + data.providerId,
+                                             url: "/aws/providers/" + data.blueprintConfig.cloudProviderId,
                                              success: function(data) {
                                                  $blueprintReadContainer.find('.modal-body #instanceProviderName').val(data.providerName);
                                                  $blueprintReadContainer.find('.modal-body #instanceProviderType').val(data.providerType);
@@ -3327,7 +3329,9 @@
          //To fix template id and template type
          // alert('in' + data.length);
          for (var i = 0; i < data.length; i++) {
-             //alert(JSON.stringify(data[i]));
+             console.log(data[i]);
+            //alert(data[i]);
+            
              //Find a panel-body with the template type class
              var $currRolePanel = $('#accordion-2').find('.' + data[i].templateType);
              //   alert($currRolePanel.length);
@@ -3353,7 +3357,7 @@
                  $ul.append($liCardName);
 
                  var $selecteditBtnContainer = $('<div style="position:absolute;padding-left:27px;bottom:11px;"></div>');
-                 if (data[i].versionsList) {
+           //      if (data[i].versionsList) {
 
                      var $selectVerEdit = $('<a style="padding:0px 4px;margin-left:3px;border-radius:5px;" class="bpEditBtn"><i class="ace-icon fa fa-pencil"></i></a>').addClass('btn btn-primary').attr('data-toggle', 'tooltip').attr('data-placement', 'top').attr('title', 'Edit');
                      var $selectVer = null;
@@ -3385,15 +3389,22 @@
                          $selectVer = $('<select style="padding:1px;padding-left:5px;"></select>').addClass('blueprintVersionDropDown').attr('data-blueprintId', data[i]._id);
 
 
+                         
 
                          //code for info about blueprints
                          (function(blueprint) {
+                           // alert(JSON.stringify(blueprint));
                              $liRead.click(function(e) {
 
+                                var $blueprintReadContainer = $('#modalForRead');
+                                 $blueprintReadContainer.find('.modal-body #blueprintNameInputNew').val(blueprint.name);
+
+                          
+                            
                                  //for getting the image Name
                                  $.ajax({
                                      type: "GET",
-                                     url: "/vmimages/" + blueprint.imageId,
+                                     url: "/vmimages/" + blueprint.blueprintConfig.cloudProviderData.imageId,
                                      success: function(data) {
                                          console.log(data);
                                          $blueprintReadContainer.find('.modal-body #instanceImage').val(data.name);
@@ -3404,7 +3415,7 @@
                                  //for getting the Provider name,Type,Region,KeyPair
                                  $.ajax({
                                      type: "GET",
-                                     url: "/aws/providers/" + blueprint.providerId,
+                                     url: "/aws/providers/" + blueprint.blueprintConfig.cloudProviderId,
                                      success: function(data) {
                                          $blueprintReadContainer.find('.modal-body #instanceProviderName').val(data.providerName);
                                          $blueprintReadContainer.find('.modal-body #instanceProviderType').val(data.providerType);
@@ -3423,36 +3434,41 @@
                                  });
 
                                  var $parent = $(this).parents('.cardimage');
-                                 var $blueprintReadContainer = $('#modalForRead');
+                                 
                                  var version = $parent.find('.blueprintVersionDropDown').val();
                                  $blueprintReadContainer.modal('show');
                                  //for getting the blueprint name
-                                 $blueprintReadContainer.find('.modal-body #blueprintNameInputNew').val(blueprint.name);
+                                
                                  //for getting the OsName
-                                 $blueprintReadContainer.find('.modal-body #instanceOSNew').val(blueprint.instanceOS);
+                                 $blueprintReadContainer.find('.modal-body #instanceOSNew').val(blueprint.blueprintConfig.cloudProviderData.instanceOS);
                                  //for getting the instance Size
-                                 $blueprintReadContainer.find('.modal-body #instancesizeNew').val(blueprint.instanceType);
-                                 //for getting the version
-                                 $blueprintReadContainer.find('.modal-body #instanceVersion').val(version);
+                                 $blueprintReadContainer.find('.modal-body #instancesizeNew').val(blueprint.blueprintConfig.cloudProviderData.instanceType);
+                                 
                                  //for getting the SubnetId
-                                 $blueprintReadContainer.find('.modal-body #instanceSubnetId').val(blueprint.subnetId);
+                                 $blueprintReadContainer.find('.modal-body #instanceSubnetId').val(blueprint.blueprintConfig.cloudProviderData.subnetId);
                                  //loop for getting the Security Group
 
-                                 $blueprintReadContainer.find('.modal-body #instanceSecurityGroupId').val(blueprint.securityGroupIds);
+                                 $blueprintReadContainer.find('.modal-body #instanceSecurityGroupId').val(blueprint.blueprintConfig.cloudProviderData.securityGroupIds);
+
+                                 //for getting the VPC
+                                 $blueprintReadContainer.find('.modal-body #instanceVPC').val(blueprint.blueprintConfig.cloudProviderData.vpcId)
 
                                  // loop for getting runlist
-                                 for (var j = 0; j < blueprint.versionsList.length; j++) {
-                                     if (blueprint.versionsList[j].ver == version) {
-                                         $blueprintReadContainer.find('.modal-body #instanceRunlist').val(blueprint.versionsList[j].runlist);
-                                     }
+                                 for (var j = 0; j < blueprint.blueprintConfig.infraManagerData.versionsList.length; j++) {
+                                    
+                                         $blueprintReadContainer.find('.modal-body #instanceRunlist').val(blueprint.blueprintConfig.infraManagerData.versionsList[j].runlist);
 
+                                        //for getting the version
+                                        $blueprintReadContainer.find('.modal-body #instanceVersion').val(blueprint.blueprintConfig.infraManagerData.versionsList[j].ver);
+                                   
                                  }
-                                 //for getting the VPC
-                                 $blueprintReadContainer.find('.modal-body #instanceVPC').val(blueprint.vpcId)
+                                 
+                             
 
                              });
                          })(data[i]);
                          //info ends here
+                        //  }
 
                          //for updating 
                          $selectVerEdit.click(function(e) {
@@ -3496,16 +3512,18 @@
                              "font-size": '10px'
                          }).append(tagLabel, $selectVer);
 
+                      
                      }
                      if ($selectVer.attr('class').indexOf('dockerrepotagselect') < 0) {
-                         for (var j = 0; j < data[i].versionsList.length; j++) {
-                             var $options = $('<option></option>').append(data[i].versionsList[j].ver).val(data[i].versionsList[j].ver);
+                         for (var j = 0; j < data[i].blueprintConfig.infraManagerData.versionsList.length; j++) {
+                             var $options = $('<option></option>').append(data[i].blueprintConfig.infraManagerData.versionsList[j].ver).val(data[i].blueprintConfig.infraManagerData.versionsList[j].ver);
                              $selectVer.append($options);
                          }
                      }
                      $selecteditBtnContainer.append($li);
+                    
 
-                 }
+                 //}
                  $itemBody.append($ul);
                  $itemBody.append($selecteditBtnContainer);
                  $itemContainer.append($itemBody);
@@ -3530,6 +3548,7 @@
                  }
 
              }
+           
          }
 
          // $("#myTabContent3").append(containerTemp);

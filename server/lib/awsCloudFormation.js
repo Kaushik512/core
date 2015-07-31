@@ -170,19 +170,42 @@ var AWSCloudFormation = function(awsSettings) {
         if (nextToken) {
             params.NextToken = nextToken;
         }
-        
+
         cloudFormation.describeStackEvents(params, function(err, data) {
 
             if (err) {
                 callback(err, null);
                 return;
             }
-       
+
             callback(null, {
                 events: data.StackEvents,
                 nextToken: data.NextToken
             });
         });
+
+    };
+
+    this.getAllStackEvents = function(stackNameOrId, callback) {
+        var self = this;
+        var events = [];
+
+        function getEvents(nextToken, callback) {
+            self.getStackEvents(stackNameOrId, nextToken, function(err, data) {
+                if (err) {
+                    callback(err, null);
+                    return;
+                }
+                events = events.concat(data.events);
+                if (data.nextToken) {
+                    getEvents(data.nextToken, callback);
+                } else {
+                    callback(null, events)
+                }
+            });
+        }
+        getEvents(null, callback);
+
 
     };
 
