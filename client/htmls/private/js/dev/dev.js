@@ -28,32 +28,38 @@
                                                                }
 
                                                                //for removing the selected blueprint in the blueprint tab
-                                                               window.removeSelectedBlueprint = function() {
-                                                                   var blueprintId = $('.productdiv1.role-Selected1').attr('data-blueprintid');
-                                                                   if (blueprintId) {
-                                                                       //found now delete
-                                                                       bootbox.confirm("Are you sure you would like to remove this blueprint?", function(result) {
-                                                                           if (!result) {
-                                                                               return;
-                                                                           }
-                                                                           $.get('/blueprints/delete/' + blueprintId, function(data) {
-                                                                               //  alert(data);
-                                                                               if (data == 'OK') {
-                                                                                   var $bcc = $('.productdiv1.role-Selected1').closest('.blueprintContainer');
-                                                                                   $('.productdiv1.role-Selected1').parent().detach();
-                                                                                   //Check if the closest bluprintcontainer is empty, if empty then hide it.
-                                                                                   // alert($bcc.find('.panel-body').children().length);
-                                                                                   if ($bcc.find('.panel-body').children().length <= 0) {
-                                                                                       $bcc.addClass('hidden');
-                                                                                   }
-                                                                               } else
-                                                                                   alert(data);
-                                                                           });
-                                                                       });
-                                                                   } else {
-                                                                       alert('Please select a blueprint to remove.');
-                                                                   }
-                                                               }
+                                                                window.removeSelectedBlueprint = function() {
+                                                                    var blueprintId = $('.productdiv1.role-Selected1').attr('data-blueprintid');
+                                                                    if (blueprintId) {
+                                                                        //found now delete
+                                                                        bootbox.confirm("Are you sure you would like to remove this blueprint?", function(result) {
+                                                                            //  alert(result);
+                                                                            if (!result) {
+                                                                                return;
+                                                                            } else {
+                                                                                //alert(result);
+                                                                                $.ajax({
+                                                                                    url: '/blueprints/' + blueprintId,
+                                                                                    type: 'DELETE',
+                                                                                    success: function(data) {
+                                                                                        if (data) {
+                                                                                            var $bcc = $('.productdiv1.role-Selected1').closest('.blueprintContainer');
+                                                                                            $('.productdiv1.role-Selected1').parent().detach();
+                                                                                            //Check if the closest bluprintcontainer is empty, if empty then hide it.
+                                                                                            // alert($bcc.find('.panel-body').children().length);
+                                                                                            if ($bcc.find('.panel-body').children().length <= 0) {
+                                                                                                $bcc.addClass('hidden');
+                                                                                            }
+                                                                                        } else
+                                                                                            alert(data);
+                                                                                    }
+                                                                                });
+                                                                            }
+                                                                        });
+                                                                    } else {
+                                                                        alert('Please select a blueprint to remove.');
+                                                                    }
+                                                                }
                                                                window.removeStack = function() {
                                                                    var $selectedCard = $('.productdiv1.role-Selected1');
 
@@ -2556,7 +2562,7 @@
                                                                                        } else {
                                                                                            msgStr = 'Instance Id : ' + data.id + '<br/>Instance Logs :- ';
                                                                                        }
-                                                                                       var $msg = $('<div></div>').append('<h3 style="font-size:16px;" class=\"alert alert-success\">Your Selected Blueprint is being Launched.Kindly check back in a while.</h3>').append(msgStr);
+                                                                                       var $msg = $('<div></div>').append('<h3 style="font-size:16px;" class=\"alert alert-success\">Your Selected Blueprint is being Launched, kindly check back in a while.</h3>').append(msgStr);
 
                                                                                        $launchResultContainer.find('.modal-body').empty();
                                                                                        $launchResultContainer.find('.modal-body').append($msg);
@@ -3178,1065 +3184,1048 @@
                                                                    }
 
                                                                    /*Initialising the data table in orchestration*/
-                                                                   function initializeTaskArea(data) {
-
-                                                                       $('#assignedExecute').on('show.bs.modal', function() {
-                                                                           $('#assignedTaskHistory').css('z-index', 1030);
-                                                                       });
-
-                                                                       $('#assignedExecute').on('hidden.bs.modal', function() {
-                                                                           $('#assignedTaskHistory').css('z-index', 1040);
-                                                                       });
-
-                                                                       //for jenkins
-
-                                                                       $('#assignedExecute').on('show.bs.modal', function() {
-                                                                           $('#assignedTaskHistoryForJenkins').css('z-index', 1030);
-                                                                       });
-
-                                                                       $('#assignedExecute').on('hidden.bs.modal', function() {
-                                                                           $('#assignedTaskHistoryForJenkins').css('z-index', 1040);
-                                                                       });
-
-                                                                       function getUpdatedData(dat) {
-                                                                           var obj;
-                                                                           var list = $('#tableOrchestration').find('tr[data-taskid]'),
-                                                                               available = [],
-                                                                               key = [],
-                                                                               index;
-                                                                           if (list.length) {
-                                                                               for (var i = 0; i < dat.length; i++) {
-                                                                                   key.push(data[i]._id);
-                                                                                   if ($('#tableOrchestration').find('tr[data-taskid="' + dat[i]._id + '"]').length) {
-                                                                                       available.push(data[i]._id);
-                                                                                   }
-                                                                               }
-                                                                               if (available.length) {
-                                                                                   for (var x = 0; x < available.length; x++) {
-                                                                                       index = $.inArray(available[x], key);
-                                                                                       key.splice(index, 1);
-                                                                                       dat.splice(index, 1);
-                                                                                   }
-                                                                               }
-                                                                               obj = dat;
-                                                                           } else {
-                                                                               obj = dat;
-                                                                           }
-                                                                           return obj;
-                                                                       }
-                                                                       data = getUpdatedData(data);
-                                                                       if (!$.fn.dataTable.isDataTable('#tableOrchestration')) {
-                                                                           //var $taskListArea = $('.taskListArea').empty();
-                                                                           var $taskDatatable = $('#tableOrchestration').DataTable({
-                                                                               "pagingType": "full_numbers",
-                                                                               "aaSorting": [
-                                                                                   [0, "desc"]
-                                                                               ],
-                                                                               "aLengthMenu": [
-                                                                                   [40, 80, -1],
-                                                                                   [40, 80, "All"]
-                                                                               ],
-                                                                               "iDisplayLength": 40,
-                                                                               "aoColumns": [
-                                                                                   null, {
-                                                                                       "bSortable": false
-                                                                                   }, {
-                                                                                       "bSortable": false
-                                                                                   }, {
-                                                                                       "bSortable": false
-                                                                                   }, {
-                                                                                       "bSortable": false
-                                                                                   }, {
-                                                                                       "bSortable": false
-                                                                                   }, {
-                                                                                       "bSortable": false
-                                                                                   }, {
-                                                                                       "bSortable": false
-                                                                                   }
-                                                                               ]
-
-                                                                           });
-                                                                       }
-                                                                       if (!$.fn.dataTable.isDataTable('#tablehistoryTask')) {
-                                                                           //var $taskListArea = $('.taskListArea').empty();
-                                                                           var $taskHistoryDatatable = $('#tablehistoryTask').DataTable({
-                                                                               "pagingType": "full_numbers",
-
-                                                                               "aoColumns": [
-                                                                                   null, {
-                                                                                       "bSortable": true
-                                                                                   }, {
-                                                                                       "bSortable": true
-                                                                                   }, {
-                                                                                       "bSortable": true
-                                                                                   }, {
-                                                                                       "bSortable": true
-                                                                                   }, {
-                                                                                       "bSortable": false
-                                                                                   }
-                                                                               ]
-
-                                                                           });
-                                                                       }
-
-                                                                       $('#tablehistoryTask_length').hide();
-                                                                       $('#tablehistoryTask_filter').hide();
-
-                                                                       if (!$.fn.dataTable.isDataTable('#tablehistoryTaskForJenkins')) {
-                                                                           //var $taskListArea = $('.taskListArea').empty();
-                                                                           var $taskHistoryDatatableJenkins = $('#tablehistoryTaskForJenkins').DataTable({
-                                                                               "pagingType": "full_numbers",
-                                                                               "order": [
-                                                                                   [0, "desc"]
-                                                                               ],
-                                                                               "aoColumns": [
-                                                                                   null, {
-                                                                                       "bSortable": false
-                                                                                   }, {
-                                                                                       "bSortable": false
-                                                                                   }, {
-                                                                                       "bSortable": false
-                                                                                   }, {
-                                                                                       "bSortable": false
-                                                                                   }
-                                                                               ]
-
-                                                                           });
-                                                                       }
-
-                                                                       $('#tablehistoryTaskForJenkins_length').hide();
-                                                                       $('#tablehistoryTaskForJenkins_filter').hide();
-
-                                                                       function showTaskLogs() {
-                                                                           var $taskExecuteTabsHeaderContainer = $('#taskExecuteTabsHeader').empty();
-                                                                           var $taskExecuteTabsContent = $('#taskExecuteTabsContent').empty();
-                                                                           var $modal = $('#assignedExecute');
-                                                                           $modal.find('.loadingContainer').hide();
-                                                                           $modal.find('.errorMsgContainer').hide();
-                                                                           var $outputArea = $modal.find('.outputArea').show();
-                                                                           var taskType = $outputArea.data('taskType');
-
-                                                                           if (taskType === 'chef') {
-
-
-                                                                               var instances = $outputArea.data('instances');
-                                                                               for (var i = 0; i < instances.length; i++) {
-                                                                                   var nodeName = instances[i].chef.chefNodeName;
-                                                                                   if (instances[i].instanceIP) {
-                                                                                       var nodeName = instances[i].instanceIP;
-                                                                                   }
-                                                                                   if (instances[i].name) {
-                                                                                       nodeName = instances[i].name;
-                                                                                   }
-                                                                                   var $liHeader = $('<li><a href="#tab_' + instances[i]._id + '" data-toggle="tab" data-taskInstanceId="' + instances[i]._id + '" data-taskActionLogId="' + instances[i].tempActionLogId + '">' + nodeName + '</a></li>');
-                                                                                   if (i === 4) {
-                                                                                       var $liMoreHeader = $('<li class="dropdown dropdownlog"><a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">More... <b class="caret"></b></a><ul class="dropdown-menu"></ul></li>');
-
-                                                                                       $taskExecuteTabsHeaderContainer.append($liMoreHeader);
-
-                                                                                       $taskExecuteTabsHeaderContainer = $liMoreHeader.find('ul');
-
-                                                                                   }
-                                                                                   $taskExecuteTabsHeaderContainer.append($liHeader);
-                                                                                   var $tabContent = $('<div class="tab-pane fade" id="tab_' + instances[i]._id + '"><div class="taskLogArea chefLOGS"></div></div>');
-                                                                                   $taskExecuteTabsContent.append($tabContent);
-                                                                               }
-                                                                               //shown event
-
-
-
-                                                                               $('#taskExecuteTabsHeader').find('a[data-toggle="tab"]').each(function(e) {
-                                                                                   $(this).attr('data-taskPolling', 'true');
-                                                                                   var timestamp = $outputArea.data('timestampStarted');
-                                                                                   if (!timestamp) {
-                                                                                       timestamp = new Date().getTime();
-                                                                                   }
-                                                                                   $(this).attr('data-taskPollLastTimestamp', timestamp);
-
-
-                                                                                   var timestampEnded = $outputArea.data('timestampEnded');
-                                                                                   if (timestampEnded) {
-                                                                                       $(this).attr('data-taskPollTimestampEnded', timestampEnded);
-                                                                                   }
-                                                                                   var tabId = $(this).attr('href')
-                                                                                   pollTaskLogs($(this), $(tabId), null, 0, false);
-                                                                                   //e.relatedTarget // previous active tab
-                                                                               });
-
-                                                                               $('#taskExecuteTabsHeader').find('a[data-toggle="tab"]').on('hidden.bs.tab', function(e) {
-                                                                                   $(e.target).attr('data-taskPolling', 'true');
-                                                                                   //e.relatedTarget // previous active tab
-                                                                               }).first().click();
-
-                                                                               $('#assignedExecute').modal('show');
-                                                                           } else {
-                                                                               var $liHeader = $('<li><a href="#tab_jenkinsTask" data-toggle="tab">Jenkins Job</a></li>');
-                                                                               $taskExecuteTabsHeaderContainer.append($liHeader);
-                                                                               var $tabContent = $('<div class="tab-pane fade" id="tab_jenkinsTask"><div class="taskLogArea taskLOGS"></div></div>');
-                                                                               $taskExecuteTabsContent.append($tabContent);
-                                                                               $liHeader.find('a').click();
-                                                                               var jenkinsServerId = $outputArea.data('jenkinsServerId');
-                                                                               var jobName = $outputArea.data('jobName');
-                                                                               var lastBuildNumber = $outputArea.data('lastBuildNumber');
-                                                                               var buildNumber = $outputArea.data('currentBuildNumber');
-
-                                                                               function pollJobOutput() {
-                                                                                   $.get('../jenkins/' + jenkinsServerId + '/jobs/' + jobName + '/builds/' + buildNumber + '/output', function(jobOutput) {
-                                                                                       var output = jobOutput.output.replace(/\r?\n/g, "<br />");
-
-                                                                                       $tabContent.find('.taskLogArea').html(output);
-                                                                                       console.log(jobOutput);
-                                                                                       setTimeout(function() {
-                                                                                           if ($('#assignedExecute').data()['bs.modal'].isShown) {
-                                                                                               pollJobOutput();
-                                                                                           }
-                                                                                       }, 3000);
-                                                                                   });
-                                                                               }
-
-                                                                               function pollJob() {
-
-                                                                                   $.get('../jenkins/' + jenkinsServerId + '/jobs/' + jobName, function(job) {
-
-                                                                                       if (job.lastBuild.number > lastBuildNumber) {
-                                                                                           $modal.find('.loadingContainer').hide();
-                                                                                           $modal.find('.errorMsgContainer').hide();
-                                                                                           $modal.find('.outputArea').show();
-
-                                                                                           buildNumber = job.lastBuild.number;
-
-                                                                                           pollJobOutput();
-                                                                                       } else {
-                                                                                           pollJob();
-                                                                                       }
-                                                                                       console.log(job);
-                                                                                   });
-                                                                               }
-
-
-                                                                               if (buildNumber) {
-                                                                                   pollJobOutput();
-                                                                               } else {
-                                                                                   pollJob();
-                                                                               }
-                                                                               console.log(data);
-                                                                           }
-
-                                                                       }
-
-
-                                                                       for (var i = 0; i < data.length; i++) {
-
-                                                                           // alert(JSON.stringify(data));
-                                                                           (function(i) {
-                                                                               var $tr = $('<tr></tr>').attr('data-taskId', data[i]._id);
-                                                                               var $tdName = $('<td style="vertical-align:inherit;text-align:center;"></td>').append(data[i].name);
-                                                                               $tr.append($tdName);
-                                                                               if (data[i].taskType === 'chef') {
-                                                                                   var $tdType = $('<td style="vertical-align:inherit;text-align:center;"></td>').append("<img style='width:31px;margin-left:-18px;' src='img/chef.png' alt='chef'>&nbsp;&nbsp;<span style='font-size:14px;'>" + data[i].taskType + "</span>");
-                                                                               } else {
-                                                                                   var $tdType = $('<td style="vertical-align:inherit;text-align:center;"></td>').append("<img style='width:22px;' src='img/jenkins.png' alt='jenkins'>&nbsp;&nbsp;<span style='font-size:14px;'>" + data[i].taskType + "</span>");
-                                                                               }
-                                                                               $tr.append($tdType);
-
-                                                                               var $tdDescription = $('<td style="vertical-align:inherit;text-align:center;"></td>').append(data[i].description);
-                                                                               $tr.append($tdDescription);
-
-                                                                               if (data[i].taskType === 'chef') {
-                                                                                   var $tdNodeList = $('<td style="vertical-align:inherit;text-align:center;"></td>').append('<i style="font-size:20px;color:#40baf1" class="ace-icon fa fa-sitemap"></i><a rel="tooltip" data-placement="top" data-original-title="View Nodes" style="cursor:pointer;text-decoration:none;" data-toggle="modal"><span class="assignedNodesList" style="margin-top:10px;margin-left:8px;">Nodes&nbsp; </span></a>').append('<i style="font-size:20px;color:#40baf1;margin-left:5px;" class="ace-icon fa fa-list-ul"></i><a style="margin-top:5px;text-decoration:none" rel="tooltip" data-placement="top" data-original-title="Assigned Runlists" data-toggle="modal" href="#assignedRunlist"><span class="assignedRunlistTable" style="margin-left:10px;">View Runlist&nbsp;</span> </a>');
-                                                                                   $tdNodeList.find('span.assignedNodesList').data('nodeList', data[i].taskConfig.nodeIds).click(function(e) {
-                                                                                       $.post('../instances/', {
-                                                                                           instanceIds: $(this).data('nodeList')
-                                                                                       }, function(instances) {
-                                                                                           var $taskNodeListContainer = $('.taskNodeListContainer').empty();
-                                                                                           for (var i = 0; i < instances.length; i++) {
-                                                                                               var $tr = $('<tr></tr>').css({
-                                                                                                   'line-height': '2.1'
-                                                                                               });
-                                                                                               var nodeName = instances[i].chef.chefNodeName;
-                                                                                               if (instances[i].instanceIP) {
-                                                                                                   var nodeName = instances[i].instanceIP;
-                                                                                               }
-                                                                                               if (instances[i].name) {
-                                                                                                   nodeName = instances[i].name;
-                                                                                               }
-                                                                                               var $tdInstanceName = $('<td></td>').append(nodeName).css({
-                                                                                                   'font-size': '12px'
-                                                                                               });
-
-                                                                                               var $tdInstanceIp = $('<td></td>').append(instances[i].instanceIP).css({
-                                                                                                   'font-size': '12px'
-                                                                                               });
-                                                                                               var $tdInstanceStatus = $('<td></td>').append(instances[i].instanceState).css({
-                                                                                                   'font-size': '12px'
-                                                                                               });
-                                                                                               $tr.append($tdInstanceName).append($tdInstanceIp).append($tdInstanceStatus);
-                                                                                               $taskNodeListContainer.append($tr);
-                                                                                           }
-                                                                                           $('#assignedNode').modal('show');
-                                                                                       });
-                                                                                   });
-
-                                                                                   $tdNodeList.find('span.assignedRunlistTable').data('taskRunlist', data[i].taskConfig.runlist).click(function(e) {
-                                                                                       var $taskRunListContainer = $('.taskRunListContainer').empty();
-                                                                                       var runlist = $(this).data('taskRunlist');
-                                                                                       if (runlist && runlist.length) {
-                                                                                           for (var i = 0; i < runlist.length; i++) {
-                                                                                               $li = $('<li></li>').append(runlist[i].substring(runlist[i].lastIndexOf("[") + 1, runlist[i].lastIndexOf("]"))).css({
-                                                                                                   "font-size": "12px"
-                                                                                               });
-                                                                                               $taskRunListContainer.append($li);
-                                                                                           }
-                                                                                       }
-                                                                                       $('#assignedRunlist').modal('show');
-                                                                                   });
-                                                                               } else {
-                                                                                   //var url = data[i].taskConfig.jobResultURL;
-                                                                                   //alert(JSON.stringify(url));
-                                                                                   var jobURLS = data[i].taskConfig.jobURL;
-                                                                                   //alert(jobURLS);
-
-                                                                                   /*if (url) {
-                                                                          url = url.replace('lastBuild', );
-                                                                      }*/
-                                                                                   if (jobURLS) {
-                                                                                       var $tdNodeList = $('<td style="vertical-align:inherit;text-align:center;"></td>').append('<span><img style="width:20px;" src="img/joburl.jpg">&nbsp;<a style="word-break: break-all;text-decoration:none" title="' + jobURLS + '" href="' + jobURLS + '" target="_blank">Job URL</a></span>');
-                                                                                   }
-                                                                               }
-                                                                               $tr.append($tdNodeList);
-                                                                               /*if (data[i].taskType === 'chef') {
-                                                                       var $tdRunlist = $('<td></td>').append('<a rel="tooltip" data-placement="top" data-original-title="Assigned Runlists" data-toggle="modal" href="#assignedRunlist" class="btn btn-primary btn-sg tableactionbutton"><i class="ace-icon fa fa-list-ul bigger-120"></i></a>');
-                                                                       $tdRunlist.find('a').data('taskRunlist', data[i].taskConfig.runlist).click(function(e) {
-                                                                           var $taskRunListContainer = $('.taskRunListContainer').empty();
-                                                                           var runlist = $(this).data('taskRunlist');
-                                                                           if (runlist && runlist.length) {
-                                                                               for (var i = 0; i < runlist.length; i++) {
-                                                                                   $li = $('<li></li>').append(runlist[i]).css({
-                                                                                       "font-size": "12px"
-                                                                                   });
-                                                                                   $taskRunListContainer.append($li);
-                                                                               }
-                                                                           }
-                                                                           $('#assignedRunlist').modal('show');
-                                                                       });
-                                                                   } else {
-                                                                       var $tdRunlist = $('<td> - </td>');
-                                                                   }
-                                                                   $tr.append($tdRunlist);*/
-
-                                                                               var $tdExecute = $('<td style="vertical-align:inherit;text-align:center;"></td>').append('<a rel="tooltip" data-placement="top" data-original-title="Execute" data-toggle="modal" href="javascript:void(0)" class="btn btn-primary btn-sg tableactionbutton"><i class="ace-icon fa fa-play bigger-120"></i></a>');
-                                                                               $tdExecute.find('a').data('taskId', data[i]._id).attr('data-executeTaskId', data[i]._id).click(function(e) {
-                                                                                   var taskId = $(this).data('taskId');
-                                                                                   bootbox.confirm({
-                                                                                       message: "Are you sure you want to execute this Job?",
-                                                                                       title: "Confirmation",
-                                                                                       callback: function(result) {
-                                                                                           if (result) {
-
-
-                                                                                               var $taskExecuteTabsHeaderContainer = $('#taskExecuteTabsHeader').empty();
-                                                                                               var $taskExecuteTabsContent = $('#taskExecuteTabsContent').empty();
-                                                                                               var $modal = $('#assignedExecute');
-                                                                                               $modal.find('.loadingContainer').show();
-                                                                                               $modal.find('.errorMsgContainer').hide();
-                                                                                               $modal.find('.outputArea').hide();
-                                                                                               $modal.modal('show');
-                                                                                               var timestampToPoll = new Date().getTime();
-                                                                                               $.get('../tasks/' + taskId + '/run', function(data) {
-                                                                                                   var date = new Date().setTime(data.timestamp);
-                                                                                                   var taskTimestamp = new Date(date).toLocaleString(); //converts to human readable strings
-                                                                                                   $('tr[data-taskId="' + taskId + '"] .taskrunTimestamp').html(taskTimestamp);
-
-                                                                                                   var $outputArea = $modal.find('.outputArea');
-
-                                                                                                   $outputArea.data('taskType', data.taskType);
-                                                                                                   $outputArea.data('instances', data.instances);
-                                                                                                   $outputArea.data('jenkinsServerId', data.jenkinsServerId);
-                                                                                                   $outputArea.data('jobName', data.jobName);
-                                                                                                   $outputArea.data('lastBuildNumber', data.lastBuildNumber);
-                                                                                                   $outputArea.data('currentBuildNumber', data.currentBuildNumber);
-                                                                                                   $outputArea.data('timestampStarted', data.timestamp);
-                                                                                                   showTaskLogs();
-
-                                                                                               }).fail(function(jxhr) {
-                                                                                                   $modal.find('.loadingContainer').hide();
-                                                                                                   $modal.find('.outputArea').hide();
-                                                                                                   var $errorContainer = $modal.find('.errorMsgContainer').show();
-                                                                                                   if (jxhr.responseJSON && jxhr.responseJSON.message) {
-                                                                                                       $errorContainer.html(jxhr.responseJSON.message);
-                                                                                                   } else {
-                                                                                                       $errorContainer.html("Server Behaved Unexpectedly");
-                                                                                                   }
-                                                                                               });
-
-                                                                                           }
-                                                                                       }
-                                                                                   });
-
-                                                                               });
-                                                                               $tr.append($tdExecute);
-
-                                                                               //History starts here
-                                                                               if (data[i].taskType === 'chef') {
-                                                                                   var $tdHistory = $('<td style="vertical-align:inherit;text-align:center;"></td>').append('<a rel="tooltip" data-placement="top" data-original-title="History" data-toggle="modal" href="javascript:void(0)" class="btn btn-primary btn-sg tableactionbutton"><i class="ace-icon fa fa-header bigger-120"></i></a>');
-                                                                                   $tdHistory.find('a').data('taskId', data[i]._id).attr('data-historyTaskId', data[i]._id).click(function(e) {
-                                                                                       //var $taskHistoryContent = $('#taskHistoryContent').show();
-                                                                                       var taskId = $(this).data('taskId');
-                                                                                       var $modal = $('#chefJobHistory');
-                                                                                       $modal.find('.loadingContainer').show();
-                                                                                       $modal.find('.outputArea').hide();
-                                                                                       $modal.find('.errorMsgContainer').hide();
-                                                                                       $modal.removeClass('hidden');
-                                                                                       $('#orchestrationTable').hide();
-                                                                                       $('.hideChefJob').click(function(e) {
-                                                                                           $modal.addClass('hidden');
-                                                                                           $('#orchestrationTable').show();
-                                                                                       });
-                                                                                       $taskHistoryDatatable.clear().draw();
-                                                                                       $.get('../tasks/' + taskId + '/history', function(taskHistories) {
-                                                                                           for (var i = 0; i < taskHistories.length; i++) {
-                                                                                               var $trHistoryRow = $('<tr/>');
-
-                                                                                               var dateStarted = new Date().setTime(taskHistories[i].timestampStarted);
-                                                                                               dateStarted = new Date(dateStarted).toLocaleString(); //converts to human readable strings
-                                                                                               var $tdTimeStarted = $('<td></td>').append(dateStarted);
-                                                                                               $trHistoryRow.append($tdTimeStarted);
-
-                                                                                               var dateEnded = ' - '
-                                                                                               if (taskHistories[i].timestampEnded) {
-                                                                                                   var dateEnded = new Date().setTime(taskHistories[i].timestampEnded);
-                                                                                                   dateEnded = new Date(dateEnded).toLocaleString(); //converts to human readable strings
-                                                                                               }
-                                                                                               var $tdTimeEnded = $('<td></td>').append(dateEnded);
-                                                                                               $trHistoryRow.append($tdTimeEnded);
-
-
-
-                                                                                               if (taskHistories[i].status === "success") {
-                                                                                                   var $tdBuildStatus = $('<td style="background-color:#1c9951;"></td>').append('<span style="color:#fff">SUCCESS</span>');
-                                                                                                   $trHistoryRow.append($tdBuildStatus);
-                                                                                               } else if (taskHistories[i].status === "failed") {
-                                                                                                   var $tdBuildStatusFailure = $('<td style="background-color:red;"></td>').append('<span style="color:#fff;">FAILURE</span>');
-                                                                                                   $trHistoryRow.append($tdBuildStatusFailure);
-                                                                                               } else {
-                                                                                                   var $tdBuildStatusRunning = $('<td style="background-color:gray;"></td>').append('<span style="color:#fff;">PENDING</span>');
-                                                                                                   $trHistoryRow.append($tdBuildStatusRunning);
-                                                                                               }
-
-
-                                                                                               var $tdMessage = $('<td style="width:42%"></td>');
-                                                                                               $trHistoryRow.append($tdMessage);
-                                                                                               (function($td) {
-                                                                                                   var message = ' - ';
-                                                                                                   if (taskHistories[i].nodeIds && taskHistories[i].nodeIds.length == 1) {
-                                                                                                       if (taskHistories[i].executionResults && taskHistories[i].executionResults.length == 1) {
-                                                                                                           $.get('../chefClientExecution/' + taskHistories[i].executionResults[0].executionId, function(execData) {
-                                                                                                               if (execData && execData.message) {
-                                                                                                                   $td.append(execData.message);
-                                                                                                               } else {
-                                                                                                                   $td.append(message);
-                                                                                                               }
-
-                                                                                                           }).fail(function() {
-                                                                                                               $td.append(message);
-                                                                                                           });
-                                                                                                       } else {
-                                                                                                           $td.append(message);
-                                                                                                       }
-                                                                                                   } else {
-                                                                                                       $td.append(message);
-                                                                                                   }
-                                                                                               })($tdMessage)
-
-
-                                                                                               var $tdUser = $('<td></td>').append(taskHistories[i].user);
-                                                                                               $trHistoryRow.append($tdUser);
-
-                                                                                               var $tdLogs = $('<td></td>').append('<a data-original-title="MoreInfo" data-placement="top" rel="tooltip" class="moreinfoBuild margin-left40per" href="javascript:void(0)" data-toggle="modal"></a>');
-                                                                                               $tdLogs.find('a').data('history', taskHistories[i]).data('taskId', taskId).click(function() {
-
-                                                                                                   //$('#assignedTaskHistory').modal('hide');
-                                                                                                   var taskId = $(this).data('taskId');
-                                                                                                   var $taskExecuteTabsHeaderContainer = $('#taskExecuteTabsHeader').empty();
-                                                                                                   var $taskExecuteTabsContent = $('#taskExecuteTabsContent').empty();
-                                                                                                   var $modal = $('#assignedExecute');
-                                                                                                   $modal.find('.loadingContainer').show();
-                                                                                                   $modal.find('.errorMsgContainer').hide();
-                                                                                                   $modal.find('.outputArea').hide();
-                                                                                                   $modal.modal('show');
-                                                                                                   var $outputArea = $modal.find('.outputArea');
-                                                                                                   var history = $(this).data('history');
-
-                                                                                                   $outputArea.data('taskType', history.taskType);
-                                                                                                   $outputArea.data('jenkinsServerId', history.jenkinsServerId);
-                                                                                                   $outputArea.data('jobName', history.jobName);
-                                                                                                   $outputArea.data('lastBuildNumber', history.lastBuildNumber);
-                                                                                                   $outputArea.data('currentBuildNumber', history.buildNumber);
-                                                                                                   $outputArea.data('timestampStarted', history.timestampStarted);
-                                                                                                   $outputArea.data('timestampEnded', history.timestampEnded);
-
-                                                                                                   if (history.nodeIdsWithActionLog && history.nodeIdsWithActionLog.length) {
-                                                                                                       var ids = [];
-                                                                                                       for (var kk = 0; kk < history.nodeIdsWithActionLog.length; kk++) {
-                                                                                                           ids.push(history.nodeIdsWithActionLog[kk].nodeId)
-                                                                                                       }
-                                                                                                       $.post('../instances', {
-                                                                                                           instanceIds: ids
-                                                                                                       }, function(instances) {
-                                                                                                           for (var kk = 0; kk < instances.length; kk++) {
-                                                                                                               for (var jj = 0; jj < history.nodeIdsWithActionLog.length; jj++) {
-                                                                                                                   if (instances[kk]._id === history.nodeIdsWithActionLog[jj].nodeId) {
-                                                                                                                       instances[kk].tempActionLogId = history.nodeIdsWithActionLog[jj].actionLogId;
-                                                                                                                   }
-                                                                                                               }
-                                                                                                           }
-                                                                                                           $outputArea.data('instances', instances);
-                                                                                                           showTaskLogs();
-                                                                                                       });
-
-                                                                                                   } else {
-                                                                                                       if (history.nodeIds && history.nodeIds.length) {
-                                                                                                           $.post('../instances', {
-                                                                                                               instanceIds: history.nodeIds
-                                                                                                           }, function(instances) {
-                                                                                                               $outputArea.data('instances', instances);
-                                                                                                               showTaskLogs();
-                                                                                                           });
-                                                                                                       } else {
-                                                                                                           showTaskLogs();
-                                                                                                       }
-                                                                                                   }
-
-
-                                                                                               });
-                                                                                               $trHistoryRow.append($tdLogs);
-
-                                                                                               $taskHistoryDatatable.row.add($trHistoryRow).draw();
-                                                                                           }
-                                                                                           $modal.find('.loadingContainer').hide();
-                                                                                           $modal.find('.outputArea').show();
-                                                                                       }).fail(function(jxhr) {
-                                                                                           $modal.find('.loadingContainer').hide();
-                                                                                           $modal.find('.outputArea').hide();
-                                                                                           var $errorContainer = $modal.find('.errorMsgContainer').show();
-                                                                                           if (jxhr.responseJSON && jxhr.responseJSON.message) {
-                                                                                               $errorContainer.html(jxhr.responseJSON.message);
-                                                                                           } else {
-                                                                                               $errorContainer.html("Server Behaved Unexpectedly");
-                                                                                           }
-                                                                                       });
-
-                                                                                       //$modal.find('.outputArea').hide();
-
-                                                                                   });
-                                                                               } else {
-                                                                                   var $tdHistory = $('<td style="vertical-align:inherit;text-align:center;"></td>').append('<a rel="tooltip" data-placement="top" data-original-title="History" data-toggle="modal" href="javascript:void(0)" class="btn btn-primary btn-sg tableactionbutton"><i class="ace-icon fa fa-header bigger-120"></i></a>');
-                                                                                   $tdHistory.find('a').data('taskId', data[i]._id).data('autosyncFlag', data[i].taskConfig.autoSyncFlag).attr('data-historyTaskId', data[i]._id).click(function(e) {
-                                                                                       //var $taskHistoryContent = $('#taskHistoryContent').show();
-                                                                                       var taskId = $(this).data('taskId');
-
-                                                                                       var $modal = $('#jenkinsJobHistory');
-                                                                                       $modal.find('.loadingContainer').show();
-                                                                                       $modal.find('.outputArea').hide();
-                                                                                       $modal.find('.errorMsgContainer').hide();
-                                                                                       $modal.removeClass('hidden');
-                                                                                       $('#orchestrationTable').hide();
-                                                                                       $('.hideJenkinsJob').click(function(e) {
-                                                                                           $modal.addClass('hidden');
-                                                                                           $('#orchestrationTable').show();
-                                                                                       });
-                                                                                       $taskHistoryDatatableJenkins.clear().draw();
-
-                                                                                       var autoSyncFlag = $(this).data('autosyncFlag');
-
-                                                                                       console.log('autoSyncFlag', autoSyncFlag);
-
-                                                                                       $.get('../tasks/' + taskId + '/history', function(taskHistories) {
-                                                                                           console.log(taskHistories);
-
-                                                                                           for (var i = 0; i < taskHistories.length; i++) {
-                                                                                               (function(i) {
-                                                                                                   var $trHistoryRow = $('<tr/>');
-
-                                                                                                   //condition to get the jobname as per the particular build number..
-                                                                                                   $.get('../jenkins/' + taskHistories[i].jenkinsServerId + '/jobs/' + taskHistories[i].jobName, function(job) {
-                                                                                                       console.log(JSON.stringify(job));
-                                                                                                       var url;
-                                                                                                       var buildFound = false
-
-                                                                                                       if (taskHistories[i].buildNumber === job.nextBuildNumber) {
-                                                                                                           var $tdBuildNumber = $('<td/>').append('<a style="word-break: break-all;" href="' + url + '" title="' + url + '" target="_blank">' + taskHistories[i].buildNumber + '</a>');
-                                                                                                           $trHistoryRow.append($tdBuildNumber);
-                                                                                                           if (typeof job.builds[job.nextBuildNumber - 1] === "undefined") {
-                                                                                                               var $tdJobName = $('<td/>').append('Current Job is still pending');
-                                                                                                               $trHistoryRow.append($tdJobName);
-                                                                                                           } else {
-
-
-                                                                                                               url = job.builds[job.nextBuildNumber - 1].url;
-                                                                                                               // alert(url);
-                                                                                                               var $tdJobName = $('<td/>').append('<a style="word-break: break-all;" href="' + taskHistories[i].jobResultURL + '" target="_blank">' + taskHistories[i].jobName + '</a>');
-                                                                                                               $trHistoryRow.append($tdJobName);
-                                                                                                           }
-                                                                                                           buildFound = true;
-
-                                                                                                       } else {
-                                                                                                           for (var k = 0; k < job.builds.length; k++) {
-                                                                                                               //alert(JSON.stringify(job.builds));
-
-                                                                                                               console.log(taskHistories[i].buildNumber, "  ---  ", job.nextBuildNumber);
-                                                                                                               // alert(job.nextBuildNumber);
-                                                                                                               //var $tdJobName='';
-                                                                                                               if (taskHistories[i].buildNumber === job.builds[k].number) {
-
-                                                                                                                   url = job.builds[k].url;
-                                                                                                                   // alert(url);
-                                                                                                                   var $tdBuildNumber = $('<td/>').append('<a style="word-break: break-all;" href="' + url + '" title="' + url + '" target="_blank">' + taskHistories[i].buildNumber + '</a>');
-                                                                                                                   $trHistoryRow.append($tdBuildNumber);
-
-                                                                                                                   //alert(taskHistories[i].jobResultURL);
-
-
-
-                                                                                                                   buildFound = true;
-                                                                                                                   break;
-                                                                                                               }
-
-
-                                                                                                           }
-
-                                                                                                       }
-                                                                                                       if (!buildFound) {
-                                                                                                           return;
-
-                                                                                                       }
-
-
-
-                                                                                                       $tdJobName = $('<td/>');
-
-
-                                                                                                       // alert(taskHistories[i].jobResultURL[p]);
-                                                                                                       //alert(taskHistories[i].jobResultURL.length);
-                                                                                                       if (taskHistories[i].jobResultURL.length) {
-                                                                                                           for (var p = 0; p < taskHistories[i].jobResultURL.length; p++) {
-                                                                                                               $tdJobName.append('<a class="btn btn-primary btn-sg tableactionbutton marginleftright7" style="word-break: break-all;" href="' + taskHistories[i].jobResultURL[p] + '" title="' + taskHistories[i].jobResultURL[p] + '" target="_blank"><i class="ace-icon fa fa-file-text bigger-120"></i></a>');
-                                                                                                           }
-
-                                                                                                           //$trHistoryRow.append($tdJobName);
-                                                                                                       }
-                                                                                                       $tdJobName.append('<a title="Jenkins Log" data-placement="top" rel="tooltip" class="btn btn-primary btn-sg tableactionbutton moreinfo" href="javascript:void(0)" data-toggle="modal"><i class="ace-icon fa fa-list bigger-120"></i></a>');
-                                                                                                       $tdJobName.find('a.moreinfo').data('history', taskHistories[i]).data('taskId', taskId).click(function() {
-                                                                                                           //$('#assignedTaskHistory').modal('hide');
-                                                                                                           var taskId = $(this).data('taskId');
-                                                                                                           var $taskExecuteTabsHeaderContainer = $('#taskExecuteTabsHeader').empty();
-                                                                                                           var $taskExecuteTabsContent = $('#taskExecuteTabsContent').empty();
-                                                                                                           var $modal = $('#assignedExecute');
-                                                                                                           $modal.find('.loadingContainer').show();
-                                                                                                           $modal.find('.errorMsgContainer').hide();
-                                                                                                           $modal.find('.outputArea').hide();
-                                                                                                           $modal.modal('show');
-                                                                                                           var $outputArea = $modal.find('.outputArea');
-                                                                                                           var history = $(this).data('history');
-
-                                                                                                           $outputArea.data('taskType', history.taskType);
-                                                                                                           $outputArea.data('jenkinsServerId', history.jenkinsServerId);
-                                                                                                           $outputArea.data('jobName', history.jobName);
-                                                                                                           $outputArea.data('lastBuildNumber', history.lastBuildNumber);
-                                                                                                           $outputArea.data('currentBuildNumber', history.buildNumber);
-                                                                                                           $outputArea.data('timestampStarted', history.timestampStarted);
-                                                                                                           $outputArea.data('timestampEnded', history.timestampEnded);
-
-                                                                                                           if (history.nodeIdsWithActionLog && history.nodeIdsWithActionLog.length) {
-                                                                                                               var ids = [];
-                                                                                                               for (var kk = 0; kk < history.nodeIdsWithActionLog.length; kk++) {
-                                                                                                                   ids.push(history.nodeIdsWithActionLog[kk].nodeId)
-                                                                                                               }
-                                                                                                               $.post('../instances', {
-                                                                                                                   instanceIds: ids
-                                                                                                               }, function(instances) {
-                                                                                                                   for (var kk = 0; kk < instances.length; kk++) {
-                                                                                                                       for (var jj = 0; jj < history.nodeIdsWithActionLog.length; jj++) {
-                                                                                                                           if (instances[kk]._id === history.nodeIdsWithActionLog[jj].nodeId) {
-                                                                                                                               instances[kk].tempActionLogId = history.nodeIdsWithActionLog[jj].actionLogId;
-                                                                                                                           }
-                                                                                                                       }
-                                                                                                                   }
-                                                                                                                   $outputArea.data('instances', instances);
-                                                                                                                   showTaskLogs();
-                                                                                                               });
-
-                                                                                                           } else {
-                                                                                                               if (history.nodeIds && history.nodeIds.length) {
-                                                                                                                   $.post('../instances', {
-                                                                                                                       instanceIds: history.nodeIds
-                                                                                                                   }, function(instances) {
-                                                                                                                       $outputArea.data('instances', instances);
-                                                                                                                       showTaskLogs();
-                                                                                                                   });
-                                                                                                               } else {
-                                                                                                                   showTaskLogs();
-                                                                                                               }
-                                                                                                           }
-
-
-                                                                                                       });
-
-
-
-
-                                                                                                       $trHistoryRow.append($tdJobName);
-                                                                                                       if (taskHistories[i].status === "success") {
-                                                                                                           var $tdBuildStatus = $('<td style="background-color:#1c9951;"></td>').append('<span style="color:#fff">SUCCESS</span>');
-                                                                                                           $trHistoryRow.append($tdBuildStatus);
-                                                                                                       } else if (taskHistories[i].status === "failed") {
-                                                                                                           var $tdBuildStatusFailure = $('<td style="background-color:red;"></td>').append('<span style="color:#fff;">FAILURE</span>');
-                                                                                                           $trHistoryRow.append($tdBuildStatusFailure);
-                                                                                                       } else {
-                                                                                                           var $tdBuildStatusRunning = $('<td style="background-color:gray;"></td>').append('<span style="color:#fff;">PENDING</span>');
-                                                                                                           $trHistoryRow.append($tdBuildStatusRunning);
-                                                                                                       }
-
-
-
-                                                                                                       var dateStarted = new Date().setTime(taskHistories[i].timestampStarted);
-                                                                                                       dateStarted = new Date(dateStarted).toLocaleString(); //converts to human readable strings
-                                                                                                       var $tdTimeStarted = $('<td></td>').append(dateStarted);
-                                                                                                       $trHistoryRow.append($tdTimeStarted);
-
-                                                                                                       var dateEnded = ' - '
-                                                                                                       if (taskHistories[i].timestampEnded) {
-                                                                                                           var dateEnded = new Date().setTime(taskHistories[i].timestampEnded);
-                                                                                                           dateEnded = new Date(dateEnded).toLocaleString(); //converts to human readable strings
-                                                                                                       }
-                                                                                                       var $tdTimeEnded = $('<td></td>').append(dateEnded);
-                                                                                                       $trHistoryRow.append($tdTimeEnded);
-
-                                                                                                       $taskHistoryDatatableJenkins.row.add($trHistoryRow).draw();
-                                                                                                   });
-                                                                                               })(i);
-
-                                                                                           }
-                                                                                           $modal.find('.loadingContainer').hide();
-                                                                                           $modal.find('.outputArea').show();
-
-                                                                                       }).fail(function(jxhr) {
-                                                                                           $modal.find('.loadingContainer').hide();
-                                                                                           $modal.find('.outputArea').hide();
-                                                                                           var $errorContainer = $modal.find('.errorMsgContainer').show();
-                                                                                           if (jxhr.responseJSON && jxhr.responseJSON.message) {
-                                                                                               $errorContainer.html(jxhr.responseJSON.message);
-                                                                                           } else {
-                                                                                               $errorContainer.html("Server Behaved Unexpectedly");
-                                                                                           }
-                                                                                       });
-                                                                                       if (autoSyncFlag && autoSyncFlag === "Yes") {
-                                                                                           alert('firing');
-
-                                                                                           console.log('Fetching build history from Data Lake..');
-
-
-
-
-
-                                                                                           console.log('BuildHistory API', url);
-
-                                                                                           $.ajax({
-                                                                                               url: url,
-                                                                                               type: 'GET',
-                                                                                               contentType: 'application/json',
-                                                                                               success: function(buildData) {
-
-                                                                                                   if (buildData.BuildHistory) {
-
-                                                                                                       var buildLength = '';
-
-                                                                                                       if (buildData.BuildHistory.length > 100) {
-                                                                                                           buildLength = 100;
-                                                                                                       } else {
-                                                                                                           buildLength = buildData.BuildHistory.length;
-                                                                                                       }
-
-                                                                                                       for (i = 0; i < buildLength; i++) {
-
-                                                                                                           var $trHistoryRow = $('<tr/>');
-
-                                                                                                           var date = new Date(buildData.BuildHistory[i].builddate);
-                                                                                                           var formatted = formatDate(date);
-
-                                                                                                           var $tdTimeStarted = $('<td></td>').append(formatted);
-                                                                                                           $trHistoryRow.append($tdTimeStarted);
-
-                                                                                                           date.setMilliseconds(date.getMilliseconds() + buildData.BuildHistory[i].duration);
-
-                                                                                                           formatted = formatDate(date);
-
-                                                                                                           var $tdTimeEnded = $('<td></td>').append(formatted);
-                                                                                                           $trHistoryRow.append($tdTimeEnded);
-
-                                                                                                           if (buildData.BuildHistory[i].status === "SUCCESS") {
-                                                                                                               var $tdBuildStatus = $('<td></td>').append('<img rel="tooltip" data-placement="top" title="Success" src="img/indicator_started.png"/>');
-                                                                                                               $trHistoryRow.append($tdBuildStatus);
-                                                                                                           } else if (buildData.BuildHistory[i].status === "FAILED") {
-                                                                                                               var $tdBuildStatusFailure = $('<td></td>').append('<img rel="tooltip" data-placement="top" title="Failed" src="img/indicator_stopped.png"/>');
-                                                                                                               $trHistoryRow.append($tdBuildStatusFailure);
-                                                                                                           } else {
-                                                                                                               var $tdBuildStatusRunning = $('<td></td>').append('<img rel="tooltip" data-placement="top" title="Running" src="img/indicator_unknown.png"/>');
-                                                                                                               $trHistoryRow.append($tdBuildStatusRunning);
-                                                                                                           }
-
-                                                                                                           var $tdMessage = $('<td style="width:42%"> -- </td>');
-                                                                                                           $trHistoryRow.append($tdMessage);
-
-                                                                                                           var $tdUser = $('<td></td>').append(buildData.BuildHistory[i].startedby);
-                                                                                                           $trHistoryRow.append($tdUser);
-
-                                                                                                           var $tdLogs = $('<td></td>').append('<a data-original-title="MoreInfo" rel="tooltip" class="moreinfoBuild margin-left40per" href="javascript:void(0)"></a>');
-
-                                                                                                           $tdLogs.find('a').data('logfileurl', buildData.BuildHistory[i].logfileurl).data('taskId', taskId).click(function() {
-                                                                                                               $('#assignedTaskHistory').modal('hide');
-                                                                                                               var taskId = $(this).data('taskId');
-                                                                                                               var $taskExecuteTabsHeaderContainer = $('#taskExecuteTabsHeader').empty();
-                                                                                                               var $taskExecuteTabsContent = $('#taskExecuteTabsContent').empty();
-                                                                                                               var $modal = $('#assignedExecute');
-                                                                                                               $modal.find('.loadingContainer').show();
-                                                                                                               $modal.find('.errorMsgContainer').hide();
-                                                                                                               $modal.find('.outputArea').hide();
-                                                                                                               $modal.modal('show');
-
-                                                                                                               var $liHeader = $('<li><a href="#tab_jenkinsTask" data-toggle="tab">Jenkins Job</a></li>');
-                                                                                                               $taskExecuteTabsHeaderContainer.append($liHeader);
-                                                                                                               var $tabContent = $('<div class="tab-pane fade" id="tab_jenkinsTask"><div class="taskLogArea taskLOGS"></div></div>');
-                                                                                                               $taskExecuteTabsContent.append($tabContent);
-                                                                                                               $liHeader.find('a').click();
-
-                                                                                                               var logfileurl = $(this).data('logfileurl');
-
-                                                                                                               var url = dataLakeHost + '/EnterpriseDataLake/rest/getLogfiledata?logurl=' + logfileurl + '&username=admin&password=admin@RL123';
-
-                                                                                                               $.ajax({
-                                                                                                                   type: 'GET',
-                                                                                                                   url: url,
-                                                                                                                   contentType: 'application/json',
-                                                                                                                   dataType: 'text',
-                                                                                                                   success: function(jobOutput) {
-                                                                                                                       var output = jobOutput.replace(/\r?\n/g, "<br />");
-
-                                                                                                                       $tabContent.find('.taskLogArea').html(output);
-                                                                                                                       $modal.find('.loadingContainer').hide();
-                                                                                                                       $modal.find('.outputArea').show();
-                                                                                                                   }
-                                                                                                               });
-
-
-                                                                                                           })
-
-                                                                                                           $trHistoryRow.append($tdLogs);
-                                                                                                           $taskHistoryDatatable.row.add($trHistoryRow).draw();
-
-                                                                                                       }
-
-                                                                                                   }
-                                                                                               },
-                                                                                               error: function(errMsg) {
-                                                                                                   console.log('Error in fetching build history', errMsg);
-                                                                                               }
-                                                                                           });
-
-                                                                                       }
-                                                                                   });
-                                                                               }
-                                                                               $tr.append($tdHistory);
-
-                                                                               var timestamp = "-";
-                                                                               if (data[i].lastRunTimestamp) {
-                                                                                   var date = new Date().setTime(data[i].lastRunTimestamp);
-                                                                                   timestamp = new Date(date).toLocaleString(); //converts to human readable strings
-                                                                               }
-
-
-                                                                               var $tdTime = $('<td style="vertical-align:inherit;text-align:center;"></td>').append(timestamp).addClass('taskrunTimestamp');
-                                                                               $tr.append($tdTime);
-
-                                                                               var $tdOptions = $('<td style="vertical-align:inherit;text-align:center;"></td>').append('<div class="btn-group tableactionWidth"><a rel="tooltip" data-placement="top" data-original-title="Delete" class="btn btn-danger pull-left btn-sg tableactionbutton btnDeleteTask"><i class="ace-icon fa fa-trash-o bigger-120"></i></a><a class="btn btn-info pull-left tableactionbutton btnEditTask tableactionbuttonpadding btn-sg" data-original-title="Edit" data-placement="top" rel="tooltip"><i class="ace-icon fa fa-pencil bigger-120"></i></a></div>').attr('data-taskId', data[i]._id);
-                                                                               //permission set for editing and deleting for ChefTask
-
-                                                                               var hasEditChefTaskPermission = false;
-                                                                               if (haspermission('chef_task', 'modify')) {
-                                                                                   hasEditChefTaskPermission = true;
-                                                                               }
-                                                                               if (!hasEditChefTaskPermission) {
-                                                                                   $tdOptions.find('.btnEditTask').addClass('hidden');
-                                                                               }
-
-                                                                               var hasDeleteChefTaskPermission = false;
-                                                                               if (haspermission('chef_task', 'delete')) {
-                                                                                   hasDeleteChefTaskPermission = true;
-                                                                               }
-                                                                               if (!hasDeleteChefTaskPermission) {
-                                                                                   $tdOptions.find('.btnDeleteTask').addClass('hidden');
-                                                                               }
-                                                                               //custom
-                                                                               var hasEditCustomTaskPermission = false;
-                                                                               if (haspermission('custom_task', 'modify')) {
-                                                                                   hasEditCustomTaskPermission = true;
-                                                                               }
-                                                                               if (!hasEditCustomTaskPermission) {
-                                                                                   $tdOptions.find('.btnEditTask').addClass('hidden');
-                                                                               }
-
-                                                                               var hasDeleteCustomTaskPermission = false;
-                                                                               if (haspermission('custom_task', 'delete')) {
-                                                                                   hasDeleteCustomTaskPermission = true;
-                                                                               }
-                                                                               if (!hasDeleteCustomTaskPermission) {
-                                                                                   $tdOptions.find('.btnDeleteTask').addClass('hidden');
-                                                                               }
-                                                                               //jenkins
-                                                                               var hasEditJenkinsTaskPermission = false;
-                                                                               if (haspermission('jenkins_task', 'modify')) {
-                                                                                   hasEditJenkinsTaskPermission = true;
-                                                                               }
-                                                                               if (!hasEditJenkinsTaskPermission) {
-                                                                                   $tdOptions.find('.btnEditTask').addClass('hidden');
-                                                                               }
-
-                                                                               var hasDeleteJenkinsTaskPermission = false;
-                                                                               if (haspermission('jenkins_task', 'delete')) {
-                                                                                   hasDeleteJenkinsTaskPermission = true;
-                                                                               }
-                                                                               if (!hasDeleteJenkinsTaskPermission) {
-                                                                                   $tdOptions.find('.btnDeleteTask').addClass('hidden');
-                                                                               }
-
-                                                                               $tdOptions.find('.btnDeleteTask').click(function(e) {
-                                                                                   var taskId = $(this).parents('td').attr('data-taskId');
-                                                                                   var that = this;
-
-                                                                                   bootbox.confirm('Are you sure you want to delete the Task -&nbsp;<b>' + data[i].name + '</b>', function(result) {
-                                                                                       if (result) {
-                                                                                           $.ajax({
-                                                                                               url: '../tasks/' + taskId,
-                                                                                               method: 'DELETE',
-                                                                                               success: function(data) {
-                                                                                                   //$(that).parents('tr').remove();
-                                                                                                   //var totalTask = $taskListArea.children('tr').length;
-                                                                                                   //$('.taskListFooter').text('Showing ' + totalTask + ' of ' + totalTask + ' entries');
-                                                                                                   $taskDatatable.row($(that).parents('tr')).remove().draw(false);
-
-                                                                                                   $('div[data-taskCardIconId="' + taskId + '"]').remove();
-
-                                                                                               },
-                                                                                               fail: function(msg) {
-                                                                                                   console.log("fail ==>", msg);
-                                                                                               }
-                                                                                           })
-                                                                                       }
-                                                                                   });
-                                                                                   return false;
-                                                                               });
-                                                                               $tdOptions.find('.btnEditTask').click(function(e) {
-                                                                                   setBreadCrumbAndViewOrchestration();
-
-                                                                                   var taskId = $(this).parents('td').attr('data-taskId');
-
-                                                                                   window.location.href = 'index.html#ajax/assignTask.html?org=' + urlParams.org + '&bg=' + urlParams['bg'] + '&projid=' + urlParams['projid'] + '&envid=' + urlParams['envid'] + '&taskId=' + taskId;
-
-                                                                               });
-                                                                               $tr.append($tdOptions);
-
-                                                                               $taskDatatable.row.add($tr).draw();
-                                                                               //$taskListArea.append($tr);
-
-                                                                               //aaaa
-                                                                               if ($("#sorttableheader").length) {
-                                                                                   //alert(1);
-                                                                                   $("#sorttableheader").tablesorter();
-                                                                               }
-                                                                               //     $("#sorttableheader").tablesorter();
-                                                                               pageSetUp();
-                                                                           })(i);
-
-                                                                       }
-
-                                                                       function pollTaskLogs($tabLink, $tab, timestamp, delay, clearData) {
-                                                                           var instanceId = $tabLink.attr('data-taskInstanceId');
-                                                                           var actionLogId = $tabLink.attr('data-taskActionLogId');
-                                                                           var timestamp = $tabLink.attr('data-taskPollLastTimestamp');
-                                                                           var timestampEnded = $tabLink.attr('data-taskPollTimestampEnded');
-                                                                           var poll = $tabLink.attr('data-taskPolling');
-
-                                                                           if (poll !== 'true') {
-                                                                               console.log('not polling');
-                                                                               return;
-                                                                           }
-                                                                           if (actionLogId) {
-                                                                               var url = '../instances/' + instanceId + '/actionLogs/' + actionLogId + '/logs';
-                                                                           } else {
-                                                                               var url = '../instances/' + instanceId + '/logs';
-                                                                           }
-
-
-                                                                           if (timestamp) {
-                                                                               url = url + '?timestamp=' + timestamp;
-                                                                               if (timestampEnded) {
-                                                                                   url = url + '&timestampEnded=' + timestampEnded;
-                                                                               }
-                                                                           }
-
-                                                                           timeout = setTimeout(function() {
-                                                                               $.get(url, function(data) {
-                                                                                   var $modalBody = $tab.find('.taskLogArea')
-                                                                                   if (clearData) {
-                                                                                       $modalBody.empty();
-                                                                                   }
-                                                                                   var $table = $('<table></table>');
-
-                                                                                   for (var i = 0; i < data.length; i++) {
-                                                                                       var $rowDiv = $('<tr class="row rowSpacing"></tr>');
-                                                                                       var timeString = new Date().setTime(data[i].timestamp);
-                                                                                       var date = new Date(timeString).toLocaleString(); //converts to human readable strings
-
-                                                                                       /*$rowDiv.append($('<div class="col-lg-4 col-sm-4"></div>').append('<div>' + date + '</div>'));*/
-
-                                                                                       if (data[i].err) {
-                                                                                           $rowDiv.append($('<td class="col-lg-12 col-sm-12" style="color:red;"></td>').append('<span class="textLogs">' + date + '</span>' + '&nbsp;&nbsp;&nbsp;' + '<span>' + data[i].log + '</span>'));
-                                                                                       } else {
-                                                                                           $rowDiv.append($('<td class="col-lg-12 col-sm-12" style="color:DarkBlue;"></td>').append('<span class="textLogs">' + date + '</span>' + '&nbsp;&nbsp;&nbsp;' + '<span>' + data[i].log + '</span>'));
-                                                                                       }
-
-                                                                                       $table.append($rowDiv);
-                                                                                       // $table.append('<hr/>');
-
-                                                                                   }
-
-
-                                                                                   if (data.length) {
-                                                                                       lastTimestamp = data[data.length - 1].timestamp;
-                                                                                       console.log(lastTimestamp);
-                                                                                       $modalBody.append($table);
-                                                                                       $modalBody.scrollTop($modalBody[0].scrollHeight + 100);
-                                                                                       $tabLink.attr('data-taskPollLastTimestamp', data[data.length - 1].timestamp);
-
-                                                                                   }
-
-
-                                                                                   console.log('polling again');
-                                                                                   if ($tabLink.attr('data-taskPolling') === 'true' && $('#assignedExecute').data()['bs.modal'].isShown && !timestampEnded) {
-
-                                                                                       pollTaskLogs($tabLink, $tab, $tabLink.attr('data-taskPollLastTimestamp'), 1000, false);
-
-                                                                                   } else {
-                                                                                       console.log('not polling again');
-                                                                                   }
-                                                                               });
-                                                                           }, delay);
-                                                                       }
-
-                                                                       //updating footer
-                                                                       $('.taskListFooter').text('Showing ' + data.length + ' of ' + data.length + ' entries');
-                                                                       pageSetUp();
-                                                                   };
+                                                                    function initializeTaskArea(data) {
+
+                                                                $('#assignedExecute').on('show.bs.modal', function() {
+                                                                    $('#assignedTaskHistory').css('z-index', 1030);
+                                                                });
+
+                                                                $('#assignedExecute').on('hidden.bs.modal', function() {
+                                                                    $('#assignedTaskHistory').css('z-index', 1040);
+                                                                });
+
+                                                                //for jenkins
+
+                                                                $('#assignedExecute').on('show.bs.modal', function() {
+                                                                    $('#assignedTaskHistoryForJenkins').css('z-index', 1030);
+                                                                });
+
+                                                                $('#assignedExecute').on('hidden.bs.modal', function() {
+                                                                    $('#assignedTaskHistoryForJenkins').css('z-index', 1040);
+                                                                });
+
+                                                                function getUpdatedData(dat) {
+                                                                    var obj;
+                                                                    var list = $('#tableOrchestration').find('tr[data-taskid]'),
+                                                                        available = [],
+                                                                        key = [],
+                                                                        index;
+                                                                    if (list.length) {
+                                                                        for (var i = 0; i < dat.length; i++) {
+                                                                            key.push(data[i]._id);
+                                                                            if ($('#tableOrchestration').find('tr[data-taskid="' + dat[i]._id + '"]').length) {
+                                                                                available.push(data[i]._id);
+                                                                            }
+                                                                        }
+                                                                        if (available.length) {
+                                                                            for (var x = 0; x < available.length; x++) {
+                                                                                index = $.inArray(available[x], key);
+                                                                                key.splice(index, 1);
+                                                                                dat.splice(index, 1);
+                                                                            }
+                                                                        }
+                                                                        obj = dat;
+                                                                    } else {
+                                                                        obj = dat;
+                                                                    }
+                                                                    return obj;
+                                                                }
+                                                                data = getUpdatedData(data);
+                                                                if (!$.fn.dataTable.isDataTable('#tableOrchestration')) {
+                                                                    //var $taskListArea = $('.taskListArea').empty();
+                                                                    var $taskDatatable = $('#tableOrchestration').DataTable({
+                                                                        "pagingType": "full_numbers",
+                                                                        "aaSorting": [
+                                                                            [0, "desc"]
+                                                                        ],
+                                                                        "aLengthMenu": [
+                                                                            [40, 80, -1],
+                                                                            [40, 80, "All"]
+                                                                        ],
+                                                                        "iDisplayLength": 40,
+                                                                        "aoColumns": [
+                                                                            {
+                                                                                "bSortable": true
+                                                                            }, {
+                                                                                "bSortable": false
+                                                                            }, {
+                                                                                "bSortable": false
+                                                                            }, {
+                                                                                "bSortable": false
+                                                                            }, {
+                                                                                "bSortable": false
+                                                                            }, {
+                                                                                "bSortable": false
+                                                                            }, {
+                                                                                "bSortable": false
+                                                                            }, {
+                                                                                "bSortable": false
+                                                                            }
+                                                                        ]
+
+                                                                    });
+                                                                }
+                                                                if (!$.fn.dataTable.isDataTable('#tablehistoryTask')) {
+                                                                    //var $taskListArea = $('.taskListArea').empty();
+                                                                    var $taskHistoryDatatable = $('#tablehistoryTask').DataTable({
+                                                                        "pagingType": "full_numbers",
+
+                                                                        "aoColumns": [
+                                                                            null, {
+                                                                                "bSortable": true
+                                                                            }, {
+                                                                                "bSortable": true
+                                                                            }, {
+                                                                                "bSortable": true
+                                                                            }, {
+                                                                                "bSortable": true
+                                                                            }, {
+                                                                                "bSortable": false
+                                                                            }
+                                                                        ]
+
+                                                                    });
+                                                                }
+
+                                                                $('#tablehistoryTask_length').hide();
+                                                                $('#tablehistoryTask_filter').hide();
+
+                                                                if (!$.fn.dataTable.isDataTable('#tablehistoryTaskForJenkins')) {
+                                                                    //var $taskListArea = $('.taskListArea').empty();
+                                                                    var $taskHistoryDatatableJenkins = $('#tablehistoryTaskForJenkins').DataTable({
+                                                                        "pagingType": "full_numbers",
+                                                                        "order": [
+                                                                            [0, "desc"]
+                                                                        ],
+                                                                        "aoColumns": [
+                                                                            null, {
+                                                                                "bSortable": false
+                                                                            }, {
+                                                                                "bSortable": false
+                                                                            }, {
+                                                                                "bSortable": false
+                                                                            }, {
+                                                                                "bSortable": false
+                                                                            }
+                                                                        ]
+
+                                                                    });
+                                                                }
+
+                                                                $('#tablehistoryTaskForJenkins_length').hide();
+                                                                $('#tablehistoryTaskForJenkins_filter').hide();
+
+                                                                function showTaskLogs() {
+                                                                    var $taskExecuteTabsHeaderContainer = $('#taskExecuteTabsHeader').empty();
+                                                                    var $taskExecuteTabsContent = $('#taskExecuteTabsContent').empty();
+                                                                    var $modal = $('#assignedExecute');
+                                                                    $modal.find('.loadingContainer').hide();
+                                                                    $modal.find('.errorMsgContainer').hide();
+                                                                    var $outputArea = $modal.find('.outputArea').show();
+                                                                    var taskType = $outputArea.data('taskType');
+
+                                                                    if (taskType === 'chef') {
+
+
+                                                                        var instances = $outputArea.data('instances');
+                                                                        for (var i = 0; i < instances.length; i++) {
+                                                                            var nodeName = instances[i].chef.chefNodeName;
+                                                                            if (instances[i].instanceIP) {
+                                                                                var nodeName = instances[i].instanceIP;
+                                                                            }
+                                                                            if (instances[i].name) {
+                                                                                nodeName = instances[i].name;
+                                                                            }
+                                                                            var $liHeader = $('<li><a href="#tab_' + instances[i]._id + '" data-toggle="tab" data-taskInstanceId="' + instances[i]._id + '" data-taskActionLogId="' + instances[i].tempActionLogId + '">' + nodeName + '</a></li>');
+                                                                            if (i === 4) {
+                                                                                var $liMoreHeader = $('<li class="dropdown dropdownlog"><a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">More... <b class="caret"></b></a><ul class="dropdown-menu"></ul></li>');
+
+                                                                                $taskExecuteTabsHeaderContainer.append($liMoreHeader);
+
+                                                                                $taskExecuteTabsHeaderContainer = $liMoreHeader.find('ul');
+
+                                                                            }
+                                                                            $taskExecuteTabsHeaderContainer.append($liHeader);
+                                                                            var $tabContent = $('<div class="tab-pane fade" id="tab_' + instances[i]._id + '"><div class="taskLogArea chefLOGS"></div></div>');
+                                                                            $taskExecuteTabsContent.append($tabContent);
+                                                                        }
+                                                                        //shown event
+
+
+
+                                                                        $('#taskExecuteTabsHeader').find('a[data-toggle="tab"]').each(function(e) {
+                                                                            $(this).attr('data-taskPolling', 'true');
+                                                                            var timestamp = $outputArea.data('timestampStarted');
+                                                                            if (!timestamp) {
+                                                                                timestamp = new Date().getTime();
+                                                                            }
+                                                                            $(this).attr('data-taskPollLastTimestamp', timestamp);
+
+
+                                                                            var timestampEnded = $outputArea.data('timestampEnded');
+                                                                            if (timestampEnded) {
+                                                                                $(this).attr('data-taskPollTimestampEnded', timestampEnded);
+                                                                            }
+                                                                            var tabId = $(this).attr('href')
+                                                                            pollTaskLogs($(this), $(tabId), null, 0, false);
+                                                                            //e.relatedTarget // previous active tab
+                                                                        });
+
+                                                                        $('#taskExecuteTabsHeader').find('a[data-toggle="tab"]').on('hidden.bs.tab', function(e) {
+                                                                            $(e.target).attr('data-taskPolling', 'true');
+                                                                            //e.relatedTarget // previous active tab
+                                                                        }).first().click();
+
+                                                                        $('#assignedExecute').modal('show');
+                                                                    } else {
+                                                                        var $liHeader = $('<li><a href="#tab_jenkinsTask" data-toggle="tab">Jenkins Job</a></li>');
+                                                                        $taskExecuteTabsHeaderContainer.append($liHeader);
+                                                                        var $tabContent = $('<div class="tab-pane fade" id="tab_jenkinsTask"><div class="taskLogArea taskLOGS"></div></div>');
+                                                                        $taskExecuteTabsContent.append($tabContent);
+                                                                        $liHeader.find('a').click();
+                                                                        var jenkinsServerId = $outputArea.data('jenkinsServerId');
+                                                                        var jobName = $outputArea.data('jobName');
+                                                                        var lastBuildNumber = $outputArea.data('lastBuildNumber');
+                                                                        var buildNumber = $outputArea.data('currentBuildNumber');
+
+                                                                        function pollJobOutput() {
+                                                                            $.get('../jenkins/' + jenkinsServerId + '/jobs/' + jobName + '/builds/' + buildNumber + '/output', function(jobOutput) {
+                                                                                var output = jobOutput.output.replace(/\r?\n/g, "<br />");
+
+                                                                                $tabContent.find('.taskLogArea').html(output);
+                                                                                console.log(jobOutput);
+                                                                                setTimeout(function() {
+                                                                                    if ($('#assignedExecute').data()['bs.modal'].isShown) {
+                                                                                        pollJobOutput();
+                                                                                    }
+                                                                                }, 3000);
+                                                                            });
+                                                                        }
+
+                                                                        function pollJob() {
+
+                                                                            $.get('../jenkins/' + jenkinsServerId + '/jobs/' + jobName, function(job) {
+
+                                                                                if (job.lastBuild.number > lastBuildNumber) {
+                                                                                    $modal.find('.loadingContainer').hide();
+                                                                                    $modal.find('.errorMsgContainer').hide();
+                                                                                    $modal.find('.outputArea').show();
+
+                                                                                    buildNumber = job.lastBuild.number;
+
+                                                                                    pollJobOutput();
+                                                                                } else {
+                                                                                    pollJob();
+                                                                                }
+                                                                                console.log(job);
+                                                                            });
+                                                                        }
+
+
+                                                                        if (buildNumber) {
+                                                                            pollJobOutput();
+                                                                        } else {
+                                                                            pollJob();
+                                                                        }
+                                                                        console.log(data);
+                                                                    }
+
+                                                                }
+
+
+                                                                for (var i = 0; i < data.length; i++) {
+
+                                                                    // alert(JSON.stringify(data));
+                                                                    (function(i) {
+                                                                        var $tr = $('<tr></tr>').attr('data-taskId', data[i]._id);
+                                                                        //method for getting the type of job.. 
+                                                                        if (data[i].taskType === 'chef') {
+                                                                            var $tdType = $('<td style="vertical-align:inherit;text-align:center;"></td>').append("<img style='width:31px;' src='img/chef.png' alt='chef'>&nbsp;&nbsp;<span style='font-size:14px;'></span>");
+                                                                        } else {
+                                                                            var $tdType = $('<td style="vertical-align:inherit;text-align:center;"></td>').append("<img style='width:22px;' src='img/jenkins.png' alt='jenkins'>&nbsp;&nbsp;<span style='font-size:14px;'></span>");
+                                                                        }
+                                                                        $tr.append($tdType);
+
+                                                                        //method for getting the job which has been created..either jenkins or chef.
+                                                                        var $tdName = $('<td style="vertical-align:inherit;text-align:center;"></td>').append(data[i].name);
+                                                                        $tr.append($tdName);
+
+                                                                        //method for getting the decsription for chef or jenkins job.
+                                                                        var $tdDescription = $('<td style="vertical-align:inherit;text-align:center;"></td>').append(data[i].description);
+                                                                        $tr.append($tdDescription);
+
+                                                                        //if job type is chef show runlists and nodes.
+                                                                        if (data[i].taskType === 'chef') {
+                                                                            var $tdNodeList = $('<td style="vertical-align:inherit;text-align:center;"></td>').append('<i style="font-size:20px;color:#40baf1" class="ace-icon fa fa-sitemap"></i><a rel="tooltip" data-placement="top" data-original-title="View Nodes" style="cursor:pointer;text-decoration:none;" data-toggle="modal"><span class="assignedNodesList" style="margin-top:10px;margin-left:8px;">Nodes&nbsp; </span></a>').append('<i style="font-size:20px;color:#40baf1;margin-left:5px;" class="ace-icon fa fa-list-ul"></i><a style="margin-top:5px;text-decoration:none" rel="tooltip" data-placement="top" data-original-title="Assigned Runlists" data-toggle="modal" href="#assignedRunlist"><span class="assignedRunlistTable" style="margin-left:10px;">View Runlist&nbsp;</span> </a>');
+                                                                            $tdNodeList.find('span.assignedNodesList').data('nodeList', data[i].taskConfig.nodeIds).click(function(e) {
+                                                                                $.post('../instances/', {
+                                                                                    instanceIds: $(this).data('nodeList')
+                                                                                }, function(instances) {
+                                                                                    var $taskNodeListContainer = $('.taskNodeListContainer').empty();
+                                                                                    for (var i = 0; i < instances.length; i++) {
+                                                                                        var $tr = $('<tr></tr>').css({
+                                                                                            'line-height': '2.1'
+                                                                                        });
+                                                                                        var nodeName = instances[i].chef.chefNodeName;
+                                                                                        if (instances[i].instanceIP) {
+                                                                                            var nodeName = instances[i].instanceIP;
+                                                                                        }
+                                                                                        if (instances[i].name) {
+                                                                                            nodeName = instances[i].name;
+                                                                                        }
+                                                                                        var $tdInstanceName = $('<td></td>').append(nodeName).css({
+                                                                                            'font-size': '12px'
+                                                                                        });
+
+                                                                                        var $tdInstanceIp = $('<td></td>').append(instances[i].instanceIP).css({
+                                                                                            'font-size': '12px'
+                                                                                        });
+                                                                                        var $tdInstanceStatus = $('<td></td>').append(instances[i].instanceState).css({
+                                                                                            'font-size': '12px'
+                                                                                        });
+                                                                                        $tr.append($tdInstanceName).append($tdInstanceIp).append($tdInstanceStatus);
+                                                                                        $taskNodeListContainer.append($tr);
+                                                                                    }
+                                                                                    $('#assignedNode').modal('show');
+                                                                                });
+                                                                            });
+
+                                                                            $tdNodeList.find('span.assignedRunlistTable').data('taskRunlist', data[i].taskConfig.runlist).click(function(e) {
+                                                                                var $taskRunListContainer = $('.taskRunListContainer').empty();
+                                                                                var runlist = $(this).data('taskRunlist');
+                                                                                if (runlist && runlist.length) {
+                                                                                    for (var i = 0; i < runlist.length; i++) {
+                                                                                        $li = $('<li></li>').append(runlist[i].substring(runlist[i].lastIndexOf("[") + 1, runlist[i].lastIndexOf("]"))).css({
+                                                                                            "font-size": "12px"
+                                                                                        });
+                                                                                        $taskRunListContainer.append($li);
+                                                                                    }
+                                                                                }
+                                                                                $('#assignedRunlist').modal('show');
+                                                                            });
+                                                                        } else {
+                                                                            //if job type is jenkins show job url..
+                                                                            var jobURLS = data[i].taskConfig.jobURL;
+                                                                            
+                                                                            if (jobURLS) {
+                                                                                var $tdNodeList = $('<td style="vertical-align:inherit;text-align:center;"></td>').append('<span><img style="width:20px;" src="img/joburl.jpg">&nbsp;<a style="word-break: break-all;text-decoration:none" title="' + jobURLS + '" href="' + jobURLS + '" target="_blank">Job URL</a></span>');
+                                                                            }
+                                                                        }
+                                                                        $tr.append($tdNodeList);
+                                                                        
+                                                                        //method for executing the chef and jenkins job...
+                                                                        var $tdExecute = $('<td style="vertical-align:inherit;text-align:center;"></td>').append('<a rel="tooltip" data-placement="top" data-original-title="Execute" data-toggle="modal" href="javascript:void(0)" class="btn btn-primary btn-sg tableactionbutton"><i class="ace-icon fa fa-play bigger-120"></i></a>');
+                                                                        $tdExecute.find('a').data('taskId', data[i]._id).attr('data-executeTaskId', data[i]._id).click(function(e) {
+                                                                            var taskId = $(this).data('taskId');
+                                                                            bootbox.confirm({
+                                                                                message: "Are you sure you want to execute this Job?",
+                                                                                title: "Confirmation",
+                                                                                callback: function(result) {
+                                                                                    if (result) {
+
+
+                                                                                        var $taskExecuteTabsHeaderContainer = $('#taskExecuteTabsHeader').empty();
+                                                                                        var $taskExecuteTabsContent = $('#taskExecuteTabsContent').empty();
+                                                                                        var $modal = $('#assignedExecute');
+                                                                                        $modal.find('.loadingContainer').show();
+                                                                                        $modal.find('.errorMsgContainer').hide();
+                                                                                        $modal.find('.outputArea').hide();
+                                                                                        $modal.modal('show');
+                                                                                        var timestampToPoll = new Date().getTime();
+                                                                                        $.get('../tasks/' + taskId + '/run', function(data) {
+                                                                                            var date = new Date().setTime(data.timestamp);
+                                                                                            var taskTimestamp = new Date(date).toLocaleString(); //converts to human readable strings
+                                                                                            $('tr[data-taskId="' + taskId + '"] .taskrunTimestamp').html(taskTimestamp);
+
+                                                                                            var $outputArea = $modal.find('.outputArea');
+
+                                                                                            $outputArea.data('taskType', data.taskType);
+                                                                                            $outputArea.data('instances', data.instances);
+                                                                                            $outputArea.data('jenkinsServerId', data.jenkinsServerId);
+                                                                                            $outputArea.data('jobName', data.jobName);
+                                                                                            $outputArea.data('lastBuildNumber', data.lastBuildNumber);
+                                                                                            $outputArea.data('currentBuildNumber', data.currentBuildNumber);
+                                                                                            $outputArea.data('timestampStarted', data.timestamp);
+                                                                                            showTaskLogs();
+
+                                                                                        }).fail(function(jxhr) {
+                                                                                            $modal.find('.loadingContainer').hide();
+                                                                                            $modal.find('.outputArea').hide();
+                                                                                            var $errorContainer = $modal.find('.errorMsgContainer').show();
+                                                                                            if (jxhr.responseJSON && jxhr.responseJSON.message) {
+                                                                                                $errorContainer.html(jxhr.responseJSON.message);
+                                                                                            } else {
+                                                                                                $errorContainer.html("Server Behaved Unexpectedly");
+                                                                                            }
+                                                                                        });
+
+                                                                                    }
+                                                                                }
+                                                                            });
+
+                                                                        });
+                                                                        $tr.append($tdExecute);
+
+                                                                        //method for history starts here. depending upon the job type whether it is chef or jenkins....
+                                                                        if (data[i].taskType === 'chef') {
+                                                                            var $tdHistory = $('<td style="vertical-align:inherit;text-align:center;"></td>').append('<a rel="tooltip" data-placement="top" data-original-title="History" data-toggle="modal" href="javascript:void(0)" class="btn btn-primary btn-sg tableactionbutton"><i class="ace-icon fa fa-header bigger-120"></i></a>');
+                                                                            $tdHistory.find('a').data('taskId', data[i]._id).attr('data-historyTaskId', data[i]._id).click(function(e) {
+                                                                                //var $taskHistoryContent = $('#taskHistoryContent').show();
+                                                                                var taskId = $(this).data('taskId');
+                                                                                var $modal = $('#chefJobHistory');
+                                                                                $modal.find('.loadingContainer').show();
+                                                                                $modal.find('.outputArea').hide();
+                                                                                $modal.find('.errorMsgContainer').hide();
+                                                                                $modal.removeClass('hidden');
+                                                                                $('#orchestrationTable').hide();
+                                                                                $('.hideChefJob').click(function(e) {
+                                                                                    $modal.addClass('hidden');
+                                                                                    $('#orchestrationTable').show();
+                                                                                });
+                                                                                $taskHistoryDatatable.clear().draw();
+                                                                                $.get('../tasks/' + taskId + '/history', function(taskHistories) {
+                                                                                    for (var i = 0; i < taskHistories.length; i++) {
+                                                                                        var $trHistoryRow = $('<tr/>');
+
+                                                                                        var dateStarted = new Date().setTime(taskHistories[i].timestampStarted);
+                                                                                        dateStarted = new Date(dateStarted).toLocaleString(); //converts to human readable strings
+                                                                                        var $tdTimeStarted = $('<td></td>').append(dateStarted);
+                                                                                        $trHistoryRow.append($tdTimeStarted);
+
+                                                                                        var dateEnded = ' - '
+                                                                                        if (taskHistories[i].timestampEnded) {
+                                                                                            var dateEnded = new Date().setTime(taskHistories[i].timestampEnded);
+                                                                                            dateEnded = new Date(dateEnded).toLocaleString(); //converts to human readable strings
+                                                                                        }
+                                                                                        var $tdTimeEnded = $('<td></td>').append(dateEnded);
+                                                                                        $trHistoryRow.append($tdTimeEnded);
+
+
+
+                                                                                        if (taskHistories[i].status === "success") {
+                                                                                            var $tdBuildStatus = $('<td style="background-color:#1c9951;"></td>').append('<span style="color:#fff">SUCCESS</span>');
+                                                                                            $trHistoryRow.append($tdBuildStatus);
+                                                                                        } else if (taskHistories[i].status === "failed") {
+                                                                                            var $tdBuildStatusFailure = $('<td style="background-color:red;"></td>').append('<span style="color:#fff;">FAILURE</span>');
+                                                                                            $trHistoryRow.append($tdBuildStatusFailure);
+                                                                                        } else {
+                                                                                            var $tdBuildStatusRunning = $('<td style="background-color:gray;"></td>').append('<span style="color:#fff;">PENDING</span>');
+                                                                                            $trHistoryRow.append($tdBuildStatusRunning);
+                                                                                        }
+
+
+                                                                                        var $tdMessage = $('<td style="width:42%"></td>');
+                                                                                        $trHistoryRow.append($tdMessage);
+                                                                                        (function($td) {
+                                                                                            var message = ' - ';
+                                                                                            if (taskHistories[i].nodeIds && taskHistories[i].nodeIds.length == 1) {
+                                                                                                if (taskHistories[i].executionResults && taskHistories[i].executionResults.length == 1) {
+                                                                                                    $.get('../chefClientExecution/' + taskHistories[i].executionResults[0].executionId, function(execData) {
+                                                                                                        if (execData && execData.message) {
+                                                                                                            $td.append(execData.message);
+                                                                                                        } else {
+                                                                                                            $td.append(message);
+                                                                                                        }
+
+                                                                                                    }).fail(function() {
+                                                                                                        $td.append(message);
+                                                                                                    });
+                                                                                                } else {
+                                                                                                    $td.append(message);
+                                                                                                }
+                                                                                            } else {
+                                                                                                $td.append(message);
+                                                                                            }
+                                                                                        })($tdMessage)
+
+
+                                                                                        var $tdUser = $('<td></td>').append(taskHistories[i].user);
+                                                                                        $trHistoryRow.append($tdUser);
+
+                                                                                        var $tdLogs = $('<td></td>').append('<a data-original-title="MoreInfo" data-placement="top" rel="tooltip" class="moreinfoBuild margin-left40per" href="javascript:void(0)" data-toggle="modal"></a>');
+                                                                                        $tdLogs.find('a').data('history', taskHistories[i]).data('taskId', taskId).click(function() {
+
+                                                                                            //$('#assignedTaskHistory').modal('hide');
+                                                                                            var taskId = $(this).data('taskId');
+                                                                                            var $taskExecuteTabsHeaderContainer = $('#taskExecuteTabsHeader').empty();
+                                                                                            var $taskExecuteTabsContent = $('#taskExecuteTabsContent').empty();
+                                                                                            var $modal = $('#assignedExecute');
+                                                                                            $modal.find('.loadingContainer').show();
+                                                                                            $modal.find('.errorMsgContainer').hide();
+                                                                                            $modal.find('.outputArea').hide();
+                                                                                            $modal.modal('show');
+                                                                                            var $outputArea = $modal.find('.outputArea');
+                                                                                            var history = $(this).data('history');
+
+                                                                                            $outputArea.data('taskType', history.taskType);
+                                                                                            $outputArea.data('jenkinsServerId', history.jenkinsServerId);
+                                                                                            $outputArea.data('jobName', history.jobName);
+                                                                                            $outputArea.data('lastBuildNumber', history.lastBuildNumber);
+                                                                                            $outputArea.data('currentBuildNumber', history.buildNumber);
+                                                                                            $outputArea.data('timestampStarted', history.timestampStarted);
+                                                                                            $outputArea.data('timestampEnded', history.timestampEnded);
+
+                                                                                            if (history.nodeIdsWithActionLog && history.nodeIdsWithActionLog.length) {
+                                                                                                var ids = [];
+                                                                                                for (var kk = 0; kk < history.nodeIdsWithActionLog.length; kk++) {
+                                                                                                    ids.push(history.nodeIdsWithActionLog[kk].nodeId)
+                                                                                                }
+                                                                                                $.post('../instances', {
+                                                                                                    instanceIds: ids
+                                                                                                }, function(instances) {
+                                                                                                    for (var kk = 0; kk < instances.length; kk++) {
+                                                                                                        for (var jj = 0; jj < history.nodeIdsWithActionLog.length; jj++) {
+                                                                                                            if (instances[kk]._id === history.nodeIdsWithActionLog[jj].nodeId) {
+                                                                                                                instances[kk].tempActionLogId = history.nodeIdsWithActionLog[jj].actionLogId;
+                                                                                                            }
+                                                                                                        }
+                                                                                                    }
+                                                                                                    $outputArea.data('instances', instances);
+                                                                                                    showTaskLogs();
+                                                                                                });
+
+                                                                                            } else {
+                                                                                                if (history.nodeIds && history.nodeIds.length) {
+                                                                                                    $.post('../instances', {
+                                                                                                        instanceIds: history.nodeIds
+                                                                                                    }, function(instances) {
+                                                                                                        $outputArea.data('instances', instances);
+                                                                                                        showTaskLogs();
+                                                                                                    });
+                                                                                                } else {
+                                                                                                    showTaskLogs();
+                                                                                                }
+                                                                                            }
+
+
+                                                                                        });
+                                                                                        $trHistoryRow.append($tdLogs);
+
+                                                                                        $taskHistoryDatatable.row.add($trHistoryRow).draw();
+                                                                                    }
+                                                                                    $modal.find('.loadingContainer').hide();
+                                                                                    $modal.find('.outputArea').show();
+                                                                                }).fail(function(jxhr) {
+                                                                                    $modal.find('.loadingContainer').hide();
+                                                                                    $modal.find('.outputArea').hide();
+                                                                                    var $errorContainer = $modal.find('.errorMsgContainer').show();
+                                                                                    if (jxhr.responseJSON && jxhr.responseJSON.message) {
+                                                                                        $errorContainer.html(jxhr.responseJSON.message);
+                                                                                    } else {
+                                                                                        $errorContainer.html("Server Behaved Unexpectedly");
+                                                                                    }
+                                                                                });
+
+                                                                                //$modal.find('.outputArea').hide();
+
+                                                                            });
+                                                                        } else {
+                                                                          //history for jenkins job type...description mentioned above..
+                                                                            var $tdHistory = $('<td style="vertical-align:inherit;text-align:center;"></td>').append('<a rel="tooltip" data-placement="top" data-original-title="History" data-toggle="modal" href="javascript:void(0)" class="btn btn-primary btn-sg tableactionbutton"><i class="ace-icon fa fa-header bigger-120"></i></a>');
+                                                                            $tdHistory.find('a').data('taskId', data[i]._id).data('autosyncFlag', data[i].taskConfig.autoSyncFlag).attr('data-historyTaskId', data[i]._id).click(function(e) {
+                                                                                //var $taskHistoryContent = $('#taskHistoryContent').show();
+                                                                                var taskId = $(this).data('taskId');
+
+                                                                                var $modal = $('#jenkinsJobHistory');
+                                                                                $modal.find('.loadingContainer').show();
+                                                                                $modal.find('.outputArea').hide();
+                                                                                $modal.find('.errorMsgContainer').hide();
+                                                                                $modal.removeClass('hidden');
+                                                                                $('#orchestrationTable').hide();
+                                                                                $('.hideJenkinsJob').click(function(e) {
+                                                                                    $modal.addClass('hidden');
+                                                                                    $('#orchestrationTable').show();
+                                                                                });
+                                                                                $taskHistoryDatatableJenkins.clear().draw();
+
+                                                                                var autoSyncFlag = $(this).data('autosyncFlag');
+
+                                                                                console.log('autoSyncFlag', autoSyncFlag);
+
+                                                                                //for getting the entire history related to a particular job...
+                                                                                $.get('../tasks/' + taskId + '/history', function(taskHistories) {
+                                                                                    console.log(taskHistories);
+
+                                                                                    for (var i = 0; i < taskHistories.length; i++) {
+                                                                                        (function(i) {
+                                                                                            var $trHistoryRow = $('<tr/>');
+
+                                                                                            //condition to get the jobname as per the particular build number..
+                                                                                            $.get('../jenkins/' + taskHistories[i].jenkinsServerId + '/jobs/' + taskHistories[i].jobName, function(job) {
+                                                                                                console.log(JSON.stringify(job));
+                                                                                                var url;
+                                                                                                var buildFound = false
+
+                                                                                                //method for getting the build number..
+                                                                                                if (taskHistories[i].buildNumber === job.nextBuildNumber) {
+                                                                                                    var $tdBuildNumber = $('<td/>').append('<a style="word-break: break-all;" href="' + url + '" title="' + url + '" target="_blank">' + taskHistories[i].buildNumber + '</a>');
+                                                                                                    $trHistoryRow.append($tdBuildNumber);
+                                                                                                    if (typeof job.builds[job.nextBuildNumber - 1] === "undefined") {
+                                                                                                        var $tdJobName = $('<td/>').append('Current Job is still pending');
+                                                                                                        $trHistoryRow.append($tdJobName);
+                                                                                                    } else {
+
+
+                                                                                                        url = job.builds[job.nextBuildNumber - 1].url;
+                                                                                                        // alert(url);
+                                                                                                        var $tdJobName = $('<td/>').append('<a style="word-break: break-all;" href="' + taskHistories[i].jobResultURL + '" target="_blank">' + taskHistories[i].jobName + '</a>');
+                                                                                                        $trHistoryRow.append($tdJobName);
+                                                                                                    }
+                                                                                                    buildFound = true;
+
+                                                                                                } else {
+                                                                                                    for (var k = 0; k < job.builds.length; k++) {
+                                                                                                        //alert(JSON.stringify(job.builds));
+
+                                                                                                        console.log(taskHistories[i].buildNumber, "  ---  ", job.nextBuildNumber);
+                                                                                                        
+                                                                                                        if (taskHistories[i].buildNumber === job.builds[k].number) {
+
+                                                                                                            url = job.builds[k].url;
+                                                                                                            // alert(url);
+                                                                                                            var $tdBuildNumber = $('<td/>').append('<a style="word-break: break-all;" href="' + url + '" title="' + url + '" target="_blank">' + taskHistories[i].buildNumber + '</a>');
+                                                                                                            $trHistoryRow.append($tdBuildNumber);
+
+                                                                                                            buildFound = true;
+                                                                                                            break;
+                                                                                                        }
+
+
+                                                                                                    }
+
+                                                                                                }
+                                                                                                if (!buildFound) {
+                                                                                                    return;
+
+                                                                                                }
+
+
+
+                                                                                                $tdJobName = $('<td/>');
+
+
+                                                                                                // alert(taskHistories[i].jobResultURL[p]);
+                                                                                                //alert(taskHistories[i].jobResultURL.length);
+                                                                                                if (taskHistories[i].jobResultURL.length) {
+                                                                                                    for (var p = 0; p < taskHistories[i].jobResultURL.length; p++) {
+                                                                                                        $tdJobName.append('<a class="btn btn-primary btn-sg tableactionbutton marginleftright7" style="word-break: break-all;" href="' + taskHistories[i].jobResultURL[p] + '" title="' + taskHistories[i].jobResultURL[p] + '" target="_blank"><i class="ace-icon fa fa-file-text bigger-120"></i></a>');
+                                                                                                    }
+
+                                                                                                    //$trHistoryRow.append($tdJobName);
+                                                                                                }
+                                                                                                $tdJobName.append('<a title="Jenkins Log" data-placement="top" rel="tooltip" class="btn btn-primary btn-sg tableactionbutton moreinfo" href="javascript:void(0)" data-toggle="modal"><i class="ace-icon fa fa-list bigger-120"></i></a>');
+                                                                                                $tdJobName.find('a.moreinfo').data('history', taskHistories[i]).data('taskId', taskId).click(function() {
+                                                                                                    //$('#assignedTaskHistory').modal('hide');
+                                                                                                    var taskId = $(this).data('taskId');
+                                                                                                    var $taskExecuteTabsHeaderContainer = $('#taskExecuteTabsHeader').empty();
+                                                                                                    var $taskExecuteTabsContent = $('#taskExecuteTabsContent').empty();
+                                                                                                    var $modal = $('#assignedExecute');
+                                                                                                    $modal.find('.loadingContainer').show();
+                                                                                                    $modal.find('.errorMsgContainer').hide();
+                                                                                                    $modal.find('.outputArea').hide();
+                                                                                                    $modal.modal('show');
+                                                                                                    var $outputArea = $modal.find('.outputArea');
+                                                                                                    var history = $(this).data('history');
+
+                                                                                                    $outputArea.data('taskType', history.taskType);
+                                                                                                    $outputArea.data('jenkinsServerId', history.jenkinsServerId);
+                                                                                                    $outputArea.data('jobName', history.jobName);
+                                                                                                    $outputArea.data('lastBuildNumber', history.lastBuildNumber);
+                                                                                                    $outputArea.data('currentBuildNumber', history.buildNumber);
+                                                                                                    $outputArea.data('timestampStarted', history.timestampStarted);
+                                                                                                    $outputArea.data('timestampEnded', history.timestampEnded);
+
+                                                                                                    if (history.nodeIdsWithActionLog && history.nodeIdsWithActionLog.length) {
+                                                                                                        var ids = [];
+                                                                                                        for (var kk = 0; kk < history.nodeIdsWithActionLog.length; kk++) {
+                                                                                                            ids.push(history.nodeIdsWithActionLog[kk].nodeId)
+                                                                                                        }
+                                                                                                        $.post('../instances', {
+                                                                                                            instanceIds: ids
+                                                                                                        }, function(instances) {
+                                                                                                            for (var kk = 0; kk < instances.length; kk++) {
+                                                                                                                for (var jj = 0; jj < history.nodeIdsWithActionLog.length; jj++) {
+                                                                                                                    if (instances[kk]._id === history.nodeIdsWithActionLog[jj].nodeId) {
+                                                                                                                        instances[kk].tempActionLogId = history.nodeIdsWithActionLog[jj].actionLogId;
+                                                                                                                    }
+                                                                                                                }
+                                                                                                            }
+                                                                                                            $outputArea.data('instances', instances);
+                                                                                                            showTaskLogs();
+                                                                                                        });
+
+                                                                                                    } else {
+                                                                                                        if (history.nodeIds && history.nodeIds.length) {
+                                                                                                            $.post('../instances', {
+                                                                                                                instanceIds: history.nodeIds
+                                                                                                            }, function(instances) {
+                                                                                                                $outputArea.data('instances', instances);
+                                                                                                                showTaskLogs();
+                                                                                                            });
+                                                                                                        } else {
+                                                                                                            showTaskLogs();
+                                                                                                        }
+                                                                                                    }
+
+
+                                                                                                });
+
+
+
+                                                                                                //method for showing the status of the job that is getting executed or the job already executed..
+                                                                                                $trHistoryRow.append($tdJobName);
+                                                                                                if (taskHistories[i].status === "success") {
+                                                                                                    var $tdBuildStatus = $('<td style="background-color:#1c9951;"></td>').append('<span style="color:#fff">SUCCESS</span>');
+                                                                                                    $trHistoryRow.append($tdBuildStatus);
+                                                                                                } else if (taskHistories[i].status === "failed") {
+                                                                                                    var $tdBuildStatusFailure = $('<td style="background-color:red;"></td>').append('<span style="color:#fff;">FAILURE</span>');
+                                                                                                    $trHistoryRow.append($tdBuildStatusFailure);
+                                                                                                } else {
+                                                                                                    var $tdBuildStatusRunning = $('<td style="background-color:gray;"></td>').append('<span style="color:#fff;">PENDING</span>');
+                                                                                                    $trHistoryRow.append($tdBuildStatusRunning);
+                                                                                                }
+
+
+                                                                                                //method for getting the start time and end time for a job..
+                                                                                                var dateStarted = new Date().setTime(taskHistories[i].timestampStarted);
+                                                                                                dateStarted = new Date(dateStarted).toLocaleString(); //converts to human readable strings
+                                                                                                var $tdTimeStarted = $('<td></td>').append(dateStarted);
+                                                                                                $trHistoryRow.append($tdTimeStarted);
+
+                                                                                                var dateEnded = ' - '
+                                                                                                if (taskHistories[i].timestampEnded) {
+                                                                                                    var dateEnded = new Date().setTime(taskHistories[i].timestampEnded);
+                                                                                                    dateEnded = new Date(dateEnded).toLocaleString(); //converts to human readable strings
+                                                                                                }
+                                                                                                var $tdTimeEnded = $('<td></td>').append(dateEnded);
+                                                                                                $trHistoryRow.append($tdTimeEnded);
+
+                                                                                                $taskHistoryDatatableJenkins.row.add($trHistoryRow).draw();
+                                                                                            });
+                                                                                        })(i);
+
+                                                                                    }
+                                                                                    $modal.find('.loadingContainer').hide();
+                                                                                    $modal.find('.outputArea').show();
+
+                                                                                }).fail(function(jxhr) {
+                                                                                    $modal.find('.loadingContainer').hide();
+                                                                                    $modal.find('.outputArea').hide();
+                                                                                    var $errorContainer = $modal.find('.errorMsgContainer').show();
+                                                                                    if (jxhr.responseJSON && jxhr.responseJSON.message) {
+                                                                                        $errorContainer.html(jxhr.responseJSON.message);
+                                                                                    } else {
+                                                                                        $errorContainer.html("Server Behaved Unexpectedly");
+                                                                                    }
+                                                                                });
+                                                                                if (autoSyncFlag && autoSyncFlag === "Yes") {
+                                                                                    alert('firing');
+
+                                                                                    console.log('Fetching build history from Data Lake..');
+
+
+
+
+
+                                                                                    console.log('BuildHistory API', url);
+
+                                                                                    $.ajax({
+                                                                                        url: url,
+                                                                                        type: 'GET',
+                                                                                        contentType: 'application/json',
+                                                                                        success: function(buildData) {
+
+                                                                                            if (buildData.BuildHistory) {
+
+                                                                                                var buildLength = '';
+
+                                                                                                if (buildData.BuildHistory.length > 100) {
+                                                                                                    buildLength = 100;
+                                                                                                } else {
+                                                                                                    buildLength = buildData.BuildHistory.length;
+                                                                                                }
+
+                                                                                                for (i = 0; i < buildLength; i++) {
+
+                                                                                                    var $trHistoryRow = $('<tr/>');
+
+                                                                                                    var date = new Date(buildData.BuildHistory[i].builddate);
+                                                                                                    var formatted = formatDate(date);
+
+                                                                                                    var $tdTimeStarted = $('<td></td>').append(formatted);
+                                                                                                    $trHistoryRow.append($tdTimeStarted);
+
+                                                                                                    date.setMilliseconds(date.getMilliseconds() + buildData.BuildHistory[i].duration);
+
+                                                                                                    formatted = formatDate(date);
+
+                                                                                                    var $tdTimeEnded = $('<td></td>').append(formatted);
+                                                                                                    $trHistoryRow.append($tdTimeEnded);
+
+                                                                                                    if (buildData.BuildHistory[i].status === "SUCCESS") {
+                                                                                                        var $tdBuildStatus = $('<td></td>').append('<img rel="tooltip" data-placement="top" title="Success" src="img/indicator_started.png"/>');
+                                                                                                        $trHistoryRow.append($tdBuildStatus);
+                                                                                                    } else if (buildData.BuildHistory[i].status === "FAILED") {
+                                                                                                        var $tdBuildStatusFailure = $('<td></td>').append('<img rel="tooltip" data-placement="top" title="Failed" src="img/indicator_stopped.png"/>');
+                                                                                                        $trHistoryRow.append($tdBuildStatusFailure);
+                                                                                                    } else {
+                                                                                                        var $tdBuildStatusRunning = $('<td></td>').append('<img rel="tooltip" data-placement="top" title="Running" src="img/indicator_unknown.png"/>');
+                                                                                                        $trHistoryRow.append($tdBuildStatusRunning);
+                                                                                                    }
+
+                                                                                                    var $tdMessage = $('<td style="width:42%"> -- </td>');
+                                                                                                    $trHistoryRow.append($tdMessage);
+
+                                                                                                    var $tdUser = $('<td></td>').append(buildData.BuildHistory[i].startedby);
+                                                                                                    $trHistoryRow.append($tdUser);
+
+                                                                                                    var $tdLogs = $('<td></td>').append('<a data-original-title="MoreInfo" rel="tooltip" class="moreinfoBuild margin-left40per" href="javascript:void(0)"></a>');
+
+                                                                                                    $tdLogs.find('a').data('logfileurl', buildData.BuildHistory[i].logfileurl).data('taskId', taskId).click(function() {
+                                                                                                        $('#assignedTaskHistory').modal('hide');
+                                                                                                        var taskId = $(this).data('taskId');
+                                                                                                        var $taskExecuteTabsHeaderContainer = $('#taskExecuteTabsHeader').empty();
+                                                                                                        var $taskExecuteTabsContent = $('#taskExecuteTabsContent').empty();
+                                                                                                        var $modal = $('#assignedExecute');
+                                                                                                        $modal.find('.loadingContainer').show();
+                                                                                                        $modal.find('.errorMsgContainer').hide();
+                                                                                                        $modal.find('.outputArea').hide();
+                                                                                                        $modal.modal('show');
+
+                                                                                                        var $liHeader = $('<li><a href="#tab_jenkinsTask" data-toggle="tab">Jenkins Job</a></li>');
+                                                                                                        $taskExecuteTabsHeaderContainer.append($liHeader);
+                                                                                                        var $tabContent = $('<div class="tab-pane fade" id="tab_jenkinsTask"><div class="taskLogArea taskLOGS"></div></div>');
+                                                                                                        $taskExecuteTabsContent.append($tabContent);
+                                                                                                        $liHeader.find('a').click();
+
+                                                                                                        var logfileurl = $(this).data('logfileurl');
+
+                                                                                                        var url = dataLakeHost + '/EnterpriseDataLake/rest/getLogfiledata?logurl=' + logfileurl + '&username=admin&password=admin@RL123';
+
+                                                                                                        $.ajax({
+                                                                                                            type: 'GET',
+                                                                                                            url: url,
+                                                                                                            contentType: 'application/json',
+                                                                                                            dataType: 'text',
+                                                                                                            success: function(jobOutput) {
+                                                                                                                var output = jobOutput.replace(/\r?\n/g, "<br />");
+
+                                                                                                                $tabContent.find('.taskLogArea').html(output);
+                                                                                                                $modal.find('.loadingContainer').hide();
+                                                                                                                $modal.find('.outputArea').show();
+                                                                                                            }
+                                                                                                        });
+
+
+                                                                                                    })
+
+                                                                                                    $trHistoryRow.append($tdLogs);
+                                                                                                    $taskHistoryDatatable.row.add($trHistoryRow).draw();
+
+                                                                                                }
+
+                                                                                            }
+                                                                                        },
+                                                                                        error: function(errMsg) {
+                                                                                            console.log('Error in fetching build history', errMsg);
+                                                                                        }
+                                                                                    });
+
+                                                                                }
+                                                                            });
+                                                                        }
+                                                                        $tr.append($tdHistory);
+
+                                                                        var timestamp = "-";
+                                                                        if (data[i].lastRunTimestamp) {
+                                                                            var date = new Date().setTime(data[i].lastRunTimestamp);
+                                                                            timestamp = new Date(date).toLocaleString(); //converts to human readable strings
+                                                                        }
+
+                                                                        //method for getting the last run job time.....
+                                                                        var $tdTime = $('<td style="vertical-align:inherit;text-align:center;"></td>').append(timestamp).addClass('taskrunTimestamp');
+                                                                        $tr.append($tdTime);
+
+                                                                        //method for edit and delete of jobs from orchestration table.
+                                                                        var $tdOptions = $('<td style="vertical-align:inherit;text-align:center;"></td>').append('<div class="btn-group tableactionWidth"><a rel="tooltip" data-placement="top" data-original-title="Delete" class="btn btn-danger pull-left btn-sg tableactionbutton btnDeleteTask"><i class="ace-icon fa fa-trash-o bigger-120"></i></a><a class="btn btn-info pull-left tableactionbutton btnEditTask tableactionbuttonpadding btn-sg" data-original-title="Edit" data-placement="top" rel="tooltip"><i class="ace-icon fa fa-pencil bigger-120"></i></a></div>').attr('data-taskId', data[i]._id);
+                                                                        //permission set for editing and deleting for ChefTask
+
+                                                                        var hasEditChefTaskPermission = false;
+                                                                        if (haspermission('chef_task', 'modify')) {
+                                                                            hasEditChefTaskPermission = true;
+                                                                        }
+                                                                        if (!hasEditChefTaskPermission) {
+                                                                            $tdOptions.find('.btnEditTask').addClass('hidden');
+                                                                        }
+
+                                                                        var hasDeleteChefTaskPermission = false;
+                                                                        if (haspermission('chef_task', 'delete')) {
+                                                                            hasDeleteChefTaskPermission = true;
+                                                                        }
+                                                                        if (!hasDeleteChefTaskPermission) {
+                                                                            $tdOptions.find('.btnDeleteTask').addClass('hidden');
+                                                                        }
+                                                                        //custom
+                                                                        var hasEditCustomTaskPermission = false;
+                                                                        if (haspermission('custom_task', 'modify')) {
+                                                                            hasEditCustomTaskPermission = true;
+                                                                        }
+                                                                        if (!hasEditCustomTaskPermission) {
+                                                                            $tdOptions.find('.btnEditTask').addClass('hidden');
+                                                                        }
+
+                                                                        var hasDeleteCustomTaskPermission = false;
+                                                                        if (haspermission('custom_task', 'delete')) {
+                                                                            hasDeleteCustomTaskPermission = true;
+                                                                        }
+                                                                        if (!hasDeleteCustomTaskPermission) {
+                                                                            $tdOptions.find('.btnDeleteTask').addClass('hidden');
+                                                                        }
+                                                                        //jenkins
+                                                                        var hasEditJenkinsTaskPermission = false;
+                                                                        if (haspermission('jenkins_task', 'modify')) {
+                                                                            hasEditJenkinsTaskPermission = true;
+                                                                        }
+                                                                        if (!hasEditJenkinsTaskPermission) {
+                                                                            $tdOptions.find('.btnEditTask').addClass('hidden');
+                                                                        }
+
+                                                                        var hasDeleteJenkinsTaskPermission = false;
+                                                                        if (haspermission('jenkins_task', 'delete')) {
+                                                                            hasDeleteJenkinsTaskPermission = true;
+                                                                        }
+                                                                        if (!hasDeleteJenkinsTaskPermission) {
+                                                                            $tdOptions.find('.btnDeleteTask').addClass('hidden');
+                                                                        }
+
+                                                                        $tdOptions.find('.btnDeleteTask').click(function(e) {
+                                                                            var taskId = $(this).parents('td').attr('data-taskId');
+                                                                            var that = this;
+
+                                                                            bootbox.confirm('Are you sure you want to delete the Task -&nbsp;<b>' + data[i].name + '</b>', function(result) {
+                                                                                if (result) {
+                                                                                    $.ajax({
+                                                                                        url: '../tasks/' + taskId,
+                                                                                        method: 'DELETE',
+                                                                                        success: function(data) {
+                                                                                            //$(that).parents('tr').remove();
+                                                                                            //var totalTask = $taskListArea.children('tr').length;
+                                                                                            //$('.taskListFooter').text('Showing ' + totalTask + ' of ' + totalTask + ' entries');
+                                                                                            $taskDatatable.row($(that).parents('tr')).remove().draw(false);
+
+                                                                                            $('div[data-taskCardIconId="' + taskId + '"]').remove();
+
+                                                                                        },
+                                                                                        fail: function(msg) {
+                                                                                            console.log("fail ==>", msg);
+                                                                                        }
+                                                                                    })
+                                                                                }
+                                                                            });
+                                                                            return false;
+                                                                        });
+                                                                        $tdOptions.find('.btnEditTask').click(function(e) {
+                                                                            setBreadCrumbAndViewOrchestration();
+
+                                                                            var taskId = $(this).parents('td').attr('data-taskId');
+
+                                                                            window.location.href = 'index.html#ajax/assignTask.html?org=' + urlParams.org + '&bg=' + urlParams['bg'] + '&projid=' + urlParams['projid'] + '&envid=' + urlParams['envid'] + '&taskId=' + taskId;
+
+                                                                        });
+                                                                        $tr.append($tdOptions);
+
+                                                                        $taskDatatable.row.add($tr).draw();
+                                                                        //$taskListArea.append($tr);
+
+                                                                        //aaaa
+                                                                        if ($("#sorttableheader").length) {
+                                                                            //alert(1);
+                                                                            $("#sorttableheader").tablesorter();
+                                                                        }
+                                                                        //     $("#sorttableheader").tablesorter();
+                                                                        pageSetUp();
+                                                                    })(i);
+
+                                                                }
+
+                                                                function pollTaskLogs($tabLink, $tab, timestamp, delay, clearData) {
+                                                                    var instanceId = $tabLink.attr('data-taskInstanceId');
+                                                                    var actionLogId = $tabLink.attr('data-taskActionLogId');
+                                                                    var timestamp = $tabLink.attr('data-taskPollLastTimestamp');
+                                                                    var timestampEnded = $tabLink.attr('data-taskPollTimestampEnded');
+                                                                    var poll = $tabLink.attr('data-taskPolling');
+
+                                                                    if (poll !== 'true') {
+                                                                        console.log('not polling');
+                                                                        return;
+                                                                    }
+                                                                    if (actionLogId) {
+                                                                        var url = '../instances/' + instanceId + '/actionLogs/' + actionLogId + '/logs';
+                                                                    } else {
+                                                                        var url = '../instances/' + instanceId + '/logs';
+                                                                    }
+
+
+                                                                    if (timestamp) {
+                                                                        url = url + '?timestamp=' + timestamp;
+                                                                        if (timestampEnded) {
+                                                                            url = url + '&timestampEnded=' + timestampEnded;
+                                                                        }
+                                                                    }
+
+                                                                    timeout = setTimeout(function() {
+                                                                        $.get(url, function(data) {
+                                                                            var $modalBody = $tab.find('.taskLogArea')
+                                                                            if (clearData) {
+                                                                                $modalBody.empty();
+                                                                            }
+                                                                            var $table = $('<table></table>');
+
+                                                                            for (var i = 0; i < data.length; i++) {
+                                                                                var $rowDiv = $('<tr class="row rowSpacing"></tr>');
+                                                                                var timeString = new Date().setTime(data[i].timestamp);
+                                                                                var date = new Date(timeString).toLocaleString(); //converts to human readable strings
+
+                                                                                /*$rowDiv.append($('<div class="col-lg-4 col-sm-4"></div>').append('<div>' + date + '</div>'));*/
+
+                                                                                if (data[i].err) {
+                                                                                    $rowDiv.append($('<td class="col-lg-12 col-sm-12" style="color:red;"></td>').append('<span class="textLogs">' + date + '</span>' + '&nbsp;&nbsp;&nbsp;' + '<span>' + data[i].log + '</span>'));
+                                                                                } else {
+                                                                                    $rowDiv.append($('<td class="col-lg-12 col-sm-12" style="color:DarkBlue;"></td>').append('<span class="textLogs">' + date + '</span>' + '&nbsp;&nbsp;&nbsp;' + '<span>' + data[i].log + '</span>'));
+                                                                                }
+
+                                                                                $table.append($rowDiv);
+                                                                                // $table.append('<hr/>');
+
+                                                                            }
+
+
+                                                                            if (data.length) {
+                                                                                lastTimestamp = data[data.length - 1].timestamp;
+                                                                                console.log(lastTimestamp);
+                                                                                $modalBody.append($table);
+                                                                                $modalBody.scrollTop($modalBody[0].scrollHeight + 100);
+                                                                                $tabLink.attr('data-taskPollLastTimestamp', data[data.length - 1].timestamp);
+
+                                                                            }
+
+
+                                                                            console.log('polling again');
+                                                                            if ($tabLink.attr('data-taskPolling') === 'true' && $('#assignedExecute').data()['bs.modal'].isShown && !timestampEnded) {
+
+                                                                                pollTaskLogs($tabLink, $tab, $tabLink.attr('data-taskPollLastTimestamp'), 1000, false);
+
+                                                                            } else {
+                                                                                console.log('not polling again');
+                                                                            }
+                                                                        });
+                                                                    }, delay);
+                                                                }
+
+                                                                //updating footer
+                                                                $('.taskListFooter').text('Showing ' + data.length + ' of ' + data.length + ' entries');
+                                                                pageSetUp();
+                                                            };
 
 
 
@@ -4993,7 +4982,7 @@
 
 
                                                                        $.post('/blueprints/' + blueprintId + '/provision', reqBody, function(data) {
-                                                                           var $msg = $('<div></div>').append('<h3 style="font-size:16px;" class=\"alert alert-success\">Your selected Blueprint is being Launched. Kindly check back in a while.</h3>').append('Instance Id : ' + data.id).append('<br/>Instance Logs :- ');
+                                                                           var $msg = $('<div></div>').append('<h3 style="font-size:16px;" class=\"alert alert-success\">Your selected Blueprint is being Launched, kindly check back in a while.</h3>').append('Instance Id : ' + data.id).append('<br/>Instance Logs :- ');
 
                                                                            $launchResultContainer.find('.modal-body').empty();
                                                                            $launchResultContainer.find('.modal-body').append($msg);
