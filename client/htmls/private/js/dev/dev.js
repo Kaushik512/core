@@ -3741,15 +3741,19 @@
                                                                                 var autoSyncFlag = $(this).data('autosyncFlag');
 
                                                                                 console.log('autoSyncFlag', autoSyncFlag);
+                                                                                
 
                                                                                 //for getting the entire history related to a particular job...
                                                                                 $.get('../tasks/' + taskId + '/history', function(taskHistories) {
+                                                                                   
+                                                                                  
                                                                                     console.log(taskHistories);
 
                                                                                     for (var i = 0; i < taskHistories.length; i++) {
                                                                                         (function(i) {
                                                                                             var $trHistoryRow = $('<tr/>');
 
+                                                                                            $trHistoryRow.append($('<td></td>').addClass('build-number').append('<img class="center-block" style="height:20px;width:20px;" src="img/loading.gif" />'));
                                                                                             //condition to get the jobname as per the particular build number..
                                                                                             $.get('../jenkins/' + taskHistories[i].jenkinsServerId + '/jobs/' + taskHistories[i].jobName, function(job) {
                                                                                                 console.log(JSON.stringify(job));
@@ -3783,14 +3787,23 @@
 
                                                                                                             url = job.builds[k].url;
                                                                                                             // alert(url);
-                                                                                                            var $tdBuildNumber = $('<td/>').append('<a style="word-break: break-all;" href="' + url + '" title="' + url + '" target="_blank">' + taskHistories[i].buildNumber + '</a>');
-                                                                                                            $trHistoryRow.append($tdBuildNumber);
+                                                                                                          //  var $tdBuildNumber = $('<td/>');
+                                                                                                           // alert('spinm');
+                                                                                                            /*var $nodeListContainer = $('.build-number');
+                                                                                                            $nodeListContainer.find('img').remove();*/
+                                                                                                            
+                                                                                                            var $nodeListContainer = $('.build-number');
+                                                                                                            $nodeListContainer.find('img').remove();
+                                                                                                             timeout = setTimeout(function() {
+                                                                                                            $trHistoryRow.find('.build-number').append('<a style="word-break: break-all;" href="' + url + '" title="' + url + '" target="_blank">' + taskHistories[i].buildNumber + '</a>');
+                                                                                                             }, 1500);
+                                                                                                            
 
                                                                                                             buildFound = true;
                                                                                                             break;
                                                                                                         }
 
-
+                                                                                                        
                                                                                                     }
 
                                                                                                 }
