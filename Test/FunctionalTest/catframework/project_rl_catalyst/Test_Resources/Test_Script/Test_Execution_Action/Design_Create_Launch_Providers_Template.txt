@@ -365,7 +365,7 @@ Catalyst Choose Template and Save Setup
     Choose the Provider
     Choose the Available Images
     Choose the Region
-    Select the VPC
+    #Select the VPC
     Select the Subnet
     Select the Key Pair
     Choose Instance Size
@@ -935,7 +935,7 @@ Catlayst verfication of Instance Stop Setup and Disable of Ubuntu
 Chooses the Operating System as Ubuntu
     Click Element    xpath=.//*[@id='s2id_instanceOS']/a
     Input Text    xpath=.//*[@id='select2-drop']/div/input    ${OPERATING SYSTEM2}
-    Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
+    Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
 
 #Enters The Blueprint Name
     #Input Text    id=blueprintNameInput    ${BLUEPRINT NAME1}
@@ -1344,7 +1344,7 @@ Choose the Provider
     Sleep    1s
     Input Text    xpath=.//*[@id='select2-drop']/div/input    ${PROVIDER NAME}
     Sleep    1s
-    Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
+    Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
 
 
     #Click Element    css=#s2id_providerId > .select2-choice
@@ -1360,15 +1360,15 @@ Choose the Available Images
 
 Choose the Region
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='s2id_region']/a/span[1]
-    Input Text    xpath=.//*[@id='select2-drop']/div/input    US West (Oregon) | us-west-2
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
+    Input Text    xpath=.//*[@id='select2-drop']/div/input    US West
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
     Sleep    10s
 
 Select the Subnet
     Sleep    2s
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='s2id_subnetId']/a/span[1]
     Input Text    xpath=.//*[@id='select2-drop']/div/input    ${SUBNET NAME}
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
 
 Select the VPC
     Sleep    5s
@@ -1376,7 +1376,7 @@ Select the VPC
     Sleep    1s
     Input Text    css=#select2-drop > div > input    ${VPC}
     Sleep    1s
-    Click Element    css=ul > li > div
+    Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
 
 
 
@@ -1391,7 +1391,7 @@ Select the Key Pair
     Log    after click
     Input Text    css=#select2-drop .select2-input    cat_instances
     Sleep    1s
-    Click Element    xpath=//*[@id='select2-drop']/ul/li/div
+    Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
     
     
     
@@ -1404,7 +1404,7 @@ Choose Instance Size
     Log    after click
     Input Text    css=#select2-drop .select2-input    ${CentosInstanceSize}
     Sleep    1s
-    Click Element    xpath=//*[@id='select2-drop']/ul/li/div
+    Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
     
 
 
@@ -1779,7 +1779,7 @@ Chooses the Operating System
     Sleep    3s
     Input Text    xpath=.//*[@id='select2-drop']/div/input    ${OPERATING SYSTEM1}
     Sleep    2s
-    Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
+    Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
 
 #Choose Instance Size
     #Click Element    xpath=.//*[@id='s2id_intanceTypeControl']/a/span[1]
@@ -1802,7 +1802,7 @@ Chooses Organization
     Log    after click
     Input Text    css=#select2-drop .select2-input    ${ORGANIZATION NAME}
     Sleep    1s
-    Click Element    xpath=//*[@id='select2-drop']/ul/li/div
+    Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
 
 
 
@@ -1858,7 +1858,7 @@ Chooses The Business Group
     Log    after click
     Input Text    css=#select2-drop .select2-input    ${BUSINESS GROUP NAME}
     Sleep    1s
-    Click Element    xpath=//*[@id='select2-drop']/ul/li/div
+    Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
 
     
 Chooses The Project
@@ -1869,7 +1869,7 @@ Chooses The Project
     Log    after click
     Input Text    css=#select2-drop .select2-input    ${PROJECT NAME}
     Sleep    1s
-    Click Element    xpath=//*[@id='select2-drop']/ul/li/div    
+    Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span    
 
 
 
