@@ -190,7 +190,9 @@ module.exports.setRoutes = function(socketIo) {
 
     });
 
-    var jobId = crontab.scheduleJob("*/1 * * * *", function() { //This will call this function every 3 minutes 
+// Sync instance status AWS with Catalyst.
+
+    var jobId = crontab.scheduleJob("*/3 * * * *", function() { //This will call this function every 3 minutes 
         logger.debug("Cron Job run every 3 minutes!");
         var instanceState = socketIo.of('/insState');
         var socketList = [];
@@ -198,18 +200,18 @@ module.exports.setRoutes = function(socketIo) {
             if (err) {
                 logger.debug("Error while getElementBytting instance!");
             }
-            logger.debug("Got instance: ", JSON.stringify(instances));
+            logger.debug("Got instance: ");
             if (instances.length > 0) {
                 AWSProvider.getAWSProviderById(instances[0].providerId, function(err, aProvider) {
                     if (err) {
                         logger.debug("Failed to get Provider!");
                     }
-                    logger.debug("Got Provider: ", JSON.stringify(aProvider));
+                    logger.debug("Got Provider: ");
                     AWSKeyPair.getAWSKeyPairByProviderId(aProvider._id, function(err, aKeyPair) {
                         if (err) {
                             logger.debug("Failed to get KeyPair!");
                         }
-                        logger.debug("Got KeyPair: ", JSON.stringify(aKeyPair));
+                        logger.debug("Got KeyPair: ");
                         if (aKeyPair) {
                             var instanceIds = [];
                             var cryptoConfig = appConfig.cryptoSettings;
@@ -236,7 +238,7 @@ module.exports.setRoutes = function(socketIo) {
                                     if (err) {
                                         logger.debug("Failed to describe Instances from AWS!", err);
                                     }
-                                    logger.debug("Described Instances from AWS: ", JSON.stringify(awsInstances));
+                                    logger.debug("Described Instances from AWS: ");
                                     if (awsInstances) {
                                         var reservations = awsInstances.Reservations;
                                         for (var x = 0; x < reservations.length; x++) {
@@ -251,14 +253,7 @@ module.exports.setRoutes = function(socketIo) {
                                                         return;
                                                     }
 
-                                                    logger.debug("Exit updateInstanceState: ", JSON.stringify(data));
-                                                    instanceState.on('connection', function(socket) {
-                                                        logger.debug("socket: ",socket);
-                                                        socketList.push[socket];
-                                                        socket.on('open', function(instanceData) {
-                                                            logger.debug(instanceData);
-                                                        });
-                                                    });
+                                                    logger.debug("Exit updateInstanceState: ");
                                                 });
                                             }
                                         }
