@@ -154,6 +154,14 @@ String.prototype.capitalizeFirstLetter = function() {
                     </a>
                 </li>
                 <li style="margin-top:10px;">
+                    <a href="ajax/awslogs.html">
+                        <div>
+                            <i class="fa fa-tasks fa-2x"></i>
+                            <span style="margin-left:5px" class="trackAlign2">AWS Logs</span>
+                        </div>
+                    </a>
+                </li> 
+                <li style="margin-top:10px;">
                     <a href="ajax/jobs.html">
                         <div>
                             <i class="fa fa-tasks fa-2x"></i>
@@ -217,9 +225,9 @@ String.prototype.capitalizeFirstLetter = function() {
         <div id="content">
         </div> 
         <!--hiding the comment for no org available when the organization and environments are present-->
-        <!-- <div id="noenvwarning" class="hidden alert alert-warning noEnvWarning"><img style="width:50px;height:40px" src="img/warning.png" alt="warning"/><span style="margin-left:20px;">There are no Workzone items to display. Please check your </span><ul style="list-style-type:none;text-align:center"><li class="left-projects-links hidden" data-target="#Settings" navigation="Settings">
+        <div id="noenvwarning" class="hidden alert alert-warning noEnvWarning"><img style="width:50px;height:40px" src="img/warning.png" alt="warning"/><span style="margin-left:20px;">There are no Workzone items to display. Please check your </span><ul style="list-style-type:none;text-align:center"><li class="left-projects-links hidden" data-target="#Settings" navigation="Settings">
                                 <a class="navigationTab" href="#ajax/Settings/Dashboard.html" id="settingsNewClick"  onclick="setleftnavigation(this,'Settings');">&nbsp;SETTINGS</a></li></ul>
-        </div> -->
+        </div>
 
         <!--noEnv Error for consumer and designer-->
         <div id="noEnvError" class="hidden alert alert-warning noEnvWarningConsumerDesigner"><img style="width:50px;height:40px" src="img/warning.png" alt="warning"/><span style="margin-left:20px;">There are no Workzone items to display.</span>
@@ -340,14 +348,14 @@ function setleftnavigation(toplink, breadcrumbHeader) {
         $('#Workspace1').hide();
         $('#Settings_nav').show();
 
-    } /*else if (TabID === "settingsNewClick") {
+    } else if (TabID === "settingsNewClick") {
         $('#tree').empty()
         loadSettingsTree();
         foldTreeForSetting();
         $('#Workspace1').hide();
         $('#Settings_nav').show();
 
-    }*/ else if (TabID === "trackNew") {
+    } else if (TabID === "trackNew") {
         $('#Workspace1').hide();
         $('#Settings_nav').hide();
 
