@@ -22,13 +22,15 @@
     color: rgb(44, 55, 66); 
     font-weight: bold; 
     padding: 10px; 
-    font-size: 12px;
+    /*font-size: 12px;*/
+    font-size: 11px;
 }
 .menuTaskSpan{
     color: rgb(44, 55, 66); 
     font-weight: bold; 
     padding: 10px; 
-    font-size: 12px;
+    /*font-size: 12px;*/
+    font-size: 11px;
 }
 .paddingleft32{
     padding-left: 32px;

@@ -1323,7 +1323,6 @@
                                                                           //return '<div class="showmenuAppTask"><a class="btn1 showmenuAppTaskAnchor"><i class="fa fa-ellipsis-h showmenuAppTaskAnchorI"></i></a></div><div class="menuAppTask" style="display: none;"><span class="menuAppTaskSpan">App Links</span><ul class="paddingleft32"><li><a href="javascript:voi(0)" class="fontsize11">App Perf</a></li><li><a href="javascript:voi(0)" class="fontsize11">App Logs</a></li></ul><span class="menuAppTaskSpan">Task Links</span><ul class="paddingleft32"><li><a href="javascript:voi(0)" class="fontsize11">Deploy Task</a></li><li><a href="javascript:voi(0)" class="fontsize11">Build Task</a></li></ul></div>';
                                                                       },
                                                                       getmenuAppTask: function(data) {
-                                                                          var menuAppTaskLI1 = '';
                                                                           if (data.appUrls && data.appUrls.length) {
                                                                               for (var k = 0; k < data.appUrls.length; k++) {
                                                                                   // if (k == 2) {
@@ -1337,7 +1336,7 @@
                                                                                   menuAppTaskLI = menuAppTaskLI + tempApp;
                                                                               }
                                                                           }else{
-                                                                            menuAppTaskLI = "<li><a style='font-size:10px;' href='javascript:void(0)'>No AppLinks Available</a></li>";
+                                                                            menuAppTaskLI = "<li style='font-size:10px;color:#3276b1'>No AppLinks Available</li>";
                                                                           }
                                                                           $rowContainter.append('<td>' + menuAppTaskLI + '</td>');
 
@@ -1362,9 +1361,9 @@
                                                                                   }
                                                                               });
                                                                             //alert(data._id);
-                                                                            var tempTaskLinks = "<li>Fetching</li>";
+                                                                            var tempTaskLinks = "<li style='font-size:10px;color:#3276b1'>Fetching</li>";
                                                                           }else{
-                                                                            var tempTaskLinks = "<li>No TaskLinks Available</li>";
+                                                                            var tempTaskLinks = "<li style='font-size:10px;color:#3276b1'>No TaskLinks Available</li>";
                                                                             // var $ul = $('.domain-roles-caption[data-instanceId="' + data._id + '"]').find('.taskListLI');
                                                                             // //$ul.html("<span class='red'>Hello</span>");
                                                                             // //alert($ul.length);
@@ -1834,7 +1833,7 @@
                                                                   $rowContainter.find('.showmenuAppTask').click(function() {
                                                                       
                                                                       var $menu = $rowContainter.find('.menuAppTask');
-                                                                      alert($menu.length);
+                                                                      //alert($menu.length);
                                                                       if ($menu.is(':visible')) {
                                                                           $menu.hide();
                                                                       } else {
