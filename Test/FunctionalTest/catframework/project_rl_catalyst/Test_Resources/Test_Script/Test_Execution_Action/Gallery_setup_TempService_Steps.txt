@@ -48,11 +48,9 @@ Validate the No Organization for Template Type
     Clicks on Settings
     Clicks on Gallery Setup
     Clicks on Template Type
-    Sleep    2s
     Clicks on New Template Type Button
     Enters the Design Template name
     Chooses Template type Icon
-    Select type of the template
     Clicks on Template Save Button
 
 Organization not selected ErrorMessage
@@ -61,17 +59,14 @@ Organization not selected ErrorMessage
     Clicks on Templat type Cancel Button
     
 Validate the 15chr Template Typee Name
-    Sleep    2s
     Clicks on New Template Type Button
     Enters the 15Chr Template type name
     Chooses Template type Icon
     Select Created organization
-    Select type of the template
     Clicks on Template Save Button
 
 
 Validate the Blank Spaces Template Type Name
-    Sleep    2s
     Clicks on New Template Type Button
     Enters the Blank Spaces Temp Type Name
     Chooses Template type Icon
@@ -90,11 +85,9 @@ Template Type Name with Blank Spaces
 
 
 Validate the Empty Template Type Name
-    Sleep    2s
     Clicks on New Template Type Button
     Chooses Template type Icon
     Select Created organization
-    Select type of the template
     Clicks on Template Save Button
 
 Tempalte Type Name left Empty
@@ -109,12 +102,10 @@ Template type Name more than 15chr
 
 
 Catalyst User New Design Template Type
-    Sleep    2s
     Clicks on New Template Type Button
     Enters the Design Template name
     Chooses Template type Icon
     Select Created organization
-    Select type of the template
     Clicks on Template Save Button
     
 Validate the Edit Template name
@@ -145,12 +136,7 @@ Vaildate the Empty Template Name
 Enters the 15Chr Template type name
     Input Text    id=templatetypename    ${Vaild15ChrTempName}
 
-Select type of the template
-    Click Element    xpath=.//*[@id='s2id_templatetype']/a/span[1]
-    Sleep    3s
-    Input Text    xpath=.//*[@id='select2-drop']/div/input    ${Template Type}
-    Sleep    4s
-    Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
+
 
 
 Clicks on Templat type Cancel Button
@@ -253,7 +239,7 @@ Chooses Template Type
     Click Element    xpath=.//*[@id='s2id_templatetypename']/a
     Sleep    2s
     Input Text    xpath=.//*[@id='select2-drop']/div/input    ${TEMPLATE TYPENAME}
-    Sleep    2s
+    Sleep    1s
     Click Element    xpath=.//*[@id='select2-drop']/ul/li/div      #App FactoryT
     #Click Element    xpath=.//*[@id='select2-drop']/ul/li[2]/div      #DevopsRoles
     #Click Element    xpath=.//*[@id='select2-drop']/ul/li[3]/div      #Docker

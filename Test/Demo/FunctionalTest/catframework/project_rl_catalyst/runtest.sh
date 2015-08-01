@@ -1,1 +1,0 @@
-pybot --include Sanity --variable ENV:QA --variable ROOTPATH:project_rl_catalyst project_rl_catalyst\Test_Suites\CatalystSuites

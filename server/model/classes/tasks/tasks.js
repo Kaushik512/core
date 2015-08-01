@@ -1,4 +1,4 @@
-var logger = require('_pr/logger')(module);
+var logger = require('../../../lib/logger')(module);
 var mongoose = require('mongoose');
 var extend = require('mongoose-schema-extend');
 var ObjectId = require('mongoose').Types.ObjectId;
@@ -9,10 +9,6 @@ var ChefTask = require('./taskTypeChef');
 var JenkinsTask = require('./taskTypeJenkins');
 
 var TaskHistory = require('./taskHistory');
-var configmgmtDao = require('../../../model/d4dmasters/configmgmt');
-var Jenkins = require('../../../lib/jenkins');
-//var js2xmlparser = require("js2xmlparser");
-//var url = require('url');
 
 
 var Schema = mongoose.Schema;
@@ -65,12 +61,6 @@ var taskSchema = new Schema({
         required: true,
         trim: true
     },
-    description: {
-        type: String
-    },
-    jobResultURLPattern: {
-        type: [String]
-    },
     taskConfig: Schema.Types.Mixed,
     lastTaskStatus: String,
     lastRunTimestamp: Number,
@@ -117,20 +107,17 @@ taskSchema.methods.execute = function(userName, baseUrl, callback, onComplete) {
             callback(err, null);
             return;
         }
-        logger.debug("Task last run timestamp updated",JSON.stringify(taskExecuteData));
         self.lastRunTimestamp = timestamp;
         self.lastTaskStatus = TASK_STATUS.RUNNING;
-        //logger.debug("========================= ",JSON.stringify(self));
         self.save(function(err, data) {
             if (err) {
                 logger.error("Unable to update task timestamp");
                 return;
             }
-
             logger.debug("Task last run timestamp updated");
-            
-
         });
+
+
         if (!taskExecuteData) {
             taskExecuteData = {};
         }
@@ -155,43 +142,6 @@ taskSchema.methods.execute = function(userName, baseUrl, callback, onComplete) {
         if (taskExecuteData.buildNumber) {
             taskHistoryData.buildNumber = taskExecuteData.buildNumber;
         }
-        //var arrStr;
-        //var x;
-        logger.debug("+++++++++++++++++++++++ ",self.taskConfig.jobResultURL);
-        var acUrl=[];
-        if(self.jobResultURLPattern.length > 0){
-            /*arrStr = self.taskConfig.jobResultURL.split("-");
-            if(arrStr.length === 3){
-                x = taskExecuteData.buildNumber+"/"+arrStr[2].substr(arrStr[2].lastIndexOf("/")+1);
-                acUrl = arrStr[0]+"-"+arrStr[1]+"-"+x;
-            }*/
-            for(var i=0;i< self.jobResultURLPattern.length;i++){
-                acUrl.push(self.jobResultURLPattern[i].replace("$buildNumber",taskExecuteData.buildNumber));
-            }
-        }
-        //self.taskConfig.jobResultURL = acUrl;
-        logger.debug(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ",acUrl);
-        taskHistoryData.jobResultURL = acUrl;
-        if (taskHistoryData.taskType === TASK_TYPE.JENKINS_TASK) {
-            var taskConfig = self.taskConfig;
-            taskConfig.jobResultURL = acUrl;
-            Tasks.update({
-                "_id": new ObjectId(self._id)
-            },{
-            $set: {
-                taskConfig: taskConfig
-            }
-            }, {
-            upsert: false
-            },function(err, data) {
-                if (err) {
-                    logger.error("Unable to update task jobResultURL");
-                    return;
-                }
-                logger.debug("Task jobResultURL updated");
-                
-            });
-        }
         TaskHistory.createNew(taskHistoryData, function(err, taskHistoryEntry) {
             if (err) {
                 logger.error("Unable to make task history entry", err);
@@ -200,8 +150,6 @@ taskSchema.methods.execute = function(userName, baseUrl, callback, onComplete) {
             taskHistory = taskHistoryEntry;
             logger.debug("Task history created");
         });
-
-
 
         callback(null, taskExecuteData);
     }, function(err, status, resultData) {
@@ -240,7 +188,7 @@ taskSchema.methods.getChefTaskNodes = function() {
 };
 
 taskSchema.methods.getHistory = function(callback) {
-    TaskHistory.getHistoryByTaskId(this.id, function(err, tHistories) {
+    TaskHistory.getHistoryByTaskId(this._id, function(err, tHistories) {
         callback(err, tHistories);
     });
 };
@@ -259,12 +207,7 @@ taskSchema.statics.createNew = function(taskData, callback) {
         taskConfig = new JenkinsTask({
             taskType: TASK_TYPE.JENKINS_TASK,
             jenkinsServerId: taskData.jenkinsServerId,
-            jobName: taskData.jobName,
-            jobResultURL: taskData.jobResultURL,
-            jobURL: taskData.jobURL,
-            autoSyncFlag: taskData.autoSyncFlag,
-            isParameterized: taskData.isParameterized,
-            parameterized: taskData.parameterized
+            jobName: taskData.jobName
         });
     } else if (taskData.taskType === TASK_TYPE.CHEF_TASK) {
         var attrJson = null;
@@ -383,12 +326,7 @@ taskSchema.statics.updateTaskById = function(taskId, taskData, callback) {
         taskConfig = new JenkinsTask({
             taskType: TASK_TYPE.JENKINS_TASK,
             jenkinsServerId: taskData.jenkinsServerId,
-            jobName: taskData.jobName,
-            jobResultURL: taskData.jobResultURL,
-            jobURL: taskData.jobURL,
-            autoSyncFlag: taskData.autoSyncFlag,
-            isParameterized: taskData.isParameterized,
-            parameterized: taskData.parameterized
+            jobName: taskData.jobName
         });
     } else if (taskData.taskType === TASK_TYPE.CHEF_TASK) {
 
@@ -411,8 +349,7 @@ taskSchema.statics.updateTaskById = function(taskId, taskData, callback) {
         $set: {
             name: taskData.name,
             taskConfig: taskConfig,
-            taskType: taskData.taskType,
-            description: taskData.description
+            taskType: taskData.taskType
         }
     }, {
         upsert: false
@@ -445,26 +382,6 @@ taskSchema.statics.getTasksByNodeIds = function(nodeIds, callback) {
         }
         //console.log('data ==>', data);
         callback(null, tasks);
-
-    });
-};
-
-taskSchema.statics.updateJobUrl = function(taskId,taskConfig, callback) {
-    Tasks.update({
-        "_id": new ObjectId(taskId)
-    }, {
-        $set: {
-            taskConfig: taskConfig
-        }
-    }, {
-        upsert: false
-    }, function(err, updateCount) {
-        if (err) {
-            callback(err, null);
-            return;
-        }
-        logger.debug('Updated task:' + updateCount);
-        callback(null, updateCount);
 
     });
 };

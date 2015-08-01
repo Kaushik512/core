@@ -2,7 +2,7 @@
 This is a temproray class. these methods will me moved to model once mvc comes into pictured
 */
 var Cryptography = require('./utils/cryptography');
-var appConfig = require('_pr/config');
+var appConfig = require('../config/app_config');
 var uuid = require('node-uuid');
 var fileIo = require('./utils/fileio');
 

@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 var ObjectId = require('mongoose').Types.ObjectId;
 var validate = require('mongoose-validator');
-var logger = require('_pr/logger')(module);
+var logger = require('../../lib/logger')(module);
 var schemaValidator = require('./schema-validator');
 var configmgmtDao = require('../d4dmasters/configmgmt.js');
 
@@ -188,7 +188,7 @@ var BlueprintSchema = new Schema({
 
 });
 
-var Blueprint = mongoose.model('blueprints_old', BlueprintSchema);
+var Blueprint = mongoose.model('blueprints', BlueprintSchema);
 
 function generateBlueprintVersionNumber(prevVersion) {
     logger.debug("Enter generateBlueprintVersionNumber()", prevVersion);

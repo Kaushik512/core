@@ -7,11 +7,11 @@
 
 // This file act as a Util class which contains provider related util methods.
 
-var logger = require('_pr/logger')(module);
+var logger = require('../../lib/logger')(module);
 var currentDirectory = __dirname;
 var fs = require('fs');
 var path = require('path');
-var appConfig = require('_pr/config');
+var appConfig = require('../../config/app_config');
 var Cryptography = require('../../lib/utils/cryptography');
 
 // saveAwsPemFiles() capture all uploaded files from request and save.

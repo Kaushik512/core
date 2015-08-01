@@ -106,18 +106,8 @@ $(document).ready(function() {
 		}else{
 			$('#setting_tree').addClass('hide_nav');
 		}
-        if ($('body').hasClass("minified")) {
-            $('.trackAlign').hide();
-            $('.trackAlign1').hide();
-            $('.trackAlign2').hide();
-        } else {
-            $('.trackAlign').show();
-            $('.trackAlign1').show();
-            $('.trackAlign2').show();
-        }
 		e.preventDefault();
 	});
-
 
 	// HIDE MENU
 	$('#hide-menu >:first-child > a').click(function(e) {

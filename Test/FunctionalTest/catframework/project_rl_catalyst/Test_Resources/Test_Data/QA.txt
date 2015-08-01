@@ -9,15 +9,10 @@ Resource           catalyst.txt
 
 
 *** Variables ***
-${BROWSERTYPE}                    firefox                   
-${ENVIRONMENTSERVER}              http://d4d.relevancelab.com:3001                
-#http://10.0.1.206:3002/private/index.html#ajax/Settings/Dashboard.html
+${BROWSERTYPE}                    chrome             
+${ENVIRONMENTSERVER}         http://52.26.87.125:3001/public/login.html
 
 
-
-             
-
- 
 
 
 
@@ -34,10 +29,8 @@ ${PROJECT NAME}                  Catalyst
 ${PROJECT DESCRIPTION}           Catalyst product automation Description
 ${ENVIRONMENT NAME}              Dev
 ${CONFIG MANAGEMENT NAME}             RLChefServer
-
-
-
-
+${CONFIG MANAGEMENT USER NAME}         mycatqa
+${CONFIG MANAGEMENT URL}         https://api.opscode.com/organizations/cattest
 ${PROVIDER}             Data Center
 ${ASSIGN USERS}         Designer
 ${ASSIGN USERS1}        superadmin          #Consumer
@@ -52,7 +45,7 @@ ${TOTAL MEMORY}     604680kB
 ${FREE MEMORY}      298024kB
 ${ENVIRONMENTSER NAME}          _default
 ${NEW EMAIL}                  crickinfo@gmail.com
-${AlreadyExistOrg}            This entry is already registered. Try another?
+${AlreadyExistOrg}            Selected is already registered
 ${IPTEXT}                   undefined
 ${STATS}                    pending
 ${STATSYY}                  Pending
@@ -75,15 +68,6 @@ ${CENT OS}            Cent OS
 ${UBUNTU OS}            ubuntu
 ${SUITS}                stopped
 ${UserName}             root
-${RUNLIST}              recipe[apache2]
-${KEYPAIRNAME}           cat_instances
-${REGION NAME}           US West (Oregon) | us-west-2
-${SUBNET NAME}           subnet-aed68ce8 (us-west-2c)
-${NEW CONFIG NAME}       catserver
-${REGION NAME}            US West (Oregon) | us-west-2
-${BLUEPRINT TESTNAME}          TestingNew
-
-
 
 ${PHOENIX COMMERNCE WITHOUT COOKBOOK UBUNTUOS}            Phoenix Commernce without Cookbook UbuntuOS
 ${PHOENIX COMMERCE WITH COOKBOOK UBUNTUOS}          Phoenix Commerce With CookBook ubuntuOS
@@ -92,26 +76,17 @@ ${PHOENIX COMMERNCE WITHOUT COOKBOOK CENTOS}            Phoenix Commernce withou
 ${PHOENIX COMMERCE WITH COOKBOOK CENTOS}          Phoenix Commerce With CookBook CENTOS
 ${TASK NAME}          Test Task
 
+${USERPEMFILE}              ${ROOTPATH}\\Chef\\mycatqa.pem 
+${VALIDATORPEMFILE}      ${ROOTPATH}\\Chef\\cattest-validator.pem
+${KNIFERBFILE}                ${ROOTPATH}\\Chef\\knife.rb
+${CATALYSTPEM}                ${ROOTPATH}\\Chef\\catalyst.pem
+${CAT_INSTANCES}              ${ROOTPATH}\\Chef\\cat_instances.pem
 
-
-${CONFIG MANAGEMENT USER NAME}              mycatqa             
-${CONFIG MANAGEMENT URL}             https://api.opscode.com/organizations/cattest
-
-
-
-
-
-${USERPEMFILE}              ${ROOTPATH}/Chef/mycatqa.pem
-${VALIDATORPEMFILE}      ${ROOTPATH}/Chef/cattest-validator.pem
-${KNIFERBFILE}                ${ROOTPATH}/Chef/knife.rb
-${CATALYSTPEM}                ${ROOTPATH}/Chef/catalyst.pem
-${CAT_INSTANCES}              ${ROOTPATH}/Chef/cat_instances.pem
-
-${CENTOSIMG}                  ${ROOTPATH}/Images/centos.jpg
-${UBUNTUIMG}                  ${ROOTPATH}/Images/ubuntuu.jpg
-${APPICON}                    ${ROOTPATH}/Images/rel.jpg    
-${TEMPLTYPEICON}              ${ROOTPATH}/Images/index.jpg           
-${APACHEIMG}                  ${ROOTPATH}/Images/apache.jpg
+${CENTOSIMG}                  ${ROOTPATH}\\Images\\centos.jpg
+${UBUNTUIMG}                  ${ROOTPATH}\\Images\\ubuntuu.jpg
+${APPICON}                    ${ROOTPATH}\\Images\\rel.jpg    
+${TEMPLTYPEICON}              ${ROOTPATH}\\Images\\index.jpg           
+${APACHEIMG}                  ${ROOTPATH}\\Images\\apache.jpg
 
 ${JENKINSNAME}            JenkinsTAT
 ${JENKINS URL}               http://54.68.204.110:9091/
@@ -121,9 +96,8 @@ ${TASK NAME}              Task1
 ${JENKINS SERVER}         Jenkins
 ${JENKINS EDIT}           Jenkins
 ${JOB NAME}               catalyst_Get
-${RECIPE}                  recipe[apt]     
-${RECIPE1}                 recipe[apt]
-${Template Type}           Chef
+${RECIPE}                  recipe[apt]      
+
 ${OPERATING SYSTEM}        Cent OS
 ${CentosInstanceSize}           m1.small
 ${UbuntuInstanceSize}      t2.small      
@@ -162,18 +136,17 @@ ${MAT RUNLIST}             recipe[apt]          #recipe[cron]
 ${MAT RUNLIST1}            recipe[a],recipe[cron]
 ${MAT OS1}                 ubuntu
 ${UBUNTU MEM}              1016256kB
-${UBUNTU REC}              recipe[apt],recipe[apt]
+${UBUNTU REC}              recipe[apt]
 ${TEMPLATE TYPENAME}       CatAutomatn          #AppFactory
 ${random}                  adarsh
 ${ADD}                     apache2              #tomcat-all
 ${ACTBOOT1}                 Pending
 ${ACTBOOT2}                 Success
-${RUN}                       running
+${IP Centos}                 52.24.73.49
 ${AUTHN}                    Pem File 
 ${NAME}                     Bootstrap
 ${DUP MSG}                  An Instance with the same IP already exists.
 ${NAME1}                    Chef-Client-Run
-${NAME2}                    SSH-Shell
 ${TEAM1}                    Rel_Designer
 ${TEAM DESCRPN1}            Designer of Catalyst
 ${TEAM2}                    Rel_Consumer
@@ -187,40 +160,26 @@ ${PASSWD2}                  Consumer
 ${PASSWD11}                 Designer
 ${PASSWD22}                 Consumer 
 ${EDIT_INSTANCE_NAME}       Instance_Centos
-${ERRORMESSAGE}             Required        #Please enter instance name
+${ERRORMESSAGE}             Please enter instance name
 ${MORE INFO}                 SSH Terminal
 ${NO MATCH}                 No matches found
 ${ENVNAME}                  QA
 ${NAMEOFINSTANCE}           Instance_Centos
+${IP Ubuntu}                52.10.75.4
 ${IP UBUNTUSERNAME}         ubuntu
 ${EDIT_UBUNTU_INSTANCE_NAME}     Instance_Ubuntu
 ${DESIGNER_NAME}            Designer01
 ${DESIGNER_PASWD}           Designer01
 ${CONSUMER_NAME}            Consumer01
 ${CONSUMER_PASWD}           Consumer01
-${CENTOS NAME}              Instance_Centos
-${UBUNTU NAME}              Instance_Ubuntu
-${IP ADD UBUNTU}            54.68.147.50
-${IP Ubuntu}                54.68.147.50
-
-${IP ADD CENTOS}              52.24.178.71
-${IP Centos}                  52.24.178.71
-
+${CENTOS NAME}              "Instance_Centos"
+${UBUNTU NAME}              "Instance_Ubuntu"
+${IP ADD UBUNTU}             "52.10.75.4"
+${IP ADD CENTOS}             "52.24.73.49" 
 ${Proj1}                      Catalyst
 ${Proj2}                      Primary_Edu
 ${CookBkName}                 apt
-${UbuntuUser}                 ubuntu
-${MAT OS1}                    ubuntu
-${RUNLIST1}                   recipe[tomcat-all]
-${RUNLIST2}                   cron 
-${RUNLIST3}                   recipe[cron]
-${ALL}                        ALL
-${REQ}                        Required
-${VPC}                        vpc-b1f3ecd3 (172.31.0.0/16) Default
-${SECRTY GRP1}                sg-c00ee1a5 | all_open
-${SECRTY GRP2}                sg-c06faca4 | HTTP&S_SG
-${SECRTY GRP3}                sg-038f4d67 | SSH_SG
-${SECRTY GRP4}                sg-ab6faccf | Tomcat
+
 
 
 
@@ -250,9 +209,9 @@ ${ValidEditVMImage}            Windows 2008
 #${LOG2}                        ConsmrRL15j                        
 #${LOG3}                        DesgnrRL15j
 
-#${CATE1}                   AdminRL15j
-#${CATE2}                   ConsmrRL15j
-#${CATE3}                   DesgnrRL15j
+${CATE1}                   AdminRL15j
+${CATE2}                   ConsmrRL15j
+${CATE3}                   DesgnrRL15j
 
 #provider
 ${VaildNoProvider}   
@@ -298,7 +257,7 @@ ${VaildateBlankSpacesOrgName}       Relevance Labs
 ${VaildateEmptyOrgName}            
 ${VaildateSpecialChrOrgName}       RL&@Testing
 ${VaildateAlreadyExistChrOrgName}  phoenixInc
-${VaildOrgName}                    Relevance
+${VaildOrgName}                    Relevance_Labs
 ${VaildEditOrg}                    Relevance_Labs
 ${VaildEditOrgDomainName}       http://www.relevancelab.com
 
@@ -417,8 +376,8 @@ ${VaildEmptyValidatorname}
 ${VaildEmptyKnifename}
 
 
-${ValidateAlrdyExistConfigNameErrMsg}    This entry is already registered. Try another?
-${ValidateAlrdyExistOrgNameErrMsg}       This entry is already registered. Try another?
+${ValidateAlrdyExistConfigNameErrMsg}    Selected is already registered
+${ValidateAlrdyExistOrgNameErrMsg}       Selected is already registered
 ${VaildEmptyURLErrMsg}                   Please enter a valid Url
 ${VaildEmptyConfignameErrMsg}           Required
 ${VaildEmptyUsernameErrMsg}             Required
@@ -455,13 +414,11 @@ ${VaildateEmptyEmailName}
 ${ValidAldyExistLogName}             userc
 ${EDIT EMAIL}                        AdminDave@gmail.com
 ${NEW USER}                           newipl
-${UserLoginName}                         JohnsonM
 
 ${VaildateEmptyUserNameErrMsg}           Required    
 ${VaildateEmptyEmailNameErrMsg}          Required
 ${ValidNotLDAPExistErrMsg}              selected is NOT in LDAP.
 ${ValidAldyExistLogNameErrMsg}          Selected is already registered
-${VaildNoRolesErrMsg}                     Atleast one required
 
 
 #Gallery Setup
@@ -530,7 +487,3 @@ ${DEF TEAMNAME1}                Relevance_Labs_Admins
 ${DEF TEAMNAME2}                Relevance_Labs_DEV
 ${DEF TEAMNAME3}                Relevance_Labs_DevOps
 ${DEF TEAMNAME4}                Relevance_Labs_QA
-
-
-#Blueprint Validation
-${ERRROR MESSAGE}              Required.

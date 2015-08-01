@@ -7,7 +7,7 @@
 
 // This file act as a Controller which contains provider related all end points.
 
-var logger = require('_pr/logger')(module);
+var logger = require('../lib/logger')(module);
 var EC2 = require('../lib/ec2.js');
 var d4dModelNew = require('../model/d4dmasters/d4dmastersmodelnew.js');
 var AWSProvider = require('../model/classes/masters/cloudprovider/awsCloudProvider.js');
@@ -19,7 +19,7 @@ var masterUtil = require('../lib/utils/masterUtil.js');
 var usersDao = require('../model/users.js');
 var configmgmtDao = require('../model/d4dmasters/configmgmt.js');
 var Cryptography = require('../lib/utils/cryptography');
-var appConfig = require('_pr/config');
+var appConfig = require('../config/app_config');
 module.exports.setRoutes = function(app, sessionVerificationFunc) {
     app.all("/aws/providers/*", sessionVerificationFunc);
     var cryptoConfig = appConfig.cryptoSettings;

@@ -30,9 +30,7 @@ var vmimage = require('./routes_vmImages');
 
 var chefClientExecution = require('./routes_chefClientExecutionResponse');
 
-var appConfig = require('_pr/config');
-
-var cloudformation = require('./routes_cloudformation');
+var appConfig = require('../config/app_config');
 
 var notification = require('./routes_notification');
 
@@ -81,8 +79,6 @@ module.exports.setRoutes = function(app) {
 
     vmimage.setRoutes(app, sessionVerificationFunc);
     chefClientExecution.setRoutes(app);
-
-    cloudformation.setRoutes(app, sessionVerificationFunc);
 
     app.get('/', function(req, res) {
         res.redirect('/private/index.html');

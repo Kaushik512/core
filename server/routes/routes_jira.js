@@ -1,4 +1,4 @@
-var logger = require('_pr/logger')(module);
+var logger = require('../lib/logger')(module);
 var Jira = require('../lib/jira');
 module.exports.setRoutes = function(app,sessionVerificationFunc){
 	app.all('/jira/*',sessionVerificationFunc);

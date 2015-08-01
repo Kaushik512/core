@@ -1,7 +1,6 @@
 var jenkinsApi = require('jenkins-api');
-var logger = require('_pr/logger')(module);
+var logger = require('./logger')(module);
 var url = require('url');
-var fs = require('fs');
 
 
 
@@ -112,31 +111,9 @@ var Jenkins = function(options) {
         });
     };
 
-    this.getJobsBuildNumber = function(jobName,callback) {
-        jenkins.last_build_info(jobName, function(err, data) {
-            if (err) {
-                logger.error(err);
-                callback(err, null);
-                return;
-            }
-            callback(null, data);
-        });
-    };
 
-    this.updateJob = function(jobName,callback){
-        //var config = fs.readFileSync("/home/gobinda/Gobinda/config.xml", 'ascii');
-        jenkins.update_job(jobName, function(config) {
-            //return config.replace('development',"dev");
-            },function(err, data) {
-                if(err){
-                    logger.debug("Error while updating job in jenkins: ",err);
-                    callback(err,null);
-                }
-                logger.debug("Update success jenkins job: ",JSON.stringify(data));
-                callback(null,data);
-        });
 
-    };
+
 }
 
 module.exports = Jenkins;
