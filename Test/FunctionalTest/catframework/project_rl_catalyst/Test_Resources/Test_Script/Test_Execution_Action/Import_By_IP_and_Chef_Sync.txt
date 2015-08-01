@@ -18,7 +18,6 @@ Resource           ${CATALYST ACTION}/Gallery_setup_TempService_Steps.txt
 
 *** Variables ***
 
-
 *** Keywords ***
 Catalyst Import an CentOS Instance By IP
     Clicks on Settings
@@ -40,7 +39,6 @@ Catalyst Import an CentOS Instance By IP
     Verify the Operation as BootStrap
     Verfify the Status of the CentOAS Instance
     Clicks on Back To Instances
-    Sleep    5s
 
 Catalyst Import an Ubuntu Instance By IP
     Clicks on Settings
@@ -65,7 +63,7 @@ Catalyst Import an Ubuntu Instance By IP
 
 
 Catalyst Verfication of Duplicate Node
-    Clicks on Inport New IP Button
+    Clicks on Inport By IP Button
     Enters the IP Address of CentOS Box
     Select the Operating System of the Box
     Input the User Name for IP
@@ -76,7 +74,7 @@ Catalyst Verfication of Duplicate Node
     Clicks on Cancel Bbutoon
 
 Catalyst Verfication Ubuntu Duplicate Node
-    Clicks on Inport New IP Button
+    Clicks on Inport By IP Button
     Enters the IP Address of Ubuntu Box
     Select the Operating System as Ubuntu
     Input the Ubuntu User Name for IP
@@ -92,7 +90,7 @@ Catalyst Verfication Ubuntu Duplicate Node
 
 
 
-Catalyst Import By IP Chef Client run,SSH,Stop,Start
+Catalyst Import By IP Chef Client run
     Clicks on Settings
     Clicks on Workzone Button
     Sleep    2s
@@ -115,36 +113,14 @@ Catalyst Import By IP Chef Client run,SSH,Stop,Start
     Input the Usrname in Terminal
     Select Authenticationtype as PEM
     Upload the PemFile to ssh
-    Clicking on the SubmitButton
+    Clicks on SubmitButton
     Sleep    5s
-    Clicks on Close the Terminal
-    Sleep    2s 
-    Clicks on Contreol Panel
-    Clicks on Action History
-    Verfiy the operation as SSH
-    Verfiy the SSH-Status after update
-    Clicks on Back To Instances
-
-Catalyst Verfication of IP,Status,Chef,SSH,MoreInfo and frm Ctrlpanel
-    Verfication of IP Address from card view
-    Verfication of status from card view
-    Verfication of chefclient run from card view
-    Verfication of SSH from card view
-    Verification of Stop toggler disabled
-    Verfication of MoreInfo from card view
-    Clicks on Contreol Panel
-    Sleep    4s
-    Verfication of Machine status from control panel
-    Getting the Total Memory of the Machine from control panel
-    Getting the Free Memory of the Machine from control panel
-    Verfiying the OS the Machine from control panel
-    Getting the Version of the Machine from control panel
-    Verfiying Bootstrap status from control panel
-    Verfiying the Runlist from control panel
-    Clicks on Back To Instances
+    Clicks on Close the Terminal 
 
 
-Catalyst Import By IP Chef Client run,SSH,Stop,Start on Ubuntu Instance
+
+
+Catalyst Import By IP Chef Client run on Ubuntu Instance
     Clicks on Settings
     Clicks on Workzone Button
     Sleep    2s
@@ -161,40 +137,10 @@ Catalyst Import By IP Chef Client run,SSH,Stop,Start on Ubuntu Instance
     Verify the Operation as Chef-Client-Run
     Verfiy the Chef Client Status after update
     Clicks on Back To Instances
-    Sleep    2s
-    Clicks on SSH for ubuntu instance
-    Sleep    3s
-    Input the Ubuntu Usrname in Terminal
-    Select Authenticationtype as PEM
-    Upload the PemFile to ssh
-    Clicking on the SubmitButton
-    Sleep    5s
-    Clicks on Close the Terminal
-    Sleep    2s 
-    Clicks on Contreol Panel
-    Clicks on Action History
-    Verfiy the operation as SSH
-    Verfiy the SSH-Status after update
-    Clicks on Back To Instances
 
 
-Catalyst Verfication of IP,Status,Chef,SSH,MoreInfo on UbuntuIns frm Ctrlpanel
-    Verfication of IP Adres ubuntu from card view
-    Verfication of status from card view
-    Verfication of chefclient run from card view
-    Verfication of SSH from card view
-    Verification of Stop toggler disabled
-    Verfication of MoreInfo from card view
-    Clicks on Contreol Panel
-    Sleep    4s
-    Verfication of Machine status from control panel
-    Getting the Total Memory of the Machine from control panel
-    Getting the Free Memory of the Machine from control panel
-    Verfiying the UbuntuOS the Machine from control panel
-    Getting the Version of the Machine from control panel
-    Verfiying Bootstrap status from control panel
-    Verfiying the ubuntu Runlist from control panel
-    Clicks on Back To Instances
+
+
 
 
 
@@ -221,10 +167,15 @@ Catalyst Check and Edit the Instance Name
     Enters the Empty Edit name
     Clicks on Edit Save Button of the instance
     Verfiy the Message Displayed of the Instance
-    Sleep    2s
+    Clicks on OK Button after the Validation of Message
+    Clicks on Close Button after Validation
+    Clicks on Edit Button of the Instance Imported
     Enters the New Edit Instance Name
     Clicks on Edit Save Button of the instance
-
+    ##Verify Edited Name of the Instance
+    ##Clicks on More Info Button of the Imported Node
+    ##Sleep    1s
+    ##Verify the Instance Logs Pop up is Displayed
 
 
 Catalyst Check and Edit the Ubuntu Instance Name
@@ -232,14 +183,20 @@ Catalyst Check and Edit the Ubuntu Instance Name
     Clicks on Workzone Button
     Clicks on Button to your > Environment
     Sleep    4s
-    Clicks on Edit Button of the UbuntuIns Imported
+    Clicks on Edit Button of the Ubuntu Instance Imported
     Enters the Empty Edit name
     Clicks on Edit Save Button of the instance
     Verfiy the Message Displayed of the Instance
-    Sleep    2s
+    Clicks on OK Button after the Validation of Message
+    Clicks on Close Button after Validation
+    Clicks on Edit Button of the Ubuntu Instance Imported
     Enters the New Edit Ubuntu Instance Name
     Clicks on Edit Save Button of the instance
-    
+    ##Verify Edited Name of the Instance
+    ##Clicks on More Info Button of the Imported Node
+    ##Sleep    1s
+    ##Verify the Instance Logs Pop up is Displayed
+
 
 
 
@@ -364,85 +321,13 @@ Catlayst Importing the Instance Chef Sync
 #//div[@class='domain-roles']/div[@data-blueprintname='52.24.73.49']
 #//div[@class='messageDiv']/div
 
-
-Clicks on Inport New IP Button
-    Sleep    1s
-    #Execute JavaScript    $('#divinstancescardview').attr('style','display:none')
-    #Sleep    1s
-    Click Element    id=ipaddressimport
-    
-
-
-
-Verfication of IP Address from card view
-    Sleep    4s
-    ${IP VALUE}=    Get Text    xpath=//strong[@class='instanceip']
-    Log    ${IP VALUE} is the IP Address of the Centos Machine
-
-Verfication of IP Adres ubuntu from card view
-    Sleep    4s
-    ${IP VALUE}=    Get Text    xpath=//strong[@class='instanceip']
-    Log    ${IP VALUE} is the IP Address of the ubuntu Machine    
-
-Verfication of status from card view
-    Element Should Contain    xpath=//*[@class='instance-state instance-state-text-started']    ${RUN}
-
-Verfication of chefclient run from card view
-    Element Should Be Visible    xpath=.//*[@id='divinstancescardview']/div/div/ul/li/div/div/div[1]/div/div/div[4]/div[1]/a[@class='chefClientRunlistImage actionbuttonChefClientRun instance-bootstrap-list-image']
-
-Verfication of SSH from card view
-    Element Should Be Visible    xpath=.//*[@id='divinstancescardview']/div/div/ul/li/div/div/div[1]/div/div/div[4]/div[2]/a[@class='sshIcon devTOP']
-
-Verification of Stop toggler disabled
-    Element Should Be Visible    xpath=.//*[@id='divinstancescardview']/div/div/ul/li/div/div/div/div/div/div[4]/div[@class='startstoptoggler shutdown']    
-
-Verfication of MoreInfo from card view
-    Element Should Be Visible    xpath=.//*[@id='divinstancescardview']/div/div/ul/li/div/div/div/div/div/div[4]/span/a[@class='moreInfo']
-
-Verfication of Machine status from control panel
-    ${MACHINE STATUS}=    Get Text    xpath=.//*[@id='collapseHardware']/div/table/tbody/tr[1]/td[3]
-    Log    ${MACHINE STATUS}
-
-Getting the Total Memory of the Machine from control panel
-    ${TOTAL MEM}=    Get Text    xpath=.//*[@id='collapseHardware']/div/table/tbody/tr[2]/td[3]
-    Log    ${TOTAL MEM}    
-
-Getting the Free Memory of the Machine from control panel
-    ${FREE MEM}=    Get Text    xpath=.//*[@id='collapseHardware']/div/table/tbody/tr[3]/td[3]
-    Log    ${FREE MEM}        
-
-Verfiying the OS the Machine from control panel
-    Element Should Contain    xpath=.//*[@id='collapseSoftware']/div/table/tbody/tr[1]/td[3]    ${MAT OS}
-
-Verfiying the UbuntuOS the Machine from control panel
-    Element Should Contain    xpath=.//*[@id='collapseSoftware']/div/table/tbody/tr[1]/td[3]    ${MAT OS1}
-
-
-
-Getting the Version of the Machine from control panel
-    ${VERSION}=    Get Text    xpath=.//*[@id='collapseSoftware']/div/table/tbody/tr[2]/td[3]
-    Log    ${VERSION}
-
-Verfiying Bootstrap status from control panel
-    Element Should Contain    xpath=.//*[@id='collapseConfigmgmt']/div/table/tbody/tr[1]/td[3]    ${SATSS}
-
-Verfiying the Runlist from control panel
-    Element Should Contain    xpath=.//*[@id='collapseConfigmgmt']/div/table/tbody/tr[2]/td[3]    ${RUNLIST}
-
-Verfiying the ubuntu Runlist from control panel
-    Element Should Contain    xpath=.//*[@id='collapseConfigmgmt']/div/table/tbody/tr[2]/td[3]    ${RUNLIST1}
-
-
 Clicks on Close the Terminal
     Sleep    2s
     Click Element    xpath=.//*[@id='modalSSHShellContainer']/div/div/div[1]/button
 
 
 Input the Usrname in Terminal
-    Input Text    id=ssh-username    ${UserName}
-
-Input the Ubuntu Usrname in Terminal
-    Input Text    id=ssh-username    ${UbuntuUser}    
+    Input Text    id=username    ${UserName}
 
 Select Authenticationtype as PEM
     Click Element    xpath=.//*[@id='s2id_ssh-pemFileCheckbox']/a/span[1]   
@@ -452,7 +337,7 @@ Select Authenticationtype as PEM
 Upload the PemFile to ssh
     Choose File    xpath=.//*[@id='ssh-pemfileInput']    ${CAT_INSTANCES}
 
-Clicking on the SubmitButton
+Clicks on SubmitButton
     Click Element    xpath=.//*[@id='ssh-login-form']/div[7]/button[1]
 
 Verify the Node Importedd
@@ -465,10 +350,10 @@ Node is Inported in the  Environment
     Element Should Contain    xpath=//div[@class='domain-roles-heading']//span[text()='{IP Centos}']
 
 Verify the IP Address
-    Element Should Contain    xpath=.//*[@id='deleteInstanceForm']/div[2]/strong/span    ${CENTOS NAME}
+    Element Should Contain    xpath=.//*[@id='deleteInstanceForm']/div[2]/span    ${CENTOS NAME}
 
 Verify the Ubuntu IP Address
-    Element Should Contain    xpath=.//*[@id='deleteInstanceForm']/div[2]/strong/span    ${UBUNTU NAME}
+    Element Should Contain    xpath=.//*[@id='deleteInstanceForm']/div[2]/span    ${UBUNTU NAME}
 
 Verfiy the Organization is Disabled
     Element Should Be Disabled     xpath=.//*[@id='s2id_chefImportOrgSelect']/a
@@ -515,11 +400,6 @@ Clicking on the Import Nodes Button in Config Mgmt Page
 Clicks on SSH for instance
     Click Element    xpath=//div[@class='domain-roles-caption'][//div[//span[text()='${IP Centos}']]]/div[4]/div[2]/a
 
-Clicks on SSH for ubuntu instance
-    Click Element    xpath=//div[@class='domain-roles-caption'][//div[//span[text()='${IP Ubuntu}']]]/div[4]/div[2]/a
-
-
-
 Click on the Instance To Be Deleted
     Sleep    2s
     Click Element    xpath=//div[@class='domain-roles']/div[@data-blueprintname='${IP Centos}']
@@ -534,11 +414,11 @@ Clicks on the Dlt Button to Delete the Instance
     Sleep    3s
     Click Element    id=removeInstance
 
-Verify the Name of the Instance as IP Address   
-    Element Should Contain    xpath=.//*[@id='deleteInstanceForm']/div[2]/strong/span    ${IP ADD CENTOS}
+Verify the Name of the Instance as IP Address
+    Element Should Contain    xpath=.//*[@id='deleteInstanceForm']/div[2]/span    ${IP ADD CENTOS}
 
 Verify the Name of the Ubuntu Instance as IP Address
-    Element Should Contain    xpath=.//*[@id='deleteInstanceForm']/div[2]/strong/span    ${IP ADD UBUNTU}    
+    Element Should Contain    xpath=.//*[@id='deleteInstanceForm']/div[2]/span    ${IP ADD UBUNTU}    
 
 Select the CheckBox to Delete
     Sleep    1s
@@ -547,7 +427,7 @@ Select the CheckBox to Delete
 Clicks on the Delete Button to Delete the Instance
     Sleep    1s
     Click Element    xpath=//*[text()='Delete']
-    Sleep    4s
+    Sleep    3s
 
 Clicks on DevOps Setupp 
     Click Element    xpath=//*[text()='DevOps Setup']
@@ -607,13 +487,13 @@ Enters the Empty Edit name
 
 Verfiy the Message Displayed of the Instance
     Sleep    1s
-    Element Should Contain    xpath=.//*[@id='instanceEditName-error']    ${ERRORMESSAGE}
+    Element Should Contain    xpath=//div[@class='bootbox-body']    ${ERRORMESSAGE}
 
 Clicks on Edit Button of the Instance Imported
     Sleep    3s
     Click Element    xpath=//div[@class='domain-roles-heading'][//span[text()='${IP Centos}']]/a
 
-Clicks on Edit Button of the UbuntuIns Imported
+Clicks on Edit Button of the Ubuntu Instance Imported
     Sleep    3s
     Click Element    xpath=//div[@class='domain-roles-heading'][//span[text()='${IP Ubuntu}']]/a
 
@@ -658,19 +538,6 @@ Verfiy the Chef Client Status after update
     Log    ${STAGE}
     Log    ${ACTBOOT2}
     Should Be Equal    ${STAGE}     ${ACTBOOT2} 
-
-Verfiy the operation as SSH
-    Sleep    1s
-    Element Should Contain    xpath=.//*[@id='tableactionHistory']/tbody/tr[3]/td[1]    ${NAME2}
-
-Verfiy the SSH-Status after update
-    Sleep    1 minute
-    ${STAGE}=    Get Element Attribute    xpath=.//*[@id='tableactionHistory']/tbody/tr[3]/td[2]/img@title
-    Log    ${STAGE}
-    Log    ${ACTBOOT2}
-    Should Be Equal    ${STAGE}     ${ACTBOOT2} 
-
-
 
 Clicks on Button to your > Environment
     #Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=//li[contains(., "Catalyst")]/./span[3]              #Catalyst project
@@ -717,7 +584,7 @@ Clicks on Cancel Bbutoon
 
 Clicks on Cloose of Update Button
     Sleep    5s
-    Wait Until Keyword Succeeds    1 minute     5 seconds      Click Element    xpath=.//*[@id='instanceLogModalContainer']/div/div/div[3]/button      #close
+    Click Element    xpath=.//*[@id='instanceLogModalContainer']/div/div/div[3]/button
 
 
 
@@ -733,14 +600,14 @@ Verify the Operation as BootStrap
 
 Verfify the Status of the CentOAS Instance
     Sleep    50s
-    ${STATUSS}=    Get Element Attribute    xpath=.//*[@id='tableactionHistory']/tbody/tr[1]/td[2]/img@title
+    ${STATUSS}=    Get Element Attribute    xpath=.//*[@id='tableactionHistory']/tbody/tr[1]/td[2]/img@data-original-title
     Log    ${STATUSS}
     Log    ${ACTBOOT2}
     Should Be Equal    ${STATUSS}     ${ACTBOOT2}
 
 Verfify the Status of the UbuntuOS Instance 
     Sleep    50s
-    ${STATUSS}=    Get Element Attribute    xpath=.//*[@id='tableactionHistory']/tbody/tr[1]/td[2]/img@title
+    ${STATUSS}=    Get Element Attribute    xpath=.//*[@id='tableactionHistory']/tbody/tr[1]/td[2]/img@data-original-title
     Log    ${STATUSS}
     Log    ${ACTBOOT2}
     Should Be Equal    ${STATUSS}     ${ACTBOOT2}
@@ -988,7 +855,7 @@ Catalyst Creation of Jenkins Task in Environment
     Clicks on User Created Organization
     Clicks on User Created BusinessGroup
     Clicks on > Button to your Environment
-    #Clicks on Orchestration Tab
+    Clicks on Orchestration Tab
     Clicks on New Button of Jenkins
     Clicks on Choose Task Type of Jenkins
     Enter the Task Name of Jenkins
@@ -1136,7 +1003,7 @@ Clicks on Jenkins Save Button
 Clicks on Jenknis New Button
     Click  Element    xpath=.//*[@id='content']/div/div/div/div/div[1]/div/div/a[2]
 
-#Clicks on Orchestration Tab
+Clicks on Orchestration Tab
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='myTab3']/li[3]/a
 
 

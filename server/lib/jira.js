@@ -1,4 +1,4 @@
-var logger = require('_pr/logger')(module);
+var logger = require('../lib/logger')(module);
 
 //var jira = require('nodejs-jira-wrapper');
 var JiraApi = require('jira').JiraApi;

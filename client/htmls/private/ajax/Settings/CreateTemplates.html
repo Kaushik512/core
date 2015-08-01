@@ -80,19 +80,6 @@
                                           </select>
                                           </div>
                                        </div>
-
-                                       <div class="col-lg-6 col-md-6" style="margin-top:20px">
-                                                <div class="smart-forms">
-                                                   <label>Template File:</label>
-                                                   <!-- <span class="templateFile"data-original-title='Jenkins Log' data-placement='top' rel='tooltip'><i class='fa fa-question'></i>
-                                                   </span> -->
-                                                   
-                                                   <label for="validatorpemfile" class="field file">
-                                                      <div class="imgdiv" value="1"></div>
-                                                      <span class="button btn-primary">Browse</span><input id="template" keyfield="configname" type="file" onchange="this.nextSibling.value = this.value"  cdata="catalyst" class="gui-file"><input type="text" readonly="" class="gui-input">
-                                                   </label>
-                                                </div>
-                                             </div>
                                        
                                     
                                        <div class="col-lg-12 col-md-12">
@@ -459,15 +446,12 @@
 <script>
    //Form Name
    $(document).ready(function() {
-      pageSetUp();
    $(".choosetemplateType").select2();
    $(".choosedockerRepo").select2();
    $(".choosechefserver").trigger('change').select2();
    $("select").select2();
    //isUserTypeSuperAdmin();
    });
-
-   
 
    function isUserTypeSuperAdmin(){
     $.get('/d4dMasters/loggedInUser',function(data){

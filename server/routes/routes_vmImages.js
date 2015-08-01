@@ -7,18 +7,18 @@
 
 // This file act as a Controller which contains VMImage related all end points.
 
-var logger = require('_pr/logger')(module);
+var logger = require('../lib/logger')(module);
 var EC2 = require('../lib/ec2.js');
 var VMImage = require('../model/classes/masters/vmImage.js');
 var AWSProvider = require('../model/classes/masters/cloudprovider/awsCloudProvider.js');
-var appConfig = require('_pr/config');
+var appConfig = require('../config/app_config');
 var blueprintsDao = require('../model/dao/blueprints');
 var AWSKeyPair = require('../model/classes/masters/cloudprovider/keyPair.js');
 var masterUtil = require('../lib/utils/masterUtil.js');
 var usersDao = require('../model/users.js');
 var configmgmtDao = require('../model/d4dmasters/configmgmt.js');
 var Cryptography = require('../lib/utils/cryptography');
-var appConfig = require('_pr/config');
+var appConfig = require('../config/app_config');
 module.exports.setRoutes = function(app, sessionVerificationFunc) {
     app.all('/vmimages/*', sessionVerificationFunc);
     var cryptoConfig = appConfig.cryptoSettings;

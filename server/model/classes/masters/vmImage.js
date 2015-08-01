@@ -7,7 +7,7 @@
 
 // This file act as a Model which contains vmImage related all dao methods.
 
-var logger = require('_pr/logger')(module);
+var logger = require('../../../lib/logger')(module);
 var mongoose = require('mongoose');
 var extend = require('mongoose-schema-extend');
 var ObjectId = require('mongoose').Types.ObjectId;

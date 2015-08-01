@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 var ObjectId = require('mongoose').Types.ObjectId;
-var logger = require('_pr/logger')(module);
+var logger = require('../../lib/logger')(module);
 
 var Schema = mongoose.Schema;
 var LogSchema = new Schema({

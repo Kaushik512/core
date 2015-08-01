@@ -131,10 +131,6 @@ function getDefaultsConfig() {
             host: 'localhost',
             port: '27017'
         },
-        authStrategy: {
-            local: false,
-            externals: true
-        },
         ldap: {
             host: '54.68.204.110',
             port: 389,
@@ -150,8 +146,7 @@ function getDefaultsConfig() {
             baseDn: 'dc=rlindia,dc=com',
             ou: ''*/
         },
-        //logServerUrl: 'http://54.186.108.35/index.html#/dashboard/file/logstash.json',
-        logServerUrl: '',
+        logServerUrl: 'http://54.186.108.35/index.html#/dashboard/file/logstash.json',
         features: {
             appcard: false
         },
@@ -263,7 +258,7 @@ function getConfig(config, options) {
 
 function installPackageJson() {
     console.log("Installing node packages from pacakge.json");
-    var procInstall = spawn('npm', ['install','--unsafe-perm']);
+    var procInstall = spawn('npm', ['install']);
     procInstall.stdout.on('data', function(data) {
         console.log("" + data);
     });
