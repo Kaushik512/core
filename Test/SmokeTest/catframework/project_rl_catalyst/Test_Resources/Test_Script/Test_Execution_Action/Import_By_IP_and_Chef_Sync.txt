@@ -640,7 +640,10 @@ Verfify the Status of the UbuntuOS Instance
     Should Be Equal    ${Ubuntu_IMP_IP_SUCCESS}     ${SATSSYY}
 
 Clicks on Inport By IP Button
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    id=ipaddressimport
+    Sleep    1s
+    Execute JavaScript    $('#divinstancescardview').attr('style','display:none')
+    Sleep    1s
+    Click Element    id=ipaddressimport
 
 Enters the IP Address of CentOS Box
     Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    id=instanceFQDN    ${IP Centos}

@@ -386,6 +386,7 @@
 
                                                                            $.get('/instances/search/' + urlParams.org + '/' + urlParams['bg'] + '/' + urlParams.projid + '/' + urlParams.envid + '/' + encodeURIComponent($('#instanceSearchQuery').val()), function(data) {
                                                                                console.log(JSON.stringify(data.instances.length));
+
                                                                                //display statistics
                                                                                //$('#instancesearchmessage').html('Returned ' + data.instances.length + ' results (' + data.queryduration + ' seconds)');
                                                                                $('#instancesearchmessage').html('Returned ' + data.instances.length + ' result(s)');
@@ -3741,15 +3742,19 @@
                                                                                 var autoSyncFlag = $(this).data('autosyncFlag');
 
                                                                                 console.log('autoSyncFlag', autoSyncFlag);
+                                                                                
 
                                                                                 //for getting the entire history related to a particular job...
                                                                                 $.get('../tasks/' + taskId + '/history', function(taskHistories) {
+                                                                                   
+                                                                                  
                                                                                     console.log(taskHistories);
 
                                                                                     for (var i = 0; i < taskHistories.length; i++) {
                                                                                         (function(i) {
                                                                                             var $trHistoryRow = $('<tr/>');
 
+                                                                                            $trHistoryRow.append($('<td></td>').addClass('build-number').append('<img class="center-block" style="height:20px;width:20px;" src="img/loading.gif" />'));
                                                                                             //condition to get the jobname as per the particular build number..
                                                                                             $.get('../jenkins/' + taskHistories[i].jenkinsServerId + '/jobs/' + taskHistories[i].jobName, function(job) {
                                                                                                 console.log(JSON.stringify(job));
@@ -3783,14 +3788,23 @@
 
                                                                                                             url = job.builds[k].url;
                                                                                                             // alert(url);
-                                                                                                            var $tdBuildNumber = $('<td/>').append('<a style="word-break: break-all;" href="' + url + '" title="' + url + '" target="_blank">' + taskHistories[i].buildNumber + '</a>');
-                                                                                                            $trHistoryRow.append($tdBuildNumber);
+                                                                                                          //  var $tdBuildNumber = $('<td/>');
+                                                                                                           // alert('spinm');
+                                                                                                            /*var $nodeListContainer = $('.build-number');
+                                                                                                            $nodeListContainer.find('img').remove();*/
+                                                                                                            
+                                                                                                            var $nodeListContainer = $('.build-number');
+                                                                                                            $nodeListContainer.find('img').remove();
+                                                                                                             timeout = setTimeout(function() {
+                                                                                                            $trHistoryRow.find('.build-number').append('<a style="word-break: break-all;" href="' + url + '" title="' + url + '" target="_blank">' + taskHistories[i].buildNumber + '</a>');
+                                                                                                             }, 1500);
+                                                                                                            
 
                                                                                                             buildFound = true;
                                                                                                             break;
                                                                                                         }
 
-
+                                                                                                        
                                                                                                     }
 
                                                                                                 }
@@ -4047,7 +4061,7 @@
                                                                         $tr.append($tdTime);
 
                                                                         //method for edit and delete of jobs from orchestration table.
-                                                                        var $tdOptions = $('<td style="vertical-align:inherit;text-align:center;"></td>').append('<div class="btn-group tableactionWidth"><a rel="tooltip" data-placement="top" data-original-title="Delete" class="btn btn-danger pull-left btn-sg tableactionbutton btnDeleteTask"><i class="ace-icon fa fa-trash-o bigger-120"></i></a><a class="btn btn-info pull-left tableactionbutton btnEditTask tableactionbuttonpadding btn-sg" data-original-title="Edit" data-placement="top" rel="tooltip"><i class="ace-icon fa fa-pencil bigger-120"></i></a></div>').attr('data-taskId', data[i]._id);
+                                                                        var $tdOptions = $('<td style="vertical-align:inherit;text-align:center;"></td>').append('<div class="btn-group tableactionWidth"><a class="btn btn-info pull-left tableactionbutton btnEditTask btn-sg" data-original-title="Edit" data-placement="top" rel="tooltip"><i class="ace-icon fa fa-pencil bigger-120"></i></a><a style="margin-left:5px;" rel="tooltip" data-placement="top" data-original-title="Delete" class="btn btn-danger pull-left btn-sg tableactionbutton btnDeleteTask"><i class="ace-icon fa fa-trash-o bigger-120"></i></a></div>').attr('data-taskId', data[i]._id);
                                                                         //permission set for editing and deleting for ChefTask
 
                                                                         var hasEditChefTaskPermission = false;
