@@ -4605,7 +4605,7 @@
                                                                                 if (data.instances.length > 0) {
                                                                                     for (var x = 0; x < data.instances.length; x++) {
 
-                                                                                        pollInstanceState(data.instances[x]._id, data.instances[x].instanceState, 120000);
+                                                                                        pollInstanceState(data.instances[x]._id, data.instances[x].instanceState, 10000);
 
                                                                                     }
                                                                                 }
@@ -4617,7 +4617,7 @@
                                                                                 initializeStackArea(data.stacks);
 
                                                                             });
-                                                                            setTimeout(getInstances, 180000);
+                                                                            setTimeout(getInstances, 120000);
                                                                         }
                                                                         getInstances();
 

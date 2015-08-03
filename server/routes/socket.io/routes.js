@@ -192,7 +192,7 @@ module.exports.setRoutes = function(socketIo) {
 
     // Sync instance status AWS with Catalyst.
 
-    var jobId = crontab.scheduleJob("*/3 * * * *", function() { //This will call this function every 3 minutes 
+    var jobId = crontab.scheduleJob("*/1 * * * *", function() { //This will call this function every 3 minutes 
         logger.debug("Cron Job run every 3 minutes!");
         var instanceState = socketIo.of('/insState');
         var socketList = [];
@@ -200,13 +200,13 @@ module.exports.setRoutes = function(socketIo) {
             if (err) {
                 logger.debug("Error while getElementBytting instance!");
             }
-            logger.debug("Got instance: ");
+            logger.debug("Got instance: ",JSON.stringify(instances));
             if (instances.length > 0) {
                 AWSProvider.getAWSProviderById(instances[0].providerId, function(err, aProvider) {
                     if (err) {
                         logger.debug("Failed to get Provider!");
                     }
-                    logger.debug("Got Provider: ");
+                    logger.debug("Got Provider: ",JSON.stringify(aProvider));
                     if (aProvider) {
                         AWSKeyPair.getAWSKeyPairByProviderId(aProvider._id, function(err, aKeyPair) {
                             if (err) {
