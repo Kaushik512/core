@@ -1834,6 +1834,10 @@
                                                                             } else {
                                                                                 $('.menuAppTask').hide();
                                                                                 $menu.show();
+                                                                                var $anchor = $('.app-url').parent();
+                                                                                $anchor.click(function() {
+                                                                                  $menu.hide();                                                                                          
+                                                                                });
                                                                             }
                                                                         });
 
