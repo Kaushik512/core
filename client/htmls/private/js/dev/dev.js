@@ -1330,40 +1330,54 @@
                                                                                 //return '<div class="showmenuAppTask"><a class="btn1 showmenuAppTaskAnchor"><i class="fa fa-ellipsis-h showmenuAppTaskAnchorI"></i></a></div><div class="menuAppTask" style="display: none;"><span class="menuAppTaskSpan">App Links</span><ul class="paddingleft32"><li><a href="javascript:voi(0)" class="fontsize11">App Perf</a></li><li><a href="javascript:voi(0)" class="fontsize11">App Logs</a></li></ul><span class="menuAppTaskSpan">Task Links</span><ul class="paddingleft32"><li><a href="javascript:voi(0)" class="fontsize11">Deploy Task</a></li><li><a href="javascript:voi(0)" class="fontsize11">Build Task</a></li></ul></div>';
                                                                             },
                                                                             getmenuAppTask: function(data) {
-                                                                                var menuAppTaskLI1 = '';
-                                                                                if (data.appUrls && data.appUrls.length) {
-                                                                                    for (var k = 0; k < data.appUrls.length; k++) {
-                                                                                        // if (k == 2) {
-                                                                                        //     break;
-                                                                                        // }
-                                                                                        var url = data.appUrls[k].url;
-                                                                                        if (data.appUrls[k].url) {
-                                                                                            url = url.replace('$host', data.instanceIP);
-                                                                                        }
-                                                                                        var tempApp = "<li><a style='font-size:10px;' data-appUrlId='" + data.appUrls[k]._id + "' class='app-url' title='" + url + "' href='" + url + "'' target='_blank' >" + data.appUrls[k].name + "</a></li>";
-                                                                                        menuAppTaskLI = menuAppTaskLI + tempApp;
-                                                                                    }
-                                                                                }
-                                                                                $rowContainter.append('<td>' + menuAppTaskLI + '</td>');
+                                                                                console.log("Data is:"+data);
+                                                                              if (data.appUrls && data.appUrls.length) {
+                                                                                  for (var k = 0; k < data.appUrls.length; k++) {
+                                                                                      // if (k == 2) {
+                                                                                      //     break;
+                                                                                      // }
+                                                                                      var url = data.appUrls[k].url;
+                                                                                      if (data.appUrls[k].url) {
+                                                                                          url = url.replace('$host', data.instanceIP);
+                                                                                      }
+                                                                                      var tempApp = "<li><a style='font-size:10px;' data-appUrlId='" + data.appUrls[k]._id + "' class='app-url' title='" + url + "' href='" + url + "'' target='_blank' >" + data.appUrls[k].name + "</a></li>";
+                                                                                      menuAppTaskLI = menuAppTaskLI + tempApp;
+                                                                                  }
+                                                                              }else{
+                                                                                menuAppTaskLI = "<li style='font-size:10px;color:#3276b1'>No AppLinks Available</li>";
+                                                                              }
+                                                                              $rowContainter.append('<td>' + menuAppTaskLI + '</td>');
 
-                                                                                if (data.taskIds && data.taskIds.length) {
+                                                                              if (data.taskIds && data.taskIds.length) {
 
-                                                                                    $.post('../tasks', {
-                                                                                        taskIds: data.taskIds
-                                                                                    }, function(tasks) {
-                                                                                        var $ul = $('.domain-roles-caption[data-instanceId="' + data._id + '"]').find('.instanceTaskListUL');
-
-                                                                                        for (var ll = 0; ll < tasks.length; ll++) {
-                                                                                            var $taskLi = $("<li><a style='font-size:10px;' href='javascript:void(0)' data-taskId='" + tasks[ll]._id + "'>" + tasks[ll].name + "</a></li>");
-                                                                                            $taskLi.find('a').click(function(e) {
-                                                                                                var taskId = $(this).attr('data-taskId');
-                                                                                                $('a[data-executeTaskId="' + taskId + '"]').click();
-                                                                                            });
-                                                                                            $ul.append($taskLi);
-                                                                                        }
-                                                                                    });
-                                                                                }
-                                                                                return '<div class="menuAppTask" style="display: none;"><span class="menuAppLinkSpan">App Links</span><ul class="paddingleft32">' + menuAppTaskLI + '</ul><span class="menuTaskSpan">Task Links</span><ul class="paddingleft32 instanceTaskListUL"></ul></div>';
+                                                                                  $.post('../tasks', {
+                                                                                      taskIds: data.taskIds
+                                                                                  }, function(tasks) {
+                                                                                      var $ul = $('.domain-roles-caption[data-instanceId="' + data._id + '"]').find('.instanceTaskListUL');
+                                                                                      $ul.empty();
+                                                                                      var $ulTr = $('tr[data-instanceId="' +  data._id + '"]').find('.instanceTaskListUL');
+                                                                                      $ulTr.empty();
+            
+                                                                                      for (var ll = 0; ll < tasks.length; ll++) {
+                                                                                          var $taskLi = $("<li><a style='font-size:10px;' href='javascript:void(0)' data-taskId='" + tasks[ll]._id + "'>" + tasks[ll].name + "</a></li>");
+                                                                                          $taskLi.find('a').click(function(e) {
+                                                                                              var taskId = $(this).attr('data-taskId');
+                                                                                              $('a[data-executeTaskId="' + taskId + '"]').click();
+                                                                                          });
+                                                                                          $ul.append($taskLi);
+                                                                                          $ulTr.append($taskLi.clone(true));
+                                                                                      }
+                                                                                  });
+                                                                                //alert(data._id);
+                                                                                var tempTaskLinks = "<li style='font-size:10px;color:#3276b1'>Fetching</li>";
+                                                                              }else{
+                                                                                var tempTaskLinks = "<li style='font-size:10px;color:#3276b1'>No TaskLinks Available</li>";
+                                                                                // var $ul = $('.domain-roles-caption[data-instanceId="' + data._id + '"]').find('.taskListLI');
+                                                                                // //$ul.html("<span class='red'>Hello</span>");
+                                                                                // //alert($ul.length);
+                                                                                // $ul.append("No TaskLinks");
+                                                                              }
+                                                                              return '<div class="menuAppTask" style="display: none;"><span class="menuAppLinkSpan">App Links</span><ul class="paddingleft32">' + menuAppTaskLI + '</ul><span class="menuTaskSpan">Task Links</span><ul class="paddingleft32 instanceTaskListUL" style="list-style-type: square;">'+tempTaskLinks+'</ul></div>';
                                                                             },
                                                                             getDomainRolesHeading: function(data) {
                                                                                 return '<div class="domain-roles-heading">' + this.getSpanHeadingLeft(data) + this.getSpanHeadingMiddle(data) + this.getOS(data) + '</div>';
