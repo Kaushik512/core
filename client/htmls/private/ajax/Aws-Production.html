@@ -894,7 +894,7 @@
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
                 <h4 class="modal-title" id="myModalLabel">Blueprint Information</h4>
             </div>
-            <div class="modal-body" style="height:534px;overflow-y:auto;">
+            <div class="modal-body" style="height:480px;overflow-y:auto;">
             	<!--os and the 1st tier-->
  <table class="table table-bordered">
     <thead>
@@ -3595,17 +3595,20 @@
 
                      if ($selectVer.attr('class').indexOf('dockerrepotagselect') < 0) {
                      //    alert(data[i].blueprintConfig.infraManagerData.versionsList.length);
-                     console.log("+++++++++++++++ "+i);
-                      console.log("sdasadsds" + JSON.stringify(data[i].blueprintConfig.infraManagerData.versionsList));
-                        for (var j = 0; j < data[i].blueprintConfig.infraManagerData.versionsList.length; j++) {
-                        
-                         
-                           
+                    // console.log("+++++++++++++++ "+i);
+                   //   console.log("sdasadsds" + JSON.stringify(data[i].blueprintConfig.infraManagerData.versionsList));
+
+                        if (typeof data[i].blueprintConfig.infraManagerData !=='undefined') {
+                            for (var j = 0; j < data[i].blueprintConfig.infraManagerData.versionsList.length; j++) {
+
+
+
                                 var $options = $('<option></option>').append(data[i].blueprintConfig.infraManagerData.versionsList[j].ver).val(data[i].blueprintConfig.infraManagerData.versionsList[j].ver);
                                 $selectVer.append($options);
-                           
-                        
-                     }
+
+
+                            }
+                        }
                    }
                      $selecteditBtnContainer.append($li);
                     
