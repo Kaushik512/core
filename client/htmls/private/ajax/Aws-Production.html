@@ -373,7 +373,7 @@
 
   <!--configure runlist collapse starts here-->
 
- <div class="panel panel-default divRunlistParameter notforCFT">
+ <div class="panel panel-default divRunlistParameter notforCFT notForDocker">
  <div class="panel-heading">
  <h4 class="panel-title">
  <a data-toggle="collapse" data-parent="#accordion-Design" href="#CollapseEditRunlistParam" class="collapsed"><i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i>Configure Runlist Parameters</a>
@@ -2920,8 +2920,9 @@
                                      var wizard = $wizard.data('bootstrapWizard');
                                      wizard.next();
                                      wizard.disablePreviouBtn();
-
+                                     if(tempType==='appfactory'){
                                      $('a#blueprintInfo').click(function(e) {
+                                      
                                        
                                          //  alert('check');
                                          var $blueprintReadContainer = $('#modalForRead');
@@ -2985,8 +2986,17 @@
                                              }
                                          });
                                          //for getting the VPC
-
+                                      
+                                         
+                                       
                                      });
+                                    }else{
+                                        $('a#blueprintInfo').click(function(e) {
+                                          bootbox.alert('Information Will be updated in the next build');
+                                          return false;
+                                        });
+                                      }
+                                         //for getting the blueprint name
                                  }).error(function(xhr) {
                                      $('.blueprintSaveFail').find('h3').first().html(xhr.responseText);
                                      $('.blueprintSaveFail').show();
