@@ -1,7 +1,7 @@
 //User Migration script
 var server = "localhost";
 var port = "27017";
-var dbname = "devops_fromsc";
+var dbname = "devops_new";
 db = connect(server + ':' + port + '/' + dbname);
 // db.blueprints.update(
 // 	{users:["sd1"]},
@@ -30,6 +30,11 @@ db = connect(server + ':' + port + '/' + dbname);
 
 
 //Migrate to New BP Design - Update script
+//backing up existing db
+//Step 1. Create a db with todays date
+print("Current db will be backed up to " + dbname + "_" + Date.now());
+db.copyDatabase(dbname,dbname + "_" + Date.now());
+
 //Template Types
 db.d4dmastersnew.update({"id":"16","templatetypename":"AppFactory"},{$set :{templatetypename:"SoftwareStack"}});
 db.d4dmastersnew.update({"id":"16","templatetypename":"CloudFormation"},{$set :{templatetype:"cft"}});
@@ -43,8 +48,9 @@ db.blueprints.update({"templateType":"AppFactory"},{$set :{templatetypename:"che
 db.blueprints.update({"templateType":"Docker"},{$set :{templatetypename:"docker"}});
 db.blueprints.update({"templateType":"CloudFormation"},{$set :{templatetypename:"cft"}});
 db.blueprints.update({"templateType":"DevOpsRoles"},{$set :{templatetypename:"ami"}});
+print('Updation successful.');
+//End of Migrate to New BP Design - Update script
 
 
 
-//db.permissionsets.find({rolename:'Admin',permissions.category:'instancerunlist'})
 
