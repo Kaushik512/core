@@ -1,3 +1,4 @@
+
 .carousel-inner{
     overflow: auto !important;
     min-height:400px !important;
@@ -6,12 +7,15 @@
     background-color: #ffffff;
     border-color:#40baf1 !important;
     background-repeat: no-repeat; 
-    float: left; 
+    /*float: left; */
+    float: right; 
     border-radius: 50% !important; 
     height: 26px; 
     width: 26px; 
     margin-left: 10px; 
     margin-top: 4px;
+    
+    margin-right: 6px;
 }
 .showmenuAppTaskAnchorI{
    color:#40baf1 ! important;
@@ -3105,6 +3109,9 @@ margin-top:15px;
     /*border: 1px solid #ccc;*/
     padding-left: 0px !important;
     padding-right: 0px !important;
+}
+.domain-role-thumbnailDev > .container{
+    -webkit-perspective: 0 !important;
 }
 .flip-toggle.flip .card {
     -webkit-transform: rotateY(180deg);

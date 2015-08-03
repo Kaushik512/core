@@ -1830,6 +1830,14 @@
                                                                       } else {
                                                                           $('.menuAppTask').hide();
                                                                           $menu.show();
+                                                                          var $anchor = $('.app-url').parent();
+                                                                            $anchor.click(function() {
+                                                                              //$domainRolesCaption.find('.menuAppTask').remove();
+                                                                              $menu.hide();                                                                                          
+                                                                            });
+                                                                            // $('body').click(function(){
+                                                                            //     $menu.hide();
+                                                                            // });
                                                                       }
                                                                   });
                                                                   $rowContainter.find('.showmenuAppTask').click(function() {

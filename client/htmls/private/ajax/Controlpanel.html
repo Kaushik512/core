@@ -61,17 +61,11 @@
                                         <a href="javascript:void(0)" class='sshShellBtn cpTop sshTerminalBtn' data-actiontype="SSH" data-placement="top" rel="tooltip" data-original-title="SSH">
                                         </a>
                                       </div>
-                                      <!--rdp-->
                                         <div class="rdpContainer actionbutton instance-bootstrap-ActionRDP">
                                         <a class='rdpIcon rdpShellBtn cpTop'>
                                         </a>
                                       </div>
-                                      <!--rdp ends here-->
-                                      <!-- <div class="showmenuAppTask">
-                                        <a class="btn1 showmenuAppTaskAnchor">
-                                          <i class="fa fa-ellipsis-h showmenuAppTaskAnchorI"></i>
-                                        </a>
-                                      </div> -->
+                                      
                                     </div>
 
                                   </div>
@@ -251,7 +245,7 @@
  <tr class="rowCustomStyle">
 
                                                                             
- <td>S.No</td>
+ <td style="width:5%">S.No</td>
  <td style="width:40%">Name</td>
  <td style="width:20%" class="">Action</td>
 
@@ -1464,7 +1458,7 @@ $.get('../instances/' + urlParams.id, function(data) {
 
                 $serviceList.append($tr);
             }
-        })
+        });
         //console.log('hi ==>',serviceList);
 
 
@@ -1492,7 +1486,7 @@ $.get('../instances/' + urlParams.id, function(data) {
     }};
     var menuAppTaskLI = '';
     var menuTaskListLI = '';
-    var menuAppTaskVar = {
+    /*var menuAppTaskVar = {
       getmenuAppTask: function(data) {
         //alert("I am in function");
         //alert(data.appUrls.length);
@@ -1514,7 +1508,7 @@ $.get('../instances/' + urlParams.id, function(data) {
         
         //alert(menuAppTaskLI);
         return '<div class="menuAppTask" style="display: none;"><span class="menuAppLinkSpan">App Links</span><ul class="paddingleft32">' + menuAppTaskLI + '</ul></div>';
-    }};
+    }};*/
     var getOS = function(data) {
             if (data.bootStrapStatus === 'waiting') {
                 console.log('polling bootStrapStatus');
@@ -1618,15 +1612,62 @@ $.get('../instances/' + urlParams.id, function(data) {
     //$divHeadingCP.append($spanheadingRightCP);
     //$domainRolesCaption.append($divHeadingCP);
 
-    $domainRolesCaption.append(menuAppTaskVar.getmenuAppTask(data));
+    //$domainRolesCaption.append(menuAppTaskVar.getmenuAppTask(data));
     $domainRolesCaption.find('.showmenuAppTask').click(function() {
-        var $menu = $domainRolesCaption.find('.menuAppTask');
-        if ($menu.is(':visible')) {
-            $menu.hide();
-        } else {
-            $('.menuAppTask').hide();
-            $menu.show();
+      
+      $.get('../instances/' + instanceId ,function(data1){
+        if(data1.orgId){
+        $.get('../organizations/' + data1.orgId + '/businessgroups/' + data1.bgId + '/projects/' + data1.projectId + '/environments/' + data1.envId + '/', function(data2) {
+            console.log('success---3---4');
+            var urls= data2.instances[0].appUrls;
+            console.log("data2 is:"+urls);
+            var stringmenuAppTask = '';
+            
+            if(urls && urls.length){
+              
+              var menuAppTaskLI ='';
+                  for(var i = 0; i< urls.length;i++){
+                    $domainRolesCaption.find('.menuAppTask').empty();
+                  console.log("I am inside the Loop");
+                      var url = urls[i].url;
+                      if (url) {
+                          url = url.replace('$host', data2.instances[0].instanceIP);
+                      }
+                      console.log(url);
+                      //alert("123");
+                      var tempApp = "<li><a style='font-size:10px;' data-appUrlId='" + urls[i]._id + "' class='app-url' title='" + url + "' href='" + url + "'' target='_blank' >" + urls[i].name + "</a></li>";
+
+                      menuAppTaskLI = menuAppTaskLI + tempApp;
+                    }
+                } else {
+                    menuAppTaskLI = "<li style='font-size:10px;color:#3276b1'>No AppLinks Available</li>";
+                    //var $menuAppTaskLI = $(menuAppTaskLI);              
+                }
+                //debugger;
+
+                stringmenuAppTask = "<div class='menuAppTask' style='display: none;'><span class='menuAppLinkSpan'>App Links</span><ul class='paddingleft32'>" + menuAppTaskLI + "</ul></div>";
+                // var $stringNEW = $(stringNEW);
+                console.log(JSON.stringify(stringmenuAppTask));
+                $domainRolesCaption.append(stringmenuAppTask);
+                //$domainRolesCaption.append(menuAppTaskVar.getmenuAppTask(data));
+                var $menu = $domainRolesCaption.find('.menuAppTask');
+                if ($menu.is(':visible')) {
+                  //alert("I am in if part");
+                  $domainRolesCaption.find('.menuAppTask').remove();
+                  $menu.hide();
+                } else {
+                    //alert("I am in else");
+                    $('.menuAppTask').hide();
+                    $menu.show();
+                    var $anchor = $('.app-url').parent();
+                    $anchor.click(function() {
+                      $domainRolesCaption.find('.menuAppTask').remove();
+                      $menu.hide();                                                                                          
+                    });  
+                }
+          });
         }
+      });
     });
     $('.startstoptoggler').click(startAndStopToggler);
     // .append('<img src="img/templateicons/'+data.blueprintData.templateId+'.png" style="height:20px;width:20px;margin-right:5px;">').append(data.blueprintData.blueprintName);
@@ -3234,6 +3275,9 @@ $(document).ready(function() {
      //     $anchor.hide();
      // }
      //$cardAppUrlListContanier.last().append($anchor);
+     // $('.instanceActionBtnCtr').find('.showmenuAppTask').click();
+     // $('.instanceActionBtnCtr').find('.menuAppTask').append($anchor);
+     //alert($('.instanceActionBtnCtr').html());
 
  }
 
