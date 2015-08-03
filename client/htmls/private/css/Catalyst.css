@@ -4493,7 +4493,7 @@ float: left;
     margin-left:10px !important;
 }
 .tableactionWidth{
-    width:84px;
+    width:110px;
 }
 .rowCustomStyle {
     height: 34px;
@@ -4501,7 +4501,7 @@ float: left;
     background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#f2f2f2), to(#fafafa));
 }
 .tableactionWidthCheficon{
-    width:181px;
+    width:192px;
 }
 .cookbookChefClientRun{
     height: 150px;
@@ -8217,3 +8217,10 @@ form.cmxform .gray * {
   margin-left: 7px;
   margin-right: 7px;
 }
+
+.serviceClass{
+    float:left;
+    margin-top:7px;
+    margin-left:20px;
+}
+

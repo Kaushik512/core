@@ -10,7 +10,11 @@ Resource           catalyst.txt
 
 *** Variables ***
 ${BROWSERTYPE}                    firefox                   
-${ENVIRONMENTSERVER}              http://d4d.relevancelab.com:3001                
+${ENVIRONMENTSERVER}               http://10.0.1.206:3003/public/login.html           
+
+http://10.0.1.206:3003/public/login.html
+
+
 #http://10.0.1.206:3002/private/index.html#ajax/Settings/Dashboard.html
 
 
@@ -101,17 +105,17 @@ ${CONFIG MANAGEMENT URL}             https://api.opscode.com/organizations/catte
 
 
 
-${USERPEMFILE}              ${ROOTPATH}/Chef/mycatqa.pem
-${VALIDATORPEMFILE}      ${ROOTPATH}/Chef/cattest-validator.pem
-${KNIFERBFILE}                ${ROOTPATH}/Chef/knife.rb
-${CATALYSTPEM}                ${ROOTPATH}/Chef/catalyst.pem
-${CAT_INSTANCES}              ${ROOTPATH}/Chef/cat_instances.pem
+${USERPEMFILE}              ${ROOTPATH}\\Chef\\mycatqa.pem
+${VALIDATORPEMFILE}      ${ROOTPATH}\\Chef\\cattest-validator.pem
+${KNIFERBFILE}                ${ROOTPATH}\\Chef\\knife.rb
+${CATALYSTPEM}                ${ROOTPATH}\\Chef\\catalyst.pem
+${CAT_INSTANCES}              ${ROOTPATH}\\Chef\\cat_instances.pem
 
-${CENTOSIMG}                  ${ROOTPATH}/Images/centos.jpg
-${UBUNTUIMG}                  ${ROOTPATH}/Images/ubuntuu.jpg
-${APPICON}                    ${ROOTPATH}/Images/rel.jpg    
-${TEMPLTYPEICON}              ${ROOTPATH}/Images/index.jpg           
-${APACHEIMG}                  ${ROOTPATH}/Images/apache.jpg
+${CENTOSIMG}                  ${ROOTPATH}\\Images\\centos.jpg
+${UBUNTUIMG}                  ${ROOTPATH}\\Images\\ubuntuu.jpg
+${APPICON}                    ${ROOTPATH}\\Images\\rel.jpg    
+${TEMPLTYPEICON}              ${ROOTPATH}\\Images\\index.jpg           
+${APACHEIMG}                  ${ROOTPATH}\\Images\\apache.jpg
 
 ${JENKINSNAME}            JenkinsTAT
 ${JENKINS URL}               http://54.68.204.110:9091/

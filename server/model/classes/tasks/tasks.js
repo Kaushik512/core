@@ -463,7 +463,7 @@ taskSchema.statics.updateJobUrl = function(taskId,taskConfig, callback) {
             callback(err, null);
             return;
         }
-        logger.debug('Updated task:' + JSON.stringify(Tasks));
+        logger.debug('Updated task:' + updateCount);
         callback(null, updateCount);
 
     });

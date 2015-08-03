@@ -20,7 +20,7 @@ ${ENVIRONMENT SERVER}              http://d4d.relevancelab.com:3001/public/login
 ${ENV}                 QA.txt
 ${VALID USER}             superadmin
 ${VALID PASSWORD}         superadmin@123
-${ORGANIZATION NAME}         Smoke_Rel_Org1
+${ORGANIZATION NAME}         Smoke_Rel_Org
 ${ORGANIZATION DOMAIN NAME}          www.relevancelab.com
 ${ORG ADMIN USER}               smoke_admin
 ${ORG ADMIN PASSWORD}           smoke_admin
@@ -32,8 +32,8 @@ ${PROJECT NAME2}                  Jira-Catalyst
 ${PROJECT DESCRIPTION}           Catalyst product automation Description
 ${ENVIRONMENT NAME}              Dev
 ${CONFIG MANAGEMENT NAME}             smokechef
-${CONFIG MANAGEMENT USER NAME}         mycatqa
-${CONFIG MANAGEMENT URL}         https://api.opscode.com/organizations/cattest
+${CONFIG MANAGEMENT USER NAME}         jagadeesh12
+${CONFIG MANAGEMENT URL}         https://api.opscode.com/organizations/jm012
 ${INSTANCE STARTED}        Instance Started
 ${INSTANCE STOPPED}        Instance Stopped
 ${RUNNING}            running
@@ -62,8 +62,8 @@ ${SUITS}                stopped
 ${UserName}             root
 
 
-${USERPEMFILE}              ${ROOTPATH}\\Chef\\mycatqa.pem
-${VALIDATORPEMFILE}      ${ROOTPATH}\\Chef\\cattest-validator.pem
+${USERPEMFILE}              ${ROOTPATH}\\Chef\\jagadeesh12.pem
+${VALIDATORPEMFILE}      ${ROOTPATH}\\Chef\\jm012-validator.pem
 ${KNIFERBFILE}                ${ROOTPATH}\\Chef\\knife.rb
 ${CATALYSTPEM}                ${ROOTPATH}\\Chef\\catalyst.pem
 ${CAT_INSTANCES}              ${ROOTPATH}\\Chef\\cat_instances.pem

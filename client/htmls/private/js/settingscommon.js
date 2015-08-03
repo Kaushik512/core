@@ -360,7 +360,7 @@ function CreateTableFromJson__(formID, idFieldName, createFileName) {
                         //get all image tags
                         imageTD = $('.rowtemplate').find("[datatype='image']");
 
-                        editButton = $('.rowtemplate').find("[title='Update']");
+                        editButton = $('.rowtemplate').find("[title='Edit']");
                         if (editButton) {
                             var tv = '';
                             $.each(v, function(k1, v1) {
@@ -405,7 +405,7 @@ function CreateTableFromJson__(formID, idFieldName, createFileName) {
 
                             //setting the delete button
 
-                            var deletebutton = $('.rowtemplate').find("[title='Remove']");
+                            var deletebutton = $('.rowtemplate').find("[title='Delete']").css('margin-left','12px');
                             if (deletebutton) {
                                 deletebutton.attr('onClick', 'deleteItem(\"' + formID + '\", \"' + idFieldName + '\",\"' + tv + '\",this);');
                                 deletebutton.removeClass('btn-xs');
@@ -520,7 +520,7 @@ function CreateTableFromJson(formID, idFieldName, createFileName) {
         // $('#envtable').append(sRow);
         imageTD = $('.rowtemplate').find("[datatype='image']");
 
-        editButton = $('.rowtemplate').find("[title='Update']");
+        editButton = $('.rowtemplate').find("[title='Edit']");
         if (idFieldValue) {
             if (imageTD) {
                 if (imageTD.length > 0) {
@@ -655,7 +655,7 @@ function CreateTableFromJson(formID, idFieldName, createFileName) {
 
             //setting the delete button
 
-            var deletebutton = $('.rowtemplate').find("[title='Remove']");
+            var deletebutton = $('.rowtemplate').find("[title='Delete']").css('margin-left','12px');
             if (deletebutton) {
                 deletebutton.attr('onClick', 'deleteItem(\"' + formID + '\", \"' + idFieldName + '\",\"' + idFieldValue + '\",this);');
                 var hasDeletePermission = false;
@@ -1955,7 +1955,7 @@ function CreateTableFromJsonNew(formID, idFieldName, createFileName) {
         // $('#envtable').append(sRow);
         imageTD = $('.rowtemplate').find("[datatype='image']");
 
-        editButton = $('.rowtemplate').find("[title='Update']");
+        editButton = $('.rowtemplate').find("[title='Edit']");
 
         if (idFieldValue) {
             if (imageTD) {
@@ -1994,7 +1994,7 @@ function CreateTableFromJsonNew(formID, idFieldName, createFileName) {
 
             //setting the delete button
 
-            var deletebutton = $('.rowtemplate').find("[title='Remove']");
+            var deletebutton = $('.rowtemplate').find("[title='Delete']").css('margin-left','12px');
             if (deletebutton) {
                 deletebutton.attr('onClick', 'deleteItem(\"' + formID + '\", \"' + idFieldName + '\",\"' + idFieldValue + '\",this);');
                 deletebutton.removeClass('btn-xs');

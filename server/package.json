@@ -15,6 +15,7 @@
         "express": "3.4.7",
         "mongoose": "*",
         "socket.io": "0.9.16",
+        "raw-socket": "1.2.2",
         "net-ping": "1.1.9",
         "ldapjs": "0.7.1",
         "connect-redis": "1.4.x",
@@ -44,7 +45,9 @@
         "shell-escape": "0.2.0",
         "bcryptjs": "2.2.0",
         "mongoose-text-search": "0.0.2",
-    "newrelic-node": "0.3.7"
+        "newrelic-node": "0.3.7",
+        "node-crontab": "0.0.8",
+        "node-rest-client" : "1.5.1"
     },
     "devDependencies": {
         "grunt": "0.4.5",

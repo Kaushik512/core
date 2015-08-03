@@ -50,10 +50,11 @@
                                     <!-- <td datafield="accountid"></td> -->
                                     <td>
                                         <div class="btn-group tableactionWidth">
-                                            <a class="btn btn-xs btn-danger pull-left" value="Remove" title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></a>
-                                            <a class="btn btn-xs btn-info pull-left" title="Update">
+                                            <a class="btn btn-xs btn-info pull-left" title="Edit">
                                                 <i class="ace-icon fa fa-pencil bigger-120"></i>
                                             </a>
+                                            <a style="margin-left:12px;" class="btn btn-xs btn-danger pull-left" value="Remove" title="Delete"><i class="ace-icon fa fa-trash-o bigger-120"></i></a>
+                                            
                                         </div>
                                     </td>
 
@@ -223,7 +224,7 @@
             // $('#envtable').append(sRow);
             imageTD = $('.rowtemplate').find("[datatype='image']");
 
-            editButton = $('.rowtemplate').find("[title='Update']");
+            editButton = $('.rowtemplate').find("[title='Edit']");
 
             if (idFieldValue) {
                 if (imageTD) {
@@ -324,7 +325,7 @@
 
                 //setting the delete button
 
-                var deletebutton = $('.rowtemplate').find("[title='Remove']");
+                var deletebutton = $('.rowtemplate').find("[title='Delete']");
                 if (deletebutton) {
                     deletebutton.attr('onClick', 'deleteItemFromProvider(\"' + formID + '\", \"' + idFieldName + '\",\"' + idFieldValue + '\",this);');
                     var hasDeletePermission = false;

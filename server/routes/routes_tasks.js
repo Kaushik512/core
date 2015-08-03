@@ -173,23 +173,29 @@ module.exports.setRoutes = function(app, sessionVerification) {
                         var historyResult = [];
                         var jobResult = [];
                         if (histories.length > 0) {
+                            var jobInfo = [];
                             for (var i = 0; i < histories.length; i++) {
                                 historyResult.push(histories[i].buildNumber);
                             }
-                            jenkins.getJobInfo(task.taskConfig.jobName, function(err, job) {
+                            jenkins.getDepthJobInfo(task.taskConfig.jobName, function(err, job) {
                                 if (err) {
                                     logger.error('jenkins jobs fetch error', err);
 
                                 }
-
+                                logger.debug("All Job info: ", JSON.stringify(job));
                                 if (job) {
                                     for (var j = 0; j < job.builds.length; j++) {
+                                        var jobDetails = {
+                                            "result": job.builds[j].result,
+                                            "timestampEnded": job.builds[j].timestamp
+                                        };
                                         jobResult.push(job.builds[j].number);
+                                        jobInfo.push(jobDetails);
                                     }
                                 }
                                 var count = 0;
                                 if (jobResult.length > 0) {
-                                    
+
                                     for (var x = 0; x < jobResult.length; x++) {
                                         (function(x) {
                                             count++;
@@ -198,7 +204,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                             if (historyResult.indexOf(jobResult[x]) == -1) {
                                                 //logger.debug("------------------ ", jobResult[x]);
                                                 for (var i = 0; i < task.jobResultURLPattern.length; i++) {
-                                                    var urlPattern= task.jobResultURLPattern[i];
+                                                    var urlPattern = task.jobResultURLPattern[i];
                                                     resultUrl.push(urlPattern.replace("$buildNumber", jobResult[x]));
                                                 }
                                                 var hData = {
@@ -207,11 +213,11 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                     "user": req.session.user.cn,
                                                     "jenkinsServerId": task.taskConfig.jenkinsServerId,
                                                     "jobName": task.taskConfig.jobName,
-                                                    "status": "success",
+                                                    "status": jobInfo[x].result,
                                                     "timestampStarted": new Date().getTime(),
                                                     "buildNumber": jobResult[x],
                                                     "__v": 1,
-                                                    "timestampEnded": new Date().getTime(),
+                                                    "timestampEnded": jobInfo[x].timestampEnded,
                                                     "executionResults": [],
                                                     "nodeIdsWithActionLog": [],
                                                     "nodeIds": [],
@@ -270,25 +276,31 @@ module.exports.setRoutes = function(app, sessionVerification) {
                         } else {
 
                             var jobResult = [];
-                            jenkins.getJobInfo(task.taskConfig.jobName, function(err, job) {
+                            var jobInfo = [];
+                            jenkins.getDepthJobInfo(task.taskConfig.jobName, function(err, job) {
                                 if (err) {
                                     logger.error('jenkins jobs fetch error', err);
 
                                 }
-
+                                logger.debug("All Job info: ", JSON.stringify(job));
                                 if (job) {
                                     for (var j = 0; j < job.builds.length; j++) {
+                                        var jobDetails = {
+                                            "result": job.builds[j].result,
+                                            "timestampEnded": job.builds[j].timestamp
+                                        };
                                         jobResult.push(job.builds[j].number);
+                                        jobInfo.push(jobDetails);
                                     }
                                 }
                                 var count1 = 0;
                                 if (jobResult) {
-                                    
+
                                     for (var x = 0; x < jobResult.length; x++) {
                                         (function(x) {
                                             var resultUrl = [];
                                             for (var i = 0; i < task.jobResultURLPattern.length; i++) {
-                                                var urlPattern= task.jobResultURLPattern[i];
+                                                var urlPattern = task.jobResultURLPattern[i];
                                                 resultUrl.push(urlPattern.replace("$buildNumber", jobResult[x]));
                                             }
                                             //logger.debug("==================================== ",resultUrl);
@@ -298,11 +310,11 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                 "user": req.session.user.cn,
                                                 "jenkinsServerId": task.taskConfig.jenkinsServerId,
                                                 "jobName": task.taskConfig.jobName,
-                                                "status": "success",
+                                                "status": jobInfo[x].result,
                                                 "timestampStarted": new Date().getTime(),
                                                 "buildNumber": jobResult[x],
                                                 "__v": 1,
-                                                "timestampEnded": new Date().getTime(),
+                                                "timestampEnded": jobInfo[x].timestampEnded,
                                                 "executionResults": [],
                                                 "nodeIdsWithActionLog": [],
                                                 "nodeIds": [],
@@ -413,9 +425,9 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 if (index != -1) {
                     result.splice(index, 1);
                     logger.debug("Updated JobResultURL: ", JSON.stringify(result));
-                    var taskConfig = data.taskConfig.jobResult;
-                        taskConfig = result;
-                    Tasks.updateJobUrl(req.params.taskId, taskConfig, function(err, updateCount) {
+                    var tConfig = data.taskConfig;
+                    tConfig.jobResultURL = result;
+                    Tasks.updateJobUrl(req.params.taskId, tConfig, function(err, updateCount) {
                         if (err) {
                             logger.error(err);
                             res.send(500, errorResponses.db.error);
