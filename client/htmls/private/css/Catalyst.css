@@ -52,14 +52,16 @@
     border: 2px solid #40baf1;
     width:300px !important;
     min-height:100px;*/
-    position: relative;
+    /*position: relative;*/
+    position: absolute;
+    width:150px;
     z-index: 1;
     /*margin-top: 40px;*/
     margin-top: 15px;
     /*left:6px;*/
     background: none repeat scroll 0 0 #ffffff !important;
     border: 2px solid #40baf1;
-    min-height:100px;;
+    min-height:100px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 } 
 .menuAppTask:after, .menuAppTask:before {

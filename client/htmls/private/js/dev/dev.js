@@ -1780,7 +1780,9 @@
                                                                         $divDomainRolesCaption.append($divActionBtnContainer);
 
                                                                         //Add Showmenu div for Toggle
-                                                                        $divDomainRolesCaption.append(cardTemplate.getmenuAppTask(data));
+                                                                        //$divDomainRolesCaption.append(cardTemplate.getmenuAppTask(data));
+                                                                        var menuStr = cardTemplate.getmenuAppTask(data);
+                                                                        $divDomainRolesCaption.append(menuStr);
 
 
 
@@ -1794,7 +1796,7 @@
                                                                         $tableActionBtnContainer.find('.moreInfo').remove();
                                                                         $tableActionBtnContainer.find('.instance-bootstrap-ActionChefRun').remove();
                                                                         //$tableActionBtnContainer.append()
-                                                                        $rowContainter.append('<td>' + $('<div></div>').append($tableActionBtnContainer).html() + '</td>');
+                                                                        $rowContainter.append('<td>' + $('<div></div>').append($tableActionBtnContainer).html() + menuStr +'</td>');
 
                                                                         var dataTable = $instanceDataTable.DataTable();
                                                                         dataTable.row.add($rowContainter).draw();
@@ -1829,6 +1831,21 @@
                                                                         $li.find('.showmenuAppTask').click(function() {
                                                                             //alert("I am Here");
                                                                             var $menu = $li.find('.menuAppTask');
+                                                                            if ($menu.is(':visible')) {
+                                                                                $menu.hide();
+                                                                            } else {
+                                                                                $('.menuAppTask').hide();
+                                                                                $menu.show();
+                                                                                var $anchor = $('.app-url').parent();
+                                                                                $anchor.click(function() {
+                                                                                  $menu.hide();                                                                                          
+                                                                                });
+                                                                            }
+                                                                        });
+                                                                        $rowContainter.find('.showmenuAppTask').click(function() {
+
+                                                                            var $menu = $rowContainter.find('.menuAppTask');
+                                                                            //alert($menu.length);
                                                                             if ($menu.is(':visible')) {
                                                                                 $menu.hide();
                                                                             } else {
