@@ -1511,30 +1511,9 @@ $.get('../instances/' + urlParams.id, function(data) {
         } else {
             menuAppTaskLI = "<li style='font-size:10px;color:#3276b1'>No AppLinks Available</li>";
         }
-        //alert(data.taskIds.length);
-        if (data.taskIds && data.taskIds.length) {
-
-            $.post('../tasks', {
-                taskIds: data.taskIds
-            }, function(tasks) {
-                var $ul = $('.domain-roles-caption[data-instanceId="' + data._id + '"]').find('.instanceTaskListUL');
-                $ul.empty();
-                for (var ll = 0; ll < tasks.length; ll++) {
-                    var $taskLi = $("<li><a style='font-size:10px;' href='javascript:void(0)' data-taskId='" + tasks[ll]._id + "'>" + tasks[ll].name + "</a></li>");
-                    $taskLi.find('a').click(function(e) {
-                        var taskId = $(this).attr('data-taskId');
-                        $('a[data-executeTaskId="' + taskId + '"]').click();
-                    });
-                    $ul.append($taskLi);
-                }
-            });
-            //alert(data._id);
-            var tempTaskLinks = "<li style='font-size:10px;color:#3276b1'>Fetching</li>";
-        } else {
-            var tempTaskLinks = "<li style='font-size:10px;color:#3276b1'>No TaskLinks Available</li>";
-        }
+        
         //alert(menuAppTaskLI);
-        return '<div class="menuAppTask" style="display: none;"><span class="menuAppLinkSpan">App Links</span><ul class="paddingleft32">' + menuAppTaskLI + '</ul><span class="menuTaskSpan">Task Links</span><ul class="paddingleft32 instanceTaskListUL" style="list-style-type: square;">'+tempTaskLinks+'</ul></div>';
+        return '<div class="menuAppTask" style="display: none;"><span class="menuAppLinkSpan">App Links</span><ul class="paddingleft32">' + menuAppTaskLI + '</ul></div>';
     }};
     var getOS = function(data) {
             if (data.bootStrapStatus === 'waiting') {
@@ -3170,14 +3149,15 @@ $(document).ready(function() {
  }
 
  function removeAppUrlCardLink(appUrlId) {
+  //alert(appUrlId);
      var $anchor = $('a[data-appUrlId="' + appUrlId + '"]').parent();
      if (!$anchor.length) {
          return;
      }
-     console.log($anchor);
-     console.log($anchor.index());
-     //alert($anchor.index());
-     var index = $anchor.index();
+     // console.log($anchor);
+     // console.log($anchor.index());
+     // //alert($anchor.index());
+     // var index = $anchor.index();
      
      // if (index < 3) {
      //     var $nextLink;
@@ -3189,14 +3169,14 @@ $(document).ready(function() {
      //     console.log($nextLink.length);
      //     $nextLink.show();
      // }
-      var $nextLink;
-      if (index == 1) {console.log(data[0]);
-          $nextLink = $anchor.next().next();
-      } else {
-         $nextLink = $anchor.next();
-      }
-      console.log($nextLink.length);
-      $nextLink.show();
+      // var $nextLink;
+      // if (index == 1) {console.log(data[0]);
+      //     $nextLink = $anchor.next().next();
+      // } else {
+      //    $nextLink = $anchor.next();
+      // }
+      // console.log($nextLink.length);
+      // $nextLink.show();
     $anchor.remove();
  }
 
@@ -3214,6 +3194,33 @@ $(document).ready(function() {
  //     $cardAppUrlListContanier.last().append($anchor);
 
  // }
+ 
+
+
+
+ // var menuAppTaskVar = {
+ //      getmenuAppTask: function(data) {
+ //        //alert("I am in function");
+ //        //alert(data.appUrls.length);
+ //        if (data.appUrls && data.appUrls.length) {
+ //            for (var k = 0; k < data.appUrls.length; k++) {
+ //                // if (k == 2) {
+ //                //     break;
+ //                // }
+ //                var url = data.appUrls[k].url;
+ //                if (data.appUrls[k].url) {
+ //                    url = url.replace('$host', data.instanceIP);
+ //                }
+ //                var tempApp = "<li><a style='font-size:10px;' data-appUrlId='" + data.appUrls[k]._id + "' class='app-url' title='" + url + "' href='" + url + "'' target='_blank' >" + data.appUrls[k].name + "</a></li>";
+ //                menuAppTaskLI = menuAppTaskLI + tempApp;
+ //            }
+ //        } else {
+ //            menuAppTaskLI = "<li style='font-size:10px;color:#3276b1'>No AppLinks Available</li>";
+ //        }
+ //        //alert(data.taskIds.length);
+        
+ //        return '<div class="menuAppTask" style="display: none;"><span class="menuAppLinkSpan">App Links</span><ul class="paddingleft32">' + menuAppTaskLI + '</ul></div>';
+ //    }};
  function createAppUrlCardLink(appUrlData, instanceIP) {
     //menuAppTaskVar.getmenuAppTask(appUrlData);
      var $cardAppUrlListContanier = $('.instance-bootstrap-list');
@@ -3226,7 +3233,7 @@ $(document).ready(function() {
      // if ($cardAppUrlListContanier.find('.marginForURLCP').length > 1) {
      //     $anchor.hide();
      // }
-     $cardAppUrlListContanier.last().append($anchor);
+     //$cardAppUrlListContanier.last().append($anchor);
 
  }
 
@@ -3269,7 +3276,7 @@ $(document).ready(function() {
              console.log(data);
              if (!appUrlId) {
                 //alert("appUrlId ====>"+appUrlId);
-                //console.log(data[0]);
+                console.log("DATA:"+data[0]);
                  createAppUrlTableRow(data[0]);
                  createAppUrlCardLink(data[0], window.instanceIPForAppLink);
              } else {

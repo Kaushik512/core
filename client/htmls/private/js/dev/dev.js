@@ -1323,6 +1323,7 @@
                                                                           //return '<div class="showmenuAppTask"><a class="btn1 showmenuAppTaskAnchor"><i class="fa fa-ellipsis-h showmenuAppTaskAnchorI"></i></a></div><div class="menuAppTask" style="display: none;"><span class="menuAppTaskSpan">App Links</span><ul class="paddingleft32"><li><a href="javascript:voi(0)" class="fontsize11">App Perf</a></li><li><a href="javascript:voi(0)" class="fontsize11">App Logs</a></li></ul><span class="menuAppTaskSpan">Task Links</span><ul class="paddingleft32"><li><a href="javascript:voi(0)" class="fontsize11">Deploy Task</a></li><li><a href="javascript:voi(0)" class="fontsize11">Build Task</a></li></ul></div>';
                                                                       },
                                                                       getmenuAppTask: function(data) {
+                                                                        console.log("Data is:"+data);
                                                                           if (data.appUrls && data.appUrls.length) {
                                                                               for (var k = 0; k < data.appUrls.length; k++) {
                                                                                   // if (k == 2) {
@@ -1774,7 +1775,8 @@
                                                                   //Add Showmenu div for Toggle
                                                                   var menuStr = cardTemplate.getmenuAppTask(data);
                                                                   $divDomainRolesCaption.append(menuStr);
-                                                                  $rowContainter.append(menuStr);
+                                                                  //$rowContainter.find('.instanceActionBtnCtr').append(menuStr);
+                                                                  //$rowContainter.append(menuStr);
 
 
 
@@ -1788,7 +1790,7 @@
                                                                   $tableActionBtnContainer.find('.moreInfo').remove();
                                                                   $tableActionBtnContainer.find('.instance-bootstrap-ActionChefRun').remove();
                                                                   //$tableActionBtnContainer.append()
-                                                                  $rowContainter.append('<td>' + $('<div></div>').append($tableActionBtnContainer).html() + '</td>');
+                                                                  $rowContainter.append('<td>' + $('<div></div>').append($tableActionBtnContainer).html() + menuStr +'</td>');
 
                                                                   var dataTable = $instanceDataTable.DataTable();
                                                                   dataTable.row.add($rowContainter).draw();
