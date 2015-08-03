@@ -8215,3 +8215,9 @@ form.cmxform .gray * {
     margin-left:20px;
 }
 
+@media (min-width:768px) and (max-width:1200px){
+    .swap-view{
+        margin-top: -32px;
+    }
+}
+

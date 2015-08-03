@@ -93,7 +93,7 @@
 
                                                                        });
                                                                    } else {
-                                                                       alert('Please select a stack to remove.');
+                                                                       bootbox.alert('Please select a stack to remove.');
                                                                    }
                                                                }
 
@@ -271,7 +271,7 @@
                                                                                console.log('Got ' + data.length + ' instances');
                                                                                //found now delete
                                                                                var dialog = bootbox.dialog({
-                                                                                   title: "Remove Instance",
+                                                                                   title: "Delete Instance",
                                                                                    message: '<div class="row">  ' +
                                                                                        '<div class="col-md-12"> ' +
                                                                                        '<div id="deleteInstanceWorkingIndicator" style="display:none"><img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" /></div>' +
@@ -741,7 +741,8 @@
                                                                        //alert(data.length);
                                                                        if (data.length <= 0) {
                                                                            $('.instanceloaderspinner').addClass('hidden');
-                                                                           $('#tabInstanceStatus').html('No Instances found.').show()
+                                                                           
+                                                                         //  $('#tabInstanceStatus').html('No Instances found.').show()
                                                                        }
 
                                                                        for (var i = 0; i < data.length; i++) {
@@ -2700,10 +2701,10 @@
                                                                    function bindClick_updateInstanceRunList() {
                                                                        // Blueprint runtlist updation
                                                                        $('.btnUpdateInstanceRunlist').click(function(e) {
-                                                                           bootbox.confirm("Update runlist?", function(result) {
-                                                                               if (!result) {
+                                                                           bootbox.confirm("Are you sure you want to Update the runlist?", function(result) {
+                                                                               /*if (!result) {
                                                                                    return;
-                                                                               }
+                                                                               }*/
                                                                                $chefRunModalContainer = $('#chefRunModalContainer');
                                                                                var $ccrs = $chefRunModalContainer.find('.chefRunlistContainer').data('$ccrs');
 
@@ -2712,10 +2713,7 @@
 
                                                                                var runlist = $ccrs.getSelectedRunlist();
 
-                                                                               if (!runlist.length) {
-                                                                                   bootbox.alert('Runlist is empty');
-                                                                                   return;
-                                                                               }
+                                                                               
 
                                                                                console.log(runlist);
 
@@ -3457,7 +3455,7 @@
 
                                                                         //if job type is chef show runlists and nodes.
                                                                         if (data[i].taskType === 'chef') {
-                                                                            var $tdNodeList = $('<td style="vertical-align:inherit;text-align:center;"></td>').append('<i style="font-size:20px;color:#40baf1" class="ace-icon fa fa-sitemap"></i><a rel="tooltip" data-placement="top" data-original-title="View Nodes" style="cursor:pointer;text-decoration:none;" data-toggle="modal"><span class="assignedNodesList" style="margin-top:10px;margin-left:8px;">Nodes&nbsp; </span></a>').append('<i style="font-size:20px;color:#40baf1;margin-left:5px;" class="ace-icon fa fa-list-ul"></i><a style="margin-top:5px;text-decoration:none" rel="tooltip" data-placement="top" data-original-title="Assigned Runlists" data-toggle="modal" href="#assignedRunlist"><span class="assignedRunlistTable" style="margin-left:10px;">View Runlist&nbsp;</span> </a>');
+                                                                            var $tdNodeList = $('<td style="vertical-align:inherit;text-align:center;"></td>').append('<a rel="tooltip" data-placement="top" data-original-title="View Nodes" style="cursor:pointer;text-decoration:none;" data-toggle="modal"><i style="font-size:20px;color:#40baf1" class="ace-icon fa fa-sitemap"></i></a>').append('<a style="margin-top:5px;text-decoration:none;margin-left:20px;" rel="tooltip" data-placement="top" data-original-title="Assigned Runlists" data-toggle="modal" href="#assignedRunlist"><i style="font-size:20px;color:#40baf1;margin-left:5px;" class="ace-icon fa fa-list-ul"></i></a>');
                                                                             $tdNodeList.find('span.assignedNodesList').data('nodeList', data[i].taskConfig.nodeIds).click(function(e) {
                                                                                 $.post('../instances/', {
                                                                                     instanceIds: $(this).data('nodeList')
@@ -3509,7 +3507,7 @@
                                                                             var jobURLS = data[i].taskConfig.jobURL;
                                                                             
                                                                             if (jobURLS) {
-                                                                                var $tdNodeList = $('<td style="vertical-align:inherit;text-align:center;"></td>').append('<span><img style="width:20px;" src="img/joburl.jpg">&nbsp;<a style="word-break: break-all;text-decoration:none" title="' + jobURLS + '" href="' + jobURLS + '" target="_blank">Job URL</a></span>');
+                                                                                var $tdNodeList = $('<td style="vertical-align:inherit;text-align:center;"></td>').append('<span>&nbsp;<a title="' + jobURLS + '" href="' + jobURLS + '" target="_blank" style="word-break: break-all;text-decoration:none"><img style="width:20px;" src="img/joburl.jpg"></a></span>');
                                                                             }
                                                                         }
                                                                         $tr.append($tdNodeList);
@@ -3754,7 +3752,7 @@
                                                                                         (function(i) {
                                                                                             var $trHistoryRow = $('<tr/>');
 
-                                                                                            $trHistoryRow.append($('<td></td>').addClass('build-number').append('<img class="center-block" style="height:20px;width:20px;" src="img/loading.gif" />'));
+                                                                                           // $trHistoryRow.append($('<td></td>').addClass('build-number').append('<img class="center-block" style="height:20px;width:20px;" src="img/loading.gif" />'));
                                                                                             //condition to get the jobname as per the particular build number..
                                                                                             $.get('../jenkins/' + taskHistories[i].jenkinsServerId + '/jobs/' + taskHistories[i].jobName, function(job) {
                                                                                                 console.log(JSON.stringify(job));
@@ -3793,11 +3791,11 @@
                                                                                                             /*var $nodeListContainer = $('.build-number');
                                                                                                             $nodeListContainer.find('img').remove();*/
                                                                                                             
-                                                                                                            var $nodeListContainer = $('.build-number');
-                                                                                                            $nodeListContainer.find('img').remove();
-                                                                                                             timeout = setTimeout(function() {
-                                                                                                            $trHistoryRow.find('.build-number').append('<a style="word-break: break-all;" href="' + url + '" title="' + url + '" target="_blank">' + taskHistories[i].buildNumber + '</a>');
-                                                                                                             }, 1500);
+                                                                                                            
+                                                                                                            
+                                                                                                            var $tdBuildNumber = $('<td/>').append('<a style="word-break: break-all;" href="' + url + '" title="' + url + '" target="_blank">' + taskHistories[i].buildNumber + '</a>');
+-                                                                                                            $trHistoryRow.append($tdBuildNumber);
+                                                                                                            
                                                                                                             
 
                                                                                                             buildFound = true;
@@ -4595,18 +4593,18 @@
                                                                                     for (var x = 0; x < data.instances.length; x++) {
 
                                                                                         pollInstanceState(data.instances[x]._id, data.instances[x].instanceState, 10000);
-
+                                                                                       // alert(pollInstanceState);
                                                                                     }
                                                                                 }
 
-                                                                                initializeTaskArea(data.tasks);
-                                                                                initializeBlueprintArea(data.blueprints);
-                                                                                x = data.instances;
+                                                                              //  initializeTaskArea(data.tasks);
+                                                                               // initializeBlueprintArea(data.blueprints);
+                                                                               // x = data.instances;
                                                                                 initializeInstanceArea(data.instances);
-                                                                                initializeStackArea(data.stacks);
+                                                                               // initializeStackArea(data.stacks);
 
                                                                             });
-                                                                            setTimeout(getInstances, 100000);
+                                                                            setTimeout(getInstances, 1000);
                                                                         }
                                                                         getInstances();
 
@@ -4616,6 +4614,24 @@
                                                                            $workzoneTab.click();
                                                                        }
                                                                    }
+
+                                                                   if (orgId && urlParams['bg'] && projectId && envId) {
+
+                                                                       $('.instanceloaderspinner').removeClass('hidden');
+                                              
+                                                                            $.get('../organizations/' + orgId + '/businessgroups/' + urlParams['bg'] + '/projects/' + projectId + '/environments/' + envId + '/', function(data) {
+                                                                                console.log('success---3---4');
+                                                                                initializeTaskArea(data.tasks);
+                                                                                initializeBlueprintArea(data.blueprints);
+                                                                                x = data.instances;
+                                                                                initializeStackArea(data.stacks);
+                                                                              });
+                                                                          }else{
+                                                                            var $workzoneTab = $('#workZoneNew');
+                                                                          if ($workzoneTab.length) {
+                                                                           $workzoneTab.click();
+                                                                       }
+                                                                          }
 
                                                                    //Generating the docker launch parameters
                                                                    function generateDockerLaunchParams() {
