@@ -2,6 +2,8 @@ var jenkinsApi = require('jenkins-api');
 var logger = require('_pr/logger')(module);
 var url = require('url');
 var fs = require('fs');
+//var http = require('http');
+var Client = require('node-rest-client').Client;
 
 
 
@@ -14,8 +16,8 @@ var Jenkins = function(options) {
         jenkinsUrl += ':' + pass + '@';
     }
 
-    jenkinsUrl += parsedUrl.host+parsedUrl.path;
-    
+    jenkinsUrl += parsedUrl.host + parsedUrl.path;
+
 
     logger.debug(jenkinsUrl);
     var jenkins = jenkinsApi.init(jenkinsUrl);
@@ -112,7 +114,7 @@ var Jenkins = function(options) {
         });
     };
 
-    this.getJobsBuildNumber = function(jobName,callback) {
+    this.getJobsBuildNumber = function(jobName, callback) {
         jenkins.last_build_info(jobName, function(err, data) {
             if (err) {
                 logger.error(err);
@@ -123,20 +125,30 @@ var Jenkins = function(options) {
         });
     };
 
-    this.updateJob = function(jobName,callback){
+    this.updateJob = function(jobName, callback) {
         //var config = fs.readFileSync("/home/gobinda/Gobinda/config.xml", 'ascii');
         jenkins.update_job(jobName, function(config) {
             //return config.replace('development',"dev");
-            },function(err, data) {
-                if(err){
-                    logger.debug("Error while updating job in jenkins: ",err);
-                    callback(err,null);
-                }
-                logger.debug("Update success jenkins job: ",JSON.stringify(data));
-                callback(null,data);
+        }, function(err, data) {
+            if (err) {
+                logger.debug("Error while updating job in jenkins: ", err);
+                callback(err, null);
+            }
+            logger.debug("Update success jenkins job: ", JSON.stringify(data));
+            callback(null, data);
         });
 
     };
+    this.getDepthJobInfo = function(jobName, callback) {
+        logger.debug("parsedUrl: ",parsedUrl.href);
+        var options_auth={user:options.username,password:options.password};
+        client = new Client(options_auth);
+        var jenkinsUrl1 = parsedUrl.href+'job/'+jobName+'/api/json?depth=1';
+        client.registerMethod("jsonMethod", jenkinsUrl1, "GET");
+        client.methods.jsonMethod(function(data,response){
+            callback(null,data);
+        });
+    }
 }
 
 module.exports = Jenkins;
