@@ -413,9 +413,9 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 if (index != -1) {
                     result.splice(index, 1);
                     logger.debug("Updated JobResultURL: ", JSON.stringify(result));
-                    var taskConfig = data.taskConfig.jobResult;
-                        taskConfig = result;
-                    Tasks.updateJobUrl(req.params.taskId, taskConfig, function(err, updateCount) {
+                    var tConfig = data.taskConfig;
+                    tConfig.jobResultURL = result;
+                    Tasks.updateJobUrl(req.params.taskId, tConfig, function(err, updateCount) {
                         if (err) {
                             logger.error(err);
                             res.send(500, errorResponses.db.error);

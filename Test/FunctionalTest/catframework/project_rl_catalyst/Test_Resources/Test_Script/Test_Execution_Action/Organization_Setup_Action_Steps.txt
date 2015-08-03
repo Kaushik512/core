@@ -54,6 +54,7 @@ Catalyst Verfiy ALL is Disabled for OrgAdmin
     Clicks on Settings
     Clicks on Users Setup
     Clicks on Users
+    Sleep    2s
     Clicks on New Button
     Enters Email Address
     Verification of Organization only with out ALL option Being Disabled

@@ -363,7 +363,7 @@ Catlayst Importing the Instance Chef Sync
 #//div[@class='domain-roles-heading']/span[@data-originaL-title='apache']
 #//div[@class='domain-roles']/div[@data-blueprintname='52.24.73.49']
 #//div[@class='messageDiv']/div
-
+ 
 
 Clicks on Inport New IP Button
     Sleep    1s
