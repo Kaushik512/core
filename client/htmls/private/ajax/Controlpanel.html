@@ -2417,11 +2417,16 @@ $.get('../instances/' + urlParams.id, function(data) {
     $hrdwareTbody.append($tr);
     function memoryCalculation(data) {
         var memoryInitial = data;
-        var mem = memoryInitial.substring(0, memoryInitial.length - 2);
-        var mem1 = mem / 1000;
-        var intvalue = Math.round(mem1);
-        var mem2 = intvalue + ' MB';
-        return mem2;
+        //alert(memoryInitial);
+        if(memoryInitial == 'unknown'){
+          return memoryInitial;
+        }else{
+          var mem = memoryInitial.substring(0, memoryInitial.length - 2);
+          var mem1 = mem / 1000;
+          var intvalue = Math.round(mem1);
+          var mem2 = intvalue + ' MB';
+          return mem2;
+        }
     }
     $tr = $('<tr style="line-height:2.3"></tr>');
     $tr.append('<td scope="col" style="font-size:12px;">Total Memory</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + memoryCalculation(data.hardware.memory.total) + '</td>');
@@ -2430,6 +2435,15 @@ $.get('../instances/' + urlParams.id, function(data) {
     $tr = $('<tr style="line-height:2.3"></tr>');
     $tr.append('<td scope="col" style="font-size:12px;">Free Memory</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + memoryCalculation(data.hardware.memory.free) + '</td>');
     $hrdwareTbody.append($tr);
+
+    // $tr = $('<tr style="line-height:2.3"></tr>');
+    // $tr.append('<td scope="col" style="font-size:12px;">Total Memory</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + data.hardware.memory.total + '</td>');
+    // $hrdwareTbody.append($tr);
+
+    // $tr = $('<tr style="line-height:2.3"></tr>');
+    // $tr.append('<td scope="col" style="font-size:12px;">Free Memory</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + data.hardware.memory.free + '</td>');
+    // $hrdwareTbody.append($tr);
+
 
 
     //software
