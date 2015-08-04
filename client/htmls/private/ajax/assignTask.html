@@ -951,6 +951,17 @@ $(document).ready(function() {
                             }
                             $spinnerJob.addClass('hidden');
                         }
+                    }).fail(function(jxhr) {
+                        $spinnerJob.addClass('hidden');
+                        var msg = "Jenkins Job Behaved Unexpectedly.";
+                        if (jxhr.responseJSON && jxhr.responseJSON.message) {
+                            msg = jxhr.responseJSON.message;
+                        } else if (jxhr.responseText) {
+                            msg = jxhr.responseText;
+                        }
+                        bootbox.alert(msg);
+
+
                     });
 
                 }
@@ -986,7 +997,18 @@ $(document).ready(function() {
                         //alert($anchor);
                         $('.jenkinsJobURL').val(jobsList.url);
                         //}
-                    });   
+                    }).fail(function(jxhr) {
+                        $spinnerJobForUrl.addClass('hidden');
+                        var msg = "Jenkins Server Behaved Unexpectedly.";
+                        if (jxhr.responseJSON && jxhr.responseJSON.message) {
+                            msg = jxhr.responseJSON.message;
+                        } else if (jxhr.responseText) {
+                            msg = jxhr.responseText;
+                        }
+                        bootbox.alert(msg);
+
+
+                    });
                 }
 
                 
@@ -1118,6 +1140,10 @@ $(document).ready(function() {
                 return false;
             }
             var jobUrl = $('.jenkinsJobURL').val();
+            /*if(!jobUrl){
+               alert('Please Choose Jenkins Job URL');
+               return false;
+            }*/
             var jobResultURL = [];
             var $jobUrlTableBody = $('#tableJobList tbody');
             var $trs = $jobUrlTableBody.find('tr');
