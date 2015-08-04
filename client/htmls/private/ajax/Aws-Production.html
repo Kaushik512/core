@@ -3757,29 +3757,35 @@
  //for removing the selected blueprint in the Existing Blueprints tab
  function removeSelectedBlueprint() {
      var blueprintId = $('.productdiv1.role-Selected1').attr('data-blueprintid');
-     if (blueprintId) {
-         //found now delete
-         bootbox.confirm("Are you sure you would like to remove this blueprint?", function(result) {
-             if (!result) {
-                 return;
-             }
-             $.get('/blueprints/delete/' + blueprintId, function(data) {
-                 //  alert(data);
-                 if (data == 'OK') {
-                     var $bcc = $('.productdiv1.role-Selected1').closest('.blueprintContainer');
-                     $('.productdiv1.role-Selected1').parent().detach();
-                     //Check if the closest bluprintcontainer is empty, if empty then hide it.
-                     // alert($bcc.find('.panel-body').children().length);
-                     if ($bcc.find('.panel-body').children().length <= 0) {
-                         $bcc.addClass('hidden');
-                     }
-                 } else
-                     alert(data);
-             });
-         });
-     } else {
-         alert('Please select a blueprint to remove.');
-     }
+    if (blueprintId) {
+        //found now delete
+        bootbox.confirm("Are you sure you would like to remove this blueprint?", function(result) {
+            //  alert(result);
+            if (!result) {
+                return;
+            } else {
+                //alert(result);
+                $.ajax({
+                    url: '/blueprints/' + blueprintId,
+                    type: 'DELETE',
+                    success: function(data) {
+                        if (data) {
+                            var $bcc = $('.productdiv1.role-Selected1').closest('.blueprintContainer');
+                            $('.productdiv1.role-Selected1').parent().detach();
+                            //Check if the closest bluprintcontainer is empty, if empty then hide it.
+                            // alert($bcc.find('.panel-body').children().length);
+                            if ($bcc.find('.panel-body').children().length <= 0) {
+                                $bcc.addClass('hidden');
+                            }
+                        } else
+                            alert(data);
+                    }
+                });
+            }
+        });
+    } else {
+        alert('Please select a blueprint to remove.');
+    }
  }
 
 

@@ -3809,7 +3809,7 @@
                                                                                     $tdHistory.find('a').data('taskId', data[i]._id).data('autosyncFlag', data[i].taskConfig.autoSyncFlag).attr('data-historyTaskId', data[i]._id).click(function(e) {
                                                                                         //var $taskHistoryContent = $('#taskHistoryContent').show();
                                                                                         var taskId = $(this).data('taskId');
-                                                                                        alert('empty');
+                                                                                        
                                                                                         $taskHistoryDatatableJenkins.row().clear().draw(true);
                                                                                         var $modal = $('#jenkinsJobHistory');
                                                                                         $modal.find('.loadingContainer').show();
@@ -4679,6 +4679,7 @@
                                                                         $('.instanceloaderspinner').removeClass('hidden');
                                                                         $.get('../organizations/' + orgId + '/businessgroups/' + urlParams['bg'] + '/projects/' + projectId + '/environments/' + envId + '/', function(data) {
                                                                             console.log('success---3---4');
+                                                                            initializeInstanceArea(data.instances);
                                                                             initializeTaskArea(data.tasks);
                                                                             initializeBlueprintArea(data.blueprints);
                                                                             x = data.instances;
@@ -4692,7 +4693,7 @@
                                                                         }
                                                                     }
 
-                                                                    if (orgId && urlParams['bg'] && projectId && envId) {
+                                                                    /*if (orgId && urlParams['bg'] && projectId && envId) {
 
                                                                         $('.instanceloaderspinner').removeClass('hidden');
 
@@ -4712,6 +4713,8 @@
                                                                                 $('.instancesList').empty();
                                                                                 var $table = $('#tableinstanceview').DataTable();
                                                                                 $table.clear().draw();
+
+
                                                                                 initializeInstanceArea(data.instances);
                                                                             });
                                                                             setTimeout(getInstances, 120000);
@@ -4719,15 +4722,14 @@
 
                                                                         getInstances();
 
-                                                                        //$('#divinstancescardview').empty();
-                                                                        //$('#divinstancestableview').empty();
+                                                                        
 
                                                                     } else {
                                                                         var $workzoneTab = $('#workZoneNew');
                                                                         if ($workzoneTab.length) {
                                                                             $workzoneTab.click();
                                                                         }
-                                                                    }
+                                                                    }*/
 
                                                                     //Generating the docker launch parameters
                                                                     function generateDockerLaunchParams() {
