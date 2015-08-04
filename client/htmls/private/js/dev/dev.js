@@ -4679,6 +4679,7 @@
                                                                         $('.instanceloaderspinner').removeClass('hidden');
                                                                         $.get('../organizations/' + orgId + '/businessgroups/' + urlParams['bg'] + '/projects/' + projectId + '/environments/' + envId + '/', function(data) {
                                                                             console.log('success---3---4');
+                                                                            initializeInstanceArea(data.instances);
                                                                             initializeTaskArea(data.tasks);
                                                                             initializeBlueprintArea(data.blueprints);
                                                                             x = data.instances;
@@ -4692,7 +4693,7 @@
                                                                         }
                                                                     }
 
-                                                                    if (orgId && urlParams['bg'] && projectId && envId) {
+                                                                    /*if (orgId && urlParams['bg'] && projectId && envId) {
 
                                                                         $('.instanceloaderspinner').removeClass('hidden');
 
@@ -4704,35 +4705,31 @@
                                                                                 if (data.instances.length > 0) {
                                                                                     for (var x = 0; x < data.instances.length; x++) {
 
-                                                                                        pollInstanceState(data.instances[x]._id, data.instances[x].instanceState, 10000);
+                                                                                        pollInstanceState(data.instances[x]._id, data.instances[x].instanceState, 1000000);
 
                                                                                     }
                                                                                 }
 
-                                                                                /*$('.instancesList').empty();
+                                                                                $('.instancesList').empty();
                                                                                 var $table = $('#tableinstanceview').DataTable();
-                                                                                
                                                                                 $table.clear().draw();
-*/
-                                                                               // alert('clearing');
-                                                                                initializeInstanceArea(data.instances);
-                                                                                
 
+
+                                                                                initializeInstanceArea(data.instances);
                                                                             });
                                                                             setTimeout(getInstances, 120000);
                                                                         }
 
                                                                         getInstances();
 
-                                                                        //$('#divinstancescardview').empty();
-                                                                        //$('#divinstancestableview').empty();
+                                                                        
 
                                                                     } else {
                                                                         var $workzoneTab = $('#workZoneNew');
                                                                         if ($workzoneTab.length) {
                                                                             $workzoneTab.click();
                                                                         }
-                                                                    }
+                                                                    }*/
 
                                                                     //Generating the docker launch parameters
                                                                     function generateDockerLaunchParams() {

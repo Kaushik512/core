@@ -192,7 +192,7 @@ module.exports.setRoutes = function(socketIo) {
 
     // Sync instance status AWS with Catalyst.
 
-    var jobId = crontab.scheduleJob("*/1 * * * *", function() { //This will call this function every 3 minutes 
+    var jobId = crontab.scheduleJob("*/3 * * * *", function() { //This will call this function every 3 minutes 
         logger.debug("Cron Job run every 3 minutes!");
         var instanceState = socketIo.of('/insState');
         var socketList = [];
@@ -200,15 +200,15 @@ module.exports.setRoutes = function(socketIo) {
             if (err) {
                 logger.debug("Error while getElementBytting instance!");
             }
-            logger.debug("Got instance: ",JSON.stringify(instances));
+            logger.debug("Got instance: ");
             if (instances.length > 0) {
-                AWSProvider.getAWSProviderById(instances[0].providerId, function(err, aProvider) {
+                AWSProvider.getAWSProviders(function(err, aProvider) {
                     if (err) {
                         logger.debug("Failed to get Provider!");
                     }
-                    logger.debug("Got Provider: ",JSON.stringify(aProvider));
+                    logger.debug("Got Provider: ");
                     if (aProvider) {
-                        AWSKeyPair.getAWSKeyPairByProviderId(aProvider._id, function(err, aKeyPair) {
+                        AWSKeyPair.getAWSKeyPairByProviderId(aProvider[0]._id, function(err, aKeyPair) {
                             if (err) {
                                 logger.debug("Failed to get KeyPair!");
                             }
@@ -218,8 +218,8 @@ module.exports.setRoutes = function(socketIo) {
                                 var cryptoConfig = appConfig.cryptoSettings;
                                 var cryptography = new Cryptography(cryptoConfig.algorithm, cryptoConfig.password);
                                 var keys = [];
-                                keys.push(aProvider.accessKey);
-                                keys.push(aProvider.secretKey);
+                                keys.push(aProvider[0].accessKey);
+                                keys.push(aProvider[0].secretKey);
                                 cryptography.decryptMultipleText(keys, cryptoConfig.decryptionEncoding, cryptoConfig.encryptionEncoding, function(err, decryptedKeys) {
                                     if (err) {
                                         res.send(500, "Failed to decrypt accessKey or secretKey");
