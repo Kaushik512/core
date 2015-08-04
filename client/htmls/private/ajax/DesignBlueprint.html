@@ -2005,6 +2005,29 @@
              var getDesignTypeImg;
              var getDesignTypeRowID;
              //alert(JSON.stringify(data)); 
+             var _tdata = [{},{},{},{}];
+            //Reordering - chef, osimage, cft, docker
+            for (var i = 0; i < rowLength; i += 1) {
+             
+              switch (data[i]['templatetype']) {
+                    case "chef":
+                      _tdata[0] = data[i];
+                      break;
+                    case "ami":
+                      _tdata[1] = data[i];
+                      break;
+                    case "cft":
+                      _tdata[2] = data[i];
+                      break;
+                    case "docker":
+                      _tdata[3] = data[i];
+                      break;
+              }
+
+            }
+            data = _tdata;
+
+
              for (var i = 0; i < rowLength; i += 1) {
                  getDesignTypeImg = data[i]['designtemplateicon_filename'];
 

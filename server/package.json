@@ -46,7 +46,8 @@
         "bcryptjs": "2.2.0",
         "mongoose-text-search": "0.0.2",
         "newrelic-node": "0.3.7",
-        "node-crontab": "0.0.8"
+        "node-crontab": "0.0.8",
+        "node-rest-client" : "1.5.1"
     },
     "devDependencies": {
         "grunt": "0.4.5",
