@@ -265,7 +265,7 @@
 
  </div>
  </div> -->
-<div class="col-lg-6 col-md-6 notForDocker notforCFT" style="margin-top:19px">
+<!-- <div class="col-lg-6 col-md-6 notForDocker notforCFT" style="margin-top:19px">
     <label>
      <i style="color:#40baf1;font-size:16px;" class="ace-icon fa fa-list-ul"></i>   
      Edit Runlist <span style="color:red">*</span>
@@ -286,7 +286,7 @@
 
 
  <div class="col-lg-4 col-md-4 notForDocker notforCFT" style="margin-top:25px;margin-left:2px;"><a style="font-size:14px!important" href="#modalForHelp" data-toggle="modal" id="dokuNew"><i class="fa fa-question"></i>&nbsp;Help</a>
- </div>
+ </div> -->
 
  
 
@@ -347,6 +347,7 @@
 
  </div>
  </div>
+
 <!-- Docker Image selection table -->
 <div class="col-lg-12 col-md-12 forDocker notforCFT" style="margin-top:5px;">
     <label for="category">Docker Images<span style="color:red">*</span>
@@ -369,6 +370,49 @@
  </div>
  </div>
  </div>
+
+  <!--configure runlist collapse starts here-->
+
+ <div class="panel panel-default divRunlistParameter notforCFT notForDocker">
+ <div class="panel-heading">
+ <h4 class="panel-title">
+ <a data-toggle="collapse" data-parent="#accordion-Design" href="#CollapseEditRunlistParam" class="collapsed"><i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i>Configure Runlist Parameters</a>
+ </h4>
+ </div>
+ <div id="CollapseEditRunlistParam" class="panel-collapse collapse">
+ <div class="panel-body" style="padding-left: 8px;">
+    <!-- <div class="col-lg-12 notForDocker notforCFT" style="margin-top:10px;padding-left:8px;overflow:hidden">
+ <div class="cookbookShow">
+
+ </div>
+ </div> -->
+<div class="col-lg-6 col-md-6 notForDocker notforCFT" style="margin-top:19px">
+    <label>
+     <i style="color:#40baf1;font-size:16px;" class="ace-icon fa fa-list-ul"></i>   
+     Edit Runlist
+     </label>
+     <a href="#chefRunlistModal" data-backdrop="false" data-toggle="modal" style="cursor:pointer;"> <img src="img/add.png" style="float:right;margin-top:6px;" class="addList" rel="tooltip" data-placement="top" title="Edit Runlist" /></a>
+     <div style="height:146px;overflow-y:auto;" id="dbNameTable_wrapper" class="dataTables_wrapper no-footer">
+        <table id="tableRunlistForBlueprint" class="table table-striped table-bordered table-hover dataTable no-footer" cellpadding="5px" width="100%" style="text-align:center";>
+           <thead>
+              <tr class="rowCustomStyle">
+                 <th style="text-align:center">View Runlist</th>
+              </tr>
+           </thead>
+           <tbody>
+           </tbody>
+        </table>
+     </div>
+</div>
+
+
+ <div class="col-lg-4 col-md-4 notForDocker notforCFT" style="margin-top:25px;margin-left:2px;"><a style="font-size:14px!important" href="#modalForHelp" data-toggle="modal" id="dokuNew"><i class="fa fa-question"></i>&nbsp;Help</a>
+ </div>
+ </div>
+</div>
+</div>
+
+ <!--configure runlist collapse ends here-->
 
  <!--assign runlist modal-->
    <div class="modal fade" id="chefRunlistModal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
@@ -850,7 +894,7 @@
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
                 <h4 class="modal-title" id="myModalLabel">Blueprint Information</h4>
             </div>
-            <div class="modal-body" style="height:534px;overflow-y:auto;">
+            <div class="modal-body" style="height:480px;overflow-y:auto;">
             	<!--os and the 1st tier-->
  <table class="table table-bordered">
     <thead>
@@ -983,10 +1027,11 @@
 
             </tbody>
            </table> 
-            <div class="modal-footer">
+            
+             </div>
+             <div class="modal-footer">
                 <button type="button" class="btn btn-default btn-primary" data-dismiss="modal">Close</button>
             </div>
-             </div>
         </div>
     </div>
 </div>
@@ -1256,7 +1301,9 @@
  function createRunlistTable(runlist) {
      //alert(runlist.length);
      //$('#tableRunlist').removeClass('hidden');
+    
      var $options = $('#cookbooksrecipesselectedList').find('option');
+     console.log("checking???" + $options);
      if (runlist.length == 0) {
          var runlist = [];
          $options.each(function() {
@@ -1292,15 +1339,12 @@
      console.log($ccrs.getSelectedRunlist());
      var runlist = $ccrs.getSelectedRunlist();
      // alert(runlist);
-     if (!runlist.length) {
-         alert('Please choose a runlist first');
-         return false;
-     } else {
+    
          // alert('here');
          createRunlistTable(runlist);
          $('#chefRunlistModal').modal('hide');
          return false;
-     }
+    
 
  });
 
@@ -2352,7 +2396,7 @@
                  $('.forCFT').hide();
                  
                  $('.cookbookShow').parent().show();
-
+                 //createRunlistTable(runlist);
                  $('.divconfigureparameterrunlist').show();
                  $('.divchefrunlist').show();
 
@@ -2464,7 +2508,7 @@
 
                                 }
                                 var $regionInput = $('<select id="cftRegionInput" class="form-control"></select>').append(regionOptStr);
-                                var $regionInputContainer = $('<div class="col-lg-6 col-md-6" style="margin-top: 10px;"><label class="cftParameterLabelContainer" for=""><span class="cftParameterLabel">Choose Region</span></label><div class="input-groups"></div></div>');
+                                var $regionInputContainer = $('<div class="col-lg-6 col-md-6" style="margin-top: 10px;"><label class="cftParameterLabelContainer" for=""><span class="cftParameterLabel required">Choose Region</span></label><div class="input-groups"></div></div>');
                                 $regionInputContainer.find('.input-groups').append($regionInput);
 
 
@@ -2644,6 +2688,8 @@
              $('.chooseProject').select2('data', null)
              // $(".chooseEnv").change();
              $(".chooseDockerContainer").change();
+            var validatorForm = $("#wizard-1").validate();
+            validatorForm.resetForm();
 
 
          } else if (index == 3) {
@@ -2874,8 +2920,9 @@
                                      var wizard = $wizard.data('bootstrapWizard');
                                      wizard.next();
                                      wizard.disablePreviouBtn();
-
+                                     if(tempType==='appfactory'){
                                      $('a#blueprintInfo').click(function(e) {
+                                      
                                        
                                          //  alert('check');
                                          var $blueprintReadContainer = $('#modalForRead');
@@ -2939,8 +2986,17 @@
                                              }
                                          });
                                          //for getting the VPC
-
+                                      
+                                         
+                                       
                                      });
+                                    }else{
+                                        $('a#blueprintInfo').click(function(e) {
+                                          bootbox.alert('Information Will be updated in the next build');
+                                          return false;
+                                        });
+                                      }
+                                         //for getting the blueprint name
                                  }).error(function(xhr) {
                                      $('.blueprintSaveFail').find('h3').first().html(xhr.responseText);
                                      $('.blueprintSaveFail').show();
@@ -2986,11 +3042,15 @@
              $("#tabheader").html('Choose Templates');
              if ($('#tab1').find('.role-Selected').attr('data-templatetype') === "Docker") {
                  $('#bootstrap-wizard-1').bootstrapWizard('show', 0);
+                var validatorForm = $("#wizard-1").validate();
+                validatorForm.resetForm();
              }
          } else if (index === 2) {
              $("#tabheader").html('Choose Template');
          } else if (index === 3) {
              $("#tabheader").html('Create Blueprint');
+            var validatorForm = $("#wizard-1").validate();
+            validatorForm.resetForm();
          }
 
      }
@@ -3093,8 +3153,34 @@
              var $ccrs = $chefCookbookRoleSelector(orgName, function(data) {
 
              }, tcb);
+             console.log("Variables>>>>>" + $ccrs);
              $cookbookShow.empty();
              $cookbookShow.append($ccrs);
+            // console.log($ccrs.substring($ccrs.lastIndexOf("[") + 1, $ccrs.lastIndexOf("]")));
+             /*var $runlistList = $('#tableRunlistForBlueprint');
+             var $tr = $('<tr class="runlistRow"></tr>');
+             var $tdName = $('<td class="runlistDescription"></td>');
+
+             $tdName.append($ccrs);*/
+            // alert($ccrs);
+            // createRunlistTable($ccrs);
+            $tasksRunlist.clear().draw();
+            for (var i = 0; i < tcb.length; i++) {
+                //alert('check');
+                if (tcb.length > 0) {
+                    //alert('ch');
+                    console.log(tcb[i].substring(tcb[i].lastIndexOf("[") + 1, tcb[i].lastIndexOf("]")));
+                    var $runlistList = $('#tableRunlistForBlueprint');
+                    var $tr = $('<tr class="runlistRow"></tr>');
+                    var $tdName = $('<td class="runlistDescription"></td>');
+
+                    $tdName.append(tcb[i].substring(tcb[i].lastIndexOf("[") + 1, tcb[i].lastIndexOf("]")));
+                    $tr.append($tdName);
+                    $runlistList.append($tr);
+                    $tasksRunlist.row.add($tr).draw();
+                }
+            }
+
              $cookbookShow.data('$ccrs', $ccrs)
 
 
@@ -3328,10 +3414,12 @@
          }
          //To fix template id and template type
          // alert('in' + data.length);
+
          for (var i = 0; i < data.length; i++) {
+          (function(i){
              console.log(data[i]);
             //alert(data[i]);
-            
+             
              //Find a panel-body with the template type class
              var $currRolePanel = $('#accordion-2').find('.' + data[i].templateType);
              //   alert($currRolePanel.length);
@@ -3514,12 +3602,24 @@
 
                       
                      }
+
                      if ($selectVer.attr('class').indexOf('dockerrepotagselect') < 0) {
-                         for (var j = 0; j < data[i].blueprintConfig.infraManagerData.versionsList.length; j++) {
-                             var $options = $('<option></option>').append(data[i].blueprintConfig.infraManagerData.versionsList[j].ver).val(data[i].blueprintConfig.infraManagerData.versionsList[j].ver);
-                             $selectVer.append($options);
-                         }
-                     }
+                     //    alert(data[i].blueprintConfig.infraManagerData.versionsList.length);
+                    // console.log("+++++++++++++++ "+i);
+                   //   console.log("sdasadsds" + JSON.stringify(data[i].blueprintConfig.infraManagerData.versionsList));
+
+                        if (typeof data[i].blueprintConfig.infraManagerData !=='undefined') {
+                            for (var j = 0; j < data[i].blueprintConfig.infraManagerData.versionsList.length; j++) {
+
+
+
+                                var $options = $('<option></option>').append(data[i].blueprintConfig.infraManagerData.versionsList[j].ver).val(data[i].blueprintConfig.infraManagerData.versionsList[j].ver);
+                                $selectVer.append($options);
+
+
+                            }
+                        }
+                   }
                      $selecteditBtnContainer.append($li);
                     
 
@@ -3548,8 +3648,10 @@
                  }
 
              }
+       })(i);
            
          }
+         //for loop for data ends here...
 
          // $("#myTabContent3").append(containerTemp);
          // $("#templateContent #grid0").addClass("role-Selected");
