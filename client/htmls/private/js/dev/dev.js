@@ -2448,8 +2448,10 @@
                                                                                 $('[dockerparamkey]').val('');
                                                                             $('#myModalLabelDockerContainer').attr('saveto', lpinput).css('z-index', '9999').modal('show');
                                                                         };
+                                                                        
                                                                         $('.launchBtn').click(function(e) {
                                                                             $('#cftForm').trigger('reset');
+
                                                                             $('#commentForm')[0].reset();
                                                                             $('#Removeonexitfield').change();
                                                                             var $selectedItems = $('.role-Selected1');
@@ -2698,13 +2700,17 @@
                                                                                 }, "No space allowed and the user can't leave it empty");
                                                                                     var $modalCftContainer = $('#cftContainer');
                                                                                     $('#cftContainer').modal('show');
-                                                                                    $("#cftForm").validate({
+                                                                                  var validator =  $("#cftForm").validate({
                                                                                         rules: {
                                                                                             cftInput: {
                                                                                                 noSpace: true,
                                                                                                 alphanumeric:true
                                                                                             }
                                                                                         }
+                                                                                    });
+                                                                                    $('a.launchBtn[type="reset"]').on('click', function() {
+                                                                                        
+                                                                                        validator.resetForm();
                                                                                     });
                                                                                     $("#cftForm").submit(function(e){
                                                                                         var stackName = $('#cftInput').val();
@@ -3587,6 +3593,8 @@
 
                                                                                     if (jobURLS) {
                                                                                         var $tdNodeList = $('<td style="vertical-align:inherit;text-align:center;"></td>').append('<span>&nbsp;<a title="' + jobURLS + '" href="' + jobURLS + '" target="_blank" style="word-break: break-all;text-decoration:none"><img style="width:20px;" src="img/joburl.jpg"></a></span>');
+                                                                                    }else{
+                                                                                        var $tdNodeList=$('<td>Not Available</td>');
                                                                                     }
                                                                                 }
                                                                                 $tr.append($tdNodeList);
