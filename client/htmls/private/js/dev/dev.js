@@ -4704,20 +4704,15 @@
                                                                                 if (data.instances.length > 0) {
                                                                                     for (var x = 0; x < data.instances.length; x++) {
 
-                                                                                        pollInstanceState(data.instances[x]._id, data.instances[x].instanceState, 10000);
+                                                                                        pollInstanceState(data.instances[x]._id, data.instances[x].instanceState, 1000000);
 
                                                                                     }
                                                                                 }
 
                                                                                 $('.instancesList').empty();
                                                                                 var $table = $('#tableinstanceview').DataTable();
-                                                                                
                                                                                 $table.clear().draw();
-
-                                                                                
                                                                                 initializeInstanceArea(data.instances);
-                                                                                
-
                                                                             });
                                                                             setTimeout(getInstances, 120000);
                                                                         }

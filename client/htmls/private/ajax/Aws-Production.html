@@ -2389,6 +2389,7 @@
              //   $('#orgnameSelect').val($('li[class*="orgSelected"]').text().trim());
              $('#orgnameSelect').val(localStorage.getItem('selectedOrgId'));
              console.log('role-Selected before ==> ', $('#tab2 .role-Selected').length);
+             //console.log("======================= "+$('.productdiv2.role-Selected').first().attr('templatetype'));
              if ($('.productdiv2.role-Selected').length > 0) {
                  //Setting controls connected to docker to hidden
                  $('.forDocker').hide();
