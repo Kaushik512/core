@@ -206,6 +206,19 @@
 </div>
  </div>
 
+ <div class="col-lg-6 col-md-6" style="margin-top:15px;">
+ <label for="instanceCount">Instances to Launch:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+ <div class="input-groups">
+ <select id="instanceCount" name="instanceCount" class="required chooseOrganization width-100 chooseSelect" style="vertical-align:central">
+ <option value="1">1</option>
+ <option value="2">2</option>
+ <option value="3">3</option>
+ <option value="4">4</option>
+ <option value="5">5</option>
+ </select>
+ </div>
+ </div> 
+
  <!--To add the Swipe Functionality-->                            
 
  
@@ -1949,6 +1962,7 @@
      getSubnet();
      getImagesWithOSFilter();
 
+
      console.log("Orgname===>" + localStorage.getItem('selectedOrgName'));
      $.get('../aws/ec2/amiids', function(data) {
          var $instanceOS = $('#instanceOS');
@@ -2144,6 +2158,7 @@
                      var getRowID, getImage;
                      //alert(JSON.stringify(data));
                      //alert('check');
+                     
                      for (var z = 0; z < rowGridLength; z += 1) {
 
                         if(gallerytype == 'ami'){
@@ -2404,7 +2419,7 @@
                             var $providerInput = $('<select id="cftProviderInput" class="form-control"></select>').append(providerStr);
                             var $providerInputContainer = $('<div class="col-lg-6 col-md-6" style="margin-top: 10px;"><label class="cftParameterLabelContainer" for=""><span class="cftParameterLabel">Choose Provider</span></label><div class="input-groups"></div></div>');
                             $providerInputContainer.find('.input-groups').append($providerInput);
-
+                            
                             $.get('/vmimages/regions/list', function(regionList) {
 
                                 regionList = typeof regionList == "string" ? JSON.parse(regionList) : regionList;
@@ -2570,6 +2585,8 @@
                     
                  } else {
                     $('div.selectedTemplateArea').first().removeClass('hidden').parent().removeClass('hidden');
+                    //setting the instance count drop down
+                    $('#instanceCount').val("1").select2();
                     if($('.productdiv2.role-Selected').first().attr('templatetype') == "ami"){
                         var vmimage = JSON.parse($('.productdiv2.role-Selected').first().attr('imagedata'));
                         $('#instanceOS').val(vmimage.osName);
@@ -2682,6 +2699,7 @@
                              reqBody.chefServerId = $ccrs.getChefServerId();
                              reqBody.instanceType = $('select.instanceType').val();
                              reqBody.instanceOS = $('#instanceOS').val();
+                             reqBody.instanceCount = $('#instanceCount').val();
                              console.log(reqBody);
 
 
