@@ -3809,7 +3809,7 @@
                                                                                     $tdHistory.find('a').data('taskId', data[i]._id).data('autosyncFlag', data[i].taskConfig.autoSyncFlag).attr('data-historyTaskId', data[i]._id).click(function(e) {
                                                                                         //var $taskHistoryContent = $('#taskHistoryContent').show();
                                                                                         var taskId = $(this).data('taskId');
-                                                                                        alert('empty');
+                                                                                        
                                                                                         $taskHistoryDatatableJenkins.row().clear().draw(true);
                                                                                         var $modal = $('#jenkinsJobHistory');
                                                                                         $modal.find('.loadingContainer').show();
@@ -4709,12 +4709,12 @@
                                                                                     }
                                                                                 }
 
-                                                                                $('.instancesList').empty();
+                                                                                /*$('.instancesList').empty();
                                                                                 var $table = $('#tableinstanceview').DataTable();
                                                                                 
                                                                                 $table.clear().draw();
-
-                                                                                
+*/
+                                                                               // alert('clearing');
                                                                                 initializeInstanceArea(data.instances);
                                                                                 
 
