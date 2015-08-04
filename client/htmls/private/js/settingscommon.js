@@ -550,9 +550,9 @@ function CreateTableFromJson(formID, idFieldName, createFileName) {
                             case "Environment":
                                 imgpath = '/d4dMasters/image/71e62952-b464-4980-b76b-482a129f5627__designtemplateicon__Environment.png';
                                 break;
-                            /*case "CloudFormation":
+                            case "CloudFormation":
                                 imgpath = '/d4dMasters/image/4fdda07b-c1bd-4bad-b1f4-aca3a3d7ebd9__designtemplateicon__Cloudformation.png';
-                                break;*/
+                                break;
                         }
                     }
 
