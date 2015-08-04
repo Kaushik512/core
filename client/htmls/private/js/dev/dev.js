@@ -3594,7 +3594,7 @@
                                                                                     if (jobURLS) {
                                                                                         var $tdNodeList = $('<td style="vertical-align:inherit;text-align:center;"></td>').append('<span>&nbsp;<a title="' + jobURLS + '" href="' + jobURLS + '" target="_blank" style="word-break: break-all;text-decoration:none"><img style="width:20px;" src="img/joburl.jpg"></a></span>');
                                                                                     }else{
-                                                                                        var $tdNodeList=$('<td></td>');
+                                                                                        var $tdNodeList=$('<td>Not Available</td>');
                                                                                     }
                                                                                 }
                                                                                 $tr.append($tdNodeList);
