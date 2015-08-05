@@ -2501,7 +2501,7 @@
                                                                                 $modalDesktopProvisioning.modal('show');
                                                                                 return;
                                                                             }
-                                                                            if ($selectedItems.attr('data-templateType') === 'Docker') {
+                                                                            if ($selectedItems.attr('data-templateType') === 'Docker' || $selectedItems.attr('data-templateType') === 'docker') {
 
                                                                                 $('.oldlaunchparams').empty(); //clearing the old div for composite blue print.
                                                                                 // alert('in test');
@@ -2575,7 +2575,7 @@
                                                                                 $('.dockerinstances').first().append($instancetable);
 
                                                                                 $('#dockerintsancestab thead td').each(function(k, v) {
-                                                                                    if (k > 3)
+                                                                                    if (k > 2)
                                                                                         $(this).detach();
                                                                                 });
                                                                                 $('#dockerintsancestab thead').append('<td>Log Info</td>');
@@ -2588,7 +2588,8 @@
                                                                                         $(this).addClass('rowcustomselected');
                                                                                     });
                                                                                     $(this).find('td').each(function(k1, v1) {
-                                                                                        if (k1 > 3)
+
+                                                                                        if (k1 > 2)
                                                                                             $(this).detach();
                                                                                         //inserting a checkbox to select instance
                                                                                         if (k1 == 0) {
@@ -2607,7 +2608,7 @@
                                                                                 $('#dockerInstanceSelectionTitle').empty().append('Select Instances to pull  "' + dockerreponame + '" into');
                                                                                 $launchDockerInstanceSelector.modal('show');
                                                                                 $('#rootwizard').find("a[href*='tab1']").trigger('click'); //showing first tab.
-                                                                                $('#dockerintsancestab thead').empty().append('<tr><td>Select Instance</td><td>Logo</td><td>Instance Name</td><td>IP Address</td><td>Log</td><td  class="hidden">Add Docker Engine</td></tr>');
+                                                                                $('#dockerintsancestab thead').empty().append('<tr><td>Select Instance</td><td>Instance Name</td><td>IP Address</td><td>Log</td><td  class="hidden">Add Docker Engine</td></tr>');
                                                                                 $('#dockerintsancestab').dataTable({
                                                                                     "bPaginate": false
                                                                                 });
