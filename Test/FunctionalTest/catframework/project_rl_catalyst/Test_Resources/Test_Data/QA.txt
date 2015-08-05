@@ -10,11 +10,12 @@ Resource           catalyst.txt
 
 *** Variables ***
 ${BROWSERTYPE}                    firefox                   
-${ENVIRONMENTSERVER}               http://10.0.1.206:3003/public/login.html           
+${ENVIRONMENTSERVER}              http://10.0.1.206:3003/public/login.html
+#http://d4d.relevancelab.com:3001                
 
-http://10.0.1.206:3003/public/login.html
 
-
+#http://supercatalyst.relevancelab.com
+#http://10.0.1.206:3003/public/login.html
 #http://10.0.1.206:3002/private/index.html#ajax/Settings/Dashboard.html
 
 
@@ -37,8 +38,7 @@ ${BUSINESS GROUP NAME}           Devops
 ${PROJECT NAME}                  Catalyst
 ${PROJECT DESCRIPTION}           Catalyst product automation Description
 ${ENVIRONMENT NAME}              Dev
-${CONFIG MANAGEMENT NAME}             RLChefServer
-
+${CONFIG MANAGEMENT NAME}             RLChefServer                       
 
 
 
@@ -81,10 +81,10 @@ ${SUITS}                stopped
 ${UserName}             root
 ${RUNLIST}              recipe[apache2]
 ${KEYPAIRNAME}           cat_instances
-${REGION NAME}           US West (Oregon) | us-west-2
-${SUBNET NAME}           subnet-aed68ce8 (us-west-2c)
+${REGION NAME}           US West 
+${SUBNET NAME}           subnet-aed68ce8
 ${NEW CONFIG NAME}       catserver
-${REGION NAME}            US West (Oregon) | us-west-2
+${REGION NAME}            US West
 ${BLUEPRINT TESTNAME}          TestingNew
 
 
@@ -111,11 +111,11 @@ ${KNIFERBFILE}                ${ROOTPATH}\\Chef\\knife.rb
 ${CATALYSTPEM}                ${ROOTPATH}\\Chef\\catalyst.pem
 ${CAT_INSTANCES}              ${ROOTPATH}\\Chef\\cat_instances.pem
 
-${CENTOSIMG}                  ${ROOTPATH}\\Images\\centos.jpg
-${UBUNTUIMG}                  ${ROOTPATH}\\Images\\ubuntuu.jpg
-${APPICON}                    ${ROOTPATH}\\Images\\rel.jpg    
-${TEMPLTYPEICON}              ${ROOTPATH}\\Images\\index.jpg           
-${APACHEIMG}                  ${ROOTPATH}\\Images\\apache.jpg
+${CENTOSIMG}                  ${ROOTPATH}/Images/centos.jpg
+${UBUNTUIMG}                  ${ROOTPATH}/Images/ubuntuu.jpg
+${APPICON}                    ${ROOTPATH}/Images/rel.jpg    
+${TEMPLTYPEICON}              ${ROOTPATH}/Images/index.jpg           
+${APACHEIMG}                  ${ROOTPATH}/Images/apache.jpg
 
 ${JENKINSNAME}            JenkinsTAT
 ${JENKINS URL}               http://54.68.204.110:9091/
@@ -152,7 +152,7 @@ ${IP ADDRESS}             52.10.69.55
 ${IP USERNAME}            root
 ${IP APPNAME}             RelevanceApp
 ${IP URL}                 http://www.google.com
-${REG}                    US West (Oregon) | us-west-2
+${REG}                    US West
 ${CHEF BOOTSTRAP}         waiting
 ${MACHINE STATS}           unknown
 ${APPLICATION NAME}       RelRio
@@ -167,7 +167,7 @@ ${MAT RUNLIST1}            recipe[a],recipe[cron]
 ${MAT OS1}                 ubuntu
 ${UBUNTU MEM}              1016256kB
 ${UBUNTU REC}              recipe[apt],recipe[apt]
-${TEMPLATE TYPENAME}       CatAutomatn          #AppFactory
+${TEMPLATE TYPENAME}       AppFactory                 #CatAutomatn          
 ${random}                  adarsh
 ${ADD}                     apache2              #tomcat-all
 ${ACTBOOT1}                 Pending
@@ -483,6 +483,7 @@ ${VaildOrGErrMsg}                           Required
 ${VaildEmptyTempName}                       Required
 ${Vaild15ChrTempErrMsg}                     limited to 15 chars
 ${VaildBlankspErrMsg}                       space(s) not allowed
+${VaildNoOrgTemplErrMsg}                    Required
 
 
 #Service Setup

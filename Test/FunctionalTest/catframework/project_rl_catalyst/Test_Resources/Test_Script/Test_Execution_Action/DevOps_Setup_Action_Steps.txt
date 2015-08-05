@@ -332,8 +332,8 @@ Clicks on ButtonCancel Button
 
 
 Devops click on Created Config Mgmt
-    Wait Until keyword Succeeds    1 minute     1 seconds    Wait Until Element Is Visible    xpath=.//*[@id='envtable']/tbody/tr/td[text()='Relevance_Labs']/../td/div/a[2]/i 
-    Click Element    xpath =.//*[@id='envtable']/tbody/tr/td[text()='Relevance_Labs']/../td/div/a[2]/i                                                              
+    Wait Until keyword Succeeds    1 minute     1 seconds    Wait Until Element Is Visible    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${CONFIG MANAGEMENT NAME}']/../td[5]/div/a[1]
+    Click Element    xpath =.//*[@id='envtable']/tbody/tr/td[text()='${CONFIG MANAGEMENT NAME}']/../td[5]/div/a[1]                                                      
 
 Organization is Disabled
      Wait Until keyword Succeeds    1 minute     1 seconds    Wait Until Element Is Visible    id=orgname
