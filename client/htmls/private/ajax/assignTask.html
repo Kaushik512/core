@@ -114,7 +114,7 @@
                                                       <div class="col-lg-6 col-md-6" style="margin-top:5px;">
                                                          <label>
                                                          <i style="color:#40baf1;font-size:16px;" class="ace-icon fa fa-list-ul"></i>   
-                                                         Edit Runlist <span style="color:red">*</span>
+                                                         Edit Runlist
                                                          </label>
                                                          <a href="#chefRunlistModal" data-backdrop="false" data-toggle="modal" style="cursor:pointer;"> <img src="img/add.png" style="float:right;margin-top:6px;" class="addList" rel="tooltip" data-placement="top" title="Edit Runlist" /></a>
                                                          <div style="height:146px;overflow-y:auto;" id="dbNameTable_wrapper" class="dataTables_wrapper no-footer">
@@ -951,6 +951,17 @@ $(document).ready(function() {
                             }
                             $spinnerJob.addClass('hidden');
                         }
+                    }).fail(function(jxhr) {
+                        $spinnerJob.addClass('hidden');
+                        var msg = "Jenkins Job Behaved Unexpectedly.";
+                        if (jxhr.responseJSON && jxhr.responseJSON.message) {
+                            msg = jxhr.responseJSON.message;
+                        } else if (jxhr.responseText) {
+                            msg = jxhr.responseText;
+                        }
+                        bootbox.alert(msg);
+
+
                     });
 
                 }
@@ -986,7 +997,18 @@ $(document).ready(function() {
                         //alert($anchor);
                         $('.jenkinsJobURL').val(jobsList.url);
                         //}
-                    });   
+                    }).fail(function(jxhr) {
+                        $spinnerJobForUrl.addClass('hidden');
+                        var msg = "Jenkins Server Behaved Unexpectedly.";
+                        if (jxhr.responseJSON && jxhr.responseJSON.message) {
+                            msg = jxhr.responseJSON.message;
+                        } else if (jxhr.responseText) {
+                            msg = jxhr.responseText;
+                        }
+                        bootbox.alert(msg);
+
+
+                    });
                 }
 
                 
@@ -1073,10 +1095,10 @@ $(document).ready(function() {
             var runlist = $ccrs.getSelectedRunlist();
             
 
-            if (!runlist.length) {
+            /*if (!runlist.length) {
                 alert('Please choose runlist');
                 return false;
-            }
+            }*/
             taskData.nodeIds = nodesList;
             taskData.runlist = runlist;
             //taskData.attributesjson = $('#attrtextarea').val().trim();
@@ -1118,6 +1140,10 @@ $(document).ready(function() {
                 return false;
             }
             var jobUrl = $('.jenkinsJobURL').val();
+            /*if(!jobUrl){
+               alert('Please Choose Jenkins Job URL');
+               return false;
+            }*/
             var jobResultURL = [];
             var $jobUrlTableBody = $('#tableJobList tbody');
             var $trs = $jobUrlTableBody.find('tr');
@@ -1395,15 +1421,12 @@ $(document).ready(function() {
         console.log($ccrs.getSelectedRunlist());
         var runlist = $ccrs.getSelectedRunlist();
        // alert(runlist);
-        if (!runlist.length) {
-            alert('Please choose a runlist first');
-            return false;
-        } else {
+        
             // alert('here');
             createRunlistTable(runlist);
             $('#chefRunlistModal').modal('hide');
             return false;
-        }
+        
 
     });
 

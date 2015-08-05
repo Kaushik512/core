@@ -2007,6 +2007,10 @@
      $(".chooseSelectExit").select2();
      $('select').select2();
 
+     var sortbyid = function SortByID(x,y) {
+                      return x.position - y.position; 
+                    }
+
      $.ajax({
          url: "/d4dMasters/readmasterjsonnew/16",
          dataType: "json",
@@ -2019,27 +2023,26 @@
              var getDesignTypeImg;
              var getDesignTypeRowID;
              //alert(JSON.stringify(data)); 
-             var _tdata = [{},{},{},{}];
-            //Reordering - chef, osimage, cft, docker
-            for (var i = 0; i < rowLength; i += 1) {
              
+            for (var i = 0; i < rowLength; i += 1) {
+                                                                             
               switch (data[i]['templatetype']) {
                     case "chef":
-                      _tdata[0] = data[i];
+                     data[i]['position'] = 0;
                       break;
                     case "ami":
-                      _tdata[1] = data[i];
+                      data[i]['position'] = 1;
                       break;
                     case "cft":
-                      _tdata[2] = data[i];
+                      data[i]['position'] = 2;
                       break;
                     case "docker":
-                      _tdata[3] = data[i];
+                      data[i]['position'] = 3;
                       break;
               }
 
             }
-            data = _tdata;
+            data.sort(sortbyid);
 
 
              for (var i = 0; i < rowLength; i += 1) {

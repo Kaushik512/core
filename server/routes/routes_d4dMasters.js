@@ -2559,28 +2559,24 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                 res.send(500, "Failed to save Org.");
                                                 return;
                                             }
-                                            for (var x1 = 0; x1 < 5; x1++) {
+                                            for (var x1 = 0; x1 < 4; x1++) {
                                                 (function(x1) {
                                                     var templatetypename;
                                                     var designtemplateicon_filename;
                                                     var templatetype;
                                                     if (x1 === 0) {
-                                                        templatetypename = "AppFactory";
+                                                        templatetypename = "SoftwareStack";
                                                         designtemplateicon_filename = "Appfactory.png";
                                                         templatetype = "chef";
                                                     } else if (x1 === 1) {
-                                                        templatetypename = "DevOpsRoles";
-                                                        designtemplateicon_filename = "DevopsRoles.png";
-                                                        templatetype = "chef";
-                                                    } else if (x1 === 2) {
-                                                        templatetypename = "Desktop";
+                                                        templatetypename = "OSImages";
                                                         designtemplateicon_filename = "Desktop Provisining.png";
-                                                        templatetype = "chef";
-                                                    } else if (x1 === 3) {
-                                                        templatetypename = "Environment";
-                                                        designtemplateicon_filename = "Environment.png";
-                                                        templatetype = "chef";
-                                                    } else {
+                                                        templatetype = "ami";
+                                                    } else if (x1 === 2) {
+                                                        templatetypename = "CloudFormation";
+                                                        designtemplateicon_filename = "CloudFormation.png";
+                                                        templatetype = "cft";
+                                                    }  else {
                                                         templatetypename = "Docker";
                                                         designtemplateicon_filename = "Docker.png";
                                                         templatetype = "docker";

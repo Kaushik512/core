@@ -11,7 +11,7 @@
                                 <div class="panel-group smart-accordion-default" id="accordion-1" style="overflow-y: auto;">
                                     <div class="panel panel-default">
                                         <div class="panel-heading">
-                                            <h4 class="panel-title" style="width:88%">
+                                            <h4 class="panel-title" style="width:86%">
                                             <a data-toggle="collapse" style="float:left">Instances</a>
                                             <div class="instanceloaderspinner hidden"><img   src="img/select2-spinner.gif"> Loading Instances</div>
                                             <form type="post" id="instancesearchform">
@@ -51,7 +51,7 @@
                                         </div>
                                         <div id="collapseOne-1" class="panel-collapse collapse in">
                                             <div class="panel-body" style="padding:0px !important;">
-                                                <div id="tabInstanceStatus">&nbsp;</div>
+                                             <!--    <div id="tabInstanceStatus">&nbsp;</div> -->
                                                 <div class="widget-box" id="divinstancestableview">
                                                     <div class="widget-body">
                                                         <div class="widget-main " style="min-height:300px">
@@ -61,7 +61,7 @@
                                                                     <table id="tableinstanceview" class="table table-bordered dataTable" cellpadding="5px" width="100%" style="border:1px solid #eeeeee !important; text-align:center;">
                                                                         <thead>
                                                                         <tr class="rowCustomStyle" style="font-weight:bold;">
-                                                                            <td>S.No.</td>
+                                                                            
                                                                             <td>Logo</td>
                                                                             <td>Name</td>
                                                                             <td>IPAddress</td>
@@ -73,7 +73,7 @@
                                                                             <td class="widthAdjustment">Action</td>
                                                                         </tr>
                                                                         </thead>
-                                                                        <tbody>
+                                                                        <tbody class="customRow">
 
 
                                                                         </tbody>
@@ -115,7 +115,7 @@
 
 
                             </div>
-                            <a class="btn pull-right btn-danger right-button" title="Remove Instance" id="removeInstance" >
+                            <a class="btn pull-right btn-danger right-button" title="Delete Instance" id="removeInstance" >
                                 <i class="fa fa-trash-o"></i>
                             </a>&nbsp;
                             

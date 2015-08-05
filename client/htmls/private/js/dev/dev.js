@@ -2061,6 +2061,10 @@
                                                                         var $desktopProvisioningPanelBody = $('.desktopProvisioningPanel').find('.panel-body');
                                                                         $devopsRolepanelBody.empty();
 
+                                                                        var sortbyid = function SortByID(x,y) {
+                                                                          return x.position - y.position; 
+                                                                        }
+
                                                                         //alert(orgId + "/" + projectId + "/" + envId + data.length);
 
                                                                         //Displaying the Template Types.
@@ -2075,31 +2079,37 @@
                                                                             var getDesignTypeName;
                                                                             var getDesignType;
                                                                             $('#accordion-2').empty();
-                                                                            var _tdata = [{},{},{},{}];
+                                                                           // var _tdata = [];
+                                                                            //alert(JSON.stringify(tdata));
                                                                             //Reordering - chef, osimage, cft, docker
                                                                             for (var i = 0; i < rowLength; i += 1) {
                                                                              
                                                                               switch (tdata[i]['templatetype']) {
                                                                                     case "chef":
-                                                                                      _tdata[0] = tdata[i];
+                                                                                     tdata[i]['position'] = 0;
                                                                                       break;
                                                                                     case "ami":
-                                                                                      _tdata[1] = tdata[i];
+                                                                                      tdata[i]['position'] = 1;
                                                                                       break;
                                                                                     case "cft":
-                                                                                      _tdata[2] = tdata[i];
+                                                                                      tdata[i]['position'] = 2;
                                                                                       break;
                                                                                     case "docker":
-                                                                                      _tdata[3] = tdata[i];
+                                                                                      tdata[i]['position'] = 3;
                                                                                       break;
                                                                               }
 
                                                                             }
-                                                                            tdata = _tdata;
+                                                                            tdata.sort(sortbyid);
+                                                                            
 
                                                                             console.log(tdata);
                                                                             for (var i = 0; i < rowLength; i += 1) {
+                                                                              console.log(i);
+                                                                              if(tdata[i]['designtemplateicon_filename'])
                                                                                 getDesignTypeImg = tdata[i]['designtemplateicon_filename'];
+                                                                              else
+                                                                                getDesignTypeImg = ''; //tdata[i]['designtemplateicon_filename']
                                                                                 getDesignTypeRowID = tdata[i]['rowid'];
                                                                                 getDesignTypeName = tdata[i]['templatetypename'];
                                                                                 getDesignType = tdata[i]['templatetype'];
@@ -2472,8 +2482,10 @@
                                                                                 $('[dockerparamkey]').val('');
                                                                             $('#myModalLabelDockerContainer').attr('saveto', lpinput).css('z-index', '9999').modal('show');
                                                                         };
+                                                                        
                                                                         $('.launchBtn').click(function(e) {
                                                                             $('#cftForm').trigger('reset');
+
                                                                             $('#commentForm')[0].reset();
                                                                             $('#Removeonexitfield').change();
                                                                             var $selectedItems = $('.role-Selected1');
@@ -2722,13 +2734,17 @@
                                                                                 }, "No space allowed and the user can't leave it empty");
                                                                                     var $modalCftContainer = $('#cftContainer');
                                                                                     $('#cftContainer').modal('show');
-                                                                                    $("#cftForm").validate({
+                                                                                  var validator =  $("#cftForm").validate({
                                                                                         rules: {
                                                                                             cftInput: {
                                                                                                 noSpace: true,
                                                                                                 alphanumeric:true
                                                                                             }
                                                                                         }
+                                                                                    });
+                                                                                    $('a.launchBtn[type="reset"]').on('click', function() {
+                                                                                        
+                                                                                        validator.resetForm();
                                                                                     });
                                                                                     $("#cftForm").submit(function(e){
                                                                                         var stackName = $('#cftInput').val();
@@ -3611,6 +3627,8 @@
 
                                                                                     if (jobURLS) {
                                                                                         var $tdNodeList = $('<td style="vertical-align:inherit;text-align:center;"></td>').append('<span>&nbsp;<a title="' + jobURLS + '" href="' + jobURLS + '" target="_blank" style="word-break: break-all;text-decoration:none"><img style="width:20px;" src="img/joburl.jpg"></a></span>');
+                                                                                    }else{
+                                                                                        var $tdNodeList=$('<td>Not Available</td>');
                                                                                     }
                                                                                 }
                                                                                 $tr.append($tdNodeList);
@@ -3833,7 +3851,7 @@
                                                                                     $tdHistory.find('a').data('taskId', data[i]._id).data('autosyncFlag', data[i].taskConfig.autoSyncFlag).attr('data-historyTaskId', data[i]._id).click(function(e) {
                                                                                         //var $taskHistoryContent = $('#taskHistoryContent').show();
                                                                                         var taskId = $(this).data('taskId');
-                                                                                        alert('empty');
+                                                                                        
                                                                                         $taskHistoryDatatableJenkins.row().clear().draw(true);
                                                                                         var $modal = $('#jenkinsJobHistory');
                                                                                         $modal.find('.loadingContainer').show();
@@ -4703,6 +4721,7 @@
                                                                         $('.instanceloaderspinner').removeClass('hidden');
                                                                         $.get('../organizations/' + orgId + '/businessgroups/' + urlParams['bg'] + '/projects/' + projectId + '/environments/' + envId + '/', function(data) {
                                                                             console.log('success---3---4');
+                                                                            initializeInstanceArea(data.instances);
                                                                             initializeTaskArea(data.tasks);
                                                                             initializeBlueprintArea(data.blueprints);
                                                                             x = data.instances;
@@ -4716,7 +4735,7 @@
                                                                         }
                                                                     }
 
-                                                                    if (orgId && urlParams['bg'] && projectId && envId) {
+                                                                    /*if (orgId && urlParams['bg'] && projectId && envId) {
 
                                                                         $('.instanceloaderspinner').removeClass('hidden');
 
@@ -4728,35 +4747,31 @@
                                                                                 if (data.instances.length > 0) {
                                                                                     for (var x = 0; x < data.instances.length; x++) {
 
-                                                                                        pollInstanceState(data.instances[x]._id, data.instances[x].instanceState, 10000);
+                                                                                        pollInstanceState(data.instances[x]._id, data.instances[x].instanceState, 1000000);
 
                                                                                     }
                                                                                 }
 
                                                                                 $('.instancesList').empty();
                                                                                 var $table = $('#tableinstanceview').DataTable();
-                                                                                
                                                                                 $table.clear().draw();
 
-                                                                                
-                                                                                initializeInstanceArea(data.instances);
-                                                                                
 
+                                                                                initializeInstanceArea(data.instances);
                                                                             });
                                                                             setTimeout(getInstances, 120000);
                                                                         }
 
                                                                         getInstances();
 
-                                                                        //$('#divinstancescardview').empty();
-                                                                        //$('#divinstancestableview').empty();
+                                                                        
 
                                                                     } else {
                                                                         var $workzoneTab = $('#workZoneNew');
                                                                         if ($workzoneTab.length) {
                                                                             $workzoneTab.click();
                                                                         }
-                                                                    }
+                                                                    }*/
 
                                                                     //Generating the docker launch parameters
                                                                     function generateDockerLaunchParams() {
