@@ -2087,8 +2087,8 @@
                                                                                 getDesignTypeRowID = tdata[i]['rowid'];
                                                                                 getDesignTypeName = tdata[i]['templatetypename'];
                                                                                 //alert(tdata[i].orgname_rowid[0]);
-                                                                                if(orgData[j].rowid===tdata[i].orgname_rowid[0]){
-                                                                                    alert(orgData[j].rowid===tdata[i].orgname_rowid[0]);
+                                                                                if(orgData[j].rowid == tdata[i].orgname_rowid[0]){
+                                                                                 //   alert(orgData[j].rowid===tdata[i].orgname_rowid[0]);
                                                                                 // for (var x = 0; x < tdata.masterjson.rows.row[i].field.length; x++) {
                                                                                 //     if (tdata.masterjson.rows.row[i].field[x].name == "rowid") {
                                                                                 //         getDesignTypeRowID = tdata.masterjson.rows.row[i].field[x].values.value;
@@ -2104,7 +2104,7 @@
                                                                                 // }
                                                                                 //Extracting the TT definitions. Add New Template types
                                                                                 var $currRolePanel = null;
-                                                                                //alert(getDesignTypeName);
+                                                                                
                                                                                 switch (getDesignTypeName) {
                                                                                     case "AppFactory":
                                                                                         $AppFactpanelBody = $('<div class="panel-body AppFactory"></div>');
@@ -2132,7 +2132,7 @@
                                                                                         break;
 
                                                                                 }
-
+                                                                               // alert(getDesignTypeName);
 
                                                                                 $containerTemp = '<div class="panel panel-default blueprintContainer hidden">' +
                                                                                     '<div class="panel-heading">' +
@@ -2145,7 +2145,7 @@
                                                                                     '<div class="panel-body ' + getDesignTypeName + '"></div>' +
                                                                                     '</div>';
                                                                                 $('#accordion-2').append($containerTemp);
-
+                                                                              // alert($containerTemp);
                                                                                     }
                                                                                 }
                                                                             })(j);
@@ -2156,7 +2156,7 @@
                                                                                 //alert(JSON.stringify(data[i]));
                                                                                 //Find a panel-body with the template type class
                                                                                 var $currRolePanel = $('#accordion-2').find('.' + data[i].templateType);
-                                                                                //   alert($currRolePanel.length);
+                                                                                  // alert(data[i].templateType);
                                                                                 if ($currRolePanel.length > 0) {
                                                                                     var $itemContainer = $('<div></div>').addClass("productdiv4");
 
@@ -2293,8 +2293,10 @@
                                                                                     $currRolePanel.append($itemContainer);
                                                                                     //enabling the bluepintContiner div when item added.
                                                                                     $currRolePanel.closest('.blueprintContainer').removeClass('hidden');
+                                                                                  //  alert($currRolePanel);
                                                                                     // alert($currRolePanel.html());
                                                                                     $currRolePanel.parent().parent().show();
+
                                                                                     //Attaching the selection event.
                                                                                     if (i == (data.length - 1)) {
                                                                                         var $productdiv1 = $('.productdiv1');
@@ -2320,6 +2322,7 @@
                                                                     }); //end of getTreeForBtv
                                                                         $('#accordion-2').on('show.bs.collapse', function(e) {
                                                                             console.log(e.target);
+
                                                                             $(e.target).find('.productdiv1').first().click();
                                                                         });
                                                                         //Expanding the fist Accordion.
@@ -3670,6 +3673,7 @@
                                                                                     var $tdHistory = $('<td style="vertical-align:inherit;text-align:center;"></td>').append('<a rel="tooltip" data-placement="top" data-original-title="History" data-toggle="modal" href="javascript:void(0)" class="btn btn-primary btn-sg tableactionbutton"><i class="ace-icon fa fa-header bigger-120"></i></a>');
                                                                                     $tdHistory.find('a').data('taskId', data[i]._id).attr('data-historyTaskId', data[i]._id).click(function(e) {
                                                                                         //var $taskHistoryContent = $('#taskHistoryContent').show();
+                                                                                     //   alert(JSON.stringify(data[i]));
                                                                                         var taskId = $(this).data('taskId');
                                                                                         var $modal = $('#chefJobHistory');
                                                                                         $modal.find('.loadingContainer').show();
@@ -3679,9 +3683,11 @@
                                                                                         $('#orchestrationTable').hide();
                                                                                         $('.hideChefJob').click(function(e) {
                                                                                             $modal.addClass('hidden');
+                                                                                            
                                                                                             $('#orchestrationTable').show();
                                                                                         });
                                                                                         $taskHistoryDatatable.clear().draw();
+                                                                                        $('.widget-header').find('h5.chefTitle').html('Chef History For -&nbsp;' + data[i].name);
                                                                                         $.get('../tasks/' + taskId + '/history', function(taskHistories) {
                                                                                             for (var i = 0; i < taskHistories.length; i++) {
                                                                                                 var $trHistoryRow = $('<tr/>');
@@ -3830,7 +3836,7 @@
                                                                                     $tdHistory.find('a').data('taskId', data[i]._id).data('autosyncFlag', data[i].taskConfig.autoSyncFlag).attr('data-historyTaskId', data[i]._id).click(function(e) {
                                                                                         //var $taskHistoryContent = $('#taskHistoryContent').show();
                                                                                         var taskId = $(this).data('taskId');
-                                                                                        
+                                                                                       // alert(JSON.stringify(data[i]));
                                                                                         $taskHistoryDatatableJenkins.row().clear().draw(true);
                                                                                         var $modal = $('#jenkinsJobHistory');
                                                                                         $modal.find('.loadingContainer').show();
@@ -3843,8 +3849,9 @@
                                                                                             $taskHistoryDatatableJenkins.row().clear().draw(true);
                                                                                             $('#orchestrationTable').show();
                                                                                         });
+                                                                                       
+                                                                                       $('.widget-header').find('h5.jenkinsTitle').html('Jenkins Job History For -&nbsp;' + data[i].name);
                                                                                         
-
                                                                                         var autoSyncFlag = $(this).data('autosyncFlag');
 
                                                                                         console.log('autoSyncFlag', autoSyncFlag);
@@ -3856,13 +3863,20 @@
 
                                                                                             console.log(taskHistories);
 
+
                                                                                             for (var i = 0; i < taskHistories.length; i++) {
+                                                                                                //alert(taskHistories.length);
+                                                                                                
+                                                                                                
+                                                                                                
                                                                                                 (function(i) {
+
                                                                                                     var $trHistoryRow = $('<tr/>');
 
                                                                                                     //$trHistoryRow.append($('<td></td>').addClass('build-number').append('<img class="center-block" style="height:20px;width:20px;" src="img/loading.gif" />'));
                                                                                                     //condition to get the jobname as per the particular build number..
                                                                                                     $.get('../jenkins/' + taskHistories[i].jenkinsServerId + '/jobs/' + taskHistories[i].jobName, function(job) {
+                                                                                                        
                                                                                                         console.log(JSON.stringify(job));
                                                                                                         var url;
                                                                                                         var buildFound = false
