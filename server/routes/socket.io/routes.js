@@ -190,7 +190,7 @@ module.exports.setRoutes = function(socketIo) {
 
     });
 
-// Sync instance status AWS with Catalyst.
+    // Sync instance status AWS with Catalyst.
 
     var jobId = crontab.scheduleJob("*/3 * * * *", function() { //This will call this function every 3 minutes 
         logger.debug("Cron Job run every 3 minutes!");
@@ -202,67 +202,69 @@ module.exports.setRoutes = function(socketIo) {
             }
             logger.debug("Got instance: ");
             if (instances.length > 0) {
-                AWSProvider.getAWSProviderById(instances[0].providerId, function(err, aProvider) {
+                AWSProvider.getAWSProviders(function(err, aProvider) {
                     if (err) {
                         logger.debug("Failed to get Provider!");
                     }
                     logger.debug("Got Provider: ");
-                    AWSKeyPair.getAWSKeyPairByProviderId(aProvider._id, function(err, aKeyPair) {
-                        if (err) {
-                            logger.debug("Failed to get KeyPair!");
-                        }
-                        logger.debug("Got KeyPair: ");
-                        if (aKeyPair) {
-                            var instanceIds = [];
-                            var cryptoConfig = appConfig.cryptoSettings;
-                            var cryptography = new Cryptography(cryptoConfig.algorithm, cryptoConfig.password);
-                            var keys = [];
-                            keys.push(aProvider.accessKey);
-                            keys.push(aProvider.secretKey);
-                            cryptography.decryptMultipleText(keys, cryptoConfig.decryptionEncoding, cryptoConfig.encryptionEncoding, function(err, decryptedKeys) {
-                                if (err) {
-                                    res.send(500, "Failed to decrypt accessKey or secretKey");
-                                    return;
-                                }
-                                var ec2 = new EC2({
-                                    "access_key": decryptedKeys[0],
-                                    "secret_key": decryptedKeys[1],
-                                    "region": aKeyPair[0].region
-                                });
-                                logger.debug("AWS ec2: ", JSON.stringify(ec2));
-                                for (var i = 0; i < instances.length; i++) {
-                                    instanceIds.push(instances[i].platformId);
-                                }
-                                logger.debug("All instance Ids: ", JSON.stringify(instanceIds));
-                                ec2.describeInstances(instanceIds, function(err, awsInstances) {
+                    if (aProvider) {
+                        AWSKeyPair.getAWSKeyPairByProviderId(aProvider[0]._id, function(err, aKeyPair) {
+                            if (err) {
+                                logger.debug("Failed to get KeyPair!");
+                            }
+                            logger.debug("Got KeyPair: ");
+                            if (aKeyPair) {
+                                var instanceIds = [];
+                                var cryptoConfig = appConfig.cryptoSettings;
+                                var cryptography = new Cryptography(cryptoConfig.algorithm, cryptoConfig.password);
+                                var keys = [];
+                                keys.push(aProvider[0].accessKey);
+                                keys.push(aProvider[0].secretKey);
+                                cryptography.decryptMultipleText(keys, cryptoConfig.decryptionEncoding, cryptoConfig.encryptionEncoding, function(err, decryptedKeys) {
                                     if (err) {
-                                        logger.debug("Failed to describe Instances from AWS!", err);
+                                        res.send(500, "Failed to decrypt accessKey or secretKey");
+                                        return;
                                     }
-                                    logger.debug("Described Instances from AWS: ");
-                                    if (awsInstances) {
-                                        var reservations = awsInstances.Reservations;
-                                        for (var x = 0; x < reservations.length; x++) {
-                                            if (instances[x].instanceState === reservations[x].Instances[0].State.Name) {
-                                                logger.debug("Status matched......");
-                                            } else {
-                                                logger.debug("Status does not matched.....", instances[x]._id);
-                                                instancesDao.updateInstanceState(instances[x]._id, reservations[x].Instances[0].State.Name, function(err, data) {
-                                                    if (err) {
-                                                        logger.error("Failed to updateInstance State!", err);
-                                                        callback(err, null);
-                                                        return;
-                                                    }
+                                    var ec2 = new EC2({
+                                        "access_key": decryptedKeys[0],
+                                        "secret_key": decryptedKeys[1],
+                                        "region": aKeyPair[0].region
+                                    });
+                                    logger.debug("AWS ec2: ", JSON.stringify(ec2));
+                                    for (var i = 0; i < instances.length; i++) {
+                                        instanceIds.push(instances[i].platformId);
+                                    }
+                                    logger.debug("All instance Ids: ", JSON.stringify(instanceIds));
+                                    ec2.describeInstances(instanceIds, function(err, awsInstances) {
+                                        if (err) {
+                                            logger.debug("Failed to describe Instances from AWS!", err);
+                                        }
+                                        logger.debug("Described Instances from AWS: ");
+                                        if (awsInstances) {
+                                            var reservations = awsInstances.Reservations;
+                                            for (var x = 0; x < reservations.length; x++) {
+                                                if (instances[x].instanceState === reservations[x].Instances[0].State.Name) {
+                                                    logger.debug("Status matched......");
+                                                } else {
+                                                    logger.debug("Status does not matched.....", instances[x]._id);
+                                                    instancesDao.updateInstanceState(instances[x]._id, reservations[x].Instances[0].State.Name, function(err, data) {
+                                                        if (err) {
+                                                            logger.error("Failed to updateInstance State!", err);
+                                                            callback(err, null);
+                                                            return;
+                                                        }
 
-                                                    logger.debug("Exit updateInstanceState: ");
-                                                });
+                                                        logger.debug("Exit updateInstanceState: ");
+                                                    });
+                                                }
                                             }
                                         }
-                                    }
 
+                                    });
                                 });
-                            });
-                        }
-                    });
+                            }
+                        });
+                    }
                 });
             }
         });

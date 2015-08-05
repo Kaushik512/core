@@ -27,10 +27,10 @@
                                     <hr>
                                     <div class="componentlistContainer">
                                       <div class="instance-bootstrap-list">
-                                        <span style="overflow:hidden;text-overflow:ellipsis;width:62px;" class="instance-details-item">
+                                        <!-- <span style="overflow:hidden;text-overflow:ellipsis;width:62px;" class="instance-details-item">
                                           <a class="btn instance-bootstrap-list-faimage" href="javascript:void(0);" rel="tooltip" data-placement="top" data-original-title="View All Runlist"><i class="fa fa-2x fa-exchange txt-color-blue"></i>
                                           </a>
-                                        </span>
+                                        </span> -->
                                       </div>
                                       <div class="forURL">
                                       
@@ -61,17 +61,17 @@
                                         <a href="javascript:void(0)" class='sshShellBtn cpTop sshTerminalBtn' data-actiontype="SSH" data-placement="top" rel="tooltip" data-original-title="SSH">
                                         </a>
                                       </div>
-                                      <!--rdp-->
                                         <div class="rdpContainer actionbutton instance-bootstrap-ActionRDP">
                                         <a class='rdpIcon rdpShellBtn cpTop'>
                                         </a>
                                       </div>
-                                      <!--rdp ends here-->
+                                      
                                     </div>
+
                                   </div>
                                 </div>
                               </div>
-                              <div class="back card-backflip">                            
+                              <!-- <div class="back card-backflip">
                                   <span class="card-backflip-margin">
                                     <a style="color:#333;">
                                       <i class="fa fa-lg fa-fw fa-book txt-color-blue"></i>
@@ -80,15 +80,13 @@
                                   </span>
                                   <hr>
                                   <div class="cardBackRunlistContaner">
-                                    <!-- <span class="instance-details-item" style="margin-top:8px;overflow:hidden;text-overflow:ellipsis;
-                                    width:130px;color:#3a87ad"></span> -->
-                                    <!-- append(data.runlist[j]) -->
+                                    
                                   </div>
-                                <hr>
-                                <span style="width:160px;text-align:center;display:block;margin-top:8px" class="goback">
-                                  <a style="color:#333;cursor:pointer">Go Back</a>
-                                </span>
-                              </div>
+                                  <hr>
+                                  <span style="width:160px;text-align:center;display:block;margin-top:8px" class="goback">
+                                    <a style="color:#333;cursor:pointer">Go Back</a>
+                                  </span>
+                              </div> -->
                             </div>
                           </div>
                       </li>
@@ -240,7 +238,7 @@
  <tr class="rowCustomStyle">
 
                                                                             
- <td>S.No</td>
+ <td style="width:5%">S.No</td>
  <td style="width:40%">Name</td>
  <td style="width:20%" class="">Action</td>
 
@@ -1268,7 +1266,18 @@ function populateWorkstation(){
     });
 }
 
-$('.workstationBtn').click(populateWorkstation);
+//bootbox alert for setting it as a workstation..
+$('.workstationBtn').click(function() {
+    bootbox.confirm({
+        message: "Are you sure you want to Convert this to a Workstation?",
+        title: "Confirmation",
+        callback: function(result) {
+            if (result) {
+              populateWorkstation();
+            }
+        }
+    });
+});
 
 function disableSSHBtn(instanceId) {
     var $cardViewInstanceId = $(".domain-roles-caption[data-instanceId='" + instanceId + "']");
@@ -1462,7 +1471,7 @@ $.get('../instances/' + urlParams.id, function(data) {
 
                 $serviceList.append($tr);
             }
-        })
+        });
         //console.log('hi ==>',serviceList);
 
 
@@ -1484,7 +1493,35 @@ $.get('../instances/' + urlParams.id, function(data) {
     $.get('/instances/' + urlParams.id + '/actionLogs', function(actionLogs) {
         addActionLogsToTable(actionLogs);
     });
-
+    var showmenuAppTaskVar = {
+      getshowmenuAppTask: function() {
+        return '<div class="showmenuAppTask"><a class="btn1 showmenuAppTaskAnchor"><i class="fa fa-ellipsis-h showmenuAppTaskAnchorI"></i></a></div>';
+    }};
+    var menuAppTaskLI = '';
+    var menuTaskListLI = '';
+    /*var menuAppTaskVar = {
+      getmenuAppTask: function(data) {
+        //alert("I am in function");
+        //alert(data.appUrls.length);
+        if (data.appUrls && data.appUrls.length) {
+            for (var k = 0; k < data.appUrls.length; k++) {
+                // if (k == 2) {
+                //     break;
+                // }
+                var url = data.appUrls[k].url;
+                if (data.appUrls[k].url) {
+                    url = url.replace('$host', data.instanceIP);
+                }
+                var tempApp = "<li><a style='font-size:10px;' data-appUrlId='" + data.appUrls[k]._id + "' class='app-url' title='" + url + "' href='" + url + "'' target='_blank' >" + data.appUrls[k].name + "</a></li>";
+                menuAppTaskLI = menuAppTaskLI + tempApp;
+            }
+        } else {
+            menuAppTaskLI = "<li style='font-size:10px;color:#3276b1'>No AppLinks Available</li>";
+        }
+        
+        //alert(menuAppTaskLI);
+        return '<div class="menuAppTask" style="display: none;"><span class="menuAppLinkSpan">App Links</span><ul class="paddingleft32">' + menuAppTaskLI + '</ul></div>';
+    }};*/
     var getOS = function(data) {
             if (data.bootStrapStatus === 'waiting') {
                 console.log('polling bootStrapStatus');
@@ -1575,7 +1612,7 @@ $.get('../instances/' + urlParams.id, function(data) {
     var $spanheadingRightCP = $('<span></span>').css({
         'float': 'left',
         'margin-top': '4px',
-        'margin-left': '8px'
+        'margin-left': '37px'
     }).append($('<a href="javascript:void(0)" data-instanceId="' + data._id + '"></a>').addClass('moreInfo').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'MoreInfo'));
 
     $divHeadingCP.append($spanheadingLeftCP);
@@ -1583,9 +1620,68 @@ $.get('../instances/' + urlParams.id, function(data) {
     $divHeadingCP.append($(getOS(data)));
 
     $('.instanceActionBtnCtr').append([$(getStartStopToggler(data)), $spanheadingRightCP]);
+    $('.instanceActionBtnCtr').append(showmenuAppTaskVar.getshowmenuAppTask());
+    $('.instance-bootstrap-list').append($spanheadingRightCP);
     //$divHeadingCP.append($spanheadingRightCP);
     //$domainRolesCaption.append($divHeadingCP);
 
+    //$domainRolesCaption.append(menuAppTaskVar.getmenuAppTask(data));
+    $domainRolesCaption.find('.showmenuAppTask').click(function() {
+      
+      $.get('../instances/' + instanceId ,function(data1){
+        if(data1.orgId){
+        $.get('../organizations/' + data1.orgId + '/businessgroups/' + data1.bgId + '/projects/' + data1.projectId + '/environments/' + data1.envId + '/', function(data2) {
+            console.log('success---3---4');
+            var urls;
+            var instanceIp;
+            for(var i in data2.instances){
+              console.log(data2.instances[i]);
+              if(data2.instances[i]._id == instanceId){
+                urls = data2.instances[i].appUrls;
+                instanceIp = data2.instances[i].instanceIP;
+                break;
+              }
+            }
+            //var urls= data2.instances[0].appUrls;
+            //console.log("data2 is:"+urls);
+            var stringmenuAppTask = '';
+            
+            if(urls && urls.length){
+              
+              var menuAppTaskLI ='';
+                  for(var i = 0; i< urls.length;i++){
+                    $domainRolesCaption.find('.menuAppTask').empty();
+                  console.log("I am inside the Loop");
+                      var url = urls[i].url;
+                      if (url) {
+                          url = url.replace('$host', instanceIp);
+                      }
+                      var tempApp = "<li><a style='font-size:10px;' data-appUrlId='" + urls[i]._id + "' class='app-url' title='" + url + "' href='" + url + "'' target='_blank' >" + urls[i].name + "</a></li>";
+
+                      menuAppTaskLI = menuAppTaskLI + tempApp;
+                    }
+                } else {
+                    menuAppTaskLI = "<li style='font-size:10px;color:#3276b1'>No AppLinks Available</li>";
+                }
+                stringmenuAppTask = "<div class='menuAppTask' style='display: none;'><span class='menuAppLinkSpan'>App Links</span><ul class='paddingleft32'>" + menuAppTaskLI + "</ul></div>";
+                $domainRolesCaption.append(stringmenuAppTask);
+                var $menu = $domainRolesCaption.find('.menuAppTask');
+                if ($menu.is(':visible')) {
+                  $domainRolesCaption.find('.menuAppTask').remove();
+                  $menu.hide();
+                } else {
+                    $('.menuAppTask').hide();
+                    $menu.show();
+                    var $anchor = $('.app-url').parent();
+                    $anchor.click(function() {
+                      $domainRolesCaption.find('.menuAppTask').remove();
+                      $menu.hide();                                                                                          
+                    });  
+                }
+          });
+        }
+      });
+    });
     $('.startstoptoggler').click(startAndStopToggler);
     // .append('<img src="img/templateicons/'+data.blueprintData.templateId+'.png" style="height:20px;width:20px;margin-right:5px;">').append(data.blueprintData.blueprintName);
     $domainRolesCaption.find('.instance-details-ip strong').html(data.instanceIP);
@@ -2319,14 +2415,35 @@ $.get('../instances/' + urlParams.id, function(data) {
     var $tr = $('<tr style="line-height:2.3"></tr>');
     $tr.append('<td scope="col" style="font-size:12px;">Machine</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + data.hardware.architecture + '</td>');
     $hrdwareTbody.append($tr);
-
+    function memoryCalculation(data) {
+        var memoryInitial = data;
+        //alert(memoryInitial);
+        if(memoryInitial == 'unknown'){
+          return memoryInitial;
+        }else{
+          var mem = memoryInitial.substring(0, memoryInitial.length - 2);
+          var mem1 = mem / 1000;
+          var intvalue = Math.round(mem1);
+          var mem2 = intvalue + ' MB';
+          return mem2;
+        }
+    }
     $tr = $('<tr style="line-height:2.3"></tr>');
-    $tr.append('<td scope="col" style="font-size:12px;">Total Memory</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + data.hardware.memory.total + '</td>');
+    $tr.append('<td scope="col" style="font-size:12px;">Total Memory</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + memoryCalculation(data.hardware.memory.total) + '</td>');
     $hrdwareTbody.append($tr);
 
     $tr = $('<tr style="line-height:2.3"></tr>');
-    $tr.append('<td scope="col" style="font-size:12px;">Free Memory</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + data.hardware.memory.free + '</td>');
+    $tr.append('<td scope="col" style="font-size:12px;">Free Memory</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + memoryCalculation(data.hardware.memory.free) + '</td>');
     $hrdwareTbody.append($tr);
+
+    // $tr = $('<tr style="line-height:2.3"></tr>');
+    // $tr.append('<td scope="col" style="font-size:12px;">Total Memory</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + data.hardware.memory.total + '</td>');
+    // $hrdwareTbody.append($tr);
+
+    // $tr = $('<tr style="line-height:2.3"></tr>');
+    // $tr.append('<td scope="col" style="font-size:12px;">Free Memory</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + data.hardware.memory.free + '</td>');
+    // $hrdwareTbody.append($tr);
+
 
 
     //software
@@ -2385,7 +2502,8 @@ $.get('../instances/' + urlParams.id, function(data) {
     if (data.appUrls && data.appUrls.length) {
         for (var kk = 0; kk < data.appUrls.length; kk++) {
             createAppUrlTableRow(data.appUrls[kk]);
-            createAppUrlCardLink(data.appUrls[kk], data.instanceIP);
+            //menuAppTaskVar.getmenuAppTask(data);
+            //createAppUrlCardLink(data.appUrls[kk], data.instanceIP);
         }
     }
     /*else {
@@ -3064,7 +3182,7 @@ $(document).ready(function() {
      }
      var $tdURL = $('<td class="appUrlTable"/>').append('<a style="word-break:break-word" href="' + url + '" target="_blank">' + appUrlData.name + '</a> ');
      var $tdAction = $('<td/>');
-     $tdAction.append('<div class="btn-group"><button class="btn btn-info pull-left btn-sg tableactionbutton appUrlEditLink" value="Update" title="Update"><i class="ace-icon fa fa-pencil bigger-120"></i></button></div>').append('<div style="margin-left:5px;" class="btn-group"><button class="btn btn-danger pull-left btn-sg tableactionbutton appUrlRemoveLink" value="Remove" title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></div>');
+     $tdAction.append('<div class="btn-group"><button class="btn btn-info pull-left btn-sg tableactionbutton appUrlEditLink" data-placement="top" value="Update" title="Edit"><i class="ace-icon fa fa-pencil bigger-120"></i></button></div>').append('<div style="margin-left:5px;" class="btn-group"><button class="btn btn-danger pull-left btn-sg tableactionbutton appUrlRemoveLink" data-placement="top" value="Remove" title="Delete"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></div>');
 
      $tdAction.find('.appUrlEditLink').click(function() {
          var appUrlData = $row.data('appUrlData');
@@ -3099,43 +3217,56 @@ $(document).ready(function() {
  }
 
  function removeAppUrlCardLink(appUrlId) {
+  //alert(appUrlId);
      var $anchor = $('a[data-appUrlId="' + appUrlId + '"]').parent();
      if (!$anchor.length) {
          return;
-
      }
-     console.log($anchor);
-     console.log($anchor.index());
-     //alert($anchor.index());
-     var index = $anchor.index();
+     // console.log($anchor);
+     // console.log($anchor.index());
+     // //alert($anchor.index());
+     // var index = $anchor.index();
      
-     if (index < 3) {
-         var $nextLink;
-         if (index == 1) {console.log(data[0]);
-             $nextLink = $anchor.next().next();
-         } else {
-             $nextLink = $anchor.next();
-         }
-         console.log($nextLink.length);
-         $nextLink.show();
-     }
-     $anchor.remove();
+     // if (index < 3) {
+     //     var $nextLink;
+     //     if (index == 1) {console.log(data[0]);
+     //         $nextLink = $anchor.next().next();
+     //     } else {
+     //         $nextLink = $anchor.next();
+     //     }
+     //     console.log($nextLink.length);
+     //     $nextLink.show();
+     // }
+      // var $nextLink;
+      // if (index == 1) {console.log(data[0]);
+      //     $nextLink = $anchor.next().next();
+      // } else {
+      //    $nextLink = $anchor.next();
+      // }
+      // console.log($nextLink.length);
+      // $nextLink.show();
+    $anchor.remove();
  }
 
- function createAppUrlCardLink(appUrlData, instanceIP) {
-     var $cardAppUrlListContanier = $('.instance-bootstrap-list');
-     var url = appUrlData.url;
-     if (url) {
-         url = url.replace('$host', instanceIP);
-     }
-     var anchor = "<span class='marginForURLCP'><a class='app-url' data-instanceIP='" + instanceIP + "' data-appUrlId='" + appUrlData._id + "' href='" + url + "'' target='_blank' title='" + appUrlData.name + "'>" + appUrlData.name + "</a></span>";
-     var $anchor = $(anchor);
-     if ($cardAppUrlListContanier.find('.marginForURLCP').length > 1) {
-         $anchor.hide();
-     }
-     $cardAppUrlListContanier.last().append($anchor);
+ 
+ // function createAppUrlCardLink(appUrlData, instanceIP) {
+ //    //menuAppTaskVar.getmenuAppTask(appUrlData);
+ //     var $cardAppUrlListContanier = $('.instance-bootstrap-list');
+ //     var url = appUrlData.url;
+ //     if (url) {
+ //         url = url.replace('$host', instanceIP);
+ //     }
+ //     var anchor = "<span class='marginForURLCP'><a class='app-url' data-instanceIP='" + instanceIP + "' data-appUrlId='" + appUrlData._id + "' href='" + url + "'' target='_blank' title='" + appUrlData.name + "'>" + appUrlData.name + "</a></span>";
+ //     var $anchor = $(anchor);
+ //     // if ($cardAppUrlListContanier.find('.marginForURLCP').length > 1) {
+ //     //     $anchor.hide();
+ //     // }
+ //     //$cardAppUrlListContanier.last().append($anchor);
+ //     // $('.instanceActionBtnCtr').find('.showmenuAppTask').click();
+ //     // $('.instanceActionBtnCtr').find('.menuAppTask').append($anchor);
+ //     //alert($('.instanceActionBtnCtr').html());
 
- }
+ // }
 
 
 
@@ -3176,9 +3307,9 @@ $(document).ready(function() {
              console.log(data);
              if (!appUrlId) {
                 //alert("appUrlId ====>"+appUrlId);
-                //console.log(data[0]);
+                console.log("DATA:"+data[0]);
                  createAppUrlTableRow(data[0]);
-                 createAppUrlCardLink(data[0], window.instanceIPForAppLink);
+                 //createAppUrlCardLink(data[0], window.instanceIPForAppLink);
              } else {
                 //When edit button clicked in a row it's executed.
                  var $tr = $('tr[data-appUrlIdTableRow="' + appUrlId + '"]');

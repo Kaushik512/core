@@ -19,7 +19,6 @@ Resource           ${CATALYST ACTION}/Users_Setup_With_New_Users_and_Teams.txt
 *** Variables ***
 
 *** Keywords ***
-
 Catalyst Login
     Browser is opened to login catalyst
     Enters catalyst User Name
@@ -31,6 +30,7 @@ Catalyst Create New Org Admin
     Clicks on Users Setup
     Clicks on Users
     Clicks on New Button
+    Sleep    4s
     Enters the Org Admin Login Name
     Enters the Org Admin Email Address
     Select The Organization of the OrgAdmin created
@@ -40,6 +40,8 @@ Catalyst Create New Org Admin
     Assign the Roles as Admin
     Assign Teams for OrgAdmin
     Clicks on USave Button
+    Sleep    5s
+    Verfiy OrgAdmin is Created
 
 Catalyst Org Admin Verfifcation of New,Update,Delete Button disabled
     Clicks on Settings
@@ -56,6 +58,7 @@ Catalyst Verfiy ALL is Disabled for OrgAdmin
     Clicks on Users
     Sleep    2s
     Clicks on New Button
+    Sleep    4s
     Enters Email Address
     Verification of Organization only with out ALL option Being Disabled
     Sleep    1s
@@ -65,9 +68,9 @@ Catalyst Creation of Designer and Consumer
     Clicks on Settings
     Clicks on Users Setup
     Clicks on Users
-    Sleep    1s
-    Clicks on New Button
     Sleep    2s
+    Clicks on New Button
+    Sleep    8s
     Enters Login name as Designer
     Enters Email Address
     Select particular User Created organization
@@ -77,9 +80,9 @@ Catalyst Creation of Designer and Consumer
     Selecting the Role as Designer
     Assign Teams for users
     Clicks on USave Button
-    Sleep    1s
+    Sleep    6s
     Clicks on New Button
-    Sleep    2s
+    Sleep    8s
     Enters Login name as Consumer
     Enters Email Address
     Select particular User Created organization
@@ -89,6 +92,8 @@ Catalyst Creation of Designer and Consumer
     Selecting the Role as Consumer
     Assign Teams for users
     Clicks on USave Button
+    Sleep    5s
+    Verify Designer and Consumer are Created
 
 
 
@@ -102,6 +107,15 @@ Verification of Organization only with out ALL option Being Disabled
     Input Text    css=#select2-drop > div > input    ${ORGANIZATION NAME}
     Click Element    css=li > div
 
+Verfiy OrgAdmin is Created
+    Sleep    3s
+    Element Should Contain    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${ORG ADMIN USER}']    ${ORG ADMIN USER}    
+
+Verify Designer and Consumer are Created
+    Sleep    3s
+    Element Should Contain    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${LOGIN NAME1}']    ${LOGIN NAME1}
+    Sleep    2s
+    Element Should Contain    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${LOGIN NAME2}']    ${LOGIN NAME2}
 
 
 
@@ -576,6 +590,7 @@ Vaildate the Edit Business Group fields
     Enters New Edit BusinessGroup Name
     Clicks on Save button to save the Business group details 
     Verfiy that Edited Business Group is created  ${ProductGroupName}
+  
 
 
 Clicks on Organzatin Tree 
@@ -605,6 +620,7 @@ Clicks on Save button to save the Business group details
 
 Clicks on Update Button of Business Group Created
     Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible    xpath=.//*[@id='envtable']/tbody/tr/td[text()="${VaildBGrpName2}"]/../td[3]/div/a
+    Sleep    3s
     Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()="${VaildBGrpName2}"]/../td[3]/div/a
 
 Enters New Edit BusinessGroup Name
@@ -615,7 +631,9 @@ Enters New Edit BusinessGroup Name
 Verfiy that Edited Business Group is created
     [Arguments]    ${BusinessGroupMsg}
     Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       xpath=.//*[@id='envtable']/tbody/tr/td[text()="${VaildEditBusinessGroup}"]
-    Element Should Contain    xpath=.//*[@id='envtable']/tbody/tr/td[text()="${VaildEditBusinessGroup}"]    ${BusinessGroupMsg}   
+    Element Should Contain    xpath=.//*[@id='envtable']/tbody/tr/td[text()="${VaildEditBusinessGroup}"]    ${BusinessGroupMsg}
+    Sleep    2s
+    Element Should Contain    xpath=.//*[@id='envtable']/tbody/tr/td[text()="${BUSINESS GROUP NAME}"]    ${BUSINESS GROUP NAME}   
 
                                                                             #business group ends
 
@@ -823,7 +841,9 @@ Verfiy that EditedProject is created
 Verify that EditedProjectDesc is created
     [Arguments]    ${ProjectEditDescMsg}
     Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       xpath=.//*[@id='envtable']/tbody/tr/td[text()="${VaildEditDescProject}"]
-    Element Should Contain    xpath=.//*[@id='envtable']/tbody/tr/td[text()="${VaildEditDescProject}"]    ${ProjectEditDescMsg}    
+    Element Should Contain    xpath=.//*[@id='envtable']/tbody/tr/td[text()="${VaildEditDescProject}"]    ${ProjectEditDescMsg}
+    Sleep    2s 
+    Element Should Contain    xpath=.//*[@id='envtable']/tbody/tr/td[text()="${PROJECT NAME}"]    ${PROJECT NAME}  
 
                                                                              #project ends
 Catalyst Logout
