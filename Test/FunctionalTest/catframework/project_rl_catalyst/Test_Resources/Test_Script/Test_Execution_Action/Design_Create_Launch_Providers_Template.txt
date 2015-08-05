@@ -125,7 +125,7 @@ Catalyst Creation of New Blueprint and Delete
     Choose the Provider
     Choose the Available Images
     Choose the Region
-    Select the VPC
+    #Select the VPC
     Select the Subnet
     Select the Key Pair
     Choose Instance Size
@@ -187,8 +187,11 @@ Catalyst Creation of Providers Setup
     Selects the Key Pair
     Uploads the Pem File for Provider
     Clicks on Save Button of the Provider
+    Verfiy the Provider is Created
 
-
+Verfiy the Provider is Created
+    Sleep    2s
+    Element Should Contain    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${PROVIDER NAME}']    ${PROVIDER NAME}
 
 Validation of Creation of New Image
     Validation of Empty Image Name  ${ValidEmptyImageName}
@@ -213,6 +216,12 @@ Catalyst Creation of VM Image Process for CentOS
     Enters the UserName of CentOSProviders
     Select the Organizatn to Create Cent OS Img
     Clicks on Save Button of Providers
+    Verfiy the Centos Img is Created
+
+Verfiy the Centos Img is Created
+    Sleep    2s
+    Element Should Contain    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${IMAGE NAME1}']    ${IMAGE NAME1}
+
 
 Catalyst Creation of VM Image Process for Ubutnu
     Sleep    5s
@@ -224,6 +233,12 @@ Catalyst Creation of VM Image Process for Ubutnu
     Enters the UserName of UbuntuProviders
     Select the Organizatn to Create Ubuntu Img
     Clicks on Save Button of Providers
+    Verfiy the Ubuntu Img is Created
+
+Verfiy the Ubuntu Img is Created
+    Sleep    2s
+    Element Should Contain    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${IMAGE NAME2}']    ${IMAGE NAME2}    
+
 
 Catalyst Creation of VM Image Process for Windows
     Sleep    5s
@@ -238,10 +253,19 @@ Catalyst Creation of VM Image Process for Windows
     Validate the Edit of VM Image
 
 Validate the Edit of VM Image
+    Sleep    3s
     Clicks on Edit Button of Windows Image
+    Sleep    2s
     Enters the New Image name for Windows
     Enters the UserName of WindowsProviders
     Clicks on Save Button of Providers
+    Verfiy the Windows Img is Created
+
+Verfiy the Windows Img is Created
+    Sleep    2s
+    Element Should Contain    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${IMAGE NAME4}']    ${IMAGE NAME4}
+
+
 
 Select organization now
     Sleep    4s
@@ -252,7 +276,7 @@ Select organization now
     Click Element    css=.select2-result-label
 
 Clicks on Edit Button of Windows Image
-    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()='Windows']/../td[6]/div/a[2]
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${IMAGE NAME3}']/../td[6]/div/a[1]
 
 Select the Organizatn to Create Cent OS Img
     Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='s2id_orgId']/a/span[1]
@@ -567,7 +591,7 @@ Catalyst Choose Template and Save Setup for UBUNTU
     Choose the Provider
     Choose the Available Images
     Choose the Region
-    Select the VPC
+    #Select the VPC
     Select the Subnet
     Select the Key Pair
     Choose Instance Size for Ubuntu
@@ -1580,8 +1604,8 @@ Selects the Region
     Log    After Click
     Input Text    css=#select2-drop .select2-input    US West
     Sleep    4s
-    Click Element    xpath=css=#select2-drop > ul > li:nth-child(1) > div > span
-    Sleep 1s
+    Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
+    Sleep    1s
     
    #Wait Until Keyword Succeeds    2 minute     1 seconds      Click Element    xpath=//span[./text()='Select Region']
     #Input Text    xpath=.//*[@id='select2-drop']/div/input     US West (Oregon) | us-west-2
@@ -1809,8 +1833,8 @@ Chooses Organization
     
 
 #Select WorkCookBooks
-    Sleep    1s
-    Click Element    id=btnRunlistItemUp
+    #Sleep    1s
+    #Click Element    id=btnRunlistItemUp
     #Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[2]
     #Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='checkout-form']/div[3]/div/div/div[1]/div[1]/label[3]
     #Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesselectedList']/option[1]
@@ -1879,7 +1903,7 @@ Chooses The Environment
     Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
 
 Clicks on Configure Application URL
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='accordion-Design']/div[4]/div[1]/h4/a/i[1]
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='accordion-Design']/div[6]/div[1]/h4/a/i[1]
 
 Clicks on AppNew Button
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='newAppSeries']

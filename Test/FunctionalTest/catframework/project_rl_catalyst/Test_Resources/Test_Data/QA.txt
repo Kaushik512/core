@@ -11,8 +11,11 @@ Resource           catalyst.txt
 *** Variables ***
 ${BROWSERTYPE}                    firefox                   
 ${ENVIRONMENTSERVER}              http://10.0.1.206:3003/public/login.html
-
 #http://d4d.relevancelab.com:3001                
+
+
+#http://supercatalyst.relevancelab.com
+#http://10.0.1.206:3003/public/login.html
 #http://10.0.1.206:3002/private/index.html#ajax/Settings/Dashboard.html
 
 
@@ -35,8 +38,7 @@ ${BUSINESS GROUP NAME}           Devops
 ${PROJECT NAME}                  Catalyst
 ${PROJECT DESCRIPTION}           Catalyst product automation Description
 ${ENVIRONMENT NAME}              Dev
-${CONFIG MANAGEMENT NAME}             RLChefServer
-
+${CONFIG MANAGEMENT NAME}             RLChefServer                       
 
 
 
@@ -165,7 +167,7 @@ ${MAT RUNLIST1}            recipe[a],recipe[cron]
 ${MAT OS1}                 ubuntu
 ${UBUNTU MEM}              1016256kB
 ${UBUNTU REC}              recipe[apt],recipe[apt]
-${TEMPLATE TYPENAME}       CatAutomatn          #AppFactory
+${TEMPLATE TYPENAME}       AppFactory                 #CatAutomatn          
 ${random}                  adarsh
 ${ADD}                     apache2              #tomcat-all
 ${ACTBOOT1}                 Pending
@@ -481,6 +483,7 @@ ${VaildOrGErrMsg}                           Required
 ${VaildEmptyTempName}                       Required
 ${Vaild15ChrTempErrMsg}                     limited to 15 chars
 ${VaildBlankspErrMsg}                       space(s) not allowed
+${VaildNoOrgTemplErrMsg}                    Required
 
 
 #Service Setup

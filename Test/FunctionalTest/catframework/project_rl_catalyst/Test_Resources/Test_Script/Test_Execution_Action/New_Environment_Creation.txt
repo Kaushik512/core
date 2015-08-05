@@ -44,6 +44,8 @@ Catalyst Addition and Creation of New Envirorments Setup
     #Assign Team2
     Assign Created Project2
     Clicks on Save Button to save the Environments
+    Sleep    2s
+    Verfiy the Environment is Created
 
 
 
@@ -64,6 +66,12 @@ Catalyst Addition of New Environments
     Assign Created Project2
     Clicks on Save Button to save the Environments
 
+
+Verfiy the Environment is Created
+    Sleep    3s
+    Element Should Contain    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${EnV1}']/../td[text()='${ORGANIZATION NAME}']    ${ORGANIZATION NAME}
+    Sleep    2s
+    Element Should Contain    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${EnV2}']/../td[text()='${ORGANIZATION NAME}']    ${ORGANIZATION NAME}
 
 
 
