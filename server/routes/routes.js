@@ -35,6 +35,7 @@ var appConfig = require('_pr/config');
 var cloudformation = require('./routes_cloudformation');
 
 var notification = require('./routes_notification');
+var globalsettings = require('./routes_globalsettings');
 
 module.exports.setRoutes = function(app) {
 
@@ -83,6 +84,7 @@ module.exports.setRoutes = function(app) {
     chefClientExecution.setRoutes(app);
 
     cloudformation.setRoutes(app, sessionVerificationFunc);
+    globalsettings.setRoutes(app, sessionVerificationFunc);
 
     app.get('/', function(req, res) {
         res.redirect('/private/index.html');

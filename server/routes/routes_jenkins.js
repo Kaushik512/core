@@ -1,3 +1,10 @@
+/* Copyright (C) Relevance Lab Private Limited- All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Gobinda Das <gobinda.das@relevancelab.com>, 
+ * Aug 2015
+ */
+
 var Jenkins = require('../lib/jenkins');
 var configmgmtDao = require('../model/d4dmasters/configmgmt');
 var errorResponses = require('./error_responses');
