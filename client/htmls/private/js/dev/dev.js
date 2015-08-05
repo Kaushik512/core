@@ -2062,7 +2062,8 @@
                                                                         $devopsRolepanelBody.empty();
 
                                                                         //alert(orgId + "/" + projectId + "/" + envId + data.length);
-
+                                                                        //displaying the organisation from tree view
+                                                                        $.get('../organizations/getTreeForbtv',function(orgData){
                                                                         //Displaying the Template Types.
                                                                         $.get("/d4dMasters/readmasterjsonnew/16", function(tdata) {
                                                                             tdata = JSON.parse(tdata);
@@ -2075,10 +2076,19 @@
                                                                             var getDesignTypeName;
                                                                             $('#accordion-2').empty();
                                                                             console.log(tdata);
+
+                                                                            //for loop for getting the orgdata
+
+                                                                            for(var j=0;j<orgData.length;j++){
+                                                                               // alert(orgData[j].rowid);
+                                                                               (function(j){
                                                                             for (var i = 0; i < rowLength; i += 1) {
                                                                                 getDesignTypeImg = tdata[i]['designtemplateicon_filename'];
                                                                                 getDesignTypeRowID = tdata[i]['rowid'];
                                                                                 getDesignTypeName = tdata[i]['templatetypename'];
+                                                                                //alert(tdata[i].orgname_rowid[0]);
+                                                                                if(orgData[j].rowid===tdata[i].orgname_rowid[0]){
+                                                                                    alert(orgData[j].rowid===tdata[i].orgname_rowid[0]);
                                                                                 // for (var x = 0; x < tdata.masterjson.rows.row[i].field.length; x++) {
                                                                                 //     if (tdata.masterjson.rows.row[i].field[x].name == "rowid") {
                                                                                 //         getDesignTypeRowID = tdata.masterjson.rows.row[i].field[x].values.value;
@@ -2136,6 +2146,9 @@
                                                                                     '</div>';
                                                                                 $('#accordion-2').append($containerTemp);
 
+                                                                                    }
+                                                                                }
+                                                                            })(j);
                                                                             }
                                                                             //To fix template id and template type
                                                                             // alert('in' + data.length);
@@ -2304,7 +2317,7 @@
                                                                             }
                                                                             pageSetUp();
                                                                         }); //end of readmasterjson to be pushed to the end of the function.
-
+                                                                    }); //end of getTreeForBtv
                                                                         $('#accordion-2').on('show.bs.collapse', function(e) {
                                                                             console.log(e.target);
                                                                             $(e.target).find('.productdiv1').first().click();
