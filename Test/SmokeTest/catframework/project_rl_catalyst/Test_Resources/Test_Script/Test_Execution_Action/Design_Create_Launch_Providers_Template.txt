@@ -261,7 +261,6 @@ Catalyst Choose Template and Save Setup
     #Select WorkCookBooks
     #Clicks on >>T Button
     Clicks on close of Configure Organization Parameters
-    #Chooses The Environment
     Clicks on Configure Application URL
     Clicks on AppNew Button
     Enters the Application URL Name
@@ -270,6 +269,7 @@ Catalyst Choose Template and Save Setup
     Enable the Next Button 
     Clicks on Next Button
     Clicks on Confirm OK Button
+
 
 Clicks on Design
     Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       id=designNew
@@ -411,7 +411,7 @@ Clicks on close of Configure Organization Parameters
 
 
 Clicks on Configure Application URL
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='accordion-Design']/div[4]/div[1]/h4/a/i[1]
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='accordion-Design']/div[6]/div[1]/h4/a/i[1]
 
 Clicks on AppNew Button
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    css=#newAppSeries
