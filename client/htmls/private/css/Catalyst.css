@@ -1,3 +1,4 @@
+
 .carousel-inner{
     overflow: auto !important;
     min-height:400px !important;
@@ -6,12 +7,15 @@
     background-color: #ffffff;
     border-color:#40baf1 !important;
     background-repeat: no-repeat; 
-    float: left; 
+    /*float: left; */
+    float: right; 
     border-radius: 50% !important; 
     height: 26px; 
     width: 26px; 
     margin-left: 10px; 
     margin-top: 4px;
+    
+    margin-right: 6px;
 }
 .showmenuAppTaskAnchorI{
    color:#40baf1 ! important;
@@ -22,13 +26,15 @@
     color: rgb(44, 55, 66); 
     font-weight: bold; 
     padding: 10px; 
-    font-size: 12px;
+    /*font-size: 12px;*/
+    font-size: 11px;
 }
 .menuTaskSpan{
     color: rgb(44, 55, 66); 
     font-weight: bold; 
     padding: 10px; 
-    font-size: 12px;
+    /*font-size: 12px;*/
+    font-size: 11px;
 }
 .paddingleft32{
     padding-left: 32px;
@@ -46,14 +52,16 @@
     border: 2px solid #40baf1;
     width:300px !important;
     min-height:100px;*/
-    position: relative;
+    /*position: relative;*/
+    position: absolute;
+    width:150px;
     z-index: 1;
     /*margin-top: 40px;*/
     margin-top: 15px;
     /*left:6px;*/
-    background: #ffffff;
+    background: none repeat scroll 0 0 #ffffff !important;
     border: 2px solid #40baf1;
-    min-height:100px;;
+    min-height:100px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 } 
 .menuAppTask:after, .menuAppTask:before {
@@ -3103,6 +3111,9 @@ margin-top:15px;
     /*border: 1px solid #ccc;*/
     padding-left: 0px !important;
     padding-right: 0px !important;
+}
+.domain-role-thumbnailDev > .container{
+    -webkit-perspective: 0 !important;
 }
 .flip-toggle.flip .card {
     -webkit-transform: rotateY(180deg);
@@ -8213,5 +8224,11 @@ form.cmxform .gray * {
     float:left;
     margin-top:7px;
     margin-left:20px;
+}
+
+@media (min-width:768px) and (max-width:1200px){
+    .swap-view{
+        margin-top: -32px;
+    }
 }
 

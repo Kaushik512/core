@@ -2558,7 +2558,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                 res.send(500, "Failed to save Org.");
                                                 return;
                                             }
-                                            for (var x1 = 0; x1 < 5; x1++) {
+                                            for (var x1 = 0; x1 < 6; x1++) {
                                                 (function(x1) {
                                                     var templatetypename;
                                                     var designtemplateicon_filename;
@@ -2579,6 +2579,10 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                         templatetypename = "Environment";
                                                         designtemplateicon_filename = "Environment.png";
                                                         templatetype = "chef";
+                                                    }else if (x1 === 4) {
+                                                        templatetypename = "CloudFormation";
+                                                        designtemplateicon_filename = "CloudFormation.png";
+                                                        templatetype = "cft";
                                                     } else {
                                                         templatetypename = "Docker";
                                                         designtemplateicon_filename = "Docker.png";
