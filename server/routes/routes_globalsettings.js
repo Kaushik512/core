@@ -16,7 +16,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
     app.all('/globalsettings/*', sessionVerificationFunc);
 
     // Get all GlobalSettings
-    app.get('/globalsettings', function(req, res) {
+    app.get('/globalsettings/', function(req, res) {
         GlobalSettings.getGolbalSettings(function(err, globalSettings) {
             if (err) {
                 res.send(500, errorResponses.db.error);
@@ -24,17 +24,13 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             }
             if (globalSettings) {
                 res.send(200, globalSettings);
-
-            } else {
-                res.send(404, {
-                    message: "Not Found"
-                });
+                return;
             }
         });
     });
 
     // Get all GlobalSettings
-    app.post('/globalsettings', function(req, res) {
+    app.post('/globalsettings/', function(req, res) {
     	logger.debug("Got GlobalSettings data: ",JSON.stringify(req.body.aGlobalSettings));
         GlobalSettings.createNew(req.body.aGlobalSettings,function(err, globalSettings) {
             if (err) {

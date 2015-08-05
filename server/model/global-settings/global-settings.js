@@ -41,7 +41,7 @@ GlobalSettingsSchema.statics.getGolbalSettings = function(callback){
 		}
 		if(globalSettings){
 			logger.debug("Got GobalSettings: ",JSON.stringify(globalSettings));
-			callback(null,globalSettings);
+			callback(null,globalSettings[0]);
 		}
 	});
 };
