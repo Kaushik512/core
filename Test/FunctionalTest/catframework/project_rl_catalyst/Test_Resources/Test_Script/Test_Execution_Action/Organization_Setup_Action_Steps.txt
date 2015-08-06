@@ -25,6 +25,17 @@ Catalyst Login
     Enters catalyst password
     Clicks on Login button
 
+
+Version Number and the Jenkins Buildnumber
+    Open Browser             ${ENVIRONMENTSERVER}     ${BROWSERTYPE}
+    Sleep    3s   
+    Store the Buildnumber
+
+
+Store the Buildnumber
+    ${JEN BUILDNUM}=    Get Text    xpath=.//*[@id='login']/footer/div[2]/p/span
+    Log    ${JEN BUILDNUM}
+
 Catalyst Create New Org Admin
     Clicks on Settings 
     Clicks on Users Setup
