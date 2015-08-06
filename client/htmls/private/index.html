@@ -68,16 +68,19 @@ String.prototype.capitalizeFirstLetter = function() {
                                 <i class="fa fa-puzzle-piece"></i>&nbsp;DESIGN
                             </a>
                         </li>
+
+                        <!--track-->
+                    <li class="left-projects-links hidden" style="margin-left:16px;margin-right:16px;" data-target="#Track" navigation="Track">
+                                <a class="dropdown-toggle navigationTab" style="font-size:14px!important" href="#ajax/Tracker.html" id="trackNew"  onclick="setleftnavigation(this,'Track');"><i class="fa fa-anchor"></i>&nbsp;TRACK</a>
+                            </li>
+                            <!--track ends here-->
                     
                   </ul>
                   <!--right side navbar-->
                   <ul class="nav navbar-nav navbar-right" style="font-size:14px!important;margin-top:20px">
                     <li class="left-projects-links active" id="liuserinfo" style="color:white;margin-right:16px;"></li>
                     <!-- <li class="left-projects-links"></li> -->
-                    <!--track-->
-                    <li class="left-projects-links hidden" style="margin-left:16px;margin-right:16px;" data-target="#Track" navigation="Track">
-                                <a class="dropdown-toggle navigationTab" style="font-size:14px!important" href="#ajax/Tracker.html" id="trackNew"  onclick="setleftnavigation(this,'Track');"><i class="fa fa-anchor"></i>&nbsp;TRACK</a>
-                            </li>
+                    
                     <!--Settings tab-->
                     <li class="left-projects-links hidden" data-target="#Settings"   navigation="Settings">
                                 <a class="dropdown-toggle navigationTab" style="font-size:14px!important" href="#ajax/Settings/Dashboard.html" id="settingsNew"  onclick="setleftnavigation(this,'Settings');"><i class="fa fa-cog"></i>&nbsp;SETTINGS</a>
@@ -162,7 +165,7 @@ String.prototype.capitalizeFirstLetter = function() {
                         </div>
                     </a>
                 </li> 
-                <li style="margin-top:10px;">
+                <li style="margin-top:10px; display:none;">
                     <a href="ajax/jobs.html">
                         <div>
                             <i class="fa fa-tasks fa-2x"></i>

@@ -1,3 +1,10 @@
+/* Copyright (C) Relevance Lab Private Limited- All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Gobinda Das <gobinda.das@relevancelab.com>, 
+ * Aug 2015
+ */
+
 var configmgmtDao = require('../model/d4dmasters/configmgmt.js');
 var Chef = require('../lib/chef');
 
@@ -185,9 +192,11 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                 logger.debug("All Job info: ", JSON.stringify(job));
                                 if (job) {
                                     for (var j = 0; j < job.builds.length; j++) {
+                                        var actualTimeStamp = new Date(job.builds[j].timestamp).setMilliseconds(job.builds[j].duration);
                                         var jobDetails = {
                                             "result": job.builds[j].result,
-                                            "timestampEnded": job.builds[j].timestamp
+                                            "timestampEnded": actualTimeStamp,
+                                            "timestampStarted" : job.builds[j].timestamp
                                         };
                                         jobResult.push(job.builds[j].number);
                                         jobInfo.push(jobDetails);
@@ -214,7 +223,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                     "jenkinsServerId": task.taskConfig.jenkinsServerId,
                                                     "jobName": task.taskConfig.jobName,
                                                     "status": jobInfo[x].result,
-                                                    "timestampStarted": new Date().getTime(),
+                                                    "timestampStarted": jobInfo[x].timestampStarted,
                                                     "buildNumber": jobResult[x],
                                                     "__v": 1,
                                                     "timestampEnded": jobInfo[x].timestampEnded,
@@ -285,9 +294,11 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                 logger.debug("All Job info: ", JSON.stringify(job));
                                 if (job) {
                                     for (var j = 0; j < job.builds.length; j++) {
+                                        var actualTimeStamp = new Date(job.builds[j].timestamp).setMilliseconds(job.builds[j].duration);
                                         var jobDetails = {
                                             "result": job.builds[j].result,
-                                            "timestampEnded": job.builds[j].timestamp
+                                            "timestampEnded": actualTimeStamp,
+                                            "timestampStarted": job.builds[j].timestamp
                                         };
                                         jobResult.push(job.builds[j].number);
                                         jobInfo.push(jobDetails);
@@ -311,7 +322,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                 "jenkinsServerId": task.taskConfig.jenkinsServerId,
                                                 "jobName": task.taskConfig.jobName,
                                                 "status": jobInfo[x].result,
-                                                "timestampStarted": new Date().getTime(),
+                                                "timestampStarted": jobInfo[x].timestampStarted,
                                                 "buildNumber": jobResult[x],
                                                 "__v": 1,
                                                 "timestampEnded": jobInfo[x].timestampEnded,

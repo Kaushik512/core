@@ -10,14 +10,6 @@ Resource           ${COMMON RESOURCES}/catalyst_grid_node.txt
 
 
 *** Test Cases ***
-Catalyst Gallery Template Type Creation
-    [Tags]       Sanity               Smoke
-#    Catalyst Login
-    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
-    Catalyst User Creates New Template Type
-    Catalyst Logout                      
-    [Teardown]     Close Browser
-
 Catalyst Gallery Templates Creation
     [Tags]       Sanity               Smoke
 #    Catalyst Login
@@ -35,6 +27,15 @@ Catalyst Gallery Templates Creation
 #    Catalyst Logout                      
 #    [Teardown]     Close Browser
 
+
+
+#Catalyst Gallery Template Type Creation
+    [Tags]       Sanity               Smoke
+#    Catalyst Login
+#    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+#    Catalyst User Creates New Template Type
+#    Catalyst Logout                      
+#    [Teardown]     Close Browser
 
 
 

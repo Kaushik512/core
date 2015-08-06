@@ -93,9 +93,9 @@ ${TASK TYPE1}              Chef
 ${CHEF TASKNAME}           apache2deploy
 ${SERVICE NAME}             MongoDB		
 ${TEMP NME}                 Apac
-${REGION NAME}           US West (Oregon) | us-west-2
-${VPC NAME}              vpc-b1f3ecd3 (172.31.0.0/16) Default
-${SUBNET NAME}           subnet-aed68ce8 (us-west-2c)
+${REGION NAME}           US West 
+${VPC NAME}              vpc-b1f3ecd3 
+${SUBNET NAME}           subnet-aed68ce8 
 ${Key_Pair}               cat_instances
 ${SECRTY GRP1}                sg-c00ee1a5 | all_open
 ${SECRTY GRP2}                sg-c06faca4 | HTTP&S_SG
@@ -108,7 +108,7 @@ ${IP ADDRESS}             52.10.69.55
 ${IP USERNAME}            root
 ${IP APPNAME}             RelevanceApp
 ${IP URL}                 http://www.google.com
-${REG}                    US West (Oregon) | us-west-2
+${REG}                    US West
 ${CHEF BOOTSTRAP}         waiting
 ${MACHINE STATS}           unknown
 ${APPLICATION URL}        http://d4d.relevancelab.com
@@ -122,7 +122,7 @@ ${MAT RUNLIST1}            recipe[a],recipe[cron]
 ${MAT OS1}                 ubuntu
 ${UBUNTU MEM}              1016256kB
 ${UBUNTU REC}              recipe[a],recipe[a],recipe[cron]
-${TEMPLATE TYPENAME}       TestTemplate
+${TEMPLATE TYPENAME}       AppFactory
 ${random}                  adarsh
 ${ADD}                     apache2              #tomcat-all
 ${ACTBOOT1}                 Pending
@@ -359,7 +359,7 @@ ${VaildateBlankSpacesTeamName}    Schola Team
 ${VaildateSpecialChrTeamName}     Sch#21$$%#@
 
 
-${VPC}                        vpc-b1f3ecd3 (172.31.0.0/16) Default
+${VPC}                        vpc-b1f3ecd3
 
 
 ${VaildEmptyTeamNameErrMsg}           Required 

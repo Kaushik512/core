@@ -87,6 +87,7 @@ Catalyst Validation and Creation of New Projects
     [Teardown]     Close Browser
 
 
+
 Catalyst Edit the ProjectName and Description Name 
     [Tags]       Sanity               Smoke
 #    Catalyst Login 
