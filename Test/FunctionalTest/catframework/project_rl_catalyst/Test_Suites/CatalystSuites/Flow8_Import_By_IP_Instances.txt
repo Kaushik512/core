@@ -40,7 +40,7 @@ Catalyst Edit the Instance Name of Inported Instance
 
 
 
-Catalyst Verify the Instance Deleted from Chef Server
+Catalyst Verify the CentOS Instance Deleted from Chef Server
     [Tags]       Sanity       ps
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"

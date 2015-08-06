@@ -11,6 +11,13 @@ Library            String
 
 
 *** Test Cases ***
+Catalyst Get the Build Number Step
+    [Tags]       Sanity               Smoke
+    Version Number and the Jenkins Buildnumber
+    [Teardown]     Close Browser
+
+
+
 Catalyst Validation and Creation of New Organization 
     [Tags]       Sanity               Smoke
 #    Catalyst Login 
