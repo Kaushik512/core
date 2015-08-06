@@ -15,7 +15,9 @@ Catalyst Org Admin creates new org user
     Clicks on Settings
     Clicks on Users Setup 
     Clicks on Users
+    Sleep    5s
     Clicks on New Button
+    Sleep    5s
     Enters new orgadmin login name
     Enters new orgadmin email address
     Enters new orgadmin password
@@ -24,10 +26,13 @@ Catalyst Org Admin creates new org user
     Assign Roles for org admin
     Assign Teams for organization admin
     Clicks on Save button in Users Page
+    Sleep    5s
 
 
 Catalyst creates new org designer
+    Sleep    4s
     Clicks on New Button
+    Sleep    5s
     Enters new designer login name
     Enters new designer email address
     Enters new designer password
@@ -36,9 +41,12 @@ Catalyst creates new org designer
     Assign Roles for org designer
     Assign Teams for organization designer
     Clicks on Save button in Users Page
+    Sleep    5s
 
 Catalyst creates new org consumer
+    Sleep    4s
     Clicks on New Button
+    Sleep    5s
     Enters new Consumer login name
     Enters new Consumer email address
     Enters new consumer password
@@ -47,6 +55,7 @@ Catalyst creates new org consumer
     Assign Roles for org Consumer
     Assign Teams for organization Consumer
     Clicks on Save button in Users Page
+    Sleep    5s
 
 
 Catalyst Creates New Teams
@@ -54,14 +63,16 @@ Catalyst Creates New Teams
     Clicks on Users Setup
     Clicks on Teams
     Clicks on New Team Button
+    Sleep    3s
     Enters the Team Name
     Enters the Team Description
     Select particular User Created organization
     Assign Users
     Assign Projects
     Clicks on Save button in Teams Page
+    Sleep    5s
 
-on
+
 Clicks on Users Setup
     Wait Until keyword Succeeds    1 minute     1 seconds    Wait Until Element Is Visible    xpath=//a[contains(text(),'Users Setup')]
     Click Element    xpath=//a[contains(text(),'Users Setup')]
