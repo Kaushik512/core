@@ -21,45 +21,92 @@ var GlobalSettingsSchema = new Schema({
     },
     addLDAPUser: Boolean,
     ldapServer: {
-    	url: String,
-    	userName: String,
-    	password: String
+        url: String,
+        userName: String,
+        password: String
     },
     kibanaUrl: String,
     zabbixUrl: String,
     jenkinsUrl: String,
-    awsUrl: String
+    awsUrl: String,
+    awsMonitorUrl: String
 
 });
 
 // Get all GobalSettings informations.
-GlobalSettingsSchema.statics.getGolbalSettings = function(callback){
-	this.find(function(err,globalSettings){
-		if(err){
-			logger.debug("Got error while fetching GobalSettings: ",err);
-			callback(err,null);
-		}
-		if(globalSettings){
-			logger.debug("Got GobalSettings: ",JSON.stringify(globalSettings));
-			callback(null,globalSettings[0]);
-		}
-	});
+GlobalSettingsSchema.statics.getGolbalSettings = function(callback) {
+    this.find(function(err, globalSettings) {
+        if (err) {
+            logger.debug("Got error while fetching GobalSettings: ", err);
+            callback(err, null);
+        }
+        if (globalSettings) {
+            logger.debug("Got GobalSettings: ", JSON.stringify(globalSettings));
+            callback(null, globalSettings);
+        }
+    });
 };
 
 // Save all GobalSettings informations.
-GlobalSettingsSchema.statics.createNew = function(globalSettingsData,callback){
-	var gSettings = new this(globalSettingsData);
-	gSettings.save(function(err,globalSettings){
-		if(err){
-			logger.debug("Got error while creating GobalSettings: ",err);
-			callback(err,null);
-		}
-		if(globalSettings){
-			logger.debug("Creating GobalSettings: ",JSON.stringify(globalSettings));
-			callback(null,globalSettings);
-		}
-	});
+GlobalSettingsSchema.statics.createNew = function(globalSettingsData, callback) {
+    var gSettings = new this(globalSettingsData);
+    gSettings.save(function(err, globalSettings) {
+        if (err) {
+            logger.debug("Got error while creating GobalSettings: ", err);
+            callback(err, null);
+        }
+        if (globalSettings) {
+            logger.debug("Creating GobalSettings: ", JSON.stringify(globalSettings));
+            callback(null, globalSettings);
+        }
+    });
 };
 
-var GobalSettings = mongoose.model("globalSettings",GlobalSettingsSchema);
+// Save all GobalSettings informations.
+GlobalSettingsSchema.statics.updateSettings = function(gSettingsId, globalSettingsData, callback) {
+	logger.debug("Going to Update settings data: ",JSON.stringify(globalSettingsData));
+    this.update({
+        "_id": gSettingsId
+    }, {
+        $set: {
+            authStrategy: globalSettingsData.authStrategy,
+            addLDAPUser: globalSettingsData.addLDAPUser,
+            ldapServer: globalSettingsData.ldapServer,
+            kibanaUrl: globalSettingsData.kibanaUrl,
+            zabbixUrl: globalSettingsData.zabbixUrl,
+            jenkinsUrl: globalSettingsData.jenkinsUrl,
+            awsUrl: globalSettingsData.awsUrl,
+            awsMonitorUrl: globalSettingsData.awsMonitorUrl
+        }
+    }, {
+        upsert: false
+    }, function(err, globalSettings) {
+        if (err) {
+            logger.debug("Got error while creating GobalSettings: ", err);
+            callback(err, null);
+        }
+        if (globalSettings) {
+            logger.debug("Updating GobalSettings: ", JSON.stringify(globalSettings));
+            callback(null, globalSettings);
+        }
+    });
+};
+
+// Get all GobalSettings informations.
+GlobalSettingsSchema.statics.getGolbalSettingsById = function(gSettingsId, callback) {
+    this.find({
+        "_id": gSettingsId
+    }, function(err, globalSettings) {
+        if (err) {
+            logger.debug("Got error while fetching GobalSettings: ", err);
+            callback(err, null);
+        }
+        if (globalSettings) {
+            logger.debug("Got GobalSettings: ", JSON.stringify(globalSettings[0]));
+            callback(null, globalSettings[0]);
+        }
+    });
+};
+
+var GobalSettings = mongoose.model("globalSettings", GlobalSettingsSchema);
 module.exports = GobalSettings;
