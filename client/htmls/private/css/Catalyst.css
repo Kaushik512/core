@@ -2096,7 +2096,7 @@ nav ul ul>li:hover b {
     position: absolute;
     left: 40px;
     top: -3px;
-    width: 186px;
+    width: 86px;
     height: 38px;
     line-height: 38px;
     background-color: #f5f5f5;
@@ -2113,7 +2113,7 @@ nav ul ul>li:hover b {
     display: none!important;
     position: absolute;
     left: 40px;
-    width: 200px;
+    width: 100px;
     z-index: 5;
     border: 1px solid #bfbfbf;
     min-height: 180px;
@@ -8241,4 +8241,6 @@ form.cmxform .gray * {
         margin-top: -32px;
     }
 }
+
+
 
