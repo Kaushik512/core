@@ -1836,12 +1836,24 @@
                                                                             $(document).click(function () {
                                                                                 $menu.hide();
                                                                             });
+                                                                            
                                                                             $li.find('.showmenuAppTask').click(function (e) {
                                                                                 e.stopPropagation();
-                                                                                $menu.show();
+                                                                                var $menuInside = $li.find('.menuAppTask');
+                                                                                if ($menuInside.is(':visible')) {
+                                                                                    $menuInside.hide();
+                                                                                } else {
+                                                                                    $('.menuAppTask').hide();
+                                                                                    $menuInside.show();                                                                                         
+                                                                                }
+                                                                                //$menu.show();
                                                                             });
                                                                             $menu.click(function (e) {
                                                                                 e.stopPropagation();
+                                                                            });
+                                                                            var $anchor = $('.app-url').parent();
+                                                                            $anchor.click(function() {
+                                                                              $menu.hide();                                                                                          
                                                                             });
                                                                         });
                                                                         // $li.find('.showmenuAppTask').click(function() {
@@ -1862,21 +1874,46 @@
                                                                         //         });
                                                                         //     }
                                                                         // });
-                                                                        $rowContainter.find('.showmenuAppTask').click(function() {
-
-                                                                            var $menu = $rowContainter.find('.menuAppTask').css('width','166px').css('margin-left','-42px');
-                                                                            //alert($menu.length);
-                                                                            if ($menu.is(':visible')) {
-                                                                                $menu.hide();
-                                                                            } else {
-                                                                                $('.menuAppTask').hide();
-                                                                                $menu.show();
-                                                                                var $anchor = $('.app-url').parent();
-                                                                                $anchor.click(function() {
-                                                                                  $menu.hide();                                                                                          
-                                                                                });
-                                                                            }
+                                                                        $(document).ready(function () {
+                                                                            var $menuT = $rowContainter.find('.menuAppTask').css('width','166px').css('margin-left','-42px');
+                                                                            $(document).click(function () {
+                                                                                $menuT.hide();
+                                                                            });
+                                                                            $rowContainter.find('.showmenuAppTask').click(function (e) {
+                                                                                e.stopPropagation();
+                                                                                //$menuT.show();
+                                                                                var $menuInside = $rowContainter.find('.menuAppTask');
+                                                                                if ($menuInside.is(':visible')) {
+                                                                                    $menuInside.hide();
+                                                                                } else {
+                                                                                    $('.menuAppTask').hide();
+                                                                                    $menuInside.show();                                                                                         
+                                                                                    
+                                                                                }
+                                                                            });
+                                                                            $menuT.click(function (e) {
+                                                                                e.stopPropagation();
+                                                                            });
+                                                                            var $anchor = $('.app-url').parent();
+                                                                            $anchor.click(function() {
+                                                                              $menuT.hide();                                                                                          
+                                                                            });
                                                                         });
+                                                                        // $rowContainter.find('.showmenuAppTask').click(function() {
+
+                                                                        //     var $menu = $rowContainter.find('.menuAppTask').css('width','166px').css('margin-left','-42px');
+                                                                        //     //alert($menu.length);
+                                                                        //     if ($menu.is(':visible')) {
+                                                                        //         $menu.hide();
+                                                                        //     } else {
+                                                                        //         $('.menuAppTask').hide();
+                                                                        //         $menu.show();
+                                                                        //         var $anchor = $('.app-url').parent();
+                                                                        //         $anchor.click(function() {
+                                                                        //           $menu.hide();                                                                                          
+                                                                        //         });
+                                                                        //     }
+                                                                        // });
 
                                                                         var $cardContainer = $li.find('.container').click(function(e) {
                                                                             $('.container').removeClass('role-Selectedcard');
@@ -3937,7 +3974,7 @@
                                                                                                                         $trHistoryRow.find('.build-number').append('<a style="word-break: break-all;" href="' + url + '" title="' + url + '" target="_blank">' + taskHistories[i].buildNumber + '</a>');
                                                                                                                     }, 1500);*/
                                                                                                                     var $tdBuildNumber = $('<td/>').append('<a style="word-break: break-all;" href="' + url + '" title="' + url + '" target="_blank">' + taskHistories[i].buildNumber + '</a>');
-+-                                                                                                                  $trHistoryRow.append($tdBuildNumber);
+                                                                                                              $trHistoryRow.append($tdBuildNumber);
 
 
                                                                                                                     buildFound = true;
