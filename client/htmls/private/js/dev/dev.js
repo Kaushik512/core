@@ -1555,9 +1555,40 @@
                                                                         $rowContainter.find('.editInstanceNameBtn').click(editInstanceNameHandler);
                                                                         $rowContainter.append('<td class="instanceIPCol">' + data.instanceIP + '</td>');
                                                                         var $tableRunlistDiv = $('<div></div>'); /*.append('<span>'+data.runlist.join()+'</span>');*/
+                                                                        var $viewAllA;
+                                                                        //alert(data.runlist);
+                                                                        if (data.runlist.length) {
+                                                                            $viewAllA = $('<a></a>').attr('href', 'javascript:void(0)').append("View All Runlist");
+
+                                                                            $viewAllA.click(function(e) {
+                                                                                e.preventDefault();
+                                                                                e.stopPropagation();
+
+
+                                                                                var $modal = $('#modalTableRunlist');
+                                                                                var $modalBody = $('#modalTableRunlist .modal-body').empty();
+                                                                                var runlist = $(this).parents('tr').find('.instance-bootstrap-list-image').data('runlist');
+                                                                                for (var j = 0; j < runlist.length; j++) {
+                                                                                    var $divComponentItem;
+                                                                                    if (j == 0) {
+
+                                                                                        $divComponentItem = $('<span title="' + runlist[j] + '" style="margin-top:8px;overflow:hidden;text-overflow:ellipsis;width:300px;"></span>').addClass('instance-details-item').append(runlist[j]);
+
+                                                                                    } else {
+                                                                                        $divComponentItem = $('<span title="' + runlist[j] + '" style="overflow:hidden;text-overflow:ellipsis;width:300px;"></span>').addClass('instance-details-item').append(runlist[j]);
+                                                                                    }
+
+                                                                                    $modalBody.append($divComponentItem);
+                                                                                }
+                                                                                $modal.modal('show');
+                                                                                return false;
+                                                                            });
+                                                                        } else {
+                                                                            $viewAllA = $('<span></span>').append("View All Runlist");
+                                                                        }
                                                                         var $divComponentItem = $('<span title="View all runlist" style="overflow:hidden;text-overflow:ellipsis;width:111px;"></span>').addClass('instance-details-item');
                                                                         $tableRunlistDiv.append($divComponentItem);
-                                                                        $rowContainter.append($('<td></td>').append($tableRunlistDiv));
+                                                                        $rowContainter.append($('<td></td>').append($viewAllA));
                                                                         $rowContainter.append($tableInstanceStatusIndicator);
 
                                                                         $rowContainter.append('<td><a class="tableMoreInfo moreInfo" data-instanceId="' + data._id + '" href="javascript:void(0)" rel="tooltip" data-placement="top" data-original-title="MoreInfo"></a></td>');
