@@ -111,11 +111,11 @@ ${KNIFERBFILE}                ${ROOTPATH}\\Chef\\knife.rb
 ${CATALYSTPEM}                ${ROOTPATH}\\Chef\\catalyst.pem
 ${CAT_INSTANCES}              ${ROOTPATH}\\Chef\\cat_instances.pem
 
-${CENTOSIMG}                  ${ROOTPATH}/Images/centos.jpg
-${UBUNTUIMG}                  ${ROOTPATH}/Images/ubuntuu.jpg
-${APPICON}                    ${ROOTPATH}/Images/rel.jpg    
-${TEMPLTYPEICON}              ${ROOTPATH}/Images/index.jpg           
-${APACHEIMG}                  ${ROOTPATH}/Images/apache.jpg
+${CENTOSIMG}                  ${ROOTPATH}\\Images\\centos.jpg
+${UBUNTUIMG}                  ${ROOTPATH}\\Images\\ubuntuu.jpg
+${APPICON}                    ${ROOTPATH}\\Images\\rel.jpg    
+${TEMPLTYPEICON}              ${ROOTPATH}\\Images\\index.jpg           
+${APACHEIMG}                  ${ROOTPATH}\\Images\\apache.jpg
 
 ${JENKINSNAME}            JenkinsTAT
 ${JENKINS URL}               http://54.68.204.110:9091/
