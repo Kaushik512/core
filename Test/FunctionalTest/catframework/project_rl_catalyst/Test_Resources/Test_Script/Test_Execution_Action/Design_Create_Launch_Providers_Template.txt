@@ -216,6 +216,7 @@ Catalyst Creation of VM Image Process for CentOS
     Enters the UserName of CentOSProviders
     Select the Organizatn to Create Cent OS Img
     Clicks on Save Button of Providers
+    Sleep    4s
     Verfiy the Centos Img is Created
 
 Verfiy the Centos Img is Created
@@ -233,6 +234,7 @@ Catalyst Creation of VM Image Process for Ubutnu
     Enters the UserName of UbuntuProviders
     Select the Organizatn to Create Ubuntu Img
     Clicks on Save Button of Providers
+    Sleep    4s
     Verfiy the Ubuntu Img is Created
 
 Verfiy the Ubuntu Img is Created
@@ -253,12 +255,13 @@ Catalyst Creation of VM Image Process for Windows
     Validate the Edit of VM Image
 
 Validate the Edit of VM Image
-    Sleep    3s
+    Sleep    5s
     Clicks on Edit Button of Windows Image
-    Sleep    2s
+    Sleep    4s
     Enters the New Image name for Windows
     Enters the UserName of WindowsProviders
     Clicks on Save Button of Providers
+    Sleep    4s
     Verfiy the Windows Img is Created
 
 Verfiy the Windows Img is Created
@@ -1876,7 +1879,7 @@ Enters The ubuntu Blueprint Name
 
 Chooses The Business Group
     Sleep    3s
-    Log    after scroll
+    Log    after scroll 
     Sleep    1s
     Click Element    css=#s2id_bgListInput > .select2-choice
     Log    after click
@@ -1891,7 +1894,7 @@ Chooses The Project
     Sleep    1s
     Click Element    css=#s2id_projectListInput > .select2-choice
     Log    after click
-    Input Text    css=#select2-drop .select2-input    ${PROJECT NAME}
+    Input Text    css=#select2-drop .select2-input    ${Proj2}
     Sleep    1s
     Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span    
 
