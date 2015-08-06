@@ -1830,7 +1830,7 @@
                                                                         $rowContainter.find('.tableMoreInfo').click(instanceLogsHandler);
                                                                         $li.find('.moreInfo').click(instanceLogsHandler);
 
-                                                                        $li.find('.showmenuAppTask').click(function() {
+                                                                        /*$li.find('.showmenuAppTask').click(function() {
                                                                             //alert("I am Here");
                                                                             var $menu = $li.find('.menuAppTask');
                                                                             if ($menu.is(':visible')) {
@@ -1858,6 +1858,56 @@
                                                                                   $menu.hide();                                                                                          
                                                                                 });
                                                                             }
+                                                                        });*/
+                                                                        $(document).ready(function () {
+                                                                            var $menu = $li.find('.menuAppTask');
+                                                                            $(document).click(function () {
+                                                                                $menu.hide();
+                                                                            });
+                                                                            
+                                                                            $li.find('.showmenuAppTask').click(function (e) {
+                                                                                e.stopPropagation();
+                                                                                var $menuInside = $li.find('.menuAppTask');
+                                                                                if ($menuInside.is(':visible')) {
+                                                                                    $menuInside.hide();
+                                                                                } else {
+                                                                                    $('.menuAppTask').hide();
+                                                                                    $menuInside.show();                                                                                         
+                                                                                }
+                                                                                //$menu.show();
+                                                                            });
+                                                                            $menu.click(function (e) {
+                                                                                e.stopPropagation();
+                                                                            });
+                                                                            var $anchor = $('.app-url').parent();
+                                                                            $anchor.click(function() {
+                                                                              $menu.hide();                                                                                          
+                                                                            });
+                                                                       });
+                                                                        $(document).ready(function() {
+                                                                            var $menuT = $rowContainter.find('.menuAppTask').css('width', '166px').css('margin-left', '-42px');
+                                                                            $(document).click(function() {
+                                                                                $menuT.hide();
+                                                                            });
+                                                                            $rowContainter.find('.showmenuAppTask').click(function(e) {
+                                                                                e.stopPropagation();
+                                                                                //$menuT.show();
+                                                                                var $menuInside = $rowContainter.find('.menuAppTask');
+                                                                                if ($menuInside.is(':visible')) {
+                                                                                    $menuInside.hide();
+                                                                                } else {
+                                                                                    $('.menuAppTask').hide();
+                                                                                    $menuInside.show();
+
+                                                                                }
+                                                                            });
+                                                                            $menuT.click(function(e) {
+                                                                                e.stopPropagation();
+                                                                            });
+                                                                            var $anchor = $('.app-url').parent();
+                                                                            $anchor.click(function() {
+                                                                                $menuT.hide();
+                                                                            });
                                                                         });
 
                                                                         var $cardContainer = $li.find('.container').click(function(e) {
@@ -4714,10 +4764,11 @@
                                                                         $('.instanceloaderspinner').removeClass('hidden');
                                                                         $.get('../organizations/' + orgId + '/businessgroups/' + urlParams['bg'] + '/projects/' + projectId + '/environments/' + envId + '/', function(data) {
                                                                             console.log('success---3---4');
-                                                                            initializeInstanceArea(data.instances);
+                                                                            
                                                                             initializeTaskArea(data.tasks);
                                                                             initializeBlueprintArea(data.blueprints);
                                                                             x = data.instances;
+                                                                            initializeInstanceArea(data.instances);
                                                                             initializeStackArea(data.stacks);
                                                                         });
 
