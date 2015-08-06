@@ -1639,7 +1639,7 @@
      $('#btnaddDockerTemplateToTable').attr('disabled', 'disabled');
      $('#dockertemplateSpinner').removeClass('hidden');
      $('#dockertemplatetagselector').empty().select2('val', '');
-     $.get('/d4dmasters/getdockertags/' + encodeURIComponent($('#dockertemplateselector').val()) + '/' + $('#dockertemplateselector option:selected').attr('reponame'), function(data) {
+     $.get('/d4dmasters/getdockertags/' + encodeURIComponent($('#dockertemplateselector').val().replace(/\//g, "$$$")) + '/' + $('#dockertemplateselector option:selected').attr('reponame'), function(data) {
          //Sample json given below
          //[{"layer": "cddde0cd", "name": "latest"}, {"layer": "3baf8932", "name": "6.4"}, {"layer": "d1c0a07f", "name": "6.5"}, {"layer": "a9dd9e89", "name": "centos5"}, {"layer": "02398e09", "name": "centos6"}, {"layer": "4e5b3b2f", "name": "centos7"}]
          $('#dockertemplateSpinner').addClass('hidden');
