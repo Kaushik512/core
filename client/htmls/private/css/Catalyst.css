@@ -1431,6 +1431,16 @@ h6 {
     padding: 0 13px;
     position: relative;
 }
+@media (min-width:1600px) {
+#ribbon {
+    min-height:4%;
+    background: #474544;
+    padding: 0 13px;
+    position: relative;
+}
+
+   }
+    
 #ribbon .breadcrumb {
     display: inline-block;
     margin: 0;
