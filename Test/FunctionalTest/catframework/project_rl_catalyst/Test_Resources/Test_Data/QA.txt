@@ -10,7 +10,10 @@ Resource           catalyst.txt
 
 *** Variables ***
 ${BROWSERTYPE}                    firefox                   
-${ENVIRONMENTSERVER}              http://10.0.1.206:3003/public/login.html
+${ENVIRONMENTSERVER}                http://10.0.1.206:3003/public/login.html
+
+#http://d4d.relevancelab.com:3001                            
+
 #http://d4d.relevancelab.com:3001                
 
 
@@ -124,7 +127,7 @@ ${JENKINS PASSWORD}       admin@RL123
 ${TASK NAME}              Task1
 ${JENKINS SERVER}         Jenkins
 ${JENKINS EDIT}           Jenkins
-${JOB NAME}               catalyst_Get
+#${JOB NAME}               catalyst_Get
 ${RECIPE}                  recipe[apt]     
 ${RECIPE1}                 recipe[apt]
 ${Template Type}           Chef
