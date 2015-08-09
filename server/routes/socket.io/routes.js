@@ -239,7 +239,7 @@ module.exports.setRoutes = function(socketIo) {
                                     });
                                     logger.debug("AWS ec2: ", JSON.stringify(ec2));
                                     for (var i = 0; i < instances.length; i++) {
-                                        if(instances[i].platformId != 'null' || typeof instances[i].platformId != 'undefined'){
+                                        if(instances[i].platformId != 'null' || typeof instances[i].platformId != 'undefined' || instances[i].platformId != null){
                                             instanceIds.push(instances[i].platformId);
                                         }
                                     }
