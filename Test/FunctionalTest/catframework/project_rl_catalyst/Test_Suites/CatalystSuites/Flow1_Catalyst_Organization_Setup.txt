@@ -11,6 +11,13 @@ Library            String
 
 
 *** Test Cases ***
+Catalyst Get the Build Number Step
+    [Tags]       Sanity               Smoke
+    Version Number and the Jenkins Buildnumber
+    [Teardown]     Close Browser
+
+
+
 Catalyst Validation and Creation of New Organization 
     [Tags]       Sanity               Smoke
 #    Catalyst Login 
@@ -21,13 +28,13 @@ Catalyst Validation and Creation of New Organization
 
 
 
-Catalyst Edit the Organization and Domain Name  
-    [Tags]       Sanity               Smoke
+#Catalyst Edit the Organization and Domain Name  
+    #[Tags]       Sanity               Smoke
 #    Catalyst Login 
-    Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
-    Catalyst Editing the Organization and Domain name
-    Catalyst Logout                      
-    [Teardown]     Close Browser
+    #Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
+    #Catalyst Editing the Organization and Domain name
+    #Catalyst Logout                      
+    #[Teardown]     Close Browser
 
 
 

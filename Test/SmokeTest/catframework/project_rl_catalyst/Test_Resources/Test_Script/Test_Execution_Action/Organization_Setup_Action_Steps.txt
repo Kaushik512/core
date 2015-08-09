@@ -110,7 +110,7 @@ Selecting the Role as Consumer
     Click Element    xpath=.//*[@id='userrolename']/label[text()='Consumer']    
 
 Creates New Organization
-      Vaildate the Organization feilds    ${ORGANIZATION NAME}
+      Vaildate the Organization feilds
 
 
 
@@ -178,14 +178,13 @@ Assign Teams for OrgAdmin
 
 
 Vaildate the Organization feilds
-    [Arguments]    ${Orgname}
     Clicks on Settings
     Clicks on Organization image
     Validate Org same path
 
 Validate Org same path
     Clicks on New button to Create New Organization
-    Enters organization name        ${OrgName}
+    Enters organization name
     Enters organization domain name    
     Clicks on Save button to save the Organization details 
 
@@ -217,9 +216,8 @@ Clicks on New button to Create New Organization
     Click Element    css=#newOrg
     
 Enters organization name
-    [Arguments]    ${Orgname}
-    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       id=orgname
-    Input Text     id=orgname      ${Orgname}
+    Sleep    5s
+    Input Text     id=orgname      ${ORGANIZATION NAME}
 
 Enters organization domain name
     Sleep    1s

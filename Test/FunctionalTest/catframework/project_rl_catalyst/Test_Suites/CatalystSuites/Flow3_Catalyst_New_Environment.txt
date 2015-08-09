@@ -21,7 +21,7 @@ Catalyst new Environments setup
 
 
 
-Catalyst Adding New Envirornments to the Chef          #from chef server
+Catalyst Adding New Envirornments to the Chef          
     [Tags]       Sanity       ps
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
