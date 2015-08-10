@@ -279,6 +279,7 @@ Vaildate the Organizationsame feilds
     Validate Org same path
 
 Validate Org same path
+    [Arguments]    ${Orgname}
     Clicks on Settings
     Clicks on Organization image
     Clicks on New button to Create New Organization
