@@ -171,15 +171,15 @@ Selecting the Role as Consumer
     Click Element    xpath=.//*[@id='userrolename']/label[text()='Consumer']    
 
 Validation and Creation of New Organization
-      #-Vaildate the Organization feilds   ${Vaildate15ChrOrgName}        
-      #-Organization name with more than 15 characters   ${Vaildate15ChrErrMsg}   
-      #-Vaildate the Organizationsame feilds  ${VaildateBlankSpacesOrgName}
-      #-Organization name with Blankspaces  ${VaildateBlankSpacesErrMsg}
-      #-Vaildate the Organizationsame feilds  ${VaildateEmptyOrgName}
-      #-Organization name Left Empty  ${VaildateEmptyErrMsg}
-      #-Vaildate the Organizationsame feilds  ${VaildateSpecialChrOrgName}
-      #-Organization name with special characters  ${VaildateSpecialChrErrMsg}
-      Vaildate the Organizationsame feilds  
+      Vaildate the Organization feilds   ${Vaildate15ChrOrgName}        
+      Organization name with more than 15 characters   ${Vaildate15ChrErrMsg}   
+      Vaildate the Organizationsame feilds  ${VaildateBlankSpacesOrgName}
+      Organization name with Blankspaces  ${VaildateBlankSpacesErrMsg}
+      Vaildate the Organizationsame feilds  ${VaildateEmptyOrgName}
+      Organization name Left Empty  ${VaildateEmptyErrMsg}
+      Vaildate the Organizationsame feilds  ${VaildateSpecialChrOrgName}
+      Organization name with special characters   ${VaildateSpecialChrErrMsg}
+      Vaildate the Organizationsame feilds  ${VaildOrgName}
       
 
 Catalyst Editing the Organization and Domain name 
@@ -258,7 +258,7 @@ Organization name Left Empty
 
 Organization name with special characters 
     [Arguments]    ${VaildateSpecialChrErrMsg}
-    Vaildate the Organization name feilds      ${VaildateSpecialChrErrMsg}
+    Vaildate the Organization name feilds     ${VaildateSpecialChrErrMsg}
 
 #Organization name already exists  
     [Arguments]    ${VaildateAlreadyExistErrMsg}
@@ -275,6 +275,7 @@ Vaildate the Organization feilds
     Validate Org same path
 
 Vaildate the Organizationsame feilds
+    [Arguments]    ${Orgname}
     Validate Org same path
 
 Validate Org same path
@@ -325,7 +326,7 @@ Clicks on New button to Create New Organization
     
 Enters organization name
     Sleep    5s
-    Input Text     id=orgname      ${ORGANIZATION NAME}
+    Input Text     id=orgname      ${Orgname}
 
 Enters organization domain name
     Sleep    1s
@@ -512,7 +513,7 @@ Validation and Creation of New Business Groups
      Vaildate the Business group1 feilds  ${VaildateEmptyBGrpName}
      Business group name Left Empty  ${VaildateEmptyErrMsg}
      Vaildate the Business group1 feilds  ${VaildateSpecialChrBGrpName}
-     Business group name with special characters  ${VaildateSpecialChrErrMsg}
+     Business group name with special characters   ${VaildateSpecialChrErrMsg}
      Vaildate the Business group2 feilds   ${VaildateNoOrgBName}
      Business group name with no org name selected   ${VaildateNoOrgBErrMsg}
      Vaildate the Business group1 feilds  ${VaildBGrpName1}
