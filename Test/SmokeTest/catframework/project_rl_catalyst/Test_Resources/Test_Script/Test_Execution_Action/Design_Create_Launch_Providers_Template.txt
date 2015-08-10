@@ -467,7 +467,7 @@ Select the CentosBlueprint
     Click Element    xpath=//*[text()='${BLUEPRINT NAME}']
 
 Clicks on Launch Button
-    Wait Until Keyword Succeeds    2 minute     2 seconds      Click Element    css=button.btn.pull-left.btn-primary.launchBtn
+    Wait Until Keyword Succeeds    2 minute     2 seconds      Click Element    css=a.btn.pull-left.btn-primary.launchBtn
     Sleep    3 seconds
 
 Clicks on Instance Close Button
