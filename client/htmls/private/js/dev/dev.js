@@ -1736,6 +1736,7 @@
 
                                                                         $instanceDetailsList.append($instanceDetailItemId);
                                                                         var $instanceDetailItemStatus;
+                                                                        data.instanceState == 'running';
                                                                         if (data.instanceState == 'running') {
                                                                             $instanceDetailItemStatus = $('<span></span>').addClass('instance-details-id').html('status : <span class="instance-state instance-state-text-started">' + data.instanceState + '</strong>');
                                                                         } else if (data.instanceState == 'terminated') {
