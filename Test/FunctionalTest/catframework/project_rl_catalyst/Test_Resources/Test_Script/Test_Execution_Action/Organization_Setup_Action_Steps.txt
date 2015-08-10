@@ -272,11 +272,11 @@ Vaildate the Organization feilds
     [Arguments]      ${Orgname}
     Clicks on Settings
     Clicks on Organization image
-    Validate Org same path
+    Validate Org same path   ${Orgname}
 
 Vaildate the Organizationsame feilds
     [Arguments]      ${Orgname}
-    Validate Org same path
+    Validate Org same path   ${Orgname}
 
 Validate Org same path
     [Arguments]      ${Orgname}
