@@ -17,7 +17,7 @@ Resource           ${CATALYST ACTION}/Organization_Setup_Action_Steps.txt
 
 *** Keywords ***
 Testing All New Config Management Conditions
-    Vaildate the Empty URL field  ${VaildEmptyURL}
+    Vaildate the Empty URL field
     URL field left Empty  ${VaildEmptyURLErrMsg} 
     Vaildate Empty Config Name  ${VaildEmptyConfigname}
     Config Name left empty  ${VaildEmptyConfignameErrMsg}
@@ -171,7 +171,6 @@ Enters Empty Configuration name
     Input Text   id=configname    ${configname}
 
 Vaildate the Empty URL field
-    [Arguments]    ${url}
     Clicks on Settings
     Clicks on DevOps Setup menu
     Clicks on Config Management menu
@@ -179,15 +178,12 @@ Vaildate the Empty URL field
     Enters config management name
     Enters config management user name
     Select organization for config management
-    Enters empty config management URL
     Upload user Pem File
     Upload Validator Pem File
     Upload Validator Knife File
     Clicks on Save button to save the ConfigMgmt detail
 
 
-Enters empty config management URL
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    id=url    ${url}
 
 
 
