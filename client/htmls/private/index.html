@@ -71,7 +71,7 @@ String.prototype.capitalizeFirstLetter = function() {
 
                         <!--track-->
                     <li class="left-projects-links hidden" style="margin-left:16px;margin-right:16px;" data-target="#Track" navigation="Track">
-                                <a class="dropdown-toggle navigationTab" style="font-size:14px!important" href="#ajax/Tracker.html" id="trackNew"  onclick="setleftnavigation(this,'Track');"><i class="fa fa-anchor"></i>&nbsp;TRACK</a>
+                                <a class="dropdown-toggle navigationTab" style="font-size:14px!important" href="#ajax/awsnotifications.html" id="trackNew"  onclick="setleftnavigation(this,'Track');"><i class="fa fa-anchor"></i>&nbsp;TRACK</a>
                             </li>
                             <!--track ends here-->
                     
@@ -139,67 +139,85 @@ String.prototype.capitalizeFirstLetter = function() {
              <li class="active open">
                 <a href="#" style="background-color:#40baf1;margin-right:1px;"><i class="fa fa-lg fa-fw fa-sitemap"></i><span class="menu-item-parent" style="font-weight:bold">TRACK</span> </a>
                      <ul style="display:block">
+
+<!--notification starts here-->
                 <li>
-                    
-                  
-                    <a href="ajax/Tracker.html">
+                    <a href="ajax/awsnotifications.html">
                         <div>
-                            <i class="fa fa-cubes fa-2x"></i>
-                            <span class="trackAlign">Kibana Logs</span>
+                            <i class="fa fa-tasks fa-2x" title="Notification"></i>
+                            <span style="margin-left:5px" class="trackAlign">Notifications</span>
                         </div>
                     </a>
                 </li>
+                <!--notification ends here-->
+
+                <!--aws usage-->
+                <li style="margin-top:10px;">
+                    <a href="ajax/awslogs.html">
+                        <div>
+                            <i class="fa fa-tasks fa-2x" title="AWS Usage"></i>
+                            <span style="margin-left:5px" class="trackAlign2">AWS Usage</span>
+                        </div>
+                    </a>
+                </li> 
+                <!--aws usage ends here-->
+
+                <!--zabbix starts here-->
                 <li style="margin-top:10px;">
                     <a href="ajax/Zabbix.html">
                         <div>
-                            <i class="fa fa-reorder fa-2x"></i>
+                            <i class="fa fa-reorder fa-2x" title="Zabbix"></i>
                             <span style="margin-left:5px" class="trackAlign1">Zabbix</span>
                         </div>
                     </a>
                 </li>
+                
+                <!--zabbix ends here-->
+                        <!--kibana-->
                 <li style="margin-top:10px;">
-                    <a href="ajax/awslogs.html">
+                    
+                  
+                    <a href="ajax/Tracker.html">
                         <div>
-                            <i class="fa fa-tasks fa-2x"></i>
-                            <span style="margin-left:5px" class="trackAlign2">AWS Logs</span>
+                            <i class="fa fa-cubes fa-2x" title="Kibana"></i>
+                            <span style="margin-left:5px" class="trackAlign2">Kibana</span>
                         </div>
                     </a>
-                </li> 
-                <li style="margin-top:10px; display:none;">
-                    <a href="ajax/jobs.html">
-                        <div>
-                            <i class="fa fa-tasks fa-2x"></i>
-                            <span style="margin-left:5px" class="trackAlign2">Jobs</span>
-                        </div>
-                    </a>
-                </li> 
+                </li>
+                <!--kibana ends here-->
+
+                
+
+                
+
+
             </li>
                 </ul>                       
             </ul>
             <ul class="menu-item-parentdemo hidden" id="blueprints">
                 <li class="active open">
-                    <a href="#" style="background-color:#40baf1;margin-right:1px;"><i class="fa fa-lg fa-fw fa-sitemap"></i><span class="menu-item-parent" style="font-weight:bold">PROVIDERS</span>
+                    <a href="#" style="background-color:#40baf1;margin-right:1px;"><i class="fa fa-lg fa-fw fa-sitemap"></i><span class="menu-item-parent trackAlign" style="font-weight:bold">PROVIDERS</span>
                     </a>
                     <ul style="display:block">
                         <li>
-                            <a href="ajax/Aws-Production.html" class="devops_providers"><div class="aws"><span class="menu-item-parent provider-images">&nbsp;&nbsp;AWS</span></div></a>
+                            <a href="ajax/Aws-Production.html" class="devops_providers"><div class="aws" title="AWS"><span class="menu-item-parent provider-images trackAlign">&nbsp;&nbsp;AWS</span></div></a>
                         </li>
                         
                         <li>
-                            <a href="ajax/Azure-DevOps.html" class="devops_providers"><div class="azure"><span class="menu-item-parent provider-images">&nbsp;&nbsp;Azure</span></div></a>
+                            <a href="ajax/Azure-DevOps.html" class="devops_providers"><div class="azure" title="Azure"><span class="menu-item-parent provider-images trackAlign">&nbsp;&nbsp;Azure</span></div></a>
                         </li>
                         <li>
-                            <a href="ajax/RL-DevOps.html" class="devops_providers"><div class="rl"><span class="menu-item-parent provider-images">&nbsp;Data Centre</span></div></a>
+                            <a href="ajax/RL-DevOps.html" class="devops_providers"><div class="rl" title="Data Centre"><span class="menu-item-parent provider-images trackAlign">&nbsp;Data Centre</span></div></a>
                         </li>
                         
                         <li>
-                            <a href="ajax/OpenStack.html" class="devops_providers"><div class="openstack"><span class="menu-item-parent provider-images">&nbsp;Open Stack</span></div></a>
+                            <a href="ajax/OpenStack.html" class="devops_providers"><div class="openstack" title="Open Stack"><span class="menu-item-parent provider-images trackAlign">&nbsp;Open Stack</span></div></a>
                         </li>
                         <li>
-                            <a href="ajax/cloudstack.html" class="devops_providers"><div class="cloudstack"><span class="menu-item-parent provider-images">&nbsp;Cloud Stack</span></div></a>
+                            <a href="ajax/cloudstack.html" class="devops_providers"><div class="cloudstack" title="Cloud Stack"><span class="menu-item-parent provider-images trackAlign">&nbsp;Cloud Stack</span></div></a>
                         </li>
                         <li>
-                            <a href="ajax/Docker.html" class="devops_providers"><div class="dock"><span class="menu-item-parent provider-images">&nbsp;Docker</span></div></a>
+                            <a href="ajax/Docker.html" class="devops_providers"><div class="dock" title="Docker"><span class="menu-item-parent provider-images trackAlign">&nbsp;Docker</span></div></a>
                         </li>
                     </ul>
                 </li>

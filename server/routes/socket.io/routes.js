@@ -207,7 +207,7 @@ module.exports.setRoutes = function(socketIo) {
             if (err) {
                 logger.debug("Error while getElementBytting instance!");
             }
-            logger.debug("Got instance: ");
+            logger.debug("Got instance: ",JSON.stringify(instances));
             if (instances.length > 0) {
                 AWSProvider.getAWSProviders(function(err, aProvider) {
                     if (err) {
@@ -239,14 +239,16 @@ module.exports.setRoutes = function(socketIo) {
                                     });
                                     logger.debug("AWS ec2: ", JSON.stringify(ec2));
                                     for (var i = 0; i < instances.length; i++) {
-                                        instanceIds.push(instances[i].platformId);
+                                        if(instances[i].platformId != 'null' || typeof instances[i].platformId != 'undefined' || instances[i].platformId != null){
+                                            instanceIds.push(instances[i].platformId);
+                                        }
                                     }
                                     logger.debug("All instance Ids: ", JSON.stringify(instanceIds));
                                     ec2.describeInstances(instanceIds, function(err, awsInstances) {
                                         if (err) {
                                             logger.debug("Failed to describe Instances from AWS!", err);
                                         }
-                                        logger.debug("Described Instances from AWS: ");
+                                        logger.debug("Described Instances from AWS: ",JSON.stringify(awsInstances));
                                         if (awsInstances) {
                                             var reservations = awsInstances.Reservations;
                                             for (var x = 0; x < reservations.length; x++) {

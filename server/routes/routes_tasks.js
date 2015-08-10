@@ -209,8 +209,8 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                         (function(x) {
                                             count++;
                                             var resultUrl = [];
-                                            //logger.debug("------+++++---");
-                                            if (historyResult.indexOf(jobResult[x]) == -1) {
+                                            //logger.debug("------+++++---",historyResult.indexOf(jobResult[x]) == -1);
+                                            if (historyResult.indexOf(jobResult[x]) === -1) {
                                                 //logger.debug("------------------ ", jobResult[x]);
                                                 for (var i = 0; i < task.jobResultURLPattern.length; i++) {
                                                     var urlPattern = task.jobResultURLPattern[i];

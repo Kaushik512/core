@@ -25,6 +25,17 @@ Catalyst Login
     Enters catalyst password
     Clicks on Login button
 
+
+Version Number and the Jenkins Buildnumber
+    Open Browser             ${ENVIRONMENTSERVER}     ${BROWSERTYPE}
+    Sleep    3s   
+    Store the Buildnumber
+
+
+Store the Buildnumber
+    ${JEN BUILDNUM}=    Get Text    xpath=.//*[@id='login']/footer/div[2]/p/span
+    Log    ${JEN BUILDNUM}
+
 Catalyst Create New Org Admin
     Clicks on Settings 
     Clicks on Users Setup
@@ -160,15 +171,15 @@ Selecting the Role as Consumer
     Click Element    xpath=.//*[@id='userrolename']/label[text()='Consumer']    
 
 Validation and Creation of New Organization
-      Vaildate the Organization feilds   ${Vaildate15ChrOrgName}        
-      Organization name with more than 15 characters   ${Vaildate15ChrErrMsg}   
-      Vaildate the Organizationsame feilds  ${VaildateBlankSpacesOrgName}
-      Organization name with Blankspaces  ${VaildateBlankSpacesErrMsg}
-      Vaildate the Organizationsame feilds  ${VaildateEmptyOrgName}
-      Organization name Left Empty  ${VaildateEmptyErrMsg}
-      Vaildate the Organizationsame feilds  ${VaildateSpecialChrOrgName}
-      Organization name with special characters  ${VaildateSpecialChrErrMsg}
-      Vaildate the Organizationsame feilds  ${VaildOrgName}
+      #-Vaildate the Organization feilds   ${Vaildate15ChrOrgName}        
+      #-Organization name with more than 15 characters   ${Vaildate15ChrErrMsg}   
+      #-Vaildate the Organizationsame feilds  ${VaildateBlankSpacesOrgName}
+      #-Organization name with Blankspaces  ${VaildateBlankSpacesErrMsg}
+      #-Vaildate the Organizationsame feilds  ${VaildateEmptyOrgName}
+      #-Organization name Left Empty  ${VaildateEmptyErrMsg}
+      #-Vaildate the Organizationsame feilds  ${VaildateSpecialChrOrgName}
+      #-Organization name with special characters  ${VaildateSpecialChrErrMsg}
+      Vaildate the Organizationsame feilds  
       
 
 Catalyst Editing the Organization and Domain name 
@@ -264,18 +275,18 @@ Vaildate the Organization feilds
     Validate Org same path
 
 Vaildate the Organizationsame feilds
-    [Arguments]    ${OrgName}
-    #-Click Element    xpath=.//*[@id='setting_tree']/ul/li[2]/a
-    Validate Org remaining path
+    Validate Org same path
 
 Validate Org same path
+    Clicks on Settings
+    Clicks on Organization image
     Clicks on New button to Create New Organization
-    Enters organization name        ${OrgName}
+    Enters organization name
     Enters organization domain name    
     Clicks on Save button to save the Organization details 
 
 Validate Org remaining path
-    Enters organization name        ${OrgName}
+    Enters organization name
     Enters organization domain name    
     Clicks on Save button to save the Organization details
 
@@ -313,9 +324,8 @@ Clicks on New button to Create New Organization
     Click Element    link=New
     
 Enters organization name
-    [Arguments]    ${Orgname}
-    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       id=orgname
-    Input Text     id=orgname      ${Orgname}
+    Sleep    5s
+    Input Text     id=orgname      ${ORGANIZATION NAME}
 
 Enters organization domain name
     Sleep    1s

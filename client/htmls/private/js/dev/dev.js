@@ -3899,10 +3899,13 @@
 
                                                                                             console.log(taskHistories);
 
-
+                                                                                            var history =[];
+                                                                                            for (var j = 0; j < taskHistories.length; j++) {
+                                                                                                history.push(taskHistories[j].buildNumber);
+                                                                                            }
                                                                                             for (var i = 0; i < taskHistories.length; i++) {
                                                                                                 //alert(taskHistories.length);
-                                                                                                
+                                                                                
                                                                                                 
                                                                                                 
                                                                                                 (function(i) {
@@ -3940,8 +3943,8 @@
 
                                                                                                                 console.log(taskHistories[i].buildNumber, "  ---  ", job.nextBuildNumber);
 
-                                                                                                                if (taskHistories[i].buildNumber === job.builds[k].number) {
-
+                                                                                                                //if (taskHistories[i].buildNumber === job.builds[k].number) {
+                                                                                                                if (history.indexOf(job.builds[k].number) != -1) {
                                                                                                                     url = job.builds[k].url;
                                                                                                                     // alert(url);
                                                                                                                     //  var $tdBuildNumber = $('<td/>');
