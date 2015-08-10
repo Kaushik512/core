@@ -179,7 +179,7 @@ ${ACTBOOT1}                 Pending
 ${ACTBOOT2}                 Success
 ${RUN}                       running
 ${AUTHN}                    Pem File 
-${NAME}                     Bootstrap
+#${NAME}                     Bootstrap
 ${DUP MSG}                  An Instance with the same IP already exists.
 ${NAME1}                    Chef-Client-Run
 ${NAME2}                    SSH-Shell
@@ -315,7 +315,7 @@ ${VaildEditOrgDomainName}       http://www.relevancelab.com
 ${Vaildate15ChrErrMsg}            limited to 15 chars
 ${VaildateBlankSpacesErrMsg}      space(s) not allowed
 ${VaildateEmptyErrMsg}            Required
-${VaildateSpecialChrErrMsg}       special chars not allowed
+${VaildateSpecialChrErrMsg}        special chars not allowed
 ${VaildateAlreadyExistErrMsg}     Selected is already registered
 ${OrganizationMsg}                Relevance_Labs
 ${OrganizationDomainMsg}        http://www.relevancelab.com
@@ -338,7 +338,7 @@ ${REQ}                                Required
 ${Vaildate15ChrErrMsg}              limited to 15 chars            
 ${VaildateBlankSpacesErrMsg}        space(s) not allowed
 ${VaildateEmptyErrMsg}              Required
-${VaildateSpecialChrErrMsg}         special chars not allowed
+${VaildateSpecialChrErrMsg}          special chars not allowed
 ${VaildateAlreadyExistErrMsg}       Selected is already registered
 ${VaildateNoOrgErrMsg}                 Required
 ${EnvironmentMsg}                      QA
@@ -483,7 +483,7 @@ ${TEMPLATE NAME}                        ApacRelevance
 
 
 ${VaildEmptyTemplateNameErrMsg}              Required
-${Vaild15ChrTemplateNameErrMsg}             limited to 15 chars
+${Vaild15ChrTemplateNameErrMsg}             limited to 15 chars.
 ${VaildOrGErrMsg}                           Required
 ${VaildEmptyTempName}                       Required
 ${Vaild15ChrTempErrMsg}                     limited to 15 chars
