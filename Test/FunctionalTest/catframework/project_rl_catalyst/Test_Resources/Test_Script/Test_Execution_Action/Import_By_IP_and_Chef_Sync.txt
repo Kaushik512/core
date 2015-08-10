@@ -557,27 +557,27 @@ Clicks on Config Managementt
 
 
 Clicks on Import Nodes Button of Chef Server
-    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()='RLChefServer']/../td[5]/div/a[3]
+    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()='RLChefServer']/../td[5]/div/a[2]
     Sleep    50s
     Page Should Not Contain    ${IP Centos}
 
 
 Clicks on Import Nodes Button and verify Ubuntu instance deleted
-    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()='RLChefServer']/../td[5]/div/a[3]
+    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()='RLChefServer']/../td[5]/div/a[2]
     Sleep    50s
     Page Should Not Contain    ${IP Ubuntu}    
 
 Clicks on Import Nodes Button of Server for Sync
-    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()='RLChefServer']/../td[5]/div/a[3]
+    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()='RLChefServer']/../td[5]/div/a[2]
     Sleep    1 minutes
 
 Clicks on Import Button Server
-    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()='RLChefServer']/../td[5]/div/a[3]
+    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()='RLChefServer']/../td[5]/div/a[2]
     Sleep    50s
     Page Should Contain    ${IP Centos} 
 
 Clicks on Import Button Server and Verfiy the Ubuntu Instance
-    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()='RLChefServer']/../td[5]/div/a[3]
+    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()='RLChefServer']/../td[5]/div/a[2]
     Sleep    50s
     Page Should Contain    ${IP Ubuntu}    
 
