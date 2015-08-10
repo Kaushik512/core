@@ -2464,9 +2464,10 @@ $.get('../instances/' + urlParams.id, function(data) {
     // $blueprintTbody.append($tr);
     //Arab
     $.get('../instances/' + instanceId ,function(data1){
+      //console.log('success---1---2===');
         if(data1.orgId){
         $.get('../organizations/' + data1.orgId + '/businessgroups/' + data1.bgId + '/projects/' + data1.projectId + '/environments/' + data1.envId + '/', function(data2) {
-            console.log('success---3---4');
+            console.log('success---3---4===');
             var urls;
             var instanceIp;
             for(var i in data2.instances){
