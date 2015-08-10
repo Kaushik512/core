@@ -308,7 +308,9 @@ Vaildate the Organization Create feilds
 Enters organization new create name
     Sleep    5s
     Input Text     id=orgname    ${VaildOrgName}
- 
+
+    
+    
 
 Enters organization specialchars name
     Sleep    5s
@@ -552,18 +554,18 @@ Verfiy that EditedEnvironment is created
 
     
 Validation and Creation of New Business Groups
-     Vaildate the Business group feilds   ${Vaildate15ChrBGrpName}        
-     Business group name with more than 15 characters   ${Vaildate15ChrErrMsg}   
-     Vaildate the Business group1 feilds  ${VaildateBlankSpacesBGrpName}
-     Business group name with Blankspaces  ${VaildateBlankSpacesErrMsg}
-     Vaildate the Business group1 feilds  ${VaildateEmptyBGrpName}
-     Business group name Left Empty  ${VaildateEmptyErrMsg}
-     Vaildate the Business group1 feilds  ${VaildateSpecialChrBGrpName}
-     Business group name with special characters   ${VaildateSpecialChrErrMsg}
-     Vaildate the Business group2 feilds   ${VaildateNoOrgBName}
-     Business group name with no org name selected   ${VaildateNoOrgBErrMsg}
-     Vaildate the Business group1 feilds  ${VaildBGrpName1}
-     Vaildate the Business groupnew feilds  ${VaildBGrpName2}
+    Vaildate the Business group 15Character feilds        
+    Business group name with more than 15 characters   ${Vaildate15ChrErrMsg}   
+    Vaildate the Business group Blankspaces feilds  
+    Business group name with Blankspaces  ${VaildateBlankSpacesErrMsg}
+    Vaildate the Business group Emmpty feilds  
+    Business group name Left Empty  ${VaildateEmptyErrMsg}
+    Vaildate the Business group special char feilds  
+    Business group name with special characters   ${VaildateSpecialChrErrMsg}
+    Vaildate the Business no Organztn feilds   
+    Business group name with no org name selected   ${VaildateNoOrgBErrMsg}
+    Vaildate the Business group create New1 feilds  
+    Vaildate the Businessgroup2 create fields 
      
 
 
@@ -605,37 +607,54 @@ Vaildate the Business Group namenoorg feilds
     [Arguments]    ${ErrorMsg}
     Element Should Contain    id=errmsg_productgroupname     ${ErrorMsg}
   
-Vaildate the Business Group feilds
-    [Arguments]    ${productgroupname}
+Vaildate the Business group 15Character feilds 
     Clicks on Settings
     Clicks on Organzatin Tree 
     Clicks on Business Groups menu
     Clicks on New button to create new Business Group
-    Validate Busgrp path
+    Enters new business group 15Char name    
+    Select organization for business group
+    Clicks on Save button to save the Business group details
 
-Vaildate the Business Group2 feilds
-    [Arguments]    ${productgroupname}
+Vaildate the Businessgroup2 create fields
+    Clicks on New button to create new Business Group
+    Enters new business group2 newname    
+    Select organization for business group
+    Clicks on Save button to save the Business group details
+
+Vaildate the Business group Blankspaces feilds  
+    Enters new business group Blankspaces name    
+    Select organization for business group
+    Clicks on Save button to save the Business group details
+    
+Vaildate the Business group Emmpty feilds
+    Enters new business group emptyy name    
+    Select organization for business group
+    Clicks on Save button to save the Business group details
+
+Vaildate the Business group special char feilds
+    Enters new business group spcl char name    
+    Select organization for business group
+    Clicks on Save button to save the Business group details
+
+
+Vaildate the Business no Organztn feilds
     Clicks on BusinessGrp cancel Button
     Clicks on New button to create new Business Group
-    Validate Busgrp2 path
-
-Validate Busgrp2 path
-    Enters new business group name    ${productgroupname}
+    Enters new business GroupNaME 
     Clicks on Save button to save the Business group details   
 
-Vaildate the Business Group1 feilds
-    [Arguments]    ${productgroupname}
-    Validate Busgrp path
 
 Vaildate the Business groupnew feilds
     [Arguments]    ${productgroupname}
     Clicks on New button to create new Business Group
     Validate Busgrp path
-    
-Validate Busgrp path
-    Enters new business group name    ${productgroupname}
+
+Vaildate the Business group create New1 feilds
+    Enters New Bgroup1 Name
     Select organization for business group
-    Clicks on Save button to save the Business group details   
+    Clicks on Save button to save the Business group details
+
 
 Vaildate the Edit Business Group fields
     [Arguments]    ${ProductGroupName}
@@ -648,6 +667,34 @@ Vaildate the Edit Business Group fields
     Clicks on Save button to save the Business group details 
     Verfiy that Edited Business Group is created  ${ProductGroupName}
   
+
+Enters new business group 15Char name
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       id=productgroupname
+    Input Text     id=productgroupname      ${Vaildate15ChrBGrpName}  
+  
+Enters new business group Blankspaces name   
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       id=productgroupname
+    Input Text     id=productgroupname      ${VaildateBlankSpacesBGrpName}
+  
+Enters new business group emptyy name    
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       id=productgroupname
+    Input Text     id=productgroupname      ${VaildateEmptyBGrpName}
+
+Enters new business group spcl char name 
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       id=productgroupname
+    Input Text     id=productgroupname      ${VaildateSpecialChrBGrpName}
+
+Enters new business GroupNaME
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       id=productgroupname
+    Input Text     id=productgroupname      ${VaildateNoOrgBName}
+
+Enters New Bgroup1 Name
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       id=productgroupname
+    Input Text     id=productgroupname      ${VaildBGrpName1}
+
+Enters new business group2 newname
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       id=productgroupname
+    Input Text     id=productgroupname      ${VaildBGrpName2}
 
 
 Clicks on Organzatin Tree 
@@ -664,10 +711,7 @@ Clicks on New button to create new Business Group
     Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       link=New
     Click Element    link=New
 
-Enters new business group name
-    [Arguments]     ${productgroupname}
-    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       id=productgroupname
-    Input Text     id=productgroupname      ${productgroupname}
+
 
 Select organization for business group
     Select From List     id=orgname      ${ORGANIZATION NAME}
@@ -693,6 +737,7 @@ Verfiy that Edited Business Group is created
     Element Should Contain    xpath=.//*[@id='envtable']/tbody/tr/td[text()="${BUSINESS GROUP NAME}"]    ${BUSINESS GROUP NAME}   
 
                                                                             #business group ends
+
 
 
 
