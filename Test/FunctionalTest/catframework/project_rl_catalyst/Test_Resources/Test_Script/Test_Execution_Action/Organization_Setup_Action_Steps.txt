@@ -171,15 +171,16 @@ Selecting the Role as Consumer
     Click Element    xpath=.//*[@id='userrolename']/label[text()='Consumer']    
 
 Validation and Creation of New Organization
-      Vaildate the Organization feilds   ${Vaildate15ChrOrgName}        
+      Vaildate the Organization 15Character feilds     
       Organization name with more than 15 characters   ${Vaildate15ChrErrMsg}   
-      Vaildate the Organizationsame feilds  ${VaildateBlankSpacesOrgName}
+      Vaildate the Organization Blankspaces feilds  
       Organization name with Blankspaces  ${VaildateBlankSpacesErrMsg}
-      Vaildate the Organizationsame feilds  ${VaildateEmptyOrgName}
+      Vaildate the Organization name empty feilds  
       Organization name Left Empty  ${VaildateEmptyErrMsg}
-      Vaildate the Organizationsame feilds  ${VaildateSpecialChrOrgName}
+      Vaildate the Organization SpecialChars feilds  
       Organization name with special characters   ${VaildateSpecialChrErrMsg}
-      Vaildate the Organizationsame feilds  ${VaildOrgName}
+      Vaildate the Organization Create feilds  
+      
       
 
 Catalyst Editing the Organization and Domain name 
@@ -243,6 +244,7 @@ Assign Teams for OrgAdmin
     Click Element    xpath=.//*[@id='teamname']/label[text()='Relevance_Labs_Admins']
 
 
+
 #organization validation                                                           #organization start
 Organization name with more than 15 characters
     [Arguments]    ${Vaildate15ChrErrMsg}     
@@ -268,25 +270,71 @@ Vaildate the Organization name feilds
     [Arguments]    ${ErrorMsg}
     Element Should Contain    id=errmsg_orgname     ${ErrorMsg}
 
-Vaildate the Organization feilds
-    [Arguments]      ${Orgname}
-    Clicks on Settings
-    Clicks on Organization image
-    Validate Org same path   ${Orgname}
-
-Vaildate the Organizationsame feilds
-    [Arguments]      ${Orgname}
-    Validate Org same path   ${Orgname}
-
-Validate Org same path
-    [Arguments]      ${Orgname}
+Vaildate the Organization 15Character feilds 
     Clicks on Settings
     Clicks on Organization image
     Clicks on New button to Create New Organization
-    Enters organization name
+    Enters organization 15Character name
+    Enters organization domain name    
+    Clicks on Save button to save the Organization details 
+    
+    
+Vaildate the Organization Blankspaces feilds
+    Sleep    3s
+    Enters organization Blankspaces name
     Enters organization domain name    
     Clicks on Save button to save the Organization details 
 
+
+Vaildate the Organization name empty feilds
+    Sleep    3s
+    Enters organization Empty name
+    Enters organization domain name    
+    Clicks on Save button to save the Organization details 
+
+Vaildate the Organization SpecialChars feilds
+    Sleep    3s
+    Enters organization specialchars name
+    Enters organization domain name    
+    Clicks on Save button to save the Organization details 
+
+Vaildate the Organization Create feilds
+    Sleep    3s
+    Enters organization new create name
+    Enters organization domain name    
+    Clicks on Save button to save the Organization details 
+    
+    
+Enters organization new create name
+    Sleep    5s
+    Input Text     id=orgname    ${VaildOrgName}
+ 
+
+Enters organization specialchars name
+    Sleep    5s
+    Input Text     id=orgname    ${VaildateSpecialChrOrgName}
+    
+Enters organization Empty name
+    Sleep    5s
+    Input Text     id=orgname    ${VaildateEmptyOrgName}
+
+
+Enters organization Blankspaces name
+    Sleep    5s
+    Input Text     id=orgname    ${VaildateBlankSpacesOrgName}
+
+Enters organization 15Character name
+    Sleep    5s
+    Input Text     id=orgname    ${Vaildate15ChrOrgName}   
+    
+    
+    
+    
+    
+    
+
+
+    
 Validate Org remaining path
     Enters organization name
     Enters organization domain name    
@@ -325,9 +373,7 @@ Clicks on New button to Create New Organization
     Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       link=New
     Click Element    link=New
     
-Enters organization name
-    Sleep    5s
-    Input Text     id=orgname      ${Orgname}
+
 
 Enters organization domain name
     Sleep    1s
@@ -363,7 +409,6 @@ Verfiy that EditedOrganizationdomain is created
     Element Should Contain    xpath=.//*[@id='envtable']/tbody/tr/td[text()="${VaildEditOrgDomainName}"]    ${OrganizationDomainMsg} 
 
 #Organization ends
-
 
 
 Create New Environments
