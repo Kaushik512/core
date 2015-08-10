@@ -269,17 +269,17 @@ Vaildate the Organization name feilds
     Element Should Contain    id=errmsg_orgname     ${ErrorMsg}
 
 Vaildate the Organization feilds
-    [Arguments]    ${Orgname}
+    [Arguments]      ${Orgname}
     Clicks on Settings
     Clicks on Organization image
     Validate Org same path
 
 Vaildate the Organizationsame feilds
-    [Arguments]    ${Orgname}
+    [Arguments]      ${Orgname}
     Validate Org same path
 
 Validate Org same path
-    [Arguments]    ${Orgname}
+    [Arguments]      ${Orgname}
     Clicks on Settings
     Clicks on Organization image
     Clicks on New button to Create New Organization
