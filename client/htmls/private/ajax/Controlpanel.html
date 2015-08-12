@@ -2484,112 +2484,119 @@ $.get('../instances/' + urlParams.id, function(data) {
               console.log(data2.blueprints[j]);
               //debugger;
               if(data2.blueprints[j]._id == data.blueprintData.blueprintId){
-                //alert("I am kalam");
+                if(typeof data2.blueprints[j].blueprintConfig.cloudProviderData != "undefined"){
 
-                securityGroupIDs=data2.blueprints[j].blueprintConfig.cloudProviderData.securityGroupIds[0];
-                instanceSIZE = data2.blueprints[j].blueprintConfig.cloudProviderData.instanceType;
-                vpcTYPE = data2.blueprints[j].blueprintConfig.cloudProviderData.vpcId;
-                subnetID = data2.blueprints[j].blueprintConfig.cloudProviderData.subnetId;
-                versionLatest = data2.blueprints[j].blueprintConfig.infraManagerData.latestVersion;
-                
+                  securityGroupIDs=data2.blueprints[j].blueprintConfig.cloudProviderData.securityGroupIds[0];
+                  instanceSIZE = data2.blueprints[j].blueprintConfig.cloudProviderData.instanceType;
+                  vpcTYPE = data2.blueprints[j].blueprintConfig.cloudProviderData.vpcId;
+                  subnetID = data2.blueprints[j].blueprintConfig.cloudProviderData.subnetId;
+                  versionLatest = data2.blueprints[j].blueprintConfig.infraManagerData.latestVersion;
+                  
 
-                $tr = $('<tr style="line-height:2.3"></tr>');
-                $tr.append('<td scope="col" style="font-size:12px;">Blueprint Name</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + data2.blueprints[j].name + '</td>');
-                $blueprintTbody.append($tr);
-
-
-
-                //alert(subnetID);
-                $tr = $('<tr style="line-height:2.3"></tr>');
-                $tr.append('<td scope="col" style="font-size:12px;">Instance Size</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + instanceSIZE + '</td>');
-                $blueprintTbody.append($tr);
-
-                $tr = $('<tr style="line-height:2.3"></tr>');
-                $tr.append('<td scope="col" style="font-size:12px;">VPC ID</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + vpcTYPE + '</td>');
-                $blueprintTbody.append($tr);
-
-
-                $tr = $('<tr style="line-height:2.3"></tr>');
-                $tr.append('<td scope="col" style="font-size:12px;">Subnet ID</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + subnetID + '</td>');
-                $blueprintTbody.append($tr);
-                
-
-                $tr = $('<tr style="line-height:2.3"></tr>');
-                $tr.append('<td scope="col" style="font-size:12px;">Security Group</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + securityGroupIDs + '</td>');
-                $blueprintTbody.append($tr);
-
-                $tr = $('<tr style="line-height:2.3"></tr>');
-                $tr.append('<td scope="col" style="font-size:12px;">Version</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + versionLatest + '</td>');
-                $blueprintTbody.append($tr);
-                
-                // urls = data2.instances[i].appUrls;
-                // instanceIp = data2.instances[i].instanceIP;
-                // break;
-                //for getting the Provider name,Type,Region,KeyPair
-             $.ajax({
-                 type: "GET",
-                 url: "/aws/providers/" + data2.blueprints[j].blueprintConfig.cloudProviderId,
-                 success: function(data3) {
-                     // $blueprintReadContainer.find('.modal-body #instanceProviderName').val(data.providerName);
-                     // $blueprintReadContainer.find('.modal-body #instanceProviderType').val(data.providerType);
-                     // // loop for getting region and Keypair
-                     // for (var k = 0; k < data.keyPairs.length; k++) {
-
-                     //     $blueprintReadContainer.find('.modal-body #instanceRegion').val(data.keyPairs[k].region);
-                     //     $blueprintReadContainer.find('.modal-body #instancekeyPair').val(data.keyPairs[k].keyPairName);
-                     // }
-                     var providerTYPE = data3.providerType
-                     var providerNAME = data3.providerName;
-                     var regionNAME   = data3.keyPairs[0].region;
-                     var keypairNAME  = data3.keyPairs[0].keyPairName;
-                     $tr = $('<tr style="line-height:2.3"></tr>');
-                      $tr.append('<td scope="col" style="font-size:12px;">Provider Type</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + providerTYPE + '</td>');
-                      $blueprintTbody.append($tr);
-
-
-                      $tr = $('<tr style="line-height:2.3"></tr>');
-                      $tr.append('<td scope="col" style="font-size:12px;">Provider Name</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + providerNAME + '</td>');
-                      $blueprintTbody.append($tr);
-
-                      $tr = $('<tr style="line-height:2.3"></tr>');
-                      $tr.append('<td scope="col" style="font-size:12px;">Region Name</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + regionNAME + '</td>');
-                      $blueprintTbody.append($tr);
-
-                      $tr = $('<tr style="line-height:2.3"></tr>');
-                      $tr.append('<td scope="col" style="font-size:12px;">Keypair Name</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + keypairNAME + '</td>');
-                      $blueprintTbody.append($tr);
-                
-                     console.log("Provider Details:"+data3);
-                 },
-                 failure: function(data) {
-                     alert(data.toString());
-                 }
-             });
-             $.ajax({
-                 type: "GET",
-                 url: "/vmimages/" + data2.blueprints[j].blueprintConfig.cloudProviderData.imageId,
-                 success: function(data4) {
-                  var imageNAME = data4.name;
-                  var imageIDENTIFIER = data4.imageIdentifier;
                   $tr = $('<tr style="line-height:2.3"></tr>');
-                  $tr.append('<td scope="col" style="font-size:12px;">Image Name</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + imageNAME + '</td>');
+                  $tr.append('<td scope="col" style="font-size:12px;">Blueprint Name</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + data2.blueprints[j].name + '</td>');
+                  $blueprintTbody.append($tr);
+
+
+
+                  //alert(subnetID);
+                  $tr = $('<tr style="line-height:2.3"></tr>');
+                  $tr.append('<td scope="col" style="font-size:12px;">Instance Size</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + instanceSIZE + '</td>');
+                  $blueprintTbody.append($tr);
+
+                  $tr = $('<tr style="line-height:2.3"></tr>');
+                  $tr.append('<td scope="col" style="font-size:12px;">VPC ID</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + vpcTYPE + '</td>');
                   $blueprintTbody.append($tr);
 
 
                   $tr = $('<tr style="line-height:2.3"></tr>');
-                  $tr.append('<td scope="col" style="font-size:12px;">Image Identifier</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + imageIDENTIFIER + '</td>');
+                  $tr.append('<td scope="col" style="font-size:12px;">Subnet ID</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + subnetID + '</td>');
                   $blueprintTbody.append($tr);
-                 },
-                 failure: function(data) {
-                     alert(data.toString());
-                 }
-             });
+                  
+
+                  $tr = $('<tr style="line-height:2.3"></tr>');
+                  $tr.append('<td scope="col" style="font-size:12px;">Security Group</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + securityGroupIDs + '</td>');
+                  $blueprintTbody.append($tr);
+
+                  $tr = $('<tr style="line-height:2.3"></tr>');
+                  $tr.append('<td scope="col" style="font-size:12px;">Version</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + versionLatest + '</td>');
+                  $blueprintTbody.append($tr);
+                  
+                  // urls = data2.instances[i].appUrls;
+                  // instanceIp = data2.instances[i].instanceIP;
+                  // break;
+                  //for getting the Provider name,Type,Region,KeyPair
+                 $.ajax({
+                     type: "GET",
+                     url: "/aws/providers/" + data2.blueprints[j].blueprintConfig.cloudProviderId,
+                     success: function(data3) {
+                         // $blueprintReadContainer.find('.modal-body #instanceProviderName').val(data.providerName);
+                         // $blueprintReadContainer.find('.modal-body #instanceProviderType').val(data.providerType);
+                         // // loop for getting region and Keypair
+                         // for (var k = 0; k < data.keyPairs.length; k++) {
+
+                         //     $blueprintReadContainer.find('.modal-body #instanceRegion').val(data.keyPairs[k].region);
+                         //     $blueprintReadContainer.find('.modal-body #instancekeyPair').val(data.keyPairs[k].keyPairName);
+                         // }
+                         var providerTYPE = data3.providerType
+                         var providerNAME = data3.providerName;
+                         var regionNAME   = data3.keyPairs[0].region;
+                         var keypairNAME  = data3.keyPairs[0].keyPairName;
+                         $tr = $('<tr style="line-height:2.3"></tr>');
+                          $tr.append('<td scope="col" style="font-size:12px;">Provider Type</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + providerTYPE + '</td>');
+                          $blueprintTbody.append($tr);
+
+
+                          $tr = $('<tr style="line-height:2.3"></tr>');
+                          $tr.append('<td scope="col" style="font-size:12px;">Provider Name</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + providerNAME + '</td>');
+                          $blueprintTbody.append($tr);
+
+                          $tr = $('<tr style="line-height:2.3"></tr>');
+                          $tr.append('<td scope="col" style="font-size:12px;">Region Name</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + regionNAME + '</td>');
+                          $blueprintTbody.append($tr);
+
+                          $tr = $('<tr style="line-height:2.3"></tr>');
+                          $tr.append('<td scope="col" style="font-size:12px;">Keypair Name</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + keypairNAME + '</td>');
+                          $blueprintTbody.append($tr);
+                    
+                         console.log("Provider Details:"+data3);
+                     },
+                     failure: function(data) {
+                         alert(data.toString());
+                     }
+                  });
+                 $.ajax({
+                     type: "GET",
+                     url: "/vmimages/" + data2.blueprints[j].blueprintConfig.cloudProviderData.imageId,
+                     success: function(data4) {
+                      var imageNAME = data4.name;
+                      var imageIDENTIFIER = data4.imageIdentifier;
+                      $tr = $('<tr style="line-height:2.3"></tr>');
+                      $tr.append('<td scope="col" style="font-size:12px;">Image Name</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + imageNAME + '</td>');
+                      $blueprintTbody.append($tr);
+
+
+                      $tr = $('<tr style="line-height:2.3"></tr>');
+                      $tr.append('<td scope="col" style="font-size:12px;">Image Identifier</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + imageIDENTIFIER + '</td>');
+                      $blueprintTbody.append($tr);
+                     },
+                     failure: function(data) {
+                         alert(data.toString());
+                     }
+                  });
+                }
               }
+              // else{
+              //   alert("I am in else part");
+              //     //$('#accordion-Blueprints').hide();
+              // }
             }
             
           });
         }
     });
+    
+    
     $tr = $('<tr style="line-height:2.3"></tr>');
     $tr.append('<td scope="col" style="font-size:12px;">Template</td><td scope="col"> : </td><td scope="col" style="font-size:12px;">' + data.blueprintData.templateId + '</td>');
     $blueprintTbody.append($tr);
@@ -2598,7 +2605,9 @@ $.get('../instances/' + urlParams.id, function(data) {
     $tr.append('<td scope="col" style="font-size:12px;">Template Type</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + data.blueprintData.templateType + '</td>');
     $blueprintTbody.append($tr);
 
-
+    if(data.blueprintData.templateId == 'chef_import'){
+      $("#accordion-Blueprints").hide();
+    }
 
 
 
