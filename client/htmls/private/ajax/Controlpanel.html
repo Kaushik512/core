@@ -96,7 +96,7 @@
 
                 </div>
 
-<!--<div style="height:200px;border:1px solid blue;margin-left:200px;width:0px"></div>-->
+    <!--<div style="height:200px;border:1px solid blue;margin-left:200px;width:0px"></div>-->
 
     <ul id="myTab3" class="nav nav-tabs pull-left" style="padding: 10px 0 0 40px;border-bottom: medium none; position: auto; width: 80%; background-color: #2c3742;border-radius:11px 11px 0px 0px;">
 
@@ -114,475 +114,471 @@
           </li>
     </ul>
     <div id="myTabContent3" class="nav pull-left tab-content" style="position: auto; left: 0px; width: 80%;margin-top:4px;">
-
-            <!-- info tab contents starts here -->
-            <div class="tab-pane fade in active " id="l1" style="min-height:405px;overflow-y:auto;">
-
-                 
-
-                      <div class="panel-group smart-accordion-default">
-                        <div class="panel panel-default" id="accordion-Hardware" style="border-radius:10px 10px 0px 0px;">
-                            <div class="panel-heading">
-                              
-                              <h4 class="panel-title">
-                                <a data-toggle="collapse" data-parent="#accordion-Hardware" href="#collapseHardware" > 
-                                  <i class="fa fa-fw fa-plus-circle txt-color-blue"></i> 
-                                  <i class="fa fa-fw fa-minus-circle txt-color-red"></i>
-                                  <i class="fa fa-fw fa-wrench" style="font-size:14px;"></i>
-                                  <b style="color:#3a87ad;font-size:12px;"><u>Hardware</u></b>
-                                </a>
-                             </h4>
-                            </div>
-                            <div id="collapseHardware" class="panel-collapse collapse in">
-                              <div class="panel-body">
-                                <table align="left">
-                                       <thead>
-                                           
-                                       </thead>
-
-                                       <tbody>
-               
-
-                                          </tbody>
-
-                                      </table>
-
-                              </div>
-                             
-                            </div>
-                        </div>
-
-                        <!--Role Attributes Starts here-->
-                        <div class="panel panel-default" id="accordion-Software">
-                          <div class="panel-heading">
-                            <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion-Software" href="#collapseSoftware" ><i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i><i class="fa fa-fw fa-rss fa-dot-circle-o" style="font-size:14px;"></i> <b style="color:#3a87ad;font-size:12px;"><u>Software</u></b></a></h4>
-
-                            <a class="btn btn-primary inspectBtn" data-toggle="modal" href="#installedSoftwareModalContainer" style="float: right; margin-right: 5px; margin-top: 2px;">
-                              <i class="fa fa-fw fa-search" style="font-size:14px;"></i>
-                              Inspect
-                            </a>
-
-                          </div>
-                          <div id="collapseSoftware" class="panel-collapse collapse in">
-                            <div class="panel-body">
-                              <table align="left">
-                              
-
-                               <tbody > 
-                                 
-                                </tbody>
-                              </table>
-
-                            </div>
-
-                          </div><!--collapseRoleAttr ends here-->
-                        </div>
-                        <!--Role Attributes ends here-->
-
-                        <!--Configmgmt Attributes Starts here-->
-                        <div class="panel panel-default">
-                          <div class="panel-heading">
-                            <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion-configmgmt" href="#collapseConfigmgmt"> <i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i><i class="fa fa-fw fa-bar-chart-o" style="font-size:14px;"></i> <b style="color:#3a87ad;font-size:12px;"><u>Configuration Management</u></b></a></h4>
-                          </div>
-                          <div id="collapseConfigmgmt" class="panel-collapse collapse in">
-                            <div class="panel-body">
-                                <table align="left">
-                                 
-                                 <tbody > 
-                                    
-                                </tbody>
-                              </table>
-                            </div>
-                          </div>
-                        </div>
-
-                         <!--Configmgmt Attributes Starts here-->
-                       
-                        <!--Configmgmt Attributes Ends here-->
-
-                        <!--Application URL-->
-                        <div class="panel panel-default">
-                          <div class="panel-heading">
-                            <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion-configmgmt" href="#collapseAppURL"> <i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i><i class="fa fa-fw fa-list-ul" style="font-size:14px;"></i> <b style="color:#3a87ad;font-size:12px;"><u>Additional Parameters</u></b></a></h4>
-                          </div>
-                          <div id="collapseAppURL" class="panel-collapse collapse in">
-                            <div class="panel-body">
-                              <!--row starts AWS-->
-                               <div class="row">
- <div class="col-md-12">
- <div class="col-md-12">
-
- <div class="widget-box">
- <div class="widget-header">
- <h5 class="widget-title" style="color:#4e5964;">
- <strong>Application URLs</strong>
- </h5>
- <div class="widget-toolbar no-border">
-
- <a type="reset" id="newAppSeries" class="btn btn-minier btn-primary" href="#modalAppNameURL" data-toggle="modal">
- <i class="ace-icon ace-icon fa fa-plus bigger-110"></i>
- New
- </a>                                                
-
- </div>
-
- </div>
- <div class="widget-body">
- <div class="widget-main" style="min-height:100px">
- <div class="col-md-12 table-responsive" style="padding-left:0px; padding-right:0px;">
-   
- 
- <table id="appUrlTable" class="table table-striped table-bordered table-hover dataTable no-footer" cellpadding="5px" width="100%" style="text-align:center";>
- <!-- <div class="applicationURLContainer" id="appSeries12"> -->
- <thead>
- <tr class="rowCustomStyle">
-
-                                                                            
- <td style="width:5%">S.No</td>
- <td style="width:40%">Name</td>
- <td style="width:20%" class="">Action</td>
-
- </tr>
- </thead>
- <tbody>
-  
- </tbody>
- </table>
-  
- <div id="envtable_tools1"></div>
-
- <div class="col-md-5">
-
- </div>
- </div>
-
- </div>
- <div class="widget-toolbox padding-8 clearfix dataTables_wrapper">
- <div id="tableFooterLeft" class="pull-left"></div>
- <div id="tableFooterRight" class="pull-right"></div>
- </div>
-
-
- </div>
- </div>
- </div>
- </div>
- </div>
-                              <!--row ends from Aws--> 
-                             
-                                
-
-                              
-                            </div>
-                          </div>
-                        </div>
-                        <!--Application URL Ends here-->
-                        <!--tasks start here-->
-                         <div class="panel panel-default">
-                          <div class="panel-heading">
-                            <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion-configmgmt" href="#collapseTaskArea"> <i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i><i class="fa fa-fw fa-newspaper-o" style="font-size:14px;"></i> <b style="color:#3a87ad;font-size:12px;"><u>Tasks</u></b></a></h4>
-                          </div>
-                          <div id="collapseTaskArea" class="panel-collapse collapse in">
-                            <div class="panel-body">
-                                <!-- <table align="left">
-                                 
-                                 <tbody > 
-                                  <tr>
-                                    <td>Task Name</td><td> : </td><td class="taskNameTd"></td><td class=""><button id="addTaskBtn">Edit</button></td>
-                                  </tr>
-                                    
-                                </tbody>
-                              </table> -->
-                                     <div class="row">
- <div class="col-md-12">
- <div class="col-md-12">
-
- <div class="widget-box">
- <div class="widget-header">
- <h5 class="widget-title" style="color:#4e5964;">
- <strong>List of Tasks</strong>
- </h5>
- <div class="widget-toolbar no-border">
-
- <a id="addTaskBtn" class="btn btn-minier btn-primary" data-toggle="modal">
- <i class="ace-icon ace-icon fa fa-plus bigger-110"></i>
- Edit
- </a>                                                
-
- </div>
-
- </div>
- <div class="widget-body">
- <div class="widget-main" style="min-height:100px">
- <div class="col-md-12 table-responsive" style="padding-left:0px; padding-right:0px;">
-   
- 
- <table id="tasksLists"  class="table table-striped table-bordered table-hover dataTable no-footer" cellpadding="5px" width="100%" style="text-align:center";>
- <!-- <div class="applicationURLContainer" id="appSeries12"> -->
- <thead>
- <tr class="rowCustomStyle">
-
- <td width="50px">S.No </td>                                                                      
- <td>Tasks Name</td>
-
-
- </tr>
- </thead>
- <tbody>
- </tbody>
- </table>
-  
- </div>
-
- </div>
- </div>
- </div>
- </div>
- </div>
- </div>
-                            </div>
-                          </div>
-                        </div>
-                        <!--tasks name ends here-->
- <!--app series-->
- <div class="modal fade" id="modalAppNameURL" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
- <div class="modal-dialog">
- <div class="modal-content">
- <form role="form" class="cmxform" id="appURLForm" autocomplete="off">
- <div class="modal-header">
- <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
- &times;
- </button>
- <h4 class="modal-title">
- <i class="fa fa-th-list txt-color-blue"></i>&nbsp;&nbsp;Add Application URL
- </h4>
- </div>
-
- <div class="modal-body appSeriesHeight">
-
-
-
- <!--app series-->
- <div class="applicationURLContainer" id="appSeries"> 
- <div class="col-lg-6 col-md-6 projectRepo">
-
- <label for="appNameInput">Name:</label>
-
- <input type="hidden" class="form-control appUrlId">
- <input placeholder="AppName" type="text" maxlength="8" name="appNameInput" id="appNameInput" class="form-control appName">
- <b class="tooltip tooltip-top-right">
- <i class="fa fa-user txt-color-teal"></i> Please enter Application</b>
-
-
- </div>
-
- <div class="col-lg-6 col-md-6 projectRepo">
-
- <label for="appNameURL">URL:</label>
-
- <input placeholder="http://$host[:port]/appname" name="appNameURL" id="appNameURL" class="form-control appURL" type="text">
- <b class="tooltip tooltip-top-right">
- <i class="fa fa-user txt-color-teal"></i> Please enter URL</b>
- </div>
- </div>
-
-
-
- </div>
- <div class="modal-footer">
- <label id="nodeAppspinner" class=" hidden"><img  style="margin-left:5px;margin-right:25px;" src="img/select2-spinner.gif"></label>
- <div class="marginForButtons">
- <button id="addAppBtn" class="btn btn-primary" type="submit">
- <i class="fa fa-upload fa-1x"></i>&nbsp;Add
- </button>
- <a class="btn btn-primary" type="submit" data-dismiss="modal">
- <i class="fa fa-undo fa-1x"></i>&nbsp;Cancel
- </a>
- </div>
- </div>
- </form>
- </div><!-- /.modal-content -->
- </div><!-- /.modal-dialog -->
- </div><!-- /.modal for appSeries ends-->
-
-
-
-                      </div>
-            </div> <!-- info tab contents ends here-->
-
-            <!-- tab of Actions starts here -->
-            <div class="tab-pane" id="l2" style="height:415px;overflow-y: auto;border-radius:11px;">
-
-
-                
-                <div role="content">
-
-                    <!-- widget content -->
-                    <div class="table-responsive" style="border:1px solid #dddddd;border-radius:11px">
-                        <!-- class="table table-hover" -->
-                        <table  id="tableServices" class="table table-striped table-bordered table-hover dataTable no-footer text-align-center table-condensed tablesorter" style="margin-top:72px;">
-                            <thead>
-                              <tr>
-                                <th style="font-size: 13px;">
-                                  <i class="fa fa-fw fa-archive "></i>
-                                  <strong style="color:#3a87ad">Service Name</strong>
-                                </th>
-                                <th style="font-size: 13px;">
-                                  <i class="fa fa-fw fa-sort-amount-asc "></i>
-                                  <strong style="color:#3a87ad">Actions </strong>
-                                </th>
-                                <th style="font-size: 13px;">
-                                  <i class="fa fa-fw fa-flash "></i>
-                                  <strong style="color:#3a87ad">Options</strong>
-                                </th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                                <tbody class="servicesTbody">
-                                  
-                                </tbody> 
-                            </tbody>
-                            <a class="btn btn-primary addServiceBtn" style="float:right;padding-right:10px;margin-right:10px;" data-toggle="modal" href="#serviceModalContainer">Add New Service</a>
-                        </table>
-
-                    </div>
-                    <div class="col-lg-6 col-md-6" style="margin-top:20px;border:1px solid black;padding:5px 5px 5px 5px;width:380px;">
-                      <label class="serviceClass">Special Services:</label>
-                    <label id="saveSpinner" class="hidden" style="float:left"><img style="margin-left:8px;margin-top:8px;" src="img/select2-spinner.gif"></label>
-
-                    <a class="btn btn-primary workstationBtn" data-toggle="modal" style="float: left; margin-left:32px; margin-top:2px;">
-                      <i class="fa fa-check" style="font-size:14px;"></i>
-                      Convert To Workstation
+        <!-- info tab contents starts here -->
+        <div class="tab-pane fade in active " id="l1" style="min-height:405px;overflow-y:auto;">
+          <div class="panel-group smart-accordion-default">
+            <div class="panel panel-default" id="accordion-Hardware" style="border-radius:10px 10px 0px 0px;">
+                <div class="panel-heading">
+                  
+                  <h4 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#accordion-Hardware" href="#collapseHardware" > 
+                      <i class="fa fa-fw fa-plus-circle txt-color-blue"></i> 
+                      <i class="fa fa-fw fa-minus-circle txt-color-red"></i>
+                      <i class="fa fa-fw fa-wrench" style="font-size:14px;"></i>
+                      <b style="color:#3a87ad;font-size:12px;"><u>Hardware</u></b>
                     </a>
-                  </div>
-                    <!-- end widget content -->
-
+                 </h4>
                 </div>
-                <!-- end widget div -->
+                <div id="collapseHardware" class="panel-collapse collapse in">
+                  <div class="panel-body">
+                    <table align="left">
+                           <thead>
+                               
+                           </thead>
 
-            </div> <!-- Tab of Action ends here -->
-            <div class="modal fade" id="serviceModalContainer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
-                <div class="modal-dialog">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                    <h4 class="modal-title" id="myModalLabel">Add New Service</h4>
-                  </div>
-                  <div class="modal-body">
-                    
-                    <!--<select id="serviceList" class="col col-6" multiple></select>-->
-                      <table  class="table table-striped table-bordered table-hover dataTable no-footer" cellpadding="5px" width="100%" style="text-align:center";>
-                       <thead>
-                        <tr>
-                          <th>Name</th>
-                          <th>Actions</th>
-                          <th>Select</th>
-                        </tr>
-                       </thead>
-                       <tbody id="serviceList">
-                            <tr><td colspan=3>No Data Available</td></tr>
+                           <tbody>
+   
 
-                       </tbody>
-                      </table>
+                              </tbody>
+
+                          </table>
 
                   </div>
-                  
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-default btn-primary btnsaveDeploymentBP btnSaveService"><i class="ace-icon fa fa-check bigger-110"></i>&nbsp;Save</button>
-                    <button type="button" class="btn btn-default btn-primary" data-dismiss="modal"><i class="ace-icon fa fa-undo bigger-110"></i>&nbsp;Cancel</button>
-                  </div>
+                 
                 </div>
-              </div>
             </div>
-          
 
-            <div class="modal fade" id="installedSoftwareModalContainer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
-                <div class="modal-dialog">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                    <h4 class="modal-title" id="myModalLabel"><i class="fa fa-list txt-color-blue"></i>&nbsp;&nbsp;Inspect Installed Software</h4>
-                  </div>
-                  <div class="modal-body">
-                    <div class="row">
+            <!--Role Attributes Starts here-->
+            <div class="panel panel-default" id="accordion-Software">
+              <div class="panel-heading">
+                <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion-Software" href="#collapseSoftware" ><i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i><i class="fa fa-fw fa-rss fa-dot-circle-o" style="font-size:14px;"></i> <b style="color:#3a87ad;font-size:12px;"><u>Software</u></b></a></h4>
 
-                      <div class="col-md-12 heightModal400">
+                <a class="btn btn-primary inspectBtn" data-toggle="modal" href="#installedSoftwareModalContainer" style="float: right; margin-right: 5px; margin-top: 2px;">
+                  <i class="fa fa-fw fa-search" style="font-size:14px;"></i>
+                  Inspect
+                </a>
+
+              </div>
+              <div id="collapseSoftware" class="panel-collapse collapse in">
+                <div class="panel-body">
+                  <table align="left">
+                  
+
+                   <tbody > 
+                     
+                    </tbody>
+                  </table>
+
+                </div>
+
+              </div><!--collapseRoleAttr ends here-->
+            </div>
+            <!--Role Attributes ends here-->
+
+            <!--Configmgmt Attributes Starts here-->
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion-configmgmt" href="#collapseConfigmgmt"> <i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i><i class="fa fa-fw fa-bar-chart-o" style="font-size:14px;"></i> <b style="color:#3a87ad;font-size:12px;"><u>Configuration Management</u></b></a></h4>
+              </div>
+              <div id="collapseConfigmgmt" class="panel-collapse collapse in">
+                <div class="panel-body">
+                    <table align="left">
+                     
+                     <tbody > 
                         
-                        <div id="paragraphs" class="p-sieve paraHeightModal">
-                         
-                        </div>
-                        <div class="loadingContainerimageInspectCSS">
-                          <img  style="margin-left:140px;" src="img/spinner.gif">
-                        </div>
-                      </div>
-                    </div>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+             <!--Configmgmt Attributes Starts here-->
+           
+            <!--Configmgmt Attributes Ends here-->
+
+            <!--Application URL-->
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion-configmgmt" href="#collapseAppURL"> <i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i><i class="fa fa-fw fa-list-ul" style="font-size:14px;"></i> <b style="color:#3a87ad;font-size:12px;"><u>Additional Parameters</u></b></a></h4>
+              </div>
+              <div id="collapseAppURL" class="panel-collapse collapse in">
+                <div class="panel-body">
+                  <!--row starts AWS-->
+                   <div class="row">
+                   <div class="col-md-12">
+                   <div class="col-md-12">
+
+                   <div class="widget-box">
+                   <div class="widget-header">
+                   <h5 class="widget-title" style="color:#4e5964;">
+                   <strong>Application URLs</strong>
+                   </h5>
+                   <div class="widget-toolbar no-border">
+
+                   <a type="reset" id="newAppSeries" class="btn btn-minier btn-primary" href="#modalAppNameURL" data-toggle="modal">
+                   <i class="ace-icon ace-icon fa fa-plus bigger-110"></i>
+                   New
+                   </a>                                                
+
+                   </div>
+
+                   </div>
+                   <div class="widget-body">
+                   <div class="widget-main" style="min-height:100px">
+                   <div class="col-md-12 table-responsive" style="padding-left:0px; padding-right:0px;">
+                     
+                   
+                   <table id="appUrlTable" class="table table-striped table-bordered table-hover dataTable no-footer" cellpadding="5px" width="100%" style="text-align:center";>
+                   <!-- <div class="applicationURLContainer" id="appSeries12"> -->
+                   <thead>
+                   <tr class="rowCustomStyle">
+
+                                                                                              
+                   <td style="width:5%">S.No</td>
+                   <td style="width:40%">Name</td>
+                   <td style="width:20%" class="">Action</td>
+
+                   </tr>
+                   </thead>
+                   <tbody>
                     
-                  </div>
-                  
-                  <div class="modal-footer">
-                    <!-- <button type="button" class="btn btn-default btn-primary btnsaveDeploymentBP btnSaveService"><i class="ace-icon fa fa-check bigger-110"></i>&nbsp;Save</button> -->
-                    <button type="button" class="btn btn-default btn-primary" data-dismiss="modal"><i class="ace-icon fa fa-undo bigger-110"></i>&nbsp;Cancel</button>
+                   </tbody>
+                   </table>
+                    
+                   <div id="envtable_tools1"></div>
+
+                   <div class="col-md-5">
+
+                   </div>
+                   </div>
+
+                   </div>
+                   <div class="widget-toolbox padding-8 clearfix dataTables_wrapper">
+                   <div id="tableFooterLeft" class="pull-left"></div>
+                   <div id="tableFooterRight" class="pull-right"></div>
+                   </div>
+
+
+                   </div>
+                   </div>
+                   </div>
+                   </div>
+                   </div>
+                  <!--row ends from Aws--> 
+                </div>
+              </div>
+            </div>
+            <!--Application URL Ends here-->
+            <!--tasks start here-->
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion-configmgmt" href="#collapseTaskArea"> <i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i><i class="fa fa-fw fa-newspaper-o" style="font-size:14px;"></i> <b style="color:#3a87ad;font-size:12px;"><u>Tasks</u></b></a></h4>
+              </div>
+              <div id="collapseTaskArea" class="panel-collapse collapse in">
+                <div class="panel-body">
+                    <!-- <table align="left">
+                     
+                     <tbody > 
+                      <tr>
+                        <td>Task Name</td><td> : </td><td class="taskNameTd"></td><td class=""><button id="addTaskBtn">Edit</button></td>
+                      </tr>
+                        
+                    </tbody>
+                  </table> -->
+                 <div class="row">
+                   <div class="col-md-12">
+                   <div class="col-md-12">
+
+                   <div class="widget-box">
+                   <div class="widget-header">
+                   <h5 class="widget-title" style="color:#4e5964;">
+                   <strong>List of Tasks</strong>
+                   </h5>
+                   <div class="widget-toolbar no-border">
+
+                   <a id="addTaskBtn" class="btn btn-minier btn-primary" data-toggle="modal">
+                   <i class="ace-icon ace-icon fa fa-plus bigger-110"></i>
+                   Edit
+                   </a>                                                
+
+                   </div>
+
+                   </div>
+                   <div class="widget-body">
+                   <div class="widget-main" style="min-height:100px">
+                   <div class="col-md-12 table-responsive" style="padding-left:0px; padding-right:0px;">
+                     
+                   
+                   <table id="tasksLists"  class="table table-striped table-bordered table-hover dataTable no-footer" cellpadding="5px" width="100%" style="text-align:center";>
+                   <!-- <div class="applicationURLContainer" id="appSeries12"> -->
+                   <thead>
+                   <tr class="rowCustomStyle">
+
+                   <td width="50px">S.No </td>                                                                      
+                   <td>Tasks Name</td>
+
+
+                   </tr>
+                   </thead>
+                   <tbody>
+                   </tbody>
+                   </table>
+                    
+                   </div>
+
+                   </div>
+                   </div>
+                   </div>
+                   </div>
+                   </div>
                   </div>
                 </div>
               </div>
             </div>
-           
-            <!-- Configure tab contents starts here -->
-            <div class="tab-pane" id="l3" style="height:415px;overflow-y: auto;">
-              <div class="table-responsive" style="border:1px solid #dddddd;min-height:400px;border-radius:11px">
+            <!--tasks name ends here-->
+            <div class="panel panel-default" id="accordion-Blueprints">
+              <div class="panel-heading">
+                <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion-Blueprints" href="#collapseBlueprints" ><i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i><i class="fa fa-fw fa-rss fa-dot-circle-o" style="font-size:14px;"></i> <b style="color:#3a87ad;font-size:12px;"><u>Blueprint Information</u></b></a></h4>
+              </div>
+              <div id="collapseBlueprints" class="panel-collapse collapse in">
+                <div class="panel-body">
+                  <table align="left">
+                    <tbody > 
+                     
+                    </tbody>
+                  </table>
 
-                        <table id="tableactionHistory" class="table table-striped table-bordered table-hover dataTable no-footer" cellpadding="5px" width="100%" style="text-align:center";>
-                            <thead style="font-size: 13px">
-                              <tr>
-                              <td>
-                                <!-- <i class="fa fa-fw fa-archive "></i> -->
-                                <strong style="color:#3a87ad";>Type</strong>
-                              </td>
-                              <td>
-    
-                                <strong style="color:#3a87ad;">Status</strong>
-                              </td>
-                              <td>
-    
-                                <strong style="color:#3a87ad;">Data</strong>
-                              </td>
-                              <td>
-                                
-                                <strong style="color:#3a87ad;">Timestamp</strong>
-                              </td>
-                              <td>
-                                
-                                <strong style="color:#3a87ad;">Users</strong>
-                              </td>
-                              <td>
-                                
-                                <strong style="color:#3a87ad;">MoreInfo</strong>
-                              </td> 
-                            </tr>
-                            </thead>
-                            <tbody>
-                             
-                                
-                            </tbody>
-                        </table>
-                    </div>
+                </div>
 
-            </div> <!--Configure tab contents ends here -->
-
-            <div class="tab-pane" id="l4" style="height:415px;overflow-y: auto;overflow-x:hidden;border:1px solid #ddd;border-radius:11px;">
-              <div class="logsArea"></div>
+              </div><!--collapseRoleAttr ends here-->
             </div>
-            <!-- History tab contents starts here -->
-        
+             <!--app series-->
+             <div class="modal fade" id="modalAppNameURL" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+               <div class="modal-dialog">
+               <div class="modal-content">
+               <form role="form" class="cmxform" id="appURLForm" autocomplete="off">
+               <div class="modal-header">
+               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+               &times;
+               </button>
+               <h4 class="modal-title">
+               <i class="fa fa-th-list txt-color-blue"></i>&nbsp;&nbsp;Add Application URL
+               </h4>
+               </div>
+
+               <div class="modal-body appSeriesHeight">
 
 
-           <!--  <div class="row" > -->
+
+               <!--app series-->
+               <div class="applicationURLContainer" id="appSeries"> 
+               <div class="col-lg-6 col-md-6 projectRepo">
+
+               <label for="appNameInput">Name:</label>
+
+               <input type="hidden" class="form-control appUrlId">
+               <input placeholder="AppName" type="text" maxlength="8" name="appNameInput" id="appNameInput" class="form-control appName">
+               <b class="tooltip tooltip-top-right">
+               <i class="fa fa-user txt-color-teal"></i> Please enter Application</b>
+
+
+               </div>
+
+               <div class="col-lg-6 col-md-6 projectRepo">
+
+               <label for="appNameURL">URL:</label>
+
+               <input placeholder="http://$host[:port]/appname" name="appNameURL" id="appNameURL" class="form-control appURL" type="text">
+               <b class="tooltip tooltip-top-right">
+               <i class="fa fa-user txt-color-teal"></i> Please enter URL</b>
+               </div>
+               </div>
+
+
+
+               </div>
+               <div class="modal-footer">
+               <label id="nodeAppspinner" class=" hidden"><img  style="margin-left:5px;margin-right:25px;" src="img/select2-spinner.gif"></label>
+               <div class="marginForButtons">
+               <button id="addAppBtn" class="btn btn-primary" type="submit">
+               <i class="fa fa-upload fa-1x"></i>&nbsp;Add
+               </button>
+               <a class="btn btn-primary" type="submit" data-dismiss="modal">
+               <i class="fa fa-undo fa-1x"></i>&nbsp;Cancel
+               </a>
+               </div>
+               </div>
+               </form>
+               </div><!-- /.modal-content -->
+               </div><!-- /.modal-dialog -->
+             </div><!-- /.modal for appSeries ends-->
+          </div>
+        </div> <!-- info tab contents ends here-->
+
+        <!-- tab of Actions starts here -->
+        <div class="tab-pane" id="l2" style="height:415px;overflow-y: auto;border-radius:11px;">
+
+
+            
+            <div role="content">
+
+                <!-- widget content -->
+                <div class="table-responsive" style="border:1px solid #dddddd;border-radius:11px">
+                    <!-- class="table table-hover" -->
+                    <table  id="tableServices" class="table table-striped table-bordered table-hover dataTable no-footer text-align-center table-condensed tablesorter" style="margin-top:72px;">
+                        <thead>
+                          <tr>
+                            <th style="font-size: 13px;">
+                              <i class="fa fa-fw fa-archive "></i>
+                              <strong style="color:#3a87ad">Service Name</strong>
+                            </th>
+                            <th style="font-size: 13px;">
+                              <i class="fa fa-fw fa-sort-amount-asc "></i>
+                              <strong style="color:#3a87ad">Actions </strong>
+                            </th>
+                            <th style="font-size: 13px;">
+                              <i class="fa fa-fw fa-flash "></i>
+                              <strong style="color:#3a87ad">Options</strong>
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                            <tbody class="servicesTbody">
+                              
+                            </tbody> 
+                        </tbody>
+                        <a class="btn btn-primary addServiceBtn" style="float:right;padding-right:10px;margin-right:10px;" data-toggle="modal" href="#serviceModalContainer">Add New Service</a>
+                    </table>
+
+                </div>
+                <div class="col-lg-6 col-md-6" style="margin-top:20px;border:1px solid black;padding:5px 5px 5px 5px;width:380px;">
+                  <label class="serviceClass">Special Services:</label>
+                <label id="saveSpinner" class="hidden" style="float:left"><img style="margin-left:8px;margin-top:8px;" src="img/select2-spinner.gif"></label>
+
+                <a class="btn btn-primary workstationBtn" data-toggle="modal" style="float: left; margin-left:32px; margin-top:2px;">
+                  <i class="fa fa-check" style="font-size:14px;"></i>
+                  Convert To Workstation
+                </a>
+              </div>
+                <!-- end widget content -->
+
+            </div>
+            <!-- end widget div -->
+
+        </div> <!-- Tab of Action ends here -->
+        <div class="modal fade" id="serviceModalContainer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+            <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">Add New Service</h4>
+              </div>
+              <div class="modal-body">
+                
+                <!--<select id="serviceList" class="col col-6" multiple></select>-->
+                  <table  class="table table-striped table-bordered table-hover dataTable no-footer" cellpadding="5px" width="100%" style="text-align:center";>
+                   <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Actions</th>
+                      <th>Select</th>
+                    </tr>
+                   </thead>
+                   <tbody id="serviceList">
+                        <tr><td colspan=3>No Data Available</td></tr>
+
+                   </tbody>
+                  </table>
+
+              </div>
               
-            <!-- </div> -->
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default btn-primary btnsaveDeploymentBP btnSaveService"><i class="ace-icon fa fa-check bigger-110"></i>&nbsp;Save</button>
+                <button type="button" class="btn btn-default btn-primary" data-dismiss="modal"><i class="ace-icon fa fa-undo bigger-110"></i>&nbsp;Cancel</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      
 
+        <div class="modal fade" id="installedSoftwareModalContainer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+            <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel"><i class="fa fa-list txt-color-blue"></i>&nbsp;&nbsp;Inspect Installed Software</h4>
+              </div>
+              <div class="modal-body">
+                <div class="row">
+
+                  <div class="col-md-12 heightModal400">
+                    
+                    <div id="paragraphs" class="p-sieve paraHeightModal">
+                     
+                    </div>
+                    <div class="loadingContainerimageInspectCSS">
+                      <img  style="margin-left:140px;" src="img/spinner.gif">
+                    </div>
+                  </div>
+                </div>
+                
+              </div>
+              
+              <div class="modal-footer">
+                <!-- <button type="button" class="btn btn-default btn-primary btnsaveDeploymentBP btnSaveService"><i class="ace-icon fa fa-check bigger-110"></i>&nbsp;Save</button> -->
+                <button type="button" class="btn btn-default btn-primary" data-dismiss="modal"><i class="ace-icon fa fa-undo bigger-110"></i>&nbsp;Cancel</button>
+              </div>
+            </div>
+          </div>
+        </div>
+       
+        <!-- Configure tab contents starts here -->
+        <div class="tab-pane" id="l3" style="height:415px;overflow-y: auto;">
+          <div class="table-responsive" style="border:1px solid #dddddd;min-height:400px;border-radius:11px">
+
+                    <table id="tableactionHistory" class="table table-striped table-bordered table-hover dataTable no-footer" cellpadding="5px" width="100%" style="text-align:center";>
+                        <thead style="font-size: 13px">
+                          <tr>
+                          <td>
+                            <!-- <i class="fa fa-fw fa-archive "></i> -->
+                            <strong style="color:#3a87ad";>Type</strong>
+                          </td>
+                          <td>
+
+                            <strong style="color:#3a87ad;">Status</strong>
+                          </td>
+                          <td>
+
+                            <strong style="color:#3a87ad;">Data</strong>
+                          </td>
+                          <td>
+                            
+                            <strong style="color:#3a87ad;">Timestamp</strong>
+                          </td>
+                          <td>
+                            
+                            <strong style="color:#3a87ad;">Users</strong>
+                          </td>
+                          <td>
+                            
+                            <strong style="color:#3a87ad;">MoreInfo</strong>
+                          </td> 
+                        </tr>
+                        </thead>
+                        <tbody>
+                         
+                            
+                        </tbody>
+                    </table>
+                </div>
+
+        </div> <!--Configure tab contents ends here -->
+
+        <div class="tab-pane" id="l4" style="height:415px;overflow-y: auto;overflow-x:hidden;border:1px solid #ddd;border-radius:11px;">
+          <div class="logsArea"></div>
+        </div>
     </div> 
-
-</div>
+  </div>
 </article>
 <!-- <div class="col-md-10 col-lg-10 col-xs-12 col-sm-12" style="bottom:0px;position:fixed;">
                 <div class="clearfix form-actions" style="text-align:center">
@@ -2444,6 +2440,177 @@ $.get('../instances/' + urlParams.id, function(data) {
     // $tr = $('<tr style="line-height:2.3"></tr>');
     // $tr.append('<td scope="col" style="font-size:12px;">Free Memory</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + data.hardware.memory.free + '</td>');
     // $hrdwareTbody.append($tr);
+
+
+
+
+
+    //Blueprint Information Arab
+    var $blueprintTbody = $('#collapseBlueprints').find('tbody');
+    $blueprintTbody.empty();
+    // var $tr = $('<tr style="line-height:2.3"></tr>');
+    // $tr.append('<td scope="col" style="font-size:12px;">Blueprint Id</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + data.blueprintData.blueprintId + '</td>');
+    // $blueprintTbody.append($tr);
+
+    // $tr = $('<tr style="line-height:2.3"></tr>');
+    // $tr.append('<td scope="col" style="font-size:12px;">Blueprint Name</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + data.blueprintData.blueprintName + '</td>');
+    // $blueprintTbody.append($tr);
+
+    // $tr = $('<tr style="line-height:2.3"></tr>');
+    // $tr.append('<td scope="col" style="font-size:12px;">Template Id</td><td scope="col"> : </td><td scope="col" style="font-size:12px;">' + data.blueprintData.templateId + '</td>');
+    // $blueprintTbody.append($tr);
+
+    // $tr = $('<tr style="line-height:2.3"></tr>');
+    // $tr.append('<td scope="col" style="font-size:12px;">Template Type</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + data.blueprintData.templateType + '</td>');
+    // $blueprintTbody.append($tr);
+    //Arab
+    $.get('../instances/' + instanceId ,function(data1){
+      //console.log('success---1---2===');
+        if(data1.orgId){
+        $.get('../organizations/' + data1.orgId + '/businessgroups/' + data1.bgId + '/projects/' + data1.projectId + '/environments/' + data1.envId + '/', function(data2) {
+            console.log('success---3---4===');
+            var urls;
+            var instanceIp;
+            for(var i in data2.instances){
+              console.log(data2.instances[i]);
+              if(data2.instances[i]._id == instanceId){
+                urls = data2.instances[i].appUrls;
+                instanceIp = data2.instances[i].instanceIP;
+                break;
+              }
+            }
+            var subnetID;
+            var instanceType;
+            for(var j in data2.blueprints){
+              console.log(data2.blueprints[j]);
+              //debugger;
+              if(data2.blueprints[j]._id == data.blueprintData.blueprintId){
+                if(typeof data2.blueprints[j].blueprintConfig.cloudProviderData != "undefined"){
+
+                  securityGroupIDs=data2.blueprints[j].blueprintConfig.cloudProviderData.securityGroupIds[0];
+                  instanceSIZE = data2.blueprints[j].blueprintConfig.cloudProviderData.instanceType;
+                  vpcTYPE = data2.blueprints[j].blueprintConfig.cloudProviderData.vpcId;
+                  subnetID = data2.blueprints[j].blueprintConfig.cloudProviderData.subnetId;
+                  versionLatest = data2.blueprints[j].blueprintConfig.infraManagerData.latestVersion;
+                  
+
+                  $tr = $('<tr style="line-height:2.3"></tr>');
+                  $tr.append('<td scope="col" style="font-size:12px;">Blueprint Name</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + data2.blueprints[j].name + '</td>');
+                  $blueprintTbody.append($tr);
+
+
+
+                  //alert(subnetID);
+                  $tr = $('<tr style="line-height:2.3"></tr>');
+                  $tr.append('<td scope="col" style="font-size:12px;">Instance Size</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + instanceSIZE + '</td>');
+                  $blueprintTbody.append($tr);
+
+                  $tr = $('<tr style="line-height:2.3"></tr>');
+                  $tr.append('<td scope="col" style="font-size:12px;">VPC ID</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + vpcTYPE + '</td>');
+                  $blueprintTbody.append($tr);
+
+
+                  $tr = $('<tr style="line-height:2.3"></tr>');
+                  $tr.append('<td scope="col" style="font-size:12px;">Subnet ID</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + subnetID + '</td>');
+                  $blueprintTbody.append($tr);
+                  
+
+                  $tr = $('<tr style="line-height:2.3"></tr>');
+                  $tr.append('<td scope="col" style="font-size:12px;">Security Group</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + securityGroupIDs + '</td>');
+                  $blueprintTbody.append($tr);
+
+                  $tr = $('<tr style="line-height:2.3"></tr>');
+                  $tr.append('<td scope="col" style="font-size:12px;">Version</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + versionLatest + '</td>');
+                  $blueprintTbody.append($tr);
+                  
+                  // urls = data2.instances[i].appUrls;
+                  // instanceIp = data2.instances[i].instanceIP;
+                  // break;
+                  //for getting the Provider name,Type,Region,KeyPair
+                 $.ajax({
+                     type: "GET",
+                     url: "/aws/providers/" + data2.blueprints[j].blueprintConfig.cloudProviderId,
+                     success: function(data3) {
+                         // $blueprintReadContainer.find('.modal-body #instanceProviderName').val(data.providerName);
+                         // $blueprintReadContainer.find('.modal-body #instanceProviderType').val(data.providerType);
+                         // // loop for getting region and Keypair
+                         // for (var k = 0; k < data.keyPairs.length; k++) {
+
+                         //     $blueprintReadContainer.find('.modal-body #instanceRegion').val(data.keyPairs[k].region);
+                         //     $blueprintReadContainer.find('.modal-body #instancekeyPair').val(data.keyPairs[k].keyPairName);
+                         // }
+                         var providerTYPE = data3.providerType
+                         var providerNAME = data3.providerName;
+                         var regionNAME   = data3.keyPairs[0].region;
+                         var keypairNAME  = data3.keyPairs[0].keyPairName;
+                         $tr = $('<tr style="line-height:2.3"></tr>');
+                          $tr.append('<td scope="col" style="font-size:12px;">Provider Type</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + providerTYPE + '</td>');
+                          $blueprintTbody.append($tr);
+
+
+                          $tr = $('<tr style="line-height:2.3"></tr>');
+                          $tr.append('<td scope="col" style="font-size:12px;">Provider Name</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + providerNAME + '</td>');
+                          $blueprintTbody.append($tr);
+
+                          $tr = $('<tr style="line-height:2.3"></tr>');
+                          $tr.append('<td scope="col" style="font-size:12px;">Region Name</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + regionNAME + '</td>');
+                          $blueprintTbody.append($tr);
+
+                          $tr = $('<tr style="line-height:2.3"></tr>');
+                          $tr.append('<td scope="col" style="font-size:12px;">Keypair Name</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + keypairNAME + '</td>');
+                          $blueprintTbody.append($tr);
+                    
+                         console.log("Provider Details:"+data3);
+                     },
+                     failure: function(data) {
+                         alert(data.toString());
+                     }
+                  });
+                 $.ajax({
+                     type: "GET",
+                     url: "/vmimages/" + data2.blueprints[j].blueprintConfig.cloudProviderData.imageId,
+                     success: function(data4) {
+                      var imageNAME = data4.name;
+                      var imageIDENTIFIER = data4.imageIdentifier;
+                      $tr = $('<tr style="line-height:2.3"></tr>');
+                      $tr.append('<td scope="col" style="font-size:12px;">Image Name</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + imageNAME + '</td>');
+                      $blueprintTbody.append($tr);
+
+
+                      $tr = $('<tr style="line-height:2.3"></tr>');
+                      $tr.append('<td scope="col" style="font-size:12px;">Image Identifier</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + imageIDENTIFIER + '</td>');
+                      $blueprintTbody.append($tr);
+                     },
+                     failure: function(data) {
+                         alert(data.toString());
+                     }
+                  });
+                }
+              }
+              // else{
+              //   alert("I am in else part");
+              //     //$('#accordion-Blueprints').hide();
+              // }
+            }
+            
+          });
+        }
+    });
+    
+    
+    $tr = $('<tr style="line-height:2.3"></tr>');
+    $tr.append('<td scope="col" style="font-size:12px;">Template</td><td scope="col"> : </td><td scope="col" style="font-size:12px;">' + data.blueprintData.templateId + '</td>');
+    $blueprintTbody.append($tr);
+
+    $tr = $('<tr style="line-height:2.3"></tr>');
+    $tr.append('<td scope="col" style="font-size:12px;">Template Type</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + data.blueprintData.templateType + '</td>');
+    $blueprintTbody.append($tr);
+
+    if(data.blueprintData.templateId == 'chef_import'){
+      $("#accordion-Blueprints").hide();
+    }
+
+
 
 
 
