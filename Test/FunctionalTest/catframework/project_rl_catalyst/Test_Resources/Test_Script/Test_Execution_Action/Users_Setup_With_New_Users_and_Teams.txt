@@ -286,6 +286,7 @@ Team name with special characters
 
 
 Catalyst Creation of New Team in Catalyst
+    Sleep    2s
     Clicks on New Team Button
     Enters the New Team Name for Catalyst
     Enters the Team Description
