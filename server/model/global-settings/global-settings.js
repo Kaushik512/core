@@ -28,8 +28,8 @@ var GlobalSettingsSchema = new Schema({
     kibanaUrl: String,
     zabbixUrl: String,
     jenkinsUrl: String,
-    awsUrl: String,
-    awsMonitorUrl: String
+    awsUsageUrl: String,
+    awsCostUrl: String
 
 });
 
@@ -62,9 +62,9 @@ GlobalSettingsSchema.statics.createNew = function(globalSettingsData, callback) 
     });
 };
 
-// Save all GobalSettings informations.
+// Update all GobalSettings informations.
 GlobalSettingsSchema.statics.updateSettings = function(gSettingsId, globalSettingsData, callback) {
-	logger.debug("Going to Update settings data: ",JSON.stringify(globalSettingsData));
+    logger.debug("Going to Update settings data: ", JSON.stringify(globalSettingsData));
     this.update({
         "_id": gSettingsId
     }, {
@@ -75,8 +75,8 @@ GlobalSettingsSchema.statics.updateSettings = function(gSettingsId, globalSettin
             kibanaUrl: globalSettingsData.kibanaUrl,
             zabbixUrl: globalSettingsData.zabbixUrl,
             jenkinsUrl: globalSettingsData.jenkinsUrl,
-            awsUrl: globalSettingsData.awsUrl,
-            awsMonitorUrl: globalSettingsData.awsMonitorUrl
+            awsUsageUrl: globalSettingsData.awsUsageUrl,
+            awsCostUrl: globalSettingsData.awsCostUrl
         }
     }, {
         upsert: false
@@ -104,6 +104,56 @@ GlobalSettingsSchema.statics.getGolbalSettingsById = function(gSettingsId, callb
         if (globalSettings) {
             logger.debug("Got GobalSettings: ", JSON.stringify(globalSettings[0]));
             callback(null, globalSettings[0]);
+        }
+    });
+};
+
+// Save or Update all GobalSettings informations.
+GlobalSettingsSchema.statics.updateGlobalSettings = function(globalSettingsData, callback) {
+    logger.debug("Going to Update settings data: ", JSON.stringify(globalSettingsData));
+    var that = this;
+    this.find(function(err, data) {
+        if (err) {
+            logger.debug("Gote err: ", err);
+        }
+        if (data.length > 0) {
+            this.update({
+                "_id": data[0]._id
+            }, {
+                $set: {
+                    authStrategy: globalSettingsData.authStrategy,
+                    addLDAPUser: globalSettingsData.addLDAPUser,
+                    ldapServer: globalSettingsData.ldapServer,
+                    kibanaUrl: globalSettingsData.kibanaUrl,
+                    zabbixUrl: globalSettingsData.zabbixUrl,
+                    jenkinsUrl: globalSettingsData.jenkinsUrl,
+                    awsUsageUrl: globalSettingsData.awsUsageUrl,
+                    awsCostUrl: globalSettingsData.awsCostUrl
+                }
+            }, {
+                upsert: false
+            }, function(err, globalSettings) {
+                if (err) {
+                    logger.debug("Got error while creating GobalSettings: ", err);
+                    callback(err, null);
+                }
+                if (globalSettings) {
+                    logger.debug("Updated GobalSettings: ", JSON.stringify(globalSettings));
+                    callback(null, globalSettings);
+                }
+            });
+        } else {
+            var gSettings = new that(globalSettingsData);
+            gSettings.save(function(err, globalSettings) {
+                if (err) {
+                    logger.debug("Got error while creating GobalSettings: ", err);
+                    callback(err, null);
+                }
+                if (globalSettings) {
+                    logger.debug("Creating GobalSettings: ", JSON.stringify(globalSettings));
+                    callback(null, globalSettings);
+                }
+            });
         }
     });
 };

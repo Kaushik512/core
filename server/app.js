@@ -20,7 +20,7 @@ var appConfig = require('_pr/config');
 var RedisStore = require('connect-redis')(express);
 var MongoStore = require('connect-mongo')(express.session);
 
-var mongoDbConnect = require('./lib/mongodb');
+var mongoDbConnect = require('_pr/lib/mongodb');
 
 
 logger.debug('Starting Catalyst');

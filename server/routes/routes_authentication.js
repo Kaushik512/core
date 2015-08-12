@@ -10,7 +10,7 @@ var ldapSettings = appConfig.ldap;
 var passport = require('passport');
 var bcrypt = require('bcryptjs');
 var authUtil = require('../lib/utils/authUtil.js');
-//var GlobalSettings = require('_pr/model/global-settings/global-settings');
+var GlobalSettings = require('_pr/model/global-settings/global-settings');
 
 module.exports.setRoutes = function(app) {
     app.post('/auth/createldapUser', function(req, res) {
@@ -44,14 +44,14 @@ module.exports.setRoutes = function(app) {
     });
     app.post('/auth/signin', function(req, res, next) {
         if (req.body && req.body.username && req.body.pass) {
-            /*GlobalSettings.getGolbalSettings(function(err, globalSettings) {
+            GlobalSettings.getGolbalSettings(function(err, globalSettings) {
                 if (err) {
                     res.send(500, errorResponses.db.error);
                     return;
-                }*/
-                //if (globalSettings) {
-                    //logger.debug("Authentication Strategy: ", globalSettings.authStrategy.externals);
-                    if (appConfig.authStrategy.externals) {
+                }
+                if (globalSettings.length) {
+                    logger.debug("Authentication Strategy: ", globalSettings[0].authStrategy.externals);
+                    if (globalSettings[0].authStrategy.externals) {
                         logger.debug("LDAP Authentication>>>>>");
                         passport.authenticate('ldap-custom-auth', function(err, user, info) {
                             logger.debug('passport error ==>', err);
@@ -146,8 +146,8 @@ module.exports.setRoutes = function(app) {
                             }
                         });
                     }
-               // }
-           // });
+                }
+            });
 
         } else {
             res.redirect('/public/login.html?o=try');
