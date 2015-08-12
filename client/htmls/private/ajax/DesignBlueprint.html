@@ -1049,6 +1049,92 @@
 </div>
 <!--modal for blueprint edit read-->
 
+<!--modal for blueprint read-->
+<div class="modal fade bs-example-modal-lg" id="modalForReadCFT" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">Blueprint Information-CFT</h4>
+            </div>
+            <div class="modal-body" style="height:360px;overflow-y:auto;">
+              <!--os and the 1st tier-->
+ <table class="table table-bordered">
+    <thead>
+        <th style="width:11%;text-align:center">Parameters</th>
+        <th style="width:27%;text-align:center">Values</th>
+    </thead>
+    <tbody>
+        <tr>
+            <td style="padding-left: 18px;padding-top:16px;">Blueprint Name:</td>
+<td>
+    
+ <input  id="blueprintNameCFT" disabled="disabled" class="form-control">
+ 
+</td>
+</tr>
+
+<tr>
+  <td style="padding-left:18px;padding-top:16px">Organisation Name:</td>
+  <td>
+    <input id="blueprintORG" disabled="disabled" class="form-control">
+  </td>
+</tr>
+
+<tr>
+  <td style="padding-left:18px;padding-top:16px">Template Type:</td>
+  <td>
+    <input id="blueprintTemplateTypeCFT" disabled="disabled" class="form-control">
+  </td>
+</tr>
+
+<tr>
+  <td style="padding-left:18px;padding-top:16px">Business Group:</td>
+  <td>
+    <input id="blueprintBU" disabled="disabled" class="form-control">
+  </td>
+</tr>
+
+<tr>
+  <td style="padding-left:18px;padding-top:16px">Project Name:</td>
+  <td>
+    <input id="blueprintProject" disabled="disabled" class="form-control">
+  </td>
+</tr>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            </tbody>
+           </table> 
+            
+             </div>
+             <div class="modal-footer">
+                <button type="button" class="btn btn-default btn-primary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--modal for blueprint edit read-->
+
 <!--modal for blueprint edit-->
 <div class="modal fade bs-example-modal-lg" id="blueprintEditResultContainer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
     <div class="modal-dialog modal-lg">
@@ -3012,13 +3098,13 @@
 
                                      // alert(JSON.stringify(data));
                                      $('.blueprintSaveSuccess').show();
-                                     $('.blueprintNameSuccess').html('Blueprint&nbsp;&nbsp;<a id="blueprintInfo" href="#modalForRead" data-toggle="modal">' + data.name + '</a>&nbsp;&nbsp;Saved Successfully');
+                                     $('.blueprintNameSuccess').html('Blueprint&nbsp;&nbsp;<a id="blueprintInfo" data-toggle="modal">' + data.name + '</a>&nbsp;&nbsp;Saved Successfully');
                                      $wizard.data('secondClick', true);
                                      var wizard = $wizard.data('bootstrapWizard');
                                      wizard.next();
                                      wizard.disablePreviouBtn();
                                      if(tempType==='appfactory'){
-                                     $('a#blueprintInfo').click(function(e) {
+                                     $('a#blueprintInfo').attr('href','#modalForRead').click(function(e) {
                                       
                                        
                                          //  alert('check');
@@ -3088,9 +3174,52 @@
                                        
                                      });
                                     }else{
-                                        $('a#blueprintInfo').click(function(e) {
-                                          bootbox.alert('Information Will be updated in the next build');
-                                          return false;
+                                        $('a#blueprintInfo').attr('href','#modalForReadCFT').click(function(e) {
+                                          var $blueprintReadContainerCFT = $('#modalForReadCFT');
+
+                                       
+                                        //  alert(JSON.stringify(data));
+                                         //condition for getting the OS,instanceType,version...
+
+                                         $blueprintReadContainerCFT.modal('show');
+                                         //for getting the blueprint name
+                                         $blueprintReadContainerCFT.find('.modal-body #blueprintNameCFT').val(data.name);
+                                         $blueprintReadContainerCFT.find('.modal-body #blueprintTemplateTypeCFT').val(data.templateType);
+                                            $.ajax({
+                                                type: "get",
+                                                dataType: "json",
+
+                                                async: false,
+                                                url: "../organizations/getTreeNew",
+                                                success: function(data) {
+
+                                                    console.log(data);
+                                                    data = JSON.parse(JSON.stringify(data));
+                                                    
+                                                  //  alert(JSON.stringify(data));
+                                                    
+
+                                                    for (var i = 0; i < data.length; i++) {
+
+                                                        (function(i) {
+                                                            $blueprintReadContainerCFT.find('.modal-body #blueprintORG').val(data[i].name);
+                                                            for (var p = 0; p < data[i].businessGroups.length; p++) {
+                                                                (function(p) {
+                                                                    $blueprintReadContainerCFT.find('.modal-body #blueprintBU').val(data[i].businessGroups[p].name);
+                                                                    //}
+                                                                    for (var x = 0; x < data[i].businessGroups[p].projects.length; x++) {
+                                                                        $blueprintReadContainerCFT.find('.modal-body #blueprintProject').val(data[i].businessGroups[p].projects[x].name);
+                                                                    }
+                                                                })(p);
+                                                            }
+                                                        })(i);
+                                                    }
+                                                    
+
+                                                    
+
+                                                }
+                                            });
                                         });
                                       }
                                          //for getting the blueprint name

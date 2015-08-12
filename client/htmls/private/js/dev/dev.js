@@ -2654,8 +2654,14 @@
                                                                                         if (blueprintType === 'aws_cf') {
                                                                                             msgStr = 'Stack Id : ' + data.stackId + '. You can view your stack in cloudformation tab';
                                                                                         } else {
-                                                                                            msgStr = 'Instance Id : ' + data.id + '<br/>Instance Logs :- ';
+                                                                                            msgStr = 'Instance Id : ';
+                                                                                            
+                                                                                           // for(var i = 0; i < data.id.length; i++)
+                                                                                                msgStr += data.id.join(',');
+
+                                                                                            msgStr += '<br/>You could monitor logs form the launched Instances.';
                                                                                         }
+
                                                                                         var $msg = $('<div></div>').append('<h3 style="font-size:16px;" class=\"alert alert-success\">Your Selected Blueprint is being Launched, kindly check back in a while.</h3>').append(msgStr);
 
                                                                                         $launchResultContainer.find('.modal-body').empty();
@@ -2665,9 +2671,10 @@
 
                                                                                                 addStackToDom(stack);
                                                                                                
-                                                                                            })
+                                                                                        })
                                                                                             return;
                                                                                         }
+                                                                                       
 
                                                                                         var instanceId = data.id;
                                                                                         var timeout;
@@ -2731,14 +2738,34 @@
                                                                                                 });
                                                                                             }, delay);
                                                                                         }
-                                                                                        pollLogs(lastTimestamp, 0, true);
+                                                                                        //alert('Instances ' + data.id.length);
+                                                                                        if(data.id.length <= 1)
+                                                                                            {
+                                                                                                //data = data[0];
+                                                                                                instanceId = data.id[0];
+                                                                                                //to be called only when there is one instance.
+                                                                                                pollLogs(lastTimestamp, 0, true);
+                                                                                                $.get('../instances/' + data.id[0], function(data) {
+                                                                                                    $('#tabInstanceStatus').hide();
+                                                                                                        addInstanceToDOM(data);
+                                                                                                    // serachBoxInInstance.updateData(data,"add",undefined);
+                                                                                                });
+                                                                                            }
+                                                                                        else{
+                                                                                            for(var j = 0; j < data.id.length;j++){
+                                                                                                $.get('../instances/' + data.id[j], function(data) {
+                                                                                                    $('#tabInstanceStatus').hide();
+                                                                                                        addInstanceToDOM(data);
+                                                                                                    // serachBoxInInstance.updateData(data,"add",undefined);
+                                                                                                });
+                                                                                                if(j >= data.id.length - 1){
+                                                                                                    $('.logsAreaBootstrap').hide();
+                                                                                                }
+                                                                                            }
+                                                                                        }
+                                                                                        
 
-                                                                                        $.get('../instances/' + data.id, function(data) {
-                                                                                            $('#tabInstanceStatus').hide();
-                                                                                            addInstanceToDOM(data);
-                                                                                            // serachBoxInInstance.updateData(data,"add",undefined);
-
-                                                                                        });
+                                                                                        
 
 
                                                                                     }).error(function() {
