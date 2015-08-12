@@ -41,8 +41,8 @@ var globalSettingsData = {
     "kibanaUrl": "",
     "zabbixUrl": "",
     "jenkinsUrl": "",
-    "awsUsageUrl": "http://54.67.35.103:3031/Awsusage",
-    "awsCostUrl": "http://54.67.35.103:3030/Infrah"
+    "awsUsageUrl": "",
+    "awsCostUrl": ""
 };
 setTimeout(function(){
 GlobalSettings.updateGlobalSettings(globalSettingsData, function(err, globalSettings) {
