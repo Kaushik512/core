@@ -143,18 +143,17 @@ Validate the New User and Add Setup
 Test Validation of Creation of New Teams
     Vaildate the Empty Team Name
     Team name field left empty  ${VaildEmptyTeamNameErrMsg}
-    Vaildate the 22chrTeam Name feilds   ${Vaildate15ChrTeamName}        
+    Vaildate the 22chrTeam Name feilds        
     Team name with more than 15 characters   ${Vaildate15ChrTeamErrMsg}   
-    Vaildate the Team Name Blankspace feilds  ${VaildateBlankSpacesTeamName}
+    Vaildate the Team Name Blankspace feilds
     Team Name name with Blankspaces  ${VaildateTeamBlankSpacesErrMsg}
-    Vaildate the Team Name Special Char feilds  ${VaildateSpecialChrTeamName}
+    Vaildate the Team Name Special Char feilds  
     Team name with special characters  ${VaildateTeamSpecialChrErrMsg}
 
 
 Vaildate the 22chrTeam Name feilds
-    [Arguments]    ${teamname}
     Clicks on New Team Button
-    Enters the 15chr Team Name
+    Enters the 22chr Team Name
     Enters the Team Description
     Select particular User Created organization
     Assign Users
@@ -250,7 +249,6 @@ Vaildate the 15chr field
     Clicks on TeamCancel Button
 
 Vaildate the Team Name Blankspace feilds
-    [Arguments]    ${teamname}
     Clicks on New Team Button
     Enters the Blank Spaces Team Name
     Enters the Team Description
@@ -269,7 +267,6 @@ Validate the Blankspaces Field
     Clicks on TeamCancel Button
 
 Vaildate the Team Name Special Char feilds
-    [Arguments]    ${teamname}
     Clicks on New Team Button
     Enters the Special Chars Team name
     Enters the Team Description
@@ -293,13 +290,13 @@ Team name with special characters
 
 
 Enters the Special Chars Team name
-    Wait Until Keyword Succeeds    1 minute     1 seconds       Input Text    id=teamname    ${teamname}
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Input Text    id=teamname    ${VaildateSpecialChrTeamName}
 
-Enters the 15chr Team Name
-    Wait Until Keyword Succeeds    1 minute     1 seconds       Input Text    id=teamname    ${teamname}
+Enters the 22chr Team Name
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Input Text    id=teamname    ${Vaildate15ChrTeamName}
 
 Enters the Blank Spaces Team Name
-    Wait Until Keyword Succeeds    1 minute     1 seconds       Input Text    id=teamname    ${teamname}
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Input Text    id=teamname    ${VaildateBlankSpacesTeamName}
 
 
     
@@ -688,8 +685,6 @@ Vaildate the Empty Team Name
     Assign Projects
     Clicks on TSave Button
 
-Enters the Empty Team Name
-    Input Text    id=teamname    ${teamname}
 
 Clicks on TeamCancel Button
     Click Element    xpath=.//*[@id='btncancel']
