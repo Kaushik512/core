@@ -16,9 +16,9 @@ Resource           ${CATALYST TEST DATA}/${TESTDATA}
 
 *** Keywords ***
 Test Validation of Creation of New Templates
-    Vaildate the Empty Template Name  ${VaildEmptyTemplateName}
+    Vaildate the Empty Template Name
     Template Name left empty  ${VaildEmptyTemplateNameErrMsg}
-    Vaildate the 15Character Template Name   ${Vaild15ChrTemplateName} 
+    Vaildate the 15Character Template Name
     Template Name more than 15characters   ${Vaild15ChrTemplateNameErrMsg}
     Validate the No Organization Creating Template
     Template Creation with no Organization
@@ -142,7 +142,6 @@ Verfiy the Template Type is Created
     Element Should Contain    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${TEMPLATE TYPENAME}']
 
 Vaildate the Empty Template Name
-    [Arguments]    ${templatename}
     Clicks on Settings
     Clicks on Gallery Setup
     Clicks on Templates
@@ -229,7 +228,6 @@ Clicks on Template Cancel Button
 
 
 Vaildate the 15Character Template Name
-    [Arguments]   ${Templatename}
     Clicks on New Button
     Sleep    3s
     Enters 15Chr Template Name
@@ -242,9 +240,7 @@ Vaildate the 15Character Template Name
     Clicks on Save Button
 
 Enters 15Chr Template Name
-    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible        id=templatename
-    Click Element    xpath=.//*[@id='templatename']
-    Input Text     id=templatename     ${Templatename}
+    Input Text     id=templatename    ${Vaild15ChrTemplateName} 
 
 Template Name more than 15characters
      [Arguments]    ${Vaild15ChrTemplateNameErrMsg}
@@ -328,13 +324,13 @@ Clicks on Save Button
 
 
 Test Validation of Creation of New Services
-    Vaildate the Empty Service Name  ${VaildEmptyServiceName}
+    Vaildate the Empty Service Name
     Service Name left empty  ${VaildEmptyServiceNameErrMsg}
-    Vaildate the 15Character Service Name    ${Vaild15ChrTemplateName} 
-    Service Name more than 15characters      ${Vaild15ChrTemplateNameErrMsg}
-    Validate the BlankSpaces Service name  ${VaildBlkSerName}  
+    Vaildate the 15Character Service Name
+    Service Name more than 15characters   ${Vaild15ChrTemplateNameErrMsg}
+    Validate the BlankSpaces Service name  
     Service Name with BlankSpaces  ${VaildBlkServiceErrMsg}
-    Vaildate the Special Chars ServiceName  ${VaildSpclCharName}
+    Vaildate the Special Chars ServiceName
     Service Name with Special Characters  ${VaildSpclCharErrMsg}
     Vaildate the No Org Selected in Services
     Service Name with no Organziatn Selected
@@ -362,8 +358,7 @@ Validate the Edit Service command
     Select the Edit Actions
     Clicks on SerSave Button
 
-Validate the BlankSpaces Service name 
-    [Arguments]   ${Servicename}
+Validate the BlankSpaces Service name
     Clicks on SNew Button
     Select Created organization
     Enters the BlanksSpace Service name
@@ -374,7 +369,6 @@ Validate the BlankSpaces Service name
     Clicks on SerSave Button
 
 Vaildate the Special Chars ServiceName
-    [Arguments]   ${Servicename}
     Clicks on SNew Button
     Select Created organization
     Enters Special Chars Service Name
@@ -395,7 +389,7 @@ Vaildate the No Org Selected in Services
 
 
 Enters Special Chars Service Name
-    Input Text    id=servicename    ${Servicename}
+    Input Text    id=servicename    ${VaildSpclCharName}
 
 
 Service Name with BlankSpaces
@@ -414,7 +408,6 @@ Service Name with no Organziatn Selected
 
 
 Vaildate the 15Character Service Name
-    [Arguments]   ${Servicename}
     Clicks on SNew Button
     Select Created organization
     Enters 15Chr Service Name
@@ -430,10 +423,10 @@ Clicks on Edit Button of Service
 
 
 Enters 15Chr Service Name
-   Input Text    id=servicename    ${Servicename}
+   Input Text    id=servicename    ${Vaild15ChrTemplateName}
 
 Enters the BlanksSpace Service name
-   Input Text    id=servicename    ${Servicename}
+   Input Text    id=servicename    ${VaildBlkSerName}
 
 Service Name more than 15characters
      [Arguments]    ${Vaild15ChrServiceNameErrMsg}
@@ -447,13 +440,11 @@ Vaildate 15chr service
     
 
 Vaildate the Empty Service Name
-    [Arguments]    ${servicename}
     Clicks on Settings
     Clicks on Gallery Setup
     Clicks on Service Command
     Clicks on SNew Button
     Select Created organization
-    Enters Empty Service Name
     Choose Service Command Type
     Select Chef Server
     Select Service CookBooks
@@ -462,8 +453,7 @@ Vaildate the Empty Service Name
     
 
 
-Enters Empty Service Name
-    Input Text    id=servicename    ${servicename}
+
 
 Enters New Service Name
     Sleep    1s
