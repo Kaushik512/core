@@ -3944,13 +3944,10 @@
 
                                                                                             console.log(taskHistories);
 
-                                                                                            var history =[];
-                                                                                            for (var j = 0; j < taskHistories.length; j++) {
-                                                                                                history.push(taskHistories[j].buildNumber);
-                                                                                            }
+
                                                                                             for (var i = 0; i < taskHistories.length; i++) {
                                                                                                 //alert(taskHistories.length);
-                                                                                
+                                                                                                
                                                                                                 
                                                                                                 
                                                                                                 (function(i) {
@@ -3970,8 +3967,9 @@
                                                                                                             var $tdBuildNumber = $('<td/>').append('<a style="word-break: break-all;" href="' + url + '" title="' + url + '" target="_blank">' + taskHistories[i].buildNumber + '</a>');
                                                                                                             $trHistoryRow.append($tdBuildNumber);
                                                                                                             if (typeof job.builds[job.nextBuildNumber - 1] === "undefined") {
-                                                                                                                var $tdJobName = $('<td/>').append('Current Job is still pending');
-                                                                                                                $trHistoryRow.append($tdJobName);
+                                                                                                                //commented for not showing the pending job flow..
+                                                                                                                /*var $tdJobName = $('<td/>').append('Current Job is still pending');
+                                                                                                                $trHistoryRow.append($tdJobName);*/
                                                                                                             } else {
 
 
@@ -3984,24 +3982,15 @@
 
                                                                                                         } else {
                                                                                                             for (var k = 0; k < job.builds.length; k++) {
-                                                                                                                //alert(JSON.stringify(job.builds));
+                                                                                                                
 
                                                                                                                 console.log(taskHistories[i].buildNumber, "  ---  ", job.nextBuildNumber);
 
-                                                                                                                //if (taskHistories[i].buildNumber === job.builds[k].number) {
-                                                                                                                if (history.indexOf(job.builds[k].number) != -1) {
-                                                                                                                    url = job.builds[k].url;
-                                                                                                                    // alert(url);
-                                                                                                                    //  var $tdBuildNumber = $('<td/>');
-                                                                                                                    // alert('spinm');
-                                                                                                                    /*var $nodeListContainer = $('.build-number');
-                                                                                                                    $nodeListContainer.find('img').remove();*/
+                                                                                                                if (taskHistories[i].buildNumber === job.builds[k].number) {
 
-                                                                                                                    /*var $nodeListContainer = $('.build-number');
-                                                                                                                    $nodeListContainer.find('img').remove();
-                                                                                                                    timeout = setTimeout(function() {
-                                                                                                                        $trHistoryRow.find('.build-number').append('<a style="word-break: break-all;" href="' + url + '" title="' + url + '" target="_blank">' + taskHistories[i].buildNumber + '</a>');
-                                                                                                                    }, 1500);*/
+                                                                                                                    url = job.builds[k].url;
+                                                                                                                    
+                                                                                                                    
                                                                                                                     var $tdBuildNumber = $('<td/>').append('<a style="word-break: break-all;" href="' + url + '" title="' + url + '" target="_blank">' + taskHistories[i].buildNumber + '</a>');
 +-                                                                                                                  $trHistoryRow.append($tdBuildNumber);
 
@@ -4024,18 +4013,17 @@
                                                                                                         $tdJobName = $('<td/>');
 
 
-                                                                                                        // alert(taskHistories[i].jobResultURL[p]);
-                                                                                                        //alert(taskHistories[i].jobResultURL.length);
+                                                                                                        
                                                                                                         if (taskHistories[i].jobResultURL.length) {
                                                                                                             for (var p = 0; p < taskHistories[i].jobResultURL.length; p++) {
                                                                                                                 $tdJobName.append('<a class="btn btn-primary btn-sg tableactionbutton marginleftright7" style="word-break: break-all;" href="' + taskHistories[i].jobResultURL[p] + '" title="' + taskHistories[i].jobResultURL[p] + '" target="_blank"><i class="ace-icon fa fa-file-text bigger-120"></i></a>');
                                                                                                             }
 
-                                                                                                            //$trHistoryRow.append($tdJobName);
+                                                                                                            
                                                                                                         }
                                                                                                         $tdJobName.append('<a title="Jenkins Log" data-placement="top" rel="tooltip" class="btn btn-primary btn-sg tableactionbutton moreinfo" href="javascript:void(0)" data-toggle="modal"><i class="ace-icon fa fa-list bigger-120"></i></a>');
                                                                                                         $tdJobName.find('a.moreinfo').data('history', taskHistories[i]).data('taskId', taskId).click(function() {
-                                                                                                            //$('#assignedTaskHistory').modal('hide');
+                                                                                                            
                                                                                                             var taskId = $(this).data('taskId');
                                                                                                             var $taskExecuteTabsHeaderContainer = $('#taskExecuteTabsHeader').empty();
                                                                                                             var $taskExecuteTabsContent = $('#taskExecuteTabsContent').empty();
@@ -4092,22 +4080,29 @@
 
 
 
-                                                                                                        //method for showing the status of the job that is getting executed or the job already executed..
+                                                                                                        //method for showing the status of the job that is getting executed or the job already executed and for no status..
                                                                                                         $trHistoryRow.append($tdJobName);
-                                                                                                        if (taskHistories[i].status.toLowerCase() === "success") {
-                                                                                                            var $tdBuildStatus = $('<td style="background-color:#1c9951;"></td>').append('<span style="color:#fff">SUCCESS</span>');
-                                                                                                            $trHistoryRow.append($tdBuildStatus);
-                                                                                                        } else if (taskHistories[i].status.toLowerCase() === "failed") {
-                                                                                                            var $tdBuildStatusFailure = $('<td style="background-color:red;"></td>').append('<span style="color:#fff;">FAILURE</span>');
-                                                                                                            $trHistoryRow.append($tdBuildStatusFailure);
-                                                                                                        } else if (taskHistories[i].status.toLowerCase() === "failure") {
-                                                                                                            var $tdBuildStatusFailure = $('<td style="background-color:red;"></td>').append('<span style="color:#fff;">FAILURE</span>');
-                                                                                                            $trHistoryRow.append($tdBuildStatusFailure);
-                                                                                                        } else if (taskHistories[i].status.toLowerCase() === "aborted") {
-                                                                                                            var $tdBuildStatusFailure = $('<td style="background-color:red;"></td>').append('<span style="color:#fff;">ABORTED</span>');
-                                                                                                            $trHistoryRow.append($tdBuildStatusFailure);
+                                                                                                        
+                                                                                                        
+                                                                                                        if (taskHistories[i].status != null) {
+                                                                                                            if (taskHistories[i].status.toLowerCase() === "success") {
+                                                                                                                var $tdBuildStatus = $('<td style="background-color:#1c9951;"></td>').append('<span style="color:#fff">SUCCESS</span>');
+                                                                                                                $trHistoryRow.append($tdBuildStatus);
+                                                                                                            } else if (taskHistories[i].status.toLowerCase() === "failed") {
+                                                                                                                var $tdBuildStatusFailure = $('<td style="background-color:red;"></td>').append('<span style="color:#fff;">FAILURE</span>');
+                                                                                                                $trHistoryRow.append($tdBuildStatusFailure);
+                                                                                                            } else if (taskHistories[i].status.toLowerCase() === "failure") {
+                                                                                                                var $tdBuildStatusFailure = $('<td style="background-color:red;"></td>').append('<span style="color:#fff;">FAILURE</span>');
+                                                                                                                $trHistoryRow.append($tdBuildStatusFailure);
+                                                                                                            } else if (taskHistories[i].status.toLowerCase() === "aborted") {
+                                                                                                                var $tdBuildStatusFailure = $('<td style="background-color:red;"></td>').append('<span style="color:#fff;">ABORTED</span>');
+                                                                                                                $trHistoryRow.append($tdBuildStatusFailure);
+                                                                                                            } else {
+                                                                                                                var $tdBuildStatusRunning = $('<td style="background-color:gray;"></td>').append('<span style="color:#fff;">PENDING</span>');
+                                                                                                                $trHistoryRow.append($tdBuildStatusRunning);
+                                                                                                            }
                                                                                                         } else {
-                                                                                                            var $tdBuildStatusRunning = $('<td style="background-color:gray;"></td>').append('<span style="color:#fff;">PENDING</span>');
+                                                                                                            var $tdBuildStatusRunning = $('<td></td>').append('<span style="color:#000;">No Status</span>');
                                                                                                             $trHistoryRow.append($tdBuildStatusRunning);
                                                                                                         }
 
@@ -4144,120 +4139,7 @@
                                                                                                 $errorContainer.html("Server Behaved Unexpectedly");
                                                                                             }
                                                                                         });
-                                                                                        if (autoSyncFlag && autoSyncFlag === "Yes") {
-                                                                                            alert('firing');
-
-                                                                                            console.log('Fetching build history from Data Lake..');
-
-
-
-
-
-                                                                                            console.log('BuildHistory API', url);
-
-                                                                                            $.ajax({
-                                                                                                url: url,
-                                                                                                type: 'GET',
-                                                                                                contentType: 'application/json',
-                                                                                                success: function(buildData) {
-
-                                                                                                    if (buildData.BuildHistory) {
-
-                                                                                                        var buildLength = '';
-
-                                                                                                        if (buildData.BuildHistory.length > 100) {
-                                                                                                            buildLength = 100;
-                                                                                                        } else {
-                                                                                                            buildLength = buildData.BuildHistory.length;
-                                                                                                        }
-
-                                                                                                        for (i = 0; i < buildLength; i++) {
-
-                                                                                                            var $trHistoryRow = $('<tr/>');
-
-                                                                                                            var date = new Date(buildData.BuildHistory[i].builddate);
-                                                                                                            var formatted = formatDate(date);
-
-                                                                                                            var $tdTimeStarted = $('<td></td>').append(formatted);
-                                                                                                            $trHistoryRow.append($tdTimeStarted);
-
-                                                                                                            date.setMilliseconds(date.getMilliseconds() + buildData.BuildHistory[i].duration);
-
-                                                                                                            formatted = formatDate(date);
-
-                                                                                                            var $tdTimeEnded = $('<td></td>').append(formatted);
-                                                                                                            $trHistoryRow.append($tdTimeEnded);
-
-                                                                                                            if (buildData.BuildHistory[i].status === "SUCCESS") {
-                                                                                                                var $tdBuildStatus = $('<td></td>').append('<img rel="tooltip" data-placement="top" title="Success" src="img/indicator_started.png"/>');
-                                                                                                                $trHistoryRow.append($tdBuildStatus);
-                                                                                                            } else if (buildData.BuildHistory[i].status === "FAILED") {
-                                                                                                                var $tdBuildStatusFailure = $('<td></td>').append('<img rel="tooltip" data-placement="top" title="Failed" src="img/indicator_stopped.png"/>');
-                                                                                                                $trHistoryRow.append($tdBuildStatusFailure);
-                                                                                                            } else {
-                                                                                                                var $tdBuildStatusRunning = $('<td></td>').append('<img rel="tooltip" data-placement="top" title="Running" src="img/indicator_unknown.png"/>');
-                                                                                                                $trHistoryRow.append($tdBuildStatusRunning);
-                                                                                                            }
-
-                                                                                                            var $tdMessage = $('<td style="width:42%"> -- </td>');
-                                                                                                            $trHistoryRow.append($tdMessage);
-
-                                                                                                            var $tdUser = $('<td></td>').append(buildData.BuildHistory[i].startedby);
-                                                                                                            $trHistoryRow.append($tdUser);
-
-                                                                                                            var $tdLogs = $('<td></td>').append('<a data-original-title="MoreInfo" rel="tooltip" class="moreinfoBuild margin-left40per" href="javascript:void(0)"></a>');
-
-                                                                                                            $tdLogs.find('a').data('logfileurl', buildData.BuildHistory[i].logfileurl).data('taskId', taskId).click(function() {
-                                                                                                                $('#assignedTaskHistory').modal('hide');
-                                                                                                                var taskId = $(this).data('taskId');
-                                                                                                                var $taskExecuteTabsHeaderContainer = $('#taskExecuteTabsHeader').empty();
-                                                                                                                var $taskExecuteTabsContent = $('#taskExecuteTabsContent').empty();
-                                                                                                                var $modal = $('#assignedExecute');
-                                                                                                                $modal.find('.loadingContainer').show();
-                                                                                                                $modal.find('.errorMsgContainer').hide();
-                                                                                                                $modal.find('.outputArea').hide();
-                                                                                                                $modal.modal('show');
-
-                                                                                                                var $liHeader = $('<li><a href="#tab_jenkinsTask" data-toggle="tab">Jenkins Job</a></li>');
-                                                                                                                $taskExecuteTabsHeaderContainer.append($liHeader);
-                                                                                                                var $tabContent = $('<div class="tab-pane fade" id="tab_jenkinsTask"><div class="taskLogArea taskLOGS"></div></div>');
-                                                                                                                $taskExecuteTabsContent.append($tabContent);
-                                                                                                                $liHeader.find('a').click();
-
-                                                                                                                var logfileurl = $(this).data('logfileurl');
-
-                                                                                                                var url = dataLakeHost + '/EnterpriseDataLake/rest/getLogfiledata?logurl=' + logfileurl + '&username=admin&password=admin@RL123';
-
-                                                                                                                $.ajax({
-                                                                                                                    type: 'GET',
-                                                                                                                    url: url,
-                                                                                                                    contentType: 'application/json',
-                                                                                                                    dataType: 'text',
-                                                                                                                    success: function(jobOutput) {
-                                                                                                                        var output = jobOutput.replace(/\r?\n/g, "<br />");
-
-                                                                                                                        $tabContent.find('.taskLogArea').html(output);
-                                                                                                                        $modal.find('.loadingContainer').hide();
-                                                                                                                        $modal.find('.outputArea').show();
-                                                                                                                    }
-                                                                                                                });
-
-
-                                                                                                            })
-
-                                                                                                            $trHistoryRow.append($tdLogs);
-                                                                                                            $taskHistoryDatatable.row.add($trHistoryRow).draw();
-
-                                                                                                        }
-
-                                                                                                    }
-                                                                                                },
-                                                                                                error: function(errMsg) {
-                                                                                                    console.log('Error in fetching build history', errMsg);
-                                                                                                }
-                                                                                            });
-
-                                                                                        }
+                                                                                        
                                                                                     });
                                                                                 }
                                                                                 $tr.append($tdHistory);

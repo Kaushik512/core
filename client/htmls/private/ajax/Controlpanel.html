@@ -354,7 +354,6 @@
  &times;
  </button>
  <h4 class="modal-title">
- <i class="fa fa-th-list txt-color-blue"></i>&nbsp;&nbsp;Add Application URL
  </h4>
  </div>
 
@@ -3164,6 +3163,7 @@ $(document).ready(function() {
 
  $('#newAppSeries').click(function(e) {
      $('#appURLForm').trigger("reset");
+     $('#modalAppNameURL').find('.modal-title').html('Add Application URL').css('margin-left','18px');
  });
 
  function createAppUrlTableRow(appUrlData) {
@@ -3187,7 +3187,7 @@ $(document).ready(function() {
      $tdAction.find('.appUrlEditLink').click(function() {
          var appUrlData = $row.data('appUrlData');
          var $editModal = $('#modalAppNameURL');
-
+         $('#modalAppNameURL').find('.modal-title').html('Edit Application URL').css('margin-left','18px');
          $editModal.modal('show');
          $editModal.find('.appName').val(appUrlData.name);
          $editModal.find('.appURL').val(appUrlData.url);
