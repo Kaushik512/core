@@ -110,7 +110,8 @@ InstanceBlueprintSchema.statics.createNew = function(data) {
             vpcId: data.vpcId,
             subnetId: data.subnetId,
             imageId: data.imageId,
-            instanceOS: data.instanceOS
+            instanceOS: data.instanceOS,
+            instanceCount: data.instanceCount
         });
     } else if (data.cloudProviderType === CLOUD_PROVIDER_TYPE.AZURE) {
         providerType = CLOUD_PROVIDER_TYPE.AZURE;
