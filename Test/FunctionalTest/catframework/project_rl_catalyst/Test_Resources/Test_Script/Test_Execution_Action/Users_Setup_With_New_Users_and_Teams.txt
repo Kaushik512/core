@@ -285,7 +285,25 @@ Team name with special characters
      Clicks on TeamCancel Button
 
 
+Catalyst Creation of New Team in Catalyst
+    Sleep    2s
+    Clicks on New Team Button
+    Enters the New Team Name for Catalyst
+    Enters the Team Description
+    Select particular User Created organization
+    Sleep    3s
+    Assigning Both Users and Projects
+    Clicks on TSave Button
 
+Enters the New Team Name for Catalyst
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Input Text    id=teamname    NEW CATLYST
+
+Assigning Both Users and Projects
+    Click Element    xpath=.//*[@id='loginname']/label[text()='${ORG ADMIN USER}']/i
+    Sleep    2s
+    Click Element    xpath=.//*[@id='projectname']/label[text()='${Proj1}']/i
+    Sleep    2s
+    Click Element    xpath=.//*[@id='projectname']/label[text()='${Proj2}']/i
 
 
 
