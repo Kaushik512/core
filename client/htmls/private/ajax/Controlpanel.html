@@ -1682,6 +1682,7 @@ $.get('../instances/' + urlParams.id, function(data) {
     // .append('<img src="img/templateicons/'+data.blueprintData.templateId+'.png" style="height:20px;width:20px;margin-right:5px;">').append(data.blueprintData.blueprintName);
     $domainRolesCaption.find('.instance-details-ip strong').html(data.instanceIP);
     $domainRolesCaption.find('.instance-state').html(data.instanceState);
+    data.instanceState = 'running';
     if (data.instanceState == 'running') {
         $domainRolesCaption.find('.componentlistContainer').addClass('started');
         $domainRolesCaption.find('.instance-state').html(data.instanceState).addClass('instance-state-text-started');
