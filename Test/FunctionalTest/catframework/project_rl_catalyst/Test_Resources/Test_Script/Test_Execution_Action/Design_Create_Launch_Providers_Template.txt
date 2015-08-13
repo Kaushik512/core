@@ -132,7 +132,7 @@ Catalyst Creation of New Blueprint and Delete
     Select the Security Group
     Clicks on Configure Provider Parameters
     Clicks on Configure Organization Parameters
-    Chooses Organization
+    #Chooses Organization
     Enters The Testing Blueprint Name
     Chooses The Business Group
     Chooses The Project
@@ -399,7 +399,7 @@ Catalyst Choose Template and Save Setup
     Select the Security Group
     Clicks on Configure Provider Parameters
     Clicks on Configure Organization Parameters
-    Chooses Organization
+    #Chooses Organization
     Enters The Blueprint Name
     Chooses The Business Group
     Chooses The Project
@@ -601,7 +601,7 @@ Catalyst Choose Template and Save Setup for UBUNTU
     Select the Security Group
     Clicks on Configure Provider Parameters
     Clicks on Configure Organization Parameters
-    Chooses Organization
+    #Chooses Organization
     Enters The ubuntu Blueprint Name
     Chooses The Business Group
     Chooses The Project

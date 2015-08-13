@@ -19,11 +19,10 @@ Resource           ${CATALYST ACTION}/Organization_Setup_Action_Steps.txt
 Testing All New Config Management Conditions
     Vaildate the Empty URL field
     URL field left Empty  ${VaildEmptyURLErrMsg} 
-    Vaildate Empty Config Name  ${VaildEmptyConfigname}
+    Vaildate Empty Config Name
     Config Name left empty  ${VaildEmptyConfignameErrMsg}
-    Vaildate Empty User Name  ${VaildEmptyUsername}
+    Vaildate Empty User Name
     User Name left empty  ${VaildEmptyUsernameErrMsg}
-    #Vaildate Empty User Pem and Validator Pem and Knife File 
 
 
 Create New Config Management
@@ -103,10 +102,8 @@ Vaildate Empty User Pem and Validator Pem and Knife File
 
 
 Vaildate Empty User Name
-    [Arguments]    ${loginname}
     Clicks on New button to Create New Config Management
     Enters config management name
-    Enters Empty User Name
     Select organization for config management
     Enters config management URL
     Upload user Pem File
@@ -125,10 +122,6 @@ Confirming Userpem and Knife files are mandatory
 
 
 
-
-
-Enters Empty User Name
-    Input Text    id=loginname    ${loginname}
 
 User Name left empty  
     [Arguments]    ${VaildEmptyUsernameErrMsg}
@@ -156,7 +149,6 @@ Vaildate the Empty config field
 
 
 Vaildate Empty Config Name
-    [Arguments]    ${configname}
     Clicks on New button to Create New Config Management
     Enters config management user name
     Select organization for config management

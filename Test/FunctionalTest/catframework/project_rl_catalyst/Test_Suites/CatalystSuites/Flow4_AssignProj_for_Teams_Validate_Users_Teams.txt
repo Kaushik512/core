@@ -41,6 +41,7 @@ Catalyst Validate Teams Setup
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
     Test Validation of Creation of New Teams
+    Catalyst Creation of New Team in Catalyst
     Catalyst Logout                      
     [Teardown]     Close Browser
 
