@@ -70,8 +70,8 @@ Catalyst assigning of the projects to the default Teams
 Clicks Edit Button of the Relevance_lab_Admin and Assign Project
     Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${ORGANIZATION NAME}_Admins']/../td[5]/div/a
     Sleep    4s
-    Click Element    xpath=.//*[@id='loginname']/label[text()='${ORG ADMIN USER}']/i
-    Sleep    2s
+    #-Click Element    xpath=.//*[@id='loginname']/label[text()='${ORG ADMIN USER}']/i
+    #-Sleep    2s
     Click Element    xpath=.//*[@id='projectname']/label[text()='${Proj1}']/i
     Sleep    2s
     Click Element    xpath=.//*[@id='projectname']/label[text()='${Proj2}']/i
@@ -79,10 +79,10 @@ Clicks Edit Button of the Relevance_lab_Admin and Assign Project
 Clicks Edit Button of the Relevance_lab_DEV and Assign Project
     Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${ORGANIZATION NAME}_DEV']/../td[5]/div/a
     Sleep    4s
-    Click Element    xpath=.//*[@id='loginname']/label[text()='${DESIGNER_NAME}']/i
-    Sleep    2s
-    Click Element    xpath=.//*[@id='loginname']/label[text()='${CONSUMER_NAME}']/i
-    Sleep    2s
+    #-Click Element    xpath=.//*[@id='loginname']/label[text()='${DESIGNER_NAME}']/i
+    #-Sleep    2s
+    #-Click Element    xpath=.//*[@id='loginname']/label[text()='${CONSUMER_NAME}']/i
+    #-Sleep    2s
     Click Element    xpath=.//*[@id='projectname']/label[text()='${Proj1}']/i
     Sleep    2s
     Click Element    xpath=.//*[@id='projectname']/label[text()='${Proj2}']/i   

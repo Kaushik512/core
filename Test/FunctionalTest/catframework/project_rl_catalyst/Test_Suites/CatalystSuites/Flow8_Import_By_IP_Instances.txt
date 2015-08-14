@@ -137,25 +137,25 @@ Catalyst Ubuntu Instance Deleted only from Catalyst not from Chef Server
 
 
 
-#-Catalyst new Jenkins Configuration setup
-    #-[Tags]       Sanity               Smoke
+Catalyst new Jenkins Configuration setup
+    [Tags]       Sanity               Jenk
 #    Catalyst Login
-    #-Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
-    #-Validate the Jenkins Configuration Setup
-    #-Catalyst Create New Jenkins Configuration Setup          
-    #-Catalyst Logout                      
-    #-[Teardown]     Close Browser
+    Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
+    #Validate the Jenkins Configuration Setup
+    Catalyst Create New Jenkins Configuration Setup          
+    Catalyst Logout                      
+    [Teardown]     Close Browser
 
 
 
-#-Catalyst new Jenkins Executioon of Task Environment Setup
-    #-[Tags]       Sanity               Smoke
+Catalyst new Jenkins Executioon of Task Environment Setup
+    [Tags]       Sanity               Smoke
 #    Catalyst Login
-    #-Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
-    #-Catalyst Creation of Jenkins Task in Environment
+    Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
+    Catalyst Creation of Jenkins Task in Environment
     #-Catlayst Creation of Chef Task in the Environment       
-   #-Catalyst Logout                      
-    #-[Teardown]     Close Browser
+    Catalyst Logout                      
+    [Teardown]     Close Browser
 
 
 
