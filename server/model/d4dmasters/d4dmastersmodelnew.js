@@ -337,6 +337,22 @@ var d4dMastersJira = new mongoose.Schema(
 );
 var d4dModelMastersJira = mongoose.model('d4dModelMastersJira',d4dMastersJira,'d4dmastersnew');
 
+var d4dMastersPuppetServer = new mongoose.Schema(
+	{id: {type:String,required:true, trim:true},
+	name: {type:String,trim:true, validate:nameValidator},
+	orgname: {type:[String],required:true, trim:true, validate:nameValidator},
+	orgname_rowid: {type:[String], trim:true},
+	orgrowid: {type:String, trim:true},
+	puppetservername: {type:String,required:true, trim:true},
+	username: {type:String,required:true, trim:true},
+	puppetserverurl: {type:String, trim:true},
+	userpemfile_filename: {type:String, trim:true},
+	folderpath: {type:String, trim:true},
+	active: {type:Boolean, trim:true,default:true},
+	rowid:{type:String,required:true, trim:true}},{collection:'d4dmastersnew'}
+);
+var d4dModelMastersPuppetServer = mongoose.model('d4dModelMastersPuppetServer',d4dMastersPuppetServer,'d4dmastersnew');
+
 
 module.exports = d4dModelNew;
 module.exports.d4dModelMastersOrg = d4dModelMastersOrg;
@@ -358,3 +374,4 @@ module.exports.d4dModelMastersDynamic  = d4dModelMastersDynamic;
 module.exports.d4dModelMastersProviders = d4dModelMastersProviders;
 module.exports.d4dModelMastersImages = d4dModelMastersImages;
 module.exports.d4dModelMastersJira = d4dModelMastersJira;
+module.exports.d4dModelMastersPuppetServer = d4dModelMastersPuppetServer;

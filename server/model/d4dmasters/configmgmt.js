@@ -86,6 +86,10 @@ function Configmgmt() {
                 logger.log('Exting getDBModelFromID ' + id.toString());
                 callback(null, 'd4dModelMastersJira');
                 break;
+            case "25":
+                logger.log('Exting getDBModelFromID ' + id.toString());
+                callback(null, 'd4dModelMastersPuppetServer');
+                break;
         }
     };
 
@@ -151,6 +155,10 @@ function Configmgmt() {
             case "23":
                  logger.log('Exting getDBModelFromID ' + id.toString());
                return('jiraserver');
+                break;
+            case "23":
+                 logger.log('Exting getDBModelFromID ' + id.toString());
+               return('puppetserver');
                 break;
 
         };

@@ -759,6 +759,16 @@ module.exports.setRoutes = function(app, sessionVerification) {
                             res.send(teamList);
                             return;
                         });
+                    } else if (req.params.id === '25') {
+                        // For Puppet Server
+                        masterUtil.getPuppetServers(orgList, function(err, pList) {
+                            if (err) {
+                                res.send(500, 'Not able to fetch Puppet Server.');
+                            }
+                            //logger.debug("Returned Team List:>>>>> ", JSON.stringify(teamList));
+                            res.send(pList);
+                            return;
+                        });
                     } else {
                         logger.debug('nothin here');
                         res.send([]);
@@ -921,6 +931,16 @@ module.exports.setRoutes = function(app, sessionVerification) {
                             }
                             //logger.debug("Returned Team List:>>>>> ", JSON.stringify(teamList));
                             res.send(teamList);
+                            return;
+                        });
+                    } else if (req.params.id === '25') {
+                        // For Puppet Server
+                        masterUtil.getPuppetServers(orgList, function(err, pList) {
+                            if (err) {
+                                res.send(500, 'Not able to fetch Puppet Server.');
+                            }
+                            //logger.debug("Returned Team List:>>>>> ", JSON.stringify(teamList));
+                            res.send(pList);
                             return;
                         });
                     } else {
@@ -1965,6 +1985,13 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
         var chefRepoPath = settings.chefReposLocation;
 
+        if(req.params.id === "25"){
+            settings = appConfig.puppet;
+            chefRepoPath = settings.puppetReposLocation;
+        }
+
+        
+
         logger.debug("Type of org : %s", typeof req.params.orgname);
         logger.debug("Org ID: %s", req.params.orgid);
         logger.debug(chefRepoPath + req.params.orgname + folderpath.substring(0, folderpath.length - 1));
@@ -2015,7 +2042,8 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                 });*/
                 if (folderpath == '') {
                     logger.debug("this is where file gets saved as (no folderpath): %s %s / %s %s __ %s", chefRepoPath, req.params.orgname, suffix, controlName, fil.name);
-                    fs.writeFileSync(chefRepoPath + req.params.orgname + '/' + suffix + controlName + '__' + fil.name, data);
+                    fs.writeFile(chefRepoPath + req.params.orgname + '/' + suffix + controlName + '__' + fil.name, data);
+                    logger.debug("File saved Successfully.");
                 } else {
                     if (folderpath.indexOf('.chef') > 0) { //identifying if its a chef config file
                         logger.debug("this is where file gets saved as .chef (with folderpath):    %s %s %s %s", chefRepoPath, req.params.orgid, folderpath, fil.name);
@@ -2392,6 +2420,8 @@ module.exports.setRoutes = function(app, sessionVerification) {
         logger.debug("Enter post() for /d4dMasters/savemasterjsonrownew/%s/%s/%s", req.params.id, req.params.fileinputs, req.params.orgname);
         var bodyJson = JSON.parse(JSON.stringify(req.body));
         //pushing the rowid field
+
+        logger.debug("{}}}}}{}}}}}}}}{}}}}}}}}}}}: ",JSON.stringify(bodyJson));
 
         var editMode = false; //to identify if in edit mode.
         var rowtoedit = null;

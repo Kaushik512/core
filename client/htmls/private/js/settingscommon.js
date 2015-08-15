@@ -486,6 +486,10 @@ function CreateTableFromJson(formID, idFieldName, createFileName) {
         var imageTD = null;
         $.each(item, function(k, v) { //columns
             // var inputC = null;
+            if(typeof v != "undefined"){
+                v = JSON.parse(JSON.stringify(v).replace(/,(?=[^,]*$)/, ''));
+            }
+            
             console.log('k:' + k + ' v :' + JSON.stringify(v));
             if (k == idFieldName) {
                 idFieldValue = v;
@@ -621,6 +625,10 @@ function CreateTableFromJson(formID, idFieldName, createFileName) {
                     if (haspermission('services', 'modify')) {
                         hasEditPermission = true;
                     }
+                } else if (createFileName === 'CreatePuppetServer.html') {
+                    if (haspermission('puppetserver', 'modify')) {
+                        hasEditPermission = true;
+                    }
                 }
                 //user has no permission to edit
                 if (!hasEditPermission) {
@@ -715,6 +723,10 @@ function CreateTableFromJson(formID, idFieldName, createFileName) {
                     }
                 } else if (createFileName === 'CreateImages.html') {
                     if (haspermission('services', 'delete')) {
+                        hasDeletePermission = true;
+                    }
+                } else if (createFileName === 'CreatePuppetServer.html') {
+                    if (haspermission('puppetserver', 'delete')) {
                         hasDeletePermission = true;
                     }
                 }
@@ -2224,6 +2236,9 @@ function saveform(formID, operationTypes) {
             }
 
         });
+        if(typeof itms != "undefined"){
+                itms = JSON.parse(JSON.stringify(itms).replace(/,(?=[^,]*$)/, ''));
+            }
         v1.push('\"' + itms + '\"');
 
     });
