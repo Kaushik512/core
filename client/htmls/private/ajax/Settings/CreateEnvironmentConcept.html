@@ -28,7 +28,7 @@
                                                         <label for="category">Organization:<span style="color:Red;" class="control-label">&nbsp;*</span>
                                                         </label>
 
-                                                        <select id="orgname" class="chooseOrganization width-100" sourcepath="1" datapath="masterjson.rows.row" valuelinkfield="costcode" style="vertical-align:central" cdata="catalyst" cat-validation="required" cat-validation="required" linkedfields="['configname','projectname']" onchange="$('#configname').change();">
+                                                        <select id="orgname" class="chooseOrganization width-100" sourcepath="1" datapath="masterjson.rows.row" valuelinkfield="costcode" style="vertical-align:central" cdata="catalyst" cat-validation="required" cat-validation="required" linkedfields="['configname','projectname','puppetservername']" onchange="$('#configname').change();">
                                                             <option value="">Select an Organization</option>
                                                         </select>
 
@@ -47,7 +47,7 @@
                                                             <label for="category">Puppet Server:
                                                             </label>
 
-                                                            <select id="configname" class="chooseOrganization width-100" sourcepath="10" datapath="masterjson.rows.row" style="vertical-align:central" cdata="catalyst" linkedto="orgname">
+                                                            <select id="puppetservername" class="chooseOrganization width-100" sourcepath="25" datapath="masterjson.rows.row" style="vertical-align:central" cdata="catalyst" linkedto="orgname">
                                                                 <option value="">Select a Puppet Server</option>
                                                             </select>
                                                         </div>
@@ -65,8 +65,8 @@
                                                         <div class="col-lg-6 col-md-6" style="margin-top:25px;">
                                                             <label for="category">Puppet Environment:
                                                             </label>
-                                                            <a href="javascript:void(0)" class="clearfix pull-right" onclick="if(preprocess()) {$('#myModalCreateChefEnv').modal('show')}">Add</a>
-                                                            <select id="environmentname" class="chooseOrganization width-100"  datapath="masterjson.rows.row" style="vertical-align:central" cdata="catalyst" uniqueconditionedby="environmentname,orgname">
+                                                            <!-- <a href="javascript:void(0)" class="clearfix pull-right" onclick="if(preprocess()) {$('#myModalCreateChefEnv').modal('show')}">Add</a> -->
+                                                            <select id="puppetenvironmentname" class="chooseOrganization width-100"  datapath="masterjson.rows.row" style="vertical-align:central" cdata="catalyst">
                                                                 <option value="">Select an Puppet Environment</option>
                                                             </select>
                                                         </div>

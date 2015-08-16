@@ -86,14 +86,15 @@ var d4dMastersEnvironments = new mongoose.Schema(
 	name: {type:String,trim:true},
 	orgname: {type:[String],required:false, trim:true},
 	orgname_rowid: {type:[String], trim:true},
-	environmentname: {type:String,required:true, trim:true, validate:nameValidator},
+	environmentname: {type:String,required:true, trim:true},
+	puppetenvironmentname: {type:String},
 	description: {type:String, trim:true, validate:descValidator},
 	active: {type:Boolean, trim:true,default:true},
 	//Included as a concept to be regularized after approval
 	configname: {type:String, trim:true},
 	configname_rowid: {type:String, trim:true},
-	/*teamname: {type:String, trim:true},
-	teamname_rowid: {type:String, trim:true},*/
+	puppetservername: {type:String, trim:true},
+	puppetservername_rowid: {type:String, trim:true},
 	projectname: {type:String, trim:true},
 	projectname_rowid: {type:String,trim:true},
 	//end of concept
