@@ -1985,12 +1985,12 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
         var chefRepoPath = settings.chefReposLocation;
 
-        if(req.params.id === "25"){
+        if (req.params.id === "25") {
             settings = appConfig.puppet;
             chefRepoPath = settings.puppetReposLocation;
         }
 
-        
+
 
         logger.debug("Type of org : %s", typeof req.params.orgname);
         logger.debug("Org ID: %s", req.params.orgid);
@@ -2043,23 +2043,26 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 if (folderpath == '') {
                     logger.debug("this is where file gets saved as (no folderpath): %s %s / %s %s __ %s", chefRepoPath, req.params.orgname, suffix, controlName, fil.name);
                     fs.writeFile(chefRepoPath + req.params.orgname + '/' + suffix + controlName + '__' + fil.name, data);
-                    logger.debug("File saved Successfully.");
+                    logger.debug("File saved Successfully: ");
                 } else {
                     if (folderpath.indexOf('.chef') > 0) { //identifying if its a chef config file
                         logger.debug("this is where file gets saved as .chef (with folderpath):    %s %s %s %s", chefRepoPath, req.params.orgid, folderpath, fil.name);
-                        fs.writeFileSync(chefRepoPath + req.params.orgid + folderpath + fil.name, data);
+                        fs.writeFile(chefRepoPath + req.params.orgid + folderpath + fil.name, data);
+                    } else if (folderpath.indexOf('.puppet') > 0) { //identifying if its a chef config file
+                        logger.debug("this is where file gets saved as .chef (with folderpath) for puppet:    %s %s %s %s", chefRepoPath, req.params.orgid, folderpath, fil.name);
+                        fs.writeFile(chefRepoPath + req.params.orgid + folderpath + fil.name, data);
                     } else //not a a chef config file
                     {
                         logger.debug("Folderpath rcvd: %s", folderpath);
 
                         if (fil.name == saveAsfileName) {
                             logger.debug("this is where file gets saved as (with folderpath): %s %s / %s %s __ %s", chefRepoPath, req.params.orgid, suffix, controlName, fil.name);
-                            fs.writeFileSync(chefRepoPath + req.params.orgname + '/' + suffix + controlName + '__' + fil.name, data);
+                            fs.writeFile(chefRepoPath + req.params.orgname + '/' + suffix + controlName + '__' + fil.name, data);
 
                         } else {
                             logger.debug("this is where file gets saved as (with folderpath) fixed name: %s %s %s / %s", chefRepoPath, req.params.orgid, folderpath, saveAsfileName);
                             //fs.writeFileSync(chefRepoPath + folderpath.substring(1,folderpath.length) + fil.name, data);
-                            fs.writeFileSync(chefRepoPath + req.params.orgname + folderpath + '/' + saveAsfileName, data);
+                            fs.writeFile(chefRepoPath + req.params.orgname + folderpath + '/' + saveAsfileName, data);
                         }
 
                     }
@@ -2100,6 +2103,36 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 logger.debug("procSSLFetch : %s", data);
             });
         }
+        /*else if (req.params.id == '25') //Fix introduced for Kana 
+               {
+                   logger.debug("In ssl fetch");
+                   var options = {
+                       cwd: chefRepoPath + req.params.orgid + folderpath,
+                       onError: function(err) {
+                           callback(err, null);
+                       },
+                       onClose: function(code) {
+                           callback(null, code);
+                       }
+                   };
+                   var cmdSSLFetch = 'knife ssl fetch';
+
+                   var procSSLFetch = exec(cmdSSLFetch, options, function(err, stdOut, stdErr) {
+                       if (err) {
+                           logger.debug("Failed on procSSLFetch routes d4dMasters:", err);
+                           return;
+                       }
+                   });
+                   procSSLFetch.on('close', function(code) {
+                       logger.debug("procSSLFetch done: ");
+                   });
+
+                   procSSLFetch.stdout.on('data', function(data) {
+                       //console.log('stdout: ==> ' + data);
+                       logger.debug("procSSLFetch : %s", data);
+                   });
+               }*/
+        //res.send("200");
         return ("200");
     }
 
@@ -2421,8 +2454,6 @@ module.exports.setRoutes = function(app, sessionVerification) {
         var bodyJson = JSON.parse(JSON.stringify(req.body));
         //pushing the rowid field
 
-        logger.debug("{}}}}}{}}}}}}}}{}}}}}}}}}}}: ",JSON.stringify(bodyJson));
-
         var editMode = false; //to identify if in edit mode.
         var rowtoedit = null;
         if (bodyJson["rowid"] != null) {
@@ -2482,6 +2513,9 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
 
                     logger.debug("Full bodyJson: ", JSON.stringify(bodyJson));
+                        if (req.params.id === "25") {
+                            bodyJson["folderpath"] = "/" + bodyJson["username"] + "/.puppet/";
+                        }
                     configmgmtDao.getDBModelFromID(req.params.id, function(err, dbtype) {
                         if (err) {
                             logger.error("Hit and error:", err);
@@ -2606,7 +2640,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                         templatetypename = "CloudFormation";
                                                         designtemplateicon_filename = "CloudFormation.png";
                                                         templatetype = "cft";
-                                                    }  else {
+                                                    } else {
                                                         templatetypename = "Docker";
                                                         designtemplateicon_filename = "Docker.png";
                                                         templatetype = "docker";
