@@ -330,7 +330,7 @@ Verfiy that EditedEnvironment is created
     
 Create New Business Group                                                        
     Catalyst creates new business group1
-    Catalyst creates new business group2
+    #Catalyst creates new business group2
 
 Catalyst creates new business group1    
     Clicks on Settings
@@ -404,7 +404,7 @@ Clicks on Save button to save the Business group details
 
 Create New Projects                                                                  
      Creates project 1   ${PROJECT NAME1}
-     Creates project 2   ${PROJECT NAME2}
+     #Creates project 2   ${PROJECT NAME2}
 
 
  

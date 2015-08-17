@@ -67,6 +67,15 @@ ${VALIDATORPEMFILE}      ${ROOTPATH}//Chef//jm012-validator.pem
 ${KNIFERBFILE}                ${ROOTPATH}//Chef//knife.rb
 ${CATALYSTPEM}                ${ROOTPATH}//Chef//catalyst.pem
 ${CAT_INSTANCES}              ${ROOTPATH}//Chef//cat_instances.pem
+${TEMPLATE FILE}              ${ROOTPATH}//Chef//CatalystStack.template
+${Goldendemo_pem}             ${ROOTPATH}//Chef//GoldenDemo.pem
+
+
+${CLOUD TEMPTYPE}        CloudFormation
+${CLOUD TEMPNAME}        CloudTemp
+${CLOUD BLUEPRNTNAME}    CloudBP
+${USER INSTANCE NAME}    ubuntu
+
 
 ${CENTOSIMG}                  ${ROOTPATH}//Images//centos.jpg
 ${UBUNTUIMG}                  ${ROOTPATH}//Images//ubuntuu.jpg
@@ -78,10 +87,10 @@ ${RECIPE}                  recipe[apt]
 ${RECIPE1}                 recipe[apt]
 
 ${OPERATING SYSTEM}        Cent OS
-${CentosInstanceSize}           m1.small
-${UbuntuInstanceSize}      t2.small
-${BLUEPRINT NAME}          ApacheNew
-${BLUEPRINT NAME1}         UbuntuApac
+${CentosInstanceSize}      t1.micro
+${UbuntuInstanceSize}      t2.micro
+${BLUEPRINT NAME}          Apache-Centos
+${BLUEPRINT NAME1}         Ubuntu-Apache
 ${NEW BLUEPRINT NAME}      ApacheNew-Edited
 ${NEW UBUNTU BLUPRNT}      UbuntuNew-Edited
 ${APPNAME}                 Catalyst              
@@ -94,8 +103,8 @@ ${CHEF TASKNAME}           apache2deploy
 ${SERVICE NAME}             MongoDB		
 ${TEMP NME}                 Apac
 ${REGION NAME}           US West 
-${VPC NAME}              vpc-b1f3ecd3 
-${SUBNET NAME}           subnet-aed68ce8 
+${VPC NAME}              vpc-b1f3ecd3
+${SUBNET NAME}           subnet-aed68ce8
 ${Key_Pair}               cat_instances
 ${SECRTY GRP1}                sg-c00ee1a5 | all_open
 ${SECRTY GRP2}                sg-c06faca4 | HTTP&S_SG
@@ -122,7 +131,7 @@ ${MAT RUNLIST1}            recipe[a],recipe[cron]
 ${MAT OS1}                 ubuntu
 ${UBUNTU MEM}              1016256kB
 ${UBUNTU REC}              recipe[a],recipe[a],recipe[cron]
-${TEMPLATE TYPENAME}       AppFactory
+${TEMPLATE TYPENAME}       SoftwareStack
 ${random}                  adarsh
 ${ADD}                     apache2              #tomcat-all
 ${ACTBOOT1}                 Pending
@@ -179,6 +188,7 @@ ${CONSUMER_PASWD}           Consumer01
 
 #Provider
 ${PROVIDER NAME}             smoke-Provider
+${PROVDR_Name}               AWSProvider
 ${PROVIDERR}                 AWS
 ${SECRET KEY}                  qm/j8lT0/IPc1P5ud8yujUSa61+QjqeyZ/jZkIff
 ${ACCESS KEY}                  AKIAI3ETOOEFHJ62G2NQ
@@ -189,14 +199,17 @@ ${IMAGE NAME4}                 smoke_Win2012
 ${OPERATING SYSTEM1}           Cent OS
 ${OPERATING SYSTEM2}           Ubuntu
 ${OPERATING SYSTEM3}           Windows
-${IMAGE ID1}                   ami-b6bdde86
-${IMAGE ID2}                   ami-3d50120d
+${IMAGE ID1}                   ami-696e9c2d
+${IMAGE ID2}                   ami-df6a8b9b
 ${IMAGE ID3}                   ami-21732111
 ${USER}                        superadmin
 ${COOKBOOK NAME1}              apt
 ${COOKBOOK NAME2}              apache2
 ${SERVICE NAME1}               ApacheServ
 ${ValidEditVMImage}            Windows 2008
+${Centos_IMAGE}                Centos6.6
+${Ubuntu_Image}                Ubuntu
+
 
 
 #${ValidateNotExistLDAP}             0564ghs
@@ -252,7 +265,7 @@ ${VaildateAlreadyExistErrMsg}       Selected is already registered
 ${VaildateNoOrgErrMsg}                 Required
 ${EnvironmentMsg}                      QA
 ${REQ1}                               Atleast one required
-${KeyNAME}                            cat_instances
+${KeyNAME}                            GoldenDemo
 
 #Business Group Name 
 ${Vaildate15ChrBGrpName}               RLTestBusinessGroup                   
@@ -391,7 +404,7 @@ ${ValidTEditemplName}                    ApacRelevance
 ${Vaild15ChrTempName}                    CatalystAutomation
 ${VaildSpacesTEmpTyName}                 Catlsyt Auto
 ${TEMPLATE NAME}                         Apache2
-
+${TEMP_NAME}                             Apache
 
 ${VaildEmptyTemplateNameErrMsg}              Required
 ${Vaild15ChrTemplateNameErrMsg}             limited to 15 chars
@@ -447,3 +460,23 @@ ${UBUNBLUEPRINT NAME}                UbuntuOS
 
 
 
+${JENTASK NAME}            JenkinsJob
+${JENKINSNAME}            JenkinsRL
+${JENKINS URL}               http://jenkins.rlcatalyst.com
+${JENKINS USERID}         admin    
+${JENKINS PASSWORD}       admin@RL123
+${TASK NAME}              Task1
+${JENKINS SERVER}         JenkinsRL
+${DEF_JENKINS_SERVER}    PhoenixJenkins
+${JENKINS EDIT}           Jenkins
+${JJOB NAME}               testjob
+
+
+${Stack_Name}         CatalystStack
+${ORG_NAME}           Phoenix
+${BU_NAME}            PhoenixBG
+${Proj_Name}          PhoenixApp
+
+
+
+${Cheftask}      ChefTask

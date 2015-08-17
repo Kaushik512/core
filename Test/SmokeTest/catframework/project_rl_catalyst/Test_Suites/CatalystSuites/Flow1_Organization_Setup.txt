@@ -12,7 +12,7 @@ Library            String
 
 *** Test Cases ***
 Catalyst Creation of New Organization and Org Admin
-    [Tags]       Sanity               Smoke
+    [Tags]       Sanity               Settings
 #    Catalyst Login 
     Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
     Creates New Organization
@@ -21,7 +21,7 @@ Catalyst Creation of New Organization and Org Admin
     [Teardown]     Close Browser
 
 Catalyst Creation of Business Group And Projects
-    [Tags]       Sanity               Smoke
+    [Tags]       Sanity               Settings
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
     Create New Business Group 
