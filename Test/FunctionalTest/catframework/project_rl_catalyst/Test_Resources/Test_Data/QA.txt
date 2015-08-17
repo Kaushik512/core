@@ -181,7 +181,7 @@ ${ACTBOOT1}                 Pending
 ${ACTBOOT2}                 Success
 ${RUN}                       running
 ${AUTHN}                    Pem File 
-#${NAME}                     Bootstrap
+${NAME}                     Bootstrap
 ${DUP MSG}                  An Instance with the same IP already exists.
 ${NAME1}                    Chef-Client-Run
 ${NAME2}                    SSH-Shell
