@@ -1895,7 +1895,7 @@ Chooses The Project
     Sleep    1s
     Click Element    css=#s2id_projectListInput > .select2-choice
     Log    after click
-    Input Text    css=#select2-drop .select2-input    ${Proj2}
+    Input Text    css=#select2-drop .select2-input    ${Proj1}
     Sleep    1s
     Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span    
 
