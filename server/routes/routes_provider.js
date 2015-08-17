@@ -746,4 +746,32 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             }
         });
     });
+
+    // List out all aws nodes.
+    app.post('/aws/providers/node/list', function(req, res) {
+        logger.debug("Enter List AWS Nodes: ");
+
+        var ec2 = new EC2({
+            "access_key": req.body.accessKey,
+            "secret_key": req.body.secretKey,
+            "region": req.body.region
+        });
+        ec2.listInstances(function(err, nodes) {
+            if (err) {
+                logger.debug("Unable to list nodes from AWS.", err);
+                res.send("Unable to list nodes from AWS.", 500);
+                return;
+            }
+            logger.debug("Success to list nodes from AWS.");
+            var nodeList = [];
+            for(var i =0; i< nodes.Reservations.length; i++){
+                var instance = {
+                    "instance": nodes.Reservations[i].Instances[0].InstanceId,
+                    "privateIp": nodes.Reservations[i].Instances[0].PrivateIpAddress
+                };
+                nodeList.push(instance);
+            }
+            res.send(nodeList);
+        });
+    });
 }

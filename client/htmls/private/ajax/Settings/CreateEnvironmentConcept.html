@@ -65,7 +65,7 @@
                                                         <div class="col-lg-6 col-md-6" style="margin-top:25px;">
                                                             <label for="category">Puppet Environment:
                                                             </label>
-                                                            <!-- <a href="javascript:void(0)" class="clearfix pull-right" onclick="if(preprocess()) {$('#myModalCreateChefEnv').modal('show')}">Add</a> -->
+                                                             <!-- <a href="javascript:void(0)" class="clearfix pull-right" onclick="if(preprocessPuppet()) {$('#myModalCreatePuppetEnv').modal('show')}">Add</a> -->
                                                             <select id="puppetenvironmentname" class="chooseOrganization width-100"  datapath="masterjson.rows.row" style="vertical-align:central" cdata="catalyst">
                                                                 <option value="">Select an Puppet Environment</option>
                                                             </select>
@@ -151,6 +151,44 @@
   </div>
 </div>
 <!--row ends here-->
+<div class="modal fade bs-example-modal-sg" id="myModalCreatePuppetEnv" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog modal-sg">
+    <div class="modal-content">
+    <form id="createenvinpuppetform" action="">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title">Add a Puppet Environment</h4>
+      </div>
+      <div class="modal-body" style="height:100px">
+      
+        
+             
+                    <div class="col-lg-6 col-md-6">
+                        <label for="category">Environment Name:<span style="color:red">*</span>
+                        </label>
+                        
+                           <input type="text" id="puppetenvname" name="puppetenvname" class=" form-control" tabindex='1'>
+                        
+                    </div>
+                </div>
+                    <div class="modal-footer">
+                        <div class="btn-group pull-right">
+                        <i id="envcreatespinner" class="fa-li fa fa-spinner fa-spin hidden" style="margin-top:9px"></i>
+                        <span id="puppetenvcreatemsg" style="color:red"></span>
+                         <button class="btn btn-default btn-primary createpuppetenvbtn" style="margin-right:11px;">
+                          <i class="fa fa-save fa-1x" ></i>&nbsp;Add</button>
+                        <a class="btn btn-primary" data-dismiss="modal">
+                          <i class="fa fa-undo fa-1x"></i>&nbsp;Cancel</a>
+                        </div>
+                    </div>
+                
+      
+      
+      </form>
+    </div>
+  </div>
+</div>
+<!--row ends here-->
 <script>
 //Form Name
 $(document).ready(function() {
@@ -217,6 +255,58 @@ function preprocess() {
                 bootbox.alert(envname.responseText);
             }
         });
+
+/*function preprocessPuppet() {
+    $('#createenvinpuppetform')[0].reset();
+    if (typeof $('#puppetservername').find('option:selected').attr('rowid') == 'undefined') {
+        bootbox.alert('Select a Puppet Server before adding an environments.');
+        return (false);
+    } else
+        return (true);
+}
+ $('#createenvinpuppetform').submit(function(e){
+   var reqBodyEnv = {};
+   var puppetId =  $('#puppetservername').find('option:selected').attr('rowid');
+   var $crbtn = $('#createenvinpuppetform').find('#createpuppetenvbtn')
+   $crbtn.attr('disabled','disabled');
+   var $form = $('#createenvinpuppetform');
+   reqBodyEnv.name= $form.find('#puppetenvname').val();
+   if(!reqBodyEnv.name){
+        alert('Please Enter Environment Name');
+        return false;
+   }
+   $('#envcreatespinner').removeClass('hidden');
+   //alert('in createchefenvbtn');
+   if(typeof puppetId != 'undefined'){   
+
+        $.ajax({
+            type: "Post",
+            url: '../puppet/environments/create/' + puppetId,
+            data: {
+                envName: $('#puppetenvname').val()
+            },
+            success: function(envname,success) {
+                if (envname) {
+                    $crbtn.removeAttr('disabled');
+                    $('#envcreatespinner').addClass('hidden');
+                    $('#puppetservername').change();
+                    $('#myModalCreatePuppetEnv').modal('hide');
+                    $('#puppetenvironmentname').empty();
+                } else {
+                    $('#puppetenvcreatemsg').html('Could not complete.' + envname);
+                    $crbtn.removeAttr('disabled');
+                    $('#envcreatespinner').addClass('hidden');
+                    $('#myModalCreatePuppetEnv').modal('hide');
+                }
+            },error: function(jqxhr) {
+                bootbox.alert(jqxhr.responseText);
+                $crbtn.removeAttr('disabled');
+                    $('#envcreatespinner').addClass('hidden');
+                    $('#myModalCreatePuppetEnv').modal('hide');
+            },failure: function(envname) {
+                bootbox.alert(envname.responseText);
+            }
+        });*/
 
    /*$.post('../chef/environments/create/' + chefid,{envName:$('#chefenvname').val()},function(envname){
             if(envname){
