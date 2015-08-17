@@ -11,31 +11,29 @@ Resource           ${COMMON RESOURCES}/catalyst_grid_node.txt
 
 *** Test Cases ***
 Catalyst Gallery Templates Creation
-    [Tags]       Sanity               Smoke
+    [Tags]       Sanity               Settings
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
     Catalyst User New Template Creation
+    Catalyst Create New Cloud Formation Template
     Catalyst Logout                      
     [Teardown]     Close Browser
 
 
+Catalyst Creates Cloud Formation Template
+    [Tags]       Sanity               Settings
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst Create New Cloud Formation Template
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
 #Catalyst Gallery Service Command Creation
-    [Tags]       Sanity               Smoke
+    [Tags]       Sanity               Settings
 #    Catalyst Login
 #    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
 #    Catalyst User Creates Service Command
 #    Catalyst Logout                      
 #    [Teardown]     Close Browser
-
-
-
-#Catalyst Gallery Template Type Creation
-    [Tags]       Sanity               Smoke
-#    Catalyst Login
-#    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
-#    Catalyst User Creates New Template Type
-#    Catalyst Logout                      
-#    [Teardown]     Close Browser
-
 
 

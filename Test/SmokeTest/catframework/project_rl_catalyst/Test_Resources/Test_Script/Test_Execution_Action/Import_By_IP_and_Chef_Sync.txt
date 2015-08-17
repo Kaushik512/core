@@ -18,15 +18,66 @@ Resource           ${CATALYST ACTION}/Gallery_setup_TempService_Steps.txt
 
 *** Variables ***
 
+
 *** Keywords ***
+Catalyst Execution of the Jenkins Task in Envrnment
+    Sleep    3s
+    Clicks on Design
+    Sleep    2s
+    Clicks on Workzone
+    Sleep    2s
+    Clicks on Orchestration Tab of the Environment
+    Clicks on Execute Button of the Jenkins Task Created
+    Close the Logs Tab after the Task Completion
+
+
+Clicks on Execute Button of the Jenkins Task Created
+    Execute Javascript    $('#tableOrchestration > tbody > tr:nth-child(1) > td:nth-child(5) > a > i').click()
+    Sleep    10s
+    Click Element    xpath=//button[text()='OK']
+
+
+Close the Logs Tab after the Task Completion
+    Sleep    9s
+    Click Element    css=button.btn.btn-primary.pull-right
+
+
+Catalyst checks the Jenkins task history
+    Clicks on Orchestration Tab of the Environment
+    Clicks on the History button
+    Sleep    10s
+    Clicks on Jenkins Log button in Job output column
+    Closes the Execute Logs window
+    Clicks on Close button to go back to List of task page
+
+
+Clicks on the History button
+    Execute Javascript    $('#tableOrchestration > tbody > tr:nth-child(1) > td:nth-child(6) > a > i').click()
+
+
+Clicks on Jenkins Log button in Job output column
+    Sleep    3s
+    Execute Javascript    $('tbody > tr:nth-of-type(1) > td:nth-of-type(2) > a.btn.btn-primary.btn-sg.tableactionbutton.moreinfo').click()
+
+
+Closes the Execute Logs window
+    Sleep    3s
+    Click Element    css=div.modal-body.no-padding.jenkinsChefModal > form > footer > button
+
+Clicks on Close button to go back to List of task page
+    Sleep    2s
+    Click Element    xpath=//*[@id="jenkinsJobHistory"]/div/div/div/div[1]/div/div/button
+
+
+
 Catalyst Import an CentOS Instance By IP
     #Clicks on Settings
     #Clicks on Workzone Button
     #Clicks on User Created Organization
     #Clicks on User Created BusinessGroup
-    Clicks on Button to your > Environment
-    Sleep    4s
-    Clicks on Inport By IP Button
+    #Clicks on Button to your > Environment
+    Sleep    5s
+    Clicks on Import By IP Button
     Enters the IP Address of CentOS Box
     Select the Operating System of the Box
     Input the User Name for IP
@@ -34,20 +85,22 @@ Catalyst Import an CentOS Instance By IP
     Upload the PEM File for Import By IP
     Clicks on Import Button to Import an Instance
     Clicks on Import Close Button
+    Selects the imported centos node
     Clicks on Contreol Panel
     Clicks on Action History
     Verify the Operation as BootStrap
     Verfify the Status of the CentOAS Instance
     Clicks on Back To Instances
+    Sleep    5s
 
 Catalyst Import an Ubuntu Instance By IP
     #Clicks on Settings
     #Clicks on Workzone Button
     #Clicks on User Created Organization
     #Clicks on User Created BusinessGroup
-    Clicks on Button to your > Environment
-    Sleep    4s
-    Clicks on Inport By IP Button
+    #Clicks on Button to your > Environment
+    Sleep    3s
+    Clicks on Import By IP Button
     Enters the IP Address of Ubuntu Box
     Select the Operating System as Ubuntu
     Input the Ubuntu User Name for IP
@@ -55,6 +108,7 @@ Catalyst Import an Ubuntu Instance By IP
     Upload the PEM File for Import By IP
     Clicks on Import Button to Import an Instance
     Clicks on Import Close Button
+    Selects Ubuntu imported node
     Clicks on Contreol Panel
     Clicks on Action History
     Verify the Operation as BootStrap
@@ -63,7 +117,7 @@ Catalyst Import an Ubuntu Instance By IP
 
 
 Catalyst Verfication of Duplicate Node
-    Clicks on Inport By IP Button
+    Clicks on Inport New IP Button
     Enters the IP Address of CentOS Box
     Select the Operating System of the Box
     Input the User Name for IP
@@ -74,7 +128,7 @@ Catalyst Verfication of Duplicate Node
     Clicks on Cancel Bbutoon
 
 Catalyst Verfication Ubuntu Duplicate Node
-    Clicks on Inport By IP Button
+    Clicks on Inport New IP Button
     Enters the IP Address of Ubuntu Box
     Select the Operating System as Ubuntu
     Input the Ubuntu User Name for IP
@@ -94,11 +148,11 @@ Catalyst Import By IP Chef Client run,SSH,Stop,Start
     Clicks on Settings
     Clicks on Workzone Button
     Sleep    2s
-    Clicks on Button to your > Environment
+    #Clicks on Button to your > Environment
     Sleep    5s
+    Selects the imported centos node
     Click on Chef ClientRun    
-    Clicks on CoookBooks
-    Select the Apt CookBook
+    Select the CookBook
     Clicks on ADD To RunList
     Clicks on Update Button Of the a Runlist
     Clicks on Cloose of Update Button
@@ -108,20 +162,21 @@ Catalyst Import By IP Chef Client run,SSH,Stop,Start
     Verfiy the Chef Client Status after update
     Clicks on Back To Instances
     Sleep    2s
-    Clicks on SSH for instance
-    Sleep    3s
-    Input the Usrname in Terminal
-    Select Authenticationtype as PEM
-    Upload the PemFile to ssh
-    Clicking on the SubmitButton
-    Sleep    5s
-    Clicks on Close the Terminal
-    Sleep    2s 
-    Clicks on Contreol Panel
-    Clicks on Action History
-    Verfiy the operation as SSH
-    Verfiy the SSH-Status after update
-    Clicks on Back To Instances
+    #Selects the imported centos node
+    #Clicks on SSH for instance
+    #Sleep    3s
+    #Input the Usrname in Terminal
+    #Select Authenticationtype as PEM
+    #Upload the PemFile to ssh
+    #Clicking on the SubmitButton
+    #Sleep    5s
+    #Clicks on Close the Terminal
+    #Sleep    2s 
+    #Clicks on Contreol Panel
+    #Clicks on Action History
+    #Verfiy the operation as SSH
+    #Verfiy the SSH-Status after update
+    #Clicks on Back To Instances
 
 Catalyst Verfication of IP,Status,Chef,SSH,MoreInfo and frm Ctrlpanel
     Verfication of IP Address from card view
@@ -130,27 +185,27 @@ Catalyst Verfication of IP,Status,Chef,SSH,MoreInfo and frm Ctrlpanel
     Verfication of SSH from card view
     Verification of Stop toggler disabled
     Verfication of MoreInfo from card view
-    #Clicks on Contreol Panel
-    #Sleep    4s
-    #Verfication of Machine status from control panel
-    #Getting the Total Memory of the Machine from control panel
-    #Getting the Free Memory of the Machine from control panel
-    #Verfiying the OS the Machine from control panel
-    #Getting the Version of the Machine from control panel
-    #Verfiying Bootstrap status from control panel
-    #Verfiying the Runlist from control panel
-    #Clicks on Back To Instances
+    Clicks on Contreol Panel
+    Sleep    4s
+    Verfication of Machine status from control panel
+    Getting the Total Memory of the Machine from control panel
+    Getting the Free Memory of the Machine from control panel
+    Verfiying the OS the Machine from control panel
+    Getting the Version of the Machine from control panel
+    Verfiying Bootstrap status from control panel
+    Verfiying the Runlist from control panel
+    Clicks on Back To Instances
 
 
 Catalyst Import By IP Chef Client run,SSH,Stop,Start on Ubuntu Instance
-    Clicks on Settings
-    Clicks on Workzone Button
-    Sleep    2s
-    Clicks on Button to your > Environment
+    #Clicks on Settings
+    #Clicks on Workzone Button
+    #Sleep    2s
+    #Clicks on Button to your > Environment
     Sleep    5s
+    Selects Ubuntu imported node
     Click on Chef ClientRun of Ubuntu Instance   
-    Clicks on CoookBooks
-    Select the Apt CookBook
+    Select the CookBook for ubuntu imported node
     Clicks on ADD To RunList
     Clicks on Update Button Of the a Runlist
     Clicks on Cloose of Update Button
@@ -160,20 +215,20 @@ Catalyst Import By IP Chef Client run,SSH,Stop,Start on Ubuntu Instance
     Verfiy the Chef Client Status after update
     Clicks on Back To Instances
     Sleep    2s
-    Clicks on SSH for ubuntu instance
-    Sleep    3s
-    Input the Ubuntu Usrname in Terminal
-    Select Authenticationtype as PEM
-    Upload the PemFile to ssh
-    Clicking on the SubmitButton
-    Sleep    5s
-    Clicks on Close the Terminal
-    Sleep    2s 
-    Clicks on Contreol Panel
-    Clicks on Action History
-    Verfiy the operation as SSH
-    Verfiy the SSH-Status after update
-    Clicks on Back To Instances
+    #Clicks on SSH for ubuntu instance
+    #Sleep    3s
+    #Input the Ubuntu Usrname in Terminal
+    #Select Authenticationtype as PEM
+    #Upload the PemFile to ssh
+    #Clicking on the SubmitButton
+    #Sleep    5s
+    #Clicks on Close the Terminal
+    #Sleep    2s 
+    #Clicks on Contreol Panel
+    #Clicks on Action History
+    #Verfiy the operation as SSH
+    #Verfiy the SSH-Status after update
+    #Clicks on Back To Instances
 
 
 Catalyst Verfication of IP,Status,Chef,SSH,MoreInfo on UbuntuIns frm Ctrlpanel
@@ -183,16 +238,16 @@ Catalyst Verfication of IP,Status,Chef,SSH,MoreInfo on UbuntuIns frm Ctrlpanel
     Verfication of SSH from card view
     Verification of Stop toggler disabled
     Verfication of MoreInfo from card view
-    #Clicks on Contreol Panel
-    #Sleep    4s
-    #Verfication of Machine status from control panel
-    #Getting the Total Memory of the Machine from control panel
-    #Getting the Free Memory of the Machine from control panel
-    #Verfiying the UbuntuOS the Machine from control panel
-    #Getting the Version of the Machine from control panel
-    #Verfiying Bootstrap status from control panel
-    #Verfiying the ubuntu Runlist from control panel
-    #Clicks on Back To Instances
+    Clicks on Contreol Panel
+    Sleep    4s
+    Verfication of Machine status from control panel
+    Getting the Total Memory of the Machine from control panel
+    Getting the Free Memory of the Machine from control panel
+    Verfiying the UbuntuOS the Machine from control panel
+    Getting the Version of the Machine from control panel
+    Verfiying Bootstrap status from control panel
+    Verfiying the ubuntu Runlist from control panel
+    Clicks on Back To Instances
 
 
 
@@ -217,9 +272,12 @@ Catalyst Check and Edit the Instance Name
     Sleep    4s
     Clicks on Edit Button of the Instance Imported
     Enters the Empty Edit name
+    Clicks on Edit Save Button of the instance
+    Verfiy the Message Displayed of the Instance
     Sleep    2s
     Enters the New Edit Instance Name
-    Clicks on Edit Save Button of the instances
+    Clicks on Edit Save Button of the instance
+
 
 
 Catalyst Check and Edit the Ubuntu Instance Name
@@ -229,16 +287,83 @@ Catalyst Check and Edit the Ubuntu Instance Name
     Sleep    4s
     Clicks on Edit Button of the UbuntuIns Imported
     Enters the Empty Edit name
+    Clicks on Edit Save Button of the instance
+    Verfiy the Message Displayed of the Instance
     Sleep    2s
     Enters the New Edit Ubuntu Instance Name
-    Clicks on Edit Save Button of the instances
+    Clicks on Edit Save Button of the instance
     
+
+
+
+
+Catalyst Instance Deleted From Chef Environment
+    Sleep    6s
+    Clicks on Workzone Button
+    Clicks on Button to your > Environment
+    Sleep    4s
+    Click on the Instance To Be Deleted 
+    Clicks on the Dlt Button to Delete the Instance
+    Verify the IP Address
+    Select the CheckBox to Delete
+    Clicks on the Delete Button to Delete the Instance
+    Clicks on Settings
+    Sleep    5s
+    Clicks on DevOps Setupp 
+    Clicks on Config Managementt
+    Clicks on Import Nodes Button of Chef Server
+
+
+Catalyst Ubuntu Instance Deleted From Chef Environment
+    Sleep    6s
+    Clicks on Workzone Button
+    Clicks on Button to your > Environment
+    Sleep    4s
+    Click on the Ubuntu Instance To Be Deleted 
+    Clicks on the Dlt Button to Delete the Instance
+    Verify the Ubuntu IP Address
+    Select the CheckBox to Delete
+    Clicks on the Delete Button to Delete the Instance
+    Clicks on Settings
+    Sleep    5s
+    Clicks on DevOps Setupp 
+    Clicks on Config Managementt
+    Clicks on Import Nodes Button and verify Ubuntu instance deleted
+
+
+Catalyst Delete the Node only From Catalyst
+    Sleep    5s
+    Catalyst Steps for Inmporting
+    Sleep    15s
+    Clicks on the Dlt Button to Delete the Instance
+    Verify the Name of the Instance as IP Address
+    Clicks on the Delete Button to Delete the Instance
+    Clicks on Settings
+    Sleep    5s
+    Clicks on DevOps Setupp 
+    Clicks on Config Managementt
+    Clicks on Import Button Server
+
+Catalyst Delete the Ubuntu Node only From Catalyst
+    Sleep    5s
+    Catalyst Steps for Inport by IP Ubuntu
+    Sleep    15s
+    Clicks on the Dlt Button to Delete the Instance
+    Verify the Name of the Ubuntu Instance as IP Address
+    Clicks on the Delete Button to Delete the Instance
+    Clicks on Settings
+    Sleep    5s
+    Clicks on DevOps Setupp 
+    Clicks on Config Managementt
+    Clicks on Import Button Server and Verfiy the Ubuntu Instance
+
+
 
 Catalyst Steps for Inport by IP Ubuntu
     Clicks on Workzone Button
     Clicks on Button to your > Environment
     Sleep    4s
-    Clicks on Inport By IP Button
+    Clicks on Import By IP Button
     Enters the IP Address of Ubuntu Box
     Select the Operating System as Ubuntu
     Input the Ubuntu User Name for IP
@@ -253,7 +378,7 @@ Catalyst Steps for Inmporting
     Clicks on Workzone Button
     Clicks on Button to your > Environment
     Sleep    4s
-    Clicks on Inport By IP Button
+    Clicks on Import By IP Button
     Enters the IP Address of CentOS Box
     Select the Operating System of the Box
     Input the User Name for IP
@@ -263,6 +388,50 @@ Catalyst Steps for Inmporting
     Clicks on Import Close Button
 
 
+Catlayst Importing the Instance Chef Sync
+    Clicks on Settings
+    Sleep    5s
+    Clicks on DevOps Setupp 
+    Clicks on Config Managementt
+    Clicks on Import Nodes Button of Server for Sync
+    Find the Instance and Impoert to the Environment
+    Clicking on the Import Nodes Button in Config Mgmt Page 
+    Verfiy the Organization is Disabled
+    Select the Business Grp in Inport Nodes
+    Select the Project in Inport Nodes
+    Enters the UserName in Inport Nodes
+    Choose the Authentication as Pem in Inportnodes
+    Upload the PEM file in Inport Nodes
+    Clicks on Import Button in Import Nodes
+    Sleep    5s
+    Verify the Node Importedd
+    Clicks on Workzone
+    Sleep    10s
+    Node is Inported in the  Environment
+
+
+
+   #.//*[@id='envtable']/tbody/tr/td[text()='RLChefServer']/../td[5]/div/a[3]
+    #//div[@class='domain-roles-heading'][//span[text()='52.24.73.49']]/a
+#//div[@class='domain-roles-heading']/span[@data-originaL-title='apache']
+#//div[@class='domain-roles']/div[@data-blueprintname='52.24.73.49']
+#//div[@class='messageDiv']/div
+ 
+
+Clicks on Inport New IP Button
+    Sleep    1s
+    #Execute JavaScript    $('#divinstancescardview').attr('style','display:none')
+    #Sleep    1s
+    Click Element    id=ipaddressimport
+    
+
+Selects the imported centos node
+    Sleep    3s
+    Click Element    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${IP Centos}")]/div/div/div
+
+Selects Ubuntu imported node
+    Sleep    6s
+    Click Element    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${IP Ubuntu}")]/div/div/div
 
 Verfication of IP Address from card view
     Sleep    4s
@@ -326,10 +495,6 @@ Verfiying the ubuntu Runlist from control panel
 Clicks on Close the Terminal
     Sleep    2s
     Click Element    xpath=.//*[@id='modalSSHShellContainer']/div/div/div[1]/button
-
-Clicks on Edit Save Button of the instances
-    Sleep    2s
-    Click Element    id=editSaveBTN
 
 
 Input the Usrname in Terminal
@@ -414,7 +579,9 @@ Clicks on SSH for ubuntu instance
 
 
 
-
+Click on the Instance To Be Deleted
+    Sleep    2s
+    Click Element    xpath=//div[@class='domain-roles']/div[@data-blueprintname='${IP Centos}']
 
 Click on the Ubuntu Instance To Be Deleted 
     Sleep    2s
@@ -449,27 +616,27 @@ Clicks on Config Managementt
 
 
 Clicks on Import Nodes Button of Chef Server
-    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()='RLChefServer']/../td[5]/div/a[3]
+    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()='RLChefServer']/../td[5]/div/a[2]
     Sleep    50s
     Page Should Not Contain    ${IP Centos}
 
 
 Clicks on Import Nodes Button and verify Ubuntu instance deleted
-    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()='RLChefServer']/../td[5]/div/a[3]
+    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()='RLChefServer']/../td[5]/div/a[2]
     Sleep    50s
     Page Should Not Contain    ${IP Ubuntu}    
 
 Clicks on Import Nodes Button of Server for Sync
-    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()='RLChefServer']/../td[5]/div/a[3]
+    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()='RLChefServer']/../td[5]/div/a[2]
     Sleep    1 minutes
 
 Clicks on Import Button Server
-    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()='RLChefServer']/../td[5]/div/a[3]
+    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()='RLChefServer']/../td[5]/div/a[2]
     Sleep    50s
     Page Should Contain    ${IP Centos} 
 
 Clicks on Import Button Server and Verfiy the Ubuntu Instance
-    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()='RLChefServer']/../td[5]/div/a[3]
+    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()='RLChefServer']/../td[5]/div/a[2]
     Sleep    50s
     Page Should Contain    ${IP Ubuntu}    
 
@@ -497,6 +664,9 @@ Clicks on Close Button after Validation
 Enters the Empty Edit name
     Input Text    id=instanceEditName    ${Empty}
 
+Verfiy the Message Displayed of the Instance
+    Sleep    1s
+    Element Should Contain    xpath=.//*[@id='instanceEditName-error']    ${ERRORMESSAGE}
 
 Clicks on Edit Button of the Instance Imported
     Sleep    3s
@@ -514,6 +684,9 @@ Enters the New Edit Ubuntu Instance Name
     Input Text    id=instanceEditName    ${EDIT_UBUNTU_INSTANCE_NAME}
 
 
+
+Clicks on Edit Save Button of the instance
+    Click Element    id=editSaveBTN
 
 Verify Edited Name of the Instance
     Element Should Contain    xpath=//div[@class='domain-roles-heading']/span[@data-originaL-title='${EDIT_INSTANCE_NAME}']
@@ -567,10 +740,10 @@ Clicks on Button to your > Environment
 
 
 Click on Chef ClientRun
-    Click Element    xpath=//div[@class='domain-roles-caption'][//div[//span[text()='${IP Centos}']]]/div[4]/div[1]
+    Click Element    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${IP Centos}")]/div/div/div/div[4]/div[1]/a
 
 Click on Chef ClientRun of Ubuntu Instance   
-    Click Element    xpath=//div[@class='domain-roles-caption'][//div[//span[text()='${IP Ubuntu}']]]/div[4]/div[1]
+    Click Element    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${IP Ubuntu}")]/div/div/div/div[4]/div[1]/a
 
 
 
@@ -580,12 +753,12 @@ Clicks on CoookBooks
     Sleep    5s
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='chefRunAccordionRunlistArea']/div/div/div/div[1]/div[1]/label[3]
 
-Select the Apt CookBook
+Select the CookBook
     Sleep    5s
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[text()='apt']
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[text()='apache2']
 
-Select the tomcatall CookBook
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[text()='tomcat-all']
+Select the CookBook for ubuntu imported node
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[text()='${COOKBOOK NAME1}']
 
 
 Clicks on ADD To RunList
@@ -602,8 +775,8 @@ Clicks on Cancel Bbutoon
     Click Element    xpath=.//*[@id='addInstanceForm']/div[3]/div/a
 
 Clicks on Cloose of Update Button
-    Sleep    5s
-    Click Element    xpath=.//*[@id='instanceLogModalContainer']/div/div/div[3]/button
+    Sleep    3 minutes
+    Wait Until Keyword Succeeds    1 minute     5 seconds      Click Element    xpath=.//*[@id='instanceLogModalContainer']/div/div/div[3]/button      #close
 
 
 
@@ -619,31 +792,21 @@ Verify the Operation as BootStrap
 
 Verfify the Status of the CentOAS Instance
     Sleep    50s
-    #${STATUSS}=    Get Element Attribute    xpath=.//*[@id='tableactionHistory']/tbody/tr[1]/td[2]/img@title
-    #Log    ${STATUSS}
-    #Log    ${ACTBOOT2}
-    #Should Be Equal    ${STATUSS}     ${ACTBOOT2}
-    
-    ${Centos_IMP_IP_SUCCESS}=    Get Element Attribute    xpath=.//*[@id='tableactionHistory']/tbody/tr[1]/td[2]/img@title
-    Log    ${Centos_IMP_IP_SUCCESS}
-    Should Be Equal    ${Centos_IMP_IP_SUCCESS}     ${SATSSYY}
+    ${STATUSS}=    Get Element Attribute    xpath=.//*[@id='tableactionHistory']/tbody/tr[1]/td[2]/img@title
+    Log    ${STATUSS}
+    Log    ${ACTBOOT2}
+    Should Be Equal    ${STATUSS}     ${ACTBOOT2}
 
 Verfify the Status of the UbuntuOS Instance 
     Sleep    50s
-    #${STATUSS}=    Get Element Attribute    xpath=.//*[@id='tableactionHistory']/tbody/tr[1]/td[2]/img@title
-    #Log    ${STATUSS}
-    #Log    ${ACTBOOT2}
-    #Should Be Equal    ${STATUSS}     ${ACTBOOT2}
+    ${STATUSS}=    Get Element Attribute    xpath=.//*[@id='tableactionHistory']/tbody/tr[1]/td[2]/img@title
+    Log    ${STATUSS}
+    Log    ${ACTBOOT2}
+    Should Be Equal    ${STATUSS}     ${ACTBOOT2}
     
-    ${Ubuntu_IMP_IP_SUCCESS}=    Get Element Attribute    xpath=.//*[@id='tableactionHistory']/tbody/tr[1]/td[2]/img@title
-    Log     ${Ubuntu_IMP_IP_SUCCESS}
-    Should Be Equal    ${Ubuntu_IMP_IP_SUCCESS}     ${SATSSYY}
 
-Clicks on Inport By IP Button
-    Sleep    1s
-    Execute JavaScript    $('#divinstancescardview').attr('style','display:none')
-    Sleep    1s
-    Click Element    id=ipaddressimport
+Clicks on Import By IP Button
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    id=ipaddressimport
 
 Enters the IP Address of CentOS Box
     Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    id=instanceFQDN    ${IP Centos}
@@ -822,6 +985,9 @@ Validate the Jenkins Configuration Setup
     Organization not Selected  ${VaildNotSelectOrg}
 
 Catalyst Create New Jenkins Configuration Setup
+    Clicks on Settings
+    Clicks on DevOps Setup menu
+    Clicks on Jenkins Link
     Clicks on Jenkins New Button
     Select your Orgg Created
     Enters the Reference Name
@@ -829,7 +995,7 @@ Catalyst Create New Jenkins Configuration Setup
     Enters the User ID Name
     Enters the Password
     Clicks on JeSave Button
-    Vaildate the Editof Created Jenkins Reference Name
+    #-Vaildate the Editof Created Jenkins Reference Name
 
 Vaildate the Editof Created Jenkins Reference Name
     Clicks on Edit Button of Reference name
@@ -880,24 +1046,24 @@ Enters New Ubun Operating System Template Name
     Input Text    id=templatename    ${TEMP NAMEUBUN}        
 
 Catalyst Creation of Jenkins Task in Environment
-    Clicks on Workzone
-    Clicks on User Created Organization
-    Clicks on User Created BusinessGroup
-    Clicks on > Button to your Environment
-    Clicks on Orchestration Tab
-    Clicks on New Button of Jenkins
+    #Clicks on Workzone
+    #Clicks on User Created Organization
+    #Clicks on User Created BusinessGroup
+    #Clicks on > Button to your Environment
+    Sleep    2s
+    Clicks on Orchestration Tab of the Environment
+    Clicks on New Button to create task
     Clicks on Choose Task Type of Jenkins
-    Enter the Task Name of Jenkins
-    #-Select Nodes
-    #-Assign Runlist
-    #-Clicks on >>T Button
+    Enter the Job Name of Jenkins
     Select the Jenkins Server
     Select the Job to Run
-    #Assign Users to Run
+    Select the AutoSync Button
     Clicks on Save Task Button
+    Sleep    4s
+    Clicks on Save of the Success Button
 
 Catlayst Creation of Chef Task in the Environment
-    Clicks on New Button of Jenkins
+    Clicks on New Button to create task
     Clicks on Choose Task Type of Chef
     Enter the Task Name of Chef
     Check the Chef Serve is Disabled 
@@ -933,6 +1099,9 @@ Creation of New Application for your Project and Executing Tasks
     Enters the UI Performance Analysis
     Clicks on Jenkins Save Button
 
+Clicks on Save of the Success Button
+    Click Element    css=div.bootbox.modal.fade.bootbox-alert.in > div.modal-dialog > div.modal-content > div.modal-footer > button.btn.btn-primary
+
 
 Check the Chef Serve is Disabled
     Element Should Be Disabled     id=configname    
@@ -961,8 +1130,8 @@ Selection of CookBooks
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[text()='deploy_mongodb']
     Click Element    id=btnaddToRunlist
 
-Clicks on New Button of Jenkins
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='l3']/div/div/div/div/div[1]/div/div/button   
+Clicks on New Button to create task
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    css=button.btn.btn-minier.btn-primary.createTaskLink
 
 Clicks on ADD APP Button
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='l2']/div/div/div/div[1]/div/div/a
@@ -1032,14 +1201,14 @@ Clicks on Jenkins Save Button
 Clicks on Jenknis New Button
     Click  Element    xpath=.//*[@id='content']/div/div/div/div/div[1]/div/div/a[2]
 
-Clicks on Orchestration Tab
+Clicks on Orchestration Tab of the Environment
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='myTab3']/li[3]/a
 
 
 Clicks on Choose Task Type of Jenkins
-    Click Element    xpath=.//*[@id='s2id_taskType']/a
-    Input Text    xpath=.//*[@id='select2-drop']/div/input     ${TASK TYPE}
-    Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
+    Click Element    css=#s2id_taskType > a > span.select2-arrow
+    Input Text    css=#select2-drop > div > input     ${TASK TYPE}
+    Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
 
 Clicks on Choose Task Type of Chef
     Click Element    xpath=.//*[@id='s2id_taskType']/a
@@ -1047,19 +1216,20 @@ Clicks on Choose Task Type of Chef
     Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
 
 
-Enter the Task Name of Jenkins
-    Input Text    id=jenkinsTaskName    JenkinsTask
+Enter the Job Name of Jenkins
+    Input Text    id=jenkinsTaskName    ${JENTASK NAME}
 
 Enter the Task Name of Chef
     Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    id=chefTaskName    ${CHEF TASKNAME}
 
 
 Select the Job to Run
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='s2id_jobListJenkins']/a/span[1]
-    Input Text     xpath=.//*[@id='select2-drop']/div/input     ${JOB NAME}
-    #Input Text    xpath=.//*[@id='select2-drop']/div/input     Catalyst_Build_Demo
-    #Input Text    xpath=.//*[@id='select2-drop']/div/input     Catalyst_Get
-    #Input Text    xpath=.//*[@id='select2-drop']/div/input     LR-AngularPorlet
+    Click Element    css=#s2id_jobListJenkins > a > span.select2-chosen
+    Input Text     xpath=.//*[@id='select2-drop']/div/input     ${JJOB NAME}
+    Click Element    css=ul > li:first-child > div
+
+Select the AutoSync Button
+    Click Element    css=#radio_yes 
 
 Assign Users to Run
     Click Element    xpath=.//*[@id='jenkinsUserList']/option[text()="Admin"]
@@ -1094,9 +1264,9 @@ Enters the Task Name
     Input Text    id=jenkinsTaskName     ${TASK NAME}
 
 Select the Jenkins Server
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='s2id_jenkinsServerList']/a/span[1]
-    Input Text    xpath=.//*[@id='select2-drop']/div/input    ${JENKINS SERVER}
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
+    Click Element    css=#s2id_jenkinsServerList > a > span.select2-chosen
+    Input Text    css=#select2-drop > div > input    ${DEF_JENKINS_SERVER}
+    Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
 
 Select Job
     Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
@@ -1109,7 +1279,7 @@ Assign Users
     Click Element    xpath=.//*[@id='jenkinsUserList']/option[3]       #User
 
 Clicks on Save Task Button
-    Click Element    xpath=.//*[@id='content']/div[3]/div/div/div/a[1]
+    Click Element    css=button.btn.btn-primary.btnSaveTask.btn-mini
 
 Clicks on Execute Button
     Click Element    xpath=.//*[@id='tableOrchestration']/tbody/tr/td[4]/a
@@ -1257,22 +1427,76 @@ Select your Orgg Created
     Select From List   id=orgname    ${ORGANIZATION NAME}
 
 Clicks on Jenkins New Button
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element     xpath=.//*[@id='content']/div/div/div/div/div[1]/div/div/a[2]
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element     id=newJen
 
 Clicks on Jenkins Cancel Button
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='btncancel']
 
 
+Catalyst creation of Chef Task
+    Clicks on Orchestration Tab of the Environment
+    Clicks on New Button to create task
+    Enters Chef job name
+    Select nodes for chef task
+    Clicks on Edit Runlist icon inside chef task page
+    Adds the cookbook to the runlist for Chef task
+    Clicks on Update runlist button to save runlist
+    Clicks on Save button for chef task
+    Clicks on Save of the Success Button
 
-Catalyst deletes Centos Imported node
-    Clicks on the Button to the Environment
-    Click on Remove button
-    Selects Delete this node from chef server Checkbox
-    Clicks on Delete button in Remove Instance window
+
+Enters Chef job name
+    Sleep    2s
+    Input Text    id=chefTaskName    ${Cheftask}
+
+Select nodes for chef task
+    Click Element    xpath=.//*[@id='selectedNodesChefTask']/li[1]/label/i
+    Click Element    xpath=.//*[@id='selectedNodesChefTask']/li[2]/label/i
+
+Clicks on Edit Runlist icon inside chef task page
+    Click Element    css=img.addList
+
+Adds the cookbook to the runlist for Chef task
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[text()='${COOKBOOK NAME1}']
+    Sleep    3s
+    Click Element    css=#btnaddToRunlist
+
+Clicks on Update runlist button to save runlist
+    Click Element    css=#saveRunlist
+
+Clicks on Save button for chef task
+    Sleep    3s
+    Click Element    xpath=.//*[@id='taskForm']/div/div[7]/div/button    
+    
+Catalyst execution of Chef Task
+    Sleep    3s
+    Clicks on Design
+    Sleep    2s
+    Clicks on Workzone
+    Sleep    2s
+    Clicks on Orchestration Tab of the Environment
+    Clicks on Execute Button for Chef task
+    Close the Logs Tab after the Task Completion
 
 
-Catalyst deletes Ubuntu Imported node
-    Clicks on the Button to the Environment
-    Click on Remove button
-    Selects Delete this node from chef server Checkbox
-    Clicks on Delete button in Remove Instance window
+Clicks on Execute Button for Chef task
+    Execute Javascript    $('#tableOrchestration > tbody > tr:nth-child(2) > td:nth-child(5) > a > i').click()
+    Sleep    10s
+    Click Element    xpath=//button[text()='OK']      
+
+    
+Catalyst checks the Chef task history
+    Clicks on Orchestration Tab of the Environment
+    Clicks on Chef task History button
+    Sleep    10s
+    Clicks on Close button in Chef history page
+
+
+Clicks on Chef task History button
+    Execute Javascript    $('#tableOrchestration > tbody > tr:nth-child(2) > td:nth-child(6) > a > i').click()    
+
+Clicks on Chef task Log button in Job output column
+    Execute Javascript    $('#tableOrchestration > tbody > tr:nth-child(2) > td:nth-child(6) > a > i').click()
+
+Clicks on Close button in Chef history page
+    Click Element    xpath=.//*[@id='chefJobHistory']/div/div/div/div[1]/div/div/button
