@@ -1736,6 +1736,7 @@
 
                                                                         $instanceDetailsList.append($instanceDetailItemId);
                                                                         var $instanceDetailItemStatus;
+                                                                        data.instanceState == 'running';
                                                                         if (data.instanceState == 'running') {
                                                                             $instanceDetailItemStatus = $('<span></span>').addClass('instance-details-id').html('status : <span class="instance-state instance-state-text-started">' + data.instanceState + '</strong>');
                                                                         } else if (data.instanceState == 'terminated') {
@@ -1830,35 +1831,90 @@
                                                                         $rowContainter.find('.tableMoreInfo').click(instanceLogsHandler);
                                                                         $li.find('.moreInfo').click(instanceLogsHandler);
 
-                                                                        $li.find('.showmenuAppTask').click(function() {
-                                                                            //alert("I am Here");
-                                                                            var $menu = $li.find('.menuAppTask');
-                                                                            if ($menu.is(':visible')) {
-                                                                                $menu.hide();
-                                                                            } else {
-                                                                                $('.menuAppTask').hide();
-                                                                                $menu.show();
-                                                                                var $anchor = $('.app-url').parent();
-                                                                                $anchor.click(function() {
-                                                                                  $menu.hide();                                                                                          
-                                                                                });
-                                                                            }
-                                                                        });
-                                                                        $rowContainter.find('.showmenuAppTask').click(function() {
 
-                                                                            var $menu = $rowContainter.find('.menuAppTask').css('width','166px').css('margin-left','-42px');
-                                                                            //alert($menu.length);
-                                                                            if ($menu.is(':visible')) {
+                                                                        $(document).ready(function () {
+                                                                            var $menu = $li.find('.menuAppTask');
+                                                                            $(document).click(function () {
                                                                                 $menu.hide();
-                                                                            } else {
-                                                                                $('.menuAppTask').hide();
-                                                                                $menu.show();
-                                                                                var $anchor = $('.app-url').parent();
-                                                                                $anchor.click(function() {
-                                                                                  $menu.hide();                                                                                          
-                                                                                });
-                                                                            }
+                                                                            });
+                                                                            
+                                                                            $li.find('.showmenuAppTask').click(function (e) {
+                                                                                e.stopPropagation();
+                                                                                var $menuInside = $li.find('.menuAppTask');
+                                                                                if ($menuInside.is(':visible')) {
+                                                                                    $menuInside.hide();
+                                                                                } else {
+                                                                                    $('.menuAppTask').hide();
+                                                                                    $menuInside.show();                                                                                         
+                                                                                }
+                                                                                //$menu.show();
+                                                                            });
+                                                                            $menu.click(function (e) {
+                                                                                e.stopPropagation();
+                                                                            });
+                                                                            var $anchor = $('.app-url').parent();
+                                                                            $anchor.click(function() {
+                                                                              $menu.hide();                                                                                          
+                                                                            });
                                                                         });
+                                                                        // $li.find('.showmenuAppTask').click(function() {
+                                                                        //     //alert("I am Here");
+                                                                        //     var $menu = $li.find('.menuAppTask');
+                                                                        //     if ($menu.is(':visible')) {
+                                                                        //         $menu.hide();
+                                                                        //     } else {
+                                                                        //         $('.menuAppTask').hide();
+                                                                        //         $menu.show();
+                                                                        //         var $anchorbody = $('body');
+                                                                        //         $anchorbody.click(function() {
+                                                                        //           $menu.hide();                                                                                          
+                                                                        //         });
+                                                                        //         var $anchor = $('.app-url').parent();
+                                                                        //         $anchor.click(function() {
+                                                                        //           $menu.hide();                                                                                          
+                                                                        //         });
+                                                                        //     }
+                                                                        // });
+                                                                        $(document).ready(function () {
+                                                                            var $menuT = $rowContainter.find('.menuAppTask').css('width','166px').css('margin-left','-42px');
+                                                                            $(document).click(function () {
+                                                                                $menuT.hide();
+                                                                            });
+                                                                            $rowContainter.find('.showmenuAppTask').click(function (e) {
+                                                                                e.stopPropagation();
+                                                                                //$menuT.show();
+                                                                                var $menuInside = $rowContainter.find('.menuAppTask');
+                                                                                if ($menuInside.is(':visible')) {
+                                                                                    $menuInside.hide();
+                                                                                } else {
+                                                                                    $('.menuAppTask').hide();
+                                                                                    $menuInside.show();                                                                                         
+                                                                                    
+                                                                                }
+                                                                            });
+                                                                            $menuT.click(function (e) {
+                                                                                e.stopPropagation();
+                                                                            });
+                                                                            var $anchor = $('.app-url').parent();
+                                                                            $anchor.click(function() {
+                                                                              $menuT.hide();                                                                                          
+                                                                            });
+                                                                        });
+                                                                        // $rowContainter.find('.showmenuAppTask').click(function() {
+
+                                                                        //     var $menu = $rowContainter.find('.menuAppTask').css('width','166px').css('margin-left','-42px');
+                                                                        //     //alert($menu.length);
+                                                                        //     if ($menu.is(':visible')) {
+                                                                        //         $menu.hide();
+                                                                        //     } else {
+                                                                        //         $('.menuAppTask').hide();
+                                                                        //         $menu.show();
+                                                                        //         var $anchor = $('.app-url').parent();
+                                                                        //         $anchor.click(function() {
+                                                                        //           $menu.hide();                                                                                          
+                                                                        //         });
+                                                                        //     }
+                                                                        // });
 
                                                                         var $cardContainer = $li.find('.container').click(function(e) {
                                                                             $('.container').removeClass('role-Selectedcard');
@@ -2061,6 +2117,10 @@
                                                                         var $desktopProvisioningPanelBody = $('.desktopProvisioningPanel').find('.panel-body');
                                                                         $devopsRolepanelBody.empty();
 
+                                                                        var sortbyid = function SortByID(x,y) {
+                                                                          return x.position - y.position; 
+                                                                        }
+
                                                                         //alert(orgId + "/" + projectId + "/" + envId + data.length);
                                                                         //displaying the organisation from tree view
                                                                         $.get('../organizations/getTreeForbtv',function(orgData){
@@ -2074,7 +2134,32 @@
                                                                             var getDesignTypeImg;
                                                                             var getDesignTypeRowID;
                                                                             var getDesignTypeName;
+                                                                            var getDesignType;
                                                                             $('#accordion-2').empty();
+                                                                           // var _tdata = [];
+                                                                            //alert(JSON.stringify(tdata));
+                                                                            //Reordering - chef, osimage, cft, docker
+                                                                            for (var i = 0; i < rowLength; i += 1) {
+                                                                             
+                                                                              switch (tdata[i]['templatetype']) {
+                                                                                    case "chef":
+                                                                                     tdata[i]['position'] = 0;
+                                                                                      break;
+                                                                                    case "ami":
+                                                                                      tdata[i]['position'] = 1;
+                                                                                      break;
+                                                                                    case "cft":
+                                                                                      tdata[i]['position'] = 2;
+                                                                                      break;
+                                                                                    case "docker":
+                                                                                      tdata[i]['position'] = 3;
+                                                                                      break;
+                                                                              }
+
+                                                                            }
+                                                                            tdata.sort(sortbyid);
+                                                                            
+
                                                                             console.log(tdata);
 
                                                                             //for loop for getting the orgdata
@@ -2083,9 +2168,14 @@
                                                                                // alert(orgData[j].rowid);
                                                                                (function(j){
                                                                             for (var i = 0; i < rowLength; i += 1) {
+                                                                              console.log(i);
+                                                                              if(tdata[i]['designtemplateicon_filename'])
                                                                                 getDesignTypeImg = tdata[i]['designtemplateicon_filename'];
+                                                                              else
+                                                                                getDesignTypeImg = ''; //tdata[i]['designtemplateicon_filename']
                                                                                 getDesignTypeRowID = tdata[i]['rowid'];
                                                                                 getDesignTypeName = tdata[i]['templatetypename'];
+                                                                                getDesignType = tdata[i]['templatetype'];
                                                                                 //alert(tdata[i].orgname_rowid[0]);
                                                                                 if(orgData[j].rowid == tdata[i].orgname_rowid[0]){
                                                                                  //   alert(orgData[j].rowid===tdata[i].orgname_rowid[0]);
@@ -2142,7 +2232,7 @@
                                                                                     '<i class="fa fa-fw fa-plus-circle txt-color-blue"></i> ' +
                                                                                     '<i class="fa fa-fw fa-minus-circle txt-color-red"></i>' + getDesignTypeName + '</a>' +
                                                                                     '</h4></div><div class="panel-collapse collapse" id="collapse' + i + '">' +
-                                                                                    '<div class="panel-body ' + getDesignTypeName + '"></div>' +
+                                                                                    '<div class="panel-body ' + getDesignType + '"></div>' +
                                                                                     '</div>';
                                                                                 $('#accordion-2').append($containerTemp);
                                                                               // alert($containerTemp);
@@ -2183,7 +2273,7 @@
                                                                                     var tagLabel = '';
                                                                                     //Docker Check
 
-                                                                                    if (data[i].templateType == "Docker") {
+                                                                                    if (data[i].templateType == "Docker"  ||  data[i].templateType == "docker" ) {
 
                                                                                         console.log("docker", data[i].blueprintConfig);
                                                                                         //$selectVer = $('<select style="padding:1px;"></select>').addClass('blueprintVersionDropDown').attr('data-blueprintId', data[i]._id);
@@ -2483,7 +2573,7 @@
                                                                                 $modalDesktopProvisioning.modal('show');
                                                                                 return;
                                                                             }
-                                                                            if ($selectedItems.attr('data-templateType') === 'Docker') {
+                                                                            if ($selectedItems.attr('data-templateType') === 'Docker' || $selectedItems.attr('data-templateType') === 'docker') {
 
                                                                                 $('.oldlaunchparams').empty(); //clearing the old div for composite blue print.
                                                                                 // alert('in test');
@@ -2557,7 +2647,7 @@
                                                                                 $('.dockerinstances').first().append($instancetable);
 
                                                                                 $('#dockerintsancestab thead td').each(function(k, v) {
-                                                                                    if (k > 3)
+                                                                                    if (k > 2)
                                                                                         $(this).detach();
                                                                                 });
                                                                                 $('#dockerintsancestab thead').append('<td>Log Info</td>');
@@ -2570,7 +2660,8 @@
                                                                                         $(this).addClass('rowcustomselected');
                                                                                     });
                                                                                     $(this).find('td').each(function(k1, v1) {
-                                                                                        if (k1 > 3)
+
+                                                                                        if (k1 > 2)
                                                                                             $(this).detach();
                                                                                         //inserting a checkbox to select instance
                                                                                         if (k1 == 0) {
@@ -2589,7 +2680,7 @@
                                                                                 $('#dockerInstanceSelectionTitle').empty().append('Select Instances to pull  "' + dockerreponame + '" into');
                                                                                 $launchDockerInstanceSelector.modal('show');
                                                                                 $('#rootwizard').find("a[href*='tab1']").trigger('click'); //showing first tab.
-                                                                                $('#dockerintsancestab thead').empty().append('<tr><td>Select Instance</td><td>Logo</td><td>Instance Name</td><td>IP Address</td><td>Log</td><td  class="hidden">Add Docker Engine</td></tr>');
+                                                                                $('#dockerintsancestab thead').empty().append('<tr><td>Select Instance</td><td>Instance Name</td><td>IP Address</td><td>Log</td><td  class="hidden">Add Docker Engine</td></tr>');
                                                                                 $('#dockerintsancestab').dataTable({
                                                                                     "bPaginate": false
                                                                                 });
@@ -2618,8 +2709,14 @@
                                                                                         if (blueprintType === 'aws_cf') {
                                                                                             msgStr = 'Stack Id : ' + data.stackId + '. You can view your stack in cloudformation tab';
                                                                                         } else {
-                                                                                            msgStr = 'Instance Id : ' + data.id + '<br/>Instance Logs :- ';
+                                                                                            msgStr = 'Instance Id : ';
+                                                                                            
+                                                                                           // for(var i = 0; i < data.id.length; i++)
+                                                                                                msgStr += data.id.join(',');
+
+                                                                                            msgStr += '<br/>You could monitor logs form the launched Instances.';
                                                                                         }
+
                                                                                         var $msg = $('<div></div>').append('<h3 style="font-size:16px;" class=\"alert alert-success\">Your Selected Blueprint is being Launched, kindly check back in a while.</h3>').append(msgStr);
 
                                                                                         $launchResultContainer.find('.modal-body').empty();
@@ -2629,9 +2726,10 @@
 
                                                                                                 addStackToDom(stack);
                                                                                                
-                                                                                            })
+                                                                                        })
                                                                                             return;
                                                                                         }
+                                                                                       
 
                                                                                         var instanceId = data.id;
                                                                                         var timeout;
@@ -2695,14 +2793,34 @@
                                                                                                 });
                                                                                             }, delay);
                                                                                         }
-                                                                                        pollLogs(lastTimestamp, 0, true);
+                                                                                        //alert('Instances ' + data.id.length);
+                                                                                        if(data.id.length <= 1)
+                                                                                            {
+                                                                                                //data = data[0];
+                                                                                                instanceId = data.id[0];
+                                                                                                //to be called only when there is one instance.
+                                                                                                pollLogs(lastTimestamp, 0, true);
+                                                                                                $.get('../instances/' + data.id[0], function(data) {
+                                                                                                    $('#tabInstanceStatus').hide();
+                                                                                                        addInstanceToDOM(data);
+                                                                                                    // serachBoxInInstance.updateData(data,"add",undefined);
+                                                                                                });
+                                                                                            }
+                                                                                        else{
+                                                                                            for(var j = 0; j < data.id.length;j++){
+                                                                                                $.get('../instances/' + data.id[j], function(data) {
+                                                                                                    $('#tabInstanceStatus').hide();
+                                                                                                        addInstanceToDOM(data);
+                                                                                                    // serachBoxInInstance.updateData(data,"add",undefined);
+                                                                                                });
+                                                                                                if(j >= data.id.length - 1){
+                                                                                                    $('.logsAreaBootstrap').hide();
+                                                                                                }
+                                                                                            }
+                                                                                        }
+                                                                                        
 
-                                                                                        $.get('../instances/' + data.id, function(data) {
-                                                                                            $('#tabInstanceStatus').hide();
-                                                                                            addInstanceToDOM(data);
-                                                                                            // serachBoxInInstance.updateData(data,"add",undefined);
-
-                                                                                        });
+                                                                                        
 
 
                                                                                     }).error(function() {
@@ -3863,10 +3981,13 @@
 
                                                                                             console.log(taskHistories);
 
-
+                                                                                            var history =[];
+                                                                                            for (var j = 0; j < taskHistories.length; j++) {
+                                                                                                history.push(taskHistories[j].buildNumber);
+                                                                                            }
                                                                                             for (var i = 0; i < taskHistories.length; i++) {
                                                                                                 //alert(taskHistories.length);
-                                                                                                
+                                                                                
                                                                                                 
                                                                                                 
                                                                                                 (function(i) {
@@ -3904,8 +4025,8 @@
 
                                                                                                                 console.log(taskHistories[i].buildNumber, "  ---  ", job.nextBuildNumber);
 
-                                                                                                                if (taskHistories[i].buildNumber === job.builds[k].number) {
-
+                                                                                                                //if (taskHistories[i].buildNumber === job.builds[k].number) {
+                                                                                                                if (history.indexOf(job.builds[k].number) != -1) {
                                                                                                                     url = job.builds[k].url;
                                                                                                                     // alert(url);
                                                                                                                     //  var $tdBuildNumber = $('<td/>');
@@ -3919,7 +4040,7 @@
                                                                                                                         $trHistoryRow.find('.build-number').append('<a style="word-break: break-all;" href="' + url + '" title="' + url + '" target="_blank">' + taskHistories[i].buildNumber + '</a>');
                                                                                                                     }, 1500);*/
                                                                                                                     var $tdBuildNumber = $('<td/>').append('<a style="word-break: break-all;" href="' + url + '" title="' + url + '" target="_blank">' + taskHistories[i].buildNumber + '</a>');
-+-                                                                                                                  $trHistoryRow.append($tdBuildNumber);
+                                                                                                              $trHistoryRow.append($tdBuildNumber);
 
 
                                                                                                                     buildFound = true;

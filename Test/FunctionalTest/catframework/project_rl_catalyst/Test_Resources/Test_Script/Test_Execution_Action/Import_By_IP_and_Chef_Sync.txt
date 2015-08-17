@@ -926,6 +926,9 @@ Validate the Jenkins Configuration Setup
     Organization not Selected  ${VaildNotSelectOrg}
 
 Catalyst Create New Jenkins Configuration Setup
+    Clicks on Settings
+    Clicks on DevOps Setup menu
+    Clicks on Jenkins Link
     Clicks on Jenkins New Button
     Select your Orgg Created
     Enters the Reference Name
@@ -933,7 +936,7 @@ Catalyst Create New Jenkins Configuration Setup
     Enters the User ID Name
     Enters the Password
     Clicks on JeSave Button
-    Vaildate the Editof Created Jenkins Reference Name
+    #-Vaildate the Editof Created Jenkins Reference Name
 
 Vaildate the Editof Created Jenkins Reference Name
     Clicks on Edit Button of Reference name
@@ -988,17 +991,16 @@ Catalyst Creation of Jenkins Task in Environment
     Clicks on User Created Organization
     Clicks on User Created BusinessGroup
     Clicks on > Button to your Environment
-    #Clicks on Orchestration Tab
+    Clicks on Orchestration Tab
     Clicks on New Button of Jenkins
     Clicks on Choose Task Type of Jenkins
-    Enter the Task Name of Jenkins
-    #-Select Nodes
-    #-Assign Runlist
-    #-Clicks on >>T Button
+    Enter the Job Name of Jenkins
     Select the Jenkins Server
     Select the Job to Run
-    #Assign Users to Run
+    Select the AutoSync Button
     Clicks on Save Task Button
+    Sleep    4s
+    Clicks on Save of the Success Button
 
 Catlayst Creation of Chef Task in the Environment
     Clicks on New Button of Jenkins
@@ -1037,6 +1039,9 @@ Creation of New Application for your Project and Executing Tasks
     Enters the UI Performance Analysis
     Clicks on Jenkins Save Button
 
+Clicks on Save of the Success Button
+    Click Element    css=div.bootbox.modal.fade.bootbox-alert.in > div.modal-dialog > div.modal-content > div.modal-footer > button.btn.btn-primary
+
 
 Check the Chef Serve is Disabled
     Element Should Be Disabled     id=configname    
@@ -1066,7 +1071,7 @@ Selection of CookBooks
     Click Element    id=btnaddToRunlist
 
 Clicks on New Button of Jenkins
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='l3']/div/div/div/div/div[1]/div/div/button   
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    css=button.btn.btn-minier.btn-primary.createTaskLink
 
 Clicks on ADD APP Button
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='l2']/div/div/div/div[1]/div/div/a
@@ -1141,9 +1146,9 @@ Clicks on Jenknis New Button
 
 
 Clicks on Choose Task Type of Jenkins
-    Click Element    xpath=.//*[@id='s2id_taskType']/a
-    Input Text    xpath=.//*[@id='select2-drop']/div/input     ${TASK TYPE}
-    Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
+    Click Element    css=#s2id_taskType > a > span.select2-arrow
+    Input Text    css=#select2-drop > div > input     ${TASK TYPE}
+    Click Element    css=ul > li:nth-of-type(2) > div
 
 Clicks on Choose Task Type of Chef
     Click Element    xpath=.//*[@id='s2id_taskType']/a
@@ -1151,19 +1156,20 @@ Clicks on Choose Task Type of Chef
     Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
 
 
-Enter the Task Name of Jenkins
-    Input Text    id=jenkinsTaskName    JenkinsTask
+Enter the Job Name of Jenkins
+    Input Text    id=jenkinsTaskName    ${JENTASK NAME}
 
 Enter the Task Name of Chef
     Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    id=chefTaskName    ${CHEF TASKNAME}
 
 
 Select the Job to Run
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='s2id_jobListJenkins']/a/span[1]
-    Input Text     xpath=.//*[@id='select2-drop']/div/input     ${JOB NAME}
-    #Input Text    xpath=.//*[@id='select2-drop']/div/input     Catalyst_Build_Demo
-    #Input Text    xpath=.//*[@id='select2-drop']/div/input     Catalyst_Get
-    #Input Text    xpath=.//*[@id='select2-drop']/div/input     LR-AngularPorlet
+    Click Element    css=#s2id_jobListJenkins > a > span.select2-chosen
+    Input Text     xpath=.//*[@id='select2-drop']/div/input     ${JJOB NAME}
+    Click Element    css=ul > li:first-child > div
+
+Select the AutoSync Button
+    Click Element    css=#radio_yes 
 
 Assign Users to Run
     Click Element    xpath=.//*[@id='jenkinsUserList']/option[text()="Admin"]
@@ -1198,9 +1204,9 @@ Enters the Task Name
     Input Text    id=jenkinsTaskName     ${TASK NAME}
 
 Select the Jenkins Server
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='s2id_jenkinsServerList']/a/span[1]
-    Input Text    xpath=.//*[@id='select2-drop']/div/input    ${JENKINS SERVER}
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
+    Click Element    css=#s2id_jenkinsServerList > a > span.select2-chosen
+    Input Text    css=#select2-drop > div > input    ${JENKINS SERVER}
+    Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
 
 Select Job
     Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
@@ -1213,7 +1219,7 @@ Assign Users
     Click Element    xpath=.//*[@id='jenkinsUserList']/option[3]       #User
 
 Clicks on Save Task Button
-    Click Element    xpath=.//*[@id='content']/div[3]/div/div/div/a[1]
+    Click Element    css=button.btn.btn-primary.btnSaveTask.btn-mini
 
 Clicks on Execute Button
     Click Element    xpath=.//*[@id='tableOrchestration']/tbody/tr/td[4]/a
@@ -1361,7 +1367,7 @@ Select your Orgg Created
     Select From List   id=orgname    ${ORGANIZATION NAME}
 
 Clicks on Jenkins New Button
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element     xpath=.//*[@id='content']/div/div/div/div/div[1]/div/div/a[2]
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element     id=newJen
 
 Clicks on Jenkins Cancel Button
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='btncancel']

@@ -1075,7 +1075,8 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     infraManagerType: 'chef',
                     infraManagerId: req.body.blueprintData.chefServerId,
                     runlist: req.body.blueprintData.runlist,
-                    instanceOS: req.body.blueprintData.instanceOS
+                    instanceOS: req.body.blueprintData.instanceOS,
+                    instanceCount: req.body.blueprintData.instanceCount
                 }
                 blueprintData.instanceData = instanceData;
             } else if (req.body.blueprintData.blueprintType === 'aws_cf') {
