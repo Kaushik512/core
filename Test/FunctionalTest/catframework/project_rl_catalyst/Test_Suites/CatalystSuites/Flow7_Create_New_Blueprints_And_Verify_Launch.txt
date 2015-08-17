@@ -21,11 +21,11 @@ Catalyst Validation of BlueprintPage
 
 
 
-Catalyst CENT OS Blueprint Setup and Create New Blueprint Setup
+Catalyst CENT OS Blueprint Save Setup and Create New Blueprint Setup
     [Tags]       Sanity               Smoke
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
-    Catalyst Choose Template and Save Setup
+    Catalyst Choose Template and Save Setup of CentOS Blueprint
     Sleep    2s
     Catalyst Creation of New Blueprint and Delete
     Catalyst Logout                      
@@ -33,29 +33,12 @@ Catalyst CENT OS Blueprint Setup and Create New Blueprint Setup
     
 
 
-    
-
-
-
-
-
-
-Catalyst CENT OS Launch Blueprint setup
+Catalyst CENT OS Launch Blueprint Setup
     [Tags]       Sanity               Smoke
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
     Sleep    3s
-    Catlayst Workzone and Status Setup          
-    Catalyst Logout                      
-    [Teardown]     Close Browser
-
-
-
-Catalyst CENT OS Verfication and Bootstrap setup
-    [Tags]       Sanity               Smoke
-#    Catalyst Login
-    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
-    Catalyst Verfication and BootStrap Instance
+    CentOS Blueprint Launched and verify IP,Status,Chef,SSH,Stop,BootStrap          
     Catalyst Logout                      
     [Teardown]     Close Browser
 
