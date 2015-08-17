@@ -174,7 +174,7 @@ ${MAT RUNLIST1}            recipe[a],recipe[cron]
 ${MAT OS1}                 ubuntu
 ${UBUNTU MEM}              1016256kB
 ${UBUNTU REC}              recipe[apt],recipe[apt]
-${TEMPLATE TYPENAME}       AppFactory                 #CatAutomatn          
+${TEMPLATE TYPENAME}       SoftwareStack                 #CatAutomatn          
 ${random}                  adarsh
 ${ADD}                     apache2              #tomcat-all
 ${ACTBOOT1}                 Pending
