@@ -427,9 +427,10 @@ CentOS Blueprint Launched and verify IP,Status,Chef,SSH,Stop,BootStrap
     Verify the IP Address of the Instance
     Verfiy the Status of the Instance
     Sleep    30s
-    Clicks on Contreol Panel
-    Sleep    2s
-    Clicks on Back To Instances
+    Clicks on Design
+    Sleep    7s
+    Clicks on Workzone Button
+    Sleep    6s
     Verify the CHEF Client Run
     Verfiy the SSH is Enabled
     Verfiy the STOP Button is Enabled
@@ -515,6 +516,7 @@ Steps To Run Chef Client
     Sleep    5s
     Update the Run List with Cookbook
     Clicks on Update Button of Runlist
+    Sleep    1s
     Clicks on Contreol Panel
     Clicks on Action History
     Checking the BChefClient Run Status
