@@ -7,14 +7,13 @@ Resource           ${CATALYST ACTION}/Organization_Setup_Action_Steps.txt
 Resource           ${CATALYST ACTION}/Import_By_IP_and_Chef_Sync.txt
 Resource           ${COMMON RESOURCES}/catalyst_grid_node.txt
 Resource           ${CATALYST ACTION}/Gallery_setup_TempService_Steps.txt
-Resource           ${CATALYST ACTION}/Design_Create_Launch_Providers_Template.txt
 
 
 *** Test Cases ***
 Catalyst Import CentOS Node By IP
-    [Tags]       Sanity       ps
+    [Tags]       Sanity       Workzone
 #    Catalyst Login
-    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
     Catalyst Import an CentOS Instance By IP
     #Catalyst Verfication of Duplicate Node
     Catalyst Logout
@@ -22,37 +21,19 @@ Catalyst Import CentOS Node By IP
     
 
 Catalyst Chef Client Run-SSH,Verification on the Imported Node
-    [Tags]       Sanity       ps
+    [Tags]       Sanity       Workzone
 #    Catalyst Login
-    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
     Catalyst Import By IP Chef Client run,SSH,Stop,Start
-    Catalyst Verfication of IP,Status,Chef,SSH,MoreInfo and frm Ctrlpanel
+    #Catalyst Verfication of IP,Status,Chef,SSH,MoreInfo and frm Ctrlpanel
     Catalyst Logout
     [Teardown]     Close Browser
-
-
-Catalyst Edit the Instance Name of Inported Instance
-    [Tags]       Sanity       ps
-#    Catalyst Login
-    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
-    Catalyst Check and Edit the Instance Name
-    Catalyst Logout
-    [Teardown]     Close Browser
-
-Catalyst Deletes Imported Centos Node
-    [Tags]       Sanity       ps
-#    Catalyst Login
-    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
-    Catalyst deletes Centos Imported node 
-    Catalyst Logout
-    [Teardown]     Close Browser
-
 
 
 Catalyst Import Ubuntu Node By IP
-    [Tags]       Sanity       ps
+    [Tags]       Sanity       Workzone
 #    Catalyst Login
-    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
     Catalyst Import an Ubuntu Instance By IP
     #Catalyst Verfication Ubuntu Duplicate Node
     Catalyst Logout
@@ -61,28 +42,146 @@ Catalyst Import Ubuntu Node By IP
 
 
 Catalyst Chef Client Run-SSH,Verification on the Ubuntu Imported Node
-    [Tags]       Sanity       ps
+    [Tags]       Sanity       Workzone
 #    Catalyst Login
-    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
     Catalyst Import By IP Chef Client run,SSH,Stop,Start on Ubuntu Instance
-    Catalyst Verfication of IP,Status,Chef,SSH,MoreInfo on UbuntuIns frm Ctrlpanel
+    #Catalyst Verfication of IP,Status,Chef,SSH,MoreInfo on UbuntuIns frm Ctrlpanel
     Catalyst Logout
     [Teardown]     Close Browser
 
 
-Catalyst Edit the Ubuntu Instance Name of Inported Instance
-    [Tags]       Sanity       ps
+
+Catalyst new Jenkins Configuration setup
+    [Tags]       Sanity        Settings
 #    Catalyst Login
-    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
-    Catalyst Check and Edit the Ubuntu Instance Name
-    Catalyst Logout
+    Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
+    Catalyst Create New Jenkins Configuration Setup          
+    Catalyst Logout                      
     [Teardown]     Close Browser
 
 
-Catalyst Deletes Ubuntu Imported node
-    [Tags]       Sanity       ps
+
+Catalyst Jenkins Task Creation and Execution
+    [Tags]       Sanity               Workzone
 #    Catalyst Login
-    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
-    Catalyst deletes Ubuntu Imported node
-    Catalyst Logout
+    Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
+    Catalyst Creation of Jenkins Task in Environment
+    Catalyst Execution of the Jenkins Task in Envrnment
+    Catalyst checks the Jenkins task history
+    Catalyst Logout                      
     [Teardown]     Close Browser
+
+
+Catalyst Chef task creation and Execution
+    [Tags]       Sanity               Chef
+    Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
+    Catalyst creation of Chef Task
+    Catalyst execution of Chef Task
+    Catalyst checks the Chef task history
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+#-Catalyst Execution of Tasks by Creating the App
+    #-[Tags]       Sanity               Smoke
+#    Catalyst Login
+    #-Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    #-Creation of New Application for your Project and Executing Tasks         
+    #-Catalyst Logout                    
+    #-[Teardown]     Close Browser
+
+
+#------------------------Ubuntu Node Import
+
+
+#Catalyst Edit the Instance Name of Inported Instance
+#    [Tags]       Sanity       Workzone
+#    Catalyst Login
+#    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+#    Catalyst Check and Edit the Instance Name
+#    Catalyst Logout
+#    [Teardown]     Close Browser
+
+
+
+#Catalyst Verify the CentOS Instance Deleted from Chef Server
+#    [Tags]       Sanity       Workzone
+#    Catalyst Login
+#    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+#    Catalyst Instance Deleted From Chef Environment
+#    Catalyst Logout
+#    [Teardown]     Close Browser
+
+
+#Catalyst CentOS Instance Deleted only from Catalyst not from Chef Server
+#    [Tags]       Sanity       Workzone
+#    Catalyst Login
+#    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+#    Catalyst Delete the Node only From catalyst
+#    Catalyst Logout
+#    [Teardown]     Close Browser  
+    
+
+
+
+
+
+
+
+
+#Catalyst Edit the Ubuntu Instance Name of Inported Instance
+#    [Tags]       Sanity       Workzone
+#    Catalyst Login
+#    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+#    Catalyst Check and Edit the Ubuntu Instance Name
+#    Catalyst Logout
+#    [Teardown]     Close Browser
+
+
+#Catalyst Verify the Ubuntu Instance Deleted from Chef Server
+#    [Tags]       Sanity       Workzone
+#    Catalyst Login
+#    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+#    Catalyst Ubuntu Instance Deleted From Chef Environment
+#    Catalyst Logout
+#    [Teardown]     Close Browser
+
+
+#Catalyst Ubuntu Instance Deleted only from Catalyst not from Chef Server
+#    [Tags]       Sanity       Workzone
+#    Catalyst Login
+#    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+#    Catalyst Delete the Ubuntu Node only From Catalyst
+#    Catalyst Logout
+#    [Teardown]     Close Browser  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

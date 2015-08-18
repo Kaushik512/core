@@ -65,7 +65,7 @@ ${AlreadyExistOrg}            This entry is already registered. Try another?
 ${IPTEXT}                   undefined
 ${STATS}                    pending
 ${STATSYY}                  Pending
-${STATS RUN}                running
+${STATUS RUN}                running
 ${VAR}            54.75.4.3
 ${PRINTSTMT}            The Instance has an IP Address
 ${SATSS}                         success
@@ -82,7 +82,7 @@ ${SERVER TIME COOKBOOK}            starter
 ${DISABLED}           disabled
 ${CENT OS}            Cent OS
 ${UBUNTU OS}            ubuntu
-${SUITS}                stopped
+${STOPD}                stopped
 ${UserName}             root
 ${RUNLIST}              recipe[apache2]
 ${KEYPAIRNAME}           cat_instances
@@ -122,14 +122,16 @@ ${APPICON}                    ${ROOTPATH}//Images//rel.jpg
 ${TEMPLTYPEICON}              ${ROOTPATH}//Images//index.jpg           
 ${APACHEIMG}                  ${ROOTPATH}//Images//apache.jpg
 
-${JENKINSNAME}            JenkinsTAT
-${JENKINS URL}               http://54.68.204.110:9091/
+
+${JENTASK NAME}            JenkinsJob
+${JENKINSNAME}            JenkinsRL
+${JENKINS URL}               http://jenkins.rlcatalyst.com
 ${JENKINS USERID}         admin    
 ${JENKINS PASSWORD}       admin@RL123
 ${TASK NAME}              Task1
-${JENKINS SERVER}         Jenkins
+${JENKINS SERVER}         JenkinsRL
 ${JENKINS EDIT}           Jenkins
-#${JOB NAME}               catalyst_Get
+${JJOB NAME}               testjob
 ${RECIPE}                  recipe[apt]     
 ${RECIPE1}                 recipe[apt]
 ${Template Type}           Chef
@@ -172,14 +174,14 @@ ${MAT RUNLIST1}            recipe[a],recipe[cron]
 ${MAT OS1}                 ubuntu
 ${UBUNTU MEM}              1016256kB
 ${UBUNTU REC}              recipe[apt],recipe[apt]
-${TEMPLATE TYPENAME}       AppFactory                 #CatAutomatn          
+${TEMPLATE TYPENAME}       SoftwareStack                 #CatAutomatn          
 ${random}                  adarsh
 ${ADD}                     apache2              #tomcat-all
 ${ACTBOOT1}                 Pending
 ${ACTBOOT2}                 Success
 ${RUN}                       running
 ${AUTHN}                    Pem File 
-#${NAME}                     Bootstrap
+${NAME}                     Bootstrap
 ${DUP MSG}                  An Instance with the same IP already exists.
 ${NAME1}                    Chef-Client-Run
 ${NAME2}                    SSH-Shell
@@ -252,6 +254,7 @@ ${USER}                        superadmin
 ${COOKBOOK NAME1}              apache2                #service_apache       #apache2
 ${SERVICE NAME1}               ApacheServce
 ${ValidEditVMImage}            Windows 2008
+${COOKBOOK NAME2}              tomcat-all
 
 
 #${ValidateNotExistLDAP}             0564ghs

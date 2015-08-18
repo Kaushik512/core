@@ -207,7 +207,7 @@ module.exports.setRoutes = function(socketIo) {
             if (err) {
                 logger.debug("Error while getElementBytting instance!");
             }
-            logger.debug("Got instance: ",JSON.stringify(instances));
+            logger.debug("Got instance: ", JSON.stringify(instances));
             if (instances.length > 0) {
                 AWSProvider.getAWSProviders(function(err, aProvider) {
                     if (err) {
@@ -239,37 +239,39 @@ module.exports.setRoutes = function(socketIo) {
                                     });
                                     logger.debug("AWS ec2: ", JSON.stringify(ec2));
                                     for (var i = 0; i < instances.length; i++) {
-                                        if(instances[i].platformId != 'null' || typeof instances[i].platformId != 'undefined' || instances[i].platformId != null){
+                                        if (instances[i].platformId) {
                                             instanceIds.push(instances[i].platformId);
                                         }
                                     }
                                     logger.debug("All instance Ids: ", JSON.stringify(instanceIds));
-                                    ec2.describeInstances(instanceIds, function(err, awsInstances) {
-                                        if (err) {
-                                            logger.debug("Failed to describe Instances from AWS!", err);
-                                        }
-                                        logger.debug("Described Instances from AWS: ",JSON.stringify(awsInstances));
-                                        if (awsInstances) {
-                                            var reservations = awsInstances.Reservations;
-                                            for (var x = 0; x < reservations.length; x++) {
-                                                if (instances[x].instanceState === reservations[x].Instances[0].State.Name) {
-                                                    logger.debug("Status matched......");
-                                                } else {
-                                                    logger.debug("Status does not matched.....", instances[x]._id);
-                                                    instancesDao.updateInstanceState(instances[x]._id, reservations[x].Instances[0].State.Name, function(err, data) {
-                                                        if (err) {
-                                                            logger.error("Failed to updateInstance State!", err);
-                                                            callback(err, null);
-                                                            return;
-                                                        }
+                                    if (instanceIds.length > 0) {
+                                        ec2.describeInstances(instanceIds, function(err, awsInstances) {
+                                            if (err) {
+                                                logger.debug("Failed to describe Instances from AWS!", err);
+                                            }
+                                            logger.debug("Described Instances from AWS: ", JSON.stringify(awsInstances));
+                                            if (awsInstances) {
+                                                var reservations = awsInstances.Reservations;
+                                                for (var x = 0; x < reservations.length; x++) {
+                                                    if (instances[x].instanceState === reservations[x].Instances[0].State.Name) {
+                                                        logger.debug("Status matched......");
+                                                    } else {
+                                                        logger.debug("Status does not matched.....", instances[x]._id);
+                                                        instancesDao.updateInstanceState(instances[x]._id, reservations[x].Instances[0].State.Name, function(err, data) {
+                                                            if (err) {
+                                                                logger.error("Failed to updateInstance State!", err);
+                                                                callback(err, null);
+                                                                return;
+                                                            }
 
-                                                        logger.debug("Exit updateInstanceState: ");
-                                                    });
+                                                            logger.debug("Exit updateInstanceState: ");
+                                                        });
+                                                    }
                                                 }
                                             }
-                                        }
 
-                                    });
+                                        });
+                                    }
                                 });
                             }
                         });
