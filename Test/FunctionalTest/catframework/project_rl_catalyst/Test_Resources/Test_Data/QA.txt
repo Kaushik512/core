@@ -254,6 +254,7 @@ ${USER}                        superadmin
 ${COOKBOOK NAME1}              apache2                #service_apache       #apache2
 ${SERVICE NAME1}               ApacheServce
 ${ValidEditVMImage}            Windows 2008
+${COOKBOOK NAME2}              tomcat-all
 
 
 #${ValidateNotExistLDAP}             0564ghs
