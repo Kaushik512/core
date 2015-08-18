@@ -1034,7 +1034,7 @@ Verfiy the Ubuntu Stopped SSH is Disabled after Updation
     Wait Until Keyword Succeeds    1 minute     1 seconds    Element Should Be Visible    xpath=.//*[@id='controlPanelContainer']/div/div/ul/li[contains(.,"${NEW UBUNTU BLUPRNT}")]/div/div/div/div/div/div[4]/div[4]/a[@class='cpTop sshTerminalBtn isStopedInstance sshIcondisable']
 
 Checking THe BootStrpa Status
-    Sleep    5 minute
+    Sleep    7 minute
     Clicks on Back To Instances
     Sleep    5s
     Clicks on Contreol Panel
