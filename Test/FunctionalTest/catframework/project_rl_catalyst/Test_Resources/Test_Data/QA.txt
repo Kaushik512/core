@@ -82,7 +82,7 @@ ${SERVER TIME COOKBOOK}            starter
 ${DISABLED}           disabled
 ${CENT OS}            Cent OS
 ${UBUNTU OS}            ubuntu
-${SUITS}                stopped
+${STOPD}                stopped
 ${UserName}             root
 ${RUNLIST}              recipe[apache2]
 ${KEYPAIRNAME}           cat_instances
