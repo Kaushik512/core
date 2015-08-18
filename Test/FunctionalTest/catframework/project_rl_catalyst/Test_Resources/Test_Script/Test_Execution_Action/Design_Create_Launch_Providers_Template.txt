@@ -532,8 +532,10 @@ Steps to Run SSH
     Upload the Catalyst PEM File
     Clicks on Terminlal Submit Button
     Close the SSH Terminal
+    Sleep    4s
     Clicks on Contreol Panel
     Clicks on Action History
+    Sleep    7s
     Verfify the status of SSH Shell
     Clicks Back Burtton of Instances
     
