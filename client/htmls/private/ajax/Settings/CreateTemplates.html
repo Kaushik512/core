@@ -38,10 +38,12 @@
                                           </div>
                                        </div>
                                     </div>
-                                   
+                                    
+         
+
                                        <div class="col-lg-6 col-md-6" style="margin-top:5px;">
                                           <label for="">Template Type:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
-                                          <select id="templatetypename" class="choosetemplateType width-100" sourcepath="16"  cdata="catalyst" datapath="masterjson.rows.row" onChange="if($(this).val().indexOf('Docker') >= 0) {$('.forDocker').show(); $('.notforDocker').hide();}else {$('.forDocker').hide();$('.notforDocker').show();}">
+                                          <select id="templatetypename" ignoreoption="OSImage" class="choosetemplateType width-100" sourcepath="16"  cdata="catalyst" datapath="masterjson.rows.row" onChange="if($(this).val().indexOf('Docker') >= 0) {$('.forDocker').show(); $('.notforDocker').hide();$('.notCFT').hide();}else {$('.forDocker').hide();$('.notforDocker').show();$('.forCFT').hide();}if($(this).val().indexOf('CloudFormation') >=0){$('.forDocker').hide(); $('.notforDocker').hide(); $('.forCFT').show();}">
                                           </select>
                                        </div>
                                        <div class="col-lg-6 col-md-6" hidden>
@@ -49,20 +51,9 @@
                                           <label id="msgOrgName" style="display:none;color:red;float:right;">Required</label>
                                           <input name="ctl00$MainContent$orgname" value="https://" id="providertemplatepath" class="form-control" type="text"><span data-val-controltovalidate="orgname" id="MainContent_Req_orgname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility:hidden;">Required</span>
                                        </div>
-                                       <div  class="col-lg-6 col-md-6" style="margin-top:5px;">
-                                          <div class="forDocker">
-                                             <label for="">
-
-                                             Select Docker Repo <span style="color:Red;" class="control-label">&nbsp;*</span>
-                                             </label>
-                                             
-                                             <select id="dockerreponame" class="choosedockerRepo width-100" sourcepath="18" datapath="masterjson.rows.row"  cdata="catalyst">
-                                             </select>
-                                          </div>
-                                          
-                                       </div>
+                                       
                                     
-                                       <div class="col-lg-6 col-md-6">
+                                       <div class="col-lg-6 col-md-6" style="margin-top:5px;">
 
                                                         <label for="category">Organization:<span style="color:Red;" class="control-label">&nbsp;*</span>
                                                         </label>
@@ -72,16 +63,30 @@
                                                         </select>
 
                                                     </div>
-                                       <div class="col-lg-6 col-md-6 margintop15">
-                                          <div class="notforDocker">
+
+                                       <div  class="col-lg-6 col-md-6 forDocker" style="margin-top:16px;">
+                                          
+                                             <label for="">
+
+                                             Select Docker Repo <span style="color:Red;" class="control-label">&nbsp;*</span>
+                                             </label>
+                                             
+                                             <select id="dockerreponame" class="choosedockerRepo width-100" sourcepath="18" datapath="masterjson.rows.row"  cdata="catalyst">
+                                             </select>
+                                          
+                                          
+                                       </div>
+
+                                       <div class="col-lg-6 col-md-6 margintop15 notforDocker notCFT">
+                                          
                                              <label for="">Chef Server <span style="color:Red;" class="control-label">&nbsp;*</span></label>
                                           
                                           <select id="configname" class="choosechefserver width-100" sourcepath="10" datapath="masterjson.rows.row"  cdata="catalyst" onchange="loadCookbookSelectorControl('configname');" >
                                           </select>
-                                          </div>
+                                          
                                        </div>
 
-                                       <div class="col-lg-6 col-md-6" style="margin-top:20px">
+                                       <div class="col-lg-6 col-md-6 notforDocker forCFT" style="margin-top:20px">
                                                 <div class="smart-forms">
                                                    <label>Template File:</label>
                                                    <!-- <span class="templateFile"data-original-title='Jenkins Log' data-placement='top' rel='tooltip'><i class='fa fa-question'></i>
@@ -95,21 +100,21 @@
                                              </div>
                                        
                                     
-                                       <div class="col-lg-12 col-md-12">
-                                          <div class="col-lg-6 col-md-6" style="margin-top:5px;">
-                                             <div class="forDocker">
+                                       
+                                          <div class="col-lg-6 col-md-6 forDocker" style="margin-top:16px">
+                                             
                                                 <label for="">
                                                 Title
                                                 <label id="msgOrgName2" style="display:none;color:red;float:right;">Required</label></label>
                                              
                                              
                                                 
-                                                   <input name="ctl00$MainContent$costcode" value="" id="dockercontainerstitle" class="form-control" type="text" datavalues="dockercontainerstitle" targetelement="dockercontainerpathstitle"  show="imgCheck" style="min-width:105px;"  maxlength="13">
+                                                   <input name="ctl00$MainContent$costcode" value="" id="dockercontainerstitle" class="form-control" type="text" datavalues="dockercontainerstitle" targetelement="dockercontainerpathstitle"  show="imgCheck" maxlength="13">
                                                 
                                              
-                                             </div>
+                                             
                                           </div>
-                                          <div class="col-lg-6 col-md-6 forDocker" style="margin-top:5px;">
+                                          <div class="col-lg-6 col-md-6 forDocker" style="margin-top:16px;">
                                              <label for="">
                                              Add  Docker Repo Path
                                              <label id="msgOrgName2" style="display:none;color:red;float:right;">Required</label>
@@ -123,11 +128,11 @@
                                                 </div>
                                              
                                           </div>
-                                       </div>
+                                       
                                     
                                  
                                  
-                                 <div class="col-lg-12 col-md-12 notforDocker" style="margin-top:25px">
+                                 <div class="col-lg-12 col-md-12 notforDocker notCFT" style="margin-top:25px">
                                  <label for="">Chef Server Objects List:</label>
                                  <div class="row notforDocker" style="margin-top:15px">
                                     <div style="margin-top:-38px;margin-left:216px;" ><a style="font-size:14px!important" href="#modalForHelp" data-toggle="modal"><i class="fa fa-question"></i>&nbsp;Help</a>
@@ -318,10 +323,10 @@
 </div>
                                  <div class="col-lg-12 col-md-12 forDocker">
                                  <div class="col-lg-6 col-md-6 forDocker  noleftpadding" style="margin-top:15px">
-                                 <div id="dockercontainerpathstitle" class="input-group from-control col-md-12 forDocker" style="height:200px;overflow-y:auto;min-width:105px;"  cdata="catalyst" ctype="list" csource="dockercontainerstitle" ></div>
+                                 <div id="dockercontainerpathstitle" class="input-group from-control col-md-12 forDocker" style="height:20px;overflow-y:auto;min-width:105px;"  cdata="catalyst" ctype="list" csource="dockercontainerstitle" ></div>
                                  </div>
                                  <div class="col-lg-6 col-md-6 forDocker" style="margin-top:15px"> 
-                                 <div id="dockercontainerpaths" class="input-group from-control col-md-12 forDocker" style="height:200px;overflow-y:auto;"  cdata="catalyst" ctype="list" csource="dockercontainers"></div>
+                                 <div id="dockercontainerpaths" class="input-group from-control col-md-12 forDocker" style="height:20px;overflow-y:auto;"  cdata="catalyst" ctype="list" csource="dockercontainers"></div>
                                  </div>
                                  </div>
                                  
@@ -464,6 +469,11 @@
    $(".choosedockerRepo").select2();
    $(".choosechefserver").trigger('change').select2();
    $("select").select2();
+    /*$('.forDocker').show();
+    $('.notforDocker').hide();
+    $('.notCFT').hide();
+    $('.notForSSOS').hide();*/
+
    //isUserTypeSuperAdmin();
    });
 
@@ -724,6 +734,8 @@
    //Fix for default first item selection and cookbook load. - Vinood CAT-88
    $('#configname').trigger('change');
    $('#templatetypename').trigger('change');
+
+   
    
    // $chefItemdiv.find('.searchoptionforCookbooks').keyup(function(e){
    //      var searchText = $(this).val();

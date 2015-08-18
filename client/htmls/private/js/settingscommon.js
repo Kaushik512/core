@@ -1149,7 +1149,7 @@ function readform(formID) {
                         _rowid = item['rowid'];
                         $.each(item, function(k, v) { //columns
                             //console.log('1 k:' + k + ' 1 v :' + JSON.stringify(v));
-                            if (k == curSelect.attr("id")) {
+                            if (k == curSelect.attr("id") && curSelect.attr("ignoreoption") != v) {
                                 curSelect.append('<option value="' + v + '" rowid = "' + _rowid + '">' + v + '</option>');
                             }
                         });

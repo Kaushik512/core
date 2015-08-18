@@ -2350,9 +2350,11 @@
                                                                                         // tagLabel = '<span>Tags&nbsp;</span';
                                                                                         tagLabel = '';
                                                                                         //alert(JSON.stringify(data[i]));
-                                                                                    } else if (data[i].templateType == "CloudFormation") {
+                                                                                    } else if (data[i].templateType == "cft") {
                                                                                         //$selectVer.hide();
+                                                                                       // $selectVerEdit.hide();
                                                                                         $selectVerEdit.hide();
+                                                                                        
 
                                                                                     } else {
                                                                                         $selectVer = $('<select style="padding:1px;padding-left:5px;"></select>').addClass('blueprintVersionDropDown').attr('data-blueprintId', data[i]._id);
@@ -2753,7 +2755,7 @@
                                                                                            // for(var i = 0; i < data.id.length; i++)
                                                                                                 msgStr += data.id.join(',');
 
-                                                                                            msgStr += '<br/>You could monitor logs form the launched Instances.';
+                                                                                            msgStr += '<br/>You can monitor logs from the Launched Instances.';
                                                                                         }
 
                                                                                         var $msg = $('<div></div>').append('<h3 style="font-size:16px;" class=\"alert alert-success\">Your Selected Blueprint is being Launched, kindly check back in a while.</h3>').append(msgStr);
@@ -3762,7 +3764,7 @@
                                                                                     });
                                                                                 } else {
                                                                                     //if job type is jenkins show job url..
-                                                                                    var jobURLS = data[i].taskConfig.jobURL;
+                                                                                    var jobURLS = 'http://' + data[i].taskConfig.jobURL;
 
                                                                                     if (jobURLS) {
                                                                                         var $tdNodeList = $('<td style="vertical-align:inherit;text-align:center;"></td>').append('<span>&nbsp;<a title="' + jobURLS + '" href="' + jobURLS + '" target="_blank" style="word-break: break-all;text-decoration:none"><img style="width:20px;" src="img/joburl.jpg"></a></span>');
@@ -4064,7 +4066,7 @@
 
                                                                                                                 if (taskHistories[i].buildNumber === job.builds[k].number) {
 
-                                                                                                                    url = job.builds[k].url;
+                                                                                                                    url = 'http://' + job.builds[k].url;
                                                                                                                     
                                                                                                                     
                                                                                                                     var $tdBuildNumber = $('<td/>').append('<a style="word-break: break-all;" href="' + url + '" title="' + url + '" target="_blank">' + taskHistories[i].buildNumber + '</a>');
