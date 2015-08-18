@@ -19,6 +19,16 @@ Resource           ${CATALYST ACTION}/Users_Setup_With_New_Users_and_Teams.txt
 *** Variables ***
 
 *** Keywords ***
+Version Number and the Jenkins Buildnumber
+    Open Browser             ${ENVIRONMENT SERVER}     ${BROWSER TYPE}
+    Sleep    3s   
+    Store the Buildnumber
+
+
+Store the Buildnumber
+    ${JEN BUILDNUM}=    Get Text    xpath=.//*[@id='login']/footer/div[2]/p/span
+    Log    ${JEN BUILDNUM}
+
 
 Catalyst Login
     Browser is opened to login catalyst
@@ -330,7 +340,7 @@ Verfiy that EditedEnvironment is created
     
 Create New Business Group                                                        
     Catalyst creates new business group1
-    Catalyst creates new business group2
+    #Catalyst creates new business group2
 
 Catalyst creates new business group1    
     Clicks on Settings
@@ -404,7 +414,7 @@ Clicks on Save button to save the Business group details
 
 Create New Projects                                                                  
      Creates project 1   ${PROJECT NAME1}
-     Creates project 2   ${PROJECT NAME2}
+     #Creates project 2   ${PROJECT NAME2}
 
 
  

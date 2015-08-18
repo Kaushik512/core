@@ -39,6 +39,32 @@ Catalyst User New Template Creation
     Select CookBooks
     Clicks on Save Button in Template Page
 
+Catalyst Create New Cloud Formation Template
+    Clicks on Settings
+    Clicks on Gallery Setup
+    Clicks on Templates
+    Clicks on New Button to create template
+    Enters Cloud Formation Tempalte Name
+    Chooses Icon
+    Choose Template Type for Cloud formation
+    Select Created organization
+    Upload Template File
+    Clicks on Save Button in Template Page
+
+	
+Choose Template Type for Cloud formation
+    Click Element    css=#s2id_templatetypename > a > span.select2-chosen	
+    Sleep    1s
+    Input Text    css=#select2-drop > div > input    ${CLOUD TEMPTYPE}
+    Sleep    1s
+    Click Element    css=ul > li:first-child > div
+
+Enters Cloud Formation Tempalte Name
+    Input Text    id=templatename    ${CLOUD TEMPNAME}
+
+
+Upload Template File
+    Choose File    id=template    ${TEMPLATE FILE}	
 
 Clicks on Template Type
     Click Element    xpath=//a[contains(text(),'Template Types')]
