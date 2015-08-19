@@ -11,9 +11,8 @@ module.exports.setRoutes = function(app, verificationFunc) {
         var username = "admin";
         var password = "ADMIN_PASS";
         var tenantName = "admin";
-        var tenantId = "64371fa53f804417900e32c367d800b9"
 
-	    var openstackconfig = {host: host,username: username, password: password, tenantName: tenantName, tenantId: tenantId};
+	    var openstackconfig = {host: host,username: username, password: password, tenantName: tenantName};
         callback(null,openstackconfig);
     }
 
