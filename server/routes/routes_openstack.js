@@ -151,14 +151,14 @@ module.exports.setRoutes = function(app, verificationFunc) {
            
             var json= "{\"server\": {\"name\": \"server-testa\",\"imageRef\": \"0495d8b6-1746-4e0d-a44e-010e41db0caa\",\"flavorRef\": \"2\",\"max_count\": 1,\"min_count\": 1,\"networks\": [{\"uuid\": \"a3bf46aa-20fa-477e-a2e5-e3d3a3ea1122\"}],\"security_groups\": [{\"name\": \"default\"}]}}";
 
-	        openstack.createServer(req.params.tenantId,json,function(err,securityGroups){
+	        openstack.createServer(req.params.tenantId,json,function(err,data){
 	        	if(err){
-	                 logger.error('openstack securityGroups fetch error', err);
+	                 logger.error('openstack createServer error', err);
 	                 res.send(500,err);
 	                 return;
 	        	}
 	            
-				res.send(securityGroups);
+				res.send(data);
 			});
 	    });
          
