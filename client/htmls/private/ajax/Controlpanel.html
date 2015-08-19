@@ -326,6 +326,7 @@
                     
                    </div>
 
+
                    </div>
                    </div>
                    </div>
@@ -347,6 +348,7 @@
                      
                     </tbody>
                   </table>
+
 
                 </div>
 
@@ -3332,6 +3334,7 @@ $(document).ready(function() {
 
  $('#newAppSeries').click(function(e) {
      $('#appURLForm').trigger("reset");
+     $('#modalAppNameURL').find('.modal-title').html('Add Application URL').css('margin-left','18px');
  });
 
  function createAppUrlTableRow(appUrlData) {
@@ -3355,7 +3358,7 @@ $(document).ready(function() {
      $tdAction.find('.appUrlEditLink').click(function() {
          var appUrlData = $row.data('appUrlData');
          var $editModal = $('#modalAppNameURL');
-
+         $('#modalAppNameURL').find('.modal-title').html('Edit Application URL').css('margin-left','18px');
          $editModal.modal('show');
          $editModal.find('.appName').val(appUrlData.name);
          $editModal.find('.appURL').val(appUrlData.url);
