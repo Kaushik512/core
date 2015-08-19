@@ -767,7 +767,9 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             for(var i =0; i< nodes.Reservations.length; i++){
                 var instance = {
                     "instance": nodes.Reservations[i].Instances[0].InstanceId,
-                    "privateIp": nodes.Reservations[i].Instances[0].PrivateIpAddress
+                    "privateIp": nodes.Reservations[i].Instances[0].PrivateIpAddress,
+                    "publicIp": nodes.Reservations[i].Instances[0].PublicIpAddress,
+                    "privateDnsName": nodes.Reservations[i].Instances[0].PrivateDnsName
                 };
                 nodeList.push(instance);
             }
