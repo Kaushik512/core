@@ -92,14 +92,15 @@ Catalyst Verfication Ubuntu Duplicate Node
 
 
 
-Catalyst Import By IP Chef Client run,SSH,Stop,Start
+Catalyst Import By IP Chef Client Run on CentOS Instance
     Clicks on Settings
     Clicks on Workzone Button
     Sleep    2s
     Clicks on Button to your > Environment
     Sleep    5s
-    Click on Chef ClientRun    
-    Clicks on CoookBooks
+    Click on Chef ClientRun
+    Sleep    8s 
+    #Clicks on CoookBooks
     Select the Apache2 CookBook
     Clicks on ADD To RunList
     Clicks on Update Button Of the a Runlist
@@ -110,6 +111,15 @@ Catalyst Import By IP Chef Client run,SSH,Stop,Start
     Verfiy the Chef Client Status after update
     Clicks on Back To Instances
     Sleep    2s
+
+
+
+Catalyst Import By IP perform SSH on CentOS Instance
+    Clicks on Settings
+    Clicks on Workzone Button
+    Sleep    2s
+    Clicks on Button to your > Environment
+    Sleep    5s
     Clicks on SSH for instance
     Sleep    3s
     Input the Usrname in Terminal
@@ -126,8 +136,14 @@ Catalyst Import By IP Chef Client run,SSH,Stop,Start
     Clicks on Back To Instances
 
 Catalyst Verfication of IP,Status,Chef,SSH,MoreInfo and frm Ctrlpanel
+    Clicks on Settings
+    Clicks on Workzone Button
+    Sleep    2s
+    Clicks on Button to your > Environment
+    Sleep    5s
     Verfication of IP Address from card view
     Verfication of status from card view
+    Sleep    3s
     Verfication of chefclient run from card view
     Verfication of SSH from card view
     Verification of Stop toggler disabled
@@ -144,14 +160,15 @@ Catalyst Verfication of IP,Status,Chef,SSH,MoreInfo and frm Ctrlpanel
     Clicks on Back To Instances
 
 
-Catalyst Import By IP Chef Client run,SSH,Stop,Start on Ubuntu Instance
+Catalyst Import By IP Ubuntu Instance Chef Client Run
     Clicks on Settings
     Clicks on Workzone Button
     Sleep    2s
     Clicks on Button to your > Environment
     Sleep    5s
-    Click on Chef ClientRun of Ubuntu Instance   
-    Clicks on CoookBooks
+    Click on Chef ClientRun of Ubuntu Instance
+    Sleep    8s
+    #Clicks on CoookBooks
     Select the tomcatall CookBook
     Clicks on ADD To RunList
     Clicks on Update Button Of the a Runlist
@@ -162,6 +179,14 @@ Catalyst Import By IP Chef Client run,SSH,Stop,Start on Ubuntu Instance
     Verfiy the Chef Client Status after update
     Clicks on Back To Instances
     Sleep    2s
+
+
+Catalyst Import By IP Perform SSH on Ubuntu Instance
+    Clicks on Settings
+    Clicks on Workzone Button
+    Sleep    2s
+    Clicks on Button to your > Environment
+    Sleep    5s  
     Clicks on SSH for ubuntu instance
     Sleep    3s
     Input the Ubuntu Usrname in Terminal
@@ -179,6 +204,11 @@ Catalyst Import By IP Chef Client run,SSH,Stop,Start on Ubuntu Instance
 
 
 Catalyst Verfication of IP,Status,Chef,SSH,MoreInfo on UbuntuIns frm Ctrlpanel
+    Clicks on Settings
+    Clicks on Workzone Button
+    Sleep    2s
+    Clicks on Button to your > Environment
+    Sleep    5s
     Verfication of IP Adres ubuntu from card view
     Verfication of status from card view
     Verfication of chefclient run from card view
@@ -389,6 +419,7 @@ Verfication of status from card view
 
 Verfication of chefclient run from card view
     Element Should Be Visible    xpath=.//*[@id='divinstancescardview']/div/div/ul/li/div/div/div[1]/div/div/div[4]/div[1]/a[@class='chefClientRunlistImage actionbuttonChefClientRun instance-bootstrap-list-image']
+
 
 Verfication of SSH from card view
     Element Should Be Visible    xpath=.//*[@id='divinstancescardview']/div/div/ul/li/div/div/div[1]/div/div/div[4]/div[2]/a[@class='sshIcon devTOP']
@@ -653,7 +684,13 @@ Verify the Operation as Chef-Client-Run
     Element Should Contain    xpath=.//*[@id='tableactionHistory']/tbody/tr[2]/td[1]    ${NAME1}
 
 Verfiy the Chef Client Status after update
-    Sleep    1 minute
+    Sleep   3 minute
+    Clicks on Back To Instances
+    Sleep    1s
+    Clicks on Contreol Panel
+    Sleep    1s
+    Clicks on Action History
+    Sleep    3s
     ${STAGE}=    Get Element Attribute    xpath=.//*[@id='tableactionHistory']/tbody/tr[2]/td[2]/img@title
     Log    ${STAGE}
     Log    ${ACTBOOT2}
@@ -681,10 +718,10 @@ Clicks on Button to your > Environment
 
 
 Click on Chef ClientRun
-    Click Element    xpath=//div[@class='domain-roles-caption'][//div[//span[text()='${IP Centos}']]]/div[4]/div[1]
+    Click Element    xpath=//div[@class='domain-roles-caption'][//div[//span[text()='${IP Centos}']]]/div[4]/div[1]/a
 
 Click on Chef ClientRun of Ubuntu Instance   
-    Click Element    xpath=//div[@class='domain-roles-caption'][//div[//span[text()='${IP Ubuntu}']]]/div[4]/div[1]
+    Click Element    xpath=//div[@class='domain-roles-caption'][//div[//span[text()='${IP Ubuntu}']]]/div[4]/div[1]/a
 
 
 
@@ -696,10 +733,10 @@ Clicks on CoookBooks
 
 Select the Apache2 CookBook
     Sleep    5s
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[text()='apache2']
+    Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[text()='${COOKBOOK NAME1}']
 
 Select the tomcatall CookBook
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[text()='tomcat-all']
+    Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[text()='${COOKBOOK NAME2}']
 
 
 Clicks on ADD To RunList
@@ -987,32 +1024,125 @@ Enters New Ubun Operating System Template Name
     Input Text    id=templatename    ${TEMP NAMEUBUN}        
 
 Catalyst Creation of Jenkins Task in Environment
-    Clicks on Workzone
-    Clicks on User Created Organization
-    Clicks on User Created BusinessGroup
-    Clicks on > Button to your Environment
-    Clicks on Orchestration Tab
+    Sleep    5s
+    Clicks on Button to your > Environment
+    Sleep    3s
+    Clicks on Task Bar Orchestration Tab 
     Clicks on New Button of Jenkins
     Clicks on Choose Task Type of Jenkins
     Enter the Job Name of Jenkins
     Select the Jenkins Server
+    Sleep    2s
     Select the Job to Run
     Select the AutoSync Button
     Clicks on Save Task Button
     Sleep    4s
     Clicks on Save of the Success Button
+    Verify the Jenkins Job is Cerated
 
 Catlayst Creation of Chef Task in the Environment
+    Sleep    5s
+    Clicks on Button to your > Environment
+    Sleep    3s
+    Clicks on Inport By IP Button
+    Enters the IP Address of CentOS Box
+    Select the Operating System of the Box
+    Input the User Name for IP
+    Choose The Authentication Type as Pem File
+    Upload the PEM File for Import By IP
+    Clicks on Import Button to Import an Instance
+    Clicks on Import Close Button
+    Sleep    2s
+    Clicks on Task Bar Orchestration Tab
     Clicks on New Button of Jenkins
     Clicks on Choose Task Type of Chef
     Enter the Task Name of Chef
-    Check the Chef Serve is Disabled 
     Select the ChefNodes
-    Selection of CookBooks
-    Clicks on CookBook Attributes
-    Clicks on Edit Button for Attributes
-    Clicks on Save Button of Attributes and Values
+    Clicks on Edit Runlist Button
+    Adding CookBooks to Runlist
     Clicks on Save Task Button
+    Sleep    4s
+    Clicks on Save of the Success Button
+    Verify the Chef Job is Created
+
+
+Catalyst Execution of the Jenkins Job
+    Sleep    5s
+    Clicks on Button to your > Environment
+    Sleep    3s
+    Clicks on Task Bar Orchestration Tab
+    Clicks on Execute Button of Jenkins Job Created
+    Clicks on Ok Button to Close the Button
+    Clicks on History Button of the Jenkins Job
+    Clicks on Close of History Button
+
+
+Catalyst Execution of the Chef Job
+    Sleep    5s
+    Clicks on Button to your > Environment
+    Sleep    3s
+    Clicks on Task Bar Orchestration Tab
+    Clicks on Execute Button of Chef Job Created
+    Clicks on Ok Button to Close the Button
+    Clicks on History Button of the Chef Job
+    Sleep    1s
+    Clicks on Close of Chef History Button 
+
+Clicks on Close of Chef History Button
+    Click Element    css=.btn.btn-minier.btn-primary.hideChefJob
+
+
+Clicks on History Button of the Chef Job
+    Click Element    xpath=.//*[@id='tableOrchestration']/tbody/tr/td[text()='${CHEF TASKNAME}']/../td[6]/a/i
+
+Clicks on History Button of the Jenkins Job
+    Click Element    xpath=.//*[@id='tableOrchestration']/tbody/tr/td[text()='${JENTASK NAME}']/../td[6]/a/i
+
+Clicks on Close of History Button
+    Sleep    6s
+    Click Element    css=.btn.btn-minier.btn-primary.hideJenkinsJob
+    Sleep    1s
+
+
+Clicks on Execute Button of Chef Job Created
+    Click Element    xpath=.//*[@id='tableOrchestration']/tbody/tr/td[text()='${CHEF TASKNAME}']/../td[5]/a/i
+    Sleep    10s
+
+Clicks on Execute Button of Jenkins Job Created
+    Click Element    xpath=.//*[@id='tableOrchestration']/tbody/tr/td[text()='${JENTASK NAME}']/../td[5]/a/i
+    Sleep    10s
+
+Clicks on Ok Button to Close the Button
+    Click Element    xpath=//button[text()='OK']
+    Sleep    9s
+    Click Element    css=button.btn.btn-primary.pull-right
+    Sleep    2s
+
+
+
+Verify the Jenkins Job is Cerated
+    Element Should Contain    xpath=.//*[@id='tableOrchestration']/tbody/tr/td[text()='${JENTASK NAME}']    ${JENTASK NAME}
+
+Verify the Chef Job is Created
+    Element Should Contain    xpath=.//*[@id='tableOrchestration']/tbody/tr/td[text()='${CHEF TASKNAME}']    ${CHEF TASKNAME}
+
+
+
+
+Clicks on Edit Runlist Button
+    Click Element    xpath=//*[@title='Edit Runlist']
+
+Adding CookBooks to Runlist
+    Sleep    1s
+    Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[text()='${CookBkName}']
+    Sleep    1s
+    Click Element    id=btnaddToRunlist
+    Sleep    1s
+    Click Element    id=saveRunlist
+
+
+
+
 
 Creation of New Application for your Project and Executing Tasks  
     Clicks on Workzone
@@ -1062,7 +1192,7 @@ Clicks on CookBook Attributes
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='accordion-assigntask']/div[2]/div[1]/h4/a
 
 Select the ChefNodes
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='selectedNodesChefTask']/li[contains(.,'${TEMPLATE NAME}')]/label
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='selectedNodesChefTask']/li/label[text()='${IP Centos}']
 
 Selection of CookBooks
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[text()='deploy_nodejs']
@@ -1086,7 +1216,7 @@ Upload the Application Icon
 Enters the Repo URL
     Input Text    id=gitURLInputaddApp     ${REPO URL}
 
-Enters the Repo Password
+Enters the Repo UserName
     Input Text    id=gitusernameaddApp     ${REPO USER}
 
 Enters the Repo Password
@@ -1141,14 +1271,14 @@ Clicks on Jenkins Save Button
 Clicks on Jenknis New Button
     Click  Element    xpath=.//*[@id='content']/div/div/div/div/div[1]/div/div/a[2]
 
-#Clicks on Orchestration Tab
+Clicks on Task Bar Orchestration Tab
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='myTab3']/li[3]/a
 
 
 Clicks on Choose Task Type of Jenkins
     Click Element    css=#s2id_taskType > a > span.select2-arrow
     Input Text    css=#select2-drop > div > input     ${TASK TYPE}
-    Click Element    css=ul > li:nth-of-type(2) > div
+    Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
 
 Clicks on Choose Task Type of Chef
     Click Element    xpath=.//*[@id='s2id_taskType']/a

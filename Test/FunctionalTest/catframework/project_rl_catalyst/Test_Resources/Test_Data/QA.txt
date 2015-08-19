@@ -82,7 +82,7 @@ ${SERVER TIME COOKBOOK}            starter
 ${DISABLED}           disabled
 ${CENT OS}            Cent OS
 ${UBUNTU OS}            ubuntu
-${SUITS}                stopped
+${STOPD}                stopped
 ${UserName}             root
 ${RUNLIST}              recipe[apache2]
 ${KEYPAIRNAME}           cat_instances
@@ -174,14 +174,14 @@ ${MAT RUNLIST1}            recipe[a],recipe[cron]
 ${MAT OS1}                 ubuntu
 ${UBUNTU MEM}              1016256kB
 ${UBUNTU REC}              recipe[apt],recipe[apt]
-${TEMPLATE TYPENAME}       AppFactory                 #CatAutomatn          
+${TEMPLATE TYPENAME}       SoftwareStack                #CatAutomatn          
 ${random}                  adarsh
 ${ADD}                     apache2              #tomcat-all
 ${ACTBOOT1}                 Pending
 ${ACTBOOT2}                 Success
 ${RUN}                       running
 ${AUTHN}                    Pem File 
-#${NAME}                     Bootstrap
+${NAME}                     Bootstrap
 ${DUP MSG}                  An Instance with the same IP already exists.
 ${NAME1}                    Chef-Client-Run
 ${NAME2}                    SSH-Shell
@@ -208,6 +208,7 @@ ${EDIT_UBUNTU_INSTANCE_NAME}     Instance_Ubuntu
 ${DESIGNER_NAME}            Designer01
 ${DESIGNER_PASWD}           Designer01
 ${CONSUMER_NAME}            Consumer01
+
 ${CONSUMER_PASWD}           Consumer01
 ${CENTOS NAME}              Instance_Centos
 ${UBUNTU NAME}              Instance_Ubuntu
@@ -254,6 +255,7 @@ ${USER}                        superadmin
 ${COOKBOOK NAME1}              apache2                #service_apache       #apache2
 ${SERVICE NAME1}               ApacheServce
 ${ValidEditVMImage}            Windows 2008
+${COOKBOOK NAME2}              tomcat-all
 
 
 #${ValidateNotExistLDAP}             0564ghs
