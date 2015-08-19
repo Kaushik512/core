@@ -26,6 +26,38 @@ function getAuthToken(host,username,password,tenantName,callback){
 
 var Openstack = function(options) {
 	
+	this.getProjects = function(callback){
+		console.log("START:: getProjects");
+		
+		getAuthToken(options.host,options.username,options.password,options.tenantName,function(err,token){
+			if(token){
+			   console.log("token::"+token);	
+			   var args = {
+					   headers:{"X-Auth-Token": token} 
+					};
+				client = new Client();
+				var projectsUrl = 'http://'+options.host+':5000/v3/projects';
+				client.registerMethod("jsonMethod", projectsUrl, "GET");
+				client.methods.jsonMethod(args,function(data,response){
+					console.log("get Projects response::"+data);
+					if(data.projects){
+					   console.log("END:: getProjects");
+					   callback(null,data);
+					   return ;
+					}else{
+						console.log("Error in getProjects");
+						callback(data,null);
+					}
+				});    
+			}else{
+				console.log(err);
+				callback(err,null);
+			    return ;
+			}
+		})
+		
+    }
+    	
 	this.getTenants = function(callback){
 		console.log("START:: getTenants");
 		
@@ -42,13 +74,12 @@ var Openstack = function(options) {
 					if(data.tenants){
 					   var tenants = data.tenants;
 					   console.log("END:: getTenants");
-					   callback(null,tenants);
+					   callback(null,data);
 					   return ;
 					}else{
 						console.log("Error in getTenants");
 						callback(data,null);
 					}
-					console.log("errorrr");
 				});    
 			}else{
 				console.log(err);
@@ -58,20 +89,11 @@ var Openstack = function(options) {
 		})
 	}
   
-  this.getImages = function(callback){
+  this.getImages = function(tenantId,callback){
 	console.log("START:: getImages");	
-	
-	  this.getTenants(function(err,tenantsJson){
-		  if(tenantsJson){
+	  
 			 getAuthToken(options.host,options.username,options.password,options.tenantName,function(err,token){ 
-					if(token){ 
-						var tenantId = '';
-						tenantsJson.forEach(function(tenant){
-									if(tenant.name==options.tenantName){
-										tenantId = tenant.id;
-									}
-								});
-								
+					if(token){ 	
 						console.log("Token Id::"+token);
 						console.log("Tenant Id::"+tenantId);
 						
@@ -101,33 +123,16 @@ var Openstack = function(options) {
 						console.log(err);
 						callback(err,null);
 			            return ;
-					}	
-				 
+					}	 
 			 });
-	   }else{
-		   console.log(err);
-		   callback(err,null);
-		   return ;
-	   }		
-	});
-	
 }
 	
-this.getServers = function(callback){
+this.getServers = function(tenantId,callback){
 	
 	console.log("START:: getServers");	
 	
-	this.getTenants(function(err,tenantsJson){
-	   if(tenantsJson){	
 			 getAuthToken(options.host,options.username,options.password,options.tenantName,function(err,token){ 
 				if(token){
-					var tenantId = '';
-					tenantsJson.forEach(function(tenant){
-								if(tenant.name==options.tenantName){
-									tenantId = tenant.id;
-								}
-							});
-							
 					console.log("Token Id::"+token);
 					console.log("Tenant Id::"+tenantId);
 					
@@ -160,29 +165,14 @@ this.getServers = function(callback){
 				}	
 				 
 			 });
-	 }else{
-		 console.log("error:"+err);
-		 callback(err,null);
-		 return;
-	 }		
-	});
 	
 }
 
-  this.getFlavors = function(callback){
+  this.getFlavors = function(tenantId,callback){
 	console.log("START:: getFlavors");	
-	
-	  this.getTenants(function(err,tenantsJson){
-		if(tenantsJson) { 
+
 			 getAuthToken(options.host,options.username,options.password,options.tenantName,function(err,token){
 				if(token){ 
-					var tenantId = '';
-					tenantsJson.forEach(function(tenant){
-								if(tenant.name==options.tenantName){
-									tenantId = tenant.id;
-								}
-							});
-							
 					console.log("Token Id::"+token);
 					console.log("Tenant Id::"+tenantId);
 					
@@ -215,13 +205,6 @@ this.getServers = function(callback){
 				  return;
 			 }
 			 });
-	 }else{
-		 console.log(err);
-		 callback(err,null);
-		 return;
-	 }		
-	});
-	
 }
 
   this.getNetworks= function(callback){
@@ -289,9 +272,39 @@ this.getServers = function(callback){
 	})
  }
  
+ this.createServer = function(tenantId,createServerJson,callback){
+	 console.log("START:: createServer");
+	 
+	 getAuthToken(options.host,options.username,options.password,options.tenantName,function(err,token){
+		 if(token){
+			   console.log("token::"+token);	
+			   var args = {
+				       data: createServerJson, 
+					   headers:{"X-Auth-Token": token,"Content-Type": "application/json"} 
+					};
+				client = new Client();
+				var createServerUrl = 'http://'+options.host+':8774/v2/'+tenantId+'/servers';
+				client.registerMethod("jsonMethod", createServerUrl, "POST");
+				client.methods.jsonMethod(args,function(data,response){
+					console.log("createServer response:: "+data);
+					if(data.server){
+					   console.log("END:: createServer");	
+					   callback(null,data);
+					   return;
+				    }else{
+						callback(data,null);
+					}
+					
+				}); 
+		}else{
+			console.log(err);
+		    callback(err,null);
+		    return;
+		}   
+	})
+ }
+ 
 }
 
 
 module.exports = Openstack;
-
-
