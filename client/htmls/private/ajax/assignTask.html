@@ -209,7 +209,7 @@
                                                       </table>
                                                    </div>
                                                    <!--div for paremeters-->
-                                                   <div class="col-lg-12" style="margin-top:10px;">
+                                                   <div class="col-lg-12 hidden" style="margin-top:10px;">
                                                       <input style="margin-left:5px;" id="addParameters" type="checkbox" name="addParams" value="This build is parameterized"/>&nbsp;&nbsp;This build is parameterized
                                                    </div>
                                                    <!-- </div> -->
@@ -1717,7 +1717,7 @@ $(document).ready(function() {
     $('#parametersSelect').change(function(e) {
         if (this.value == "Boolean") {
             $("#booleanName").val('');
-           // $("#booleanValue").val('');
+           
             $('input#booleanValue:checkbox').removeAttr('checked');
             $("#booleanDescription").val('');
             $("#booleanTable").removeClass('hidden');
