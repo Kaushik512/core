@@ -34,6 +34,9 @@ var AWSInstanceBlueprintSchema = new Schema({
         type: String,
         // required: true
     },
+    instanceCount:{
+        type: String,
+    },
     instanceAmiid: {
         type: String,
         //  required: true

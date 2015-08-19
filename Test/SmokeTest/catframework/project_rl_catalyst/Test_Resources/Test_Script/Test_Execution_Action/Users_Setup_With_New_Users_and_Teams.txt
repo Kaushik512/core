@@ -190,13 +190,13 @@ Select particular User Created organization
 
 Assign Users
     Click Element    xpath=.//*[@id='loginname']/label[text()="${ORG ADMIN USER}"]/i
-    Click Element    xpath=.//*[@id='loginname']/label[text()="${Org_Admin1}"]/i
-    Click Element    xpath=.//*[@id='loginname']/label[text()="${Org_Designer}"]/i
-    Click Element    xpath=.//*[@id='loginname']/label[text()="${Org_Consumer}"]/i
+#    Click Element    xpath=.//*[@id='loginname']/label[text()="${Org_Admin1}"]/i
+#    Click Element    xpath=.//*[@id='loginname']/label[text()="${Org_Designer}"]/i
+#    Click Element    xpath=.//*[@id='loginname']/label[text()="${Org_Consumer}"]/i
 
 Assign Projects
     Click Element    xpath=.//*[@id='projectname']/label[text()="${PROJECT NAME1}"]/i
-    Click Element    xpath=.//*[@id='projectname']/label[text()="${PROJECT NAME2}"]/i
+#    Click Element    xpath=.//*[@id='projectname']/label[text()="${PROJECT NAME2}"]/i
 
 Clicks on Save button in Teams Page
     Click Element    css=div.btn-group.pull-right > button

@@ -11,7 +11,7 @@ Resource           ${COMMON RESOURCES}/catalyst_grid_node.txt
 
 *** Test Cases ***
 Catalyst new Environments setup
-    [Tags]       Sanity               Smoke
+    [Tags]       Sanity               Settings
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
     Catalyst creates environments by selcting from chef server  
@@ -21,7 +21,7 @@ Catalyst new Environments setup
 
 
 Catalyst Adding New Envirornments to the Chef          #from chef server
-    [Tags]       Sanity       ps
+    [Tags]       Sanity               Settings
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
     Catalyst Addition of New Environments
@@ -30,7 +30,7 @@ Catalyst Adding New Envirornments to the Chef          #from chef server
 
 
 #Catalyst Activation of User Created Envirornments           #from chef server
-    [Tags]       Sanity       ps
+    [Tags]       Sanity       Settings
 #    Catalyst Login
  #   Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
  #   Catalyst Activation of Environments in projects

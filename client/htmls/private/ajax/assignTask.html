@@ -38,320 +38,212 @@
                                                       </select>
                                                    </div>
                                                    <!--chef dropdown starts here-->
-                                                   
-                                                      <div id="chef-dropdown">
-                                                         <div class="col-lg-6 col-md-6" style="margin-top:5px;">
-                                                            <label>
-                                                            Job Name <span style="color:red">*</span>
-                                                            </label>
-                                                            <input id="chefTaskName" type="text" class="form-control inputTaskName" name="ctl00$MainContent$orgname">
-                                                         </div>
-                                                         <!--div for description for task type-->
-                                                         <div class="col-lg-12 col-md-12 margintop15">
-                                                            <label>Job Description</label>
-                                                            <textarea id="chefDescription" style="width:100%" rows="9" cols="15" name="description"></textarea>
-                                                         </div>
+                                                   <div id="chef-dropdown">
+                                                      <div class="col-lg-6 col-md-6" style="margin-top:5px;">
+                                                         <label>
+                                                         Job Name <span style="color:red">*</span>
+                                                         </label>
+                                                         <input id="chefTaskName" type="text" class="form-control inputTaskName" name="ctl00$MainContent$orgname">
                                                       </div>
-                                                   
-                                                      <!--chef dropdown ends here-->
-                                                      <!--jenkins dropdown starts here-->
-                                                      <div id="Jenkins-dropdown">
-                                                         <div class="col-lg-6 col-md-6" style="margin-top:5px;">
-                                                            <label>Job Name<span style="color:red">*</span>
-                                                            </label>
-                                                            <input id="jenkinsTaskName" type="text" cat-validation="required,nospecial" cdata="catalyst" class="form-control inputTaskName" autofocus>                       
-                                                         </div>
-                                                         <div class="col-lg-6 col-md-6 margintop15">
-                                                            <label>Select Jenkins Server<span style="color:red">*</span>
-                                                            </label>
-                                                            <select id="jenkinsServerList" class="width-100">
-                                                               <option value="choose">Choose</option>
-                                                            </select>
-                                                         </div>
-                                                         <div class="col-lg-6 col-md-6 margintop15">
-                                                            <label>Select Job<span style="color:red">*</span></label>
-                                                            <label id="spinnerForJob" class="hidden"><img  style="margin-left:5px;margin-right:25px;" src="img/select2-spinner.gif"></label>
-                                                            <select id="jobListJenkins" class="width-100" disabled>
-                                                              
-                                                            </select>
-                                                         </div>
-                                                         <div class="col-lg-12 col-md-12 margintop15">
-                                                            <label>Job Description</label>
-                                                            <textarea id="jenkinsDescription"  style="width:100%" rows="8" cols="15" name="description"></textarea>
-                                                         </div>
+                                                      <!--div for description for task type-->
+                                                      <div class="col-lg-12 col-md-12 margintop15">
+                                                         <label>Job Description</label>
+                                                         <textarea id="chefDescription" style="width:100%" rows="9" cols="15" name="description"></textarea>
                                                       </div>
-                                                      <!--jenkins dropdown ends here-->
+                                                   </div>
+                                                   <!--chef dropdown ends here-->
+                                                   <!--jenkins dropdown starts here-->
+                                                   <div id="Jenkins-dropdown">
+                                                      <div class="col-lg-6 col-md-6" style="margin-top:5px;">
+                                                         <label>Job Name<span style="color:red">*</span>
+                                                         </label>
+                                                         <input id="jenkinsTaskName" type="text" cat-validation="required,nospecial" cdata="catalyst" class="form-control inputTaskName" autofocus>                       
+                                                      </div>
+                                                      <div class="col-lg-6 col-md-6 margintop15">
+                                                         <label>Select Jenkins Server<span style="color:red">*</span>
+                                                         </label>
+                                                         <select id="jenkinsServerList" class="width-100">
+                                                            <option value="choose">Choose</option>
+                                                         </select>
+                                                      </div>
+                                                      <div class="col-lg-6 col-md-6 margintop15">
+                                                         <label>Select Job<span style="color:red">*</span></label>
+                                                         <label id="spinnerForJob" class="hidden"><img  style="margin-left:5px;margin-right:25px;" src="img/select2-spinner.gif"></label>
+                                                         <select id="jobListJenkins" class="width-100" disabled>
+                                                         </select>
+                                                      </div>
+                                                      <div class="col-lg-12 col-md-12 margintop15">
+                                                         <label>Job Description</label>
+                                                         <textarea id="jenkinsDescription"  style="width:100%" rows="8" cols="15" name="description"></textarea>
+                                                      </div>
+                                                   </div>
+                                                   <!--jenkins dropdown ends here-->
                                                 </td>
                                              </tr>
                                           </tbody>
                                        </table>
-                                       </div>
-                                       <!--chef task type details-->
-                                       <div class="containerTable chefTaskType col-lg-7 col-md-7">
-                                          <!--table 2 -->
-                                          <table class="table table-bordered">
-                                             <thead>
-                                                <tr>
-                                                   <th style="text-align:center" class="chefServerName"></th>
-                                                </tr>
-                                             </thead>
-                                             <tbody>
-                                                <tr>
-                                                   <td>
-                                                      <div class="col-lg-6 col-md-6" style="margin-top:5px;">
-                                                         
-                                                         <div class="col-lg-12 nodesTable">
-                                                            <div class="smart-form">
-                                                               <label>
-                                                               <img style="margin-top:-5px;" src="img/templateicons/Select-nodes---deployment.png">
-                                                               Select Nodes <span style="color:red">*</span>
-                                                               </label>
-                                                               <ul id="selectedNodesChefTask" class="deploymentNodeList selectedNodesChefTaskCSS">
-                                                               </ul>
-                                                            </div>
+                                    </div>
+                                    <!--chef task type details-->
+                                    <div class="containerTable chefTaskType col-lg-7 col-md-7">
+                                       <!--table 2 -->
+                                       <table class="table table-bordered">
+                                          <thead>
+                                             <tr>
+                                                <th style="text-align:center" class="chefServerName"></th>
+                                             </tr>
+                                          </thead>
+                                          <tbody>
+                                             <tr>
+                                                <td>
+                                                   <div class="col-lg-6 col-md-6" style="margin-top:5px;">
+                                                      <div class="col-lg-12 nodesTable">
+                                                         <div class="smart-form">
+                                                            <label>
+                                                            <img style="margin-top:-5px;" src="img/templateicons/Select-nodes---deployment.png">
+                                                            Select Nodes <span style="color:red">*</span>
+                                                            </label>
+                                                            <ul id="selectedNodesChefTask" class="deploymentNodeList selectedNodesChefTaskCSS">
+                                                            </ul>
                                                          </div>
                                                       </div>
-                                                      <div class="col-lg-6 col-md-6" style="margin-top:5px;">
-                                                         <label>
-                                                         <i style="color:#40baf1;font-size:16px;" class="ace-icon fa fa-list-ul"></i>   
-                                                         Edit Runlist
-                                                         </label>
-                                                         <a href="#chefRunlistModal" data-backdrop="false" data-toggle="modal" style="cursor:pointer;"> <img src="img/add.png" style="float:right;margin-top:6px;" class="addList" rel="tooltip" data-placement="top" title="Edit Runlist" /></a>
-                                                         <div style="height:146px;overflow-y:auto;" id="dbNameTable_wrapper" class="dataTables_wrapper no-footer">
-                                                            <table id="tableRunlist" class="table table-striped table-bordered table-hover dataTable no-footer" cellpadding="5px" width="100%" style="text-align:center";>
-                                                               <thead>
-                                                                  <tr class="rowCustomStyle">
-                                                                     <th style="text-align:center">View Runlist</th>
-                                                                  </tr>
-                                                               </thead>
-                                                               <tbody>
-                                                               </tbody>
-                                                            </table>
-                                                         </div>
-                                                      </div>
-                                                      <div class="col-lg-12 col-md-12" style="margin-top:22px;">
-                                                         
-                                                         <label>
-                                                         <i style="color:#40baf1;font-size:16px;" class="ace-icon fa fa-list-ul"></i>   
-                                                         Cookbook Attributes <a href="#editAttributesModalContainer" id="editAttributesBtn" class="bpEditBtn btn btn-primary editAttributesBtnCSS" rel="tooltip" data-placement="top" data-original-title="Edit">
-                                                         <i class="ace-icon fa fa-pencil"></i>
-                                                         </a>
-                                                         </label>
-                                                         <textarea id="attrtextarea" style="width:100%;display:none" rows="6" onfocus="$('#attrmessage').html('');" onblur="validatejson($(this));" disabled> </textarea>
-                                                         <table id="attributesViewListTable" class="table table-striped table-bordered table-hover dataTable no-footer table-condensed tablesorter" cellpadding="5px" width="100%">
+                                                   </div>
+                                                   <div class="col-lg-6 col-md-6" style="margin-top:5px;">
+                                                      <label>
+                                                      <i style="color:#40baf1;font-size:16px;" class="ace-icon fa fa-list-ul"></i>   
+                                                      Edit Runlist
+                                                      </label>
+                                                      <a href="#chefRunlistModal" data-backdrop="false" data-toggle="modal" style="cursor:pointer;"> <img src="img/add.png" style="float:right;margin-top:6px;" class="addList" rel="tooltip" data-placement="top" title="Edit Runlist" /></a>
+                                                      <div style="height:146px;overflow-y:auto;" id="dbNameTable_wrapper" class="dataTables_wrapper no-footer">
+                                                         <table id="tableRunlist" class="table table-striped table-bordered table-hover dataTable no-footer" cellpadding="5px" width="100%" style="text-align:center";>
                                                             <thead>
-                                                               <tr>
-                                                                  <th>Attributes</th>
-                                                                  <th>Values</th>
+                                                               <tr class="rowCustomStyle">
+                                                                  <th style="text-align:center">View Runlist</th>
                                                                </tr>
                                                             </thead>
-                                                            <tbody class="attributesViewTableBody">
+                                                            <tbody>
                                                             </tbody>
                                                          </table>
                                                       </div>
-                                                      
-                                                   </td>
-                                                </tr>
-                                             </tbody>
-                                          </table>
-                                          <!--table 2 ends -->
-                                       </div>
-                                       <!--chef task type details ends here-->
-                                       <!--jenkins details for url and parameters-->
-                                       <div class="containerTable jenkinsTaskType col-lg-7 col-md-7">
-                                          <!--table 2 -->
-                                          <table class="table table-bordered">
-                                             <thead>
-                                                <tr>
-                                                   <th style="text-align:center" class="">Jenkins</th>
-                                                </tr>
-                                             </thead>
-                                             <tbody>
-                                                <tr>
-                                                   <td>
-                                                      <div class="col-lg-12 col-md-12">
-                                                         <table id="jobParamTable" class="table" style="margin-top:20px;" cellpadding="5px" width="100%">
-                                                            <thead>
-                                                               
-                                                            </thead>
-                                                            <tbody>
-                                                               <tr>
-                                                                  <td class="jobParam">Auto sync:</td>
-                                                                  <td style="padding-top:16px;"><div class="col-lg-11 col-md-11"><input type="radio" id="radio_yes" name="auto_sync" value="true" /> Yes
-                                                                  <input style="margin-left:15px;" type="radio" id="radio_no" name="auto_sync" value="false" checked="checked" /> No</div><div class="col-lg-1 col-md-1"><img tabindex="50" style="width:16px;height:16px;margin-top:2px;" data-toggle="popover" data-placement="left" data-content="This feature fetches the entire Jenkins Job history for the particular job." src="img/help.png"/></div></td>
-                                                               </tr>
-                                                               <tr>
-                                                                  <td class="jobParam">Job Url:</td>
-                                                                  <td><div class="col-lg-11 col-md-11"><span id="spinnerForUrl" class="hidden"><img  style="margin-left:5px;margin-right:25px;" src="img/select2-spinner.gif"></span><input type="text" disabled class="jenkinsJobURL form-control hidden" style="margin-top:4px"></div><div class="col-lg-1 col-md-1"><img style="width:16px;height:16px;margin-top:8px;" id="helpImage" tabindex="50" class="hidden" data-toggle="popover" data-placement="left" data-content="This is the URL for a particular JOB selected by the User available in the Jenkins Server" src="img/help.png"/></div></td>
-                                                               </tr>
-                                                               <tr>
-                                                                  <td class="jobParam" id="jobTD" style="padding-top:26px!important">Job Links:</td>
-                                                                  <td><div class="col-lg-11 col-md-11 jobTable" style="margin-top:1px">
-                                                                    <a href="#jobResultModal" id="imageLink" data-backdrop="false" data-toggle="modal" style="cursor:pointer;"> <img src="img/add.png" style="float:right;" class="addListUrl" rel="tooltip" data-placement="top" title="Add Job Links" /></a>
+                                                   </div>
+                                                   <div class="col-lg-12 col-md-12" style="margin-top:22px;">
+                                                      <label>
+                                                      <i style="color:#40baf1;font-size:16px;" class="ace-icon fa fa-list-ul"></i>   
+                                                      Cookbook Attributes <a href="#editAttributesModalContainer" id="editAttributesBtn" class="bpEditBtn btn btn-primary editAttributesBtnCSS" rel="tooltip" data-placement="top" data-original-title="Edit">
+                                                      <i class="ace-icon fa fa-pencil"></i>
+                                                      </a>
+                                                      </label>
+                                                      <textarea id="attrtextarea" style="width:100%;display:none" rows="6" onfocus="$('#attrmessage').html('');" onblur="validatejson($(this));" disabled> </textarea>
+                                                      <table id="attributesViewListTable" class="table table-striped table-bordered table-hover dataTable no-footer table-condensed tablesorter" cellpadding="5px" width="100%">
+                                                         <thead>
+                                                            <tr>
+                                                               <th>Attributes</th>
+                                                               <th>Values</th>
+                                                            </tr>
+                                                         </thead>
+                                                         <tbody class="attributesViewTableBody">
+                                                         </tbody>
+                                                      </table>
+                                                   </div>
+                                                </td>
+                                             </tr>
+                                          </tbody>
+                                       </table>
+                                       <!--table 2 ends -->
+                                    </div>
+                                    <!--chef task type details ends here-->
+                                    <!--jenkins details for url and parameters-->
+                                    <div class="containerTable jenkinsTaskType col-lg-7 col-md-7">
+                                       <!--table 2 -->
+                                       <table class="table table-bordered">
+                                          <thead>
+                                             <tr>
+                                                <th style="text-align:center" class="">Jenkins</th>
+                                             </tr>
+                                          </thead>
+                                          <tbody>
+                                             <tr>
+                                                <td>
+                                                   <div class="col-lg-12 col-md-12" style="border:1px dotted black;">
+                                                      <table id="jobParamTable" class="table" style="margin-top:20px;" cellpadding="5px" width="100%">
+                                                         <thead>
+                                                         </thead>
+                                                         <tbody>
+                                                            <tr>
+                                                               <td class="jobParam">Auto sync:</td>
+                                                               <td style="padding-top:16px;">
+                                                                  <div class="col-lg-11 col-md-11"><input type="radio" id="radio_yes" name="auto_sync" value="true" /> Yes
+                                                                     <input style="margin-left:15px;" type="radio" id="radio_no" name="auto_sync" value="false" checked="checked" /> No
+                                                                  </div>
+                                                                  <div class="col-lg-1 col-md-1"><img tabindex="50" style="width:16px;height:16px;margin-top:2px;" data-toggle="popover" data-placement="left" data-content="This feature fetches the entire Jenkins Job history for the particular job." src="img/help.png"/></div>
+                                                               </td>
+                                                            </tr>
+                                                            <tr>
+                                                               <td class="jobParam">Job Url:</td>
+                                                               <td>
+                                                                  <div class="col-lg-11 col-md-11"><span id="spinnerForUrl" class="hidden"><img  style="margin-left:5px;margin-right:25px;" src="img/select2-spinner.gif"></span><input type="text" disabled class="jenkinsJobURL form-control hidden" style="margin-top:4px"></div>
+                                                                  <div class="col-lg-1 col-md-1"><img style="width:16px;height:16px;margin-top:8px;" id="helpImage" tabindex="50" class="hidden" data-toggle="popover" data-placement="left" data-content="This is the URL for a particular JOB selected by the User available in the Jenkins Server" src="img/help.png"/></div>
+                                                               </td>
+                                                            </tr>
+                                                            <tr>
+                                                               <td class="jobParam" id="jobTD" style="padding-top:26px!important">Job Links:</td>
+                                                               <td>
+                                                                  <div class="col-lg-11 col-md-11 jobTable" style="margin-top:1px">
+                                                                     <a href="#jobResultModal" id="imageLink" data-backdrop="false" data-toggle="modal" style="cursor:pointer;"> <img src="img/add.png" style="float:right;" class="addListUrl" rel="tooltip" data-placement="top" title="Add Job Links" /></a>
+                                                                     <div style="height:auto;overflow-y:auto;" id="dbNameTable_wrapper" class="dataTables_wrapper no-footer">
+                                                                        <table id="tableJobList" class="table table-striped table-bordered table-hover dataTable no-footer" cellpadding="5px" width="100%" style="text-align:center";>
+                                                                           <thead>
+                                                                              <tr class="rowCustomStyle">
+                                                                                 <th style="text-align:center">Job Links</th>
+                                                                                 <th style="text-align:center">Action</th>
+                                                                              </tr>
+                                                                           </thead>
+                                                                           <tbody id="jobListSave">
+                                                                           </tbody>
+                                                                        </table>
+                                                                     </div>
+                                                                  </div>
+                                                                  <div class="col-lg-1 col-md-1"><img style="width:16px;height:16px;margin-top:8px;" data-toggle="popover" tabindex="50" data-placement="left" data-content="This is a URL pattern for the JOB Result or Job Output" src="img/help.png"/></div>
+                                                               </td>
+                                                            </tr>
+                                                         </tbody>
+                                                      </table>
+                                                   </div>
+                                                   <!--div for paremeters-->
+                                                   <div class="col-lg-12 hidden" style="margin-top:10px;">
+                                                      <input style="margin-left:5px;" id="addParameters" type="checkbox" name="addParams" value="This build is parameterized"/>&nbsp;&nbsp;This build is parameterized
+                                                   </div>
+                                                   <!-- </div> -->
+                                                   <!--div for paremeter checkbox ends here-->
+                                                   <!--dropdown for paremeters-->
+                                                   <div class="col-lg-12 col-md-12">
+                                                      <div class="col-lg-11 col-md-11 jobTable addParameters hidden" style="margin-top:1px">
+                                                         <a href="#parameterModal" id="imageLink" data-backdrop="false" data-toggle="modal" style="cursor:pointer;"> <img src="img/add.png" style="float:right;" class="addListParam" rel="tooltip" data-placement="top" title="Add Parameters" /></a>
                                                          <div style="height:auto;overflow-y:auto;" id="dbNameTable_wrapper" class="dataTables_wrapper no-footer">
-                                                            <table id="tableJobList" class="table table-striped table-bordered table-hover dataTable no-footer" cellpadding="5px" width="100%" style="text-align:center";>
+                                                            <table id="tableParameters" class="table table-striped table-bordered table-hover dataTable no-footer" cellpadding="5px" width="100%" style="text-align:center";>
                                                                <thead>
                                                                   <tr class="rowCustomStyle">
-                                                                     <th style="text-align:center">Job Links</th>
+                                                                     <th style="text-align:center">Type</th>
+                                                                     <th style="text-align:center">Name</th>
+                                                                     <th style="text-align:center">Default Value</th>
+                                                                     <th style="text-align:center">Description</th>
                                                                      <th style="text-align:center">Action</th>
                                                                   </tr>
                                                                </thead>
-                                                               <tbody id="jobListSave">
+                                                               <tbody id="paramList">
                                                                </tbody>
                                                             </table>
-                                                         </div></div><div class="col-lg-1 col-md-1"><img style="width:16px;height:16px;margin-top:8px;" data-toggle="popover" tabindex="50" data-placement="left" data-content="This is a URL pattern for the JOB Result or Job Output" src="img/help.png"/></div><!-- <i><span style="margin-left:29px;">ex:http://{host:port}/TestResult/$buildNumber/log.html</span><i> --></td>
-                                                               </tr> 
-                                                            </tbody>
-                                                         </table>
+                                                         </div>
                                                       </div>
-                                                         
-                                                         <!--div for paremeters-->
-                                                         
-                                                            <div class="col-lg-12 hidden">
-                                                               <input style="margin-left:5px;" id="addParameters" type="checkbox" name="addParams" value="This build is parameterized"/>&nbsp;&nbsp;This build is parameterized
-                                                            </div>
-                                                         
-                                                      <!-- </div> -->
-                                                      <!--div for paremeter chekboc ends here-->
-                                                      <!--dropdown for paremeters-->
-                                                      <div class="col-lg-6 col-md-6" style="margin-top:10px;">
-                                                         <select id="parametersSelect" class="addParameters width-100 hidden">
-                                                            <option value="">Add Parameter</option>
-                                                            <option value="boolean">Boolean Parameter</option>
-                                                            <option value="string">String Parameter</option>
-                                                         </select>
-                                                      </div>
-                                                      <!--dropdown ends here-->
-                                                      <!--boolean parameters-->
-                                                      <div class="col-lg-12 col-md-12 margintop15">
-                                                         <table id="booleanTable" class="table tableLength hidden" cellpadding="5px" width="100%">
-                                                            <thead>
-                                                               <tr>
-                                                                  <th class="headParamTable"><input id="booleanParameter" type="hidden"/>BooleanParameterDefinition</th>
-                                                                  <th></th>
-                                                               </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                               <tr>
-                                                                  <td class="booleanParam">Name:</td>
-                                                                  <td><input id="booleanName" type="text" class="form-control" name="booleanName"></td>
-                                                               </tr>
-                                                               <tr>
-                                                                  <td class="booleanParam">Default Value:</td>
-                                                                  <td><input id="booleanValue" style="margin-top:10px;" type="checkbox" name="booleanValue"></td>
-                                                               </tr>
-                                                               <tr>
-                                                                  <td class="booleanParam">Description:</td>
-                                                                  <td><input id="booleanDescription" type="text" class="form-control" name="booleanDescription"></td>
-                                                               </tr>
-                                                            </tbody>
-                                                         </table>
-                                                      </div>
-                                                      <!--boolean parameters ends here-->
-                                                      <!--string parameters-->
-                                                      <div class="col-lg-12 col-md-12 margintop15">
-                                                         <table id="stringTable" class="table tableLength hidden" cellpadding="5px" width="100%">
-                                                            <thead>
-                                                               <tr>
-                                                                  <th class="headStringTable"><input type="hidden" id="stringParameter">StringParameterDefinition</th>
-                                                                  <th></th>
-                                                               </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                               <tr>
-                                                                  <td class="stringParam">Name:</td>
-                                                                  <td><input id="stringName" type="text" class="form-control" name="stringName"></td>
-                                                               </tr>
-                                                               <tr>
-                                                                  <td class="stringParam">Default Value:</td>
-                                                                  <td><input id="stringValue" type="text" class="form-control" name="stringValue"></td>
-                                                               </tr>
-                                                               <tr>
-                                                                  <td class="stringParam">Description:</td>
-                                                                  <td><input id="stringDescription" type="text" class="form-control" name="stringDescription"></td>
-                                                               </tr>
-                                                            </tbody>
-                                                         </table>
-                                                      </div>
-                                                      <!--string parameters ends here-->
-                                       
-                                       </td>
-                                       </tr>
-                                       </tbody>
+                                                   </div>
+                                                   
+                                                </td>
+                                             </tr>
+                                          </tbody>
                                        </table>
                                        <!--table 2 ends -->
                                     </div>
                                     <!--jenkins paremeters ends here-->
-                                    <!-- <div class="col-lg-9 paddingleftright0">
-                                       <div class="col-lg-12 paddingleftright0 margintop-56">
-                                           <div class="panel-group smart-accordion-default" id="accordion-assigntask">
-                                               <div class="panel panel-default divconfigureparameterrunlist">
-                                                 
-                                                 
-                                       
-                                               </div>
-                                       
-                                       
-                                       
-                                               <div class="panel panel-default divchefrunlist">
-                                                   <div class="panel-heading">
-                                                     <h4 class="panel-title">
-                                                       <a data-toggle="collapse" data-parent="#accordion-assigntask" href="#CollapsecookbookAttributes" class="collapsed"><i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i>Cookbook Attributes</a>
-                                                     </h4>
-                                                   </div>
-                                                   <div id="CollapsecookbookAttributes" class="panel-collapse collapse">
-                                                       <div class="col-lg-12">
-                                                           <div class="smart-form margin15">
-                                                               <label class="marginbottom4">
-                                                                   <img src="img/templateicons/Select-nodes---deployment.png">
-                                                                   <strong>Cookbook Attributes 
-                                                                       <a id="editAttributesBtn" class="bpEditBtn btn btn-primary editAttributesBtnCSS" rel="tooltip" data-placement="top" data-original-title="Edit">
-                                                                           <i class="ace-icon fa fa-pencil"></i>
-                                                                       </a>
-                                                                       <span style="color:red" id="attrmessage"></span>
-                                                                   </strong>
-                                                               </label>
-                                                               <div class="row">
-                                                                   <div class="col-lg-12">
-                                                                       <textarea id="attrtextarea" style="width:100%;display:none" rows="6" onfocus="$('#attrmessage').html('');" onblur="validatejson($(this));" disabled> </textarea>
-                                                                       <table id="attributesViewListTable" class="table table-striped table-bordered table-hover dataTable no-footer table-condensed tablesorter" cellpadding="5px" width="100%">
-                                                                        <thead>
-                                                                         <tr>
-                                                                           <th>Attributes</th>
-                                                                           <th>Values</th>
-                                                                         </tr>
-                                                                        </thead>
-                                                                        <tbody class="attributesViewTableBody">
-                                       
-                                                                        </tbody>
-                                                                       </table>
-                                                                   </div>
-                                                               </div>
-                                                           </div>
-                                                       </div>
-                                                   </div>
-                                               </div>
-                                           </div>
-                                       </div>
-                                       </div> -->
                                  </div>
-                                 <!-- <div class="row">
-                                    <div class="col-md-10 col-sm-12 col-xs-12 footerfixed">
-                                        <div class="clearfix form-actions text-align-center">
-                                            <div class="btn-group">
-                                                <a class="btn pull-left btn-primary btnSaveTask marginleft5px">
-                                                    <i class="ace-icon fa fa-check bigger-110"></i>
-                                                    Save Task
-                                                </a>  
-                                                <a class="btn pull-left btn-primary btnBack marginleft5px" onclick="window.history.back()">
-                                                    <i class="ace-icon fa fa-rotate-left  bigger-110"></i>
-                                                    Cancel
-                                                </a>                                     
-                                                 
-                                            </div>
-                                        </div>
-                                    </div>
-                                    </div> -->
                                  <!-- end widget content -->
                               </div>
                               <!-- end widget div -->
@@ -389,12 +281,10 @@
          </div><!-- /.modal-dialog -->
          </div>
          <!--modal for runlist ends here-->
-
          <!--modal for job links-->
-         <!--assign runlist modal-->
-               <div class="modal fade" id="jobResultModal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
-                  <div class="modal-dialog">
-                     <div class="modal-content">
+         <div class="modal fade" id="jobResultModal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+         <div class="modal-dialog">
+         <div class="modal-content">
          <form role="form" class="cmxform" id="jobLinkCreate" autocomplete="off">
          <div class="modal-header">
          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
@@ -406,9 +296,9 @@
          </div>
          <div class="modal-body" style="height:100px;">
          <div class="col-lg-12 col-md-12">
-            <label for="jobResultLinks">Job Link<span style="color:Red;" class="control-label">&nbsp;*</span></label>
-            <input type="text" name="jobLinkName" class="form-control jobLinkCreate" id="jobLinkName" autofocus/>
-            <i><span style="color:#666">ex:http://{host:port}/TestResult/$buildNumber/log.html</span></i> 
+         <label for="jobResultLinks">Job Link<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+         <input type="text" name="jobLinkName" class="form-control jobLinkCreate" id="jobLinkName" autofocus/>
+         <i><span style="color:#666">ex:http://{host:port}/TestResult/$buildNumber/log.html</span></i> 
          </div>
          </div>
          <div class="modal-footer">
@@ -419,9 +309,94 @@
          </div><!-- /.modal-content -->
          </div><!-- /.modal-dialog -->
          </div>
-         <!--modal for runlist ends here-->
          <!--modal for job links ends here-->
-
+         <!--modal for parameters-->
+         <div class="modal fade" id="parameterModal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+         <div class="modal-dialog">
+         <div class="modal-content">
+         <form role="form" class="cmxform" id="parameterCreate" autocomplete="off">
+         <div class="modal-header">
+         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+         &times;
+         </button>
+         <h4 class="modal-title">
+         <i class="fa fa-th-list txt-color-blue"></i>&nbsp;&nbsp;Add Parameters
+         </h4>
+         </div>
+         <div class="modal-body" style="height:320px">
+            <!--dropdown for selecting the parameter type-->
+         <label style="margin-left:10px;">Select Paremeter:</label>
+         <select id="parametersSelect" class="addParameters" style="width:40%">
+         <option value="">Add Parameter</option>
+         <option value="Boolean">Boolean Parameter</option>
+         <option value="String">String Parameter</option>
+         </select>
+         <br/><br/>
+         <hr/>
+         <!--dropdown ends here-->
+        
+            <div class="col-lg-12 col-md-12 margintop15" style="margin-left:-10px;">
+                  <table id="booleanTable" class="table tableLength hidden" cellpadding="5px" width="100%">
+                     <thead>
+                        <tr>
+                           <th class="headParamTable"><input id="booleanParameter" type="hidden"/>Boolean Parameter Definition</th>
+                           <th></th>
+                        </tr>
+                     </thead>
+                     <tbody>
+                        <tr>
+                           <td class="booleanParam">Name:</td>
+                           <td><input id="booleanName" type="text" class="form-control" name="booleanName"></td>
+                        </tr>
+                        <tr>
+                           <td class="booleanParam">Default Value:</td>
+                           <td><input id="booleanValue" style="margin-top:10px;" value="false" type="checkbox" name="booleanValue"></td>
+                        </tr>
+                        <tr>
+                           <td class="booleanParam">Description:</td>
+                           <td><input id="booleanDescription" type="text" class="form-control" name="booleanDescription"></td>
+                        </tr>
+                     </tbody>
+                  </table>
+               </div>
+               <!--boolean parameters ends here-->
+               <!--string parameters-->
+               <div class="col-lg-12 col-md-12 margintop15" style="margin-left:-10px;">
+                  <table id="stringTable" class="table tableLength hidden" cellpadding="5px" width="100%">
+                     <thead>
+                        <tr>
+                           <th class="headStringTable"><input type="hidden" id="stringParameter">String Parameter Definition</th>
+                           <th></th>
+                        </tr>
+                     </thead>
+                     <tbody>
+                        <tr>
+                           <td class="stringParam">Name:</td>
+                           <td><input id="stringName" type="text" class="form-control" name="stringName"></td>
+                        </tr>
+                        <tr>
+                           <td class="stringParam">Default Value:</td>
+                           <td><input id="stringValue" type="text" class="form-control" name="stringValue"></td>
+                        </tr>
+                        <tr>
+                           <td class="stringParam">Description:</td>
+                           <td><input id="stringDescription" type="text" class="form-control" name="stringDescription"></td>
+                        </tr>
+                     </tbody>
+                  </table>
+               </div>
+               <!--string parameters ends here-->
+         
+         </div>
+         <div class="modal-footer">
+         <a type="button" class="btn btn-default" data-dismiss="modal">Close</a>
+         <input type="submit" class="btn btn-primary" id="saveParameter" value="Save">  
+         </div>   
+         </form>
+         </div><!-- /.modal-content -->
+         </div><!-- /.modal-dialog -->
+         </div>
+         <!--modal for parameters ends here-->
          <!--modal for help -->
          <div class="modal fade" id="modalForHelp" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
          <div class="modal-dialog">
@@ -648,7 +623,7 @@
 
 
 <script type="text/javascript">
-
+//datatable for runlist
 if (!$.fn.dataTable.isDataTable('#tableRunlist')) {
     //var $taskListArea = $('.taskListArea').empty();
     $tasksRunlist = $('#tableRunlist').DataTable({
@@ -663,6 +638,7 @@ if (!$.fn.dataTable.isDataTable('#tableRunlist')) {
     });
 }
 
+//datatable for jobResult
 if (!$.fn.dataTable.isDataTable('#tableJobList')) {
     //var $taskListArea = $('.taskListArea').empty();
     $jobList = $('#tableJobList').DataTable({
@@ -681,6 +657,30 @@ if (!$.fn.dataTable.isDataTable('#tableJobList')) {
     });
 }
 
+//datatable for parameters
+if (!$.fn.dataTable.isDataTable('#tableParameters')) {
+    //var $taskListArea = $('.taskListArea').empty();
+    $paramList = $('#tableParameters').DataTable({
+        "pagingType": "full_numbers",
+        "bInfo": false,
+        "bLengthChange": false,
+        "paging": false,
+        "bFilter": false,
+        "aoColumns": [{
+            "bSortable": false
+         },{
+            "bSortable": false
+         },{
+            "bSortable": false
+         },{
+            "bSortable": false
+         },{
+            "bSortable":false,
+            "sWidth": "20%"
+        }]
+    });
+}
+
 $(document).ready(function() {
     $('[data-toggle="popover"]').popover({
        trigger: 'focus'
@@ -688,7 +688,12 @@ $(document).ready(function() {
 
     $('.addListUrl').click(function(e) {
         $('#jobLinkCreate').trigger("reset");
-
+    });
+    $('.addListParam').click(function(e) {
+        $('#parameterCreate').trigger('reset');
+        $('#parametersSelect').select2("val","");
+        $('#booleanTable').addClass('hidden');
+        $('#stringTable').addClass('hidden');
     });
 });
 
@@ -824,23 +829,14 @@ $(document).ready(function() {
                 if (taskData.taskConfig.parameterized.length > 0) {
                   //alert(taskData.parameterized.length);
                     for (var j = 0; j < taskData.taskConfig.parameterized.length; j++) {
+                   //  alert(JSON.stringify(taskData.taskConfig.parameterized[j]));
                         //$('input:radio[class=test1][id=test2]').prop('checked', true);
                         $("input[type='checkbox'][name='addParams'][id='addParameters']").prop('checked', true);
                         $('.addParameters').removeClass('hidden');
-                        if(taskData.taskConfig.parameterized[j].parameterName ==='Boolean Parameter'){
-                       //    alert('boolean');
-                            $('#booleanTable').removeClass('hidden');
-                            $('#booleanName').val(taskData.taskConfig.parameterized[j].name);
-                            $("input[type='checkbox'][name='booleanValue'][id='booleanValue']").prop('checked',true);
-                            $('#booleanValue').val(taskData.taskConfig.parameterized[j].defaultValue);
-                            $('#booleanDescription').val(taskData.taskConfig.parameterized[j].description);
-                        } else if(taskData.taskConfig.parameterized[j].parameterName === 'String Parameter') {
-                          // alert('string');
-                            $('#stringTable').removeClass('hidden');
-                            $('#stringName').val(taskData.taskConfig.parameterized[j].name);
-                            $('#stringValue').val(taskData.taskConfig.parameterized[j].defaultValue);
-                            $('#stringDescription').val(taskData.taskConfig.parameterized[j].description);
-                        }
+                        //alert(JSON.stringify(taskData.taskConfig.parameterized[j]));
+                        console.log("parapapa>>>>" + taskData.taskConfig.parameterized.length);
+                        createParametersTable(taskData.taskConfig.parameterized[j],null);
+                        
                     }
                 } else {
                     $("input[type='checkbox'][name='addParams'][id='addParameters']").prop('checked', false);
@@ -1180,52 +1176,12 @@ $(document).ready(function() {
             if ($('#addParameters').is(":checked")) {
                 isParameterized = true;
                 var parameterized = [];
-                var countForParameter = 0;
-                if($('#booleanTable').is(':visible')){
-                  countForParameter++;  
-                } 
-                if($('#stringTable').is(':visible')) {
-                  countForParameter++;  
-                } 
-                //alert(countForParameter);
-                
-                   
-
-
-                        for (j = 0; j < countForParameter; j++) {
-
-                            var parameterType = $('#parametersSelect').val();
-                            if (parameterType === "boolean") {
-                                var parameterizedObj = {
-                                    parameterName: String,
-                                    name: String,
-                                    defaultValue: String,
-                                    description: String
-                                };
-                                parameterizedObj.parameterName = "BooleanParameterDefinition";
-                                parameterizedObj.name = $('#booleanName').val();
-                                parameterizedObj.defaultValue = $('#booleanValue').val();
-                                parameterizedObj.description = $('#booleanDescription').val();
-                                console.log(parameterizedObj.parameterName);
-                                parameterized.push(parameterizedObj);
-                                //alert(parameterized);
-                                console.log(parameterized);
-
-                            } else {
-                                var parameterizedObj = {
-                                    parameterName: String,
-                                    name: String,
-                                    defaultValue: String,
-                                    description: String
-                                };
-                                parameterizedObj.parameterName = "StringParameterDefinition";
-                                parameterizedObj.name = $('#stringName').val();
-                                parameterizedObj.defaultValue = $('#stringValue').val();
-                                parameterizedObj.description = $('#stringDescription').val();
-                                parameterized.push(parameterizedObj);
-                            }
-                        }
-                   
+                var $paramBody = $('#tableParameters tbody');
+                var $trs = $paramBody.find('tr');
+                $trs.each(function(e) {
+                    var $this = $(this);
+                    parameterized.push($this.data('parameterizedObj'));
+                });
                 
                 taskData.isParameterized = isParameterized;
                 taskData.parameterized =parameterized;
@@ -1246,9 +1202,6 @@ $(document).ready(function() {
             taskData: taskData
         };
         console.log(reqBody);
-        //alert(JSON.stringify(reqBody));
-        //alert(JSON.stringify(taskData.name));
-
         if (urlParams.taskId) {
             if (taskType === 'jenkins') {
                $saveSpinner.removeClass('hidden');
@@ -1363,7 +1316,88 @@ $(document).ready(function() {
         $jobList.row.add($tr).draw();
     }
 
-    ///tasks/:taskId/resultUrl/remove
+    function createParametersTable(param,parameterType) {
+        var parameterType;
+        
+         var parameterized = [];
+        
+        var parameterizedObj = {
+            parameterName: String,
+            name: String,
+            defaultValue: String,
+            description: String
+        };
+       // alert("parameterType" + JSON.stringify(parameterType));
+       // alert("param" + JSON.stringify(param));
+        if(parameterType){
+            if (parameterType === "Boolean") {
+             //  alert('bool');
+               parameterizedObj.parameterName = "Boolean";
+               parameterizedObj.name = $('#booleanName').val();
+               parameterizedObj.defaultValue = false;
+               parameterizedObj.defaultValue = $('#booleanValue').val();
+               if ($('#booleanValue').is(":checked")) {
+                   parameterizedObj.defaultValue = true;
+               }
+               parameterizedObj.description = $('#booleanDescription').val();
+
+           } else if(parameterType === "String") {
+          //  alert('check');
+               parameterizedObj.parameterName = "String";
+               parameterizedObj.name = $('#stringName').val();
+               parameterizedObj.defaultValue = $('#stringValue').val();
+               parameterizedObj.description = $('#stringDescription').val();
+               
+
+           }
+     }else if(param){
+         if (param.parameterName === "Boolean") {
+               parameterizedObj.parameterName = "Boolean";
+               parameterizedObj.name = param.name;
+               parameterizedObj.defaultValue = param.defaultValue;
+               if ($('#booleanValue').is(":checked")) {
+                   parameterizedObj.defaultValue = true;
+               }
+               parameterizedObj.description = param.description;
+
+           } else if(param.parameterName === "String") {
+          //  alert('check');
+               parameterizedObj.parameterName = "String";
+               parameterizedObj.name = param.name;
+               parameterizedObj.defaultValue = param.defaultValue;
+               parameterizedObj.description = param.description;   
+           }
+     }
+        var $parameterListTable = $('#paramList');
+        var $tr = $('<tr class="paramResultRow"></tr>');
+        $tr.data('parameterizedObj', {
+            parameterName: parameterizedObj.parameterName,
+            name: parameterizedObj.name,
+            defaultValue: parameterizedObj.defaultValue,
+            description: parameterizedObj.description
+        });
+        var $tdType = $('<td class="paramType"></td>');
+        var $tdName = $('<td class="paramName"></td>');
+        var $tdValue = $('<td class="paramValue"></td>');
+        var $tdDescription = $('<td class="paramDescription"></td>');
+        var $tdAction = $('<td/>');
+        $tdAction.append('<div style="margin-right:17px;float:right;" class="btn-group"><button class="deleteRow" value="Remove" title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></div>');
+
+        $tdAction.find('.deleteRow').click(function() {
+            $paramList.row($tr).remove().draw(true);
+        });
+        $tdType.append(parameterizedObj.parameterName);
+        $tdName.append(parameterizedObj.name);
+        $tdValue.append(parameterizedObj.defaultValue);
+        $tdDescription.append(parameterizedObj.description);
+        // alert(parameterizedObj.name);
+        $tr.append($tdType).append($tdName).append($tdValue).append($tdDescription).append($tdAction);
+        $parameterListTable.append($tr);
+        $paramList.row.add($tr).draw();
+        parameterized.push(parameterizedObj);
+        console.log("param>>>>" + parameterized);
+
+    }
 
 
 
@@ -1382,6 +1416,19 @@ $(document).ready(function() {
         }
     });
 
+    $('#parameterCreate').submit(function(e) {
+        var parameterType = $('#parametersSelect').val();
+        if (parameterType === "boolean") {
+            createParametersTable(null,parameterType);
+            $('#parameterModal').modal('hide');
+            return false;
+        } else {
+            createParametersTable(null,parameterType);
+            $('#parameterModal').modal('hide');
+            return false;
+        }
+    });
+
     function createRunlistTable(runlist) {
         //alert(runlist.length);
         //$('#tableRunlist').removeClass('hidden');
@@ -1396,7 +1443,7 @@ $(document).ready(function() {
             });
         }
         $tasksRunlist.clear().draw();
-       // alert(runlist.length);
+        alert(runlist.length);
         for (i = 0; i < runlist.length; i++) {
          //alert('check');
             if (runlist.length > 0) {
@@ -1667,16 +1714,25 @@ $(document).ready(function() {
             $("#chef-dropdown").hide();
         }
     });
-    $('#parametersSelect').change(function(e){
-      if(this.value == "boolean"){
-         $("#booleanTable").removeClass('hidden');
-      } else if(this.value == ""){
-         $("#stringTable").addClass('hidden');
-         $("#booleanTable").addClass('hidden');
-      } else{
-         $("#stringTable").removeClass('hidden');
-      }
-    })
+    $('#parametersSelect').change(function(e) {
+        if (this.value == "Boolean") {
+            $("#booleanName").val('');
+           
+            $('input#booleanValue:checkbox').removeAttr('checked');
+            $("#booleanDescription").val('');
+            $("#booleanTable").removeClass('hidden');
+            $("#stringTable").addClass('hidden');
+        } else if (this.value == "") {
+            $("#stringTable").addClass('hidden');
+            $("#booleanTable").addClass('hidden');
+        } else {
+            $("#stringName").val('');
+            $("#stringValue").val('');
+            $("#stringDescription").val('');
+            $("#stringTable").removeClass('hidden');
+            $("#booleanTable").addClass('hidden');
+        }
+    });
 });
 
 

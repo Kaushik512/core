@@ -18,6 +18,148 @@ Resource           ${CATALYST ACTION}/New_Environment_Creation.txt
 
 
 *** Keywords ***
+Catalyst Launch of Cloud Formation Template
+    Clicks on Workzone Button
+	Sleep    2s
+	Clicks on Cloud FormationBlueprint Section
+	Select Your Cloud Blueprint
+	Clicks on Launch of Cloud Blueprint
+	Enters the unique stack name
+    Clicks on Submit button in Enter a Unique Stack Name window
+    Clicks on close button in launching blueprint window
+    Navigates to Cloud Formation tab
+    Verifies Created Cloud Stack is displayed
+    Clicks on Instances Button
+    Verifies Node and MongoInstances are present
+
+
+Enters the unique stack name
+    Sleep    3s
+    Input Text    css=#cftInput    ${Stack_Name}
+
+Clicks on Submit button in Enter a Unique Stack Name window
+    Sleep    2s
+    Click Element    css=input.btn.btn-default.btn-primary
+
+Clicks on close button in launching blueprint window
+    Sleep    2s
+    Click Element    xpath=//button[@text()='Close']
+
+Navigates to Cloud Formation tab
+    Sleep    2s
+    Click Element    css=li.pull-left.CloudFormation > a
+
+Verifies Created Cloud Stack is displayed
+    Page Should Contain    ${Stack_Name}
+
+Verifies Node and MongoInstances are present
+    Sleep    3s
+
+Catalyst Create Template of Cloud Formation and Save
+    Clicks on Design
+    Clicks on CloudFormation Template Type
+    Clicks on Next Button
+    Clicks on User created Template
+    Clicks on Next Button
+    Enters the New Cloud Blueprint Name
+    Chooses The Business Group
+    Chooses The Project
+    Clicks on close Cloud Configure Organization Parameters
+    Clicks on Configure Stack Parameters
+    Choose the Cloud Region
+    Choose the Cloud Provider
+    Hide the Imageid and Instance Type
+    Clicks on Configure Resource Node
+    Enters the Node Instance User Name
+    Clicks on Configure Resource Node
+    Hide the Configure Resource Node
+    Clicks on Configure Mongo
+    Enters the Mongo Instance User Name
+    #Clicks on Configure Mongo
+    Enable the Configure Resource Node,Imageid and Instance Type
+    Clicks on Next Button
+    Clicks on OKK Button of Cloud Page
+
+	
+Select Your Cloud Blueprint
+    Click Element    xpath=//*[text()='${CLOUD BLUEPRNTNAME}']	
+	
+Clicks on Launch of Cloud Blueprint
+    Click Element    xpath=.//*[@id='l2']/footer/div/div/a	
+	
+Clicks on Cloud FormationBlueprint Section
+    Click Element    css=li.pull-left.Blueprints > a	
+	
+	
+Clicks on OKK Button of Cloud Page
+    Click Element    xpath=//*[text()='OK']	
+	
+	
+Clicks on Configure Mongo	
+    Sleep    1s
+	Click Element    xpath=.//*[@id='cft-resource-editArea']/div[2]/div[1]/h4/a/i[1]
+    Log    before scrolled 
+    Execute JavaScript    window.scrollTo(0, document.body.scrollHeight)
+    Log    after scrolled
+	
+Clicks on Configure Resource Node
+    #Execute JavaScript    $('#bootstrap-wizard-1 > div.tab-content > footer > div').attr('style','display:none')
+    Sleep    3s
+    #Log    after scroll
+    Click Element    xpath=.//*[@id='cft-resource-editArea']/div[1]/div[1]/h4/a/i[2]	
+	
+Enters the Node Instance User Name
+    Input Text    xpath=.//*[@id='cftResource-Node']/div/div[1]/div/input    ${USER INSTANCE NAME}
+    Sleep    5s
+
+Enters the Mongo Instance User Name
+    Input Text    xpath=.//*[@id='cftResource-Mongo']/div/div[1]/div/input    ${USER INSTANCE NAME}
+    Sleep    5s
+
+	
+	
+Choose the Cloud Region
+    Click Element    css=#cftRegionInput > option:nth-child(4)
+
+Choose the Cloud Provider
+    Sleep    2s
+    Click Element    css=#cftProviderInput > option:nth-child(2)
+	
+	
+Clicks on Configure Stack Parameters
+    Click Element    xpath=.//*[@id='accordion-Design']/div[7]/div[1]/h4/a/i[1]
+	
+	
+Enters the New Cloud Blueprint Name	
+    Input Text    id=blueprintNameInput    ${CLOUD BLUEPRNTNAME}
+
+Clicks on User created Template
+    Click Element    xpath=.//*[@id='individualTemplateNameGrid']/div/div/ul/li/u/b[text()="${CLOUD TEMPNAME}"]
+
+Clicks on CloudFormation Template Type
+    Sleep    5s
+    Click Element    xpath=//div[@data-templatetype='${CLOUD TEMPTYPE}']
+
+
+Hide the Imageid and Instance Type
+    Execute JavaScript    $('#CollapseStackParameters > div > div:nth-child(8)').hide()
+    Execute JavaScript    $('#CollapseStackParameters > div > div:nth-child(9)').hide()
+
+
+Hide the Configure Resource Node
+    Execute JavaScript    $('#cft-resource-editArea > div:nth-child(1) > div.panel-heading').hide()
+
+Enable the Configure Resource Node,Imageid and Instance Type
+    Execute JavaScript    $('#CollapseStackParameters > div > div:nth-child(8)').show()
+    Execute JavaScript    $('#CollapseStackParameters > div > div:nth-child(9)').show()
+    Execute JavaScript    $('#cft-resource-editArea > div:nth-child(1) > div.panel-heading').show()
+
+
+Clicks on close Cloud Configure Organization Parameters
+    Click Element    xpath=.//*[@id='accordion-Design']/div[2]/div[1]/h4/a/i[2]
+
+
+
 Catalyst Creation of Providers Setup 
     Clicks on Settings
     Clicks on DevOps Setup menu
@@ -71,7 +213,7 @@ Selects the Region
     Log    after click
     Input Text    css=#select2-drop .select2-input    ${REGION NAME}
     Sleep    4s
-    Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
+    Click Element    css=#select2-drop > ul > li:nth-child(2) > div > span
 
 
 Selects the Key Pair
@@ -83,7 +225,7 @@ Selects the Key Pair
     Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
 
 Uploads the Pem File for Provider
-    Choose File     xpath=.//*[@class='gui-file file']     ${CAT_INSTANCES}
+    Choose File     xpath=.//*[@class='gui-file file']     ${Goldendemo_pem}
 
 
 Clicks on Save Button of the Provider
@@ -283,7 +425,7 @@ Clicks on Next Button
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    css=#nextSpecificValue > a.btn.btn-primary
 
 Chooses the Template User Created
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='individualTemplateNameGrid']/div/div/ul/li/u/b[text()="${TEMPLATE NAME}"]
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='individualTemplateNameGrid']/div/div/ul/li/u/b[text()="${TEMP_NAME}"]
 
 Chooses the Operating System as Centos
     Sleep    1s
@@ -297,7 +439,7 @@ Choose the Provider
     Sleep    4s
     Click Element    css=#s2id_providerId > .select2-choice
     Log    after click
-    Input Text    css=#select2-drop .select2-input    ${PROVIDER NAME}
+    Input Text    css=#select2-drop .select2-input    ${PROVDR_Name}
     Sleep    4s
     Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
 
@@ -306,7 +448,7 @@ Choose the Available Images
     Sleep    4s
     Click Element    css=#s2id_imageId > .select2-choice
     Log    after click
-    Input Text    css=#select2-drop .select2-input    ${IMAGE NAME1}
+    Input Text    css=#select2-drop .select2-input    ${Centos_IMAGE}
     Sleep    4s
     Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
 
@@ -377,7 +519,7 @@ Chooses Organization
     Sleep    1s
     Click Element    css=#s2id_orgnameSelect > .select2-choice
     Log    after click
-    Input Text    css=#select2-drop .select2-input    ${ORGANIZATION NAME}
+    Input Text    css=#select2-drop .select2-input    ${ORG_NAME}
     Sleep    1s
     Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
 
@@ -390,7 +532,7 @@ Chooses The Business Group
     Sleep    1s
     Click Element    css=#s2id_bgListInput > .select2-choice
     Log    after click
-    Input Text    css=#select2-drop .select2-input    ${BUSINESS GROUP NAME1}
+    Input Text    css=#select2-drop .select2-input    ${BU_NAME}
     Sleep    1s
     Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
 
@@ -401,7 +543,7 @@ Chooses The Project
     Sleep    1s
     Click Element    css=#s2id_projectListInput > .select2-choice
     Log    after click
-    Input Text    css=#select2-drop .select2-input    ${PROJECT NAME1}
+    Input Text    css=#select2-drop .select2-input    ${Proj_Name}
     Sleep    1s
     Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
 
@@ -409,6 +551,16 @@ Chooses The Project
 Clicks on close of Configure Organization Parameters
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='accordion-Design']/div[2]/div[1]/h4/a/i[2]
 
+Clicks on Configure Runlist Parameters
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=//*[@id="accordion-Design"]/div[3]/div[1]/h4/a/i[1]
+
+Clicks on Edit Runlist icon
+    Sleep    2s
+    Click Element    css=img.addList
+
+Clicks on Update Runlist button
+    Sleep    2s
+    Click Element    id=saveRunlist
 
 Clicks on Configure Application URL
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='accordion-Design']/div[6]/div[1]/h4/a/i[1]
@@ -436,10 +588,10 @@ Clicks on Confirm OK Button
 #------------------------------------
 
 Catlayst Workzone and Status Setup           
-    Clicks on Settings
-    Sleep    5s
-    Clicks on Design
-    Sleep    10s
+    #Clicks on Settings
+    #Sleep    5s
+    #Clicks on Design
+    #Sleep    10s
     Clicks on Workzone Button
     Sleep    5s
     #Clicks on User Created Organization
@@ -456,7 +608,7 @@ Catlayst Workzone and Status Setup
     #Verfiy the SSH is Disabled
     #Verfiy the STOP Button is Disabled
     #Verfiy the More Info Button is Dispalyed
-
+	
 Clicks on Workzone Button
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    css=#workZoneNew
 
@@ -499,10 +651,10 @@ Verfiy the More Info Button is Dispalyed
 Catalyst Verfication and BootStrap Instance
     Verify the Status after Launch of Instance
     Verify the IP Address after Launch of Instance
-    Verfiy the Chef Client Run 
-    Verify the SSH
-    Verify the STOP
-    Verfiy the More Info Button is Dispalyed
+    #Verfiy the Chef Client Run 
+    #Verify the SSH
+    #Verify the STOP
+    #Verfiy the More Info Button is Dispalyed
     Clicks on Contreol Panel
     Clicks on Action History
     Checking THe BootStrpa Status
@@ -512,10 +664,10 @@ Catalyst Verfication and BootStrap Instance
 
 Verify the Status after Launch of Instance
     Sleep    3 minutes
-    Wait Until Keyword Succeeds    5 minute     10 seconds    Element Should Contain    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${BLUEPRINT NAME}")]/div/div/div/div/div/div[3]/div/span[2]/span    ${STATS RUN}
+    Wait Until Keyword Succeeds    5 minute     10 seconds    Element Should Contain    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${BLUEPRINT NAME}")]/div/div/div/div[3]/div/span[2]/span    ${STATS RUN}
 
 Verify the IP Address after Launch of Instance
-    ${EXTRACTED}=    Get Value       xpath=//.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${BLUEPRINT NAME}")]/div/div/div[1]/div/div/div[3]/div/span[1]/strong[@class='instanceip']
+    ${EXTRACTED}=    Get Value       xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${BLUEPRINT NAME}")]/div/div/div/div[3]/div/span[1]/strong[@class='instanceip']
     Run Keyword If    '${STATS}' != '${EXTRACTED}'    Log    ${PRINTSTMT}
 
 Verfiy the Chef Client Run 
@@ -566,17 +718,17 @@ Steps To Run Chef Client
     Clicks on Back To Instances
 
 Click on RUNNN of Chef Client
-    Wait Until Keyword Succeeds    2 minute     1 seconds    Click Element    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${BLUEPRINT NAME}")]/div/div/div/div/div/div[4]/div[1]/a
+    Wait Until Keyword Succeeds    2 minute     1 seconds    Click Element    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${BLUEPRINT NAME}")]/div/div/div/div[4]/div[1]/a
 
 Update the Run List with Cookbook
-    Sleep    3s
-    Click Element    xpath=.//*[@id='cookbooksrecipesselectedList']/option[text()='${COOKBOOK NAME1}']
-    Click Element    id=btnremoveFromRunlist
-    Sleep    2s
-    Click Element    xpath=.//*[@id='cookbooksrecipesselectedList']/option[text()='${COOKBOOK NAME2}']
-    Click Element    id=btnremoveFromRunlist
-    Sleep    2s
-    Wait Until Keyword Succeeds    1 minute     10 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[@value='recipe[${COOKBOOK NAME1}]']
+    #Sleep    3s
+    #Click Element    xpath=.//*[@id='cookbooksrecipesselectedList']/option[text()='${COOKBOOK NAME1}']
+    #Click Element    id=btnremoveFromRunlist
+    #Sleep    2s
+    #Click Element    xpath=.//*[@id='cookbooksrecipesselectedList']/option[text()='${COOKBOOK NAME2}']
+    #Click Element    id=btnremoveFromRunlist
+    #Sleep    2s
+    Wait Until Keyword Succeeds    1 minute     10 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[@value='recipe[${COOKBOOK NAME2}]']
     Wait Until Keyword Succeeds    1 minute     10 seconds      Click Element    id=btnaddToRunlist
 
 Clicks on Update Button of Runlist
@@ -876,8 +1028,10 @@ Catalyst Choose Template and Save Setup for UBUNTU
     Enters The ubuntu Blueprint Name
     Chooses The Business Group
     Chooses The Project
-    #Select WorkCookBooks for Ubuntu
-    Clicks on close of Configure Organization Parameters
+    Clicks on Configure Runlist Parameters
+    Clicks on Edit Runlist icon
+    Select WorkCookBooks for Ubuntu
+    Clicks on Update Runlist button
     #Chooses The Environment
     Clicks on Configure Application URL
     Clicks on AppNew Button
@@ -901,7 +1055,7 @@ Choose the Available Images for Ubuntu
     Sleep    4s
     Click Element    css=#s2id_imageId > .select2-choice
     Log    after click
-    Input Text    css=#select2-drop .select2-input    ${IMAGE NAME2}
+    Input Text    css=#select2-drop .select2-input    ${Ubuntu_Image}
     Sleep    4s
     Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
 
@@ -926,7 +1080,7 @@ Catlayst Workzone and Status Setup for Ubuntu
     Clicks on Workzone Button
     #Clicks on User Created Organization
     #Clicks on User Created BusinessGroup
-    Clicks on the Button to the Environment
+    #Clicks on the Button to the Environment
     Clicks on Blueprint Section
     Select the BlueprintUbuntu
     Clicks on Launch Button
@@ -972,13 +1126,15 @@ Verfiy the More Info Button is Dispalyed for Ubuntu
 
 Catalyst Ubuntu Instance Verfication and BootStrap steps
     Sleep    5s
-    Clicks on the Button to the Environment
+    #Clicks on the Button to the Environment
     Verify the Status after Launch of Ubuntu Instance
     Verify the IP Address after Launch of Ubuntu Instance
-    Verfiy the Chef Client Run of Ubuntu
-    Verify the SSH of Ubuntu
-    Verify the STOP of Ubuntu
-    Verfiy the More Info Button is Dispalyed for Ubuntu
+    #Verfiy the Chef Client Run of Ubuntu
+    #Verify the SSH of Ubuntu
+    #Verify the STOP of Ubuntu
+    #Verfiy the More Info Button is Dispalyed for Ubuntu
+    Sleep    3s
+    Select the launched ubuntu node
     Clicks on Contreol Panel
     Clicks on Action History
     Checking THe Ubuntu BootStrpa Status
@@ -987,26 +1143,30 @@ Catalyst Ubuntu Instance Verfication and BootStrap steps
 
 Verify the Status after Launch of Ubuntu Instance
     Sleep    30 seconds
-    Wait Until Keyword Succeeds    5 minute     10 seconds    Element Should Contain    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${BLUEPRINT NAME1}")]/div/div/div/div/div/div[3]/div/span[2]/span    ${STATS RUN}
+    Wait Until Keyword Succeeds    5 minute     10 seconds    Element Should Contain    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${BLUEPRINT NAME1}")]/div/div/div/div[3]/div/span[2]/span    ${STATS RUN}
 
 Verify the IP Address after Launch of Ubuntu Instance
-    ${EXTRACTED}=    Get Value       xpath=//.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${BLUEPRINT NAME1}")]/div/div/div[1]/div/div/div[3]/div/span[1]/strong[@class='instanceip']
-    Run Keyword If    '${STATS}' != '${EXTRACTED}'    Log    ${PRINTSTMT} is the IP Address
+    ${EXTRACTED}=    Get Value       xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${BLUEPRINT NAME1}")]/div/div/div/div[3]/div/span[1]/strong[@class='instanceip']
+    Run Keyword If    '${STATS}' != '${EXTRACTED}'    Log    ${EXTRACTED} is the IP Address
 
 
 Verfiy the Chef Client Run of Ubuntu
-    Element Should Be Visible    xpath=//div[@class='domain-roles-caption'][//div[//span[text()='${BLUEPRINT NAME1}']]]/div[4]/div[1]/a
+    Element Should Be Visible    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${BLUEPRINT NAME1}")]/div/div/div/div[4]/div[1]/a
 
 Verify the SSH of Ubuntu
     Element Should Be Visible    xpath=//div[@class='domain-roles-caption'][//div[//span[text()='${BLUEPRINT NAME1}']]]/div[4]/div[2]/a
 
 Verify the STOP of Ubuntu
     Element Should Be Visible    xpath=//div[@class='domain-roles-caption'][//div[//span[text()='${BLUEPRINT NAME1}']]]/div[4]/div[5] 
+Select the launched ubuntu node
+    Click Element    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${BLUEPRINT NAME1}")]/div/div/div
 
 Checking THe Ubuntu BootStrpa Status
     Sleep    4 minutes
     Clicks on Back To Instances
     Sleep    5s
+    Select the launched ubuntu node
+    Sleep    3s
     Clicks on Contreol Panel
     Clicks on Action History
     ${BOOTSTAT2}=    Get Element Attribute   xpath=//*[@id='tableactionHistory']/tbody/tr/td[2]/img@title
@@ -1018,7 +1178,7 @@ Checking THe Ubuntu BootStrpa Status
 
 Catalyst CHEFCLIENT Action on Ubuntu Instance
     Sleep    5s
-    Clicks on the Button to the Environment
+    #Clicks on the Button to the Environment
     Steps To Run Chef Client of Ubuntu
     Sleep    3s
 
@@ -1033,7 +1193,7 @@ Steps To Run Chef Client of Ubuntu
     Clicks on Back To Instances
 
 Click on RUNNN of Chef Client of Ubuntu
-    Wait Until Keyword Succeeds    2 minute     1 seconds    Click Element    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${BLUEPRINT NAME1}")]/div/div/div/div/div/div[4]/div[1]/a
+    Wait Until Keyword Succeeds    2 minute     1 seconds    Click Element    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${BLUEPRINT NAME1}")]/div/div/div/div[4]/div[1]/a
 
 Update the Run List with Newwww Cookbook
     Sleep    3s
@@ -1043,7 +1203,7 @@ Update the Run List with Newwww Cookbook
     Click Element    xpath=.//*[@id='cookbooksrecipesselectedList']/option[text()='${COOKBOOK NAME2}']
     Click Element    id=btnremoveFromRunlist
     Sleep    2s
-    Wait Until Keyword Succeeds    1 minute     10 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[@value='recipe[${COOKBOOK NAME1}]']
+    Wait Until Keyword Succeeds    1 minute     10 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[@value='recipe[${COOKBOOK NAME2}]']
     Wait Until Keyword Succeeds    1 minute     10 seconds      Click Element    id=btnaddToRunlist
 
 
@@ -1051,6 +1211,8 @@ Checking the Ubuntu BChefClient Run Status
     Sleep    2 minute
     Clicks on Back To Instances
     Sleep    5s
+    Select the launched ubuntu node
+    Sleep    3s
     Clicks on Contreol Panel
     Clicks on Action History
     ${CHEFSUCCESS1}=    Get Element Attribute    xpath=.//*[@id='tableactionHistory']/tbody/tr[2]/td[2]/img@title
@@ -1422,7 +1584,7 @@ Clicks on Configure Chef Runlist
 #Select WorkCookBooks
     #Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[2]
     #Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='checkout-form']/div[3]/div/div/div[1]/div[1]/label[3]
-    #Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesselectedList']/option[1]
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesselectedList']/option[1]
     #Click Element    id=btnremoveFromRunlist
     #Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesselectedList']/option
     #Click Element    id=btnremoveFromRunlist
@@ -1430,28 +1592,17 @@ Clicks on Configure Chef Runlist
     #Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[@value='recipe[a]']
 
 Select WorkCookBooks for Ubuntu
-    #Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='checkout-form']/div[3]/div/div/div[1]/div[1]/label[3]
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesselectedList']/option[text()='${COOKBOOK NAME2}']
+    Click Element    id=btnremoveFromRunlist    
 
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesselectedList']/option[text()='${ADD}']
-    Click Element    id=btnremoveFromRunlist
-
-    #Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesselectedList']/option[text()='${CookBkName}']
-    Click Element    id=btnremoveFromRunlist
-
-    Input Text    id=textbox     ${CookBkName}
-    Sleep    10s
-
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[text()='${CookBkName}']
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[text()='${COOKBOOK NAME1}']
     Click Element    id=btnaddToRunlist
 
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[text()='${ADD}']
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[text()='${COOKBOOK NAME2}']
     Click Element    id=btnaddToRunlist
 
 
-
-
-
-
+    
 Clicks on >>T Button
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    id=btnaddToRunlist
 

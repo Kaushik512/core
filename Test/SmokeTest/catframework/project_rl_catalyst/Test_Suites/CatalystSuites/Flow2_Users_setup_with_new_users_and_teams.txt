@@ -11,21 +11,20 @@ Resource           ${CATALYST ACTION}/Organization_Setup_Action_Steps.txt
 
 
 *** Test Cases ***
-Catalyst New Users Setup
-    [Tags]       Sanity               Smoke
-#    Catalyst Login
-    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
-    Catalyst Org Admin creates new org user
-    Catalyst creates new org designer
-    Catalyst creates new org consumer    
-    Catalyst Logout                      
-    [Teardown]     Close Browser
-
 Catalyst New Teams Setup
-    [Tags]       Sanity               Smoke
+    [Tags]       Sanity               Settings
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
     Catalyst Creates New Teams             
     Catalyst Logout                      
     [Teardown]     Close Browser
 
+#Catalyst New Users Setup
+#    [Tags]       Sanity               Settings
+#    Catalyst Login
+#    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+#    Catalyst Org Admin creates new org user
+#    Catalyst creates new org designer
+#    Catalyst creates new org consumer    
+#    Catalyst Logout                      
+#    [Teardown]     Close Browser

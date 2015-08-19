@@ -207,7 +207,7 @@ Select the Environment2
 
 Assign Projects for Orgnaization in Environment
     Click Element    xpath=.//*[@id='projectname']/label[text()='${PROJECT NAME1}']
-    Click Element    xpath=.//*[@id='projectname']/label[text()='${PROJECT NAME2}']
+    #Click Element    xpath=.//*[@id='projectname']/label[text()='${PROJECT NAME2}']
 
 
 
@@ -220,8 +220,7 @@ Clicks on Save Button to save the Environment
 
 
  #Import By IP
- Clicks on Import By IP Button
-     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='ipaddressimport']
+
 
 Enters the IP Address for IP
     Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    id=instanceFQDN     ${IP ADDRESS}

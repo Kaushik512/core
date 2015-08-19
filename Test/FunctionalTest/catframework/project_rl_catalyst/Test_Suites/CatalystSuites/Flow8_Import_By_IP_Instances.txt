@@ -147,33 +147,3 @@ Catalyst Ubuntu Instance Deleted only from Catalyst not from Chef Server
     Catalyst Logout
     [Teardown]     Close Browser  
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

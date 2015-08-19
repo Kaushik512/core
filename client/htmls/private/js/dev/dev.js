@@ -1555,9 +1555,40 @@
                                                                         $rowContainter.find('.editInstanceNameBtn').click(editInstanceNameHandler);
                                                                         $rowContainter.append('<td class="instanceIPCol">' + data.instanceIP + '</td>');
                                                                         var $tableRunlistDiv = $('<div></div>'); /*.append('<span>'+data.runlist.join()+'</span>');*/
+                                                                        var $viewAllA;
+                                                                        //alert(data.runlist);
+                                                                        if (data.runlist.length) {
+                                                                            $viewAllA = $('<a></a>').attr('href', 'javascript:void(0)').append("View All Runlist");
+
+                                                                            $viewAllA.click(function(e) {
+                                                                                e.preventDefault();
+                                                                                e.stopPropagation();
+
+
+                                                                                var $modal = $('#modalTableRunlist');
+                                                                                var $modalBody = $('#modalTableRunlist .modal-body').empty();
+                                                                                var runlist = $(this).parents('tr').find('.instance-bootstrap-list-image').data('runlist');
+                                                                                for (var j = 0; j < runlist.length; j++) {
+                                                                                    var $divComponentItem;
+                                                                                    if (j == 0) {
+
+                                                                                        $divComponentItem = $('<span title="' + runlist[j] + '" style="margin-top:8px;overflow:hidden;text-overflow:ellipsis;width:300px;"></span>').addClass('instance-details-item').append(runlist[j]);
+
+                                                                                    } else {
+                                                                                        $divComponentItem = $('<span title="' + runlist[j] + '" style="overflow:hidden;text-overflow:ellipsis;width:300px;"></span>').addClass('instance-details-item').append(runlist[j]);
+                                                                                    }
+
+                                                                                    $modalBody.append($divComponentItem);
+                                                                                }
+                                                                                $modal.modal('show');
+                                                                                return false;
+                                                                            });
+                                                                        } else {
+                                                                            $viewAllA = $('<span></span>').append("View All Runlist");
+                                                                        }
                                                                         var $divComponentItem = $('<span title="View all runlist" style="overflow:hidden;text-overflow:ellipsis;width:111px;"></span>').addClass('instance-details-item');
                                                                         $tableRunlistDiv.append($divComponentItem);
-                                                                        $rowContainter.append($('<td></td>').append($tableRunlistDiv));
+                                                                        $rowContainter.append($('<td></td>').append($viewAllA));
                                                                         $rowContainter.append($tableInstanceStatusIndicator);
 
                                                                         $rowContainter.append('<td><a class="tableMoreInfo moreInfo" data-instanceId="' + data._id + '" href="javascript:void(0)" rel="tooltip" data-placement="top" data-original-title="MoreInfo"></a></td>');
@@ -1736,6 +1767,7 @@
 
                                                                         $instanceDetailsList.append($instanceDetailItemId);
                                                                         var $instanceDetailItemStatus;
+                                                                        data.instanceState == 'running';
                                                                         if (data.instanceState == 'running') {
                                                                             $instanceDetailItemStatus = $('<span></span>').addClass('instance-details-id').html('status : <span class="instance-state instance-state-text-started">' + data.instanceState + '</strong>');
                                                                         } else if (data.instanceState == 'terminated') {
@@ -1830,35 +1862,98 @@
                                                                         $rowContainter.find('.tableMoreInfo').click(instanceLogsHandler);
                                                                         $li.find('.moreInfo').click(instanceLogsHandler);
 
-                                                                        $li.find('.showmenuAppTask').click(function() {
-                                                                            //alert("I am Here");
-                                                                            var $menu = $li.find('.menuAppTask');
-                                                                            if ($menu.is(':visible')) {
-                                                                                $menu.hide();
-                                                                            } else {
-                                                                                $('.menuAppTask').hide();
-                                                                                $menu.show();
-                                                                                var $anchor = $('.app-url').parent();
-                                                                                $anchor.click(function() {
-                                                                                  $menu.hide();                                                                                          
-                                                                                });
-                                                                            }
-                                                                        });
-                                                                        $rowContainter.find('.showmenuAppTask').click(function() {
 
-                                                                            var $menu = $rowContainter.find('.menuAppTask').css('width','166px').css('margin-left','-42px');
-                                                                            //alert($menu.length);
-                                                                            if ($menu.is(':visible')) {
+
+                                                                        $(document).ready(function () {
+
+                                                                            var $menu = $li.find('.menuAppTask');
+                                                                            $(document).click(function () {
                                                                                 $menu.hide();
-                                                                            } else {
-                                                                                $('.menuAppTask').hide();
-                                                                                $menu.show();
-                                                                                var $anchor = $('.app-url').parent();
-                                                                                $anchor.click(function() {
-                                                                                  $menu.hide();                                                                                          
-                                                                                });
-                                                                            }
+                                                                            });
+                                                                            
+                                                                            $li.find('.showmenuAppTask').click(function (e) {
+                                                                                e.stopPropagation();
+                                                                                var $menuInside = $li.find('.menuAppTask');
+                                                                                if ($menuInside.is(':visible')) {
+                                                                                    $menuInside.hide();
+                                                                                } else {
+                                                                                    $('.menuAppTask').hide();
+                                                                                    $menuInside.show();                                                                                         
+                                                                                }
+                                                                                //$menu.show();
+                                                                            });
+                                                                            $menu.click(function (e) {
+                                                                                e.stopPropagation();
+                                                                            });
+                                                                            var $anchor = $('.app-url').parent();
+                                                                            $anchor.click(function() {
+                                                                              $menu.hide();                                                                                          
+                                                                            });
                                                                         });
+
+                                                                        // $li.find('.showmenuAppTask').click(function() {
+                                                                        //     //alert("I am Here");
+                                                                        //     var $menu = $li.find('.menuAppTask');
+                                                                        //     if ($menu.is(':visible')) {
+                                                                        //         $menu.hide();
+                                                                        //     } else {
+                                                                        //         $('.menuAppTask').hide();
+                                                                        //         $menu.show();
+                                                                        //         var $anchorbody = $('body');
+                                                                        //         $anchorbody.click(function() {
+                                                                        //           $menu.hide();                                                                                          
+                                                                        //         });
+                                                                        //         var $anchor = $('.app-url').parent();
+                                                                        //         $anchor.click(function() {
+                                                                        //           $menu.hide();                                                                                          
+                                                                        //         });
+                                                                        //     }
+                                                                        // });
+                                                                        $(document).ready(function () {
+                                                                            var $menuT = $rowContainter.find('.menuAppTask').css('width','166px').css('margin-left','-42px');
+                                                                            $(document).click(function () {
+                                                                                $menuT.hide();
+                                                                            });
+                                                                            $rowContainter.find('.showmenuAppTask').click(function (e) {
+
+                                                                                e.stopPropagation();
+                                                                                //$menuT.show();
+                                                                                var $menuInside = $rowContainter.find('.menuAppTask');
+                                                                                if ($menuInside.is(':visible')) {
+                                                                                    $menuInside.hide();
+                                                                                } else {
+                                                                                    $('.menuAppTask').hide();
+
+                                                                                    $menuInside.show();                                                                                         
+                                                                                    
+                                                                                }
+                                                                            });
+                                                                            $menuT.click(function (e) {
+
+                                                                                e.stopPropagation();
+                                                                            });
+                                                                            var $anchor = $('.app-url').parent();
+                                                                            $anchor.click(function() {
+
+                                                                              $menuT.hide();                                                                                          
+
+                                                                            });
+                                                                        });
+                                                                        // $rowContainter.find('.showmenuAppTask').click(function() {
+
+                                                                        //     var $menu = $rowContainter.find('.menuAppTask').css('width','166px').css('margin-left','-42px');
+                                                                        //     //alert($menu.length);
+                                                                        //     if ($menu.is(':visible')) {
+                                                                        //         $menu.hide();
+                                                                        //     } else {
+                                                                        //         $('.menuAppTask').hide();
+                                                                        //         $menu.show();
+                                                                        //         var $anchor = $('.app-url').parent();
+                                                                        //         $anchor.click(function() {
+                                                                        //           $menu.hide();                                                                                          
+                                                                        //         });
+                                                                        //     }
+                                                                        // });
 
                                                                         var $cardContainer = $li.find('.container').click(function(e) {
                                                                             $('.container').removeClass('role-Selectedcard');
@@ -2061,6 +2156,10 @@
                                                                         var $desktopProvisioningPanelBody = $('.desktopProvisioningPanel').find('.panel-body');
                                                                         $devopsRolepanelBody.empty();
 
+                                                                        var sortbyid = function SortByID(x,y) {
+                                                                          return x.position - y.position; 
+                                                                        }
+
                                                                         //alert(orgId + "/" + projectId + "/" + envId + data.length);
                                                                         //displaying the organisation from tree view
                                                                         $.get('../organizations/getTreeForbtv',function(orgData){
@@ -2074,7 +2173,32 @@
                                                                             var getDesignTypeImg;
                                                                             var getDesignTypeRowID;
                                                                             var getDesignTypeName;
+                                                                            var getDesignType;
                                                                             $('#accordion-2').empty();
+                                                                           // var _tdata = [];
+                                                                            //alert(JSON.stringify(tdata));
+                                                                            //Reordering - chef, osimage, cft, docker
+                                                                            for (var i = 0; i < rowLength; i += 1) {
+                                                                             
+                                                                              switch (tdata[i]['templatetype']) {
+                                                                                    case "chef":
+                                                                                     tdata[i]['position'] = 0;
+                                                                                      break;
+                                                                                    case "ami":
+                                                                                      tdata[i]['position'] = 1;
+                                                                                      break;
+                                                                                    case "cft":
+                                                                                      tdata[i]['position'] = 2;
+                                                                                      break;
+                                                                                    case "docker":
+                                                                                      tdata[i]['position'] = 3;
+                                                                                      break;
+                                                                              }
+
+                                                                            }
+                                                                            tdata.sort(sortbyid);
+                                                                            
+
                                                                             console.log(tdata);
 
                                                                             //for loop for getting the orgdata
@@ -2083,9 +2207,14 @@
                                                                                // alert(orgData[j].rowid);
                                                                                (function(j){
                                                                             for (var i = 0; i < rowLength; i += 1) {
+                                                                              console.log(i);
+                                                                              if(tdata[i]['designtemplateicon_filename'])
                                                                                 getDesignTypeImg = tdata[i]['designtemplateicon_filename'];
+                                                                              else
+                                                                                getDesignTypeImg = ''; //tdata[i]['designtemplateicon_filename']
                                                                                 getDesignTypeRowID = tdata[i]['rowid'];
                                                                                 getDesignTypeName = tdata[i]['templatetypename'];
+                                                                                getDesignType = tdata[i]['templatetype'];
                                                                                 //alert(tdata[i].orgname_rowid[0]);
                                                                                 if(orgData[j].rowid == tdata[i].orgname_rowid[0]){
                                                                                  //   alert(orgData[j].rowid===tdata[i].orgname_rowid[0]);
@@ -2142,7 +2271,7 @@
                                                                                     '<i class="fa fa-fw fa-plus-circle txt-color-blue"></i> ' +
                                                                                     '<i class="fa fa-fw fa-minus-circle txt-color-red"></i>' + getDesignTypeName + '</a>' +
                                                                                     '</h4></div><div class="panel-collapse collapse" id="collapse' + i + '">' +
-                                                                                    '<div class="panel-body ' + getDesignTypeName + '"></div>' +
+                                                                                    '<div class="panel-body ' + getDesignType + '"></div>' +
                                                                                     '</div>';
                                                                                 $('#accordion-2').append($containerTemp);
                                                                               // alert($containerTemp);
@@ -2183,7 +2312,7 @@
                                                                                     var tagLabel = '';
                                                                                     //Docker Check
 
-                                                                                    if (data[i].templateType == "Docker") {
+                                                                                    if (data[i].templateType == "Docker"  ||  data[i].templateType == "docker" ) {
 
                                                                                         console.log("docker", data[i].blueprintConfig);
                                                                                         //$selectVer = $('<select style="padding:1px;"></select>').addClass('blueprintVersionDropDown').attr('data-blueprintId', data[i]._id);
@@ -2221,9 +2350,11 @@
                                                                                         // tagLabel = '<span>Tags&nbsp;</span';
                                                                                         tagLabel = '';
                                                                                         //alert(JSON.stringify(data[i]));
-                                                                                    } else if (data[i].templateType == "CloudFormation") {
+                                                                                    } else if (data[i].templateType == "cft") {
                                                                                         //$selectVer.hide();
+                                                                                       // $selectVerEdit.hide();
                                                                                         $selectVerEdit.hide();
+                                                                                        
 
                                                                                     } else {
                                                                                         $selectVer = $('<select style="padding:1px;padding-left:5px;"></select>').addClass('blueprintVersionDropDown').attr('data-blueprintId', data[i]._id);
@@ -2483,7 +2614,7 @@
                                                                                 $modalDesktopProvisioning.modal('show');
                                                                                 return;
                                                                             }
-                                                                            if ($selectedItems.attr('data-templateType') === 'Docker') {
+                                                                            if ($selectedItems.attr('data-templateType') === 'Docker' || $selectedItems.attr('data-templateType') === 'docker') {
 
                                                                                 $('.oldlaunchparams').empty(); //clearing the old div for composite blue print.
                                                                                 // alert('in test');
@@ -2557,7 +2688,7 @@
                                                                                 $('.dockerinstances').first().append($instancetable);
 
                                                                                 $('#dockerintsancestab thead td').each(function(k, v) {
-                                                                                    if (k > 3)
+                                                                                    if (k > 2)
                                                                                         $(this).detach();
                                                                                 });
                                                                                 $('#dockerintsancestab thead').append('<td>Log Info</td>');
@@ -2570,7 +2701,8 @@
                                                                                         $(this).addClass('rowcustomselected');
                                                                                     });
                                                                                     $(this).find('td').each(function(k1, v1) {
-                                                                                        if (k1 > 3)
+
+                                                                                        if (k1 > 2)
                                                                                             $(this).detach();
                                                                                         //inserting a checkbox to select instance
                                                                                         if (k1 == 0) {
@@ -2589,7 +2721,7 @@
                                                                                 $('#dockerInstanceSelectionTitle').empty().append('Select Instances to pull  "' + dockerreponame + '" into');
                                                                                 $launchDockerInstanceSelector.modal('show');
                                                                                 $('#rootwizard').find("a[href*='tab1']").trigger('click'); //showing first tab.
-                                                                                $('#dockerintsancestab thead').empty().append('<tr><td>Select Instance</td><td>Logo</td><td>Instance Name</td><td>IP Address</td><td>Log</td><td  class="hidden">Add Docker Engine</td></tr>');
+                                                                                $('#dockerintsancestab thead').empty().append('<tr><td>Select Instance</td><td>Instance Name</td><td>IP Address</td><td>Log</td><td  class="hidden">Add Docker Engine</td></tr>');
                                                                                 $('#dockerintsancestab').dataTable({
                                                                                     "bPaginate": false
                                                                                 });
@@ -2618,8 +2750,14 @@
                                                                                         if (blueprintType === 'aws_cf') {
                                                                                             msgStr = 'Stack Id : ' + data.stackId + '. You can view your stack in cloudformation tab';
                                                                                         } else {
-                                                                                            msgStr = 'Instance Id : ' + data.id + '<br/>Instance Logs :- ';
+                                                                                            msgStr = 'Instance Id : ';
+                                                                                            
+                                                                                           // for(var i = 0; i < data.id.length; i++)
+                                                                                                msgStr += data.id.join(',');
+
+                                                                                            msgStr += '<br/>You can monitor logs from the Launched Instances.';
                                                                                         }
+
                                                                                         var $msg = $('<div></div>').append('<h3 style="font-size:16px;" class=\"alert alert-success\">Your Selected Blueprint is being Launched, kindly check back in a while.</h3>').append(msgStr);
 
                                                                                         $launchResultContainer.find('.modal-body').empty();
@@ -2629,9 +2767,10 @@
 
                                                                                                 addStackToDom(stack);
                                                                                                
-                                                                                            })
+                                                                                        })
                                                                                             return;
                                                                                         }
+                                                                                       
 
                                                                                         var instanceId = data.id;
                                                                                         var timeout;
@@ -2695,14 +2834,34 @@
                                                                                                 });
                                                                                             }, delay);
                                                                                         }
-                                                                                        pollLogs(lastTimestamp, 0, true);
+                                                                                        //alert('Instances ' + data.id.length);
+                                                                                        if(data.id.length <= 1)
+                                                                                            {
+                                                                                                //data = data[0];
+                                                                                                instanceId = data.id[0];
+                                                                                                //to be called only when there is one instance.
+                                                                                                pollLogs(lastTimestamp, 0, true);
+                                                                                                $.get('../instances/' + data.id[0], function(data) {
+                                                                                                    $('#tabInstanceStatus').hide();
+                                                                                                        addInstanceToDOM(data);
+                                                                                                    // serachBoxInInstance.updateData(data,"add",undefined);
+                                                                                                });
+                                                                                            }
+                                                                                        else{
+                                                                                            for(var j = 0; j < data.id.length;j++){
+                                                                                                $.get('../instances/' + data.id[j], function(data) {
+                                                                                                    $('#tabInstanceStatus').hide();
+                                                                                                        addInstanceToDOM(data);
+                                                                                                    // serachBoxInInstance.updateData(data,"add",undefined);
+                                                                                                });
+                                                                                                if(j >= data.id.length - 1){
+                                                                                                    $('.logsAreaBootstrap').hide();
+                                                                                                }
+                                                                                            }
+                                                                                        }
+                                                                                        
 
-                                                                                        $.get('../instances/' + data.id, function(data) {
-                                                                                            $('#tabInstanceStatus').hide();
-                                                                                            addInstanceToDOM(data);
-                                                                                            // serachBoxInInstance.updateData(data,"add",undefined);
-
-                                                                                        });
+                                                                                        
 
 
                                                                                     }).error(function() {
@@ -3605,7 +3764,7 @@
                                                                                     });
                                                                                 } else {
                                                                                     //if job type is jenkins show job url..
-                                                                                    var jobURLS = data[i].taskConfig.jobURL;
+                                                                                    var jobURLS = 'http://' + data[i].taskConfig.jobURL;
 
                                                                                     if (jobURLS) {
                                                                                         var $tdNodeList = $('<td style="vertical-align:inherit;text-align:center;"></td>').append('<span>&nbsp;<a title="' + jobURLS + '" href="' + jobURLS + '" target="_blank" style="word-break: break-all;text-decoration:none"><img style="width:20px;" src="img/joburl.jpg"></a></span>');
@@ -3863,13 +4022,10 @@
 
                                                                                             console.log(taskHistories);
 
-                                                                                            var history =[];
-                                                                                            for (var j = 0; j < taskHistories.length; j++) {
-                                                                                                history.push(taskHistories[j].buildNumber);
-                                                                                            }
+
                                                                                             for (var i = 0; i < taskHistories.length; i++) {
                                                                                                 //alert(taskHistories.length);
-                                                                                
+                                                                                                
                                                                                                 
                                                                                                 
                                                                                                 (function(i) {
@@ -3889,8 +4045,9 @@
                                                                                                             var $tdBuildNumber = $('<td/>').append('<a style="word-break: break-all;" href="' + url + '" title="' + url + '" target="_blank">' + taskHistories[i].buildNumber + '</a>');
                                                                                                             $trHistoryRow.append($tdBuildNumber);
                                                                                                             if (typeof job.builds[job.nextBuildNumber - 1] === "undefined") {
-                                                                                                                var $tdJobName = $('<td/>').append('Current Job is still pending');
-                                                                                                                $trHistoryRow.append($tdJobName);
+                                                                                                                //commented for not showing the pending job flow..
+                                                                                                                /*var $tdJobName = $('<td/>').append('Current Job is still pending');
+                                                                                                                $trHistoryRow.append($tdJobName);*/
                                                                                                             } else {
 
 
@@ -3903,26 +4060,17 @@
 
                                                                                                         } else {
                                                                                                             for (var k = 0; k < job.builds.length; k++) {
-                                                                                                                //alert(JSON.stringify(job.builds));
+                                                                                                                
 
                                                                                                                 console.log(taskHistories[i].buildNumber, "  ---  ", job.nextBuildNumber);
 
-                                                                                                                //if (taskHistories[i].buildNumber === job.builds[k].number) {
-                                                                                                                if (history.indexOf(job.builds[k].number) != -1) {
-                                                                                                                    url = job.builds[k].url;
-                                                                                                                    // alert(url);
-                                                                                                                    //  var $tdBuildNumber = $('<td/>');
-                                                                                                                    // alert('spinm');
-                                                                                                                    /*var $nodeListContainer = $('.build-number');
-                                                                                                                    $nodeListContainer.find('img').remove();*/
+                                                                                                                if (taskHistories[i].buildNumber === job.builds[k].number) {
 
-                                                                                                                    /*var $nodeListContainer = $('.build-number');
-                                                                                                                    $nodeListContainer.find('img').remove();
-                                                                                                                    timeout = setTimeout(function() {
-                                                                                                                        $trHistoryRow.find('.build-number').append('<a style="word-break: break-all;" href="' + url + '" title="' + url + '" target="_blank">' + taskHistories[i].buildNumber + '</a>');
-                                                                                                                    }, 1500);*/
+                                                                                                                    url = 'http://' + job.builds[k].url;
+                                                                                                                    
+                                                                                                                    
                                                                                                                     var $tdBuildNumber = $('<td/>').append('<a style="word-break: break-all;" href="' + url + '" title="' + url + '" target="_blank">' + taskHistories[i].buildNumber + '</a>');
-+-                                                                                                                  $trHistoryRow.append($tdBuildNumber);
+                                                                                                              $trHistoryRow.append($tdBuildNumber);
 
 
                                                                                                                     buildFound = true;
@@ -3943,18 +4091,17 @@
                                                                                                         $tdJobName = $('<td/>');
 
 
-                                                                                                        // alert(taskHistories[i].jobResultURL[p]);
-                                                                                                        //alert(taskHistories[i].jobResultURL.length);
+                                                                                                        
                                                                                                         if (taskHistories[i].jobResultURL.length) {
                                                                                                             for (var p = 0; p < taskHistories[i].jobResultURL.length; p++) {
                                                                                                                 $tdJobName.append('<a class="btn btn-primary btn-sg tableactionbutton marginleftright7" style="word-break: break-all;" href="' + taskHistories[i].jobResultURL[p] + '" title="' + taskHistories[i].jobResultURL[p] + '" target="_blank"><i class="ace-icon fa fa-file-text bigger-120"></i></a>');
                                                                                                             }
 
-                                                                                                            //$trHistoryRow.append($tdJobName);
+                                                                                                            
                                                                                                         }
                                                                                                         $tdJobName.append('<a title="Jenkins Log" data-placement="top" rel="tooltip" class="btn btn-primary btn-sg tableactionbutton moreinfo" href="javascript:void(0)" data-toggle="modal"><i class="ace-icon fa fa-list bigger-120"></i></a>');
                                                                                                         $tdJobName.find('a.moreinfo').data('history', taskHistories[i]).data('taskId', taskId).click(function() {
-                                                                                                            //$('#assignedTaskHistory').modal('hide');
+                                                                                                            
                                                                                                             var taskId = $(this).data('taskId');
                                                                                                             var $taskExecuteTabsHeaderContainer = $('#taskExecuteTabsHeader').empty();
                                                                                                             var $taskExecuteTabsContent = $('#taskExecuteTabsContent').empty();
@@ -4011,22 +4158,29 @@
 
 
 
-                                                                                                        //method for showing the status of the job that is getting executed or the job already executed..
+                                                                                                        //method for showing the status of the job that is getting executed or the job already executed and for no status..
                                                                                                         $trHistoryRow.append($tdJobName);
-                                                                                                        if (taskHistories[i].status.toLowerCase() === "success") {
-                                                                                                            var $tdBuildStatus = $('<td style="background-color:#1c9951;"></td>').append('<span style="color:#fff">SUCCESS</span>');
-                                                                                                            $trHistoryRow.append($tdBuildStatus);
-                                                                                                        } else if (taskHistories[i].status.toLowerCase() === "failed") {
-                                                                                                            var $tdBuildStatusFailure = $('<td style="background-color:red;"></td>').append('<span style="color:#fff;">FAILURE</span>');
-                                                                                                            $trHistoryRow.append($tdBuildStatusFailure);
-                                                                                                        } else if (taskHistories[i].status.toLowerCase() === "failure") {
-                                                                                                            var $tdBuildStatusFailure = $('<td style="background-color:red;"></td>').append('<span style="color:#fff;">FAILURE</span>');
-                                                                                                            $trHistoryRow.append($tdBuildStatusFailure);
-                                                                                                        } else if (taskHistories[i].status.toLowerCase() === "aborted") {
-                                                                                                            var $tdBuildStatusFailure = $('<td style="background-color:red;"></td>').append('<span style="color:#fff;">ABORTED</span>');
-                                                                                                            $trHistoryRow.append($tdBuildStatusFailure);
+                                                                                                        
+                                                                                                        
+                                                                                                        if (taskHistories[i].status != null) {
+                                                                                                            if (taskHistories[i].status.toLowerCase() === "success") {
+                                                                                                                var $tdBuildStatus = $('<td style="background-color:#1c9951;"></td>').append('<span style="color:#fff">SUCCESS</span>');
+                                                                                                                $trHistoryRow.append($tdBuildStatus);
+                                                                                                            } else if (taskHistories[i].status.toLowerCase() === "failed") {
+                                                                                                                var $tdBuildStatusFailure = $('<td style="background-color:red;"></td>').append('<span style="color:#fff;">FAILURE</span>');
+                                                                                                                $trHistoryRow.append($tdBuildStatusFailure);
+                                                                                                            } else if (taskHistories[i].status.toLowerCase() === "failure") {
+                                                                                                                var $tdBuildStatusFailure = $('<td style="background-color:red;"></td>').append('<span style="color:#fff;">FAILURE</span>');
+                                                                                                                $trHistoryRow.append($tdBuildStatusFailure);
+                                                                                                            } else if (taskHistories[i].status.toLowerCase() === "aborted") {
+                                                                                                                var $tdBuildStatusFailure = $('<td style="background-color:red;"></td>').append('<span style="color:#fff;">ABORTED</span>');
+                                                                                                                $trHistoryRow.append($tdBuildStatusFailure);
+                                                                                                            } else {
+                                                                                                                var $tdBuildStatusRunning = $('<td style="background-color:gray;"></td>').append('<span style="color:#fff;">PENDING</span>');
+                                                                                                                $trHistoryRow.append($tdBuildStatusRunning);
+                                                                                                            }
                                                                                                         } else {
-                                                                                                            var $tdBuildStatusRunning = $('<td style="background-color:gray;"></td>').append('<span style="color:#fff;">PENDING</span>');
+                                                                                                            var $tdBuildStatusRunning = $('<td></td>').append('<span style="color:#000;">No Status</span>');
                                                                                                             $trHistoryRow.append($tdBuildStatusRunning);
                                                                                                         }
 
@@ -4063,120 +4217,7 @@
                                                                                                 $errorContainer.html("Server Behaved Unexpectedly");
                                                                                             }
                                                                                         });
-                                                                                        if (autoSyncFlag && autoSyncFlag === "Yes") {
-                                                                                            alert('firing');
-
-                                                                                            console.log('Fetching build history from Data Lake..');
-
-
-
-
-
-                                                                                            console.log('BuildHistory API', url);
-
-                                                                                            $.ajax({
-                                                                                                url: url,
-                                                                                                type: 'GET',
-                                                                                                contentType: 'application/json',
-                                                                                                success: function(buildData) {
-
-                                                                                                    if (buildData.BuildHistory) {
-
-                                                                                                        var buildLength = '';
-
-                                                                                                        if (buildData.BuildHistory.length > 100) {
-                                                                                                            buildLength = 100;
-                                                                                                        } else {
-                                                                                                            buildLength = buildData.BuildHistory.length;
-                                                                                                        }
-
-                                                                                                        for (i = 0; i < buildLength; i++) {
-
-                                                                                                            var $trHistoryRow = $('<tr/>');
-
-                                                                                                            var date = new Date(buildData.BuildHistory[i].builddate);
-                                                                                                            var formatted = formatDate(date);
-
-                                                                                                            var $tdTimeStarted = $('<td></td>').append(formatted);
-                                                                                                            $trHistoryRow.append($tdTimeStarted);
-
-                                                                                                            date.setMilliseconds(date.getMilliseconds() + buildData.BuildHistory[i].duration);
-
-                                                                                                            formatted = formatDate(date);
-
-                                                                                                            var $tdTimeEnded = $('<td></td>').append(formatted);
-                                                                                                            $trHistoryRow.append($tdTimeEnded);
-
-                                                                                                            if (buildData.BuildHistory[i].status === "SUCCESS") {
-                                                                                                                var $tdBuildStatus = $('<td></td>').append('<img rel="tooltip" data-placement="top" title="Success" src="img/indicator_started.png"/>');
-                                                                                                                $trHistoryRow.append($tdBuildStatus);
-                                                                                                            } else if (buildData.BuildHistory[i].status === "FAILED") {
-                                                                                                                var $tdBuildStatusFailure = $('<td></td>').append('<img rel="tooltip" data-placement="top" title="Failed" src="img/indicator_stopped.png"/>');
-                                                                                                                $trHistoryRow.append($tdBuildStatusFailure);
-                                                                                                            } else {
-                                                                                                                var $tdBuildStatusRunning = $('<td></td>').append('<img rel="tooltip" data-placement="top" title="Running" src="img/indicator_unknown.png"/>');
-                                                                                                                $trHistoryRow.append($tdBuildStatusRunning);
-                                                                                                            }
-
-                                                                                                            var $tdMessage = $('<td style="width:42%"> -- </td>');
-                                                                                                            $trHistoryRow.append($tdMessage);
-
-                                                                                                            var $tdUser = $('<td></td>').append(buildData.BuildHistory[i].startedby);
-                                                                                                            $trHistoryRow.append($tdUser);
-
-                                                                                                            var $tdLogs = $('<td></td>').append('<a data-original-title="MoreInfo" rel="tooltip" class="moreinfoBuild margin-left40per" href="javascript:void(0)"></a>');
-
-                                                                                                            $tdLogs.find('a').data('logfileurl', buildData.BuildHistory[i].logfileurl).data('taskId', taskId).click(function() {
-                                                                                                                $('#assignedTaskHistory').modal('hide');
-                                                                                                                var taskId = $(this).data('taskId');
-                                                                                                                var $taskExecuteTabsHeaderContainer = $('#taskExecuteTabsHeader').empty();
-                                                                                                                var $taskExecuteTabsContent = $('#taskExecuteTabsContent').empty();
-                                                                                                                var $modal = $('#assignedExecute');
-                                                                                                                $modal.find('.loadingContainer').show();
-                                                                                                                $modal.find('.errorMsgContainer').hide();
-                                                                                                                $modal.find('.outputArea').hide();
-                                                                                                                $modal.modal('show');
-
-                                                                                                                var $liHeader = $('<li><a href="#tab_jenkinsTask" data-toggle="tab">Jenkins Job</a></li>');
-                                                                                                                $taskExecuteTabsHeaderContainer.append($liHeader);
-                                                                                                                var $tabContent = $('<div class="tab-pane fade" id="tab_jenkinsTask"><div class="taskLogArea taskLOGS"></div></div>');
-                                                                                                                $taskExecuteTabsContent.append($tabContent);
-                                                                                                                $liHeader.find('a').click();
-
-                                                                                                                var logfileurl = $(this).data('logfileurl');
-
-                                                                                                                var url = dataLakeHost + '/EnterpriseDataLake/rest/getLogfiledata?logurl=' + logfileurl + '&username=admin&password=admin@RL123';
-
-                                                                                                                $.ajax({
-                                                                                                                    type: 'GET',
-                                                                                                                    url: url,
-                                                                                                                    contentType: 'application/json',
-                                                                                                                    dataType: 'text',
-                                                                                                                    success: function(jobOutput) {
-                                                                                                                        var output = jobOutput.replace(/\r?\n/g, "<br />");
-
-                                                                                                                        $tabContent.find('.taskLogArea').html(output);
-                                                                                                                        $modal.find('.loadingContainer').hide();
-                                                                                                                        $modal.find('.outputArea').show();
-                                                                                                                    }
-                                                                                                                });
-
-
-                                                                                                            })
-
-                                                                                                            $trHistoryRow.append($tdLogs);
-                                                                                                            $taskHistoryDatatable.row.add($trHistoryRow).draw();
-
-                                                                                                        }
-
-                                                                                                    }
-                                                                                                },
-                                                                                                error: function(errMsg) {
-                                                                                                    console.log('Error in fetching build history', errMsg);
-                                                                                                }
-                                                                                            });
-
-                                                                                        }
+                                                                                        
                                                                                     });
                                                                                 }
                                                                                 $tr.append($tdHistory);
@@ -4717,10 +4758,11 @@
                                                                         $('.instanceloaderspinner').removeClass('hidden');
                                                                         $.get('../organizations/' + orgId + '/businessgroups/' + urlParams['bg'] + '/projects/' + projectId + '/environments/' + envId + '/', function(data) {
                                                                             console.log('success---3---4');
-                                                                            initializeInstanceArea(data.instances);
+                                                                            
                                                                             initializeTaskArea(data.tasks);
                                                                             initializeBlueprintArea(data.blueprints);
                                                                             x = data.instances;
+                                                                            initializeInstanceArea(data.instances);
                                                                             initializeStackArea(data.stacks);
                                                                         });
 

@@ -11,7 +11,7 @@ Resource           ${COMMON RESOURCES}/catalyst_grid_node.txt
 
 *** Test Cases ***
 Catalyst new PROVIDERS setup
-    [Tags]       Sanity               Smoke
+    [Tags]       Sanity               Settings
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
     Catalyst Creation of Providers Setup 
@@ -20,12 +20,12 @@ Catalyst new PROVIDERS setup
 
 
 Catalyst new VM IMAGE setup
-    [Tags]       Sanity               Smoke
+    [Tags]       Sanity               Settings
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
     Catalyst navigates to VMImage page
     Catalyst Creation of VM Image Process for CentOS
     Catalyst Creation of VM Image Process for Ubutnu
-    Catalyst Creation of VM Image Process for Windows      
+    #Catalyst Creation of VM Image Process for Windows      
     Catalyst Logout                      
     [Teardown]     Close Browser
