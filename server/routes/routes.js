@@ -22,6 +22,7 @@ var taskStatus = require('./routes_taskstatus');
 var ec2 = require('./routes_aws_ec2');
 
 var jenkins = require('./routes_jenkins');
+var openstack = require('./routes_openstack');
 var application = require('./routes_application');
 var jira = require('./routes_jira');
 
@@ -73,6 +74,8 @@ module.exports.setRoutes = function(app) {
     ec2.setRoutes(app, sessionVerificationFunc);
 
     jenkins.setRoutes(app, sessionVerificationFunc);
+    openstack.setRoutes(app, sessionVerificationFunc);
+    
 
     application.setRoutes(app, sessionVerificationFunc);
 

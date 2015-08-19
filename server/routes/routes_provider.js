@@ -11,6 +11,7 @@ var logger = require('_pr/logger')(module);
 var EC2 = require('../lib/ec2.js');
 var d4dModelNew = require('../model/d4dmasters/d4dmastersmodelnew.js');
 var AWSProvider = require('../model/classes/masters/cloudprovider/awsCloudProvider.js');
+var openstackProvider = require('../model/classes/masters/cloudprovider/openstackCloudProvider.js');
 var VMImage = require('../model/classes/masters/vmImage.js');
 var AWSKeyPair = require('../model/classes/masters/cloudprovider/keyPair.js');
 var blueprints = require('../model/dao/blueprints');
@@ -24,6 +25,350 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
     app.all("/aws/providers/*", sessionVerificationFunc);
     var cryptoConfig = appConfig.cryptoSettings;
     var cryptography = new Cryptography(cryptoConfig.algorithm, cryptoConfig.password);
+
+    //Create Openstack provider
+     app.post('/openstack/providers', function(req, res) {
+
+        logger.debug("Enter post() for /providers.", typeof req.body.fileName);
+        var user = req.session.user;
+        var category = configmgmtDao.getCategoryFromID("9");
+        var permissionto = 'create';
+        var openstackusername = req.body.openstackusername;
+        var openstackpassword = req.body.openstackpassword;
+        var providerName = req.body.providerName;
+        var providerType = req.body.providerType;
+        var orgId = req.body.orgId;
+
+        if (typeof openstackusername === 'undefined' || openstackusername.length === 0) {
+            res.send(400, "Please Enter Username.");
+            return;
+        }
+        if (typeof openstackpassword === 'undefined' || openstackpassword.length === 0) {
+            res.send(400, "Please Enter Password.");
+            return;
+        }
+        if (typeof providerName === 'undefined' || providerName.length === 0) {
+            res.send(400, "Please Enter Name.");
+            return;
+        }
+        if (typeof providerType === 'undefined' || providerType.length === 0) {
+            res.send(400, "Please Enter ProviderType.");
+            return;
+        }
+        if (typeof orgId === 'undefined' || orgId.length === 0) {
+            res.status(400);
+            res.send("Please Select Any Organization.");
+            return;
+        }
+        var region;
+        // if (typeof req.body.region === 'string') {
+        //     logger.debug("inside single region: ", req.body.region);
+        //     region = req.body.region;
+        // } else {
+        //     region = req.body.region[0];
+        // }
+        // logger.debug("Final Region:  ", region)
+
+         usersDao.haspermission(user.cn, category, permissionto, null, req.session.user.permissionset, function(err, data) {
+                if (!err) {
+                    logger.debug('Returned from haspermission : ' + data + ' : ' + (data == false));
+                    if (data == false) {
+                        logger.debug('No permission to ' + permissionto + ' on ' + category);
+                        res.send(401, "You don't have permission to perform this operation.");
+                        return;
+                    }
+                } else {
+                    logger.error("Hit and error in haspermission:", err);
+                    res.send(500);
+                    return;
+                }
+
+                masterUtil.getLoggedInUser(user.cn, function(err, anUser) {
+                    if (err) {
+                        res.send(500, "Failed to fetch User.");
+                        return;
+                    }
+                    logger.debug("LoggedIn User:>>>> ", JSON.stringify(anUser));
+                    if (anUser) {
+                       
+                            var providerData = {
+                                id: 9,
+                                username: openstackusername,
+                                password: openstackpassword,
+                                providerName: providerName,
+                                providerType: providerType,
+                                orgId: orgId
+                            };
+                            openstackProvider.getopenstackProviderByName(providerData.providerName, providerData.orgId, function(err, prov) {
+                                if (err) {
+                                    logger.debug("err.....", err);
+                                }
+                                if (prov) {
+                                    logger.debug("getAWSProviderByName: ",JSON.stringify(prov));
+                                    logger.debug("err.....", err);
+                                    res.status(409);
+                                    res.send("Provider name already exist.");
+                                    return;
+                                }
+                                openstackProvider.createNew(providerData, function(err, provider) {
+                                    if (err) {
+                                        logger.debug("err.....", err);
+                                        res.status(500);
+                                        res.send("Failed to create Provider.");
+                                        return;
+                                    }
+                                    logger.debug("Provider id:  %s", JSON.stringify(provider._id));
+                                  
+                                    masterUtil.getOrgById(providerData.orgId, function(err, orgs) {
+                                        if (err) {
+                                            res.send(500, "Not able to fetch org.");
+                                            return;
+                                        }
+                                        if (orgs.length > 0) {
+                                            
+                                            var dommyProvider = {
+                                                _id: provider._id,
+                                                id: 9,
+                                                username: openstackusername,
+                                                password: openstackpassword,
+                                                providerName: provider.providerName,
+                                                providerType: provider.providerType,
+                                                orgId: orgs[0].rowid,
+                                                orgName: orgs[0].orgname,
+                                                __v: provider.__v,
+                                             
+                                            };
+                                            res.send(dommyProvider);
+                                            return;
+                                            
+                                        }
+                                    });
+                                 
+                                    logger.debug("Exit post() for /providers");
+                                });
+                            });
+                      
+                    } //end anuser
+                });
+            });
+
+    });
+    
+     // Return list of all available AWS Providers.
+    app.get('/openstack/providers', function(req, res) {
+        logger.debug("Enter get() for /providers");
+        var loggedInUser = req.session.user.cn;
+        masterUtil.getLoggedInUser(loggedInUser, function(err, anUser) {
+            if (err) {
+                res.send(500, "Failed to fetch User.");
+                return;
+            }
+            if (!anUser) {
+                res.send(500, "Invalid User.");
+                return;
+            }
+            if (anUser.orgname_rowid[0] === "") {
+                masterUtil.getAllActiveOrg(function(err, orgList) {
+                    if (err) {
+                        res.send(500, 'Not able to fetch Orgs.');
+                        return;
+                    }
+                    if (orgList) {
+                        openstackProvider.getopenstackProvidersForOrg(orgList, function(err, providers) {
+                            if (err) {
+                                logger.error(err);
+                                res.send(500, errorResponses.db.error);
+                                return;
+                            }
+                            logger.debug("providers>>> ", JSON.stringify(providers));
+                            if (providers.length > 0) {
+                                 res.send(providers);
+                                            return;
+                            } else {
+                                res.send(200,[]);
+                                return;
+                            }
+                        });
+                    } else {
+                        res.send(200, []);
+                        return;
+                    }
+                });
+            } else {
+                masterUtil.getOrgs(loggedInUser, function(err, orgList) {
+                    if (err) {
+                        res.send(500, 'Not able to fetch Orgs.');
+                        return;
+                    }
+                    if (orgList) {
+                        openstackProvider.getopenstackProvidersForOrg(orgList, function(err, providers) {
+                            if (err) {
+                                logger.error(err);
+                                res.send(500, errorResponses.db.error);
+                                return;
+                            }
+                            var providersList = [];
+                            logger.debug("Providers::::::::::::::::::: ",providers === null);
+                            if(providers === null){
+                                res.send(providersList);
+                                return;
+                            }
+                            if (providers.length > 0) {
+                                 res.send(providers);
+                                            return;
+                            } else {
+                                res.send(providersList);
+                                return;
+                            }
+                        });
+                    } else {
+                        res.send(200, []);
+                        return;
+                    }
+                });
+            }
+        });
+    });
+    
+    // Return AWS Provider respect to id.
+    app.get('/openstack/providers/:providerId', function(req, res) {
+        logger.debug("Enter get() for /providers/%s", req.params.providerId);
+        var providerId = req.params.providerId.trim();
+        if (typeof providerId === 'undefined' || providerId.length === 0) {
+            res.send(500, "Please Enter ProviderId.");
+            return;
+        }
+        openstackProvider.getopenstackProviderById(providerId, function(err, aProvider) {
+            if (err) {
+                logger.error(err);
+                res.send(500, errorResponses.db.error);
+                return;
+            }
+            if (aProvider) {
+               
+                    masterUtil.getOrgById(aProvider.orgId[0], function(err, orgs) {
+                        if (err) {
+                            res.send(500, "Not able to fetch org.");
+                            return;
+                        }
+                        aProvider.orgname = orgs[0].orgname;
+                       
+                        if (orgs.length > 0) {
+                            res.send(aProvider);
+                        }
+                    });
+              
+            } else {
+                res.send(404);
+            }
+        });
+    });
+    
+    // Update a particular AWS Provider
+    app.post('/openstack/providers/:providerId/update', function(req, res) {
+        logger.debug("Enter post() for /providers/%s/update", req.params.providerId);
+        var user = req.session.user;
+        var category = configmgmtDao.getCategoryFromID("9");
+        var permissionto = 'modify';
+        var openstackusername = req.body.openstackusername;
+        var openstackpassword = req.body.openstackpassword;
+        var providerName = req.body.providerName.trim();
+        var providerType = req.body.providerType.trim();
+        var providerId = req.params.providerId.trim();
+        var orgId = req.body.orgId;
+        if (typeof openstackusername === 'undefined' || openstackusername.length === 0) {
+            res.send(400, "Please Enter Username.");
+            return;
+        }
+        if (typeof openstackpassword === 'undefined' || openstackpassword.length === 0) {
+            res.send(400, "Please Enter Password.");
+            return;
+        }
+        if (typeof providerName === 'undefined' || providerName.length === 0) {
+            res.send(400, "Please Enter Name.");
+            return;
+        }
+        if (typeof providerType === 'undefined' || providerType.length === 0) {
+            res.send(400, "Please Enter ProviderType.");
+            return;
+        }
+        if (typeof orgId === 'undefined' || orgId.length === 0) {
+            res.status(400);
+            res.send("Please Select Any Organization.");
+            return;
+        }
+
+       
+          
+                
+               
+                    var providerData = {
+                                id: 9,
+                                username: openstackusername,
+                                password: openstackpassword,
+                                providerName: providerName,
+                                providerType: providerType,
+                                orgId: orgId
+                            };
+                    logger.debug("provider>>>>>>>>>>>> %s", providerData.providerType);
+                   
+                    usersDao.haspermission(user.cn, category, permissionto, null, req.session.user.permissionset, function(err, data) {
+                        if (!err) {
+                            logger.debug('Returned from haspermission : ' + data + ' : ' + (data == false));
+                            if (data == false) {
+                                logger.debug('No permission to ' + permissionto + ' on ' + category);
+                                res.send(401, "You don't have permission to perform this operation.");
+                                return;
+                            }
+                        } else {
+                            logger.error("Hit and error in haspermission:", err);
+                            res.send(500);
+                            return;
+                        }
+
+                        masterUtil.getLoggedInUser(user.cn, function(err, anUser) {
+                            if (err) {
+                                res.send(500, "Failed to fetch User.");
+                            }
+                            logger.debug("LoggedIn User:>>>> ", JSON.stringify(anUser));
+                            if (anUser) {
+                               
+                                    logger.debug("Able to get AWS Keypairs. %s", JSON.stringify(data));
+                                    openstackProvider.updateopenstackProviderById(req.params.providerId, providerData, function(err, updateCount) {
+                                        if (err) {
+                                            logger.error(err);
+                                            res.send(500, errorResponses.db.error);
+                                            return;
+                                        }
+                                         masterUtil.getOrgById(providerData.orgId, function(err, orgs) {
+                                            if (err) {
+                                                res.send(500, "Not able to fetch org.");
+                                                return;
+                                            }
+                                            if (orgs.length > 0) {
+                                             var dommyProvider = {
+                                                    _id: req.params.providerId,
+                                                    id: 9,
+                                                    username: openstackusername,
+                                                    password: openstackpassword,
+                                                    providerName: providerData.providerName,
+                                                    providerType: providerData.providerType,
+                                                    orgId: orgs[0].rowid,
+                                                    orgName: orgs[0].orgname
+                                                };
+                                                res.send(dommyProvider);
+                                                return;
+                                            }
+                                        });
+                                    });
+                          
+                            }
+                        });
+                    });
+         
+            
+        
+    });
 
     // Create AWS Provider.
     app.post('/aws/providers', function(req, res) {

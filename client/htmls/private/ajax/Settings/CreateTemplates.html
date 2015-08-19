@@ -8,7 +8,7 @@
          <form action="" id="myForm6">
             <div class="widget-box">
                <div class="widget-header">
-                  <h4 class="widget-margin" style="color:black;">Create Templates <span id="spnbuildservername"></span></h4>
+                  <h4 class="widget-margin" style="color:black;">Create Template <span id="spnbuildservername"></span></h4>
                </div>
                <div class="widget-body">
                   <div class="widget-main" style="min-height:300px">
@@ -41,7 +41,7 @@
                                    
                                        <div class="col-lg-6 col-md-6" style="margin-top:5px;">
                                           <label for="">Template Type:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
-                                          <select id="templatetypename" class="choosetemplateType width-100" sourcepath="16"  cdata="catalyst" datapath="masterjson.rows.row" onChange="if($(this).val().indexOf('Docker') >= 0) {$('.forDocker').show(); $('.notforDocker').hide();}else {$('.forDocker').hide();$('.notforDocker').show();}">
+                                          <select id="templatetypename" class="choosetemplateType width-100" sourcepath="16" ignoreoption="OSImage"  cdata="catalyst" datapath="masterjson.rows.row" onChange="if($(this).val().indexOf('Docker') >= 0) {$('.forDocker').show(); $('.notforDocker').hide();}else {$('.forDocker').hide();$('.notforDocker').show();}">
                                           </select>
                                        </div>
                                        <div class="col-lg-6 col-md-6" hidden>

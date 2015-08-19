@@ -1,9 +1,12 @@
-var Openstack = require('../lib/openstack');
-var logger = require('../lib/logger')(module);
+var Openstack = require('_pr/lib/openstack');
+var logger = require('_pr/logger')(module);
 
 module.exports.setRoutes = function(app, verificationFunc) {
 
 	app.all('/openstack/*', verificationFunc);
+
+
+
 
 	app.get('/openstack/tenants', function(req, res) {
 
@@ -21,20 +24,15 @@ module.exports.setRoutes = function(app, verificationFunc) {
 		});
     });
 
+    
+
+
     app.get('/openstack/images', function(req, res) {
 
         //Openstack settings API should give host,username,password and default tenantName 
         var openstack = new Openstack({host: host,username: username, password: password, tenantName: tenantName});
-
-        openstack.getImages(function(err,images){
-        	if(err){
-                 logger.error('openstack images fetch error', err);
-                 res.send(500,err.error.message);
-                 return;
-        	}
-            
-			res.send(images);
-		});
+        
+        
     });
 
     app.get('/openstack/servers', function(req, res) {
