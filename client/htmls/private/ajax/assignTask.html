@@ -209,7 +209,7 @@
                                                       </table>
                                                    </div>
                                                    <!--div for paremeters-->
-                                                   <div class="col-lg-12 hidden" style="margin-top:10px;">
+                                                   <div class="col-lg-12" style="margin-top:10px;">
                                                       <input style="margin-left:5px;" id="addParameters" type="checkbox" name="addParams" value="This build is parameterized"/>&nbsp;&nbsp;This build is parameterized
                                                    </div>
                                                    <!-- </div> -->
@@ -328,8 +328,8 @@
          <label style="margin-left:10px;">Select Paremeter:</label>
          <select id="parametersSelect" class="addParameters" style="width:40%">
          <option value="">Add Parameter</option>
-         <option value="boolean">Boolean Parameter</option>
-         <option value="string">String Parameter</option>
+         <option value="Boolean">Boolean Parameter</option>
+         <option value="String">String Parameter</option>
          </select>
          <br/><br/>
          <hr/>
@@ -690,6 +690,7 @@ $(document).ready(function() {
         $('#jobLinkCreate').trigger("reset");
     });
     $('.addListParam').click(function(e) {
+        $('#parameterCreate').trigger('reset');
         $('#parametersSelect').select2("val","");
         $('#booleanTable').addClass('hidden');
         $('#stringTable').addClass('hidden');
@@ -833,8 +834,8 @@ $(document).ready(function() {
                         $("input[type='checkbox'][name='addParams'][id='addParameters']").prop('checked', true);
                         $('.addParameters').removeClass('hidden');
                         //alert(JSON.stringify(taskData.taskConfig.parameterized[j]));
-                        console.log("parapapa" + taskData.taskConfig.parameterized.length);
-                        createParametersTable(taskData.taskConfig.parameterized[j]);
+                        console.log("parapapa>>>>" + taskData.taskConfig.parameterized.length);
+                        createParametersTable(taskData.taskConfig.parameterized[j],null);
                         
                     }
                 } else {
@@ -1315,33 +1316,58 @@ $(document).ready(function() {
         $jobList.row.add($tr).draw();
     }
 
-    function createParametersTable(parameterType) {
-        var parameterType = $('#parametersSelect').val();
-        var parameterized = [];
+    function createParametersTable(param,parameterType) {
+        var parameterType;
+        
+         var parameterized = [];
+        
         var parameterizedObj = {
             parameterName: String,
             name: String,
             defaultValue: String,
             description: String
         };
-        if (parameterType === "boolean") {
-            parameterizedObj.parameterName = "Boolean";
-            parameterizedObj.name = $('#booleanName').val();
-            parameterizedObj.defaultValue = false;
-            parameterizedObj.defaultValue = $('#booleanValue').val();
-            if ($('#booleanValue').is(":checked")) {
-                parameterizedObj.defaultValue = true;
-            }
-            parameterizedObj.description = $('#booleanDescription').val();
+       // alert("parameterType" + JSON.stringify(parameterType));
+       // alert("param" + JSON.stringify(param));
+        if(parameterType){
+            if (parameterType === "Boolean") {
+             //  alert('bool');
+               parameterizedObj.parameterName = "Boolean";
+               parameterizedObj.name = $('#booleanName').val();
+               parameterizedObj.defaultValue = false;
+               parameterizedObj.defaultValue = $('#booleanValue').val();
+               if ($('#booleanValue').is(":checked")) {
+                   parameterizedObj.defaultValue = true;
+               }
+               parameterizedObj.description = $('#booleanDescription').val();
 
-        } else if(parameterType === "string") {
-            parameterizedObj.parameterName = "String";
-            parameterizedObj.name = $('#stringName').val();
-            parameterizedObj.defaultValue = $('#stringValue').val();
-            parameterizedObj.description = $('#stringDescription').val();
-            
+           } else if(parameterType === "String") {
+          //  alert('check');
+               parameterizedObj.parameterName = "String";
+               parameterizedObj.name = $('#stringName').val();
+               parameterizedObj.defaultValue = $('#stringValue').val();
+               parameterizedObj.description = $('#stringDescription').val();
+               
 
-        }
+           }
+     }else if(param){
+         if (param.parameterName === "Boolean") {
+               parameterizedObj.parameterName = "Boolean";
+               parameterizedObj.name = param.name;
+               parameterizedObj.defaultValue = param.defaultValue;
+               if ($('#booleanValue').is(":checked")) {
+                   parameterizedObj.defaultValue = true;
+               }
+               parameterizedObj.description = param.description;
+
+           } else if(param.parameterName === "String") {
+          //  alert('check');
+               parameterizedObj.parameterName = "String";
+               parameterizedObj.name = param.name;
+               parameterizedObj.defaultValue = param.defaultValue;
+               parameterizedObj.description = param.description;   
+           }
+     }
         var $parameterListTable = $('#paramList');
         var $tr = $('<tr class="paramResultRow"></tr>');
         $tr.data('parameterizedObj', {
@@ -1393,11 +1419,11 @@ $(document).ready(function() {
     $('#parameterCreate').submit(function(e) {
         var parameterType = $('#parametersSelect').val();
         if (parameterType === "boolean") {
-            createParametersTable(parameterType);
+            createParametersTable(null,parameterType);
             $('#parameterModal').modal('hide');
             return false;
         } else {
-            createParametersTable(parameterType);
+            createParametersTable(null,parameterType);
             $('#parameterModal').modal('hide');
             return false;
         }
@@ -1417,7 +1443,7 @@ $(document).ready(function() {
             });
         }
         $tasksRunlist.clear().draw();
-       // alert(runlist.length);
+        alert(runlist.length);
         for (i = 0; i < runlist.length; i++) {
          //alert('check');
             if (runlist.length > 0) {
@@ -1688,18 +1714,25 @@ $(document).ready(function() {
             $("#chef-dropdown").hide();
         }
     });
-    $('#parametersSelect').change(function(e){
-      if(this.value == "boolean"){
-         $("#booleanTable").removeClass('hidden');
-         $("#stringTable").addClass('hidden');
-      } else if(this.value == ""){
-         $("#stringTable").addClass('hidden');
-         $("#booleanTable").addClass('hidden');
-      } else{
-         $("#stringTable").removeClass('hidden');
-         $("#booleanTable").addClass('hidden');
-      }
-    })
+    $('#parametersSelect').change(function(e) {
+        if (this.value == "Boolean") {
+            $("#booleanName").val('');
+           // $("#booleanValue").val('');
+            $('input#booleanValue:checkbox').removeAttr('checked');
+            $("#booleanDescription").val('');
+            $("#booleanTable").removeClass('hidden');
+            $("#stringTable").addClass('hidden');
+        } else if (this.value == "") {
+            $("#stringTable").addClass('hidden');
+            $("#booleanTable").addClass('hidden');
+        } else {
+            $("#stringName").val('');
+            $("#stringValue").val('');
+            $("#stringDescription").val('');
+            $("#stringTable").removeClass('hidden');
+            $("#booleanTable").addClass('hidden');
+        }
+    });
 });
 
 
