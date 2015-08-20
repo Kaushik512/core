@@ -29,7 +29,8 @@ var GlobalSettingsSchema = new Schema({
     zabbixUrl: String,
     jenkinsUrl: String,
     awsUsageUrl: String,
-    awsCostUrl: String
+    awsCostUrl: String,
+    awsNotificationUrl: String
 
 });
 
@@ -76,7 +77,8 @@ GlobalSettingsSchema.statics.updateSettings = function(gSettingsId, globalSettin
             zabbixUrl: globalSettingsData.zabbixUrl,
             jenkinsUrl: globalSettingsData.jenkinsUrl,
             awsUsageUrl: globalSettingsData.awsUsageUrl,
-            awsCostUrl: globalSettingsData.awsCostUrl
+            awsCostUrl: globalSettingsData.awsCostUrl,
+            awsNotificationUrl: globalSettingsData.awsNotificationUrl
         }
     }, {
         upsert: false
@@ -128,7 +130,8 @@ GlobalSettingsSchema.statics.updateGlobalSettings = function(globalSettingsData,
                     zabbixUrl: globalSettingsData.zabbixUrl,
                     jenkinsUrl: globalSettingsData.jenkinsUrl,
                     awsUsageUrl: globalSettingsData.awsUsageUrl,
-                    awsCostUrl: globalSettingsData.awsCostUrl
+                    awsCostUrl: globalSettingsData.awsCostUrl,
+                    awsNotificationUrl: globalSettingsData.awsNotificationUrl
                 }
             }, {
                 upsert: false

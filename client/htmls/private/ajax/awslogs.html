@@ -3,4 +3,19 @@
 	height:100%!important;
 }
 </style>
-<iframe src="http://54.67.35.103:3030/Infrah" style="width: 101% ! important; height: 97%! important; border: medium none;"></iframe>
+<script type="text/javascript">
+	$.ajax({
+     method: "GET",
+     url: "/globalsettings",   
+     success: function(data, success) {
+      $("#content").append('<iframe src='+ data[0].awsCostUrl+' style="width: 101% ! important; height: 97%! important; border: medium none;"></iframe>');
+    },
+    error: function(jqxhr) {
+      removeLoader();
+      bootbox.alert(jqxhr.status);
+    },
+    failure: function(data) {
+      bootbox.alert(data);
+    }
+  });
+</script>
