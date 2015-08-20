@@ -36,6 +36,7 @@ var cloudformation = require('./routes_cloudformation');
 
 var notification = require('./routes_notification');
 var globalsettings = require('./routes_globalsettings');
+var puppet = require('./routes_puppet.js');
 
 module.exports.setRoutes = function(app) {
 
@@ -85,6 +86,9 @@ module.exports.setRoutes = function(app) {
 
     cloudformation.setRoutes(app, sessionVerificationFunc);
     globalsettings.setRoutes(app, sessionVerificationFunc);
+
+    puppet.setRoutes(app, sessionVerificationFunc);
+
 
     app.get('/', function(req, res) {
         res.redirect('/private/index.html');
@@ -150,6 +154,6 @@ module.exports.setRoutes = function(app) {
 
     // for notification
 
-    notification.setRoutes(app,sessionVerificationFunc);
+    notification.setRoutes(app, sessionVerificationFunc);
 
 }
