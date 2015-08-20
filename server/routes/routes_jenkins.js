@@ -152,6 +152,8 @@ module.exports.setRoutes = function(app, verificationFunc) {
             if (err) {
                 logger.error('jenkins jobs fetch error', err);
                 res.send(500, errorResponses.jenkins.serverError);
+                // If job is newly created.
+                //res.send({});
                 return;
             }
             res.send(jobOutput);

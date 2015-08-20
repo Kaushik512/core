@@ -6,6 +6,7 @@ var d4dModelNew = require('./d4dmastersmodelnew.js');
 var codelist = require('../../codelist.json');
 var appConfig = require('_pr/config');
 var chefSettings = appConfig.chef;
+var puppetSettings = appConfig.puppet;
 var logger = require('_pr/logger')(module);
 var blueprintdao = require('../dao/blueprints.js');
 var instancedao = require('../classes/instance/instance.js');
@@ -86,6 +87,10 @@ function Configmgmt() {
                 logger.log('Exting getDBModelFromID ' + id.toString());
                 callback(null, 'd4dModelMastersJira');
                 break;
+            case "25":
+                logger.log('Exting getDBModelFromID ' + id.toString());
+                callback(null, 'd4dModelMastersPuppetServer');
+                break;
         }
     };
 
@@ -151,6 +156,10 @@ function Configmgmt() {
             case "23":
                  logger.log('Exting getDBModelFromID ' + id.toString());
                return('jiraserver');
+                break;
+            case "25":
+                 logger.log('Exting getDBModelFromID ' + id.toString());
+               return('puppetserver');
                 break;
 
         };
@@ -243,6 +252,86 @@ function Configmgmt() {
                         var settings = chefSettings;
 
                         chefRepoPath = settings.chefReposLocation;
+                        console.log("Repopath:" + chefRepoPath);
+
+                        var outJson = JSON.parse(JSON.stringify(d4dMasterJson));
+                        console.log('outJson:' + JSON.stringify(d4dMasterJson));
+                        if (outJson) {
+                            var keys = Object.keys(outJson);
+                            var orgname = '';
+                            var liveorgname = '';
+                            var loginname = '';
+                            for (i = 0; i < keys.length; i++) {
+                                var k = keys[i];
+                                if (keys[i].indexOf("login") >= 0)
+                                    loginname = outJson[k] + "/";
+                                // if (keys[i].indexOf("orgname") >= 0)
+                                //     orgname = outJson[k] + "/";
+                                if (keys[i].indexOf("orgname_rowid") >= 0) {
+                                    liveorgname = that.convertRowIDToValue(outJson[k], rowidlist);
+                                    orgname = outJson[k] + "/";
+                                }
+                            }
+                            if (loginname != '' && orgname != '') {
+                                for (i = 0; i < keys.length; i++) {
+                                    var k = keys[i];
+                                    if (keys[i].indexOf('_filename') > 0) {
+                                        keys[i] = keys[i].replace('_filename', '');
+                                        outJson[k] = chefRepoPath + orgname + loginname + '.chef/' + outJson[k];
+                                    }
+                                    // if (keys[i].indexOf('orgname') >= 0) {
+
+                                    //     outJson[k]  =  liveorgname;
+                                    //     console.log('>>>>>>>>>>>>>>>>>>>>>>>> Hit Here <<<<<<<<<<<<<<<<' + outJson[k]);
+                                    // }
+
+                                    if (configmgmt == '')
+                                        configmgmt = '\"' + keys[i] + '\":\"' + outJson[k] + '\"';
+                                    else
+                                        configmgmt += ',\"' + keys[i] + '\":\"' + outJson[k] + '\"';
+
+                                    //console.log('>>>>>' + keys[i] + ':' + outJson[keys[i]] );
+                                }
+                                if (configmgmt != '') {
+                                    configmgmt += ',\"chefRepoLocation\":\"' + chefRepoPath + orgname + loginname + '\"';
+                                    if (liveorgname != '') {
+                                        configmgmt += ',\"orgname_new\":\"' + liveorgname + '\"';
+                                    }
+                                }
+                            }
+                            callback(null, JSON.parse('{' + configmgmt + '}'));
+                            return;
+                        } else {
+                            callback(err, null);
+                            return;
+                        }
+                    });
+                }); //end getRowids
+            }
+        });
+    };
+
+    this.getPuppetServerDetails = function(rowid, callback) {
+        var that = this;
+        this.getDBModelFromID("25", function(err, dbtype) {
+            if (err) {
+                console.log("Hit and error getChefServerDetails.getDBModelFromID:" + err);
+                callback(true, err);
+            }
+            if (dbtype) {
+                console.log("Master Type: " + dbtype + ' rowid : ' + rowid);
+                that.getRowids(function(err, rowidlist) {
+                    eval('d4dModelNew.' + dbtype).findOne({
+                        rowid: rowid
+                    }, function(err, d4dMasterJson) {
+                        if (err) {
+                            console.log("Hit and error @ getChefServerDetails:" + err);
+                        }
+                        var chefRepoPath = '';
+                        var configmgmt = '';
+                        var settings = puppetSettings;
+
+                        chefRepoPath = settings.puppetReposLocation;
                         console.log("Repopath:" + chefRepoPath);
 
                         var outJson = JSON.parse(JSON.stringify(d4dMasterJson));

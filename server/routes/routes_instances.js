@@ -41,6 +41,25 @@ var shellEscape = require('shell-escape');
 
 module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
+    app.get('/instances/:instanceId', function(req, res) {
+        logger.debug("Enter get() for /instances/%s", req.params.instanceId);
+        instancesDao.getInstanceById(req.params.instanceId, function(err, data) {
+            if (err) {
+                logger.error("Instance fetch Failed >> ", err);
+                res.send(500);
+                return;
+            }
+
+            if (data.length) {
+                res.send(data[0]);
+            } else {
+                logger.error("No such Instance for >> %s", req.params.instanceId);
+                res.send(404);
+            }
+            logger.debug("Exit get() for /instances/%s", req.params.instanceId);
+        });
+    });
+
     app.all('/instances/*', sessionVerificationFunc);
 
 
@@ -80,25 +99,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             }
             res.send(data);
             logger.debug("Exit post() for /instances");
-        });
-    });
-
-    app.get('/instances/:instanceId', function(req, res) {
-        logger.debug("Enter get() for /instances/%s", req.params.instanceId);
-        instancesDao.getInstanceById(req.params.instanceId, function(err, data) {
-            if (err) {
-                logger.error("Instance fetch Failed >> ", err);
-                res.send(500);
-                return;
-            }
-
-            if (data.length) {
-                res.send(data[0]);
-            } else {
-                logger.error("No such Instance for >> %s", req.params.instanceId);
-                res.send(404);
-            }
-            logger.debug("Exit get() for /instances/%s", req.params.instanceId);
         });
     });
 
