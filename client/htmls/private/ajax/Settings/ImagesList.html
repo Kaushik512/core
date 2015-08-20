@@ -83,14 +83,15 @@
 
                         <script>
                             function updateImageListByGivingProviderName(imageList,ProviderList){
-                                for(var i=0;i<imageList.length;i++){
-                                    for(var j=0;j<ProviderList.length;j++){
+                               for(var i=0;i<imageList.length;i++){
+                                    for(var j=0;j<ProviderList.length;j++)
+                                    {
                                         if(imageList[i].providerId ===ProviderList[j]._id){
                                             imageList[i].providerName=ProviderList[j].providerName;
                                             break;
                                         }
                                     }
-
+                                   
                                 }
                                 return imageList;
                             }
@@ -108,8 +109,35 @@
        success: function(data, success) {
         data= typeof data=="string" ?JSON.parse(data):data;
                 //d4ddata=data;
-               d4ddata= updateImageListByGivingProviderName(d4ddata,data);
-                  getOrganizationList();
+                //pulling in data for openstack
+                    $.ajax({
+                       method: "GET",url: "/openstack/providers",data: reqBody,   
+                       success: function(data1, success) {
+                        data1= typeof data1=="string" ?JSON.parse(data1):data1;
+                                //d4ddata=data;
+                                //pulling in data for openstack
+                                for(var h = 0;h < data1.length;h++){
+                                    data.push(data1[h]);
+                                }
+                                
+                               d4ddata= updateImageListByGivingProviderName(d4ddata,data);
+                                getOrganizationList();
+                                //startup();
+                            },
+                            error: function(jqxhr) {
+                                removeLoader();
+                                bootbox.alert(jqxhr.status);
+                            },
+                            failure: function(data) {
+                                bootbox.alert(data);
+                            }
+                    });
+
+
+
+
+              // d4ddata= updateImageListByGivingProviderName(d4ddata,data);
+              //    getOrganizationList();
                 //startup();
             },
             error: function(jqxhr) {
@@ -134,12 +162,9 @@
                             $.ajax({
                                 method: "GET",url: "/vmimages",data: reqBody,
                                 success: function(data, success) {
-
                                     data= typeof data=="string" ?JSON.parse(data):data;
                                     d4ddata=data;
                                     getProviderData();
-
-                                    
                                 },
                                 error: function(jqxhr) {
                                     removeLoader();
@@ -192,9 +217,9 @@
                 }
             });
 
-var sRow = $(".rowtemplate").clone();
-sRow.removeClass("hidden");
-sRow.removeClass("rowtemplate");
+            var sRow = $(".rowtemplate").clone();
+            sRow.removeClass("hidden");
+            sRow.removeClass("rowtemplate");
             // $('#envtable').append(sRow);
             imageTD = $('.rowtemplate').find("[datatype='image']");
 
@@ -214,7 +239,6 @@ sRow.removeClass("rowtemplate");
                         imageTD.append($('<img src="' + imgpath + '" style="height:28px;width:auto"/>'));
 
                     }
-
                 }
                 if (editButton) {
                     editButton.attr("href", "#ajax/Settings/" + createFileName + "?" + idFieldValue);
@@ -368,8 +392,6 @@ sRow.removeClass("rowtemplate");
                     deletebutton.addClass('tableactionbutton');
                 }
             }
-
-
             console.log('-----------');
             var sRow = $(".rowtemplate").clone();
             sRow.removeClass("hidden");

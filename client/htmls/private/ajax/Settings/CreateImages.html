@@ -204,6 +204,44 @@
               for(var i=0;i<len;i++){
                 str=str+'<option value="'+data[i]._id+'" secretKey="'+data[i].secretKey+'" accessKey="'+data[i].accessKey+'" providerType="'+data[i].providerType+'">'+data[i].providerName+'</option>';
               }
+              //Reading providers from openstack
+
+                
+              $.ajax({
+               type: "GET",
+               url: "/openstack/providers",
+               success: function (data) {
+                data= typeof data =="string" ? JSON.parse(data) :data;
+                console.log(data);
+                
+                for(var i=0;i<len;i++){
+                  str+='<option value="'+data[i]._id+'" username="'+data[i].userName+'" password="'+data[i].password+'" providerType="'+data[i].providerType+'">'+data[i].providerName+'</option>';
+                }
+                //Reading providers from openstack
+                
+
+
+
+                $('#providerId').html(str);
+                if($('#providerId').attr('answer')){
+                  $('#providerId').val($('#providerId').attr('answer')).select2();
+                }
+                  /*.off('change').on('change',function(){
+                    debugger;
+                    
+                    var val=$(this).val(),region=
+                    $(this).find('[value="'+val+'"]').attr('region');
+                    $('#region').html('<option value="'+region+'">'+region+'</option>').val(region);
+                  });*/
+
+                },
+                failure: function (data) {
+                 alert(data.toString());
+               }
+              }); 
+        
+
+
               $('#providerId').html(str);
               if($('#providerId').attr('answer')){
                 $('#providerId').val($('#providerId').attr('answer')).select2();
@@ -216,11 +254,11 @@
                   $('#region').html('<option value="'+region+'">'+region+'</option>').val(region);
                 });*/
 
-  },
-  failure: function (data) {
-   alert(data.toString());
- }
-}); 
+          },
+          failure: function (data) {
+           alert(data.toString());
+         }
+        }); 
   }
   function isUserTypeSuperAdmin(){
     $.get('/d4dMasters/loggedInUser',function(data){
@@ -240,7 +278,9 @@
     ,osType=$('#osType').find('option:selected').attr('ostype'),
     userName=$('#UserName').val(),
     orgId = $('#orgId').val().trim();
+    var pt = $('#providerId').find('option:selected').attr('providertype');
     //alert(orgId);
+
     if(imageIdentifier && providerId && osType && name && osName && userName && orgId){
       appendLoader();
       if(!UtilityMethods.getIdFromURL()){
@@ -253,7 +293,7 @@
       $.ajax({
         method:"POST",
         url:url,
-        data:{ "providerId": providerId, "osType": osType, "name": name, "imageIdentifier":imageIdentifier,"osName":osName,"userName":userName,"orgId":orgId},
+        data:{ "providerId": providerId, "osType": osType, "name": name, "imageIdentifier":imageIdentifier,"osName":osName,"userName":userName,"orgId":orgId,"providertype":pt},
         success: function(data, success) {
           if (data!=500) {
             if ($('#btncancel').length){

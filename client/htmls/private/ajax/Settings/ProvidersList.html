@@ -440,6 +440,11 @@
     }
 
     function deleteItemFromProvider(docid, key, value, button) {
+    //Determining the provider type before delete
+    var provname = 'aws';
+
+    if($(button).closest('tr').find('td[datafield="providerType"]').first().text() == "OPENSTACK")
+        provname = 'openstack';
 
     bootbox.confirm('You are about to remove this item \" ' + $(button).closest('tr').find('td').first().html() + ' \"', function(result) {
         if (result) {
@@ -447,7 +452,7 @@
                 type: "delete",
                 dataType: "text",
                 async: false,
-                url: "/aws/providers/" + value,
+                url: "/" + provname + "/providers/" + value,
                 success: function(data) {
                     // $('#refreshpage').click();
                     if(data != '401')
