@@ -15,7 +15,7 @@ Catalyst new Jenkins Configuration setup
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
     Validate the Jenkins Configuration Setup
-    Catalyst Create New Jenkins Configuration Setup          
+    Catalyst Create New Jenkins Configuration Setup       
     Catalyst Logout                      
     [Teardown]     Close Browser
 
