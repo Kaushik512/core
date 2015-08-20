@@ -1,0 +1,90 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="col-md-12">
+
+            <div class="widget-box">
+                <div class="widget-header">
+                    <h5 class="widget-title" style="color:#4e5964;">
+                        <strong>List of Dashboard</strong>
+                    </h5>
+                    <div class="widget-toolbar no-border">
+                        <div>
+
+                          <a class="btn btn-minier btn-primary" id="refreshpage" href="#ajax/Settings/ProjectList.html" style="display:none">
+                            <i class="ace-icon ace-icon fa fa-refresh bigger-110"></i>
+                        </a>                                                               
+                    </div>
+                </div>
+
+            </div>
+            <div class="widget-body">
+                <div class="widget-main" style="min-height:300px">
+                    <div class="col-md-12 table-responsive" style="padding-left:0px; padding-right:0px;">
+                         
+                          
+                         <table id="trackTable" class="tableData table table-striped table-bordered table-hover dataTable no-footer" cellpadding="5px" width="100%" style="text-align:center;">
+                             
+                                <thead>
+                                    <tr class="rowCustomStyle">
+                                        <td>Name</td>
+                                        <td>Dashboard URL</td>
+                                        <td>Action</td>
+                                    </tr>
+                                </thead>
+                                <tbody id="trackTableInput">
+                                </tbody>
+                                    
+                            </table>
+                          
+                        
+                    </div>
+                </div> <!--widget main ends here-->
+              </div> <!--widget body ends here-->
+            </div> <!--widget box ends here-->  
+        </div>
+    </div>
+</div>             
+
+
+<script>
+if (!$.fn.dataTable.isDataTable('#trackTable')) {
+    //var $taskListArea = $('.taskListArea').empty();
+    var $trackDatatable = $('#trackTable').DataTable({
+        "pagingType": "full_numbers",
+        "bInfo": false,
+        "bLengthChange": false,
+        "paging": false,
+        "bFilter": false,
+        "aoColumns": [{
+            "bSortable": false
+        }, {
+            "bSortable": false
+        }, {
+            "bSortable": false
+        }]
+
+    });
+}
+
+function createTableForTrack() {
+        var $trackNameList = $('#trackTable');
+        var $tr = $('<tr class="trackItemRow"></tr>');
+        var $tdName = $('<td class="trackName"></td>');
+        var $tdURL = $('<td class="trackDashboardURL"></td>');
+        var $tdAction = $('<td/>');
+        $tdAction.append('<div class="btn btn-xs btn-info pull-left" style="float:right;"><button class="editRow" value="Update" title="Update"><i class="ace-icon fa fa-pencil bigger-120"></i></button></div>');
+        $tr.append($tdName).append($tdURL).append($tdAction);
+        $trackNameList.append($tr);
+        $trackDatatable.row.add($tr).draw();
+        
+        
+
+        //row click
+        
+
+        console.log(">>>>>>>>>>>>>>>>>>>>>>>>");
+
+    };
+
+</script>
+                             
