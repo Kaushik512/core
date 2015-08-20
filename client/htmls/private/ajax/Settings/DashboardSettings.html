@@ -32,6 +32,7 @@
                                     </tr>
                                 </thead>
                                 <tbody id="trackTableInput">
+                
                                 </tbody>
                                     
                             </table>
@@ -43,7 +44,43 @@
             </div> <!--widget box ends here-->  
         </div>
     </div>
-</div>             
+</div>          
+
+<!--modal for ItemList-->
+<div class="modal fade" id="modalForTrackEdit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog " style="">
+        <div class="modal-content"> 
+            <form role="form" id="trackItemUrl">
+             <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">
+                </h4>
+
+            </div> 
+            
+            
+             <div class="modal-body" style="height:150px;">            
+                            <div class="col-lg-12 col-md-12">
+                            <label for="">URL:</label>
+                            
+                            <textarea rows="5" cols="60" name="trackUrlName" class="trackUrlName" id="trackUrlName"></textarea>
+                </div>
+                     <input type="hidden" id="trackEditHiddenInput">
+                     <input type="hidden" id="trackUrlHiddenName">
+                
+
+            </div>
+            
+               <div class="modal-footer">
+                <label id="saveItemSpinner" class="hidden"><img  style="margin-left:5px;margin-right:25px;" src="img/select2-spinner.gif"></label>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <input type="submit" id="saveBtnTrack" class="btn btn-primary" value="Save" />
+      </div>   
+  </form>
+         </div>
+    </div>
+</div>
+<!--modal for Itemlist-->   
 
 
 <script>
@@ -65,26 +102,129 @@ if (!$.fn.dataTable.isDataTable('#trackTable')) {
 
     });
 }
+$(document).ready(function(e){
 
-function createTableForTrack() {
-        var $trackNameList = $('#trackTable');
+    getGlobalTrack();
+    
+});
+
+function createTableForTrack(name,url,key) {
+        var $trackNameList = $('#trackTableInput');
         var $tr = $('<tr class="trackItemRow"></tr>');
-        var $tdName = $('<td class="trackName"></td>');
-        var $tdURL = $('<td class="trackDashboardURL"></td>');
+        var $tdName = $('<td class="trackName">'+name+'</td>');
+        var $tdURL = $('<td class="trackDashboardURL">'+url+'</td>');
         var $tdAction = $('<td/>');
         $tdAction.append('<div class="btn btn-xs btn-info pull-left" style="float:right;"><button class="editRow" value="Update" title="Update"><i class="ace-icon fa fa-pencil bigger-120"></i></button></div>');
         $tr.append($tdName).append($tdURL).append($tdAction);
         $trackNameList.append($tr);
         $trackDatatable.row.add($tr).draw();
-        
-        
 
-        //row click
-        
-
-        console.log(">>>>>>>>>>>>>>>>>>>>>>>>");
-
+        //for edit
+        $tdAction.find('button.editRow').click(function() {
+            
+            var $this = $(this);
+            var $trNew = $this.parents('tr.trackItemRow');
+            var $editModal = $('#modalForTrackEdit');
+            $('textarea#trackUrlName').val('');
+            $editModal.modal('show');
+           // alert(name);
+            $editModal.find('h4.modal-title').html('Edit URL for &nbsp;-' + name);
+            alert(key);
+            $editModal.find('textarea#trackUrlName').val(url);
+            $editModal.find('#trackEditHiddenInput').val();
+            $editModal.find('#trackUrlHiddenName').val(key);
+            return false;
+        });
     };
+
+    function getGlobalTrack() {
+        var globalSettings = '../globalSettings';
+        $.get(globalSettings, function(data) {
+
+            if (data.length) {
+                $('#trackEditHiddenInput').val(data[0]._id);
+                var keys = Object.keys(data[0]);
+                for (var i = 0; i < keys.length; i++) {
+                    console.log(JSON.stringify(keys[i]));
+                    
+                    if (keys[i].indexOf('kibana') !== -1) {
+                        createTableForTrack('Kibana', data[0][keys[i]], keys[i]);
+                    } else if (keys[i].indexOf('zabbix') !== -1) {
+                        createTableForTrack('Zabbix', data[0][keys[i]], keys[i]);
+                        
+                    } else if (keys[i].indexOf('awsUsage') !== -1) {
+                        createTableForTrack('AWS Usage', data[0][keys[i]], keys[i]);
+                        
+                    } else if (keys[i].indexOf('awsCost') !== -1) {
+                        createTableForTrack('AWS Cost', data[0][keys[i]], keys[i]);
+                        
+                    } else if (keys[i].indexOf('awsNotification') !== -1) {
+                        createTableForTrack('AWS Notification', data[0][keys[i]], keys[i]);
+                        
+                    }
+                }
+            }
+        });
+    }
+
+    $('#trackItemUrl').submit(function(e){
+        var $form = $('#trackItemUrl');
+        var trackEdit = $(this).find('#trackEditHiddenInput').val();
+        var keyUrl = $(this).find('#trackUrlHiddenName').val();
+        var trackUrl = $(this).find('textarea#trackUrlName').val();
+        //alert(keyUrl);
+        var reqBody ={};
+         /*   keyUrl:trackUrl
+        };*/
+        reqBody[keyUrl]=trackUrl;
+        alert(JSON.stringify(reqBody));
+         $.ajax({
+
+            method: "POST",
+            url: '../globalsettings/'+ trackEdit+ '/update',
+            data: {aGlobalSettings:reqBody},
+            success: function(data, success) {
+               // alert(data);
+                $('#modalForTrackEdit').modal('hide');
+              //  $('#saveItemSpinner').addClass('hidden');
+                //$('#saveBTNList').removeAttr('disabled');
+               // alert(itemsEditNew);
+
+               
+                 //   alert(itemID);
+                    createTableForTrack(trackEdit);
+                   // $('#saveBTNList').removeAttr('disabled');
+               
+            },
+            error: function(jxhr) {
+              console.log(jxhr);
+                var msg = "Server Behaved Unexpectedly";
+                if (jxhr.responseJSON && jxhr.responseJSON.message) {
+                    msg = jxhr.responseJSON.message;
+                } else if (jxhr.responseText) {
+                    msg = jxhr.responseText;
+                }
+                bootbox.alert(msg);
+
+                $('#saveItemSpinner').addClass('hidden');
+                $('#saveBTNList').removeAttr('disabled');
+            },
+            failure: function(jxhr) {
+              console.log(jxhr);
+                var msg = "Server Behaved Unexpectedly";
+                if (jxhr.responseJSON && jxhr.responseJSON.message) {
+                    msg = jxhr.responseJSON.message;
+                } else if(jxhr.responseText) {
+                  msg = jxhr.responseText;
+                }
+                bootbox.alert(msg);
+
+                $('#saveItemSpinner').addClass('hidden');
+                $('#saveBTNList').removeAttr('disabled');
+            }
+        });
+        return false;
+    });
 
 </script>
                              
