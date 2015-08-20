@@ -65,21 +65,17 @@ GlobalSettingsSchema.statics.createNew = function(globalSettingsData, callback) 
 
 // Update all GobalSettings informations.
 GlobalSettingsSchema.statics.updateSettings = function(gSettingsId, globalSettingsData, callback) {
+
     logger.debug("Going to Update settings data: ", JSON.stringify(globalSettingsData));
+    var setData = {};
+    var keys = Object.keys(globalSettingsData);
+    for (var i = 0; i < keys.length; i++) {
+        setData[keys[i]] = globalSettingsData[keys[i]];
+    }
     this.update({
         "_id": gSettingsId
     }, {
-        $set: {
-            authStrategy: globalSettingsData.authStrategy,
-            addLDAPUser: globalSettingsData.addLDAPUser,
-            ldapServer: globalSettingsData.ldapServer,
-            kibanaUrl: globalSettingsData.kibanaUrl,
-            zabbixUrl: globalSettingsData.zabbixUrl,
-            jenkinsUrl: globalSettingsData.jenkinsUrl,
-            awsUsageUrl: globalSettingsData.awsUsageUrl,
-            awsCostUrl: globalSettingsData.awsCostUrl,
-            awsNotificationUrl: globalSettingsData.awsNotificationUrl
-        }
+        $set: setData
     }, {
         upsert: false
     }, function(err, globalSettings) {
@@ -112,11 +108,6 @@ GlobalSettingsSchema.statics.getGolbalSettingsById = function(gSettingsId, callb
 
 // Save or Update all GobalSettings informations.
 GlobalSettingsSchema.statics.updateGlobalSettings = function(globalSettingsData, callback) {
-    var setData = {};
-    var keys = Object.keys(globalSettingsData);
-    for (var i = 0; i < keys.length; i++) {
-        setData[keys[i]] = globalSettingsData[keys[i]];
-    }
     logger.debug("Going to Update settings data: ", JSON.stringify(globalSettingsData));
     var that = this;
     this.find(function(err, data) {
@@ -127,7 +118,17 @@ GlobalSettingsSchema.statics.updateGlobalSettings = function(globalSettingsData,
             this.update({
                 "_id": data[0]._id
             }, {
-                $set: setData
+                $set: {
+                    authStrategy: globalSettingsData.authStrategy,
+                    addLDAPUser: globalSettingsData.addLDAPUser,
+                    ldapServer: globalSettingsData.ldapServer,
+                    kibanaUrl: globalSettingsData.kibanaUrl,
+                    zabbixUrl: globalSettingsData.zabbixUrl,
+                    jenkinsUrl: globalSettingsData.jenkinsUrl,
+                    awsUsageUrl: globalSettingsData.awsUsageUrl,
+                    awsCostUrl: globalSettingsData.awsCostUrl,
+                    awsNotificationUrl: globalSettingsData.awsNotificationUrl
+                }
             }, {
                 upsert: false
             }, function(err, globalSettings) {
