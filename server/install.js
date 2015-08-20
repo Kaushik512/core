@@ -42,6 +42,14 @@ function getDefaultsConfig() {
                 return config.catalystHome + this.cookbooksDirName + "/";
             }
         },
+        puppet: {
+            puppetReposDirName: 'puppet-repos',
+
+            // getter methods
+            get puppetReposLocation() {
+                return config.catalystHome + this.puppetReposDirName + '/';
+            }
+        },
         aws: {
             access_key: "AKIAI6TVFFD23LMBJUPA",
             secret_key: "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",
@@ -394,6 +402,7 @@ proc.on('close', function(code) {
         mkdirp.sync(config.tempDir);
         mkdirp.sync(config.chef.chefReposLocation);
         mkdirp.sync(config.chef.cookbooksDir);
+        mkdirp.sync(config.puppet.puppetReposLocation);
 
 
         if (options['seed-data']) {
