@@ -1,0 +1,48 @@
+*** Settings ***
+Documentation      A resource file with reusable keywords and variables.
+...
+...                This file is part of a prototype automated test suite designed to
+...                test web application products built on top of the SLZ platform.
+...
+
+Library            Selenium2Library
+Library            String
+Library            Collections
+
+Resource           catalyst.txt
+Resource           ${CATALYST TEST DATA}/${TESTDATA}
+Resource           ${CATALYST ACTION}/Organization_Setup_Action_Steps.txt
+Resource           ${CATALYST ACTION}/Gallery_setup_TempService_Steps.txt
+
+
+*** Keywords ***
+Catalyst Creation of New Cloud Formation Template
+    Clicks on Settings
+    Clicks on Gallery Setup
+    Clicks on Templates
+    Clicks on New Button
+    Sleep    3s
+    Enters the Cloud Template Name
+    Chooses Icon
+    Chooses Cloud Formation Template Type
+    Select Created organization
+    Upload the Cloud Template File
+    Clicks on Save Button
+
+
+
+
+Upload the Cloud Template File
+    Choose File     id=template     ${CATALYST STACKFILE}
+
+
+Enters the Cloud Template Name
+    Input Text    id=templatename    ${CLOUD TEMP NAME}
+
+
+Chooses Cloud Formation Template Type
+    Click Element    css=#s2id_templatetypename > a > span.select2-chosen
+    Sleep    2s
+    Input Text    css=#select2-drop > div > input    ${CLOUD TEMPLATENAME}
+    Sleep    2s
+    Click Element    css=ul > li:first-child > div
