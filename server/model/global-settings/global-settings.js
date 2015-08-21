@@ -1,7 +1,7 @@
 /* Copyright (C) Relevance Lab Private Limited- All Rights Reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
- * Written by Gobinda Das <gobinda.das@relevancelab.com>, 
+ * Written by Gobinda Das <gobinda.das@relevancelab.com>,
  * Aug 2015
  */
 
@@ -65,21 +65,17 @@ GlobalSettingsSchema.statics.createNew = function(globalSettingsData, callback) 
 
 // Update all GobalSettings informations.
 GlobalSettingsSchema.statics.updateSettings = function(gSettingsId, globalSettingsData, callback) {
+
     logger.debug("Going to Update settings data: ", JSON.stringify(globalSettingsData));
+    var setData = {};
+    var keys = Object.keys(globalSettingsData);
+    for (var i = 0; i < keys.length; i++) {
+        setData[keys[i]] = globalSettingsData[keys[i]];
+    }
     this.update({
         "_id": gSettingsId
     }, {
-        $set: {
-            authStrategy: globalSettingsData.authStrategy,
-            addLDAPUser: globalSettingsData.addLDAPUser,
-            ldapServer: globalSettingsData.ldapServer,
-            kibanaUrl: globalSettingsData.kibanaUrl,
-            zabbixUrl: globalSettingsData.zabbixUrl,
-            jenkinsUrl: globalSettingsData.jenkinsUrl,
-            awsUsageUrl: globalSettingsData.awsUsageUrl,
-            awsCostUrl: globalSettingsData.awsCostUrl,
-            awsNotificationUrl: globalSettingsData.awsNotificationUrl
-        }
+        $set: setData
     }, {
         upsert: false
     }, function(err, globalSettings) {

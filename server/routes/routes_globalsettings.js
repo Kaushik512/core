@@ -10,6 +10,7 @@
 
 var logger = require('_pr/logger')(module);
 var GlobalSettings = require('_pr/model/global-settings/global-settings');
+var errorResponses = require('./error_responses');
 
 
 module.exports.setRoutes = function(app, sessionVerificationFunc) {
