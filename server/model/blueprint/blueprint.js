@@ -8,12 +8,15 @@ var uniqueValidator = require('mongoose-unique-validator');
 
 var DockerBlueprint = require('./blueprint-types/docker-blueprint/docker-blueprint');
 var InstanceBlueprint = require('./blueprint-types/instance-blueprint/instance-blueprint');
+var OpenstackBlueprint = require('./blueprint-types/instance-blueprint/openstack-blueprint/openstack-blueprint');
+
 var CloudFormationBlueprint = require('./blueprint-types/cloud-formation-blueprint/cloud-formation-blueprint');
 
 var BLUEPRINT_TYPE = {
     DOCKER: 'docker',
     AWS_CLOUDFORMATION: 'aws_cf',
-    INSTANCE_LAUNCH: "instance_launch"
+    INSTANCE_LAUNCH: "instance_launch",
+    OPENSTACK_LAUNCH: "openstack_launch"
 };
 
 var Schema = mongoose.Schema;
@@ -83,6 +86,8 @@ function getBlueprintConfigType(blueprint) {
         BlueprintConfigType = DockerBlueprint;
     } else if ((blueprint.blueprintType === BLUEPRINT_TYPE.AWS_CLOUDFORMATION) && blueprint.blueprintConfig) {
         BlueprintConfigType = CloudFormationBlueprint;
+    } else if ((blueprint.blueprintType === BLUEPRINT_TYPE.OPENSTACK_LAUNCH) && blueprint.blueprintConfig) {
+        BlueprintConfigType = OpenstackBlueprint;
     } else {
         return;
     }

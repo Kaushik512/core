@@ -15,6 +15,7 @@ var ObjectId = require('mongoose').Types.ObjectId;
 var schemaValidator = require('../../../dao/schema-validator');
 var uniqueValidator = require('mongoose-unique-validator');
 
+
 var Schema = mongoose.Schema;
 
 
@@ -39,6 +40,16 @@ var openstackProviderSchema = new Schema({
         trim: true
     },
     password: {
+        type: String,
+        required: true,
+        trim: true
+    },
+    host: {
+        type: String,
+        required: true,
+        trim: true
+    },
+    tenantid: {
         type: String,
         required: true,
         trim: true
@@ -176,8 +187,10 @@ openstackProviderSchema.statics.updateopenstackProviderById = function(providerI
         $set: {
             id: providerData.id,
             providerName: providerData.providerName,
-            accessKey: providerData.username,
-            secretKey: providerData.password,
+            username: providerData.username,
+            password: providerData.password,
+            host: providerData.host,
+            tenantid: providerData.tenantid,
             providerType: providerData.providerType
         }
     }, {

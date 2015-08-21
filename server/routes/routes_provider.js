@@ -35,6 +35,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         var permissionto = 'create';
         var openstackusername = req.body.openstackusername;
         var openstackpassword = req.body.openstackpassword;
+        var openstackhost = req.body.openstackhost;
+        var openstacktenantid = req.body.openstacktenantid;
         var providerName = req.body.providerName;
         var providerType = req.body.providerType;
         var orgId = req.body.orgId;
@@ -45,6 +47,14 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         }
         if (typeof openstackpassword === 'undefined' || openstackpassword.length === 0) {
             res.send(400, "Please Enter Password.");
+            return;
+        }
+        if (typeof openstackhost === 'undefined' || openstackhost.length === 0) {
+            res.send(400, "Please Enter a Host.");
+            return;
+        }
+        if (typeof openstacktenantid === 'undefined' || openstacktenantid.length === 0) {
+            res.send(400, "Please Enter a Tenant ID");
             return;
         }
         if (typeof providerName === 'undefined' || providerName.length === 0) {
@@ -95,8 +105,10 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                 id: 9,
                                 username: openstackusername,
                                 password: openstackpassword,
+                                host: openstackhost,
                                 providerName: providerName,
                                 providerType: providerType,
+                                tenantid : openstacktenantid,
                                 orgId: orgId
                             };
                             openstackProvider.getopenstackProviderByName(providerData.providerName, providerData.orgId, function(err, prov) {
@@ -131,10 +143,12 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                 id: 9,
                                                 username: openstackusername,
                                                 password: openstackpassword,
+                                                host: openstackhost,
                                                 providerName: provider.providerName,
                                                 providerType: provider.providerType,
                                                 orgId: orgs[0].rowid,
                                                 orgName: orgs[0].orgname,
+                                                tenantid : openstacktenantid,
                                                 __v: provider.__v,
                                              
                                             };
@@ -272,6 +286,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         var permissionto = 'modify';
         var openstackusername = req.body.openstackusername;
         var openstackpassword = req.body.openstackpassword;
+        var openstackhost = req.body.openstackhost;
+        var openstacktenantid = req.body.openstacktenantid;
         var providerName = req.body.providerName.trim();
         var providerType = req.body.providerType.trim();
         var providerId = req.params.providerId.trim();
@@ -282,6 +298,14 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         }
         if (typeof openstackpassword === 'undefined' || openstackpassword.length === 0) {
             res.send(400, "Please Enter Password.");
+            return;
+        }
+        if (typeof openstackhost === 'undefined' || openstackhost.length === 0) {
+            res.send(400, "Please Enter a Host");
+            return;
+        }
+        if (typeof openstacktenantid === 'undefined' || openstacktenantid.length === 0) {
+            res.send(400, "Please Enter a Tenant ID");
             return;
         }
         if (typeof providerName === 'undefined' || providerName.length === 0) {
@@ -298,14 +322,12 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             return;
         }
 
-       
-          
-                
-               
-                    var providerData = {
+             var providerData = {
                                 id: 9,
                                 username: openstackusername,
                                 password: openstackpassword,
+                                host: openstackhost,
+                                tenantid: openstacktenantid,
                                 providerName: providerName,
                                 providerType: providerType,
                                 orgId: orgId
@@ -351,6 +373,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                     id: 9,
                                                     username: openstackusername,
                                                     password: openstackpassword,
+                                                    host: openstackhost,
                                                     providerName: providerData.providerName,
                                                     providerType: providerData.providerType,
                                                     orgId: orgs[0].rowid,

@@ -1,4 +1,4 @@
-    <div class="row">
+  <div class="row">
 
  <article class="col-sm-12 col-md-12 col-lg-12">
 
@@ -148,7 +148,47 @@
 </div>
  </div>
 
- <div class="col-lg-6 col-md-6" style="margin-top:15px;">
+ <div class="col-lg-6 col-md-6 foropenstack" style="margin-top:15px;">
+ <label for="region">Choose Flavour:<span style="color:red">*</span></label>
+
+<div class="input-groups">
+ <select id="openstackflavour" name="openstackflavour" class="required chooseSecurity width-100">
+ <option value="">Select Flavour</option>
+ </select>
+</div>
+ </div> 
+
+ <div class="col-lg-6 col-md-6 foropenstack" style="margin-top:15px;">
+ <label for="region">Network:<span style="color:red">*</span></label>
+
+<div class="input-groups">
+ <select id="openstacknetwork" name="openstacknetwork" class="required chooseSecurity width-100">
+ <option value="">Select Network</option>
+ </select>
+</div>
+ </div> 
+
+ <div class="col-lg-6 col-md-6 foropenstack" style="margin-top:15px;">
+ <label for="region">Subnet:<span style="color:red">*</span></label>
+
+<div class="input-groups">
+ <select id="openstacksubnet" name="openstacksubnet" class="required chooseSecurity width-100">
+ <option value="">Select Subnet</option>
+ </select>
+</div>
+ </div> 
+
+ <div class="col-lg-6 col-md-6 foropenstack" style="margin-top:15px;">
+ <label for="region">Security Group:<span style="color:red">*</span></label>
+
+<div class="input-groups">
+ <select id="openstacksecuritygroup" name="openstacksecuritygroup" class="required chooseSecurity width-100">
+ <option value="">Select Group</option>
+ </select>
+</div>
+ </div> 
+
+ <div class="col-lg-6 col-md-6 foraws" style="margin-top:15px;">
  <label for="region">Choose Region:<span style="color:red">*</span></label>
 
 <div class="input-groups">
@@ -158,7 +198,7 @@
 </div>
  </div> 
 
- <div class="col-lg-6 col-md-6" style="margin-top:15px;">
+ <div class="col-lg-6 col-md-6 foraws" style="margin-top:15px;">
  <label for="vpcId">Select VPC:<span style="color:red">*</span></label>
  <label id="vpcSpinner" class="hidden"><img  style="margin-left:5px;margin-right:25px;" src="img/select2-spinner.gif"></label>
  <div class="input-groups">
@@ -168,7 +208,7 @@
  </div>                                                                                           
  </div>
 
- <div class="col-lg-6 col-md-6" style="margin-top:15px;">
+ <div class="col-lg-6 col-md-6 foraws" style="margin-top:15px;">
  <label for="subnetId">Select Subnet:<span style="color:red">*</span></label>
  <label id="spinnerSubnet" class="hidden"><img  style="margin-left:5px;margin-right:25px;" src="img/select2-spinner.gif"></label>
  <div class="input-groups">
@@ -179,7 +219,7 @@
  </div>
 
 
- <div class="col-lg-6 col-md-6" style="margin-top:15px;">
+ <div class="col-lg-6 col-md-6 foraws" style="margin-top:15px;">
  <label for="keypairId">Select KeyPair :<span style="color:red">*</span></label>
  <div class="input-groups">
  <select id="keypairId" name="keypairId" class="required instanceType chooseInstance width-100">
@@ -188,7 +228,7 @@
  </div>
  </div>
 
- <div class="col-lg-6 col-md-6" style="margin-top:15px;">
+ <div class="col-lg-6 col-md-6 foraws" style="margin-top:15px;">
  <label for="instancesize">Instance Size:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
  <div class="input-groups">
  <select id="instancesize" name="instancesize" class="required chooseOrganization width-100 chooseSelect" style="vertical-align:central">
@@ -197,7 +237,7 @@
  </div>
  </div> 
 
- <div class="col-lg-6 col-md-6" style="margin-top:15px;">
+ <div class="col-lg-6 col-md-6 foraws" style="margin-top:15px;">
  <label for="checkbox-toggle">Security Group:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
  <label id="spinnerSecurityGroup" class="hidden"><img  style="margin-left:5px;margin-right:25px;" src="img/select2-spinner.gif"></label>
  <div class="col-lg-6 smart-form multiselect inputGroups" style="  height: 140px;overflow-y: scroll;border:1px solid gray;padding: 0px;width:100%">
@@ -206,7 +246,7 @@
 </div>
  </div>
 
- <div class="col-lg-6 col-md-6" style="margin-top:15px;">
+ <div class="col-lg-6 col-md-6 foraws" style="margin-top:15px;">
  <label for="instanceCount">Instances to Launch:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
  <div class="input-groups">
  <select id="instanceCount" name="instanceCount" class="required chooseOrganization width-100 chooseSelect" style="vertical-align:central">
@@ -761,7 +801,7 @@
  
  <div class="blueprintSaveSuccess blueprintMsgContainer"><div class="alert alert-success bootstrapSuccess"><img style="width:50px;height:40px" src="img/correct.png" alt="success"/>
  <span class="blueprintNameSuccess" style="margin-left:20px;"></span>
- <div style="margin-top:24px;text-align:center;"><button class="btn btn-primary"><a style="color:white;text-decoration:none" href="#ajax/DesignBlueprint.html?addnew" id="addanotherlink">&nbsp;&nbsp;Add New Blueprint</a></button>
+ <div style="margin-top:24px;text-align:center;"><button class="btn btn-primary"><a style="color:white;text-decoration:none" href="#ajax/Aws-Production.html?addnew" id="addanotherlink">&nbsp;&nbsp;Add New Blueprint</a></button>
 </div>
  
  
@@ -828,7 +868,7 @@
 
                             <div class="widget-body no-padding">
                              <form action="">
-                                <div class="col-lg-12 awsExisting">
+                              <div class="col-lg-12 awsExisting">
                                <div class="col-lg-3 col-md-3">
                                  <label for="">Choose Organization <span style="color:red">*</span></label>
                                  <select id="orgnameSelectExisting" class="chooseOrgSelectExisting width-100">
@@ -884,7 +924,7 @@
 
                     <footer class="footer">
                         <div class="clearfix form-actions" style="text-align:center">
-                            <!-- <div class="btn-group">
+                          <!-- <div class="btn-group">
 
                                 <button class="btn pull-left btn-primary launchBtn" style="margin-left:200px;">
                                     <i class="ace-icon fa  fa-location-arrow bigger-110"></i>
@@ -907,7 +947,7 @@
                 <h4 class="modal-title" id="myModalLabel">Blueprint Information</h4>
             </div>
             <div class="modal-body" style="height:480px;overflow-y:auto;">
-                <!--os and the 1st tier-->
+              <!--os and the 1st tier-->
  <table class="table table-bordered">
     <thead>
         <th style="width:11%;text-align:center">Parameters</th>
@@ -1453,6 +1493,9 @@
      }
 
  }
+ var providerselected = $('#blueprints').attr('providerselected');
+ //alert(providerselected);
+
  $(document).ready(function() {
 
 
@@ -1464,9 +1507,9 @@
      $(".chooseEnvExisting").select2();
      var $addal = $("#addanotherlink"); //#ajax/Aws-Production.html?addnew
      if (window.url.indexOf('addnew') > 0)
-         $addal.attr('href', '#ajax/DesignBlueprint.html?addanother');
+         $addal.attr('href', '#ajax/Aws-Production.html?addanother');
      else
-         $addal.attr('href', '#ajax/DesignBlueprint.html?addnew');
+         $addal.attr('href', '#ajax/Aws-Production.html?addnew');
 
 
 
@@ -1711,7 +1754,7 @@
      var uniqueid = (Math.floor(Math.random() * 9000) + 1000).toString();
      //remove any empty row message from table
      $('#dockerimageemptytr').detach();
-     var $dockertemplaterow = '<tr class="dockerimagesrow"><td >' + $cdt.find('tr').length + '</td><td paramtype="dockercontainerpathstitle">' + title + '</td><td  paramtype="dockercontainerpaths">' + repopath + '</td><td paramtype="dockerrepotags">' + tagname + '</td><td><a onclick="loadLaunchParams(\'launchparam' + uniqueid + '\');" href="javascript:void(0);"><i class="icon-append fa fa-list-alt fa-lg" title="Launch Parameters"></i></a><input type="text" paramtype="dockerlaunchparameters" id="launchparam' + uniqueid + '" class=""><input type="hidden" paramtype="dockerreponame" id="dockerreponame' + uniqueid + '" class="" value="' + reponame + '"></td><td ><a class="dockerimageselectorup" id="dockerimageselectorup' + uniqueid + '"  href="javascript:movetablerow(\'dockerimageselectorup\',' + uniqueid + ');"><i class="fa fa-chevron-circle-up fa-lg"></i></a><a class="dockerimageselectordown" id="dockerimageselectordown' + uniqueid + '" href="javascript:movetablerow(\'dockerimageselectordown\',' + uniqueid + ');" style="padding-left:5px;"><i class="fa fa-chevron-circle-down fa-lg"></i></a><button class="btn btn-xs btn-danger pull-right" value="Remove" title="Remove" id="dockerimageremove' + uniqueid + '" onClick="javascript:removeimage(\'dockerimageremove\',' + uniqueid + ');"><i class="ace-icon fa fa-trash-o fa-lg"></i></button></td></tr>';
+     var $dockertemplaterow = '<tr class="dockerimagesrow"><td >' + $cdt.find('tr').length + '</td><td paramtype="dockercontainerpathstitle">' + title + '</td><td  paramtype="dockercontainerpaths">' + repopath + '</td><td paramtype="dockerrepotags">' + tagname + '</td><td><input type="text" paramtype="dockerlaunchparameters" id="launchparam' + uniqueid + '" class=""><input type="hidden" paramtype="dockerreponame" id="dockerreponame' + uniqueid + '" class="" value="' + reponame + '"><a onclick="loadLaunchParams(\'launchparam' + uniqueid + '\');" href="javascript:void(0);"><i class="icon-append fa fa-list-alt fa-lg" title="Launch Parameters"></i></a></td><td ><a class="dockerimageselectorup" id="dockerimageselectorup' + uniqueid + '"  href="javascript:movetablerow(\'dockerimageselectorup\',' + uniqueid + ');"><i class="fa fa-chevron-circle-up fa-lg"></i></a><a class="dockerimageselectordown" id="dockerimageselectordown' + uniqueid + '" href="javascript:movetablerow(\'dockerimageselectordown\',' + uniqueid + ');" style="padding-left:5px;"><i class="fa fa-chevron-circle-down fa-lg"></i></a><button class="btn btn-xs btn-danger pull-right" value="Remove" title="Remove" id="dockerimageremove' + uniqueid + '" onClick="javascript:removeimage(\'dockerimageremove\',' + uniqueid + ');"><i class="ace-icon fa fa-trash-o fa-lg"></i></button></td></tr>';
 
      $cdt.append($dockertemplaterow);
 
@@ -1875,8 +1918,7 @@
      }
      return str;
  }
-
- function getProviderList() {
+function getProviderListold() {
      $.ajax({
          type: "GET",
          url: "/aws/providers",
@@ -1893,6 +1935,53 @@
          }
      });
  }
+
+ function getProviderList() {
+     $.ajax({
+         type: "GET",
+         url: "/aws/providers",
+         success: function(data) {
+             data = typeof data == "string" ? JSON.parse(data) : data;
+             console.log(data);
+             var str = ' <option value="">Select Provider</option>',
+                 len = data.length;
+             str = str + helperConstructOption(data, ['secretKey', 'accessKey', 'providerType'], 'providerName', '_id');
+             //getting openstack provider list
+              //alert('in');
+                $.ajax({
+                       type: "GET",
+                       url: "/openstack/providers",
+                       success: function(data) {
+                           data = typeof data == "string" ? JSON.parse(data) : data;
+                           console.log(data);
+                         // alert(JSON.stringify(data));
+                               len = data.length;
+                           str += helperConstructOption(data, ['username', 'password', 'providerType'], 'providerName', '_id');
+                          
+                           $('#providerId').html(str);
+                            $("#providerId > option").each(function() {
+                                if($(this).attr('providertype')){
+                                  if($(this).attr('providertype') != providerselected.toUpperCase()){
+                                     $(this).detach();
+                                  }
+                                }
+                            });
+                       },
+                       failure: function(data) {
+                           alert(data.toString());
+                       }
+                   });
+                 
+             //end of openstack 
+             
+         },
+         failure: function(data) {
+             alert(data.toString());
+         }
+     });
+  
+ }
+ 
 
  function getImagesWithOSFilter() {
 
@@ -1932,6 +2021,69 @@
              });
          } else {
              $('#imageId').html('<option value="">Select Image</option>').select2().trigger('change');
+         }
+
+         if(providerselected == 'openstack'){
+              $('.foraws').hide();
+              $('.foropenstack').show();
+
+              //load each of the dropdowns
+              //flavour
+              $.get('/openstack/' + providerVal + '/flavors',function(data){
+                if(data){
+                  var str = ' <option value="">Select Flavors</option>';
+                    var data =  JSON.parse(JSON.stringify(data));
+                    for (var i = 0; i < data.flavors.length; i++) {
+                      str += '<option value="' + data.flavors[i].id + '">' + data.flavors[i].name + '</option>';
+                      //alert(str);
+                    }
+                    $('#openstackflavour').html(str);
+                    $('#openstackflavour').select2().trigger('change');
+                  }
+              });
+
+              $.get('/openstack/' + providerVal + '/networks',function(data){
+                if(data){
+                  var str = ' <option value="">Select Network</option>';
+                    var data =  JSON.parse(JSON.stringify(data));
+                    for (var i = 0; i < data.networks.length; i++) {
+                      str += '<option value="' + data.networks[i].id + '" subnets="' + data.networks[i].subnets.join() + '">' + data.networks[i].name + '</option>';
+                      //alert(str);
+                    }
+                    $('#openstacknetwork').html(str);
+                    $('#openstacknetwork').select2().trigger('change');
+                    $('#openstacknetwork').on('change',function(){
+                       // alert($(this).find(':selected').attr('subnets'));
+                        var ss = ' <option value="">Select Subnet</option>';
+                        var subn = $(this).find(':selected').attr('subnets').split(',');
+                        
+                        for(var i = 0; i < subn.length;i++){
+                          ss += '<option value="' + subn[i] + '">' + subn[i]+ '</option>';
+                        }
+                        
+                        $('#openstacksubnet').html(ss);
+                         $('#openstacksubnet').select2().trigger('change');
+                    });
+                  }
+              });
+
+              $.get('/openstack/' + providerVal + '/securityGroups',function(data){
+                if(data){
+                  var str = ' <option value="">Select Group</option>';
+                    var data =  JSON.parse(JSON.stringify(data));
+                    for (var i = 0; i < data.security_groups.length; i++) {
+                      str += '<option value="' + data.security_groups[i].id + '">' + data.security_groups[i].name + '</option>';
+                      //alert(str);
+                    }
+                    $('#openstacksecuritygroup').html(str);
+                    $('#openstacksecuritygroup').select2().trigger('change');
+                  }
+              });
+
+         }
+         else{
+            $('.foraws').show();
+            $('.foropenstack').hide();
          }
      }
 
@@ -2193,17 +2345,20 @@
      $('select').val('').select2();
      $('[multiselect]').empty();
  }
-
  $(document).ready(function() {
+       // blueprintstartup();
+       //removed as it does not load when povider flipped.
+  });
 
+ var blueprintstartup = function() {
      getProviderList();
      getImageInstances();
+     
      getSecurityGroup();
      getkeypairList();
      getVPC();
      getSubnet();
      getImagesWithOSFilter();
-
 
      console.log("Orgname===>" + localStorage.getItem('selectedOrgName'));
      $.get('../aws/ec2/amiids', function(data) {
@@ -2285,9 +2440,13 @@
 
             }
             data.sort(sortbyid);
-
+           
 
              for (var i = 0; i < rowLength; i += 1) {
+                //skipping cft if not aws provider
+                  if(providerselected && providerselected == 'openstack' && data[i]['templatetype'] && data[i]['templatetype'] == 'cft')
+                    continue;
+
                  getDesignTypeImg = data[i]['designtemplateicon_filename'];
 
                  switch (data[i].templatetypename) {
@@ -2362,7 +2521,7 @@
              resetForm();
          }
      });
- });
+ }
 
  var reqBody;
  var $wizard = $('#bootstrap-wizard-1').bootstrapWizard({
@@ -2383,9 +2542,8 @@
              //hiding to move to next tag when docker selected
              $('#individualTemplateNameGrid').hide();
              var getID = parseInt($clone.attr("id").replace("grid", ""), 10);
-
-             var gallerytype = $clone.attr("data-gallerytype");
-             var templateurl = "/d4dMasters/readmasterjsonnew/17";
+              var gallerytype = $clone.attr("data-gallerytype");
+               var templateurl = "/d4dMasters/readmasterjsonnew/17";
                 if(gallerytype == 'ami'){
                     // alert('to build a new selection by updating the url');
                     templateurl = '/vmimages';
@@ -2403,7 +2561,6 @@
                      var getRowID, getImage;
                      //alert(JSON.stringify(data));
                      //alert('check');
-                     
                      for (var z = 0; z < rowGridLength; z += 1) {
 
                         if(gallerytype == 'ami'){
@@ -2444,7 +2601,6 @@
                          getImage = data[z]['templatesicon_filename'];
                          getTemplateType = data[z]['templatetypename'];
                          console.log(getTemplateType);
-                         //alert(selectedText + ' '  +  getTemplateType + ' ' + data[z]['templatename'] + (selectedText.trim() != getTemplateType.trim()));
 
                          if (selectedText.trim() != getTemplateType.trim())
                              continue;
@@ -2461,7 +2617,6 @@
 
                          console.log('here end ' + dockercontainerpathstitle);
                          //added to the docker template adder pop-up : Vinod
-                         //alert(dockercontainerpathstitle + z + ' ' + rowGridLength);
                          $('#dockertemplateselector').append('<option value="' + dockercontainerpaths + '" title="' + dockercontainerpaths + '" reponame="' + dockerreponame + '">' + dockercontainerpathstitle + '</option>');
                         var templateImgUrl = "img/logo.png";
                         if (getImage) {
@@ -2484,7 +2639,7 @@
                             'src="' + templateImgUrl + '">' +
                             '</li><li style="font-size:12px;"><u><b>' + getTempName + '</b></u></li>';
 
-                         if (getTemplateType != "Docker") {
+                         if (getTemplateType != "Docker" && getTemplateType != "docker") {
                              var cb = gettemplatescookbooks.split(',');
                              var licb = '';
                              //alert(cb.length);
@@ -2543,7 +2698,7 @@
 
              // }
              //alert('kickin 2');
-
+              getProviderList();             
              //If a docker type of template selected then select the Org 
              var $selectedItem = $('.role-Selected');
              // alert('in ' + $selectedItem.length);
@@ -2665,7 +2820,7 @@
                             var $providerInput = $('<select id="cftProviderInput" class="form-control"></select>').append(providerStr);
                             var $providerInputContainer = $('<div class="col-lg-6 col-md-6" style="margin-top: 10px;"><label class="cftParameterLabelContainer" for=""><span class="cftParameterLabel">Choose Provider</span></label><div class="input-groups"></div></div>');
                             $providerInputContainer.find('.input-groups').append($providerInput);
-                            
+
                             $.get('/vmimages/regions/list', function(regionList) {
 
                                 regionList = typeof regionList == "string" ? JSON.parse(regionList) : regionList;
@@ -2843,6 +2998,7 @@
                     else{
                         $('#instanceOS').removeAttr('disabled');
                         $('#providerId').removeAttr('disabled');
+
                         $('#orgnameSelect').removeAttr('disabled');
                     }
                      if (!$('#CollapseConfigureproviderParameter').hasClass('in')) {
@@ -2918,6 +3074,8 @@
                              reqBody.dockercontainerpaths = $selectedItem.attr('dockercontainerpaths');
                              reqBody.dockerlaunchparameters = $('#dockerlaunchparameters').val();
                              reqBody.dockerreponame = $('.productdiv2.role-Selected').attr('dockerreponame');
+
+
 
 
                              //constructing the docker composite json.
@@ -3015,7 +3173,16 @@
                              /*if (($('.role-Selected').data('templatetype')).toLowerCase() != "docker") {
                            // return false;
                         }*/
-
+                            //Openstack variables.
+                             reqBody.imageIdentifier = imageId;
+                             reqBody.openstackflavor = $('#openstackflavour').val();
+                             reqBody.openstacknetwork = $('#openstacknetwork').val();
+                             reqBody.openstacksecurityGroupIds = $('#openstacksecuritygroup').val();
+                             reqBody.openstacksubnet = $('#openstacksubnet').val();
+                            
+                             reqBody.instanceCount = 1;
+                             reqBody.instanceImageName = imageIdentifier;
+                             
 
                              $('#userListSelect').find('option').attr('selected', 'selected');
                              reqBody.users = $('#userListSelect').val();
@@ -3025,7 +3192,7 @@
                                  return false;
                              }
                              //Checking for docker blueprint images
-                             if ($('.productdiv2.role-Selected').first().attr('templatetype') == "Docker" && $('#dockerimageemptytr').length > 0) {
+                             if (($('.productdiv2.role-Selected').first().attr('templatetype') == "Docker" || $('.productdiv2.role-Selected').first().attr('templatetype') == "docker") && $('#dockerimageemptytr').length > 0) {
                                  //no rows found add empty message
                                  alert("Please add atleast one image");
                                  return false;
@@ -3088,6 +3255,10 @@
                                  if(($('.role-Selected').data('templatetype')).toLowerCase() === 'cloudformation') {
                                     reqBody.blueprintType = 'aws_cf';
                                  }
+                                 if($('#providerId').find("option:selected").attr('providertype').toLowerCase() == 'openstack'){
+                                  reqBody.blueprintType = 'openstack_launch';
+                                 }
+
                                  $.post('/organizations/' + reqBody.orgId + '/businessgroups/' + reqBody.bgId + '/projects/' + reqBody.projectId + '/blueprints', {
                                      blueprintData: reqBody
                                  }, function(data) {
@@ -3163,6 +3334,7 @@
                                                      $blueprintReadContainer.find('.modal-body #instancekeyPair').val(data.keyPairs[k].keyPairName);
                                                  }
                                                  //console.log(data);
+                                                 //
                                              },
                                              failure: function(data) {
                                                  alert(data.toString());
@@ -3266,7 +3438,7 @@
              $('#viewCreateNew').removeClass('hidden');
          } else if (index === 1) {
              $("#tabheader").html('Choose Templates');
-             if ($('#tab1').find('.role-Selected').attr('data-templatetype') === "Docker") {
+             if ($('#tab1').find('.role-Selected').attr('data-templatetype') === "Docker" || $('#tab1').find('.role-Selected').attr('data-templatetype') === "docker") {
                  $('#bootstrap-wizard-1').bootstrapWizard('show', 0);
                 var validatorForm = $("#wizard-1").validate();
                 validatorForm.resetForm();
@@ -3626,7 +3798,6 @@
 
              }
              console.log(tdata);
-             //alert(getDesignTypeName);
              $containerTempNew = '<div class="panel panel-default blueprintContainer hidden">' +
                  '<div class="panel-heading">' +
 
@@ -3643,13 +3814,13 @@
          }
          //To fix template id and template type
          // alert('in' + data.length);
+
          for (var i = 0; i < data.length; i++) {
           (function(i){
              console.log(data[i]);
             //alert(data[i]);
              
              //Find a panel-body with the template type class
-            // alert(data[i].templateType);
              var $currRolePanel = $('#accordion-2').find('.' + data[i].templateType);
              //   alert($currRolePanel.length);
              if ($currRolePanel.length > 0) {
@@ -3713,11 +3884,18 @@
                          $selectVer = $('<select style="padding:1px;padding-left:5px;"></select>').addClass('blueprintVersionDropDown').attr('data-blueprintId', data[i]._id);
 
 
+                         
 
                          //code for info about blueprints
                          (function(blueprint) {
+                           // alert(JSON.stringify(blueprint));
                              $liRead.click(function(e) {
 
+                                var $blueprintReadContainer = $('#modalForRead');
+                                 $blueprintReadContainer.find('.modal-body #blueprintNameInputNew').val(blueprint.name);
+
+                          
+                            
                                  //for getting the image Name
                                  $.ajax({
                                      type: "GET",
@@ -4205,5 +4383,5 @@
                      });
 
                  }*/
-
+                 blueprintstartup();
   </script>
