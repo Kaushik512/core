@@ -108,13 +108,15 @@ ${CONFIG MANAGEMENT URL}             https://api.opscode.com/organizations/catte
 
 
 
-
+${CLOUD TEMPLATENAME}        CloudFormation
+${CLOUD TEMP NAME}           RLCloud
 
 ${USERPEMFILE}              ${ROOTPATH}//Chef//mycatqa.pem
 ${VALIDATORPEMFILE}      ${ROOTPATH}//Chef//cattest-validator.pem
 ${KNIFERBFILE}                ${ROOTPATH}//Chef//knife.rb
 ${CATALYSTPEM}                ${ROOTPATH}//Chef//catalyst.pem
 ${CAT_INSTANCES}              ${ROOTPATH}//Chef//cat_instances.pem
+${CATALYST STACKFILE}         ${ROOTPATH}//Chef//CatalystStack.Template
 
 ${CENTOSIMG}                  ${ROOTPATH}//Images//centos.jpg
 ${UBUNTUIMG}                  ${ROOTPATH}//Images//ubuntuu.jpg
