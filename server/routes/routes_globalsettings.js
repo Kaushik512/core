@@ -10,13 +10,14 @@
 
 var logger = require('_pr/logger')(module);
 var GlobalSettings = require('_pr/model/global-settings/global-settings');
+var errorResponses = require('./error_responses');
 
 
 module.exports.setRoutes = function(app, sessionVerificationFunc) {
     app.all('/globalsettings/*', sessionVerificationFunc);
 
     // Get all GlobalSettings
-    app.get('/globalsettings/', function(req, res) {
+    app.get('/globalsettings', function(req, res) {
         GlobalSettings.getGolbalSettings(function(err, globalSettings) {
             if (err) {
                 res.send(500, errorResponses.db.error);
@@ -29,16 +30,58 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         });
     });
 
-    // Get all GlobalSettings
-    app.post('/globalsettings/', function(req, res) {
-    	logger.debug("Got GlobalSettings data: ",JSON.stringify(req.body.aGlobalSettings));
-        GlobalSettings.createNew(req.body.aGlobalSettings,function(err, globalSettings) {
+    // Create GlobalSettings
+    app.post('/globalsettings', function(req, res) {
+        logger.debug("Got GlobalSettings data: ", JSON.stringify(req.body.aGlobalSettings));
+        GlobalSettings.createNew(req.body.aGlobalSettings, function(err, globalSettings) {
             if (err) {
                 res.send(500, errorResponses.db.error);
                 return;
             }
             if (globalSettings) {
                 res.send(200, globalSettings);
+                return;
+            }
+        });
+    });
+
+    // Update GlobalSettings
+    app.post('/globalsettings/:gSettingsId/update', function(req, res) {
+        logger.debug("Got GlobalSettings data: ", JSON.stringify(req.body.aGlobalSettings));
+        GlobalSettings.getGolbalSettingsById(req.params.gSettingsId, function(err, globalSettings) {
+            if (err) {
+                res.send(500, errorResponses.db.error);
+                return;
+            }
+            if(!globalSettings){
+                res.send(404,"GlobalSettings not found!");
+                return;
+            }
+            GlobalSettings.updateSettings(req.params.gSettingsId, req.body.aGlobalSettings, function(err, globalSettings) {
+                if (err) {
+                    res.send(500, errorResponses.db.error);
+                    return;
+                }
+                if (globalSettings) {
+                    res.send(200, globalSettings);
+                    return;
+                }
+            });
+        });
+    });
+
+    // Get GlobalSettings w.r.t. Id
+    app.get('/globalsettings/:gSettingsId', function(req, res) {
+        GlobalSettings.getGolbalSettingsById(req.params.gSettingsId, function(err, globalSettings) {
+            if (err) {
+                res.send(500, errorResponses.db.error);
+                return;
+            }
+            if (globalSettings) {
+                res.send(200, globalSettings);
+                return;
+            }else{
+                res.send(404,"GlobalSettings not found!");
                 return;
             }
         });

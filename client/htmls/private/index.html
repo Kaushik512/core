@@ -151,16 +151,16 @@ String.prototype.capitalizeFirstLetter = function() {
                 </li>
                 <!--notification ends here-->
 
-                <!--aws usage-->
+                <!--aws cost-->
                 <li style="margin-top:10px;">
                     <a href="ajax/awslogs.html">
                         <div>
-                            <i class="fa fa-tasks fa-2x" title="AWS Usage"></i>
-                            <span style="margin-left:5px" class="trackAlign2">AWS Usage</span>
+                            <i class="fa fa-tasks fa-2x" title="AWS Cost"></i>
+                            <span style="margin-left:5px" class="trackAlign2">AWS Cost</span>
                         </div>
                     </a>
                 </li> 
-                <!--aws usage ends here-->
+                <!--aws cost ends here-->
 
                 <!--zabbix starts here-->
                 <li style="margin-top:10px;">
@@ -185,6 +185,17 @@ String.prototype.capitalizeFirstLetter = function() {
                     </a>
                 </li>
                 <!--kibana ends here-->
+
+                <!--aws usage-->
+                <li style="margin-top:10px;">
+                    <a href="ajax/awsUsageLogs.html">
+                        <div>
+                            <i class="fa fa-tasks fa-2x" title="AWS Usage"></i>
+                            <span style="margin-left:5px" class="trackAlign2">AWS Usage</span>
+                        </div>
+                    </a>
+                </li> 
+                <!--aws usage ends here-->
 
                 
 
@@ -491,7 +502,15 @@ var SettingTreeJson = [{
                 "selectable": true,
                 "icon": "fa fa-lg fa-fw fa-random"
 
-            }, {
+            },/*{
+                "name": "organizations",
+                "text": "Puppet Server",
+                "borderColor": "#000",
+                "href": "#ajax/Settings/PuppetServerList.html",
+                "selectable": true,
+                "icon": "fa fa-lg fa-fw fa-random"
+
+            },*/ {
                 "name": "organizations",
                 "text": "Environments",
                 "borderColor": "#000",
