@@ -1,11 +1,14 @@
 var SSHExec = require('./utils/sshexec');
 var https = require('https');
 var fs = require('fs');
-var PSON = require('pson');
+
 var Buffer = require('buffer');
 var logger = require('_pr/logger')(module);
 var util = require('util');
 var YAML = require('yamljs');
+var SCP = require('_pr/lib/utils/scp');
+var Process = require("_pr/lib/utils/process");
+
 var Puppet = function(settings) {
 
     var puppetConfig = null;
@@ -21,7 +24,7 @@ var Puppet = function(settings) {
         sshOptions.password = settings.password;
     }
 
-    function runSSHCmd(cmds, onComplete, onStdOut, onStdErr) {
+    function runSSHCmd(sshOptions, cmds, onComplete, onStdOut, onStdErr) {
         var sshExec = new SSHExec(sshOptions);
         var cmdString = '';
         if (util.isArray(cmds)) {
@@ -35,6 +38,14 @@ var Puppet = function(settings) {
         sshExec.exec(cmdString, onComplete, onStdOut, onStdErr);
     }
 
+    function runSSHCmdOnMaster(cmds, onComplete, onStdOut, onStdErr) {
+        runSSHCmd(sshOptions, cmds, onComplete, onStdOut, onStdErr);
+    }
+
+    function runSSHCmdOnAgent(sshOptions, cmds, onComplete, onStdOut, onStdErr) {
+        runSSHCmd(sshOptions, cmds, onComplete, onStdOut, onStdErr);
+    }
+
     function getPuppetConfig(callback) {
         if (puppetConfig) {
             process.nextTick(function() {
@@ -46,7 +57,7 @@ var Puppet = function(settings) {
         var stdErrStr = '';
         puppetConfig = {};
         var line = '';
-        runSSHCmd('puppet config print', function(err, retCode) {
+        runSSHCmdOnMaster('puppet config print', function(err, retCode) {
             if (err) {
                 callback(err, null);
                 return;
@@ -84,7 +95,163 @@ var Puppet = function(settings) {
     }
 
 
-    this.bootstrap = function(options, callback) {
+    this.bootstrap = function(node, callback) {
+        // getting hostname of puppet master
+        var hostNamePuppetMaster = '';
+        runSSHCmdOnMaster('hostname -f', function(err, retCode) {
+            if (err) {
+                callback(err, null);
+                return;
+            }
+            if (retCode !== 0) {
+                message = "cmd run failed with ret code : " + retCode
+                callback({
+                    message: message,
+                    retCode: retCode
+                }, null);
+                return;
+            }
+            hostNamePuppetMaster = hostNamePuppetMaster.replace(/[\t\n\r\b\0\v\f\'\"\\]/g, '');
+            hostNamePuppetMaster = hostNamePuppetMaster.trim();
+
+
+            // getting hostname of client
+            var hostnamePuppetAgent = '';
+            var sshOptions = {
+                username: node.username,
+                host: node.host,
+                port: 22,
+            }
+            if (node.pemFileLocation) {
+                sshOptions.privateKey = node.pemFileLocation;
+            } else {
+                sshOptions.password = node.password;
+            }
+
+            runSSHCmdOnAgent(sshOptions, 'hostname -f', function(err, retCode) {
+                if (err) {
+                    callback(err, null);
+                    return;
+                }
+                if (retCode !== 0) {
+                    message = "cmd run failed with ret code : " + retCode
+                    callback({
+                        message: message,
+                        retCode: retCode
+                    }, null);
+                    return;
+                }
+                hostnamePuppetAgent = hostnamePuppetAgent.replace(/[\t\n\r\b\0\v\f\'\"\\]/g, '');
+                hostnamePuppetAgent = hostnamePuppetAgent.trim();
+                // copying cookbook on client machine
+
+                var scp = new SCP(sshOptions);
+                scp.upload(__dirname + '/../cookbooks.tar', '/tmp', function(err) {
+                    if (err) {
+                        callback(err, null);
+                        return;
+                    }
+                    // extracting cookbook on clinet machine
+                    runSSHCmdOnAgent(sshOptions, 'tar -xf /tmp/cookbooks.tar -C /tmp/', function(err, retCode) {
+                        if (err) {
+                            callback(err, null);
+                            return;
+                        }
+                        if (retCode !== 0) {
+                            message = "cmd run failed with ret code : " + retCode
+                            callback({
+                                message: message,
+                                retCode: retCode
+                            }, null);
+                            return;
+                        }
+                        // creating chef-solo.rb file
+                        var proc = new Process('echo "cookbook_path            [\'' + __dirname + '/../../seed/catalyst/cookbooks/' + '\']" > /etc/chef/solo.rb', [], {
+                            //cwd: settings.userChefRepoLocation + '/.chef',
+                            onError: function(err) {
+                                callback(err, null);
+                            },
+                            onClose: function(code) {
+                                if (code !== 0) {
+                                    message = "cmd run failed with ret code : " + code
+                                    callback({
+                                        message: message,
+                                        retCode: code
+                                    }, null);
+                                    return;
+                                }
+                                // running chef-solo
+                                var jsonAttributes = {
+                                    "puppet_configure": {
+                                        "cache_dir": "/var/chef/cache",
+                                        "client": {
+                                            "user": node.username,
+                                            //"pswd": "vagrant",
+                                            "ipaddress": node.host,
+                                            "fqdn": hostnamePuppetAgent,
+                                            "ssh_pass_method": true,
+                                            "pem_file": node.pemFileLocation
+                                        },
+                                        "puppet_master": {
+                                            "user": settings.username,
+                                            //"pswd": "vagrant",
+                                            "ipaddress": settings.host,
+                                            "fqdn": hostNamePuppetMaster,
+                                            "ssh_pass_method": true,
+                                            "pem_file": settings.pemFileLocation
+                                        }
+                                    }
+                                }
+
+                                var argList = [];
+                                argList.push('-o');
+                                argList.push('recipe[puppet_configure]');
+                                
+                                var jsonAttributesString = JSON.stringify(jsonAttributes);
+                                jsonAttributesString = jsonAttributesString.split('"').join('\\\"');
+
+                                var jsonAttributeFile = '/tmp/chef-solo_'+new Date().getTime();
+
+                                argList.push('-j');
+                                argList.push(jsonAttributeFile);
+
+                                var proc = new Process('echo '+jsonAttributesString+'> '+jsonAttributeFile+' && chef-solo '+argList.join(' '), [], {
+                                    //cwd: settings.userChefRepoLocation + '/.chef',
+                                    onError: function(err) {
+                                        callback(err, null);
+                                    },
+                                    onClose: function(code) {
+                                        callback(null, code);
+                                    },
+                                    onStdErr: function(stdErr) {
+                                        console.error(stdErr.toString());
+                                    },
+                                    onStdOut: function(stdOut) {
+                                        console.log(stdOut.toString());
+                                    }
+                                });
+                                proc.start();
+
+                            }
+                        });
+                        proc.start();
+
+
+
+
+                    });
+
+                });
+
+            }, function(stdOut) {
+                hostnamePuppetAgent = hostnamePuppetAgent + stdOut.toString('utf8');
+            })
+
+        }, function(stdOut) {
+            hostNamePuppetMaster = hostNamePuppetMaster + stdOut.toString('utf8');
+        }, function(stdErr) {
+
+        });
 
     };
 
@@ -97,7 +264,7 @@ var Puppet = function(settings) {
                 callback(err, null);
                 return;
             }
-            runSSHCmd('ls ' + puppetConfig.environmentpath, function(err, retCode) {
+            runSSHCmdOnMaster('ls ' + puppetConfig.environmentpath, function(err, retCode) {
                 if (err) {
                     callback(err, null);
                     return;
@@ -118,7 +285,6 @@ var Puppet = function(settings) {
                             environments.push(stdOutStr[i]);
                         }
                     }
-
                     callback(null, environments);
                 }
             }, function(stdOut) {
@@ -139,10 +305,9 @@ var Puppet = function(settings) {
                 callback(err, null);
                 return;
             }
-
             var stdOutStr = '';
             var stdErrStr = '';
-            runSSHCmd(['mkdir -p ' + puppetConfig.environmentpath + '/' + envName + '/manifest', 'mkdir -p ' + puppetConfig.environmentpath + '/' + envName + '/modules'], function(err, retCode) {
+            runSSHCmdOnMaster(['mkdir -p ' + puppetConfig.environmentpath + '/' + envName + '/manifest', 'mkdir -p ' + puppetConfig.environmentpath + '/' + envName + '/modules'], function(err, retCode) {
                 if (err) {
                     callback(err, null);
                     return;
@@ -171,7 +336,7 @@ var Puppet = function(settings) {
             }
             var stdOutStr = '';
             var stdErrStr = '';
-            runSSHCmd('ls ' + puppetConfig.yamldir + '/node', function(err, retCode) {
+            runSSHCmdOnMaster('ls ' + puppetConfig.yamldir + '/node', function(err, retCode) {
                 if (err) {
                     callback(err, null);
                     return;
@@ -212,7 +377,7 @@ var Puppet = function(settings) {
             }
             var stdOutStr = '';
             var stdErrStr = '';
-            runSSHCmd('cat ' + puppetConfig.yamldir + '/node/' + nodeName + '.yaml', function(err, retCode) {
+            runSSHCmdOnMaster('cat ' + puppetConfig.yamldir + '/node/' + nodeName + '.yaml', function(err, retCode) {
                 if (err) {
                     callback(err, null);
                     return;
