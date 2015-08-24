@@ -6,6 +6,16 @@ var CHEFInfraBlueprint = require('../chef-infra-manager/chef-infra-manager');
 
 var Schema = mongoose.Schema;
 
+var CLOUD_PROVIDER_TYPE = {
+    AWS: 'aws',
+    AZURE: 'azure'
+};
+
+var INFRA_MANAGER_TYPE = {
+    CHEF: 'chef',
+    PUPPET: 'puppet'
+};
+
 var openstackInstanceBlueprintSchema = new Schema({
     instanceImageID: {
         type: String,
@@ -57,17 +67,89 @@ openstackInstanceBlueprintSchema.methods.launch = function(ver, callback) {
 
 };
 
+
+function getInfraManagerConfigType(blueprint) {
+    var InfraManagerConfig;
+    if (blueprint.infraMangerType === INFRA_MANAGER_TYPE.CHEF) {
+        InfraManagerConfig = CHEFInfraBlueprint;
+    } else if (blueprint.infraMangerType === INFRA_MANAGER_TYPE.PUPPET) {
+        return null;
+    } else {
+        return null;
+    }
+    var infraManagerConfig = new InfraManagerConfig(blueprint.infraManagerData);
+    return infraManagerConfig;
+}
+
+function getCloudProviderConfigType(blueprint) {
+    var CloudProviderConfig;
+    if (blueprint.cloudProviderType === CLOUD_PROVIDER_TYPE.AWS) {
+        CloudProviderConfig = AWSBlueprint;
+    } else if (blueprint.infraMangerType === CLOUD_PROVIDER_TYPE.azure) {
+        return null;
+    } else {
+        return null;
+    }
+    var cloudProviderConfig = new CloudProviderConfig(blueprint.cloudProviderData);
+    return cloudProviderConfig;
+}
+
+openstackInstanceBlueprintSchema.methods.launch = function(version, callback) {
+    cloudProviderConfig = getCloudProviderConfigType(this);
+    cloudProviderConfig.launch(version, callback);
+};
+
+openstackInstanceBlueprintSchema.methods.update = function(updateData) {
+    infraManagerConfig = getInfraManagerConfigType(this);
+    infraManagerConfig.update(updateData);
+    this.infraManagerData = infraManagerConfig;
+};
+
+openstackInstanceBlueprintSchema.methods.getVersionData = function(ver) {
+    infraManagerConfig = getInfraManagerConfigType(this);
+    return infraManagerConfig.getVersionData(ver);
+
+};
+
+openstackInstanceBlueprintSchema.methods.getLatestVersion = function() {
+    infraManagerConfig = getInfraManagerConfigType(this);
+    return infraManagerConfig.getLatestVersion();
+
+};
+
+openstackInstanceBlueprintSchema.methods.getInfraManagerData = function() {
+    return {
+        infraMangerType: this.infraManagerType,
+        infraManagerId: this.infraManagerId,
+        infraManagerData: this.infraManagerData
+    };
+};
+
+openstackInstanceBlueprintSchema.methods.getCloudProviderData = function() {
+    return {
+        cloudProviderType: this.cloudProviderType,
+        cloudProviderId: this.cloudProviderId,
+        cloudProviderData: this.cloudProviderData
+    };
+};
+
+
+
+
 // static methods
 openstackInstanceBlueprintSchema.statics.createNew = function(awsData) {
     var self = this;
     logger.debug('In openstackInstanceBlueprintSchema createNew');
-    logger.debug(JSON.stringify(awsData));
+   
 
     var infraManagerBlueprint = CHEFInfraBlueprint.createNew({
             runlist: awsData.runlist
         });
     awsData.infraManagerData = infraManagerBlueprint;
+    awsData.infraMangerType = "chef";
+    awsData.infraManagerId = awsData.infraManagerId;
 
+    logger.debug(JSON.stringify(awsData));
 
     var awsInstanceBlueprint = new self(awsData);
     return awsInstanceBlueprint;

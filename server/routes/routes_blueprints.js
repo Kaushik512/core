@@ -253,7 +253,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                             return;
                         }
 
-
+                        logger.debug(blueprint);
 
                         var infraManager = blueprint.getInfraManagerData();
                         configmgmtDao.getEnvNameFromEnvId(req.query.envId, function(err, envName) {
@@ -305,6 +305,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                             return;
                                         }
                                         logger.debug("Loaded Image -- : >>>>>>>>>>> %s", anImage.providerId);
+
                                         AWSProvider.getAWSProviderById(anImage.providerId, function(err, aProvider) {
                                             if (err) {
                                                 logger.error(err);
@@ -716,6 +717,9 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                 }); // decryption
                                             });
                                         });
+                                        
+
+
                                     });
                                 } else if (blueprint.blueprintType === 'aws_cf') {
                                     var stackName = req.query.stackName;
@@ -1247,7 +1251,10 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
 
                                     });
-                                } else {
+                                } else if (blueprint.blueprintType === 'openstack_launch') {
+                                    logger.debug(blueprint);
+
+                                }else {
                                     res.send(400, {
                                         message: "Invalid Blueprint Type"
                                     })

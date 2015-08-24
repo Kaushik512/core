@@ -2254,12 +2254,18 @@
                                                                                     var $ul = $('<ul></ul>').addClass('list-unstyled system-prop').css({
                                                                                         'text-align': 'center'
                                                                                     });
-                                                                                    var $img
+                                                                                    var $img;
+                                                                                    var $imgprovider;
                                                                                     if (data[i].iconpath)
                                                                                         $img = $('<img />').attr('src', data[i].iconpath).attr('alt', data[i].name).addClass('cardLogo');
                                                                                     else
                                                                                         $img = $('<img />').attr('src', 'img/logo.png').attr('alt', data[i].name).addClass('cardLogo');
-                                                                                    var $liImage = $('<li></li>').append($img);
+
+                                                                                    //provider logo added - currently included open stack
+                                                                                    if(data[i].blueprintType == 'openstack_launch')
+                                                                                        $imgprovider = $('<img src="img/openstack-card.png" style="margin-right: 7px; margin-top: 4px; margin-left: 102px;">');
+
+                                                                                    var $liImage = $('<li></li>').append($imgprovider).append($img);
                                                                                     $ul.append($liImage);
 
                                                                                     var $liCardName = $('<li title="' + data[i].name + '"></li>').addClass('Cardtextoverflow').html('<u><b>' + data[i].name + '</b></u>');
@@ -2322,6 +2328,8 @@
 
                                                                                             var $parent = $(this).parents('.cardimage');
                                                                                             var $blueprintEditResultContainer = $('#blueprintEditResultContainer');
+
+                                                                                            //<img src="img/openstack-card.png" style="margin-right: 7px; margin-top: 4px; margin-left: 102px;">
 
 
                                                                                             $blueprintEditResultContainer.modal('show');
@@ -2873,7 +2881,13 @@
                                                                                         }
                                                                                     });
 */
-                                                                                }else {
+                                                                                }if(blueprintType === 'openstack_launch'){
+                                                                                    //alert('attempt launch of openstack');
+                                                                                    launchBP();
+
+
+                                                                                }
+                                                                                else {
                                                                                     launchBP();
                                                                                 }
                                                                             }
