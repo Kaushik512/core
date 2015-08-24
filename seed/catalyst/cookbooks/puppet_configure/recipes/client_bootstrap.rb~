@@ -90,7 +90,7 @@ end
 
 ruby_block "Sleeping for 20 Seconds for Request to reach Puppet Master" do
 	block do
-		sleep(50)
+		sleep(40)
 	end
 end
 

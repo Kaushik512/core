@@ -98,7 +98,7 @@ var Puppet = function(settings) {
     this.bootstrap = function(node, callback) {
         // getting hostname of puppet master
         var hostNamePuppetMaster = '';
-        runSSHCmdOnMaster('hostname -f', function(err, retCode) {
+        runSSHCmdOnMaster('hostname', function(err, retCode) {
             if (err) {
                 callback(err, null);
                 return;
@@ -128,7 +128,7 @@ var Puppet = function(settings) {
                 sshOptions.password = node.password;
             }
 
-            runSSHCmdOnAgent(sshOptions, 'hostname -f', function(err, retCode) {
+            runSSHCmdOnAgent(sshOptions, 'hostname', function(err, retCode) {
                 if (err) {
                     callback(err, null);
                     return;
@@ -144,6 +144,43 @@ var Puppet = function(settings) {
                 hostnamePuppetAgent = hostnamePuppetAgent.replace(/[\t\n\r\b\0\v\f\'\"\\]/g, '');
                 hostnamePuppetAgent = hostnamePuppetAgent.trim();
                 // copying cookbook on client machine
+                var jsonAttributes = {
+                    "puppet_configure": {
+                        "cache_dir": "/var/chef/cache",
+                        "client": {
+                            "user": node.username,
+                            //"pswd": "vagrant",
+                            "ipaddress": node.host,
+                            "fqdn": hostnamePuppetAgent,
+                            //"ssh_pass_method": false,
+                            //"pem_file": node.pemFileLocation
+                        },
+                        "puppet_master": {
+                            "user": settings.username,
+                            //"pswd": "vagrant",
+                            "ipaddress": settings.host,
+                            "fqdn": hostNamePuppetMaster,
+                            //"ssh_pass_method": false,
+                            //"pem_file": settings.pemFileLocation
+                        }
+                    }
+                }
+                if (node.pemFileLocation) {
+                    jsonAttributes["puppet_configure"]['client']["pem_file"] = node.pemFileLocation;
+                    jsonAttributes["puppet_configure"]['client']["ssh_pass_method"] = false;
+                } else {
+                    jsonAttributes["puppet_configure"]['client']["pswd"] = node.password;
+                    jsonAttributes["puppet_configure"]['client']["ssh_pass_method"] = true;
+                }
+
+                if (settings.pemFileLocation) {
+                    jsonAttributes["puppet_configure"]['puppet_master']["pem_file"] = settings.pemFileLocation;
+                    jsonAttributes["puppet_configure"]['puppet_master']["ssh_pass_method"] = false;
+                } else {
+                    jsonAttributes["puppet_configure"]['puppet_master']["pswd"] = settings.password;
+                    jsonAttributes["puppet_configure"]['puppet_master']["ssh_pass_method"] = true;
+                }
+
 
                 var scp = new SCP(sshOptions);
                 scp.upload(__dirname + '/../cookbooks.tar', '/tmp', function(err) {
@@ -151,94 +188,78 @@ var Puppet = function(settings) {
                         callback(err, null);
                         return;
                     }
-                    // extracting cookbook on clinet machine
-                    runSSHCmdOnAgent(sshOptions, 'tar -xf /tmp/cookbooks.tar -C /tmp/', function(err, retCode) {
+                    var jsonAttributeFile = '/tmp/puppet_jsonAttributes_' + new Date().getTime() + '.json';
+                    fs.writeFile(jsonAttributeFile, JSON.stringify(jsonAttributes), function(err) {
                         if (err) {
                             callback(err, null);
                             return;
                         }
-                        if (retCode !== 0) {
-                            message = "cmd run failed with ret code : " + retCode
-                            callback({
-                                message: message,
-                                retCode: retCode
-                            }, null);
-                            return;
-                        }
-                        // creating chef-solo.rb file
-                        var proc = new Process('echo "cookbook_path            [\'' + __dirname + '/../../seed/catalyst/cookbooks/' + '\']" > /etc/chef/solo.rb', [], {
-                            //cwd: settings.userChefRepoLocation + '/.chef',
-                            onError: function(err) {
+                        scp.upload(jsonAttributeFile, '/tmp/chef-solo.json', function(err) {
+                            if (err) {
                                 callback(err, null);
-                            },
-                            onClose: function(code) {
-                                if (code !== 0) {
-                                    message = "cmd run failed with ret code : " + code
+                                return;
+                            }
+                            // extracting cookbook on clinet machine
+                            runSSHCmdOnAgent(sshOptions, 'tar -xf /tmp/cookbooks.tar -C /tmp/', function(err, retCode) {
+                                if (err) {
+                                    callback(err, null);
+                                    return;
+                                }
+                                if (retCode !== 0) {
+                                    message = "cmd run failed with ret code : " + retCode
                                     callback({
                                         message: message,
-                                        retCode: code
+                                        retCode: retCode
                                     }, null);
                                     return;
                                 }
-                                // running chef-solo
-                                var jsonAttributes = {
-                                    "puppet_configure": {
-                                        "cache_dir": "/var/chef/cache",
-                                        "client": {
-                                            "user": node.username,
-                                            //"pswd": "vagrant",
-                                            "ipaddress": node.host,
-                                            "fqdn": hostnamePuppetAgent,
-                                            "ssh_pass_method": true,
-                                            "pem_file": node.pemFileLocation
-                                        },
-                                        "puppet_master": {
-                                            "user": settings.username,
-                                            //"pswd": "vagrant",
-                                            "ipaddress": settings.host,
-                                            "fqdn": hostNamePuppetMaster,
-                                            "ssh_pass_method": true,
-                                            "pem_file": settings.pemFileLocation
-                                        }
-                                    }
-                                }
-
-                                var argList = [];
-                                argList.push('-o');
-                                argList.push('recipe[puppet_configure]');
-                                
-                                var jsonAttributesString = JSON.stringify(jsonAttributes);
-                                jsonAttributesString = jsonAttributesString.split('"').join('\\\"');
-
-                                var jsonAttributeFile = '/tmp/chef-solo_'+new Date().getTime();
-
-                                argList.push('-j');
-                                argList.push(jsonAttributeFile);
-
-                                var proc = new Process('echo '+jsonAttributesString+'> '+jsonAttributeFile+' && chef-solo '+argList.join(' '), [], {
+                                // creating chef-solo.rb file
+                                var proc = new Process('echo "cookbook_path            [\'' + __dirname + '/../../seed/catalyst/cookbooks/' + '\']" > /etc/chef/solo.rb', [], {
                                     //cwd: settings.userChefRepoLocation + '/.chef',
                                     onError: function(err) {
                                         callback(err, null);
                                     },
                                     onClose: function(code) {
-                                        callback(null, code);
-                                    },
-                                    onStdErr: function(stdErr) {
-                                        console.error(stdErr.toString());
-                                    },
-                                    onStdOut: function(stdOut) {
-                                        console.log(stdOut.toString());
+                                        if (code !== 0) {
+                                            message = "cmd run failed with ret code : " + code
+                                            callback({
+                                                message: message,
+                                                retCode: code
+                                            }, null);
+                                            return;
+                                        }
+                                        // running chef-solo
+
+
+                                        var argList = [];
+                                        argList.push('-o');
+                                        argList.push('recipe[puppet_configure]');
+
+                                        argList.push('-j');
+                                        argList.push(jsonAttributeFile);
+
+                                        var proc = new Process('chef-solo ' + argList.join(' '), [], {
+                                            //cwd: settings.userChefRepoLocation + '/.chef',
+                                            onError: function(err) {
+                                                callback(err, null);
+                                            },
+                                            onClose: function(code) {
+                                                callback(null, code);
+                                            },
+                                            onStdErr: function(stdErr) {
+                                                console.error(stdErr.toString());
+                                            },
+                                            onStdOut: function(stdOut) {
+                                                console.log(stdOut.toString());
+                                            }
+                                        });
+                                        proc.start();
+
                                     }
                                 });
                                 proc.start();
-
-                            }
+                            });
                         });
-                        proc.start();
-
-
-
-
                     });
 
                 });
