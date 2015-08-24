@@ -157,5 +157,21 @@ GlobalSettingsSchema.statics.updateGlobalSettings = function(globalSettingsData,
     });
 };
 
+// Remove GobalSettings informations.
+GlobalSettingsSchema.statics.removeGolbalSettings = function(gSettingsId, callback) {
+    this.remove({
+        "_id": gSettingsId
+    }, function(err, globalSettings) {
+        if (err) {
+            logger.debug("Got error while removing GobalSettings: ", err);
+            callback(err, null);
+        }
+        if (globalSettings) {
+            logger.debug("Remove Success....");
+            callback(null, globalSettings);
+        }
+    });
+};
+
 var GobalSettings = mongoose.model("globalSettings", GlobalSettingsSchema);
 module.exports = GobalSettings;
