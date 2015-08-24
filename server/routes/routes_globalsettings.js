@@ -86,4 +86,31 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             }
         });
     });
+
+    // Delete GlobalSettings w.r.t. Id
+    app.delete('/globalsettings/:gSettingsId', function(req, res) {
+        GlobalSettings.getGolbalSettingsById(req.params.gSettingsId, function(err, globalSettings) {
+            if (err) {
+                res.send(500, errorResponses.db.error);
+                return;
+            }
+            if (globalSettings) {
+                GlobalSettings.removeGolbalSettings(req.params.gSettingsId,function(err,gSettings){
+                    if(err){
+                        logger.debug("Error while removing GlobalSettings: ",JSON.stringify(gSettings));
+                        res(500,"Error while removing GlobalSettings:");
+                        return;
+                    }
+                    if(gSettings){
+                        logger.debug("Successfully Removed GlobalSettings.");
+                        res.send(gSettings);
+                        return;
+                    }
+                });
+            }else{
+                res.send(404,"GlobalSettings not found!");
+                return;
+            }
+        });
+    });
 };
