@@ -79,7 +79,7 @@ taskHistorySchema.statics.getLast100HistoriesByTaskId = function(taskId, callbac
             return;
         }
         callback(null, tHistories);
-    }).sort({$natural: -1}).limit(100);
+    }).sort({buildNumber: -1}).limit(100);
 };
 
 taskHistorySchema.statics.listHistory = function(callback) {
