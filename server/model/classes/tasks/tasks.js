@@ -239,11 +239,38 @@ taskSchema.methods.getChefTaskNodes = function() {
     }
 };
 
-taskSchema.methods.getHistory = function(callback) {
+/*taskSchema.methods.getHistory = function(callback) {
     TaskHistory.getHistoryByTaskId(this.id, function(err, tHistories) {
         callback(err, tHistories);
     });
+};*/
+
+taskSchema.methods.getHistory = function(callback) {
+    TaskHistory.getHistoryByTaskId(this.id, function(err, tHistories) {
+        var count =0;
+        var checker;
+        var uniqueResults = [];
+        for (var i = 0; i < tHistories.length; ++i) {
+            count++;
+            if (!checker || comparer(checker, tHistories[i]) != 0) {
+                checker = tHistories[i];
+                uniqueResults.push(checker);
+            }
+        }
+        if(count === tHistories.length){
+            callback(err, uniqueResults);
+        }
+    });
 };
+
+
+var comparer = function compareObject(a, b) {
+        if (a.buildNumber === b.buildNumber) {
+            return 0;
+        } else {
+            return 1;
+        }
+    }
 
 
 
