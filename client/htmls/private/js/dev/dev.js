@@ -2461,13 +2461,13 @@
                                                                                             (function(blueprint) {
                                                                                                 // alert(JSON.stringify(blueprint));
                                                                                                 $liRead.click(function(e) {
-                                                                                                   (function(i){
+                                                                                                   
                                                                                                     var $blueprintReadContainer = $('#modalForRead');
                                                                                                     $blueprintReadContainer.find('.modal-body #blueprintNameInputNew').val(blueprint.name);
-                                                                                                    if (data[i].templateType === 'chef') {
+                                                                                                    if (blueprint.templateType === 'chef') {
                                                                                                         $('.modal-title').html('Blueprint Information-Software Stack');
                                                                                                     }
-                                                                                                    if (data[i].templateType === 'ami') {
+                                                                                                    if (blueprint.templateType === 'ami') {
                                                                                                         $('.modal-title').html('Blueprint Information-OSImage');
                                                                                                     }
 
@@ -2571,7 +2571,7 @@
                                                                                                     });
 
 
-                                                                                                })(i);
+
                                                                                                 });
                                                                                             })(data[i]);
 

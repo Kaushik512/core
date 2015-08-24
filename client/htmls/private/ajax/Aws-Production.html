@@ -3874,10 +3874,10 @@
 
                                      var $blueprintReadContainer = $('#modalForRead');
                                      $blueprintReadContainer.find('.modal-body #blueprintNameInputNew').val(blueprint.name);
-                                     if (data[i].templateType === 'chef') {
+                                     if (blueprint.templateType === 'chef') {
                                          $('.modal-title').html('Blueprint Information-Software Stack');
                                      }
-                                     if (data[i].templateType === 'ami') {
+                                     if (blueprint.templateType === 'ami') {
                                          $('.modal-title').html('Blueprint Information-OSImage');
                                      }
 
