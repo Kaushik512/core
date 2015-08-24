@@ -12,7 +12,10 @@
 
                           <a class="btn btn-minier btn-primary" id="refreshpage" href="#ajax/Settings/ProjectList.html" style="display:none">
                             <i class="ace-icon ace-icon fa fa-refresh bigger-110"></i>
-                        </a>                                                               
+                        </a>   
+                        <a id="newOrg" class="btn btn-minier btn-primary" href="#ajax/Settings/CreateOrg.html?new">
+                                <i class="ace-icon ace-icon fa fa-plus bigger-110"></i>New
+                        </a>                                                                                                            
                     </div>
                 </div>
 
@@ -28,6 +31,7 @@
                                     <tr class="rowCustomStyle">
                                         <td>S.No</td>
                                         <td>Name</td>
+                                        <td>Description</td>
                                         <td>Action</td>
                                     </tr>
                                 </thead>
@@ -65,7 +69,7 @@
                             
                             <textarea rows="5" cols="60" name="trackUrlName" class="trackUrlName" id="trackUrlName"></textarea>
                 </div>
-                     <input type="hidden" id="trackEditHiddenInput">
+                     <input type="hidden" id="trackEditHiddenInputId">
                      <input type="hidden" id="trackUrlHiddenName">
                      <input type="hidden" id="trackNameHidden">
 
@@ -93,14 +97,13 @@ if (!$.fn.dataTable.isDataTable('#trackTable')) {
         "paging": false,
         "bFilter": false,
         "aoColumns": [{
-            "bSortable": true,
-            "sWidth": "20%"
+            "bSortable": true
         }, {
-            "bSortable": false,
-            "sWidth": "20%"
+            "bSortable": false
+        },{
+            "bSortable": false
         }, {
-            "bSortable": false,
-            "sWidth": "20%"
+            "bSortable": false
         }],
         "fnRowCallback": function(nRow, aData, iDisplayIndex) {
               $("td:first", nRow).html(iDisplayIndex + 1);
@@ -119,22 +122,21 @@ function createTableForTrack(name,url,key) {
         var $trackNameList = $('#trackTableInput');
         var $tr = $('<tr class="trackItemRow"></tr>').attr('data-trackId',key);
         $tr.data('url', url);
-        var $tdSerial = $('<td/>')
+        var $tdSerial = $('<td/>');
+        var $tdDescription = $('<td/>');
         var $tdName = $('<td class="trackName"><a title="'+url+'" target="_blank" href="'+url+'">'+name+'</a></td>');
         /*var $tdURL = $('<td class="trackDashboardURL">'+url+'</td>');*/
         var $tdAction = $('<td/>');
 
-        $tdAction.append('<div class="btn-group"><button class="btn btn-info pull-left btn-sg tableactionbutton editRow" data-placement="top" value="Update" title="Edit"><i class="ace-icon fa fa-pencil bigger-120"></i></button></div>');
-        $tr.append($tdSerial).append($tdName).append($tdAction);
+        $tdAction.append('<div class="btn-group"><button class="btn btn-info pull-left btn-sg tableactionbutton editRowTrackUrl" data-placement="top" value="Update" title="Edit"><i class="ace-icon fa fa-pencil bigger-120"></i></button></div>').append('<div style="margin-left:14px;" class="btn-group"><button class="btn btn-danger pull-left btn-sg tableactionbutton globalTrackUrlRemove" data-placement="top" value="Remove" title="Delete"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></div>');
+        $tr.append($tdSerial).append($tdName).append($tdDescription).append($tdAction);
         $trackNameList.append($tr);
         $trackDatatable.row.add($tr).draw();
 
         //for edit
-        $tdAction.find('button.editRow').click(function() {
+        $tdAction.find('button.editRowTrackUrl').click(function() {
             var trackUrlData = $tr.data('url');
             var datatrackId = $tr.data('data-trackId');
-            var $this = $(this);
-            var $trNew = $this.parents('tr.trackItemRow');
             var $editModal = $('#modalForTrackEdit');
             $('textarea#trackUrlName').val('');
             $editModal.modal('show');
@@ -143,8 +145,38 @@ function createTableForTrack(name,url,key) {
             //alert(trackUrlData);
             $editModal.find('#trackNameHidden').val(name);
             $editModal.find('textarea#trackUrlName').val(trackUrlData);
-            $editModal.find('#trackEditHiddenInput').val();
+            $editModal.find('#trackEditHiddenInputId').val();
             $editModal.find('#trackUrlHiddenName').val(key);
+            return false;
+        });
+
+        $tdAction.find('button.globalTrackUrlRemove').click(function(){
+            
+            var $this = $(this);
+            var $tr = $this.parents('tr.trackItemRow');
+            var trackIdDelete = $('#trackEditHiddenInputId').val();
+            bootbox.confirm('Are you sure you want to Delete Dashboard Url -&nbsp;' + name, function(result) {
+                if (result) {
+                    $.ajax({
+                        url: '../globalsettings/' + trackIdDelete,
+                        method: 'DELETE',
+                        success: function() {
+                            $trackDatatable.row($tr).remove().draw(false);
+
+                        },
+                        error: function(jxhr) {
+                            alert(result);
+                            var msg = "Unable to Delete URL please try again later";
+                            if (jxhr.responseJSON && jxhr.responseJSON.message) {
+                                msg = jxhr.responseJSON.message;
+                            } else if (jxhr.responseText) {
+                                msg = jxhr.responseText;
+                            }
+                            bootbox.alert(msg);
+                        }
+                    });
+                }
+            });
             return false;
         });
     };
@@ -154,26 +186,21 @@ function createTableForTrack(name,url,key) {
         $.get(globalSettings, function(data) {
 
             if (data.length) {
-                $('#trackEditHiddenInput').val(data[0]._id);
+                $('#trackEditHiddenInputId').val(data[0]._id);
                 var keys = Object.keys(data[0]);
                 for (var i = 0; i < keys.length; i++) {
                     console.log(JSON.stringify(keys[i]));
                     
-                    if (keys[i].indexOf('kibana') !== -1) {
-                        createTableForTrack('Kibana', data[0][keys[i]], keys[i]);
-                    } else if (keys[i].indexOf('zabbix') !== -1) {
-                        createTableForTrack('Zabbix', data[0][keys[i]], keys[i]);
-                        
+                    if (keys[i].indexOf('awsCost') !== -1) {
+                        createTableForTrack('AWS Cost', data[0][keys[i]], keys[i]);
                     } else if (keys[i].indexOf('awsUsage') !== -1) {
                         createTableForTrack('AWS Usage', data[0][keys[i]], keys[i]);
-                        
-                    } else if (keys[i].indexOf('awsCost') !== -1) {
-                        createTableForTrack('AWS Cost', data[0][keys[i]], keys[i]);
-                        
+                    } else if (keys[i].indexOf('zabbix') !== -1) {
+                        createTableForTrack('System Monitoring', data[0][keys[i]], keys[i]);   
+                    } else if (keys[i].indexOf('kibana') !== -1) {
+                        createTableForTrack('Log Monitoring', data[0][keys[i]], keys[i]);
                     } else if (keys[i].indexOf('awsNotification') !== -1) {
-
-                        createTableForTrack('AWS Notification', data[0][keys[i]], keys[i]);
-                        
+                        createTableForTrack('Notifications', data[0][keys[i]], keys[i]);    
                     }
                 }
             }
@@ -182,7 +209,7 @@ function createTableForTrack(name,url,key) {
 
     $('#trackItemUrl').submit(function(e){
         var $form = $('#trackItemUrl');
-        var trackEdit = $(this).find('#trackEditHiddenInput').val();
+        var trackEdit = $(this).find('#trackEditHiddenInputId').val();
         var keyUrl = $(this).find('#trackUrlHiddenName').val();
         var trackUrl = $(this).find('textarea#trackUrlName').val();
         var trackUrlName = $(this).find('#trackNameHidden').val();
