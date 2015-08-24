@@ -2316,6 +2316,7 @@
                                                                                         $selectVerEdit.hide();
 
                                                                                     } else {
+                                                                                        //alert('in here');
                                                                                         $selectVer = $('<select style="padding:1px;padding-left:5px;"></select>').addClass('blueprintVersionDropDown').attr('data-blueprintId', data[i]._id);
                                                                                         $selectVerEdit.click(function(e) {
 

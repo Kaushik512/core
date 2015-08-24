@@ -167,7 +167,8 @@ BlueprintSchema.methods.launch = function(envId, ver, callback) {
 
 // static methods
 BlueprintSchema.statics.createNew = function(blueprintData, callback) {
-    logger.debug('blueprintData.blueprintType ==>',blueprintData.cloudFormationData);
+    logger.debug('blueprintData.cloudFormationData ==>',blueprintData.cloudFormationData);
+
     var blueprintConfig, blueprintType;
     if ((blueprintData.blueprintType === BLUEPRINT_TYPE.INSTANCE_LAUNCH) && blueprintData.instanceData) {
         blueprintType = BLUEPRINT_TYPE.INSTANCE_LAUNCH;
@@ -178,6 +179,10 @@ BlueprintSchema.statics.createNew = function(blueprintData, callback) {
     } else if ((blueprintData.blueprintType === BLUEPRINT_TYPE.AWS_CLOUDFORMATION) && blueprintData.cloudFormationData) {
         blueprintType = BLUEPRINT_TYPE.AWS_CLOUDFORMATION;
         blueprintConfig = CloudFormationBlueprint.createNew(blueprintData.cloudFormationData);
+    } else if ((blueprintData.blueprintType === BLUEPRINT_TYPE.OPENSTACK_LAUNCH) && blueprintData.instanceData) {
+        blueprintType = BLUEPRINT_TYPE.OPENSTACK_LAUNCH;
+        logger.debug('blueprintData openstack instacedata ==>',blueprintData.instanceData);
+        blueprintConfig = OpenstackBlueprint.createNew(blueprintData.instanceData);
     }  else {
         process.nextTick(function() {
             callback({

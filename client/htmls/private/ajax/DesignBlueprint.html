@@ -2026,7 +2026,7 @@ function getProviderListold() {
          if(providerselected == 'openstack'){
               $('.foraws').hide();
               $('.foropenstack').show();
-
+              $('.foraws>select').removeClass('required'); //removing all aws required fields. when openstatck
               //load each of the dropdowns
               //flavour
               $.get('/openstack/' + providerVal + '/flavors',function(data){
@@ -2084,6 +2084,7 @@ function getProviderListold() {
          else{
             $('.foraws').show();
             $('.foropenstack').hide();
+            $('.foraws>select').addClass('required'); //to be tested.
          }
      }
 
@@ -3035,12 +3036,18 @@ function getProviderListold() {
 
                  return true;
              }
+             //alert('before validation');
              var isValid = $('#wizard-1').valid();
-             
+             //alert('after validation ' + isValid);
              var tempType = $('.role-Selected').data('templatetype').toLowerCase(); 
              
 
              if (tempType !== "docker" && tempType !== 'cloudformation' && !isValid) {
+
+                 bootbox.alert({
+                  message: "Valiadtion failed. Do check the configuration before submitting." + tempType + ' ' + isValid,
+                  title: "Error"
+                 });
                  return false;
 
              } else {

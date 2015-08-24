@@ -1089,6 +1089,9 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     subnet:req.body.blueprintData.openstacksubnet,
                     instanceOS:req.body.blueprintData.instanceOS,
                     instanceCount:req.body.blueprintData.instanceCount,
+                    infraManagerType: 'chef',
+                    infraManagerId: req.body.blueprintData.chefServerId,
+                    runlist: req.body.blueprintData.runlist,
                     instanceImageName:req.body.blueprintData.instanceImageName
                     
                 }
