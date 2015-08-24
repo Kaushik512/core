@@ -209,13 +209,14 @@
                                                       </table>
                                                    </div>
                                                    <!--div for paremeters-->
-                                                   <div class="col-lg-12" style="margin-top:10px;">
-                                                      <input style="margin-left:5px;" id="addParameters" type="checkbox" name="addParams" value="This build is parameterized"/>&nbsp;&nbsp;This build is parameterized
-                                                   </div>
+                                                   <div class="col-lg-12" style="margin-top:20px;border:1px dotted black;">
+                                                      <h4 style="margin-top:12px;">This build is parameterized<!-- <input style="margin-left:5px;" id="addParameters" type="checkbox" name="addParams" value="This build is parameterized"/> -->&nbsp;&nbsp;<input type="radio" id="addParameters" name="paramCheck" value="true" /> Yes
+                                                      <input style="margin-left:15px;" type="radio" id="addParametersFalse" name="paramCheck" value="false" checked="checked" /> No
+                                                   </h4>
                                                    <!-- </div> -->
                                                    <!--div for paremeter checkbox ends here-->
                                                    <!--dropdown for paremeters-->
-                                                   <div class="col-lg-12 col-md-12">
+                                                   <div class="col-lg-12 col-md-12" style="margin-bottom:16px;">
                                                       <div class="col-lg-11 col-md-11 jobTable addParameters hidden" style="margin-top:1px">
                                                          <a href="#parameterModal" id="imageLink" data-backdrop="false" data-toggle="modal" style="cursor:pointer;"> <img src="img/add.png" style="float:right;" class="addListParam" rel="tooltip" data-placement="top" title="Add Parameters" /></a>
                                                          <div style="height:auto;overflow-y:auto;" id="dbNameTable_wrapper" class="dataTables_wrapper no-footer">
@@ -234,6 +235,10 @@
                                                             </table>
                                                          </div>
                                                       </div>
+                                                      <div class="col-lg-1 col-md-1 addParameters hidden">
+                                                         <img style="width:16px;height:16px;margin-top:8px;float:right;margin-right:32px;" data-toggle="popover" tabindex="50" data-placement="left" data-content="User can define Jenkins Parameters for this Build" src="img/help.png"/>
+                                                      </div>
+                                                   </div>
                                                    </div>
                                                    
                                                 </td>
@@ -350,7 +355,8 @@
                         </tr>
                         <tr>
                            <td class="booleanParam">Default Value:</td>
-                           <td><input id="booleanValue" style="margin-top:10px;" value="false" type="checkbox" name="booleanValue"></td>
+                           <td>&nbsp;&nbsp;<input type="radio" id="booleanValueTrue" name="paramCheck" value="true" /> True&nbsp;
+                                                      <input style="margin-left:15px;" type="radio" id="booleanValueFalse" name="paramCheck" value="false" checked="checked" /> False<!-- <input id="booleanValueTrue" style="margin-top:10px;" value="true" type="radio" name="booleanValue"><input id="booleanValueFalse" style="margin-top:10px;" value="false" type="radio" name="booleanValue"> --></td>
                         </tr>
                         <tr>
                            <td class="booleanParam">Description:</td>
@@ -740,14 +746,21 @@ $(document).ready(function() {
     });
 
     var $addParameters = $('#addParameters');
+    var $addParametersFalse = $('#addParametersFalse');
+
+    $addParametersFalse.change(function(){
+      if ($(this).is(":checked")){
+         $('.addParameters').addClass('hidden');
+      }
+    });
 
     $addParameters.change(function() {
         if ($(this).is(":checked")) {
             $('.addParameters').removeClass('hidden');
         } else {
             $('.addParameters').addClass('hidden');
-            $('#booleanTable').addClass('hidden');
-            $('#stringTable').addClass('hidden');
+         //   $('#booleanTable').addClass('hidden');
+           // $('#stringTable').addClass('hidden');
         }
 
     });
@@ -831,7 +844,7 @@ $(document).ready(function() {
                     for (var j = 0; j < taskData.taskConfig.parameterized.length; j++) {
                    //  alert(JSON.stringify(taskData.taskConfig.parameterized[j]));
                         //$('input:radio[class=test1][id=test2]').prop('checked', true);
-                        $("input[type='checkbox'][name='addParams'][id='addParameters']").prop('checked', true);
+                        $("input[type='radio'][name='paramCheck'][id='addParameters']").prop('checked', true);
                         $('.addParameters').removeClass('hidden');
                         //alert(JSON.stringify(taskData.taskConfig.parameterized[j]));
                         console.log("parapapa>>>>" + taskData.taskConfig.parameterized.length);
@@ -839,7 +852,7 @@ $(document).ready(function() {
                         
                     }
                 } else {
-                    $("input[type='checkbox'][name='addParams'][id='addParameters']").prop('checked', false);
+                    $("input[type='radio'][name='paramCheck'][id='addParametersFalse']").prop('checked', false);
                 }
 
             }
@@ -1335,8 +1348,8 @@ $(document).ready(function() {
                parameterizedObj.parameterName = "Boolean";
                parameterizedObj.name = $('#booleanName').val();
                parameterizedObj.defaultValue = false;
-               parameterizedObj.defaultValue = $('#booleanValue').val();
-               if ($('#booleanValue').is(":checked")) {
+               parameterizedObj.defaultValue = $('#booleanValueFalse').val();
+               if ($('#booleanValueTrue').is(":checked")) {
                    parameterizedObj.defaultValue = true;
                }
                parameterizedObj.description = $('#booleanDescription').val();
@@ -1355,7 +1368,7 @@ $(document).ready(function() {
                parameterizedObj.parameterName = "Boolean";
                parameterizedObj.name = param.name;
                parameterizedObj.defaultValue = param.defaultValue;
-               if ($('#booleanValue').is(":checked")) {
+               if ($('#booleanValueTrue').is(":checked")) {
                    parameterizedObj.defaultValue = true;
                }
                parameterizedObj.description = param.description;

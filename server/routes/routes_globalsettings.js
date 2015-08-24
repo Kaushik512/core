@@ -62,10 +62,11 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                     res.send(500, errorResponses.db.error);
                     return;
                 }
-                if (globalSettings) {
+                res.send(200,"Success");
+                /*if (globalSettings) {
                     res.send(200, globalSettings);
                     return;
-                }
+                }*/
             });
         });
     });
