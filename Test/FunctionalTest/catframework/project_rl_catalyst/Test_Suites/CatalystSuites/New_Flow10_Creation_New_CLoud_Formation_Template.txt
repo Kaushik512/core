@@ -16,3 +16,22 @@ Catalyst Create New Cloud Formation Template setup
     Catalyst Creation of New Cloud Formation Template    
     Catalyst Logout                      
     [Teardown]     Close Browser
+
+
+Catalyst Create New Cloud Formation Blueprint setup
+    [Tags]       Sanity               Smoke
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst Creation of New Cloud Formation Blueprint and Save   
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+Catalyst Launch of Cloud Formation Blueprint
+    [Tags]       Sanity               Smoke
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst Launch Cloud Formation Blueprint   
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+

@@ -28,6 +28,203 @@ Catalyst Creation of New Cloud Formation Template
     Select Created organization
     Upload the Cloud Template File
     Clicks on Save Button
+    Sleep    3s
+    Verify the Cloud Formation Template is created
+
+
+Catalyst Creation of New Cloud Formation Blueprint and Save
+    Sleep    3s
+    Clicks on CFT Design
+    Sleep    5s
+    Chooses the Template Type as Cloud Formation
+    Sleep    2s
+    Clicks on Next Button of CloudFormation
+    Sleep    3s
+    Clicks on Next Button of CloudFormation
+    Sleep    2s
+    Enters the Cloud Foramtion Blueprint Name
+    Chooses The CFT Business Group
+    Chooses The CFT Project
+    Scroll up the Configure Organization Parameters
+    Clicks on Configure Stack Parameters Accordion
+    Selects the Region for CFT
+    Select the Provider for CFT
+    Clicks on Configure Resource Node for CFT
+    Enters the Node Instance UserName
+    Clicks on Configure Resource Node for CFT
+    Clicks on Next Button of CloudFormation
+    Clicks on Confirm Button of Cloud Formation
+    Sleep    1s
+
+
+Catalyst Launch Cloud Formation Blueprint
+    Sleep    3s
+    Clicks on Blueprint Section of CFT
+    Clicks on Cloud Formation Blueprint Accordion
+    Select the User Created Cloud Formation Blueprint
+    Clicks on Launch Button of Blueprint Created
+    Sleep    1s
+    Enters the Unique Stack Name
+    Clicks on Submit Button of the Stack
+    Sleep    10s
+    Clicks on Close Button of the Stack
+    Sleep   5s
+    Clicks on CloudFormation Tab
+    Verify the Stack
+    Verfiy the Status of the Stack
+    Click on Stack Info Button
+    Clicks on Close of Stack Info Button
+    Sleep    1s
+    Clicks on Instances Button
+    Verify the Instance Name as Node 
+    Verfiy the Status of the Stack
+    Sleep    2s
+    Deleting the Stack from the Environment
+
+
+
+Deleting the Stack from the Environment
+    Click Element    css=#removeInstance
+    Sleep    1s
+    Click Element    xpath=//*[text()='OK']
+
+
+Verify the Instance Name as Node
+    Element Text Should Be    xpath=//*[@id="divinstancescardview"]/div/div/ul/li[contains(.,"${STACK INSTANCE NAME}")]/div/div/div/div[1]/span[2]    ${STACK INSTANCE NAME}
+
+Verfiy the Status of the Stack
+    Element Text Should Be    xpath=//*[@id="divinstancescardview"]/div/div/ul/li[contains(.,"${STACK INSTANCE NAME}")]/div/div/div/div[3]/div/span[2]/span    ${RUN}
+
+
+
+Clicks on Instances Button
+    Click Element    xpath=//*[@id="myTab3"]/li[1]/a
+
+
+Click on Stack Info Button
+    Execute Javascript    $('#cftStackContainer > div > div > ul > li:nth-child(1) > span > a').click()
+    Sleep    1s
+
+Clicks on Close of Stack Info Button
+    Click Element    css=#cftEventModalContainer > div > div > div.modal-footer > button
+
+
+Verfiy the Status of the Stack
+    Sleep    3s
+    Element Text Should Be    xpath=//*[@id="cftStackContainer"]/div/div/div/span[2]/span    CREATE_COMPLETE
+
+
+Verify the Stack
+    Page Should Contain    ${STACK NAME}
+
+Clicks on CloudFormation Tab
+    Click Element    xpath=.//*[@id='myTab3']/li[4]/a
+
+Clicks on Submit Button of the Stack
+    Click Element    css=#cftForm > div.modal-footer > input
+
+Clicks on Close Button of the Stack
+    Click Element    css=#launchResultContainer > div > div > div.modal-footer > button    
+
+Enters the Unique Stack Name
+    Input Text    id=cftInput    ${STACK NAME}
+
+Verify the Cloud Formation Template is created
+    Element Should Contain    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${CLOUD TEMP NAME}']    ${CLOUD TEMP NAME}
+
+Clicks on CFT Design
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       xpath=.//*[@id='designNew']
+    Click Element    xpath=.//*[@id='designNew']
+
+
+
+
+ 
+Clicks on Launch Button of Blueprint Created
+    Click Element    xpath=.//*[@id='l2']/footer/div/div/a
+
+Select the User Created Cloud Formation Blueprint
+    Click Element    xpath=.//*[text()='${CFT BLUPRNT NAME}']
+
+
+Clicks on Blueprint Section of CFT
+    Click Element    xpath=.//*[@id='myTab3']/li[2]/a
+    Sleep    1s
+
+Clicks on Cloud Formation Blueprint Accordion
+    Click Element    xpath=.//*[@id='accordion-2']/div[3]/div[1]/h4/a/i[1]
+
+Clicks on Confirm Button of Cloud Formation
+    Sleep    2s
+    Click Element    xpath=.//*[text()='OK']
+    
+
+Enters the Node Instance UserName
+    Input Text    css=input.cftResourceInput.form-control.cftResourceUsernameInput    ${NODE USERNAME}
+
+Clicks on Configure Resource Node for CFT
+    Click Element    xpath=.//*[@id='cft-resource-editArea']/div/div[1]/h4/a/i[2]
+
+
+
+
+Select the Provider for CFT
+    Sleep    2s
+    Click Element    css=#cftProviderInput > option:nth-child(2)
+
+Selects the Region for CFT
+    Sleep    2s
+    Click Element    css=#cftRegionInput > option:nth-child(3)
+
+
+Clicks on Configure Stack Parameters Accordion
+    Click Element    xpath=.//*[@id='accordion-Design']/div[7]/div[1]/h4/a/i[1]
+
+
+
+Scroll up the Configure Organization Parameters
+    Click Element    xpath=.//*[@id='accordion-Design']/div[2]/div[1]/h4/a/i[2]
+
+
+Chooses The CFT Business Group
+    Sleep    3s
+    Log    after scroll 
+    Sleep    1s
+    Click Element    css=#s2id_bgListInput > .select2-choice
+    Log    after click
+    Input Text    css=#select2-drop .select2-input    ${BUSINESS GROUP NAME}
+    Sleep    1s
+    Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
+
+    
+Chooses The CFT Project
+    Sleep    3s
+    Log    after scroll
+    Sleep    1s
+    Click Element    css=#s2id_projectListInput > .select2-choice
+    Log    after click
+    Input Text    css=#select2-drop .select2-input    ${Proj1}
+    Sleep    1s
+    Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span    
+
+
+
+
+Enters the Cloud Foramtion Blueprint Name
+    Input Text    id=blueprintNameInput    ${CFT BLUPRNT NAME}
+
+
+
+Clicks on Next Button of CloudFormation
+    Sleep    3s
+    Click Element    xpath=.//*[@id='nextSpecificValue']/a
+
+
+
+Chooses the Template Type as Cloud Formation
+    Sleep    2s
+    Click Element    xpath=//div[@data-templatetype='${CLOUD TEMPLATETYPE}']
+
 
 
 
@@ -43,6 +240,6 @@ Enters the Cloud Template Name
 Chooses Cloud Formation Template Type
     Click Element    css=#s2id_templatetypename > a > span.select2-chosen
     Sleep    2s
-    Input Text    css=#select2-drop > div > input    ${CLOUD TEMPLATENAME}
+    Input Text    css=#select2-drop > div > input    ${CLOUD TEMPLATETYPE}
     Sleep    2s
     Click Element    css=ul > li:first-child > div
