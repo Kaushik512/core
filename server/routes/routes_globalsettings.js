@@ -103,7 +103,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                     }
                     if(gSettings){
                         logger.debug("Successfully Removed GlobalSettings.");
-                        res.send(gSettings);
+                        res.send(200,"Successfully Removed GlobalSettings.");
                         return;
                     }
                 });
