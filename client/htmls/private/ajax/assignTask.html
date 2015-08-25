@@ -225,8 +225,8 @@
                                                                   <tr class="rowCustomStyle">
                                                                      <th style="text-align:center">Type</th>
                                                                      <th style="text-align:center">Name</th>
-                                                                     <th style="text-align:center">Default Value</th>
-                                                                     <th style="text-align:center">Description</th>
+                                                                     <th style="text-align:center">Value</th>
+                                                                     <th style="text-align:center;">Description</th>
                                                                      <th style="text-align:center">Action</th>
                                                                   </tr>
                                                                </thead>
@@ -332,7 +332,7 @@
             <!--dropdown for selecting the parameter type-->
          <label style="margin-left:10px;">Select Paremeter:</label>
          <select id="parametersSelect" class="addParameters" style="width:40%">
-         <option value="">Add Parameter</option>
+         <option value="">Choose Parameter</option>
          <option value="Boolean">Boolean Parameter</option>
          <option value="String">String Parameter</option>
          </select>
@@ -350,16 +350,16 @@
                      </thead>
                      <tbody>
                         <tr>
-                           <td class="booleanParam"><label for="booleanName">Name:</label></td>
-                           <td><input id="booleanName" type="text" class="form-control" name="booleanName"></td>
+                           <td class="booleanParam"><label for="booleanName">Name:<span style="color:red">*</span></label></td>
+                           <td><input id="booleanName" maxlength="7" type="text" class="form-control" name="booleanName"></td>
                         </tr>
                         <tr>
-                           <td class="booleanParam">Default Value:</td>
+                           <td class="booleanParam">Default Value:<span style="color:red">*</span></td>
                            <td>&nbsp;&nbsp;<input type="radio" id="booleanValueTrue" name="paramCheck" value="true" /> True&nbsp;
                            <input style="margin-left:15px;" type="radio" id="booleanValueFalse" name="paramCheck" value="false" checked="checked" /> False</td>
                         </tr>
                         <tr>
-                           <td class="booleanParam"><label for="booleanDescription">Description:</label></td>
+                           <td class="booleanParam"><label for="booleanDescription">Description:<span style="color:red">*</span></label></td>
                            <td><input id="booleanDescription" type="text" class="form-control" name="booleanDescription"></td>
                         </tr>
                      </tbody>
@@ -377,15 +377,15 @@
                      </thead>
                      <tbody>
                         <tr>
-                           <td class="stringParam"><label for="stringName">Name:</label></td>
-                           <td><input id="stringName" type="text" class="form-control" name="stringName"></td>
+                           <td class="stringParam"><label for="stringName">Name:<span style="color:red">*</span></label></td>
+                           <td><input id="stringName" maxlength="7" type="text" class="form-control" name="stringName"></td>
                         </tr>
                         <tr>
-                           <td class="stringParam"><label for="stringValue">Default Value:</label></td>
+                           <td class="stringParam"><label for="stringValue">Default Value:<span style="color:red">*</span></label></td>
                            <td><input id="stringValue" type="text" class="form-control" name="stringValue"></td>
                         </tr>
                         <tr>
-                           <td class="stringParam"><label for="stringDescription">Description:</label></td>
+                           <td class="stringParam"><label for="stringDescription">Description:<span style="color:red">*</span></label></td>
                            <td><input id="stringDescription" type="text" class="form-control" name="stringDescription"></td>
                         </tr>
                      </tbody>
@@ -1396,7 +1396,7 @@ $(document).ready(function() {
         var $tdType = $('<td class="paramType"></td>');
         var $tdName = $('<td class="paramName"></td>');
         var $tdValue = $('<td class="paramValue"></td>');
-        var $tdDescription = $('<td class="paramDescription"></td>');
+        var $tdDescription = $('<td title="'+ parameterizedObj.description +'" class="paramDescription"></td>');
         var $tdAction = $('<td/>');
         $tdAction.append('<div style="margin-right:17px;float:right;" class="btn-group"><button class="deleteRow" value="Remove" title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></div>');
 
