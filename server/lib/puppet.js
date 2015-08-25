@@ -95,16 +95,29 @@ var Puppet = function(settings) {
     }
 
 
-    this.bootstrap = function(node, callback) {
+    this.bootstrap = function(node, callback, callbackStdOut, callbackStdErr) {
+        if (typeof callbackStdOut !== 'function') {
+            callbackStdOut = function() {
+
+            }
+        }
+        if (typeof callbackStdErr !== 'function') {
+            callbackStdErr = function() {
+
+            }
+        }
         // getting hostname of puppet master
         var hostNamePuppetMaster = '';
         runSSHCmdOnMaster('hostname -f', function(err, retCode) {
             if (err) {
-                callback(err, null);
+                callback({
+                    message: "Unable to get hostname of puppet-master. Unable to ssh into puppet master",
+                    err: err
+                }, null);
                 return;
             }
             if (retCode !== 0) {
-                message = "cmd run failed with ret code : " + retCode
+                message = "Unable to get hostname of puppet-master. Cmd failed with ret code : " + retCode
                 callback({
                     message: message,
                     retCode: retCode
@@ -130,11 +143,15 @@ var Puppet = function(settings) {
 
             runSSHCmdOnAgent(sshOptions, 'hostname -f', function(err, retCode) {
                 if (err) {
-                    callback(err, null);
+                    callback({
+                        message: "Unable to get hostname of node. Unable to ssh into puppet node",
+                        err: err
+                    }, null);
+
                     return;
                 }
                 if (retCode !== 0) {
-                    message = "cmd run failed with ret code : " + retCode
+                    message = "Unable to get hostname of node. Cmd failed with ret code : " + retCode
                     callback({
                         message: message,
                         retCode: retCode
@@ -152,6 +169,7 @@ var Puppet = function(settings) {
                             //"pswd": "vagrant",
                             "ipaddress": node.host,
                             "fqdn": hostnamePuppetAgent,
+                            "environment": node.environment
                             //"ssh_pass_method": false,
                             //"pem_file": node.pemFileLocation
                         },
@@ -185,7 +203,10 @@ var Puppet = function(settings) {
                 var scp = new SCP(sshOptions);
                 scp.upload(__dirname + '/../cookbooks.tar', '/tmp', function(err) {
                     if (err) {
-                        callback(err, null);
+                        callback({
+                            message: "Unable to upload cookbooks onto the node",
+                            err: err
+                        }, null);
                         return;
                     }
                     var jsonAttributeFile = '/tmp/puppet_jsonAttributes_' + new Date().getTime() + '.json';
@@ -196,17 +217,23 @@ var Puppet = function(settings) {
                         }
                         scp.upload(jsonAttributeFile, '/tmp/chef-solo.json', function(err) {
                             if (err) {
-                                callback(err, null);
+                                callback({
+                                    message: "Unable to upload attribute json file on to the node",
+                                    err: err
+                                }, null);
                                 return;
                             }
                             // extracting cookbook on clinet machine
                             runSSHCmdOnAgent(sshOptions, 'tar -xf /tmp/cookbooks.tar -C /tmp/', function(err, retCode) {
                                 if (err) {
-                                    callback(err, null);
+                                    callback({
+                                        message: "Unable to upload extract cookbooks.tar on the node",
+                                        err: err
+                                    }, null);
                                     return;
                                 }
                                 if (retCode !== 0) {
-                                    message = "cmd run failed with ret code : " + retCode
+                                    message = "Unable to upload extract cookbooks.tar on the node. cmd failed with ret code : " + retCode
                                     callback({
                                         message: message,
                                         retCode: retCode
@@ -217,11 +244,14 @@ var Puppet = function(settings) {
                                 var proc = new Process('echo "cookbook_path            [\'' + __dirname + '/../../seed/catalyst/cookbooks/' + '\']" > /etc/chef/solo.rb', [], {
                                     //cwd: settings.userChefRepoLocation + '/.chef',
                                     onError: function(err) {
-                                        callback(err, null);
+                                        callback({
+                                            message: "Unable to create solo.rb file on catalyst machine",
+                                            err: err
+                                        }, null);
                                     },
                                     onClose: function(code) {
                                         if (code !== 0) {
-                                            message = "cmd run failed with ret code : " + code
+                                            message: "Unable to create solo.rb file on catalyst machine. Cmd failed with ret code : " + code,
                                             callback({
                                                 message: message,
                                                 retCode: code
@@ -233,7 +263,7 @@ var Puppet = function(settings) {
 
                                         var argList = [];
                                         argList.push('-o');
-                                        argList.push('recipe[puppet_configure]');
+                                        argList.push('recipe[puppet_configure::client_bootstrap]');
 
                                         argList.push('-j');
                                         argList.push(jsonAttributeFile);
@@ -247,9 +277,11 @@ var Puppet = function(settings) {
                                                 callback(null, code);
                                             },
                                             onStdErr: function(stdErr) {
+                                                callbackStdErr(stdErr);
                                                 console.error(stdErr.toString());
                                             },
                                             onStdOut: function(stdOut) {
+                                                callbackStdOut(stdOut);
                                                 console.log(stdOut.toString());
                                             }
                                         });
@@ -302,6 +334,7 @@ var Puppet = function(settings) {
                     stdOutStr = stdOutStr.split('  ');
                     var environments = [];
                     for (var i = 0; i < stdOutStr.length; i++) {
+                        stdOutStr[i] = stdOutStr[i].trim();
                         if (stdOutStr[i]) {
                             environments.push(stdOutStr[i]);
                         }
@@ -321,6 +354,15 @@ var Puppet = function(settings) {
     };
 
     this.createEnvironment = function(envName, callback) {
+        if (!envName) {
+            process.nextTick(function() {
+                callback({
+                    message: "Invalid environment name",
+                    retCode: -1
+                })
+            });
+            return;
+        }
         getPuppetConfig(function(err, puppetConfig) {
             if (err) {
                 callback(err, null);

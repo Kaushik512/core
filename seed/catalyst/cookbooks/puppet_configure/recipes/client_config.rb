@@ -9,6 +9,8 @@
 
 pup_config = node['puppet_configure']
 
+include_recipe "puppet_configure::default"
+
 package 'puppet' do
 	action :install
 end
@@ -42,6 +44,17 @@ execute "Setting hostname" do
 	action :run
 end
 
+template '/tmp/puppet.conf' do
+	cookbook "puppet_configure"
+	source 'puppet.conf.erb'
+	mode 00755
+	variables( lazy {{
+		:server => pup_config['puppet_master']['fqdn'],
+		:client_env => pup_config['client']['environment']
+	}})
+end
+
 service "puppet" do
-	action [:restart, :enable]
+	supports :status => true, :restart => true, :reload => true
+	action [:start, :enable]
 end

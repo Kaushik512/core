@@ -122,6 +122,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
             port: 8140,
             username: 'ubuntu',
             pemFileLocation: '/WORK/D4D/server/config/cat_instances.pem',
+            environment:"anshul"
             //host: '192.168.101.21',
             // port: 8140,
             // username: 'root',
