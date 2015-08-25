@@ -25,15 +25,24 @@
                                                     <div class="col-lg-6 col-md-6">
                                                         <label for="category">Organization:<span style="color:Red;" class="control-label">&nbsp;*</span>
                                                         </label>
-                                                        <select id="orgname" class="chooseOrganization width-100" sourcepath="1" datapath="masterjson.rows.row" valuelinkfield="costcode" style="vertical-align:central" cdata="catalyst" cat-validation="required" cat-validation="required" linkedfields="['configname','projectname','puppetservername']" onchange="$('#configname').change();">
+                                                        <select id="orgname" class="chooseOrganization width-100" sourcepath="1" datapath="masterjson.rows.row" valuelinkfield="costcode" style="vertical-align:central" cdata="catalyst" cat-validation="required" cat-validation="required" linkedfields="['configname','projectname','puppetservername']" onchange="$('#configname').change();$('#puppetservername').change();">
                                                             <option value="">Select an Organization</option>
                                                         </select>
                                                     </div>
                                                     <div class="col-lg-6 col-md-6">
-                                                        <label for="category">Chef Server:<span style="color:Red;" class="control-label">&nbsp;*</span>
+                                                        <label for="category">Chef Server:
                                                         </label>
-                                                        <select id="configname" class="chooseOrganization width-100" sourcepath="10" datapath="masterjson.rows.row" style="vertical-align:central" cdata="catalyst" cat-validation="required" cat-validation="required" linkedto="orgname">
+                                                        <select id="configname" class="chooseOrganization width-100" sourcepath="10" datapath="masterjson.rows.row" style="vertical-align:central" cdata="catalyst" linkedto="orgname">
                                                             <option value="">Select a Chef Server</option>
+                                                        </select>
+                                                    </div>
+                                                    
+                                                    <div class="col-lg-6 col-md-6" style="margin-top:25px;">
+                                                        <label for="category">Chef Environment:
+                                                        </label>
+                                                        <a href="javascript:void(0)" class="clearfix pull-right" onclick="if(preprocess()) {$('#myModalCreateChefEnv').modal('show')}">Add</a>
+                                                        <select id="environmentname" class="chooseOrganization width-100" datapath="masterjson.rows.row" style="vertical-align:central" cdata="catalyst" unique="true" uniqueconditionedby="environmentname,orgname">
+                                                            <option value="">Select an Chef Environment</option>
                                                         </select>
                                                     </div>
                                                     <div class="col-lg-6 col-md-6" style="margin-top:25px;">
@@ -44,18 +53,10 @@
                                                         </select>
                                                     </div>
                                                     <div class="col-lg-6 col-md-6" style="margin-top:25px;">
-                                                        <label for="category">Chef Environment:<span style="color:Red;" class="control-label">&nbsp;*</span>
-                                                        </label>
-                                                        <a href="javascript:void(0)" class="clearfix pull-right" onclick="if(preprocess()) {$('#myModalCreateChefEnv').modal('show')}">Add</a>
-                                                        <select id="environmentname" class="chooseOrganization width-100" datapath="masterjson.rows.row" style="vertical-align:central" cdata="catalyst" cat-validation="required" cat-validation="required" unique="true" uniqueconditionedby="environmentname,orgname">
-                                                            <option value="">Select an Chef Environment</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="col-lg-6 col-md-6" style="margin-top:25px;">
                                                         <label for="category">Puppet Environment:
                                                         </label>
                                                         <a href="javascript:void(0)" class="clearfix pull-right" onclick="if(preprocessPuppet()) {$('#myModalCreatePuppetEnv').modal('show')}">Add</a>
-                                                        <select id="puppetenvironmentname" class="chooseOrganization width-100" datapath="masterjson.rows.row" style="vertical-align:central" cdata="catalyst">
+                                                        <select id="puppetenvname" class="chooseOrganization width-100" datapath="masterjson.rows.row" style="vertical-align:central" cdata="catalyst">
                                                             <option value="">Select an Puppet Environment</option>
                                                         </select>
                                                     </div>
@@ -142,7 +143,7 @@
                     <div class="col-lg-6 col-md-6">
                         <label for="category">Environment Name:<span style="color:red">*</span>
                         </label>
-                        <input type="text" id="puppetenvname" name="puppetenvname" class=" form-control" tabindex='1'>
+                        <input type="text" id="puppetenvnameinput" name="puppetenvnameinput" class=" form-control" tabindex='1'>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -189,20 +190,19 @@ $('#createenvinpuppetform').submit(function(e) {
     var $crbtn = $('#createenvinpuppetform').find('#createpuppetenvbtn')
     $crbtn.attr('disabled', 'disabled');
     var $form = $('#createenvinpuppetform');
-    reqBodyEnv.name = $form.find('#puppetenvname').val();
+    reqBodyEnv.name = $form.find('#puppetenvnameinput').val();
     if (!reqBodyEnv.name) {
         alert('Please Enter Environment Name');
         return false;
     }
     $('#envcreatespinner').removeClass('hidden');
     //alert('in createchefenvbtn');
-    if (typeof puppetId != 'undefined') {
-
+    //if (typeof puppetId != 'undefined') {
         $.ajax({
             type: "Post",
-            url: '../puppet/environments/create/' + puppetId,
+            url: '/puppet/environments',
             data: {
-                envName: $('#puppetenvname').val()
+                envName: $('#puppetenvnameinput').val()
             },
             success: function(envname, success) {
                 if (envname) {
@@ -228,7 +228,7 @@ $('#createenvinpuppetform').submit(function(e) {
                 bootbox.alert(envname.responseText);
             }
         });
-    }
+   // }
     return false;
 });
 
@@ -290,6 +290,27 @@ $('#createenvinchefform').submit(function(e) {
     return false;
 });
 
+function loadPuppetEnvs() {
+    $('#myForm1').find('button').attr('disabled', 'disabled');
+    $.get('/puppet/environments', function(envList) { //getting the list of env
+
+        if (envList) {
+            var envlist = envList.toString().split(',');
+            var $envselect = $('#puppetenvname').addClass('envselect').addClass('form-control').addClass('width100').addClass('padding0');
+            for (var j = 0; j < envList.length; j++) {
+                if ($envselect.val() === envList[j]) {
+                    //console.log($envselect);
+                    $envselect.html('');
+                }
+                $envselect.append('<option value="' + envList[j] + '">' + envList[j] + '</option>');
+            }
+            $envselect.val($envselect.attr('savedvalue'));
+            $envselect.change();
+            $('#myForm1').find('button').removeAttr('disabled');
+        }
+    });
+}
+
 function loadChefEnvs(chefID) {
     $('#myForm1').find('button').attr('disabled', 'disabled');
     $.get('../chef/servers/' + chefID + '/environments', function(envList) { //getting the list of env
@@ -320,6 +341,9 @@ function inLineReady() {
         var chefid = $(this).find('option:selected').attr('rowid');
         if (chefid)
             loadChefEnvs(chefid);
+    });
+    $('#puppetservername').change(function() {
+            loadPuppetEnvs();
     });
 
 

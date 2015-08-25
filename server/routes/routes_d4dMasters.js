@@ -24,7 +24,10 @@ var blueprintsDao = require('../model/dao/blueprints');
 var errorResponses = require('./error_responses.js');
 var bcrypt = require('bcryptjs');
 var authUtil = require('../lib/utils/authUtil.js');
+var Cryptography = require('../lib/utils/cryptography');
 
+var cryptoConfig = appConfig.cryptoSettings;
+var cryptography = new Cryptography(cryptoConfig.algorithm, cryptoConfig.password);
 
 module.exports.setRoutes = function(app, sessionVerification) {
 
@@ -2512,9 +2515,13 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     }
 
 
-                    logger.debug("Full bodyJson: ", JSON.stringify(bodyJson));
+                    //logger.debug("Full bodyJson:::: ", JSON.stringify(bodyJson));
                         if (req.params.id === "25") {
                             bodyJson["folderpath"] = "/" + bodyJson["username"] + "/.puppet/";
+                            if(bodyJson["puppetpassword"]){
+                                bodyJson["puppetpassword"] = cryptography.encryptText(bodyJson["puppetpassword"],cryptoConfig.encryptionEncoding, cryptoConfig.decryptionEncoding);
+                            }
+                            logger.debug("encryptText:>>>>>>>>>>>>> ",bodyJson["puppetpassword"]);
                         }
                     configmgmtDao.getDBModelFromID(req.params.id, function(err, dbtype) {
                         if (err) {
