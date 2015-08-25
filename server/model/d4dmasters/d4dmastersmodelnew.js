@@ -346,7 +346,7 @@ var d4dMastersPuppetServer = new mongoose.Schema(
 	orgrowid: {type:String, trim:true},
 	puppetservername: {type:String,required:true, trim:true},
 	username: {type:String,required:true, trim:true},
-	puppetserverurl: {type:String, trim:true},
+	puppetpassword: {type:String,trim:true},
 	userpemfile_filename: {type:String, trim:true},
 	folderpath: {type:String, trim:true},
 	active: {type:Boolean, trim:true,default:true},
