@@ -16,14 +16,14 @@ module.exports.setRoutes = function(app, verificationFunc) {
         var tenantid = "64371fa53f804417900e32c367d800b9";
 	    var openstackconfig = {host: host,username: username, password: password, tenantName: tenantName,tenantId: tenantid};
 
-	    /*openstackProvider.getopenstackProviderById(providerid,function(err,data){
+	    openstackProvider.getopenstackProviderById(providerid,function(err,data){
 	    		logger.debug(JSON.stringify(openstackconfig));
 	    		logger.debug('------------------------');
 	    		logger.debug(data);
 	    		data.tenantName = "admin";
 	    		callback(null,data);
-	    });*/
-        callback(null,openstackconfig);
+	    });
+        
     }
 
 	app.get('/openstack/:providerid/projects', function(req, res) {
@@ -176,7 +176,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
     app.get('/openstack/:providerid/tenants/:tenantId/servers/:serverId',function(req,res){
      
       getopenstackprovider(req.params.providerid,function(err,openstackconfig){
-      	
+
       	var openstack = new Openstack(openstackconfig);
         console.log("serverId:",req.params.serverId);
 
