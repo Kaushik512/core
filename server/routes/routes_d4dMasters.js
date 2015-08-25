@@ -2516,13 +2516,13 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
 
                     //logger.debug("Full bodyJson:::: ", JSON.stringify(bodyJson));
-                        if (req.params.id === "25") {
-                            bodyJson["folderpath"] = "/" + bodyJson["username"] + "/.puppet/";
-                            if(bodyJson["puppetpassword"]){
-                                bodyJson["puppetpassword"] = cryptography.encryptText(bodyJson["puppetpassword"],cryptoConfig.encryptionEncoding, cryptoConfig.decryptionEncoding);
-                            }
-                            logger.debug("encryptText:>>>>>>>>>>>>> ",bodyJson["puppetpassword"]);
+                    if (req.params.id === "25") {
+                        bodyJson["folderpath"] = "/" + bodyJson["username"] + "/.puppet/";
+                        if (bodyJson["puppetpassword"]) {
+                            bodyJson["puppetpassword"] = cryptography.encryptText(bodyJson["puppetpassword"], cryptoConfig.encryptionEncoding, cryptoConfig.decryptionEncoding);
                         }
+                        logger.debug("encryptText:>>>>>>>>>>>>> ", bodyJson["puppetpassword"]);
+                    }
                     configmgmtDao.getDBModelFromID(req.params.id, function(err, dbtype) {
                         if (err) {
                             logger.error("Hit and error:", err);
@@ -3637,6 +3637,22 @@ module.exports.setRoutes = function(app, sessionVerification) {
         });
 
     });
-
-
+    app.get('/d4dMasters/configmanagement', function(req, res) {
+        masterUtil.getAllActiveOrg(function(err, orgList) {
+            logger.debug("got org list ==>", JSON.stringify(orgList));
+            if (err) {
+                res.send(500, 'Not able to fetch Orgs.');
+                return;
+            }
+            masterUtil.getAllCongifMgmts(orgList, function(err, list) {
+                if (err) {
+                    logger.debug("Failed to fetch all configmanagement", err);
+                    res.send(500, "Failed to fetch all configmanagement");
+                    return;
+                }
+                res.send(list);
+                return;
+            });
+        });
+    });
 }

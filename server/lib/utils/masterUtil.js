@@ -14,7 +14,7 @@ var permissionsetDao = require('../../model/dao/permissionsetsdao');
 var d4dModel = require('../../model/d4dmasters/d4dmastersmodel.js');
 var configmgmtDao = require('../../model/d4dmasters/configmgmt.js');
 
-var MasterUtil = function(){
+var MasterUtil = function() {
     // Return All Orgs specific to User
     this.getOrgs = function(loggedInUser, callback) {
         var orgList = [];
@@ -207,17 +207,17 @@ var MasterUtil = function(){
             }
             if (projects) {
                 configmgmtDao.getRowids(function(err, rowidlist) {
-                    var allEnvs ='';
+                    var allEnvs = '';
                     for (var i = 0; i < projects.length; i++) {
                         (function(projectCount) {
                             if (projects[projectCount].id === '4') {
                                 names = configmgmtDao.convertRowIDToValue(projects[projectCount].orgname_rowid, rowidlist);
                                 bgnames = configmgmtDao.convertRowIDToValue(projects[projectCount].productgroupname_rowid, rowidlist);
-                                logger.debug("getProjects===================== ",bgnames);
+                                logger.debug("getProjects===================== ", bgnames);
                                 projects[projectCount].orgname = names;
                                 projects[projectCount].productgroupname = bgnames;
                                 //projectList.push(projects[projectCount]);
-                                logger.debug("pppppppppppppp: ",projects[projectCount].environmentname_rowid);
+                                logger.debug("pppppppppppppp: ", projects[projectCount].environmentname_rowid);
                                 /*if(typeof projects[projectCount].environmentname_rowid != "undefined"){
                                 var envs = projects[projectCount].environmentname_rowid.split(",");
                                 for(var e = 0;e< envs.length;e++){
@@ -229,7 +229,7 @@ var MasterUtil = function(){
                                 projects[projectCount].environmentname = allEnvs;*/
                                 projectList.push(projects[projectCount]);
                             }
-                           // }
+                            // }
                         })(i);
                     }
                     logger.debug("Returned Projects: ", JSON.stringify(projectList));
@@ -624,12 +624,12 @@ var MasterUtil = function(){
         }
         logger.debug("org rowids: ", rowIds);
         d4dModelNew.d4dModelMastersUsers.find({
-            orgname_rowid:{
+            orgname_rowid: {
                 $in: rowIds
             },
-            "id" : "7"
+            "id": "7"
         }, function(err, users) {
-            logger.debug("Got user+++++++++++++++++++ ",JSON.stringify(users));
+            logger.debug("Got user+++++++++++++++++++ ", JSON.stringify(users));
             if (users) {
                 configmgmtDao.getRowids(function(err, rowidlist) {
                     for (var i = 0; i < users.length; i++) {
@@ -711,16 +711,16 @@ var MasterUtil = function(){
                             names = configmgmtDao.convertRowIDToValue(teams[i].orgname_rowid, rowidlist)
                             teams[i].orgname = names;
                             var projectName = teams[i].projectname_rowid.split(",");
-                            for(var x=0;x<projectName.length;x++){
+                            for (var x = 0; x < projectName.length; x++) {
                                 projectnames = configmgmtDao.convertRowIDToValue(projectName[x], rowidlist);
-                                if(teams[i].projectname.indexOf(projectnames) === -1){
-                                   teams[i].projectname = teams[i].projectname+","+projectnames; 
-                                }   
+                                if (teams[i].projectname.indexOf(projectnames) === -1) {
+                                    teams[i].projectname = teams[i].projectname + "," + projectnames;
+                                }
                             }
                             teamList.push(teams[i]);
                         }
                     }
-                    logger.debug("My team:???????????? ",JSON.stringify(teamList));
+                    logger.debug("My team:???????????? ", JSON.stringify(teamList));
                     callback(null, teamList);
                     return;
                 });
@@ -856,8 +856,8 @@ var MasterUtil = function(){
                                     loopCount++;
                                     d4dModelNew.d4dModelMastersTeams.find({
                                         orgname_rowid: allObj[tmOrg],
-                                        rowid:{
-                                            $in:catObj.teams
+                                        rowid: {
+                                            $in: catObj.teams
                                         },
                                         id: "21"
                                     }, function(err, allTeams) {
@@ -867,82 +867,82 @@ var MasterUtil = function(){
                                         }
                                         logger.debug("allTeams:::::::::::::: ", JSON.stringify(allTeams));
                                         for (var xy = 0; xy < allTeams.length; xy++) {
-                                            (function(xy){
-                                            if(typeof allTeams[xy].orgname_rowid != "undefined" && typeof allTeams[xy].projectname_rowid != "undefined"){
-                                            d4dModelNew.d4dModelMastersOrg.find({
-                                                rowid: {
-                                                    $in: allTeams[xy].orgname_rowid
-                                                },
-                                                id: "1",
-                                                active: true
-                                            }, function(err, org) {
-                                                if (err) {
-                                                    callback(err, null);
-                                                }
-                                                if (org) {
-                                                    logger.debug("Available Org: ", JSON.stringify(org));
-                                                    for (var x = 0; x < org.length; x++) {
-                                                        if (org[x].id === '1') {
-                                                            orgs.push(org[x].rowid);
-                                                            logger.debug("Orgs list rowid: ", org[x].rowid);
-                                                        }
-                                                    }
-                                                    catObj.orgs = orgs;
-                                                }
-                                                d4dModelNew.d4dModelMastersProjects.find({
-                                                    orgname_rowid: {
-                                                        $in: allTeams[xy].orgname_rowid
-                                                    },
-                                                    rowid:{
-                                                        $in: allTeams[xy].projectname_rowid.split(",")
-                                                    },
-                                                    id: "4"
-                                                }, function(err, project) {
-                                                    if (err) {
-                                                        callback(err, null);
-                                                    }
-                                                    if (project) {
-                                                        logger.debug("Available project:>>>>> ", JSON.stringify(project));
-                                                        for (var x1 = 0; x1 < project.length; x1++) {
-                                                            if (project[x1].id === '4') {
-                                                                projects.push(project[x1].rowid);
-                                                                logger.debug("projectList:>>> ", project[x1].rowid);
-                                                            }
-                                                        }
-                                                        catObj.projects = projects;
-                                                    }
-                                                    d4dModelNew.d4dModelMastersProductGroup.find({
-                                                        orgname_rowid: {
+                                            (function(xy) {
+                                                if (typeof allTeams[xy].orgname_rowid != "undefined" && typeof allTeams[xy].projectname_rowid != "undefined") {
+                                                    d4dModelNew.d4dModelMastersOrg.find({
+                                                        rowid: {
                                                             $in: allTeams[xy].orgname_rowid
                                                         },
-                                                        id: "2"
-                                                    }, function(err, bg) {
+                                                        id: "1",
+                                                        active: true
+                                                    }, function(err, org) {
                                                         if (err) {
                                                             callback(err, null);
                                                         }
-                                                        if (bg) {
-                                                            for (var x2 = 0; x2 < bg.length; x2++) {
-                                                                if (bg[x2].id === '2') {
-                                                                    bunits.push(bg[x2].rowid);
+                                                        if (org) {
+                                                            logger.debug("Available Org: ", JSON.stringify(org));
+                                                            for (var x = 0; x < org.length; x++) {
+                                                                if (org[x].id === '1') {
+                                                                    orgs.push(org[x].rowid);
+                                                                    logger.debug("Orgs list rowid: ", org[x].rowid);
                                                                 }
                                                             }
-                                                            catObj.bunits = bunits;
-                                                            returnObj.push(catObj);
-                                                            logger.debug("returnObj: ", returnObj);
-                                                            if (allObj.length === loopCount) {
-                                                                logger.debug("Condition matched:::::::::::;");
-                                                                callback(null, returnObj);
-                                                                return;
-                                                            }
+                                                            catObj.orgs = orgs;
                                                         }
+                                                        d4dModelNew.d4dModelMastersProjects.find({
+                                                            orgname_rowid: {
+                                                                $in: allTeams[xy].orgname_rowid
+                                                            },
+                                                            rowid: {
+                                                                $in: allTeams[xy].projectname_rowid.split(",")
+                                                            },
+                                                            id: "4"
+                                                        }, function(err, project) {
+                                                            if (err) {
+                                                                callback(err, null);
+                                                            }
+                                                            if (project) {
+                                                                logger.debug("Available project:>>>>> ", JSON.stringify(project));
+                                                                for (var x1 = 0; x1 < project.length; x1++) {
+                                                                    if (project[x1].id === '4') {
+                                                                        projects.push(project[x1].rowid);
+                                                                        logger.debug("projectList:>>> ", project[x1].rowid);
+                                                                    }
+                                                                }
+                                                                catObj.projects = projects;
+                                                            }
+                                                            d4dModelNew.d4dModelMastersProductGroup.find({
+                                                                orgname_rowid: {
+                                                                    $in: allTeams[xy].orgname_rowid
+                                                                },
+                                                                id: "2"
+                                                            }, function(err, bg) {
+                                                                if (err) {
+                                                                    callback(err, null);
+                                                                }
+                                                                if (bg) {
+                                                                    for (var x2 = 0; x2 < bg.length; x2++) {
+                                                                        if (bg[x2].id === '2') {
+                                                                            bunits.push(bg[x2].rowid);
+                                                                        }
+                                                                    }
+                                                                    catObj.bunits = bunits;
+                                                                    returnObj.push(catObj);
+                                                                    logger.debug("returnObj: ", returnObj);
+                                                                    if (allObj.length === loopCount) {
+                                                                        logger.debug("Condition matched:::::::::::;");
+                                                                        callback(null, returnObj);
+                                                                        return;
+                                                                    }
+                                                                }
+                                                            });
+
+                                                        });
+                                                        // }
+
                                                     });
-
-                                                });
-                                                // }
-
-                                            });
-                                            }//if
-                                        })(xy);
+                                                } //if
+                                            })(xy);
                                         }
                                     });
                                 } // for multiple orgs
@@ -1108,15 +1108,15 @@ var MasterUtil = function(){
                             if (projects[projectCount].id === '4') {
                                 names = configmgmtDao.convertRowIDToValue(projects[projectCount].orgname_rowid, rowidlist);
                                 bgnames = configmgmtDao.convertRowIDToValue(projects[projectCount].productgroupname_rowid, rowidlist);
-                                logger.debug("getProjects===================== ",bgnames);
+                                logger.debug("getProjects===================== ", bgnames);
                                 projects[projectCount].orgname = names;
                                 projects[projectCount].productgroupname = bgnames;
                                 //projectList.push(projects[projectCount]);
                                 var envs = projects[projectCount].environmentname_rowid.split(",");
-                                for(var e = 0;e< envs.length;e++){
-                                    logger.debug("envs:::::::::::::: ",projects[projectCount].environmentname);
+                                for (var e = 0; e < envs.length; e++) {
+                                    logger.debug("envs:::::::::::::: ", projects[projectCount].environmentname);
                                     envnames = configmgmtDao.convertRowIDToValue(envs[e], rowidlist);
-                                    allEnvs =allEnvs+","+envnames;
+                                    allEnvs = allEnvs + "," + envnames;
                                 }
                                 allEnvs = allEnvs.substring(1);
                                 projects[projectCount].environmentname = allEnvs;
@@ -1414,9 +1414,9 @@ var MasterUtil = function(){
                 callback(err, null);
                 return;
             }
-            logger.debug("Got users for Org All.",JSON.stringify(users));
+            logger.debug("Got users for Org All.", JSON.stringify(users));
             if (users.length > 0) {
-                callback(null,users);
+                callback(null, users);
                 return;
             } else {
                 callback(null, []);
@@ -1487,6 +1487,49 @@ var MasterUtil = function(){
                 callback(err, null);
                 return;
             }
+        });
+    }
+
+    // Return all Puppet Servers specific to User
+    this.getAllCongifMgmts = function(orgList, callback) {
+        var congifMgmtList = [];
+        var rowIds = [];
+        for (var x = 0; x < orgList.length; x++) {
+            rowIds.push(orgList[x].rowid);
+        }
+        logger.debug("org rowids: ", rowIds);
+        d4dModelNew.d4dModelMastersPuppetServer.find({
+            orgname_rowid: {
+                $in: rowIds
+            }
+        }, function(err, configMgmt) {
+            d4dModelNew.d4dModelMastersConfigManagement.find({
+                orgname_rowid: {
+                    $in: rowIds
+                }
+            }, function(err, chefmgmt) {
+                configmgmtDao.getRowids(function(err, rowidlist) {
+                    if (configMgmt) {
+                        for (var i = 0; i < configMgmt.length; i++) {
+                            if (configMgmt[i].id === '25') {
+                                names = configmgmtDao.convertRowIDToValue(configMgmt[i].orgname_rowid, rowidlist)
+                                configMgmt[i].orgname = names;
+                                congifMgmtList.push(configMgmt[i]);
+                            }
+                        }
+                    }
+                    if (chefmgmt) {
+                        for (var j = 0; j < chefmgmt.length; j++) {
+                            if (chefmgmt[j].id === '10') {
+                                names = configmgmtDao.convertRowIDToValue(chefmgmt[j].orgname_rowid, rowidlist)
+                                chefmgmt[j].orgname = names;
+                                congifMgmtList.push(chefmgmt[j]);
+                            }
+                        }
+                    }
+                    callback(null,congifMgmtList);
+                });
+            });
         });
     }
 }
