@@ -284,6 +284,7 @@ this.getServers = function(tenantId,callback){
 					};
 				client = new Client();
 				var createServerUrl = 'http://'+options.host+':8774/v2/'+tenantId+'/servers';
+				console.log('CreateServerURL:' + createServerUrl);
 				client.registerMethod("jsonMethod", createServerUrl, "POST");
 				client.methods.jsonMethod(args,function(data,response){
 					console.log("createServer response:: "+data);

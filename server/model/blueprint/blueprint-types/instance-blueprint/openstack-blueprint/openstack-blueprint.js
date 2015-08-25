@@ -27,6 +27,21 @@ var openstackInstanceBlueprintSchema = new Schema({
         required: true,
         trim: true
     },
+    flavor: {
+        type: String,
+        required: true,
+        trim: true
+    },
+    cloudProviderType: {
+        type: String,
+        required: true,
+        trim: true
+    },
+    cloudProviderId: {
+        type: String,
+        required: true,
+        trim: true
+    },
     network: {
         type: String,
         required: true,

@@ -22,6 +22,9 @@ var CloudFormation = require('_pr/model/cloud-formation');
 var AWSCloudFormation = require('_pr/lib/awsCloudFormation.js');
 var errorResponses = require('./error_responses');
 
+var Openstack = require('_pr/lib/openstack');
+var openstackProvider = require('_pr/model/classes/masters/cloudprovider/openstackCloudProvider.js');
+
 module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
     app.all('/blueprints/*', sessionVerificationFunc);
@@ -1253,6 +1256,56 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                     });
                                 } else if (blueprint.blueprintType === 'openstack_launch') {
                                     logger.debug(blueprint);
+                                    openstackProvider.getopenstackProviderById(blueprint.blueprintConfig.cloudProviderId,function(err,providerdata){
+                                            if(err){
+                                                logger.error('getopenstackProviderById ' + err);
+                                                return;
+                                            }
+                                            logger.debug(providerdata);
+                                            var launchOpenstackBP = function(providerdata,blueprint){
+                                                //var json= "{\"server\": {\"name\": \"server-testa\",\"imageRef\": \"0495d8b6-1746-4e0d-a44e-010e41db0caa\",\"flavorRef\": \"2\",\"max_count\": 1,\"min_count\": 1,\"networks\": [{\"uuid\": \"a3bf46aa-20fa-477e-a2e5-e3d3a3ea1122\"}],\"security_groups\": [{\"name\": \"default\"}]}}";
+                                                var launchparams = {
+                                                    server:{
+                                                        name: "D4D-" + blueprint.name,
+                                                        imageRef: blueprint.blueprintConfig.instanceImageName,
+                                                        flavorRef: blueprint.blueprintConfig.flavor,
+                                                        max_count: 1,
+                                                        min_count: 1,
+                                                        networks:[
+                                                            {
+                                                                uuid: blueprint.blueprintConfig.network
+                                                            }
+                                                        ],
+                                                        security_groups:[
+                                                            {
+                                                                name: 'default'
+                                                            }
+                                                        ]
+
+                                                    }
+                                                }
+                                                var openstackconfig = {
+                                                    host: providerdata.host,
+                                                    username: providerdata.username, 
+                                                    password: providerdata.password, 
+                                                    tenantName: 'admin',
+                                                    tenantId: providerdata.tenantid
+                                                };
+                                                var openstack = new Openstack(openstackconfig);
+                                                openstack.createServer(openstackconfig.tenantId,launchparams,function(err,data){
+                                                    if(err){
+                                                         logger.error('openstack createServer error', err);
+                                                         res.send(500,err);
+                                                         return;
+                                                    }
+                                                    logger.debug('OS Launched');
+                                                    logger.debug(data);
+                                                    res.send(data);
+                                                });
+                                            }
+                                            launchOpenstackBP(providerdata,blueprint);
+
+                                    });
 
                                 }else {
                                     res.send(400, {
