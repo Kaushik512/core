@@ -37,6 +37,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         var openstackpassword = req.body.openstackpassword;
         var openstackhost = req.body.openstackhost;
         var openstacktenantid = req.body.openstacktenantid;
+        var openstacktenantname = req.body.openstacktenantname;
+        var openstackprojectname = req.body.openstackprojectname;
         var providerName = req.body.providerName;
         var providerType = req.body.providerType;
         var orgId = req.body.orgId;
@@ -68,6 +70,14 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         if (typeof orgId === 'undefined' || orgId.length === 0) {
             res.status(400);
             res.send("Please Select Any Organization.");
+            return;
+        }
+        if (typeof openstacktenantname === 'undefined' || openstacktenantname.length === 0) {
+            res.send(400, "Please Enter Tenant Name.");
+            return;
+        }
+        if (typeof openstackprojectname === 'undefined' || openstackprojectname.length === 0) {
+            res.send(400, "Please Enter Project Name.");
             return;
         }
         var region;
@@ -109,6 +119,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                 providerName: providerName,
                                 providerType: providerType,
                                 tenantid : openstacktenantid,
+                                tenantname: openstacktenantname,
+                                projectname: openstackprojectname,
                                 orgId: orgId
                             };
                             openstackProvider.getopenstackProviderByName(providerData.providerName, providerData.orgId, function(err, prov) {
@@ -288,6 +300,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         var openstackpassword = req.body.openstackpassword;
         var openstackhost = req.body.openstackhost;
         var openstacktenantid = req.body.openstacktenantid;
+        var openstacktenantname = req.body.openstacktenantname;
+        var openstackprojectname = req.body.openstackprojectname;
         var providerName = req.body.providerName.trim();
         var providerType = req.body.providerType.trim();
         var providerId = req.params.providerId.trim();
@@ -316,6 +330,14 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             res.send(400, "Please Enter ProviderType.");
             return;
         }
+        if (typeof openstacktenantname === 'undefined' || openstacktenantname.length === 0) {
+            res.send(400, "Please Enter Tenant Name.");
+            return;
+        }
+        if (typeof openstackprojectname === 'undefined' || openstackprojectname.length === 0) {
+            res.send(400, "Please Enter Project Name.");
+            return;
+        }
         if (typeof orgId === 'undefined' || orgId.length === 0) {
             res.status(400);
             res.send("Please Select Any Organization.");
@@ -328,6 +350,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                 password: openstackpassword,
                                 host: openstackhost,
                                 tenantid: openstacktenantid,
+                                tenantname: openstacktenantname,
+                                projectname: openstackprojectname,
                                 providerName: providerName,
                                 providerType: providerType,
                                 orgId: orgId

@@ -218,6 +218,7 @@ this.getServers = function(tenantId,callback){
 					};
 				client = new Client();
 				var networksUrl = 'http://'+options.host+':9696/v2.0/networks';
+				console.log('networksUrl: ' + networksUrl);
 				client.registerMethod("jsonMethod", networksUrl, "GET");
 				client.methods.jsonMethod(args,function(data,response){
 					console.log("getNetworks response:: "+data);
@@ -251,6 +252,7 @@ this.getServers = function(tenantId,callback){
 					};
 				client = new Client();
 				var securityGroupsUrl = 'http://'+options.host+':9696/v2.0/security-groups';
+				console.log('securityGroupsUrl: ' + securityGroupsUrl);
 				client.registerMethod("jsonMethod", securityGroupsUrl, "GET");
 				client.methods.jsonMethod(args,function(data,response){
 					//console.log("getSecurityGroups response:: "+data);

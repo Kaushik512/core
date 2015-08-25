@@ -12,16 +12,23 @@ module.exports.setRoutes = function(app, verificationFunc) {
         var host = "192.168.102.12";
         var username = "admin";
         var password = "ADMIN_PASS";
-        var tenantName = "admin";
+        var tenantName = "demo";
         var tenantid = "64371fa53f804417900e32c367d800b9";
 	    var openstackconfig = {host: host,username: username, password: password, tenantName: tenantName,tenantId: tenantid};
 
 	    openstackProvider.getopenstackProviderById(providerid,function(err,data){
-	    		logger.debug(JSON.stringify(openstackconfig));
+	    		logger.debug('IN getopenstackProviderById: data: ');
+	    		logger.debug(JSON.stringify(data));
 	    		logger.debug('------------------------');
-	    		logger.debug(data);
-	    		data.tenantName = "admin";
-	    		callback(null,data);
+	    		openstackconfig.host = data.host;
+	    		openstackconfig.username = data.username;
+	    		openstackconfig.password = data.password;
+	    		openstackconfig.tenantName = data.tenantname;
+	    		openstackconfig.tenantId = data.tenantid;
+	    		logger.debug('IN getopenstackProviderById: openstackconfig: ');
+	    		logger.debug(JSON.stringify(openstackconfig));
+	    	//	data.tenantName = "demo";
+	    		callback(null,openstackconfig);
 	    });
         
     }
@@ -100,7 +107,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
     });
 
     app.get('/openstack/:providerid/networks', function(req, res) {
-
+    	logger.debug('Inside openstack get networks');
        getopenstackprovider(req.params.providerid,function(err,openstackconfig){
 
 	        var openstack = new Openstack(openstackconfig);
@@ -112,17 +119,18 @@ module.exports.setRoutes = function(app, verificationFunc) {
 	                 return;
 	        	}
 				res.send(networks);
+				logger.debug('Exit openstack get networks' + JSON.stringify(networks));
 			});
 	     });	
     });
 
     app.get('/openstack/:providerid/flavors', function(req, res) {
-
+    	logger.debug('Inside openstack get flavors');
       getopenstackprovider(req.params.providerid,function(err,openstackconfig){
 
 	        var openstack = new Openstack(openstackconfig);
 
-	        openstack.getFlavors(openstackconfig.tenantid,function(err,flavors){
+	        openstack.getFlavors(openstackconfig.tenantId,function(err,flavors){
 	        	if(err){
 	                 logger.error('openstack flavors fetch error', err);
 	                 res.send(500,err);
@@ -130,12 +138,13 @@ module.exports.setRoutes = function(app, verificationFunc) {
 	        	}
 	            
 				res.send(flavors);
+				logger.debug('Exit openstack get flavors' + JSON.stringify(flavors));
 			});
 	  });
     });
 
     app.get('/openstack/:providerid/securityGroups', function(req, res) {
-
+    	logger.debug('Inside openstack get securityGroups');
         getopenstackprovider(req.params.providerid,function(err,openstackconfig){
 
 	        var openstack = new Openstack(openstackconfig);
@@ -148,6 +157,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
 	        	}
 	            
 				res.send(securityGroups);
+				logger.debug('Exit openstack get securityGroups' + JSON.stringify(securityGroups));
 			});
 	    });
     });
@@ -160,7 +170,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
            
             var json= "{\"server\": {\"name\": \"server-testa\",\"imageRef\": \"0495d8b6-1746-4e0d-a44e-010e41db0caa\",\"flavorRef\": \"2\",\"max_count\": 1,\"min_count\": 1,\"networks\": [{\"uuid\": \"a3bf46aa-20fa-477e-a2e5-e3d3a3ea1122\"}],\"security_groups\": [{\"name\": \"default\"}]}}";
 
-	        openstack.createServer(openstackconfig.tenantid,json,function(err,data){
+	        openstack.createServer(openstackconfig.tenantId,json,function(err,data){
 	        	if(err){
 	                 logger.error('openstack createServer error', err);
 	                 res.send(500,err);

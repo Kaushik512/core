@@ -54,6 +54,16 @@ var openstackProviderSchema = new Schema({
         required: true,
         trim: true
     },
+    tenantname: {
+        type: String,
+        required: true,
+        trim: true
+    },
+    projectname: {
+        type: String,
+        required: true,
+        trim: true
+    },
     orgId: {
         type: [String],
         required: true,
