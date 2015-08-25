@@ -303,6 +303,39 @@ this.getServers = function(tenantId,callback){
 		}   
 	})
  }
+
+  this.getServerById = function(tenantId,serverId,callback){
+	 console.log("START:: Getting server details by id");
+	 
+	 getAuthToken(options.host,options.username,options.password,options.tenantName,function(err,token){
+		   if(token){
+			   console.log("token:"+token);
+			   
+			   var args = {
+				    headers: {"X-Auth-Token": token, "Content-Type": "application/json"}
+				    };
+			   
+			   var serverDetailUrl = 'http://'+options.host+':8774/v2/'+tenantId+'/servers/'+serverId;
+			   client = new Client();
+			   client.registerMethod("getServerDetails",serverDetailUrl,"GET");
+			   client.methods.getServerDetails(args,function(data,response){
+				   console.log("getServerDetails response:"+data);
+				   if(data.server){
+					   console.log("END:: Getting server details by id");	
+					   callback(null,data);
+					   return;
+				    }else{
+						callback(data,null);
+					}
+				   });
+		   }else{
+			   console.log(err);
+		       callback(err,null);
+		       return;
+		   }
+		 });
+	 
+ }
  
 }
 
