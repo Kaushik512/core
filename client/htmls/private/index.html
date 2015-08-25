@@ -71,7 +71,7 @@ String.prototype.capitalizeFirstLetter = function() {
 
                         <!--track-->
                     <li class="left-projects-links hidden" style="margin-left:16px;margin-right:16px;" data-target="#Track" navigation="Track">
-                                <a class="dropdown-toggle navigationTab" style="font-size:14px!important" href="#ajax/awsnotifications.html" id="trackNew"  onclick="setleftnavigation(this,'Track');"><i class="fa fa-anchor"></i>&nbsp;TRACK</a>
+                                <a class="dropdown-toggle navigationTab" style="font-size:14px!important" href="#ajax/awsusage.html" id="trackNew"  onclick="setleftnavigation(this,'Track');"><i class="fa fa-anchor"></i>&nbsp;TRACK</a>
                             </li>
                             <!--track ends here-->
                     
@@ -140,20 +140,19 @@ String.prototype.capitalizeFirstLetter = function() {
                 <a href="#" style="background-color:#40baf1;margin-right:1px;"><i class="fa fa-lg fa-fw fa-sitemap"></i><span class="menu-item-parent" style="font-weight:bold">TRACK</span> </a>
                      <ul style="display:block">
 
-<!--notification starts here-->
+                <!--aws cost-->
                 <li>
-                    <a href="ajax/awsnotifications.html">
+                    <a href="ajax/awsusage.html">
                         <div>
-                            <i class="fa fa-tasks fa-2x" title="Notification"></i>
-                            <span style="margin-left:5px" class="trackAlign">Notifications</span>
+                            <i class="fa fa-tasks fa-2x" title="AWS Cost"></i>
+                            <span style="margin-left:5px" class="trackAlign">AWS Cost</span>
                         </div>
                     </a>
-                </li>
-                <!--notification ends here-->
-
+                </li> 
+                <!--aws cost ends here-->
                 <!--aws usage-->
                 <li style="margin-top:10px;">
-                    <a href="ajax/awslogs.html">
+                    <a href="ajax/awsUsageLogs.html">
                         <div>
                             <i class="fa fa-tasks fa-2x" title="AWS Usage"></i>
                             <span style="margin-left:5px" class="trackAlign2">AWS Usage</span>
@@ -164,35 +163,40 @@ String.prototype.capitalizeFirstLetter = function() {
 
                 <!--zabbix starts here-->
                 <li style="margin-top:10px;">
-                    <a href="ajax/Zabbix.html">
+                    <a href="ajax/zabbix.html">
                         <div>
                             <i class="fa fa-reorder fa-2x" title="Zabbix"></i>
-                            <span style="margin-left:5px" class="trackAlign1">Zabbix</span>
+                            <span style="margin-left:5px" class="trackAlign1">System Monitoring</span>
                         </div>
                     </a>
                 </li>
                 
                 <!--zabbix ends here-->
-                        <!--kibana-->
+
+                <!--kibana-->
                 <li style="margin-top:10px;">
                     
                   
-                    <a href="ajax/Tracker.html">
+                    <a href="ajax/kibana.html">
                         <div>
                             <i class="fa fa-cubes fa-2x" title="Kibana"></i>
-                            <span style="margin-left:5px" class="trackAlign2">Kibana</span>
+                            <span style="margin-left:5px" class="trackAlign2">Log Monitoring</span>
                         </div>
                     </a>
                 </li>
                 <!--kibana ends here-->
-
-                
-
-                
-
-
-            </li>
-                </ul>                       
+                <!--notification starts here-->
+                <li style="margin-top:10px;">
+                    <a href="ajax/awsnotifications.html">
+                        <div>
+                            <i class="fa fa-tasks fa-2x" title="Notification"></i>
+                            <span style="margin-left:5px" class="trackAlign2">Notifications</span>
+                        </div>
+                    </a>
+                </li>
+                <!--notification ends here-->
+                    </ul>   
+                </li>                    
             </ul>
             <ul class="menu-item-parentdemo hidden" id="blueprints">
                 <li class="active open">
@@ -491,7 +495,15 @@ var SettingTreeJson = [{
                 "selectable": true,
                 "icon": "fa fa-lg fa-fw fa-random"
 
-            }, {
+            },/*{
+                "name": "organizations",
+                "text": "Puppet Server",
+                "borderColor": "#000",
+                "href": "#ajax/Settings/PuppetServerList.html",
+                "selectable": true,
+                "icon": "fa fa-lg fa-fw fa-random"
+
+            },*/ {
                 "name": "organizations",
                 "text": "Environments",
                 "borderColor": "#000",
@@ -605,7 +617,24 @@ var SettingTreeJson = [{
         "selectable": false,
         "href": "javascript:void(0);"
 
-    }, {
+    }, /*{
+        "name": "track",
+        "text": "Track Setup",
+        "icon": "fa fa-building ",
+        "nodes": [{
+            "name": "templates",
+            "text": "Dashboard",
+            "borderColor": "#000",
+            "href": "#ajax/Settings/DashboardSettings.html",
+            "selectable": true,
+            "icon": "fa fa-lg fa-fw fa-files-o"
+
+        }],
+        "borderColor": "#000",
+        "selectable": false,
+        "href": "javascript:void(0);",
+        "icon": "fa fa-book"
+    },*/ {
         "name": "userguide",
         "text": "User Guide",
         "icon": "fa fa-building ",

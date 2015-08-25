@@ -74,7 +74,7 @@
                                     Launch
                                 </a>
                             </div>
-                            <button class="btn pull-right btn-danger right-button" title="Remove Blueprint" onClick="removeSelectedBlueprint()" > <i class="fa fa-trash-o"></i></button>
+                            <button class="btn pull-right btn-danger right-button" title="Delete Blueprint" onClick="removeSelectedBlueprint()" > <i class="fa fa-trash-o"></i></button>
                         </div>
 
                     </footer><!--Launch div ends here-->
@@ -146,6 +146,254 @@
     </div>
 </div>
 
+
+<!--modal for blueprint read-->
+<div class="modal fade bs-example-modal-lg" id="modalForRead" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel"></h4>
+            </div>
+            <div class="modal-body" style="height:480px;overflow-y:auto;">
+              <!--os and the 1st tier-->
+ <table class="table table-bordered">
+    <thead>
+        <th style="width:11%;text-align:center">Parameters</th>
+        <th style="width:27%;text-align:center">Values</th>
+    </thead>
+    <tbody>
+        <tr>
+            <td style="padding-left: 18px;padding-top:16px;">Blueprint Name:</td>
+<td>
+    
+ <input  id="blueprintNameInputNew" disabled="disabled" class="form-control">
+ 
+</td>
+</tr>
+
+<tr>
+  <td style="padding-left:18px;padding-top:16px">Template Type:</td>
+  <td>
+    <input id="blueprintTemplateType" disabled="disabled" class="form-control">
+  </td>
+</tr>
+
+<tr>
+  <td style="padding-left:18px;padding-top:16px">Organisation Name:</td>
+  <td>
+    <input id="blueprintORG" disabled="disabled" class="form-control">
+  </td>
+</tr>
+
+
+
+<tr>
+  <td style="padding-left:18px;padding-top:16px">Business Group:</td>
+  <td>
+    <input id="blueprintBU" disabled="disabled" class="form-control">
+  </td>
+</tr>
+
+<tr>
+  <td style="padding-left:18px;padding-top:16px">Project Name:</td>
+  <td>
+    <input id="blueprintProject" disabled="disabled" class="form-control">
+  </td>
+</tr>
+
+<tr>
+<td style="padding-left: 18px;padding-top:16px;">Operating System:</td>
+<td>
+
+    
+ <input id="instanceOSNew" class="form-control" disabled="disabled">                                                      
+ 
+</td>
+</tr>
+
+<tr>
+    <td style="padding-left: 18px;padding-top:16px;">Instance Size:</td>
+<td>
+  
+ <input id="instancesizeNew" disabled="disabled" class="form-control">
+ 
+</td>
+</tr>
+
+<tr>
+    <td style="padding-left: 18px;padding-top:16px;">Provider Type:</td>
+<td>
+
+ <input id="instanceProviderType" disabled="disabled" class="form-control">
+
+</td>
+</tr>
+
+<tr>
+    <td style="padding-left: 18px;padding-top:16px;">Provider Name:</td>
+
+    <td>
+ <input id="instanceProviderName" disabled="disabled" class="form-control">
+  
+ </td>
+</tr>
+
+<tr>
+    <td style="padding-left: 18px;padding-top:16px;">Region:</td>
+<td>
+ <input id="instanceRegion" disabled="disabled" class="form-control">
+
+ </td>
+</tr>
+
+
+<tr>
+    <td style="padding-left: 18px;padding-top:16px;">Image:</td>
+<td>
+
+ <input id="instanceImage" disabled="disabled" class="form-control">
+
+ </td>
+</tr>
+
+<tr>
+    <td style="padding-left: 18px;padding-top:16px;">Keypair:</td>
+<td> 
+
+ <input id="instancekeyPair" disabled="disabled" class="form-control">
+
+ </td>
+</tr>
+
+<tr>
+    <td style="padding-left: 18px;padding-top:16px;">VPC ID:</td>
+
+<td>
+ <input id="instanceVPC" class="form-control" disabled="disabled">                                               
+
+  </td>
+</tr>
+
+<tr>
+    <td style="padding-left: 18px;padding-top:16px;">Subnet:</td>
+
+ <td>
+
+
+ <input id="instanceSubnetId" class="form-control" disabled="disabled">                                          
+
+ </td>
+</tr>
+
+<tr>
+    <td style="padding-left: 18px;padding-top:16px;">Security Group:</td>
+
+<td>
+
+  <input id="instanceSecurityGroupId" class="form-control" disabled="disabled">
+
+</td>
+</tr>
+
+<tr>
+    <td style="padding-left: 18px;padding-top:16px;">Version:</td>
+
+<td>
+
+ <input id="instanceVersion" class="form-control" disabled="disabled">                                    
+
+</td>
+</tr>
+
+<tr>
+    <td style="padding-left: 18px;padding-top:16px;">Runlist:</td>
+
+ <td>
+
+
+ <input id="instanceRunlist" class="form-control" disabled="disabled">                                           
+
+</td>
+</tr>
+
+            </tbody>
+           </table> 
+            
+             </div>
+             <div class="modal-footer">
+                <button type="button" class="btn btn-default btn-primary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--modal for blueprint edit read-->
+
+<!--modal for blueprint read-->
+<div class="modal fade bs-example-modal-lg" id="modalForReadCFT" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel"></h4>
+            </div>
+            <div class="modal-body" style="height:360px;overflow-y:auto;">
+              <!--os and the 1st tier-->
+ <table class="table table-bordered">
+    <thead>
+        <th style="width:11%;text-align:center">Parameters</th>
+        <th style="width:27%;text-align:center">Values</th>
+    </thead>
+    <tbody>
+        <tr>
+            <td style="padding-left: 18px;padding-top:16px;">Blueprint Name:</td>
+<td>
+    
+ <input  id="blueprintNameCFT" disabled="disabled" class="form-control">
+ 
+</td>
+</tr>
+
+<tr>
+  <td style="padding-left:18px;padding-top:16px">Template Type:</td>
+  <td>
+    <input id="blueprintTemplateTypeCFT" disabled="disabled" class="form-control">
+  </td>
+</tr>
+
+<tr>
+  <td style="padding-left:18px;padding-top:16px">Organisation Name:</td>
+  <td>
+    <input id="blueprintORG" disabled="disabled" class="form-control">
+  </td>
+</tr>
+
+
+
+<tr>
+  <td style="padding-left:18px;padding-top:16px">Business Group:</td>
+  <td>
+    <input id="blueprintBU" disabled="disabled" class="form-control">
+  </td>
+</tr>
+
+<tr>
+  <td style="padding-left:18px;padding-top:16px">Project Name:</td>
+  <td>
+    <input id="blueprintProject" disabled="disabled" class="form-control">
+  </td>
+</tr>
+            </tbody>
+           </table> 
+            
+             </div>
+             <div class="modal-footer">
+                <button type="button" class="btn btn-default btn-primary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--modal for blueprint edit read-->
 
 
 <!--modal for help-->

@@ -176,7 +176,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                             res.send(500, errorResponses.db.error);
                             return;
                         }
-                        //logger.debug("---------");
+                        //logger.debug("---100 Last histories------",JSON.stringify(histories));
                         var historyResult = [];
                         var jobResult = [];
                         if (histories.length > 0) {
@@ -189,14 +189,14 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                     logger.error('jenkins jobs fetch error', err);
 
                                 }
-                                logger.debug("All Job info: ", JSON.stringify(job));
+                                //logger.debug("All Job info: ", JSON.stringify(job));
                                 if (job) {
                                     for (var j = 0; j < job.builds.length; j++) {
                                         var actualTimeStamp = new Date(job.builds[j].timestamp).setMilliseconds(job.builds[j].duration);
                                         var jobDetails = {
                                             "result": job.builds[j].result,
                                             "timestampEnded": actualTimeStamp,
-                                            "timestampStarted" : job.builds[j].timestamp
+                                            "timestampStarted": job.builds[j].timestamp
                                         };
                                         jobResult.push(job.builds[j].number);
                                         jobInfo.push(jobDetails);
@@ -268,7 +268,6 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                 }
                                             }
                                         })(x);
-
                                     }
                                 } else {
                                     task.getHistory(function(err, tHistories) {
@@ -291,7 +290,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                     logger.error('jenkins jobs fetch error', err);
 
                                 }
-                                logger.debug("All Job info: ", JSON.stringify(job));
+                                //logger.debug("All Job info: ", JSON.stringify(job));
                                 if (job) {
                                     for (var j = 0; j < job.builds.length; j++) {
                                         var actualTimeStamp = new Date(job.builds[j].timestamp).setMilliseconds(job.builds[j].duration);

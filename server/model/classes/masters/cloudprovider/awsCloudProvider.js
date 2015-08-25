@@ -72,9 +72,7 @@ awsProviderSchema.statics.createNew = function(providerData, callback) {
 
 awsProviderSchema.statics.getAWSProviders = function(callback) {
     logger.debug("Enter getAWSProviders");
-    this.find({
-        "id" : 9
-    }, function(err, providers) {
+    this.find(function(err, providers) {
         if (err) {
             logger.error(err);
             callback(err, null);

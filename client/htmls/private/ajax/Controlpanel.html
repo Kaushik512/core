@@ -1661,7 +1661,7 @@ $.get('../instances/' + urlParams.id, function(data) {
                 } else {
                     menuAppTaskLI = "<li style='font-size:10px;color:#3276b1'>No AppLinks Available</li>";
                 }
-                stringmenuAppTask = "<div class='menuAppTask' style='display: none;'><span class='menuAppLinkSpan'>App Links</span><ul class='paddingleft32'>" + menuAppTaskLI + "</ul></div>";
+                stringmenuAppTask = "<div class='menuAppTask' style='display: none;'><span class='menuAppLinkSpan'>AppLinks</span><ul class='paddingleft32'>" + menuAppTaskLI + "</ul></div>";
                 $domainRolesCaption.append(stringmenuAppTask);
                 var $menu = $domainRolesCaption.find('.menuAppTask');
                 if ($menu.is(':visible')) {
@@ -3496,6 +3496,7 @@ $(document).ready(function() {
                      name: reqBody.name,
                      url: reqBody.url
                  })
+                 //alert(url);
 
                  var $a = $('.app-url[data-appUrlId="' + appUrlId + '"]');
                  $a.html(reqBody.name);

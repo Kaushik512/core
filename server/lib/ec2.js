@@ -367,6 +367,18 @@ var EC2 = function(awsSettings) {
         });
     };
 
+    this.listInstances = function(callback){
+        ec.describeInstances(function(err,instances){
+            if(err){
+                logger.debug("Error occurred for listing aws instances: ",err);
+                callback(err,null);
+            }else{
+                logger.debug("Able to list all aws instances: ");
+                callback(null,instances);
+            }
+        });
+    };
+
 }
 
 module.exports = EC2;

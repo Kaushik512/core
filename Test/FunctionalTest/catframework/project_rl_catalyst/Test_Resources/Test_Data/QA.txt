@@ -108,6 +108,12 @@ ${CONFIG MANAGEMENT URL}             https://api.opscode.com/organizations/catte
 
 
 
+${CLOUD TEMPLATETYPE}        CloudFormation
+${CLOUD TEMP NAME}           RLCloud
+${CFT BLUPRNT NAME}          Rel_CloudBP
+${NODE USERNAME}             ubuntu
+${STACK NAME}                RLStack
+${STACK INSTANCE NAME}       Node
 
 
 ${USERPEMFILE}              ${ROOTPATH}//Chef//mycatqa.pem
@@ -115,6 +121,7 @@ ${VALIDATORPEMFILE}      ${ROOTPATH}//Chef//cattest-validator.pem
 ${KNIFERBFILE}                ${ROOTPATH}//Chef//knife.rb
 ${CATALYSTPEM}                ${ROOTPATH}//Chef//catalyst.pem
 ${CAT_INSTANCES}              ${ROOTPATH}//Chef//cat_instances.pem
+${CATALYST STACKFILE}         ${ROOTPATH}//Chef//CatalystStack.template
 
 ${CENTOSIMG}                  ${ROOTPATH}//Images//centos.jpg
 ${UBUNTUIMG}                  ${ROOTPATH}//Images//ubuntuu.jpg
@@ -174,7 +181,7 @@ ${MAT RUNLIST1}            recipe[a],recipe[cron]
 ${MAT OS1}                 ubuntu
 ${UBUNTU MEM}              1016256kB
 ${UBUNTU REC}              recipe[apt],recipe[apt]
-${TEMPLATE TYPENAME}       SoftwareStack                 #CatAutomatn          
+${TEMPLATE TYPENAME}       SoftwareStack                #CatAutomatn          
 ${random}                  adarsh
 ${ADD}                     apache2              #tomcat-all
 ${ACTBOOT1}                 Pending
@@ -208,6 +215,7 @@ ${EDIT_UBUNTU_INSTANCE_NAME}     Instance_Ubuntu
 ${DESIGNER_NAME}            Designer01
 ${DESIGNER_PASWD}           Designer01
 ${CONSUMER_NAME}            Consumer01
+
 ${CONSUMER_PASWD}           Consumer01
 ${CENTOS NAME}              Instance_Centos
 ${UBUNTU NAME}              Instance_Ubuntu

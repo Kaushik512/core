@@ -3,12 +3,13 @@
 	height:100%!important;
 }
 </style>
+
 <script type="text/javascript">
 	$.ajax({
      method: "GET",
      url: "/globalsettings",   
      success: function(data, success) {
-      $("#content").append('<iframe src='+ data[0].awsNotificationUrl+' style="width: 100% ! important; height: 97%! important; border: medium none;"></iframe>');
+      $("#content").append('<iframe src='+ data[0].zabbixUrl+' style="width: 100% ! important; height: 93%! important; border: medium none;"></iframe>');
     },
     error: function(jqxhr) {
       removeLoader();
