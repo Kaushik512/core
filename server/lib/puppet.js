@@ -98,7 +98,7 @@ var Puppet = function(settings) {
     this.bootstrap = function(node, callback) {
         // getting hostname of puppet master
         var hostNamePuppetMaster = '';
-        runSSHCmdOnMaster('hostname', function(err, retCode) {
+        runSSHCmdOnMaster('hostname -f', function(err, retCode) {
             if (err) {
                 callback(err, null);
                 return;
@@ -128,7 +128,7 @@ var Puppet = function(settings) {
                 sshOptions.password = node.password;
             }
 
-            runSSHCmdOnAgent(sshOptions, 'hostname', function(err, retCode) {
+            runSSHCmdOnAgent(sshOptions, 'hostname -f', function(err, retCode) {
                 if (err) {
                     callback(err, null);
                     return;
