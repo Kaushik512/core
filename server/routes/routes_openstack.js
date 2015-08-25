@@ -173,4 +173,24 @@ module.exports.setRoutes = function(app, verificationFunc) {
          
     });
 
+    app.get('/openstack/:providerid/tenants/:tenantId/servers/:serverId',function(req,res){
+     
+      getopenstackprovider(req.params.providerid,function(err,openstackconfig){
+
+      	var openstack = new Openstack(openstackconfig);
+        console.log("serverId:",req.params.serverId);
+
+        openstack.getServerById(req.params.tenantId, req.params.serverId, function(err,data){
+      		 if(err){
+      		 	logger.error('openstack createServer error', err);
+	            res.send(500,err);
+	            return;
+      		 }
+
+      		 res.send(data);
+      	});
+
+      });
+    });
+
 }
