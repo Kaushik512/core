@@ -13,7 +13,7 @@ Resource           ${CATALYST ACTION}/Gallery_setup_TempService_Steps.txt
 Catalyst Import CentOS Node By IP
     [Tags]       Sanity       Workzone
 #    Catalyst Login
-    Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
     Catalyst Import an CentOS Instance By IP
     #Catalyst Verfication of Duplicate Node
     Catalyst Logout
@@ -24,7 +24,7 @@ Catalyst Import CentOS Node By IP
 Catalyst Chef Client Run-SSH,Verification on the Imported Node
     [Tags]       Sanity       Workzone
 #    Catalyst Login
-    Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
     Catalyst Import By IP Chef Client run,SSH,Stop,Start
     #Catalyst Verfication of IP,Status,Chef,SSH,MoreInfo and frm Ctrlpanel
     Catalyst Logout
@@ -35,7 +35,7 @@ Catalyst Chef Client Run-SSH,Verification on the Imported Node
 Catalyst Import Ubuntu Node By IP
     [Tags]       Sanity       Workzone
 #    Catalyst Login
-    Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
     Catalyst Import an Ubuntu Instance By IP
     #Catalyst Verfication Ubuntu Duplicate Node
     Catalyst Logout
@@ -46,7 +46,7 @@ Catalyst Import Ubuntu Node By IP
 Catalyst Chef Client Run-SSH,Verification on the Ubuntu Imported Node
     [Tags]       Sanity       Workzone
 #    Catalyst Login
-    Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
     Catalyst Import By IP Chef Client run,SSH,Stop,Start on Ubuntu Instance
     #Catalyst Verfication of IP,Status,Chef,SSH,MoreInfo on UbuntuIns frm Ctrlpanel
     Catalyst Logout

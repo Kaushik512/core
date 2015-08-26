@@ -10,7 +10,7 @@ Resource           catalyst.txt
 
 *** Variables ***
 ${BROWSER TYPE}                   firefox                                                                     #internetexplorer               #phantomjs
-${ENVIRONMENT SERVER}              http://d4d.relevancelab.com:3001/public/login.html
+${ENVIRONMENT SERVER}              http://54.153.94.33:3001/public/login.html
 
 
 
@@ -190,8 +190,8 @@ ${CONSUMER_PASWD}           Consumer01
 ${PROVIDER NAME}             smoke-Provider
 ${PROVDR_Name}               AWSProvider
 ${PROVIDERR}                 AWS
-${SECRET KEY}                  Q5yt9NUclWbRY+z6SYtohCaZ9Z91KaCWaBKuHTJF
-${ACCESS KEY}                  AKIAJEGOXXCF6QC6LPHA
+${SECRET KEY}                  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
+${ACCESS KEY}                  AKIAI3ETOOEFHJ62G2NQ
 ${IMAGE NAME1}                 smoke_CentOS
 ${IMAGE NAME2}                 smoke_ubuntu
 ${IMAGE NAME3}                 smoke_Win08
@@ -199,8 +199,8 @@ ${IMAGE NAME4}                 smoke_Win2012
 ${OPERATING SYSTEM1}           Cent OS
 ${OPERATING SYSTEM2}           Ubuntu
 ${OPERATING SYSTEM3}           Windows
-${IMAGE ID1}                   ami-696e9c2d
-${IMAGE ID2}                   ami-df6a8b9b
+${IMAGE ID1}                   ami-b6bdde86
+${IMAGE ID2}                   ami-3d50120d
 ${IMAGE ID3}                   ami-21732111
 ${USER}                        superadmin
 ${COOKBOOK NAME1}              apt
