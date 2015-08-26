@@ -121,7 +121,7 @@ ${VALIDATORPEMFILE}      ${ROOTPATH}//Chef//cattest-validator.pem
 ${KNIFERBFILE}                ${ROOTPATH}//Chef//knife.rb
 ${CATALYSTPEM}                ${ROOTPATH}//Chef//catalyst.pem
 ${CAT_INSTANCES}              ${ROOTPATH}//Chef//cat_instances.pem
-${CATALYST STACKFILE}         ${ROOTPATH}//Chef//CatalystStack.template
+${CATALYST STACKFILE}         ${ROOTPATH}\\Chef\\CatalystStack.template
 
 ${CENTOSIMG}                  ${ROOTPATH}//Images//centos.jpg
 ${UBUNTUIMG}                  ${ROOTPATH}//Images//ubuntuu.jpg
@@ -248,6 +248,9 @@ ${PROVIDER NAME}          AWS RELPRO
 ${PROVIDERR}                 AWS
 ${SECRET KEY}                  qm/j8lT0/IPc1P5ud8yujUSa61+QjqeyZ/jZkIff
 ${ACCESS KEY}                  AKIAI3ETOOEFHJ62G2NQ
+
+
+
 ${IMAGE NAME1}                 Cent OSIm
 ${IMAGE NAME2}                 UbuntuIm
 ${IMAGE NAME3}                 Windows
@@ -310,6 +313,12 @@ ${UI PERFORMANCE}                http://www.google.com
 
 
 
+#Docker
+${DOCKER NAME}           RelDocker
+${DOCKER REGISTRY}       relevancelab
+${DOCKER USERID}         relevancelab
+${DOCKER EMAILID}        puneet@relevancelab.com
+${DOCKER PASSWD}         RL@123
 
 
 #Organization Name

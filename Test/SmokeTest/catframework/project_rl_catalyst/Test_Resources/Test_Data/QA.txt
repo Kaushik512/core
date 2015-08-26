@@ -190,8 +190,8 @@ ${CONSUMER_PASWD}           Consumer01
 ${PROVIDER NAME}             smoke-Provider
 ${PROVDR_Name}               AWSProvider
 ${PROVIDERR}                 AWS
-${SECRET KEY}                  qm/j8lT0/IPc1P5ud8yujUSa61+QjqeyZ/jZkIff
-${ACCESS KEY}                  AKIAI3ETOOEFHJ62G2NQ
+${SECRET KEY}                  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
+${ACCESS KEY}                  AKIAJEGOXXCF6QC6LPHA
 ${IMAGE NAME1}                 smoke_CentOS
 ${IMAGE NAME2}                 smoke_ubuntu
 ${IMAGE NAME3}                 smoke_Win08
