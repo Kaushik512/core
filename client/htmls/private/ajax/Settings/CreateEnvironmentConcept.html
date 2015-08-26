@@ -736,8 +736,15 @@ $(document).ready(function() {
                 alert('Either Chef or Puppet Environment Required.');
                 return false;
             }
+            if(chefEnv != puppetEnv){
+                alert('Both Chef and Puppet should have same Environment.');
+                return false;
+            }
             if(!puppetEnv){
                 $('#puppetservername').val('');
+            }
+            if(!chefEnv){
+                $('#configname').val('');
             }
             if (!saveform('3')) return false;
         } else {

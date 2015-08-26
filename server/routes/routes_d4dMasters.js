@@ -2526,6 +2526,11 @@ module.exports.setRoutes = function(app, sessionVerification) {
                         }
                         logger.debug("encryptText:>>>>>>>>>>>>> ", bodyJson["puppetpassword"]);
                     }
+                    if (req.params.id === "3") {
+                        if(!bodyJson["environmentname"]){
+                            bodyJson["environmentname"] = bodyJson["puppetenvironmentname"];
+                        }
+                    }
                     configmgmtDao.getDBModelFromID(req.params.id, function(err, dbtype) {
                         if (err) {
                             logger.error("Hit and error:", err);

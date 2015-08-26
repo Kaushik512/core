@@ -492,6 +492,9 @@ function CreateTableFromJson(formID, idFieldName, createFileName) {
             if(!item.puppetservername || item.puppetservername === "null" ){
                 item.puppetservername = "No Puppet Server";
             }
+            if(!item.configname || item.configname === "null" ){
+                item.configname = "No Chef Server";
+            }
         }
         
         $.each(item, function(k, v) { //columns
