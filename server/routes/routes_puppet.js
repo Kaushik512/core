@@ -1,15 +1,16 @@
 var Puppet = require('_pr/lib/puppet.js');
 
+
 module.exports.setRoutes = function(app, verificationFunc) {
-    app.get('/puppet/environments', function(req, res) {
+    app.get('/puppet/:puppetServerId/environments', function(req, res) {
+        
+
         var puppet = new Puppet({
             host: '52.27.204.155',
             port: 8140,
             username: 'ubuntu',
-            pemFileLocation: '/WORK/D4D/server/config/cat_instances.pem',
-            ca: '/WORK/nodetest/ssl/ca/ca_crt.pem',
-            cert: '/WORK/nodetest/ssl/certs/ip-172-31-19-103.us-west-2.compute.internal.pem',
-            key: '/WORK/nodetest/ssl/private_keys/ip-172-31-19-103.us-west-2.compute.internal.pem'
+            pemFileLocation: '/home/gobinda/Gobinda/Work/AllPemFiles/cat_instances.pem'
+            
         });
 
         puppet.getEnvironments(function(err, data) {
@@ -26,10 +27,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
             host: '52.27.204.155',
             port: 8140,
             username: 'ubuntu',
-            pemFileLocation: '/WORK/D4D/server/config/cat_instances.pem',
-            ca: '/WORK/nodetest/ssl/ca/ca_crt.pem',
-            cert: '/WORK/nodetest/ssl/certs/ip-172-31-19-103.us-west-2.compute.internal.pem',
-            key: '/WORK/nodetest/ssl/private_keys/ip-172-31-19-103.us-west-2.compute.internal.pem'
+            pemFileLocation: '/home/gobinda/Gobinda/Work/AllPemFiles/cat_instances.pem'
         });
 
         puppet.createEnvironment(req.body.envName, function(err, data) {
