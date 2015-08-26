@@ -17,32 +17,17 @@ module.exports.setRoutes = function(app, verificationFunc) {
                     message: "puppet server not found"
                 })
             }
-            // Top: {
-            //     "_id": "55dda6f57a26104016f74665",
-            //     "puppetservername": "puppet aws",
-            //     "username": "ubuntu",
-            //     "userpemfile_filename": "cat_instances.pem",
-            //     "rowid": "842ef96d-87fa-4c8b-9193-5399bdd16cb2",
-            //     "id": "25",
-            //     "folderpath": "/46d1da9a-d927-41dc-8e9e-7e926d927537/ubuntu/.puppet/",
-            //     "configType": "puppet",
-            //     "__v": 0,
-            //     "active": true,
-            //     "orgname_rowid": ["46d1da9a-d927-41dc-8e9e-7e926d927537"],
-            //     "orgname": ["Phoenix"]
-            // }
+
             var puppetSettings = {
                 host: puppetData.hostname,
                 username: puppetData.username,
             };
-
-
             if (puppetData.userpemfile_filename) {
                 puppetSettings.pemFileLocation = appConfig.puppet.puppetReposLocation + puppetData.folderpath + puppetData.userpemfile_filename
             } else {
-                puppetSettings.pemFileLocation = puppetData.user_password;
+                puppetSettings.password = puppetData.puppetpassword;
             }
-            console.log( 'puppet pemfile ==> '+puppetSettings.pemFileLocation);
+            console.log('puppet pemfile ==> ' + puppetSettings.pemFileLocation);
             var puppet = new Puppet(puppetSettings);
             puppet.getEnvironments(function(err, data) {
                 if (err) {
@@ -53,27 +38,43 @@ module.exports.setRoutes = function(app, verificationFunc) {
             });
         });
 
-
-
     });
 
     app.post('/puppet/environments', function(req, res) {
-        var puppet = new Puppet({
-            host: '52.27.204.155',
-            port: 8140,
-            username: 'ubuntu',
-            pemFileLocation: '/home/gobinda/Gobinda/Work/AllPemFiles/cat_instances.pem'
-        });
-
-        puppet.createEnvironment(req.body.envName, function(err, data) {
+        masterUtil.getCongifMgmtsById(req.params.puppetServerId, function(err, puppetData) {
             if (err) {
-                res.send(500, err);
+                res.send(500, errorResponses.db.error);
                 return;
             }
-            res.send(200, data);
-        });
+            console.log('puppet db ==> ', puppetData);
+            if (!puppetData || puppetData.configType !== 'puppet') {
+                res.send(404, {
+                    message: "puppet server not found"
+                })
+            }
 
+            var puppetSettings = {
+                host: puppetData.hostname,
+                username: puppetData.username,
+            };
+            if (puppetData.userpemfile_filename) {
+                puppetSettings.pemFileLocation = appConfig.puppet.puppetReposLocation + puppetData.folderpath + puppetData.userpemfile_filename
+            } else {
+                puppetSettings.password = puppetData.puppetpassword;
+            }
+            console.log('puppet pemfile ==> ' + puppetSettings.pemFileLocation);
+            var puppet = new Puppet(puppetSettings);
+            puppet.createEnvironment(req.body.envName, function(err, data) {
+                if (err) {
+                    res.send(500, err);
+                    return;
+                }
+                res.send(200, data);
+            });
+        });
     });
+
+
     app.get('/puppet/nodes', function(req, res) {
         var puppet = new Puppet({
             host: '52.27.204.155',
