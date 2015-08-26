@@ -20,6 +20,7 @@ Catalyst Import CentOS Node By IP
     [Teardown]     Close Browser
     
 
+
 Catalyst Chef Client Run-SSH,Verification on the Imported Node
     [Tags]       Sanity       Workzone
 #    Catalyst Login
@@ -28,6 +29,7 @@ Catalyst Chef Client Run-SSH,Verification on the Imported Node
     #Catalyst Verfication of IP,Status,Chef,SSH,MoreInfo and frm Ctrlpanel
     Catalyst Logout
     [Teardown]     Close Browser
+
 
 
 Catalyst Import Ubuntu Node By IP
@@ -52,35 +54,14 @@ Catalyst Chef Client Run-SSH,Verification on the Ubuntu Imported Node
 
 
 
-Catalyst new Jenkins Configuration setup
-    [Tags]       Sanity        Settings
-#    Catalyst Login
-    Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
-    Catalyst Create New Jenkins Configuration Setup          
-    Catalyst Logout                      
-    [Teardown]     Close Browser
 
 
 
-Catalyst Jenkins Task Creation and Execution
-    [Tags]       Sanity               Workzone
-#    Catalyst Login
-    Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
-    Catalyst Creation of Jenkins Task in Environment
-    Catalyst Execution of the Jenkins Task in Envrnment
-    Catalyst checks the Jenkins task history
-    Catalyst Logout                      
-    [Teardown]     Close Browser
 
 
-Catalyst Chef task creation and Execution
-    [Tags]       Sanity               Chef
-    Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
-    Catalyst creation of Chef Task
-    Catalyst execution of Chef Task
-    Catalyst checks the Chef task history
-    Catalyst Logout                      
-    [Teardown]     Close Browser
+
+
+
 
 
 #-Catalyst Execution of Tasks by Creating the App
@@ -122,13 +103,6 @@ Catalyst Chef task creation and Execution
 #    Catalyst Logout
 #    [Teardown]     Close Browser  
     
-
-
-
-
-
-
-
 
 #Catalyst Edit the Ubuntu Instance Name of Inported Instance
 #    [Tags]       Sanity       Workzone
