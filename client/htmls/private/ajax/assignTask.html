@@ -209,23 +209,24 @@
                                                       </table>
                                                    </div>
                                                    <!--div for paremeters-->
-                                                   <div class="col-lg-12" style="margin-top:10px;">
-                                                      <input style="margin-left:5px;" id="addParameters" type="checkbox" name="addParams" value="This build is parameterized"/>&nbsp;&nbsp;This build is parameterized
-                                                   </div>
-                                                   <!-- </div> -->
+                                                   <div class="col-lg-12" style="margin-top:20px;">
+                                                      <h4 style="margin-top:12px;margin-left:8px;">This build is parameterized<!-- <input style="margin-left:5px;" id="addParameters" type="checkbox" name="addParams" value="This build is parameterized"/> -->&nbsp;&nbsp;<input type="radio" id="addParameters" name="paramCheck" value="true" /> Yes
+                                                      <input style="margin-left:15px;" type="radio" id="addParametersFalse" name="paramCheck" value="false" checked="checked" /> No
+                                                   </h4>
+                                                   </div> 
                                                    <!--div for paremeter checkbox ends here-->
                                                    <!--dropdown for paremeters-->
-                                                   <div class="col-lg-12 col-md-12">
-                                                      <div class="col-lg-11 col-md-11 jobTable addParameters hidden" style="margin-top:1px">
-                                                         <a href="#parameterModal" id="imageLink" data-backdrop="false" data-toggle="modal" style="cursor:pointer;"> <img src="img/add.png" style="float:right;" class="addListParam" rel="tooltip" data-placement="top" title="Add Parameters" /></a>
+                                                   <div class="col-lg-12 col-md-12" style="margin-bottom:16px;">
+                                                      <div class="col-lg-11 col-md-11 addParameters hidden" style="margin-top:1px">
+                                                         <a href="#parameterModal" id="imageLinkParam" data-backdrop="false" type="reset" data-toggle="modal" style="cursor:pointer;"> <img src="img/add.png" style="float:right;" class="addListParam" rel="tooltip" data-placement="top" title="Add Parameters" /></a>
                                                          <div style="height:auto;overflow-y:auto;" id="dbNameTable_wrapper" class="dataTables_wrapper no-footer">
                                                             <table id="tableParameters" class="table table-striped table-bordered table-hover dataTable no-footer" cellpadding="5px" width="100%" style="text-align:center";>
                                                                <thead>
                                                                   <tr class="rowCustomStyle">
                                                                      <th style="text-align:center">Type</th>
                                                                      <th style="text-align:center">Name</th>
-                                                                     <th style="text-align:center">Default Value</th>
-                                                                     <th style="text-align:center">Description</th>
+                                                                     <th style="text-align:center">Value</th>
+                                                                     <th style="text-align:center;">Description</th>
                                                                      <th style="text-align:center">Action</th>
                                                                   </tr>
                                                                </thead>
@@ -234,7 +235,11 @@
                                                             </table>
                                                          </div>
                                                       </div>
+                                                      <div class="col-lg-1 col-md-1 addParameters hidden">
+                                                         <img style="width:16px;height:16px;margin-top:8px;" data-toggle="popover" tabindex="50" data-placement="left" data-content="User can define Jenkins Parameters for this Build" src="img/help.png"/>
+                                                      </div>
                                                    </div>
+                                                   
                                                    
                                                 </td>
                                              </tr>
@@ -327,7 +332,7 @@
             <!--dropdown for selecting the parameter type-->
          <label style="margin-left:10px;">Select Paremeter:</label>
          <select id="parametersSelect" class="addParameters" style="width:40%">
-         <option value="">Add Parameter</option>
+         <option value="">Choose Parameter</option>
          <option value="Boolean">Boolean Parameter</option>
          <option value="String">String Parameter</option>
          </select>
@@ -345,15 +350,16 @@
                      </thead>
                      <tbody>
                         <tr>
-                           <td class="booleanParam">Name:</td>
-                           <td><input id="booleanName" type="text" class="form-control" name="booleanName"></td>
+                           <td class="booleanParam"><label for="booleanName">Name:<span style="color:red">*</span></label></td>
+                           <td><input id="booleanName" maxlength="7" type="text" class="form-control" name="booleanName"></td>
                         </tr>
                         <tr>
-                           <td class="booleanParam">Default Value:</td>
-                           <td><input id="booleanValue" style="margin-top:10px;" value="false" type="checkbox" name="booleanValue"></td>
+                           <td class="booleanParam">Default Value:<span style="color:red">*</span></td>
+                           <td>&nbsp;&nbsp;<input type="radio" id="booleanValueTrue" name="paramCheck" value="true" /> True&nbsp;
+                           <input style="margin-left:15px;" type="radio" id="booleanValueFalse" name="paramCheck" value="false" checked="checked" /> False</td>
                         </tr>
                         <tr>
-                           <td class="booleanParam">Description:</td>
+                           <td class="booleanParam"><label for="booleanDescription">Description:<span style="color:red">*</span></label></td>
                            <td><input id="booleanDescription" type="text" class="form-control" name="booleanDescription"></td>
                         </tr>
                      </tbody>
@@ -371,15 +377,15 @@
                      </thead>
                      <tbody>
                         <tr>
-                           <td class="stringParam">Name:</td>
-                           <td><input id="stringName" type="text" class="form-control" name="stringName"></td>
+                           <td class="stringParam"><label for="stringName">Name:<span style="color:red">*</span></label></td>
+                           <td><input id="stringName" maxlength="7" type="text" class="form-control" name="stringName"></td>
                         </tr>
                         <tr>
-                           <td class="stringParam">Default Value:</td>
+                           <td class="stringParam"><label for="stringValue">Default Value:<span style="color:red">*</span></label></td>
                            <td><input id="stringValue" type="text" class="form-control" name="stringValue"></td>
                         </tr>
                         <tr>
-                           <td class="stringParam">Description:</td>
+                           <td class="stringParam"><label for="stringDescription">Description:<span style="color:red">*</span></label></td>
                            <td><input id="stringDescription" type="text" class="form-control" name="stringDescription"></td>
                         </tr>
                      </tbody>
@@ -740,14 +746,21 @@ $(document).ready(function() {
     });
 
     var $addParameters = $('#addParameters');
+    var $addParametersFalse = $('#addParametersFalse');
+
+    $addParametersFalse.change(function(){
+      if ($(this).is(":checked")){
+         $('.addParameters').addClass('hidden');
+      }
+    });
 
     $addParameters.change(function() {
         if ($(this).is(":checked")) {
             $('.addParameters').removeClass('hidden');
         } else {
             $('.addParameters').addClass('hidden');
-            $('#booleanTable').addClass('hidden');
-            $('#stringTable').addClass('hidden');
+         //   $('#booleanTable').addClass('hidden');
+           // $('#stringTable').addClass('hidden');
         }
 
     });
@@ -831,7 +844,7 @@ $(document).ready(function() {
                     for (var j = 0; j < taskData.taskConfig.parameterized.length; j++) {
                    //  alert(JSON.stringify(taskData.taskConfig.parameterized[j]));
                         //$('input:radio[class=test1][id=test2]').prop('checked', true);
-                        $("input[type='checkbox'][name='addParams'][id='addParameters']").prop('checked', true);
+                        $("input[type='radio'][name='paramCheck'][id='addParameters']").prop('checked', true);
                         $('.addParameters').removeClass('hidden');
                         //alert(JSON.stringify(taskData.taskConfig.parameterized[j]));
                         console.log("parapapa>>>>" + taskData.taskConfig.parameterized.length);
@@ -839,7 +852,7 @@ $(document).ready(function() {
                         
                     }
                 } else {
-                    $("input[type='checkbox'][name='addParams'][id='addParameters']").prop('checked', false);
+                    $("input[type='radio'][name='paramCheck'][id='addParametersFalse']").prop('checked', false);
                 }
 
             }
@@ -1111,6 +1124,9 @@ $(document).ready(function() {
             $('.btnSaveTask').attr('disabled','disabled');
         } else if (taskType === 'jenkins') {
             var $saveSpinner = $('#spinnerForSave');
+
+            var validatorForm = $("#parameterCreate").validate();
+            validatorForm.resetForm();
             
             var taskName = $('#jenkinsTaskName').val();
             if (!taskName) {
@@ -1263,6 +1279,7 @@ $(document).ready(function() {
                         });
 
                     });
+
                     $saveSpinner.addClass('hidden');
                     $('.btnSaveTask').removeAttr('disabled');
                 });
@@ -1335,8 +1352,8 @@ $(document).ready(function() {
                parameterizedObj.parameterName = "Boolean";
                parameterizedObj.name = $('#booleanName').val();
                parameterizedObj.defaultValue = false;
-               parameterizedObj.defaultValue = $('#booleanValue').val();
-               if ($('#booleanValue').is(":checked")) {
+               parameterizedObj.defaultValue = $('#booleanValueFalse').val();
+               if ($('#booleanValueTrue').is(":checked")) {
                    parameterizedObj.defaultValue = true;
                }
                parameterizedObj.description = $('#booleanDescription').val();
@@ -1355,7 +1372,7 @@ $(document).ready(function() {
                parameterizedObj.parameterName = "Boolean";
                parameterizedObj.name = param.name;
                parameterizedObj.defaultValue = param.defaultValue;
-               if ($('#booleanValue').is(":checked")) {
+               if ($('#booleanValueTrue').is(":checked")) {
                    parameterizedObj.defaultValue = true;
                }
                parameterizedObj.description = param.description;
@@ -1379,7 +1396,7 @@ $(document).ready(function() {
         var $tdType = $('<td class="paramType"></td>');
         var $tdName = $('<td class="paramName"></td>');
         var $tdValue = $('<td class="paramValue"></td>');
-        var $tdDescription = $('<td class="paramDescription"></td>');
+        var $tdDescription = $('<td title="'+ parameterizedObj.description +'" class="paramDescription"></td>');
         var $tdAction = $('<td/>');
         $tdAction.append('<div style="margin-right:17px;float:right;" class="btn-group"><button class="deleteRow" value="Remove" title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></div>');
 
@@ -1417,16 +1434,69 @@ $(document).ready(function() {
     });
 
     $('#parameterCreate').submit(function(e) {
+        var isValidate = $("#parameterCreate").valid();
         var parameterType = $('#parametersSelect').val();
-        if (parameterType === "boolean") {
-            createParametersTable(null,parameterType);
-            $('#parameterModal').modal('hide');
-            return false;
+        if (!isValidate) {
+            e.preventDefault();
         } else {
-            createParametersTable(null,parameterType);
-            $('#parameterModal').modal('hide');
-            return false;
+            e.preventDefault();
+            if (parameterType === "boolean") {
+                createParametersTable(null, parameterType);
+                $('#parameterModal').modal('hide');
+                return false;
+            } else {
+                createParametersTable(null, parameterType);
+                $('#parameterModal').modal('hide');
+                return false;
+            }
         }
+        $('a#imageLinkParam[type="reset"]').on('click', function() {
+            validator.resetForm();
+        });
+    });
+
+    var validator = $('#parameterCreate').validate({
+        errorPlacement: function(error, element) {
+            // Append error within linked label
+            $(element).closest("form").find("label[for='" + element.attr("id") + "']").append(error);
+
+        },
+        rules: {
+            booleanName: {
+                required: true
+            },
+            booleanDescription:{
+               required:true
+            },
+            stringName:{
+               required:true
+            },
+            stringValue:{
+               required:true
+            },
+            stringDescription:{
+               required:true
+            }
+        },
+        messages: {
+            booleanName: {
+                required: "&nbsp;(Required)"
+            },
+            booleanDescription: {
+                required: "&nbsp;(Required)"
+            },
+            stringName:{
+               required:"&nbsp;(Required)"
+            },
+            stringValue:{
+               required:"&nbsp;(Required)"
+            },
+            stringDescription:{
+               required:"&nbsp;(Required)"
+            }
+        },
+        onkeyup: false,
+        errorClass: "error",
     });
 
     function createRunlistTable(runlist) {
@@ -1443,7 +1513,7 @@ $(document).ready(function() {
             });
         }
         $tasksRunlist.clear().draw();
-        alert(runlist.length);
+        //alert(runlist.length);
         for (i = 0; i < runlist.length; i++) {
          //alert('check');
             if (runlist.length > 0) {

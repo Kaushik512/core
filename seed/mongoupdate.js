@@ -36,18 +36,20 @@ print("Current db will be backed up to " + dbname + "_" + Date.now());
 db.copyDatabase(dbname,dbname + "_" + Date.now());
 
 //Template Types
-db.d4dmastersnew.update({"id":"16","templatetypename":"AppFactory"},{$set :{templatetypename:"SoftwareStack"}});
-db.d4dmastersnew.update({"id":"16","templatetypename":"CloudFormation"},{$set :{templatetype:"cft"}});
-db.d4dmastersnew.update({"id":"16","templatetypename":"DevOpsRoles"},{$set :{templatetypename:"OSImage",templatetype:"ami"}});
+db.d4dmastersnew.update({"id":"16","templatetypename":"AppFactory"},{$set :{templatetypename:"SoftwareStack"}},false,true);
+db.d4dmastersnew.update({"id":"16","templatetypename":"CloudFormation"},{$set :{templatetype:"cft"}},false,true);
+db.d4dmastersnew.update({"id":"16","templatetypename":"DevOpsRoles"},{$set :{templatetypename:"OSImage",templatetype:"ami"}},false,true);
 
 //Templates
-db.d4dmastersnew.update({"id":"17","templatetypename":"AppFactory"},{$set :{templatetypename:"SoftwareStack"}});
-
+db.d4dmastersnew.update({"id":"17","templatetypename":"AppFactory"},{$set :{templatetypename:"SoftwareStack"}},false,true);
+db.d4dmastersnew.remove({"id":"16","templatetypename":"Desktop"});
+db.d4dmastersnew.remove({"id":"16","templatetypename":"Environment"});
 //blueprints
-db.blueprints.update({"templateType":"AppFactory"},{$set :{templatetypename:"chef"}});
-db.blueprints.update({"templateType":"Docker"},{$set :{templatetypename:"docker"}});
-db.blueprints.update({"templateType":"CloudFormation"},{$set :{templatetypename:"cft"}});
-db.blueprints.update({"templateType":"DevOpsRoles"},{$set :{templatetypename:"ami"}});
+db.blueprints.update({"templateType":"AppFactory"},{$set :{templatetypename:"chef","templateType":"chef"}},false,true);
+db.blueprints.update({"templateType":"Docker"},{$set :{templatetypename:"docker","templateType":"docker"}},false,true);
+db.blueprints.update({"templateType":"CloudFormation"},{$set :{templatetypename:"cft"}},false,true);
+db.blueprints.update({"templateType":"DevOpsRoles"},{$set :{templatetypename:"ami"}},false,true);
+
 print('Updation successful.');
 //End of Migrate to New BP Design - Update script
 
