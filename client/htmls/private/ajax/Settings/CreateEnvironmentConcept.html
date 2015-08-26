@@ -56,7 +56,7 @@
                                                         <label for="category">Puppet Environment:
                                                         </label>
                                                         <a href="javascript:void(0)" class="clearfix pull-right" onclick="if(preprocessPuppet()) {$('#myModalCreatePuppetEnv').modal('show')}">Add</a>
-                                                        <select id="puppetenvname" class="chooseOrganization width-100" datapath="masterjson.rows.row" style="vertical-align:central" cdata="catalyst">
+                                                        <select id="puppetenvironmentname" class="chooseOrganization width-100" datapath="masterjson.rows.row" style="vertical-align:central" cdata="catalyst">
                                                             <option value="">Select an Puppet Environment</option>
                                                         </select>
                                                     </div>
@@ -296,7 +296,7 @@ function loadPuppetEnvs() {
 
         if (envList) {
             var envlist = envList.toString().split(',');
-            var $envselect = $('#puppetenvname').addClass('envselect').addClass('form-control').addClass('width100').addClass('padding0');
+            var $envselect = $('#puppetenvironmentname').addClass('envselect').addClass('form-control').addClass('width100').addClass('padding0');
             for (var j = 0; j < envList.length; j++) {
                 if ($envselect.val() === envList[j]) {
                     //console.log($envselect);
@@ -730,6 +730,15 @@ $(document).ready(function() {
 
         if ($(this).valid) {
             /* alert('valid form submitted'); // for demo*/
+            var chefEnv = $('#environmentname option:selected').val();
+            var puppetEnv = $('#puppetenvironmentname option:selected').val();
+            if(!chefEnv && !puppetEnv){
+                alert('Either Chef or Puppet Environment Required.');
+                return false;
+            }
+            if(!puppetEnv){
+                $('#puppetservername').val('');
+            }
             if (!saveform('3')) return false;
         } else {
             alert('invalid valid form submitted'); // for demo

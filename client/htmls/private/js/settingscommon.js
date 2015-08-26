@@ -484,6 +484,16 @@ function CreateTableFromJson(formID, idFieldName, createFileName) {
         var editButton = null;
         var idFieldValue = null;
         var imageTD = null;
+        if(item.id === "3"){
+            if(!item.environmentname){
+            item.environmentname = item.puppetenvironmentname;
+            }
+            //alert(item.puppetservername);
+            if(!item.puppetservername || item.puppetservername === "null" ){
+                item.puppetservername = "No Puppet Server";
+            }
+        }
+        
         $.each(item, function(k, v) { //columns
             // var inputC = null;
             if(typeof v != "undefined"){

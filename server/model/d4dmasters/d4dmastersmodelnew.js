@@ -86,7 +86,7 @@ var d4dMastersEnvironments = new mongoose.Schema(
 	name: {type:String,trim:true},
 	orgname: {type:[String],required:false, trim:true},
 	orgname_rowid: {type:[String], trim:true},
-	environmentname: {type:String,required:true, trim:true},
+	environmentname: {type:String, trim:true},
 	puppetenvironmentname: {type:String},
 	description: {type:String, trim:true, validate:descValidator},
 	active: {type:Boolean, trim:true,default:true},
