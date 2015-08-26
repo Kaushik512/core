@@ -4806,7 +4806,9 @@
                                                                     });
 
                                                                     $('#importinstanceOS').select2();
+                                                                    $('#configManagementDropdown').select2();
                                                                     $('#pemFileDropdown').select2();
+
 
 
                                                                     if (localStorage.getItem("SelectedClass") == "Orchestration") {
