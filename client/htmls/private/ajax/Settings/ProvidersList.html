@@ -165,6 +165,39 @@
                                             for(var u = 0; u < data.length; u++){
                                                 d4ddata.push(data[u]);
                                             }
+                                            getProviderDatavmware();
+                                            
+                                           // getOrganizationList();
+                                            
+                                        },
+                                        error: function(jqxhr) {
+                                            removeLoader();
+                                            bootbox.alert(jqxhr.status);
+                                        },
+                                        failure: function(data) {
+                                            bootbox.alert(data);
+                                        }
+                                });
+
+                            }
+                            function getProviderDatavmware(){
+
+                                var reqBody={};
+                                reqBody.name=''
+                                reqBody.accessKey='';
+                                reqBody.secretKey='';
+                                reqBody.providerType='';
+                                reqBody.regions=[];
+                                //reqBody.instanceUserName='root';
+                                $.ajax({
+                                     method: "GET",
+                                     url: "/vmware/providers",data: reqBody,   
+                                     success: function(data, success) {
+                                            data= typeof data=="string" ?JSON.parse(data):data;
+                                            
+                                            for(var u = 0; u < data.length; u++){
+                                                d4ddata.push(data[u]);
+                                            }
                                             startup();
                                            // getOrganizationList();
                                             

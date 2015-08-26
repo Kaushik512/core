@@ -2121,7 +2121,7 @@
                                                                           return x.position - y.position; 
                                                                         }
 
-                                                                        //alert(orgId + "/" + projectId + "/" + envId + data.length);
+                                                                        alert(orgId + "/" + projectId + "/" + envId + '    ' + data.length);
                                                                         //displaying the organisation from tree view
                                                                         $.get('../organizations/getTreeForbtv',function(orgData){
                                                                         //Displaying the Template Types.
@@ -2241,12 +2241,15 @@
                                                                             })(j);
                                                                             }
                                                                             //To fix template id and template type
-                                                                            // alert('in' + data.length);
+                                                                             
+
                                                                             for (var i = 0; i < data.length; i++) {
                                                                                 //alert(JSON.stringify(data[i]));
                                                                                 //Find a panel-body with the template type class
-                                                                                var $currRolePanel = $('#accordion-2').find('.' + data[i].templateType);
+                                                                                alert(JSON.stringify(data[i]));
+                                                                                var $currRolePanel = $('#accordion-2').find('.' + data[i].templatetypename);
                                                                                   // alert(data[i].templateType);
+                                                                                   alert($currRolePanel.length);
                                                                                 if ($currRolePanel.length > 0) {
                                                                                     var $itemContainer = $('<div></div>').addClass("productdiv4");
 
@@ -2278,7 +2281,7 @@
                                                                                     var $selectVer = null;
                                                                                     var tagLabel = '';
                                                                                     //Docker Check
-
+                                                                                    
                                                                                     if (data[i].templateType == "Docker"  ||  data[i].templateType == "docker" ) {
 
                                                                                         console.log("docker", data[i].blueprintConfig);
@@ -4852,6 +4855,7 @@
                                                                             console.log('success---3---4');
                                                                             initializeInstanceArea(data.instances);
                                                                             initializeTaskArea(data.tasks);
+                                                                            console.log(JSON.stringify(data.blueprints));
                                                                             initializeBlueprintArea(data.blueprints);
                                                                             x = data.instances;
                                                                             initializeStackArea(data.stacks);

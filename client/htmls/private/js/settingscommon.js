@@ -2945,7 +2945,7 @@ function validateUserForm(formid) {
 }
 
 //run validation tests on inputs 
-function isFormValidOpenStack(formid) {
+function isFormValidOpenStack(formid,option) {
     var isValid = true;
 
     if ($('input[unique="true"], select[unique="true"]').length > 0) {
@@ -2961,9 +2961,9 @@ function isFormValidOpenStack(formid) {
     }
 
 
-    $('[cat-validation-openstack]').each(function(itm) {
+    $('[' + option + ']').each(function(itm) {
         var currCtrl = $(this);
-        var valiarr = $(this).attr('cat-validation-openstack').split(',');
+        var valiarr = $(this).attr(option).split(',');
         //$('#unique_loginname').text().indexOf('NOT') > 0
         if ($('#unique_' + currCtrl.attr('id')).text().indexOf('NOT') > 0) {
             //There is an error message displayed. Do not save form

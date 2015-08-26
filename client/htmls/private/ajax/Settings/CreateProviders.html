@@ -71,6 +71,7 @@ Type:<span style="color: Red;" class="control-label">&nbsp;*</span></label> <sel
 	<option value="">Select Provider</option>
 	<option value="AWS" selected>AWS</option>
   <option value="OPENSTACK">OpenStack</option>
+   <option value="VMWARE">VMware</option>
 </select></div>
 <div class="col-lg-6 col-md-6"><label for="">Name:<span
 	style="color: Red;" class="control-label">&nbsp;*</span></label> <!-- <i class="icon-append fa fa-building"></i> -->
@@ -99,6 +100,45 @@ Type:<span style="color: Red;" class="control-label">&nbsp;*</span></label> <sel
 	data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid"
 	data-val-initialvalue="" style="visibility: hidden;">Required</span></div>
 
+</div>
+<div class="row forvmware">
+  <div class="col-lg-6 col-md-6"><label for="">Username:<span
+  style="color: Red;" class="control-label">&nbsp;*</span></label> <!-- <i class="icon-append fa fa-building"></i> -->
+<input name="vmwareusername" id="vmwareusername" class="form-control" type="text"
+  cdata="catalyst" cat-validation-vmware="required"
+  placeholder="Enter Username"> <span
+  data-val-controltovalidate="orgname" id="MainContent_Req_orgname"
+  data-val="true"
+  data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid"
+  data-val-initialvalue="" style="visibility: hidden;">Required</span></div>
+  <div class="col-lg-6 col-md-6"><label for="">Password:<span
+  style="color: Red;" class="control-label">&nbsp;*</span></label> <!-- <i class="icon-append fa fa-building"></i> -->
+<input name="vmwarepassword" id="vmwarepassword" class="form-control" type="password"
+  cdata="catalyst" cat-validation-vmware="required"
+  placeholder="Enter the Password"> <span
+  data-val-controltovalidate="orgname" id="MainContent_Req_orgname"
+  data-val="true"
+  data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid"
+  data-val-initialvalue="" style="visibility: hidden;">Required</span></div>
+ <div class="col-lg-6 col-md-6"><label for="">Host:<span
+  style="color: Red;" class="control-label">&nbsp;*</span></label> <!-- <i class="icon-append fa fa-building"></i> -->
+<input name="vmwarehost" id="vmwarehost" class="form-control" type="text"
+  cdata="catalyst" cat-validation-vmware="required"
+  placeholder="Enter the Host"> <span
+  data-val-controltovalidate="orgname" id="MainContent_Req_orgname"
+  data-val="true"
+  data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid"
+  data-val-initialvalue="" style="visibility: hidden;">Required</span></div>
+<div class="col-lg-6 col-md-6"><label for="">DC:<span
+  style="color: Red;" class="control-label">&nbsp;*</span></label> <!-- <i class="icon-append fa fa-building"></i> -->
+<input name="vmwaredc" id="vmwaredc" class="form-control" type="text"
+  cdata="catalyst" cat-validation-vmware="required"
+  placeholder="Enter the Host"> <span
+  data-val-controltovalidate="orgname" id="MainContent_Req_orgname"
+  data-val="true"
+  data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid"
+  data-val-initialvalue="" style="visibility: hidden;">Required</span></div>
+   
 </div>
 <div class="row foropenstack"><!-- -->
 <div class="col-lg-6 col-md-6"><label for="">Username:<span
@@ -232,13 +272,24 @@ Type:<span style="color: Red;" class="control-label">&nbsp;*</span></label> <sel
       $('.foropenstack').show();
       $('.foraws').hide();
       $('.addNewRegion').hide();
+      $('.forvmware').hide();
       $('#myForm54').attr('action',$('#myForm54').attr('action').replace(/aws/g,'openstack'));
+      $('#myForm54').attr('action',$('#myForm54').attr('action').replace(/vmware/g,'openstack'));
+    }else if(pv == 'VMWARE'){
+      $('.foropenstack').hide();
+      $('.foraws').hide();
+      $('.forvmware').show();
+       $('.addNewRegion').hide();
+      $('#myForm54').attr('action',$('#myForm54').attr('action').replace(/aws/g,'vmware'));
+      $('#myForm54').attr('action',$('#myForm54').attr('action').replace(/openstack/g,'vmware'));
     }
       else{
         $('.foropenstack').hide();
         $('.foraws').show();
         $('.addNewRegion').show();
+        $('.forvmware').hide();
          $('#myForm54').attr('action',$('#myForm54').attr('action').replace(/openstack/g,'aws'));
+         $('#myForm54').attr('action',$('#myForm54').attr('action').replace(/vmware/g,'aws'));
       }
   }
 };
@@ -389,15 +440,22 @@ $(document).ready(function (){
  $('#myForm54').ajaxForm( {
      beforeSubmit: function(arr, $form, options) {
     if($('#providertype').val() == 'OPENSTACK'){
-
-      if(isFormValidOpenStack()){
+      alert('in');
+      if(isFormValidOpenStack(null,'cat-validation-openstack')){
         appendLoader();  
         return true;
       }
       else
         return false;
     }
-    else
+    else if($('#providertype').val() == 'VMWARE'){
+        if(isFormValidOpenStack(null,'cat-validation-vmware')){
+        appendLoader();  
+        return true;
+      }
+      else
+        return false;
+    }else
     {
       if(isFormValid()){
          appendLoader();  
