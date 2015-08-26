@@ -3670,4 +3670,20 @@ module.exports.setRoutes = function(app, sessionVerification) {
             return;
         });
     });
+
+    app.get('/d4dMasters/configmanagement/:anId', function(req, res) {
+        masterUtil.getCongifMgmtsById(req.params.anId, function(err, data) {
+            if (err) {
+                logger.debug("Failed to fetch all configmanagement", err);
+                res.send(500, "Failed to fetch all configmanagement");
+                return;
+            }
+            if(!data){
+                res.send(404,"No ConfigManagement Found.");
+                return;
+            }
+            res.send(data);
+            return;
+        });
+    });
 }

@@ -1527,7 +1527,7 @@ var MasterUtil = function() {
                             }
                         }
                     }
-                    callback(null,congifMgmtList);
+                    callback(null, congifMgmtList);
                 });
             });
         });
@@ -1535,7 +1535,7 @@ var MasterUtil = function() {
 
     // Return all Puppet Servers specific to User
     this.getAllCongifMgmtsForOrg = function(orgId, callback) {
-        logger.debug("Entered..",orgId);
+        logger.debug("Entered..", orgId);
         var congifMgmtList = [];
         d4dModelNew.d4dModelMastersPuppetServer.find({
             orgname_rowid: orgId
@@ -1564,7 +1564,40 @@ var MasterUtil = function() {
                             }
                         }
                     }
-                    callback(null,congifMgmtList);
+                    callback(null, congifMgmtList);
+                });
+            });
+        });
+    }
+
+    // Return all Puppet Servers specific to User
+    this.getCongifMgmtsById = function(anId, callback) {
+        logger.debug("Entered..", anId);
+        d4dModelNew.d4dModelMastersPuppetServer.find({
+            rowid: anId,
+            id: "25"
+        }, function(err, configMgmt) {
+            //logger.debug("Got puppet: ",JSON.stringify(configMgmt));
+            configmgmtDao.getRowids(function(err, rowidlist) {
+                if (configMgmt.length) {
+                    names = configmgmtDao.convertRowIDToValue(configMgmt.orgname_rowid, rowidlist);
+                    configMgmt.orgname = names;
+                    callback(null, configMgmt[0]);
+                    return;
+                }
+                d4dModelNew.d4dModelMastersConfigManagement.find({
+                    rowid: anId,
+                    id: "10"
+                }, function(err, chefmgmt) {
+                    //logger.debug("Got Chef: ",JSON.stringify(chefmgmt));
+
+                    if (chefmgmt.length) {
+                        names = configmgmtDao.convertRowIDToValue(chefmgmt.orgname_rowid, rowidlist);
+                        chefmgmt.orgname = names;
+                        callback(null, chefmgmt[0]);
+                    }else{
+                        callback(null,false);
+                    }
                 });
             });
         });
