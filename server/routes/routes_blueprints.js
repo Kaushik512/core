@@ -1292,15 +1292,86 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                     tenantId: providerdata.tenantid
                                                 };
                                                 var openstack = new Openstack(openstackconfig);
-                                                openstack.createServer(openstackconfig.tenantId,launchparams,function(err,data){
+                                                openstack.createServer(openstackconfig.tenantId,launchparams,function(err,instanceData){
                                                     if(err){
                                                          logger.error('openstack createServer error', err);
                                                          res.send(500,err);
                                                          return;
                                                     }
                                                     logger.debug('OS Launched');
-                                                    logger.debug(data);
-                                                    res.send(data);
+                                                    logger.debug(JSON.stringify(instanceData));
+                                                    //Creating instance in catalyst
+                                                    var instance = {
+                                                        name: launchparams.server.name,
+                                                        orgId: blueprint.orgId,
+                                                        bgId: blueprint.bgId,
+                                                        projectId: blueprint.projectId,
+                                                        envId: req.query.envId,
+                                                        providerId: blueprint.blueprintConfig.cloudProviderId,
+                                                        keyPairId: 'unknown',
+                                                        chefNodeName: instanceData.server.id,
+                                                        platformId: instanceData.server.id,
+                                                        appUrls: blueprint.appUrls,
+                                                        instanceIP: 'unknown',
+                                                        instanceState: 'unknown',
+                                                        bootStrapStatus: 'waiting',
+                                                        users: blueprint.users,
+                                                        hardware: {
+                                                            platform: 'unknown',
+                                                            platformVersion: 'unknown',
+                                                            architecture: 'unknown',
+                                                            memory: {
+                                                                total: 'unknown',
+                                                                free: 'unknown',
+                                                            },
+                                                            os: blueprint.blueprintConfig.instanceOS
+                                                        },
+                                                        credentials: {
+                                                            username: providerdata.username,
+                                                            password: instanceData.adminPass,
+                                                        },
+                                                        chef: {
+                                                            serverId: blueprint.blueprintConfig.infraManagerId,
+                                                            chefNodeName: instanceData.id
+                                                        },
+                                                        blueprintData: {
+                                                            blueprintId: blueprint._id,
+                                                            blueprintName: blueprint.name,
+                                                            templateId: blueprint.templateId,
+                                                            templateType: blueprint.templateType,
+                                                            iconPath: blueprint.iconpath
+                                                        }
+                                                        
+                                                    };
+
+                                                    logger.debug('Instance Data');
+                                                    logger.debug(instance);
+                                                    instancesDao.createInstance(instance, function(err, data) {
+                                                        if (err) {
+                                                            logger.error("Failed to create Instance", err);
+                                                            res.send(500);
+                                                            return;
+                                                        }
+                                                        instance.id = data._id;
+                                                        var timestampStarted = new Date().getTime();
+                                                        var actionLog = instancesDao.insertBootstrapActionLog(instance.id, instance.runlist, req.session.user.cn, timestampStarted);
+                                                        var logsReferenceIds = [instance.id, actionLog._id];
+                                                        logsDao.insertLog({
+                                                            referenceId: logsReferenceIds,
+                                                            err: false,
+                                                            log: "Waiting for instance ok state",
+                                                            timestamp: timestampStarted
+                                                        });
+                                                       
+                                                        res.send(200, {
+                                                            "id": newinstanceIDs,
+                                                            "message": "instance launch success"
+                                                        });
+                                                        
+                                                    });
+
+
+                                                    //res.send(data);
                                                 });
                                             }
                                             launchOpenstackBP(providerdata,blueprint);

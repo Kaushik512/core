@@ -213,7 +213,7 @@
                success: function (data) {
                 data= typeof data =="string" ? JSON.parse(data) :data;
                 console.log(data);
-                
+                len = data.length;
                 for(var i=0;i<len;i++){
                   str+='<option value="'+data[i]._id+'" username="'+data[i].userName+'" password="'+data[i].password+'" providerType="'+data[i].providerType+'">'+data[i].providerName+'</option>';
                 }

@@ -2001,6 +2001,7 @@ function getProviderListold() {
 
 
      function loadData() {
+        alert(providerselected);
          var providerVal = $('#providerId').val();
          if (providerVal) {
              $.get("/vmimages/providers/" + providerVal, function(data) {
@@ -2026,7 +2027,7 @@ function getProviderListold() {
          if(providerselected == 'openstack'){
               $('.foraws').hide();
               $('.foropenstack').show();
-              $('.foraws>select').removeClass('required'); //removing all aws required fields. when openstatck
+              $('.foraws select').removeClass('required'); //removing all aws required fields. when openstatck
               //load each of the dropdowns
               //flavour
               $.get('/openstack/' + providerVal + '/flavors',function(data){
@@ -2084,7 +2085,7 @@ function getProviderListold() {
          else{
             $('.foraws').show();
             $('.foropenstack').hide();
-            $('.foraws>select').addClass('required'); //to be tested.
+            $('.foraws select').addClass('required'); //to be tested.
          }
      }
 

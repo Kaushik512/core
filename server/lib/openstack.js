@@ -217,7 +217,7 @@ this.getServers = function(tenantId,callback){
 					   headers:{"X-Auth-Token": token,"Content-Type": "application/json"} 
 					};
 				client = new Client();
-				var networksUrl = 'http://'+options.host+':6081/v2.0/networks'; //9696
+				var networksUrl = 'http://'+options.host+':9696/v2.0/networks'; //9696
 				console.log('networksUrl: ' + networksUrl);
 				client.registerMethod("jsonMethod", networksUrl, "GET");
 				client.methods.jsonMethod(args,function(data,response){

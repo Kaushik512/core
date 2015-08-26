@@ -2121,7 +2121,7 @@
                                                                           return x.position - y.position; 
                                                                         }
 
-                                                                        alert(orgId + "/" + projectId + "/" + envId + '    ' + data.length);
+                                                                        //alert(data.length);
                                                                         //displaying the organisation from tree view
                                                                         $.get('../organizations/getTreeForbtv',function(orgData){
                                                                         //Displaying the Template Types.
@@ -2232,7 +2232,7 @@
                                                                                     '<i class="fa fa-fw fa-plus-circle txt-color-blue"></i> ' +
                                                                                     '<i class="fa fa-fw fa-minus-circle txt-color-red"></i>' + getDesignTypeName + '</a>' +
                                                                                     '</h4></div><div class="panel-collapse collapse" id="collapse' + i + '">' +
-                                                                                    '<div class="panel-body ' + getDesignType + '"></div>' +
+                                                                                    '<div class="panel-body ' + getDesignType + ' '  + getDesignTypeName + '"></div>' +
                                                                                     '</div>';
                                                                                 $('#accordion-2').append($containerTemp);
                                                                               // alert($containerTemp);
@@ -2242,14 +2242,15 @@
                                                                             }
                                                                             //To fix template id and template type
                                                                              
-
+                                                                            //alert(data.length);
                                                                             for (var i = 0; i < data.length; i++) {
                                                                                 //alert(JSON.stringify(data[i]));
                                                                                 //Find a panel-body with the template type class
-                                                                                alert(JSON.stringify(data[i]));
-                                                                                var $currRolePanel = $('#accordion-2').find('.' + data[i].templatetypename);
+                                                                               // alert(JSON.stringify(data[i]));
+                                                                               // alert(data[i].templateType);
+                                                                                var $currRolePanel = $('#accordion-2').find('.' + data[i].templateType);
                                                                                   // alert(data[i].templateType);
-                                                                                   alert($currRolePanel.length);
+                                                                                   //alert($currRolePanel.length);
                                                                                 if ($currRolePanel.length > 0) {
                                                                                     var $itemContainer = $('<div></div>').addClass("productdiv4");
 

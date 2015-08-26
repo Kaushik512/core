@@ -440,7 +440,7 @@ $(document).ready(function (){
  $('#myForm54').ajaxForm( {
      beforeSubmit: function(arr, $form, options) {
     if($('#providertype').val() == 'OPENSTACK'){
-      alert('in');
+      //alert('in');
       if(isFormValidOpenStack(null,'cat-validation-openstack')){
         appendLoader();  
         return true;
