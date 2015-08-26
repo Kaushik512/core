@@ -11,21 +11,21 @@ Resource           ${COMMON RESOURCES}/catalyst_grid_node.txt
 
 
 *** Test Cases ***
-Catalyst Create New Cloud Formation Template
+Catalyst Create New Cloud Formation Blueprint
     [Tags]       Sanity               Settings
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
-    Catalyst Create Template of Cloud Formation and Save
+    Catalyst Create Blueprint of Cloud Formation and Save
     Sleep    2s
     Catalyst Logout                      
     [Teardown]     Close Browser
 
 
-Catalyst Launch Cloud Formation Template
+Catalyst Launch Cloud Formation Blueprint
     [Tags]       Sanity               Workzone
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
-    Catalyst Launch of Cloud Formation Template
+    Catalyst Launch of Cloud Formation Blueprint
     Sleep    2s
     Catalyst Logout                      
     [Teardown]     Close Browser
@@ -35,7 +35,7 @@ Catalyst Launch Cloud Formation Template
 Catalyst CENT OS Create Blueprint and Save
     [Tags]       Sanity               Workzone
 #    Catalyst Login
-    Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
     Catalyst Choose Template and Save Setup
     #Catlayst Workzone and Status Setup
     Sleep    2s
@@ -47,7 +47,7 @@ Catalyst CENT OS Create Blueprint and Save
 Catalyst UBUNTU Create Blueprint and Save
     [Tags]       Sanity               Workzone
 #    Catalyst Login
-    Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
     Catalyst Choose Template and Save Setup for UBUNTU
     Sleep    2s
     #Catlayst Workzone and Status Setup for Ubuntu    
