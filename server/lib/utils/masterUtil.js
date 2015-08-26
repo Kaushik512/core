@@ -1532,6 +1532,43 @@ var MasterUtil = function() {
             });
         });
     }
+
+    // Return all Puppet Servers specific to User
+    this.getAllCongifMgmtsForOrg = function(orgId, callback) {
+        logger.debug("Entered..",orgId);
+        var congifMgmtList = [];
+        d4dModelNew.d4dModelMastersPuppetServer.find({
+            orgname_rowid: orgId
+        }, function(err, configMgmt) {
+            //logger.debug("Got puppet: ",JSON.stringify(configMgmt));
+            d4dModelNew.d4dModelMastersConfigManagement.find({
+                orgname_rowid: orgId
+            }, function(err, chefmgmt) {
+                //logger.debug("Got Chef: ",JSON.stringify(chefmgmt));
+                configmgmtDao.getRowids(function(err, rowidlist) {
+                    if (configMgmt) {
+                        for (var i = 0; i < configMgmt.length; i++) {
+                            if (configMgmt[i].id === '25') {
+                                names = configmgmtDao.convertRowIDToValue(configMgmt[i].orgname_rowid, rowidlist)
+                                configMgmt[i].orgname = names;
+                                congifMgmtList.push(configMgmt[i]);
+                            }
+                        }
+                    }
+                    if (chefmgmt) {
+                        for (var j = 0; j < chefmgmt.length; j++) {
+                            if (chefmgmt[j].id === '10') {
+                                names = configmgmtDao.convertRowIDToValue(chefmgmt[j].orgname_rowid, rowidlist)
+                                chefmgmt[j].orgname = names;
+                                congifMgmtList.push(chefmgmt[j]);
+                            }
+                        }
+                    }
+                    callback(null,congifMgmtList);
+                });
+            });
+        });
+    }
 }
 
 

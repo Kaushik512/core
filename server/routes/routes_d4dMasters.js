@@ -3655,4 +3655,16 @@ module.exports.setRoutes = function(app, sessionVerification) {
             });
         });
     });
+
+    app.get('/d4dMasters/organization/:orgId/configmanagement/list', function(req, res) {
+        masterUtil.getAllCongifMgmtsForOrg(req.params.orgId, function(err, list) {
+            if (err) {
+                logger.debug("Failed to fetch all configmanagement", err);
+                res.send(500, "Failed to fetch all configmanagement");
+                return;
+            }
+            res.send(list);
+            return;
+        });
+    });
 }

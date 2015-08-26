@@ -170,6 +170,7 @@ var d4dMastersConfigManagement = new mongoose.Schema(
 	template_filename: {type:String, trim:true},
 	folderpath: {type:String, trim:true},
 	active: {type:Boolean, trim:true,default:true},
+	configType: {type:String, trim:true},
 	rowid:{type:String,required:true, trim:true}},{collection:'d4dmastersnew'}
 );
 var d4dModelMastersConfigManagement = mongoose.model('d4dModelMastersConfigManagement',d4dMastersConfigManagement,'d4dmastersnew');
@@ -350,6 +351,7 @@ var d4dMastersPuppetServer = new mongoose.Schema(
 	userpemfile_filename: {type:String, trim:true},
 	folderpath: {type:String, trim:true},
 	active: {type:Boolean, trim:true,default:true},
+	configType: {type:String, trim:true},
 	rowid:{type:String,required:true, trim:true}},{collection:'d4dmastersnew'}
 );
 var d4dModelMastersPuppetServer = mongoose.model('d4dModelMastersPuppetServer',d4dMastersPuppetServer,'d4dmastersnew');
