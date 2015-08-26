@@ -290,9 +290,9 @@ $('#createenvinchefform').submit(function(e) {
     return false;
 });
 
-function loadPuppetEnvs() {
+function loadPuppetEnvs(puppetId) {
     $('#myForm1').find('button').attr('disabled', 'disabled');
-    $.get('/puppet/environments', function(envList) { //getting the list of env
+    $.get('/puppet/'+puppetId+'/environments', function(envList) { //getting the list of env
 
         if (envList) {
             var envlist = envList.toString().split(',');
@@ -343,7 +343,10 @@ function inLineReady() {
             loadChefEnvs(chefid);
     });
     $('#puppetservername').change(function() {
-            loadPuppetEnvs();
+         var puppetId = $(this).find('option:selected').attr('rowid');
+        if (puppetId)
+            loadPuppetEnvs(puppetId);
+          
     });
 
 

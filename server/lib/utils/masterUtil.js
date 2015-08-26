@@ -1,7 +1,7 @@
 /* Copyright (C) Relevance Lab Private Limited- All Rights Reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
- * Written by Gobinda Das <gobinda.das@relevancelab.com>, 
+ * Written by Gobinda Das <gobinda.das@relevancelab.com>,
  * May 2015
  */
 
@@ -1595,8 +1595,8 @@ var MasterUtil = function() {
                         names = configmgmtDao.convertRowIDToValue(chefmgmt.orgname_rowid, rowidlist);
                         chefmgmt.orgname = names;
                         callback(null, chefmgmt[0]);
-                    }else{
-                        callback(null,false);
+                    } else {
+                        callback(null, null);
                     }
                 });
             });
