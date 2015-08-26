@@ -121,7 +121,7 @@ ${VALIDATORPEMFILE}      ${ROOTPATH}//Chef//cattest-validator.pem
 ${KNIFERBFILE}                ${ROOTPATH}//Chef//knife.rb
 ${CATALYSTPEM}                ${ROOTPATH}//Chef//catalyst.pem
 ${CAT_INSTANCES}              ${ROOTPATH}//Chef//cat_instances.pem
-${CATALYST STACKFILE}         ${ROOTPATH}\\Chef\\CatalystStack.template
+${CATALYST STACKFILE}         ${ROOTPATH}//Chef//CatalystStack.template
 
 ${CENTOSIMG}                  ${ROOTPATH}//Images//centos.jpg
 ${UBUNTUIMG}                  ${ROOTPATH}//Images//ubuntuu.jpg
