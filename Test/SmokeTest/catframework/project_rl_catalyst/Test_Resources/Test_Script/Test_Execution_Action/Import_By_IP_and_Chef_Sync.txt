@@ -1146,7 +1146,7 @@ Upload the Application Icon
 Enters the Repo URL
     Input Text    id=gitURLInputaddApp     ${REPO URL}
 
-Enters the Repo Password
+Enters the Repo UserName
     Input Text    id=gitusernameaddApp     ${REPO USER}
 
 Enters the Repo Password
