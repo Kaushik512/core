@@ -95,7 +95,7 @@ var Puppet = function(settings) {
     }
 
 
-    this.bootstrap = function(node, callback, callbackStdOut, callbackStdErr) {
+    this.bootstrapInstance = function(node, callback, callbackStdOut, callbackStdErr) {
         if (typeof callbackStdOut !== 'function') {
             callbackStdOut = function() {
 

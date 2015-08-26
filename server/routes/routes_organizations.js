@@ -1567,12 +1567,13 @@ module.exports.setRoutes = function(app, sessionVerification) {
                             res.send(500);
                             return;
                         }
-                        configmgmtDao.getChefServerDetailsByOrgname(req.params.orgId, function(err, chefDetails) {
+
+                        masterUtil.getCongifMgmtsById(req.body.configManagmentId, function(err, infraManagerDetails) {
                             if (err) {
                                 res.send(500);
                                 return;
                             }
-                            logger.debug("chefdata", chefDetails);
+                            logger.debug("infraManagerDetails", infraManagerDetails);
                             if (!chefDetails) {
                                 res.send(500);
                                 return;
@@ -1632,18 +1633,24 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                             os: req.body.os
                                         },
                                         credentials: encryptedCredentials,
-                                        chef: {
-                                            serverId: chefDetails.rowid,
-                                            chefNodeName: req.body.fqdn
-                                        },
+
                                         blueprintData: {
                                             blueprintName: req.body.fqdn,
                                             templateId: "chef_import",
                                             iconPath: "../private/img/templateicons/chef_import.png"
                                         }
                                     }
-
-
+                                    if (infraManagerDetails.configType === 'chef') {
+                                        instance.chef = {
+                                            serverId: infraManagerDetails.rowid,
+                                            chefNodeName: req.body.fqdn
+                                        }
+                                    } else {
+                                        instance.puppet = {
+                                            serverId: infraManagerDetails.rowid
+                                            /*chefNodeName: req.body.fqdn*/
+                                        }
+                                    }
                                     instancesDao.createInstance(instance, function(err, data) {
                                         if (err) {
                                             logger.error('Unable to create Instance ', err);
@@ -1676,16 +1683,50 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                 res.send(500);
                                                 return;
                                             }
-                                            var chef = new Chef({
-                                                userChefRepoLocation: chefDetails.chefRepoLocation,
-                                                chefUserName: chefDetails.loginname,
-                                                chefUserPemFile: chefDetails.userpemfile,
-                                                chefValidationPemFile: chefDetails.validatorpemfile,
-                                                hostedChefUrl: chefDetails.url
-                                            });
+                                            var infraManager;
+                                            var bootstarpOption;
+                                            if (infraManagerDetails.configType === 'chef') {
+                                                infraManager = new Chef({
+                                                    userChefRepoLocation: infraManagerDetails.chefRepoLocation,
+                                                    chefUserName: infraManagerDetails.loginname,
+                                                    chefUserPemFile: infraManagerDetails.userpemfile,
+                                                    chefValidationPemFile: infraManagerDetails.validatorpemfile,
+                                                    hostedChefUrl: infraManagerDetails.url
+                                                });
+                                                bootstarpOption = {
+                                                    instanceIp: instance.instanceIP,
+                                                    pemFilePath: decryptedCredentials.pemFileLocation,
+                                                    instancePassword: decryptedCredentials.password,
+                                                    instanceUsername: instance.credentials.username,
+                                                    nodeName: instance.chef.chefNodeName,
+                                                    environment: envName,
+                                                    instanceOS: instance.hardware.os
+                                                };
+
+                                            } else {
+                                                var puppetSettings = {
+                                                    host: infraManagerDetails.hostname,
+                                                    username: infraManagerDetails.username,
+                                                };
+                                                if (infraManagerDetails.userpemfile_filename) {
+                                                    puppetSettings.pemFileLocation = appConfig.puppet.puppetReposLocation + infraManagerDetails.orgname_rowid[0] + '/' + infraManagerDetails.folderpath + infraManagerDetails.userpemfile_filename
+                                                } else {
+                                                    puppetSettings.password = infraManagerDetails.puppetpassword;
+                                                }
+                                                console.log('puppet pemfile ==> ' + puppetSettings.pemFileLocation);
+                                                bootstarpOption = {
+                                                    host: instance.instanceIP,
+                                                    username: instance.credentials.username,
+                                                    pemFileLocation: decryptedCredentials.pemFileLocation,
+                                                    password: decryptedCredentials.password,
+                                                    environment: envName
+                                                };
+                                                infraManager = new Puppet(puppetSettings);
+                                            }
+
 
                                             //removing files on node to facilitate re-bootstrap
-                                            var opts = {
+                                            /*var opts = {
                                                     privateKey: decryptedCredentials.pemFileLocation,
                                                     username: decryptedCredentials.username,
                                                     host: instance.instanceIP,
@@ -1702,32 +1743,93 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                 opts.password = decryptedCredentials.password;
                                             }
                                             logger.debug("Node OS : %s", instance.hardware.os);
-                                            logger.debug('Cleaning instance');
-                                            chef.cleanChefonClient(opts, function(err, retCode) {
-                                                logger.debug("Entering chef.bootstarp");
-                                                chef.bootstrapInstance({
-                                                    instanceIp: instance.instanceIP,
-                                                    pemFilePath: decryptedCredentials.pemFileLocation,
-                                                    instancePassword: decryptedCredentials.password,
-                                                    instanceUsername: instance.credentials.username,
-                                                    nodeName: instance.chef.chefNodeName,
-                                                    environment: envName,
-                                                    instanceOS: instance.hardware.os
-                                                }, function(err, code) {
-                                                    if (decryptedCredentials.pemFilePath) {
-                                                        fileIo.removeFile(decryptedCredentials.pemFilePath, function(err) {
+                                            logger.debug('Cleaning instance');*/
+                                            // chef.cleanChefonClient(opts, function(err, retCode) {
+                                            logger.debug("Entering chef.bootstarp");
+                                            infraManager.bootstrapInstance(bootstarpOption, function(err, code) {
+                                                if (decryptedCredentials.pemFilePath) {
+                                                    fileIo.removeFile(decryptedCredentials.pemFilePath, function(err) {
+                                                        if (err) {
+                                                            logger.error("Unable to delete temp pem file =>", err);
+                                                        } else {
+                                                            logger.debug("temp pem file deleted");
+                                                        }
+                                                    });
+                                                }
+                                                if (err) {
+                                                    logger.error("knife launch err ==>", err);
+                                                    instancesDao.updateInstanceBootstrapStatus(instance.id, 'failed', function(err, updateData) {
+
+                                                    });
+                                                    var timestampEnded = new Date().getTime();
+                                                    logsDao.insertLog({
+                                                        referenceId: logsRefernceIds,
+                                                        err: true,
+                                                        log: "Bootstrap Failed",
+                                                        timestamp: timestampEnded
+                                                    });
+                                                    instancesDao.updateActionLog(instance.id, actionLog._id, false, timestampEnded);
+
+
+
+                                                } else {
+                                                    if (code == 0) {
+                                                        instancesDao.updateInstanceBootstrapStatus(instance.id, 'success', function(err, updateData) {
                                                             if (err) {
-                                                                logger.error("Unable to delete temp pem file =>", err);
+                                                                logger.error("Unable to set instance bootstarp status. code 0");
                                                             } else {
-                                                                logger.debug("temp pem file deleted");
+                                                                logger.debug("Instance bootstrap status set to success");
                                                             }
                                                         });
-                                                    }
-                                                    if (err) {
-                                                        logger.error("knife launch err ==>", err);
-                                                        instancesDao.updateInstanceBootstrapStatus(instance.id, 'failed', function(err, updateData) {
+                                                        var timestampEnded = new Date().getTime();
+                                                        logsDao.insertLog({
+                                                            referenceId: logsRefernceIds,
+                                                            err: false,
+                                                            log: "Instance Bootstrapped Successfully",
+                                                            timestamp: timestampEnded
+                                                        });
+                                                        instancesDao.updateActionLog(instance.id, actionLog._id, true, timestampEnded);
+
+
+                                                        chef.getNode(instance.chef.chefNodeName, function(err, nodeData) {
+                                                            if (err) {
+                                                                console.log(err);
+                                                                return;
+                                                            }
+                                                            var hardwareData = {};
+                                                            hardwareData.architecture = nodeData.automatic.kernel.machine;
+                                                            hardwareData.platform = nodeData.automatic.platform;
+                                                            hardwareData.platformVersion = nodeData.automatic.platform_version;
+                                                            hardwareData.memory = {
+                                                                total: 'unknown',
+                                                                free: 'unknown'
+                                                            };
+                                                            if (nodeData.automatic.memory) {
+                                                                hardwareData.memory.total = nodeData.automatic.memory.total;
+                                                                hardwareData.memory.free = nodeData.automatic.memory.free;
+                                                            }
+                                                            hardwareData.os = instance.hardware.os;
+                                                            //console.log(instance);
+                                                            //console.log(hardwareData,'==',instance.hardware.os);
+                                                            instancesDao.setHardwareDetails(instance.id, hardwareData, function(err, updateData) {
+                                                                if (err) {
+                                                                    logger.error("Unable to set instance hardware details  code (setHardwareDetails)", err);
+                                                                } else {
+                                                                    logger.debug("Instance hardware details set successessfully");
+                                                                }
+                                                            });
 
                                                         });
+
+                                                    } else {
+                                                        instancesDao.updateInstanceBootstrapStatus(instance.id, 'failed', function(err, updateData) {
+                                                            if (err) {
+                                                                logger.error("Unable to set instance bootstarp status code != 0");
+                                                            } else {
+                                                                logger.debug("Instance bootstrap status set to failed");
+                                                            }
+                                                        });
+
                                                         var timestampEnded = new Date().getTime();
                                                         logsDao.insertLog({
                                                             referenceId: logsRefernceIds,
@@ -1737,97 +1839,28 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                         });
                                                         instancesDao.updateActionLog(instance.id, actionLog._id, false, timestampEnded);
 
-
-
-                                                    } else {
-                                                        if (code == 0) {
-                                                            instancesDao.updateInstanceBootstrapStatus(instance.id, 'success', function(err, updateData) {
-                                                                if (err) {
-                                                                    logger.error("Unable to set instance bootstarp status. code 0");
-                                                                } else {
-                                                                    logger.debug("Instance bootstrap status set to success");
-                                                                }
-                                                            });
-                                                            var timestampEnded = new Date().getTime();
-                                                            logsDao.insertLog({
-                                                                referenceId: logsRefernceIds,
-                                                                err: false,
-                                                                log: "Instance Bootstrapped Successfully",
-                                                                timestamp: timestampEnded
-                                                            });
-                                                            instancesDao.updateActionLog(instance.id, actionLog._id, true, timestampEnded);
-
-
-                                                            chef.getNode(instance.chef.chefNodeName, function(err, nodeData) {
-                                                                if (err) {
-                                                                    console.log(err);
-                                                                    return;
-                                                                }
-                                                                var hardwareData = {};
-                                                                hardwareData.architecture = nodeData.automatic.kernel.machine;
-                                                                hardwareData.platform = nodeData.automatic.platform;
-                                                                hardwareData.platformVersion = nodeData.automatic.platform_version;
-                                                                hardwareData.memory = {
-                                                                    total: 'unknown',
-                                                                    free: 'unknown'
-                                                                };
-                                                                if (nodeData.automatic.memory) {
-                                                                    hardwareData.memory.total = nodeData.automatic.memory.total;
-                                                                    hardwareData.memory.free = nodeData.automatic.memory.free;
-                                                                }
-                                                                hardwareData.os = instance.hardware.os;
-                                                                //console.log(instance);
-                                                                //console.log(hardwareData,'==',instance.hardware.os);
-                                                                instancesDao.setHardwareDetails(instance.id, hardwareData, function(err, updateData) {
-                                                                    if (err) {
-                                                                        logger.error("Unable to set instance hardware details  code (setHardwareDetails)", err);
-                                                                    } else {
-                                                                        logger.debug("Instance hardware details set successessfully");
-                                                                    }
-                                                                });
-
-                                                            });
-
-                                                        } else {
-                                                            instancesDao.updateInstanceBootstrapStatus(instance.id, 'failed', function(err, updateData) {
-                                                                if (err) {
-                                                                    logger.error("Unable to set instance bootstarp status code != 0");
-                                                                } else {
-                                                                    logger.debug("Instance bootstrap status set to failed");
-                                                                }
-                                                            });
-
-                                                            var timestampEnded = new Date().getTime();
-                                                            logsDao.insertLog({
-                                                                referenceId: logsRefernceIds,
-                                                                err: true,
-                                                                log: "Bootstrap Failed",
-                                                                timestamp: timestampEnded
-                                                            });
-                                                            instancesDao.updateActionLog(instance.id, actionLog._id, false, timestampEnded);
-
-                                                        }
                                                     }
+                                                }
 
-                                                }, function(stdOutData) {
+                                            }, function(stdOutData) {
 
-                                                    logsDao.insertLog({
-                                                        referenceId: logsRefernceIds,
-                                                        err: false,
-                                                        log: stdOutData.toString('ascii'),
-                                                        timestamp: new Date().getTime()
-                                                    });
-
-                                                }, function(stdErrData) {
-
-                                                    logsDao.insertLog({
-                                                        referenceId: logsRefernceIds,
-                                                        err: true,
-                                                        log: stdErrData.toString('ascii'),
-                                                        timestamp: new Date().getTime()
-                                                    });
+                                                logsDao.insertLog({
+                                                    referenceId: logsRefernceIds,
+                                                    err: false,
+                                                    log: stdOutData.toString('ascii'),
+                                                    timestamp: new Date().getTime()
                                                 });
-                                            }); //end of chefcleanup
+
+                                            }, function(stdErrData) {
+
+                                                logsDao.insertLog({
+                                                    referenceId: logsRefernceIds,
+                                                    err: true,
+                                                    log: stdErrData.toString('ascii'),
+                                                    timestamp: new Date().getTime()
+                                                });
+                                            });
+                                            //}); //end of chefcleanup
 
                                         });
                                         res.send(instance);

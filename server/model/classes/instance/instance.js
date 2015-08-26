@@ -132,7 +132,7 @@ var InstanceSchema = new Schema({
     runlist: [{
         type: String,
         trim: true
-            //validate: schemaValidator.recipeValidator
+        //validate: schemaValidator.recipeValidator
     }],
     attributes: [{
         name: String,
@@ -173,6 +173,14 @@ var InstanceSchema = new Schema({
             trim: true
         },
         chefNodeName: String
+    },
+    puppet: {
+        serverId: {
+            type: String,
+            required: true,
+            trim: true
+        },
+        puppetNodeName: String
     },
     software: [{
         name: {
@@ -750,6 +758,28 @@ var InstancesDao = function() {
             callback(null, data);
         });
     };
+
+    this.updateInstancePuppetNodeName = function(instanceId, status, callback) {
+        logger.debug("Enter updateInstanceBootstrapStatus (%s, %s)", instanceId, status);
+        Instances.update({
+            "_id": new ObjectId(instanceId),
+        }, {
+            $set: {
+                "bootStrapStatus": status
+            }
+        }, {
+            upsert: false
+        }, function(err, data) {
+            if (err) {
+                logger.error("Failed to updateInstanceBootstrapStatus (%s, %s)", instanceId, status, err);
+                callback(err, null);
+                return;
+            }
+            logger.debug("Exit updateInstanceBootstrapStatus (%s, %s)", instanceId, status);
+            callback(null, data);
+        });
+    };
+
 
     this.removeInstancebyId = function(instanceId, callback) {
         logger.debug("Enter removeInstancebyId (%s)", instanceId);

@@ -23,7 +23,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
                 username: puppetData.username,
             };
             if (puppetData.userpemfile_filename) {
-                puppetSettings.pemFileLocation = appConfig.puppet.puppetReposLocation + puppetData.folderpath + puppetData.userpemfile_filename
+                puppetSettings.pemFileLocation = appConfig.puppet.puppetReposLocation + puppetData.orgname_rowid[0] + '/' + puppetData.folderpath + puppetData.userpemfile_filename
             } else {
                 puppetSettings.password = puppetData.puppetpassword;
             }
@@ -58,7 +58,8 @@ module.exports.setRoutes = function(app, verificationFunc) {
                 username: puppetData.username,
             };
             if (puppetData.userpemfile_filename) {
-                puppetSettings.pemFileLocation = appConfig.puppet.puppetReposLocation + puppetData.folderpath + puppetData.userpemfile_filename
+                puppetSettings.pemFileLocation = appConfig.puppet.puppetReposLocation + puppetData.orgname_rowid[0] + '/' + puppetData.folderpath + puppetData.userpemfile_filename
+
             } else {
                 puppetSettings.password = puppetData.puppetpassword;
             }
