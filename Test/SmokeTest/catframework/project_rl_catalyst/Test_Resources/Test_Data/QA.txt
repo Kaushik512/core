@@ -9,8 +9,8 @@ Resource           catalyst.txt
 
 
 *** Variables ***
-${BROWSER TYPE}                   firefox                                                                     #internetexplorer               #phantomjs
-${ENVIRONMENT SERVER}              http://d4d.relevancelab.com:3001/public/login.html
+${BROWSER TYPE}                  firefox 
+${ENVIRONMENT SERVER}              http://54.153.94.33:3001/public/login.html
 
 
 
@@ -199,8 +199,8 @@ ${IMAGE NAME4}                 smoke_Win2012
 ${OPERATING SYSTEM1}           Cent OS
 ${OPERATING SYSTEM2}           Ubuntu
 ${OPERATING SYSTEM3}           Windows
-${IMAGE ID1}                   ami-696e9c2d
-${IMAGE ID2}                   ami-df6a8b9b
+${IMAGE ID1}                   ami-b6bdde86
+${IMAGE ID2}                   ami-3d50120d
 ${IMAGE ID3}                   ami-21732111
 ${USER}                        superadmin
 ${COOKBOOK NAME1}              apt

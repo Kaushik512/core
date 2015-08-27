@@ -11,37 +11,51 @@ Resource           ${COMMON RESOURCES}/catalyst_grid_node.txt
 
 
 *** Test Cases ***
-#Catalyst Create New Cloud Formation Template
-#    [Tags]       Sanity               Settings
+Catalyst Create New Cloud Formation Blueprint
+    [Tags]       Sanity               Settings
 #    Catalyst Login
-#    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
-#    Catalyst Create Template of Cloud Formation and Save
-#    Sleep    2s
-#    Catalyst Logout                      
-#    [Teardown]     Close Browser
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst Create Blueprint of Cloud Formation and Save
+    Sleep    2s
+    Catalyst Logout                      
+    [Teardown]     Close Browser
 
-#Catalyst Launch Cloud Formation Template
-#    [Tags]       Sanity               Workzone
-#    Catalyst Login
-#    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
-#    Catalyst Launch of Cloud Formation Template
-#    Sleep    2s
-#    Catalyst Logout                      
-#    [Teardown]     Close Browser
 
-#---------------------------------Start
-	
-Catalyst CENT OS Create And Launch Blueprint
+Catalyst Launch Cloud Formation Blueprint
     [Tags]       Sanity               Workzone
 #    Catalyst Login
-    Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst Launch of Cloud Formation Blueprint
+    Sleep    2s
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+	
+Catalyst CENT OS Create Blueprint and Save
+    [Tags]       Sanity               Workzone
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
     Catalyst Choose Template and Save Setup
     #Catlayst Workzone and Status Setup
     Sleep    2s
     Catalyst Logout                      
     [Teardown]     Close Browser
+
+
  
- #-------------------------------End
+Catalyst UBUNTU Create Blueprint and Save
+    [Tags]       Sanity               Workzone
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst Choose Template and Save Setup for UBUNTU
+    Sleep    2s
+    #Catlayst Workzone and Status Setup for Ubuntu    
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+
 
 #Catalyst CENT OS Launch Blueprint setup
 #    [Tags]       Sanity               Workzone
@@ -120,19 +134,6 @@ Catalyst CENT OS Create And Launch Blueprint
 #    [Teardown]     Close Browser    
 
 
-#----Start
-
-Catalyst UBUNTU Create and Launch Blueprint
-    [Tags]       Sanity               Workzone
-#    Catalyst Login
-    Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
-    Catalyst Choose Template and Save Setup for UBUNTU
-    Sleep    2s
-#    Catlayst Workzone and Status Setup for Ubuntu    
-    Catalyst Logout                      
-    [Teardown]     Close Browser
-
-#------------end
 
 #Catalyst UBUNTU Launch Blueprint setup
 #    [Tags]       Sanity               Workzone

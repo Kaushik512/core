@@ -20,13 +20,14 @@ Catalyst Gallery Templates Creation
     [Teardown]     Close Browser
 
 
-Catalyst Creates Cloud Formation Template
+Catalyst Create Cloud Formation Template
     [Tags]       Sanity               Settings
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
     Catalyst Create New Cloud Formation Template
     Catalyst Logout                      
     [Teardown]     Close Browser
+
 
 #Catalyst Gallery Service Command Creation
     [Tags]       Sanity               Settings

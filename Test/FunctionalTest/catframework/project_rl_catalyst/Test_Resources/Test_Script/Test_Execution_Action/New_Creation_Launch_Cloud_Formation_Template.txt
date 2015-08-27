@@ -13,9 +13,27 @@ Resource           catalyst.txt
 Resource           ${CATALYST TEST DATA}/${TESTDATA}
 Resource           ${CATALYST ACTION}/Organization_Setup_Action_Steps.txt
 Resource           ${CATALYST ACTION}/Gallery_setup_TempService_Steps.txt
-
+Resource           ${CATALYST ACTION}/DevOps_Setup_Action_Steps.txt
 
 *** Keywords ***
+Catalyst Creation of New Docker Setup
+    Clicks on Settings
+    Clicks on DevOps Setup menu
+    Clicks on Docker Setup
+    Sleep    2s
+    Clicks on New Button of Docker
+    Select organization for config management
+    
+    Enters the Reference Name
+    Enters the Docker Registry
+    Enters the UserID for Docker
+    Enters the Email ID for Docker
+    Enters the Password for Docker
+    Clicks on Save Button of Docker Setup
+
+
+
+
 Catalyst Creation of New Cloud Formation Template
     Clicks on Settings
     Clicks on Gallery Setup
@@ -77,10 +95,37 @@ Catalyst Launch Cloud Formation Blueprint
     Sleep    1s
     Clicks on Instances Button
     Verify the Instance Name as Node 
-    Verfiy the Status of the Stack
+    Verfiy the Status of the Stack as running
     Sleep    2s
     Deleting the Stack from the Environment
 
+
+
+
+Clicks on Docker Setup
+    Click Element    xpath=.//*[text()='Docker']
+
+Enters the UserID for Docker
+    Input Text    id=dockeruserid    ${DOCKER USERID}
+
+Enters the Email ID for Docker
+    Input Text    id=dockeremailid    ${DOCKER EMAILID}
+
+Enters the Password for Docker
+    Input Text    id=dockerpassword    ${DOCKER PASSWD}
+
+Clicks on Save Button of Docker Setup
+    Click Element    css=.btn.btn-primary.btn-mini
+
+Clicks on New Button of Docker
+    Click Element    id=newDoc
+
+Enters the Reference Name
+    Sleep    1s
+    Input Text    id=dockerreponame    ${DOCKER NAME}
+
+Enters the Docker Registry
+    Input Text    id=dockerrepopath    ${DOCKER REGISTRY}
 
 
 Deleting the Stack from the Environment
@@ -92,7 +137,7 @@ Deleting the Stack from the Environment
 Verify the Instance Name as Node
     Element Text Should Be    xpath=//*[@id="divinstancescardview"]/div/div/ul/li[contains(.,"${STACK INSTANCE NAME}")]/div/div/div/div[1]/span[2]    ${STACK INSTANCE NAME}
 
-Verfiy the Status of the Stack
+Verfiy the Status of the Stack as running
     Element Text Should Be    xpath=//*[@id="divinstancescardview"]/div/div/ul/li[contains(.,"${STACK INSTANCE NAME}")]/div/div/div/div[3]/div/span[2]/span    ${RUN}
 
 

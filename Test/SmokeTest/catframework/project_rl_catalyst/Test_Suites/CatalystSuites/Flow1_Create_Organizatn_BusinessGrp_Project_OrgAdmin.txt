@@ -16,6 +16,7 @@ Catalyst Get the Build Number Step
     Version Number and the Jenkins Buildnumber
     [Teardown]     Close Browser
 
+
 Catalyst Creation of New Organization and Org Admin
     [Tags]       Sanity               Settings
 #    Catalyst Login 
@@ -24,6 +25,7 @@ Catalyst Creation of New Organization and Org Admin
     Creates New Org Admin
     Catalyst Logout                      
     [Teardown]     Close Browser
+
 
 Catalyst Creation of Business Group And Projects
     [Tags]       Sanity               Settings

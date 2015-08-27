@@ -2272,7 +2272,7 @@
                                                                                     '<i class="fa fa-fw fa-plus-circle txt-color-blue"></i> ' +
                                                                                     '<i class="fa fa-fw fa-minus-circle txt-color-red"></i>' + getDesignTypeName + '</a>' +
                                                                                     '</h4></div><div class="panel-collapse collapse" id="collapse' + i + '">' +
-                                                                                    '<div class="panel-body ' + getDesignType + '"></div>' +
+                                                                                    '<div class="panel-body ' + getDesignType + ' ' + getDesignTypeName  +  '"></div>' +
                                                                                     '</div>';
                                                                                 $('#accordion-2').append($containerTemp);
                                                                               // alert($containerTemp);
