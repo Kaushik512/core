@@ -270,6 +270,10 @@
                                                                             $.get('../instances/' + instanceId, function(data) {
                                                                                 console.log('Got ' + data.length + ' instances');
                                                                                 //found now delete
+                                                                                var infraManager = 'chef';
+                                                                                if(data.puppet) {
+                                                                                    infraManager = 'puppet'
+                                                                                }
                                                                                 var dialog = bootbox.dialog({
                                                                                     title: "Delete Instance",
                                                                                     message: '<div class="row">  ' +
@@ -288,7 +292,7 @@
                                                                                         '<label for="ckbChefDelete"></label> ' +
                                                                                         '<div class="col-md-8"> <div class="checkbox"> <label style="color:#333;" for="ckbChefDelete-0"> ' +
                                                                                         '<input type="checkbox" name="ckbChefDelete" id="ckbChefDelete"> ' +
-                                                                                        'Delete this node from chef server </label> ' +
+                                                                                        'Delete this node from '+infraManager+' server </label> ' +
                                                                                         '</div>' +
                                                                                         '</div>' +
                                                                                         '<div style="margin-top:20px;" class="col-lg-12">Note : This will not terminate the instance from the provider.</div>' +
@@ -1524,8 +1528,11 @@
 
                                                                         //$divComponentList.append($(cardTemplate.getOS()));
                                                                         $divComponentListContainer.append($divComponentList);
-                                                                        $divComponentListImage = $('<a class="chefClientRunlistImage actionbuttonChefClientRun"></a>').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'Chef Client Run').addClass('instance-bootstrap-list-image').attr('data-chefServerId', data.chef.serverId).attr('data-instanceId', data._id);
-
+                                                                        if(data.chef && data.chef.serverId) {
+                                                                            $divComponentListImage = $('<a class="chefClientRunlistImage actionbuttonChefClientRun"></a>').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'Chef Client Run').addClass('instance-bootstrap-list-image').attr('data-chefServerId', data.chef.serverId).attr('data-instanceId', data._id);
+                                                                        } else {
+                                                                            $divComponentListImage = $('<a class="chefClientRunlistImage actionbuttonChefClientRun"></a>').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'Puppet Client Run').addClass('instance-bootstrap-list-image').attr('data-puppetServerId', data.puppet.serverId).attr('data-instanceId', data._id);
+                                                                        }
                                                                         //Check if the docker status is succeeded
                                                                         if (data.docker != null) {
 

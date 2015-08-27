@@ -44,7 +44,7 @@ execute "Setting hostname" do
 	action :run
 end
 
-template '/tmp/puppet.conf' do
+template '/etc/puppet/puppet.conf' do
 	cookbook "puppet_configure"
 	source 'puppet.conf.erb'
 	mode 00755

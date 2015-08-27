@@ -169,7 +169,6 @@ var InstanceSchema = new Schema({
     chef: {
         serverId: {
             type: String,
-            required: true,
             trim: true
         },
         chefNodeName: String
@@ -177,10 +176,14 @@ var InstanceSchema = new Schema({
     puppet: {
         serverId: {
             type: String,
-            required: true,
             trim: true
         },
         puppetNodeName: String
+    },
+    infraManager: {
+        serverId: String,
+        nodeName: String,
+        type: String,
     },
     software: [{
         name: {
@@ -759,23 +762,23 @@ var InstancesDao = function() {
         });
     };
 
-    this.updateInstancePuppetNodeName = function(instanceId, status, callback) {
-        logger.debug("Enter updateInstanceBootstrapStatus (%s, %s)", instanceId, status);
+    this.updateInstancePuppetNodeName = function(instanceId, nodeName, callback) {
+        logger.debug("Enter updateInstancePuppetNodeName (%s, %s)", instanceId, nodeName);
         Instances.update({
             "_id": new ObjectId(instanceId),
         }, {
             $set: {
-                "bootStrapStatus": status
+                "puppet.puppetNodeName": nodeName
             }
         }, {
             upsert: false
         }, function(err, data) {
             if (err) {
-                logger.error("Failed to updateInstanceBootstrapStatus (%s, %s)", instanceId, status, err);
+                logger.error("Failed to updateInstancePuppetNodeName (%s, %s)", instanceId, nodeName, err);
                 callback(err, null);
                 return;
             }
-            logger.debug("Exit updateInstanceBootstrapStatus (%s, %s)", instanceId, status);
+            logger.debug("Exit updateInstancePuppetNodeName (%s, %s)", instanceId, nodeName);
             callback(null, data);
         });
     };

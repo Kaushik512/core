@@ -1,7 +1,7 @@
 var masterjsonDao = require('../model/d4dmasters/masterjson.js');
 var configmgmtDao = require('../model/d4dmasters/configmgmt.js');
-var Chef = require('../lib/chef');
-
+var Chef = require('_pr/lib/chef');
+var Puppet = require('_pr/lib/puppet');
 
 var blueprintsDao = require('../model/dao/blueprints');
 var Blueprints = require('_pr/model/blueprint');
@@ -1574,7 +1574,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                 return;
                             }
                             logger.debug("infraManagerDetails", infraManagerDetails);
-                            if (!chefDetails) {
+                            if (!infraManagerDetails) {
                                 res.send(500);
                                 return;
                             }
@@ -1746,7 +1746,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                             logger.debug('Cleaning instance');*/
                                             // chef.cleanChefonClient(opts, function(err, retCode) {
                                             logger.debug("Entering chef.bootstarp");
-                                            infraManager.bootstrapInstance(bootstarpOption, function(err, code) {
+                                            infraManager.bootstrapInstance(bootstarpOption, function(err, code, bootstrapData) {
                                                 if (decryptedCredentials.pemFilePath) {
                                                     fileIo.removeFile(decryptedCredentials.pemFilePath, function(err) {
                                                         if (err) {
@@ -1770,8 +1770,6 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                     });
                                                     instancesDao.updateActionLog(instance.id, actionLog._id, false, timestampEnded);
 
-
-
                                                 } else {
                                                     if (code == 0) {
                                                         instancesDao.updateInstanceBootstrapStatus(instance.id, 'success', function(err, updateData) {
@@ -1781,6 +1779,23 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                                 logger.debug("Instance bootstrap status set to success");
                                                             }
                                                         });
+
+                                                        // updating puppet node name
+                                                        var nodeName;
+                                                        if (bootstrapData && bootstrapData.puppetNodeName) {
+                                                            instancesDao.updateInstancePuppetNodeName(instance.id, bootstrapData.puppetNodeName, function(err, updateData) {
+                                                                if (err) {
+                                                                    logger.error("Unable to set puppet node name");
+                                                                } else {
+                                                                    logger.debug("puppet node name updated successfully");
+                                                                }
+                                                            });
+                                                            nodeName = bootstrapData.puppetNodeName;
+                                                        } else {
+                                                            nodeName = instance.chef.chefNodeName;
+                                                        }
+
+
                                                         var timestampEnded = new Date().getTime();
                                                         logsDao.insertLog({
                                                             referenceId: logsRefernceIds,
@@ -1791,24 +1806,41 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                         instancesDao.updateActionLog(instance.id, actionLog._id, true, timestampEnded);
 
 
-                                                        chef.getNode(instance.chef.chefNodeName, function(err, nodeData) {
+                                                        infraManager.getNode(nodeName, function(err, nodeData) {
                                                             if (err) {
                                                                 console.log(err);
                                                                 return;
                                                             }
+
                                                             var hardwareData = {};
-                                                            hardwareData.architecture = nodeData.automatic.kernel.machine;
-                                                            hardwareData.platform = nodeData.automatic.platform;
-                                                            hardwareData.platformVersion = nodeData.automatic.platform_version;
-                                                            hardwareData.memory = {
-                                                                total: 'unknown',
-                                                                free: 'unknown'
-                                                            };
-                                                            if (nodeData.automatic.memory) {
-                                                                hardwareData.memory.total = nodeData.automatic.memory.total;
-                                                                hardwareData.memory.free = nodeData.automatic.memory.free;
+                                                            // is puppet node
+                                                            if (bootstrapData && bootstrapData.puppetNodeName) {
+                                                                hardwareData.architecture = nodeData.facts.values.hardwaremodel;
+                                                                hardwareData.platform = nodeData.facts.values.operatingsystem;
+                                                                hardwareData.platformVersion = nodeData.facts.values.operatingsystemrelease;
+                                                                hardwareData.memory = {
+                                                                    total: 'unknown',
+                                                                    free: 'unknown'
+                                                                };
+                                                                hardwareData.memory.total =  nodeData.facts.values.memorysize;
+                                                                hardwareData.memory.free =  nodeData.facts.values.memoryfree;
+                                              
+                                                            } else {
+                                                                hardwareData.architecture = nodeData.automatic.kernel.machine;
+                                                                hardwareData.platform = nodeData.automatic.platform;
+                                                                hardwareData.platformVersion = nodeData.automatic.platform_version;
+                                                                hardwareData.memory = {
+                                                                    total: 'unknown',
+                                                                    free: 'unknown'
+                                                                };
+                                                                if (nodeData.automatic.memory) {
+                                                                    hardwareData.memory.total = nodeData.automatic.memory.total;
+                                                                    hardwareData.memory.free = nodeData.automatic.memory.free;
+                                                                }
                                                             }
                                                             hardwareData.os = instance.hardware.os;
+
+
                                                             //console.log(instance);
                                                             //console.log(hardwareData,'==',instance.hardware.os);
                                                             instancesDao.setHardwareDetails(instance.id, hardwareData, function(err, updateData) {
