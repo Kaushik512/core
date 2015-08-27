@@ -4019,7 +4019,7 @@
                                                                                                 $modal.find('.outputArea').hide();
                                                                                                 $modal.modal('show');
                                                                                                 var timestampToPoll = new Date().getTime();
-                                                                                                $.get('../tasks/' + taskId + '/run', function(data) {
+                                                                                                $.post('../tasks/' + taskId + '/run',{"choiceParam":"mango"}, function(data) {
                                                                                                     var date = new Date().setTime(data.timestamp);
                                                                                                     var taskTimestamp = new Date(date).toLocaleString(); //converts to human readable strings
                                                                                                     $('tr[data-taskId="' + taskId + '"] .taskrunTimestamp').html(taskTimestamp);
