@@ -2352,6 +2352,86 @@
                                                                                         //Commented below to accomodate docker compose
                                                                                         // tagLabel = '<span>Tags&nbsp;</span';
                                                                                         tagLabel = '';
+
+                                                                                        //for CFT and Docker..
+                                                                                        function getOrgProjDetailsCFTDocker(name) {
+                                                                                            $.ajax({
+                                                                                                type: "get",
+                                                                                                dataType: "json",
+
+                                                                                                async: false,
+                                                                                                url: "../organizations/getTreeNew",
+                                                                                                success: function(data) {
+
+                                                                                                    console.log(data);
+                                                                                                    data = JSON.parse(JSON.stringify(data));
+
+                                                                                                    //  alert(JSON.stringify(data));
+
+
+                                                                                                    for (var j = 0; j < data.length; j++) {
+                                                                                                        var $blueprintReadContainerCFT = $('#modalForReadCFT');
+                                                                                                        (function(j) {
+                                                                                                            $blueprintReadContainerCFT.find('.modal-body #blueprintORG').val(data[j].name);
+                                                                                                            for (var p = 0; p < data[j].businessGroups.length; p++) {
+                                                                                                                (function(p) {
+                                                                                                                    $blueprintReadContainerCFT.find('.modal-body #blueprintBU').val(data[j].businessGroups[p].name);
+                                                                                                                    //}
+                                                                                                                    for (var x = 0; x < data[j].businessGroups[p].projects.length; x++) {
+                                                                                                                        $blueprintReadContainerCFT.find('.modal-body #blueprintProject').val(data[j].businessGroups[p].projects[x].name);
+                                                                                                                    }
+                                                                                                                })(p);
+                                                                                                            }
+                                                                                                        })(j);
+                                                                                                    }
+
+
+
+
+                                                                                                }
+                                                                                            });
+                                                                                        }
+                                                                                        //ends here..
+                                                                                        //for software stack and os image
+                                                                                        function getOrgProjDetailsSSOS(name) {
+                                                                                            $.ajax({
+                                                                                                type: "get",
+                                                                                                dataType: "json",
+
+                                                                                                async: false,
+                                                                                                url: "../organizations/getTreeNew",
+                                                                                                success: function(data) {
+
+                                                                                                    console.log(data);
+                                                                                                    data = JSON.parse(JSON.stringify(data));
+
+                                                                                                    //  alert(JSON.stringify(data));
+
+
+                                                                                                    for (var j = 0; j < data.length; j++) {
+                                                                                                        var $blueprintReadContainer = $('#modalForRead');
+                                                                                                        (function(j) {
+                                                                                                            $blueprintReadContainer.find('.modal-body #blueprintORG').val(data[j].name);
+                                                                                                            for (var p = 0; p < data[j].businessGroups.length; p++) {
+                                                                                                                (function(p) {
+                                                                                                                    $blueprintReadContainer.find('.modal-body #blueprintBU').val(data[j].businessGroups[p].name);
+                                                                                                                    //}
+                                                                                                                    for (var x = 0; x < data[j].businessGroups[p].projects.length; x++) {
+                                                                                                                        $blueprintReadContainer.find('.modal-body #blueprintProject').val(data[j].businessGroups[p].projects[x].name);
+                                                                                                                    }
+                                                                                                                })(p);
+                                                                                                            }
+                                                                                                        })(j);
+                                                                                                    }
+
+
+
+
+                                                                                                }
+                                                                                            });
+                                                                                        }
+                                                                                        //ends here..
+
                                                                                         (function(blueprint) {
                                                                                             // alert(JSON.stringify(blueprint));
                                                                                             $liRead.click(function(e) {
@@ -2365,37 +2445,7 @@
                                                                                                 //for getting the blueprint name
                                                                                                 $blueprintReadContainerCFT.find('.modal-body #blueprintNameCFT').val(blueprint.name);
                                                                                                 $blueprintReadContainerCFT.find('.modal-body #blueprintTemplateTypeCFT').val(blueprint.templateType);
-                                                                                                $.ajax({
-                                                                                                    type: "get",
-                                                                                                    dataType: "json",
-
-                                                                                                    async: false,
-                                                                                                    url: "../organizations/getTreeNew",
-                                                                                                    success: function(dataTree) {
-
-                                                                                                        console.log(data);
-                                                                                                        data = JSON.parse(JSON.stringify(data));
-
-                                                                                                        //  alert(JSON.stringify(data));
-
-
-                                                                                                        for (var j = 0; j < dataTree.length; j++) {
-
-                                                                                                            (function(j) {
-                                                                                                                $blueprintReadContainerCFT.find('.modal-body #blueprintORG').val(dataTree[j].name);
-                                                                                                                for (var p = 0; p < dataTree[j].businessGroups.length; p++) {
-                                                                                                                    (function(p) {
-                                                                                                                        $blueprintReadContainerCFT.find('.modal-body #blueprintBU').val(dataTree[j].businessGroups[p].name);
-                                                                                                                        //}
-                                                                                                                        for (var x = 0; x < dataTree[j].businessGroups[p].projects.length; x++) {
-                                                                                                                            $blueprintReadContainerCFT.find('.modal-body #blueprintProject').val(dataTree[j].businessGroups[p].projects[x].name);
-                                                                                                                        }
-                                                                                                                    })(p);
-                                                                                                                }
-                                                                                                            })(j);
-                                                                                                        }
-                                                                                                    }
-                                                                                                });
+                                                                                                getOrgProjDetailsCFTDocker(name);
                                                                                             });
                                                                                         })(data[i]);
                                                                                         //alert(JSON.stringify(data[i]));
@@ -2414,41 +2464,7 @@
                                                                                                 //for getting the blueprint name
                                                                                                 $blueprintReadContainerCFT.find('.modal-body #blueprintNameCFT').val(blueprint.name);
                                                                                                 $blueprintReadContainerCFT.find('.modal-body #blueprintTemplateTypeCFT').val(blueprint.templateType);
-                                                                                                $.ajax({
-                                                                                                    type: "get",
-                                                                                                    dataType: "json",
-
-                                                                                                    async: false,
-                                                                                                    url: "../organizations/getTreeNew",
-                                                                                                    success: function(dataTree) {
-
-                                                                                                        console.log(data);
-                                                                                                        data = JSON.parse(JSON.stringify(data));
-
-                                                                                                        //  alert(JSON.stringify(data));
-
-
-                                                                                                        for (var j = 0; j < dataTree.length; j++) {
-
-                                                                                                            (function(j) {
-                                                                                                                $blueprintReadContainerCFT.find('.modal-body #blueprintORG').val(dataTree[j].name);
-                                                                                                                for (var p = 0; p < dataTree[j].businessGroups.length; p++) {
-                                                                                                                    (function(p) {
-                                                                                                                        $blueprintReadContainerCFT.find('.modal-body #blueprintBU').val(dataTree[j].businessGroups[p].name);
-                                                                                                                        //}
-                                                                                                                        for (var x = 0; x < dataTree[j].businessGroups[p].projects.length; x++) {
-                                                                                                                            $blueprintReadContainerCFT.find('.modal-body #blueprintProject').val(dataTree[j].businessGroups[p].projects[x].name);
-                                                                                                                        }
-                                                                                                                    })(p);
-                                                                                                                }
-                                                                                                            })(j);
-                                                                                                        }
-
-
-
-
-                                                                                                    }
-                                                                                                });
+                                                                                                getOrgProjDetailsCFTDocker(name);
                                                                                             });
                                                                                         })(data[i]);
                                                                                         
@@ -2535,41 +2551,7 @@
 
                                                                                                     }
                                                                                                     $blueprintReadContainer.find('.modal-body #blueprintTemplateType').val(blueprint.templateType);
-                                                                                                    $.ajax({
-                                                                                                        type: "get",
-                                                                                                        dataType: "json",
-
-                                                                                                        async: false,
-                                                                                                        url: "../organizations/getTreeNew",
-                                                                                                        success: function(dataTree) {
-
-                                                                                                            console.log(data);
-                                                                                                            data = JSON.parse(JSON.stringify(data));
-
-                                                                                                            //  alert(JSON.stringify(data));
-
-
-                                                                                                            for (var j = 0; j < dataTree.length; j++) {
-
-                                                                                                                (function(j) {
-                                                                                                                    $blueprintReadContainer.find('.modal-body #blueprintORG').val(dataTree[j].name);
-                                                                                                                    for (var p = 0; p < dataTree[j].businessGroups.length; p++) {
-                                                                                                                        (function(p) {
-                                                                                                                            $blueprintReadContainer.find('.modal-body #blueprintBU').val(dataTree[j].businessGroups[p].name);
-                                                                                                                            //}
-                                                                                                                            for (var x = 0; x < dataTree[j].businessGroups[p].projects.length; x++) {
-                                                                                                                                $blueprintReadContainer.find('.modal-body #blueprintProject').val(dataTree[j].businessGroups[p].projects[x].name);
-                                                                                                                            }
-                                                                                                                        })(p);
-                                                                                                                    }
-                                                                                                                })(j);
-                                                                                                            }
-
-
-
-
-                                                                                                        }
-                                                                                                    });
+                                                                                                    getOrgProjDetailsSSOS(name);
 
 
 
@@ -2577,6 +2559,7 @@
                                                                                             })(data[i]);
 
                                                                                         }
+
                                                                                         $selectVerEdit.click(function(e) {
 
                                                                                             var $parent = $(this).parents('.cardimage');
