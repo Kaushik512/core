@@ -70,8 +70,9 @@ module.exports.setRoutes = function(app, sessionVerification) {
         });
     });
 
-    app.get('/tasks/:taskId/run', function(req, res) {
-
+    app.post('/tasks/:taskId/run', function(req, res) {
+        var choiceParam = req.body.choiceParam;
+        logger.debug("Choice Param::: ",choiceParam);
         Tasks.getTaskById(req.params.taskId, function(err, task) {
 
             if (err) {
@@ -80,7 +81,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 return;
             }
 
-            task.execute(req.session.user.cn, req.protocol + '://' + req.get('host'), function(err, taskRes) {
+            task.execute(req.session.user.cn, req.protocol + '://' + req.get('host'),choiceParam, function(err, taskRes) {
                 if (err) {
                     logger.error(err);
                     res.send(500, err);
