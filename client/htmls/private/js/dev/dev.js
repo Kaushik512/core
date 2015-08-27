@@ -708,8 +708,10 @@
 
                                                                         if (!$.fn.dataTable.isDataTable('#tableinstanceview')) {
                                                                             //alert('loading table');
-                                                                            tableinstanceview = $('#tableinstanceview').DataTable({
+                                                                            $tableinstanceview = $('#tableinstanceview').DataTable({
                                                                                 "pagingType": "full_numbers",
+                                                                                "bFilter": false,
+                                                                               // "bInfo": false,
                                                                                 "aoColumns": [
                                                                                      {
                                                                                         "bSortable": false
@@ -724,19 +726,15 @@
                                                                                     }, {
                                                                                         "bSortable": false
                                                                                     }, {
-                                                                                        "bSortable": false
-                                                                                    }, {
                                                                                         "bSortable": false,
                                                                                         "sWidth": "20%"
                                                                                     }
-                                                                                ],
-                                                                                /*"fnRowCallback": function(nRow, aData, iDisplayIndex) {
-                                                                                    $("td:first", nRow).html(iDisplayIndex + 1);
-                                                                                    return nRow;
-                                                                                }*/
-
+                                                                                ]
                                                                             });
                                                                         }
+
+                                                                        //ar $tableCount = $('#tableinstanceview');
+                                                                        
 
                                                                         //alert(data.length);
                                                                         if (data.length <= 0) {
@@ -1346,7 +1344,8 @@
                                                                               }else{
                                                                                 menuAppTaskLI = "<li style='font-size:10px;color:#3276b1'>No AppLinks Available</li>";
                                                                               }
-                                                                              $rowContainter.append('<td>' + menuAppTaskLI + '</td>');
+                                                                              //column removed from table..
+                                                                            //  $rowContainter.append('<td>' + menuAppTaskLI + '</td>');
 
                                                                               if (data.taskIds && data.taskIds.length) {
 
@@ -1833,6 +1832,7 @@
                                                                         $rowContainter.append('<td>' + $('<div></div>').append($tableActionBtnContainer).html() + menuStr +'</td>');
 
                                                                         var dataTable = $instanceDataTable.DataTable();
+                                                                        
                                                                         dataTable.row.add($rowContainter).draw();
 
 
@@ -1975,7 +1975,7 @@
                                                                         if (data.instanceState == 'running') {
                                                                             enableInstanceActionStartBtn(data._id, data.hardware.os);
                                                                         }
-                                                                        if (data.instanceState == 'pending' || data.instanceState == 'stopping') {
+                                                                        if (data.instanceState == 'pending' || data.instanceState == 'stopping' || data.instanceState == 'terminated') {
                                                                             disableInstanceActionBtns(data._id);
                                                                         }
                                                                         if (data.instanceState == 'unknown') {
@@ -1998,7 +1998,8 @@
                                                                             }
                                                                         }, 3);
                                                                         $('#divinstancescardview .carousel-inner .item').eq(0).addClass('active');
-
+                                                                        /*var $xyz = $instanceDataTable.dataTable().fnGetData().length;
+                                                                        alert($xyz);*/
                                                                     }
 
                                                                     function startAndStopToggler(e) {
@@ -3705,6 +3706,7 @@
                                                                                 obj = dat;
                                                                             }
                                                                             return obj;
+
                                                                         }
                                                                         data = getUpdatedData(data);
                                                                         if (!$.fn.dataTable.isDataTable('#tableOrchestration')) {
@@ -3738,7 +3740,13 @@
                                                                                 }]
 
                                                                             });
+                                                                            /*var count = 0;
+                                                                            $('#tableOrchestration tr').each(function() {
+                                                                                count++;
+                                                                            });
+                                                                            alert(count);*/
                                                                         }
+
                                                                         if (!$.fn.dataTable.isDataTable('#tablehistoryTask')) {
                                                                             //var $taskListArea = $('.taskListArea').empty();
                                                                             var $taskHistoryDatatable = $('#tablehistoryTask').DataTable({
@@ -4541,7 +4549,7 @@
                                                                                 $taskDatatable.row.add($tr).draw();
                                                                                 //$taskListArea.append($tr);
 
-                                                                                //aaaa
+                                                                                
                                                                                 if ($("#sorttableheader").length) {
                                                                                     //alert(1);
                                                                                     $("#sorttableheader").tablesorter();
