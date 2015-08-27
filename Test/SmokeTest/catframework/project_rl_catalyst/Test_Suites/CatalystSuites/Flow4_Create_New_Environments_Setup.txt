@@ -29,6 +29,7 @@ Catalyst Adding New Envirornments to the Chef          #from chef server
     [Teardown]     Close Browser
 
 
+
 #Catalyst Activation of User Created Envirornments           #from chef server
     [Tags]       Sanity       Settings
 #    Catalyst Login

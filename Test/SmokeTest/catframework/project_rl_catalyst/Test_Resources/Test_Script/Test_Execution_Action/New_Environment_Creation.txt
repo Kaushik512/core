@@ -59,15 +59,21 @@ Enters randomly generated environment name
     Set Global Variable    ${ENV STORE}
     Input Text    id=chefenvname    ${ENV STORE}
 
+
 Select the Newly created Environment
-    Sleep    4s
-    Click Element    css=#s2id_environmentname > .select2-choice
-    Log    after click
-    Input Text    css=#select2-drop .select2-input    ${ENV STORE}
-    Sleep    4s
-    Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
+    Click Element    css=#s2id_environmentname > a > span.select2-chosen
+    Sleep     1s
+    Input Text    css=#select2-drop > div > input    ${ENV STORE}
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element    xpath=.//*[@id='select2-drop']/ul/li[contains("${ENV STORE}",.)]
+ 
 
 
+    #Sleep    4s
+    #Click Element    css=#s2id_environmentname > .select2-choice
+    #Log    after click
+    #Input Text    css=#select2-drop .select2-input    ${ENV STORE}
+    #Sleep    4s
+    #Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
 
     #Click Element    xpath=.//*[@id='s2id_environmentname']/a/span[1]
     #Sleep     1s
