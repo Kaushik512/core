@@ -4484,7 +4484,7 @@ float: left;
     float:left;
 }
 .logsArea {
-    height:400px;
+    height:413px;
     overflow-y:auto;
     overflow-x:hidden;
     word-break:break-all;
@@ -4887,7 +4887,7 @@ padding-top:5px;
 /*Style CSS for header,navigation*/
 header
 {  
- border-bottom: 1px solid #CCCCCC;
+/* border-bottom: 1px solid #CCCCCC;*/
  min-height:8%!important;
 }
 @media(min-width:1400px){
@@ -5274,7 +5274,7 @@ body.custom-theme {
 
 .custom-theme #ribbon {
     /*Arabinda background:#fff;*/
-    background:linear-gradient(to right, #40baf1 99%, #cacaca 100%) repeat scroll 0 0 rgba(0, 0, 0, 0);
+    background:linear-gradient(to right, #40baf1 100%, #cacaca 100%) repeat scroll 0 0 rgba(0, 0, 0, 0);
 }
 
 .custom-theme .btn.btn-ribbon {
@@ -6071,6 +6071,7 @@ font-size:14px !important;
     background-position: -15px -12px ;
     width: 25px;
     height: 25px;
+    margin-left: 28px;
 }
 .actionbuttonChefClientRun{
     background-position: -59px -10px ;
@@ -7647,7 +7648,7 @@ body .ui-tooltip {
 }
 
 .instanceBody{
-    height:430px;
+    height:490px;
     overflow-y:auto;
     overflow-x:hidden;
     word-break:break-word;

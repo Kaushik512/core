@@ -2472,6 +2472,7 @@
                             getRowID = data[z]['_id'];
                             
                             getTemplateType = data[z]['osType'];
+                           // alert(getTemplateType);
                             getImage = 'img/osIcons/' + getTemplateType + '.png';
                             getTempName = data[z]['name'];
                             getImageData = '\'' + JSON.stringify(data[z]) + '\'';
@@ -2486,12 +2487,21 @@
                                 '<li><img style="height:40px;width:auto;" alt="" ' +
                                 'src="' + getImage + '">' +
                                 '</li><li style="font-size:12px;"><u><b>' + getTempName + '</b></u></li></ul></div></div>';
+
+                            
+                                
                             if(z >= rowGridLength -1)
                             {
+                            
+                                $wizard.data('secondClick', true);
+                                var wizard = $wizard.data('bootstrapWizard');
+                                
+                                
                                 $('#individualTemplateNameGrid').show();
+
                             }
                             continue;
-                        }
+                        } 
 
 
                          //iterate thhrough columns to get correct column and value
@@ -2576,6 +2586,15 @@
                      if ($('#tab1').find('.role-Selected').attr('data-templatetype') === "Docker" || $('#tab1').find('.role-Selected').attr('data-templatetype') === "docker") {
                          $('li.next').find('a').trigger('click');
                      }
+
+                    var wizard = $wizard.data('bootstrapWizard');
+                    if ($('#individualTemplateNameGrid').children('div').length) {
+                        wizard.enableNextBtn();
+
+                    } else {
+                        wizard.disableNextBtn();
+                    }
+
                  }
 
 
@@ -3364,6 +3383,9 @@
          if (index === 0) {
              $("#tabheader").html('Choose Template Type');
              $('#viewCreateNew').removeClass('hidden');
+             var wizard = $wizard.data('bootstrapWizard');
+              wizard.enableNextBtn();
+             
          } else if (index === 1) {
              $("#tabheader").html('Choose Templates');
              if ($('#tab1').find('.role-Selected').attr('data-templatetype') === "Docker" || $('#tab1').find('.role-Selected').attr('data-templatetype') === "docker") {
