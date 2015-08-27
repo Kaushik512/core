@@ -2001,7 +2001,7 @@ function getProviderListold() {
 
 
      function loadData() {
-        alert(providerselected);
+        //alert(providerselected);
          var providerVal = $('#providerId').val();
          if (providerVal) {
              $.get("/vmimages/providers/" + providerVal, function(data) {
