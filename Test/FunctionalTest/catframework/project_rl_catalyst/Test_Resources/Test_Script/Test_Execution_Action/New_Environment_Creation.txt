@@ -85,12 +85,30 @@ Catalyst Import a Node from Config Management
     Upload the PEM file in Inport Nodes
     Clicks on Import Button in Import Nodes
     Sleep    5s
+    Verify the Node Importedd
     Clicks on Close of ConfigMgmt Button
+    Sleep    10s
 
-    #Verify the Node Importedd
-    #Clicks on Workzone
-    #Sleep    10s
-    #Node is Inported in the  Environment
+
+Catalyst Verify and Delete the InportedNode from Environment
+    Sleep    4s
+    Clicks on the Button to the Environment
+    Sleep    4s
+    Node is Inported in the Environment
+    Delete the Node
+    Sleep    2s
+    Verfiy Node Deleted
+    
+
+
+Verfiy Node Deleted
+    Page Should Not Contain    ${IP Centos}
+
+
+Delete the Node
+    Click Element    xpath=.//*[@id='removeInstance']/i
+    Sleep   2s
+    Click Element    xpath=.//*[text()='Delete']
 
 
 Select the CheckBox to Import
@@ -98,8 +116,7 @@ Select the CheckBox to Import
     Sleep    2s
 
 Clicks on Close of ConfigMgmt Button
-    Click Element    xpath=.//*[text()='Close']
-
+    Click Element    xpath=.//*[@id='chefImportNodesResultModal']/div/div/div[3]/button
 
 Input the Environment Name in the Search
     Sleep    1s
@@ -107,18 +124,19 @@ Input the Environment Name in the Search
     Sleep    2s
     Click Element    css=ul > li:first-child > div
 
-Node is Inported in the  Environment
+Node is Inported in the Environment
     Sleep    4s
-    Element Should Contain    xpath=//div[@class='domain-roles-heading']//span[text()='{IP Centos}']
+    #Element Should Contain    xpath=//div[@class='domain-roles-heading']//span[text()='{IP Centos}']    ${IP Centos}
+    Element Should Contain    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${IP Centos}")]/div/div/div/div[3]/div/span[1]/strong    ${IP Centos}
 
 
 Clicks on Workzone
     Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element    xpath=.//*[@id='workZoneNew']
 
 Verify the Node Importedd
-    Element Should Contain    xpath=//div[@class='messageDiv']/div    Node Imported : ${IP Centos}
+    Sleep    2s
+    Element Should Contain    css=.messageDiv>div    Node Imported : ${IP Centos}
     Sleep    4s
-    Click Element    xpath=//*[text()='Close']
 
 
 
