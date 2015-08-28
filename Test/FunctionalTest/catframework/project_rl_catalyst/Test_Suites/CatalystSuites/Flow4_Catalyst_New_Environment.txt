@@ -30,17 +30,22 @@ Catalyst Adding New Envirornments to the Chef
     [Teardown]     Close Browser
 
 
-#-Catalyst Import a Node From ConfigManagement in to the Environment
-    #-[Tags]       Sanity       Env
+Catalyst Import a Node From ConfigManagement(Chef) in to the Environment
+    [Tags]       Sanity       Env
 #    Catalyst Login
-    #-Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
-    #-Catalyst Import a Node from Config Management
-    #-Catalyst Logout
-    #-[Teardown]     Close Browser
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst Import a Node from Config Management
+    Catalyst Logout
+    [Teardown]     Close Browser
 
 
-
-
+Catalyst Verify Node Imported from Config Management(Chef Server) & Delete
+    [Tags]       Sanity       Env
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst Verify and Delete the InportedNode from Environment
+    Catalyst Logout
+    [Teardown]     Close Browser
 
 
 

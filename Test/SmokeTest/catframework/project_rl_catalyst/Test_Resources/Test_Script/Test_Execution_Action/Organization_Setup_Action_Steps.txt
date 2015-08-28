@@ -20,9 +20,9 @@ Resource           ${CATALYST ACTION}/Users_Setup_With_New_Users_and_Teams.txt
 
 *** Keywords ***
 Version Number and the Jenkins Buildnumber
-   Open Browser    ${ENVIRONMENT SERVER}     ${BROWSER TYPE}
-   Sleep    5s   
-   Store the Buildnumber
+    Open Browser    ${ENVIRONMENT SERVER}     ${BROWSER TYPE}
+    Sleep    5s   
+    Store the Buildnumber
 
 
 
