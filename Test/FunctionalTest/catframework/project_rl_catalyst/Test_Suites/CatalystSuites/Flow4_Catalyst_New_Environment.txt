@@ -10,7 +10,7 @@ Resource           ${COMMON RESOURCES}/catalyst_grid_node.txt
 
 
 *** Test Cases ***
-#Catalyst new Environments setup
+Catalyst new Environments setup
     [Tags]       Sanity               Smoke
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
@@ -21,7 +21,7 @@ Resource           ${COMMON RESOURCES}/catalyst_grid_node.txt
 
 
 
-#Catalyst Adding New Envirornments to the Chef          
+Catalyst Adding New Envirornments to the Chef          
     [Tags]       Sanity       ps
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
@@ -30,7 +30,7 @@ Resource           ${COMMON RESOURCES}/catalyst_grid_node.txt
     [Teardown]     Close Browser
 
 
-Catalyst Import a Node From ConfigManagement in to the Environment
+Catalyst Import a Node From ConfigManagement(Chef) in to the Environment
     [Tags]       Sanity       Env
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
@@ -39,8 +39,13 @@ Catalyst Import a Node From ConfigManagement in to the Environment
     [Teardown]     Close Browser
 
 
-
-
+Catalyst Verify Node Imported from Config Management(Chef Server) & Delete
+    [Tags]       Sanity       Env
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst Verify and Delete the InportedNode from Environment
+    Catalyst Logout
+    [Teardown]     Close Browser
 
 
 
