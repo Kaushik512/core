@@ -9,7 +9,7 @@ Resource           ${COMMON RESOURCES}/catalyst_grid_node.txt
 
 
 *** Test Cases ***
-#Catalyst Create New Docker setup
+Catalyst Create New Docker setup
     [Tags]       Sanity               Smoke
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
@@ -20,10 +20,7 @@ Resource           ${COMMON RESOURCES}/catalyst_grid_node.txt
 
 
 
-
-
-
-#Catalyst Create New Cloud Formation Template setup
+Catalyst Create New Cloud Formation Template setup
     [Tags]       Sanity               Smoke
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
@@ -32,7 +29,7 @@ Resource           ${COMMON RESOURCES}/catalyst_grid_node.txt
     [Teardown]     Close Browser
 
 
-#Catalyst Create New Cloud Formation Blueprint setup
+Catalyst Create New Cloud Formation Blueprint setup
     [Tags]       Sanity               Smoke
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"

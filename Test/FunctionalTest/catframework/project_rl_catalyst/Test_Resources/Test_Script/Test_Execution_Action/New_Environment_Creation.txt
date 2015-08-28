@@ -74,7 +74,7 @@ Catalyst Import a Node from Config Management
     Clicks on Config Managementt
     Clicks on Import Nodes Button of Server for Sync
     Find the Instance and Impoert to the Environment
-    Input the Environment Name in the Search
+    #Input the Environment Name in the Search
     Select the CheckBox to Import
     Clicking on the Import Nodes Button in Config Mgmt Page 
     Verfiy the Organization is Disabled
@@ -85,16 +85,20 @@ Catalyst Import a Node from Config Management
     Upload the PEM file in Inport Nodes
     Clicks on Import Button in Import Nodes
     Sleep    5s
-    Verify the Node Importedd
-    Clicks on Workzone
-    Sleep    10s
-    Node is Inported in the  Environment
+    Clicks on Close of ConfigMgmt Button
+
+    #Verify the Node Importedd
+    #Clicks on Workzone
+    #Sleep    10s
+    #Node is Inported in the  Environment
 
 
 Select the CheckBox to Import
-    Click Element    xpath=.//*[@id='organiz']/table/tbody/tr[1]/td[text()='${IP Centos}']/../td[7]/label/i
+    Click Element    xpath=.//*[@id='organiz']/table/tbody/tr/td[text()='${IP Centos}']/../td[7]/label/i
     Sleep    2s
 
+Clicks on Close of ConfigMgmt Button
+    Click Element    xpath=.//*[text()='Close']
 
 
 Input the Environment Name in the Search
@@ -140,13 +144,12 @@ Clicks on Import Nodes Button of Server for Sync
 
 Find the Instance and Impoert to the Environment
     Sleep    2 minutes
-    Wait Until Keyword sSucceeds    1 minute     1 seconds       Element Should Be Visible       xpath=.//*[@id='organiz']/table/tbody/tr[1]/td[1]
-              ${maxloop} =        Set Variable     200
-    : FOR    ${INDEX}    IN RANGE    1    ${maxloop}        
-    \        ${VALUE}          Get Text       xpath=.//*[@id='organiz']/table/tbody/tr[${INDEX}]/td[1]
-    \       ${last index} =        Set Variable     ${INDEX}
-    \        Run Keyword If    '${VALUE}' == '${IP Centos}'      Exit For Loop          
     Click Element    xpath=.//*[@id='organiz']/table/tbody/tr/td[text()='52.24.178.71']/../td[6]/div/a/span[2]
+    Sleep    1s
+    Input Text    css=#select2-drop > div > input    ${ENVNAME}
+    Sleep    1s
+    Click Element    css=ul > li:first-child > div
+
     
 
     
@@ -171,8 +174,7 @@ Clicking on the Import Nodes Button in Config Mgmt Page
     Sleep    2s
 
 Verfiy the Organization is Disabled
-    Element Should Be Disabled     xpath=.//*[@id='s2id_chefImportOrgSelect']/a
-
+    Element Should Contain    xpath=.//*[@id='s2id_chefImportOrgSelect']/a    ${ORGANIZATION NAME}
 
 Select the Business Grp in Inport Nodes
     Click Element    xpath=.//*[@id='s2id_chefImportBgSelect']/a

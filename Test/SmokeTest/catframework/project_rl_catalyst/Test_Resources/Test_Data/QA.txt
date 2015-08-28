@@ -15,6 +15,7 @@ ${ENVIRONMENT SERVER}              http://54.153.94.33:3001/public/login.html
 
 
 
+
  
 
 ${ENV}                 QA.txt
@@ -472,7 +473,7 @@ ${JENKINS EDIT}           Jenkins
 ${JJOB NAME}               testjob
 
 
-${Stack_Name}         CatalystStack
+${Stack_Name}         RLStack
 ${ORG_NAME}           Phoenix
 ${BU_NAME}            PhoenixBG
 ${Proj_Name}          PhoenixApp
