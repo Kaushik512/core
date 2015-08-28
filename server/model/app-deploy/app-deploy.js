@@ -16,36 +16,16 @@ var schemaValidator = require('_pr/model/utils/schema-validator');
 var Schema = mongoose.Schema;
 
 var AppDeploySchema = new Schema({
-    applicationName:String,
+    applicationName: String,
     applicationInstanceName: String,
     applicationVersion: String,
     applicationNodeIP: String,
     applicationLastDeploy: String,
     applicationStatus: String,
-   orgId: {
-        type: String,
-        required: true,
-        trim: true,
-        validate: schemaValidator.orgIdValidator
-    },
-    bgId: {
-        type: String,
-        required: true,
-        trim: true,
-        validate: schemaValidator.bgIdValidator
-    },
-    projectId: {
-        type: String,
-        required: true,
-        trim: true,
-        validate: schemaValidator.projIdValidator
-    },
-    envId: {
-        type: String,
-        required: true,
-        trim: true,
-        validate: schemaValidator.envIdValidator
-    }
+    orgId: String,
+    bgId: String,
+    projectId: String,
+    envId: String
 
 });
 
@@ -87,7 +67,7 @@ AppDeploySchema.statics.updateAppDeploy = function(anId, appDeployData, callback
     for (var i = 0; i < keys.length; i++) {
         setData[keys[i]] = appDeployData[keys[i]];
     }
-    logger.debug("Whole data: ",JSON.stringify(setData));
+    logger.debug("Whole data: ", JSON.stringify(setData));
     this.update({
         "_id": anId
     }, {
@@ -139,7 +119,7 @@ AppDeploySchema.statics.removeAppDeploy = function(anId, callback) {
 };
 
 // Get all AppDeploy informations.
-AppDeploySchema.statics.getAppDeployByNameAndEnvId = function(appName,envId, callback) {
+AppDeploySchema.statics.getAppDeployByNameAndEnvId = function(appName, envId, callback) {
     this.find({
         applicationName: appName,
         envId: envId

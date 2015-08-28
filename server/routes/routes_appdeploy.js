@@ -98,7 +98,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                         res(500, "Error while removing appDeploy:");
                         return;
                     }
-                    if (gSettings) {
+                    if (appDeployes) {
                         logger.debug("Successfully Removed appDeploy.");
                         res.send(200, "Successfully Removed appDeploy.");
                         return;
