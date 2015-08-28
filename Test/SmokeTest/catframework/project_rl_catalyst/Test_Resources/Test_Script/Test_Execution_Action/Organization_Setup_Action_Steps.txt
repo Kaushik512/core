@@ -25,6 +25,7 @@ Version Number and the Jenkins Buildnumber
     Store the Buildnumber
 
 
+
 Store the Buildnumber
     ${JEN BUILDNUM}=    Get Text    xpath=.//*[@id='login']/footer/div[2]/p/span
     Log    ${JEN BUILDNUM}
