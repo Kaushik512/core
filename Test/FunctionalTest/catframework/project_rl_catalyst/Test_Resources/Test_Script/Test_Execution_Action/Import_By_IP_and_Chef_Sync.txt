@@ -287,7 +287,7 @@ Catalyst Instance Deleted From Chef Environment
     Clicks on Settings
     Sleep    5s
     Clicks on DevOps Setupp 
-    Clicks on Config Managementt
+    Clicks on ConfgMgmt butn
     Clicks on Import Nodes Button of Chef Server
 
 
@@ -304,7 +304,7 @@ Catalyst Ubuntu Instance Deleted From Chef Environment
     Clicks on Settings
     Sleep    5s
     Clicks on DevOps Setupp 
-    Clicks on Config Managementt
+    Clicks on ConfgMgmt butn
     Clicks on Import Nodes Button and verify Ubuntu instance deleted
 
 
@@ -318,7 +318,7 @@ Catalyst Delete the Node only From Catalyst
     Clicks on Settings
     Sleep    5s
     Clicks on DevOps Setupp 
-    Clicks on Config Managementt
+    Clicks on ConfgMgmt butn
     Clicks on Import Button Server
 
 Catalyst Delete the Ubuntu Node only From Catalyst
@@ -331,7 +331,7 @@ Catalyst Delete the Ubuntu Node only From Catalyst
     Clicks on Settings
     Sleep    5s
     Clicks on DevOps Setupp 
-    Clicks on Config Managementt
+    Clicks on ConfgMgmt butn
     Clicks on Import Button Server and Verfiy the Ubuntu Instance
 
 
@@ -369,7 +369,7 @@ Catlayst Importing the Instance Chef Sync
     Clicks on Settings
     Sleep    5s
     Clicks on DevOps Setupp 
-    Clicks on Config Managementt
+    Clicks on ConfgMgmt butn
     Clicks on Import Nodes Button of Server for Sync
     Find the Instance and Impoert to the Environment
     Clicking on the Import Nodes Button in Config Mgmt Page 
@@ -585,7 +585,7 @@ Clicks on the Delete Button to Delete the Instance
 Clicks on DevOps Setupp 
     Click Element    xpath=//*[text()='DevOps Setup']
 
-Clicks on Config Managementt
+Clicks on ConfgMgmt butn
     Click Element    xpath=//*[text()='Config Management']
 
 

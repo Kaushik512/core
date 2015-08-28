@@ -498,12 +498,12 @@ Choose Service Command Type
 Select Service CookBooks
     Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='s2id_servicecookbook']/a
     Wait Until Keyword Succeeds    1 minute     1 seconds    Input Text    xpath=.//*[@id='select2-drop']/div/input    ${COOKBOOK NAME}
-    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='select2-drop']/ul/li/div        
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    css=ul > li:nth-of-type(2) > div
 
 Select Edit Service CookBooks
     Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='s2id_servicecookbook']/a
     Wait Until Keyword Succeeds    1 minute     1 seconds    Input Text    xpath=.//*[@id='select2-drop']/div/input    ${COOKBOOK NAME1}
-    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='select2-drop']/ul/li/div  
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    css=ul > li:nth-of-type(1) > div
 
 
 
