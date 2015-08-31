@@ -233,8 +233,8 @@ Clicks on DevOps Setup menu
     Click Element    xpath=//a[contains(text(),'DevOps Setup')]
 
 Clicks on Config Management menu
-    Wait Until Keyword Succeeds    1 minute     1 seconds    Wait Until Element Is Visible       xpath=//a[contains(text(),'Config Management')]
-    Click Element    xpath=//a[contains(text(),'Config Management')]
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Wait Until Element Is Visible       xpath=//a[contains(text(),'Chef Server')]
+    Click Element    xpath=//a[contains(text(),'Chef Server')]
     
 Clicks on New button to Create New Config Management
         Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       link=New
