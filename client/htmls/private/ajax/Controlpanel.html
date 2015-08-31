@@ -50,6 +50,7 @@
 
                                         <!-- <a class="instanceActionBtnUpdateRunlist instance-bootstrap-list-image" rel="tooltip" data-placement="top" data-original-title="Chef Client Run"><img src="img/galleryIcons/Chefimport.png" alt="Chefimport" style="width:26px;height:auto;margin-top:1px;"></a> -->
                                         <a class="instanceActionBtnUpdateRunlist instance-bootstrap-list-image chefClientRunlistImageCP" rel="tooltip" data-placement="top" data-original-title="Chef Client Run"></a>
+                                         <a class="instanceActionBtnUpdatePuppetRunlist instance-bootstrap-list-image chefClientRunlistImageCP" rel="tooltip" data-placement="top" data-original-title="Puppet Client Run"></a>
                                       
                                       </div>
                                       <div class="actionbutton instance-bootstrap-ActionStart" style="display:none;"><a href="javascript:void(0)" class="actionbuttonStart instanceActionBtn" data-actiontype="Start" data-placement="top" rel="tooltip" data-original-title="Start"></a></div>
@@ -103,7 +104,7 @@
         <li class="active" style="margin-right: 30px;">
               <a style="color: #eee;border-radius: 5px 5px 0 0 ; padding: 9px 10px 13px;" href="#l1" data-toggle="tab" style="font-size: 16px" ><i class="fa fa-fw fa-exclamation-circle" style="font-size: 16px"></i>Information</a>
           </li>
-          <li class="pull-left" style="margin-right: 30px;">
+          <li class="pull-left serviceTabLi" style="margin-right: 30px;">
               <a style="color: #eee;border-radius: 5px 5px 0 0 ; padding: 9px 10px 13px;" href="#l2" data-toggle="tab" style="font-size: 16px"><i class="fa fa-fw fa-share-square-o"></i>Services</a>
           </li>
           <li class="pull-left" style="margin-right: 30px;">
@@ -1423,68 +1424,66 @@ $.get('../instances/' + urlParams.id, function(data) {
 
     //fetching services list
     //alert(data.chef.serverId);
-    $.get('/d4dMasters/19/chefserverid/' + data.chef.serverId, function(services) {
-        $.get('/d4dMasters/19/commandtype/Service%20Command', function(servicesCmd) {
+    if (data.chef) {
+        $.get('/d4dMasters/19/chefserverid/' + data.chef.serverId, function(services) {
+            $.get('/d4dMasters/19/commandtype/Service%20Command', function(servicesCmd) {
 
-            servicesCmd = JSON.parse(servicesCmd);
-            services = JSON.parse(services);
-            for (var k = 0; k < servicesCmd.length; k++) {
-                if (servicesCmd[k].chefserverid !== data.chef.serverId) {
-                    services.push(servicesCmd[k]);
+                servicesCmd = JSON.parse(servicesCmd);
+                services = JSON.parse(services);
+                for (var k = 0; k < servicesCmd.length; k++) {
+                    if (servicesCmd[k].chefserverid !== data.chef.serverId) {
+                        services.push(servicesCmd[k]);
+                    }
                 }
-            }
-            //alert('Out json :' + JSON.stringify(services)+ services.length);
-            var $serviceList = $('#serviceList');
-            console.log(services, "length==>", services.length);
-            var serviceIds = [];
-            if (data.serviceIds && data.serviceIds.length) {
-                serviceIds = data.serviceIds;
-            }
-
-            for (var i = 0; i < services.length; i++) {
-
-                var name = services[i].servicename;
-                if (!name) {
-                    name = services[i].commandname;
-                }
-                var $tr = $('<tr></tr>').attr('data-listServiceId', services[i].rowid);
-                var $tdName = $('<td></td>').append(name);
-                $tr.append($tdName);
-
-                var commandType = services[i].commandtype;
-                if (commandType === 'Chef Cookbook/Recipe') {
-                    var html = getCookbookActionHtml(services[i].rowid, services[i]);
-                } else {
-                    var html = getCommandActionHtml(services[i].rowid, services[i]);
+                //alert('Out json :' + JSON.stringify(services)+ services.length);
+                var $serviceList = $('#serviceList');
+                console.log(services, "length==>", services.length);
+                var serviceIds = [];
+                if (data.serviceIds && data.serviceIds.length) {
+                    serviceIds = data.serviceIds;
                 }
 
-                var $tdActions = $('<td></td>').append(html);
-                $tr.append($tdActions);
-                var $checkBox = $('<input type="checkbox" name="svcCkb"></input>').val(services[i].rowid).data('serviceData', services[i]);
-                var $tdCheckBox = $('<td></td>').append($checkBox);
-                $tr.append($tdCheckBox);
-                if (serviceIds.indexOf(services[i].rowid) !== -1) {
-                    $tr.addClass('hidden');
-                }
+                for (var i = 0; i < services.length; i++) {
 
-                $serviceList.append($tr);
-            }
+                    var name = services[i].servicename;
+                    if (!name) {
+                        name = services[i].commandname;
+                    }
+                    var $tr = $('<tr></tr>').attr('data-listServiceId', services[i].rowid);
+                    var $tdName = $('<td></td>').append(name);
+                    $tr.append($tdName);
+
+                    var commandType = services[i].commandtype;
+                    if (commandType === 'Chef Cookbook/Recipe') {
+                        var html = getCookbookActionHtml(services[i].rowid, services[i]);
+                    } else {
+                        var html = getCommandActionHtml(services[i].rowid, services[i]);
+                    }
+
+                    var $tdActions = $('<td></td>').append(html);
+                    $tr.append($tdActions);
+                    var $checkBox = $('<input type="checkbox" name="svcCkb"></input>').val(services[i].rowid).data('serviceData', services[i]);
+                    var $tdCheckBox = $('<td></td>').append($checkBox);
+                    $tr.append($tdCheckBox);
+                    if (serviceIds.indexOf(services[i].rowid) !== -1) {
+                        $tr.addClass('hidden');
+                    }
+
+                    $serviceList.append($tr);
+                }
+            });
         });
-        //console.log('hi ==>',serviceList);
-
-
-
-    });
-    if (data.serviceIds && data.serviceIds.length) {
-        $.post('/d4dMasters/getrows/19', {
-            serviceids: data.serviceIds
-        }, function(services) {
-            services = JSON.parse(services);
-            for (var i = 0; i < services.length; i++) {
-                console.log("sd1 = ", services[i]);
-                addServiceToDom(services[i]);
-            }
-        });
+        if (data.serviceIds && data.serviceIds.length) {
+            $.post('/d4dMasters/getrows/19', {
+                serviceids: data.serviceIds
+            }, function(services) {
+                services = JSON.parse(services);
+                for (var i = 0; i < services.length; i++) {
+                    console.log("sd1 = ", services[i]);
+                    addServiceToDom(services[i]);
+                }
+            });
+        }
     }
 
     // setting up action logs
@@ -1592,9 +1591,15 @@ $.get('../instances/' + urlParams.id, function(data) {
             }
         }
 
-
-    var $domainRolesCaption = $('.domain-roles-caption').attr('data-instanceId', data._id).attr('data-chefServerId', data.chef.serverId).attr('data-osType', data.hardware.os).attr('data-instanceIP', data.instanceIP).data('runlist', data.runlist).data('orgId', data.orgId).data('serviceList', data.serviceIds).data('jsonAttributes',data.attributes);
-
+    if(data.chef) {
+      var $domainRolesCaption = $('.domain-roles-caption').attr('data-instanceId', data._id).attr('data-chefServerId', data.chef.serverId).attr('data-osType', data.hardware.os).attr('data-instanceIP', data.instanceIP).data('runlist', data.runlist).data('orgId', data.orgId).data('serviceList', data.serviceIds).data('jsonAttributes',data.attributes);
+      $('.instanceActionBtnUpdatePuppetRunlist').remove();
+    } else {
+      var $domainRolesCaption = $('.domain-roles-caption').attr('data-instanceId', data._id).attr('data-puppetServerId', data.puppet.serverId).attr('data-osType', data.hardware.os).attr('data-instanceIP', data.instanceIP).data('runlist', data.runlist).data('orgId', data.orgId).data('serviceList', data.serviceIds).data('jsonAttributes',data.attributes);
+      $('.instanceActionBtnUpdateRunlist').remove();
+      $('.serviceTabLi').hide();
+    }
+    
     var $divHeadingCP = $domainRolesCaption.find('.domain-roles-heading').empty();
 
     if (data.blueprintData.iconPath == undefined) {
@@ -2417,7 +2422,7 @@ $.get('../instances/' + urlParams.id, function(data) {
     function memoryCalculation(data) {
         var memoryInitial = data;
         //alert(memoryInitial);
-        if(memoryInitial == 'unknown'){
+        if(memoryInitial == 'unknown' || memoryInitial.indexOf('MB') !== -1){
           return memoryInitial;
         }else{
           var mem = memoryInitial.substring(0, memoryInitial.length - 2);
@@ -2635,7 +2640,7 @@ $.get('../instances/' + urlParams.id, function(data) {
     // $cfmwareTbody.append($tr); //commented as we were receiving the id instead of the name : Vinod
 
     $tr = $('<tr style="line-height:2.3"></tr>');
-    $tr.append('<td scope="col" style="font-size:12px;">Chef Bootstrap</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + data.bootStrapStatus + '</td>');
+    $tr.append('<td scope="col" style="font-size:12px;">Bootstrap</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + data.bootStrapStatus + '</td>');
     $cfmwareTbody.append($tr);
 
     $tr = $('<tr style="line-height:2.3"></tr>');

@@ -37,6 +37,10 @@ var Task = require('../model/classes/tasks/tasks.js');
 var utils = require('../model/classes/utils/utils.js');
 var SCPClient = require('../lib/utils/scp');
 var shellEscape = require('shell-escape');
+
+var Puppet = require('_pr/lib/puppet.js');
+var masterUtil = require('_pr/lib/utils/masterUtil');
+
 //var WINRM = require('../lib/utils/winrmexec');
 
 module.exports.setRoutes = function(app, sessionVerificationFunc) {
@@ -128,33 +132,66 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                     }
 
                     if (req.query.chefRemove && req.query.chefRemove === 'true') {
-                        configmgmtDao.getChefServerDetails(instance.chef.serverId, function(err, chefDetails) {
-                            if (err) {
-                                logger.debug("Failed to fetch ChefServerDetails ", err);
-                                res.send(500, errorResponses.chef.corruptChefData);
-                                return;
-                            }
-                            var chef = new Chef({
-                                userChefRepoLocation: chefDetails.chefRepoLocation,
-                                chefUserName: chefDetails.loginname,
-                                chefUserPemFile: chefDetails.userpemfile,
-                                chefValidationPemFile: chefDetails.validatorpemfile,
-                                hostedChefUrl: chefDetails.url,
-                            });
-                            chef.deleteNode(instance.chef.chefNodeName, function(err, nodeData) {
-                                if (err) {
-                                    logger.debug("Failed to delete node ", err);
-                                    if (err.chefStatusCode && err.chefStatusCode === 404) {
-                                        removeInstanceFromDb();
-                                    } else {
-                                        res.send(500);
-                                    }
-                                } else {
-                                    removeInstanceFromDb();
-                                    logger.debug("Successfully removed instance from db.");
-                                }
-                            });
 
+                        var infraManagerData = instance.chef || instance.puppet;
+                        var infraManagerId = infraManagerData.serverId;
+
+                        masterUtil.getCongifMgmtsById(infraManagerId, function(err, infraManagerDetails) {
+
+                            if (infraManagerData.configType === 'chef') {
+
+                                if (err) {
+                                    logger.debug("Failed to fetch ChefServerDetails ", err);
+                                    res.send(500, errorResponses.chef.corruptChefData);
+                                    return;
+                                }
+                                var chef = new Chef({
+                                    userChefRepoLocation: infraManagerDetails.chefRepoLocation,
+                                    chefUserName: infraManagerDetails.loginname,
+                                    chefUserPemFile: infraManagerDetails.userpemfile,
+                                    chefValidationPemFile: infraManagerDetails.validatorpemfile,
+                                    hostedChefUrl: infraManagerDetails.url,
+                                });
+                                chef.deleteNode(instance.chef.chefNodeName, function(err, nodeData) {
+                                    if (err) {
+                                        logger.debug("Failed to delete node ", err);
+                                        if (err.chefStatusCode && err.chefStatusCode === 404) {
+                                            removeInstanceFromDb();
+                                        } else {
+                                            res.send(500);
+                                        }
+                                    } else {
+                                        removeInstanceFromDb();
+                                        logger.debug("Successfully removed instance from db.");
+                                    }
+                                });
+                            } else {
+                                var puppetSettings = {
+                                    host: infraManagerDetails.hostname,
+                                    username: infraManagerDetails.username,
+                                };
+                                if (infraManagerDetails.userpemfile_filename) {
+                                    puppetSettings.pemFileLocation = appConfig.puppet.puppetReposLocation + infraManagerDetails.orgname_rowid[0] + '/' + infraManagerDetails.folderpath + infraManagerDetails.userpemfile_filename
+                                } else {
+                                    puppetSettings.password = infraManagerDetails.puppetpassword;
+                                }
+                               
+                                var puppet = new Puppet(puppetSettings);
+                                puppet.deleteNode(instance.puppet.puppetNodeName, function(err,deleted) {
+                                    if (err) {
+                                        logger.debug("Failed to delete node ", err);
+                                        if (err.chefStatusCode && err.chefStatusCode === 404) {
+                                            removeInstanceFromDb();
+                                        } else {
+                                            res.send(500);
+                                        }
+                                    } else {
+                                        removeInstanceFromDb();
+                                        logger.debug("Successfully removed instance from db.");
+                                    }
+                                });
+
+                            }
                         });
                     } else {
                         removeInstanceFromDb();
@@ -1117,7 +1154,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                             runlist: req.body.runlist,
                                             overrideRunlist: false,
                                             jsonAttributes: JSON.stringify(jsonAttributeObj)
-                                                //parallel:true
+                                            //parallel:true
                                         }
                                         logger.debug('decryptCredentials ==>', decryptedCredentials);
                                         if (decryptedCredentials.pemFileLocation) {
@@ -1851,7 +1888,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                 port: 22,
                                 runlist: runlist, // runing service runlist
                                 overrideRunlist: true
-                                    //parallel:true
+                                //parallel:true
                             }
                             if (decryptedCredentials.pemFileLocation) {
                                 chefClientOptions.privateKey = decryptedCredentials.pemFileLocation;

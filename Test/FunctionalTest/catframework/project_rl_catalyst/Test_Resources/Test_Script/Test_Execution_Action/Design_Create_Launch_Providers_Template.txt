@@ -548,7 +548,7 @@ Steps to Run Stopping the Instance
     Clicks on Back To Instances
     
 
-Catlayst verfication of Instance Stop Setup and Disable
+Catlayst verfication of CentOS Instance Stop Setup and Disable
     #Clicks on Workzone Button
     #Clicks on User Created Organization
     #Clicks on User Created BusinessGroup
@@ -556,19 +556,19 @@ Catlayst verfication of Instance Stop Setup and Disable
     #-Clicks on your Blueeeprint
     Verfified the STOPPED Status
     Verify the IP Address after Launch of Instance
-    Verify the CHEF Client Run
+    Verify the CHEF Client Run is disabled
     Verfiy the SSH is Disabled
     Verify the Start Button Enabled
-    Verfiy the More Info Button is Dispalyed
+    Verfiy the Applink Button is Dispalyed
     Clicks on Contreol Panel
     Verify the IP Address after Launch of Instance
     Verify the Stopped CHEF Client Run after Updation
     Verfiy the Stopped SSH is Disabled after Updation
     Verify the Start Button Enabled from Contrl Panel
-    Verfiy the More Info Button is Dispalyed from Control panel
+    Verfiy the Applink Button is Dispalyed from Control panel
     Verify the Machine status from CntrlPanel
-    #Verify the Total Memory from CntrlPanel
-    #Verify the Free Memory from CntrlPanel
+    Verify the Total Memory from CntrlPanel
+    Verify the Free Memory from CntrlPanel
     Verfiy the OS Frm ContrlPanel
     Verfify the Chef Bootstrap frm ContrlPanel
     Verify the Runlist from CntrlPanel
@@ -659,7 +659,7 @@ Catalyst Check INFORMATION Status for Ubuntu
     Check the Chef BootStrap
     Clicks on Back To Instances
 
-Catalyst Grid View Verify Start ,Stop ,SSH ,Chef ,Client ,Log Setup and Delete
+Catalyst Grid View Verify Start ,Stop ,SSH ,Chef ,Client ,Log Setup
     #Clicks on Workzone Button
     #Clicks on User Created Organization
     #Clicks on User Created BusinessGroup
@@ -684,7 +684,37 @@ Catalyst Grid View Verify Start ,Stop ,SSH ,Chef ,Client ,Log Setup and Delete
     #Verfiy the STOP Toggler Enabled from Grid View
     Clicks on View Instancess Button
 
-Catalyst Grid View Verify Start ,Stop ,SSH ,Chef ,Client ,Log ,Del Setup of Ubuntu
+Catalyst CentOS Deleete the Instance Setup
+    Sleep    4s
+    Clicks on CentOS Instance to Delete
+    Del the CentOS Instance
+
+Catalyst ubuntu OS Deleete the Instance Setup
+    Sleep    4s
+    Clicks on the Button to the Environment
+    Sleep    3s
+    Clicks on Ubuntu OS Instance to Delete
+    Del the CentOS Instance
+
+Del the CentOS Instance
+    Click Element    id=removeInstance
+    Sleep    1s
+    Click Element    id=ckbChefDelete
+    Sleep    1s
+    Click Element    xpath=//*[text()='Delete']
+
+
+Clicks on CentOS Instance to Delete
+    Sleep    3s
+    Click Element    xpath=//span[@data-original-title='${NEW BLUEPRINT NAME}']
+
+
+Clicks on Ubuntu OS Instance to Delete
+    Sleep    3s
+    Click Element    xpath=//span[@data-original-title='${NEW UBUNTU BLUPRNT}']
+    
+
+Catalyst Grid View Verify Start ,Stop ,SSH ,Chef ,Client ,Log Setup of Ubuntu
     Clicks on the Button to the Environment
     Sleep    1s
     Clicks on Instances View
@@ -705,6 +735,10 @@ Catalyst Grid View Verify Start ,Stop ,SSH ,Chef ,Client ,Log ,Del Setup of Ubun
     #Verify the SSH Enabledd fromn Grid View
     #Verfiy the STOP Toggler Enabled from Grid View
     Clicks on View Instancess Button
+
+
+
+
 
 
 
@@ -858,11 +892,7 @@ SSH in to the Instance from Grid view
 Clicks on View Instancess Button
     Click Element    id=defaultViewButton
     Sleep    3s
-    Click Element    id=removeInstance
-    Sleep    1s
-    Click Element    id=ckbChefDelete
-    Sleep    1s
-    Click Element    xpath=//*[text()='Delete']
+    
 
 
 
@@ -955,7 +985,7 @@ Catlayst verfication of Instance Stop Setup and Disable of Ubuntu
     #Clicks on your Ubuntu Blueeeprint
     Verfified the STOPPED Status of Ubuntu
     Verify the IP Address after Launch of Ubuntu Instance
-    Verify the CHEF Client Run off Ubuntu
+    Verify the CHEF Client Run off Ubuntu disabled
     Verfiy the SSH is Disabled off Ubuntu
     Verify the Ubuntuu Start Button Enabled
     Verfiy the More Info Button Dispalyed off Ubuntu
@@ -1037,10 +1067,10 @@ Verify the Runlist for Ubuntu from CntrlPanel
 
 
 Verify the Start Button Enabled
-    Wait Until Keyword Succeeds    1 minute     1 seconds    Element Should Be Visible    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${BLUEPRINT NAME}")]/div/div/div/div/div/div[4]/div[@class='startstoptoggler stopped'] 
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Element Should Be Visible    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${BLUEPRINT NAME}")]/div/div/div/div[4]/div[@class='startstoptoggler stopped']
 
 Verify the Ubuntuu Start Button Enabled
-    Wait Until Keyword Succeeds    1 minute     1 seconds    Element Should Be Visible    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${NEW UBUNTU BLUPRNT}")]/div/div/div/div/div/div[4]/div[@class='startstoptoggler stopped']
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Element Should Be Visible    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${BLUEPRINT NAME1}")]/div/div/div/div[4]/div[@class='startstoptoggler stopped']
 
 
 Verify the Stopped CHEF Client Run after Updation
@@ -1189,7 +1219,7 @@ Verfiy the More Info Button Dispalyed off Ubuntu
     Element Should Be Visible    xpath=//div[@class='domain-roles-caption'][//div[//span[text()='${NEW UBUNTU BLUPRNT}']]]/div[4]/span
     
 
-Verfiy the More Info Button is Dispalyed from Control panel
+Verfiy the Applink Button is Dispalyed from Control panel
     Wait Until Keyword Succeeds    1 minute     1 seconds     Element Should Be Visible    xpath=.//*[@id='controlPanelContainer']/div/div/ul/li[contains(.,"${BLUEPRINT NAME}")]/div/div/div/div/div/div[4]/span/a[@class='moreInfo']
 
 Verfiy the Ubuntu More Info Button is Dispalyed from Control panel
@@ -1242,11 +1272,11 @@ Verfified the STOPPED Status of Ubuntu
 
 
 Verify the IP Address after Launch of Instance
-    ${EXTRACTED}=    Get Value       xpath=//.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${BLUEPRINT NAME}")]/div/div/div[1]/div/div/div[3]/div/span[1]/strong[@class='instanceip']
+    ${EXTRACTED}=    Get Text    xpath=//.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${BLUEPRINT NAME}")]/div/div/div[1]/div/div/div[3]/div/span[1]/strong[@class='instanceip']
     Run Keyword If    '${STATS}' != '${EXTRACTED}'    Log    ${PRINTSTMT}
 
 Verify the IP Address after Launch of Ubuntu Instance
-    ${EXTRACTED}=    Get Value       xpath=//.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${BLUEPRINT NAME1}")]/div/div/div[1]/div/div/div[3]/div/span[1]/strong[@class='instanceip']
+    ${EXTRACTED}=    Get Text     xpath=//.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${BLUEPRINT NAME1}")]/div/div/div[1]/div/div/div[3]/div/span[1]/strong[@class='instanceip']
     Run Keyword If    '${STATS}' != '${EXTRACTED}'    Log    ${PRINTSTMT} is the IP Address
 
 
@@ -1319,12 +1349,15 @@ Verify the CHEF Client Run
     Sleep    5s
     Wait Until Keyword Succeeds    1 minute     1 seconds    Element Should Be Visible    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${BLUEPRINT NAME}")]/div/div/div/div/div[1]/a[@class='chefClientRunlistImage actionbuttonChefClientRun instance-bootstrap-list-image']
 
+Verify the CHEF Client Run is disabled
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Element Should Be Visible    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${BLUEPRINT NAME}")]/div/div/div/div/div[1]/a[@class='chefClientRunlistImage instance-bootstrap-list-image isStopedInstance actionbuttonChefClientRundisable']
+
 
 Verify the CHEF Client Run for Ubuntu
     Sleep    5s
     Wait Until Keyword Succeeds    1 minute     1 seconds    Element Should Be Visible    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${BLUEPRINT NAME1}")]/div/div/div/div/div[1]/a[@class='chefClientRunlistImage actionbuttonChefClientRun instance-bootstrap-list-image']
 
-Verify the CHEF Client Run off Ubuntu
+Verify the CHEF Client Run off Ubuntu disabled
     Wait Until Keyword Succeeds    1 minute     1 seconds    Element Should Be Visible    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${NEW UBUNTU BLUPRNT}")]/div/div/div/div/div/div[4]/div[1]/a[@class='chefClientRunlistImage instance-bootstrap-list-image isStopedInstance actionbuttonChefClientRundisable']
 
 
@@ -1335,7 +1368,10 @@ Verfiy the SSH is Enabled for Ubuntu
     Wait Until Keyword Succeeds    1 minute     1 seconds    Element Should Be Visible    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${BLUEPRINT NAME1}")]/div/div/div/div/div[2]/a[@class='sshIcon devTOP']    
 
 Verfiy the SSH is Disabled off Ubuntu
-    Wait Until Keyword Succeeds    1 minute     1 seconds    Element Should Be Visible    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${NEW UBUNTU BLUPRNT}")]/div/div/div[1]/div/div/div[4]/div[2]/a[@class='devTOP isStopedInstance sshIcondisable']    
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Element Should Be Visible    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${BLUEPRINT NAME1}")]/div/div/div/div[4]/div[2]/a[@class='devTOP isStopedInstance sshIcondisable']    
+
+Verfiy the SSH is Disabled
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Element Should Be Visible    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${BLUEPRINT NAME}")]/div/div/div/div[4]/div[2]/a[@class='devTOP isStopedInstance sshIcondisable']
 
 
 

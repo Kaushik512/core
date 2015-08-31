@@ -618,7 +618,6 @@ var Chef = function(settings) {
             var sshExec = new SSHExec(options);
             sshExec.exec(cmd, callback, callbackOnStdOut, callbackOnStdErr);
 
-
         } else {
 
             var processOptions = {
@@ -683,9 +682,7 @@ var Chef = function(settings) {
         //var proc = new Process('knife', ['winrm', options.host, ' "powershell ' + cmd + ' "', '-m', '-P', options.password, '-x', options.username], processOptions);
         var proc = new Process('knife', ['winrm', options.host, "\'" + cmd + "\'", '-m', '-P\"', options.password + '\"', '-x', options.username], processOptions);
         proc.start();
-
-
-    }
+    };
 
 
     this.updateNodeEnvironment = function(nodeName, newEnvironment, callback) {

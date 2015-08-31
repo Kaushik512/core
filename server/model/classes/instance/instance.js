@@ -132,7 +132,7 @@ var InstanceSchema = new Schema({
     runlist: [{
         type: String,
         trim: true
-            //validate: schemaValidator.recipeValidator
+        //validate: schemaValidator.recipeValidator
     }],
     attributes: [{
         name: String,
@@ -169,10 +169,21 @@ var InstanceSchema = new Schema({
     chef: {
         serverId: {
             type: String,
-            required: true,
             trim: true
         },
         chefNodeName: String
+    },
+    puppet: {
+        serverId: {
+            type: String,
+            trim: true
+        },
+        puppetNodeName: String
+    },
+    infraManager: {
+        serverId: String,
+        nodeName: String,
+        type: String,
     },
     software: [{
         name: {
@@ -750,6 +761,28 @@ var InstancesDao = function() {
             callback(null, data);
         });
     };
+
+    this.updateInstancePuppetNodeName = function(instanceId, nodeName, callback) {
+        logger.debug("Enter updateInstancePuppetNodeName (%s, %s)", instanceId, nodeName);
+        Instances.update({
+            "_id": new ObjectId(instanceId),
+        }, {
+            $set: {
+                "puppet.puppetNodeName": nodeName
+            }
+        }, {
+            upsert: false
+        }, function(err, data) {
+            if (err) {
+                logger.error("Failed to updateInstancePuppetNodeName (%s, %s)", instanceId, nodeName, err);
+                callback(err, null);
+                return;
+            }
+            logger.debug("Exit updateInstancePuppetNodeName (%s, %s)", instanceId, nodeName);
+            callback(null, data);
+        });
+    };
+
 
     this.removeInstancebyId = function(instanceId, callback) {
         logger.debug("Enter removeInstancebyId (%s)", instanceId);

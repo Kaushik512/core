@@ -86,7 +86,7 @@ var d4dMastersEnvironments = new mongoose.Schema(
 	name: {type:String,trim:true},
 	orgname: {type:[String],required:false, trim:true},
 	orgname_rowid: {type:[String], trim:true},
-	environmentname: {type:String,required:true, trim:true},
+	environmentname: {type:String, trim:true},
 	puppetenvironmentname: {type:String},
 	description: {type:String, trim:true, validate:descValidator},
 	active: {type:Boolean, trim:true,default:true},
@@ -170,6 +170,7 @@ var d4dMastersConfigManagement = new mongoose.Schema(
 	template_filename: {type:String, trim:true},
 	folderpath: {type:String, trim:true},
 	active: {type:Boolean, trim:true,default:true},
+	configType: {type:String, trim:true},
 	rowid:{type:String,required:true, trim:true}},{collection:'d4dmastersnew'}
 );
 var d4dModelMastersConfigManagement = mongoose.model('d4dModelMastersConfigManagement',d4dMastersConfigManagement,'d4dmastersnew');
@@ -346,10 +347,12 @@ var d4dMastersPuppetServer = new mongoose.Schema(
 	orgrowid: {type:String, trim:true},
 	puppetservername: {type:String,required:true, trim:true},
 	username: {type:String,required:true, trim:true},
-	puppetserverurl: {type:String, trim:true},
+	puppetpassword: {type:String,trim:true},
 	userpemfile_filename: {type:String, trim:true},
 	folderpath: {type:String, trim:true},
 	active: {type:Boolean, trim:true,default:true},
+	configType: {type:String, trim:true},
+	hostname: {type:String,required:true, trim:true},
 	rowid:{type:String,required:true, trim:true}},{collection:'d4dmastersnew'}
 );
 var d4dModelMastersPuppetServer = mongoose.model('d4dModelMastersPuppetServer',d4dMastersPuppetServer,'d4dmastersnew');
