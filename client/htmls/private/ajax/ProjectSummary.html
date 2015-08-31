@@ -40,13 +40,6 @@
         </h4>
       </div>
       <div id="collapseAppEnv1" class="panel-collapse collapse in envAppDeployAccordian" style="padding: 5px;">
-        <!-- <div class="panel-heading">
-          <span class="pull-right swap-view" style="margin-top:-10px;">
-              <a class="btn1 envAppDeployModal" href="#modalAppCardDetails" data-toggle="modal"> 
-                <i title="Add Application Details" class="fa fa-plus fa-2x font-size18" style="color:#40baf1;cursor:pointer;"></i>
-              </a>
-          </span>
-        </div> -->
         <div class="table-responsive table-div">
           <table id="tableappDeploydetails" class="table table-striped table-bordered table-hover dataTable envAppDeployTable" style="border:1px solid #eeeeee !important; text-align:center;font-size:12px;margin-top:45px;" width="100%" cellpadding="5px">
                 <thead>
@@ -62,107 +55,13 @@
                         <td style="color:#fff;background-color: #2c3742;">Action</td>
                     </tr>
                 </thead>
-                <tbody>
-                  <!-- <tr>
-                      <td>1</td>
-                      <td>Catalyst</td>
-                      <td>Cat1</td>
-                      <td>NodeJS</td>
-                      <td>1.13.0</td>
-                      <td>216.58.220.46</td>
-                      <td>14/8/2015 19:05pm</td>
-                      <td><img src="img/indicator_started.png"></td>
-                      <td>
-                        <img style="height: 18px;margin-left: -5px;" src="img/projectdemo/app-performanceblack.png" title="App-Performance">
-                        <img style="height: 18px;margin-left: 5px;" src="img/projectdemo/logsblack.png" title="App-Logs">
-                        <img style="height: 18px;margin-left: 5px;" src="img/projectdemo/code_healthblack.png" title="Code-Health">
-                        <img style="height: 18px;margin-left: 5px;" src="img/projectdemo/UI_performanceblack.png" title="UI-Performance">
-                          
-                      </td>
-                      <td>
-                        <div class="updateupgrade" style="margin-left:30%;" title="Upgrade"></div>
-                      </td>
-                  </tr> -->                     
+                <tbody>                   
                 </tbody>                   
           </table>                
         </div>
       </div>
   </div>
 </div>
-<!-- <div class="envAppDeployParentModalDetails">
-  <div class="modal fade envAppDeploymodalDetailsClass" id="" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" style="display:none">
-      <div class="modal-dialog">
-          <div class="modal-content">
-            <form role="form" id="" autocomplete="off">
-              <div class="modal-header">
-                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                      X
-                  </button>
-                  <h4 class="modal-title">
-                      <i class="fa fa-th-list txt-color-blue"></i>&nbsp;&nbsp;Add Parameters
-                  </h4>
-              </div>
-             
-              <div class="modal-body">
-                  <div class="addApptoAppend">
-                    <div style="margin:5px 0px 0px;" class="row application4Params">
-                      <div style="padding-left:0px;" class="col-lg-6">
-                        <label for="name">Application Name:
-                        </label>
-                        <input type="text" autofocus="" style="height:36px;" class="form-control envAppDeploymodalAppName" id="">
-                      </div>
-                      <div style="padding-left:0px;" class="col-lg-6">
-                        <label for="name">Components:
-                        </label>
-                        <input type="text" style="height:36px;" class="form-control applicationComponentsInput" id="">
-                      </div>
-                      <div style="padding-left:0px;" class="col-lg-6">
-                        <label for="name">App-Instance Name:
-                        </label>
-                        <input type="text" style="height:36px;" class="form-control applicationInstanceNameInput" id="">
-                      </div>
-                      
-                      <div style="padding-left:0px;" class="col-lg-6">
-                        <label for="name">Version:
-                        </label>
-                        <input type="text" style="height:36px;" class="form-control applicationVersionInput" id="">
-                      </div>
-                      <div style="padding-left:0px;" class="col-lg-6">
-                        <label for="name">Node IP:
-                        </label>
-                        <input type="text" style="height:36px;" class="form-control applicationNodeIPInput" id="">
-                      </div>
-                      <div style="padding-left:0px;" class="col-lg-6">
-                        <label for="name">Last Deploy:
-                        </label>
-                        <input type="text" style="height:36px;" class="form-control applicationLastDeployInput" id="">
-                      </div>
-                      <div style="padding-left:0px;" class="col-lg-6">
-                        <label for="name">Status:
-                        </label>
-                        <input type="text" style="height:36px;" class="form-control applicationStatusInput" id="">
-                      </div> 
-                    </div>
-                  </div>
-              </div>
-               <div class="modal-footer">
-                  <div class="btn-group" style="margin-left:200px;">                                 
-                   <a class="btn btn-primary parameterAppDeploySaveBtn" data-dismiss="modal">
-                      <i class="ace-icon fa fa-save bigger-110"></i>
-                      Save
-                  </a>
-                  <a style="margin-left:10px;" class="btn btn-primary" data-dismiss="modal">
-                      <i class="ace-icon fa fa-undo bigger-110"></i>
-                      Cancel
-                  </a>
-                  </div>
-                </div>
-               </form>
-          </div>
-      </div>
-  </div>
-</div> -->
-
 <script type="text/javascript">
   var urlParams = {};
   (window.onpopstate = function() {
@@ -177,773 +76,111 @@
               urlParams[paramParts[0]] = paramParts[1];
           }
       }
-
   })();
-  $(function(){
-    $('#widgetAppDeploy').hide();
-  })
-  // var envArray = [];
-
-  // function loopNodes(nodes) {
-  //     for (var i = 0; i < nodes.length; i++) {
-  //         var childNodes = nodes[i].nodes;
-  //         if (childNodes && childNodes.length) {
-  //             if (nodes[i].rowid == urlParams.projid) {
-  //                 for (var j = 0; j < childNodes.length; j++) {
-  //                     envArray.push(childNodes[j].text);
-  //                 }
-  //             } else {
-  //               loopNodes(childNodes)
-  //             }
-  //         }
-
-  //     }
-  // }
-  
-  // $(function() {
-  //     $.get('/organizations/getTreeForbtv', function(data) {
-  //       loopNodes(data);
-  //       var $accordianTemplate = $('.accordianTemplateContainer').find('.accordianTemplate');
-  //       console.log(envArray);
-  //       for (var i = 0; i < envArray.length; i++) {
-  //         var $clone = $accordianTemplate.clone(true);
-  //         $clone.attr('id', envArray[i] + '_parentAccordian');
-  //         $clone.find('.envAppDeployAnchor').attr('data-parent', '#' + envArray[i] + '_parentAccordian');
-
-
-  //         $clone.find('.envAppDeployName').html('<u>' + envArray[i] + '</u>');
-  //         $clone.find('.envAppDeployAnchor').attr('href', '#' + envArray[i] + '_accordian');
-  //         $clone.find('.envAppDeployAccordian').attr('id', envArray[i] + '_accordian');
-  //         $clone.find('.envAppDeployTable').attr('id', envArray[i] + '_tableappDeploydetails');
-
-  //         $('#accordion-AppDeploy').append($clone);
-  //         if (!$.fn.dataTable.isDataTable('#' + envArray[i] + '_tableappDeploydetails')) {
-  //             $('#' + envArray[i] + '_tableappDeploydetails').DataTable({
-  //                 "pagingType": "full_numbers",
-  //                 "iDisplayLength": 5,
-  //                 //"oSearch": {"sSearch": "Initial search"},
-  //                 "aLengthMenu": [
-  //                     [5, 40, 100, -1],
-  //                     [5, 40, 100, "All"]
-  //                 ],
-  //                 "aoColumns": [{
-  //                     "bSortable": true
-  //                 }, {
-  //                     "bSortable": true
-  //                 }, {
-  //                     "bSortable": true
-  //                 }, {
-  //                     "bSortable": true
-  //                 }, {
-  //                     "bSortable": true
-  //                 }, {
-  //                     "bSortable": true
-  //                 }, {
-  //                     "bSortable": true
-  //                 }, {
-  //                     "bSortable": true
-  //                 }, {
-  //                     "bSortable": false
-  //                 }]
-  //             });
-  //         }
-          
-  //         // for (var j = 0; j < readAppDeploymentData.length; j++) {
-  //         //     console.log(readAppDeploymentData[j]);
-  //         //     var deployData = readAppDeploymentData[j];
-  //         //     var $taskenvArray = $('#' + deployData.envID + '_tableappDeploydetails');
-
-  //         //     var rowindex = $taskenvArray.dataTable().fnGetData().length;
-
-  //         //     if (deployData.applicationStatusInput == 'Successful') {
-  //         //         deployData.applicationStatusInput = '<img src="img/indicator_started.png">';
-  //         //     } else if (deployData.applicationStatusInput == 'Failure') {
-  //         //         deployData.applicationStatusInput = '<img src="img/indicator_stopped.png">';
-  //         //     } else {
-  //         //         deployData.applicationStatusInput = '<img src="img/indicator_unknown.png">';
-  //         //     }
-  //         //     //var status = '<img src="img/indicator_started.png">';
-  //         //     var appLinks = '<img style="height: 18px;margin-left: -5px;"src="img/projectdemo/app-performanceblack.png" title="App-Performance"><img style="height: 18px;margin-left: 5px;" src="img/projectdemo/logsblack.png" title="App-Logs"><img style="height: 18px;margin-left: 5px;" src="img/projectdemo/code_healthblack.png" title="Code-Health"><img style="height: 18px;margin-left: 5px;" src="img/projectdemo/UI_performanceblack.png" title="UI-Performance">';
-  //         //     var upgrade = '<div class="updateupgrade" style="margin-left:30%;" title="Upgrade"></div>';
-  //         //     $taskenvArray.dataTable().fnAddData([
-  //         //         rowindex + 1,
-  //         //         deployData.applicationName,
-  //         //         deployData.applicationInstanceNameInput,
-  //         //         //deployData.applicationComponentsInput,
-  //         //         deployData.applicationVersionInput,
-  //         //         deployData.applicationNodeIPInput,
-  //         //         deployData.applicationLastDeployInput,
-  //         //         deployData.applicationStatusInput,
-  //         //         appLinks,
-  //         //         upgrade
-  //         //     ]);
-  //         // }
-  //       }
-        
-  //     });
-  // });
+  $('#widgetAppDeploy').hide();
   $.get('/app/deploy', function(data) {
-      var $chooseApplication = $('#chooseApplication');
-      $chooseApplication.append('<option value="">Select Application</option>');
-      var applicationNameArr = [];
-      // for (var i = 0; i < data.length; i++) {
-      //   //console.log(data);
-      //   applicationNameArr.push(data[i].applicationName);
-      // }
-      //var envArrfrmCookbook = [];
+    var $chooseApplication = $('#chooseApplication');
+    $chooseApplication.append('<option value="">Select Application</option>');
+    var applicationNameArr = [];
+    $.each(data, function(key, val) {
+        applicationNameArr.push(val.applicationName);
+    });
 
+    var uniqueAppName = unique(applicationNameArr);
 
-      $.each(data, function(key, val) {
-          applicationNameArr.push(val.applicationName);
-      });
+    $.each(uniqueAppName, function(key, val) {
+        $option = $('<option data-applicationName="' + val + '" value="' + val + '">' + val + '</option>');
+        $option.data('selectedAppName', val);
+        $chooseApplication.append($option);
+    });
 
-      
-      
-      var uniqueAppName = unique(applicationNameArr);
-
-      $.each(uniqueAppName, function(key, val) {
-          $option = $('<option data-applicationName="' + val + '" value="' + val + '">' + val + '</option>');
-          $option.data('selectedAppName', val);
-          $chooseApplication.append($option);
-      });
-
-      function unique(list) {
-          var result = [];
-          $.each(list, function(i, e) {
-              if ($.inArray(e, result) == -1) result.push(e);
-          });
-          return result;
+    function unique(list) {
+        var result = [];
+        $.each(list, function(i, e) {
+            if ($.inArray(e, result) == -1) result.push(e);
+        });
+        return result;
+    }
+    $chooseApplication.change(function(e) {
+      $("#accordion-AppDeploy").empty();
+      $selectedOption = $(this).find('option:selected');
+      var selectedAppName = $selectedOption.data('selectedAppName');
+      console.log(selectedAppName);
+      if (typeof selectedAppName != 'undefined') {
+          $('#appDeployName').append().text("  for '" + selectedAppName + "'");
+          $('#widgetAppDeploy').show();
+      } else {
+          $('#appDeployName').append().text("");
+          $('#widgetAppDeploy').hide();
       }
-
-      $chooseApplication.change(function(e) {
-          //envArrfrmCookbook = [];
-          $("#accordion-AppDeploy").empty();
-          $selectedOption = $(this).find('option:selected');
-          var selectedAppName = $selectedOption.data('selectedAppName');
-          console.log(selectedAppName);
-          if (typeof selectedAppName != 'undefined') {
-              $('#appDeployName').append().text("  for '" + selectedAppName + "'");
-              $('#widgetAppDeploy').show();
-          } else {
-              $('#appDeployName').append().text("");
-              $('#widgetAppDeploy').hide();
+      var $accordianTemplate = $('.accordianTemplateContainer').find('.accordianTemplate');
+      for (var i = 0; i < data.length; i++) {
+        applicationNameArr.push(data[i].applicationName);
+        if (selectedAppName == data[i].applicationName) {
+          var $clone = $accordianTemplate.clone(true);
+          if($('#' + data[i].envId + '_parentAccordian').length == 0){
+            $clone.attr('id', data[i].envId + '_parentAccordian');
+            $clone.find('.envAppDeployAnchor').attr('data-parent', '#' + data[i].envId + '_parentAccordian');
+            $clone.find('.envAppDeployName').html('<u>' + data[i].envId + '</u>');
+            $clone.find('.envAppDeployAnchor').attr('href', '#' + data[i].envId + '_accordian');
+            $clone.find('.envAppDeployAccordian').attr('id', data[i].envId + '_accordian');
+            $clone.find('.envAppDeployTable').attr('id', data[i].envId + '_tableappDeploydetails');
+            $('#accordion-AppDeploy').append($clone);
+            if (!$.fn.dataTable.isDataTable('#' + data[i].envId + '_tableappDeploydetails')) {
+              $('#' + data[i].envId + '_tableappDeploydetails').DataTable({
+                  "pagingType": "full_numbers",
+                  "iDisplayLength": 5,
+                  "aLengthMenu": [
+                      [5, 40, 100, -1],
+                      [5, 40, 100, "All"]
+                  ],
+                  "aoColumns": [{
+                      "bSortable": true
+                  }, {
+                      "bSortable": true
+                  }, {
+                      "bSortable": true
+                  }, {
+                      "bSortable": true
+                  }, {
+                      "bSortable": true
+                  }, {
+                      "bSortable": true
+                  }, {
+                      "bSortable": true
+                  }, {
+                      "bSortable": true
+                  }, {
+                      "bSortable": false
+                  }]
+              });
+            }
           }
-
-          var $accordianTemplate = $('.accordianTemplateContainer').find('.accordianTemplate');
-          // $.each(data, function(key, val) {
-          //   var uniqueAppName = unique(applicationNameArr);
-          //     if(selectedAppName == val.applicationName){
-          //       //envArrfrmCookbook.push(val.envId);
-          //       var $clone = $accordianTemplate.clone(true);
-          //       $clone.attr('id', val.envId + '_parentAccordian');
-          //       $clone.find('.envAppDeployAnchor').attr('data-parent', '#' + val.envId + '_parentAccordian');
-          //       $clone.find('.envAppDeployName').html('<u>' + val.envId + '</u>');
-          //       $clone.find('.envAppDeployAnchor').attr('href', '#' + val.envId + '_accordian');
-          //       $clone.find('.envAppDeployAccordian').attr('id', val.envId + '_accordian');
-          //       $clone.find('.envAppDeployTable').attr('id', val.envId + '_tableappDeploydetails');
-
-          //       $('#accordion-AppDeploy').append($clone);
-          //     }
-          // });
-          //console.log(envArrfrmCookbook);
-
-          // var selectedAppArray = [];
-          for (var i = 0; i < data.length; i++) {
-              applicationNameArr.push(data[i].applicationName);
-              if (selectedAppName == data[i].applicationName) {
-                  //selectedAppArray.push(data[i]);
-                var $clone = $accordianTemplate.clone(true);
-                if($('#' + data[i].envId + '_parentAccordian').length == 0){
-                  $clone.attr('id', data[i].envId + '_parentAccordian');
-                  $clone.find('.envAppDeployAnchor').attr('data-parent', '#' + data[i].envId + '_parentAccordian');
-                  $clone.find('.envAppDeployName').html('<u>' + data[i].envId + '</u>');
-                  $clone.find('.envAppDeployAnchor').attr('href', '#' + data[i].envId + '_accordian');
-                  $clone.find('.envAppDeployAccordian').attr('id', data[i].envId + '_accordian');
-                  $clone.find('.envAppDeployTable').attr('id', data[i].envId + '_tableappDeploydetails');
-                  $('#accordion-AppDeploy').append($clone);
-                  if (!$.fn.dataTable.isDataTable('#' + data[i].envId + '_tableappDeploydetails')) {
-                    $('#' + data[i].envId + '_tableappDeploydetails').DataTable({
-                        "pagingType": "full_numbers",
-                        "iDisplayLength": 5,
-                        //"oSearch": {"sSearch": "Initial search"},
-                        "aLengthMenu": [
-                            [5, 40, 100, -1],
-                            [5, 40, 100, "All"]
-                        ],
-                        "aoColumns": [{
-                            "bSortable": true
-                        }, {
-                            "bSortable": true
-                        }, {
-                            "bSortable": true
-                        }, {
-                            "bSortable": true
-                        }, {
-                            "bSortable": true
-                        }, {
-                            "bSortable": true
-                        }, {
-                            "bSortable": true
-                        }, {
-                            "bSortable": true
-                        }, {
-                            "bSortable": false
-                        }]
-                    });
-                  }
-
-                  // var $taskenvArray = $('#' + data[i].envId + '_tableappDeploydetails');
-
-                  // var rowindex = $taskenvArray.dataTable().fnGetData().length;
-
-                  // if (data.applicationStatus == 'Successful') {
-                  //     data.applicationStatus = '<img src="img/indicator_started.png">';
-                  // } else if (data.applicationStatus == 'Failure') {
-                  //     data.applicationStatus = '<img src="img/indicator_stopped.png">';
-                  // } else {
-                  //     data.applicationStatus = '<img src="img/indicator_unknown.png">';
-                  // }
-                  // //var status = '<img src="img/indicator_started.png">';
-                  // var appLinks = '<img style="height: 18px;margin-left: -5px;"src="img/projectdemo/app-performanceblack.png" title="App-Performance"><img style="height: 18px;margin-left: 5px;" src="img/projectdemo/logsblack.png" title="App-Logs"><img style="height: 18px;margin-left: 5px;" src="img/projectdemo/code_healthblack.png" title="Code-Health"><img style="height: 18px;margin-left: 5px;" src="img/projectdemo/UI_performanceblack.png" title="UI-Performance">';
-                  // var upgrade = '<div class="updateupgrade" style="margin-left:30%;" title="Upgrade"></div>';
-                  // $taskenvArray.dataTable().fnAddData([
-                  //     rowindex + 1,
-                  //     deployData.applicationName,
-                  //     deployData.applicationInstanceName,
-                  //     //deployData.applicationComponentsInput,
-                  //     deployData.applicationVersion,
-                  //     deployData.applicationNodeIP,
-                  //     deployData.applicationLastDeploy,
-                  //     deployData.applicationStatus,
-                  //     appLinks,
-                  //     upgrade
-                  // ]);
-                }
-                //alert(data[i].applicationStatus);
-                var $taskenvArray = $('#' + data[i].envId + '_tableappDeploydetails');
-
-                  var rowindex = $taskenvArray.dataTable().fnGetData().length;
-
-                  if (data[i].applicationStatus == 'Successful') {
-                      data[i].applicationStatus = '<img src="img/indicator_started.png">';
-                  } else if (data[i].applicationStatus == 'Failure') {
-                      data[i].applicationStatus = '<img src="img/indicator_stopped.png">';
-                  } else {
-                      data[i].applicationStatus = '<img src="img/indicator_unknown.png">';
-                  }
-                  //var status = '<img src="img/indicator_started.png">';
-                  var appLinks = '<img style="height: 18px;margin-left: -5px;"src="img/projectdemo/app-performanceblack.png" title="App-Performance"><img style="height: 18px;margin-left: 5px;" src="img/projectdemo/logsblack.png" title="App-Logs"><img style="height: 18px;margin-left: 5px;" src="img/projectdemo/code_healthblack.png" title="Code-Health"><img style="height: 18px;margin-left: 5px;" src="img/projectdemo/UI_performanceblack.png" title="UI-Performance">';
-                  var upgrade = '<div class="updateupgrade" style="margin-left:30%;" title="Upgrade"></div>';
-                  $taskenvArray.dataTable().fnAddData([
-                      rowindex + 1,
-                      data[i].applicationName,
-                      data[i].applicationInstanceName,
-                      //deployData.applicationComponentsInput,
-                      data[i].applicationVersion,
-                      data[i].applicationNodeIP,
-                      data[i].applicationLastDeploy,
-                      data[i].applicationStatus,
-                      appLinks,
-                      upgrade
-                  ]);
-
-
-                
-              }
-          }
-          // console.log(selectedAppArray);
-
-
-
-          // for (var k = 0; k < envArray.length; k++) {
-          //   (function(x) {
-          //     $.get('/app/deploy/' + selectedAppName + '/env/' + envArray[x], function(deployData) {
-          //         console.log(deployData);
-          //         var $taskenvArray = $('#' + envArray[x] + '_tableappDeploydetails');
-
-          //         //for()
-          //         //alert($taskenvArray.length);
-          //         var rowindex = $taskenvArray.dataTable().fnGetData().length;
-          //         if (deployData.applicationStatus == 'Successful') {
-          //             deployData.applicationStatus = '<img src="img/indicator_started.png">';
-          //         } else if (deployData.applicationStatus == 'Failure') {
-          //             deployData.applicationStatus = '<img src="img/indicator_stopped.png">';
-          //         } else {
-          //             deployData.applicationStatus = '<img src="img/indicator_unknown.png">';
-          //         }
-          //         //var status = '<img src="img/indicator_started.png">';
-          //         var appLinks = '<img style="height: 18px;margin-left: -5px;"src="img/projectdemo/app-performanceblack.png" title="App-Performance"><img style="height: 18px;margin-left: 5px;" src="img/projectdemo/logsblack.png" title="App-Logs"><img style="height: 18px;margin-left: 5px;" src="img/projectdemo/code_healthblack.png" title="Code-Health"><img style="height: 18px;margin-left: 5px;" src="img/projectdemo/UI_performanceblack.png" title="UI-Performance">';
-          //         var upgrade = '<div class="updateupgrade" style="margin-left:30%;" title="Upgrade"></div>';
-          //         $taskenvArray.dataTable().fnAddData([
-          //             rowindex + 1,
-          //             deployData.applicationName,
-          //             deployData.applicationInstanceName,
-          //             //deployData.applicationComponentsInput,
-          //             deployData.applicationVersion,
-          //             deployData.applicationNodeIP,
-          //             deployData.applicationLastDeploy,
-          //             deployData.applicationStatus,
-          //             appLinks,
-          //             upgrade
-          //         ]);
-          //     });
-          //   })(k);
+          var $taskenvArray = $('#' + data[i].envId + '_tableappDeploydetails');
+          var rowindex = $taskenvArray.dataTable().fnGetData().length;
+          // if (data[i].applicationStatus == "Successful") {
+          //     data[i].applicationStatus = '<img src="img/indicator_started.png">';
+          // } else if (data[i].applicationStatus == "Failure") {
+          //     data[i].applicationStatus = '<img src="img/indicator_stopped.png">';
+          // } else {
+          //     data[i].applicationStatus = '<img src="img/indicator_unknown.png">';
           // }
-      });
-      $chooseApplication.select2();
-      //$chooseApplication.trigger('change');
+          var appLinks = '<img style="height: 18px;margin-left: -5px;"src="img/projectdemo/app-performanceblack.png" title="App-Performance"><img style="height: 18px;margin-left: 5px;" src="img/projectdemo/logsblack.png" title="App-Logs"><img style="height: 18px;margin-left: 5px;" src="img/projectdemo/code_healthblack.png" title="Code-Health"><img style="height: 18px;margin-left: 5px;" src="img/projectdemo/UI_performanceblack.png" title="UI-Performance">';
+          var upgrade = '<div class="updateupgrade" style="margin-left:30%;" title="Upgrade"></div>';
+          $taskenvArray.dataTable().fnAddData([
+            rowindex + 1,
+            data[i].applicationName,
+            data[i].applicationInstanceName,
+            data[i].applicationVersion,
+            data[i].applicationNodeIP,
+            data[i].applicationLastDeploy,
+            data[i].applicationStatus,
+            appLinks,
+            upgrade
+          ]);
+        }
+      }
+    });
+    $chooseApplication.select2();
   });
-    // $.get('/organizations/getTreeForbtv', function(data) {
-    //   loopNodes(data);
-    //   var $accordianTemplate = $('.accordianTemplateContainer').find('.accordianTemplate');
-    //   var $envAppDeploymodalDetailsClass = $('.envAppDeploymodalDetailsClass');
-    //   var orgID = urlParams.org;
-    //   var bgID = urlParams.bg;
-    //   var projID = urlParams.projid;
-    //   $.get('/deployment/getDataAppDeploy?orgID=' + orgID + '&bgID=' + bgID + '&projID=' +projID, function(readAppDeploymentData) {
-    //     console.log("Printing from CLient");
-    //     console.log(readAppDeploymentData);
-    //     for (var i = 0; i < envArray.length; i++) {
-    //     var $clone = $accordianTemplate.clone(true);
-    //     var $cloneModal = $envAppDeploymodalDetailsClass.clone(true);
-    //     $cloneModal.attr('id', envArray[i] + '_modal');
-    //     $cloneModal.find('.envAppDeploymodalAppName').attr('id', envArray[i] + '_appName');
-    //     //alert(i);
-
-    //     // $cloneModal.find('.applicationInstanceNameInput').attr('id', envArray[i] + '_appInstanceName');
-    //     // //$cloneModal.find('.applicationComponentsInput').attr('id', envArray[i] + '_appComponents');
-    //     // $cloneModal.find('.applicationVersionInput').attr('id', envArray[i] + '_appVersion');
-    //     // $cloneModal.find('.applicationNodeIPInput').attr('id', envArray[i] + '_appNodeIP');
-    //     // $cloneModal.find('.applicationLastDeployInput').attr('id', envArray[i] + '_appLastDeploy');
-    //     // $cloneModal.find('.applicationStatusInput').attr('id', envArray[i] + '_appStatus');
-
-    //     $cloneModal.find('.parameterAppDeploySaveBtn').attr('id', envArray[i] + '_appDeploySave');
-        
-    //     $('.envAppDeployParentModalDetails').append($cloneModal);
-
-    //     $clone.attr('id', envArray[i] + '_parentAccordian');
-    //     $clone.find('.envAppDeployAnchor').attr('data-parent', '#' + envArray[i] + '_parentAccordian');
-
-
-    //     $clone.find('.envAppDeployName').html('<u>' + envArray[i] + '</u>');
-    //     $clone.find('.envAppDeployAnchor').attr('href', '#' + envArray[i] + '_accordian');
-    //     $clone.find('.envAppDeployAccordian').attr('id', envArray[i] + '_accordian');
-    //     $clone.find('.envAppDeployTable').attr('id', envArray[i] + '_tableappDeploydetails');
-    //     $clone.find('.envAppDeployModal').attr('href', '#' + envArray[i] + '_modal');
-    //     $('#accordion-AppDeploy').append($clone);
-        
-    //     if (!$.fn.dataTable.isDataTable('#' + envArray[i] + '_tableappDeploydetails')) {
-    //       $('#' + envArray[i] + '_tableappDeploydetails').DataTable({
-    //           "pagingType": "full_numbers",
-    //           "iDisplayLength": 5,
-    //             //"oSearch": {"sSearch": "Initial search"},
-    //             "aLengthMenu": [
-    //                 [5, 40, 100, -1],
-    //                 [5, 40, 100, "All"]
-    //             ],
-    //           "aoColumns": [{
-    //               "bSortable": true
-    //           }, {
-    //               "bSortable": true
-    //           }, {
-    //               "bSortable": true
-    //           }, {
-    //               "bSortable": true
-    //           }, {
-    //               "bSortable": true
-    //           }, {
-    //               "bSortable": true
-    //           }, {
-    //               "bSortable": true
-    //           }, {
-    //               "bSortable": true
-    //           }, {
-    //               "bSortable": false
-    //           }]
-    //       });
-    //     }
-    //     (function(x) {
-    //         $('#' + envArray[x] + '_appDeploySave').on("click", function() {
-    //             var dataDeploy = new FormData();
-    //             var applicationName = $('#' + envArray[x] + '_appName').val();
-    //             // var applicationInstanceNameInput = $('#'+envArray[x] + '_appInstanceName').val();
-    //             // //var applicationComponentsInput = $('#'+envArray[x] + '_appComponents').val();
-    //             // var applicationVersionInput = $('#'+envArray[x] + '_appVersion').val();
-    //             // var applicationNodeIPInput = $('#'+envArray[x] + '_appNodeIP').val();
-    //             // var applicationLastDeployInput = $('#'+envArray[x] + '_appLastDeploy').val();
-    //             // var applicationStatusInput = $('#'+envArray[x] + '_appStatus').val();
-
-
-
-    //             //alert(applicationStatusInput);
-    //             // var orgID = urlParams.org;
-    //             // var bgID = urlParams.bg;
-    //             // var projID = urlParams.projid;
-    //             var envID = envArray[x];
-                
-    //             dataDeploy.append("applicationName", applicationName);
-    //             dataDeploy.append("applicationInstanceNameInput", "");
-    //             //dataDeploy.append("applicationComponentsInput", applicationComponentsInput);
-    //             dataDeploy.append("applicationVersionInput", "");
-    //             dataDeploy.append("applicationNodeIPInput", "");
-    //             dataDeploy.append("applicationLastDeployInput", "");
-    //             dataDeploy.append("applicationStatusInput", "");
-    //             // dataDeploy.append("applicationInstanceNameInput", applicationInstanceNameInput);
-    //             // //dataDeploy.append("applicationComponentsInput", applicationComponentsInput);
-    //             // dataDeploy.append("applicationVersionInput", applicationVersionInput);
-    //             // dataDeploy.append("applicationNodeIPInput", applicationNodeIPInput);
-    //             // dataDeploy.append("applicationLastDeployInput", applicationLastDeployInput);
-    //             // dataDeploy.append("applicationStatusInput", applicationStatusInput);
-
-    //             dataDeploy.append("orgID",orgID);
-    //             dataDeploy.append("bgID",bgID);
-    //             dataDeploy.append("projID",projID);
-    //             dataDeploy.append("envID",envID);
-
-    //             //For Timing Hardcoded as discussed
-    //             // dataDeploy.append("orgID","RL");
-    //             // dataDeploy.append("bgID","DevOps");
-    //             // dataDeploy.append("projID","Catalyst");
-    //             //dataDeploy.append("envID","envID");
-
-                
-    //             //isValidDate(applicationLastDeployInput);
-                
-    //             $.ajax({
-    //                 url: '/deployment/addParamsAppDeploy',
-    //                 data: dataDeploy,
-    //                 type: 'POST',
-    //                 processData: false,
-    //                 contentType: false,
-    //                 success: function(data1) {
-    //                     console.log(data1.applicationInstanceNameInput);
-    //                     //debugger;
-    //                     var $taskenvArray = $('#' + envArray[x] + '_tableappDeploydetails');
-    //                     var rowindex = $taskenvArray.dataTable().fnGetData().length;
-    //                     // if(data.applicationStatusInput == 'success'){
-    //                     //   data.applicationStatusInput = '<img src="img/indicator_started.png">';
-    //                     // }else{
-    //                     //   data.applicationStatusInput = '<img src="img/indicator_stopped.png">';
-    //                     // }
-    //                     //var status = '<img src="img/indicator_started.png">';
-    //                     var appLinks = '<img style="height: 18px;margin-left: -5px;"src="img/projectdemo/app-performanceblack.png" title="App-Performance"><img style="height: 18px;margin-left: 5px;" src="img/projectdemo/logsblack.png" title="App-Logs"><img style="height: 18px;margin-left: 5px;" src="img/projectdemo/code_healthblack.png" title="Code-Health"><img style="height: 18px;margin-left: 5px;" src="img/projectdemo/UI_performanceblack.png" title="UI-Performance">';
-    //                     var upgrade = '<div class="updateupgrade" style="margin-left:30%;" title="Upgrade"></div>';
-    //                     $taskenvArray.dataTable().fnAddData( [
-    //                       rowindex+1,
-    //                       data1.applicationName,
-    //                       data1.applicationInstanceNameInput,
-    //                       // data.applicationComponentsInput,
-    //                       data1.applicationVersionInput,
-    //                       data1.applicationNodeIPInput,
-    //                       data1.applicationLastDeployInput,
-    //                       data1.applicationStatusInput,
-    //                       appLinks,
-    //                       upgrade
-    //                     ] );
-    //                 },
-    //                 error: function(jqxhr) {
-    //                     //alert("I am in else part");
-    //                 }
-    //             });
-    //         });
-    //     })(i);        
-    //   }
-
-    //   for (var j = 0; j < readAppDeploymentData.length; j++) {
-    //     console.log(readAppDeploymentData[j]);
-    //     var deployData = readAppDeploymentData[j];
-    //     var $taskenvArray = $('#' + deployData.envID + '_tableappDeploydetails');
-        
-    //     var rowindex = $taskenvArray.dataTable().fnGetData().length;
-
-    //     if (deployData.applicationStatusInput == 'Successful') {
-    //         deployData.applicationStatusInput = '<img src="img/indicator_started.png">';
-    //     }else if (deployData.applicationStatusInput == 'Failure'){
-    //         deployData.applicationStatusInput = '<img src="img/indicator_stopped.png">';
-    //     }else{
-    //       deployData.applicationStatusInput = '<img src="img/indicator_unknown.png">';
-    //     }
-    //     //var status = '<img src="img/indicator_started.png">';
-    //     var appLinks = '<img style="height: 18px;margin-left: -5px;"src="img/projectdemo/app-performanceblack.png" title="App-Performance"><img style="height: 18px;margin-left: 5px;" src="img/projectdemo/logsblack.png" title="App-Logs"><img style="height: 18px;margin-left: 5px;" src="img/projectdemo/code_healthblack.png" title="Code-Health"><img style="height: 18px;margin-left: 5px;" src="img/projectdemo/UI_performanceblack.png" title="UI-Performance">';
-    //     var upgrade = '<div class="updateupgrade" style="margin-left:30%;" title="Upgrade"></div>';
-    //     $taskenvArray.dataTable().fnAddData([
-    //         rowindex + 1,
-    //         deployData.applicationName,
-    //         deployData.applicationInstanceNameInput,
-    //         //deployData.applicationComponentsInput,
-    //         deployData.applicationVersionInput,
-    //         deployData.applicationNodeIPInput,
-    //         deployData.applicationLastDeployInput,
-    //         deployData.applicationStatusInput,
-    //         appLinks,
-    //         upgrade
-    //     ]);
-    //   }
-
-    //   //$('#accordion-AppDeploy').find('.envAppDeployAnchor').first().trigger('click');
-    //   $('#accordion-AppDeploy').find('.accordianTemplate').first().css('border-top','medium none');
-    //   });
-      
-    // });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-
-    // $.get('/organizations/getTreeForbtv', function(data) {
-    //   loopNodes(data);
-    //   var $accordianTemplate = $('.accordianTemplateContainer').find('.accordianTemplate');
-    //   var $envAppDeploymodalDetailsClass = $('.envAppDeploymodalDetailsClass');
-    //   var orgID = urlParams.org;
-    //   var bgID = urlParams.bg;
-    //   var projID = urlParams.projid;
-    //   $.get('/deployment/getDataAppDeploy?orgID=' + orgID + '&bgID=' + bgID + '&projID=' +projID, function(readAppDeploymentData) {
-    //     console.log("Printing from CLient");
-    //     console.log(readAppDeploymentData);
-    //     for (var i = 0; i < envArray.length; i++) {
-    //     var $clone = $accordianTemplate.clone(true);
-    //     var $cloneModal = $envAppDeploymodalDetailsClass.clone(true);
-    //     $cloneModal.attr('id', envArray[i] + '_modal');
-    //     $cloneModal.find('.envAppDeploymodalAppName').attr('id', envArray[i] + '_appName');
-    //     //alert(i);
-
-    //     // $cloneModal.find('.applicationInstanceNameInput').attr('id', envArray[i] + '_appInstanceName');
-    //     // //$cloneModal.find('.applicationComponentsInput').attr('id', envArray[i] + '_appComponents');
-    //     // $cloneModal.find('.applicationVersionInput').attr('id', envArray[i] + '_appVersion');
-    //     // $cloneModal.find('.applicationNodeIPInput').attr('id', envArray[i] + '_appNodeIP');
-    //     // $cloneModal.find('.applicationLastDeployInput').attr('id', envArray[i] + '_appLastDeploy');
-    //     // $cloneModal.find('.applicationStatusInput').attr('id', envArray[i] + '_appStatus');
-
-    //     $cloneModal.find('.parameterAppDeploySaveBtn').attr('id', envArray[i] + '_appDeploySave');
-        
-    //     $('.envAppDeployParentModalDetails').append($cloneModal);
-
-    //     $clone.attr('id', envArray[i] + '_parentAccordian');
-    //     $clone.find('.envAppDeployAnchor').attr('data-parent', '#' + envArray[i] + '_parentAccordian');
-
-
-    //     $clone.find('.envAppDeployName').html('<u>' + envArray[i] + '</u>');
-    //     $clone.find('.envAppDeployAnchor').attr('href', '#' + envArray[i] + '_accordian');
-    //     $clone.find('.envAppDeployAccordian').attr('id', envArray[i] + '_accordian');
-    //     $clone.find('.envAppDeployTable').attr('id', envArray[i] + '_tableappDeploydetails');
-    //     $clone.find('.envAppDeployModal').attr('href', '#' + envArray[i] + '_modal');
-    //     $('#accordion-AppDeploy').append($clone);
-    //     switch (i) {
-    //         case 0:
-    //             console.log("I am in 0");
-    //             console.log($('#'+envArray[i] + '_parentAccordian').length);
-    //             $('#'+envArray[i] + '_parentAccordian').find('.panel-heading').first().css('background-color','#FFA07A');
-    //             break;
-    //         case 1:
-    //             console.log("I am in 1");
-    //             console.log($('#'+envArray[i] + '_parentAccordian').find('panel-heading').length);
-    //             $('#'+envArray[i] + '_parentAccordian').find('.panel-heading').first().css('background-color','#F08080');
-    //             break;
-    //         case 2:
-    //             $('#'+envArray[i] + '_parentAccordian').find('.panel-heading').first().css('background-color','#90EE90');
-    //             break;
-    //         case 3:
-    //             $('#'+envArray[i] + '_parentAccordian').find('.panel-heading').first().css('background-color','#00CED1');
-    //             break;
-    //         case 4:
-    //             $('#'+envArray[i] + '_parentAccordian').find('.panel-heading').first().css('background-color','#B22222');
-    //             break;
-    //         case 5:
-    //             $('#'+envArray[i] + '_parentAccordian').find('.panel-heading').first().css('background-color','#ADFF2F');
-    //             break;
-    //         default:
-    //             $('#'+envArray[i] + '_parentAccordian').find('.panel-heading').first().css('background-color','Black');
-    //             break;
-    //     }
-    //     if (!$.fn.dataTable.isDataTable('#' + envArray[i] + '_tableappDeploydetails')) {
-    //       $('#' + envArray[i] + '_tableappDeploydetails').DataTable({
-    //           "pagingType": "full_numbers",
-    //           "iDisplayLength": 5,
-    //             //"oSearch": {"sSearch": "Initial search"},
-    //             "aLengthMenu": [
-    //                 [5, 40, 100, -1],
-    //                 [5, 40, 100, "All"]
-    //             ],
-    //           "aoColumns": [{
-    //               "bSortable": true
-    //           }, {
-    //               "bSortable": true
-    //           }, {
-    //               "bSortable": true
-    //           }, {
-    //               "bSortable": true
-    //           }, {
-    //               "bSortable": true
-    //           }, {
-    //               "bSortable": true
-    //           }, {
-    //               "bSortable": true
-    //           }, {
-    //               "bSortable": true
-    //           }, {
-    //               "bSortable": false
-    //           }]
-    //       });
-    //     }
-    //     (function(x) {
-    //         $('#' + envArray[x] + '_appDeploySave').on("click", function() {
-    //             var dataDeploy = new FormData();
-    //             var applicationName = $('#' + envArray[x] + '_appName').val();
-    //             // var applicationInstanceNameInput = $('#'+envArray[x] + '_appInstanceName').val();
-    //             // //var applicationComponentsInput = $('#'+envArray[x] + '_appComponents').val();
-    //             // var applicationVersionInput = $('#'+envArray[x] + '_appVersion').val();
-    //             // var applicationNodeIPInput = $('#'+envArray[x] + '_appNodeIP').val();
-    //             // var applicationLastDeployInput = $('#'+envArray[x] + '_appLastDeploy').val();
-    //             // var applicationStatusInput = $('#'+envArray[x] + '_appStatus').val();
-
-
-
-    //             //alert(applicationStatusInput);
-    //             // var orgID = urlParams.org;
-    //             // var bgID = urlParams.bg;
-    //             // var projID = urlParams.projid;
-    //             var envID = envArray[x];
-                
-    //             dataDeploy.append("applicationName", applicationName);
-    //             dataDeploy.append("applicationInstanceNameInput", "");
-    //             //dataDeploy.append("applicationComponentsInput", applicationComponentsInput);
-    //             dataDeploy.append("applicationVersionInput", "");
-    //             dataDeploy.append("applicationNodeIPInput", "");
-    //             dataDeploy.append("applicationLastDeployInput", "");
-    //             dataDeploy.append("applicationStatusInput", "");
-    //             // dataDeploy.append("applicationInstanceNameInput", applicationInstanceNameInput);
-    //             // //dataDeploy.append("applicationComponentsInput", applicationComponentsInput);
-    //             // dataDeploy.append("applicationVersionInput", applicationVersionInput);
-    //             // dataDeploy.append("applicationNodeIPInput", applicationNodeIPInput);
-    //             // dataDeploy.append("applicationLastDeployInput", applicationLastDeployInput);
-    //             // dataDeploy.append("applicationStatusInput", applicationStatusInput);
-
-    //             dataDeploy.append("orgID",orgID);
-    //             dataDeploy.append("bgID",bgID);
-    //             dataDeploy.append("projID",projID);
-    //             dataDeploy.append("envID",envID);
-
-    //             //For Timing Hardcoded as discussed
-    //             // dataDeploy.append("orgID","RL");
-    //             // dataDeploy.append("bgID","DevOps");
-    //             // dataDeploy.append("projID","Catalyst");
-    //             //dataDeploy.append("envID","envID");
-
-                
-    //             //isValidDate(applicationLastDeployInput);
-                
-    //             $.ajax({
-    //                 url: '/deployment/addParamsAppDeploy',
-    //                 data: dataDeploy,
-    //                 type: 'POST',
-    //                 processData: false,
-    //                 contentType: false,
-    //                 success: function(data1) {
-    //                     console.log(data1.applicationInstanceNameInput);
-    //                     //debugger;
-    //                     var $taskenvArray = $('#' + envArray[x] + '_tableappDeploydetails');
-    //                     var rowindex = $taskenvArray.dataTable().fnGetData().length;
-    //                     // if(data.applicationStatusInput == 'success'){
-    //                     //   data.applicationStatusInput = '<img src="img/indicator_started.png">';
-    //                     // }else{
-    //                     //   data.applicationStatusInput = '<img src="img/indicator_stopped.png">';
-    //                     // }
-    //                     //var status = '<img src="img/indicator_started.png">';
-    //                     var appLinks = '<img style="height: 18px;margin-left: -5px;"src="img/projectdemo/app-performanceblack.png" title="App-Performance"><img style="height: 18px;margin-left: 5px;" src="img/projectdemo/logsblack.png" title="App-Logs"><img style="height: 18px;margin-left: 5px;" src="img/projectdemo/code_healthblack.png" title="Code-Health"><img style="height: 18px;margin-left: 5px;" src="img/projectdemo/UI_performanceblack.png" title="UI-Performance">';
-    //                     var upgrade = '<div class="updateupgrade" style="margin-left:30%;" title="Upgrade"></div>';
-    //                     $taskenvArray.dataTable().fnAddData( [
-    //                       rowindex+1,
-    //                       data1.applicationName,
-    //                       data1.applicationInstanceNameInput,
-    //                       // data.applicationComponentsInput,
-    //                       data1.applicationVersionInput,
-    //                       data1.applicationNodeIPInput,
-    //                       data1.applicationLastDeployInput,
-    //                       data1.applicationStatusInput,
-    //                       appLinks,
-    //                       upgrade
-    //                     ] );
-    //                 },
-    //                 error: function(jqxhr) {
-    //                     //alert("I am in else part");
-    //                 }
-    //             });
-    //         });
-    //     })(i);        
-    //   }
-
-    //   for (var j = 0; j < readAppDeploymentData.length; j++) {
-    //     console.log(readAppDeploymentData[j]);
-    //     var deployData = readAppDeploymentData[j];
-    //     var $taskenvArray = $('#' + deployData.envID + '_tableappDeploydetails');
-        
-    //     var rowindex = $taskenvArray.dataTable().fnGetData().length;
-
-    //     if (deployData.applicationStatusInput == 'Successful') {
-    //         deployData.applicationStatusInput = '<img src="img/indicator_started.png">';
-    //     }else if (deployData.applicationStatusInput == 'Failure'){
-    //         deployData.applicationStatusInput = '<img src="img/indicator_stopped.png">';
-    //     }else{
-    //       deployData.applicationStatusInput = '<img src="img/indicator_unknown.png">';
-    //     }
-    //     //var status = '<img src="img/indicator_started.png">';
-    //     var appLinks = '<img style="height: 18px;margin-left: -5px;"src="img/projectdemo/app-performanceblack.png" title="App-Performance"><img style="height: 18px;margin-left: 5px;" src="img/projectdemo/logsblack.png" title="App-Logs"><img style="height: 18px;margin-left: 5px;" src="img/projectdemo/code_healthblack.png" title="Code-Health"><img style="height: 18px;margin-left: 5px;" src="img/projectdemo/UI_performanceblack.png" title="UI-Performance">';
-    //     var upgrade = '<div class="updateupgrade" style="margin-left:30%;" title="Upgrade"></div>';
-    //     $taskenvArray.dataTable().fnAddData([
-    //         rowindex + 1,
-    //         deployData.applicationName,
-    //         deployData.applicationInstanceNameInput,
-    //         //deployData.applicationComponentsInput,
-    //         deployData.applicationVersionInput,
-    //         deployData.applicationNodeIPInput,
-    //         deployData.applicationLastDeployInput,
-    //         deployData.applicationStatusInput,
-    //         appLinks,
-    //         upgrade
-    //     ]);
-    //   }
-
-    //   //$('#accordion-AppDeploy').find('.envAppDeployAnchor').first().trigger('click');
-    //   $('#accordion-AppDeploy').find('.accordianTemplate').first().css('border-top','medium none');
-    //   });
-      
-    // });
-    
 </script>
