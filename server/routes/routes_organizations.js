@@ -1761,6 +1761,16 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                     instancesDao.updateInstanceBootstrapStatus(instance.id, 'failed', function(err, updateData) {
 
                                                     });
+                                                    if (err.message) {
+                                                        var timestampEnded = new Date().getTime();
+                                                        logsDao.insertLog({
+                                                            referenceId: logsRefernceIds,
+                                                            err: true,
+                                                            log: err.message,
+                                                            timestamp: timestampEnded
+                                                        });
+
+                                                    }
                                                     var timestampEnded = new Date().getTime();
                                                     logsDao.insertLog({
                                                         referenceId: logsRefernceIds,
@@ -1822,9 +1832,9 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                                     total: 'unknown',
                                                                     free: 'unknown'
                                                                 };
-                                                                hardwareData.memory.total =  nodeData.facts.values.memorysize;
-                                                                hardwareData.memory.free =  nodeData.facts.values.memoryfree;
-                                              
+                                                                hardwareData.memory.total = nodeData.facts.values.memorysize;
+                                                                hardwareData.memory.free = nodeData.facts.values.memoryfree;
+
                                                             } else {
                                                                 hardwareData.architecture = nodeData.automatic.kernel.machine;
                                                                 hardwareData.platform = nodeData.automatic.platform;

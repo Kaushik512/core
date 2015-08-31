@@ -67,11 +67,155 @@ Catalyst Addition of New Environments
     Clicks on Save Button to save the Environments
 
 
+Catalyst Import a Node from Config Management
+    Clicks on Settings
+    Sleep    5s
+    Clicks on DevOps Setup menu
+    Clicks on Config Managementt
+    Clicks on Import Nodes Button of Server for Sync
+    Find the Instance and Impoert to the Environment
+    #Input the Environment Name in the Search
+    Select the CheckBox to Import
+    Clicking on the Import Nodes Button in Config Mgmt Page 
+    Verfiy the Organization is Disabled
+    Select the Business Grp in Inport Nodes
+    Select the Project in Inport Nodes
+    Enters the UserName in Inport Nodes
+    Choose the Authentication as Pem in Inportnodes
+    Upload the PEM file in Inport Nodes
+    Clicks on Import Button in Import Nodes
+    Sleep    5s
+    Verify the Node Importedd
+    Clicks on Close of ConfigMgmt Button
+    Sleep    10s
+
+
+Catalyst Verify and Delete the InportedNode from Environment
+    Sleep    4s
+    Clicks on the Button to the Environment
+    Sleep    4s
+    Node is Inported in the Environment
+    Delete the Node
+    Sleep    2s
+    Verfiy Node Deleted
+    
+
+
+Verfiy Node Deleted
+    Page Should Not Contain    ${IP Centos}
+
+
+Delete the Node
+    Click Element    xpath=.//*[@id='removeInstance']/i
+    Sleep   2s
+    Click Element    xpath=.//*[text()='Delete']
+
+
+Select the CheckBox to Import
+    Click Element    xpath=.//*[@id='organiz']/table/tbody/tr/td[text()='${IP Centos}']/../td[7]/label/i
+    Sleep    2s
+
+Clicks on Close of ConfigMgmt Button
+    Click Element    xpath=.//*[@id='chefImportNodesResultModal']/div/div/div[3]/button
+
+Input the Environment Name in the Search
+    Sleep    1s
+    Input Text    css=body > div:nth-of-type(10) > div > input    ${ENVNAME}
+    Sleep    2s
+    Click Element    css=ul > li:first-child > div
+
+Node is Inported in the Environment
+    Sleep    4s
+    #Element Should Contain    xpath=//div[@class='domain-roles-heading']//span[text()='{IP Centos}']    ${IP Centos}
+    Element Should Contain    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${IP Centos}")]/div/div/div/div[3]/div/span[1]/strong    ${IP Centos}
+
+
+Clicks on Workzone
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element    xpath=.//*[@id='workZoneNew']
+
+Verify the Node Importedd
+    Sleep    2s
+    Element Should Contain    css=.messageDiv>div    Node Imported : ${IP Centos}
+    Sleep    4s
+
+
+
+
+Clicks on Config Managementt
+    Click Element    xpath=//*[text()='Config Management']
+
 Verfiy the Environment is Created
     Sleep    3s
     Element Should Contain    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${EnV1}']/../td[text()='${ORGANIZATION NAME}']    ${ORGANIZATION NAME}
     Sleep    2s
     Element Should Contain    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${EnV2}']/../td[text()='${ORGANIZATION NAME}']    ${ORGANIZATION NAME}
+
+Clicks on Import Nodes Button of Chef Server
+    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${CONFIG MANAGEMENT NAME}']/../td[5]/div/a[2]
+    Sleep    50s
+    Page Should Not Contain    ${IP Centos}
+
+
+Clicks on Import Nodes Button of Server for Sync
+    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${CONFIG MANAGEMENT NAME}']/../td[5]/div/a[2]
+
+
+Find the Instance and Impoert to the Environment
+    Sleep    2 minutes
+    Click Element    xpath=.//*[@id='organiz']/table/tbody/tr/td[text()='52.24.178.71']/../td[6]/div/a/span[2]
+    Sleep    1s
+    Input Text    css=#select2-drop > div > input    ${ENVNAME}
+    Sleep    1s
+    Click Element    css=ul > li:first-child > div
+
+    
+
+    
+    
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+Clicking on the Import Nodes Button in Config Mgmt Page
+    Click Element    id=buttonForIP
+    Sleep    2s
+
+Verfiy the Organization is Disabled
+    Element Should Contain    xpath=.//*[@id='s2id_chefImportOrgSelect']/a    ${ORGANIZATION NAME}
+
+Select the Business Grp in Inport Nodes
+    Click Element    xpath=.//*[@id='s2id_chefImportBgSelect']/a
+    #Input Text    xpath=.//*[@id='select2-drop']/div/input    ${BUSINESS GROUP NAME}
+    Click Element    xpath=//div[text()='Devops'] 
+
+Select the Project in Inport Nodes
+    Click Element    xpath=.//*[@id='s2id_chefImportProjectSelect']/a
+    Click Element    xpath=//div[text()='Catalyst']
+
+Enters the UserName in Inport Nodes
+    Input Text    id=importUsernameInput    ${IP USERNAME}
+
+Choose the Authentication as Pem in Inportnodes
+    Click Element    xpath=.//*[@id='s2id_pemFileDropdown2']/a
+    Click Element    xpath=//div[text()='Pem File']
+
+Upload the PEM file in Inport Nodes
+    Choose File    id=importPemfileInput    ${CAT_INSTANCES}
+    #C:\\Users\\adarsh.RLINDIA\\Desktop\\caty\\Chef\\cat_instances.pem
+
+Clicks on Import Button in Import Nodes
+    Click Element    xpath=//*[text()='Import']
 
 
 

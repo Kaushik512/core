@@ -40,6 +40,8 @@ var globalsettings = require('./routes_globalsettings');
 var tracks = require('./routes_track');
 var puppet = require('./routes_puppet.js');
 
+var appdeploy = require('./routes_appdeploy');
+
 module.exports.setRoutes = function(app) {
 
 
@@ -92,6 +94,7 @@ module.exports.setRoutes = function(app) {
 
     puppet.setRoutes(app, sessionVerificationFunc);
 
+    appdeploy.setRoutes(app, sessionVerificationFunc);
 
     app.get('/', function(req, res) {
         res.redirect('/private/index.html');

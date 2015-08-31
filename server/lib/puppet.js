@@ -127,14 +127,14 @@ var Puppet = function(settings) {
             }
         }
         // getting hostname of puppet master
-    /*    changePuppetServerPemFilePerm(function(err) {
+       changePuppetServerPemFilePerm(function(err) {
             if (err) {
                 callback({
                     message: "Unable to change permission of pem file of puppet-master.",
                     err: err
                 }, null);
                 return;
-            }*/
+            }
 
             var hostNamePuppetMaster = '';
             runSSHCmdOnMaster('hostname -f', function(err, retCode) {
@@ -336,7 +336,7 @@ var Puppet = function(settings) {
             }, function(stdErr) {
 
             });
-        //});
+        });
 
     };
 

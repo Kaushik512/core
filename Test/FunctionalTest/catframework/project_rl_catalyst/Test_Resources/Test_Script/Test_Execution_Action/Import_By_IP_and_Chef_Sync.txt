@@ -287,7 +287,7 @@ Catalyst Instance Deleted From Chef Environment
     Clicks on Settings
     Sleep    5s
     Clicks on DevOps Setupp 
-    Clicks on Config Managementt
+    Clicks on ConfgMgmt butn
     Clicks on Import Nodes Button of Chef Server
 
 
@@ -304,7 +304,7 @@ Catalyst Ubuntu Instance Deleted From Chef Environment
     Clicks on Settings
     Sleep    5s
     Clicks on DevOps Setupp 
-    Clicks on Config Managementt
+    Clicks on ConfgMgmt butn
     Clicks on Import Nodes Button and verify Ubuntu instance deleted
 
 
@@ -318,7 +318,7 @@ Catalyst Delete the Node only From Catalyst
     Clicks on Settings
     Sleep    5s
     Clicks on DevOps Setupp 
-    Clicks on Config Managementt
+    Clicks on ConfgMgmt butn
     Clicks on Import Button Server
 
 Catalyst Delete the Ubuntu Node only From Catalyst
@@ -331,7 +331,7 @@ Catalyst Delete the Ubuntu Node only From Catalyst
     Clicks on Settings
     Sleep    5s
     Clicks on DevOps Setupp 
-    Clicks on Config Managementt
+    Clicks on ConfgMgmt butn
     Clicks on Import Button Server and Verfiy the Ubuntu Instance
 
 
@@ -369,7 +369,7 @@ Catlayst Importing the Instance Chef Sync
     Clicks on Settings
     Sleep    5s
     Clicks on DevOps Setupp 
-    Clicks on Config Managementt
+    Clicks on ConfgMgmt butn
     Clicks on Import Nodes Button of Server for Sync
     Find the Instance and Impoert to the Environment
     Clicking on the Import Nodes Button in Config Mgmt Page 
@@ -532,8 +532,10 @@ Find the Instance and Impoert to the Environment
           ${maxloop} =        Set Variable     200
     :FOR    ${INDEX}    IN RANGE    1    ${maxloop}
 \       Wait Until Keyword Succeeds    1 minute     1 seconds       Element Should Be Visible       xpath=.//*[@id='organiz']/table/tbody/tr[${INDEX}]
-\       ${VALUE}          Get Text       xpath=.//*[@id='organiz']/table/tbody/tr[${INDEX}]/td[1]
-\       Run Keyword If    '${VALUE}' == '${IP Centos}'       Click Element        xpath=.//*[@id='organiz']/table/tbody/tr[${INDEX}]/   
+\       ${VALUE}=          Get Text       xpath=.//*[@id='organiz']/table/tbody/tr[${INDEX}]/td[1]
+\       Run Keyword If    '${VALUE}' == '${IP Centos}'       Click Element        xpath=.//*[@id='organiz']/table/tbody/tr[${INDEX}]/td[6]/div 
+
+
 
     #Click Element    xpath=//tr[@class="show-settings"][td[text()='52.24.73.49']]/td[7]/label
     #//tr[@class="show-settings"]/td[text()='52.24.73.49']/../td[@class='chef-checkbox smart-form']/label[@class='checkbox']
@@ -583,32 +585,32 @@ Clicks on the Delete Button to Delete the Instance
 Clicks on DevOps Setupp 
     Click Element    xpath=//*[text()='DevOps Setup']
 
-Clicks on Config Managementt
+Clicks on ConfgMgmt butn
     Click Element    xpath=//*[text()='Config Management']
 
 
 Clicks on Import Nodes Button of Chef Server
-    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()='RLChefServer']/../td[5]/div/a[2]
+    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${CONFIG MANAGEMENT NAME}']/../td[5]/div/a[2]
     Sleep    50s
     Page Should Not Contain    ${IP Centos}
 
 
 Clicks on Import Nodes Button and verify Ubuntu instance deleted
-    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()='RLChefServer']/../td[5]/div/a[2]
+    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${CONFIG MANAGEMENT NAME}']/../td[5]/div/a[2]
     Sleep    50s
     Page Should Not Contain    ${IP Ubuntu}    
 
 Clicks on Import Nodes Button of Server for Sync
-    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()='RLChefServer']/../td[5]/div/a[2]
+    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${CONFIG MANAGEMENT NAME}']/../td[5]/div/a[2]
     Sleep    1 minutes
 
 Clicks on Import Button Server
-    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()='RLChefServer']/../td[5]/div/a[2]
+    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${CONFIG MANAGEMENT NAME}']/../td[5]/div/a[2]
     Sleep    50s
     Page Should Contain    ${IP Centos} 
 
 Clicks on Import Button Server and Verfiy the Ubuntu Instance
-    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()='RLChefServer']/../td[5]/div/a[2]
+    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${CONFIG MANAGEMENT NAME}']/../td[5]/div/a[2]
     Sleep    50s
     Page Should Contain    ${IP Ubuntu}    
 
