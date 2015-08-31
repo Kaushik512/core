@@ -35,11 +35,11 @@
                                                 <input name="ctl00$MainContent$orgname" value="" id="username" class="form-control" type="text"  cdata="catalyst"  cat-validation="required,max15">
                                              </div>
                                           
-                                             <!-- <div class="col-lg-6 col-md-6" style="margin-top:25px">
-                                                <label for="link">URL:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+                                              <div class="col-lg-6 col-md-6" style="margin-top:25px">
+                                                <label for="link">Host Name:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
                                                 <!-- <i class="icon-append fa fa-building"></i> -->
-                                               <!-- <input type="text" unique="true" uniqueconditionedbyUrl="puppetserverurl" name="ctl00$MainContent$orgname" value="" id="puppetserverurl" class="form-control" type="url"  name="website"  cdata="catalyst"  cat-validation="required,urlcheck">
-                                             </div> -->
+                                                <input type="text" unique="true" uniqueconditionedbyUrl="hostname" name="ctl00$MainContent$orgname" value="" id="hostname" class="form-control" type="url"  name="website"  cdata="catalyst"  cat-validation="required">
+                                             </div>
                                              <div class="col-lg-6 col-md-6" style="margin-top:25px">
                                                 <label for="name">Organization:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
                                                 <select id="orgname" unique="true" uniqueconditionedby="orgname"  class="chooseOrganization width-100" sourcepath="1" datapath="masterjson.rows.row" valuelinkfield="costcode" style="vertical-align:central"  cdata="catalyst"  cat-validation="required">
@@ -48,12 +48,6 @@
                                                 <span data-val-controltovalidate="domainname" id="MainContent_Req_domainname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility:hidden;">Required</span>
                                              </div>
 
-                                             <!-- <div class="col-lg-6 col-md-6">
-                                                <input name="ctl00$MainContent$orgname" value="puppet" id="configType" class="form-control" type="text"  cdata="catalyst" hidden>
-                                             </div> -->
-                                             <!-- <div>
-                                             <input type="text" name="ctl00$MainContent$orgname" value="puppet" id="configType" class="form-control"  cdata="catalyst" >
-                                          </div> -->
 
                                          <div class="col-lg-6 col-md-6" style="margin-top:25px">
                                                       <label for ="name">
@@ -73,8 +67,6 @@
                                                    </label>
                                                 </div>
                                              </div>
-                                             </div>
-
                                              <!--for password-->
 
                                              <div class="col-lg-6 col-md-6" id="passwordShow">
@@ -83,6 +75,9 @@
                                                 <input name="ctl00$MainContent$orgname" value="" id="puppetpassword" class="form-control" type="password">
                                              </div>
 
+                                             </div>
+
+                                             
                                              <!-- <div class="col-lg-6 col-md-6" id="passwordShow" style="margin-top:10px">
                                                 
                                                    <label>Password:<span style="color:Red;" class="control-label">&nbsp;*</span></label>

@@ -50,6 +50,7 @@
 
                                         <!-- <a class="instanceActionBtnUpdateRunlist instance-bootstrap-list-image" rel="tooltip" data-placement="top" data-original-title="Chef Client Run"><img src="img/galleryIcons/Chefimport.png" alt="Chefimport" style="width:26px;height:auto;margin-top:1px;"></a> -->
                                         <a class="instanceActionBtnUpdateRunlist instance-bootstrap-list-image chefClientRunlistImageCP" rel="tooltip" data-placement="top" data-original-title="Chef Client Run"></a>
+                                         <a class="instanceActionBtnUpdatePuppetRunlist instance-bootstrap-list-image chefClientRunlistImageCP" rel="tooltip" data-placement="top" data-original-title="Puppet Client Run"></a>
                                       
                                       </div>
                                       <div class="actionbutton instance-bootstrap-ActionStart" style="display:none;"><a href="javascript:void(0)" class="actionbuttonStart instanceActionBtn" data-actiontype="Start" data-placement="top" rel="tooltip" data-original-title="Start"></a></div>
@@ -103,7 +104,7 @@
         <li class="active" style="margin-right: 30px;">
               <a style="color: #eee;border-radius: 5px 5px 0 0 ; padding: 9px 10px 13px;" href="#l1" data-toggle="tab" style="font-size: 16px" ><i class="fa fa-fw fa-exclamation-circle" style="font-size: 16px"></i>Information</a>
           </li>
-          <li class="pull-left" style="margin-right: 30px;">
+          <li class="pull-left serviceTabLi" style="margin-right: 30px;">
               <a style="color: #eee;border-radius: 5px 5px 0 0 ; padding: 9px 10px 13px;" href="#l2" data-toggle="tab" style="font-size: 16px"><i class="fa fa-fw fa-share-square-o"></i>Services</a>
           </li>
           <li class="pull-left" style="margin-right: 30px;">
@@ -113,7 +114,7 @@
               <a id="controlPanelLogTab" style="color: #eee;border-radius: 5px 5px 0 0 ; padding: 9px 10px 13px;" href="#l4" data-toggle="tab" style="font-size: 14px"> <i class="fa fa-fw fa-clock-o"></i>Logs</a>
           </li>
     </ul>
-    <div id="myTabContent3" class="nav pull-left tab-content" style="position: auto; left: 0px; width: 80%;margin-top:4px;height:0px;">
+    <div id="myTabContent3" class="nav pull-left tab-content" style="position: auto; left: 0px; width: 80%;margin-top:4px;">
         <!-- info tab contents starts here -->
         <div class="tab-pane fade in active " id="l1" style="min-height:405px;overflow-y:auto;">
           <div class="panel-group smart-accordion-default">
@@ -297,7 +298,8 @@
                    <div class="widget-toolbar no-border">
 
                    <a id="addTaskBtn" class="btn btn-minier btn-primary" data-toggle="modal">
-                   Assign Job
+                   <i class="ace-icon ace-icon fa fa-plus bigger-110"></i>
+                   Edit
                    </a>                                                
 
                    </div>
@@ -401,13 +403,12 @@
                <div class="modal-footer">
                <label id="nodeAppspinner" class=" hidden"><img  style="margin-left:5px;margin-right:25px;" src="img/select2-spinner.gif"></label>
                <div class="marginForButtons">
-               <a class="btn btn-default" type="submit" data-dismiss="modal">
-               <i class="fa fa-times fa-1x"></i>&nbsp;Cancel
-               </a>
                <button id="addAppBtn" class="btn btn-primary" type="submit">
-               <i class="fa fa-check fa-1x"></i>&nbsp;Save
+               <i class="fa fa-upload fa-1x"></i>&nbsp;Add
                </button>
-               
+               <a class="btn btn-primary" type="submit" data-dismiss="modal">
+               <i class="fa fa-undo fa-1x"></i>&nbsp;Cancel
+               </a>
                </div>
                </div>
                </form>
@@ -430,15 +431,15 @@
                     <table  id="tableServices" class="table table-striped table-bordered table-hover dataTable no-footer text-align-center table-condensed tablesorter" style="margin-top:72px;">
                         <thead>
                           <tr>
-                            <th style="font-size: 13px;text-align:center;">
+                            <th style="font-size: 13px;">
                               <i class="fa fa-fw fa-archive "></i>
                               <strong style="color:#3a87ad">Service Name</strong>
                             </th>
-                            <th style="font-size: 13px;text-align:center;">
+                            <th style="font-size: 13px;">
                               <i class="fa fa-fw fa-sort-amount-asc "></i>
                               <strong style="color:#3a87ad">Actions </strong>
                             </th>
-                            <th style="font-size: 13px;text-align:center;">
+                            <th style="font-size: 13px;">
                               <i class="fa fa-fw fa-flash "></i>
                               <strong style="color:#3a87ad">Options</strong>
                             </th>
@@ -449,7 +450,7 @@
                               
                             </tbody> 
                         </tbody>
-                        <a class="btn btn-primary addServiceBtn" style="float:right;padding-right:10px;margin-right:10px;margin-top:32px;" data-toggle="modal" href="#serviceModalContainer">Add New Service</a>
+                        <a class="btn btn-primary addServiceBtn" style="float:right;padding-right:10px;margin-right:10px;" data-toggle="modal" href="#serviceModalContainer">Add New Service</a>
                     </table>
 
                 </div>
@@ -481,9 +482,9 @@
                   <table  class="table table-striped table-bordered table-hover dataTable no-footer" cellpadding="5px" width="100%" style="text-align:center";>
                    <thead>
                     <tr>
-                      <th style="text-align:center;">Select</th>
-                      <th style="text-align:center;">Name</th>
-                      <th style="text-align:center;">Actions</th>
+                      <th>Name</th>
+                      <th>Actions</th>
+                      <th>Select</th>
                     </tr>
                    </thead>
                    <tbody id="serviceList">
@@ -495,9 +496,8 @@
               </div>
               
               <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal"><i class="ace-icon fa fa-times bigger-110"></i>&nbsp;Cancel</button>
                 <button type="button" class="btn btn-default btn-primary btnsaveDeploymentBP btnSaveService"><i class="ace-icon fa fa-check bigger-110"></i>&nbsp;Save</button>
-                
+                <button type="button" class="btn btn-default btn-primary" data-dismiss="modal"><i class="ace-icon fa fa-undo bigger-110"></i>&nbsp;Cancel</button>
               </div>
             </div>
           </div>
@@ -529,7 +529,7 @@
               
               <div class="modal-footer">
                 <!-- <button type="button" class="btn btn-default btn-primary btnsaveDeploymentBP btnSaveService"><i class="ace-icon fa fa-check bigger-110"></i>&nbsp;Save</button> -->
-                <button type="button" class="btn btn-default btn-primary" data-dismiss="modal"><i class="ace-icon fa fa-times bigger-110"></i>&nbsp;Cancel</button>
+                <button type="button" class="btn btn-default btn-primary" data-dismiss="modal"><i class="ace-icon fa fa-undo bigger-110"></i>&nbsp;Cancel</button>
               </div>
             </div>
           </div>
@@ -710,8 +710,8 @@
                 </form>
             </div>
            <div class="modal-footer">
-            <a type="button" class="btn btn-default" data-dismiss="modal"><i class="ace-icon fa fa-times bigger-110"></i>&nbsp;Close</a>
-            <button type="button" class="btn btn-primary btnSaveInstanceRunlistAttributes"><i class="ace-icon fa fa-check bigger-110"></i>&nbsp;Save</button>
+        <button type="button" class="btn btn-primary btnSaveInstanceRunlistAttributes">Save</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
         
       </div>
         </div><!-- /.modal-content -->
@@ -1033,9 +1033,8 @@
             </div>
             
                <div class="modal-footer">
-                <a type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times fa-1x"></i>&nbsp;Cancel</a>
-        <button type="submit" id="editSaveBTN" class="btn btn-primary" value="Save"><i class="fa fa-check fa-1x"></i>&nbsp;Save</button>
-        
+        <input type="submit" id="editSaveBTN" class="btn btn-primary" value="Save" />
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
       </div>   
   </form>
          </div>
@@ -1057,8 +1056,7 @@
             
              <div class="modal-body" style="min-height:300px;">
               <div>
-
-                <div class="col-lg-6" id="availableTask">
+                <div class="col-lg-6">
                   <div class="input-group width100">
                     <label class="input searchTaskLabel">
                       <strong class="fontsize13">Available Task</strong>
@@ -1086,7 +1084,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="col-lg-6" id="selectedTaskForSave">
+                <div class="col-lg-6">
                   <div class="input-group width100">
                     <label class="input searchTaskLabel">
                       <strong class="fontsize13">Selected Task</strong>
@@ -1099,15 +1097,24 @@
                   </div>
                 </div>
               </div>
-                
+                <!-- <div class="col-lg-6 col-md-6" style="margin-left:-15px">
+
+                  <label for="">
+                    <input type="checkbox" name="my_checkbox" id="my_checkbox"/>&nbsp;Select/Unselect Task
+                  </label>
+                  
+
+                  <select class="form-control customNew" id="taskList" multiple> </select>
+                            
+                </div> -->
                 
                 
 
             </div>
             
                <div class="modal-footer">
-        <a type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times fa-1x"></i>&nbsp;Close</a>
-        <button type="submit" id="saveTaskBtn" class="btn btn-primary" value="Save"><i class="fa fa-check fa-1x"></i>&nbsp;Save</button>
+        <input type="submit" id="saveTaskBtn" class="btn btn-primary" value="Save" />
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
       </div>   
          </div>
     </div>
@@ -1214,18 +1221,11 @@ function populateJsonData(instanceId) {
         //     $('.paraHeightModal').hide();
         // },
         error: function(jqxhr) {
-          
-          $('#installedSoftwareModalContainer').modal('hide');
-          var failureText;
+          var failureText = "Server Behaved Unexpectedly. Please try again later";
             if(jqxhr.responseJSON && jqxhr.responseJSON.message) {
                 failureText = jqxhr.responseJSON.message;
             }
-            //alert(failureText);
-            bootbox.alert({
-              size:'small',
-              title:'<span style="font-size:22px;">Error!</span>',
-              message:failureText
-            });
+            bootbox.alert(failureText);
             
             $('.loadingContainerimageInspectCSS').hide();
             $('.paraHeightModal').hide();
@@ -1424,68 +1424,66 @@ $.get('../instances/' + urlParams.id, function(data) {
 
     //fetching services list
     //alert(data.chef.serverId);
-    $.get('/d4dMasters/19/chefserverid/' + data.chef.serverId, function(services) {
-        $.get('/d4dMasters/19/commandtype/Service%20Command', function(servicesCmd) {
+    if (data.chef) {
+        $.get('/d4dMasters/19/chefserverid/' + data.chef.serverId, function(services) {
+            $.get('/d4dMasters/19/commandtype/Service%20Command', function(servicesCmd) {
 
-            servicesCmd = JSON.parse(servicesCmd);
-            services = JSON.parse(services);
-            for (var k = 0; k < servicesCmd.length; k++) {
-                if (servicesCmd[k].chefserverid !== data.chef.serverId) {
-                    services.push(servicesCmd[k]);
+                servicesCmd = JSON.parse(servicesCmd);
+                services = JSON.parse(services);
+                for (var k = 0; k < servicesCmd.length; k++) {
+                    if (servicesCmd[k].chefserverid !== data.chef.serverId) {
+                        services.push(servicesCmd[k]);
+                    }
                 }
-            }
-            //alert('Out json :' + JSON.stringify(services)+ services.length);
-            var $serviceList = $('#serviceList');
-            console.log(services, "length==>", services.length);
-            var serviceIds = [];
-            if (data.serviceIds && data.serviceIds.length) {
-                serviceIds = data.serviceIds;
-            }
-
-            for (var i = 0; i < services.length; i++) {
-
-                var name = services[i].servicename;
-                if (!name) {
-                    name = services[i].commandname;
-                }
-                var $tr = $('<tr></tr>').attr('data-listServiceId', services[i].rowid);
-                var $checkBox = $('<input type="checkbox" name="svcCkb"></input>').val(services[i].rowid).data('serviceData', services[i]);
-                var $tdCheckBox = $('<td></td>').append($checkBox);
-                $tr.append($tdCheckBox);
-                var $tdName = $('<td></td>').append(name);
-                $tr.append($tdName);
-
-                var commandType = services[i].commandtype;
-                if (commandType === 'Chef Cookbook/Recipe') {
-                    var html = getCookbookActionHtml(services[i].rowid, services[i]);
-                } else {
-                    var html = getCommandActionHtml(services[i].rowid, services[i]);
+                //alert('Out json :' + JSON.stringify(services)+ services.length);
+                var $serviceList = $('#serviceList');
+                console.log(services, "length==>", services.length);
+                var serviceIds = [];
+                if (data.serviceIds && data.serviceIds.length) {
+                    serviceIds = data.serviceIds;
                 }
 
-                var $tdActions = $('<td></td>').append(html);
-                $tr.append($tdActions);
-                if (serviceIds.indexOf(services[i].rowid) !== -1) {
-                    $tr.addClass('hidden');
-                }
+                for (var i = 0; i < services.length; i++) {
 
-                $serviceList.append($tr);
-            }
+                    var name = services[i].servicename;
+                    if (!name) {
+                        name = services[i].commandname;
+                    }
+                    var $tr = $('<tr></tr>').attr('data-listServiceId', services[i].rowid);
+                    var $tdName = $('<td></td>').append(name);
+                    $tr.append($tdName);
+
+                    var commandType = services[i].commandtype;
+                    if (commandType === 'Chef Cookbook/Recipe') {
+                        var html = getCookbookActionHtml(services[i].rowid, services[i]);
+                    } else {
+                        var html = getCommandActionHtml(services[i].rowid, services[i]);
+                    }
+
+                    var $tdActions = $('<td></td>').append(html);
+                    $tr.append($tdActions);
+                    var $checkBox = $('<input type="checkbox" name="svcCkb"></input>').val(services[i].rowid).data('serviceData', services[i]);
+                    var $tdCheckBox = $('<td></td>').append($checkBox);
+                    $tr.append($tdCheckBox);
+                    if (serviceIds.indexOf(services[i].rowid) !== -1) {
+                        $tr.addClass('hidden');
+                    }
+
+                    $serviceList.append($tr);
+                }
+            });
         });
-        //console.log('hi ==>',serviceList);
-
-
-
-    });
-    if (data.serviceIds && data.serviceIds.length) {
-        $.post('/d4dMasters/getrows/19', {
-            serviceids: data.serviceIds
-        }, function(services) {
-            services = JSON.parse(services);
-            for (var i = 0; i < services.length; i++) {
-                console.log("sd1 = ", services[i]);
-                addServiceToDom(services[i]);
-            }
-        });
+        if (data.serviceIds && data.serviceIds.length) {
+            $.post('/d4dMasters/getrows/19', {
+                serviceids: data.serviceIds
+            }, function(services) {
+                services = JSON.parse(services);
+                for (var i = 0; i < services.length; i++) {
+                    console.log("sd1 = ", services[i]);
+                    addServiceToDom(services[i]);
+                }
+            });
+        }
     }
 
     // setting up action logs
@@ -1562,7 +1560,7 @@ $.get('../instances/' + urlParams.id, function(data) {
             return '<div class="startstoptoggler ' + data.instanceState + '" instanceID="' + data._id + '" style="float:left;margin-left:14px;margin-top:4px;" data-placement="top" data-original-title="' + title + '" rel="tooltip"></div>'
         },
         startAndStopToggler = function(e) {
-            if ($(this).hasClass('unknown') || $(this).hasClass('pending') || $(this).hasClass('stopping') || $(this).hasClass('terminated')) {
+            if ($(this).hasClass('unknown') || $(this).hasClass('pending') || $(this).hasClass('stopping')) {
                 console.log('pending or Unknow State');
                 return false;
             } else if ($(this).hasClass('running')) {
@@ -1593,9 +1591,15 @@ $.get('../instances/' + urlParams.id, function(data) {
             }
         }
 
-
-    var $domainRolesCaption = $('.domain-roles-caption').attr('data-instanceId', data._id).attr('data-chefServerId', data.chef.serverId).attr('data-osType', data.hardware.os).attr('data-instanceIP', data.instanceIP).data('runlist', data.runlist).data('orgId', data.orgId).data('serviceList', data.serviceIds).data('jsonAttributes',data.attributes);
-
+    if(data.chef) {
+      var $domainRolesCaption = $('.domain-roles-caption').attr('data-instanceId', data._id).attr('data-chefServerId', data.chef.serverId).attr('data-osType', data.hardware.os).attr('data-instanceIP', data.instanceIP).data('runlist', data.runlist).data('orgId', data.orgId).data('serviceList', data.serviceIds).data('jsonAttributes',data.attributes);
+      $('.instanceActionBtnUpdatePuppetRunlist').remove();
+    } else {
+      var $domainRolesCaption = $('.domain-roles-caption').attr('data-instanceId', data._id).attr('data-puppetServerId', data.puppet.serverId).attr('data-osType', data.hardware.os).attr('data-instanceIP', data.instanceIP).data('runlist', data.runlist).data('orgId', data.orgId).data('serviceList', data.serviceIds).data('jsonAttributes',data.attributes);
+      $('.instanceActionBtnUpdateRunlist').remove();
+      $('.serviceTabLi').hide();
+    }
+    
     var $divHeadingCP = $domainRolesCaption.find('.domain-roles-heading').empty();
 
     if (data.blueprintData.iconPath == undefined) {
@@ -1685,13 +1689,11 @@ $.get('../instances/' + urlParams.id, function(data) {
     // .append('<img src="img/templateicons/'+data.blueprintData.templateId+'.png" style="height:20px;width:20px;margin-right:5px;">').append(data.blueprintData.blueprintName);
     $domainRolesCaption.find('.instance-details-ip strong').html(data.instanceIP);
     $domainRolesCaption.find('.instance-state').html(data.instanceState);
-   // data.instanceState = 'running';
+    data.instanceState = 'running';
     if (data.instanceState == 'running') {
-    //  alert('running');
         $domainRolesCaption.find('.componentlistContainer').addClass('started');
         $domainRolesCaption.find('.instance-state').html(data.instanceState).addClass('instance-state-text-started');
     } else if (data.instanceState == 'terminated') {
-     // alert(data.instanceState);
         $domainRolesCaption.find('.componentlistContainer').addClass('stopped');
         $domainRolesCaption.find('.instance-state').html(data.instanceState).addClass('instance-state-text-stopped');
     } else if (data.instanceState == 'stopped') {
@@ -1725,7 +1727,7 @@ $.get('../instances/' + urlParams.id, function(data) {
     if (data.instanceState == 'running') {
         enableInstanceActionStartBtn(data._id);
     }
-    if (data.instanceState == 'pending' || data.instanceState == 'stopping' || data.instanceState == 'terminated') {
+    if (data.instanceState == 'pending' || data.instanceState == 'stopping') {
         disableInstanceActionBtns(data._id);
     }
     if (data.instanceState == 'unknown') {
@@ -2024,7 +2026,7 @@ $.get('../instances/' + urlParams.id, function(data) {
                                 if (data.instanceState == 'running') {
                                     enableInstanceActionStartBtn(data._id);
                                 }
-                                if (data.instanceState == 'pending' || data.instanceState == 'stopping' || data.instanceState == 'terminated') {
+                                if (data.instanceState == 'pending' || data.instanceState == 'stopping') {
                                     disableInstanceActionBtns(data._id);
                                 }
                                 if (data.instanceState == 'unknown') {
@@ -2420,7 +2422,7 @@ $.get('../instances/' + urlParams.id, function(data) {
     function memoryCalculation(data) {
         var memoryInitial = data;
         //alert(memoryInitial);
-        if(memoryInitial == 'unknown'){
+        if(memoryInitial == 'unknown' || memoryInitial.indexOf('MB') !== -1){
           return memoryInitial;
         }else{
           var mem = memoryInitial.substring(0, memoryInitial.length - 2);
@@ -2638,7 +2640,7 @@ $.get('../instances/' + urlParams.id, function(data) {
     // $cfmwareTbody.append($tr); //commented as we were receiving the id instead of the name : Vinod
 
     $tr = $('<tr style="line-height:2.3"></tr>');
-    $tr.append('<td scope="col" style="font-size:12px;">Chef Bootstrap</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + data.bootStrapStatus + '</td>');
+    $tr.append('<td scope="col" style="font-size:12px;">Bootstrap</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + data.bootStrapStatus + '</td>');
     $cfmwareTbody.append($tr);
 
     $tr = $('<tr style="line-height:2.3"></tr>');
@@ -2691,36 +2693,41 @@ $.get('../instances/' + urlParams.id, function(data) {
 
 
     $('#addTaskBtn').click(function(e) {
+        // var $select = $('#taskList').empty();
+        // var taskIds = [];
+        // if (data.taskIds && data.taskIds.length) {
+        //     taskIds = data.taskIds;
+        // }
+        // $.get('/tasks?orgId=' + data.orgId + '&bgId=' + data.bgId + '&projectId=' + data.projectId + '&envId=' + data.envId, function(taskList) {
+        //     for (var i = 0; i < taskList.length; i++) {
+        //         var $option = $("<option></option>").val(taskList[i]._id).html(taskList[i].name).attr('data-taskName', taskList[i].name);
+        //         if (taskIds.indexOf(taskList[i]._id) !== -1) {
+        //             $option.attr('selected', 'selected');
+        //         }
+        //         $select.append($option);
+                
+        //     }
+            
+        //     $('#instanceTaskModal').modal('show');
+        // });
         var $select = $('#selectavailbleTaskList').empty();
         var taskIds = [];
         if (data.taskIds && data.taskIds.length) {
             taskIds = data.taskIds;
         }
         $.get('/tasks?orgId=' + data.orgId + '&bgId=' + data.bgId + '&projectId=' + data.projectId + '&envId=' + data.envId, function(taskList) {
-            if (taskList.length == 0) {
-                bootbox.alert({
-                  size:'small',
-                  message:'<div style="margin-left:6px;"><img style="width:50px;height:40px" src="img/warning.png" alt="warning"/><span style="margin-left:20px;font-size:16px;">There are no Jobs associated to this Instance. Navigate to <span style="margin-left:72px;">Orchestration Tab on the Instances Page to create one.</span></span></div>',
-                  title:'<span style="font-size:22px;">Warning</span>'
-                });
-                $('#instanceTaskModal').modal('hide');
-            } else{
-                for (var i = 0; i < taskList.length; i++) {
-
-
-                    //$('#selectedTaskForSave').hide();
-                    //$('#availableTask').hide();
-
-                    var $option = $("<option></option>").val(taskList[i]._id).html(taskList[i].name).attr('data-taskName', taskList[i].name).addClass('taskimg');
-                    var $selectedOptionsValues = $('#selectedTaskList').find('option[value="' + taskList[i]._id + '"]').length;
-                    $select.append($option);
-                    if ($selectedOptionsValues) {
-                        $('#selectavailbleTaskList option[value="' + taskList[i]._id + '"]').hide();
-                    }
-                }
-
-                $('#instanceTaskModal').modal('show');
+            for (var i = 0; i < taskList.length; i++) {
+              var $option = $("<option></option>").val(taskList[i]._id).html(taskList[i].name).attr('data-taskName', taskList[i].name).addClass('taskimg');
+              // if (taskIds.indexOf(taskList[i]._id) !== -1) {
+              //     $option.attr('selected', 'selected');
+              // }
+              var $selectedOptionsValues = $('#selectedTaskList').find('option[value="'+ taskList[i]._id +'"]').length;
+              $select.append($option);
+              if($selectedOptionsValues){
+                $('#selectavailbleTaskList option[value="'+ taskList[i]._id +'"]').hide();
+              }                
             }
+            $('#instanceTaskModal').modal('show');
         });
     });
 
@@ -2913,7 +2920,7 @@ function addServiceToDom(serviceData) {
 
     addActionToServiceDom(serviceData.rowid, serviceData, $tr);
 
-    var $tdOption = $('<td></td>').append('<div class="btn-group"><button class="btn btn-danger pull-left btn-sg tableactionbutton deleteServiceBtn" rel="tooltip" data-placement="top" data-original-title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></div>');
+    var $tdOption = $('<td></td>').append('<div class="btn-group tableactionWidth"><button class="btn btn-danger pull-left btn-sg tableactionbutton deleteServiceBtn" rel="tooltip" data-placement="top" data-original-title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></div>');
     $tdOption.find('.deleteServiceBtn').click(function(e) {
         $.ajax({
             url: '../instances/' + urlParams.id + '/services/' + serviceData.rowid,
@@ -3243,7 +3250,6 @@ $(document).ready(function(e) {
       //var $taskListArea = $('.taskListArea').empty();
       $servicesDatatable = $('#tableServices').DataTable({
           "pagingType": "full_numbers",
-          "bLengthChange": false,
           "aoColumns": [{
               "bSortable": true
           }, {

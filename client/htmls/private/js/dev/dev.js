@@ -1,4 +1,4 @@
-                                                            //function for showing the tableview and the cardview
+                                                             //function for showing the tableview and the cardview
                                                             function devCall() {
                                                                 window.showHideControl = function(objID) {
                                                                     if (objID) {
@@ -270,6 +270,10 @@
                                                                             $.get('../instances/' + instanceId, function(data) {
                                                                                 console.log('Got ' + data.length + ' instances');
                                                                                 //found now delete
+                                                                                var infraManager = 'chef';
+                                                                                if(data.puppet) {
+                                                                                    infraManager = 'puppet'
+                                                                                }
                                                                                 var dialog = bootbox.dialog({
                                                                                     title: "Delete Instance",
                                                                                     message: '<div class="row">  ' +
@@ -288,7 +292,7 @@
                                                                                         '<label for="ckbChefDelete"></label> ' +
                                                                                         '<div class="col-md-8"> <div class="checkbox"> <label style="color:#333;" for="ckbChefDelete-0"> ' +
                                                                                         '<input type="checkbox" name="ckbChefDelete" id="ckbChefDelete"> ' +
-                                                                                        'Delete this node from chef server </label> ' +
+                                                                                        'Delete this node from '+infraManager+' server </label> ' +
                                                                                         '</div>' +
                                                                                         '</div>' +
                                                                                         '<div style="margin-top:20px;" class="col-lg-12">Note : This will not terminate the instance from the provider.</div>' +
@@ -609,6 +613,7 @@
                                                                                 reqBody.credentials = {
                                                                                     username: $form.find('#instanceUsername').val()
                                                                                 };
+                                                                                reqBody.configManagmentId = $('#configManagementDropdown').val();
                                                                                 var appUrls = [];
                                                                                 var $appURLContainers = $('.applicationURLContainer');
                                                                                 var isAppUrlValid = true;
@@ -708,12 +713,9 @@
 
                                                                         if (!$.fn.dataTable.isDataTable('#tableinstanceview')) {
                                                                             //alert('loading table');
-                                                                            $tableinstanceview = $('#tableinstanceview').DataTable({
+                                                                            tableinstanceview = $('#tableinstanceview').DataTable({
                                                                                 "pagingType": "full_numbers",
-                                                                                "bFilter": false,
-                                                                               // "bInfo": false,
-                                                                                "aoColumns": [
-                                                                                     {
+                                                                                "aoColumns": [{
                                                                                         "bSortable": false
                                                                                     },
                                                                                     null,
@@ -726,15 +728,19 @@
                                                                                     }, {
                                                                                         "bSortable": false
                                                                                     }, {
+                                                                                        "bSortable": false
+                                                                                    }, {
                                                                                         "bSortable": false,
                                                                                         "sWidth": "20%"
                                                                                     }
-                                                                                ]
+                                                                                ],
+                                                                                /*"fnRowCallback": function(nRow, aData, iDisplayIndex) {
+                                                                                    $("td:first", nRow).html(iDisplayIndex + 1);
+                                                                                    return nRow;
+                                                                                }*/
+
                                                                             });
                                                                         }
-
-                                                                        //ar $tableCount = $('#tableinstanceview');
-                                                                        
 
                                                                         //alert(data.length);
                                                                         if (data.length <= 0) {
@@ -1328,55 +1334,54 @@
                                                                                 //return '<div class="showmenuAppTask"><a class="btn1 showmenuAppTaskAnchor"><i class="fa fa-ellipsis-h showmenuAppTaskAnchorI"></i></a></div><div class="menuAppTask" style="display: none;"><span class="menuAppTaskSpan">App Links</span><ul class="paddingleft32"><li><a href="javascript:voi(0)" class="fontsize11">App Perf</a></li><li><a href="javascript:voi(0)" class="fontsize11">App Logs</a></li></ul><span class="menuAppTaskSpan">Task Links</span><ul class="paddingleft32"><li><a href="javascript:voi(0)" class="fontsize11">Deploy Task</a></li><li><a href="javascript:voi(0)" class="fontsize11">Build Task</a></li></ul></div>';
                                                                             },
                                                                             getmenuAppTask: function(data) {
-                                                                                console.log("Data is:"+data);
-                                                                              if (data.appUrls && data.appUrls.length) {
-                                                                                  for (var k = 0; k < data.appUrls.length; k++) {
-                                                                                      // if (k == 2) {
-                                                                                      //     break;
-                                                                                      // }
-                                                                                      var url = data.appUrls[k].url;
-                                                                                      if (data.appUrls[k].url) {
-                                                                                          url = url.replace('$host', data.instanceIP);
-                                                                                      }
-                                                                                      var tempApp = "<li><a style='font-size:10px;' data-appUrlId='" + data.appUrls[k]._id + "' class='app-url' title='" + url + "' href='" + url + "'' target='_blank' >" + data.appUrls[k].name + "</a></li>";
-                                                                                      menuAppTaskLI = menuAppTaskLI + tempApp;
-                                                                                  }
-                                                                              }else{
-                                                                                menuAppTaskLI = "<li style='font-size:10px;color:#3276b1'>No AppLinks Available</li>";
-                                                                              }
-                                                                              //column removed from table..
-                                                                            //  $rowContainter.append('<td>' + menuAppTaskLI + '</td>');
+                                                                                console.log("Data is:" + data);
+                                                                                if (data.appUrls && data.appUrls.length) {
+                                                                                    for (var k = 0; k < data.appUrls.length; k++) {
+                                                                                        // if (k == 2) {
+                                                                                        //     break;
+                                                                                        // }
+                                                                                        var url = data.appUrls[k].url;
+                                                                                        if (data.appUrls[k].url) {
+                                                                                            url = url.replace('$host', data.instanceIP);
+                                                                                        }
+                                                                                        var tempApp = "<li><a style='font-size:10px;' data-appUrlId='" + data.appUrls[k]._id + "' class='app-url' title='" + url + "' href='" + url + "'' target='_blank' >" + data.appUrls[k].name + "</a></li>";
+                                                                                        menuAppTaskLI = menuAppTaskLI + tempApp;
+                                                                                    }
+                                                                                } else {
+                                                                                    menuAppTaskLI = "<li style='font-size:10px;color:#3276b1'>No AppLinks Available</li>";
+                                                                                }
+                                                                                $rowContainter.append('<td>' + menuAppTaskLI + '</td>');
 
-                                                                              if (data.taskIds && data.taskIds.length) {
+                                                                                if (data.taskIds && data.taskIds.length) {
 
-                                                                                  $.post('../tasks', {
-                                                                                      taskIds: data.taskIds
-                                                                                  }, function(tasks) {
-                                                                                      var $ul = $('.domain-roles-caption[data-instanceId="' + data._id + '"]').find('.instanceTaskListUL');
-                                                                                      $ul.empty();
-                                                                                      var $ulTr = $('tr[data-instanceId="' +  data._id + '"]').find('.instanceTaskListUL');
-                                                                                      $ulTr.empty();
-            
-                                                                                      for (var ll = 0; ll < tasks.length; ll++) {
-                                                                                          var $taskLi = $("<li><a style='font-size:10px;' href='javascript:void(0)' data-taskId='" + tasks[ll]._id + "'>" + tasks[ll].name + "</a></li>");
-                                                                                          $taskLi.find('a').click(function(e) {
-                                                                                              var taskId = $(this).attr('data-taskId');
-                                                                                              $('a[data-executeTaskId="' + taskId + '"]').click();
-                                                                                          });
-                                                                                          $ul.append($taskLi);
-                                                                                          $ulTr.append($taskLi.clone(true));
-                                                                                      }
-                                                                                  });
-                                                                                //alert(data._id);
-                                                                                var tempTaskLinks = "<li style='font-size:10px;color:#3276b1'>Fetching</li>";
-                                                                              }else{
-                                                                                var tempTaskLinks = "<li style='font-size:10px;color:#3276b1'>No TaskLinks Available</li>";
-                                                                                // var $ul = $('.domain-roles-caption[data-instanceId="' + data._id + '"]').find('.taskListLI');
-                                                                                // //$ul.html("<span class='red'>Hello</span>");
-                                                                                // //alert($ul.length);
-                                                                                // $ul.append("No TaskLinks");
-                                                                              }
-                                                                              return '<div class="menuAppTask" style="display: none;"><span class="menuAppLinkSpan">AppLinks</span><ul class="paddingleft32">' + menuAppTaskLI + '</ul><span class="menuTaskSpan">TaskLinks</span><ul class="paddingleft32 instanceTaskListUL" style="list-style-type: square;">'+tempTaskLinks+'</ul></div>';
+                                                                                    $.post('../tasks', {
+                                                                                        taskIds: data.taskIds
+                                                                                    }, function(tasks) {
+                                                                                        var $ul = $('.domain-roles-caption[data-instanceId="' + data._id + '"]').find('.instanceTaskListUL');
+                                                                                        $ul.empty();
+                                                                                        var $ulTr = $('tr[data-instanceId="' + data._id + '"]').find('.instanceTaskListUL');
+                                                                                        $ulTr.empty();
+
+                                                                                        for (var ll = 0; ll < tasks.length; ll++) {
+                                                                                            var $taskLi = $("<li><a style='font-size:10px;' href='javascript:void(0)' data-taskId='" + tasks[ll]._id + "'>" + tasks[ll].name + "</a></li>");
+                                                                                            $taskLi.find('a').click(function(e) {
+                                                                                                var taskId = $(this).attr('data-taskId');
+                                                                                                $('a[data-executeTaskId="' + taskId + '"]').click();
+                                                                                            });
+                                                                                            $ul.append($taskLi);
+                                                                                            $ulTr.append($taskLi.clone(true));
+                                                                                        }
+                                                                                    });
+                                                                                    //alert(data._id);
+                                                                                    var tempTaskLinks = "<li style='font-size:10px;color:#3276b1'>Fetching</li>";
+                                                                                } else {
+                                                                                    var tempTaskLinks = "<li style='font-size:10px;color:#3276b1'>No TaskLinks Available</li>";
+                                                                                    // var $ul = $('.domain-roles-caption[data-instanceId="' + data._id + '"]').find('.taskListLI');
+                                                                                    // //$ul.html("<span class='red'>Hello</span>");
+                                                                                    // //alert($ul.length);
+                                                                                    // $ul.append("No TaskLinks");
+                                                                                }
+                                                                                return '<div class="menuAppTask" style="display: none;"><span class="menuAppLinkSpan">AppLinks</span><ul class="paddingleft32">' + menuAppTaskLI + '</ul><span class="menuTaskSpan">TaskLinks</span><ul class="paddingleft32 instanceTaskListUL" style="list-style-type: square;">' + tempTaskLinks + '</ul></div>';
                                                                             },
                                                                             getDomainRolesHeading: function(data) {
                                                                                 return '<div class="domain-roles-heading">' + this.getSpanHeadingLeft(data) + this.getSpanHeadingMiddle(data) + this.getOS(data) + '</div>';
@@ -1445,7 +1450,7 @@
                                                                             getContainerForActionButtons: function(data) {
                                                                                 return '<div style="height:30px;width:152px;" class="instanceActionBtnCtr" data-instanceId="' + data._id + '"></div>';
                                                                             }
-                                                                            
+
 
                                                                         }
 
@@ -1523,8 +1528,11 @@
 
                                                                         //$divComponentList.append($(cardTemplate.getOS()));
                                                                         $divComponentListContainer.append($divComponentList);
-                                                                        $divComponentListImage = $('<a class="chefClientRunlistImage actionbuttonChefClientRun"></a>').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'Chef Client Run').addClass('instance-bootstrap-list-image').attr('data-chefServerId', data.chef.serverId).attr('data-instanceId', data._id);
-
+                                                                        if(data.chef && data.chef.serverId) {
+                                                                            $divComponentListImage = $('<a class="chefClientRunlistImage actionbuttonChefClientRun"></a>').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'Chef Client Run').addClass('instance-bootstrap-list-image').attr('data-chefServerId', data.chef.serverId).attr('data-instanceId', data._id);
+                                                                        } else {
+                                                                            $divComponentListImage = $('<a class="chefClientRunlistImage actionbuttonChefClientRun"></a>').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'Puppet Client Run').addClass('instance-bootstrap-list-image').attr('data-puppetServerId', data.puppet.serverId).attr('data-instanceId', data._id);
+                                                                        }
                                                                         //Check if the docker status is succeeded
                                                                         if (data.docker != null) {
 
@@ -1808,7 +1816,7 @@
 
                                                                         $divActionBtnContainer.append([$divActionSSHContainer, $divActionStartContainer, $divActionShutdownContainer, $startStopToggler, cardTemplate.getSpanHeadingRight(data)]);
 
-                                                                        var $tableActionBtnContainer = $divActionBtnContainer.clone().css('width','122px');
+                                                                        var $tableActionBtnContainer = $divActionBtnContainer.clone().css('width', '122px');
 
                                                                         $divDomainRolesCaption.append($divActionBtnContainer);
 
@@ -1829,10 +1837,9 @@
                                                                         $tableActionBtnContainer.find('.moreInfo').remove();
                                                                         $tableActionBtnContainer.find('.instance-bootstrap-ActionChefRun').remove();
                                                                         //$tableActionBtnContainer.append()
-                                                                        $rowContainter.append('<td>' + $('<div></div>').append($tableActionBtnContainer).html() + menuStr +'</td>');
+                                                                        $rowContainter.append('<td>' + $('<div></div>').append($tableActionBtnContainer).html() + menuStr + '</td>');
 
                                                                         var dataTable = $instanceDataTable.DataTable();
-                                                                        
                                                                         dataTable.row.add($rowContainter).draw();
 
 
@@ -1864,30 +1871,30 @@
 
 
 
-                                                                        $(document).ready(function () {
+                                                                        $(document).ready(function() {
 
                                                                             var $menu = $li.find('.menuAppTask');
-                                                                            $(document).click(function () {
+                                                                            $(document).click(function() {
                                                                                 $menu.hide();
                                                                             });
-                                                                            
-                                                                            $li.find('.showmenuAppTask').click(function (e) {
+
+                                                                            $li.find('.showmenuAppTask').click(function(e) {
                                                                                 e.stopPropagation();
                                                                                 var $menuInside = $li.find('.menuAppTask');
                                                                                 if ($menuInside.is(':visible')) {
                                                                                     $menuInside.hide();
                                                                                 } else {
                                                                                     $('.menuAppTask').hide();
-                                                                                    $menuInside.show();                                                                                         
+                                                                                    $menuInside.show();
                                                                                 }
                                                                                 //$menu.show();
                                                                             });
-                                                                            $menu.click(function (e) {
+                                                                            $menu.click(function(e) {
                                                                                 e.stopPropagation();
                                                                             });
                                                                             var $anchor = $('.app-url').parent();
                                                                             $anchor.click(function() {
-                                                                              $menu.hide();                                                                                          
+                                                                                $menu.hide();
                                                                             });
                                                                         });
 
@@ -1909,12 +1916,12 @@
                                                                         //         });
                                                                         //     }
                                                                         // });
-                                                                        $(document).ready(function () {
-                                                                            var $menuT = $rowContainter.find('.menuAppTask').css('width','166px').css('margin-left','-42px');
-                                                                            $(document).click(function () {
+                                                                        $(document).ready(function() {
+                                                                            var $menuT = $rowContainter.find('.menuAppTask').css('width', '166px').css('margin-left', '-42px');
+                                                                            $(document).click(function() {
                                                                                 $menuT.hide();
                                                                             });
-                                                                            $rowContainter.find('.showmenuAppTask').click(function (e) {
+                                                                            $rowContainter.find('.showmenuAppTask').click(function(e) {
 
                                                                                 e.stopPropagation();
                                                                                 //$menuT.show();
@@ -1924,18 +1931,18 @@
                                                                                 } else {
                                                                                     $('.menuAppTask').hide();
 
-                                                                                    $menuInside.show();                                                                                         
-                                                                                    
+                                                                                    $menuInside.show();
+
                                                                                 }
                                                                             });
-                                                                            $menuT.click(function (e) {
+                                                                            $menuT.click(function(e) {
 
                                                                                 e.stopPropagation();
                                                                             });
                                                                             var $anchor = $('.app-url').parent();
                                                                             $anchor.click(function() {
 
-                                                                              $menuT.hide();                                                                                          
+                                                                                $menuT.hide();
 
                                                                             });
                                                                         });
@@ -1975,7 +1982,7 @@
                                                                         if (data.instanceState == 'running') {
                                                                             enableInstanceActionStartBtn(data._id, data.hardware.os);
                                                                         }
-                                                                        if (data.instanceState == 'pending' || data.instanceState == 'stopping' || data.instanceState == 'terminated') {
+                                                                        if (data.instanceState == 'pending' || data.instanceState == 'stopping') {
                                                                             disableInstanceActionBtns(data._id);
                                                                         }
                                                                         if (data.instanceState == 'unknown') {
@@ -1998,8 +2005,7 @@
                                                                             }
                                                                         }, 3);
                                                                         $('#divinstancescardview .carousel-inner .item').eq(0).addClass('active');
-                                                                        /*var $xyz = $instanceDataTable.dataTable().fnGetData().length;
-                                                                        alert($xyz);*/
+
                                                                     }
 
                                                                     function startAndStopToggler(e) {
@@ -2100,7 +2106,7 @@
                                                                         bindClick_LaunchBtn();
                                                                         bindClick_bluePrintUpdate();
                                                                         bindClick_updateInstanceRunList();
-                                                                       // bindClick_dockercontainertablerefreshbutton();
+                                                                        // bindClick_dockercontainertablerefreshbutton();
                                                                     }
 
                                                                     //setting the breadcrumb when the user clicks on the blueprint tab
@@ -2146,7 +2152,7 @@
 
                                                                     //Initializing the blueprint area according to the Template-Type and showing
                                                                     //the differnt template types whenever a blueprint is added
-                                                                    function initializeBlueprintArea(data) {
+function initializeBlueprintArea(data) {
 
                                                                         var $AppFactpanelBody = $('.appFactoryPanel').find('.panel-body');
                                                                         $AppFactpanelBody.empty();
@@ -2352,86 +2358,6 @@
                                                                                         //Commented below to accomodate docker compose
                                                                                         // tagLabel = '<span>Tags&nbsp;</span';
                                                                                         tagLabel = '';
-
-                                                                                        //for CFT and Docker..
-                                                                                        function getOrgProjDetailsCFTDocker(name) {
-                                                                                            $.ajax({
-                                                                                                type: "get",
-                                                                                                dataType: "json",
-
-                                                                                                async: false,
-                                                                                                url: "../organizations/getTreeNew",
-                                                                                                success: function(data) {
-
-                                                                                                    console.log(data);
-                                                                                                    data = JSON.parse(JSON.stringify(data));
-
-                                                                                                    //  alert(JSON.stringify(data));
-
-
-                                                                                                    for (var j = 0; j < data.length; j++) {
-                                                                                                        var $blueprintReadContainerCFT = $('#modalForReadCFT');
-                                                                                                        (function(j) {
-                                                                                                            $blueprintReadContainerCFT.find('.modal-body #blueprintORG').val(data[j].name);
-                                                                                                            for (var p = 0; p < data[j].businessGroups.length; p++) {
-                                                                                                                (function(p) {
-                                                                                                                    $blueprintReadContainerCFT.find('.modal-body #blueprintBU').val(data[j].businessGroups[p].name);
-                                                                                                                    //}
-                                                                                                                    for (var x = 0; x < data[j].businessGroups[p].projects.length; x++) {
-                                                                                                                        $blueprintReadContainerCFT.find('.modal-body #blueprintProject').val(data[j].businessGroups[p].projects[x].name);
-                                                                                                                    }
-                                                                                                                })(p);
-                                                                                                            }
-                                                                                                        })(j);
-                                                                                                    }
-
-
-
-
-                                                                                                }
-                                                                                            });
-                                                                                        }
-                                                                                        //ends here..
-                                                                                        //for software stack and os image
-                                                                                        function getOrgProjDetailsSSOS(name) {
-                                                                                            $.ajax({
-                                                                                                type: "get",
-                                                                                                dataType: "json",
-
-                                                                                                async: false,
-                                                                                                url: "../organizations/getTreeNew",
-                                                                                                success: function(data) {
-
-                                                                                                    console.log(data);
-                                                                                                    data = JSON.parse(JSON.stringify(data));
-
-                                                                                                    //  alert(JSON.stringify(data));
-
-
-                                                                                                    for (var j = 0; j < data.length; j++) {
-                                                                                                        var $blueprintReadContainer = $('#modalForRead');
-                                                                                                        (function(j) {
-                                                                                                            $blueprintReadContainer.find('.modal-body #blueprintORG').val(data[j].name);
-                                                                                                            for (var p = 0; p < data[j].businessGroups.length; p++) {
-                                                                                                                (function(p) {
-                                                                                                                    $blueprintReadContainer.find('.modal-body #blueprintBU').val(data[j].businessGroups[p].name);
-                                                                                                                    //}
-                                                                                                                    for (var x = 0; x < data[j].businessGroups[p].projects.length; x++) {
-                                                                                                                        $blueprintReadContainer.find('.modal-body #blueprintProject').val(data[j].businessGroups[p].projects[x].name);
-                                                                                                                    }
-                                                                                                                })(p);
-                                                                                                            }
-                                                                                                        })(j);
-                                                                                                    }
-
-
-
-
-                                                                                                }
-                                                                                            });
-                                                                                        }
-                                                                                        //ends here..
-
                                                                                         (function(blueprint) {
                                                                                             // alert(JSON.stringify(blueprint));
                                                                                             $liRead.click(function(e) {
@@ -2445,7 +2371,37 @@
                                                                                                 //for getting the blueprint name
                                                                                                 $blueprintReadContainerCFT.find('.modal-body #blueprintNameCFT').val(blueprint.name);
                                                                                                 $blueprintReadContainerCFT.find('.modal-body #blueprintTemplateTypeCFT').val(blueprint.templateType);
-                                                                                                getOrgProjDetailsCFTDocker(name);
+                                                                                                $.ajax({
+                                                                                                    type: "get",
+                                                                                                    dataType: "json",
+
+                                                                                                    async: false,
+                                                                                                    url: "../organizations/getTreeNew",
+                                                                                                    success: function(dataTree) {
+
+                                                                                                        console.log(data);
+                                                                                                        data = JSON.parse(JSON.stringify(data));
+
+                                                                                                        //  alert(JSON.stringify(data));
+
+
+                                                                                                        for (var j = 0; j < dataTree.length; j++) {
+
+                                                                                                            (function(j) {
+                                                                                                                $blueprintReadContainerCFT.find('.modal-body #blueprintORG').val(dataTree[j].name);
+                                                                                                                for (var p = 0; p < dataTree[j].businessGroups.length; p++) {
+                                                                                                                    (function(p) {
+                                                                                                                        $blueprintReadContainerCFT.find('.modal-body #blueprintBU').val(dataTree[j].businessGroups[p].name);
+                                                                                                                        //}
+                                                                                                                        for (var x = 0; x < dataTree[j].businessGroups[p].projects.length; x++) {
+                                                                                                                            $blueprintReadContainerCFT.find('.modal-body #blueprintProject').val(dataTree[j].businessGroups[p].projects[x].name);
+                                                                                                                        }
+                                                                                                                    })(p);
+                                                                                                                }
+                                                                                                            })(j);
+                                                                                                        }
+                                                                                                    }
+                                                                                                });
                                                                                             });
                                                                                         })(data[i]);
                                                                                         //alert(JSON.stringify(data[i]));
@@ -2464,7 +2420,41 @@
                                                                                                 //for getting the blueprint name
                                                                                                 $blueprintReadContainerCFT.find('.modal-body #blueprintNameCFT').val(blueprint.name);
                                                                                                 $blueprintReadContainerCFT.find('.modal-body #blueprintTemplateTypeCFT').val(blueprint.templateType);
-                                                                                                getOrgProjDetailsCFTDocker(name);
+                                                                                                $.ajax({
+                                                                                                    type: "get",
+                                                                                                    dataType: "json",
+
+                                                                                                    async: false,
+                                                                                                    url: "../organizations/getTreeNew",
+                                                                                                    success: function(dataTree) {
+
+                                                                                                        console.log(data);
+                                                                                                        data = JSON.parse(JSON.stringify(data));
+
+                                                                                                        //  alert(JSON.stringify(data));
+
+
+                                                                                                        for (var j = 0; j < dataTree.length; j++) {
+
+                                                                                                            (function(j) {
+                                                                                                                $blueprintReadContainerCFT.find('.modal-body #blueprintORG').val(dataTree[j].name);
+                                                                                                                for (var p = 0; p < dataTree[j].businessGroups.length; p++) {
+                                                                                                                    (function(p) {
+                                                                                                                        $blueprintReadContainerCFT.find('.modal-body #blueprintBU').val(dataTree[j].businessGroups[p].name);
+                                                                                                                        //}
+                                                                                                                        for (var x = 0; x < dataTree[j].businessGroups[p].projects.length; x++) {
+                                                                                                                            $blueprintReadContainerCFT.find('.modal-body #blueprintProject').val(dataTree[j].businessGroups[p].projects[x].name);
+                                                                                                                        }
+                                                                                                                    })(p);
+                                                                                                                }
+                                                                                                            })(j);
+                                                                                                        }
+
+
+
+
+                                                                                                    }
+                                                                                                });
                                                                                             });
                                                                                         })(data[i]);
                                                                                         
@@ -2551,7 +2541,41 @@
 
                                                                                                     }
                                                                                                     $blueprintReadContainer.find('.modal-body #blueprintTemplateType').val(blueprint.templateType);
-                                                                                                    getOrgProjDetailsSSOS(name);
+                                                                                                    $.ajax({
+                                                                                                        type: "get",
+                                                                                                        dataType: "json",
+
+                                                                                                        async: false,
+                                                                                                        url: "../organizations/getTreeNew",
+                                                                                                        success: function(dataTree) {
+
+                                                                                                            console.log(data);
+                                                                                                            data = JSON.parse(JSON.stringify(data));
+
+                                                                                                            //  alert(JSON.stringify(data));
+
+
+                                                                                                            for (var j = 0; j < dataTree.length; j++) {
+
+                                                                                                                (function(j) {
+                                                                                                                    $blueprintReadContainer.find('.modal-body #blueprintORG').val(dataTree[j].name);
+                                                                                                                    for (var p = 0; p < dataTree[j].businessGroups.length; p++) {
+                                                                                                                        (function(p) {
+                                                                                                                            $blueprintReadContainer.find('.modal-body #blueprintBU').val(dataTree[j].businessGroups[p].name);
+                                                                                                                            //}
+                                                                                                                            for (var x = 0; x < dataTree[j].businessGroups[p].projects.length; x++) {
+                                                                                                                                $blueprintReadContainer.find('.modal-body #blueprintProject').val(dataTree[j].businessGroups[p].projects[x].name);
+                                                                                                                            }
+                                                                                                                        })(p);
+                                                                                                                    }
+                                                                                                                })(j);
+                                                                                                            }
+
+
+
+
+                                                                                                        }
+                                                                                                    });
 
 
 
@@ -2559,7 +2583,6 @@
                                                                                             })(data[i]);
 
                                                                                         }
-
                                                                                         $selectVerEdit.click(function(e) {
 
                                                                                             var $parent = $(this).parents('.cardimage');
@@ -2797,7 +2820,7 @@
                                                                                 $('[dockerparamkey]').val('');
                                                                             $('#myModalLabelDockerContainer').attr('saveto', lpinput).css('z-index', '9999').modal('show');
                                                                         };
-                                                                        
+
                                                                         $('.launchBtn').click(function(e) {
                                                                             $('#cftForm').trigger('reset');
 
@@ -2940,7 +2963,7 @@
                                                                                 var blueprintType = $($selectedItems.get(0)).attr('data-blueprintType');
                                                                                 // alert('launching -> ' +'../blueprints/' + blueprintId + '/launch?version=' + version);
                                                                                 function launchBP(stackName) {
-                                                                                 //   alert(JSON.stringify(stackName));
+                                                                                    //   alert(JSON.stringify(stackName));
                                                                                     var $launchResultContainer = $('#launchResultContainer');
                                                                                     $launchResultContainer.find('.modal-body').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
                                                                                     $launchResultContainer.find('.modal-title').html('Launching Blueprint');
@@ -2953,9 +2976,9 @@
                                                                                             msgStr = 'Stack Id : ' + data.stackId + '. You can view your stack in cloudformation tab';
                                                                                         } else {
                                                                                             msgStr = 'Instance Id : ';
-                                                                                            
-                                                                                           // for(var i = 0; i < data.id.length; i++)
-                                                                                                msgStr += data.id.join(',');
+
+                                                                                            // for(var i = 0; i < data.id.length; i++)
+                                                                                            msgStr += data.id.join(',');
 
                                                                                             msgStr += '<br/>You can monitor logs from the Launched Instances.';
                                                                                         }
@@ -2968,11 +2991,11 @@
                                                                                             $.get('/cloudformation/' + data.stackId, function(stack) {
 
                                                                                                 addStackToDom(stack);
-                                                                                               
-                                                                                        })
+
+                                                                                            })
                                                                                             return;
                                                                                         }
-                                                                                       
+
 
                                                                                         var instanceId = data.id;
                                                                                         var timeout;
@@ -3037,33 +3060,31 @@
                                                                                             }, delay);
                                                                                         }
                                                                                         //alert('Instances ' + data.id.length);
-                                                                                        if(data.id.length <= 1)
-                                                                                            {
-                                                                                                //data = data[0];
-                                                                                                instanceId = data.id[0];
-                                                                                                //to be called only when there is one instance.
-                                                                                                pollLogs(lastTimestamp, 0, true);
-                                                                                                $.get('../instances/' + data.id[0], function(data) {
-                                                                                                    $('#tabInstanceStatus').hide();
-                                                                                                        addInstanceToDOM(data);
-                                                                                                    // serachBoxInInstance.updateData(data,"add",undefined);
-                                                                                                });
-                                                                                            }
-                                                                                        else{
-                                                                                            for(var j = 0; j < data.id.length;j++){
+                                                                                        if (data.id.length <= 1) {
+                                                                                            //data = data[0];
+                                                                                            instanceId = data.id[0];
+                                                                                            //to be called only when there is one instance.
+                                                                                            pollLogs(lastTimestamp, 0, true);
+                                                                                            $.get('../instances/' + data.id[0], function(data) {
+                                                                                                $('#tabInstanceStatus').hide();
+                                                                                                addInstanceToDOM(data);
+                                                                                                // serachBoxInInstance.updateData(data,"add",undefined);
+                                                                                            });
+                                                                                        } else {
+                                                                                            for (var j = 0; j < data.id.length; j++) {
                                                                                                 $.get('../instances/' + data.id[j], function(data) {
                                                                                                     $('#tabInstanceStatus').hide();
-                                                                                                        addInstanceToDOM(data);
+                                                                                                    addInstanceToDOM(data);
                                                                                                     // serachBoxInInstance.updateData(data,"add",undefined);
                                                                                                 });
-                                                                                                if(j >= data.id.length - 1){
+                                                                                                if (j >= data.id.length - 1) {
                                                                                                     $('.logsAreaBootstrap').hide();
                                                                                                 }
                                                                                             }
                                                                                         }
-                                                                                        
 
-                                                                                        
+
+
 
 
                                                                                     }).error(function() {
@@ -3072,41 +3093,41 @@
                                                                                 }
 
                                                                                 if (blueprintType === 'aws_cf') {
-                                                                                jQuery.validator.addMethod("noSpace", function(value, element) {
-                                                                                    return value.indexOf(" ") < 0 && value != "";
-                                                                                }, "No space allowed and the user can't leave it empty");
+                                                                                    jQuery.validator.addMethod("noSpace", function(value, element) {
+                                                                                        return value.indexOf(" ") < 0 && value != "";
+                                                                                    }, "No space allowed and the user can't leave it empty");
                                                                                     var $modalCftContainer = $('#cftContainer');
                                                                                     $('#cftContainer').modal('show');
-                                                                                  var validator =  $("#cftForm").validate({
+                                                                                    var validator = $("#cftForm").validate({
                                                                                         rules: {
                                                                                             cftInput: {
                                                                                                 noSpace: true,
-                                                                                                alphanumeric:true
+                                                                                                alphanumeric: true
                                                                                             }
                                                                                         }
                                                                                     });
                                                                                     $('a.launchBtn[type="reset"]').on('click', function() {
-                                                                                        
+
                                                                                         validator.resetForm();
                                                                                     });
-                                                                                    $("#cftForm").submit(function(e){
+                                                                                    $("#cftForm").submit(function(e) {
                                                                                         var stackName = $('#cftInput').val();
-                                                                                        var isValid= $('#cftForm').valid();
-                                                                                        if(!isValid){
+                                                                                        var isValid = $('#cftForm').valid();
+                                                                                        if (!isValid) {
                                                                                             e.preventDefault();
                                                                                             return false;
-                                                                                        }else{
-                                                                                       
+                                                                                        } else {
+
                                                                                             launchBP(stackName);
                                                                                             $('#cftContainer').modal('hide');
                                                                                             e.preventDefault();
-                                                                                       
+
                                                                                             return false;
                                                                                         }
 
                                                                                     });
 
-                                                                                /*$('.bootbox-form input').append('name', 'nospace');    
+                                                                                    /*$('.bootbox-form input').append('name', 'nospace');    
                                                                                     $('.bootbox-form').validate();
                                                                                     bootbox.prompt("Please Enter Unique Stack Name?", function(result) {
 
@@ -3115,7 +3136,7 @@
                                                                                         }
                                                                                     });
 */
-                                                                                }else {
+                                                                                } else {
                                                                                     launchBP();
                                                                                 }
                                                                             }
@@ -3600,7 +3621,7 @@
 
                                                                         for (var i = 0; i < stacks.length; i++) {
                                                                             addStackToDom(stacks[i]);
-                                                                          //  alert(JSON.stringify(stacks[i]));
+                                                                            //  alert(JSON.stringify(stacks[i]));
                                                                         }
 
                                                                     }
@@ -3689,7 +3710,6 @@
                                                                                 obj = dat;
                                                                             }
                                                                             return obj;
-
                                                                         }
                                                                         data = getUpdatedData(data);
                                                                         if (!$.fn.dataTable.isDataTable('#tableOrchestration')) {
@@ -3723,13 +3743,7 @@
                                                                                 }]
 
                                                                             });
-                                                                            /*var count = 0;
-                                                                            $('#tableOrchestration tr').each(function() {
-                                                                                count++;
-                                                                            });
-                                                                            alert(count);*/
                                                                         }
-
                                                                         if (!$.fn.dataTable.isDataTable('#tablehistoryTask')) {
                                                                             //var $taskListArea = $('.taskListArea').empty();
                                                                             var $taskHistoryDatatable = $('#tablehistoryTask').DataTable({
@@ -3960,13 +3974,12 @@
                                                                                         var runlist = $(this).data('taskRunlist');
                                                                                         if (runlist && runlist.length) {
                                                                                             for (var i = 0; i < runlist.length; i++) {
-                                                                                                
                                                                                                 $li = $('<li></li>').append(runlist[i].substring(runlist[i].lastIndexOf("[") + 1, runlist[i].lastIndexOf("]"))).css({
                                                                                                     "font-size": "12px"
                                                                                                 });
                                                                                                 $taskRunListContainer.append($li);
                                                                                             }
-                                                                                        }else{
+                                                                                        } else {
                                                                                             bootbox.alert('No runlists were selected.Either Create a New Job or Edit the Particular Job.');
                                                                                             return false;
                                                                                         }
@@ -3978,153 +3991,23 @@
 
                                                                                     if (jobURLS) {
                                                                                         var $tdNodeList = $('<td style="vertical-align:inherit;text-align:center;"></td>').append('<span>&nbsp;<a title="' + jobURLS + '" href="' + jobURLS + '" target="_blank" style="word-break: break-all;text-decoration:none"><img style="width:20px;" src="img/joburl.jpg"></a></span>');
-                                                                                    }else{
-                                                                                        var $tdNodeList=$('<td>Not Available</td>');
+                                                                                    } else {
+                                                                                        var $tdNodeList = $('<td>Not Available</td>');
                                                                                     }
                                                                                 }
                                                                                 $tr.append($tdNodeList);
 
                                                                                 //method for executing the chef and jenkins job...
-
                                                                                 var $tdExecute = $('<td style="vertical-align:inherit;text-align:center;"></td>').append('<a rel="tooltip" data-placement="top" data-original-title="Execute" data-toggle="modal" href="javascript:void(0)" class="btn btn-primary btn-sg tableactionbutton"><i class="ace-icon fa fa-play bigger-120"></i></a>');
                                                                                 $tdExecute.find('a').data('taskId', data[i]._id).attr('data-executeTaskId', data[i]._id).click(function(e) {
                                                                                     var taskId = $(this).data('taskId');
-                                                                                    
-                                                                                // alert(JSON.stringify(data[i]));
-                                                                                if (data[i].taskType === 'jenkins'|| data[i].taskType==='chef') {
-                                                                                    //checking for parameterized condition..
-                                                                                    if(data[i].taskConfig.parameterized){
-                                                                                    for (var a = 0; a < data[i].taskConfig.parameterized.length; a++) {
-                                                                                        if (data[i].taskConfig.parameterized[a].parameterName === "Choice") {
-
-
-                                                                                            if (data[i].taskConfig.parameterized[a].defaultValue) {
-
-
-                                                                                                var $modalForSelect = $('#modalForSelect');
-                                                                                                $modalForSelect.modal('show');
-                                                                                                var $defaultValue = $('#defaultValue').val();
-                                                                                                var defaultValueCheck = data[i].taskConfig.parameterized[a].defaultValue;
-                                                                                                var str;
-                                                                                                for (var b = 0; b < defaultValueCheck.length; b++) {
-                                                                                                    str = '<option>' + defaultValueCheck[b] + '</option>';
-
-                                                                                                    $('#defaultValue').append(str).select2();
-                                                                                                }
-                                                                                                $('#executeJob').submit(function(e) {
-
-                                                                                                    $modalForSelect.modal('hide');
-                                                                                                    executeJob(defaultValue);
-                                                                                                    return false;
-                                                                                                });
-
-                                                                                            } //if ends here for default value..
-                                                                                            function executeJob(defaultValue) {
-
-                                                                                                var $taskExecuteTabsHeaderContainer = $('#taskExecuteTabsHeader').empty();
-                                                                                                var $taskExecuteTabsContent = $('#taskExecuteTabsContent').empty();
-                                                                                                var $modal = $('#assignedExecute');
-                                                                                                $modal.find('.loadingContainer').show();
-                                                                                                $modal.find('.errorMsgContainer').hide();
-                                                                                                $modal.find('.outputArea').hide();
-                                                                                                $modal.modal('show');
-                                                                                                var timestampToPoll = new Date().getTime();
-                                                                                                var reqBody = {};
-                                                                                                var defaultValue = $('#defaultValue').val();
-                                                                                                reqBody = defaultValue;
-                                                                                                $.post('../tasks/' + taskId + '/run', {
-                                                                                                    choiceParam: reqBody
-                                                                                                }, function(data) {
-                                                                                                    /*alert(reqBody);
-                                                                                                                                                                                                                                                                                                                                                                                                    alert(JSON.stringify(data));*/
-                                                                                                    var date = new Date().setTime(data.timestamp);
-                                                                                                    var taskTimestamp = new Date(date).toLocaleString(); //converts to human readable strings
-                                                                                                    $('tr[data-taskId="' + taskId + '"] .taskrunTimestamp').html(taskTimestamp);
-
-                                                                                                    var $outputArea = $modal.find('.outputArea');
-
-                                                                                                    $outputArea.data('taskType', data.taskType);
-                                                                                                    $outputArea.data('instances', data.instances);
-                                                                                                    $outputArea.data('jenkinsServerId', data.jenkinsServerId);
-                                                                                                    $outputArea.data('jobName', data.jobName);
-                                                                                                    $outputArea.data('lastBuildNumber', data.lastBuildNumber);
-                                                                                                    $outputArea.data('currentBuildNumber', data.currentBuildNumber);
-                                                                                                    $outputArea.data('timestampStarted', data.timestamp);
-                                                                                                    showTaskLogs();
-
-                                                                                                }).fail(function(jxhr) {
-                                                                                                    $modal.find('.loadingContainer').hide();
-                                                                                                    $modal.find('.outputArea').hide();
-                                                                                                    var $errorContainer = $modal.find('.errorMsgContainer').show();
-                                                                                                    if (jxhr.responseJSON && jxhr.responseJSON.message) {
-                                                                                                        $errorContainer.html(jxhr.responseJSON.message);
-                                                                                                    } else {
-                                                                                                        $errorContainer.html("Server Behaved Unexpectedly");
-                                                                                                    }
-                                                                                                });
-                                                                                            } //function ends here..
-                                                                                        } //if loop for choice ends here..
-                                                                                        else {
-                                                                                            if (data[i].taskConfig.parameterized.length >= 1) {
-                                                                                                //  alert(data[i].taskConfig.parameterized.length);
-                                                                                                bootbox.confirm({
-                                                                                                    message: "Are you sure you want to execute this Job?",
-                                                                                                    title: "Confirmation",
-
-                                                                                                    callback: function(result) {
-                                                                                                        if (result) {
-                                                                                                            var $taskExecuteTabsHeaderContainer = $('#taskExecuteTabsHeader').empty();
-                                                                                                            var $taskExecuteTabsContent = $('#taskExecuteTabsContent').empty();
-                                                                                                            var $modal = $('#assignedExecute');
-                                                                                                            $modal.find('.loadingContainer').show();
-                                                                                                            $modal.find('.errorMsgContainer').hide();
-                                                                                                            $modal.find('.outputArea').hide();
-                                                                                                            $modal.modal('show');
-                                                                                                            var timestampToPoll = new Date().getTime();
-                                                                                                            $.post('../tasks/' + taskId + '/run', {}, function(data) {
-                                                                                                                //  alert(JSON.stringify(data));
-                                                                                                                var date = new Date().setTime(data.timestamp);
-                                                                                                                var taskTimestamp = new Date(date).toLocaleString(); //converts to human readable strings
-                                                                                                                $('tr[data-taskId="' + taskId + '"] .taskrunTimestamp').html(taskTimestamp);
-
-                                                                                                                var $outputArea = $modal.find('.outputArea');
-
-                                                                                                                $outputArea.data('taskType', data.taskType);
-                                                                                                                $outputArea.data('instances', data.instances);
-                                                                                                                $outputArea.data('jenkinsServerId', data.jenkinsServerId);
-                                                                                                                $outputArea.data('jobName', data.jobName);
-                                                                                                                $outputArea.data('lastBuildNumber', data.lastBuildNumber);
-                                                                                                                $outputArea.data('currentBuildNumber', data.currentBuildNumber);
-                                                                                                                $outputArea.data('timestampStarted', data.timestamp);
-                                                                                                                showTaskLogs();
-
-                                                                                                            }).fail(function(jxhr) {
-                                                                                                                $modal.find('.loadingContainer').hide();
-                                                                                                                $modal.find('.outputArea').hide();
-                                                                                                                var $errorContainer = $modal.find('.errorMsgContainer').show();
-                                                                                                                if (jxhr.responseJSON && jxhr.responseJSON.message) {
-                                                                                                                    $errorContainer.html(jxhr.responseJSON.message);
-                                                                                                                } else {
-                                                                                                                    $errorContainer.html("Server Behaved Unexpectedly");
-                                                                                                                }
-                                                                                                            });
-
-                                                                                                        } //result ends here..
-                                                                                                    }
-                                                                                                });
-                                                                                            }
-                                                                                            break;
-                                                                                        }
-                                                                                    } //for ends here..
-                                                                                    //new else starts here..
-                                                                                } else{
-                                                                                    //condition when build is not parameterized and for chef
                                                                                     bootbox.confirm({
                                                                                         message: "Are you sure you want to execute this Job?",
                                                                                         title: "Confirmation",
-
                                                                                         callback: function(result) {
                                                                                             if (result) {
+
+
                                                                                                 var $taskExecuteTabsHeaderContainer = $('#taskExecuteTabsHeader').empty();
                                                                                                 var $taskExecuteTabsContent = $('#taskExecuteTabsContent').empty();
                                                                                                 var $modal = $('#assignedExecute');
@@ -4133,8 +4016,7 @@
                                                                                                 $modal.find('.outputArea').hide();
                                                                                                 $modal.modal('show');
                                                                                                 var timestampToPoll = new Date().getTime();
-                                                                                                $.post('../tasks/' + taskId + '/run',{}, function(data) {
-                                                                                                  //  alert(JSON.stringify(data));
+                                                                                                $.get('../tasks/' + taskId + '/run', function(data) {
                                                                                                     var date = new Date().setTime(data.timestamp);
                                                                                                     var taskTimestamp = new Date(date).toLocaleString(); //converts to human readable strings
                                                                                                     $('tr[data-taskId="' + taskId + '"] .taskrunTimestamp').html(taskTimestamp);
@@ -4161,20 +4043,9 @@
                                                                                                     }
                                                                                                 });
 
-                                                                                            }//result ends here..
+                                                                                            }
                                                                                         }
                                                                                     });
-                                                                                }
-                                                                            } //if ends here..
-
-
-                                                                                
-                                                                                                
-
-                                                                                //alert(data[i].taskConfig.parameterized[a].parameterName);
-                                                                                /*if(data[i].taskType==="chef"){
-                                                                                
-                                                                                }*/
 
                                                                                 });
                                                                                 $tr.append($tdExecute);
@@ -4184,7 +4055,7 @@
                                                                                     var $tdHistory = $('<td style="vertical-align:inherit;text-align:center;"></td>').append('<a rel="tooltip" data-placement="top" data-original-title="History" data-toggle="modal" href="javascript:void(0)" class="btn btn-primary btn-sg tableactionbutton"><i class="ace-icon fa fa-header bigger-120"></i></a>');
                                                                                     $tdHistory.find('a').data('taskId', data[i]._id).attr('data-historyTaskId', data[i]._id).click(function(e) {
                                                                                         //var $taskHistoryContent = $('#taskHistoryContent').show();
-                                                                                     //   alert(JSON.stringify(data[i]));
+                                                                                        //   alert(JSON.stringify(data[i]));
                                                                                         var taskId = $(this).data('taskId');
                                                                                         var $modal = $('#chefJobHistory');
                                                                                         $modal.find('.loadingContainer').show();
@@ -4194,7 +4065,7 @@
                                                                                         $('#orchestrationTable').hide();
                                                                                         $('.hideChefJob').click(function(e) {
                                                                                             $modal.addClass('hidden');
-                                                                                            
+
                                                                                             $('#orchestrationTable').show();
                                                                                         });
                                                                                         $taskHistoryDatatable.clear().draw();
@@ -4347,7 +4218,7 @@
                                                                                     $tdHistory.find('a').data('taskId', data[i]._id).data('autosyncFlag', data[i].taskConfig.autoSyncFlag).attr('data-historyTaskId', data[i]._id).click(function(e) {
                                                                                         //var $taskHistoryContent = $('#taskHistoryContent').show();
                                                                                         var taskId = $(this).data('taskId');
-                                                                                       // alert(JSON.stringify(data[i]));
+                                                                                        // alert(JSON.stringify(data[i]));
                                                                                         $taskHistoryDatatableJenkins.row().clear().draw(true);
                                                                                         var $modal = $('#jenkinsJobHistory');
                                                                                         $modal.find('.loadingContainer').show();
@@ -4360,9 +4231,9 @@
                                                                                             $taskHistoryDatatableJenkins.row().clear().draw(true);
                                                                                             $('#orchestrationTable').show();
                                                                                         });
-                                                                                       
-                                                                                       $('.widget-header').find('h5.jenkinsTitle').html('Jenkins Job History For -&nbsp;' + data[i].name);
-                                                                                        
+
+                                                                                        $('.widget-header').find('h5.jenkinsTitle').html('Jenkins Job History For -&nbsp;' + data[i].name);
+
                                                                                         var autoSyncFlag = $(this).data('autosyncFlag');
 
                                                                                         console.log('autoSyncFlag', autoSyncFlag);
@@ -4377,9 +4248,9 @@
 
                                                                                             for (var i = 0; i < taskHistories.length; i++) {
                                                                                                 //alert(taskHistories.length);
-                                                                                                
-                                                                                                
-                                                                                                
+
+
+
                                                                                                 (function(i) {
 
                                                                                                     var $trHistoryRow = $('<tr/>');
@@ -4387,7 +4258,7 @@
                                                                                                     //$trHistoryRow.append($('<td></td>').addClass('build-number').append('<img class="center-block" style="height:20px;width:20px;" src="img/loading.gif" />'));
                                                                                                     //condition to get the jobname as per the particular build number..
                                                                                                     $.get('../jenkins/' + taskHistories[i].jenkinsServerId + '/jobs/' + taskHistories[i].jobName, function(job) {
-                                                                                                        
+
                                                                                                         console.log(JSON.stringify(job));
                                                                                                         var url;
                                                                                                         var buildFound = false
@@ -4412,17 +4283,17 @@
 
                                                                                                         } else {
                                                                                                             for (var k = 0; k < job.builds.length; k++) {
-                                                                                                                
+
 
                                                                                                                 console.log(taskHistories[i].buildNumber, "  ---  ", job.nextBuildNumber);
 
                                                                                                                 if (taskHistories[i].buildNumber === job.builds[k].number) {
 
                                                                                                                     url = 'http://' + job.builds[k].url;
-                                                                                                                    
-                                                                                                                    
+
+
                                                                                                                     var $tdBuildNumber = $('<td/>').append('<a style="word-break: break-all;" href="' + url + '" title="' + url + '" target="_blank">' + taskHistories[i].buildNumber + '</a>');
-                                                                                                              $trHistoryRow.append($tdBuildNumber);
+                                                                                                                    $trHistoryRow.append($tdBuildNumber);
 
 
                                                                                                                     buildFound = true;
@@ -4443,17 +4314,17 @@
                                                                                                         $tdJobName = $('<td/>');
 
 
-                                                                                                        
+
                                                                                                         if (taskHistories[i].jobResultURL.length) {
                                                                                                             for (var p = 0; p < taskHistories[i].jobResultURL.length; p++) {
                                                                                                                 $tdJobName.append('<a class="btn btn-primary btn-sg tableactionbutton marginleftright7" style="word-break: break-all;" href="' + taskHistories[i].jobResultURL[p] + '" title="' + taskHistories[i].jobResultURL[p] + '" target="_blank"><i class="ace-icon fa fa-file-text bigger-120"></i></a>');
                                                                                                             }
 
-                                                                                                            
+
                                                                                                         }
                                                                                                         $tdJobName.append('<a title="Jenkins Log" data-placement="top" rel="tooltip" class="btn btn-primary btn-sg tableactionbutton moreinfo" href="javascript:void(0)" data-toggle="modal"><i class="ace-icon fa fa-list bigger-120"></i></a>');
                                                                                                         $tdJobName.find('a.moreinfo').data('history', taskHistories[i]).data('taskId', taskId).click(function() {
-                                                                                                            
+
                                                                                                             var taskId = $(this).data('taskId');
                                                                                                             var $taskExecuteTabsHeaderContainer = $('#taskExecuteTabsHeader').empty();
                                                                                                             var $taskExecuteTabsContent = $('#taskExecuteTabsContent').empty();
@@ -4512,8 +4383,8 @@
 
                                                                                                         //method for showing the status of the job that is getting executed or the job already executed and for no status..
                                                                                                         $trHistoryRow.append($tdJobName);
-                                                                                                        
-                                                                                                        
+
+
                                                                                                         if (taskHistories[i].status != null) {
                                                                                                             if (taskHistories[i].status.toLowerCase() === "success") {
                                                                                                                 var $tdBuildStatus = $('<td style="background-color:#1c9951;"></td>').append('<span style="color:#fff">SUCCESS</span>');
@@ -4569,7 +4440,7 @@
                                                                                                 $errorContainer.html("Server Behaved Unexpectedly");
                                                                                             }
                                                                                         });
-                                                                                        
+
                                                                                     });
                                                                                 }
                                                                                 $tr.append($tdHistory);
@@ -4675,7 +4546,7 @@
                                                                                 $taskDatatable.row.add($tr).draw();
                                                                                 //$taskListArea.append($tr);
 
-                                                                                
+                                                                                //aaaa
                                                                                 if ($("#sorttableheader").length) {
                                                                                     //alert(1);
                                                                                     $("#sorttableheader").tablesorter();
@@ -4940,7 +4811,9 @@
                                                                     });
 
                                                                     $('#importinstanceOS').select2();
+                                                                    $('#configManagementDropdown').select2();
                                                                     $('#pemFileDropdown').select2();
+
 
 
                                                                     if (localStorage.getItem("SelectedClass") == "Orchestration") {
@@ -5110,20 +4983,38 @@
                                                                         $('.instanceloaderspinner').removeClass('hidden');
                                                                         $.get('../organizations/' + orgId + '/businessgroups/' + urlParams['bg'] + '/projects/' + projectId + '/environments/' + envId + '/', function(data) {
                                                                             console.log('success---3---4');
-                                                                            
+
                                                                             initializeTaskArea(data.tasks);
                                                                             initializeBlueprintArea(data.blueprints);
                                                                             x = data.instances;
                                                                             initializeInstanceArea(data.instances);
                                                                             initializeStackArea(data.stacks);
                                                                         });
-
+                                                                        if (orgId) {
+                                                                            $.get('/d4dMasters/organization/' + orgId + '/configmanagement/list', function(configMgmntList) {
+                                                                                console.log('confi=== >', configMgmntList);
+                                                                                var $configManagementDropdown = $('#configManagementDropdown');
+                                                                                for (var i = 0; i < configMgmntList.length; i++) {
+                                                                                    var $options = $('<option></option>');
+                                                                                    var name;
+                                                                                    if (configMgmntList[i].configType === 'puppet') {
+                                                                                        name = configMgmntList[i].puppetservername;
+                                                                                    } else {
+                                                                                        name = configMgmntList[i].configname;
+                                                                                    }
+                                                                                    $options.html(name);
+                                                                                    $options.val(configMgmntList[i].rowid);
+                                                                                    $configManagementDropdown.append($options);
+                                                                                }
+                                                                            });
+                                                                        }
                                                                     } else {
                                                                         var $workzoneTab = $('#workZoneNew');
                                                                         if ($workzoneTab.length) {
                                                                             $workzoneTab.click();
                                                                         }
                                                                     }
+
 
                                                                     /*if (orgId && urlParams['bg'] && projectId && envId) {
 
@@ -5263,7 +5154,7 @@
                                                                         //alert('called');
                                                                         //debugger;
                                                                         console.log('called');
-                                                                      //  $('#dockercontainertablerefreshspinner').addClass('fa-spin');
+                                                                        //  $('#dockercontainertablerefreshspinner').addClass('fa-spin');
                                                                         $dockercontainertable = $('#dockercontainertable tbody');
 
                                                                         $('.docctrempty').detach();

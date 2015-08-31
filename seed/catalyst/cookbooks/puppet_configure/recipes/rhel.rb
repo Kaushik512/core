@@ -9,6 +9,7 @@
 
 pup_config = node['puppet_configure']
 ssh_rpm = File.basename(pup_config['ssh_rpm'])
+pup_repo_rpm = File.basename(pup_config['repo'])
 
 directory pup_config['cache_dir'] do
 	owner pup_config['user']
@@ -30,4 +31,14 @@ rpm_package "SSHPASS installation" do
 	action :install
 end
 
-include_recipe "puppet_configure::client_bootstrap"
+remote_file "#{pup_config['cache_dir']}/#{pup_repo_rpm}" do
+	user pup_config['user']
+	group pup_config['group']
+	source pup_config['repo']
+	not_if { File.size? ("#{pup_config['cache_dir']}/#{pup_repo_rpm}") }
+end
+
+rpm_package "Puppet Repo Install" do
+	source "#{pup_config['cache_dir']}/#{pup_repo_rpm}"
+	action :install
+end

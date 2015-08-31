@@ -98,7 +98,7 @@ module.exports.setRoutes = function(app) {
     tracks.setRoutes(app, sessionVerificationFunc);
 
     puppet.setRoutes(app, sessionVerificationFunc);
-    
+
     appdeploy.setRoutes(app, sessionVerificationFunc);
 
     app.get('/', function(req, res) {
