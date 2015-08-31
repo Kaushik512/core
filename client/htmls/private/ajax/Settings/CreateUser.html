@@ -165,7 +165,7 @@
        });
        drawBreadCrumb1();
        enableUniqueCheckingForInputs(7);
-      //checkusernameexistsinldap('loginname');
+      checkusernameexistsinldap('loginname');
       //frezing login name on edit mode.
       if(typeof $('#myForm5').find('button[rowid]').first().attr('rowid') != 'undefined'){
         // $('#loginname').attr('readonly','readonly');
@@ -191,7 +191,7 @@
    function createUserInLdap(){
     var data1 = new FormData();
       data1.append("username",$('#loginname').val());
-      data1.append("password",$('#userpassword').val());
+      data1.append("password",$('#password').val());
       data1.append("fname",$('#loginname').val());
       data1.append("lname","cuser");
       //data1.append("ldaprootusername","Admin");
@@ -261,6 +261,7 @@
                 /*alert('valid form submitted'); // for demo*/
                if(validateForm()) {
                 //alert("in");
+                createUserInLdap();
                 saveform('7');
               }
            }else{

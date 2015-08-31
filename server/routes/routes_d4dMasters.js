@@ -24,7 +24,10 @@ var blueprintsDao = require('../model/dao/blueprints');
 var errorResponses = require('./error_responses.js');
 var bcrypt = require('bcryptjs');
 var authUtil = require('../lib/utils/authUtil.js');
+var Cryptography = require('../lib/utils/cryptography');
 
+var cryptoConfig = appConfig.cryptoSettings;
+var cryptography = new Cryptography(cryptoConfig.algorithm, cryptoConfig.password);
 
 module.exports.setRoutes = function(app, sessionVerification) {
 
@@ -2511,11 +2514,23 @@ module.exports.setRoutes = function(app, sessionVerification) {
                         bodyJson["orgname_rowid"] = "";
                     }
 
-
-                    logger.debug("Full bodyJson: ", JSON.stringify(bodyJson));
-                        if (req.params.id === "25") {
-                            bodyJson["folderpath"] = "/" + bodyJson["username"] + "/.puppet/";
+                    if (req.params.id === "10") {
+                        bodyJson["configType"] = "chef";
+                    }
+                    //logger.debug("Full bodyJson:::: ", JSON.stringify(bodyJson));
+                    if (req.params.id === "25") {
+                        bodyJson["folderpath"] = "/" + bodyJson["username"] + "/.puppet/";
+                        bodyJson["configType"] = "puppet";
+                        if (bodyJson["puppetpassword"]) {
+                            bodyJson["puppetpassword"] = cryptography.encryptText(bodyJson["puppetpassword"], cryptoConfig.encryptionEncoding, cryptoConfig.decryptionEncoding);
                         }
+                        logger.debug("encryptText:>>>>>>>>>>>>> ", bodyJson["puppetpassword"]);
+                    }
+                    if (req.params.id === "3") {
+                        if(!bodyJson["environmentname"]){
+                            bodyJson["environmentname"] = bodyJson["puppetenvironmentname"];
+                        }
+                    }
                     configmgmtDao.getDBModelFromID(req.params.id, function(err, dbtype) {
                         if (err) {
                             logger.error("Hit and error:", err);
@@ -2608,6 +2623,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                 if (!editMode) { //push new values only when not in edit mode
                                     //dMasterJson = JSON.parse(FLD);
                                     //   console.log('>>>>>> Whats going to be saved:' + FLD['rowid']);
+
 
                                     // Start Auto create Team
                                     if (req.params.id === '1') {
@@ -3630,6 +3646,50 @@ module.exports.setRoutes = function(app, sessionVerification) {
         });
 
     });
+    app.get('/d4dMasters/configmanagement', function(req, res) {
+        masterUtil.getAllActiveOrg(function(err, orgList) {
+            logger.debug("got org list ==>", JSON.stringify(orgList));
+            if (err) {
+                res.send(500, 'Not able to fetch Orgs.');
+                return;
+            }
+            masterUtil.getAllCongifMgmts(orgList, function(err, list) {
+                if (err) {
+                    logger.debug("Failed to fetch all configmanagement", err);
+                    res.send(500, "Failed to fetch all configmanagement");
+                    return;
+                }
+                res.send(list);
+                return;
+            });
+        });
+    });
 
+    app.get('/d4dMasters/organization/:orgId/configmanagement/list', function(req, res) {
+        masterUtil.getAllCongifMgmtsForOrg(req.params.orgId, function(err, list) {
+            if (err) {
+                logger.debug("Failed to fetch all configmanagement", err);
+                res.send(500, "Failed to fetch all configmanagement");
+                return;
+            }
+            res.send(list);
+            return;
+        });
+    });
 
+    app.get('/d4dMasters/configmanagement/:anId', function(req, res) {
+        masterUtil.getCongifMgmtsById(req.params.anId, function(err, data) {
+            if (err) {
+                logger.debug("Failed to fetch all configmanagement", err);
+                res.send(500, "Failed to fetch all configmanagement");
+                return;
+            }
+            if(!data){
+                res.send(404,"No ConfigManagement Found.");
+                return;
+            }
+            res.send(data);
+            return;
+        });
+    });
 }
