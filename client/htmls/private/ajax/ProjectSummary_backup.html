@@ -1,0 +1,1119 @@
+<div class="row">
+
+    <article class="col-sm-12 col-md-12 col-lg-12">
+
+            <div class="widget-body font-size12">
+
+                <ul id="myTab3" class="nav nav-tabs tabs-pull-left">
+
+                    <!-- <li class="active Dashboard">
+                        <a href="#l1" data-toggle="tab"><i class="fa fa-reorder"></i>&nbsp;Dashboard</a>
+                    </li> -->
+                    <li class="pull-left active Applications">
+                        <a href="#l2" data-toggle="tab"><i class="fa fa-crosshairs"></i>&nbsp;Application</a>
+                    </li>
+                </ul>
+
+                <div id="myTabContent3" class="nav tab-content">
+                    <!-- <div class="tab-pane" id="l1">
+                      <span style="font-size: 13px;">Support for this features will be available in the future...</span>
+                    </div> -->
+
+
+                    <div class="tab-pane active" id="l2">
+                      <div class="row">
+                        <div class="col-md-12">
+                          <div class="widget-box bordermargintop0">
+                            <div class="widget-header">
+                              <h5 style="color:#777;font-size:14px;" class="widget-title">
+                              <strong>Applications</strong>
+                              </h5>
+                              <div class="widget-toolbar no-border">
+                                  <div>     
+                                      <a href="#modaladdAppCard" data-toggle="modal" class="btn btn-minier btn-primary createAPP" style="margin-top: 2px;">
+                                          <i class="ace-icon ace-icon fa fa-plus bigger-110"></i>
+                                          ADD APP
+                                      </a>                                                
+                                  </div>
+                              </div>                         
+                            </div>
+                            <div class="widget-body">
+                               <div class="widget-main" style="min-height:200px">
+                                  <div class="row appcardList paddingleftright0">
+
+                                    
+
+                                   
+
+
+                          
+                               </div>
+                            </div>
+                            <div class="widget-toolbox clearfix text-align-center">
+                               <div class="btn-group">
+                                  <a class="btn btn-primary btn-mini actionnewControlPanel" style="text-align:center;">
+                                  <i class="ace-icon fa fa-gears bigger-110"></i>
+                                  Control Panel
+                                  </a>
+                               </div>
+                               <!-- <a class="btn pull-right btn-danger right-button" title="Remove AppCard" id="removeAppCard" >
+                                <i class="fa fa-trash-o"></i>
+                            </a> -->
+                            </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                      
+
+                </div>
+
+            </div>
+
+    </article>
+</div>
+<!--Modal for Project appCard-->
+<div class="modal fade" id="modaladdAppCard" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+          <form role="form" id="appCardForm" autocomplete="off">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    X
+                </button>
+                <h4 class="modal-title">
+                    <i class="fa fa-th-list txt-color-blue"></i>&nbsp;&nbsp;Add a Application
+                </h4>
+            </div>
+          
+            <div class="modal-body">
+              <form action="" id="checkout-form">
+                <div class="row" style="margin:0px">
+                  <div class="col-lg-6" style="padding-left:0px;">
+                    <label for="name">Application Name:<span style="color:Red;" class="control-label">&nbsp;*</span>
+                    </label>
+                    <input id="applicationNameInput" class="form-control" type="text" autofocus>
+                  </div>
+                  <div class="col-lg-6">
+                    <div class="smart-forms">
+                      <label for="">Application Icon</label>
+                      <label for="" name="field" class="file">
+                          <span class="button btn-primary btn-applicationIcon" style="margin-top: 19px;">Browse</span>
+                          <input id="applicationiconInput" type="file" class="gui-file">
+                          <input type="text" readonly="" class="gui-input">
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <br>
+                
+                  <div class="panel-group smart-accordion-default" id="accordion-DesignaddApp">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                              <a data-toggle="collapse" data-parent="#accordion-DesignaddApp" href="#CollapseGithubRepoParameteraddApp"> <i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i>Configure Codeline[GIT Repository]</a>
+                            </h4>
+                        </div>
+                        <div id="CollapseGithubRepoParameteraddApp" class="panel-collapse collapse in">
+                          <div class="panel-body">
+                             <div class="widget-body no-padding">
+                                  <form action="">
+                                    <div class="row" style="margin:0px">
+                                      <div class="col-lg-6 projectRepo">
+                                        <label for="name">Repo URL:
+                                          <span style="color:Red;" class="control-label">&nbsp;*</span>
+                                        </label>
+                                        <input  id="gitURLInputaddApp" class="form-control" type="text">
+                                      </div>
+                                    </div>
+                                    <br>
+                                    <hr>
+                                    <div class="row" style="margin:0px">
+                                      <div class="col-lg-6 projectRepo">
+                                         <label for="">
+                                         Username<span style="color:Red;" class="control-label">&nbsp;*</span>
+                                         </label>
+                                         <input id="gitusernameaddApp" class="form-control" type="text">
+                                      </div>
+                                      <div class="col-lg-6 projectRepo">
+                                         <label for="">Password <span style="color:Red;" class="control-label">&nbsp;*</span></label>
+                                         <input id="gitpasswordaddApp" class="form-control" type="password">
+                                      </div>
+                                    </div>    
+                                  </form>
+                              </div>
+                          </div>
+                        </div>
+                    </div>
+                    <div class="panel panel-default">
+                      <div class="panel-heading">
+                          <h4 class="panel-title">
+                            <a data-toggle="collapse" data-parent="#accordion-DesignaddApp" href="#CollapseConfigureBuildParameteraddApp" class="collapsed"><i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i>Configure Build Parameters</a>
+                          </h4>
+                      </div>
+                        <div id="CollapseConfigureBuildParameteraddApp" class="panel-collapse collapse">
+                          <div class="panel-body">
+                            <form action="" id="formBuildParameters" class="smart-form">
+                              <div class="widget-body no-padding">
+                                <fieldset>
+                                    <section class="col col-6 projectRepo">
+                                        <label for="category">Choose Environment<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+                                        <label class="input">
+                                            <select id="environmentList" class="chooseAppEnvironment width-100">
+                                              <option>Choose</option>
+                                            </select>   
+                                        </label>
+                                    </section>
+                                    <section class="col col-6 projectRepo">
+                                        <label for="category">Choose Tasks<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+                                        <label class="input">                                                
+                                            <select id="taskList" class="chooseTasks width-100" disabled>
+                                                
+                                            </select>   
+                                        </label>
+                                    </section>
+                                  
+                                </fieldset>
+                                <!-- <div class="col-lg-6">
+                                  
+                                </div> -->
+                              </div>
+                            </form>           
+                          </div>
+                        </div>
+                    </div>
+                    <div class="panel panel-default">
+                      <div class="panel-heading">
+                          <h4 class="panel-title">
+                            <a data-toggle="collapse" data-parent="#accordion-DesignaddApp" href="#CollapseHealthParameteraddApp" class="collapsed"><i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i>Build Health Parameters</a>
+                          </h4>
+                      </div>
+                        <div id="CollapseHealthParameteraddApp" class="panel-collapse collapse">
+                          <div class="panel-body">
+                            <form action="" id="checkout-form">
+                              <div class="widget-body no-padding">
+                                <div class="col-lg-6 projectRepo">
+                                   <label for="">
+                                    <i class="fa fa-fw fa-crosshairs txt-color-blue" style="font-size:20px"></i>
+                                   Funtional Test Result
+                                    </label>
+                                   <input id="appFunctionalTest" class="form-control" type="url" placeholder="URL">
+                                </div>
+                                <div class="col-lg-6 projectRepo">
+                                   <label for="">
+                                    <i class="fa fa-fw fa-dot-circle-o txt-color-blue" style="font-size:20px"></i>
+                                   Performance Test Result</label>
+                                   <input id="appPerformanceTest" class="form-control" type="url" placeholder="URL">
+                                </div>
+                                <div class="col-lg-6 projectRepo">
+                                   <label for="">
+                                    <i class="fa fa-fw fa-compass txt-color-blue" style="font-size:20px"></i>
+                                   Non Functional Test Result</label>
+                                   <input id="appNonFunctionalTest" class="form-control" type="text" placeholder="URL">
+                                </div>
+                                <div class="col-lg-6 projectRepo">
+                                   <label for="">
+                                    <i class="fa fa-fw fa-lock txt-color-blue" style="font-size:20px"></i>
+                                    Security Test Result</label>
+                                   <input id="appSecurityTest" class="form-control" type="text" placeholder="URL">
+                                </div>
+                                <div class="col-lg-6 projectRepo">
+                                   <label for="">
+                                    <i class="fa fa-fw fa-lemon-o txt-color-blue" style="font-size:20px"></i>
+                                    Unit Test Result</label>
+                                   <input id="appUnitTest" class="form-control" type="text" placeholder="URL">
+                                </div>
+                                <div class="col-lg-6 projectRepo">
+                                   <label for="">
+                                    <i class="fa fa-fw fa-bookmark-o txt-color-blue" style="font-size:20px"></i>
+                                    Code Coverage</label>
+                                   <input id="appCodeCoverage" class="form-control" type="text" placeholder="URL">
+                                </div>
+                                <div class="col-lg-6 projectRepo">
+                                   <label for="">
+                                    <i class="fa fa-fw fa-barcode txt-color-blue" style="font-size:20px"></i>
+                                    Code Analysis</label>
+                                   <input id="appCodeAnalysis" class="form-control" type="text" placeholder="URL">
+                                </div>
+                                <div class="col-lg-6 projectRepo">
+                                   <label for="">
+                                    <i class="fa fa-fw fa-barcode txt-color-blue" style="font-size:20px"></i>
+                                    UI Performace Analysis</label>
+                                   <input id="UIPerfAnalysis" class="form-control" type="text" placeholder="URL">
+                                </div>
+                              </div>
+                            </form>           
+                          </div>
+                        </div>
+                    </div>
+
+                  </div>
+              </form>
+            </div>
+             <div class="modal-footer">
+                <div class="btn-group" style="margin-left:200px;">                                
+                 <a class="btn btn-primary appCardSaveBtn">
+                    <i class="ace-icon fa fa-save bigger-110"></i>
+                    Save
+                </a>
+                <a style="margin-left:10px;" class="btn btn-primary" data-dismiss="modal">
+                    <i class="ace-icon fa fa-undo bigger-110"></i>
+                    Cancel
+                </a>
+                </div>
+              </div>
+             </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+<!--Liferay App card -->
+<div class="modal fade" id="modalappCardBuild" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+          <form role="form" id="" autocomplete="off">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    X
+                </button>
+                <h4 class="modal-title">
+                    <i class="fa fa-th-list txt-color-blue"></i>&nbsp;&nbsp;Build Logs
+                </h4>
+            </div>
+           
+            <div class="modal-body">
+              <table class="table table-bordered font-size12" style="border:1px solid #eeeeee !important;">
+                  <thead>
+                    <th>Time</th>
+                    <th>Logs</th>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td style="width:20%">23/2/2015 11:08:28 am</td>
+                      <td style="color:DarkBlue;">LifeRay App-Card build started</td>
+                    </tr>
+                    <tr>
+                      <td style="width:20%">23/2/2015 11:11:59 am</td>
+                      <td style="color:DarkBlue;">LifeRay App-Card build ends</td>
+                    </tr>
+                  </tbody>
+                </table> 
+            </div>
+             <div class="modal-footer">
+                <div class="btn-group" style="margin-left:200px;">                                
+                <a style="margin-left:10px;" class="btn btn-primary" data-dismiss="modal">
+                    <i class="ace-icon fa fa-undo bigger-110"></i>
+                    Cancel
+                </a>
+                </div>
+              </div>
+             </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+<div class="modal fade" id="modalappCardDeploy" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+          <form role="form" id="" autocomplete="off">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    X
+                </button>
+                <h4 class="modal-title">
+                    <i class="fa fa-th-list txt-color-blue"></i>&nbsp;&nbsp;Deploy Logs
+                </h4>
+            </div>
+           
+            <div class="modal-body">
+              <table style="border:1px solid #eeeeee !important;" class="table table-bordered font-size12">
+                <thead>
+                  <tr><th>Time</th>
+                  <th>Logs</th>
+                </tr></thead>
+                <tbody>
+                  <tr>
+                    <td style="width:20%">23/2/2015 11:08:28 am</td>
+                    <td style="color:DarkBlue;">LifeRay App-Card Deploying Java started</td>
+                  </tr>
+                  <tr>
+                    <td style="width:20%">23/2/2015 11:11:59 am</td>
+                    <td style="color:DarkBlue;">LifeRay App-Card Deploying Java ends</td>
+                  </tr>
+                  <tr>
+                    <td style="width:20%">23/2/2015 11:12:28 am</td>
+                    <td style="color:DarkBlue;">LifeRay App-Card Deploying NodeJS started</td>
+                  </tr>
+                  <tr>
+                    <td style="width:20%">23/2/2015 11:12:59 am</td>
+                    <td style="color:DarkBlue;">LifeRay App-Card Deploying NodeJS ends</td>
+                  </tr>
+                  <tr>
+                    <td style="width:20%">23/2/2015 11:14:12 am</td>
+                    <td style="color:DarkBlue;">LifeRay App-Card Deploying MongoDB started</td>
+                  </tr>
+                  <tr>
+                    <td style="width:20%">23/2/2015 11:14:52 am</td>
+                    <td style="color:DarkBlue;">LifeRay App-Card Deploying MongoDB ends</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+             <div class="modal-footer">
+                <div class="btn-group" style="margin-left:200px;">                                
+                <a style="margin-left:10px;" class="btn btn-primary" data-dismiss="modal">
+                    <i class="ace-icon fa fa-undo bigger-110"></i>
+                    Cancel
+                </a>
+                </div>
+              </div>
+             </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+<div class="modal fade" id="modalappCardTest" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+          <form role="form" id="" autocomplete="off">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    X
+                </button>
+                <h4 class="modal-title">
+                    <i class="fa fa-th-list txt-color-blue"></i>&nbsp;&nbsp;Test Logs
+                </h4>
+            </div>
+           
+            <div class="modal-body">
+              <table style="border:1px solid #eeeeee !important;" class="table table-bordered font-size12">
+                <thead>
+                  <tr><th>Time</th>
+                  <th>Logs</th>
+                </tr></thead>
+                <tbody>
+                  <tr>
+                    <td style="width:20%">23/2/2015 11:08:28 am</td>
+                    <td style="color:DarkBlue;">LifeRay App-Card Test started</td>
+                  </tr>
+                  <tr>
+                    <td style="width:20%">23/2/2015 11:11:59 am</td>
+                    <td style="color:DarkBlue;">LifeRay App-Card Test ends</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+             <div class="modal-footer">
+                <div class="btn-group" style="margin-left:200px;">                                
+                <a style="margin-left:10px;" class="btn btn-primary" data-dismiss="modal">
+                    <i class="ace-icon fa fa-undo bigger-110"></i>
+                    Cancel
+                </a>
+                </div>
+              </div>
+             </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+<!--LifeRay Ends-->
+<!--Drupal App card -->
+<div class="modal fade" id="modalappDrupalCardBuild" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+          <form role="form" id="" autocomplete="off">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    X
+                </button>
+                <h4 class="modal-title">
+                    <i class="fa fa-th-list txt-color-blue"></i>&nbsp;&nbsp;Build Logs
+                </h4>
+            </div>
+           
+            <div class="modal-body">
+              <table class="table table-bordered font-size12" style="border:1px solid #eeeeee !important;">
+                  <thead>
+                    <th>Time</th>
+                    <th>Logs</th>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td style="width:20%">23/2/2015 11:08:28 am</td>
+                      <td style="color:DarkBlue;">Drupal App-Card build started</td>
+                    </tr>
+                    <tr>
+                      <td style="width:20%">23/2/2015 11:11:59 am</td>
+                      <td style="color:DarkBlue;">Drupal App-Card build ends</td>
+                    </tr>
+                  </tbody>
+                </table> 
+            </div>
+             <div class="modal-footer">
+                <div class="btn-group" style="margin-left:200px;">                                
+                <a style="margin-left:10px;" class="btn btn-primary" data-dismiss="modal">
+                    <i class="ace-icon fa fa-undo bigger-110"></i>
+                    Cancel
+                </a>
+                </div>
+              </div>
+             </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+<div class="modal fade" id="modalappDrupalCardDeploy" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+          <form role="form" id="" autocomplete="off">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    X
+                </button>
+                <h4 class="modal-title">
+                    <i class="fa fa-th-list txt-color-blue"></i>&nbsp;&nbsp;Deploy Logs
+                </h4>
+            </div>
+           
+            <div class="modal-body">
+              <table style="border:1px solid #eeeeee !important;" class="table table-bordered font-size12">
+                <thead>
+                  <tr><th>Time</th>
+                  <th>Logs</th>
+                </tr></thead>
+                <tbody>
+                  <tr>
+                    <td style="width:20%">23/2/2015 11:08:28 am</td>
+                    <td style="color:DarkBlue;">Drupal App-Card Deploying Java started</td>
+                  </tr>
+                  <tr>
+                    <td style="width:20%">23/2/2015 11:11:59 am</td>
+                    <td style="color:DarkBlue;">Drupal App-Card Deploying Java ends</td>
+                  </tr>
+                  <tr>
+                    <td style="width:20%">23/2/2015 11:12:28 am</td>
+                    <td style="color:DarkBlue;">Drupal App-Card Deploying NodeJS started</td>
+                  </tr>
+                  <tr>
+                    <td style="width:20%">23/2/2015 11:12:59 am</td>
+                    <td style="color:DarkBlue;">Drupal App-Card Deploying NodeJS ends</td>
+                  </tr>
+                  <tr>
+                    <td style="width:20%">23/2/2015 11:14:12 am</td>
+                    <td style="color:DarkBlue;">Drupal App-Card Deploying MongoDB started</td>
+                  </tr>
+                  <tr>
+                    <td style="width:20%">23/2/2015 11:14:52 am</td>
+                    <td style="color:DarkBlue;">Drupal App-Card Deploying MongoDB ends</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+             <div class="modal-footer">
+                <div class="btn-group" style="margin-left:200px;">                                
+                <a style="margin-left:10px;" class="btn btn-primary" data-dismiss="modal">
+                    <i class="ace-icon fa fa-undo bigger-110"></i>
+                    Cancel
+                </a>
+                </div>
+              </div>
+             </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+<div class="modal fade" id="modalappDrupalCardTest" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+          <form role="form" id="" autocomplete="off">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    X
+                </button>
+                <h4 class="modal-title">
+                    <i class="fa fa-th-list txt-color-blue"></i>&nbsp;&nbsp;Test Logs
+                </h4>
+            </div>
+           
+            <div class="modal-body">
+              <table style="border:1px solid #eeeeee !important;" class="table table-bordered font-size12">
+                <thead>
+                  <tr><th>Time</th>
+                  <th>Logs</th>
+                </tr></thead>
+                <tbody>
+                  <tr>
+                    <td style="width:20%">23/2/2015 11:08:28 am</td>
+                    <td style="color:DarkBlue;">Drupal App-Card Test started</td>
+                  </tr>
+                  <tr>
+                    <td style="width:20%">23/2/2015 11:11:59 am</td>
+                    <td style="color:DarkBlue;">Drupal App-Card Test ends</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+             <div class="modal-footer">
+                <div class="btn-group" style="margin-left:200px;">                                
+                <a style="margin-left:10px;" class="btn btn-primary" data-dismiss="modal">
+                    <i class="ace-icon fa fa-undo bigger-110"></i>
+                    Cancel
+                </a>
+                </div>
+              </div>
+             </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+<!--Drupal Ends-->
+<!--App card build-->
+<div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="appCardBuildResult" class="modal fade" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button aria-hidden="true" data-dismiss="modal" class="close" type="button">
+                    x
+                </button>
+                <h4 class="modal-title">
+                    <i class="fa fa-eraser txt-color-blue"></i>&nbsp;&nbsp;Execute Logs
+                </h4>
+            </div>
+            <div class="modal-body no-padding">
+                <div class="loadingContainer"><img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" /></div>
+                <div class="errorMsgContainer" style="font-size: 14px;height: 100px;padding-top: 10px;text-align: center;"></div> 
+                <form class="smart-form outputArea" action="" novalidate="novalidate">
+                    <fieldset style="padding-top:7px !important;">
+                        <section>
+
+                            <div role="content">
+                                <div class="widget-body">
+
+                                    <ul id="taskExecuteTabsHeader" class="nav nav-tabs bordered">
+
+                                    </ul>
+
+                                    <div id="taskExecuteTabsContent" class="tab-content padding-10">
+                                    </div>
+                                </div>
+                            </div>
+
+                        </section>
+                    </fieldset>
+                    <footer>
+                        <button class="btn btn-primary" type="submit" data-dismiss="modal">
+                            <i class="fa fa-undo fa-1x"></i>&nbsp;Cancel
+                        </button>
+                    </footer>
+                </form>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!--/.modal-assignedExecute-->
+<div class="modal fade" id="modalappRedaxscriptCardDeploy" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+          <form role="form" id="" autocomplete="off">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    X
+                </button>
+                <h4 class="modal-title">
+                    <i class="fa fa-th-list txt-color-blue"></i>&nbsp;&nbsp;Deploy Logs
+                </h4>
+            </div>
+           
+            <div class="modal-body">
+              <table style="border:1px solid #eeeeee !important;" class="table table-bordered font-size12">
+                <thead>
+                  <tr><th>Time</th>
+                  <th>Logs</th>
+                </tr></thead>
+                <tbody>
+                  <tr>
+                    <td style="width:20%">23/2/2015 11:08:28 am</td>
+                    <td style="color:DarkBlue;">Redaxscript App-Card Deploying Java started</td>
+                  </tr>
+                  <tr>
+                    <td style="width:20%">23/2/2015 11:11:59 am</td>
+                    <td style="color:DarkBlue;">Redaxscript App-Card Deploying Java ends</td>
+                  </tr>
+                  <tr>
+                    <td style="width:20%">23/2/2015 11:12:28 am</td>
+                    <td style="color:DarkBlue;">Redaxscript App-Card Deploying NodeJS started</td>
+                  </tr>
+                  <tr>
+                    <td style="width:20%">23/2/2015 11:12:59 am</td>
+                    <td style="color:DarkBlue;">Redaxscript App-Card Deploying NodeJS ends</td>
+                  </tr>
+                  <tr>
+                    <td style="width:20%">23/2/2015 11:14:12 am</td>
+                    <td style="color:DarkBlue;">Redaxscript App-Card Deploying MongoDB started</td>
+                  </tr>
+                  <tr>
+                    <td style="width:20%">23/2/2015 11:14:52 am</td>
+                    <td style="color:DarkBlue;">Redaxscript App-Card Deploying MongoDB ends</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+             <div class="modal-footer">
+                <div class="btn-group" style="margin-left:200px;">                                
+                <a style="margin-left:10px;" class="btn btn-primary" data-dismiss="modal">
+                    <i class="ace-icon fa fa-undo bigger-110"></i>
+                    Cancel
+                </a>
+                </div>
+              </div>
+             </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+<div class="modal fade" id="modalappRedaxscriptCardTest" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+          <form role="form" id="" autocomplete="off">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    X
+                </button>
+                <h4 class="modal-title">
+                    <i class="fa fa-th-list txt-color-blue"></i>&nbsp;&nbsp;Test Logs
+                </h4>
+            </div>
+           
+            <div class="modal-body">
+              <table style="border:1px solid #eeeeee !important;" class="table table-bordered font-size12">
+                <thead>
+                  <tr><th>Time</th>
+                  <th>Logs</th>
+                </tr></thead>
+                <tbody>
+                  <tr>
+                    <td style="width:20%">23/2/2015 11:08:28 am</td>
+                    <td style="color:DarkBlue;">Redaxscript  App-Card Test started</td>
+                  </tr>
+                  <tr>
+                    <td style="width:20%">23/2/2015 11:11:59 am</td>
+                    <td style="color:DarkBlue;">Redaxscript  App-Card Test ends</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+             <div class="modal-footer">
+                <div class="btn-group" style="margin-left:200px;">                                
+                <a style="margin-left:10px;" class="btn btn-primary" data-dismiss="modal">
+                    <i class="ace-icon fa fa-undo bigger-110"></i>
+                    Cancel
+                </a>
+                </div>
+              </div>
+             </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+<!--Redaxscript Ends-->
+<div class="modal fade" id="modalappCardMonitor" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+          <form role="form" id="" autocomplete="off">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    X
+                </button>
+                <h4 class="modal-title">
+                    <i class="fa fa-th-list txt-color-blue"></i>&nbsp;&nbsp;Monitoring Logs
+                </h4>
+            </div>
+           
+            <div class="modal-body">
+              <table style="border:1px solid #eeeeee !important;" class="table table-bordered">
+                <thead>
+                  <tr><th>Time</th>
+                  <th>Logs</th>
+                </tr></thead>
+                <tbody>
+                  <tr>
+                    <td style="width:20%">23/2/2015 11:08:28 am</td>
+                    <td style="color:DarkBlue;">Catalyst App-Card Monitoring started</td>
+                  </tr>
+                  <tr>
+                    <td style="width:20%">23/2/2015 11:11:59 am</td>
+                    <td style="color:DarkBlue;">Catalyst App-Card Monitoring ends</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+             <div class="modal-footer">
+                <div class="btn-group" style="margin-left:200px;">                                
+                <a style="margin-left:10px;" class="btn btn-primary" data-dismiss="modal">
+                    <i class="ace-icon fa fa-undo bigger-110"></i>
+                    Cancel
+                </a>
+                </div>
+              </div>
+             </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+<div class="modal fade" id="modalAppCardSettings" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+          <form role="form" id="" autocomplete="off">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    X
+                </button>
+                <h4 class="modal-title">
+                    <i class="fa fa-th-list txt-color-blue"></i>&nbsp;&nbsp;Add Parameters
+                </h4>
+            </div>
+           
+            <div class="modal-body">
+              <div class="panel-group smart-accordion-default" id="accordion-Design">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                          <a data-toggle="collapse" data-parent="#accordion-Design" href="#CollapseGithubRepoParameter"> <i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i>GITHUB Repo Parameters</a>
+                        </h4>
+                    </div>
+                    <div id="CollapseGithubRepoParameter" class="panel-collapse collapse in">
+                      <div class="panel-body">
+                         <div class="widget-body no-padding">
+                              <form action="" id="checkout-form">
+                                <div class="row" style="margin:0px">
+                                  <div class="col-lg-6">
+                                    <label for="name">Repo Name:
+                                      <span style="color:Red;" class="control-label">&nbsp;*</span>
+                                    </label>
+                                    <input  id="gitNameInput" class="form-control" type="text" autofocus>
+                                  </div>
+                                  <div class="col-lg-6">
+                                    <label for="name">Repo URL:
+                                      <span style="color:Red;" class="control-label">&nbsp;*</span>
+                                    </label>
+                                    <input  id="gitURLInput" class="form-control" type="text">
+                                  </div>
+                                </div>
+                                <div class="row" style="margin:0px">
+                                  <div class="col-lg-6" style="margin-top:15px">
+                                     <label for="">
+                                     Username<span style="color:Red;" class="control-label">&nbsp;*</span>
+                                     </label>
+                                     <input id="gitusername" class="form-control" type="text">
+                                  </div>
+                                  <div class="col-lg-6" style="margin-top:15px">
+                                     <label for="">Password <span style="color:Red;" class="control-label">&nbsp;*</span></label>
+                                     <input id="gitpassword" class="form-control" type="password">
+                                  </div>
+                                </div>     
+                              </form>
+                          </div> 
+                      </div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                  <div class="panel-heading">
+                      <h4 class="panel-title">
+                        <a data-toggle="collapse" data-parent="#accordion-Design" href="#CollapseJenkinJobsParameter" class="collapsed"><i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i>Jenkin Jobs Parameters</a>
+                      </h4>
+                  </div>
+                    <div id="CollapseJenkinJobsParameter" class="panel-collapse collapse">
+                      <div class="panel-body">
+                        <form action="" id="checkout-form">
+                          <div class="widget-body no-padding">
+                            <div class="col-lg-6">
+                               <label for="">
+                               Reference Name<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+                               <input id="jenkinsname" class="form-control" type="text">
+                            </div>
+                            <div class="col-lg-6">
+                               <label for="">
+                               Jenkins URL<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+                               <input id="jenkinsurl" class="form-control" type="text">
+                            </div>
+                            <div class="col-lg-6" style="margin-top:15px">
+                               <label for="">
+                               User ID <span style="color:Red;" class="control-label">&nbsp;*</span>
+                               </label>
+                               <input id="jenkinsusername" class="form-control" type="text">
+                            </div>
+                            <div class="col-lg-6" style="margin-top:15px">
+                               <label for="">Password <span style="color:Red;" class="control-label">&nbsp;*</span></label>
+                               <input id="jenkinspassword" class="form-control" type="password">
+                            </div>
+                            <div class="col-lg-6" style="margin-top:15px">
+                             <div class="smart-forms">
+                                <label for="">Certificate Key File</label>
+                                <label for="file" class="field file">
+                                   <span class="button btn-primary" style="top:11px;">Browse</span>
+                                   <input id="jenkinstoken" type="file" class="gui-file">
+                                   <input type="text" readonly="" class="gui-input">
+                                </label>
+                             </div>
+                            </div>
+                          </div>
+                        </form>            
+                      </div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                  <div class="panel-heading">
+                      <h4 class="panel-title">
+                        <a data-toggle="collapse" data-parent="#accordion-Design" href="#CollapseChefCookbookrunlistParameter" class="collapsed"><i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i>Chef Cookbooks/Recipes Parameters</a>
+                      </h4>
+                  </div>
+                    <div id="CollapseChefCookbookrunlistParameter" class="panel-collapse collapse">
+                      <div class="panel-body">
+                        <form action="" id="checkout-form">
+                          <div class="widget-body no-padding">                    
+                            <div class="col-lg-6 topNew">
+                              <label for="name">User Name:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+                              <input id="loginname" class="form-control" type="text">
+                            </div>
+                        
+                            <div class="col-lg-6">
+                              <label for="link">URL:
+                                <span style="color:Red;" class="control-label">&nbsp;*</span></label>
+                              <input type="text" id="url" class="form-control" type="url" placeholder="http://opscode.chef.com/_default">
+                            </div>                         
+                            <hr/>
+                                                      
+                            <div class="col-lg-6" id="frmconfigmanagement" style="margin-top:20px">
+                              <div class="smart-forms">
+                                 <label>User Pem File:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+                                 <label for="userpemfile" class="field file">
+                                    <span class="button btn-primary" style="top:11px;">Browse</span>
+                                    <input id="userpemfile" type="file" class="gui-file">
+                                    <input type="text" readonly="" class="gui-input">
+                                 </label>
+                              </div>
+                            </div>
+                            <div class="col-lg-6" style="margin-top:20px">
+                              <div class="smart-forms">
+                                 <label>Validator Pem File:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+                                 <label for="validatorpemfile" class="field file">
+                                    <span class="button btn-primary" style="top:11px;">Browse</span>
+                                    <input id="validatorpemfile" type="file" class="gui-file">
+                                    <input type="text" readonly="" class="gui-input">
+                                 </label>
+                              </div>
+                            </div>                          
+                            <div class="col-lg-6" style="margin-top:20px">
+                              <div class="smart-forms">
+                                 <label>Knife.rb File:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+                                 <label for="kniferbfile" class="field file">
+                                    <span class="button btn-primary" style="top:11px;">Browse</span>
+                                    <input id="kniferbfile" type="file" class="gui-file">
+                                    <input type="text" readonly="" class="gui-input">
+                                 </label>
+                              </div>
+                            </div>
+                          </div>
+                        </form>            
+                      </div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                  <div class="panel-heading">
+                      <h4 class="panel-title">
+                        <a data-toggle="collapse" data-parent="#accordion-Design" href="#CollapseblueprintParameter" class="collapsed"><i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i>Blueprint Parameters</a>
+                      </h4>
+                  </div>
+                    <div id="CollapseblueprintParameter" class="panel-collapse collapse">
+                      <div class="panel-body">
+                        <form action="" id="checkout-form">
+                          <div class="row " style="margin:0px;">
+                            <div class="col-lg-6">
+                              <label for="name">Application Name:
+                              </label>
+                              <input  id="" class="form-control" type="text" autofocus>
+                            </div>                                    
+                            <div class="col-lg-6">
+                              <label for="">Choose Operating System:<span style="color:red">*</span></label>
+                              <select id="instanceOS" class="chooseOS width-100">
+                                <option value="0">Cent OS</option>
+                                <option value="1">Window 2008</option>
+                                <option value="2">Ubuntu</option>
+                              </select>                                    
+                            </div>
+                            <div class="col-lg-6" style="margin-top:15px;">
+                              <label for="">Choose Security Group:<span style="color:red">*</span></label>
+                                <select class="chooseSecurity width-100">
+                                  <option value="0">default-d4d</option>
+                                  <option value="1">Vpc-1</option>
+                                  <option value="2">Vpc-2</option>
+                                  <option value="3">Default VPC</option>
+                                </select>
+                            </div>
+                            <div class="col-lg-6" style="margin-top:15px;">
+                              <label for="">Choose Instance Size:<span style="color:red">*</span></label>
+                              <select id="intanceTypeControl" class="instanceType chooseInstance width-100">
+                                <option value="0">t1.micro</option>
+                                <option value="1">m1.small</option>
+                                <option value="2">m1.medium</option>
+                                <option value="3">m1.large</option>
+                                <option value="4">m1.xlarge</option>
+                              </select>
+                            </div>
+                          </div>
+                        </form>            
+                      </div>
+                    </div>
+                </div>
+              </div>
+            </div>
+             <div class="modal-footer">
+                <div class="btn-group" style="margin-left:200px;">                                 
+                 <a class="btn btn-primary parameterSaveBtn" data-dismiss="modal">
+                    <i class="ace-icon fa fa-save bigger-110"></i>
+                    Save
+                </a>
+                <a style="margin-left:10px;" class="btn btn-primary" data-dismiss="modal">
+                    <i class="ace-icon fa fa-undo bigger-110"></i>
+                    Cancel
+                </a>
+                </div>
+              </div>
+             </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+<div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="deployConfiguretModel" class="modal fade" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button aria-hidden="true" data-dismiss="modal" class="close" type="button">
+                    x
+                </button>
+                <h4 class="modal-title">
+                    <i class="fa fa-eraser txt-color-blue"></i>&nbsp;&nbsp;Deploy
+                </h4>
+            </div>
+            <div class="modal-body no-padding">
+                <div class="loadingContainer"><img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" /></div>
+                <div class="errorMsgContainer" style="font-size: 14px;height: 100px;padding-top: 10px;text-align: center;"></div>
+                <div class="workFlowArea" style="padding-bottom: 20px;padding-top: 20px;text-align: center;">
+                  workflows : <select class="workflowDropdown">
+                  </select> <button class="executeWorkflowBtn">Execute</button>
+                </div> 
+                <div class="deployResultArea" style="padding-bottom: 20px;padding-top: 20px;text-align: center;"> Workflow executed successfully </div>
+
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!--/.modal-assignedExecute-->
+
+
+
+
+
+
+<!-- Card Modal starts here -->
+<div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="deployResultModel" class="modal fade" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button aria-hidden="true" data-dismiss="modal" class="close" type="button">
+                    x
+                </button>
+                <h4 class="modal-title">
+                    <i class="fa fa-eraser txt-color-blue"></i>&nbsp;&nbsp;Execute Logs
+                </h4>
+            </div>
+            <div class="modal-body no-padding">
+                <div class="loadingContainer"><img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" /></div>
+                <div class="errorMsgContainer" style="font-size: 14px;height: 100px;padding-top: 10px;text-align: center;"></div> 
+                <form class="smart-form outputArea" action="" novalidate="novalidate">
+                   <div class="taskListArea" style=" padding-top: 10px;text-align: center;">
+                    <select id="logTaskList" class="taskList"></select>
+                  </div>
+                   <div class="deployLogContainer">
+                   <div class="instanceLoadingContainer"><img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" /></div>
+                   <div class="instanceErrorMsgContainer" style="font-size: 14px;height: 100px;padding-top: 10px;text-align: center;"></div>  
+                    <fieldset style="padding-top:7px !important;" class="instanceLogsOutputContainer">
+                        <section>
+
+                            <div role="content">
+                                <div class="widget-body">
+
+                                    <ul id="deployTaskExecuteTabsHeader" class="nav nav-tabs bordered">
+
+                                    </ul>
+
+                                    <div id="deployTaskExecuteTabsContent" class="tab-content padding-10">
+                                    </div>
+                                </div>
+                            </div>
+
+                        </section>
+                    </fieldset>
+                  </div>  
+                    <footer>
+                        <button class="btn btn-primary" type="submit" data-dismiss="modal">
+                            <i class="fa fa-undo fa-1x"></i>&nbsp;Cancel
+                        </button>
+                    </footer>
+                </form>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!--/.modal-assignedExecute-->
+<a id="showDeployLogsLink" style="display:none"></a>
+
+
+
+
+
+<script type="text/javascript" src="js/dev/application.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+  $.get('/d4dMasters/readmasterjsonnew/23',function(data){
+      if(data.indexOf('jiraname') >= 0){
+      }
+      else{
+          $('.Dashboard').addClass('hidden');
+          $('.Applications a').trigger("click");
+      }
+    });
+
+  //resetting the form
+  $('.createAPP').click(function(e){
+      $('#appCardForm').trigger("reset");
+      $('#formBuildParameters').trigger("reset");
+      $('.chooseAppEnvironment').change();
+      //$('.chooseTasks').change();
+  });
+
+  //adding permission set for Adding an Application
+  var hasApplicationCreatePermission=false;
+  if(haspermission('application','create')){
+    hasApplicationCreatePermission=true;
+  }
+  if(!hasApplicationCreatePermission){
+    $('.createAPP').addClass('hidden');
+  }
+
+  function bindClick_removeAppCard() {
+   $('#removeAppCard').on('click', removeSelectedAppCard);
+  }
+  function removeSelectedAppCard() {
+                     var instanceIP = null;
+                     var jenkinsJobName = null;
+                     if ($('.appcard-role-outer').is(':visible')) {
+                         var $selectedCard = $('.appcard-role-inner .role-Selectedcard-app').find('.appCardBody');
+                         instanceIP = $selectedCard.attr('data-instance-ip');
+                         jenkinsJobName = $selectedCard.attr('data-jenkin-job-name');
+                         alert('here');
+                     }  else {
+                         instanceIP = null;
+                     }
+                                             $.ajax({
+                                             url: url,
+                                             type: 'DELETE',
+                                             success: function() {
+                                                 $('.row .appcardList').find('.appCardBody[data-instance-ip=' + instanceIP + ']').parents('.appcard-role-outer').remove();
+                                             }
+                                         });
+                                         
+                                     
+                                 
+                             
+                         }
+                 
+});
+</script>
