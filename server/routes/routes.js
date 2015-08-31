@@ -38,11 +38,15 @@ var notification = require('./routes_notification');
 var globalsettings = require('./routes_globalsettings');
 var tracks = require('./routes_track');
 <<<<<<< HEAD
+<<<<<<< HEAD
 var puppet = require('./routes_puppet.js');
 
 =======
 var appdeploy = require('./routes_appdeploy');
 >>>>>>> dev_catalyst
+=======
+var appdeploy = require('./routes_appdeploy');
+>>>>>>> srikanth
 module.exports.setRoutes = function(app) {
 
 
@@ -95,11 +99,19 @@ module.exports.setRoutes = function(app) {
     globalsettings.setRoutes(app, sessionVerificationFunc);
 
     tracks.setRoutes(app, sessionVerificationFunc);
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> srikanth
 
     puppet.setRoutes(app, sessionVerificationFunc);
     
     appdeploy.setRoutes(app, sessionVerificationFunc);
+<<<<<<< HEAD
 
+=======
+>>>>>>> origin/dev_catalyst
+>>>>>>> srikanth
     app.get('/', function(req, res) {
         res.redirect('/private/index.html');
     });

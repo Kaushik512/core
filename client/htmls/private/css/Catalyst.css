@@ -8263,6 +8263,32 @@ form.cmxform .gray * {
     display:inline-block;
     height:35px;
 }
+.paramValue{
+    overflow: hidden;
+    white-space:nowrap;
+    text-overflow:ellipsis;
+    width:147px;
+    height:35px;
+}
+.paramName{
+    overflow: hidden;
+    white-space:nowrap;
+    text-overflow:ellipsis;
+    width:147px;
+    height:35px;
+}
+
+@media(min-width:1550px){
+    .paramDescription{
+    overflow: hidden;
+    white-space:nowrap;
+    text-overflow:ellipsis;
+    width:auto;
+    display:inline-block;
+    height:35px;
+}
+}
+
 
 
 
