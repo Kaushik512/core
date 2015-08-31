@@ -87,14 +87,8 @@ module.exports.setRoutes = function(app) {
     cloudformation.setRoutes(app, sessionVerificationFunc);
     globalsettings.setRoutes(app, sessionVerificationFunc);
     tracks.setRoutes(app, sessionVerificationFunc);
-<<<<<<< HEAD
 
-    puppet.setRoutes(app, sessionVerificationFunc);
-
-
-=======
     appdeploy.setRoutes(app, sessionVerificationFunc);
->>>>>>> origin/dev_catalyst
     app.get('/', function(req, res) {
         res.redirect('/private/index.html');
     });

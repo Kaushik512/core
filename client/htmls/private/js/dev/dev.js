@@ -3990,7 +3990,7 @@
                                                                                 $tdExecute.find('a').data('taskId', data[i]._id).attr('data-executeTaskId', data[i]._id).click(function(e) {
                                                                                     var taskId = $(this).data('taskId');
                                                                                     
-                                                                                // alert(JSON.stringify(data[i]));
+                                                                                 //alert(JSON.stringify(data[i]));
                                                                                 if (data[i].taskType === 'jenkins'|| data[i].taskType==='chef') {
                                                                                     //checking for parameterized condition..
                                                                                     if(data[i].taskConfig.parameterized){
@@ -4003,7 +4003,11 @@
 
                                                                                                 var $modalForSelect = $('#modalForSelect');
                                                                                                 $modalForSelect.modal('show');
+                                                                                                var name = data[i].taskConfig.parameterized[a].name;
+                                                                                                $modalForSelect.find('.modal-body label').html('Are you sure you want to execute? Choose the Parameter for-&nbsp;<b>' + name + '</b>');
                                                                                                 var $defaultValue = $('#defaultValue').val();
+                                                                                                //var defaultName.append(data[i].taskConfig.parameterized[a].name);
+                                                                                                //alert(JSON.stringify(defaultName));
                                                                                                 var defaultValueCheck = data[i].taskConfig.parameterized[a].defaultValue;
                                                                                                 var str;
                                                                                                 for (var b = 0; b < defaultValueCheck.length; b++) {
@@ -4029,6 +4033,11 @@
                                                                                                 $modal.find('.outputArea').hide();
                                                                                                 $modal.modal('show');
                                                                                                 var timestampToPoll = new Date().getTime();
+                                                                                                var requestBody = {
+                                                                                                    "env": "cat3",
+                                                                                                    "os": "windows",
+                                                                                                    "author":"Gboinda Das"
+                                                                                                };
                                                                                                 var reqBody = {};
                                                                                                 var defaultValue = $('#defaultValue').val();
                                                                                                 reqBody = defaultValue;
