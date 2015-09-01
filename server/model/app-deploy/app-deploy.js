@@ -148,6 +148,7 @@ AppDeploySchema.statics.updateAppDeployByName = function(appName, appDeployData,
         setData[keys[i]] = appDeployData[keys[i]];
     }
     logger.debug("Whole data: ", JSON.stringify(setData));
+    var that = this;
     this.update({
         applicationName: appName
     }, {
@@ -161,8 +162,14 @@ AppDeploySchema.statics.updateAppDeployByName = function(appName, appDeployData,
             callback(err, null);
         }
         if (appDeploy) {
-            logger.debug("Updating AppDeploy: ", JSON.stringify(appDeploy));
-            callback(null, appDeploy);
+            that.find({
+                applicationName: appName
+            },function(err,list){
+                if(err){
+                    logger.debug("Failed to fetch appDeploy",err);
+                }
+                callback(null,list);
+            });
         }
     });
 };
