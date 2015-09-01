@@ -210,7 +210,7 @@ $("#tableappParamDeploy_filter").hide();
           }
       });
   });
-  loadAppData = function(){
+  function loadAppData(){
   $.get('/app/deploy', function(data) {
     var $chooseApplication = $('#chooseApplication');
     $chooseApplication.append('<option value="">Select Application</option>');
