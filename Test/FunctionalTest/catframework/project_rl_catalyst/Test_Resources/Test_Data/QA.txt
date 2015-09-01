@@ -10,7 +10,7 @@ Resource           catalyst.txt
 
 *** Variables ***
 ${BROWSERTYPE}                    firefox                   
-${ENVIRONMENTSERVER}                http://d4d.relevancelab.com:3001                            
+${ENVIRONMENTSERVER}                http://supercatalyst.relevancelab.com                            
 
 #http://10.0.1.206:3003/public/login.html
 
@@ -117,7 +117,7 @@ ${STACK INSTANCE NAME}       Node
 
 
 ${USERPEMFILE}              ${ROOTPATH}//Chef//mycatqa.pem
-${VALIDATORPEMFILE}      ${ROOTPATH}//Chef//cattest-validator.pem
+${VALIDATORPEMFILE}         ${ROOTPATH}//Chef//cattest-validator.pem
 ${KNIFERBFILE}                ${ROOTPATH}//Chef//knife.rb
 ${CATALYSTPEM}                ${ROOTPATH}//Chef//catalyst.pem
 ${CAT_INSTANCES}              ${ROOTPATH}//Chef//cat_instances.pem

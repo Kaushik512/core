@@ -85,7 +85,7 @@ Catalyst CENT OS INSTANCE CONTROL PANEL setup
     [Tags]       Sanity               Smoke
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
-    Catlayst verfication of Instance Stop Setup and Disable
+    Catlayst verfication of CentOS Instance Stop Setup and Disable
     Catalyst Logout                      
     [Teardown]     Close Browser    
 
@@ -94,12 +94,18 @@ Cent OS Instance Grid View of the Stopped Instance and Restart,SSH,Chef Run,Star
     [Tags]       Sanity               Smoke
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
-    Catalyst Grid View Verify Start ,Stop ,SSH ,Chef ,Client ,Log Setup and Delete
+    Catalyst Grid View Verify Start ,Stop ,SSH ,Chef ,Client ,Log Setup
     Catalyst Logout                      
-    [Teardown]     Close Browser    
+    [Teardown]     Close Browser
 
 
-
+Cent OS Instance Delete Setup
+    [Tags]       Sanity               Smoke
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst CentOS Deleete the Instance Setup
+    Catalyst Logout                      
+    [Teardown]     Close Browser
 
 
 
@@ -180,7 +186,15 @@ Ubuntu Instance Grid View of Stopped Instance and Restart,SSH,Chef Run,Start
     [Tags]       Sanity               Smoke
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
-    Catalyst Grid View Verify Start ,Stop ,SSH ,Chef ,Client ,Log ,Del Setup of Ubuntu
+    Catalyst Grid View Verify Start ,Stop ,SSH ,Chef ,Client ,Log Setup of Ubuntu
     Catalyst Logout                      
     [Teardown]     Close Browser
-    
+
+
+Ubuntu OS Instance Delete Setup
+    [Tags]       Sanity               Smoke
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst ubuntu OS Deleete the Instance Setup
+    Catalyst Logout                      
+    [Teardown]     Close Browser
