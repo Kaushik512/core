@@ -301,6 +301,45 @@
 </div><!--/.modal-assignedExecute-->
 
 <!--execute modal-->
+<div class="modal fade" id="modalForSelect" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog " style="">
+        <div class="modal-content"> 
+            <form role="form" class="cmxform" id="executeJob">
+             <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">
+                    &nbsp;&nbsp;&nbsp;&nbsp;Select Choice Parameter & Execute
+                </h4>
+
+            </div> 
+            
+            
+             <div class="modal-body" style="height:80px;">
+               <div class="col-lg-12 col-md-12">
+                            
+            <label for="defaultValue" style="font-size:14px;">Are you sure you want to execute this Job? Choose the Parameter<span style="color:Red;">&nbsp;*</span></label>
+            <br/>
+                            <div class="input-groups">
+                            <select id="defaultValue" name="defaultValue" style="width:40%;">
+                            </select>
+                        </div>
+                        </div>
+                
+                    
+                
+
+            </div>
+            
+               <div class="modal-footer">
+        <a type="button" class="btn btn-default" data-dismiss="modal">Close</a>
+        <button type="submit" id="executeBtn" class="btn btn-primary" value="Ok">Ok</button>
+      </div>   
+  </form>
+         </div>
+    </div>
+</div>
+
+<!--execute modal-->
 <!-- <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="assignedTaskHistory" class="modal fade" data-backdrop="static">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
