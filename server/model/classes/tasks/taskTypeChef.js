@@ -33,7 +33,7 @@ chefTaskSchema.methods.getNodes = function() {
 };
 
 // Instance Method :- run task
-chefTaskSchema.methods.execute = function(userName, baseUrl, onExecute, onComplete) {
+chefTaskSchema.methods.execute = function(userName, baseUrl,choiceParam, onExecute, onComplete) {
     var self = this;
 
     //merging attributes Objects

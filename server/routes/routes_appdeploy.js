@@ -127,4 +127,26 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             }
         });
     });
+
+    // Update AppDeploy by Name
+    app.post('/app/deploy/:appName', function(req, res) {
+        logger.debug("Got appDeploy data: ", JSON.stringify(req.body.appDeployData));
+        AppDeploy.getAppDeployByName(req.params.appName, function(err, appDeploy) {
+            if (err) {
+                res.send(500, errorResponses.db.error);
+                return;
+            }
+            if (!appDeploy) {
+                res.send(404, "appDeploy not found!");
+                return;
+            }
+            AppDeploy.updateAppDeployByName(req.params.appName, req.body.appDeployData, function(err, appDeployes) {
+                if (err) {
+                    res.send(500, errorResponses.db.error);
+                    return;
+                }
+                res.send(200, "Success");
+            });
+        });
+    });
 };
