@@ -20,11 +20,11 @@ Resource           ${CATALYST ACTION}/New_Environment_Creation.txt
 *** Keywords ***
 Catalyst Launch of Cloud Formation Blueprint
     Clicks on Workzone Button
-	Sleep    2s
-	Clicks on Cloud FormationBlueprint Section
-	Select Your Cloud Blueprint
-	Clicks on Launch of Cloud Blueprint
-	Enters the unique stack name
+    Sleep    2s
+    Clicks on Cloud FormationBlueprint Section
+    Select Your Cloud Blueprint
+    Clicks on Launch of Cloud Blueprint
+    Enters the unique stack name
     Clicks on Submit button in Enter a Unique Stack Name window
     Clicks on close button in launching blueprint window
     Navigates to Cloud Formation tab
@@ -163,8 +163,11 @@ Clicks on close Cloud Configure Organization Parameters
 Catalyst Creation of Providers Setup 
     Clicks on Settings
     Clicks on DevOps Setup menu
+    Sleep    2s
     Clicks on Providers
+    Sleep    2s
     Clicks on New Button of Providers
+    Sleep   2s
     Select the Provider
     Enters the Name of the Provider
     Enters the Access Key
@@ -176,7 +179,7 @@ Catalyst Creation of Providers Setup
     Clicks on Save Button of the Provider
 
 Clicks on Providers
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='setting_tree']/ul/li[7]/a
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=//a[contains(text(),'Providers')]
 
 Clicks on New Button of Providers
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    id=addnewitem

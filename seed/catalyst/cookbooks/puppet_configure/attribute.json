@@ -7,7 +7,8 @@
 			"ipaddress": "172.28.128.4",
 			"fqdn": "puppetclient-us-east-1.ec2.internal",
 			"ssh_pass_method": true,
-			"pem_file": "/var/chef/cache/client_user.pem"
+			"pem_file": "/var/chef/cache/client_user.pem",
+			"environment": "production"
 		},
 		"puppet_master": {
 			"user": "vagrant",

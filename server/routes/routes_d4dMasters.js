@@ -2517,12 +2517,13 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     if (req.params.id === "10") {
                         bodyJson["configType"] = "chef";
                     }
-                    //logger.debug("Full bodyJson:::: ", JSON.stringify(bodyJson));
+                    logger.debug("Full bodyJson:::: ", JSON.stringify(bodyJson));
                     if (req.params.id === "25") {
-                        bodyJson["folderpath"] = "/" + bodyJson["username"] + "/.puppet/";
                         bodyJson["configType"] = "puppet";
                         if (bodyJson["puppetpassword"]) {
                             bodyJson["puppetpassword"] = cryptography.encryptText(bodyJson["puppetpassword"], cryptoConfig.encryptionEncoding, cryptoConfig.decryptionEncoding);
+                        }else{
+                            bodyJson["folderpath"] = "/" + bodyJson["username"] + "/.puppet/";
                         }
                         logger.debug("encryptText:>>>>>>>>>>>>> ", bodyJson["puppetpassword"]);
                     }
@@ -2623,6 +2624,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                 if (!editMode) { //push new values only when not in edit mode
                                     //dMasterJson = JSON.parse(FLD);
                                     //   console.log('>>>>>> Whats going to be saved:' + FLD['rowid']);
+
 
                                     // Start Auto create Team
                                     if (req.params.id === '1') {
