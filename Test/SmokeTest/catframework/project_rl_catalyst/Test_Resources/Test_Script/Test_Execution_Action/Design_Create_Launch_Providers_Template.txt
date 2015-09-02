@@ -179,7 +179,7 @@ Catalyst Creation of Providers Setup
     Clicks on Save Button of the Provider
 
 Clicks on Providers
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='setting_tree']/ul/li[7]/a
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=//a[contains(text(),'Providers')]
 
 Clicks on New Button of Providers
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    id=addnewitem
