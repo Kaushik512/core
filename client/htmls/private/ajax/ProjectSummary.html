@@ -177,7 +177,6 @@
 </div>
 <script type="text/javascript">
 $(document).ready(function (){
-  
   loadAppData();
 });
 $('.envAppDeployModal').click(function(e) {
@@ -219,7 +218,7 @@ $("#tableappParamDeploy_filter").hide();
       }
   })();
   $('#widgetAppDeploy').hide();
-  $('.parameterAppDeploySaveBtn').on("click", function() {
+  $('.parameterAppDeploySaveBtn').off('click').on("click", function() {
       var dataDeploy ={
         "appDeployData":{
           "applicationName": "",
@@ -246,39 +245,33 @@ $("#tableappParamDeploy_filter").hide();
               var $chooseApplication = $('#chooseApplication');
               $chooseApplication.empty();
               var $taskenvArrayTable = $('#tableappParamDeploy').DataTable();
-              $taskenvArrayTable.clear().draw(false);
-              $('.parameterAppDeploySaveBtn').attr("data-dismiss","modal");
+              $taskenvArrayTable.clear().draw();
+              $('#modalAppCardDetails').modal("hide");
               loadAppData();
           },
           error: function(jqxhr) {
-            $("#errorParam").empty();
-            $("#errorParam").append("    "+jqxhr.responseText);
+              $("#errorParam").empty();
+              $("#errorParam").append("    " + jqxhr.responseText);
           }
       });
   });
   function loadAppData(){
-    $.get('/app/deploy/data/list', function(data) {
-      console.log(data);
+    //alert("I am Here");
+    $.get('/app/deploy/data/list', function(dataTotalApp) {
       var $chooseApplication = $('#chooseApplication');
-      //$chooseApplication.select2();
       $chooseApplication.append('<option data-selectedAppName="All Application" value="All Application">All Application</option>');
       var applicationNameArr = [];
       var applicationDescArr = {};
-      $.each(data, function(key, val) {
+      $.each(dataTotalApp, function(key, val) {
         if(val.projectId){
           applicationNameArr.push(val.applicationName);
           if(!applicationDescArr[val.applicationName]) {
              applicationDescArr[val.applicationName]  = val.description;
           }
         }
-        // if(val.projectId != projectId){
-
-        // }
       });
-      console.log(applicationDescArr);
-      //var uniqueAppName = unique(applicationNameArr);
-
-      $.each(applicationNameArr, function(key, val) {
+      var uniqueAppName = unique(applicationNameArr);
+      $.each(uniqueAppName, function(key, val) {
           $option = $('<option data-selectedAppName="' + val + '" value="' + val + '">' + val + '</option>');
           //$option.data('selectedAppName', val);
           $chooseApplication.append($option);
@@ -290,296 +283,219 @@ $("#tableappParamDeploy_filter").hide();
               applicationDescArr[val]
           ]);
       });
+      function unique(list) {
+          var result = [];
+          $.each(list, function(i, e) {
+              if ($.inArray(e, result) == -1) result.push(e);
+          });
+          return result;
+      }
+      
+      $chooseApplication.change(function() {
+        //alert("I am changing the Dropdown");
+        $("#accordion-AppDeploy").empty();
+        $selectedOption = $(this).find('option:selected');
+        //alert($selectedOption.val());
+        var selectedAppName = $selectedOption.attr('data-selectedAppName');
+        console.log(selectedAppName);
+        //alert(selectedAppName);
+        if(selectedAppName == 'All Application'){
+          //alert("I am choosing All Application");
+          //alert("Hellllllllll");
+          $.get('/app/deploy/list', function(data) {
+            $("#accordion-AppDeploy").empty();
+              if (typeof selectedAppName != 'undefined') {
+                  $('#appDeployName').append().text("  for '" + selectedAppName + "'");
+                  $('#widgetAppDeploy').show();
+              } else {
+                  $('#appDeployName').append().text("");
+                  $('#widgetAppDeploy').hide();
+              }
+              var $accordianTemplate = $('.accordianTemplateContainer').find('.accordianTemplate');
+              var dataenvAccordianName;
+              for (var i = 0; i < data.length; i++) {
+                if (data[i].projectId) {
+                    var $clone = $accordianTemplate.clone(true);
+                    if ($('#' + data[i].applicationName + data[i].envId + '_parentAccordian').length == 0) {
+                        $clone.attr('id', data[i].applicationName + data[i].envId + '_parentAccordian');
+                        $clone.find('.envAppDeployAnchor').attr('data-parent', '#' + data[i].applicationName + data[i].envId + '_parentAccordian');
+                        if (typeof data[i].applicationName + data[i].envId == 'undefined') {
+                            dataenvAccordianName = '';
+                        } else {
+                            dataenvAccordianName = 'Application : ' + data[i].applicationName + '  &  ' + 'Environment : ' + data[i].envId;
+                        }
+                        $clone.find('.envAppDeployName').html(dataenvAccordianName);
+                        $clone.find('.envAppDeployAnchor').attr('href', '#' + data[i].applicationName + data[i].envId + '_accordian');
+                        $clone.find('.envAppDeployAccordian').attr('id', data[i].applicationName + data[i].envId + '_accordian');
+                        $clone.find('.envAppDeployTable').attr('id', data[i].applicationName + data[i].envId + '_tableappDeploydetails');
+                        $('#accordion-AppDeploy').append($clone);
+                        if (!$.fn.dataTable.isDataTable('#' + data[i].applicationName + data[i].envId + '_tableappDeploydetails')) {
+                            $('#' + data[i].applicationName + data[i].envId + '_tableappDeploydetails').DataTable({
+                                "pagingType": "full_numbers",
+                                "iDisplayLength": 5,
+                                "aLengthMenu": [
+                                    [5, 40, 100, -1],
+                                    [5, 40, 100, "All"]
+                                ],
+                                "aoColumns": [{
+                                        "bSortable": true
+                                    }, {
+                                        "bSortable": true
+                                    }, {
+                                        "bSortable": true
+                                    }, {
+                                        "bSortable": true
+                                    }, {
+                                        "bSortable": true
+                                    },
+                                    // {
+                                    //     "bSortable": true
+                                    // }, {
+                                    //     "bSortable": true
+                                    // }, 
+                                    {
+                                        "bSortable": true
+                                    }, {
+                                        "bSortable": false
+                                    }
+                                ]
+                            });
+                        }
+                    }
+                    var $taskenvArray = $('#' + data[i].applicationName + data[i].envId + '_tableappDeploydetails');
+                    var rowindex = $taskenvArray.dataTable().fnGetData().length;
+                    // if (data[i].applicationStatus == "Successful") {
+                    //     data[i].applicationStatus = '<img src="img/indicator_started.png">';
+                    // } else if (data[i].applicationStatus == "Failure") {
+                    //     data[i].applicationStatus = '<img src="img/indicator_stopped.png">';
+                    // } else {
+                    //     data[i].applicationStatus = '<img src="img/indicator_unknown.png">';
+                    // }
+                    // var appLinks = '<img style="height: 18px;margin-left: -5px;"src="img/projectdemo/app-performanceblack.png" title="App-Performance"><img style="height: 18px;margin-left: 5px;" src="img/projectdemo/logsblack.png" title="App-Logs"><img style="height: 18px;margin-left: 5px;" src="img/projectdemo/code_healthblack.png" title="Code-Health"><img style="height: 18px;margin-left: 5px;" src="img/projectdemo/UI_performanceblack.png" title="UI-Performance">';
+                    // var upgrade = '<div class="updateupgrade" style="margin-left:30%;" title="Upgrade"></div>';
+                    $taskenvArray.dataTable().fnAddData([
+                        rowindex + 1,
+                        data[i].applicationName,
+                        data[i].applicationInstanceName,
+                        data[i].applicationVersion,
+                        data[i].applicationNodeIP,
+                        data[i].applicationLastDeploy,
+                        data[i].applicationStatus,
+                        // appLinks,
+                        // upgrade
+                    ]);
+                }
+              }
+          });
+        }
+        // /app/deploy/data/Arab1/list
+        if (typeof selectedAppName != 'undefined') {
+            $('#appDeployName').append().text("  for '" + selectedAppName + "'");
+            $('#widgetAppDeploy').show();
+        } else {
+            $('#appDeployName').append().text("");
+            $('#widgetAppDeploy').hide();
+        }
+        $.get('/app/deploy/data/' + selectedAppName + '/list', function(data) {
+          var $accordianTemplate = $('.accordianTemplateContainer').find('.accordianTemplate');
+          var dataenvAccordianName;
+
+
+
+
+          
+
+
+
+
+
+
+
+
+
+
+
+          for (var i = 0; i < data.length; i++) {
+            if (data[i].projectId) {
+              dataenvAccordianName = '';
+              //applicationNameArr.push(data[i].applicationName);
+              if (selectedAppName == data[i].applicationName) {
+                  var $clone = $accordianTemplate.clone(true);
+                  if ($('#' + data[i].envId + '_parentAccordian').length == 0) {
+                      $clone.attr('id', data[i].envId + '_parentAccordian');
+                      $clone.find('.envAppDeployAnchor').attr('data-parent', '#' + data[i].envId + '_parentAccordian');
+                      if (typeof data[i].envId == 'undefined') {
+                          dataenvAccordianName = '';
+                      } else {
+                          dataenvAccordianName = 'Environment : ' + data[i].envId;
+                      }
+                      $clone.find('.envAppDeployName').html(dataenvAccordianName);
+                      $clone.find('.envAppDeployAnchor').attr('href', '#' + data[i].envId + '_accordian');
+                      $clone.find('.envAppDeployAccordian').attr('id', data[i].envId + '_accordian');
+                      $clone.find('.envAppDeployTable').attr('id', data[i].envId + '_tableappDeploydetails');
+                      $('#accordion-AppDeploy').append($clone);
+                      if (!$.fn.dataTable.isDataTable('#' + data[i].envId + '_tableappDeploydetails')) {
+                          $('#' + data[i].envId + '_tableappDeploydetails').DataTable({
+                              "pagingType": "full_numbers",
+                              "iDisplayLength": 5,
+                              "aLengthMenu": [
+                                  [5, 40, 100, -1],
+                                  [5, 40, 100, "All"]
+                              ],
+                              "aoColumns": [{
+                                      "bSortable": true
+                                  }, {
+                                      "bSortable": true
+                                  }, {
+                                      "bSortable": true
+                                  }, {
+                                      "bSortable": true
+                                  }, {
+                                      "bSortable": true
+                                  },
+                                  // {
+                                  //     "bSortable": true
+                                  // }, {
+                                  //     "bSortable": true
+                                  // }, 
+                                  {
+                                      "bSortable": true
+                                  }, {
+                                      "bSortable": false
+                                  }
+                              ]
+                          });
+                      }
+                  }
+                  var $taskenvArray = $('#' + data[i].envId + '_tableappDeploydetails');
+                  var rowindex = $taskenvArray.dataTable().fnGetData().length;
+                  // if (data[i].applicationStatus == "Successful") {
+                  //     data[i].applicationStatus = '<img src="img/indicator_started.png">';
+                  // } else if (data[i].applicationStatus == "Failure") {
+                  //     data[i].applicationStatus = '<img src="img/indicator_stopped.png">';
+                  // } else {
+                  //     data[i].applicationStatus = '<img src="img/indicator_unknown.png">';
+                  // }
+                  var appLinks = '<img style="height: 18px;margin-left: -5px;"src="img/projectdemo/app-performanceblack.png" title="App-Performance"><img style="height: 18px;margin-left: 5px;" src="img/projectdemo/logsblack.png" title="App-Logs"><img style="height: 18px;margin-left: 5px;" src="img/projectdemo/code_healthblack.png" title="Code-Health"><img style="height: 18px;margin-left: 5px;" src="img/projectdemo/UI_performanceblack.png" title="UI-Performance">';
+                  var upgrade = '<div class="updateupgrade" style="margin-left:30%;" title="Upgrade"></div>';
+                  $taskenvArray.dataTable().fnAddData([
+                      rowindex + 1,
+                      data[i].applicationName,
+                      data[i].applicationInstanceName,
+                      data[i].applicationVersion,
+                      data[i].applicationNodeIP,
+                      data[i].applicationLastDeploy,
+                      data[i].applicationStatus,
+                      // appLinks,
+                      // upgrade
+                  ]);
+              }
+            }
+          }
+        });
+      });
       $('#chooseApplication').select2();
+
     });
-  $.get('/app/deploy', function(data) {
-    // var $chooseApplication = $('#chooseApplication');
-    // $chooseApplication.append('<option data-selectedAppName="All Application" value="All Application">All Application</option>');
-    // var applicationNameArr = [];
-    // var applicationDescArr = {};
-    // $.each(data, function(key, val) {
-    //   if(val.projectId){
-    //     applicationNameArr.push(val.applicationName);
-    //     if(!applicationDescArr[val.applicationName]) {
-    //        applicationDescArr[val.applicationName]  = val.description;
-    //     }
-    //   }
-    //   // if(val.projectId != projectId){
-
-    //   // }
-    // });
-    // console.log(applicationDescArr);
-    // var uniqueAppName = unique(applicationNameArr);
-
-    // $.each(uniqueAppName, function(key, val) {
-    //     $option = $('<option data-selectedAppName="' + val + '" value="' + val + '">' + val + '</option>');
-    //     //$option.data('selectedAppName', val);
-    //     $chooseApplication.append($option);
-    //     var $taskenvArrayTable = $('#tableappParamDeploy');
-    //     var rowindex1= $taskenvArrayTable.dataTable().fnGetData().length;
-    //     $taskenvArrayTable.dataTable().fnAddData([
-    //         rowindex1 + 1,
-    //         val,
-    //         applicationDescArr[val]
-    //     ]);
-    // });
-
-    // function unique(list) {
-    //     var result = [];
-    //     $.each(list, function(i, e) {
-    //         if ($.inArray(e, result) == -1) result.push(e);
-    //     });
-    //     return result;
-    // }
-    // var firstselectedAppName = $chooseApplication.find('option:selected').attr('data-selectedAppName');
-    // if(firstselectedAppName == 'All Application'){
-    //   $("#accordion-AppDeploy").empty();
-    //   if (typeof firstselectedAppName != 'undefined') {
-    //       $('#appDeployName').append().text("  for '" + firstselectedAppName + "'");
-    //       $('#widgetAppDeploy').show();
-    //   } else {
-    //       $('#appDeployName').append().text("");
-    //       $('#widgetAppDeploy').hide();
-    //   }
-    //   var $accordianTemplate = $('.accordianTemplateContainer').find('.accordianTemplate');
-    //   var dataenvAccordianName;
-    //   for (var i = 0; i < data.length; i++) {
-    //     if(data[i].projectId){
-    //       var $clone = $accordianTemplate.clone(true);
-    //       if($('#' + data[i].applicationName + data[i].envId + '_parentAccordian').length == 0){
-    //         $clone.attr('id', data[i].applicationName+data[i].envId + '_parentAccordian');
-    //         $clone.find('.envAppDeployAnchor').attr('data-parent', '#' + data[i].applicationName+data[i].envId + '_parentAccordian');
-    //         if(typeof data[i].applicationName+data[i].envId == 'undefined'){
-    //           dataenvAccordianName = '';
-    //         }else{
-    //           dataenvAccordianName = 'Application : '+data[i].applicationName+'  &  '+'Environment : '+data[i].envId;
-    //         }
-    //         $clone.find('.envAppDeployName').html(dataenvAccordianName);
-    //         $clone.find('.envAppDeployAnchor').attr('href', '#' + data[i].applicationName+data[i].envId + '_accordian');
-    //         $clone.find('.envAppDeployAccordian').attr('id', data[i].applicationName+data[i].envId + '_accordian');
-    //         $clone.find('.envAppDeployTable').attr('id', data[i].applicationName+data[i].envId + '_tableappDeploydetails');
-    //         $('#accordion-AppDeploy').append($clone);
-    //         if (!$.fn.dataTable.isDataTable('#' + data[i].applicationName+data[i].envId + '_tableappDeploydetails')) {
-    //           $('#' + data[i].applicationName+data[i].envId + '_tableappDeploydetails').DataTable({
-    //               "pagingType": "full_numbers",
-    //               "iDisplayLength": 5,
-    //               "aLengthMenu": [
-    //                   [5, 40, 100, -1],
-    //                   [5, 40, 100, "All"]
-    //               ],
-    //               "aoColumns": [{
-    //                   "bSortable": true
-    //               }, {
-    //                   "bSortable": true
-    //               }, {
-    //                   "bSortable": true
-    //               }, {
-    //                   "bSortable": true
-    //               }, {
-    //                   "bSortable": true
-    //               }, 
-    //               // {
-    //               //     "bSortable": true
-    //               // }, {
-    //               //     "bSortable": true
-    //               // }, 
-    //               {
-    //                   "bSortable": true
-    //               }, {
-    //                   "bSortable": false
-    //               }]
-    //           });
-    //         }
-    //       }
-    //       var $taskenvArray = $('#' + data[i].applicationName+data[i].envId + '_tableappDeploydetails');
-    //       var rowindex = $taskenvArray.dataTable().fnGetData().length;
-    //       // if (data[i].applicationStatus == "Successful") {
-    //       //     data[i].applicationStatus = '<img src="img/indicator_started.png">';
-    //       // } else if (data[i].applicationStatus == "Failure") {
-    //       //     data[i].applicationStatus = '<img src="img/indicator_stopped.png">';
-    //       // } else {
-    //       //     data[i].applicationStatus = '<img src="img/indicator_unknown.png">';
-    //       // }
-    //       var appLinks = '<img style="height: 18px;margin-left: -5px;"src="img/projectdemo/app-performanceblack.png" title="App-Performance"><img style="height: 18px;margin-left: 5px;" src="img/projectdemo/logsblack.png" title="App-Logs"><img style="height: 18px;margin-left: 5px;" src="img/projectdemo/code_healthblack.png" title="Code-Health"><img style="height: 18px;margin-left: 5px;" src="img/projectdemo/UI_performanceblack.png" title="UI-Performance">';
-    //       var upgrade = '<div class="updateupgrade" style="margin-left:30%;" title="Upgrade"></div>';
-    //       $taskenvArray.dataTable().fnAddData([
-    //         rowindex + 1,
-    //         data[i].applicationName,
-    //         data[i].applicationInstanceName,
-    //         data[i].applicationVersion,
-    //         data[i].applicationNodeIP,
-    //         data[i].applicationLastDeploy,
-    //         data[i].applicationStatus,
-    //         // appLinks,
-    //         // upgrade
-    //       ]);
-    //     }
-    //   }
-    // }
-    // $chooseApplication.change(function(e) {
-    //   $("#accordion-AppDeploy").empty();
-    //   $selectedOption = $(this).find('option:selected');
-    //   var selectedAppName = $selectedOption.attr('data-selectedAppName');
-    //   console.log(selectedAppName);
-    //   if (typeof selectedAppName != 'undefined') {
-    //       $('#appDeployName').append().text("  for '" + selectedAppName + "'");
-    //       $('#widgetAppDeploy').show();
-    //   } else {
-    //       $('#appDeployName').append().text("");
-    //       $('#widgetAppDeploy').hide();
-    //   }
-    //   var $accordianTemplate = $('.accordianTemplateContainer').find('.accordianTemplate');
-    //   var dataenvAccordianName;
-
-    //   for (var i = 0; i < data.length; i++) {
-    //     if(data[i].projectId){
-    //       dataenvAccordianName = '';
-    //       applicationNameArr.push(data[i].applicationName);
-    //       if (selectedAppName == data[i].applicationName) {
-    //         var $clone = $accordianTemplate.clone(true);
-    //         if($('#' + data[i].envId + '_parentAccordian').length == 0){
-    //           $clone.attr('id', data[i].envId + '_parentAccordian');
-    //           $clone.find('.envAppDeployAnchor').attr('data-parent', '#' + data[i].envId + '_parentAccordian');
-    //           if(typeof data[i].envId == 'undefined'){
-    //             dataenvAccordianName = '';
-    //           }else{
-    //             dataenvAccordianName = 'Environment : '+data[i].envId;
-    //           }
-    //           $clone.find('.envAppDeployName').html(dataenvAccordianName);
-    //           $clone.find('.envAppDeployAnchor').attr('href', '#' + data[i].envId + '_accordian');
-    //           $clone.find('.envAppDeployAccordian').attr('id', data[i].envId + '_accordian');
-    //           $clone.find('.envAppDeployTable').attr('id', data[i].envId + '_tableappDeploydetails');
-    //           $('#accordion-AppDeploy').append($clone);
-    //           if (!$.fn.dataTable.isDataTable('#' + data[i].envId + '_tableappDeploydetails')) {
-    //             $('#' + data[i].envId + '_tableappDeploydetails').DataTable({
-    //                 "pagingType": "full_numbers",
-    //                 "iDisplayLength": 5,
-    //                 "aLengthMenu": [
-    //                     [5, 40, 100, -1],
-    //                     [5, 40, 100, "All"]
-    //                 ],
-    //                 "aoColumns": [{
-    //                     "bSortable": true
-    //                 }, {
-    //                     "bSortable": true
-    //                 }, {
-    //                     "bSortable": true
-    //                 }, {
-    //                     "bSortable": true
-    //                 }, {
-    //                     "bSortable": true
-    //                 }, 
-    //                 // {
-    //                 //     "bSortable": true
-    //                 // }, {
-    //                 //     "bSortable": true
-    //                 // }, 
-    //                 {
-    //                     "bSortable": true
-    //                 }, {
-    //                     "bSortable": false
-    //                 }]
-    //             });
-    //           }
-    //         }
-    //         var $taskenvArray = $('#' + data[i].envId + '_tableappDeploydetails');
-    //         var rowindex = $taskenvArray.dataTable().fnGetData().length;
-    //         // if (data[i].applicationStatus == "Successful") {
-    //         //     data[i].applicationStatus = '<img src="img/indicator_started.png">';
-    //         // } else if (data[i].applicationStatus == "Failure") {
-    //         //     data[i].applicationStatus = '<img src="img/indicator_stopped.png">';
-    //         // } else {
-    //         //     data[i].applicationStatus = '<img src="img/indicator_unknown.png">';
-    //         // }
-    //         var appLinks = '<img style="height: 18px;margin-left: -5px;"src="img/projectdemo/app-performanceblack.png" title="App-Performance"><img style="height: 18px;margin-left: 5px;" src="img/projectdemo/logsblack.png" title="App-Logs"><img style="height: 18px;margin-left: 5px;" src="img/projectdemo/code_healthblack.png" title="Code-Health"><img style="height: 18px;margin-left: 5px;" src="img/projectdemo/UI_performanceblack.png" title="UI-Performance">';
-    //         var upgrade = '<div class="updateupgrade" style="margin-left:30%;" title="Upgrade"></div>';
-    //         $taskenvArray.dataTable().fnAddData([
-    //           rowindex + 1,
-    //           data[i].applicationName,
-    //           data[i].applicationInstanceName,
-    //           data[i].applicationVersion,
-    //           data[i].applicationNodeIP,
-    //           data[i].applicationLastDeploy,
-    //           data[i].applicationStatus,
-    //           // appLinks,
-    //           // upgrade
-    //         ]);
-    //       }
-    //       if(selectedAppName == 'All Application'){
-    //         //alert("I am choosing All Application");
-    //         var $clone = $accordianTemplate.clone(true);
-    //         if($('#' + data[i].applicationName + data[i].envId + '_parentAccordian').length == 0){
-    //           $clone.attr('id', data[i].applicationName+data[i].envId + '_parentAccordian');
-    //           $clone.find('.envAppDeployAnchor').attr('data-parent', '#' + data[i].applicationName+data[i].envId + '_parentAccordian');
-    //           if(typeof data[i].applicationName+data[i].envId == 'undefined'){
-    //             dataenvAccordianName = '';
-    //           }else{
-    //             dataenvAccordianName = 'Application : '+data[i].applicationName+'  &  '+'Environment : '+data[i].envId;
-    //           }
-    //           $clone.find('.envAppDeployName').html(dataenvAccordianName);
-    //           $clone.find('.envAppDeployAnchor').attr('href', '#' + data[i].applicationName+data[i].envId + '_accordian');
-    //           $clone.find('.envAppDeployAccordian').attr('id', data[i].applicationName+data[i].envId + '_accordian');
-    //           $clone.find('.envAppDeployTable').attr('id', data[i].applicationName+data[i].envId + '_tableappDeploydetails');
-    //           $('#accordion-AppDeploy').append($clone);
-    //           if (!$.fn.dataTable.isDataTable('#' + data[i].applicationName+data[i].envId + '_tableappDeploydetails')) {
-    //             $('#' + data[i].applicationName+data[i].envId + '_tableappDeploydetails').DataTable({
-    //                 "pagingType": "full_numbers",
-    //                 "iDisplayLength": 5,
-    //                 "aLengthMenu": [
-    //                     [5, 40, 100, -1],
-    //                     [5, 40, 100, "All"]
-    //                 ],
-    //                 "aoColumns": [{
-    //                     "bSortable": true
-    //                 }, {
-    //                     "bSortable": true
-    //                 }, {
-    //                     "bSortable": true
-    //                 }, {
-    //                     "bSortable": true
-    //                 }, {
-    //                     "bSortable": true
-    //                 }, 
-    //                 // {
-    //                 //     "bSortable": true
-    //                 // }, {
-    //                 //     "bSortable": true
-    //                 // }, 
-    //                 {
-    //                     "bSortable": true
-    //                 }, {
-    //                     "bSortable": false
-    //                 }]
-    //             });
-    //           }
-    //         }
-    //         var $taskenvArray = $('#' + data[i].applicationName+data[i].envId + '_tableappDeploydetails');
-    //         var rowindex = $taskenvArray.dataTable().fnGetData().length;
-    //         // if (data[i].applicationStatus == "Successful") {
-    //         //     data[i].applicationStatus = '<img src="img/indicator_started.png">';
-    //         // } else if (data[i].applicationStatus == "Failure") {
-    //         //     data[i].applicationStatus = '<img src="img/indicator_stopped.png">';
-    //         // } else {
-    //         //     data[i].applicationStatus = '<img src="img/indicator_unknown.png">';
-    //         // }
-    //         var appLinks = '<img style="height: 18px;margin-left: -5px;"src="img/projectdemo/app-performanceblack.png" title="App-Performance"><img style="height: 18px;margin-left: 5px;" src="img/projectdemo/logsblack.png" title="App-Logs"><img style="height: 18px;margin-left: 5px;" src="img/projectdemo/code_healthblack.png" title="Code-Health"><img style="height: 18px;margin-left: 5px;" src="img/projectdemo/UI_performanceblack.png" title="UI-Performance">';
-    //         var upgrade = '<div class="updateupgrade" style="margin-left:30%;" title="Upgrade"></div>';
-    //         $taskenvArray.dataTable().fnAddData([
-    //           rowindex + 1,
-    //           data[i].applicationName,
-    //           data[i].applicationInstanceName,
-    //           data[i].applicationVersion,
-    //           data[i].applicationNodeIP,
-    //           data[i].applicationLastDeploy,
-    //           data[i].applicationStatus,
-    //           // appLinks,
-    //           // upgrade
-    //         ]);
-    //       }
-    //     }
-    //   }
-    // });
-    // $chooseApplication.select2();
-  });
-}
+  }
 </script>

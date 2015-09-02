@@ -185,7 +185,7 @@ AppDeploySchema.statics.getAppDeployByName = function(appName, callback) {
             callback(err, null);
         }
         if (appDeploy) {
-            logger.debug("Got AppDeploy: ", JSON.stringify(appDeploy));
+            //logger.debug("Got AppDeploy: ", JSON.stringify(appDeploy));
             callback(null, appDeploy);
         }
     });
