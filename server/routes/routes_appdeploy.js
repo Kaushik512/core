@@ -130,7 +130,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
     });*/
 
     // Update AppDeploy by Name
-    app.post('/app/deploy/:appName/update', function(req, res) {
+    /*app.post('/app/deploy/:appName/update', function(req, res) {
         logger.debug("Got appDeploy data: ", JSON.stringify(req.body));
         AppDeploy.getAppDeployByName(req.params.appName, function(err, appDeploy) {
             if (err) {
@@ -149,7 +149,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 res.send(200, appDeployes);
             });
         });
-    });
+    });*/
 
     // Get all AppData
     app.get('/app/deploy/data/list', function(req, res) {
@@ -188,6 +188,20 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             }
             if (appDatas) {
                 res.send(200, appDatas);
+                return;
+            }
+        });
+    });
+
+    // Get all AppData
+    app.get('/app/deploy/list', function(req, res) {
+        AppData.getAppDataWithDeploy(function(err, appDeployes) {
+            if (err) {
+                res.send(500, errorResponses.db.error);
+                return;
+            }
+            if (appDeployes) {
+                res.send(200, appDeployes);
                 return;
             }
         });
