@@ -84,14 +84,16 @@
                     </div>
                     <div class="widget-toolbox clearfix">
                         <div class="btn-group pull-right">
-                            <i id="savespinner" class="fa-li fa fa-spinner fa-spin hide"></i>
-                            <button class="btn btn-primary btn-mini" style="margin-right:11px;" oncli>
-                                <i class="ace-icon fa fa-check bigger-110"></i> Save
-                            </button>
-                            <a class="btn btn-primary btn-mini" onclick="window.history.back();" id="btncancel">
-                                <i class="ace-icon fa fa-undo bigger-110"></i> Cancel
-                            </a>
-                        </div>
+                <a class="btn btn-default" onclick="window.history.back();" style="margin-right:11px;" id="btncancel">
+                  <i class="ace-icon fa fa-times bigger-110"></i>
+                  Cancel
+                  </a>
+                  <button class="btn btn-primary btn-mini">
+                  <i class="ace-icon fa fa-check bigger-110"></i>
+                  Save
+                  </button>
+                  
+               </div>
                     </div>
                 </div>
             </form>
@@ -119,10 +121,11 @@
                     <div class="btn-group pull-right">
                         <i id="envcreatespinner" class="fa-li fa fa-spinner fa-spin hidden" style="margin-top:9px"></i>
                         <span id="chefenvcreatemsg" style="color:red"></span>
-                        <button class="btn btn-default btn-primary createchefenvbtn" style="margin-right:11px;">
+                        
+                        <a class="btn btn-default" data-dismiss="modal">
+                            <i class="fa fa-times fa-1x"></i>&nbsp;Cancel</a>
+                            <button class="btn btn-default btn-primary createchefenvbtn" style="margin-right:11px;">
                             <i class="fa fa-save fa-1x"></i>&nbsp;Add</button>
-                        <a class="btn btn-primary" data-dismiss="modal">
-                            <i class="fa fa-undo fa-1x"></i>&nbsp;Cancel</a>
                     </div>
                 </div>
             </form>
@@ -149,10 +152,11 @@
                     <div class="btn-group pull-right">
                         <i id="envcreatespinner" class="fa-li fa fa-spinner fa-spin hidden" style="margin-top:9px"></i>
                         <span id="puppetenvcreatemsg" style="color:red"></span>
-                        <button class="btn btn-default btn-primary createpuppetenvbtn" style="margin-right:11px;">
+                        
+                        <a class="btn btn-default" data-dismiss="modal">
+                            <i class="fa fa-times fa-1x"></i>&nbsp;Cancel</a>
+                            <button class="btn btn-default btn-primary createpuppetenvbtn" style="margin-right:11px;">
                             <i class="fa fa-save fa-1x"></i>&nbsp;Add</button>
-                        <a class="btn btn-primary" data-dismiss="modal">
-                            <i class="fa fa-undo fa-1x"></i>&nbsp;Cancel</a>
                     </div>
                 </div>
             </form>
