@@ -4000,12 +4000,73 @@ function initializeBlueprintArea(data) {
                                                                                 var $tdExecute = $('<td style="vertical-align:inherit;text-align:center;"></td>').append('<a rel="tooltip" data-placement="top" data-original-title="Execute" data-toggle="modal" href="javascript:void(0)" class="btn btn-primary btn-sg tableactionbutton"><i class="ace-icon fa fa-play bigger-120"></i></a>');
                                                                                 $tdExecute.find('a').data('taskId', data[i]._id).attr('data-executeTaskId', data[i]._id).click(function(e) {
                                                                                     var taskId = $(this).data('taskId');
-                                                                                    bootbox.confirm({
-                                                                                        message: "Are you sure you want to execute this Job?",
-                                                                                        title: "Confirmation",
-                                                                                        callback: function(result) {
-                                                                                            if (result) {
+                                                                                    
+                                                                                 //alert(JSON.stringify(data[i]));
 
+                                                                                if (data[i].taskType === 'jenkins'|| data[i].taskType==='chef') {
+                                                                                    //checking for parameterized condition..
+                                                                                    if(data[i].taskConfig.parameterized){
+                                                                                    
+                                                                                    var $modalForSelect = $('#modalForSelect');
+                                                                                    var $tableBody = $('#paramTableList').empty();
+                                                                                    for (var a = 0; a < data[i].taskConfig.parameterized.length; a++) {
+                                                                                        if (data[i].taskConfig.parameterized[a].parameterName === "Choice" || data[i].taskConfig.parameterized[a].parameterName === "String" || data[i].taskConfig.parameterized[a].parameterName === "Boolean") {
+                                                                                           // alert(data[i].taskConfig.parameterized.length);
+                                                                                          // alert('hisdhidsf');
+                                                                                           $modalForSelect.modal('show');
+                                                                                           var name = data[i].taskConfig.parameterized[a].name;
+                                                                                           
+                                                                                           var $tr = $('<tr/>');
+                                                                                           var $tdName = $('<td></td>');
+                                                                                           var $tdValue = $('<td id="selectValue"></td>');
+                                                                                           var selectForparam = $('<select style="width:60%;"></select>').attr('key',name);
+                                                                                           var nameForParam = data[i].taskConfig.parameterized[a].parameterName;
+                                                                                            if (nameForParam === 'Choice') {
+                                                                                                var label = $('<label style="font-size:14px;">Are you sure you want to execute? Choose the Parameter for-&nbsp <b>' + name + '<b></label>');
+                                                                                            } else {
+                                                                                                var label = $('<label style="font-size:14px;">Are you sure you want to execute the Job for Parameter &nbsp;- <b>' + name + '<b></label>');
+                                                                                            }
+                                                                                            $tdValue.append(selectForparam);
+                                                                                            $tdName.append(name);
+                                                                                            $tr.append($tdName).append($tdValue);
+                                                                                            $tableBody.append($tr);
+                                                                                            //$modalForSelect.find('.modal-body').append(label).append('<br/>');
+                                                                                          //  $modalForSelect.find('.modal-body').append($tableBody);  
+                                                                                            
+                                                                                            
+                                                                                            if (data[i].taskConfig.parameterized[a].defaultValue) {
+                                                                                                for (var k = 0; k < data[i].taskConfig.parameterized[a].defaultValue.length; k++) {
+                                                                                                    
+
+                                                                                                    var defaultValueCheck = data[i].taskConfig.parameterized[a].defaultValue;
+                                                                                                    var str;
+
+                                                                                                    str = '<option>' + defaultValueCheck[k] + '</option>';
+
+                                                                                                    selectForparam.append(str).select2();
+
+                                                                                                } //for loop for default value ends here..
+                                                                                                
+                                                                                                $('#executeJob').submit(function(e) {
+                                                                                                    
+                                                                                                    $modalForSelect.modal('hide');
+                                                                                                    executeJob();
+                                                                                                    return false;
+                                                                                                });
+                                                                                            } //if ends here for default value..
+                                                                                            
+                                                                                            function executeJob() {
+                                                                                                var $selects = $modalForSelect.find('.modal-body select');
+                                                                                                //alert($select);
+                                                                                                var reqBody={};
+                                                                                                
+                                                                                                for(var q=0;q<$selects.length;q++){
+                                                                                                    var select = $selects[q];
+                                                                                                    var $select = $(select);
+                                                                                                    var name = $select.attr('key');
+                                                                                                    var value= $select.val();
+                                                                                                    reqBody[name] = value;
+                                                                                                }
 
                                                                                                 var $taskExecuteTabsHeaderContainer = $('#taskExecuteTabsHeader').empty();
                                                                                                 var $taskExecuteTabsContent = $('#taskExecuteTabsContent').empty();
@@ -4015,7 +4076,112 @@ function initializeBlueprintArea(data) {
                                                                                                 $modal.find('.outputArea').hide();
                                                                                                 $modal.modal('show');
                                                                                                 var timestampToPoll = new Date().getTime();
-                                                                                                $.get('../tasks/' + taskId + '/run', function(data) {
+                                                                                                
+                                                                                                $.post('../tasks/' + taskId + '/run', {
+                                                                                                    choiceParam: reqBody
+                                                                                                }, function(data) {
+                                                                                                   // alert(reqBody);
+                                                                                                  
+                                                                                                    var date = new Date().setTime(data.timestamp);
+                                                                                                    var taskTimestamp = new Date(date).toLocaleString(); //converts to human readable strings
+                                                                                                    $('tr[data-taskId="' + taskId + '"] .taskrunTimestamp').html(taskTimestamp);
+
+                                                                                                    var $outputArea = $modal.find('.outputArea');
+
+                                                                                                    $outputArea.data('taskType', data.taskType);
+                                                                                                    $outputArea.data('instances', data.instances);
+                                                                                                    $outputArea.data('jenkinsServerId', data.jenkinsServerId);
+                                                                                                    $outputArea.data('jobName', data.jobName);
+                                                                                                    $outputArea.data('lastBuildNumber', data.lastBuildNumber);
+                                                                                                    $outputArea.data('currentBuildNumber', data.currentBuildNumber);
+                                                                                                    $outputArea.data('timestampStarted', data.timestamp);
+                                                                                                    showTaskLogs();
+
+                                                                                                }).fail(function(jxhr) {
+                                                                                                    $modal.find('.loadingContainer').hide();
+                                                                                                    $modal.find('.outputArea').hide();
+                                                                                                    var $errorContainer = $modal.find('.errorMsgContainer').show();
+                                                                                                    if (jxhr.responseJSON && jxhr.responseJSON.message) {
+                                                                                                        $errorContainer.html(jxhr.responseJSON.message);
+                                                                                                    } else {
+                                                                                                        $errorContainer.html("Server Behaved Unexpectedly");
+                                                                                                    }
+                                                                                                });
+                                                                                            } //function ends here..
+                                                                                        } //if loop for choice ends here..
+                                                                                        /*else {
+
+                                                                                            //condition for boolean and string..
+                                                                                            //if (data[i].taskConfig.parameterized.length >= 1) {
+                                                                                                //  alert(data[i].taskConfig.parameterized.length);
+                                                                                                bootbox.confirm({
+                                                                                                    message: "Are you sure you want to execute this Job?",
+                                                                                                    title: "Confirmation",
+
+                                                                                                    callback: function(result) {
+                                                                                                        if (result) {
+                                                                                                            var $taskExecuteTabsHeaderContainer = $('#taskExecuteTabsHeader').empty();
+                                                                                                            var $taskExecuteTabsContent = $('#taskExecuteTabsContent').empty();
+                                                                                                            var $modal = $('#assignedExecute');
+                                                                                                            $modal.find('.loadingContainer').show();
+                                                                                                            $modal.find('.errorMsgContainer').hide();
+                                                                                                            $modal.find('.outputArea').hide();
+                                                                                                            $modal.modal('show');
+                                                                                                            var timestampToPoll = new Date().getTime();
+                                                                                                            $.post('../tasks/' + taskId + '/run', {}, function(data) {
+                                                                                                                //  alert(JSON.stringify(data));
+                                                                                                                var date = new Date().setTime(data.timestamp);
+                                                                                                                var taskTimestamp = new Date(date).toLocaleString(); //converts to human readable strings
+                                                                                                                $('tr[data-taskId="' + taskId + '"] .taskrunTimestamp').html(taskTimestamp);
+
+                                                                                                                var $outputArea = $modal.find('.outputArea');
+
+                                                                                                                $outputArea.data('taskType', data.taskType);
+                                                                                                                $outputArea.data('instances', data.instances);
+                                                                                                                $outputArea.data('jenkinsServerId', data.jenkinsServerId);
+                                                                                                                $outputArea.data('jobName', data.jobName);
+                                                                                                                $outputArea.data('lastBuildNumber', data.lastBuildNumber);
+                                                                                                                $outputArea.data('currentBuildNumber', data.currentBuildNumber);
+                                                                                                                $outputArea.data('timestampStarted', data.timestamp);
+                                                                                                                showTaskLogs();
+
+                                                                                                            }).fail(function(jxhr) {
+                                                                                                                $modal.find('.loadingContainer').hide();
+                                                                                                                $modal.find('.outputArea').hide();
+                                                                                                                var $errorContainer = $modal.find('.errorMsgContainer').show();
+                                                                                                                if (jxhr.responseJSON && jxhr.responseJSON.message) {
+                                                                                                                    $errorContainer.html(jxhr.responseJSON.message);
+                                                                                                                } else {
+                                                                                                                    $errorContainer.html("Server Behaved Unexpectedly");
+                                                                                                                }
+                                                                                                            });
+
+                                                                                                        } //result ends here..
+                                                                                                    }
+                                                                                                });
+                                                                                        //    }
+                                                                                            break;
+                                                                                        }*/
+                                                                                    } //for ends here..
+                                                                                    //new else starts here..
+                                                                                } else{
+                                                                                    //condition when build is not parameterized and for chef
+                                                                                    bootbox.confirm({
+                                                                                        message: "Are you sure you want to execute this Job?",
+                                                                                        title: "Confirmation",
+
+                                                                                        callback: function(result) {
+                                                                                            if (result) {
+                                                                                                var $taskExecuteTabsHeaderContainer = $('#taskExecuteTabsHeader').empty();
+                                                                                                var $taskExecuteTabsContent = $('#taskExecuteTabsContent').empty();
+                                                                                                var $modal = $('#assignedExecute');
+                                                                                                $modal.find('.loadingContainer').show();
+                                                                                                $modal.find('.errorMsgContainer').hide();
+                                                                                                $modal.find('.outputArea').hide();
+                                                                                                $modal.modal('show');
+                                                                                                var timestampToPoll = new Date().getTime();
+                                                                                                $.post('../tasks/' + taskId + '/run',{}, function(data) {
+                                                                                                  //  alert(JSON.stringify(data));
                                                                                                     var date = new Date().setTime(data.timestamp);
                                                                                                     var taskTimestamp = new Date(date).toLocaleString(); //converts to human readable strings
                                                                                                     $('tr[data-taskId="' + taskId + '"] .taskrunTimestamp').html(taskTimestamp);
@@ -4042,9 +4208,20 @@ function initializeBlueprintArea(data) {
                                                                                                     }
                                                                                                 });
 
-                                                                                            }
+                                                                                            }//result ends here..
                                                                                         }
                                                                                     });
+                                                                                }
+                                                                            } //if ends here..
+
+
+                                                                                
+                                                                                                
+
+                                                                                //alert(data[i].taskConfig.parameterized[a].parameterName);
+                                                                                /*if(data[i].taskType==="chef"){
+                                                                                
+                                                                                }*/
 
                                                                                 });
                                                                                 $tr.append($tdExecute);
