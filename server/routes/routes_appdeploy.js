@@ -11,6 +11,7 @@
 var logger = require('_pr/logger')(module);
 var AppDeploy = require('_pr/model/app-deploy/app-deploy');
 var errorResponses = require('./error_responses');
+var AppData = require('_pr/model/app-deploy/app-data');
 
 
 module.exports.setRoutes = function(app, sessionVerificationFunc) {
@@ -112,7 +113,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
     });
 
     // Get AppDeploy w.r.t. appName and env
-    app.get('/app/deploy/:appName/env/:envId', function(req, res) {
+    /*app.get('/app/deploy/:appName/env/:envId', function(req, res) {
         AppDeploy.getAppDeployByNameAndEnvId(req.params.appName,req.params.envId, function(err, appDeploy) {
             if (err) {
                 res.send(500, errorResponses.db.error);
@@ -126,7 +127,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 return;
             }
         });
-    });
+    });*/
 
     // Update AppDeploy by Name
     app.post('/app/deploy/:appName/update', function(req, res) {
@@ -147,6 +148,48 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 }
                 res.send(200, appDeployes);
             });
+        });
+    });
+
+    // Get all AppData
+    app.get('/app/deploy/data/list', function(req, res) {
+        AppData.getAppData(function(err, appDeployes) {
+            if (err) {
+                res.send(500, errorResponses.db.error);
+                return;
+            }
+            if (appDeployes) {
+                res.send(200, appDeployes);
+                return;
+            }
+        });
+    });
+
+    // Get all AppData
+    app.post('/app/deploy/data/create', function(req, res) {
+        AppData.createNew(req.body.appDeployData,function(err, appDeployes) {
+            if (err) {
+                res.send(500, "Application Already Exist.");
+                return;
+            }
+            if (appDeployes) {
+                res.send(200, appDeployes);
+                return;
+            }
+        });
+    });
+
+    // Get all AppData by name
+    app.get('/app/deploy/data/:appName/list', function(req, res) {
+        AppData.getAppDataByName(req.params.appName,function(err, appDatas) {
+            if (err) {
+                res.send(500, "Please add app name.");
+                return;
+            }
+            if (appDatas) {
+                res.send(200, appDatas);
+                return;
+            }
         });
     });
 };
