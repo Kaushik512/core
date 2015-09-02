@@ -31,9 +31,6 @@ Catalyst new Environments setup
 
 
 
-
-
-
 Catalyst Adding New Envirornments to the Chef          
     [Tags]       Sanity       ps
 #    Catalyst Login
