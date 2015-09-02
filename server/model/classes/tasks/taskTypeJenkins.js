@@ -70,10 +70,7 @@ jenkinsTaskSchema.methods.execute = function(userName, baseUrl, choiceParam, onE
                         if (params.length > 0) {
                             logger.debug("++++++++++++++++++++++++++++++++++ in: ",choiceParam);
                             if (choiceParam) {
-                                logger.debug("++++++++++++++++++++++++++++++++++ in");
-                                for (var j = 0; j < params.length; j++) {
-                                    param[params[j].name] = choiceParam;
-                                }
+                                param = choiceParam;
                             } else {
                                 for (var i = 0; i < params.length; i++) {
                                     param[params[i].name] = params[i].defaultValue;
@@ -85,26 +82,16 @@ jenkinsTaskSchema.methods.execute = function(userName, baseUrl, choiceParam, onE
                             });
                         }
                         logger.debug("param object>>>>>>>>>>> ", JSON.stringify(param));
-                        var dummyObj = {
+                        /*var dummyObj = {
                             "Catalyst_Setup": "testValGobinda",
                             "mybool": false
                         };
-                        // var choiceParam = {
-                        //     "first": "apple"
-                        // };
-                        //var choiceParam = {"parameter": [{"name":"first", "choices" : ["mango","apple"]}]};
-                        /*var choiceParam = {
-                             "parameter": [{"defaultParameterValue": {
-                                     "value": "mango"
-                                 },
-                                 "description": "Test for fiest choice.",
-                                 "name": "first",
-                                 "type": "ChoiceParameterDefinition",
-                                 "choices": [
-                                     "mango"
-                                 ]
-                             }]
+                         var choiceParams = {
+                             "env": "cat3",
+                             "os": "windows",
+                             "author": "Gobinda Das"
                          };*/
+                        
                         jenkins.buildJobWithParams(self.jobName, param, function(err, buildRes) {
                             if (err) {
                                 logger.error(err);

@@ -189,10 +189,10 @@
  </div>
 
  <div class="col-lg-6 col-md-6" style="margin-top:15px;">
- <label for="instancesize">Instance Size:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+ <label for="instancesize">Instance Type:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
  <div class="input-groups">
  <select id="instancesize" name="instancesize" class="required chooseOrganization width-100 chooseSelect" style="vertical-align:central">
- <option value="">Choose Instanace Size</option>
+ <option value="">Choose Instanace Type</option>
  </select>
  </div>
  </div> 
@@ -858,15 +858,15 @@
 
          </div>
      
-      <!-- <div class="col-lg-3 col-md-3">
+      <div class="col-lg-4 col-md-4 hidden">
  <label for="category">Environment</label>
 
- <select  id="envListExisting" class="chooseEnvExisting width-100">
+ <select  id="envListExisting" class="chooseEnvExisting hidden width-100">
 
  </select>
 
 
- </div>   -->
+ </div>  
 </div>
                              </form>
                              <div class="col-lg-12">
@@ -965,7 +965,7 @@
 </tr>
 
 <tr>
-    <td style="padding-left: 18px;padding-top:16px;">Instance Size:</td>
+    <td style="padding-left: 18px;padding-top:16px;">Instance Type:</td>
 <td>
   
  <input id="instancesizeNew" disabled="disabled" class="form-control">
@@ -1421,6 +1421,9 @@
      $tasksRunlist = $('#tableRunlistForBlueprint').DataTable({
          "pagingType": "full_numbers",
          "bInfo": false,
+          "aaSorting": [
+              [0, "desc"]
+          ],
          "bLengthChange": false,
          "paging": false,
          "bFilter": false,
@@ -1515,92 +1518,41 @@
              console.log(data);
              data = JSON.parse(JSON.stringify(data));
              var $orgListInput = $('#orgnameSelectExisting');
-             $orgListInput.append($('<option></option>').val('choose').html('Choose'));
+           //  $orgListInput.append($('<option></option>').val('choose').html('Choose'));
              var $bgList = $('#bgListInputExisting');
              //$bgList.append($('<option></option>').val('choose').html('Choose'));
              var $projectList = $('#projectListInputExisting');
              var $envList = $('#envListExisting');
 
-             for (var i = 0; i < data.length; i++) {
 
-                 console.log(data[i].businessGroups);
-                 $orgListInput.append($('<option></option>').val(data[i].rowid).html(data[i].name).data('bglist', data[i].businessGroups));
-                /*for (var j = 0; j < data[i].businessGroups.length; j++) {
-                    $bgList.append($('<option></option').val(data[i].rowid).html(data[i].businessGroups[j].name));
-                    for(var p=0; p<data[i].businessGroups[j].projects.length;p++){
-                      $projectList.append($('<option></option').val(data[i].rowid).html(data[i].businessGroups[j].projects[p].name));
-                    }
-                }*/
-                /*var reqBodyNew = {};
-
-               
-
-                reqBodyNew.orgId = $orgListInput.val();
-                reqBodyNew.bgId = $bgList.val();
-                reqBodyNew.projectId = $projectList.val();
-               // reqBodyNew.envId = $envList.val();
-
-                $.get('../organizations/' + reqBodyNew.orgId + '/businessgroups/' + reqBodyNew.bgId + '/projects/' + reqBodyNew.projectId + '/', function(data) {
-                    console.log('success---3---4');
-                    //alert(JSON.stringify(data));
-
-                    //Syncing up the tree view based on url
-                    initializeBlueprintAreaNew(data.blueprints);
-                    $spinnerProject.addClass('hidden');
-                    if (data.blueprints.length > 0) {
-                        $('#accordion-2').removeClass('hidden');
-                        $spinnerProject.addClass('hidden');
-                    } else {
-                        bootbox.alert('No Blueprints Available. Please Create a New Blueprint');
-                        $spinnerProject.addClass('hidden');
-                    }
-                });*/
-             }
-           //  alert($orgListInput);
-
-             //on change of org
-            $orgListInput.change(function(e) {
-                $('#accordionAttr').addClass('hidden');
-                var orgName = $(this).val();
-
-                if (orgName == 'choose') {
+             
+              
+            var $projectList = $('#projectListInputExisting');
+            $bgList.change(function(e) {
+              //alert('here');
+                var bgName = $(this).val();
+                //alert(bgName);
+                if (bgName == 'choose') {
                     return;
                 }
                 var $selectedOrgOption = $(this).find(":selected");
-                $bgList.empty();
-                //$bgList.append($('<option></option>').val('choose').html('Choose'));
+                $projectList.select2('data', null);
+                
+                $projectList.empty();
 
-                var getBGs = $selectedOrgOption.data('bglist');
-                if (getBGs != null) {
-                 // alert(getBGs);
-                    for (var i = 0; i < getBGs.length; i++) {
-                        $bgList.append($('<option></option>').val(getBGs[i].rowid).html(getBGs[i].name).data('projList', getBGs[i].projects));
-                    }
+                var getProjs = bgProjects[bgName];
+                for (var i = 0; i < getProjs.length; i++) {
+                  var $option = $('<option></option>').val(getProjs[i].rowid).html(getProjs[i].name);
+                  $projectList.append($option);
                 }
+               $projectList.trigger('change');
+
             });
 
-
-             //project List
-             var $projectList = $('#projectListInputExisting');
-             //$projectList.append($('<option></option>').val('choose').html('Choose'));
-             $bgList.change(function(e) {
-                 var bgName = $(this).val();
-                 if (bgName == 'choose') {
-                     return;
-                 }
-                 var $selectedOrgOption = $(this).find(":selected");
-                 $projectList.empty();
-                 //$projectList.append($('<option></option>').val('choose').html('Choose'));
-                 var getProjs = $selectedOrgOption.data('projList');
-                 for (var i = 0; i < getProjs.length; i++) {
-
-                     $projectList.append($('<option></option>').val(getProjs[i].rowid).html(getProjs[i].name));
-                 }
-
-             });
              var $spinnerProject = $('#spinnerProjectChange').addClass('hidden');
-             //on click of environment
-             $('#projectListInputExisting').change(function(e) {
+            $('#projectListInputExisting').change(function(e) {
+
+          //    alert('change');
                  var reqBodyNew = {};
 
                  $spinnerProject.removeClass('hidden');
@@ -1629,20 +1581,129 @@
 
              }); //choose env gets over
 
-             $('.chooseOrgSelectExisting').change(function(e) {
-                 //$('chooseBGExisting').select2('data',null);  
+
+
+            var bgProjects = {};
+
+            for (var i = 0; i < data.length; i++) {
+
+                console.log(data[i].businessGroups);
+                $orgListInput.append($('<option></option>').val(data[i].rowid).html(data[i].name).data('bglist', data[i].businessGroups).data('envList', data[i].environments));
+                for (var j = 0; j < data[i].businessGroups.length; j++) {
+                    var rowid = data[i].businessGroups[j].rowid;
+                    $bgList.append($('<option></option').val(rowid).html(data[i].businessGroups[j].name));
+                    bgProjects[rowid] = data[i].businessGroups[j].projects;
+                }
+                for (var k = 0; k < data[i].environments.length; k++) {
+                    $envList.append($('<option></option').val(data[i].environments[k].rowid).html(data[i].environments[k].name))
+                }
+            }
+                $bgList.trigger('change');
+                
+               // $('#projectListInputExisting').change(function(e) {
+                  
+                  
+                
+                /*var reqBodyNew = {};
+
+               
+
+                reqBodyNew.orgId = $orgListInput.val();
+                reqBodyNew.bgId = $bgList.val();
+                reqBodyNew.projectId = $projectList.val();
+                reqBodyNew.envId = $envList.val();
+
+                $.get('../organizations/' + reqBodyNew.orgId + '/businessgroups/' + reqBodyNew.bgId + '/projects/' + reqBodyNew.projectId + '/environments/' + reqBodyNew.envId + '/', function(data) {
+                    console.log('success---3---4');
+                    //alert(JSON.stringify(data));
+
+                    //Syncing up the tree view based on url
+                    initializeBlueprintAreaNew(data.blueprints);
+
+                    $spinnerProject.addClass('hidden');
+                    if (data.blueprints.length > 0) {
+                        $('#accordion-2').removeClass('hidden');
+                        $spinnerProject.addClass('hidden');
+                    } else {
+                        bootbox.alert('No Blueprints Available. Please Create a New Blueprint');
+                        $spinnerProject.addClass('hidden');
+                    }
+                });*/
+            // });
+           
+           //  alert($orgListInput);
+
+             /*//on change of org
+            $orgListInput.change(function(e) {
+                $('#accordionAttr').addClass('hidden');
+                var orgName = $(this).val();
+
+                if (orgName == 'choose') {
+                    return;
+                }
+                var $selectedOrgOption = $(this).find(":selected");
+                $bgList.empty();
+                //$bgList.append($('<option></option>').val('choose').html('Choose'));
+
+                var getBGs = $selectedOrgOption.data('bglist');
+                if (getBGs != null) {
+                 // alert(getBGs);
+                    for (var i = 0; i < getBGs.length; i++) {
+                        $bgList.append($('<option></option>').val(getBGs[i].rowid).html(getBGs[i].name).data('projList', getBGs[i].projects));
+                    }
+                }
+                $envList.empty();
+                var getEnv = $selectedOrgOption.data('envList');
+                if (getEnv != null) {
+                    //alert(JSON.stringify(getEnv));
+                   // $envList.append($('<option></option>').val('choose').html('Choose'));
+                    for (var i = 0; i < getEnv.length; i++) {
+                        $envList.append($('<option></option>').val(getEnv[i].rowid).html(getEnv[i].name));
+                    }
+                }
+            });*/
+
+          //  var $projectList = $('#projectListInputExisting');
+            /*$bgList.trigger('change');
+            $bgList.change(function(e) {
+                var bgName = $(this).val();
+                //alert(bgName);
+                if (bgName == 'choose') {
+                    return;
+                }
+                var $selectedOrgOption = $(this).find(":selected");
+                $projectList.empty();
+
+                var getProjs = $selectedOrgOption.data('projList');
+                for (var i = 0; i < getProjs.length; i++) {
+                  $projectList.append($('<option></option>').val(getProjs[i].rowid).html(getProjs[i].name));
+                }
+
+            });*/
+
+
+
+             //project List
+             
+             //on click of environment
+             
+
+            $('.chooseOrgSelectExisting').change(function(e) {
+                //$('chooseBGExisting').select2('data',null);  
                 if ($(this).val() == 'choose') {
-                    $('.chooseBGExisting').select2('val',"");
+                    $('.chooseBGExisting').select2('val', "");
                     $('.chooseProjectExisting').select2('val', "");
                     $('#accordion-2').addClass('hidden');
                 }
-                 $('.chooseBGExisting').change();
-                 $('.chooseProjectExisting').select2('data', null);
-                 $('.chooseProjectExisting').change();
-                 $('.chooseEnvExisting').select2('data', null);
-                 //$('chooseEnvExisting').change();
+                $('.chooseBGExisting').change();
+                $('.chooseProjectExisting').select2('data', null);
+                $('.chooseProjectExisting').change();
+                $('.chooseEnvExisting').select2('data', null);
+                //$('chooseEnvExisting').change();
 
-             });
+            });
+
+
          }
 
 
@@ -2017,7 +2078,7 @@
      $('#imageId').on('change', function() {
          $.get("/vmimages/instancesizes/all/list", function(data) {
              var vType = $('#imageId').find('option:selected').attr('vType'),
-                 str = '<option value=""> Select Instance Size</option>';
+                 str = '<option value=""> Select Instance Type</option>';
              var list = [];
 
              for (var i = 0; i < data.length; i++) {
@@ -2493,7 +2554,7 @@
                             if(z >= rowGridLength -1)
                             {
                             
-                                $wizard.data('secondClick', true);
+                               // $wizard.data('secondClick', true);
                                 var wizard = $wizard.data('bootstrapWizard');
                                 
                                 
@@ -2592,7 +2653,12 @@
                         wizard.enableNextBtn();
 
                     } else {
+                        bootbox.alert({
+                          message:"There are no templates available",
+                          title:"Error!"
+                        });
                         wizard.disableNextBtn();
+                        
                     }
 
                  }
@@ -3823,76 +3889,33 @@
                          //tagLabel = '<span>Tags&nbsp;</span>';
 
                          //for CFT and Docker..
-                         function getOrgProjDetailsCFTDocker(name) {
-                             $.ajax({
-                                 type: "get",
-                                 dataType: "json",
-
-                                 async: false,
-                                 url: "../organizations/getTreeNew",
-                                 success: function(data) {
-
-                                     console.log(data);
-                                     data = JSON.parse(JSON.stringify(data));
-                                     //  alert(JSON.stringify(data));
-                                     for (var j = 0; j < data.length; j++) {
-                                         var $blueprintReadContainerCFT = $('#modalForReadCFT');
-                                         (function(j) {
-                                             $blueprintReadContainerCFT.find('.modal-body #blueprintORG').val(data[j].name);
-                                             for (var p = 0; p < data[j].businessGroups.length; p++) {
-                                                 (function(p) {
-                                                     $blueprintReadContainerCFT.find('.modal-body #blueprintBU').val(data[j].businessGroups[p].name);
-                                                     //}
-                                                     for (var x = 0; x < data[j].businessGroups[p].projects.length; x++) {
-                                                         $blueprintReadContainerCFT.find('.modal-body #blueprintProject').val(data[j].businessGroups[p].projects[x].name);
-                                                     }
-                                                 })(p);
-                                             }
-                                         })(j);
-                                     }
-
-
-
-
-                                 }
-                             });
-                         }
+                        
+                         
                          //ends here..
 
                          //for software stack and os image
-                         function getOrgProjDetailsSSOS(name) {
-                             $.ajax({
-                                 type: "get",
-                                 dataType: "json",
-
-                                 async: false,
-                                 url: "../organizations/getTreeNew",
-                                 success: function(data) {
-
-                                     console.log(data);
-                                     data = JSON.parse(JSON.stringify(data));
-
-                                     //  alert(JSON.stringify(data));
+                        function getOrgProjDetails(id) {
 
 
-                                     for (var j = 0; j < data.length; j++) {
-                                         var $blueprintReadContainer = $('#modalForRead');
-                                         (function(j) {
-                                             $blueprintReadContainer.find('.modal-body #blueprintORG').val(data[j].name);
-                                             for (var p = 0; p < data[j].businessGroups.length; p++) {
-                                                 (function(p) {
-                                                     $blueprintReadContainer.find('.modal-body #blueprintBU').val(data[j].businessGroups[p].name);
-                                                     //}
-                                                     for (var x = 0; x < data[j].businessGroups[p].projects.length; x++) {
-                                                         $blueprintReadContainer.find('.modal-body #blueprintProject').val(data[j].businessGroups[p].projects[x].name);
-                                                     }
-                                                 })(p);
-                                             }
-                                         })(j);
-                                     }
-                                 }
-                             });
-                         }
+                            var orgName = $("#orgnameSelectExisting option:selected").text();
+
+                            var bgName = $('#bgListInputExisting option:selected').text();
+                            var projName = $('#projectListInputExisting option:selected').text();
+
+
+                            var $blueprintReadContainer = $(id);
+                            $blueprintReadContainer.find('.modal-body #blueprintORG').val(orgName);
+                            $blueprintReadContainer.find('.modal-body #blueprintBU').val(bgName);
+                            $blueprintReadContainer.find('.modal-body #blueprintProject').val(projName);
+
+                            var $blueprintReadContainerCFT = $(id);
+                            $blueprintReadContainerCFT.find('.modal-body #blueprintORG').val(orgName);
+                            $blueprintReadContainerCFT.find('.modal-body #blueprintBU').val(bgName);
+                            $blueprintReadContainerCFT.find('.modal-body #blueprintProject').val(projName);
+
+                        }
+                            
+                         
                          //ends here..
 
                          (function(blueprint) {
@@ -3908,7 +3931,7 @@
                                  //for getting the blueprint name
                                  $blueprintReadContainerCFT.find('.modal-body #blueprintNameCFT').val(blueprint.name);
                                  $blueprintReadContainerCFT.find('.modal-body #blueprintTemplateTypeCFT').val(blueprint.templateType);
-                                 getOrgProjDetailsCFTDocker(name);
+                                 getOrgProjDetails($blueprintReadContainerCFT);
 
                              });
                          })(data[i]);
@@ -3998,7 +4021,7 @@
 
                                      }
                                      $blueprintReadContainer.find('.modal-body #blueprintTemplateType').val(blueprint.templateType);
-                                     getOrgProjDetailsSSOS(name);
+                                     getOrgProjDetails($blueprintReadContainer);
                                  });
                              })(data[i]);
 

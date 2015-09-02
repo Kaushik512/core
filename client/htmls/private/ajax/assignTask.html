@@ -110,7 +110,7 @@
                                                    <div class="col-lg-6 col-md-6" style="margin-top:5px;">
                                                       <label>
                                                       <i style="color:#40baf1;font-size:16px;" class="ace-icon fa fa-list-ul"></i>   
-                                                      Edit Runlist
+                                                      Add Runlist
                                                       </label>
                                                       <a href="#chefRunlistModal" data-backdrop="false" data-toggle="modal" style="cursor:pointer;"> <img src="img/add.png" style="float:right;margin-top:6px;" class="addList" rel="tooltip" data-placement="top" title="Edit Runlist" /></a>
                                                       <div style="height:146px;overflow-y:auto;" id="dbNameTable_wrapper" class="dataTables_wrapper no-footer">
@@ -638,14 +638,15 @@
          <div class="widget-toolbox clearfix">
          <div class="btn-group pull-right">
          <label id="spinnerForSave" class="hidden"><img  style="margin-left:5px;margin-right:25px;" src="img/select2-spinner.gif"></label>
-         <button type="submit" class="btn btn-primary btnSaveTask btn-mini" style="margin-right:11px;">
+         <a class="btn btn-default btn-mini btnBack" style="margin-right:11px;" onclick="window.history.back();" id="btncancel">
+         <i class="ace-icon fa fa-times bigger-110"></i>
+         Cancel
+         </a>
+         <button type="submit" class="btn btn-primary btnSaveTask btn-mini">
          <i class="ace-icon fa fa-check bigger-110"></i>
          Save
          </button>
-         <a class="btn btn-primary btn-mini btnBack" onclick="window.history.back();" id="btncancel">
-         <i class="ace-icon fa fa-undo bigger-110"></i>
-         Cancel
-         </a>
+         
          </div>
          </div>
          </div>
@@ -1087,7 +1088,10 @@ $(document).ready(function() {
             var $saveSpinner = $('#spinnerForSave');
             var taskName = $('#chefTaskName').val();
             if (!taskName) {
-                alert('Please enter a Task-Name');
+                bootbox.alert({
+                  message:'Please enter a Task-Name',
+                  title:"Error"
+                  });
                 return false;
             }
             taskData.name = taskName;
@@ -1106,7 +1110,7 @@ $(document).ready(function() {
                 }
             });
             if (!nodesList.length) {
-                alert('Please choose nodes');
+                bootbox.alert({message:'Please choose nodes',title:"Error"});
                 return false;
             }
 
@@ -1140,19 +1144,19 @@ $(document).ready(function() {
             
             var taskName = $('#jenkinsTaskName').val();
             if (!taskName) {
-                alert('Please enter a Task-Name');
+                bootbox.alert({message:'Please enter a Task-Name',title:'Error'});
                 return false;
             }
             taskData.name = taskName;
             var jenkinsServerId = $('#jenkinsServerList').val();
             if (!jenkinsServerId) {
-                alert('Please Choose a Jenkins Server');
+                bootbox.alert({message:'Please Choose a Jenkins Server',title:'Error'});
                 return false;
             }
 
             var jenkinsJobName = $('#jobListJenkins').val();
             if (!jenkinsJobName) {
-                alert('Please Choose a Jenkins Job');
+                bootbox.alert({message:'Please Choose a Jenkins Job',title:'Error'});
                 return false;
             }
             var jenkinsJobDescription = $('textarea#jenkinsDescription').val();

@@ -2354,82 +2354,65 @@
                                                                                         tagLabel = '';
 
                                                                                         //for CFT and Docker..
-                                                                                        function getOrgProjDetailsCFTDocker(name) {
+                                                                                        function loopTreeNodes(nodes, idToMatch) {
+                                                                                            var name="";
+                                                                                            for (var i = 0; i < nodes.length; i++) {
+                                                                                                console.log('name ==> ',nodes[i].text,nodes[i].rowid , idToMatch);
+                                                                                                if (nodes[i].rowid === idToMatch) {
+                                                                                                    //alert('match');
+                                                                                                    name = nodes[i].text;
+                                                                                                    return name;
+                                                                                                   
+                                                                                                } else {
+                                                                                                    var childNodes = nodes[i].nodes;
+                                                                                                    console.log('nodes ==> ',childNodes);
+                                                                                                    if (childNodes && childNodes.length) {
+                                                                                                        name = loopTreeNodes(childNodes, idToMatch);
+                                                                                                        if(name){
+                                                                                                            return name;
+                                                                                                        }
+                                                                                                    }
+                                                                                                }
+
+                                                                                            }
+                                                                                            //alert(name);
+                                                                                            //return name;
+                                                                                        }
+                                                                                        function getOrgProjDetails(id) {
                                                                                             $.ajax({
                                                                                                 type: "get",
                                                                                                 dataType: "json",
 
                                                                                                 async: false,
-                                                                                                url: "../organizations/getTreeNew",
+                                                                                                url: "../organizations/getTreeForbtv",
                                                                                                 success: function(data) {
 
-                                                                                                    console.log(data);
-                                                                                                    data = JSON.parse(JSON.stringify(data));
+                                                                                                    var orgName = loopTreeNodes(data,urlParams.org);
+                                                                                                    //alert(orgName);
+                                                                                                    var bgName = loopTreeNodes(data,urlParams.bg);
+                                                                                                    var projName = loopTreeNodes(data,urlParams.projid);
+                                                                                                   // alert("pri name ==>"+projName)
+                                                                                                    console.log(urlParams.org);
+                                                                                                    console.log(urlParams.bg);
+                                                                                                    console.log(urlParams.projid);
 
+                                                                                                    var $blueprintReadContainerCFT = $(id);
+                                                                                                    $blueprintReadContainerCFT.find('.modal-body #blueprintORG').val(orgName);
+                                                                                                    $blueprintReadContainerCFT.find('.modal-body #blueprintBU').val(bgName);
+                                                                                                    $blueprintReadContainerCFT.find('.modal-body #blueprintProject').val(projName);
                                                                                                     //  alert(JSON.stringify(data));
 
-
-                                                                                                    for (var j = 0; j < data.length; j++) {
-                                                                                                        var $blueprintReadContainerCFT = $('#modalForReadCFT');
-                                                                                                        (function(j) {
-                                                                                                            $blueprintReadContainerCFT.find('.modal-body #blueprintORG').val(data[j].name);
-                                                                                                            for (var p = 0; p < data[j].businessGroups.length; p++) {
-                                                                                                                (function(p) {
-                                                                                                                    $blueprintReadContainerCFT.find('.modal-body #blueprintBU').val(data[j].businessGroups[p].name);
-                                                                                                                    //}
-                                                                                                                    for (var x = 0; x < data[j].businessGroups[p].projects.length; x++) {
-                                                                                                                        $blueprintReadContainerCFT.find('.modal-body #blueprintProject').val(data[j].businessGroups[p].projects[x].name);
-                                                                                                                    }
-                                                                                                                })(p);
-                                                                                                            }
-                                                                                                        })(j);
-                                                                                                    }
-
-
-
-
+                                                                                                    var $blueprintReadContainer = $(id);
+                                                                                                    $blueprintReadContainer.find('.modal-body #blueprintORG').val(orgName);
+                                                                                                    $blueprintReadContainer.find('.modal-body #blueprintBU').val(bgName);
+                                                                                                    $blueprintReadContainer.find('.modal-body #blueprintProject').val(projName);
                                                                                                 }
                                                                                             });
                                                                                         }
                                                                                         //ends here..
                                                                                         //for software stack and os image
-                                                                                        function getOrgProjDetailsSSOS(name) {
-                                                                                            $.ajax({
-                                                                                                type: "get",
-                                                                                                dataType: "json",
-
-                                                                                                async: false,
-                                                                                                url: "../organizations/getTreeNew",
-                                                                                                success: function(data) {
-
-                                                                                                    console.log(data);
-                                                                                                    data = JSON.parse(JSON.stringify(data));
-
-                                                                                                    //  alert(JSON.stringify(data));
-
-
-                                                                                                    for (var j = 0; j < data.length; j++) {
-                                                                                                        var $blueprintReadContainer = $('#modalForRead');
-                                                                                                        (function(j) {
-                                                                                                            $blueprintReadContainer.find('.modal-body #blueprintORG').val(data[j].name);
-                                                                                                            for (var p = 0; p < data[j].businessGroups.length; p++) {
-                                                                                                                (function(p) {
-                                                                                                                    $blueprintReadContainer.find('.modal-body #blueprintBU').val(data[j].businessGroups[p].name);
-                                                                                                                    //}
-                                                                                                                    for (var x = 0; x < data[j].businessGroups[p].projects.length; x++) {
-                                                                                                                        $blueprintReadContainer.find('.modal-body #blueprintProject').val(data[j].businessGroups[p].projects[x].name);
-                                                                                                                    }
-                                                                                                                })(p);
-                                                                                                            }
-                                                                                                        })(j);
-                                                                                                    }
-
-
-
-
-                                                                                                }
-                                                                                            });
-                                                                                        }
+                                                                                        
+                                                                                        
                                                                                         //ends here..
 
                                                                                         (function(blueprint) {
@@ -2445,7 +2428,7 @@
                                                                                                 //for getting the blueprint name
                                                                                                 $blueprintReadContainerCFT.find('.modal-body #blueprintNameCFT').val(blueprint.name);
                                                                                                 $blueprintReadContainerCFT.find('.modal-body #blueprintTemplateTypeCFT').val(blueprint.templateType);
-                                                                                                getOrgProjDetailsCFTDocker(name);
+                                                                                                getOrgProjDetails($blueprintReadContainerCFT);
                                                                                             });
                                                                                         })(data[i]);
                                                                                         //alert(JSON.stringify(data[i]));
@@ -2464,7 +2447,7 @@
                                                                                                 //for getting the blueprint name
                                                                                                 $blueprintReadContainerCFT.find('.modal-body #blueprintNameCFT').val(blueprint.name);
                                                                                                 $blueprintReadContainerCFT.find('.modal-body #blueprintTemplateTypeCFT').val(blueprint.templateType);
-                                                                                                getOrgProjDetailsCFTDocker(name);
+                                                                                                getOrgProjDetails($blueprintReadContainerCFT);
                                                                                             });
                                                                                         })(data[i]);
                                                                                         
@@ -2551,7 +2534,7 @@
 
                                                                                                     }
                                                                                                     $blueprintReadContainer.find('.modal-body #blueprintTemplateType').val(blueprint.templateType);
-                                                                                                    getOrgProjDetailsSSOS(name);
+                                                                                                    getOrgProjDetails($blueprintReadContainer);
 
 
 
@@ -2798,330 +2781,340 @@
                                                                             $('#myModalLabelDockerContainer').attr('saveto', lpinput).css('z-index', '9999').modal('show');
                                                                         };
                                                                         
-                                                                        $('.launchBtn').click(function(e) {
-                                                                            $('#cftForm').trigger('reset');
-
-                                                                            $('#commentForm')[0].reset();
-                                                                            $('#Removeonexitfield').change();
-                                                                            var $selectedItems = $('.role-Selected1');
-                                                                            if (!$selectedItems.length) {
-                                                                                return;
-                                                                            }
-                                                                            if ($selectedItems.attr('data-templateType') === 'desktopProvisioning') {
-                                                                                var $modalDesktopProvisioning = $('#modalDesktopProvisioningLaunch');
-                                                                                var blueprintId = $selectedItems.attr('data-blueprintId');
-                                                                                var version = $selectedItems.find('.blueprintVersionDropDown').val();
-                                                                                $modalDesktopProvisioning.data('blueprintId', blueprintId);
-                                                                                $modalDesktopProvisioning.data('blueprintVersion', version);
-                                                                                $modalDesktopProvisioning.modal('show');
-                                                                                return;
-                                                                            }
-                                                                            if ($selectedItems.attr('data-templateType') === 'Docker' || $selectedItems.attr('data-templateType') === 'docker') {
-
-                                                                                $('.oldlaunchparams').empty(); //clearing the old div for composite blue print.
-                                                                                // alert('in test');
-                                                                                //Force hiding the start button
-                                                                                $('.dockerinstancestart').first().addClass('hidden');
-
-                                                                                var cardCount = $('.instancesList').find('.componentlistContainer:not(.stopped)').length;
-
-                                                                                if (cardCount === 0) {
-                                                                                    bootbox.alert('No instances available.Kindly Launch one instance');
+                                                                    $('.launchBtn').click(function(e) {
+                                                                    var $selectedItems = $('.role-Selected1');
+                                                                    if (!$selectedItems.length) {
+                                                                        return;
+                                                                    }
+                                                                        bootbox.confirm({
+                                                                            message: "Are you sure you want to launch the Blueprint? Press Ok To continue",
+                                                                            title: "Confirmation",
+                                                                            callback: function(result) {
+                                                                                if (!result) {
                                                                                     return;
-                                                                                }
-                                                                                //commented below to have a composite bp for docker
-                                                                                // loadLaunchParams();
-                                                                                //Loading table for all docker images for compose
+                                                                                } else {
 
-                                                                                var dockercompose = JSON.parse($selectedItems.attr('dockercompose'));
-                                                                                //alert('hit');
-                                                                                $('#compositedockertable tr.dockerimagesrow').detach(); //clearing previously loaded table.
-                                                                                dockercompose.forEach(function(k, v) {
-                                                                                    // alert(dockercompose[v]["dockercontainerpaths"]);
-                                                                                    addDockerTemplateToTable(dockercompose[v]["dockercontainerpathstitle"], dockercompose[v]["dockercontainerpaths"], dockercompose[v]["dockerrepotags"], dockercompose[v]["dockerreponame"], dockercompose[v]["dockerlaunchparameters"]);
-                                                                                });
-                                                                                //onclick="loadLaunchParams(\'launchparam' + uniqueid + '\');
-                                                                                $('.lnktolaunchparam').click(function() { //binding clicks for launch params
-                                                                                    loadLaunchParams('launchparam' + $(this).attr('uniqueid'));
-                                                                                });
+                                                                                    $('#cftForm').trigger('reset');
 
-                                                                                $('.dockerimageselectordown').click(function() {
-                                                                                    movetablerow('dockerimageselectordown', $(this).attr('uniqueid'));
-                                                                                });
-
-                                                                                $('.dockerimageselectorup').click(function() {
-                                                                                    movetablerow('dockerimageselectorup', $(this).attr('uniqueid'));
-                                                                                });
-
-                                                                                $('.btnaddDockerLaunchParams').click(function() {
-                                                                                    var lp = generateDockerLaunchParams();
-                                                                                    if (lp != '') {
-                                                                                        //        launchparams[0] = preparams;
-                                                                                        // launchparams[1] = startparams;
-                                                                                        // // alert(execparam);
-                                                                                        // launchparams[2] = execparam;
-                                                                                        $('#' + $('#myModalLabelDockerContainer').attr('saveto')).val(lp[0] + ' -c ' + lp[1] + ' -exec ' + lp[2]);
-                                                                                        $('#myModalLabelDockerContainer').removeAttr('saveto').modal('hide');
+                                                                                    $('#commentForm')[0].reset();
+                                                                                    $('#Removeonexitfield').change();
+                                                                                    
+                                                                                    if ($selectedItems.attr('data-templateType') === 'desktopProvisioning') {
+                                                                                        var $modalDesktopProvisioning = $('#modalDesktopProvisioningLaunch');
+                                                                                        var blueprintId = $selectedItems.attr('data-blueprintId');
+                                                                                        var version = $selectedItems.find('.blueprintVersionDropDown').val();
+                                                                                        $modalDesktopProvisioning.data('blueprintId', blueprintId);
+                                                                                        $modalDesktopProvisioning.data('blueprintVersion', version);
+                                                                                        $modalDesktopProvisioning.modal('show');
+                                                                                        return;
                                                                                     }
-                                                                                });
+                                                                                    if ($selectedItems.attr('data-templateType') === 'Docker' || $selectedItems.attr('data-templateType') === 'docker') {
 
-                                                                                var $launchDockerInstanceSelector = $('#launchDockerInstanceSelector');
-                                                                                var blueprintId = $selectedItems.attr('data-blueprintId');
-                                                                                var dockerreponame = $selectedItems.attr('dockerreponame');
-                                                                                $launchDockerInstanceSelector.data('blueprintId', blueprintId);
-                                                                                //  $launchDockerInstanceSelector.data('blueprintId',blueprintId);
+                                                                                        $('.oldlaunchparams').empty(); //clearing the old div for composite blue print.
+                                                                                        // alert('in test');
+                                                                                        //Force hiding the start button
+                                                                                        $('.dockerinstancestart').first().addClass('hidden');
 
+                                                                                        var cardCount = $('.instancesList').find('.componentlistContainer:not(.stopped)').length;
 
-
-                                                                                $('#dockerinstancesselctorview').empty().append('<span><div class=\"modal-body\"><div><div class=\"row\"><div style=\"color:;\" class=\"col-lg-12 col-sm-12\ dockerinstances"></div></div></div></div></div></span>');
-                                                                                var $newinstancetable = $("<table></table>").append("<thead><tr><td>Instance Name</td><td>IP Address</td><td>Log Info</td><td class='hidden'>Add Docker Engine</td></tr></thead>");
-                                                                                var $newinstancetbody = $('<tbody></tbody>');
-                                                                                $newinstancetable.append($newinstancetbody);
-                                                                                var $instancetable = $('#tableinstanceview').clone();
-                                                                                $instancetable.find('tbody tr').each(function() {
-                                                                                    var $newinstancetr = $("<tr><tr>");
-                                                                                    $(this).find('td').each(function(k, v) {
-                                                                                        $newinstancetr.append('<td>' + v + $(this).html() + '</td>');
-                                                                                    });
-                                                                                    $newinstancetbody.append($newinstancetr);
-                                                                                });
-
-                                                                                $instancetable.attr('id', 'dockerintsancestab');
-                                                                                $('.dockerinstances').first().append($instancetable);
-
-                                                                                $('#dockerintsancestab thead td').each(function(k, v) {
-                                                                                    if (k > 2)
-                                                                                        $(this).detach();
-                                                                                });
-                                                                                $('#dockerintsancestab thead').append('<td>Log Info</td>');
-                                                                                $('#dockerintsancestab thead tr').append('<td class="hidden" title="Select to add a docker engine">Add Engine</td>');
-                                                                                $('#dockerintsancestab tbody tr').each(function(k, v) {
-
-                                                                                    $(this).removeClass('rowcustomselected');
-                                                                                    $(this).click(function() {
-                                                                                        $('#dockerintsancestab tbody tr').removeClass('rowcustomselected');
-                                                                                        $(this).addClass('rowcustomselected');
-                                                                                    });
-                                                                                    $(this).find('td').each(function(k1, v1) {
-
-                                                                                        if (k1 > 2)
-                                                                                            $(this).detach();
-                                                                                        //inserting a checkbox to select instance
-                                                                                        if (k1 == 0) {
-                                                                                            $(this).prepend('<input type="checkbox" class="instanceselectedfordocker">&nbsp;');
-                                                                                        }
-                                                                                    });
-                                                                                    $(this).append('<td  class=""><a data-original-title="MoreInfo" data-placement="top" rel="tooltip" href="javascript:void(0)" data-instanceid="' + $(this).attr('data-instanceid') + '" class="tableMoreInfo moreInfo dockerLeft" stlye=></a></td>');
-                                                                                    $(this).append('<td  class="hidden"><input type="checkbox"></td>');
-                                                                                    $(this).find('.moreInfo').click(instanceLogsHandler);
-                                                                                });
-                                                                                $('.launchdockerinstance').click(function() {
-                                                                                    $launchResultContainer.find('.modal-body').empty().append('<span><div class=\"modal-body\"><div><h3 class=\"alert alert-success\"><b>Congratulations!</b> Blueprint Launched Successfully !!!</h3>Instance Id : 5460690c6e5c99913e37d0e4<br>Instance Logs :- </div><div class=\"logsAreaBootstrap\"><div><div class=\"row\"><div style=\"color:white;\" class=\"col-lg-12 col-sm-12\"><span>Starting instance</span></div></div></div></div></div></span>');
-                                                                                    $('#myModalLabel').first().html('Launching Blueprint');
-
-                                                                                });
-                                                                                $('#dockerInstanceSelectionTitle').empty().append('Select Instances to pull  "' + dockerreponame + '" into');
-                                                                                $launchDockerInstanceSelector.modal('show');
-                                                                                $('#rootwizard').find("a[href*='tab1']").trigger('click'); //showing first tab.
-                                                                                $('#dockerintsancestab thead').empty().append('<tr><td>Select Instance</td><td>Instance Name</td><td>IP Address</td><td>Log</td><td  class="hidden">Add Docker Engine</td></tr>');
-                                                                                $('#dockerintsancestab').dataTable({
-                                                                                    "bPaginate": false
-                                                                                });
-                                                                                return;
-                                                                            }
-
-
-
-                                                                            if ($selectedItems.length) {
-                                                                                var projectId = $($selectedItems.get(0)).attr('data-projectId');
-                                                                                var envId = $($selectedItems.get(0)).attr('data-envId');
-                                                                                var blueprintId = $($selectedItems.get(0)).attr('data-blueprintId');
-                                                                                var version = $($selectedItems.get(0)).find('.blueprintVersionDropDown').val();
-                                                                                var blueprintType = $($selectedItems.get(0)).attr('data-blueprintType');
-                                                                                // alert('launching -> ' +'../blueprints/' + blueprintId + '/launch?version=' + version);
-                                                                                function launchBP(stackName) {
-                                                                                 //   alert(JSON.stringify(stackName));
-                                                                                    var $launchResultContainer = $('#launchResultContainer');
-                                                                                    $launchResultContainer.find('.modal-body').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
-                                                                                    $launchResultContainer.find('.modal-title').html('Launching Blueprint');
-                                                                                    $launchResultContainer.modal('show');
-                                                                                    $.get('/blueprints/' + blueprintId + '/launch?version=' + version + '&envId=' + urlParams['envid'] + '&stackName=' + stackName, function(data) {
-
-
-                                                                                        var msgStr = 'Instance Id : ';
-                                                                                        if (blueprintType === 'aws_cf') {
-                                                                                            msgStr = 'Stack Id : ' + data.stackId + '. You can view your stack in cloudformation tab';
-                                                                                        } else {
-                                                                                            msgStr = 'Instance Id : ';
-                                                                                            
-                                                                                           // for(var i = 0; i < data.id.length; i++)
-                                                                                                msgStr += data.id.join(',');
-
-                                                                                            msgStr += '<br/>You can monitor logs from the Launched Instances.';
-                                                                                        }
-
-                                                                                        var $msg = $('<div></div>').append('<h3 style="font-size:16px;" class=\"alert alert-success\">Your Selected Blueprint is being Launched, kindly check back in a while.</h3>').append(msgStr);
-
-                                                                                        $launchResultContainer.find('.modal-body').empty();
-                                                                                        $launchResultContainer.find('.modal-body').append($msg);
-                                                                                        if (blueprintType === 'aws_cf') {
-                                                                                            $.get('/cloudformation/' + data.stackId, function(stack) {
-
-                                                                                                addStackToDom(stack);
-                                                                                               
-                                                                                        })
+                                                                                        if (cardCount === 0) {
+                                                                                            bootbox.alert('No instances available.Kindly Launch one instance');
                                                                                             return;
                                                                                         }
-                                                                                       
+                                                                                        //commented below to have a composite bp for docker
+                                                                                        // loadLaunchParams();
+                                                                                        //Loading table for all docker images for compose
 
-                                                                                        var instanceId = data.id;
-                                                                                        var timeout;
+                                                                                        var dockercompose = JSON.parse($selectedItems.attr('dockercompose'));
+                                                                                        //alert('hit');
+                                                                                        $('#compositedockertable tr.dockerimagesrow').detach(); //clearing previously loaded table.
+                                                                                        dockercompose.forEach(function(k, v) {
+                                                                                            // alert(dockercompose[v]["dockercontainerpaths"]);
+                                                                                            addDockerTemplateToTable(dockercompose[v]["dockercontainerpathstitle"], dockercompose[v]["dockercontainerpaths"], dockercompose[v]["dockerrepotags"], dockercompose[v]["dockerreponame"], dockercompose[v]["dockerlaunchparameters"]);
+                                                                                        });
+                                                                                        //onclick="loadLaunchParams(\'launchparam' + uniqueid + '\');
+                                                                                        $('.lnktolaunchparam').click(function() { //binding clicks for launch params
+                                                                                            loadLaunchParams('launchparam' + $(this).attr('uniqueid'));
+                                                                                        });
 
-                                                                                        $launchResultContainer.on('hidden.bs.modal', function(e) {
-                                                                                            $launchResultContainer.off('hidden.bs.modal');
-                                                                                            if (timeout) {
-                                                                                                clearTimeout(timeout);
+                                                                                        $('.dockerimageselectordown').click(function() {
+                                                                                            movetablerow('dockerimageselectordown', $(this).attr('uniqueid'));
+                                                                                        });
+
+                                                                                        $('.dockerimageselectorup').click(function() {
+                                                                                            movetablerow('dockerimageselectorup', $(this).attr('uniqueid'));
+                                                                                        });
+
+                                                                                        $('.btnaddDockerLaunchParams').click(function() {
+                                                                                            var lp = generateDockerLaunchParams();
+                                                                                            if (lp != '') {
+                                                                                                //        launchparams[0] = preparams;
+                                                                                                // launchparams[1] = startparams;
+                                                                                                // // alert(execparam);
+                                                                                                // launchparams[2] = execparam;
+                                                                                                $('#' + $('#myModalLabelDockerContainer').attr('saveto')).val(lp[0] + ' -c ' + lp[1] + ' -exec ' + lp[2]);
+                                                                                                $('#myModalLabelDockerContainer').removeAttr('saveto').modal('hide');
                                                                                             }
                                                                                         });
-                                                                                        $divBootstrapLogArea = $('<div></div>').addClass('logsAreaBootstrap');
 
-                                                                                        $launchResultContainer.find('.modal-body').append($divBootstrapLogArea);
-
-                                                                                        var lastTimestamp;
-
-                                                                                        function pollLogs(timestamp, delay, clearData) {
-                                                                                            var url = '../instances/' + instanceId + '/logs';
-                                                                                            if (timestamp) {
-                                                                                                url = url + '?timestamp=' + timestamp;
-                                                                                            }
-
-                                                                                            timeout = setTimeout(function() {
-                                                                                                $.get(url, function(data) {
-                                                                                                    var $modalBody = $divBootstrapLogArea;
-                                                                                                    if (clearData) {
-                                                                                                        $modalBody.empty();
-                                                                                                    }
-                                                                                                    var $table = $('<div></div>');
-
-                                                                                                    for (var i = 0; i < data.length; i++) {
-                                                                                                        var $rowDiv = $('<div class="row"></div>');
-                                                                                                        var timeString = new Date().setTime(data[i].timestamp);
-                                                                                                        var date = new Date(timeString).toLocaleString(); //converts to human readable strings
-                                                                                                        //$rowDiv.append($('<div class="col-lg-4 col-sm-4"></div>').append('<div>' + date + '</div>'));
-
-                                                                                                        if (data[i].err) {
-                                                                                                            $rowDiv.append($('<div class="col-lg-12 col-sm-12" style="color:red;"></div>').append('<span>' + data[i].log + '</span>'));
-                                                                                                        } else {
-                                                                                                            $rowDiv.append($('<div class="col-lg-12 col-sm-12 " style="color:white;"></div>').append('<span>' + data[i].log + '</span>'));
-                                                                                                        }
-
-                                                                                                        $table.append($rowDiv);
-                                                                                                    }
+                                                                                        var $launchDockerInstanceSelector = $('#launchDockerInstanceSelector');
+                                                                                        var blueprintId = $selectedItems.attr('data-blueprintId');
+                                                                                        var dockerreponame = $selectedItems.attr('dockerreponame');
+                                                                                        $launchDockerInstanceSelector.data('blueprintId', blueprintId);
+                                                                                        //  $launchDockerInstanceSelector.data('blueprintId',blueprintId);
 
 
-                                                                                                    if (data.length) {
-                                                                                                        lastTimestamp = data[data.length - 1].timestamp;
-                                                                                                        console.log(lastTimestamp);
-                                                                                                        $modalBody.append($table);
-                                                                                                        $modalBody.scrollTop($modalBody[0].scrollHeight + 100);
-                                                                                                    }
 
+                                                                                        $('#dockerinstancesselctorview').empty().append('<span><div class=\"modal-body\"><div><div class=\"row\"><div style=\"color:;\" class=\"col-lg-12 col-sm-12\ dockerinstances"></div></div></div></div></div></span>');
+                                                                                        var $newinstancetable = $("<table></table>").append("<thead><tr><td>Instance Name</td><td>IP Address</td><td>Log Info</td><td class='hidden'>Add Docker Engine</td></tr></thead>");
+                                                                                        var $newinstancetbody = $('<tbody></tbody>');
+                                                                                        $newinstancetable.append($newinstancetbody);
+                                                                                        var $instancetable = $('#tableinstanceview').clone();
+                                                                                        $instancetable.find('tbody tr').each(function() {
+                                                                                            var $newinstancetr = $("<tr><tr>");
+                                                                                            $(this).find('td').each(function(k, v) {
+                                                                                                $newinstancetr.append('<td>' + v + $(this).html() + '</td>');
+                                                                                            });
+                                                                                            $newinstancetbody.append($newinstancetr);
+                                                                                        });
 
-                                                                                                    console.log('polling again');
-                                                                                                    if ($launchResultContainer.data()['bs.modal'].isShown) {
-                                                                                                        pollLogs(lastTimestamp, 1000, false);
-                                                                                                    } else {
-                                                                                                        console.log('not polling again');
-                                                                                                    }
-                                                                                                });
-                                                                                            }, delay);
-                                                                                        }
-                                                                                        //alert('Instances ' + data.id.length);
-                                                                                        if(data.id.length <= 1)
-                                                                                            {
-                                                                                                //data = data[0];
-                                                                                                instanceId = data.id[0];
-                                                                                                //to be called only when there is one instance.
-                                                                                                pollLogs(lastTimestamp, 0, true);
-                                                                                                $.get('../instances/' + data.id[0], function(data) {
-                                                                                                    $('#tabInstanceStatus').hide();
-                                                                                                        addInstanceToDOM(data);
-                                                                                                    // serachBoxInInstance.updateData(data,"add",undefined);
-                                                                                                });
-                                                                                            }
-                                                                                        else{
-                                                                                            for(var j = 0; j < data.id.length;j++){
-                                                                                                $.get('../instances/' + data.id[j], function(data) {
-                                                                                                    $('#tabInstanceStatus').hide();
-                                                                                                        addInstanceToDOM(data);
-                                                                                                    // serachBoxInInstance.updateData(data,"add",undefined);
-                                                                                                });
-                                                                                                if(j >= data.id.length - 1){
-                                                                                                    $('.logsAreaBootstrap').hide();
+                                                                                        $instancetable.attr('id', 'dockerintsancestab');
+                                                                                        $('.dockerinstances').first().append($instancetable);
+
+                                                                                        $('#dockerintsancestab thead td').each(function(k, v) {
+                                                                                            if (k > 2)
+                                                                                                $(this).detach();
+                                                                                        });
+                                                                                        $('#dockerintsancestab thead').append('<td>Log Info</td>');
+                                                                                        $('#dockerintsancestab thead tr').append('<td class="hidden" title="Select to add a docker engine">Add Engine</td>');
+                                                                                        $('#dockerintsancestab tbody tr').each(function(k, v) {
+
+                                                                                            $(this).removeClass('rowcustomselected');
+                                                                                            $(this).click(function() {
+                                                                                                $('#dockerintsancestab tbody tr').removeClass('rowcustomselected');
+                                                                                                $(this).addClass('rowcustomselected');
+                                                                                            });
+                                                                                            $(this).find('td').each(function(k1, v1) {
+
+                                                                                                if (k1 > 2)
+                                                                                                    $(this).detach();
+                                                                                                //inserting a checkbox to select instance
+                                                                                                if (k1 == 0) {
+                                                                                                    $(this).prepend('<input type="checkbox" class="instanceselectedfordocker">&nbsp;');
                                                                                                 }
-                                                                                            }
+                                                                                            });
+                                                                                            $(this).append('<td  class=""><a data-original-title="MoreInfo" data-placement="top" rel="tooltip" href="javascript:void(0)" data-instanceid="' + $(this).attr('data-instanceid') + '" class="tableMoreInfo moreInfo dockerLeft" stlye=></a></td>');
+                                                                                            $(this).append('<td  class="hidden"><input type="checkbox"></td>');
+                                                                                            $(this).find('.moreInfo').click(instanceLogsHandler);
+                                                                                        });
+                                                                                        $('.launchdockerinstance').click(function() {
+                                                                                            $launchResultContainer.find('.modal-body').empty().append('<span><div class=\"modal-body\"><div><h3 class=\"alert alert-success\"><b>Congratulations!</b> Blueprint Launched Successfully !!!</h3>Instance Id : 5460690c6e5c99913e37d0e4<br>Instance Logs :- </div><div class=\"logsAreaBootstrap\"><div><div class=\"row\"><div style=\"color:white;\" class=\"col-lg-12 col-sm-12\"><span>Starting instance</span></div></div></div></div></div></span>');
+                                                                                            $('#myModalLabel').first().html('Launching Blueprint');
+
+                                                                                        });
+                                                                                        $('#dockerInstanceSelectionTitle').empty().append('Select Instances to pull  "' + dockerreponame + '" into');
+                                                                                        $launchDockerInstanceSelector.modal('show');
+                                                                                        $('#rootwizard').find("a[href*='tab1']").trigger('click'); //showing first tab.
+                                                                                        $('#dockerintsancestab thead').empty().append('<tr><td>Select Instance</td><td>Instance Name</td><td>IP Address</td><td>Log</td><td  class="hidden">Add Docker Engine</td></tr>');
+                                                                                        $('#dockerintsancestab').dataTable({
+                                                                                            "bPaginate": false
+                                                                                        });
+                                                                                        return;
+                                                                                    }
+
+
+
+                                                                                    if ($selectedItems.length) {
+                                                                                        var projectId = $($selectedItems.get(0)).attr('data-projectId');
+                                                                                        var envId = $($selectedItems.get(0)).attr('data-envId');
+                                                                                        var blueprintId = $($selectedItems.get(0)).attr('data-blueprintId');
+                                                                                        var version = $($selectedItems.get(0)).find('.blueprintVersionDropDown').val();
+                                                                                        var blueprintType = $($selectedItems.get(0)).attr('data-blueprintType');
+                                                                                        // alert('launching -> ' +'../blueprints/' + blueprintId + '/launch?version=' + version);
+                                                                                        function launchBP(stackName) {
+                                                                                            //   alert(JSON.stringify(stackName));
+                                                                                            var $launchResultContainer = $('#launchResultContainer');
+                                                                                            $launchResultContainer.find('.modal-body').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
+                                                                                            $launchResultContainer.find('.modal-title').html('Launching Blueprint');
+                                                                                            $launchResultContainer.modal('show');
+                                                                                            $.get('/blueprints/' + blueprintId + '/launch?version=' + version + '&envId=' + urlParams['envid'] + '&stackName=' + stackName, function(data) {
+
+
+                                                                                                var msgStr = 'Instance Id : ';
+                                                                                                if (blueprintType === 'aws_cf') {
+                                                                                                    msgStr = 'Stack Id : ' + data.stackId + '. You can view your stack in cloudformation tab';
+                                                                                                } else {
+                                                                                                    msgStr = 'Instance Id : ';
+
+                                                                                                    // for(var i = 0; i < data.id.length; i++)
+                                                                                                    msgStr += data.id.join(',');
+
+                                                                                                    msgStr += '<br/>You can monitor logs from the Launched Instances.';
+                                                                                                }
+
+                                                                                                var $msg = $('<div></div>').append('<h3 style="font-size:16px;" class=\"alert alert-success\">Your Selected Blueprint is being Launched, kindly check back in a while.</h3>').append(msgStr);
+
+                                                                                                $launchResultContainer.find('.modal-body').empty();
+                                                                                                $launchResultContainer.find('.modal-body').append($msg);
+                                                                                                if (blueprintType === 'aws_cf') {
+                                                                                                    $.get('/cloudformation/' + data.stackId, function(stack) {
+
+                                                                                                        addStackToDom(stack);
+
+                                                                                                    })
+                                                                                                    return;
+                                                                                                }
+
+
+                                                                                                var instanceId = data.id;
+                                                                                                var timeout;
+
+                                                                                                $launchResultContainer.on('hidden.bs.modal', function(e) {
+                                                                                                    $launchResultContainer.off('hidden.bs.modal');
+                                                                                                    if (timeout) {
+                                                                                                        clearTimeout(timeout);
+                                                                                                    }
+                                                                                                });
+                                                                                                $divBootstrapLogArea = $('<div></div>').addClass('logsAreaBootstrap');
+
+                                                                                                $launchResultContainer.find('.modal-body').append($divBootstrapLogArea);
+
+                                                                                                var lastTimestamp;
+
+                                                                                                function pollLogs(timestamp, delay, clearData) {
+                                                                                                    var url = '../instances/' + instanceId + '/logs';
+                                                                                                    if (timestamp) {
+                                                                                                        url = url + '?timestamp=' + timestamp;
+                                                                                                    }
+
+                                                                                                    timeout = setTimeout(function() {
+                                                                                                        $.get(url, function(data) {
+                                                                                                            var $modalBody = $divBootstrapLogArea;
+                                                                                                            if (clearData) {
+                                                                                                                $modalBody.empty();
+                                                                                                            }
+                                                                                                            var $table = $('<div></div>');
+
+                                                                                                            for (var i = 0; i < data.length; i++) {
+                                                                                                                var $rowDiv = $('<div class="row"></div>');
+                                                                                                                var timeString = new Date().setTime(data[i].timestamp);
+                                                                                                                var date = new Date(timeString).toLocaleString(); //converts to human readable strings
+                                                                                                                //$rowDiv.append($('<div class="col-lg-4 col-sm-4"></div>').append('<div>' + date + '</div>'));
+
+                                                                                                                if (data[i].err) {
+                                                                                                                    $rowDiv.append($('<div class="col-lg-12 col-sm-12" style="color:red;"></div>').append('<span>' + data[i].log + '</span>'));
+                                                                                                                } else {
+                                                                                                                    $rowDiv.append($('<div class="col-lg-12 col-sm-12 " style="color:white;"></div>').append('<span>' + data[i].log + '</span>'));
+                                                                                                                }
+
+                                                                                                                $table.append($rowDiv);
+                                                                                                            }
+
+
+                                                                                                            if (data.length) {
+                                                                                                                lastTimestamp = data[data.length - 1].timestamp;
+                                                                                                                console.log(lastTimestamp);
+                                                                                                                $modalBody.append($table);
+                                                                                                                $modalBody.scrollTop($modalBody[0].scrollHeight + 100);
+                                                                                                            }
+
+
+                                                                                                            console.log('polling again');
+                                                                                                            if ($launchResultContainer.data()['bs.modal'].isShown) {
+                                                                                                                pollLogs(lastTimestamp, 1000, false);
+                                                                                                            } else {
+                                                                                                                console.log('not polling again');
+                                                                                                            }
+                                                                                                        });
+                                                                                                    }, delay);
+                                                                                                }
+                                                                                                //alert('Instances ' + data.id.length);
+                                                                                                if (data.id.length <= 1) {
+                                                                                                    //data = data[0];
+                                                                                                    instanceId = data.id[0];
+                                                                                                    //to be called only when there is one instance.
+                                                                                                    pollLogs(lastTimestamp, 0, true);
+                                                                                                    $.get('../instances/' + data.id[0], function(data) {
+                                                                                                        $('#tabInstanceStatus').hide();
+                                                                                                        addInstanceToDOM(data);
+                                                                                                        // serachBoxInInstance.updateData(data,"add",undefined);
+                                                                                                    });
+                                                                                                } else {
+                                                                                                    for (var j = 0; j < data.id.length; j++) {
+                                                                                                        $.get('../instances/' + data.id[j], function(data) {
+                                                                                                            $('#tabInstanceStatus').hide();
+                                                                                                            addInstanceToDOM(data);
+                                                                                                            // serachBoxInInstance.updateData(data,"add",undefined);
+                                                                                                        });
+                                                                                                        if (j >= data.id.length - 1) {
+                                                                                                            $('.logsAreaBootstrap').hide();
+                                                                                                        }
+                                                                                                    }
+                                                                                                }
+
+
+
+
+
+                                                                                            }).error(function() {
+                                                                                                $launchResultContainer.find('.modal-body').empty().append('<span>Oops!!! Something went wrong. Please try again later</span>');
+                                                                                            });
                                                                                         }
-                                                                                        
 
-                                                                                        
+                                                                                        if (blueprintType === 'aws_cf') {
+                                                                                            jQuery.validator.addMethod("noSpace", function(value, element) {
+                                                                                                return value.indexOf(" ") < 0 && value != "";
+                                                                                            }, "No space allowed and the user can't leave it empty");
+                                                                                            var $modalCftContainer = $('#cftContainer');
+                                                                                            $('#cftContainer').modal('show');
+                                                                                            var validator = $("#cftForm").validate({
+                                                                                                rules: {
+                                                                                                    cftInput: {
+                                                                                                        noSpace: true,
+                                                                                                        alphanumeric: true
+                                                                                                    }
+                                                                                                }
+                                                                                            });
+                                                                                            $('a.launchBtn[type="reset"]').on('click', function() {
 
+                                                                                                validator.resetForm();
+                                                                                            });
+                                                                                            $("#cftForm").submit(function(e) {
+                                                                                                var stackName = $('#cftInput').val();
+                                                                                                var isValid = $('#cftForm').valid();
+                                                                                                if (!isValid) {
+                                                                                                    e.preventDefault();
+                                                                                                    return false;
+                                                                                                } else {
 
-                                                                                    }).error(function() {
-                                                                                        $launchResultContainer.find('.modal-body').empty().append('<span>Oops!!! Something went wrong. Please try again later</span>');
-                                                                                    });
-                                                                                }
+                                                                                                    launchBP(stackName);
+                                                                                                    $('#cftContainer').modal('hide');
+                                                                                                    e.preventDefault();
 
-                                                                                if (blueprintType === 'aws_cf') {
-                                                                                jQuery.validator.addMethod("noSpace", function(value, element) {
-                                                                                    return value.indexOf(" ") < 0 && value != "";
-                                                                                }, "No space allowed and the user can't leave it empty");
-                                                                                    var $modalCftContainer = $('#cftContainer');
-                                                                                    $('#cftContainer').modal('show');
-                                                                                  var validator =  $("#cftForm").validate({
-                                                                                        rules: {
-                                                                                            cftInput: {
-                                                                                                noSpace: true,
-                                                                                                alphanumeric:true
-                                                                                            }
+                                                                                                    return false;
+                                                                                                }
+
+                                                                                            });
+
+                                                                                            /*$('.bootbox-form input').append('name', 'nospace');    
+                                                                                                                                            $('.bootbox-form').validate();
+                                                                                                                                            bootbox.prompt("Please Enter Unique Stack Name?", function(result) {
+
+                                                                                                                                                if (result) {
+                                                                                                                                                    launchBP(result);
+                                                                                                                                                }
+                                                                                                                                            });
+                                                        */
+                                                                                        } else {
+                                                                                            launchBP();
                                                                                         }
-                                                                                    });
-                                                                                    $('a.launchBtn[type="reset"]').on('click', function() {
-                                                                                        
-                                                                                        validator.resetForm();
-                                                                                    });
-                                                                                    $("#cftForm").submit(function(e){
-                                                                                        var stackName = $('#cftInput').val();
-                                                                                        var isValid= $('#cftForm').valid();
-                                                                                        if(!isValid){
-                                                                                            e.preventDefault();
-                                                                                            return false;
-                                                                                        }else{
-                                                                                       
-                                                                                            launchBP(stackName);
-                                                                                            $('#cftContainer').modal('hide');
-                                                                                            e.preventDefault();
-                                                                                       
-                                                                                            return false;
-                                                                                        }
-
-                                                                                    });
-
-                                                                                /*$('.bootbox-form input').append('name', 'nospace');    
-                                                                                    $('.bootbox-form').validate();
-                                                                                    bootbox.prompt("Please Enter Unique Stack Name?", function(result) {
-
-                                                                                        if (result) {
-                                                                                            launchBP(result);
-                                                                                        }
-                                                                                    });
-*/
-                                                                                }else {
-                                                                                    launchBP();
+                                                                                    }
                                                                                 }
                                                                             }
                                                                         });
+                                                                    });
 
-                                                                    }
+                                                                    }// launch ends here..
 
                                                                     //Updating blueprints
                                                                     function bindClick_bluePrintUpdate() {
@@ -3156,8 +3149,11 @@
                                                                     //Updating the blueprint Runlist
                                                                     function bindClick_updateInstanceRunList() {
                                                                         // Blueprint runtlist updation
-                                                                        $('.btnUpdateInstanceRunlist').click(function(e) {
-                                                                            bootbox.confirm("Are you sure you want to Update the runlist?", function(result) {
+                                                                    $('.btnUpdateInstanceRunlist').click(function(e) {
+                                                                        bootbox.confirm({
+                                                                            message: "Are you sure you want to Update the runlist? This will run all the cookbooks available in the Runlist",
+                                                                            title: "Confirmation",
+                                                                            callback: function(result) {
                                                                                 if (!result) {
 
                                                                                     return;
@@ -3212,10 +3208,11 @@
                                                                                     if (jxObj.status == '401')
                                                                                         bootbox.alert('Inssuficient permission to perform operation.');
                                                                                 });
-                                                                            });
-
-
+                                                                            }
                                                                         });
+
+
+                                                                    });
 
                                                                         $('.editChefClientRunAttribBtn').click(function(e) {
                                                                             var $chefRunModalContainer = $('#chefRunModalContainer');
@@ -3991,39 +3988,71 @@
                                                                                     var taskId = $(this).data('taskId');
                                                                                     
                                                                                  //alert(JSON.stringify(data[i]));
+
                                                                                 if (data[i].taskType === 'jenkins'|| data[i].taskType==='chef') {
                                                                                     //checking for parameterized condition..
                                                                                     if(data[i].taskConfig.parameterized){
+                                                                                    
+                                                                                    var $modalForSelect = $('#modalForSelect');
+                                                                                    var $tableBody = $('#paramTableList').empty();
                                                                                     for (var a = 0; a < data[i].taskConfig.parameterized.length; a++) {
-                                                                                        if (data[i].taskConfig.parameterized[a].parameterName === "Choice") {
-
-
+                                                                                        if (data[i].taskConfig.parameterized[a].parameterName === "Choice" || data[i].taskConfig.parameterized[a].parameterName === "String" || data[i].taskConfig.parameterized[a].parameterName === "Boolean") {
+                                                                                           // alert(data[i].taskConfig.parameterized.length);
+                                                                                          // alert('hisdhidsf');
+                                                                                           $modalForSelect.modal('show');
+                                                                                           var name = data[i].taskConfig.parameterized[a].name;
+                                                                                           
+                                                                                           var $tr = $('<tr/>');
+                                                                                           var $tdName = $('<td></td>');
+                                                                                           var $tdValue = $('<td id="selectValue"></td>');
+                                                                                           var selectForparam = $('<select style="width:60%;"></select>').attr('key',name);
+                                                                                           var nameForParam = data[i].taskConfig.parameterized[a].parameterName;
+                                                                                            if (nameForParam === 'Choice') {
+                                                                                                var label = $('<label style="font-size:14px;">Are you sure you want to execute? Choose the Parameter for-&nbsp <b>' + name + '<b></label>');
+                                                                                            } else {
+                                                                                                var label = $('<label style="font-size:14px;">Are you sure you want to execute the Job for Parameter &nbsp;- <b>' + name + '<b></label>');
+                                                                                            }
+                                                                                            $tdValue.append(selectForparam);
+                                                                                            $tdName.append(name);
+                                                                                            $tr.append($tdName).append($tdValue);
+                                                                                            $tableBody.append($tr);
+                                                                                            //$modalForSelect.find('.modal-body').append(label).append('<br/>');
+                                                                                          //  $modalForSelect.find('.modal-body').append($tableBody);  
+                                                                                            
+                                                                                            
                                                                                             if (data[i].taskConfig.parameterized[a].defaultValue) {
+                                                                                                for (var k = 0; k < data[i].taskConfig.parameterized[a].defaultValue.length; k++) {
+                                                                                                    
 
+                                                                                                    var defaultValueCheck = data[i].taskConfig.parameterized[a].defaultValue;
+                                                                                                    var str;
 
-                                                                                                var $modalForSelect = $('#modalForSelect');
-                                                                                                $modalForSelect.modal('show');
-                                                                                                var name = data[i].taskConfig.parameterized[a].name;
-                                                                                                $modalForSelect.find('.modal-body label').html('Are you sure you want to execute? Choose the Parameter for-&nbsp;<b>' + name + '</b>');
-                                                                                                var $defaultValue = $('#defaultValue').val();
-                                                                                                //var defaultName.append(data[i].taskConfig.parameterized[a].name);
-                                                                                                //alert(JSON.stringify(defaultName));
-                                                                                                var defaultValueCheck = data[i].taskConfig.parameterized[a].defaultValue;
-                                                                                                var str;
-                                                                                                for (var b = 0; b < defaultValueCheck.length; b++) {
-                                                                                                    str = '<option>' + defaultValueCheck[b] + '</option>';
+                                                                                                    str = '<option>' + defaultValueCheck[k] + '</option>';
 
-                                                                                                    $('#defaultValue').append(str).select2();
-                                                                                                }
+                                                                                                    selectForparam.append(str).select2();
+
+                                                                                                } //for loop for default value ends here..
+                                                                                                
                                                                                                 $('#executeJob').submit(function(e) {
-
+                                                                                                    
                                                                                                     $modalForSelect.modal('hide');
-                                                                                                    executeJob(defaultValue);
+                                                                                                    executeJob();
                                                                                                     return false;
                                                                                                 });
-
                                                                                             } //if ends here for default value..
-                                                                                            function executeJob(defaultValue) {
+                                                                                            
+                                                                                            function executeJob() {
+                                                                                                var $selects = $modalForSelect.find('.modal-body select');
+                                                                                                //alert($select);
+                                                                                                var reqBody={};
+                                                                                                
+                                                                                                for(var q=0;q<$selects.length;q++){
+                                                                                                    var select = $selects[q];
+                                                                                                    var $select = $(select);
+                                                                                                    var name = $select.attr('key');
+                                                                                                    var value= $select.val();
+                                                                                                    reqBody[name] = value;
+                                                                                                }
 
                                                                                                 var $taskExecuteTabsHeaderContainer = $('#taskExecuteTabsHeader').empty();
                                                                                                 var $taskExecuteTabsContent = $('#taskExecuteTabsContent').empty();
@@ -4033,19 +4062,12 @@
                                                                                                 $modal.find('.outputArea').hide();
                                                                                                 $modal.modal('show');
                                                                                                 var timestampToPoll = new Date().getTime();
-                                                                                                var requestBody = {
-                                                                                                    "env": "cat3",
-                                                                                                    "os": "windows",
-                                                                                                    "author":"Gboinda Das"
-                                                                                                };
-                                                                                                var reqBody = {};
-                                                                                                var defaultValue = $('#defaultValue').val();
-                                                                                                reqBody = defaultValue;
+                                                                                                
                                                                                                 $.post('../tasks/' + taskId + '/run', {
                                                                                                     choiceParam: reqBody
                                                                                                 }, function(data) {
-                                                                                                    /*alert(reqBody);
-                                                                                                                                                                                                                                                                                                                                                                                                    alert(JSON.stringify(data));*/
+                                                                                                   // alert(reqBody);
+                                                                                                  
                                                                                                     var date = new Date().setTime(data.timestamp);
                                                                                                     var taskTimestamp = new Date(date).toLocaleString(); //converts to human readable strings
                                                                                                     $('tr[data-taskId="' + taskId + '"] .taskrunTimestamp').html(taskTimestamp);
@@ -4073,8 +4095,10 @@
                                                                                                 });
                                                                                             } //function ends here..
                                                                                         } //if loop for choice ends here..
-                                                                                        else {
-                                                                                            if (data[i].taskConfig.parameterized.length >= 1) {
+                                                                                        /*else {
+
+                                                                                            //condition for boolean and string..
+                                                                                            //if (data[i].taskConfig.parameterized.length >= 1) {
                                                                                                 //  alert(data[i].taskConfig.parameterized.length);
                                                                                                 bootbox.confirm({
                                                                                                     message: "Are you sure you want to execute this Job?",
@@ -4121,9 +4145,9 @@
                                                                                                         } //result ends here..
                                                                                                     }
                                                                                                 });
-                                                                                            }
+                                                                                        //    }
                                                                                             break;
-                                                                                        }
+                                                                                        }*/
                                                                                     } //for ends here..
                                                                                     //new else starts here..
                                                                                 } else{

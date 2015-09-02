@@ -669,8 +669,8 @@
              </div>
       </div> 
       <div class="modal-footer">
+        <a type="button" class="btn btn-default" data-dismiss="modal">Close</a>
         <button type="button" class="btn btn-default btn-primary btnUpdateInstanceRunlist">Update</button>
-        <button type="button" class="btn btn-default btn-primary" data-dismiss="modal">Close</button>
       </div>
     </div>
   </div>
@@ -2125,7 +2125,10 @@ $.get('../instances/' + urlParams.id, function(data) {
         if ($(this).hasClass('isStopedInstance')) {
             return false;
         }
-        bootbox.confirm("Update runlist?", function(result) {
+        bootbox.confirm({
+          message:"Are you sure you want to Update the runlist? This will run all the cookbooks available in the Runlist", 
+          title:"Confirmation",
+          callback: function(result) {
             if (!result) {
                 return;
             }
@@ -2190,8 +2193,9 @@ $.get('../instances/' + urlParams.id, function(data) {
                 }
             });
 
-        });
+        }
     });
+});
 
     $('.editChefClientRunAttribBtn').click(function(e) {
         var $chefRunModalContainer = $('#controlPanelChefRunModalContainer');
