@@ -239,6 +239,7 @@ var Puppet = function(settings) {
                     var scp = new SCP(sshOptions);
                     scp.upload(__dirname + '/../cookbooks.tar', '/tmp', function(err) {
                         if (err) {
+                            console.log(err);
                             callback({
                                 message: "Unable to upload cookbooks onto the node",
                                 err: err
@@ -356,6 +357,7 @@ var Puppet = function(settings) {
                 callback(err, null);
                 return;
             }
+            console.log('envPath  == >' + puppetConfig.environmentpath);
             runSSHCmdOnMaster('ls ' + puppetConfig.environmentpath, function(err, retCode) {
                 if (err) {
                     callback(err, null);
