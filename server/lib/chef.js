@@ -654,7 +654,9 @@ var Chef = function(settings) {
         }
 
     };
-
+    this.runClient = function(options, callback, callbackOnStdOut, callbackOnStdErr) {
+        this.runChefClient(options, callback, callbackOnStdOut, callbackOnStdErr);
+    };
     this.runKnifeWinrmCmd = function(cmd, options, callback, callbackOnStdOut, callbackOnStdErr) {
         var processOptions = {
             cwd: settings.userChefRepoLocation,

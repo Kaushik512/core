@@ -529,6 +529,36 @@ var Puppet = function(settings) {
         getPuppetConfig(callback);
     };
 
+    this.runClient = function(options, callback, onStdOut, onStdErr) {
+        console.log('running client');
+        var sshOptions = {
+            username: options.username,
+            host: options.host,
+            port: 22,
+        }
+        if (options.pemFileLocation) {
+            sshOptions.privateKey = options.pemFileLocation;
+        } else {
+            sshOptions.password = options.password;
+        }
+        console.log(sshOptions);
+
+        runSSHCmdOnAgent(sshOptions, 'puppet agent -t', function(err, retCode) {
+            if (err) {
+                callback({
+                    message: "Unable to run puppet client on the node",
+                    err: err
+                }, null);
+                return;
+            }
+            callback(null, retCode);
+        }, function(stdOut) {
+            onStdOut(stdOut);
+        }, function(stdErr) {
+            onStdErr(stdErr);
+        });
+    }
+
 };
 
 module.exports = Puppet;
