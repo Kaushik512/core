@@ -8,6 +8,9 @@ var util = require('util');
 var YAML = require('yamljs');
 var SCP = require('_pr/lib/utils/scp');
 var Process = require("_pr/lib/utils/process");
+var Cryptography = require('_pr/lib/utils/cryptography');
+var config = require('_pr/config');
+
 
 var Puppet = function(settings) {
 
@@ -21,7 +24,11 @@ var Puppet = function(settings) {
     if (settings.pemFileLocation) {
         sshOptions.privateKey = settings.pemFileLocation;
     } else {
-        sshOptions.password = settings.password;
+        var cryptoConfig = config.cryptoSettings;
+        var cryptography = new Cryptography(cryptoConfig.algorithm, cryptoConfig.password);
+        sshOptions.password = cryptography.decryptText(settings.password, cryptoConfig.decryptionEncoding, cryptoConfig.encryptionEncoding);
+        settings.password = sshOptions.password;
+        console.log(settings.password);
     }
 
     function runSSHCmd(sshOptions, cmds, onComplete, onStdOut, onStdErr) {
@@ -127,7 +134,7 @@ var Puppet = function(settings) {
             }
         }
         // getting hostname of puppet master
-       changePuppetServerPemFilePerm(function(err) {
+        changePuppetServerPemFilePerm(function(err) {
             if (err) {
                 callback({
                     message: "Unable to change permission of pem file of puppet-master.",
