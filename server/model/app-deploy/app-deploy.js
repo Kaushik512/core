@@ -28,7 +28,8 @@ var AppDeploySchema = new Schema({
     envId: String,
     description: String,
     applicationType: String,
-    containerId: String
+    containerId: String,
+    hostName: String 
 
 });
 
