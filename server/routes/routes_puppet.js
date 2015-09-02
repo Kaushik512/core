@@ -112,7 +112,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
     });
 
 
-    app.get('/puppet/nodes/:nodeName', function(req, res) {
+    app.get('/puppet/:puppetServerId/nodes/:nodeName', function(req, res) {
         masterUtil.getCongifMgmtsById(req.params.puppetServerId, function(err, puppetData) {
             if (err) {
                 res.send(500, errorResponses.db.error);
