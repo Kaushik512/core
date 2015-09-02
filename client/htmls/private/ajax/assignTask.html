@@ -110,7 +110,7 @@
                                                    <div class="col-lg-6 col-md-6" style="margin-top:5px;">
                                                       <label>
                                                       <i style="color:#40baf1;font-size:16px;" class="ace-icon fa fa-list-ul"></i>   
-                                                      Edit Runlist
+                                                      Add Runlist
                                                       </label>
                                                       <a href="#chefRunlistModal" data-backdrop="false" data-toggle="modal" style="cursor:pointer;"> <img src="img/add.png" style="float:right;margin-top:6px;" class="addList" rel="tooltip" data-placement="top" title="Edit Runlist" /></a>
                                                       <div style="height:146px;overflow-y:auto;" id="dbNameTable_wrapper" class="dataTables_wrapper no-footer">
@@ -210,13 +210,13 @@
                                                    </div>
                                                    <!--div for paremeters-->
                                                    <div class="col-lg-12" style="margin-top:20px;">
-                                                      <h4 style="margin-top:12px;margin-left:8px;">This build is parameterized<!-- <input style="margin-left:5px;" id="addParameters" type="checkbox" name="addParams" value="This build is parameterized"/> -->&nbsp;&nbsp;<input type="radio" id="addParameters" name="paramCheck" value="true" /> Yes
+                                                      <h4 style="margin-top:12px;margin-left:8px;">This Job is parameterized<!-- <input style="margin-left:5px;" id="addParameters" type="checkbox" name="addParams" value="This build is parameterized"/> -->&nbsp;&nbsp;<input type="radio" id="addParameters" name="paramCheck" value="true" /> Yes
                                                       <input style="margin-left:15px;" type="radio" id="addParametersFalse" name="paramCheck" value="false" checked="checked" /> No
                                                    </h4>
                                                    </div> 
                                                    <!--div for paremeter checkbox ends here-->
                                                    <!--dropdown for paremeters-->
-                                                   <div class="col-lg-12 col-md-12" style="margin-bottom:16px;border:1px dotted black;margin-top:12px;">
+                                                   <div class="col-lg-12 col-md-12" style="margin-bottom:16px;margin-top:12px;">
                                                       <div class="col-lg-12 col-md-12 addParameters hidden" style="margin-top:5px;margin-bottom:26px;">
                                                          <a href="#parameterModal" id="imageLinkParam" data-backdrop="false" type="reset" data-toggle="modal" style="cursor:pointer;"> <img src="img/add.png" style="float:right;" class="addListParam" rel="tooltip" data-placement="top" title="Add Parameters" /></a>
                                                          <div style="height:auto;overflow-y:auto;" id="dbNameTable_wrapper" class="dataTables_wrapper no-footer">
@@ -352,7 +352,7 @@
                      <tbody>
                         <tr>
                            <td class="booleanParam"><label for="booleanName">Name:<span style="color:red">*</span></label></td>
-                           <td><input id="booleanName" maxlength="7" type="text" class="form-control" name="booleanName"></td>
+                           <td><input id="booleanName" type="text" class="form-control" name="booleanName"></td>
                         </tr>
                         <tr>
                            <td class="booleanParam">Default Value:<span style="color:red">*</span></td>
@@ -379,7 +379,7 @@
                      <tbody>
                         <tr>
                            <td class="stringParam"><label for="stringName">Name:<span style="color:red">*</span></label></td>
-                           <td><input id="stringName" maxlength="7" type="text" class="form-control" name="stringName"></td>
+                           <td><input id="stringName" type="text" class="form-control" name="stringName"></td>
                         </tr>
                         <tr>
                            <td class="stringParam"><label for="stringValue">Default Value:<span style="color:red">*</span></label></td>
@@ -406,7 +406,7 @@
                      <tbody>
                         <tr>
                            <td class="choiceParam"><label for="choiceName">Name:<span style="color:red">*</span></label></td>
-                           <td><input id="choiceName" maxlength="7" type="text" class="form-control" name="choiceName"></td>
+                           <td><input id="choiceName"  type="text" class="form-control" name="choiceName"></td>
                         </tr>
                         <tr>
                            <td class="choiceParam"><label for="choiceValue">Choices:<span style="color:red">*</span></label></td>
@@ -638,14 +638,15 @@
          <div class="widget-toolbox clearfix">
          <div class="btn-group pull-right">
          <label id="spinnerForSave" class="hidden"><img  style="margin-left:5px;margin-right:25px;" src="img/select2-spinner.gif"></label>
-         <button type="submit" class="btn btn-primary btnSaveTask btn-mini" style="margin-right:11px;">
+         <a class="btn btn-default btn-mini btnBack" style="margin-right:11px;" onclick="window.history.back();" id="btncancel">
+         <i class="ace-icon fa fa-times bigger-110"></i>
+         Cancel
+         </a>
+         <button type="submit" class="btn btn-primary btnSaveTask btn-mini">
          <i class="ace-icon fa fa-check bigger-110"></i>
          Save
          </button>
-         <a class="btn btn-primary btn-mini btnBack" onclick="window.history.back();" id="btncancel">
-         <i class="ace-icon fa fa-undo bigger-110"></i>
-         Cancel
-         </a>
+         
          </div>
          </div>
          </div>
@@ -1090,7 +1091,10 @@ $(document).ready(function() {
             var $saveSpinner = $('#spinnerForSave');
             var taskName = $('#chefTaskName').val();
             if (!taskName) {
-                alert('Please enter a Task-Name');
+                bootbox.alert({
+                  message:'Please enter a Task-Name',
+                  title:"Error"
+                  });
                 return false;
             }
             taskData.name = taskName;
@@ -1109,7 +1113,7 @@ $(document).ready(function() {
                 }
             });
             if (!nodesList.length) {
-                alert('Please choose nodes');
+                bootbox.alert({message:'Please choose nodes',title:"Error"});
                 return false;
             }
 
@@ -1143,19 +1147,19 @@ $(document).ready(function() {
             
             var taskName = $('#jenkinsTaskName').val();
             if (!taskName) {
-                alert('Please enter a Task-Name');
+                bootbox.alert({message:'Please enter a Task-Name',title:'Error'});
                 return false;
             }
             taskData.name = taskName;
             var jenkinsServerId = $('#jenkinsServerList').val();
             if (!jenkinsServerId) {
-                alert('Please Choose a Jenkins Server');
+                bootbox.alert({message:'Please Choose a Jenkins Server',title:'Error'});
                 return false;
             }
 
             var jenkinsJobName = $('#jobListJenkins').val();
             if (!jenkinsJobName) {
-                alert('Please Choose a Jenkins Job');
+                bootbox.alert({message:'Please Choose a Jenkins Job',title:'Error'});
                 return false;
             }
             var jenkinsJobDescription = $('textarea#jenkinsDescription').val();

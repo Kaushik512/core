@@ -28,7 +28,8 @@ var AppDeploySchema = new Schema({
     envId: String,
     description: String,
     applicationType: String,
-    containerId: String
+    containerId: String,
+    hostName: String 
 
 });
 
@@ -138,7 +139,7 @@ AppDeploySchema.statics.getAppDeployByNameAndEnvId = function(appName, envId, ca
     });
 };
 
-// Update all AppDeploy informations.
+// Update all AppDeploy informations w.r.t name.
 AppDeploySchema.statics.updateAppDeployByName = function(appName, appDeployData, callback) {
 
     logger.debug("Going to Update AppDeploy data: ", appName);
