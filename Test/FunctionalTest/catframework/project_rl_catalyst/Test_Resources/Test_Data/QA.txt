@@ -27,7 +27,12 @@ ${ENVIRONMENTSERVER}                http://d4d.relevancelab.com:3001
 
              
 
- 
+#DataBag
+${DATABAG NAME}        DataRL
+${INSTANCE ID}         R1267
+${INSTANCE ID1}        S4567
+${DUPLICATE DATABAGMSG}         Data Bag already exist on Chef.  
+
 
 
 

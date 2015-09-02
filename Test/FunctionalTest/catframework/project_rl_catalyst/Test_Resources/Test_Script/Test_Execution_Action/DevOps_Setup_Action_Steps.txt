@@ -25,6 +25,100 @@ Testing All New Config Management Conditions
     User Name left empty  ${VaildEmptyUsernameErrMsg}
 
 
+
+
+Catalyst Create New Data Bag
+    Clicks on Settings
+    Clicks on DevOps Setup menu
+    Clicks on Config Management menu
+    Sleep    2s
+    Clicks on the User Creted Chef Server
+    Clicks on New Button of DataBag
+    Sleep    2s
+    Enters the DataBag Name
+    Clicks on Save Button of DataBag
+    Sleep    3s
+    Verify the Data Bag is Created
+    Sleep    1s
+    Clicks on Add New Item Button
+    Enters the Instance List ID
+    Clicks on Save Button List
+    Sleep    2s
+    Clicks on Add New Item Button
+    Enters the another Instance List ID
+    Clicks on Save Button List
+    Clicks on the Item1 User Created
+    
+
+Catalyst Duplicate DataBag setup
+    Clicks on Settings
+    Clicks on DevOps Setup menu
+    Clicks on Config Management menu
+    Sleep    2s
+    Clicks on the User Creted Chef Server
+    Clicks on New Button of DataBag
+    Sleep    2s
+    Enters the DataBag Name
+    Clicks on Save Button of DataBag
+    Sleep    3s
+    Verfiy the Duplicate Message of DataBag
+    Delete the DataBag Created
+
+
+
+Verfiy the Duplicate Message of DataBag
+    Element Should Contain    css=div.bootbox-body    ${DUPLICATE DATABAGMSG}
+    Sleep    2s
+    Click Element    xpath=.//*[text()='OK']
+    Sleep    2s
+    Click Element    xpath=.//*[text()='Close']
+    Sleep    1s
+
+
+Clicks on Save Button List
+    Click Element    id=saveBTNList
+
+Verify the Data Bag is Created
+    Element Should Contain    xpath=.//*[@id='dbNameTableTest']/tr/td/a[text()='${DATABAG NAME}']    ${DATABAG NAME}  
+
+
+Delete the DataBag Created
+    Click Element    xpath=.//*[@id='dbNameTableTest']/tr/td/a[text()='${DATABAG NAME}']/../div/button/i
+    Sleep    1s
+    Click Element    xpath=.//*[text()='OK']
+    Sleep    1s
+    Page Should Not Contain    ${DATABAG NAME}
+
+Clicks on the Item1 User Created
+    Click Element    xpath=.//*[@id='listNameTable']/tbody/tr/td/a[text()='${INSTANCE ID}']
+    Sleep    2s
+    Click Element    xpath=.//*[@id='listNameTable']/tbody/tr/td/a[text()='${INSTANCE ID1}']
+    Sleep    2s
+
+
+
+Enters the another Instance List ID
+    Input Text    id=instanceListID    ${INSTANCE ID1}
+
+Enters the Instance List ID
+    Input Text    id=instanceListID    ${INSTANCE ID}
+
+Clicks on Add New Item Button
+    Click Element    xpath=.//*[@title='Add New Item']
+
+Clicks on Save Button of DataBag
+    Click Element    id=saveBTN
+
+Enters the DataBag Name
+    Input Text    id=instanceDataName    ${DATABAG NAME}
+
+Clicks on the User Creted Chef Server
+    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${CONFIG MANAGEMENT NAME}']/../td[5]/div/a[3]
+
+Clicks on New Button of DataBag
+    Click Element    xpath=.//*[@title='Add New Data Bag']
+
+
 Create New Config Management
     Clicks on Settings
     Clicks on DevOps Setup menu
