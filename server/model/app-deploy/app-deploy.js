@@ -25,7 +25,10 @@ var AppDeploySchema = new Schema({
     orgId: String,
     bgId: String,
     projectId: String,
-    envId: String
+    envId: String,
+    description: String,
+    applicationType: String,
+    containerId: String
 
 });
 
@@ -131,6 +134,58 @@ AppDeploySchema.statics.getAppDeployByNameAndEnvId = function(appName, envId, ca
         if (appDeploys) {
             logger.debug("Got AppDeploy: ", JSON.stringify(appDeploys));
             callback(null, appDeploys);
+        }
+    });
+};
+
+// Update all AppDeploy informations.
+AppDeploySchema.statics.updateAppDeployByName = function(appName, appDeployData, callback) {
+
+    logger.debug("Going to Update AppDeploy data: ", appName);
+    var setData = {};
+    var keys = Object.keys(appDeployData);
+    for (var i = 0; i < keys.length; i++) {
+        setData[keys[i]] = appDeployData[keys[i]];
+    }
+    logger.debug("Whole data: ", JSON.stringify(setData));
+    var that = this;
+    this.update({
+        applicationName: appName
+    }, {
+        $set: setData
+    }, {
+        upsert: false,
+        multi: true
+    }, function(err, appDeploy) {
+        if (err) {
+            logger.debug("Got error while creating AppDeploy: ", err);
+            callback(err, null);
+        }
+        if (appDeploy) {
+            that.find({
+                applicationName: appName
+            },function(err,list){
+                if(err){
+                    logger.debug("Failed to fetch appDeploy",err);
+                }
+                callback(null,list);
+            });
+        }
+    });
+};
+
+// Get AppDeploy by name.
+AppDeploySchema.statics.getAppDeployByName = function(appName, callback) {
+    this.find({
+        applicationName: appName
+    }, function(err, appDeploy) {
+        if (err) {
+            logger.debug("Got error while fetching AppDeploy: ", err);
+            callback(err, null);
+        }
+        if (appDeploy) {
+            logger.debug("Got AppDeploy: ", JSON.stringify(appDeploy[0]));
+            callback(null, appDeploy[0]);
         }
     });
 };

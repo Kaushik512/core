@@ -46,7 +46,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
     });
 
     // Update AppDeploy
-    app.post('/app/deploy/:appId/update', function(req, res) {
+    app.post('/app/deploy/:appId', function(req, res) {
         logger.debug("Got appDeploy data: ", JSON.stringify(req.body.appDeployData));
         AppDeploy.getAppDeployById(req.params.appId, function(err, appDeploy) {
             if (err) {
@@ -125,6 +125,28 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 res.send([]);
                 return;
             }
+        });
+    });
+
+    // Update AppDeploy by Name
+    app.post('/app/deploy/:appName/update', function(req, res) {
+        logger.debug("Got appDeploy data: ", JSON.stringify(req.body));
+        AppDeploy.getAppDeployByName(req.params.appName, function(err, appDeploy) {
+            if (err) {
+                res.send(500, "errorResponses.db.error");
+                return;
+            }
+            if (!appDeploy) {
+                res.send(404, "Record not found for: "+req.params.appName);
+                return;
+            }
+            AppDeploy.updateAppDeployByName(req.params.appName, req.body.appDeployData, function(err, appDeployes) {
+                if (err) {
+                    res.send(500, errorResponses.db.error);
+                    return;
+                }
+                res.send(200, appDeployes);
+            });
         });
     });
 };

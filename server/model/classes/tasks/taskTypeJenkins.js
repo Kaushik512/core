@@ -19,14 +19,16 @@ var jenkinsTaskSchema = taskTypeSchema.extend({
     parameterized: [{
         parameterName: String,
         name: String,
-        defaultValue: String,
+        defaultValue: [String],
         description: String
     }]
 });
 
 // Instance Method :- run task
-jenkinsTaskSchema.methods.execute = function(userName, baseUrl, onExecute, onComplete) {
+jenkinsTaskSchema.methods.execute = function(userName, baseUrl, choiceParam, onExecute, onComplete) {
+    logger.debug("Choice Param in:::  anshul ",choiceParam);
     var self = this;
+    //this.parameterized.name = choiceParam;
     configmgmtDao.getJenkinsDataFromId(this.jenkinsServerId, function(err, jenkinsData) {
         if (err) {
             logger.error('jenkins list fetch error', err);
@@ -66,8 +68,13 @@ jenkinsTaskSchema.methods.execute = function(userName, baseUrl, onExecute, onCom
                         var params = self.parameterized;
                         var param = {};
                         if (params.length > 0) {
-                            for (var i = 0; i < params.length; i++) {
-                                param[params[i].name] = params[i].defaultValue;
+                            logger.debug("++++++++++++++++++++++++++++++++++ in: ",choiceParam);
+                            if (choiceParam) {
+                                param = choiceParam;
+                            } else {
+                                for (var i = 0; i < params.length; i++) {
+                                    param[params[i].name] = params[i].defaultValue;
+                                }
                             }
                         } else {
                             onExecute({
@@ -75,10 +82,16 @@ jenkinsTaskSchema.methods.execute = function(userName, baseUrl, onExecute, onCom
                             });
                         }
                         logger.debug("param object>>>>>>>>>>> ", JSON.stringify(param));
-                        var dummyObj = {
+                        /*var dummyObj = {
                             "Catalyst_Setup": "testValGobinda",
                             "mybool": false
                         };
+                         var choiceParams = {
+                             "env": "cat3",
+                             "os": "windows",
+                             "author": "Gobinda Das"
+                         };*/
+                        
                         jenkins.buildJobWithParams(self.jobName, param, function(err, buildRes) {
                             if (err) {
                                 logger.error(err);

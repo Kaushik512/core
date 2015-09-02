@@ -20,11 +20,11 @@ Resource           ${CATALYST ACTION}/New_Environment_Creation.txt
 *** Keywords ***
 Catalyst Launch of Cloud Formation Blueprint
     Clicks on Workzone Button
-	Sleep    2s
-	Clicks on Cloud FormationBlueprint Section
-	Select Your Cloud Blueprint
-	Clicks on Launch of Cloud Blueprint
-	Enters the unique stack name
+    Sleep    2s
+    Clicks on Cloud FormationBlueprint Section
+    Select Your Cloud Blueprint
+    Clicks on Launch of Cloud Blueprint
+    Enters the unique stack name
     Clicks on Submit button in Enter a Unique Stack Name window
     Clicks on close button in launching blueprint window
     Navigates to Cloud Formation tab

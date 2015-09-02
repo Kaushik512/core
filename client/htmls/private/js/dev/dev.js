@@ -718,7 +718,6 @@
                                                                                 "aoColumns": [{
                                                                                         "bSortable": false
                                                                                     },
-                                                                                    null,
                                                                                     null, {
                                                                                         "bSortable": false
                                                                                     }, {
