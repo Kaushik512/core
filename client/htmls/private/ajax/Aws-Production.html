@@ -3335,26 +3335,28 @@
                                                     data = JSON.parse(JSON.stringify(data));
 
                                                     //  alert(JSON.stringify(data));
+                                                    $.get("/d4dMasters/readmasterjsonnew/4", function(tdata) {
+                                                        
+                                                        for (var i = 0; i < tdata.length; i += 1) {
+                                                            if (data.orgId == tdata[i].orgname_rowid) {
+                                                                $blueprintReadContainer.find('.modal-body #blueprintORG').val(tdata[i].orgname[0]);
 
-
-                                                    for (var j = 0; j < dataTree.length; j++) {
-
-                                                        (function(i) {
-                                                            $blueprintReadContainer.find('.modal-body #blueprintORG').val(dataTree[i].name);
-                                                            for (var p = 0; p < dataTree[i].businessGroups.length; p++) {
-                                                                (function(p) {
-                                                                    $blueprintReadContainer.find('.modal-body #blueprintBU').val(dataTree[j].businessGroups[p].name);
-                                                                    //}
-                                                                    for (var x = 0; x < dataTree[j].businessGroups[p].projects.length; x++) {
-                                                                        $blueprintReadContainer.find('.modal-body #blueprintProject').val(dataTree[j].businessGroups[p].projects[x].name);
-                                                                    }
-                                                                })(p);
                                                             }
-                                                        })(j);
-                                                    }
 
 
+                                                            if (data.bgId == tdata[i].productgroupname_rowid) {
+                                                                $blueprintReadContainer.find('.modal-body #blueprintBU').val(tdata[i].productgroupname);
+                                                                
+                                                            }
+                                                            if (data.projectId == tdata[i].rowid) {
+                                                                $blueprintReadContainer.find('.modal-body #blueprintProject').val(tdata[i].projectname);
 
+                                                            }
+                                                        }
+                                                    });
+
+
+                                                    //  });
 
                                                 }
                                             });
@@ -3381,32 +3383,34 @@
 
                                                 async: false,
                                                 url: "../organizations/getTreeNew",
-                                                success: function(data) {
+                                                success: function(dataTree) {
 
                                                     console.log(data);
                                                     data = JSON.parse(JSON.stringify(data));
-                                                    
-                                                  //  alert(JSON.stringify(data));
-                                                    
 
-                                                    for (var i = 0; i < data.length; i++) {
+                                                    //  alert(JSON.stringify(data));
+                                                    $.get("/d4dMasters/readmasterjsonnew/4", function(tdata) {
+                                                        
+                                                        for (var i = 0; i < tdata.length; i += 1) {
+                                                            if (data.orgId == tdata[i].orgname_rowid) {
+                                                                $blueprintReadContainerCFT.find('.modal-body #blueprintORG').val(tdata[i].orgname[0]);
 
-                                                        (function(i) {
-                                                            $blueprintReadContainerCFT.find('.modal-body #blueprintORG').val(data[i].name);
-                                                            for (var p = 0; p < data[i].businessGroups.length; p++) {
-                                                                (function(p) {
-                                                                    $blueprintReadContainerCFT.find('.modal-body #blueprintBU').val(data[i].businessGroups[p].name);
-                                                                    //}
-                                                                    for (var x = 0; x < data[i].businessGroups[p].projects.length; x++) {
-                                                                        $blueprintReadContainerCFT.find('.modal-body #blueprintProject').val(data[i].businessGroups[p].projects[x].name);
-                                                                    }
-                                                                })(p);
                                                             }
-                                                        })(i);
-                                                    }
-                                                    
 
-                                                    
+
+                                                            if (data.bgId == tdata[i].productgroupname_rowid) {
+                                                                $blueprintReadContainerCFT.find('.modal-body #blueprintBU').val(tdata[i].productgroupname);
+                                                                
+                                                            }
+                                                            if (data.projectId == tdata[i].rowid) {
+                                                                $blueprintReadContainerCFT.find('.modal-body #blueprintProject').val(tdata[i].projectname);
+
+                                                            }
+                                                        }
+                                                    });
+
+
+                                                    //  });
 
                                                 }
                                             });
