@@ -1387,8 +1387,8 @@ $(document).ready(function() {
                parameterizedObj.name = $('#choiceName').val();
                var defaultValue=[];
 
-               parameterizedObj.defaultValue = $('#choiceValue').val();
-               
+               parameterizedObj.defaultValue = $('#choiceValue').val().trim();
+               alert(parameterizedObj.defaultValue);
                defaultValue=parameterizedObj.defaultValue.split(',');
 
                parameterizedObj.defaultValue=defaultValue;
