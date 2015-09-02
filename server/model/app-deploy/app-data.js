@@ -18,8 +18,7 @@ var Schema = mongoose.Schema;
 
 var AppDataSchema = new Schema({
     applicationName: {
-        type: String,
-        unique: true
+        type: String
     },
     projectId: String,
     description: String
