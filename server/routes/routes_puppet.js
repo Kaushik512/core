@@ -40,7 +40,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
 
     });
 
-    app.post('/puppet/environments', function(req, res) {
+    app.post('/puppet/:puppetServerId/environments', function(req, res) {
         masterUtil.getCongifMgmtsById(req.params.puppetServerId, function(err, puppetData) {
             if (err) {
                 res.send(500, errorResponses.db.error);
@@ -76,98 +76,77 @@ module.exports.setRoutes = function(app, verificationFunc) {
     });
 
 
-    app.get('/puppet/nodes', function(req, res) {
-        var puppet = new Puppet({
-            host: '52.27.204.155',
-            port: 8140,
-            username: 'ubuntu',
-            pemFileLocation: '/WORK/D4D/server/config/cat_instances.pem',
-            ca: '/WORK/nodetest/ssl/ca/ca_crt.pem',
-            cert: '/WORK/nodetest/ssl/certs/ip-172-31-19-103.us-west-2.compute.internal.pem',
-            key: '/WORK/nodetest/ssl/private_keys/ip-172-31-19-103.us-west-2.compute.internal.pem'
-        });
-
-        puppet.getNodesList(function(err, data) {
+    app.get('/puppet/:puppetServerId/nodes', function(req, res) {
+        masterUtil.getCongifMgmtsById(req.params.puppetServerId, function(err, puppetData) {
             if (err) {
-                res.send(500, err);
+                res.send(500, errorResponses.db.error);
                 return;
             }
-            res.send(200, data);
+            console.log('puppet db ==> ', puppetData);
+            if (!puppetData || puppetData.configType !== 'puppet') {
+                res.send(404, {
+                    message: "puppet server not found"
+                })
+            }
+
+            var puppetSettings = {
+                host: puppetData.hostname,
+                username: puppetData.username,
+            };
+            if (puppetData.userpemfile_filename) {
+                puppetSettings.pemFileLocation = appConfig.puppet.puppetReposLocation + puppetData.orgname_rowid[0] + '/' + puppetData.folderpath + puppetData.userpemfile_filename
+            } else {
+                puppetSettings.password = puppetData.puppetpassword;
+            }
+            console.log('puppet pemfile ==> ' + puppetSettings.pemFileLocation);
+            var puppet = new Puppet(puppetSettings);
+            puppet.getNodesList(function(err, data) {
+                if (err) {
+                    res.send(500, err);
+                    return;
+                }
+                res.send(200, data);
+            });
         });
+
     });
 
 
     app.get('/puppet/nodes/:nodeName', function(req, res) {
-        var puppet = new Puppet({
-            host: '52.27.204.155',
-            port: 8140,
-            username: 'ubuntu',
-            pemFileLocation: '/WORK/D4D/server/config/cat_instances.pem',
-            ca: '/WORK/nodetest/ssl/ca/ca_crt.pem',
-            cert: '/WORK/nodetest/ssl/certs/ip-172-31-19-103.us-west-2.compute.internal.pem',
-            key: '/WORK/nodetest/ssl/private_keys/ip-172-31-19-103.us-west-2.compute.internal.pem'
-        });
-
-        puppet.getNode(req.params.nodeName, function(err, data) {
+        masterUtil.getCongifMgmtsById(req.params.puppetServerId, function(err, puppetData) {
             if (err) {
-                res.send(500, err);
+                res.send(500, errorResponses.db.error);
                 return;
             }
-            res.send(200, data);
-        });
-    });
-
-    app.get('/puppet/config', function(req, res) {
-        var puppet = new Puppet({
-            host: '52.27.204.155',
-            port: 8140,
-            username: 'ubuntu',
-            pemFileLocation: '/WORK/D4D/server/config/cat_instances.pem',
-            ca: '/WORK/nodetest/ssl/ca/ca_crt.pem',
-            cert: '/WORK/nodetest/ssl/certs/ip-172-31-19-103.us-west-2.compute.internal.pem',
-            key: '/WORK/nodetest/ssl/private_keys/ip-172-31-19-103.us-west-2.compute.internal.pem'
-        });
-
-        puppet.getPuppetConfig(function(err, data) {
-            if (err) {
-                res.send(500, err);
-                return;
+            console.log('puppet db ==> ', puppetData);
+            if (!puppetData || puppetData.configType !== 'puppet') {
+                res.send(404, {
+                    message: "puppet server not found"
+                })
             }
-            res.send(200, data);
-        });
-    });
 
-    app.get('/puppet/bootstrap', function(req, res) {
-        var puppet = new Puppet({
-            host: '52.27.204.155',
-            port: 8140,
-            username: 'ubuntu',
-            pemFileLocation: '/WORK/D4D/server/config/cat_instances.pem',
-            // host: '192.168.101.34',
-            // port: 8140,
-            // username: 'root',
-            // password: 'Temperance123',
-            ca: '/WORK/nodetest/ssl/ca/ca_crt.pem',
-            cert: '/WORK/nodetest/ssl/certs/ip-172-31-19-103.us-west-2.compute.internal.pem',
-            key: '/WORK/nodetest/ssl/private_keys/ip-172-31-19-103.us-west-2.compute.internal.pem'
-        });
-
-        puppet.bootstrap({
-            host: '52.24.65.185',
-            port: 8140,
-            username: 'ubuntu',
-            pemFileLocation: '/WORK/D4D/server/config/cat_instances.pem',
-            environment: "anshul"
-            //host: '192.168.101.21',
-            // port: 8140,
-            // username: 'root',
-            // password: 'Temperance123',
-        }, function(err, data) {
-            if (err) {
-                res.send(500, err);
-                return;
+            var puppetSettings = {
+                host: puppetData.hostname,
+                username: puppetData.username,
+            };
+            if (puppetData.userpemfile_filename) {
+                puppetSettings.pemFileLocation = appConfig.puppet.puppetReposLocation + puppetData.orgname_rowid[0] + '/' + puppetData.folderpath + puppetData.userpemfile_filename
+            } else {
+                puppetSettings.password = puppetData.puppetpassword;
             }
-            res.send(200, data);
+            console.log('puppet pemfile ==> ' + puppetSettings.pemFileLocation);
+            var puppet = new Puppet(puppetSettings);
+            puppet.getNode(req.params.nodeName, function(err, data) {
+                if (err) {
+                    res.send(500, err);
+                    return;
+                }
+                res.send(200, data);
+            });
         });
+
+
+
     });
+
 };
