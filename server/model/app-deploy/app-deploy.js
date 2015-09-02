@@ -174,7 +174,7 @@ AppDeploySchema.statics.updateAppDeployByName = function(appName, appDeployData,
     });
 };
 
-// Get all AppDeploy informations.
+// Get AppDeploy by name.
 AppDeploySchema.statics.getAppDeployByName = function(appName, callback) {
     this.find({
         applicationName: appName
