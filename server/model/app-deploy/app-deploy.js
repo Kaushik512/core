@@ -138,7 +138,7 @@ AppDeploySchema.statics.getAppDeployByNameAndEnvId = function(appName, envId, ca
     });
 };
 
-// Update all AppDeploy informations.
+// Update all AppDeploy informations w.r.t name.
 AppDeploySchema.statics.updateAppDeployByName = function(appName, appDeployData, callback) {
 
     logger.debug("Going to Update AppDeploy data: ", appName);
@@ -174,7 +174,7 @@ AppDeploySchema.statics.updateAppDeployByName = function(appName, appDeployData,
     });
 };
 
-// Get all AppDeploy informations.
+// Get AppDeploy by name.
 AppDeploySchema.statics.getAppDeployByName = function(appName, callback) {
     this.find({
         applicationName: appName
