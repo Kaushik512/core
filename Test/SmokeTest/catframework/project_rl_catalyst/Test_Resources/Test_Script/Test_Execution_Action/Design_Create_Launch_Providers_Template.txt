@@ -167,7 +167,7 @@ Catalyst Creation of Providers Setup
     Clicks on Providers
     Sleep    2s
     Clicks on New Button of Providers
-    Sleep    2s
+    Sleep   2s
     Select the Provider
     Enters the Name of the Provider
     Enters the Access Key

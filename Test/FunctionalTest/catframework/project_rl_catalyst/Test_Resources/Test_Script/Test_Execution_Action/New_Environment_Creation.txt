@@ -15,12 +15,12 @@ Resource           ${CATALYST ACTION}/Organization_Setup_Action_Steps.txt
 Resource           ${CATALYST ACTION}/Design_Create_Launch_Providers_Template.txt
 
 
-
+    
 *** Keywords ***
 Catalyst Addition and Creation of New Envirorments Setup
-    #Clicks on Settings
-    #Clicks on DevOps Setup menu
-    #Clicks on EEnvironments menu line
+    Clicks on Settings
+    Clicks on DevOps Setup menu
+    Clicks on EEnvironments menu line
     Sleep    1s
     Clicks on New button Create New Environment
     Sleep    2s
