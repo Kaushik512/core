@@ -47,7 +47,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
     });
 
     // Update AppDeploy
-    app.post('/app/deploy/:appId', function(req, res) {
+    /*app.post('/app/deploy/:appId', function(req, res) {
         logger.debug("Got appDeploy data: ", JSON.stringify(req.body.appDeployData));
         AppDeploy.getAppDeployById(req.params.appId, function(err, appDeploy) {
             if (err) {
@@ -67,9 +67,9 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             });
         });
     });
-
+*/
     // Get AppDeploy w.r.t. Id
-    app.get('/app/deploy/:appId', function(req, res) {
+    /*app.get('/app/deploy/:appId', function(req, res) {
         AppDeploy.getAppDeployById(req.params.appId, function(err, appDeploy) {
             if (err) {
                 res.send(500, errorResponses.db.error);
@@ -83,10 +83,10 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 return;
             }
         });
-    });
+    });*/
 
     // Delete AppDeploy w.r.t. Id
-    app.delete('/app/deploy/:appId', function(req, res) {
+    /*app.delete('/app/deploy/:appId', function(req, res) {
         AppDeploy.getAppDeployById(req.params.appId, function(err, appDeploy) {
             if (err) {
                 res.send(500, errorResponses.db.error);
@@ -110,7 +110,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 return;
             }
         });
-    });
+    });*/
 
     // Get AppDeploy w.r.t. appName and env
     /*app.get('/app/deploy/:appName/env/:envId', function(req, res) {
