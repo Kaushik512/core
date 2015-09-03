@@ -8,6 +8,9 @@ var util = require('util');
 var YAML = require('yamljs');
 var SCP = require('_pr/lib/utils/scp');
 var Process = require("_pr/lib/utils/process");
+var Cryptography = require('_pr/lib/utils/cryptography');
+var config = require('_pr/config');
+
 
 var Puppet = function(settings) {
 
@@ -21,7 +24,11 @@ var Puppet = function(settings) {
     if (settings.pemFileLocation) {
         sshOptions.privateKey = settings.pemFileLocation;
     } else {
-        sshOptions.password = settings.password;
+        var cryptoConfig = config.cryptoSettings;
+        var cryptography = new Cryptography(cryptoConfig.algorithm, cryptoConfig.password);
+        sshOptions.password = cryptography.decryptText(settings.password, cryptoConfig.decryptionEncoding, cryptoConfig.encryptionEncoding);
+        settings.password = sshOptions.password;
+        console.log(settings.password);
     }
 
     function runSSHCmd(sshOptions, cmds, onComplete, onStdOut, onStdErr) {
@@ -127,7 +134,7 @@ var Puppet = function(settings) {
             }
         }
         // getting hostname of puppet master
-       changePuppetServerPemFilePerm(function(err) {
+        changePuppetServerPemFilePerm(function(err) {
             if (err) {
                 callback({
                     message: "Unable to change permission of pem file of puppet-master.",
@@ -232,6 +239,7 @@ var Puppet = function(settings) {
                     var scp = new SCP(sshOptions);
                     scp.upload(__dirname + '/../cookbooks.tar', '/tmp', function(err) {
                         if (err) {
+                            console.log(err);
                             callback({
                                 message: "Unable to upload cookbooks onto the node",
                                 err: err
@@ -349,6 +357,7 @@ var Puppet = function(settings) {
                 callback(err, null);
                 return;
             }
+            console.log('envPath  == >' + puppetConfig.environmentpath);
             runSSHCmdOnMaster('ls ' + puppetConfig.environmentpath, function(err, retCode) {
                 if (err) {
                     callback(err, null);
@@ -518,6 +527,66 @@ var Puppet = function(settings) {
 
     this.getPuppetConfig = function(callback) {
         getPuppetConfig(callback);
+    };
+
+    this.runClient = function(options, callback, onStdOut, onStdErr) {
+        console.log('running client');
+        var sshOptions = {
+            username: options.username,
+            host: options.host,
+            port: 22,
+        }
+        if (options.pemFileLocation) {
+            sshOptions.privateKey = options.pemFileLocation;
+        } else {
+            sshOptions.password = options.password;
+        }
+        console.log(sshOptions);
+
+        runSSHCmdOnAgent(sshOptions, 'puppet agent -t', function(err, retCode) {
+            if (err) {
+                callback({
+                    message: "Unable to run puppet client on the node",
+                    err: err
+                }, null);
+                return;
+            }
+            callback(null, retCode);
+        }, function(stdOut) {
+            onStdOut(stdOut);
+        }, function(stdErr) {
+            onStdErr(stdErr);
+        });
+    };
+
+    this.cleanClient = function(options, callback, onStdOut, onStdErr) {
+        console.log('cleaning client');
+        var sshOptions = {
+            username: options.username,
+            host: options.host,
+            port: 22,
+        }
+        if (options.pemFileLocation) {
+            sshOptions.privateKey = options.pemFileLocation;
+        } else {
+            sshOptions.password = options.password;
+        }
+        console.log(sshOptions);
+
+        runSSHCmdOnAgent(sshOptions, ['rm -rf /etc/puppet','rm -rf /var/lib/puppet'], function(err, retCode) {
+            if (err) {
+                callback({
+                    message: "Unable to run puppet client on the node",
+                    err: err
+                }, null);
+                return;
+            }
+            callback(null, retCode);
+        }, function(stdOut) {
+            onStdOut(stdOut);
+        }, function(stdErr) {
+            onStdErr(stdErr);
+        });
     };
 
 };
