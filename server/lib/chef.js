@@ -563,6 +563,10 @@ var Chef = function(settings) {
 
     };
 
+    this.cleanClient = function(options, callback, callbackOnStdOut, callbackOnStdErr) {
+        this.cleanChefonClient(options, callback, callbackOnStdOut, callbackOnStdErr);
+    };
+
     this.runChefClient = function(options, callback, callbackOnStdOut, callbackOnStdErr) {
         var runlist = options.runlist;
         var overrideRunlist = false;

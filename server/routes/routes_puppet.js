@@ -22,8 +22,8 @@ module.exports.setRoutes = function(app, verificationFunc) {
                 host: puppetData.hostname,
                 username: puppetData.username,
             };
-            if (puppetData.userpemfile_filename) {
-                puppetSettings.pemFileLocation = appConfig.puppet.puppetReposLocation + puppetData.orgname_rowid[0] + '/' + puppetData.folderpath + puppetData.userpemfile_filename
+            if (puppetData.pemFileLocation) {
+                puppetSettings.pemFileLocation = puppetData.pemFileLocation;
             } else {
                 puppetSettings.password = puppetData.puppetpassword;
             }
@@ -57,8 +57,8 @@ module.exports.setRoutes = function(app, verificationFunc) {
                 host: puppetData.hostname,
                 username: puppetData.username,
             };
-            if (puppetData.userpemfile_filename) {
-                puppetSettings.pemFileLocation = appConfig.puppet.puppetReposLocation + puppetData.orgname_rowid[0] + '/' + puppetData.folderpath + puppetData.userpemfile_filename
+            if (puppetData.pemFileLocation) {
+                puppetSettings.pemFileLocation = puppetData.pemFileLocation;
 
             } else {
                 puppetSettings.password = puppetData.puppetpassword;
@@ -93,8 +93,8 @@ module.exports.setRoutes = function(app, verificationFunc) {
                 host: puppetData.hostname,
                 username: puppetData.username,
             };
-            if (puppetData.userpemfile_filename) {
-                puppetSettings.pemFileLocation = appConfig.puppet.puppetReposLocation + puppetData.orgname_rowid[0] + '/' + puppetData.folderpath + puppetData.userpemfile_filename
+            if (puppetData.pemFileLocation) {
+                puppetSettings.pemFileLocation = puppetData.pemFileLocation;
             } else {
                 puppetSettings.password = puppetData.puppetpassword;
             }
@@ -129,8 +129,8 @@ module.exports.setRoutes = function(app, verificationFunc) {
                 host: puppetData.hostname,
                 username: puppetData.username,
             };
-            if (puppetData.userpemfile_filename) {
-                puppetSettings.pemFileLocation = appConfig.puppet.puppetReposLocation + puppetData.orgname_rowid[0] + '/' + puppetData.folderpath + puppetData.userpemfile_filename
+            if (puppetData.pemFileLocation) {
+                puppetSettings.pemFileLocation = puppetData.pemFileLocation;
             } else {
                 puppetSettings.password = puppetData.puppetpassword;
             }

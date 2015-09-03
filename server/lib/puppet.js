@@ -557,7 +557,37 @@ var Puppet = function(settings) {
         }, function(stdErr) {
             onStdErr(stdErr);
         });
-    }
+    };
+
+    this.cleanClient = function(options, callback, onStdOut, onStdErr) {
+        console.log('cleaning client');
+        var sshOptions = {
+            username: options.username,
+            host: options.host,
+            port: 22,
+        }
+        if (options.pemFileLocation) {
+            sshOptions.privateKey = options.pemFileLocation;
+        } else {
+            sshOptions.password = options.password;
+        }
+        console.log(sshOptions);
+
+        runSSHCmdOnAgent(sshOptions, ['rm -rf /etc/puppet','rm -rf /var/lib/puppet'], function(err, retCode) {
+            if (err) {
+                callback({
+                    message: "Unable to run puppet client on the node",
+                    err: err
+                }, null);
+                return;
+            }
+            callback(null, retCode);
+        }, function(stdOut) {
+            onStdOut(stdOut);
+        }, function(stdErr) {
+            onStdErr(stdErr);
+        });
+    };
 
 };
 

@@ -137,14 +137,19 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                         var infraManagerId = infraManagerData.serverId;
 
                         masterUtil.getCongifMgmtsById(infraManagerId, function(err, infraManagerDetails) {
+                            if (err) {
+                                logger.debug("Failed to fetch Infra Manager Details ", err);
+                                res.send(500, errorResponses.chef.corruptChefData);
+                                return;
+                            }
+                            if (!infraManagerDetails) {
+                                logger.debug("Infra Manager details not found", err);
+                                res.send(500, errorResponses.chef.corruptChefData);
+                                return;
+                            }
 
-                            if (infraManagerData.configType === 'chef') {
+                            if (infraManagerDetails.configType === 'chef') {
 
-                                if (err) {
-                                    logger.debug("Failed to fetch ChefServerDetails ", err);
-                                    res.send(500, errorResponses.chef.corruptChefData);
-                                    return;
-                                }
                                 var chef = new Chef({
                                     userChefRepoLocation: infraManagerDetails.chefRepoLocation,
                                     chefUserName: infraManagerDetails.loginname,
@@ -170,8 +175,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                     host: infraManagerDetails.hostname,
                                     username: infraManagerDetails.username,
                                 };
-                                if (infraManagerDetails.userpemfile_filename) {
-                                    puppetSettings.pemFileLocation = appConfig.puppet.puppetReposLocation + infraManagerDetails.orgname_rowid[0] + '/' + infraManagerDetails.folderpath + infraManagerDetails.userpemfile_filename
+                                if (infraManagerDetails.pemFileLocation) {
+                                    puppetSettings.pemFileLocation = infraManagerDetails.pemFileLocation;
                                 } else {
                                     puppetSettings.password = infraManagerDetails.puppetpassword;
                                 }
@@ -1180,8 +1185,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                 host: infraManagerDetails.hostname,
                                                 username: infraManagerDetails.username,
                                             };
-                                            if (infraManagerDetails.userpemfile_filename) {
-                                                puppetSettings.pemFileLocation = appConfig.puppet.puppetReposLocation + infraManagerDetails.orgname_rowid[0] + '/' + infraManagerDetails.folderpath + infraManagerDetails.userpemfile_filename
+                                            if (infraManagerDetails.pemFileLocation) {
+                                                puppetSettings.pemFileLocation = infraManagerDetails.pemFileLocation;
                                             } else {
                                                 puppetSettings.password = infraManagerDetails.puppetpassword;
                                             }
@@ -2299,7 +2304,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         });
 
     });
-    /*
+    
     app.get('/instances/:instanceId/setAsWorkStation', function(req, res) {
 
         instancesDao.getInstanceById(req.params.instanceId, function(err, instances) {
@@ -2341,7 +2346,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                         params.password = decryptedCredentials.password;
                     }
                     var scpClient = new SCPClient(params);
-                    scpClient.upload(chefDetails.chefRepoLocation + '/.chef/', '/home/' + decryptedCredentials.username + '/' + instance.chef.chefNodeName + '/.chef/', function(err) {
+                    scpClient.upload(chefDetails.chefRepoLocation + '/.chef/', '/home/' + decryptedCredentials.username + '/.chef/', function(err) {
                         if (err) {
                             console.log(err);
                             res.send(500, err);
@@ -2355,8 +2360,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
             });
         });
-    });*/
-
+    });
+    /*
     app.get('/instances/:instanceId/setAsWorkStation', function(req, res) {
 
         instancesDao.getInstanceById(req.params.instanceId, function(err, instances) {
@@ -2596,7 +2601,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
             });
         });
-    });
+    });*/
 
     app.get('/instances/:instanceId/status', function(req, res) {
         logger.debug("Enter get() for /instances/%s/actionLogs", req.params.instanceId);
