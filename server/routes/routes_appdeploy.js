@@ -165,11 +165,11 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         });
     });
 
-    // Get all AppData
+    // Create AppData
     app.post('/app/deploy/data/create', function(req, res) {
         AppData.createNew(req.body.appDeployData,function(err, appDeployes) {
             if (err) {
-                res.send(500, "Application Already Exist.");
+                res.send(403, "Application Already Exist.");
                 return;
             }
             if (appDeployes) {
