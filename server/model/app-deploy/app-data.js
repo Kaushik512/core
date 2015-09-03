@@ -17,10 +17,7 @@ var AppDeploy = require('_pr/model/app-deploy/app-deploy');
 var Schema = mongoose.Schema;
 
 var AppDataSchema = new Schema({
-    applicationName: {
-        type: String,
-        unique: true
-    },
+    applicationName: String,
     projectId: String,
     description: String
 });
@@ -65,7 +62,7 @@ AppDataSchema.statics.getAppDataByName = function(appName, callback) {
         }
         if (anAppData.length) {
             var appData = [];
-            
+
             AppDeploy.getAppDeployByName(appName, function(err, data) {
                 if (err) {
                     logger.debug("App deploy fetch error.", err);
@@ -88,12 +85,61 @@ AppDataSchema.statics.getAppDataByName = function(appName, callback) {
                         };
                         appData.push(dummyData);
                     }
-                    callback(null,appData);
+                    callback(null, appData);
                 }
             });
-        }else{
+        } else {
             logger.debug("Else part..");
-            callback(true,null);
+            callback(true, null);
+        }
+    });
+};
+
+// Get all appData informations.
+AppDataSchema.statics.getAppDataWithDeploy = function(callback) {
+    this.find(function(err, appData) {
+        if (err) {
+            logger.debug("Got error while fetching appData: ", err);
+            callback(err, null);
+        }
+        if (appData.length) {
+            var appDataList = [];
+            var count =0;
+            for (var j = 0; j < appData.length; j++) {
+                (function(j) {
+                    AppDeploy.getAppDeployByName(appData[j].applicationName, function(err, data) {
+                        count++;
+                        if (err) {
+                            logger.debug("App deploy fetch error.", err);
+                        }
+                        if (data.length) {
+                            for (var i = 0; i < data.length; i++) {
+                                var dummyData = {
+                                    applicationName: data[i].applicationName,
+                                    applicationInstanceName: data[i].applicationInstanceName,
+                                    applicationVersion: data[i].applicationVersion,
+                                    applicationNodeIP: data[i].applicationNodeIP,
+                                    applicationLastDeploy: data[i].applicationLastDeploy,
+                                    applicationStatus: data[i].applicationStatus,
+                                    projectId: appData[j].projectId,
+                                    envId: data[i].envId,
+                                    description: appData[j].description,
+                                    applicationType: data[i].applicationType,
+                                    containerId: data[i].containerId,
+                                    hostName: data[i].hostName
+                                };
+                                appDataList.push(dummyData);
+                            }
+                            if(count === appData.length){
+                                callback(null, appDataList);
+                            }
+                        }
+                    });
+                })(j);
+            }
+
+        } else {
+            callback(null, []);
         }
     });
 };

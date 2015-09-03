@@ -232,7 +232,8 @@ Uploads the Pem File for Provider
 
 
 Clicks on Save Button of the Provider
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    css=div.btn-group.pull-right > input
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='myForm54']/div/div[3]/div/input
+
 
 
   # -------------------------------------------------------------  
