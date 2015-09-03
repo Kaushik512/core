@@ -49,7 +49,7 @@ template '/etc/puppet/puppet.conf' do
 	source 'puppet.conf.erb'
 	mode 00755
 	variables( lazy {{
-		:server => pup_config['puppet_master']['fqdn'],
+		:server_fqdn => pup_config['puppet_master']['fqdn'],
 		:client_env => pup_config['client']['environment']
 	}})
 end
