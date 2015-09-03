@@ -21,7 +21,7 @@ Catalyst new PROVIDERS setup
 
 
 Catalyst new VM IMAGE setup
-    [Tags]       Sanity               Smoke
+    [Tags]       Sanity               VMImage
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
     Validation of Creation of New Image

@@ -232,7 +232,8 @@ Uploads the Pem File for Provider
 
 
 Clicks on Save Button of the Provider
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='myForm54']/div/div[3]/div/input
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='myForm54']/div/div[3]/div/button
+
 
 
 
@@ -372,7 +373,7 @@ Enters the UserName of WindowsProviders
 
 
 Clicks on Save Button of VMimage page   
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    css=#btnsubmit
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    css=div.widget-toolbox.clearfix > div > button
 
 
 
@@ -383,6 +384,8 @@ Catalyst Choose Template and Save Setup
     Sleep    6s
     Clicks on Design
     Sleep    10s
+    Clicks on OK Button to Create the New Blueprint
+    Sleep    1s
     Choose the Template Type Created
     Sleep    3s
     Clicks on Next Button
@@ -415,6 +418,11 @@ Catalyst Choose Template and Save Setup
     Enable the Next Button 
     Clicks on Next Button
     Clicks on Confirm OK Button
+
+
+Clicks on OK Button to Create the New Blueprint
+    Click Element    xpath=.//*[text()='OK']
+
 
 
 Clicks on Design

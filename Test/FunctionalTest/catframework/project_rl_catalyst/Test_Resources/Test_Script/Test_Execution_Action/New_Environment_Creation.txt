@@ -142,7 +142,7 @@ Verify the Node Importedd
 
 
 Clicks on Config Managementt
-    Click Element    xpath=//*[text()='Config Management']
+    Click Element    xpath=//*[text()='Chef Server']
 
 Verfiy the Environment is Created
     Sleep    3s
@@ -335,7 +335,7 @@ Catalyst Activation of Environments in projects
     #Clicks on Save Button
 
 Clicks on Add Button
-    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='wid-id-3']/div/div/div[4]/a
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='wid-id-3']/div/div/div[3]/a
     
 
 Clicks on ADD Chef Env Button
