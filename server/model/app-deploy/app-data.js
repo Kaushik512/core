@@ -101,11 +101,13 @@ AppDataSchema.statics.getAppDataByName = function(appName, callback) {
                         appData.push(dummyData);
                     }
                     callback(null, appData);
+                }else{
+                    callback(null, data);
                 }
             });
         } else {
             logger.debug("Else part..");
-            callback(true, null);
+            callback(null, anAppData);
         }
     });
 };
