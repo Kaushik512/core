@@ -17,7 +17,10 @@ var AppDeploy = require('_pr/model/app-deploy/app-deploy');
 var Schema = mongoose.Schema;
 
 var AppDataSchema = new Schema({
-    applicationName: String,
+    applicationName: {
+        type: String,
+        unique: true
+    },
     projectId: String,
     description: String
 });
@@ -39,14 +42,26 @@ AppDataSchema.statics.getAppData = function(callback) {
 // Save all appData informations.
 AppDataSchema.statics.createNew = function(appDeployData, callback) {
     var aDeploy = new this(appDeployData);
-    aDeploy.save(function(err, appDeploy) {
+    this.find({
+        applicationName: appDeployData.applicationName,
+        projectId: appDeployData.projectId
+    }, function(err, data) {
         if (err) {
-            logger.debug("Got error while creating AppDeploy: ", err);
-            callback(err, null);
+            logger.debug("Error fetching record.", err);
         }
-        if (appDeploy) {
-            logger.debug("Creating AppDeploy: ", JSON.stringify(appDeploy));
-            callback(null, appDeploy);
+        if (data.length) {
+            callback(true, null);
+        } else {
+            aDeploy.save(function(err, appDeploy) {
+                if (err) {
+                    logger.debug("Got error while creating AppDeploy: ", err);
+                    callback(err, null);
+                }
+                if (appDeploy) {
+                    logger.debug("Creating AppDeploy: ", JSON.stringify(appDeploy));
+                    callback(null, appDeploy);
+                }
+            });
         }
     });
 };
@@ -104,7 +119,7 @@ AppDataSchema.statics.getAppDataWithDeploy = function(callback) {
         }
         if (appData.length) {
             var appDataList = [];
-            var count =0;
+            var count = 0;
             for (var j = 0; j < appData.length; j++) {
                 (function(j) {
                     AppDeploy.getAppDeployByName(appData[j].applicationName, function(err, data) {
@@ -130,7 +145,11 @@ AppDataSchema.statics.getAppDataWithDeploy = function(callback) {
                                 };
                                 appDataList.push(dummyData);
                             }
-                            if(count === appData.length){
+                            if (count === appData.length) {
+                                callback(null, appDataList);
+                            }
+                        } else {
+                            if (count === appData.length) {
                                 callback(null, appDataList);
                             }
                         }
