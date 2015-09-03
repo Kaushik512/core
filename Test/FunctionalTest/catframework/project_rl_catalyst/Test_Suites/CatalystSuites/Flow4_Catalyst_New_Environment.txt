@@ -32,7 +32,7 @@ Catalyst new Environments setup
 
 
 Catalyst Adding New Envirornments to the Chef          
-    [Tags]       Sanity       ps
+    [Tags]       Sanity           Smoke
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
     Catalyst Addition of New Environments
@@ -41,7 +41,7 @@ Catalyst Adding New Envirornments to the Chef
 
 
 Catalyst Import a Node From ConfigManagement(Chef) in to the Environment
-    [Tags]       Sanity       Env
+    [Tags]       Sanity       Smoke
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
     Catalyst Import a Node from Config Management

@@ -149,6 +149,8 @@ Catalyst Creation of New Blueprint and Delete
     Clicks on Next Button
     Clicks on Confirm OK Button
     Clicks on Workzone Button
+    Clicks on the Project to go to Environment
+    Clicks on the Environment to Launch
     Sleep    5s
     Clicks on Blueprint Section
     Select the CentosTesingBlueprint
@@ -382,6 +384,8 @@ Catalyst Choose Template and Save Setup of CentOS Blueprint
     Sleep    6s
     Clicks on Design
     Sleep    10s
+    Clicks on OK Button to Create the New Blueprint
+    Sleep    1s
     Choose the Template Type Created
     Sleep    3s
     Clicks on Next Button
@@ -416,8 +420,13 @@ Catalyst Choose Template and Save Setup of CentOS Blueprint
     Clicks on Next Button
     Clicks on Confirm OK Button
 
+Clicks on OK Button to Create the New Blueprint
+    Click Element    xpath=.//*[text()='OK']
+
     
-CentOS Blueprint Launched and verify IP,Status,Chef,SSH,Stop,BootStrap           
+CentOS Blueprint Launched and verify IP,Status,Chef,SSH,Stop,BootStrap
+    Clicks on the Project to go to Environment
+    Clicks on the Environment to Launch
     Sleep    5s
     Clicks on Blueprint Section
     Select the CentosBlueprint
@@ -442,9 +451,14 @@ CentOS Blueprint Launched and verify IP,Status,Chef,SSH,Stop,BootStrap
     Clicks on Back To Instances
     Sleep    4s
     
+Clicks on the Project to go to Environment
+    Execute Javascript    $('.expand-collapse.click-expand.fa.fa-angle-right').append('${Proj1}').click()
+    Sleep    2s
 
 
-
+Clicks on the Environment to Launch
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=//*[normalize-space(text())="Dev"]
+    Sleep    5 seconds
 
 
 
@@ -501,6 +515,8 @@ Catalyst STOP Action on CentOS Instance
     Sleep    20s
 
 Catalyst EDIT Instance Name of CentOS Instance
+    Clicks on the Project to go to Environment
+    Clicks on the Environment to Launch
     Sleep    4s
     Clicks on Edit Button of the CentosInstance Imported
     Enters the New Instance Name for Centos
@@ -512,6 +528,8 @@ Catalyst EDIT Instance Name of CentOS Instance
 
 
 Steps To Run Chef Client
+    Clicks on the Project to go to Environment
+    Clicks on the Environment to Launch
     Click on RUNNN of Chef Client
     Sleep    5s
     Update the Run List with Cookbook
@@ -526,6 +544,8 @@ Steps To Run Chef Client
 
 
 Steps to Run SSH
+    Clicks on the Project to go to Environment
+    Clicks on the Environment to Launch
     Click on Verified SSH Instance
     Enters the Username in the Terminal
     Select Authentication Type
@@ -540,6 +560,8 @@ Steps to Run SSH
     Clicks Back Burtton of Instances
     
 Steps to Run Stopping the Instance
+    Clicks on the Project to go to Environment
+    Clicks on the Environment to Launch
     Clicks on STOP of Verfied Instance
     Verfified the STOPPED Status
     Clicks on Contreol Panel
@@ -554,6 +576,8 @@ Catlayst verfication of CentOS Instance Stop Setup and Disable
     #Clicks on User Created BusinessGroup
     #Clicks on > Button to your Environment
     #-Clicks on your Blueeeprint
+    Clicks on the Project to go to Environment
+    Clicks on the Environment to Launch
     Verfified the STOPPED Status
     Verify the IP Address after Launch of Instance
     Verify the CHEF Client Run is disabled
@@ -617,6 +641,7 @@ Catalyst Choose Template and Save Setup for UBUNTU
 
 Ubuntu Blueprint Launched and verify the IP,Status,Chef,SSH,Stop,BootStrap
     Sleep    5s
+    Clicks on the Project to go to Environment
     Clicks on the Button to the Environment
     Sleep    2s
     Clicks on Blueprint Section
@@ -664,6 +689,8 @@ Catalyst Grid View Verify Start ,Stop ,SSH ,Chef ,Client ,Log Setup
     #Clicks on User Created Organization
     #Clicks on User Created BusinessGroup
     #Clicks on > Button to your Environment
+    Clicks on the Project to go to Environment
+    Clicks on the Environment to Launch
     Sleep    1s
     Clicks on Instances View
     Verfiy the Name of Instance
@@ -685,11 +712,14 @@ Catalyst Grid View Verify Start ,Stop ,SSH ,Chef ,Client ,Log Setup
     Clicks on View Instancess Button
 
 Catalyst CentOS Deleete the Instance Setup
+    Clicks on the Project to go to Environment
+    Clicks on the Environment to Launch
     Sleep    4s
     Clicks on CentOS Instance to Delete
     Del the CentOS Instance
 
 Catalyst ubuntu OS Deleete the Instance Setup
+    Clicks on the Project to go to Environment
     Sleep    4s
     Clicks on the Button to the Environment
     Sleep    3s
@@ -715,6 +745,7 @@ Clicks on Ubuntu OS Instance to Delete
     
 
 Catalyst Grid View Verify Start ,Stop ,SSH ,Chef ,Client ,Log Setup of Ubuntu
+    Clicks on the Project to go to Environment
     Clicks on the Button to the Environment
     Sleep    1s
     Clicks on Instances View
@@ -785,6 +816,8 @@ Choose the Template Type Created
     Click Element    xpath=//div[@data-templatetype='${TEMPLATE TYPENAME}']
 
 Clicks on the Button to the Environment
+    Execute Javascript    $('.expand-collapse.click-expand.fa.fa-angle-right').append('${Proj1}').click()
+    Sleep    2s
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=//*[normalize-space(text())="QA"]
     Sleep    5 seconds
 
@@ -915,6 +948,7 @@ Catalyst Ubuntu Instance Verfication and BootStrap steps
 
 Catalyst CHEFCLIENT Action on Ubuntu Instance
     Sleep    5s
+    Clicks on the Project to go to Environment
     Clicks on the Button to the Environment
     Steps To Run Chef Client of Ubuntu
     Sleep    3s
@@ -922,6 +956,7 @@ Catalyst CHEFCLIENT Action on Ubuntu Instance
 
 Catalyst SSH Action on the Ubuntu Instance
     Sleep    5s
+    Clicks on the Project to go to Environment
     Clicks on the Button to the Environment
     Steps to Run SSH of Ubuntu
     Sleep    3s
@@ -929,6 +964,7 @@ Catalyst SSH Action on the Ubuntu Instance
 
 Catalyst STOP Action on the Ubuntu Instance
     Sleep    5s
+    Clicks on the Project to go to Environment
     Clicks on the Button to the Environment
     Sleep    3s
     Steps to Run Stopping the Instance of Ubuntu
@@ -938,6 +974,7 @@ Catalyst STOP Action on the Ubuntu Instance
 
 Catalyst EDIT Name of Ubuntu Instance
     Sleep    5s
+    Clicks on the Project to go to Environment
     Clicks on the Button to the Environment
     Clicks on Edit Button of the UbuntuInstance Imported
     Enters the New Instance Name for Ubuntu
@@ -981,6 +1018,7 @@ Catlayst verfication of Instance Stop Setup and Disable of Ubuntu
     #Clicks on Workzone Button
     #Clicks on User Created Organization
     #Clicks on User Created BusinessGroup
+    Clicks on the Project to go to Environment
     Clicks on the Button to the Environment
     #Clicks on your Ubuntu Blueeeprint
     Verfified the STOPPED Status of Ubuntu
@@ -1429,7 +1467,7 @@ Validation of Empty Image Name
     Enters the UserName of Providers
     Select the Organizatn to Create Cent OS Img
     Clicks on Save Button of Providers
-    Clicks on OKX Button
+    #Clicks on OKX Button
 
 Choose the Provider
     Click Element    xpath=.//*[@id='s2id_providerId']/a/span[1]
@@ -1552,7 +1590,7 @@ Validation of No Selection Provider
     Enters the UserName of Providers
     Select the Organizatn to Create Cent OS Img
     Clicks on Save Button of Providers
-    Clicks on OKX Button
+    #Clicks on OKX Button
 
 Provider field Name Left Empty
     [Arguments]    ${VaildNoNameErrMsg}
@@ -1573,7 +1611,7 @@ Validation of No Operating System
     Enters the UserName of Providers
     Select the Organizatn to Create Cent OS Img
     Clicks on Save Button of Providers
-    Clicks on OKX Button
+    #Clicks on OKX Button
 
 Operating System Left Empty  
     [Arguments]    ${ValidEmptyNoOSErrMsg}
@@ -1593,7 +1631,7 @@ Validation of No Image ID
     Enters the UserName of Providers
     Select the Organizatn to Create Cent OS Img
     Clicks on Save Button of Providers
-    Clicks on OKX Button
+    #Clicks on OKX Button
 
 Image ID Left Empty  
     [Arguments]    ${ValidEmptImgIDErrMsg}
@@ -1613,7 +1651,7 @@ Validation of Image No User Name
     Enters the Image ID for CentOS
     Select the Organizatn to Create Cent OS Img
     Clicks on Save Button of Providers
-    Clicks on OKX Button
+    #Clicks on OKX Button
 
 Image User Name Left Empty
     [Arguments]    ${ValidEmptyIUserNameErrMsg}
@@ -1699,7 +1737,7 @@ Selects the Key Pair
     #Input Text    xpath=.//*[@id='select2-drop']/div/input    ${KeyNAME}
     #Click Element    xpath=.//*[@id='select2-drop']/ul/li[1]/div
 
-Uploads the Pem File for Provider
+Uploads the Pem File for Providerdiv.widget-toolbox.clearfix > div > button
     Sleep    4s
     Choose File    xpath=.//*[@class='gui-file file']    ${CAT_INSTANCES}
     Sleep    1s
@@ -1708,7 +1746,7 @@ Uploads the Pem File for Provider
     
 
 Clicks on Save Button of the Provider
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='myForm54']/div/div[3]/div/input
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    css=div.widget-toolbox.clearfix > div > button
 
 Clicks on VMImage
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=//a[contains(text(),'VMImage')]
@@ -1763,7 +1801,7 @@ Enters the UserName of Providers
     Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    id=UserName    ${USER}
 
 Clicks on Save Button of Providers
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='btnsubmit']
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    css=div.widget-toolbox.clearfix > div > button
 
 
 
