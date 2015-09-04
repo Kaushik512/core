@@ -1,0 +1,11 @@
+*** Settings ***
+Documentation     A resource file with test data input by the user
+...
+...               This file is part of a prototype automated test suite designed to
+...               test web application products built on top of the SLZ platform.
+...
+...
+Resource           slz_litpro.txt
+
+
+*** Variables ***
