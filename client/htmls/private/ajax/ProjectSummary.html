@@ -7,7 +7,7 @@
   <label for="chooseApplication">Choose Available Application:<span style="color:red">*</span></label>
   <div class="input-groups">
     <select id="chooseApplication" name="chooseApplication" class="required chooseApplication width-100">
-    <option data-selectedAppName="All Application" value="">All Application</option>
+    <!-- <option data-selectedAppName="All Application" value="">All Application</option> -->
     </select>
   </div>                                                      
 </div>
@@ -72,7 +72,7 @@
                         <td style="color:#fff;background-color: #2c3742;">Node IP</td>
                         <td style="color:#fff;background-color: #2c3742;">Last Deploy</td>
                         <td style="color:#fff;background-color: #2c3742;">Status</td>
-                        <td style="color:#fff;background-color: #2c3742;">Logs</td>
+                        <!-- <td style="color:#fff;background-color: #2c3742;">Logs</td> -->
                         <!-- <td style="color:#fff;background-color: #2c3742;">App Links</td>
                         <td style="color:#fff;background-color: #2c3742;">Action</td> -->
                     </tr>
@@ -171,9 +171,39 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="modalAppCardLogDetails" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+          <form role="form" id="formAppDeployLogs" autocomplete="off">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    X
+                </button>
+                <h4 class="modal-title">
+                    <i class="fa fa-th-list txt-color-blue"></i>&nbsp;&nbsp;Logs
+                </h4>
+            </div>
+           
+            <div class="modal-body">
+              <div class="logsForAppDeploy">
+                
+              </div>
+            </div>
+             <div class="modal-footer">
+                <div class="btn-group" style="margin-left:200px;">                                 
+                <a style="margin-left:10px;" class="btn btn-primary cancelAppDeploy" data-dismiss="modal">
+                    <i class="ace-icon fa fa-undo bigger-110"></i>
+                    Cancel
+                </a>
+                </div>
+              </div>
+             </form>
+        </div>
+    </div>
+</div>
 <script type="text/javascript">
 $(document).ready(function (){
-  $('#chooseApplication').select2();
+  // $('#chooseApplication').select2();
   getDropdownList();
   getAllApplicationData(function(data){
     constructUI(data);
@@ -218,12 +248,14 @@ function saveRecord(){
   }
 }
 function getDropdownList(){
-  if($chooseApplication){
-    $chooseApplication.empty();
-  }
+  // if($chooseApplication){
+  //   $chooseApplication.empty();
+  // }
   $.get('/app/deploy/data/list', function(dataTotalList) {
       var $chooseApplication = $('#chooseApplication');
-      //$chooseApplication.append('');
+      $chooseApplication.empty();
+      $chooseApplication.append('<option data-selectedAppName="All Application" value="">All Application</option>');
+      $('#chooseApplication').select2();
       var applicationNameArr = [];
       var applicationDescArr = {};
       $.each(dataTotalList, function(key, val) {
@@ -260,6 +292,12 @@ function constructDataListTable(){
       alert("getDropdownList Error");
   });
 }
+// function constructLogs(){
+//   alert("I am in function");
+//   }).fail(function() {
+//       alert("getDropdownList Error");
+//   });
+// }
 function getAllApplicationData(callback){
   $.get('/app/deploy/list', function(data) {
      callback(data);
@@ -287,11 +325,23 @@ function getParticularApplicationData(selectedAppName){
 function constructUI(data) {
   $("#accordion-AppDeploy").empty();
   if(data.length){
+    var $chooseApplication = $('#chooseApplication');
+    $selectedOption = $chooseApplication.find('option:selected');
+    var selectedAppName = $selectedOption.attr('data-selectedAppName');
+    console.log(selectedAppName);
+    if (typeof selectedAppName != 'undefined') {
+        $('#appDeployName').append().text("  for '" + selectedAppName + "'");
+        $('#widgetAppDeploy').show();
+    } else {
+        $('#appDeployName').append().text("");
+        $('#widgetAppDeploy').hide();
+    }
     $("#nodataAppDeploy").css({"text-align": "center", "margin-top": "20px","display":"none"});
     var $accordianTemplate = $('.accordianTemplateContainer').find('.accordianTemplate');
     var dataenvAccordianName;
     if(data && data.length){
       for (var i = 0; i < data.length; i++) {
+        console.log(data[i]);
         if (data[i].projectId) {
           //alert(data[i].applicationName + data[i].envId);
           var $clone = $accordianTemplate.clone(true);
@@ -338,9 +388,10 @@ function constructUI(data) {
                               "bSortable": true
                           }, {
                               "bSortable": true
-                          },{
-                              "bSortable": false
                           }
+                          // ,{
+                          //     "bSortable": false
+                          // }
                       ]
                   });
               }
@@ -355,7 +406,14 @@ function constructUI(data) {
           //     data[i].applicationStatus = '<img src="img/indicator_unknown.png">';
           // }
           // var appLinks = '<img style="height: 18px;margin-left: -5px;"src="img/projectdemo/app-performanceblack.png" title="App-Performance"><img style="height: 18px;margin-left: 5px;" src="img/projectdemo/logsblack.png" title="App-Logs"><img style="height: 18px;margin-left: 5px;" src="img/projectdemo/code_healthblack.png" title="Code-Health"><img style="height: 18px;margin-left: 5px;" src="img/projectdemo/UI_performanceblack.png" title="UI-Performance">';
-          var logs = '<div class="moreinfoAppDeploy" id="" title="Logs Info" style="margin-left:27%"></div>';
+          //var logs = '<div class="moreinfoAppDeploy" id="" title="Logs Info" style="margin-left:27%"></div>';
+          // console.log(data[i].appLogs);
+          // var logs;
+          // if(!data[i]._id){
+          //   logs = "NA";
+          // }else{
+          //   logs = '<a class="moreinfoAppDeploy" id="'+data[i]._id+'_logs" href="#modalAppCardLogDetails" data-toggle="modal" title="Logs Info" style="margin-left:27%"></a>';
+          // }
           if(!data[i].applicationName){
             data[i].applicationName = "NA";
           }
@@ -398,9 +456,14 @@ function constructUI(data) {
               data[i].applicationNodeIP,
               data[i].applicationLastDeploy,
               data[i].applicationStatus,
-              logs
+              //logs
           ]);
         }
+        // console.log($taskenvArray.find('#' + $('.moreinfoAppDeploy').attr('id')));
+        // $taskenvArray.find('#' + $('.moreinfoAppDeploy').attr('id')).click(function(){
+        //   alert("Hello");
+        // });
+        //alert($('.moreinfoAppDeploy').attr('id'));
       }
     }
   }else{
@@ -443,6 +506,9 @@ $('.envAppDeployModal').click(function(e) {
 $('.envAppDeployList').click(function(e) {
   constructDataListTable();
 });
+// $('.moreinfoAppDeploy').attr('id').on("click", function() {
+//     alert("I am here:");
+// });
 if (!$.fn.dataTable.isDataTable('#tableappParamDeploy')) {
     $('#tableappParamDeploy').DataTable({
         "pagingType": "full_numbers",
