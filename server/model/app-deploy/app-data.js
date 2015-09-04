@@ -85,6 +85,7 @@ AppDataSchema.statics.getAppDataByName = function(appName, callback) {
                 if (data.length) {
                     for (var i = 0; i < data.length; i++) {
                         var dummyData = {
+                             _id: data[i]._id,
                             applicationName: data[i].applicationName,
                             applicationInstanceName: data[i].applicationInstanceName,
                             applicationVersion: data[i].applicationVersion,
@@ -132,6 +133,7 @@ AppDataSchema.statics.getAppDataWithDeploy = function(callback) {
                         if (data.length) {
                             for (var i = 0; i < data.length; i++) {
                                 var dummyData = {
+                                    _id: data[i]._id,
                                     applicationName: data[i].applicationName,
                                     applicationInstanceName: data[i].applicationInstanceName,
                                     applicationVersion: data[i].applicationVersion,

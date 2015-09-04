@@ -29,7 +29,8 @@ var AppDeploySchema = new Schema({
     description: String,
     applicationType: String,
     containerId: String,
-    hostName: String 
+    hostName: String,
+    appLogs: String
 
 });
 
@@ -187,6 +188,22 @@ AppDeploySchema.statics.getAppDeployByName = function(appName, callback) {
         if (appDeploy) {
             //logger.debug("Got AppDeploy: ", JSON.stringify(appDeploy));
             callback(null, appDeploy);
+        }
+    });
+};
+
+// Get AppDeploy by name.
+AppDeploySchema.statics.getAppDeployLogById = function(appId, callback) {
+    this.find({
+        "_id": appId
+    }, function(err, appDeploy) {
+        if (err) {
+            logger.debug("Got error while fetching AppDeploy: ", err);
+            callback(err, null);
+        }
+        if (appDeploy) {
+            //logger.debug("Got AppDeploy: for log ", JSON.stringify(appDeploy));
+            callback(null, appDeploy[0].appLogs);
         }
     });
 };
