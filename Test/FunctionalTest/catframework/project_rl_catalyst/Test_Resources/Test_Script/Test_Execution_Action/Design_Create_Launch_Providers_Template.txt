@@ -1737,7 +1737,7 @@ Selects the Key Pair
     #Input Text    xpath=.//*[@id='select2-drop']/div/input    ${KeyNAME}
     #Click Element    xpath=.//*[@id='select2-drop']/ul/li[1]/div
 
-Uploads the Pem File for Providerdiv.widget-toolbox.clearfix > div > button
+Uploads the Pem File for Provider
     Sleep    4s
     Choose File    xpath=.//*[@class='gui-file file']    ${CAT_INSTANCES}
     Sleep    1s

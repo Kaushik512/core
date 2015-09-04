@@ -10,6 +10,7 @@ Resource           ${COMMON RESOURCES}/catalyst_grid_node.txt
 
 
 
+
 *** Test Cases ***
 Catalyst Validation of BlueprintPage
     [Tags]       Sanity               Smoke
