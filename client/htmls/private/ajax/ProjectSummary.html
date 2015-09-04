@@ -7,6 +7,7 @@
   <label for="chooseApplication">Choose Available Application:<span style="color:red">*</span></label>
   <div class="input-groups">
     <select id="chooseApplication" name="chooseApplication" class="required chooseApplication width-100">
+    <option data-selectedAppName="All Application" value="">All Application</option>
     </select>
   </div>                                                      
 </div>
@@ -171,6 +172,7 @@
 </div>
 <script type="text/javascript">
 $(document).ready(function (){
+  $('#chooseApplication').select2();
   getDropdownList();
   getAllApplicationData(function(data){
     constructUI(data);
@@ -215,10 +217,12 @@ function saveRecord(){
   }
 }
 function getDropdownList(){
-  $chooseApplication.empty();
+  if($chooseApplication){
+    $chooseApplication.empty();
+  }
   $.get('/app/deploy/data/list', function(dataTotalList) {
       var $chooseApplication = $('#chooseApplication');
-      $chooseApplication.append('<option data-selectedAppName="All Application" value="All Application">All Application</option>');
+      //$chooseApplication.append('');
       var applicationNameArr = [];
       var applicationDescArr = {};
       $.each(dataTotalList, function(key, val) {
@@ -234,7 +238,6 @@ function getDropdownList(){
           $option = $('<option data-selectedAppName="' + val + '" value="' + val + '">' + val + '</option>');
           $chooseApplication.append($option);
       });
-      $('#chooseApplication').select2();
   }).fail(function() {
       alert("getDropdownList Error");
   });
@@ -354,7 +357,11 @@ function constructUI(data) {
             data[i].applicationName = "NA";
           }
           if(!data[i].applicationInstanceName){
-            data[i].applicationInstanceName = "NA";
+             if(data[i].hostName){
+                data[i].applicationInstanceName = data[i].hostName;
+             }else{
+                data[i].applicationInstanceName = "NA";
+             }
           }
           if(!data[i].applicationVersion){
             data[i].applicationVersion = "NA";
