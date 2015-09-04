@@ -206,4 +206,21 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             }
         });
     });
+
+    // Get respective Logs
+    app.get('/app/deploy/:appId/logs', function(req, res) {
+        AppDeploy.getAppDeployLogById(req.params.appId,function(err, logs) {
+            if (err) {
+                res.send(500, errorResponses.db.error);
+                return;
+            }
+            if (logs) {
+                res.send(200, logs);
+                return;
+            }else{
+                res.send(404,"Logs not available.");
+                return;
+            }
+        });
+    });
 };
