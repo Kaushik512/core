@@ -277,7 +277,8 @@ this.getServers = function(tenantId,callback){
  this.createServer = function(tenantId,createServerJson,callback){
 	 console.log("START:: createServer");
 	 
-	 getAuthToken(options.host,options.username,options.password,options.tenantName,function(err,token){
+console.log(JSON.stringify(options));
+	getAuthToken(options.host,options.username,options.password,options.tenantName,function(err,token){
 		 if(token){
 			   console.log("token::"+token);	
 			   var args = {
@@ -339,7 +340,31 @@ this.getServers = function(tenantId,callback){
 		 });
 	 
  }
- 
+this.waitforserverready = function(tenantId,serverId,callback){
+        var self = this;
+        setTimeout(function(){
+	        self.getServerById(tenantId,serverId,function(err,data){
+	                if (err) {
+	                	callback(err, null);
+	                	return;
+	            	}
+	                if(!err){
+	                        switch(data.server.status){
+	                                case 'ACTIVE':
+	                                        callback(null,data);
+	                                        return;
+	                                        break;
+	                                default:
+					                    setTimeout(function() {
+					                        self.waitforserverready(tenantId, serverId,callback);
+					                    }, 5000);
+	                    break;
+	                        }
+	                }
+	        });
+        },360 * 1000);
+ }
+
 }
 
 

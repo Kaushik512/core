@@ -84,7 +84,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
     });
 
     app.get('/instances/:instanceId', function(req, res) {
-        logger.debug("Enter get() for /instances/%s", req.params.instanceId);
+        //logger.debug("Enter get() for /instances/%s", req.params.instanceId);
         instancesDao.getInstanceById(req.params.instanceId, function(err, data) {
             if (err) {
                 logger.error("Instance fetch Failed >> ", err);
@@ -98,7 +98,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 logger.error("No such Instance for >> %s", req.params.instanceId);
                 res.send(404);
             }
-            logger.debug("Exit get() for /instances/%s", req.params.instanceId);
+        //    logger.debug("Exit get() for /instances/%s", req.params.instanceId);
         });
     });
 
@@ -1565,7 +1565,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
 
     app.get('/instances/:instanceId/logs', function(req, res) {
-        logger.debug("Enter get() for /instances/%s/logs", req.params.instanceId);
+        //logger.debug("Enter get() for /instances/%s/logs", req.params.instanceId);
         var timestamp = req.query.timestamp;
         if (timestamp) {
             timestamp = parseInt(timestamp);
@@ -1580,7 +1580,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 res.send(500);
                 return;
             }
-            logger.debug("Exit get() for /instances/%s/logs", req.params.instanceId);
+            //logger.debug("Exit get() for /instances/%s/logs", req.params.instanceId);
             res.send(data);
 
         });

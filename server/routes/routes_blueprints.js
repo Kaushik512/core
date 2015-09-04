@@ -223,7 +223,9 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
 
     app.get('/blueprints/:blueprintId/launch', function(req, res) {
-        logger.debug("Enter /blueprints/%s/launch -- ", req.params.blueprintId);
+        var tempresp = res;
+ 
+	logger.debug("Enter /blueprints/%s/launch -- ", req.params.blueprintId);
         //verifying if the user has permission
         logger.debug('Verifying User permission set for execute.');
         if (!req.query.envId) {
@@ -1269,7 +1271,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                         name: "D4D-" + blueprint.name,
                                                         imageRef: blueprint.blueprintConfig.instanceImageName,
                                                         flavorRef: blueprint.blueprintConfig.flavor,
-                                                        max_count: 1,
+                                                      key_name: 'key',  
+							max_count: 1,
                                                         min_count: 1,
                                                         networks:[
                                                             {
@@ -1288,7 +1291,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                     host: providerdata.host,
                                                     username: providerdata.username, 
                                                     password: providerdata.password, 
-                                                    tenantName: 'admin',
+                                                   tenantName: providerdata.tenantname, 
                                                     tenantId: providerdata.tenantid
                                                 };
                                                 var openstack = new Openstack(openstackconfig);
@@ -1328,7 +1331,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                         },
                                                         credentials: {
                                                             username: providerdata.username,
-                                                            password: instanceData.adminPass,
+                                                            password: instanceData.server.adminPass
                                                         },
                                                         chef: {
                                                             serverId: blueprint.blueprintConfig.infraManagerId,
@@ -1345,7 +1348,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                     };
 
                                                     logger.debug('Instance Data');
-                                                    logger.debug(instance);
+                                                    logger.debug(JSON.stringify(instance));
                                                     instancesDao.createInstance(instance, function(err, data) {
                                                         if (err) {
                                                             logger.error("Failed to create Instance", err);
@@ -1353,7 +1356,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                             return;
                                                         }
                                                         instance.id = data._id;
-                                                        var timestampStarted = new Date().getTime();
+							var timestampStarted = new Date().getTime();
                                                         var actionLog = instancesDao.insertBootstrapActionLog(instance.id, instance.runlist, req.session.user.cn, timestampStarted);
                                                         var logsReferenceIds = [instance.id, actionLog._id];
                                                         logsDao.insertLog({
@@ -1362,10 +1365,111 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                             log: "Waiting for instance ok state",
                                                             timestamp: timestampStarted
                                                         });
+                                                        //var actionLog = instancesDao.insertBootstrapActionLog(instance.id, instance.runlist, req.session.user.cn, timestampStarted);
+                                                        //var logsReferenceIds = [instance.id, actionLog._id];
+                                                        //logsDao.insertLog({
+                                                        //    referenceId: logsReferenceIds,
+                                                        //    err: false,
+                                                        //    log: "Waiting for instance ok state",
+                                                       //     timestamp: timestampStarted
+                                                      //  });
                                                        
-                                                        res.send(200, {
-                                                            "id": newinstanceIDs,
-                                                            "message": "instance launch success"
+							logger.debug('Returned from Create Instance. About to wait for instance ready state');
+                                                        
+                                                        
+                                                        //waiting for server to become active
+							logger.debug('Returned from Create Instance. About to send response');
+                                                        //res.send(200);
+							res.send(200,{
+                                                                                    "id": [instance.id],
+                                                                                    "message": "instance launch success"
+                                                                                });
+                                                         logger.debug('Should have sent the response.');
+                                                        openstack.waitforserverready(openstackconfig.tenantId,instanceData.server.id,function(err,data){
+                                                            if(!err){
+                                                                logger.debug('Instance Ready....');
+                                                               logger.debug(JSON.stringify(data));// logger.debug(data);
+								logger.debug('About to bootstrap Instance');
+                                                                //identifying pulic ip
+                                                                var publicip = '';
+                                                               if(data.server.addresses.public){
+                                                                    for(var i = 0; i < data.server.addresses.public.length;i++){
+                                                                        if(data.server.addresses.public[i]["version"] == '4'){
+                                                                            publicip = data.server.addresses.public[i].addr;
+                                                                        }
+                                                                    }
+                                                                }
+                                                                else{
+                                                                    if(data.server.addresses.private){
+                                                                        for(var i = 0; i < data.server.addresses.private.length;i++){
+                                                                            if(data.server.addresses.private[i]["version"] == '4'){
+                                                                                publicip = data.server.addresses.private[i].addr;
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                    else{
+                                                                        logger.error("No IP found", err);
+                                                                        res.send(500);
+                                                                        return;
+                                                                    }
+                                                                } 
+							instancesDao.updateInstanceIp(instance.id, publicip, function(err, updateCount) {
+                                                                                if (err) {
+                                                                                    logger.error("instancesDao.updateInstanceIp Failed ==>", err);
+                                                                                    return;
+                                                                                }
+                                                                                logger.debug('Instance ip upadated');
+                                                                            });
+							logsDao.insertLog({
+                                                                    referenceId: logsReferenceIds,
+                                                                    err: false,
+                                                                    log: "Instance Ready..about to bootstrap",
+                                                                    timestamp: timestampStarted
+                                                                });
+                                                        chef.bootstrapInstance({
+                                                                                        instanceIp: publicip,
+                                                                                        runlist: instance.runlist,
+                                                                                        instanceUsername: 'ubuntu',
+                                                                                        pemFilePath: '//etc//ssh//key.pem',
+                                                                                        nodeName: launchparams.server.name,
+                                                                                        environment: envName,
+                                                                                        instanceOS: instance.hardware.os,
+                                                                                        jsonAttributes: null
+                                                                                    }, function(err, code) {
+                                                                                        if (code == 0) {
+                                                                                            instancesDao.updateInstanceBootstrapStatus(instance.id, 'success', function(err, updateData) {
+                                                                                                if (err) {
+                                                                                                    logger.error("Unable to set instance bootstarp status. code 0", err);
+                                                                                                } else {
+                                                                                                    logger.debug("Instance bootstrap status set to success");
+                                                                                                }
+                                                                                            });
+                                                                                        }
+                                                                                    },function(stdOutData) {
+
+                                                                                        logsDao.insertLog({
+                                                                                            referenceId: logsReferenceIds,
+                                                                                            err: false,
+                                                                                            log: stdOutData.toString('ascii'),
+                                                                                            timestamp: new Date().getTime()
+                                                                                        });
+
+                                                                                    }, function(stdErrData) {
+
+                                                                                        //retrying 4 times before giving up.
+                                                                                        logsDao.insertLog({
+                                                                                            referenceId: logsReferenceIds,
+                                                                                            err: true,
+                                                                                            log: stdErrData.toString('ascii'),
+                                                                                            timestamp: new Date().getTime()
+                                                                                        });
+
+                                                                                    });    
+							 }
+                                                            else{
+                                                                logger.debug('Err Creating Instance:' + err);
+                                                                return;
+                                                            }
                                                         });
                                                         
                                                     });

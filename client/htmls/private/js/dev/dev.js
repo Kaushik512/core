@@ -2717,7 +2717,7 @@
                                                                                     $launchResultContainer.modal('show');
                                                                                     $.get('/blueprints/' + blueprintId + '/launch?version=' + version + '&envId=' + urlParams['envid'] + '&stackName=' + stackName, function(data) {
 
-
+											//alert('received ' + JSON.stringify(data));
                                                                                         var msgStr = 'Instance Id : ';
                                                                                         if (blueprintType === 'aws_cf') {
                                                                                             msgStr = 'Stack Id : ' + data.stackId + '. You can view your stack in cloudformation tab';
