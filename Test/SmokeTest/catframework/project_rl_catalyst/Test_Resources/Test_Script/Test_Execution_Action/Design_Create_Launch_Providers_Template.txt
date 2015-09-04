@@ -384,8 +384,8 @@ Catalyst Choose Template and Save Setup
     Sleep    6s
     Clicks on Design
     Sleep    10s
-    Clicks on OK Button to Create the New Blueprint
-    Sleep    1s
+    #Clicks on OK Button to Create the New Blueprint
+    #Sleep    1s
     Choose the Template Type Created
     Sleep    3s
     Clicks on Next Button
