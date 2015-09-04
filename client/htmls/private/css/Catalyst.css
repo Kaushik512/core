@@ -692,6 +692,15 @@ label.custom-select {
     width: 30px;
     margin-top:1px;
 }
+.puppetClientRunlistImageCP{
+   /* background-image:url('../img/puppeticon.png');*/
+    background-repeat:no-repeat;
+    float: left;
+    height: 28px;
+    width: 30px;
+    margin-top:1px;
+}
+
 .txt-color-white{
     color:#fff!important;
 }
