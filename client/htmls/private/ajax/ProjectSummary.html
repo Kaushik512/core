@@ -72,6 +72,7 @@
                         <td style="color:#fff;background-color: #2c3742;">Node IP</td>
                         <td style="color:#fff;background-color: #2c3742;">Last Deploy</td>
                         <td style="color:#fff;background-color: #2c3742;">Status</td>
+                        <td style="color:#fff;background-color: #2c3742;">Logs</td>
                         <!-- <td style="color:#fff;background-color: #2c3742;">App Links</td>
                         <td style="color:#fff;background-color: #2c3742;">Action</td> -->
                     </tr>
@@ -336,6 +337,8 @@ function constructUI(data) {
                           {
                               "bSortable": true
                           }, {
+                              "bSortable": true
+                          },{
                               "bSortable": false
                           }
                       ]
@@ -352,7 +355,7 @@ function constructUI(data) {
           //     data[i].applicationStatus = '<img src="img/indicator_unknown.png">';
           // }
           // var appLinks = '<img style="height: 18px;margin-left: -5px;"src="img/projectdemo/app-performanceblack.png" title="App-Performance"><img style="height: 18px;margin-left: 5px;" src="img/projectdemo/logsblack.png" title="App-Logs"><img style="height: 18px;margin-left: 5px;" src="img/projectdemo/code_healthblack.png" title="Code-Health"><img style="height: 18px;margin-left: 5px;" src="img/projectdemo/UI_performanceblack.png" title="UI-Performance">';
-          // var upgrade = '<div class="updateupgrade" style="margin-left:30%;" title="Upgrade"></div>';
+          var logs = '<div class="moreinfoAppDeploy" id="" title="Logs Info" style="margin-left:27%"></div>';
           if(!data[i].applicationName){
             data[i].applicationName = "NA";
           }
@@ -390,7 +393,8 @@ function constructUI(data) {
               data[i].hostName,
               data[i].applicationNodeIP,
               data[i].applicationLastDeploy,
-              data[i].applicationStatus
+              data[i].applicationStatus,
+              logs
           ]);
         }
       }
