@@ -384,8 +384,8 @@ Catalyst Choose Template and Save Setup of CentOS Blueprint
     Sleep    6s
     Clicks on Design
     Sleep    10s
-    Clicks on OK Button to Create the New Blueprint
-    Sleep    1s
+    #Clicks on OK Button to Create the New Blueprint
+    #Sleep    1s
     Choose the Template Type Created
     Sleep    3s
     Clicks on Next Button
@@ -1737,7 +1737,7 @@ Selects the Key Pair
     #Input Text    xpath=.//*[@id='select2-drop']/div/input    ${KeyNAME}
     #Click Element    xpath=.//*[@id='select2-drop']/ul/li[1]/div
 
-Uploads the Pem File for Providerdiv.widget-toolbox.clearfix > div > button
+Uploads the Pem File for Provider
     Sleep    4s
     Choose File    xpath=.//*[@class='gui-file file']    ${CAT_INSTANCES}
     Sleep    1s
