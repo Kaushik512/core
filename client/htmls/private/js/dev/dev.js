@@ -1541,7 +1541,7 @@
                                                                           if (data.chef && data.chef.serverId) {
                                                                               $divComponentListImage = $('<a class="chefClientRunlistImage actionbuttonChefClientRun"></a>').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'Chef Client Run').addClass('instance-bootstrap-list-image').attr('data-chefServerId', data.chef.serverId).attr('data-instanceId', data._id);
                                                                           } else {
-                                                                              $divComponentListImage = $('<a class="chefClientRunlistImage actionbuttonChefClientRun"></a>').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'Puppet Client Run').addClass('instance-bootstrap-list-image').attr('data-puppetServerId', data.puppet.serverId).attr('data-instanceId', data._id);
+                                                                              $divComponentListImage = $('<a class="chefClientRunlistImage actionbuttonChefClientRun"><img style="height:100%" src="img/puppeticon.png"/></a>').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'Puppet Client Run').addClass('instance-bootstrap-list-image').attr('data-puppetServerId', data.puppet.serverId).attr('data-instanceId', data._id);
                                                                           }
                                                                           //Check if the docker status is succeeded
                                                                           if (data.docker != null) {
