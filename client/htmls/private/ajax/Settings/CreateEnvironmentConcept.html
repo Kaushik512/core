@@ -203,7 +203,7 @@ $('#createenvinpuppetform').submit(function(e) {
     //if (typeof puppetId != 'undefined') {
     $.ajax({
         type: "Post",
-        url: '/puppet/environments',
+        url: '/puppet/'+puppetId+'/environments',
         data: {
             envName: $('#puppetenvnameinput').val()
         },
