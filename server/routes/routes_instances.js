@@ -142,6 +142,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                 res.send(500, errorResponses.db.error);
                                 return;
                             }
+                            console.log('infraManager ==>',infraManagerDetails);
                             if (!infraManagerDetails) {
                                 logger.debug("Infra Manager details not found", err);
                                 res.send(500, {
