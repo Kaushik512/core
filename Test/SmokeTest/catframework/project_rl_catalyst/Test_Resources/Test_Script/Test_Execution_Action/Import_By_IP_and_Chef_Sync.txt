@@ -75,7 +75,9 @@ Catalyst Import an CentOS Instance By IP
     #Clicks on Workzone Button
     #Clicks on User Created Organization
     #Clicks on User Created BusinessGroup
-    #Clicks on Button to your > Environment
+    Clicks on the Project to go to Environment
+    Sleep    2s
+    Clicks on Button to your > Environment
     Sleep    5s
     Clicks on Import By IP Button
     Enters the IP Address of CentOS Box
@@ -98,7 +100,9 @@ Catalyst Import an Ubuntu Instance By IP
     #Clicks on Workzone Button
     #Clicks on User Created Organization
     #Clicks on User Created BusinessGroup
-    #Clicks on Button to your > Environment
+    Clicks on the Project to go to Environment
+    Sleep    2s
+    Clicks on Button to your > Environment
     Sleep    3s
     Clicks on Import By IP Button
     Enters the IP Address of Ubuntu Box
@@ -141,14 +145,18 @@ Catalyst Verfication Ubuntu Duplicate Node
     
 
 
-
+Clicks on the Project to go to Environment
+    Execute Javascript    $('.expand-collapse.click-expand.fa.fa-angle-right').append('${PROJECT NAME2}').click()
+    Sleep    2s
 
 
 Catalyst Import By IP Chef Client run,SSH,Stop,Start
     Clicks on Settings
     Clicks on Workzone Button
     Sleep    2s
-    #Clicks on Button to your > Environment
+    Clicks on the Project to go to Environment
+    Sleep    2s
+    Clicks on Button to your > Environment
     Sleep    5s
     Selects the imported centos node
     Click on Chef ClientRun    
@@ -201,7 +209,9 @@ Catalyst Import By IP Chef Client run,SSH,Stop,Start on Ubuntu Instance
     #Clicks on Settings
     #Clicks on Workzone Button
     #Sleep    2s
-    #Clicks on Button to your > Environment
+    Clicks on the Project to go to Environment
+    Sleep    2s
+    Clicks on Button to your > Environment
     Sleep    5s
     Selects Ubuntu imported node
     Click on Chef ClientRun of Ubuntu Instance   
