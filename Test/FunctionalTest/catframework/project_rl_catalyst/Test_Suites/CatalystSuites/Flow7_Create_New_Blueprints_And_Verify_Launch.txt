@@ -23,7 +23,7 @@ Catalyst Validation of BlueprintPage
 
 
 Catalyst CENT OS Blueprint Save Setup and Create New Blueprint Setup
-    [Tags]       Sanity               Smoke
+    [Tags]       Sanity               Cent
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
     Catalyst Choose Template and Save Setup of CentOS Blueprint

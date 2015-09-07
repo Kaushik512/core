@@ -10,7 +10,7 @@ Resource           catalyst.txt
 
 *** Variables ***
 ${BROWSERTYPE}                    firefox                   
-${ENVIRONMENTSERVER}                http://d4d.relevancelab.com:3001                            
+${ENVIRONMENTSERVER}                http://d4d.relevancelab.com/private/index.html
 
 #http://10.0.1.206:3003/public/login.html
 

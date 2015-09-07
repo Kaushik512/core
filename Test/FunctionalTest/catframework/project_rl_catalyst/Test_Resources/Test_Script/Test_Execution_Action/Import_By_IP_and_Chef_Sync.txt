@@ -25,6 +25,8 @@ Catalyst Import an CentOS Instance By IP
     Clicks on Workzone Button
     #Clicks on User Created Organization
     #Clicks on User Created BusinessGroup
+    Clicks on the Project to go to Environment
+    Sleep    2s
     Clicks on Button to your > Environment
     Sleep    1s
     Clicks on Inport By IP Button
@@ -47,6 +49,8 @@ Catalyst Import an Ubuntu Instance By IP
     Clicks on Workzone Button
     #Clicks on User Created Organization
     #Clicks on User Created BusinessGroup
+    Clicks on the Project to go to Environment
+    Sleep    2s
     Clicks on Button to your > Environment
     Sleep    1s
     Clicks on Inport By IP Button
@@ -96,6 +100,8 @@ Catalyst Import By IP Chef Client Run on CentOS Instance
     Clicks on Settings
     Clicks on Workzone Button
     Sleep    2s
+    Clicks on the Project to go to Environment
+    Sleep    2s
     Clicks on Button to your > Environment
     Sleep    5s
     Click on Chef ClientRun
@@ -118,6 +124,8 @@ Catalyst Import By IP perform SSH on CentOS Instance
     Clicks on Settings
     Clicks on Workzone Button
     Sleep    2s
+    Clicks on the Project to go to Environment
+    Sleep    2s
     Clicks on Button to your > Environment
     Sleep    5s
     Clicks on SSH for instance
@@ -138,6 +146,8 @@ Catalyst Import By IP perform SSH on CentOS Instance
 Catalyst Verfication of IP,Status,Chef,SSH,MoreInfo and frm Ctrlpanel
     Clicks on Settings
     Clicks on Workzone Button
+    Sleep    2s
+    Clicks on the Project to go to Environment
     Sleep    2s
     Clicks on Button to your > Environment
     Sleep    5s
@@ -164,6 +174,8 @@ Catalyst Import By IP Ubuntu Instance Chef Client Run
     Clicks on Settings
     Clicks on Workzone Button
     Sleep    2s
+    Clicks on the Project to go to Environment
+    Sleep    2s
     Clicks on Button to your > Environment
     Sleep    5s
     Click on Chef ClientRun of Ubuntu Instance
@@ -184,6 +196,8 @@ Catalyst Import By IP Ubuntu Instance Chef Client Run
 Catalyst Import By IP Perform SSH on Ubuntu Instance
     Clicks on Settings
     Clicks on Workzone Button
+    Sleep    2s
+    Clicks on the Project to go to Environment
     Sleep    2s
     Clicks on Button to your > Environment
     Sleep    5s  
@@ -206,6 +220,8 @@ Catalyst Import By IP Perform SSH on Ubuntu Instance
 Catalyst Verfication of IP,Status,Chef,SSH,MoreInfo on UbuntuIns frm Ctrlpanel
     Clicks on Settings
     Clicks on Workzone Button
+    Sleep    2s
+    Clicks on the Project to go to Environment
     Sleep    2s
     Clicks on Button to your > Environment
     Sleep    5s
@@ -245,6 +261,8 @@ Catalyst Verify the Chef BootStrap,SSH,Status,Start,Stop
 Catalyst Check and Edit the Instance Name
     Sleep    4s
     Clicks on Workzone Button
+    Clicks on the Project to go to Environment
+    Sleep    2s
     Clicks on Button to your > Environment
     Sleep    4s
     Clicks on Edit Button of the Instance Imported
@@ -260,6 +278,8 @@ Catalyst Check and Edit the Instance Name
 Catalyst Check and Edit the Ubuntu Instance Name
     Sleep    4s
     Clicks on Workzone Button
+    Clicks on the Project to go to Environment
+    Sleep    2s
     Clicks on Button to your > Environment
     Sleep    4s
     Clicks on Edit Button of the UbuntuIns Imported
@@ -277,6 +297,8 @@ Catalyst Check and Edit the Ubuntu Instance Name
 Catalyst Instance Deleted From Chef Environment
     Sleep    6s
     Clicks on Workzone Button
+    Clicks on the Project to go to Environment
+    Sleep    2s
     Clicks on Button to your > Environment
     Sleep    4s
     Click on the Instance To Be Deleted 
@@ -294,6 +316,8 @@ Catalyst Instance Deleted From Chef Environment
 Catalyst Ubuntu Instance Deleted From Chef Environment
     Sleep    6s
     Clicks on Workzone Button
+    Clicks on the Project to go to Environment
+    Sleep    2s
     Clicks on Button to your > Environment
     Sleep    4s
     Click on the Ubuntu Instance To Be Deleted 
@@ -338,6 +362,8 @@ Catalyst Delete the Ubuntu Node only From Catalyst
 
 Catalyst Steps for Inport by IP Ubuntu
     Clicks on Workzone Button
+    Clicks on the Project to go to Environment
+    Sleep    2s
     Clicks on Button to your > Environment
     Sleep    4s
     Clicks on Inport By IP Button
@@ -353,6 +379,8 @@ Catalyst Steps for Inport by IP Ubuntu
 
 Catalyst Steps for Inmporting
     Clicks on Workzone Button
+    Clicks on the Project to go to Environment
+    Sleep    2s
     Clicks on Button to your > Environment
     Sleep    4s
     Clicks on Inport By IP Button
