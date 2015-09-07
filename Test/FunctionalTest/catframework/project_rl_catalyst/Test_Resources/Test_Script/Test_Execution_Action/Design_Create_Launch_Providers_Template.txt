@@ -457,6 +457,35 @@ CentOS Blueprint Launched and verify IP,Status,Chef,SSH,Stop,BootStrap
     Clicks on Back To Instances
     Sleep    4s
     
+
+Catalyst Inspect Functionality Setup
+    Clicks on the Project to go to Environment
+    Clicks on the Environment to Launch
+    Sleep    5s
+    Selects the CentOS Blueprint to go to Controlpanel
+    Clicks on Contreol Panel
+    Clicks on Inspect Button
+    Sleep    3s
+    
+
+
+
+
+
+
+
+
+
+
+Clicks on Inspect Button
+    Execute Javascript    $('.btn.btn-primary.inspectBtn').click()
+    
+
+
+Selects the CentOS Blueprint to go to Controlpanel
+    Click Element    xpath=.//span[text()='${BLUEPRINT NAME}']
+
+
 Clicks on the Project to go to Environment
     Execute Javascript    $('.expand-collapse.click-expand.fa.fa-angle-right').append('${Proj1}').click()
     Sleep    2s
