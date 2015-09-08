@@ -169,7 +169,7 @@ Clicks on Add New Blueprint Button
     Sleep    3s
 
 Deleting the Testing Blueprint
-    Click Element    css=button.btn.pull-right.btn-danger.right-button
+    Click Element    xpath=.//*[@id='l2']/footer/div/button
     Sleep    1s
     Click Element    xpath=//*[text()='OK']   
 
@@ -319,6 +319,8 @@ Catalyst Form validation of Blueprint
     Sleep    6s
     Clicks on Design
     Sleep    10s
+    Clicks on OK Button to Create the New Blueprint
+    Sleep    1s
     Choose the Template Type Created
     Sleep    3s
     Clicks on Next Button
@@ -430,7 +432,11 @@ CentOS Blueprint Launched and verify IP,Status,Chef,SSH,Stop,BootStrap
     Sleep    5s
     Clicks on Blueprint Section
     Select the CentosBlueprint
+    Sleep    1s
     Clicks on Launch Button
+    Sleep    2s
+    Confirmation to launch Blueprint
+    Sleep    1s
     Clicks on Instance Close Button
     Clicks on Instances Button
     Verify the IP Address of the Instance
@@ -451,10 +457,42 @@ CentOS Blueprint Launched and verify IP,Status,Chef,SSH,Stop,BootStrap
     Clicks on Back To Instances
     Sleep    4s
     
+
+Catalyst Inspect Functionality Setup
+    Clicks on the Project to go to Environment
+    Clicks on the Environment to Launch
+    Sleep    5s
+    Selects the CentOS Blueprint to go to Controlpanel
+    Clicks on Contreol Panel
+    Clicks on Inspect Button
+    Sleep    3s
+    
+
+
+
+
+
+
+
+
+
+
+Clicks on Inspect Button
+    Execute Javascript    $('.btn.btn-primary.inspectBtn').click()
+    
+
+
+Selects the CentOS Blueprint to go to Controlpanel
+    Click Element    xpath=.//span[text()='${BLUEPRINT NAME}']
+
+
 Clicks on the Project to go to Environment
     Execute Javascript    $('.expand-collapse.click-expand.fa.fa-angle-right').append('${Proj1}').click()
     Sleep    2s
 
+
+Confirmation to launch Blueprint
+    Click Element    xpath=.//*[text()='OK']
 
 Clicks on the Environment to Launch
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=//*[normalize-space(text())="Dev"]
@@ -641,12 +679,15 @@ Catalyst Choose Template and Save Setup for UBUNTU
 
 Ubuntu Blueprint Launched and verify the IP,Status,Chef,SSH,Stop,BootStrap
     Sleep    5s
-    Clicks on the Project to go to Environment
+    #Clicks on the Project to go to Environment
     Clicks on the Button to the Environment
     Sleep    2s
     Clicks on Blueprint Section
     Select the BlueprintUbuntu
     Clicks on Launch Button
+    Sleep    2s
+    Confirmation to launch Blueprint
+    Sleep    1s
     Clicks on Instance Close Button
     Clicks on Instances Button
     Verify the IP Address of the Ubuntu Instance
@@ -745,7 +786,7 @@ Clicks on Ubuntu OS Instance to Delete
     
 
 Catalyst Grid View Verify Start ,Stop ,SSH ,Chef ,Client ,Log Setup of Ubuntu
-    Clicks on the Project to go to Environment
+    #Clicks on the Project to go to Environment
     Clicks on the Button to the Environment
     Sleep    1s
     Clicks on Instances View
@@ -948,7 +989,7 @@ Catalyst Ubuntu Instance Verfication and BootStrap steps
 
 Catalyst CHEFCLIENT Action on Ubuntu Instance
     Sleep    5s
-    Clicks on the Project to go to Environment
+    #Clicks on the Project to go to Environment
     Clicks on the Button to the Environment
     Steps To Run Chef Client of Ubuntu
     Sleep    3s
@@ -956,7 +997,7 @@ Catalyst CHEFCLIENT Action on Ubuntu Instance
 
 Catalyst SSH Action on the Ubuntu Instance
     Sleep    5s
-    Clicks on the Project to go to Environment
+    #Clicks on the Project to go to Environment
     Clicks on the Button to the Environment
     Steps to Run SSH of Ubuntu
     Sleep    3s
@@ -964,7 +1005,7 @@ Catalyst SSH Action on the Ubuntu Instance
 
 Catalyst STOP Action on the Ubuntu Instance
     Sleep    5s
-    Clicks on the Project to go to Environment
+    #Clicks on the Project to go to Environment
     Clicks on the Button to the Environment
     Sleep    3s
     Steps to Run Stopping the Instance of Ubuntu
@@ -974,7 +1015,7 @@ Catalyst STOP Action on the Ubuntu Instance
 
 Catalyst EDIT Name of Ubuntu Instance
     Sleep    5s
-    Clicks on the Project to go to Environment
+    #Clicks on the Project to go to Environment
     Clicks on the Button to the Environment
     Clicks on Edit Button of the UbuntuInstance Imported
     Enters the New Instance Name for Ubuntu
@@ -1018,7 +1059,7 @@ Catlayst verfication of Instance Stop Setup and Disable of Ubuntu
     #Clicks on Workzone Button
     #Clicks on User Created Organization
     #Clicks on User Created BusinessGroup
-    Clicks on the Project to go to Environment
+    #Clicks on the Project to go to Environment
     Clicks on the Button to the Environment
     #Clicks on your Ubuntu Blueeeprint
     Verfified the STOPPED Status of Ubuntu
@@ -1448,9 +1489,9 @@ Update the Run List with Newwww Cookbook
     Wait Until Keyword Succeeds    1 minute     10 seconds      Click Element    id=btnaddToRunlist
 
 Clicks on Update Button of Runlist
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='chefRunModalContainer']/div/div/div[3]/button[1]
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[text()='Update']
     Wait Until Keyword Succeeds    1 minute     4 seconds      Click Element    xpath=//*[text()='OK']
-    Wait Until Keyword Succeeds    1 minute     5 seconds      Click Element    xpath=.//*[@id='instanceLogModalContainer']/div/div/div[3]/button      #close
+    Wait Until Keyword Succeeds    1 minute     5 seconds      Click Element    xpath=.//*[text()='Close']      #close
 
 
 

@@ -139,12 +139,15 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                         masterUtil.getCongifMgmtsById(infraManagerId, function(err, infraManagerDetails) {
                             if (err) {
                                 logger.debug("Failed to fetch Infra Manager Details ", err);
-                                res.send(500, errorResponses.chef.corruptChefData);
+                                res.send(500, errorResponses.db.error);
                                 return;
                             }
+                            console.log('infraManager ==>',infraManagerDetails);
                             if (!infraManagerDetails) {
                                 logger.debug("Infra Manager details not found", err);
-                                res.send(500, errorResponses.chef.corruptChefData);
+                                res.send(500, {
+                                    message:"Infra Manager Details Corrupted"
+                                });
                                 return;
                             }
 
