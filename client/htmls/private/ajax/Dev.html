@@ -24,6 +24,9 @@
                 <li class="pull-left Containers">
                     <a href="#l4" style="display:block!important" data-toggle="tab"><i class="fa fa-briefcase"></i>&nbsp;Containers</a>
                 </li>
+                <li class="pull-left Applications">
+                    <a href="#l6" style="display:block!important" data-toggle="tab"><i class="fa fa-shield"></i>&nbsp;Applications</a>
+                </li>
 
             </ul>
  <div id="myTabContent3" class="nav tab-content">
@@ -89,7 +92,8 @@ docker:'docker.html',
 blueprint:'blueprint.html',
 instance:'instance.html',
 cloudformation:'cloudformation.html',
-orchestration:'orchestration.html'
+orchestration:'orchestration.html',
+application: 'application.html'
 };
 window.count=0;
 
@@ -118,6 +122,8 @@ loadHTMLFile(basePath+htmlTabs.blueprint,$('#myTabContent3'));
 loadHTMLFile(basePath+htmlTabs.orchestration,$('#myTabContent3'));
 loadHTMLFile(basePath+htmlTabs.cloudformation,$('#myTabContent3'));
 loadHTMLFile(basePath+htmlTabs.docker,$('#myTabContent3'));
+
+loadHTMLFile(basePath+htmlTabs.application,$('#myTabContent3'));
 
 function loadHTMLFile(url,parentToAppend){
     $.ajax({
