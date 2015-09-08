@@ -584,7 +584,7 @@ var Puppet = function(settings) {
         }
         console.log(sshOptions);
 
-        runSSHCmdOnAgent(sshOptions, ['rm -rf /etc/puppet', 'rm -rf /var/lib/puppet', 'rm -rf $HOME/.puppet'], function(err, retCode) {
+        runSSHCmdOnAgent(sshOptions, ['rm -rf /etc/puppet', 'rm -rf /var/lib/puppet', 'rm -rf $HOME/.puppet','service puppet stop'], function(err, retCode) {
             if (err) {
                 callback({
                     message: "Unable to run puppet client on the node",
