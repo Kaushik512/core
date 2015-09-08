@@ -22,8 +22,6 @@ Resource           ${CATALYST ACTION}/Gallery_setup_TempService_Steps.txt
 *** Keywords ***
 Catalyst Execution of the Jenkins Task in Envrnment
     Sleep    3s
-    Clicks on Design
-    Sleep    2s
     Clicks on Workzone
     Sleep    2s
     Clicks on the Project to go to Environment
@@ -1065,7 +1063,7 @@ Catalyst Creation of Jenkins Task in Environment
     #Clicks on User Created BusinessGroup
     Clicks on the Project to go to Environment
     Sleep    2s
-    Clicks on > Button to your Environment
+    Clicks on Button to your > Environment
     Sleep    2s
     Clicks on Orchestration Tab of the Environment
     Clicks on New Button to create task
@@ -1077,12 +1075,12 @@ Catalyst Creation of Jenkins Task in Environment
     Clicks on Save Task Button
     Sleep    4s
     Clicks on Save of the Success Button
-    Sleep    4s
-    Clicks on Pop up of Ok Button
+    #Sleep    2s
+    #Clicks on Pop up of Ok Button
 
 
 Clicks on Pop up of Ok Button
-    Click Element    xpath=.//*[text()='OK']    
+    Execute Javascript    $('body > div.bootbox.modal.fade.bootbox-alert.in > div > div > div.modal-footer > button').click();
 
 Catlayst Creation of Chef Task in the Environment
     Clicks on New Button to create task
@@ -1473,8 +1471,8 @@ Catalyst creation of Chef Task
     Clicks on Update runlist button to save runlist
     Clicks on Save button for chef task
     Clicks on Save of the Success Button
-    Sleep    4s
-    Clicks on Pop up of Ok Button
+    #Sleep    4s
+    #Clicks on Pop up of Ok Button
 
 
 
@@ -1502,8 +1500,6 @@ Clicks on Save button for chef task
     Click Element    xpath=.//*[@id='taskForm']/div/div[7]/div/button    
     
 Catalyst execution of Chef Task
-    Sleep    3s
-    Clicks on Design
     Sleep    2s
     Clicks on Workzone
     Sleep    2s

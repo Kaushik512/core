@@ -4513,6 +4513,13 @@ float: left;
     overflow-x:hidden;
     word-break:break-all;
 }
+.logsForAppDeploy {
+    height:413px;
+    overflow-y:auto;
+    overflow-x:hidden;
+    word-break:break-all;
+    font-size: 12px;
+}
 .logsAreaBootstrap {
     height:400px;
     overflow-y:auto;
