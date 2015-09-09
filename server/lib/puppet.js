@@ -444,44 +444,54 @@ var Puppet = function(settings) {
     };
 
     this.getNodesList = function(callback) {
-        getPuppetConfig(function(err, puppetConfig) {
+        /*getPuppetConfig(function(err, puppetConfig) {
+            if (err) {
+                callback(err, null);
+                return;
+            }*/
+        var stdOutStr = '';
+        var stdErrStr = '';
+        runSSHCmdOnMaster('puppet cert list --all', function(err, retCode) {
             if (err) {
                 callback(err, null);
                 return;
             }
-            var stdOutStr = '';
-            var stdErrStr = '';
-            runSSHCmdOnMaster('ls ' + puppetConfig.yamldir + '/node', function(err, retCode) {
-                if (err) {
-                    callback(err, null);
-                    return;
-                }
-                if (retCode !== 0) {
-                    message = "cmd run failed with ret code : " + retCode
-                    callback({
-                        message: message,
-                        retCode: retCode
-                    }, null);
-                } else {
-                    logger.debug(stdOutStr)
-                    stdOutStr = stdOutStr.replace(/[\t\n\r\b\0\v\f\'\"\\]/g, '  ');
-                    stdOutStr = stdOutStr.split('  ');
-                    var nodes = [];
-                    for (var i = 0; i < stdOutStr.length; i++) {
-                        if (stdOutStr[i]) {
-                            var nodeName = stdOutStr[i].replace('.yaml', '');
-                            nodes.push(nodeName);
-                        }
+            if (retCode !== 0) {
+                message = "cmd run failed with ret code : " + retCode
+                callback({
+                    message: message,
+                    retCode: retCode
+                }, null);
+            } else {
+                logger.debug(stdOutStr)
+                //stdOutStr = stdOutStr.replace(/[\t\n\r\b\0\v\f\\]/g, '');
+                //stdOutStr = stdOutStr.split('  ');
+                var regEx = /\+\s*\"(.*?)\"/g;
+                //nodes = stdOutStr.match(regEx)
+                var matches;
+                var nodes = [];
+                while (matches = regEx.exec(stdOutStr)) {
+                    if (matches.length == 2) {
+                        nodes.push(matches[1]);
                     }
-                    callback(null, nodes);
-                }
-            }, function(stdOut) {
-                stdOutStr = stdOutStr + stdOut.toString('utf8');
 
-            }, function(stdErr) {
-                stdErrStr = stdErrStr + stdOut.toString('utf8');
-            });
+                }
+                //var nodes = [];
+                // for (var i = 0; i < stdOutStr.length; i++) {
+                //     if (stdOutStr[i]) {
+                //         var nodeName = stdOutStr[i].replace('.yaml', '');
+                //         nodes.push(nodeName);
+                //     }
+                // }
+                callback(null, nodes);
+            }
+        }, function(stdOut) {
+            stdOutStr = stdOutStr + stdOut.toString('utf8');
+
+        }, function(stdErr) {
+            stdErrStr = stdErrStr + stdOut.toString('utf8');
         });
+        //});
     };
 
     this.getNode = function(nodeName, callback) {
@@ -584,7 +594,7 @@ var Puppet = function(settings) {
         }
         console.log(sshOptions);
 
-        runSSHCmdOnAgent(sshOptions, ['rm -rf /etc/puppet', 'rm -rf /var/lib/puppet', 'rm -rf $HOME/.puppet','service puppet stop'], function(err, retCode) {
+        runSSHCmdOnAgent(sshOptions, ['rm -rf /etc/puppet', 'rm -rf /var/lib/puppet', 'rm -rf $HOME/.puppet', 'service puppet stop'], function(err, retCode) {
             if (err) {
                 callback({
                     message: "Unable to run puppet client on the node",
