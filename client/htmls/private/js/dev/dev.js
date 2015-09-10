@@ -3605,7 +3605,9 @@
                                                                                           $tBody.append($rowTr);
                                                                                       }
                                                                                       if ($modal.is(':visible')) {
-                                                                                          pollStackEvents(stackId)
+                                                                                          setTimeout(function(){
+                                                                                            pollStackEvents(stackId);
+                                                                                          },5000);
                                                                                       }
                                                                                   }).fail(function(jxhr) {
                                                                                       var msg = "Server Behaved Unexpectedly.";
