@@ -21,14 +21,14 @@ Catalyst Create New Cloud Formation Blueprint
     [Teardown]     Close Browser
 
 
-Catalyst Launch Cloud Formation Blueprint
-    [Tags]       Sanity               Workzone
+#-Catalyst Launch Cloud Formation Blueprint
+    #-[Tags]       Sanity               Workzone
 #    Catalyst Login
-    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
-    Catalyst Launch of Cloud Formation Blueprint
-    Sleep    2s
-    Catalyst Logout                      
-    [Teardown]     Close Browser
+    #-Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    #-Catalyst Launch of Cloud Formation Blueprint
+    #-Sleep    2s
+    #-Catalyst Logout                      
+    #-[Teardown]     Close Browser
 
 
 	
