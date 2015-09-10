@@ -23,7 +23,8 @@ pup_master_ip = pup_config['puppet_master']['ipaddress']
 pup_master_pem_file = pup_config['puppet_master']['pem_file']
 pup_master_fqdn = pup_config['puppet_master']['fqdn']
 
-puppet_client_cmd = "puppet agent --test --server #{pup_master_fqdn} --waitforcert 10  > /dev/null 2>&1 &"
+#puppet_client_cmd = "puppet agent --test --server #{pup_master_fqdn} --waitforcert 10  > /dev/null 2>&1 &"
+puppet_client_cmd = "puppet agent --test --waitforcert 10  > /dev/null 2>&1 &"
 
 
 if pup_config['client']['ssh_pass_method']
