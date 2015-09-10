@@ -81,7 +81,7 @@ function Env() {
 
     }
 
-    this.createEnv = function(name, orgname,bgname,projname,envname, callback) {
+    this.createEnv = function(name, orgname,bgname,projname, callback) {
         var uuid1 = uuid.v4();
         //var envField = "{\"field\":[{\"name\":\"environmentname\",\"values\":{\"value\":\"" + name + "\"}},{\"name\":\"orgname\",\"values\":{\"value\":\"" + orgname + "\"}},{\"name\":\"rowid\",\"values\":{\"value\":\"" + uuid1 + "\"}}]}";
         var envField = [];
@@ -99,10 +99,7 @@ function Env() {
 
         logger.debug('tempObj ==>', JSON.stringify(FLD));
 
-        // var query = {};
-        // query[fieldname] = fieldvalue; //building the query 
-        // query['id'] = masterid;
-       // console.log('envname:' + envname);
+        
         d4dModelNew.d4dModelMastersEnvironments.findOne({
             environmentname : name,
             orgname_rowid: orgname,

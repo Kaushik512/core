@@ -54,15 +54,15 @@ var Puppet = function(settings) {
     }
 
     function getPuppetConfig(callback) {
-        if (puppetConfig) {
-            process.nextTick(function() {
-                callback(null, puppetConfig);
-            });
-            return;
-        }
+        // if (puppetConfig) {
+        //     process.nextTick(function() {
+        //         callback(null, puppetConfig);
+        //     });
+        //     return;
+        // }
         var stdOutStr = '';
         var stdErrStr = '';
-        puppetConfig = {};
+        var puppetConfig = {};
         var line = '';
         runSSHCmdOnMaster('puppet config print', function(err, retCode) {
             if (err) {
