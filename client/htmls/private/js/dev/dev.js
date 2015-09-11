@@ -796,21 +796,40 @@
 
 
                                                                           var $divinstancescardview = $('#divinstancescardview');
-                                                                          if ($divinstancescardview.find('li').length > 0) {
+                                                                          // if ($divinstancescardview.find('li').length > 0) {
+                                                                          //     //Arab
+                                                                          //     var cardIndexInfo = localStorage.getItem("cardIndex");
+
+                                                                          //     if (cardIndexInfo) {
+                                                                          //         var li = $divinstancescardview.find('li').get(cardIndexInfo);
+                                                                          //         //console.log('container ==>',li);
+                                                                          //         if (li) {
+                                                                          //             $(li).find('.flip-toggle').trigger('click');
+                                                                          //         } else {
+                                                                          //             $divinstancescardview.find('li').first().find('.flip-toggle').trigger('click');
+                                                                          //         }
+
+                                                                          //     } else {
+                                                                          //         $divinstancescardview.find('li').first().find('.flip-toggle').trigger('click');
+                                                                          //     }
+                                                                          // }
+                                                                          if ($divinstancescardview.find('.domain-role-thumbnailDev').length > 0) {
                                                                               //Arab
+                                                                              console.log("I am here there");
+                                                                              $divinstancescardview.find('.container').removeClass('role-Selectedcard');
                                                                               var cardIndexInfo = localStorage.getItem("cardIndex");
-
+                                                                              console.log(cardIndexInfo);
                                                                               if (cardIndexInfo) {
-                                                                                  var li = $divinstancescardview.find('li').get(cardIndexInfo);
+                                                                                  var li = $divinstancescardview.find('.domain-role-thumbnailDev').get(cardIndexInfo);
                                                                                   //console.log('container ==>',li);
+                                                                                  console.log(li);
                                                                                   if (li) {
-                                                                                      $(li).find('.flip-toggle').trigger('click');
+                                                                                      $(li).find('.container').addClass('role-Selectedcard');
                                                                                   } else {
-                                                                                      $divinstancescardview.find('li').first().find('.flip-toggle').trigger('click');
+                                                                                      $divinstancescardview.find('.container').first().addClass('role-Selectedcard');
                                                                                   }
-
                                                                               } else {
-                                                                                  $divinstancescardview.find('li').first().find('.flip-toggle').trigger('click');
+                                                                                  $divinstancescardview.find('.container').first().addClass('role-Selectedcard');
                                                                               }
                                                                           }
                                                                           $divinstancescardview.find('.item').first().addClass('active');
@@ -1977,7 +1996,7 @@
                                                                               $(this).addClass('role-Selectedcard');
                                                                               //Arab
                                                                               localStorage.setItem("cardIndex", $(".container").index($(this)));
-                                                                              console.log($(".container").index($(this)));
+                                                                              console.log("Card Index is :"+$(".container").index($(this)));
                                                                           });
                                                                           pageSetUp();
 

@@ -3117,8 +3117,8 @@ nav ul ul>li:hover b {
     box-shadow:none !important; 
 }
 .role-Selectedcard{
-    border: 2px solid #40baf1;
-    border-radius:12px;
+    border: 2px solid #40baf1 !important;
+    border-radius:12px !important;
     box-shadow: 0 4px 10px rgba(0, 0, 0, .3);
 }
 .card-backflip{
