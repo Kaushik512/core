@@ -1,3 +1,7 @@
+.tableMoreInfo{
+    position: relative;
+    left:32%;
+}
 .updateupgrade{
     background: url("../img/updateupgrade.png");
     background-repeat: no-repeat;
@@ -667,6 +671,10 @@ label.custom-select {
     height: 28px;
     margin-left: 4px;
     width: 28px;
+}
+#customRow .actionbuttonChefClientRundisable{
+    position: relative;
+    left:32%;
 }
 .actionbuttonShutdowndisable{
     background-image:url('../img/galleryIcons/rsz_shut_down.png');
@@ -4440,8 +4448,15 @@ float: left;
 }
 .actionbuttonChefClientRun{
     /*background-image:url('../img/galleryIcons/Chefimport.png');*/
-    background-repeat:no-repeat;float: left;
-    height: 27px;margin-left: 4px;width: 32%;
+    background-repeat:no-repeat;
+    float: left;
+    height: 27px;
+    margin-left: 4px;
+    width: 32%;
+}
+#customRow .actionbuttonChefClientRun{
+    position: relative;
+    left:32%;
 }
 .actionbuttonShutdown{
     /*background-image:url('../img/galleryIcons/shut_down.png');*/

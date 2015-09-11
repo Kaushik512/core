@@ -1360,7 +1360,7 @@
                                                                                   } else {
                                                                                       menuAppTaskLI = "<li style='font-size:10px;color:#3276b1'>No AppLinks Available</li>";
                                                                                   }
-                                                                                  $rowContainter.append('<td>' + menuAppTaskLI + '</td>');
+                                                                                  //$rowContainter.append('<td>' + menuAppTaskLI + '</td>');
 
                                                                                   if (data.taskIds && data.taskIds.length) {
 
