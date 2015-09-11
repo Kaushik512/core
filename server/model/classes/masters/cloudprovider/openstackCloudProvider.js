@@ -49,6 +49,28 @@ var openstackProviderSchema = new Schema({
         required: true,
         trim: true
     },
+    serviceendpoints:{
+        compute: {
+            type: String,
+            trim: true
+        },
+        network: {
+            type: String,
+            trim: true
+        },
+        image: {
+            type: String,
+            trim: true
+        },
+        ec2: {
+            type: String,
+            trim: true
+        },
+        identity: {
+            type: String,
+            trim: true
+        }
+    },
     tenantid: {
         type: String,
         required: true,
@@ -201,7 +223,15 @@ openstackProviderSchema.statics.updateopenstackProviderById = function(providerI
             password: providerData.password,
             host: providerData.host,
             tenantid: providerData.tenantid,
-            providerType: providerData.providerType
+            tenantname: providerData.tenantname,
+            providerType: providerData.providerType,
+            serviceendpoints:{
+                compute: providerData.serviceendpoints.compute,
+                network: providerData.serviceendpoints.network,
+                image: providerData.serviceendpoints.image,
+                ec2:providerData.serviceendpoints.ec2 ,
+                identity: providerData.serviceendpoints.identity
+            }
         }
     }, {
         upsert: false

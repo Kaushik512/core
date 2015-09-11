@@ -286,6 +286,15 @@ console.log(JSON.stringify(options));
 					   headers:{"X-Auth-Token": token,"Content-Type": "application/json"} 
 					};
 				client = new Client();
+				console.log("createServerJson before");
+				console.log(JSON.stringify(createServerJson));
+				//Removing network and security group if not present - assuming nova will take care
+				if(!createServerJson.server.networks[0]["uuid"]){
+					delete createServerJson.server.networks;
+					delete createServerJson.server.security_groups;
+				}
+				console.log("createServerJson after");
+				console.log(JSON.stringify(createServerJson));
 				var createServerUrl = 'http://'+options.host+':8774/v2/'+tenantId+'/servers';
 				console.log('CreateServerURL:' + createServerUrl);
 				client.registerMethod("jsonMethod", createServerUrl, "POST");

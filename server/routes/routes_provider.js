@@ -264,6 +264,17 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         var openstackprojectname = req.body.openstackprojectname;
         var providerName = req.body.providerName;
         var providerType = req.body.providerType;
+        var serviceendpoints = {
+            compute : req.body.openstackendpointcompute,
+            network : req.body.openstackendpointnetwork,
+            image : req.body.openstackendpointimage,
+            ec2 : req.body.openstackendpointec2,
+            identity : req.body.openstackendpointidentity,
+
+        };
+
+
+
         var orgId = req.body.orgId;
 
         if (typeof openstackusername === 'undefined' || openstackusername.length === 0) {
@@ -303,6 +314,16 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             res.send(400, "Please Enter Project Name.");
             return;
         }
+        if (typeof serviceendpoints.compute  === 'undefined' || serviceendpoints.compute .length === 0) {
+            res.send(400, "Please Enter Compute Endpoint Name.");
+            return;
+        }
+        if (typeof serviceendpoints.identity  === 'undefined' || serviceendpoints.identity .length === 0) {
+            res.send(400, "Please Enter Identity Endpoint Name.");
+            return;
+        }
+
+
         var region;
         // if (typeof req.body.region === 'string') {
         //     logger.debug("inside single region: ", req.body.region);
@@ -344,6 +365,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                 tenantid : openstacktenantid,
                                 tenantname: openstacktenantname,
                                 projectname: openstackprojectname,
+                                serviceendpoints : serviceendpoints,
                                 orgId: orgId
                             };
                             openstackProvider.getopenstackProviderByName(providerData.providerName, providerData.orgId, function(err, prov) {
@@ -528,6 +550,14 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         var providerName = req.body.providerName.trim();
         var providerType = req.body.providerType.trim();
         var providerId = req.params.providerId.trim();
+        var serviceendpoints = {
+            compute : req.body.openstackendpointcompute,
+            network : req.body.openstackendpointnetwork,
+            image : req.body.openstackendpointimage,
+            ec2 : req.body.openstackendpointec2,
+            identity : req.body.openstackendpointidentity
+
+        };
         var orgId = req.body.orgId;
         if (typeof openstackusername === 'undefined' || openstackusername.length === 0) {
             res.send(400, "Please Enter Username.");
@@ -566,6 +596,15 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             res.send("Please Select Any Organization.");
             return;
         }
+         if (typeof serviceendpoints.compute  === 'undefined' || serviceendpoints.compute .length === 0) {
+            res.send(400, "Please Enter Compute Endpoint Name.");
+            return;
+        }
+        if (typeof serviceendpoints.identity  === 'undefined' || serviceendpoints.identity .length === 0) {
+            res.send(400, "Please Enter Identity Endpoint Name.");
+            return;
+        }
+
 
              var providerData = {
                                 id: 9,
@@ -577,9 +616,11 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                 projectname: openstackprojectname,
                                 providerName: providerName,
                                 providerType: providerType,
+                                serviceendpoints : serviceendpoints,
                                 orgId: orgId
                             };
                     logger.debug("provider>>>>>>>>>>>> %s", providerData.providerType);
+                    logger.debug("provider data>>>>>>>>>>>> %s", JSON.stringify(providerData));
                    
                     usersDao.haspermission(user.cn, category, permissionto, null, req.session.user.permissionset, function(err, data) {
                         if (!err) {
