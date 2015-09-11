@@ -11,15 +11,15 @@ var JenkinsTask = require('./taskTypeJenkins');
 var TaskHistory = require('./taskHistory');
 var configmgmtDao = require('../../../model/d4dmasters/configmgmt');
 var Jenkins = require('../../../lib/jenkins');
-//var js2xmlparser = require("js2xmlparser");
-//var url = require('url');
+var CompositeTask = require('./taskTypeComposite');
 
 
 var Schema = mongoose.Schema;
 
 var TASK_TYPE = {
     CHEF_TASK: 'chef',
-    JENKINS_TASK: 'jenkins'
+    JENKINS_TASK: 'jenkins',
+    COMPOSITE_TASK: 'composite'
 };
 
 var TASK_STATUS = {
@@ -86,7 +86,7 @@ taskSchema.methods.execute = function(userName, baseUrl,choiceParam, callback, o
     var self = this;
 
     var taskHistoryData = {
-        taskId: self._id,
+        taskId: self.id,
         taskType: self.taskType,
         user: userName
     };
@@ -103,6 +103,9 @@ taskSchema.methods.execute = function(userName, baseUrl,choiceParam, callback, o
         taskHistoryData.jenkinsServerId = this.taskConfig.jenkinsServerId;
         taskHistoryData.jobName = this.taskConfig.jobName;
 
+
+    }else if (this.taskType === TASK_TYPE.COMPOSITE_TASK) {
+        task = new CompositeTask(this.taskConfig);
 
     } else {
         callback({
@@ -192,11 +195,13 @@ taskSchema.methods.execute = function(userName, baseUrl,choiceParam, callback, o
                 
             });
         }
+        logger.debug("before call -----------------------------");
         TaskHistory.createNew(taskHistoryData, function(err, taskHistoryEntry) {
             if (err) {
                 logger.error("Unable to make task history entry", err);
                 return;
             }
+            logger.debug("after call -----------------------------");
             taskHistory = taskHistoryEntry;
             logger.debug("Task history created");
         });
@@ -222,6 +227,8 @@ taskSchema.methods.execute = function(userName, baseUrl,choiceParam, callback, o
             }
             taskHistory.save();
         }
+
+        logger.debug("Anshu======= Firing onComplete callback: ",typeof onComplete,' ===== id === ',self.id);
 
         if (typeof onComplete === 'function') {
             onComplete(err, status);
@@ -280,7 +287,7 @@ var comparer = function compareObject(a, b) {
 
 // creates a new task
 taskSchema.statics.createNew = function(taskData, callback) {
-
+    logger.debug("Got data: ",JSON.stringify(taskData));
     var taskConfig;
     if (taskData.taskType === TASK_TYPE.JENKINS_TASK) {
         taskConfig = new JenkinsTask({
@@ -301,6 +308,13 @@ taskSchema.statics.createNew = function(taskData, callback) {
             nodeIds: taskData.nodeIds,
             runlist: taskData.runlist,
             attributes: taskData.attributes
+        });
+    } else if (taskData.taskType === TASK_TYPE.COMPOSITE_TASK) {
+        logger.debug("Incomming tasks: ",JSON.stringify(taskData));
+        taskConfig = new CompositeTask({
+            taskType: TASK_TYPE.COMPOSITE_TASK,
+            assignTasks: taskData.taskConfig.assignTasks,
+            jobName: taskData.jobName
         });
     } else {
         callback({
@@ -424,6 +438,12 @@ taskSchema.statics.updateTaskById = function(taskId, taskData, callback) {
             nodeIds: taskData.nodeIds,
             runlist: taskData.runlist,
             attributes: taskData.attributes
+        });
+    }else if (taskData.taskType === TASK_TYPE.COMPOSITE_TASK) {
+        taskConfig = new CompositeTask({
+            taskType: TASK_TYPE.COMPOSITE_TASK,
+            jobName: taskData.jobName,
+            assignTasks: taskData.assignTasks
         });
     } else {
         callback({
