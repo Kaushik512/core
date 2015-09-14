@@ -465,16 +465,24 @@ Catalyst Inspect Functionality Setup
     Selects the CentOS Blueprint to go to Controlpanel
     Clicks on Contreol Panel
     Clicks on Inspect Button
-    Sleep    3s
+    Sleep    5s
+    Enter the Installed Software Name in the Filter
+    Verify the Particular Software is listed in list 
+
     
 
 
 
+Verify the Particular Software is listed in list
+    Sleep    2s 
+    Element Should Contain    css=#paragraphs > p:nth-child(1)    ${SOFTWARE NAME}
+    Sleep    3s
+    Click Element    css=#installedSoftwareModalContainer > div > div > div.modal-footer > button
 
 
 
-
-
+Enter the Installed Software Name in the Filter
+    Input Text    css=label > input.form-control    ${SOFTWARE NAME}
 
 
 Clicks on Inspect Button
@@ -483,7 +491,8 @@ Clicks on Inspect Button
 
 
 Selects the CentOS Blueprint to go to Controlpanel
-    Click Element    xpath=.//span[text()='${BLUEPRINT NAME}']
+    Click Element    xpath=//div[@data-blueprintname='${BLUEPRINT NAME}']
+    Sleep    1s
 
 
 Clicks on the Project to go to Environment
@@ -1491,7 +1500,8 @@ Update the Run List with Newwww Cookbook
 Clicks on Update Button of Runlist
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[text()='Update']
     Wait Until Keyword Succeeds    1 minute     4 seconds      Click Element    xpath=//*[text()='OK']
-    Wait Until Keyword Succeeds    1 minute     5 seconds      Click Element    xpath=.//*[text()='Close']      #close
+    Wait Until Keyword Succeeds    1 minute     5 seconds      Click Element    css=#instanceLogModalContainer > div.modal-dialog > div.modal-content > div.modal-footer > button.btn.btn-default.btn-primary
+
 
 
 

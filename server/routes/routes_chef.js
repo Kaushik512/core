@@ -362,7 +362,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
                                 console.log('orgId ==>', orgId);
                                 console.log('bgid ==>', bgId);
                                 // console.log('node ===>', node);
-                                environmentsDao.createEnv(node.chef_environment, orgId, bgId, projectId, envId, function(err, data) {
+                                environmentsDao.createEnv(node.chef_environment, orgId, bgId, projectId, function(err, data) {
 
                                     if (err) {
                                         console.log(err, 'occured in creating environment in mongo');

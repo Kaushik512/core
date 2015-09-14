@@ -1828,53 +1828,55 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                             });
                                                             instancesDao.updateActionLog(instance.id, actionLog._id, true, timestampEnded);
 
-
-                                                            infraManager.getNode(nodeName, function(err, nodeData) {
-                                                                if (err) {
-                                                                    console.log(err);
-                                                                    return;
-                                                                }
-
-                                                                var hardwareData = {};
-                                                                // is puppet node
-                                                                if (bootstrapData && bootstrapData.puppetNodeName) {
-                                                                    hardwareData.architecture = nodeData.facts.values.hardwaremodel;
-                                                                    hardwareData.platform = nodeData.facts.values.operatingsystem;
-                                                                    hardwareData.platformVersion = nodeData.facts.values.operatingsystemrelease;
-                                                                    hardwareData.memory = {
-                                                                        total: 'unknown',
-                                                                        free: 'unknown'
-                                                                    };
-                                                                    hardwareData.memory.total = nodeData.facts.values.memorysize;
-                                                                    hardwareData.memory.free = nodeData.facts.values.memoryfree;
-
-                                                                } else {
-                                                                    hardwareData.architecture = nodeData.automatic.kernel.machine;
-                                                                    hardwareData.platform = nodeData.automatic.platform;
-                                                                    hardwareData.platformVersion = nodeData.automatic.platform_version;
-                                                                    hardwareData.memory = {
-                                                                        total: 'unknown',
-                                                                        free: 'unknown'
-                                                                    };
-                                                                    if (nodeData.automatic.memory) {
-                                                                        hardwareData.memory.total = nodeData.automatic.memory.total;
-                                                                        hardwareData.memory.free = nodeData.automatic.memory.free;
-                                                                    }
-                                                                }
-                                                                hardwareData.os = instance.hardware.os;
-
-
-                                                                //console.log(instance);
-                                                                //console.log(hardwareData,'==',instance.hardware.os);
-                                                                instancesDao.setHardwareDetails(instance.id, hardwareData, function(err, updateData) {
+                                                            // waiting for 30 sec to update node data
+                                                            setTimeout(function() {
+                                                                infraManager.getNode(nodeName, function(err, nodeData) {
                                                                     if (err) {
-                                                                        logger.error("Unable to set instance hardware details  code (setHardwareDetails)", err);
-                                                                    } else {
-                                                                        logger.debug("Instance hardware details set successessfully");
+                                                                        console.log(err);
+                                                                        return;
                                                                     }
-                                                                });
 
-                                                            });
+                                                                    var hardwareData = {};
+                                                                    // is puppet node
+                                                                    if (bootstrapData && bootstrapData.puppetNodeName) {
+                                                                        hardwareData.architecture = nodeData.facts.values.hardwaremodel;
+                                                                        hardwareData.platform = nodeData.facts.values.operatingsystem;
+                                                                        hardwareData.platformVersion = nodeData.facts.values.operatingsystemrelease;
+                                                                        hardwareData.memory = {
+                                                                            total: 'unknown',
+                                                                            free: 'unknown'
+                                                                        };
+                                                                        hardwareData.memory.total = nodeData.facts.values.memorysize;
+                                                                        hardwareData.memory.free = nodeData.facts.values.memoryfree;
+
+                                                                    } else {
+                                                                        hardwareData.architecture = nodeData.automatic.kernel.machine;
+                                                                        hardwareData.platform = nodeData.automatic.platform;
+                                                                        hardwareData.platformVersion = nodeData.automatic.platform_version;
+                                                                        hardwareData.memory = {
+                                                                            total: 'unknown',
+                                                                            free: 'unknown'
+                                                                        };
+                                                                        if (nodeData.automatic.memory) {
+                                                                            hardwareData.memory.total = nodeData.automatic.memory.total;
+                                                                            hardwareData.memory.free = nodeData.automatic.memory.free;
+                                                                        }
+                                                                    }
+                                                                    hardwareData.os = instance.hardware.os;
+
+
+                                                                    //console.log(instance);
+                                                                    //console.log(hardwareData,'==',instance.hardware.os);
+                                                                    instancesDao.setHardwareDetails(instance.id, hardwareData, function(err, updateData) {
+                                                                        if (err) {
+                                                                            logger.error("Unable to set instance hardware details  code (setHardwareDetails)", err);
+                                                                        } else {
+                                                                            logger.debug("Instance hardware details set successessfully");
+                                                                        }
+                                                                    });
+
+                                                                });
+                                                            },30000);
 
                                                         } else {
                                                             instancesDao.updateInstanceBootstrapStatus(instance.id, 'failed', function(err, updateData) {

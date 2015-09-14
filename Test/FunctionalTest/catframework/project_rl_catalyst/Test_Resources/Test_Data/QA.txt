@@ -12,6 +12,8 @@ Resource           catalyst.txt
 ${BROWSERTYPE}                    firefox                   
 ${ENVIRONMENTSERVER}                http://d4d.rlcatalyst.com/public/login.html
 
+#http://d4d.rlcatalyst.com/public/login.html
+
 #http://10.0.1.206:3003/public/login.html
 
 #http://d4d.relevancelab.com:3001                            
@@ -143,7 +145,7 @@ ${JENKINS PASSWORD}       admin@RL123
 ${TASK NAME}              Task1
 ${JENKINS SERVER}         JenkinsRL
 ${JENKINS EDIT}           Jenkins
-${JJOB NAME}               testjob
+${JJOB NAME}               testmail
 ${RECIPE}                  recipe[apt]     
 ${RECIPE1}                 recipe[apt]
 ${Template Type}           Chef
@@ -246,6 +248,7 @@ ${SECRTY GRP2}                sg-c06faca4 | HTTP&S_SG
 ${SECRTY GRP3}                sg-038f4d67 | SSH_SG
 ${SECRTY GRP4}                sg-ab6faccf | Tomcat
 
+${SOFTWARE NAME}          setup-2.8.14-20.el6_4.1.noarch
 
 
 #Provider
@@ -359,6 +362,8 @@ ${VaildEditEnvironment}                QA
 ${EnV1}                                Dev
 ${EnV2}                                QA
 ${REQ}                                Required
+${EnV3}                               Preeprod
+
 
 ${Vaildate15ChrErrMsg}              limited to 15 chars            
 ${VaildateBlankSpacesErrMsg}        space(s) not allowed

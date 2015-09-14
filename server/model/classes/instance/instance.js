@@ -435,6 +435,8 @@ var InstancesDao = function() {
                 instanceIP: ip
             }, {
                 'chef.chefNodeName': nodeName
+            },{
+                'puppet.puppetNodeName': nodeName
             }],
         }
         Instances.find(queryObj, function(err, data) {
