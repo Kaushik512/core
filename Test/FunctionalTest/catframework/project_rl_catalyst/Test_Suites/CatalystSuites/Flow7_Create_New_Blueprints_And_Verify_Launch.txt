@@ -50,14 +50,14 @@ Catalyst CENT OS Instance Launch Blueprint Setup
 
 
 
-#-Catalyst Inspect Functionality after Bootstrap Setup
-    #-[Tags]       Sanity               Smoke
+Catalyst Inspect Functionality after Bootstrap Setup
+    [Tags]       Sanity               Inspect
 #    Catalyst Login
-    #-Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
-    #-Sleep    3s
-    #-Catalyst Inspect Functionality Setup
-    #-Catalyst Logout                      
-    #-[Teardown]     Close Browser
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Sleep    3s
+    Catalyst Inspect Functionality Setup
+    Catalyst Logout                      
+    [Teardown]     Close Browser
 
 
 

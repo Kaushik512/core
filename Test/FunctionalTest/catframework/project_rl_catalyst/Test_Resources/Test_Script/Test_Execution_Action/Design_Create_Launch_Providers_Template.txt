@@ -473,13 +473,16 @@ Catalyst Inspect Functionality Setup
 
 
 
-Verify the Particular Software is listed in list 
-    Element Should Contain    css=#paragraphs > p:nth-child(1)    ${}
+Verify the Particular Software is listed in list
+    Sleep    2s 
+    Element Should Contain    css=#paragraphs > p:nth-child(1)    ${SOFTWARE NAME}
+    Sleep    3s
+    Click Element    css=#installedSoftwareModalContainer > div > div > div.modal-footer > button
 
 
 
 Enter the Installed Software Name in the Filter
-    Input Text    css=.form-control    ${SOFTWARWE NAME}
+    Input Text    css=label > input.form-control    ${SOFTWARE NAME}
 
 
 Clicks on Inspect Button
@@ -488,7 +491,8 @@ Clicks on Inspect Button
 
 
 Selects the CentOS Blueprint to go to Controlpanel
-    Click Element    xpath=.//span[text()='${BLUEPRINT NAME}']
+    Click Element    xpath=//div[@data-blueprintname='${BLUEPRINT NAME}']
+    Sleep    1s
 
 
 Clicks on the Project to go to Environment
