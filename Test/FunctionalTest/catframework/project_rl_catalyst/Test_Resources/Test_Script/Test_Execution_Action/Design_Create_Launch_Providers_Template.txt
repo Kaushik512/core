@@ -1491,7 +1491,8 @@ Update the Run List with Newwww Cookbook
 Clicks on Update Button of Runlist
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[text()='Update']
     Wait Until Keyword Succeeds    1 minute     4 seconds      Click Element    xpath=//*[text()='OK']
-    Wait Until Keyword Succeeds    1 minute     5 seconds      Click Element    xpath=.//*[text()='Close']      #close
+    Wait Until Keyword Succeeds    1 minute     5 seconds      Click Element    css=#instanceLogModalContainer > div.modal-dialog > div.modal-content > div.modal-footer > button.btn.btn-default.btn-primary
+
 
 
 
