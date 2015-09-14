@@ -501,9 +501,12 @@ function CreateTableFromJson(formID, idFieldName, createFileName) {
         $.each(item, function(k, v) { //columns
             // var inputC = null;
             if (typeof v != "undefined") {
-                v = JSON.parse(JSON.stringify(v).replace(/,(?=[^,]*$)/, ''));
+                //console.log('v before',v,typeof v);
+                v = JSON.parse(JSON.stringify(v).replace(/(?=[^,]*$)/, ''));
+                //console.log('v after',v);
             }
 
+            
             console.log('k:' + k + ' v :' + JSON.stringify(v));
             if (k == idFieldName) {
                 idFieldValue = v;
