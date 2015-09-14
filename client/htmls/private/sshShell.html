@@ -7,8 +7,9 @@
     $(".pemFileCheck").hide();
     });
     </script>
+
     <script src="/socket.io/socket.io.js"></script>
-     <script type="text/javascript" src="js/term.js"></script>
+    <script type="text/javascript" src="js/term.js"></script>
 
      
 <style type="text/css">
@@ -150,67 +151,113 @@ $(function() {
     console.log($loginForm)
 
 
-    var socket = io.connect('/sshShell');
+    
 
     var term;
     var sshOpened = false;
-
-
-
-    socket.on('conErr', function(data) {
-        $errorArea.empty().append(data.message);
-         $errorArea.show();
-        $loginForm.show();
-        $terminalContainer.hide();
-        $loadingContainer.hide();
-        if(data.actionLogId) {
-            $sshActionLogIdInput.val(data.actionLogId);
-        }
-     
-    });
-
-    socket.on('opened', function(data) {
-        console.log('connected');
-        $errorArea.hide();
-        $loginForm.hide();
-        $loadingContainer.hide();
-        $terminalContainer.show();
-        sshOpened = true;
-        term = new Terminal({
-            cols: 80,
-            rows: 24,
-            screenKeys: true,
-            cursorBlink: true,
-            useStyle: true
-        });
-
-        term.on('data', function(data) {
-            if (sshOpened) {
-                //socket.emit('data', data);
-                console.log('term data ==>', data);
-                socket.emit('cmd', data);
-            }
-        });
-
-        term.open($terminalContainer.get(0));
-
-        if(data.actionLogId) {
-            $sshActionLogIdInput.val(data.actionLogId);
-        }
-
-
-
-    });
+    var socket; 
 
 
     function openSSh(reqBody) {
         console.log(reqBody);
-         $errorArea.hide();
-         $terminalContainer.hide();
-         $loginForm.hide();
-         $loadingContainer.show();
-         socket.emit('open', reqBody);
+        $errorArea.hide();
+        $terminalContainer.hide();
+        $loginForm.hide();
+        $loadingContainer.show();
+
+        socket = io.connect('/sshShell', {
+            'force new connection': true,
+            reconnection: false
+        });
+
+        socket.on('connect', function() {
+            socket.emit('open', reqBody);
+        });
+
+        socket.on('conErr', function(data) {
+            $errorArea.empty().append(data.message);
+            $errorArea.show();
+            $loginForm.show();
+            $terminalContainer.hide();
+            $loadingContainer.hide();
+            if (data.actionLogId) {
+                $sshActionLogIdInput.val(data.actionLogId);
+            }
+
+        });
+
+        socket.on('opened', function(data) {
+            console.log('connected');
+            $errorArea.hide();
+            $loginForm.hide();
+            $loadingContainer.hide();
+            $terminalContainer.show();
+            sshOpened = true;
+            term = new Terminal({
+                cols: 80,
+                rows: 24,
+                screenKeys: true,
+                cursorBlink: true,
+                useStyle: true
+            });
+
+            term.on('data', function(data) {
+                if (sshOpened) {
+                    //socket.emit('data', data);
+                    socket.emit('cmd', data);
+                }
+            });
+
+            term.open($terminalContainer.get(0));
+
+            if (data.actionLogId) {
+                $sshActionLogIdInput.val(data.actionLogId);
+            }
+
+        });
+
+        socket.on('out', function(data) {
+            if (term) {
+                term.write(data.res);
+            }
+        });
+
+        socket.on('disconnect', function() {
+            destroyTerminal();
+        });
+
+        socket.on('close', function() {
+            destroyTerminal();
+        });
+
+        socket.on('error', function(err) {
+            alert('fired');
+            if(err && err.reason) {
+                $errorArea.empty().append(err.reason);
+            } else {
+                $errorArea.empty().append('Error occured while making a connection');
+            }
+            $errorArea.show();
+            $loginForm.show();
+            $terminalContainer.hide();
+            $loadingContainer.hide();
+            if (data.actionLogId) {
+                $sshActionLogIdInput.val(data.actionLogId);
+            }
+        });
+
     }
+
+    function destroyTerminal() {
+        if (term) {
+            term.destroy();
+        }
+        $terminalContainer.hide();
+        $loginForm.show();
+        $errorArea.hide();
+        $loadingContainer.hide();
+    }
+
 
     $('.sshSubmit').click(function(e) {
         console.log('submitting form');
@@ -261,32 +308,13 @@ $(function() {
     });
 
    
-    socket.on('out', function(data) {
-        if (term) {
-            term.write(data.res);
-        }
-    });
-
-    function destroyTerminal() {
-         if (term) {
-            term.destroy();
-        }
-        $terminalContainer.hide();
-        $loginForm.show();
-        $errorArea.hide();
-    }
-
-    socket.on('disconnect', function() {
-       destroyTerminal();
-    });
     
-    socket.on('close', function() {
-        destroyTerminal()
-    });
 
-    $terminateBtn.click(function(){
+    $terminateBtn.click(function() {
         if (sshOpened) {
-          socket.disconnect();
+            if (socket) {
+                socket.disconnect();
+            }
         }
     });
 
