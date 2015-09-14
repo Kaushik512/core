@@ -23,7 +23,6 @@ Catalyst Creation of New Docker Setup
     Sleep    2s
     Clicks on New Button of Docker
     Select organization for config management
-    
     Enters the Reference Name
     Enters the Docker Registry
     Enters the UserID for Docker
@@ -48,6 +47,34 @@ Catalyst Creation of New Cloud Formation Template
     Clicks on Save Button
     Sleep    3s
     Verify the Cloud Formation Template is created
+
+Catalyst Validation of CloudFormation BlueprintPage
+    Sleep    3s
+    Clicks on CFT Design
+    Sleep    5s
+    Chooses the Template Type as Cloud Formation
+    Sleep    2s
+    Clicks on Next Button of CloudFormation
+    Sleep    3s
+    Clicks on Next Button of CloudFormation
+    Sleep    2s
+    Clicks on Next Button of CloudFormation
+    Sleep    2s
+    Clicks on Confirm Button of Cloud Formation
+    Sleep    1s
+    Verify the Validation of Error Message dispalyed for No BlueprintName
+    Verify the Validation of Error Message dispalyed for No BusinessGroup
+    Verify the Validation of Error Message dispalyed for No Project
+    
+
+Verify the Validation of Error Message dispalyed for No BlueprintName
+    Element Should Contain    id=blueprintNameInput-error    ${ERRROR MESSAGE}
+
+Verify the Validation of Error Message dispalyed for No BusinessGroup
+    Element Should Contain    id=bgListInput-error    ${ERRROR MESSAGE}
+
+Verify the Validation of Error Message dispalyed for No Project
+    Element Should Contain    id=projectListInput-error    ${ERRROR MESSAGE}
 
 
 Catalyst Creation of New Cloud Formation Blueprint and Save
