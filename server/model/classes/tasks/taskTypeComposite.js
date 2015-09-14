@@ -17,7 +17,6 @@ compositeTaskSchema.methods.execute = function(userName, baseUrl, choiceParam, o
     if (!Tasks) {
         Tasks = require('_pr/model/classes/tasks/tasks.js');
     }
-    logger.debug("---------------------------------- ", JSON.stringify(this.assignTasks));
     var that = this;
     Tasks.getTaskByIds(this.assignTasks, function(err, tasks) {
         if (err) {
@@ -26,7 +25,7 @@ compositeTaskSchema.methods.execute = function(userName, baseUrl, choiceParam, o
             }
             return;
         }
-        
+
         if (typeof onExecute === 'function') {
             onExecute(null, null);
         }
@@ -34,7 +33,6 @@ compositeTaskSchema.methods.execute = function(userName, baseUrl, choiceParam, o
 
         task = [];
         var assignTask = that.assignTasks;
-        logger.debug("tasks =======================================iii: ", assignTask.length);
         for (var i = 0; i < assignTask.length; i++) {
             for (var j = 0; j < tasks.length; j++) {
                 logger.debug("matched...... ", tasks[j].id);
@@ -44,7 +42,6 @@ compositeTaskSchema.methods.execute = function(userName, baseUrl, choiceParam, o
             }
         }
         count = 0;
-        logger.debug("tasks =======================================: ", task.length);
 
         function executeTasks() {
             task[count].execute(userName, baseUrl, choiceParam, function(err, taskExecuteData) {
