@@ -10,11 +10,19 @@ Resource           ${CATALYST ACTION}/Gallery_setup_TempService_Steps.txt
 
 
 *** Test Cases ***
+Catalyst Validation of Jenkins Configuration setup
+    [Tags]       Sanity               Smoke
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Validate the Jenkins Configuration Setup      
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
 Catalyst new Jenkins Configuration setup
     [Tags]       Sanity               Smoke
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
-    Validate the Jenkins Configuration Setup
     Catalyst Create New Jenkins Configuration Setup       
     Catalyst Logout                      
     [Teardown]     Close Browser
@@ -22,7 +30,7 @@ Catalyst new Jenkins Configuration setup
 
 
 Catalyst Creation of Jenkins Task in the Environment 
-    [Tags]       Sanity               Smoke
+    [Tags]       Sanity               Jen
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
     Catalyst Creation of Jenkins Task in Environment       

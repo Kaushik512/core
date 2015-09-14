@@ -19,7 +19,6 @@ Catalyst Create New Docker setup
 
 
 
-
 Catalyst Create New Cloud Formation Template setup
     [Tags]       Sanity               Smoke
 #    Catalyst Login
@@ -27,6 +26,19 @@ Catalyst Create New Cloud Formation Template setup
     Catalyst Creation of New Cloud Formation Template    
     Catalyst Logout                      
     [Teardown]     Close Browser
+
+
+
+
+Catalyst Validation of the CloudFormation Blueprint Page
+    [Tags]       Sanity        val
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst Validation of CloudFormation BlueprintPage    
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
 
 
 Catalyst Create New Cloud Formation Blueprint setup
