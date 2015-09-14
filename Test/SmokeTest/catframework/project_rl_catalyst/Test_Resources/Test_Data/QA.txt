@@ -470,7 +470,7 @@ ${TASK NAME}              Task1
 ${JENKINS SERVER}         JenkinsRL
 ${DEF_JENKINS_SERVER}    PhoenixJenkins
 ${JENKINS EDIT}           Jenkins
-${JJOB NAME}               testjob
+${JJOB NAME}               testmail
 
 
 ${Stack_Name}         RLStack

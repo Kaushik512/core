@@ -614,7 +614,7 @@ Clicks on DevOps Setupp
     Click Element    xpath=//*[text()='DevOps Setup']
 
 Clicks on ConfgMgmt butn
-    Click Element    xpath=//*[text()='Config Management']
+    Click Element    xpath=//*[text()='Chef Server']
 
 
 Clicks on Import Nodes Button of Chef Server
@@ -1521,7 +1521,7 @@ Enters the Empty Password
     Input Text    id=jenkinspassword    ${VaildEmptyPassword}
 
 Clicks on Jenkins Link
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='setting_tree']/ul/li[6]/a
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=//a[text()='Jenkins']
 
 Select your Orgg Created
     Select From List   id=orgname    ${ORGANIZATION NAME}
