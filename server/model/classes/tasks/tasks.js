@@ -459,7 +459,8 @@ taskSchema.statics.updateTaskById = function(taskId, taskData, callback) {
             name: taskData.name,
             taskConfig: taskConfig,
             taskType: taskData.taskType,
-            description: taskData.description
+            description: taskData.description,
+            jobResultURLPattern: taskData.jobResultURL
         }
     }, {
         upsert: false
