@@ -517,6 +517,17 @@ taskSchema.statics.updateJobUrl = function(taskId,taskConfig, callback) {
     });
 };
 
+// get task by ids
+taskSchema.statics.listTasks = function(callback) {
+    this.find(function(err, tasks) {
+        if (err) {
+            logger.error(err);
+            callback(err, null);
+            return;
+        }
+        callback(null, tasks);
+    });
+};
 
 var Tasks = mongoose.model('Tasks', taskSchema);
 
