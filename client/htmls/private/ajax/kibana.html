@@ -8,7 +8,7 @@
      method: "GET",
      url: "/globalsettings",   
      success: function(data, success) {
-      $("#content").append('<iframe src='+ data[0].kibanaUrl+' height="94%!important" width="100%!important"></iframe>');
+      $("#content").append('<iframe src='+ data[0].kibanaUrl+' height="94%!important" width="100%!important" id="kibanaId"></iframe>');
     },
     error: function(jqxhr) {
       removeLoader();
@@ -18,4 +18,7 @@
       bootbox.alert(data);
     }
   });
+/*setTimeout(function(){
+  alert($("#kibanaId").contents().find(".gridster").length);
+},20000);*/
 </script>
