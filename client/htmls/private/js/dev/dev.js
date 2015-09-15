@@ -3606,12 +3606,20 @@
                                                                           $clonedDiv.find('.stackInfo').click(function(e) {
                                                                               var $modal = $('#cftEventModalContainer');
                                                                               var $logContainer = $modal.find('.logsArea').show();
-                                                                              var $table = $modal.find('table').hide();
+                                                                              var $modalBody = $modal.find('.modal-body');
+                                                                              $modal.find('.fromTemplate').remove();
+                                                                              var $table = $modal.find('.templateTable').clone();
+                                                                              $table.removeClass('templateTable').addClass('fromTemplate');
+                                                                              $modalBody.append($table);
                                                                               var $tBody = $table.find('tbody');
 
                                                                               function pollStackEvents(stackId) {
+                                                                                
 
                                                                                   $.get('/cloudformation/' + stackId + '/events', function(events) {
+                                                                                      if(!$.contains($modal[0],$table[0])) {
+                                                                                        return;
+                                                                                      }
                                                                                       $tBody.empty();
                                                                                       $logContainer.hide();
                                                                                       $table.show();
