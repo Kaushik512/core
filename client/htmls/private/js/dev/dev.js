@@ -1342,7 +1342,7 @@
                                                                               getSpanHeadingLeft: function(data) {
                                                                                   var imgPath;
                                                                                   if (data.blueprintData.iconPath == undefined) {
-                                                                                      data.blueprintData.iconPath = 'img/logo.png';
+                                                                                      data.blueprintData.iconPath = 'img/imgo.jpg';
 
                                                                                   }
                                                                                   return '<span class="domain-roles-icon" contenteditable="false"><img src="' + data.blueprintData.iconPath + '" style="margin-right:5px;margin-top:-10px;width:27px"/></span>';
@@ -2335,7 +2335,7 @@
                                                                                           if (data[i].iconpath)
                                                                                               $img = $('<img />').attr('src', data[i].iconpath).attr('alt', data[i].name).addClass('cardLogo');
                                                                                           else
-                                                                                              $img = $('<img />').attr('src', 'img/logo.png').attr('alt', data[i].name).addClass('cardLogo');
+                                                                                              $img = $('<img />').attr('src', 'img/imgo.jpg').attr('alt', data[i].name).addClass('cardLogo');
                                                                                           var $liImage = $('<li></li>').append($img);
                                                                                           $ul.append($liImage);
 
