@@ -26,11 +26,11 @@ Catalyst creates environments by selcting from chef server
     Select the Environment1
     Assign Projects for Orgnaization in Environment
     Clicks on Save Button to save the Environment
-    Clicks on New button Create New Environment
-    Select organization for Env
-    Select the Environment2
-    Assign Projects for Orgnaization in Environment
-    Clicks on Save Button to save the Environment
+    #Clicks on New button Create New Environment
+    #Select organization for Env
+    #Select the Environment2
+    #Assign Projects for Orgnaization in Environment
+    #Clicks on Save Button to save the Environment
 
 
 

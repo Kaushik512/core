@@ -39,6 +39,8 @@ Catalyst User New Template Creation
     Select CookBooks
     Clicks on Save Button in Template Page
 
+    
+
 Catalyst Create New Cloud Formation Template
     Clicks on Settings
     Clicks on Gallery Setup
