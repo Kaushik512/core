@@ -815,14 +815,14 @@
                                                                           // }
                                                                           if ($divinstancescardview.find('.domain-role-thumbnailDev').length > 0) {
                                                                               //Arab
-                                                                              //console.log("I am here there");
+                                                                              console.log("I am here there");
                                                                               $divinstancescardview.find('.container').removeClass('role-Selectedcard');
                                                                               var cardIndexInfo = localStorage.getItem("cardIndex");
-                                                                              //console.log(cardIndexInfo);
+                                                                              console.log(cardIndexInfo);
                                                                               if (cardIndexInfo) {
                                                                                   var li = $divinstancescardview.find('.domain-role-thumbnailDev').get(cardIndexInfo);
                                                                                   //console.log('container ==>',li);
-                                                                                  //console.log(li);
+                                                                                  console.log(li);
                                                                                   if (li) {
                                                                                       $(li).find('.container').addClass('role-Selectedcard');
                                                                                   } else {
