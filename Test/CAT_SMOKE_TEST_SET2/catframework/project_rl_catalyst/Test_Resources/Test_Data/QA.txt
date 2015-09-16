@@ -10,7 +10,7 @@ Resource           catalyst.txt
 
 *** Variables ***
 ${BROWSER TYPE}                  firefox 
-${ENVIRONMENT SERVER}              http://d4d.relevancelab.com:3001
+${ENVIRONMENT SERVER}              http://d4d.rlcatalyst.com/public/login.html
 
 
 
@@ -194,6 +194,8 @@ ${PROVIDERR}                 AWS
 ${SECRET KEY}                  qm/j8lT0/IPc1P5ud8yujUSa61+QjqeyZ/jZkIff
 ${ACCESS KEY}                  AKIAI3ETOOEFHJ62G2NQ
 ${IMAGE NAME1}                 smoke_CentOS
+${PHOENIX CENTOS IMAGE}        CentOS6.6
+${PHOENIX UBUNTU IMAGE}        ubuntu
 ${IMAGE NAME2}                 smoke_ubuntu
 ${IMAGE NAME3}                 smoke_Win08
 ${IMAGE NAME4}                 smoke_Win2012
@@ -404,7 +406,7 @@ ${Vaild15ChrTemplateName}                ReelvanceLabsTemplat
 ${ValidTEditemplName}                    ApacRelevance
 ${Vaild15ChrTempName}                    CatalystAutomation
 ${VaildSpacesTEmpTyName}                 Catlsyt Auto
-${TEMPLATE NAME}                         Apache2
+${TEMPLATE NAME}                         Apache
 ${TEMP_NAME}                             Apache
 
 ${VaildEmptyTemplateNameErrMsg}              Required
@@ -470,7 +472,7 @@ ${TASK NAME}              Task1
 ${JENKINS SERVER}         JenkinsRL
 ${DEF_JENKINS_SERVER}    PhoenixJenkins
 ${JENKINS EDIT}           Jenkins
-${JJOB NAME}               testjob
+${JJOB NAME}               testmail
 
 
 ${Stack_Name}         RLStack
@@ -481,3 +483,21 @@ ${Proj_Name}          PhoenixApp
 
 
 ${Cheftask}      ChefTask
+
+
+#Phoenix Organization Related
+${PHOENIX CLOUD TEMPNAME}            CatalystStack
+${PHOENIX BUSINESS GROUP}            PhoenixBG
+${PHOENIX PROJECT}                   PhoenixApp
+
+
+
+
+
+
+
+
+
+
+
+

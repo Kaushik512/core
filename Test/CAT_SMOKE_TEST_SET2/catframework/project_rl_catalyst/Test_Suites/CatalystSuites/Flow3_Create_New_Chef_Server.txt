@@ -10,8 +10,8 @@ Resource           ${CATALYST ACTION}/Organization_Setup_Action_Steps.txt
 
 *** Test Cases ***
 Catalyst new Config management setup
-    [Tags]       Sanity          Settings
-    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    [Tags]       Sanity      Settings
+    Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
 #    Catalyst Login
     Navigates to Config Management page
     Create New Config Management
