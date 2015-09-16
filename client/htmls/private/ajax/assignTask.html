@@ -1425,8 +1425,9 @@ $(document).ready(function() {
             //alert($trs.length);
             $orderoptions.each(function(e) {
                 var $this = $(this);
-                //console.log($this);
-                assignTasks.push($this.val());
+                console.log("I am in Logs");
+                console.log($this);
+                assignTasks.push($this.attr('id'));
             });
             taskData.assignTasks = assignTasks;
             $('.btnSaveTask').attr('disabled', 'disabled');
@@ -2139,7 +2140,7 @@ $(document).ready(function() {
             $('#compositeTasksList').empty();
             for (var i = 0; i < taskLists.length; i++) {
                //alert(taskLists[i].name);
-               $('#compositeTasksList').append($('<option class="taskimg" value="' + taskLists[i].name + '">' + taskLists[i].name + '</option>'));
+               $('#compositeTasksList').append($('<option class="taskimg" id="' + taskLists[i]._id + '" value="' + taskLists[i].name + '">' + taskLists[i].name + '</option>'));
             }
         }).fail(function(jxhr) {
             alert("TaskLists load Failed");
