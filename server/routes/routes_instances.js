@@ -1015,6 +1015,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                             var instance = data[0];
                             var actionLog = instancesDao.insertChefClientRunActionLog(instance.id, req.body.runlist, req.session.user.cn, new Date().getTime());
                             var logReferenceIds = [instance.id, actionLog._id];
+                            logger.debug('Instance Details:');
+                            logger.debug(instance);
                             configmgmtDao.getChefServerDetails(instance.chef.serverId, function(err, chefDetails) {
                                 if (err) {
                                     var timestampEnded = new Date().getTime();

@@ -12,6 +12,7 @@ var EC2 = require('../lib/ec2.js');
 var d4dModelNew = require('../model/d4dmasters/d4dmastersmodelnew.js');
 var AWSProvider = require('../model/classes/masters/cloudprovider/awsCloudProvider.js');
 var openstackProvider = require('../model/classes/masters/cloudprovider/openstackCloudProvider.js');
+var hppubliccloudProvider = require('../model/classes/masters/cloudprovider/hppublicCloudProvider.js');
 var vmwareProvider = require('../model/classes/masters/cloudprovider/vmwareCloudProvider.js');
 var VMImage = require('../model/classes/masters/vmImage.js');
 var AWSKeyPair = require('../model/classes/masters/cloudprovider/keyPair.js');
@@ -71,7 +72,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             res.send("Please Select Any Organization.");
             return;
         }
-       
+
         var region;
         // if (typeof req.body.region === 'string') {
         //     logger.debug("inside single region: ", req.body.region);
@@ -81,93 +82,93 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         // }
         // logger.debug("Final Region:  ", region)
 
-         usersDao.haspermission(user.cn, category, permissionto, null, req.session.user.permissionset, function(err, data) {
-                if (!err) {
-                    logger.debug('Returned from haspermission : ' + data + ' : ' + (data == false));
-                    if (data == false) {
-                        logger.debug('No permission to ' + permissionto + ' on ' + category);
-                        res.send(401, "You don't have permission to perform this operation.");
-                        return;
-                    }
-                } else {
-                    logger.error("Hit and error in haspermission:", err);
-                    res.send(500);
+        usersDao.haspermission(user.cn, category, permissionto, null, req.session.user.permissionset, function(err, data) {
+            if (!err) {
+                logger.debug('Returned from haspermission : ' + data + ' : ' + (data == false));
+                if (data == false) {
+                    logger.debug('No permission to ' + permissionto + ' on ' + category);
+                    res.send(401, "You don't have permission to perform this operation.");
                     return;
                 }
+            } else {
+                logger.error("Hit and error in haspermission:", err);
+                res.send(500);
+                return;
+            }
 
-                masterUtil.getLoggedInUser(user.cn, function(err, anUser) {
-                    if (err) {
-                        res.send(500, "Failed to fetch User.");
-                        return;
-                    }
-                    logger.debug("LoggedIn User:>>>> ", JSON.stringify(anUser));
-                    if (anUser) {
-                       
-                            var providerData = {
-                                id: 9,
-                                username: vmwareusername,
-                                password: vmwarepassword,
-                                host: vmwarehost,
-                                providerName: providerName,
-                                providerType: providerType,
-                                dc : vmwaredc,
-                                orgId: orgId
-                            };
-                            vmwareProvider.getvmwareProviderByName(providerData.providerName, providerData.orgId, function(err, prov) {
+            masterUtil.getLoggedInUser(user.cn, function(err, anUser) {
+                if (err) {
+                    res.send(500, "Failed to fetch User.");
+                    return;
+                }
+                logger.debug("LoggedIn User:>>>> ", JSON.stringify(anUser));
+                if (anUser) {
+
+                    var providerData = {
+                        id: 9,
+                        username: vmwareusername,
+                        password: vmwarepassword,
+                        host: vmwarehost,
+                        providerName: providerName,
+                        providerType: providerType,
+                        dc: vmwaredc,
+                        orgId: orgId
+                    };
+                    vmwareProvider.getvmwareProviderByName(providerData.providerName, providerData.orgId, function(err, prov) {
+                        if (err) {
+                            logger.debug("err.....", err);
+                        }
+                        if (prov) {
+                            logger.debug("getAWSProviderByName: ", JSON.stringify(prov));
+                            logger.debug("err.....", err);
+                            res.status(409);
+                            res.send("Provider name already exist.");
+                            return;
+                        }
+                        vmwareProvider.createNew(providerData, function(err, provider) {
+                            if (err) {
+                                logger.debug("err.....", err);
+                                res.status(500);
+                                res.send("Failed to create Provider.");
+                                return;
+                            }
+                            logger.debug("Provider id:  %s", JSON.stringify(provider._id));
+
+                            masterUtil.getOrgById(providerData.orgId, function(err, orgs) {
                                 if (err) {
-                                    logger.debug("err.....", err);
-                                }
-                                if (prov) {
-                                    logger.debug("getAWSProviderByName: ",JSON.stringify(prov));
-                                    logger.debug("err.....", err);
-                                    res.status(409);
-                                    res.send("Provider name already exist.");
+                                    res.send(500, "Not able to fetch org.");
                                     return;
                                 }
-                                vmwareProvider.createNew(providerData, function(err, provider) {
-                                    if (err) {
-                                        logger.debug("err.....", err);
-                                        res.status(500);
-                                        res.send("Failed to create Provider.");
-                                        return;
-                                    }
-                                    logger.debug("Provider id:  %s", JSON.stringify(provider._id));
-                                  
-                                    masterUtil.getOrgById(providerData.orgId, function(err, orgs) {
-                                        if (err) {
-                                            res.send(500, "Not able to fetch org.");
-                                            return;
-                                        }
-                                        if (orgs.length > 0) {
-                                            
-                                            var dommyProvider = {
-                                                _id: provider._id,
-                                                id: 9,
-                                                username: vmwareusername,
-                                                password: vmwarepassword,
-                                                host: vmwarehost,
-                                                dc:vmwaredc,
-                                                providerName: provider.providerName,
-                                                providerType: provider.providerType,
-                                                orgId: orgs[0].rowid,
-                                                orgName: orgs[0].orgname,
-                                              
-                                                __v: provider.__v,
-                                             
-                                            };
-                                            res.send(dommyProvider);
-                                            return;
-                                            
-                                        }
-                                    });
-                                 
-                                    logger.debug("Exit post() for /providers");
-                                });
+                                if (orgs.length > 0) {
+
+                                    var dommyProvider = {
+                                        _id: provider._id,
+                                        id: 9,
+                                        username: vmwareusername,
+                                        password: vmwarepassword,
+                                        host: vmwarehost,
+                                        dc: vmwaredc,
+                                        providerName: provider.providerName,
+                                        providerType: provider.providerType,
+                                        orgId: orgs[0].rowid,
+                                        orgName: orgs[0].orgname,
+
+                                        __v: provider.__v,
+
+                                    };
+                                    res.send(dommyProvider);
+                                    return;
+
+                                }
                             });
-                      
-                    } //end anuser
-                });
+
+                            logger.debug("Exit post() for /providers");
+                        });
+                    });
+
+                } //end anuser
             });
+        });
 
     });
 
@@ -199,10 +200,10 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                             }
                             logger.debug("providers>>> ", JSON.stringify(providers));
                             if (providers.length > 0) {
-                                 res.send(providers);
-                                            return;
+                                res.send(providers);
+                                return;
                             } else {
-                                res.send(200,[]);
+                                res.send(200, []);
                                 return;
                             }
                         });
@@ -225,14 +226,14 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                 return;
                             }
                             var providersList = [];
-                            logger.debug("Providers::::::::::::::::::: ",providers === null);
-                            if(providers === null){
+                            logger.debug("Providers::::::::::::::::::: ", providers === null);
+                            if (providers === null) {
                                 res.send(providersList);
                                 return;
                             }
                             if (providers.length > 0) {
-                                 res.send(providers);
-                                            return;
+                                res.send(providers);
+                                return;
                             } else {
                                 res.send(providersList);
                                 return;
@@ -247,10 +248,187 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         });
     });
 
-    
+   app.post('/hppubliccloud/providers', function(req, res) {
+
+        logger.debug("Enter post() for /hppubliccloud.", typeof req.body.fileName);
+        var user = req.session.user;
+        var category = configmgmtDao.getCategoryFromID("9");
+        var permissionto = 'create';
+        var hppubliccloudusername = req.body.openstackusername;
+        var hppubliccloudpassword = req.body.openstackpassword;
+        var hppubliccloudhost = req.body.openstackhost;
+        var hppubliccloudtenantid = req.body.openstacktenantid;
+        var hppubliccloudtenantname = req.body.openstacktenantname;
+        var hppubliccloudprojectname = req.body.openstackprojectname;
+        var providerName = req.body.providerName;
+        var providerType = req.body.providerType;
+        var hppubliccloudkeyname = req.body.hppubliccloudkeyname;
+        var hppubliccloudregion = req.body.hppubliccloudregion;
+
+        var serviceendpoints = {
+            compute: req.body.openstackendpointcompute,
+            network: req.body.openstackendpointnetwork,
+            image: req.body.openstackendpointimage,
+            ec2: req.body.openstackendpointec2,
+            identity: req.body.openstackendpointidentity,
+
+        };
+
+
+
+        var orgId = req.body.orgId;
+
+        if (typeof hppubliccloudusername === 'undefined' || hppubliccloudusername.length === 0) {
+            res.send(400, "Please Enter Username.");
+            return;
+        }
+        if (typeof hppubliccloudpassword === 'undefined' || hppubliccloudpassword.length === 0) {
+            res.send(400, "Please Enter Password.");
+            return;
+        }
+        if (typeof hppubliccloudhost === 'undefined' || hppubliccloudhost.length === 0) {
+            res.send(400, "Please Enter a Host.");
+            return;
+        }
+        if (typeof hppubliccloudtenantid === 'undefined' || hppubliccloudtenantid.length === 0) {
+            res.send(400, "Please Enter a Tenant ID");
+            return;
+        }
+        if (typeof providerName === 'undefined' || providerName.length === 0) {
+            res.send(400, "Please Enter Name.");
+            return;
+        }
+        if (typeof providerType === 'undefined' || providerType.length === 0) {
+            res.send(400, "Please Enter ProviderType.");
+            return;
+        }
+        if (typeof orgId === 'undefined' || orgId.length === 0) {
+            res.status(400);
+            res.send("Please Select Any Organization.");
+            return;
+        }
+        if (typeof hppubliccloudtenantname === 'undefined' || hppubliccloudtenantname.length === 0) {
+            res.send(400, "Please Enter Tenant Name.");
+            return;
+        }
+        if (typeof hppubliccloudprojectname === 'undefined' || hppubliccloudprojectname.length === 0) {
+            res.send(400, "Please Enter Project Name.");
+            return;
+        }
+        if (typeof serviceendpoints.compute === 'undefined' || serviceendpoints.compute.length === 0) {
+            res.send(400, "Please Enter Compute Endpoint Name.");
+            return;
+        }
+        if (typeof serviceendpoints.identity === 'undefined' || serviceendpoints.identity.length === 0) {
+            res.send(400, "Please Enter Identity Endpoint Name.");
+            return;
+        }
+
+
+        var region;
+        // if (typeof req.body.region === 'string') {
+        //     logger.debug("inside single region: ", req.body.region);
+        //     region = req.body.region;
+        // } else {
+        //     region = req.body.region[0];
+        // }
+        // logger.debug("Final Region:  ", region)
+
+        usersDao.haspermission(user.cn, category, permissionto, null, req.session.user.permissionset, function(err, data) {
+            if (!err) {
+                logger.debug('Returned from haspermission : ' + data + ' : ' + (data == false));
+                if (data == false) {
+                    logger.debug('No permission to ' + permissionto + ' on ' + category);
+                    res.send(401, "You don't have permission to perform this operation.");
+                    return;
+                }
+            } else {
+                logger.error("Hit and error in haspermission:", err);
+                res.send(500);
+                return;
+            }
+
+            masterUtil.getLoggedInUser(user.cn, function(err, anUser) {
+                if (err) {
+                    res.send(500, "Failed to fetch User.");
+                    return;
+                }
+                logger.debug("LoggedIn User:>>>> ", JSON.stringify(anUser));
+                if (anUser) {
+
+                    var providerData = {
+                        id: 9,
+                        username: hppubliccloudusername,
+                        password: hppubliccloudpassword,
+                        host: hppubliccloudhost,
+                        providerName: providerName,
+                        providerType: providerType,
+                        tenantid: hppubliccloudtenantid,
+                        tenantname: hppubliccloudtenantname,
+                        projectname: hppubliccloudprojectname,
+                        serviceendpoints: serviceendpoints,
+                        orgId: orgId
+                    };
+                    hppubliccloudProvider.gethppubliccloudProviderByName(providerData.providerName, providerData.orgId, function(err, prov) {
+                        if (err) {
+                            logger.debug("err.....", err);
+                        }
+                        if (prov) {
+                            logger.debug("getAWSProviderByName: ", JSON.stringify(prov));
+                            logger.debug("err.....", err);
+                            res.status(409);
+                            res.send("Provider name already exist.");
+                            return;
+                        }
+                        hppubliccloudProvider.createNew(req,providerData, function(err, provider) {
+                            if (err) {
+                                logger.debug("err.....", err);
+                                res.status(500);
+                                res.send("Failed to create Provider.");
+                                return;
+                            }
+                            logger.debug("Provider id:  %s", JSON.stringify(provider._id));
+
+                            masterUtil.getOrgById(providerData.orgId, function(err, orgs) {
+                                if (err) {
+                                    res.send(500, "Not able to fetch org.");
+                                    return;
+                                }
+                                if (orgs.length > 0) {
+
+                                    var dommyProvider = {
+                                        _id: provider._id,
+                                        id: 9,
+                                        username: hppubliccloudusername,
+                                        password: hppubliccloudpassword,
+                                        host: hppubliccloudhost,
+                                        providerName: provider.providerName,
+                                        providerType: provider.providerType,
+                                        orgId: orgs[0].rowid,
+                                        orgName: orgs[0].orgname,
+                                        tenantid: hppubliccloudtenantid,
+                                        __v: provider.__v,
+
+                                    };
+                                    res.send(dommyProvider);
+                                    return;
+
+                                }
+                            });
+
+                            logger.debug("Exit post() for /providers");
+                        });
+                    });
+
+                } //end anuser
+            });
+        });
+
+    });
+
 
     //Create Openstack provider
-     app.post('/openstack/providers', function(req, res) {
+    app.post('/openstack/providers', function(req, res) {
 
         logger.debug("Enter post() for /providers.", typeof req.body.fileName);
         var user = req.session.user;
@@ -265,11 +443,11 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         var providerName = req.body.providerName;
         var providerType = req.body.providerType;
         var serviceendpoints = {
-            compute : req.body.openstackendpointcompute,
-            network : req.body.openstackendpointnetwork,
-            image : req.body.openstackendpointimage,
-            ec2 : req.body.openstackendpointec2,
-            identity : req.body.openstackendpointidentity,
+            compute: req.body.openstackendpointcompute,
+            network: req.body.openstackendpointnetwork,
+            image: req.body.openstackendpointimage,
+            ec2: req.body.openstackendpointec2,
+            identity: req.body.openstackendpointidentity,
 
         };
 
@@ -314,11 +492,11 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             res.send(400, "Please Enter Project Name.");
             return;
         }
-        if (typeof serviceendpoints.compute  === 'undefined' || serviceendpoints.compute .length === 0) {
+        if (typeof serviceendpoints.compute === 'undefined' || serviceendpoints.compute.length === 0) {
             res.send(400, "Please Enter Compute Endpoint Name.");
             return;
         }
-        if (typeof serviceendpoints.identity  === 'undefined' || serviceendpoints.identity .length === 0) {
+        if (typeof serviceendpoints.identity === 'undefined' || serviceendpoints.identity.length === 0) {
             res.send(400, "Please Enter Identity Endpoint Name.");
             return;
         }
@@ -333,99 +511,99 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         // }
         // logger.debug("Final Region:  ", region)
 
-         usersDao.haspermission(user.cn, category, permissionto, null, req.session.user.permissionset, function(err, data) {
-                if (!err) {
-                    logger.debug('Returned from haspermission : ' + data + ' : ' + (data == false));
-                    if (data == false) {
-                        logger.debug('No permission to ' + permissionto + ' on ' + category);
-                        res.send(401, "You don't have permission to perform this operation.");
-                        return;
-                    }
-                } else {
-                    logger.error("Hit and error in haspermission:", err);
-                    res.send(500);
+        usersDao.haspermission(user.cn, category, permissionto, null, req.session.user.permissionset, function(err, data) {
+            if (!err) {
+                logger.debug('Returned from haspermission : ' + data + ' : ' + (data == false));
+                if (data == false) {
+                    logger.debug('No permission to ' + permissionto + ' on ' + category);
+                    res.send(401, "You don't have permission to perform this operation.");
                     return;
                 }
+            } else {
+                logger.error("Hit and error in haspermission:", err);
+                res.send(500);
+                return;
+            }
 
-                masterUtil.getLoggedInUser(user.cn, function(err, anUser) {
-                    if (err) {
-                        res.send(500, "Failed to fetch User.");
-                        return;
-                    }
-                    logger.debug("LoggedIn User:>>>> ", JSON.stringify(anUser));
-                    if (anUser) {
-                       
-                            var providerData = {
-                                id: 9,
-                                username: openstackusername,
-                                password: openstackpassword,
-                                host: openstackhost,
-                                providerName: providerName,
-                                providerType: providerType,
-                                tenantid : openstacktenantid,
-                                tenantname: openstacktenantname,
-                                projectname: openstackprojectname,
-                                serviceendpoints : serviceendpoints,
-                                orgId: orgId
-                            };
-                            openstackProvider.getopenstackProviderByName(providerData.providerName, providerData.orgId, function(err, prov) {
+            masterUtil.getLoggedInUser(user.cn, function(err, anUser) {
+                if (err) {
+                    res.send(500, "Failed to fetch User.");
+                    return;
+                }
+                logger.debug("LoggedIn User:>>>> ", JSON.stringify(anUser));
+                if (anUser) {
+
+                    var providerData = {
+                        id: 9,
+                        username: openstackusername,
+                        password: openstackpassword,
+                        host: openstackhost,
+                        providerName: providerName,
+                        providerType: providerType,
+                        tenantid: openstacktenantid,
+                        tenantname: openstacktenantname,
+                        projectname: openstackprojectname,
+                        serviceendpoints: serviceendpoints,
+                        orgId: orgId
+                    };
+                    openstackProvider.getopenstackProviderByName(providerData.providerName, providerData.orgId, function(err, prov) {
+                        if (err) {
+                            logger.debug("err.....", err);
+                        }
+                        if (prov) {
+                            logger.debug("getAWSProviderByName: ", JSON.stringify(prov));
+                            logger.debug("err.....", err);
+                            res.status(409);
+                            res.send("Provider name already exist.");
+                            return;
+                        }
+                        openstackProvider.createNew(providerData, function(err, provider) {
+                            if (err) {
+                                logger.debug("err.....", err);
+                                res.status(500);
+                                res.send("Failed to create Provider.");
+                                return;
+                            }
+                            logger.debug("Provider id:  %s", JSON.stringify(provider._id));
+
+                            masterUtil.getOrgById(providerData.orgId, function(err, orgs) {
                                 if (err) {
-                                    logger.debug("err.....", err);
-                                }
-                                if (prov) {
-                                    logger.debug("getAWSProviderByName: ",JSON.stringify(prov));
-                                    logger.debug("err.....", err);
-                                    res.status(409);
-                                    res.send("Provider name already exist.");
+                                    res.send(500, "Not able to fetch org.");
                                     return;
                                 }
-                                openstackProvider.createNew(providerData, function(err, provider) {
-                                    if (err) {
-                                        logger.debug("err.....", err);
-                                        res.status(500);
-                                        res.send("Failed to create Provider.");
-                                        return;
-                                    }
-                                    logger.debug("Provider id:  %s", JSON.stringify(provider._id));
-                                  
-                                    masterUtil.getOrgById(providerData.orgId, function(err, orgs) {
-                                        if (err) {
-                                            res.send(500, "Not able to fetch org.");
-                                            return;
-                                        }
-                                        if (orgs.length > 0) {
-                                            
-                                            var dommyProvider = {
-                                                _id: provider._id,
-                                                id: 9,
-                                                username: openstackusername,
-                                                password: openstackpassword,
-                                                host: openstackhost,
-                                                providerName: provider.providerName,
-                                                providerType: provider.providerType,
-                                                orgId: orgs[0].rowid,
-                                                orgName: orgs[0].orgname,
-                                                tenantid : openstacktenantid,
-                                                __v: provider.__v,
-                                             
-                                            };
-                                            res.send(dommyProvider);
-                                            return;
-                                            
-                                        }
-                                    });
-                                 
-                                    logger.debug("Exit post() for /providers");
-                                });
+                                if (orgs.length > 0) {
+
+                                    var dommyProvider = {
+                                        _id: provider._id,
+                                        id: 9,
+                                        username: openstackusername,
+                                        password: openstackpassword,
+                                        host: openstackhost,
+                                        providerName: provider.providerName,
+                                        providerType: provider.providerType,
+                                        orgId: orgs[0].rowid,
+                                        orgName: orgs[0].orgname,
+                                        tenantid: openstacktenantid,
+                                        __v: provider.__v,
+
+                                    };
+                                    res.send(dommyProvider);
+                                    return;
+
+                                }
                             });
-                      
-                    } //end anuser
-                });
+
+                            logger.debug("Exit post() for /providers");
+                        });
+                    });
+
+                } //end anuser
             });
+        });
 
     });
-    
-     // Return list of all available AWS Providers.
+
+    // Return list of all available AWS Providers.
     app.get('/openstack/providers', function(req, res) {
         logger.debug("Enter get() for /providers");
         var loggedInUser = req.session.user.cn;
@@ -453,10 +631,10 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                             }
                             logger.debug("providers>>> ", JSON.stringify(providers));
                             if (providers.length > 0) {
-                                 res.send(providers);
-                                            return;
+                                res.send(providers);
+                                return;
                             } else {
-                                res.send(200,[]);
+                                res.send(200, []);
                                 return;
                             }
                         });
@@ -479,14 +657,14 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                 return;
                             }
                             var providersList = [];
-                            logger.debug("Providers::::::::::::::::::: ",providers === null);
-                            if(providers === null){
+                            logger.debug("Providers::::::::::::::::::: ", providers === null);
+                            if (providers === null) {
                                 res.send(providersList);
                                 return;
                             }
                             if (providers.length > 0) {
-                                 res.send(providers);
-                                            return;
+                                res.send(providers);
+                                return;
                             } else {
                                 res.send(providersList);
                                 return;
@@ -500,7 +678,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             }
         });
     });
-    
+
     // Return AWS Provider respect to id.
     app.get('/openstack/providers/:providerId', function(req, res) {
         logger.debug("Enter get() for /providers/%s", req.params.providerId);
@@ -516,25 +694,25 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 return;
             }
             if (aProvider) {
-               
-                    masterUtil.getOrgById(aProvider.orgId[0], function(err, orgs) {
-                        if (err) {
-                            res.send(500, "Not able to fetch org.");
-                            return;
-                        }
-                        aProvider.orgname = orgs[0].orgname;
-                       
-                        if (orgs.length > 0) {
-                            res.send(aProvider);
-                        }
-                    });
-              
+
+                masterUtil.getOrgById(aProvider.orgId[0], function(err, orgs) {
+                    if (err) {
+                        res.send(500, "Not able to fetch org.");
+                        return;
+                    }
+                    aProvider.orgname = orgs[0].orgname;
+
+                    if (orgs.length > 0) {
+                        res.send(aProvider);
+                    }
+                });
+
             } else {
                 res.send(404);
             }
         });
     });
-    
+
     // Update a particular AWS Provider
     app.post('/openstack/providers/:providerId/update', function(req, res) {
         logger.debug("Enter post() for /providers/%s/update", req.params.providerId);
@@ -551,11 +729,11 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         var providerType = req.body.providerType.trim();
         var providerId = req.params.providerId.trim();
         var serviceendpoints = {
-            compute : req.body.openstackendpointcompute,
-            network : req.body.openstackendpointnetwork,
-            image : req.body.openstackendpointimage,
-            ec2 : req.body.openstackendpointec2,
-            identity : req.body.openstackendpointidentity
+            compute: req.body.openstackendpointcompute,
+            network: req.body.openstackendpointnetwork,
+            image: req.body.openstackendpointimage,
+            ec2: req.body.openstackendpointec2,
+            identity: req.body.openstackendpointidentity
 
         };
         var orgId = req.body.orgId;
@@ -596,89 +774,89 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             res.send("Please Select Any Organization.");
             return;
         }
-         if (typeof serviceendpoints.compute  === 'undefined' || serviceendpoints.compute .length === 0) {
+        if (typeof serviceendpoints.compute === 'undefined' || serviceendpoints.compute.length === 0) {
             res.send(400, "Please Enter Compute Endpoint Name.");
             return;
         }
-        if (typeof serviceendpoints.identity  === 'undefined' || serviceendpoints.identity .length === 0) {
+        if (typeof serviceendpoints.identity === 'undefined' || serviceendpoints.identity.length === 0) {
             res.send(400, "Please Enter Identity Endpoint Name.");
             return;
         }
 
 
-             var providerData = {
-                                id: 9,
-                                username: openstackusername,
-                                password: openstackpassword,
-                                host: openstackhost,
-                                tenantid: openstacktenantid,
-                                tenantname: openstacktenantname,
-                                projectname: openstackprojectname,
-                                providerName: providerName,
-                                providerType: providerType,
-                                serviceendpoints : serviceendpoints,
-                                orgId: orgId
-                            };
-                    logger.debug("provider>>>>>>>>>>>> %s", providerData.providerType);
-                    logger.debug("provider data>>>>>>>>>>>> %s", JSON.stringify(providerData));
-                   
-                    usersDao.haspermission(user.cn, category, permissionto, null, req.session.user.permissionset, function(err, data) {
-                        if (!err) {
-                            logger.debug('Returned from haspermission : ' + data + ' : ' + (data == false));
-                            if (data == false) {
-                                logger.debug('No permission to ' + permissionto + ' on ' + category);
-                                res.send(401, "You don't have permission to perform this operation.");
-                                return;
-                            }
-                        } else {
-                            logger.error("Hit and error in haspermission:", err);
-                            res.send(500);
+        var providerData = {
+            id: 9,
+            username: openstackusername,
+            password: openstackpassword,
+            host: openstackhost,
+            tenantid: openstacktenantid,
+            tenantname: openstacktenantname,
+            projectname: openstackprojectname,
+            providerName: providerName,
+            providerType: providerType,
+            serviceendpoints: serviceendpoints,
+            orgId: orgId
+        };
+        logger.debug("provider>>>>>>>>>>>> %s", providerData.providerType);
+        logger.debug("provider data>>>>>>>>>>>> %s", JSON.stringify(providerData));
+
+        usersDao.haspermission(user.cn, category, permissionto, null, req.session.user.permissionset, function(err, data) {
+            if (!err) {
+                logger.debug('Returned from haspermission : ' + data + ' : ' + (data == false));
+                if (data == false) {
+                    logger.debug('No permission to ' + permissionto + ' on ' + category);
+                    res.send(401, "You don't have permission to perform this operation.");
+                    return;
+                }
+            } else {
+                logger.error("Hit and error in haspermission:", err);
+                res.send(500);
+                return;
+            }
+
+            masterUtil.getLoggedInUser(user.cn, function(err, anUser) {
+                if (err) {
+                    res.send(500, "Failed to fetch User.");
+                }
+                logger.debug("LoggedIn User:>>>> ", JSON.stringify(anUser));
+                if (anUser) {
+
+                    logger.debug("Able to get AWS Keypairs. %s", JSON.stringify(data));
+                    openstackProvider.updateopenstackProviderById(req.params.providerId, providerData, function(err, updateCount) {
+                        if (err) {
+                            logger.error(err);
+                            res.send(500, errorResponses.db.error);
                             return;
                         }
-
-                        masterUtil.getLoggedInUser(user.cn, function(err, anUser) {
+                        masterUtil.getOrgById(providerData.orgId, function(err, orgs) {
                             if (err) {
-                                res.send(500, "Failed to fetch User.");
+                                res.send(500, "Not able to fetch org.");
+                                return;
                             }
-                            logger.debug("LoggedIn User:>>>> ", JSON.stringify(anUser));
-                            if (anUser) {
-                               
-                                    logger.debug("Able to get AWS Keypairs. %s", JSON.stringify(data));
-                                    openstackProvider.updateopenstackProviderById(req.params.providerId, providerData, function(err, updateCount) {
-                                        if (err) {
-                                            logger.error(err);
-                                            res.send(500, errorResponses.db.error);
-                                            return;
-                                        }
-                                         masterUtil.getOrgById(providerData.orgId, function(err, orgs) {
-                                            if (err) {
-                                                res.send(500, "Not able to fetch org.");
-                                                return;
-                                            }
-                                            if (orgs.length > 0) {
-                                             var dommyProvider = {
-                                                    _id: req.params.providerId,
-                                                    id: 9,
-                                                    username: openstackusername,
-                                                    password: openstackpassword,
-                                                    host: openstackhost,
-                                                    providerName: providerData.providerName,
-                                                    providerType: providerData.providerType,
-                                                    orgId: orgs[0].rowid,
-                                                    orgName: orgs[0].orgname
-                                                };
-                                                res.send(dommyProvider);
-                                                return;
-                                            }
-                                        });
-                                    });
-                          
+                            if (orgs.length > 0) {
+                                var dommyProvider = {
+                                    _id: req.params.providerId,
+                                    id: 9,
+                                    username: openstackusername,
+                                    password: openstackpassword,
+                                    host: openstackhost,
+                                    providerName: providerData.providerName,
+                                    providerType: providerData.providerType,
+                                    orgId: orgs[0].rowid,
+                                    orgName: orgs[0].orgname
+                                };
+                                res.send(dommyProvider);
+                                return;
                             }
                         });
                     });
-         
-            
-        
+
+                }
+            });
+        });
+
+
+
     });
 
 
@@ -853,7 +1031,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                     logger.debug("err.....", err);
                                 }
                                 if (prov) {
-                                    logger.debug("getAWSProviderByName: ",JSON.stringify(prov));
+                                    logger.debug("getAWSProviderByName: ", JSON.stringify(prov));
                                     logger.debug("err.....", err);
                                     res.status(409);
                                     res.send("Provider name already exist.");
@@ -953,7 +1131,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                     });
                                 }
                             } else {
-                                res.send(200,[]);
+                                res.send(200, []);
                                 return;
                             }
                         });
@@ -976,8 +1154,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                 return;
                             }
                             var providersList = [];
-                            logger.debug("Providers::::::::::::::::::: ",providers === null);
-                            if(providers === null){
+                            logger.debug("Providers::::::::::::::::::: ", providers === null);
+                            if (providers === null) {
                                 res.send(providersList);
                                 return;
                             }

@@ -100,6 +100,7 @@ module.exports = function(options) {
     this.exec = function(cmd, onComplete, onStdOut, onStdErr) {
         var execRetCode = null;
         var execSignal = null;
+        console.log('in exec:' + cmd);
         initialize(function(err, initErrorCode) {
             if (err) {
                 onComplete(null, initErrorCode);

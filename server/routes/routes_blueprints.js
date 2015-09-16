@@ -1258,6 +1258,18 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                     });
                                 } else if (blueprint.blueprintType === 'openstack_launch') {
                                     logger.debug(blueprint);
+                                    logger.debug(req.query.version);
+                                    var version = blueprint.getVersionData(req.query.version);
+                                    if (!version) {
+                                        res.send(400, {
+                                            message: "No blueprint version available"
+                                        });
+                                        return;
+                                    }
+                                    else{
+                                        logger.debug('Runlist version:');
+                                        logger.debug(JSON.stringify(version.runlist));
+                                    }
                                     openstackProvider.getopenstackProviderById(blueprint.blueprintConfig.cloudProviderId,function(err,providerdata){
                                             if(err){
                                                 logger.error('getopenstackProviderById ' + err);
@@ -1313,6 +1325,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                         providerId: blueprint.blueprintConfig.cloudProviderId,
                                                         keyPairId: 'unknown',
                                                         chefNodeName: instanceData.server.id,
+                                                        runlist: version.runlist,
                                                         platformId: instanceData.server.id,
                                                         appUrls: blueprint.appUrls,
                                                         instanceIP: 'unknown',
@@ -1320,7 +1333,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                         bootStrapStatus: 'waiting',
                                                         users: blueprint.users,
                                                         hardware: {
-                                                            platform: 'unknown',
+                                                            platform: 'openstack',
                                                             platformVersion: 'unknown',
                                                             architecture: 'unknown',
                                                             memory: {
@@ -1418,8 +1431,16 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                                     logger.error("instancesDao.updateInstanceIp Failed ==>", err);
                                                                                     return;
                                                                                 }
-                                                                                logger.debug('Instance ip upadated');
+                                                                                logger.debug('Instance ip Updated');
                                                                             });
+                            instancesDao.updateInstanceState(instance.id, "running", function(err, updateCount) {
+                                                                                if (err) {
+                                                                                    logger.error("instancesDao.updateInstanceState Failed ==>", err);
+                                                                                    return;
+                                                                                }
+                                                                                logger.debug('Instance state Updated');
+                                                                            });
+                            
 							logsDao.insertLog({
                                                                     referenceId: logsReferenceIds,
                                                                     err: false,
@@ -1428,7 +1449,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                 });
                                                         chef.bootstrapInstance({
                                                                                         instanceIp: publicip,
-                                                                                        runlist: instance.runlist,
+                                                                                        runlist: version.runlist,
                                                                                         instanceUsername: 'ubuntu',
                                                                                         pemFilePath: '//etc//ssh//key.pem',
                                                                                         nodeName: launchparams.server.name,
@@ -1453,6 +1474,15 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                                             log: stdOutData.toString('ascii'),
                                                                                             timestamp: new Date().getTime()
                                                                                         });
+                                                                                        if(stdOutData.toString('ascii').indexOf("Chef Client finished") > 0){
+                                                                                            instancesDao.updateInstanceBootstrapStatus(instance.id, 'success', function(err, updateData) {
+                                                                                                if (err) {
+                                                                                                    logger.error("Unable to set instance bootstarp status. code 0", err);
+                                                                                                } else {
+                                                                                                    logger.debug("Instance bootstrap status set to success");
+                                                                                                }
+                                                                                            });
+                                                                                        }
 
                                                                                     }, function(stdErrData) {
 
