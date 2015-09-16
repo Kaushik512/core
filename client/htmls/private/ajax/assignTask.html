@@ -1253,7 +1253,7 @@ $(document).ready(function() {
         // alert('breaking');
         var taskType = $('#taskType').val();
         var taskData = {};
-        alert(taskType);
+        //alert(taskType);
         taskData.taskType = taskType;
 
         if (taskType === 'chef') {
@@ -1481,7 +1481,7 @@ $(document).ready(function() {
                 return false;
             }
         } else {
-            alert(taskType);
+            //alert(taskType);
             if (taskType === 'jenkins') {
                 $saveSpinner.removeClass('hidden');
                 //alert('jenkins');
@@ -1510,7 +1510,7 @@ $(document).ready(function() {
                 });
                 return false;
             } else if (taskType === 'composite') {
-                alert("I am in composite");
+                //alert("I am in composite");
                 $saveSpinner.removeClass('hidden');
                 //alert('chef');
                 var reqBody = {
