@@ -313,7 +313,7 @@ taskSchema.statics.createNew = function(taskData, callback) {
         logger.debug("Incomming tasks: ",JSON.stringify(taskData));
         taskConfig = new CompositeTask({
             taskType: TASK_TYPE.COMPOSITE_TASK,
-            assignTasks: taskData.taskConfig.assignTasks,
+            assignTasks: taskData.assignTasks,
             jobName: taskData.jobName
         });
     } else {
