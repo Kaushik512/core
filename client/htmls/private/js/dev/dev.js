@@ -1342,7 +1342,7 @@
                                                                               getSpanHeadingLeft: function(data) {
                                                                                   var imgPath;
                                                                                   if (data.blueprintData.iconPath == undefined) {
-                                                                                      data.blueprintData.iconPath = 'img/logo.png';
+                                                                                      data.blueprintData.iconPath = 'img/imgo.jpg';
 
                                                                                   }
                                                                                   return '<span class="domain-roles-icon" contenteditable="false"><img src="' + data.blueprintData.iconPath + '" style="margin-right:5px;margin-top:-10px;width:27px"/></span>';
@@ -2335,7 +2335,7 @@
                                                                                           if (data[i].iconpath)
                                                                                               $img = $('<img />').attr('src', data[i].iconpath).attr('alt', data[i].name).addClass('cardLogo');
                                                                                           else
-                                                                                              $img = $('<img />').attr('src', 'img/logo.png').attr('alt', data[i].name).addClass('cardLogo');
+                                                                                              $img = $('<img />').attr('src', 'img/imgo.jpg').attr('alt', data[i].name).addClass('cardLogo');
                                                                                           var $liImage = $('<li></li>').append($img);
                                                                                           $ul.append($liImage);
 
@@ -3606,12 +3606,20 @@
                                                                           $clonedDiv.find('.stackInfo').click(function(e) {
                                                                               var $modal = $('#cftEventModalContainer');
                                                                               var $logContainer = $modal.find('.logsArea').show();
-                                                                              var $table = $modal.find('table').hide();
+                                                                              var $modalBody = $modal.find('.modal-body');
+                                                                              $modal.find('.fromTemplate').remove();
+                                                                              var $table = $modal.find('.templateTable').clone();
+                                                                              $table.removeClass('templateTable').addClass('fromTemplate');
+                                                                              $modalBody.append($table);
                                                                               var $tBody = $table.find('tbody');
 
                                                                               function pollStackEvents(stackId) {
+                                                                                
 
                                                                                   $.get('/cloudformation/' + stackId + '/events', function(events) {
+                                                                                      if(!$.contains($modal[0],$table[0])) {
+                                                                                        return;
+                                                                                      }
                                                                                       $tBody.empty();
                                                                                       $logContainer.hide();
                                                                                       $table.show();
