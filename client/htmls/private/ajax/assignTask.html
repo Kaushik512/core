@@ -298,18 +298,22 @@
                                                                   </label>
                                                                    <div class="btn-group" style="width: 80%;">
                                                                        <select id="compositeTasksList" class="form-control" size="10" multiple="multiple" style="height:250px;">
-                                                                       
+                                                                        <option class="taskimg" value="Adarsh">Adarsh</option>
+                                                                        <option class="taskimg" value="Anshul">Anshul</option>
+                                                                        <option class="taskimg" value="Arab">Arabinda</option>
+                                                                        <option class="taskimg" value="Gobinda">Gobinda</option>
+                                                                        <option class="taskimg" value="Jagdeesh">Jagdeesh</option>
                                                                        </select>
                                                                    </div>
                                                                    <div class="btn-group" style="margin-left:10px;margin-top:20px;">
-                                                                       <a type="button"  style="border-radius: 50%;height: 32px;width: 32px;margin-bottom:15px;" class="btn btn-default btn-primary" id="btnaddTocompositeselectedTasksList">
+                                                                       <a type="button"  style="border-radius: 50%;height: 32px;width: 32px;margin-bottom:15px;" class="btn btn-default btn-primary" id="btnaddToassignedTasksList">
                                                                        <i class="fa  fa-chevron-right"style="font-size:14px;margin-top: 8px;"></i>
                                                                        </a>
 
                                                                        <div class="clearfix"></div>
                                                                        <div class="clearfix"></div>
 
-                                                                       <a type="button" style="border-radius: 50%;height: 32px;margin-top: 15px;width: 32px;" class="btn btn-default btn-primary" id="btnremoveFromcompositeselectedTasksList">
+                                                                       <a type="button" style="border-radius: 50%;height: 32px;margin-top: 15px;width: 32px;" class="btn btn-default btn-primary" id="btnremoveFromassignedTasksList">
                                                                        <i class="fa  fa-chevron-left"style="font-size:14px;margin-top: 8px;"></i>
                                                                        </a>
                                                                    </div>
@@ -326,14 +330,14 @@
                                                                        </select>
                                                                    </div>
                                                                    <div class="btn-group" style="margin-left:10px;margin-top:20px;">
-                                                                       <a type="button"  style="border-radius: 50%;height: 32px;width: 32px;margin-bottom:15px;" class="btn btn-default btn-primary" id="btncompositeselectedTasksListItemUp">
+                                                                       <a type="button"  style="border-radius: 50%;height: 32px;width: 32px;margin-bottom:15px;" class="btn btn-default btn-primary" id="btnassignedTasksListItemUp">
                                                                        <i class="fa  fa-chevron-up"style="font-size:14px;margin-top: 8px;"></i>
                                                                        </a>
 
                                                                        <div class="clearfix"></div>
                                                                        <div class="clearfix"></div>
 
-                                                                       <a type="button" style="border-radius: 50%;height: 32px;margin-top: 15px;width: 32px;" class="btn btn-default btn-primary" id="btncompositeselectedTasksListItemDown">
+                                                                       <a type="button" style="border-radius: 50%;height: 32px;margin-top: 15px;width: 32px;" class="btn btn-default btn-primary" id="btnassignedTasksListItemDown">
                                                                        <i class="fa  fa-chevron-down"style="font-size:14px;margin-top: 8px;"></i>
                                                                        </a>
                                                                    </div>
@@ -760,6 +764,72 @@
 
 
 <script type="text/javascript">
+$(document).ready(function() {
+    //To Add
+    $('#compositeTasksList').on('dblclick', 'option', function() {
+        var $this = $(this);
+        var $selectedList = $("#compositeselectedTasksList");
+        $selectedList.append($this.clone());
+        $this.hide();
+    });
+    //To Remove
+    $('#compositeselectedTasksList').on('dblclick', 'option', function() {
+        var $instanceCookbookList = $('#compositeTasksList');
+        var $this = $(this);
+        var value = $this.val();
+        $this.remove();
+        $instanceCookbookList.find('option[value="' + value + '"]').show();
+    });
+    //To add the wizard
+    $("#btnaddToassignedTasksList").on('click', function() {
+        var $options = $('#compositeTasksList option:selected');
+        var $selectedList = $("#compositeselectedTasksList");
+        $options.each(function() {
+            var $this = $(this);
+            $selectedList.append($this.clone());
+            $this.hide();
+        });
+    });
+
+    $("#btnremoveFromassignedTasksList").on('click', function() {
+        var $instanceCookbookList = $('#compositeTasksList');
+
+        $("#compositeselectedTasksList option:selected").each(function() {
+            var $this = $(this);
+            var value = $this.val();
+            $this.remove();
+            $instanceCookbookList.find('option[value="' + value + '"]').show();
+        });
+    });
+
+    $("#btnassignedTasksListItemUp").on('click', function() {
+        $("#compositeselectedTasksList option:selected").each(function() {
+            var listItem = $(this);
+            var listItemPosition = $("#compositeselectedTasksList option").index(listItem) + 1;
+
+            if (listItemPosition == 1) return false;
+
+            listItem.insertBefore(listItem.prev());
+        });
+
+    });
+
+    $("#btnassignedTasksListItemDown").on('click', function() {
+        var itemsCount = $("#compositeselectedTasksList option").length;
+
+        $($("#compositeselectedTasksList option:selected").get().reverse()).each(function() {
+            var listItem = $(this);
+            var listItemPosition = $("#compositeselectedTasksList option").index(listItem) + 1;
+
+            if (listItemPosition == itemsCount) return false;
+
+            listItem.insertAfter(listItem.next());
+
+        });
+    });
+});
+
+
 //datatable for runlist
 if (!$.fn.dataTable.isDataTable('#tableRunlist')) {
     //var $taskListArea = $('.taskListArea').empty();
