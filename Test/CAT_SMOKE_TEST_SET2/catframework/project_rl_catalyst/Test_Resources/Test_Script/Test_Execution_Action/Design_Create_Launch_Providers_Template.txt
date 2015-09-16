@@ -19,7 +19,7 @@ Resource           ${CATALYST ACTION}/New_Environment_Creation.txt
 
 *** Keywords ***
 Catalyst Launch of Cloud Formation Blueprint
-    Clicks on Workzone Button
+    #Clicks on Workzone Button
     Sleep    2s
     Clicks on Cloud FormationBlueprint Section
     Select Your Cloud Blueprint
@@ -43,7 +43,7 @@ Clicks on Submit button in Enter a Unique Stack Name window
 
 Clicks on close button in launching blueprint window
     Sleep    2s
-    Click Element    xpath=//button[@text()='Close']
+    Click Element    xpath=.//*[text()='Close']
 
 Navigates to Cloud Formation tab
     Sleep    2s
@@ -88,7 +88,9 @@ Select Your Cloud Blueprint
     Click Element    xpath=//*[text()='${CLOUD BLUEPRNTNAME}']	
 	
 Clicks on Launch of Cloud Blueprint
-    Click Element    xpath=.//*[@id='l2']/footer/div/div/a	
+    Click Element    xpath=.//*[@id='l2']/footer/div/div/a
+    Sleep    2s
+    Click Element    xpath=.//*[text()='OK']
 	
 Clicks on Cloud FormationBlueprint Section
     Click Element    css=li.pull-left.Blueprints > a	
@@ -137,7 +139,7 @@ Enters the New Cloud Blueprint Name
     Input Text    id=blueprintNameInput    ${CLOUD BLUEPRNTNAME}
 
 Clicks on User created Template
-    Click Element    xpath=.//*[@id='individualTemplateNameGrid']/div/div/ul/li/u/b[text()="${CLOUD TEMPNAME}"]
+    Click Element    xpath=.//*[@id='individualTemplateNameGrid']/div/div/ul/li/u/b[text()="${PHOENIX CLOUD TEMPNAME}"]
 
 Clicks on CloudFormation Template Type
     Sleep    5s
@@ -454,7 +456,7 @@ Choose the Provider
     Sleep    4s
     Click Element    css=#s2id_providerId > .select2-choice
     Log    after click
-    Input Text    css=#select2-drop .select2-input    ${PROVIDER NAME}
+    Input Text    css=#select2-drop .select2-input    ${PROVDR_Name}
     Sleep    4s
     Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
 
@@ -463,7 +465,7 @@ Choose the Available Images
     Sleep    4s
     Click Element    css=#s2id_imageId > .select2-choice
     Log    after click
-    Input Text    css=#select2-drop .select2-input    ${IMAGE NAME1}
+    Input Text    css=#select2-drop .select2-input    ${PHOENIX CENTOS IMAGE}
     Sleep    4s
     Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
 
@@ -547,7 +549,7 @@ Chooses The Business Group
     Sleep    1s
     Click Element    css=#s2id_bgListInput > .select2-choice
     Log    after click
-    Input Text    css=#select2-drop .select2-input    ${BUSINESS GROUP NAME1}
+    Input Text    css=#select2-drop .select2-input    ${PHOENIX BUSINESS GROUP}
     Sleep    1s
     Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
 
@@ -558,7 +560,7 @@ Chooses The Project
     Sleep    1s
     Click Element    css=#s2id_projectListInput > .select2-choice
     Log    after click
-    Input Text    css=#select2-drop .select2-input    ${PROJECT NAME1}
+    Input Text    css=#select2-drop .select2-input    ${PHOENIX PROJECT}
     Sleep    1s
     Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
 
@@ -1020,7 +1022,6 @@ Verfiy the Chef Run fron Grid View Enabled
 
 
 Catalyst Choose Template and Save Setup for UBUNTU
-    Clicks on Settings
     Clicks on Design
     Sleep    5s
     Choose the Template Type Created
@@ -1070,7 +1071,7 @@ Choose the Available Images for Ubuntu
     Sleep    4s
     Click Element    css=#s2id_imageId > .select2-choice
     Log    after click
-    Input Text    css=#select2-drop .select2-input    ${IMAGE NAME2}
+    Input Text    css=#select2-drop .select2-input    ${PHOENIX UBUNTU IMAGE}
     Sleep    4s
     Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
 
@@ -1559,10 +1560,11 @@ Clicks on User Created Projects
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=//*[normalize-space(text())="Catalyst"]
 
 Clicks on > Button to your Environment
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=//li[contains(., "Catalyst")]/./span[3]              #Catalyst project
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=//li[contains(., "Catalyst")]/./span[3]
     #Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='tree']/ul/li[contains(., "Catalyst")]/./span[3]
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=//*[normalize-space(text())="Dev"]
-    Sleep    5 seconds  
+    Sleep    5 seconds
+    
 
 
 

@@ -313,7 +313,7 @@ taskSchema.statics.createNew = function(taskData, callback) {
         logger.debug("Incomming tasks: ",JSON.stringify(taskData));
         taskConfig = new CompositeTask({
             taskType: TASK_TYPE.COMPOSITE_TASK,
-            assignTasks: taskData.taskConfig.assignTasks,
+            assignTasks: taskData.assignTasks,
             jobName: taskData.jobName
         });
     } else {
@@ -459,7 +459,8 @@ taskSchema.statics.updateTaskById = function(taskId, taskData, callback) {
             name: taskData.name,
             taskConfig: taskConfig,
             taskType: taskData.taskType,
-            description: taskData.description
+            description: taskData.description,
+            jobResultURLPattern: taskData.jobResultURL
         }
     }, {
         upsert: false
@@ -516,6 +517,17 @@ taskSchema.statics.updateJobUrl = function(taskId,taskConfig, callback) {
     });
 };
 
+// get task by ids
+taskSchema.statics.listTasks = function(callback) {
+    this.find(function(err, tasks) {
+        if (err) {
+            logger.error(err);
+            callback(err, null);
+            return;
+        }
+        callback(null, tasks);
+    });
+};
 
 var Tasks = mongoose.model('Tasks', taskSchema);
 

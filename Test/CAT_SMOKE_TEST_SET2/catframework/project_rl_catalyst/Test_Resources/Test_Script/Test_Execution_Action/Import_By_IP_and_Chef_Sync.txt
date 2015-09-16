@@ -22,9 +22,11 @@ Resource           ${CATALYST ACTION}/Gallery_setup_TempService_Steps.txt
 *** Keywords ***
 Catalyst Execution of the Jenkins Task in Envrnment
     Sleep    3s
-    Clicks on Design
-    Sleep    2s
     Clicks on Workzone
+    Sleep    2s
+    Clicks on the Project to go to Environment
+    Sleep    2s
+    Clicks on Button to your > Environment
     Sleep    2s
     Clicks on Orchestration Tab of the Environment
     Clicks on Execute Button of the Jenkins Task Created
@@ -43,7 +45,7 @@ Close the Logs Tab after the Task Completion
 
 
 Catalyst checks the Jenkins task history
-    Clicks on Orchestration Tab of the Environment
+    #Clicks on Orchestration Tab of the Environment
     Clicks on the History button
     Sleep    10s
     Clicks on Jenkins Log button in Job output column
@@ -75,7 +77,9 @@ Catalyst Import an CentOS Instance By IP
     #Clicks on Workzone Button
     #Clicks on User Created Organization
     #Clicks on User Created BusinessGroup
-    #Clicks on Button to your > Environment
+    Clicks on the Project to go to Environment
+    Sleep    2s
+    Clicks on Button to your > Environment
     Sleep    5s
     Clicks on Import By IP Button
     Enters the IP Address of CentOS Box
@@ -98,7 +102,9 @@ Catalyst Import an Ubuntu Instance By IP
     #Clicks on Workzone Button
     #Clicks on User Created Organization
     #Clicks on User Created BusinessGroup
-    #Clicks on Button to your > Environment
+    Clicks on the Project to go to Environment
+    Sleep    2s
+    Clicks on Button to your > Environment
     Sleep    3s
     Clicks on Import By IP Button
     Enters the IP Address of Ubuntu Box
@@ -141,14 +147,18 @@ Catalyst Verfication Ubuntu Duplicate Node
     
 
 
-
+Clicks on the Project to go to Environment
+    Execute Javascript    $('.expand-collapse.click-expand.fa.fa-angle-right').append('${PROJECT NAME2}').click()
+    Sleep    2s
 
 
 Catalyst Import By IP Chef Client run,SSH,Stop,Start
     Clicks on Settings
     Clicks on Workzone Button
     Sleep    2s
-    #Clicks on Button to your > Environment
+    Clicks on the Project to go to Environment
+    Sleep    2s
+    Clicks on Button to your > Environment
     Sleep    5s
     Selects the imported centos node
     Click on Chef ClientRun    
@@ -201,7 +211,9 @@ Catalyst Import By IP Chef Client run,SSH,Stop,Start on Ubuntu Instance
     #Clicks on Settings
     #Clicks on Workzone Button
     #Sleep    2s
-    #Clicks on Button to your > Environment
+    Clicks on the Project to go to Environment
+    Sleep    2s
+    Clicks on Button to your > Environment
     Sleep    5s
     Selects Ubuntu imported node
     Click on Chef ClientRun of Ubuntu Instance   
@@ -1049,7 +1061,9 @@ Catalyst Creation of Jenkins Task in Environment
     #Clicks on Workzone
     #Clicks on User Created Organization
     #Clicks on User Created BusinessGroup
-    #Clicks on > Button to your Environment
+    Clicks on the Project to go to Environment
+    Sleep    2s
+    Clicks on Button to your > Environment
     Sleep    2s
     Clicks on Orchestration Tab of the Environment
     Clicks on New Button to create task
@@ -1061,6 +1075,12 @@ Catalyst Creation of Jenkins Task in Environment
     Clicks on Save Task Button
     Sleep    4s
     Clicks on Save of the Success Button
+    #Sleep    2s
+    #Clicks on Pop up of Ok Button
+
+
+Clicks on Pop up of Ok Button
+    Execute Javascript    $('body > div.bootbox.modal.fade.bootbox-alert.in > div > div > div.modal-footer > button').click();
 
 Catlayst Creation of Chef Task in the Environment
     Clicks on New Button to create task
@@ -1073,6 +1093,9 @@ Catlayst Creation of Chef Task in the Environment
     Clicks on Edit Button for Attributes
     Clicks on Save Button of Attributes and Values
     Clicks on Save Task Button
+    Sleep    4s
+    Clicks on Pop up of Ok Button
+
 
 Creation of New Application for your Project and Executing Tasks  
     Clicks on Workzone
@@ -1421,7 +1444,8 @@ Enters the Empty Password
     Input Text    id=jenkinspassword    ${VaildEmptyPassword}
 
 Clicks on Jenkins Link
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='setting_tree']/ul/li[6]/a
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[text()='Jenkins']
+
 
 Select your Orgg Created
     Select From List   id=orgname    ${ORGANIZATION NAME}
@@ -1434,6 +1458,10 @@ Clicks on Jenkins Cancel Button
 
 
 Catalyst creation of Chef Task
+    Clicks on the Project to go to Environment
+    Sleep    2s
+    Clicks on Button to your > Environment
+    Sleep    2s
     Clicks on Orchestration Tab of the Environment
     Clicks on New Button to create task
     Enters Chef job name
@@ -1443,6 +1471,9 @@ Catalyst creation of Chef Task
     Clicks on Update runlist button to save runlist
     Clicks on Save button for chef task
     Clicks on Save of the Success Button
+    #Sleep    4s
+    #Clicks on Pop up of Ok Button
+
 
 
 Enters Chef job name
@@ -1469,10 +1500,12 @@ Clicks on Save button for chef task
     Click Element    xpath=.//*[@id='taskForm']/div/div[7]/div/button    
     
 Catalyst execution of Chef Task
-    Sleep    3s
-    Clicks on Design
     Sleep    2s
     Clicks on Workzone
+    Sleep    2s
+    Clicks on the Project to go to Environment
+    Sleep    2s
+    Clicks on Button to your > Environment
     Sleep    2s
     Clicks on Orchestration Tab of the Environment
     Clicks on Execute Button for Chef task
@@ -1486,7 +1519,7 @@ Clicks on Execute Button for Chef task
 
     
 Catalyst checks the Chef task history
-    Clicks on Orchestration Tab of the Environment
+    #Clicks on Orchestration Tab of the Environment
     Clicks on Chef task History button
     Sleep    10s
     Clicks on Close button in Chef history page

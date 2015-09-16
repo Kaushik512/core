@@ -34,6 +34,16 @@ module.exports.setRoutes = function(app, sessionVerification) {
         });
     });
 
+    app.get('/tasks/list/all', function(req, res) {
+        Tasks.listTasks(function(err, tasks) {
+            if (err) {
+                res.send(500, errorResponses.db.error);
+                return;
+            }
+            res.send(tasks);
+        });
+    });
+
     app.all('/tasks/:taskId/*', function(req, res, next) {
         Tasks.getTaskById(req.params.taskId, function(err, task) {
             if (err) {
@@ -72,7 +82,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
     app.post('/tasks/:taskId/run', function(req, res) {
         var choiceParam = req.body.choiceParam;
-        logger.debug("Choice Param::: ",choiceParam);
+        logger.debug("Choice Param::: ", choiceParam);
         Tasks.getTaskById(req.params.taskId, function(err, task) {
 
             if (err) {
@@ -81,7 +91,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 return;
             }
 
-            task.execute(req.session.user.cn, req.protocol + '://' + req.get('host'),choiceParam, function(err, taskRes) {
+            task.execute(req.session.user.cn, req.protocol + '://' + req.get('host'), choiceParam, function(err, taskRes) {
                 if (err) {
                     logger.error(err);
                     res.send(500, err);
@@ -458,5 +468,4 @@ module.exports.setRoutes = function(app, sessionVerification) {
             }
         });
     });
-
 };
