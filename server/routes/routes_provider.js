@@ -250,7 +250,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
    app.post('/hppubliccloud/providers', function(req, res) {
 
-        logger.debug("Enter post() for /hppubliccloud.", typeof req.body.fileName);
+        logger.debug("Enter post() for /hppubliccloud.", typeof req.files.hppubliccloudinstancepem);
         var user = req.session.user;
         var category = configmgmtDao.getCategoryFromID("9");
         var permissionto = 'create';
@@ -261,7 +261,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         var hppubliccloudtenantname = req.body.openstacktenantname;
         var hppubliccloudprojectname = req.body.openstackprojectname;
         var providerName = req.body.providerName;
-        var providerType = req.body.providerType;
+        var providerType = req.body.providerType.toLowerCase();
         var hppubliccloudkeyname = req.body.hppubliccloudkeyname;
         var hppubliccloudregion = req.body.hppubliccloudregion;
 
@@ -292,6 +292,14 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         }
         if (typeof hppubliccloudtenantid === 'undefined' || hppubliccloudtenantid.length === 0) {
             res.send(400, "Please Enter a Tenant ID");
+            return;
+        }
+        if (typeof hppubliccloudregion === 'undefined' || hppubliccloudregion.length === 0) {
+            res.send(400, "Please Enter Region.");
+            return;
+        }
+        if (typeof hppubliccloudkeyname === 'undefined' || hppubliccloudkeyname.length === 0) {
+            res.send(400, "Please Enter a Key name.");
             return;
         }
         if (typeof providerName === 'undefined' || providerName.length === 0) {
@@ -367,6 +375,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                         tenantname: hppubliccloudtenantname,
                         projectname: hppubliccloudprojectname,
                         serviceendpoints: serviceendpoints,
+                        region: hppubliccloudregion,
+                        keyname: hppubliccloudkeyname,
                         orgId: orgId
                     };
                     hppubliccloudProvider.gethppubliccloudProviderByName(providerData.providerName, providerData.orgId, function(err, prov) {
@@ -425,7 +435,276 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         });
 
     });
+    
+    app.get('/hppubliccloud/providers', function(req, res) {
+        logger.debug("Enter get() for /hppubliccloud/providers");
+        var loggedInUser = req.session.user.cn;
+        masterUtil.getLoggedInUser(loggedInUser, function(err, anUser) {
+            if (err) {
+                res.send(500, "Failed to fetch User.");
+                return;
+            }
+            if (!anUser) {
+                res.send(500, "Invalid User.");
+                return;
+            }
+            if (anUser.orgname_rowid[0] === "") {
+                masterUtil.getAllActiveOrg(function(err, orgList) {
+                    if (err) {
+                        res.send(500, 'Not able to fetch Orgs.');
+                        return;
+                    }
+                    if (orgList) {
+                        hppubliccloudProvider.gethppubliccloudProvidersForOrg(orgList, function(err, providers) {
+                            if (err) {
+                                logger.error(err);
+                                res.send(500, errorResponses.db.error);
+                                return;
+                            }
+                            for(var i =0; i < providers.length;i++){
+                                providers[i]['providerType'] = providers[i]['providerType'].toUpperCase();
+                            }
+                            logger.debug("providers>>> ", JSON.stringify(providers));
+                            if (providers.length > 0) {
+                                res.send(providers);
+                                return;
+                            } else {
+                                res.send(200, []);
+                                return;
+                            }
+                        });
+                    } else {
+                        res.send(200, []);
+                        return;
+                    }
+                });
+            } else {
+                masterUtil.getOrgs(loggedInUser, function(err, orgList) {
+                    if (err) {
+                        res.send(500, 'Not able to fetch Orgs.');
+                        return;
+                    }
+                    if (orgList) {
+                        hppubliccloudProvider.gethppubliccloudProvidersForOrg(orgList, function(err, providers) {
+                            if (err) {
+                                logger.error(err);
+                                res.send(500, errorResponses.db.error);
+                                return;
+                            }
+                            var providersList = [];
+                            logger.debug("Providers::::::::::::::::::: ", providers === null);
+                            if (providers === null) {
+                                res.send(providersList);
+                                return;
+                            }
+                            if (providers.length > 0) {
+                                res.send(providers);
+                                return;
+                            } else {
+                                res.send(providersList);
+                                return;
+                            }
+                        });
+                    } else {
+                        res.send(200, []);
+                        return;
+                    }
+                });
+            }
+        });
+    });
 
+    app.get('/hppubliccloud/providers/:providerId', function(req, res) {
+        logger.debug("Enter get() for /hppubliccloud/providers//%s", req.params.providerId);
+        var providerId = req.params.providerId.trim();
+        if (typeof providerId === 'undefined' || providerId.length === 0) {
+            res.send(500, "Please Enter ProviderId.");
+            return;
+        }
+        hppubliccloudProvider.gethppubliccloudProviderById(providerId, function(err, aProvider) {
+            if (err) {
+                logger.error(err);
+                res.send(500, errorResponses.db.error);
+                return;
+            }
+            if (aProvider) {
+
+                masterUtil.getOrgById(aProvider.orgId[0], function(err, orgs) {
+                    if (err) {
+                        res.send(500, "Not able to fetch org.");
+                        return;
+                    }
+                    aProvider.orgname = orgs[0].orgname;
+
+                    if (orgs.length > 0) {
+                        res.send(aProvider);
+                    }
+                });
+
+            } else {
+                res.send(404);
+            }
+        });
+    });
+
+
+    app.post('/hppubliccloud/providers/:providerId/update', function(req, res) {
+        logger.debug("Enter post() for /providers/hppubliccloud/%s/update", req.params.providerId);
+        var user = req.session.user;
+        var category = configmgmtDao.getCategoryFromID("9");
+        var permissionto = 'create';
+        var hppubliccloudusername = req.body.openstackusername;
+        var hppubliccloudpassword = req.body.openstackpassword;
+        var hppubliccloudhost = req.body.openstackhost;
+        var hppubliccloudtenantid = req.body.openstacktenantid;
+        var hppubliccloudtenantname = req.body.openstacktenantname;
+        var hppubliccloudprojectname = req.body.openstackprojectname;
+        var providerName = req.body.providerName;
+        var providerType = req.body.providerType.toLowerCase();
+        var hppubliccloudkeyname = req.body.hppubliccloudkeyname;
+        var hppubliccloudregion = req.body.hppubliccloudregion;
+
+        var serviceendpoints = {
+            compute: req.body.openstackendpointcompute,
+            network: req.body.openstackendpointnetwork,
+            image: req.body.openstackendpointimage,
+            ec2: req.body.openstackendpointec2,
+            identity: req.body.openstackendpointidentity,
+
+        };
+
+        var orgId = req.body.orgId;
+        if (typeof hppubliccloudusername === 'undefined' || hppubliccloudusername.length === 0) {
+            res.send(400, "Please Enter Username.");
+            return;
+        }
+        if (typeof hppubliccloudpassword === 'undefined' || hppubliccloudpassword.length === 0) {
+            res.send(400, "Please Enter Password.");
+            return;
+        }
+        if (typeof hppubliccloudhost === 'undefined' || hppubliccloudhost.length === 0) {
+            res.send(400, "Please Enter a Host.");
+            return;
+        }
+        if (typeof hppubliccloudtenantid === 'undefined' || hppubliccloudtenantid.length === 0) {
+            res.send(400, "Please Enter a Tenant ID");
+            return;
+        }
+        if (typeof hppubliccloudregion === 'undefined' || hppubliccloudregion.length === 0) {
+            res.send(400, "Please Enter Region.");
+            return;
+        }
+        if (typeof hppubliccloudkeyname === 'undefined' || hppubliccloudkeyname.length === 0) {
+            res.send(400, "Please Enter a Key name.");
+            return;
+        }
+        if (typeof providerName === 'undefined' || providerName.length === 0) {
+            res.send(400, "Please Enter Name.");
+            return;
+        }
+        if (typeof providerType === 'undefined' || providerType.length === 0) {
+            res.send(400, "Please Enter ProviderType.");
+            return;
+        }
+        if (typeof hppubliccloudtenantname === 'undefined' || hppubliccloudtenantname.length === 0) {
+            res.send(400, "Please Enter Tenant Name.");
+            return;
+        }
+        if (typeof hppubliccloudprojectname === 'undefined' || hppubliccloudprojectname.length === 0) {
+            res.send(400, "Please Enter Project Name.");
+            return;
+        }
+        if (typeof orgId === 'undefined' || orgId.length === 0) {
+            res.status(400);
+            res.send("Please Select Any Organization.");
+            return;
+        }
+        if (typeof serviceendpoints.compute === 'undefined' || serviceendpoints.compute.length === 0) {
+            res.send(400, "Please Enter Compute Endpoint Name.");
+            return;
+        }
+        if (typeof serviceendpoints.identity === 'undefined' || serviceendpoints.identity.length === 0) {
+            res.send(400, "Please Enter Identity Endpoint Name.");
+            return;
+        }
+
+
+        var providerData = {
+            id: 9,
+            username: hppubliccloudusername,
+            password: hppubliccloudpassword,
+            host: hppubliccloudhost,
+            providerName: providerName,
+            providerType: providerType,
+            tenantid: hppubliccloudtenantid,
+            tenantname: hppubliccloudtenantname,
+            projectname: hppubliccloudprojectname,
+            serviceendpoints: serviceendpoints,
+            region: hppubliccloudregion,
+            keyname: hppubliccloudkeyname,
+            orgId: orgId
+        };
+        logger.debug("provider>>>>>>>>>>>> %s", providerData.providerType);
+        logger.debug("provider data>>>>>>>>>>>> %s", JSON.stringify(providerData));
+
+        usersDao.haspermission(user.cn, category, permissionto, null, req.session.user.permissionset, function(err, data) {
+            if (!err) {
+                logger.debug('Returned from haspermission : ' + data + ' : ' + (data == false));
+                if (data == false) {
+                    logger.debug('No permission to ' + permissionto + ' on ' + category);
+                    res.send(401, "You don't have permission to perform this operation.");
+                    return;
+                }
+            } else {
+                logger.error("Hit and error in haspermission:", err);
+                res.send(500);
+                return;
+            }
+
+            masterUtil.getLoggedInUser(user.cn, function(err, anUser) {
+                if (err) {
+                    res.send(500, "Failed to fetch User.");
+                }
+                logger.debug("LoggedIn User:>>>> ", JSON.stringify(anUser));
+                if (anUser) {
+
+                    logger.debug("Able to get AWS Keypairs. %s", JSON.stringify(data));
+                    hppubliccloudProvider.updatehppubliccloudProviderById(req.params.providerId, providerData, function(err, updateCount) {
+                        if (err) {
+                            logger.error(err);
+                            res.send(500, errorResponses.db.error);
+                            return;
+                        }
+                        masterUtil.getOrgById(providerData.orgId, function(err, orgs) {
+                            if (err) {
+                                res.send(500, "Not able to fetch org.");
+                                return;
+                            }
+                            if (orgs.length > 0) {
+                                var dommyProvider = {
+                                    _id: req.params.providerId,
+                                    id: 9,
+                                    username: hppubliccloudusername,
+                                    password: hppubliccloudpassword,
+                                    host: hppubliccloudhost,
+                                    providerName: providerData.providerName,
+                                    providerType: providerData.providerType,
+                                    orgId: orgs[0].rowid,
+                                    orgName: orgs[0].orgname
+                                };
+                                res.send(dommyProvider);
+                                return;
+                            }
+                        });
+                    });
+
+                }
+            });
+        });
+
+
+
+    });
 
     //Create Openstack provider
     app.post('/openstack/providers', function(req, res) {

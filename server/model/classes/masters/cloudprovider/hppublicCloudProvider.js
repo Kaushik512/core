@@ -111,19 +111,22 @@ hppubliccloudProviderSchema.statics.createNew = function(req,providerData, callb
     logger.debug("Enter createNew");
     var providerObj = providerData;
     var that = this;
+    logger.debug(JSON.stringify(providerObj));
     var provider = new that(providerObj);
-     var inFiles = req.files.fileObject;
-     var keyPair = {
-        _id: req.body.hppubliccloudkeyname
-     }
-    logger.debug('Files found: ' + inFiles[0].fileName);
+     var inFiles = req.files.hppubliccloudinstancepem;
+     
+    logger.debug('Files found: ' + req.files.hppubliccloudinstancepem);
     provider.save(function(err, aProvider) {
         if (err) {
             logger.error(err);
             callback(err, null);
             return;
         }
-        ProviderUtil.saveAwsPemFiles(keyPair, inFiles[0], function(err, flag) {
+        logger.debug(JSON.stringify(aProvider));
+        var keyPair = {
+            _id: aProvider['_id']
+         }
+        ProviderUtil.saveAwsPemFiles(keyPair, req.files.hppubliccloudinstancepem, function(err, flag) {
                         if (err) {
                             logger.debug("Unable to save pem files.");
                             res.send(500, "Unable to save pem files.");
