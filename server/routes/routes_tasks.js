@@ -34,7 +34,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
         });
     });
 
-    app.get('/tasks/list', function(req, res) {
+    app.get('/tasks/list/all', function(req, res) {
         Tasks.listTasks(function(err, tasks) {
             if (err) {
                 res.send(500, errorResponses.db.error);
