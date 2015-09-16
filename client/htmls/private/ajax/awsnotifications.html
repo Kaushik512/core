@@ -8,7 +8,7 @@
      method: "GET",
      url: "/globalsettings",   
      success: function(data, success) {
-      $("#content").append('<iframe src='+ data[0].awsNotificationUrl+' style="width: 100% ! important; height: 97%! important; border: medium none;"></iframe>');
+      $("#content").append('<iframe src="http://supercatalyst.relevancelab.com/private/awsnotifications.html" style="width: 100% ! important; height: 97%! important; border: medium none;"></iframe>');
     },
     error: function(jqxhr) {
       removeLoader();
