@@ -20,7 +20,7 @@ module.exports = function(options, callback) {
 
 	connectionString += '/' + options.dbName;
 	console.log(connectionString);
-	mongoose.connect(connectionString);
+	mongoose.connect(connectionString,{auto_reconnect: true});
 
 	mongoose.connection.on('connected', function() {
 		callback(null);
