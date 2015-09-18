@@ -3956,6 +3956,8 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                 //method for getting the type of job.. 
                 if (data[i].taskType === 'chef') {
                     var $tdType = $('<td style="vertical-align:inherit;text-align:center;"></td>').append("<img style='width:31px;' src='img/chef.png' alt='chef'>&nbsp;&nbsp;<span style='font-size:14px;'></span>");
+                }else if(data[i].taskType === 'composite'){
+                    var $tdType = $('<td style="vertical-align:inherit;text-align:center;"></td>').append("<img style='width:22px;' src='img/composite.jpg' alt='composite'>&nbsp;&nbsp;<span style='font-size:14px;'></span>");
                 } else {
                     var $tdType = $('<td style="vertical-align:inherit;text-align:center;"></td>').append("<img style='width:22px;' src='img/jenkins.png' alt='jenkins'>&nbsp;&nbsp;<span style='font-size:14px;'></span>");
                 }
