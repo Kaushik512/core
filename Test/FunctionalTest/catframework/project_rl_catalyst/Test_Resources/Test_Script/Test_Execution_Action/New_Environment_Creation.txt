@@ -420,23 +420,24 @@ Clicks on New button create new Environment
     Click Element    xpath=.//*[@id='newENV']
 
 Select the Environments1    
-    Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element    xpath=.//*[@id='s2id_environmentname']/a/span[1]
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element    css=#s2id_environmentname > .select2-choice
     Sleep    1s
-    Input Text    xpath=.//*[@id='select2-drop']/div/input     ${EnV1}
+    Input Text    css=#select2-drop .select2-input     ${EnV1}
     Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element    xpath=.//*[@id='select2-drop']/ul/li[contains("${EnV1}",.)]
 
 
 
 Select the Environment2 
-    Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element    xpath=.//*[@id='s2id_environmentname']/a/span[1]
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element    css=#s2id_environmentname > .select2-choice
     Sleep    1s
-    Input Text    xpath=.//*[@id='select2-drop']/div/input     ${EnV2}
+    Input Text    css=#select2-drop .select2-input     ${EnV2}
     Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element    xpath=.//*[@id='select2-drop']/ul/li[contains("${EnV2}",.)]
+    
 
 Select the Environment3
-    Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element    xpath=.//*[@id='s2id_environmentname']/a/span[1]
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element    css=#s2id_environmentname > .select2-choice
     Sleep    1s
-    Input Text    xpath=.//*[@id='select2-drop']/div/input     ${EnV3}
+    Input Text    css=#select2-drop .select2-input     ${EnV3}
     Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element    xpath=.//*[@id='select2-drop']/ul/li[contains("${EnV3}",.)]
 
 

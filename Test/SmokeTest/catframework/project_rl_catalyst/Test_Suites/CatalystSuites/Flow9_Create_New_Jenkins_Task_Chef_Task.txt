@@ -31,13 +31,13 @@ Catalyst Jenkins Task Creation and Execution
     [Teardown]     Close Browser
 
 
-Catalyst Chef task creation and Execution
-    [Tags]       Sanity               Chef
+#-Catalyst Chef task creation and Execution
+    #-[Tags]       Sanity               Chef
 #    Catalyst Login
-    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
-    Catalyst creation of Chef Task
-    Catalyst execution of Chef Task
-    Catalyst checks the Chef task history
-    Catalyst Logout                      
-    [Teardown]     Close Browser
+    #-Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    #-Catalyst creation of Chef Task
+    #-Catalyst execution of Chef Task
+    #-Catalyst checks the Chef task history
+    #-Catalyst Logout                      
+    #-[Teardown]     Close Browser
 

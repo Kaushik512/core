@@ -10,7 +10,7 @@ Resource           catalyst.txt
 
 *** Variables ***
 ${BROWSER TYPE}                  firefox 
-${ENVIRONMENT SERVER}              http://d4d.relevancelab.com:3001
+${ENVIRONMENT SERVER}              http://d4d.rlcatalyst.com/public/login.html
 
 
 
@@ -50,7 +50,8 @@ ${STATS RUN}                running
 ${VAR}            54.75.4.3
 ${PRINTSTMT}            The Instance has an IP Address
 ${SATSS}                         success
-${SATSSYY}                        Success
+${CHEF STATE}                        Success
+${SSH STATE}                         Success
 ${CENTOS STACK}          CentOS
 ${ret}         0
 ${APACHE COOKBOOK}            service_apache
@@ -59,7 +60,7 @@ ${SERVER TIME COOKBOOK}            starter
 ${DISABLED}           disabled
 ${CENT OS}            Cent OS
 ${UBUNTU OS}            ubuntu
-${SUITS}                stopped
+${STATUS STOPPED}                stopped
 ${UserName}             root
 
 
@@ -136,7 +137,8 @@ ${TEMPLATE TYPENAME}       SoftwareStack
 ${random}                  adarsh
 ${ADD}                     apache2              #tomcat-all
 ${ACTBOOT1}                 Pending
-${ACTBOOT2}                 Success
+${BOOTSTRAP STATUS}          Success 
+${STOP STATUS}               Success
 ${IP Centos}                 52.24.178.71
 ${AUTHN}                    Pem File 
 ${NAME}                     Bootstrap
@@ -159,6 +161,8 @@ ${Org_Consumer}             smoke_orgcons1
 ${Org_consumer_EMAIL_ID}    consumer@gmail.com
 ${Orgconsumer_PASSWD}       password1
 ${Orgconsumer_CONFPASSWD}   password1
+${STOP STATE}               Stop
+
 
 
 ${EDIT_INSTANCE_NAME}       Instance_Centos
@@ -171,6 +175,7 @@ ${NAMEOFINSTANCE}           Instance_Centos
 ${IP Ubuntu}                54.68.147.50		
 ${IP UBUNTUSERNAME}         ubuntu
 ${EDIT_UBUNTU_INSTANCE_NAME}     Instance_Ubuntu
+
 
 ${CENTOS NAME}              Instance_Centos		
 ${UBUNTU NAME}              Instance_Ubuntu		
@@ -194,6 +199,8 @@ ${PROVIDERR}                 AWS
 ${SECRET KEY}                  qm/j8lT0/IPc1P5ud8yujUSa61+QjqeyZ/jZkIff
 ${ACCESS KEY}                  AKIAI3ETOOEFHJ62G2NQ
 ${IMAGE NAME1}                 smoke_CentOS
+${PHOENIX CENTOS IMAGE}        CentOS6.6
+${PHOENIX UBUNTU IMAGE}        ubuntu
 ${IMAGE NAME2}                 smoke_ubuntu
 ${IMAGE NAME3}                 smoke_Win08
 ${IMAGE NAME4}                 smoke_Win2012
@@ -210,7 +217,8 @@ ${SERVICE NAME1}               ApacheServ
 ${ValidEditVMImage}            Windows 2008
 ${Centos_IMAGE}                Centos6.6
 ${Ubuntu_Image}                Ubuntu
-
+${CHEFCLIENT}                  Chef-Client-Run
+${SSH}                         SSH-Shell
 
 
 #${ValidateNotExistLDAP}             0564ghs
@@ -404,7 +412,7 @@ ${Vaild15ChrTemplateName}                ReelvanceLabsTemplat
 ${ValidTEditemplName}                    ApacRelevance
 ${Vaild15ChrTempName}                    CatalystAutomation
 ${VaildSpacesTEmpTyName}                 Catlsyt Auto
-${TEMPLATE NAME}                         Apache2
+${TEMPLATE NAME}                         Apache
 ${TEMP_NAME}                             Apache
 
 ${VaildEmptyTemplateNameErrMsg}              Required
@@ -470,7 +478,7 @@ ${TASK NAME}              Task1
 ${JENKINS SERVER}         JenkinsRL
 ${DEF_JENKINS_SERVER}    PhoenixJenkins
 ${JENKINS EDIT}           Jenkins
-${JJOB NAME}               testjob
+${JJOB NAME}               testmail
 
 
 ${Stack_Name}         RLStack
@@ -481,3 +489,21 @@ ${Proj_Name}          PhoenixApp
 
 
 ${Cheftask}      ChefTask
+
+
+#Phoenix Organization Related
+${PHOENIX CLOUD TEMPNAME}            CatalystStack
+${PHOENIX BUSINESS GROUP}            PhoenixBG
+${PHOENIX PROJECT}                   PhoenixApp
+
+
+
+
+
+
+
+
+
+
+
+

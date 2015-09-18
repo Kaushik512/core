@@ -189,7 +189,7 @@ Select particular User Created organization
     Wait Until Keyword Succeeds    1 minute     1 seconds     Select From List     id=orgname    ${ORGANIZATION NAME}
 
 Assign Users
-    Click Element    xpath=.//*[@id='loginname']/label[text()="${ORG ADMIN USER}"]/i
+    Click Element    xpath=.//*[@id='loginname']/label[text()="${VALID USER}"]/i
 #    Click Element    xpath=.//*[@id='loginname']/label[text()="${Org_Admin1}"]/i
 #    Click Element    xpath=.//*[@id='loginname']/label[text()="${Org_Designer}"]/i
 #    Click Element    xpath=.//*[@id='loginname']/label[text()="${Org_Consumer}"]/i
