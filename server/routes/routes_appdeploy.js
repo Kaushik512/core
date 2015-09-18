@@ -11,6 +11,7 @@
 var logger = require('_pr/logger')(module);
 var AppDeploy = require('_pr/model/app-deploy/app-deploy');
 var errorResponses = require('./error_responses');
+var AppData = require('_pr/model/app-deploy/app-data');
 
 
 module.exports.setRoutes = function(app, sessionVerificationFunc) {
@@ -46,7 +47,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
     });
 
     // Update AppDeploy
-    app.post('/app/deploy/:appId', function(req, res) {
+    /*app.post('/app/deploy/:appId', function(req, res) {
         logger.debug("Got appDeploy data: ", JSON.stringify(req.body.appDeployData));
         AppDeploy.getAppDeployById(req.params.appId, function(err, appDeploy) {
             if (err) {
@@ -66,9 +67,9 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             });
         });
     });
-
+*/
     // Get AppDeploy w.r.t. Id
-    app.get('/app/deploy/:appId', function(req, res) {
+    /*app.get('/app/deploy/:appId', function(req, res) {
         AppDeploy.getAppDeployById(req.params.appId, function(err, appDeploy) {
             if (err) {
                 res.send(500, errorResponses.db.error);
@@ -82,10 +83,10 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 return;
             }
         });
-    });
+    });*/
 
     // Delete AppDeploy w.r.t. Id
-    app.delete('/app/deploy/:appId', function(req, res) {
+    /*app.delete('/app/deploy/:appId', function(req, res) {
         AppDeploy.getAppDeployById(req.params.appId, function(err, appDeploy) {
             if (err) {
                 res.send(500, errorResponses.db.error);
@@ -109,10 +110,10 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 return;
             }
         });
-    });
+    });*/
 
     // Get AppDeploy w.r.t. appName and env
-    app.get('/app/deploy/:appName/env/:envId', function(req, res) {
+    /*app.get('/app/deploy/:appName/env/:envId', function(req, res) {
         AppDeploy.getAppDeployByNameAndEnvId(req.params.appName,req.params.envId, function(err, appDeploy) {
             if (err) {
                 res.send(500, errorResponses.db.error);
@@ -126,10 +127,10 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 return;
             }
         });
-    });
+    });*/
 
     // Update AppDeploy by Name
-    app.post('/app/deploy/:appName/update', function(req, res) {
+    /*app.post('/app/deploy/:appName/update', function(req, res) {
         logger.debug("Got appDeploy data: ", JSON.stringify(req.body));
         AppDeploy.getAppDeployByName(req.params.appName, function(err, appDeploy) {
             if (err) {
@@ -147,6 +148,79 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 }
                 res.send(200, appDeployes);
             });
+        });
+    });*/
+
+    // Get all AppData
+    app.get('/app/deploy/data/list', function(req, res) {
+        AppData.getAppData(function(err, appDeployes) {
+            if (err) {
+                res.send(500, errorResponses.db.error);
+                return;
+            }
+            if (appDeployes) {
+                res.send(200, appDeployes);
+                return;
+            }
+        });
+    });
+
+    // Create AppData
+    app.post('/app/deploy/data/create', function(req, res) {
+        AppData.createNew(req.body.appDeployData,function(err, appDeployes) {
+            if (err) {
+                res.send(403, "Application Already Exist.");
+                return;
+            }
+            if (appDeployes) {
+                res.send(200, appDeployes);
+                return;
+            }
+        });
+    });
+
+    // Get all AppData by name
+    app.get('/app/deploy/data/:appName/list', function(req, res) {
+        AppData.getAppDataByName(req.params.appName,function(err, appDatas) {
+            if (err) {
+                res.send(500, "Please add app name.");
+                return;
+            }
+            if (appDatas) {
+                res.send(200, appDatas);
+                return;
+            }
+        });
+    });
+
+    // Get all AppData
+    app.get('/app/deploy/list', function(req, res) {
+        AppData.getAppDataWithDeploy(function(err, appDeployes) {
+            if (err) {
+                res.send(500, errorResponses.db.error);
+                return;
+            }
+            if (appDeployes) {
+                res.send(200, appDeployes);
+                return;
+            }
+        });
+    });
+
+    // Get respective Logs
+    app.get('/app/deploy/:appId/logs', function(req, res) {
+        AppDeploy.getAppDeployLogById(req.params.appId,function(err, logs) {
+            if (err) {
+                res.send(500, errorResponses.db.error);
+                return;
+            }
+            if (logs) {
+                res.send(200, logs);
+                return;
+            }else{
+                res.send(404,"Logs not available.");
+                return;
+            }
         });
     });
 };

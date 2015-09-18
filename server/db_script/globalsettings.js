@@ -42,7 +42,7 @@ var globalSettingsData = {
     "zabbixUrl": "http://54.67.35.103:8008/index.html",
     "jenkinsUrl": "http://jenkins.rlcatalyst.com",
     "awsUsageUrl": "http://54.67.35.103:3031/Awsusage",
-    "awsCostUrl": "http://54.67.35.103:3030/Infrah",
+    "awsCostUrl": "http://54.67.35.103:3032/Infrah",
     "awsNotificationUrl": "http://54.67.35.103:4000/events#"
 };
 setTimeout(function(){

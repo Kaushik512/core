@@ -1,3 +1,7 @@
+.tableMoreInfo{
+    position: relative;
+    left:32%;
+}
 .updateupgrade{
     background: url("../img/updateupgrade.png");
     background-repeat: no-repeat;
@@ -668,6 +672,10 @@ label.custom-select {
     margin-left: 4px;
     width: 28px;
 }
+#customRow .actionbuttonChefClientRundisable{
+    position: relative;
+    left:32%;
+}
 .actionbuttonShutdowndisable{
     background-image:url('../img/galleryIcons/rsz_shut_down.png');
     background-repeat:no-repeat;
@@ -692,6 +700,15 @@ label.custom-select {
     width: 30px;
     margin-top:1px;
 }
+.puppetClientRunlistImageCP{
+   /* background-image:url('../img/puppeticon.png');*/
+    background-repeat:no-repeat;
+    float: left;
+    height: 28px;
+    width: 30px;
+    margin-top:1px;
+}
+
 .txt-color-white{
     color:#fff!important;
 }
@@ -3100,8 +3117,8 @@ nav ul ul>li:hover b {
     box-shadow:none !important; 
 }
 .role-Selectedcard{
-    border: 2px solid #40baf1;
-    border-radius:12px;
+    border: 2px solid #40baf1 !important;
+    border-radius:12px !important;
     box-shadow: 0 4px 10px rgba(0, 0, 0, .3);
 }
 .card-backflip{
@@ -4341,6 +4358,13 @@ body
     width: 30px;
     margin-top:0px;
 }
+.moreinfoAppDeploy{
+    background-repeat:no-repeat;
+    float: left;
+    height: 27px;
+    width: 30px;
+    margin-top:0px;
+}
 .moreinfoactionHistory{
     background-repeat:no-repeat;
     float: left;
@@ -4424,8 +4448,15 @@ float: left;
 }
 .actionbuttonChefClientRun{
     /*background-image:url('../img/galleryIcons/Chefimport.png');*/
-    background-repeat:no-repeat;float: left;
-    height: 27px;margin-left: 4px;width: 32%;
+    background-repeat:no-repeat;
+    float: left;
+    height: 27px;
+    margin-left: 4px;
+    width: 32%;
+}
+#customRow .actionbuttonChefClientRun{
+    position: relative;
+    left:32%;
 }
 .actionbuttonShutdown{
     /*background-image:url('../img/galleryIcons/shut_down.png');*/
@@ -4496,6 +4527,13 @@ float: left;
     overflow-y:auto;
     overflow-x:hidden;
     word-break:break-all;
+}
+.logsForAppDeploy {
+    height:413px;
+    overflow-y:auto;
+    overflow-x:hidden;
+    word-break:break-all;
+    font-size: 12px;
 }
 .logsAreaBootstrap {
     height:400px;
@@ -6061,7 +6099,7 @@ font-size:14px !important;
 }
 
 
-.moreInfo,.moreinfoBuild,.moreinfoactionHistory, .actionbuttonChefClientRun, .actionbuttonStart,.actionbuttonStartContainer,.actionbuttonCPStart, .actionbuttonShutdown,.actionbuttonShutdownContainer, .sshIcon, .aws, .azure, .rl, .openstack, .cloudstack, .dock, .logo{
+.moreInfo,.moreinfoBuild,.moreinfoAppDeploy,.moreinfoactionHistory, .actionbuttonChefClientRun, .actionbuttonStart,.actionbuttonStartContainer,.actionbuttonCPStart, .actionbuttonShutdown,.actionbuttonShutdownContainer, .sshIcon, .aws, .azure, .rl, .openstack, .cloudstack, .dock, .logo{
     background: url(../img/sprites.png) no-repeat;
 }
 
@@ -6071,6 +6109,11 @@ font-size:14px !important;
     height: 25px;
 }
 .moreinfoBuild{
+    background-position: -15px -12px ;
+    width: 25px;
+    height: 25px;
+}
+.moreinfoAppDeploy{
     background-position: -15px -12px ;
     width: 25px;
     height: 25px;
@@ -8225,10 +8268,10 @@ form.cmxform .gray * {
     margin-top: 21px;
     text-align: center;
 }
-.popover.left{
+/*.popover.left{
     margin-left:-73px!important;
     margin-top:44px!important;
-}
+}*/
 
 .stackInfo{
     background: url(../img/sprites.png) no-repeat;

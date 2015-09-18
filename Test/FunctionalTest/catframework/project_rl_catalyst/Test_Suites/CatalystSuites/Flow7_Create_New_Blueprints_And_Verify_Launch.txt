@@ -10,6 +10,7 @@ Resource           ${COMMON RESOURCES}/catalyst_grid_node.txt
 
 
 
+
 *** Test Cases ***
 Catalyst Validation of BlueprintPage
     [Tags]       Sanity               Smoke
@@ -44,6 +45,32 @@ Catalyst CENT OS Instance Launch Blueprint Setup
 
 
 
+
+
+
+
+
+Catalyst Inspect Functionality after Bootstrap Setup
+    [Tags]       Sanity               Inspect
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Sleep    3s
+    Catalyst Inspect Functionality Setup
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+
+
+
+
+
+
+
+
+
+
+
 Catalyst CENT OS Instance CHEFCLIENT setup
     [Tags]       Sanity               Smoke
 #    Catalyst Login
@@ -55,7 +82,7 @@ Catalyst CENT OS Instance CHEFCLIENT setup
 
 
 Catalyst CENT OS Instance SSH setup
-    [Tags]       Sanity               Smoke
+    [Tags]       Sanity               Cent
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
     Catalyst SSH Action on CentOS Instance
@@ -64,7 +91,7 @@ Catalyst CENT OS Instance SSH setup
 
 
 Catalyst CENT OS Instance STOP setup
-    [Tags]       Sanity               Smoke
+    [Tags]       Sanity               Cent
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
     Catalyst STOP Action on CentOS Instance
@@ -73,7 +100,7 @@ Catalyst CENT OS Instance STOP setup
 
 
 Catalyst CENT OS EDIT NAME setup
-    [Tags]       Sanity               Smoke
+    [Tags]       Sanity               Cent
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
     Catalyst EDIT Instance Name of CentOS Instance
@@ -82,7 +109,7 @@ Catalyst CENT OS EDIT NAME setup
 
 
 Catalyst CENT OS INSTANCE CONTROL PANEL setup
-    [Tags]       Sanity               Smoke
+    [Tags]       Sanity               Cent
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
     Catlayst verfication of CentOS Instance Stop Setup and Disable
@@ -91,7 +118,7 @@ Catalyst CENT OS INSTANCE CONTROL PANEL setup
 
 
 Cent OS Instance Grid View of the Stopped Instance and Restart,SSH,Chef Run,Start
-    [Tags]       Sanity               Smoke
+    [Tags]       Sanity               Cent
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
     Catalyst Grid View Verify Start ,Stop ,SSH ,Chef ,Client ,Log Setup
@@ -100,7 +127,7 @@ Cent OS Instance Grid View of the Stopped Instance and Restart,SSH,Chef Run,Star
 
 
 Cent OS Instance Delete Setup
-    [Tags]       Sanity               Smoke
+    [Tags]       Sanity               Cent
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
     Catalyst CentOS Deleete the Instance Setup

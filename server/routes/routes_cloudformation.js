@@ -205,7 +205,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             if (cloudFormation) {
                 AWSProvider.getAWSProviderById(cloudFormation.cloudProviderId, function(err, aProvider) {
                     if (err) {
-                        logger.error("Unable to fetch provide", err);
+                        logger.error("Unable to fetch provider", err);
                         res.send(500, errorResponses.db.error);
                     }
                     var cryptoConfig = appConfig.cryptoSettings;

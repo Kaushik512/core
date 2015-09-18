@@ -43,6 +43,10 @@ var ACTION_LOG_TYPES = {
     SSH: {
         type: 8,
         name: 'SSH-Shell'
+    },
+    PUPPET_RUN: {
+        type: 9,
+        name: "puppet-agent-run"
     }
 
 }
@@ -431,6 +435,8 @@ var InstancesDao = function() {
                 instanceIP: ip
             }, {
                 'chef.chefNodeName': nodeName
+            },{
+                'puppet.puppetNodeName': nodeName
             }],
         }
         Instances.find(queryObj, function(err, data) {
@@ -1178,6 +1184,22 @@ var InstancesDao = function() {
                 runlist: runlist
             }
 
+        };
+        var logId = insertActionLog(instanceId, log, callback);
+        log._id = logId;
+        return log;
+    };
+
+    this.insertPuppetClientRunActionLog = function(instanceId, user, timestampStarted, callback) {
+        logger.debug("Enter insertPuppetClientRunActionLog ", instanceId, user, timestampStarted);
+        var log = {
+            type: ACTION_LOG_TYPES.PUPPET_RUN.type,
+            name: ACTION_LOG_TYPES.PUPPET_RUN.name,
+            completed: false,
+            success: false,
+            user: user,
+            timeStarted: timestampStarted,
+     
         };
         var logId = insertActionLog(instanceId, log, callback);
         log._id = logId;

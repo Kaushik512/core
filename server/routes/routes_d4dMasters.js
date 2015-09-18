@@ -1572,24 +1572,29 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     return;
                 }
                 logger.debug("Got Org: >>>>> ", JSON.stringify(anOrg));
-                var query = {};
-                query['id'] = req.params.masterid;
-                query['orgname_rowid'] = anOrg[0].rowid;
-                d4dModelNew.d4dModelMastersConfigManagement.find(query, function(err, d4dMasterJson) {
-                    if (err) {
-                        logger.error("Hit and error:", err);
-                    }
-                    logger.debug("getListFiltered %s", d4dMasterJson.length);
-                    if (d4dMasterJson.length > 0) {
-                        logger.debug("sent response %s", JSON.stringify(d4dMasterJson));
-                        res.send("Found");
-                        logger.debug("Exit post() for  /d4dMasters/getListFiltered/%s", req.params.masterid);
-                    } else {
-                        logger.debug("sent response %s", JSON.stringify(d4dMasterJson));
-                        res.send("Not Found");
-                    }
+                if(anOrg.length){
+                    var query = {};
+                    query['id'] = req.params.masterid;
+                    query['orgname_rowid'] = anOrg[0].rowid;
+                    d4dModelNew.d4dModelMastersConfigManagement.find(query, function(err, d4dMasterJson) {
+                        if (err) {
+                            logger.error("Hit and error:", err);
+                        }
+                        logger.debug("getListFiltered %s", d4dMasterJson.length);
+                        if (d4dMasterJson.length > 0) {
+                            logger.debug("sent response %s", JSON.stringify(d4dMasterJson));
+                            res.send("Found");
+                            logger.debug("Exit post() for  /d4dMasters/getListFiltered/%s", req.params.masterid);
+                        } else {
+                            logger.debug("sent response %s", JSON.stringify(d4dMasterJson));
+                            res.send("Not Found");
+                        }
 
-                });
+                    });
+                }else{
+                    res.send("Org Not Found");
+                    return;
+                }
             });
         } else {
 

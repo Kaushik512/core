@@ -20,7 +20,7 @@ Resource           ${COMMON RESOURCES}/catalyst_grid_node.txt
 
 
 Catalyst new Environments setup
-    [Tags]       Sanity               Smoke
+    [Tags]       Sanity               Env
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
     Catalyst Addition and Creation of New Envirorments Setup           
@@ -31,11 +31,8 @@ Catalyst new Environments setup
 
 
 
-
-
-
 Catalyst Adding New Envirornments to the Chef          
-    [Tags]       Sanity       ps
+    [Tags]       Sanity           Smoke
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
     Catalyst Addition of New Environments
@@ -43,13 +40,42 @@ Catalyst Adding New Envirornments to the Chef
     [Teardown]     Close Browser
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 Catalyst Import a Node From ConfigManagement(Chef) in to the Environment
-    [Tags]       Sanity       Env
+    [Tags]       Sanity       Import
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
     Catalyst Import a Node from Config Management
     Catalyst Logout
     [Teardown]     Close Browser
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 Catalyst Verify Node Imported from Config Management(Chef Server) & Delete

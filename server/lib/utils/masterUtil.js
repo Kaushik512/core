@@ -13,6 +13,8 @@ var ObjectId = require('mongoose').Types.ObjectId;
 var permissionsetDao = require('../../model/dao/permissionsetsdao');
 var d4dModel = require('../../model/d4dmasters/d4dmastersmodel.js');
 var configmgmtDao = require('../../model/d4dmasters/configmgmt.js');
+var appConfig = require('_pr/config');
+var chefSettings = appConfig.chef;
 
 var MasterUtil = function() {
     // Return All Orgs specific to User
@@ -1577,11 +1579,22 @@ var MasterUtil = function() {
             rowid: anId,
             id: "25"
         }, function(err, configMgmt) {
+            if (err) {
+                callback(err, null);
+                return;
+            }
             //logger.debug("Got puppet: ",JSON.stringify(configMgmt));
             configmgmtDao.getRowids(function(err, rowidlist) {
+                if (err) {
+                    callback(err, null);
+                    return;
+                }
                 if (configMgmt.length) {
-                    names = configmgmtDao.convertRowIDToValue(configMgmt.orgname_rowid, rowidlist);
-                    configMgmt.orgname = names;
+                    names = configmgmtDao.convertRowIDToValue(configMgmt[0].orgname_rowid, rowidlist);
+                    configMgmt[0].orgname = names;
+                    if (configMgmt[0].userpemfile_filename) {
+                        configMgmt[0].pemFileLocation = appConfig.puppet.puppetReposLocation + configMgmt[0].orgname_rowid[0] + '/' + configMgmt[0].folderpath + configMgmt[0].userpemfile_filename
+                    }
                     callback(null, configMgmt[0]);
                     return;
                 }
@@ -1590,10 +1603,19 @@ var MasterUtil = function() {
                     id: "10"
                 }, function(err, chefmgmt) {
                     //logger.debug("Got Chef: ",JSON.stringify(chefmgmt));
-
+                    if (err) {
+                        callback(err, null);
+                        return;
+                    }
                     if (chefmgmt.length) {
-                        names = configmgmtDao.convertRowIDToValue(chefmgmt.orgname_rowid, rowidlist);
-                        chefmgmt.orgname = names;
+
+                        names = configmgmtDao.convertRowIDToValue(chefmgmt[0].orgname_rowid, rowidlist);
+                        chefmgmt[0].orgname = names;
+
+                        chefmgmt[0].chefRepoLocation = chefSettings.chefReposLocation + chefmgmt[0].orgname_rowid[0] + '/' + chefmgmt[0].loginname + '/';
+                        chefmgmt[0].userpemfile = chefSettings.chefReposLocation + chefmgmt[0].orgname_rowid[0] + '/' + chefmgmt[0].folderpath + chefmgmt[0].userpemfile_filename;
+                        chefmgmt[0].validatorpemfile = chefSettings.chefReposLocation + chefmgmt[0].orgname_rowid[0] + '/' + chefmgmt[0].folderpath + chefmgmt[0].validatorpemfile_filename;
+
                         callback(null, chefmgmt[0]);
                     } else {
                         callback(null, null);

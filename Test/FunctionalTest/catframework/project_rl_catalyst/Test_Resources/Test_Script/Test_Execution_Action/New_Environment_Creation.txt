@@ -46,6 +46,21 @@ Catalyst Addition and Creation of New Envirorments Setup
     Clicks on Save Button to save the Environments
     Sleep    2s
     Verfiy the Environment is Created
+    Sleep    2s
+    Clicks on New button Create New Environment
+    Select organization for Env
+    #Select the Configuration name
+    #-Clicks on Add Button
+    #-Add the Environment Named2
+    #-Clicks on ADD Chef Env Button
+    Select the Environment3
+    #Assign Team2
+    Assign Created Project3
+    Clicks on Save Button to save the Environments
+    Sleep    2s
+    Verfiy the Environmentnew is Created
+
+
 
 
 
@@ -88,6 +103,10 @@ Catalyst Import a Node from Config Management
     Verify the Node Importedd
     Clicks on Close of ConfigMgmt Button
     Sleep    10s
+
+
+
+
 
 
 Catalyst Verify and Delete the InportedNode from Environment
@@ -142,13 +161,18 @@ Verify the Node Importedd
 
 
 Clicks on Config Managementt
-    Click Element    xpath=//*[text()='Config Management']
+    Click Element    xpath=//*[text()='Chef Server']
 
 Verfiy the Environment is Created
     Sleep    3s
     Element Should Contain    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${EnV1}']/../td[text()='${ORGANIZATION NAME}']    ${ORGANIZATION NAME}
     Sleep    2s
     Element Should Contain    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${EnV2}']/../td[text()='${ORGANIZATION NAME}']    ${ORGANIZATION NAME}
+
+
+Verfiy the Environmentnew is Created
+    Sleep    3s
+    Element Should Contain    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${EnV3}']/../td[text()='${ORGANIZATION NAME}']    ${ORGANIZATION NAME}
 
 Clicks on Import Nodes Button of Chef Server
     Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${CONFIG MANAGEMENT NAME}']/../td[5]/div/a[2]
@@ -335,7 +359,7 @@ Catalyst Activation of Environments in projects
     #Clicks on Save Button
 
 Clicks on Add Button
-    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='wid-id-3']/div/div/div[4]/a
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='wid-id-3']/div/div/div[3]/a
     
 
 Clicks on ADD Chef Env Button
@@ -396,18 +420,26 @@ Clicks on New button create new Environment
     Click Element    xpath=.//*[@id='newENV']
 
 Select the Environments1    
-    Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element    xpath=.//*[@id='s2id_environmentname']/a/span[1]
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element    css=#s2id_environmentname > .select2-choice
     Sleep    1s
-    Input Text    xpath=.//*[@id='select2-drop']/div/input     ${EnV1}
+    Input Text    css=#select2-drop .select2-input     ${EnV1}
     Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element    xpath=.//*[@id='select2-drop']/ul/li[contains("${EnV1}",.)]
 
 
 
 Select the Environment2 
-    Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element    xpath=.//*[@id='s2id_environmentname']/a/span[1]
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element    css=#s2id_environmentname > .select2-choice
     Sleep    1s
-    Input Text    xpath=.//*[@id='select2-drop']/div/input     ${EnV2}
+    Input Text    css=#select2-drop .select2-input     ${EnV2}
     Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element    xpath=.//*[@id='select2-drop']/ul/li[contains("${EnV2}",.)]
+    
+
+Select the Environment3
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element    css=#s2id_environmentname > .select2-choice
+    Sleep    1s
+    Input Text    css=#select2-drop .select2-input     ${EnV3}
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element    xpath=.//*[@id='select2-drop']/ul/li[contains("${EnV3}",.)]
+
 
 
 Assign Teams1
@@ -424,12 +456,14 @@ Assign Team2
  
 Assign Created Project1
     Click Element    xpath=.//*[@id='projectname']/label[text()='${Proj1}']/i
-    Click Element    xpath=.//*[@id='projectname']/label[text()='${Proj2}']/i
+    #Click Element    xpath=.//*[@id='projectname']/label[text()='${Proj2}']/i
 
 Assign Created Project2
     Click Element    xpath=.//*[@id='projectname']/label[text()='${Proj1}']/i
-    Click Element    xpath=.//*[@id='projectname']/label[text()='${Proj2}']/i
+    #Click Element    xpath=.//*[@id='projectname']/label[text()='${Proj2}']/i
 
+Assign Created Project3
+    Click Element    xpath=.//*[@id='projectname']/label[text()='${Proj2}']/i
 
  #Import By IP
  Clicks on Import By IP Button
