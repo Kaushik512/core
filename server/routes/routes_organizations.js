@@ -1098,6 +1098,25 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     
                 }
                 blueprintData.instanceData = instanceData;
+            }else if (req.body.blueprintData.blueprintType === 'hppubliccloud_launch') {
+                logger.debug('req.body.blueprintData.blueprintType ==>', req.body.blueprintData.blueprintType);
+                instanceData = {
+                    instanceImageID:req.body.blueprintData.imageIdentifier,
+                    flavor:req.body.blueprintData.openstackflavor,
+                    network:req.body.blueprintData.openstacknetwork,
+                    securityGroupIds:req.body.blueprintData.openstacksecurityGroupIds,
+                    subnet:req.body.blueprintData.openstacksubnet,
+                    instanceOS:req.body.blueprintData.instanceOS,
+                    instanceCount:req.body.blueprintData.instanceCount,
+                    cloudProviderType: 'hppubliccloud',
+                    cloudProviderId: req.body.blueprintData.providerId,
+                    infraManagerType: 'chef',
+                    infraManagerId: req.body.blueprintData.chefServerId,
+                    runlist: req.body.blueprintData.runlist,
+                    instanceImageName:req.body.blueprintData.instanceImageName
+                    
+                }
+                blueprintData.instanceData = instanceData;
             }else if (req.body.blueprintData.blueprintType === 'aws_cf') {
                 console.log('templateFile ==> ', req.body.blueprintData.cftTemplateFile);
                 cloudFormationData = {

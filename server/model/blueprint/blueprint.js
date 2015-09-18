@@ -16,7 +16,8 @@ var BLUEPRINT_TYPE = {
     DOCKER: 'docker',
     AWS_CLOUDFORMATION: 'aws_cf',
     INSTANCE_LAUNCH: "instance_launch",
-    OPENSTACK_LAUNCH: "openstack_launch"
+    OPENSTACK_LAUNCH: "openstack_launch",
+    HPPUBLICCLOUD_LAUNCH: "hppubliccloud_launch"
 };
 
 var Schema = mongoose.Schema;
@@ -86,7 +87,7 @@ function getBlueprintConfigType(blueprint) {
         BlueprintConfigType = DockerBlueprint;
     } else if ((blueprint.blueprintType === BLUEPRINT_TYPE.AWS_CLOUDFORMATION) && blueprint.blueprintConfig) {
         BlueprintConfigType = CloudFormationBlueprint;
-    } else if ((blueprint.blueprintType === BLUEPRINT_TYPE.OPENSTACK_LAUNCH) && blueprint.blueprintConfig) {
+    } else if ((blueprint.blueprintType === BLUEPRINT_TYPE.OPENSTACK_LAUNCH || blueprint.blueprintType === BLUEPRINT_TYPE.HPPUBLICCLOUD_LAUNCH) && blueprint.blueprintConfig) {
         BlueprintConfigType = OpenstackBlueprint;
     } else {
         return;
@@ -183,7 +184,11 @@ BlueprintSchema.statics.createNew = function(blueprintData, callback) {
         blueprintType = BLUEPRINT_TYPE.OPENSTACK_LAUNCH;
         logger.debug('blueprintData openstack instacedata ==>',blueprintData.instanceData);
         blueprintConfig = OpenstackBlueprint.createNew(blueprintData.instanceData);
-    }  else {
+    }else if ((blueprintData.blueprintType === BLUEPRINT_TYPE.HPPUBLICCLOUD_LAUNCH) && blueprintData.instanceData) {
+        blueprintType = BLUEPRINT_TYPE.HPPUBLICCLOUD_LAUNCH;
+        logger.debug('blueprintData openstack instacedata ==>',blueprintData.instanceData);
+        blueprintConfig = OpenstackBlueprint.createNew(blueprintData.instanceData);
+    }   else {
         process.nextTick(function() {
             callback({
                 message: "Invalid Blueprint Type sdds"

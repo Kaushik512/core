@@ -113,15 +113,33 @@
                     $.ajax({
                        method: "GET",url: "/openstack/providers",data: reqBody,   
                        success: function(data1, success) {
-                        data1= typeof data1=="string" ?JSON.parse(data1):data1;
+                                data1= typeof data1=="string" ?JSON.parse(data1):data1;
                                 //d4ddata=data;
-                                //pulling in data for openstack
-                                for(var h = 0;h < data1.length;h++){
-                                    data.push(data1[h]);
-                                }
+                                //pulling in data for hppublic could
+
+                                $.ajax({
+                                   method: "GET",url: "/hppubliccloud/providers",data: reqBody,   
+                                   success: function(data2, success) {
+                                    data2= typeof data2=="string" ?JSON.parse(data2):data2;
+                                            //d4ddata=data;
+                                            //pulling in data for openstack
+                                            for(var h = 0;h < data2.length;h++){
+                                                data.push(data2[h]);
+                                            }
+                                            
+                                           d4ddata= updateImageListByGivingProviderName(d4ddata,data);
+                                            getOrganizationList();
+                                            //startup();
+                                        },
+                                        error: function(jqxhr) {
+                                            removeLoader();
+                                            bootbox.alert(jqxhr.status);
+                                        },
+                                        failure: function(data) {
+                                            bootbox.alert(data);
+                                        }
+                                });
                                 
-                               d4ddata= updateImageListByGivingProviderName(d4ddata,data);
-                                getOrganizationList();
                                 //startup();
                             },
                             error: function(jqxhr) {

@@ -112,7 +112,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                     return;
                 }*/
 
-                    if(providerType == "openstack"){
+                    if(providerType == "openstack" || providerType == "hppubliccloud" ){
                         logger.debug('Provider Type',providerType);
                         openstackProvider.getopenstackProviderById(providerId, function(err, aProvider) {
                             if (err) {
@@ -360,7 +360,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                     res.send(401,"You don't have permission to perform this operation.");
                     return;
                 }*/
-                    if(providerType == "openstack"){
+                    if(providerType == "openstack" || providerType == "hppubliccloud"){
                         logger.debug('Provider Type',providerType);
                         VMImage.getImageById(imageId, function(err, anImage) {
                             if (err) {
