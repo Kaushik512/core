@@ -226,5 +226,23 @@ AppDeploySchema.statics.getAppDeployByEnvId = function(envId, callback) {
     });
 };
 
+// Get all AppDeploy informations.
+AppDeploySchema.statics.getAppDeployListByEnvId = function(envId, callback) {
+    this.find({
+        envId: envId
+    }, function(err, appDeploys) {
+        if (err) {
+            logger.debug("Got error while fetching AppDeploy: ", err);
+            callback(err, null);
+        }
+        if (appDeploys.length) {
+            logger.debug("Got AppDeploy: ", JSON.stringify(appDeploys));
+            callback(null, appDeploys);
+        }else{
+            callback(null, []);
+        }
+    });
+};
+
 var AppDeploy = mongoose.model("appDeploy", AppDeploySchema);
 module.exports = AppDeploy;
