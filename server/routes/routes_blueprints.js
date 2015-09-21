@@ -352,10 +352,10 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                         };
                                                         var ec2 = new EC2(awsSettings);
                                                         //Used to ensure that there is a default value of "1" in the count.
-                                                        if(!cloudProvider.cloudProviderData.instanceCount)
+                                                        if (!cloudProvider.cloudProviderData.instanceCount)
                                                             cloudProvider.cloudProviderData.instanceCount = "1";
 
-                                                        ec2.launchInstance(anImage.imageIdentifier, cloudProvider.cloudProviderData.instanceType, securityGroupIds, cloudProvider.cloudProviderData.subnetId, 'D4D-' + blueprint.name, aKeyPair.keyPairName,cloudProvider.cloudProviderData.instanceCount, function(err, instanceDataAll) {
+                                                        ec2.launchInstance(anImage.imageIdentifier, cloudProvider.cloudProviderData.instanceType, securityGroupIds, cloudProvider.cloudProviderData.subnetId, 'D4D-' + blueprint.name, aKeyPair.keyPairName, cloudProvider.cloudProviderData.instanceCount, function(err, instanceDataAll) {
                                                             if (err) {
                                                                 logger.error("launchInstance Failed >> ", err);
                                                                 res.send(500);
@@ -373,7 +373,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                 appUrls = appUrls.concat(appConfig.appUrls);
                                                             }
                                                             var newinstanceIDs = [];
-                                                            var addinstancewrapper = function(instanceData,instancesLength){
+                                                            var addinstancewrapper = function(instanceData, instancesLength) {
                                                                     logger.debug('Entered addinstancewrapper ++++++' + instancesLength);
                                                                     var instance = {
                                                                         name: blueprint.name,
@@ -431,11 +431,11 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                         //Returning handle when all instances are created
                                                                         newinstanceIDs.push(instance.id);
                                                                         logger.debug('Lengths ---- ' + newinstanceIDs.length + '  ' + instancesLength);
-                                                                        if(newinstanceIDs.length >= instancesLength){
+                                                                        if (newinstanceIDs.length >= instancesLength) {
                                                                             res.send(200, {
-                                                                                    "id": newinstanceIDs,
-                                                                                    "message": "instance launch success"
-                                                                                });
+                                                                                "id": newinstanceIDs,
+                                                                                "message": "instance launch success"
+                                                                            });
                                                                         }
                                                                         var timestampStarted = new Date().getTime();
                                                                         var actionLog = instancesDao.insertBootstrapActionLog(instance.id, instance.runlist, req.session.user.cn, timestampStarted);
@@ -674,14 +674,14 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                             });
                                                                         });
 
-                                                                        
+
                                                                     }); //end of create instance.
-                                                            } //end of createinstancewrapper function
-                                                            //looping through all instances that are launched.
-                                                            for(var ic = 0; ic < instanceDataAll.length;ic++){
+                                                                } //end of createinstancewrapper function
+                                                                //looping through all instances that are launched.
+                                                            for (var ic = 0; ic < instanceDataAll.length; ic++) {
                                                                 logger.debug('InstanceDataAll ' + JSON.stringify(instanceDataAll));
                                                                 logger.debug('Length : ' + instanceDataAll.length);
-                                                                addinstancewrapper(instanceDataAll[ic],instanceDataAll.length);
+                                                                addinstancewrapper(instanceDataAll[ic], instanceDataAll.length);
                                                             }
 
 
@@ -729,6 +729,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                         if (err) {
                                             logger.error("Unable to fetch provide", err);
                                             res.send(500, errorResponses.db.error);
+                                            return;
                                         }
                                         var cryptoConfig = appConfig.cryptoSettings;
                                         var cryptography = new Cryptography(cryptoConfig.algorithm, cryptoConfig.password);
@@ -843,16 +844,25 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                                 }
                                                                             }
 
+                                                                            console.log('resources === >', resources);
+
 
                                                                             var ec2 = new EC2(awsSettings);
-                                                                            var stackResources = {};
+                                                                            var ec2Resources = {};
+                                                                            var autoScaleResourceIds = [];
                                                                             for (var i = 0; i < resources.length; i++) {
                                                                                 if (resources[i].ResourceType === 'AWS::EC2::Instance') {
                                                                                     //instanceIds.push(resources[i].PhysicalResourceId);
-                                                                                    stackResources[resources[i].PhysicalResourceId] = resources[i].LogicalResourceId;
+                                                                                    ec2Resources[resources[i].PhysicalResourceId] = resources[i].LogicalResourceId;
+                                                                                } else if (resources[i].ResourceType === 'AWS::AutoScaling::AutoScalingGroup') {
+                                                                                    autoScaleResourceIds.push(resources[i].PhysicalResourceId);
                                                                                 }
                                                                             }
-                                                                            var instanceIds = Object.keys(stackResources);
+                                                                            if (autoScaleResourceIds.length) {
+                                                                                cloudFormation.autoScaleResourceIds = autoScaleResourceIds;
+                                                                                cloudFormation.save();
+                                                                            }
+                                                                            var instanceIds = Object.keys(ec2Resources);
 
                                                                             console.log("instanceIDS length ==>", instanceIds.length);
                                                                             if (instanceIds.length) {
@@ -879,13 +889,13 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
                                                                                     }
                                                                                     logger.debug('Instances length ==>', instances.length, instanceIds);
-                                                                                    //creating jsonAttributesObj
+                                                                                    //creating jsonAttributesObj ??? WHY
                                                                                     var jsonAttributesObj = {
                                                                                         instances: {}
                                                                                     };
 
                                                                                     for (var i = 0; i < instances.length; i++) {
-                                                                                        jsonAttributesObj.instances[stackResources[instances[i].InstanceId]] = instances[i].PublicIpAddress;
+                                                                                        jsonAttributesObj.instances[ec2Resources[instances[i].InstanceId]] = instances[i].PublicIpAddress;
                                                                                     }
                                                                                     for (var i = 0; i < instances.length; i++) {
                                                                                         addAndBootstrapInstance(instances[i], jsonAttributesObj);
@@ -930,7 +940,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
                                                                                             var runlist = [];
                                                                                             var instanceUsername;
-                                                                                            var logicalId = stackResources[instanceData.InstanceId];
+                                                                                            var logicalId = ec2Resources[instanceData.InstanceId];
 
                                                                                             for (var count = 0; count < blueprint.blueprintConfig.instances.length; count++) {
                                                                                                 if (logicalId === blueprint.blueprintConfig.instances[count].logicalId) {
@@ -938,6 +948,9 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                                                     runlist = blueprint.blueprintConfig.instances[count].runlist;
                                                                                                     break;
                                                                                                 }
+                                                                                            }
+                                                                                            if (!instanceUsername) {
+                                                                                                instanceUsername = 'ubuntu'; // hack for default username
                                                                                             }
 
                                                                                             var instance = {
