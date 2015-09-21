@@ -311,34 +311,12 @@ function constructDataListTable(){
   });
 }
 function getAllApplicationData(callback){
-	var envId = urlParams.envid;
-	getenvName(function(envName){
-		alert(envName);
-  $.get('/app/deploy/env/'+envName+'/list', function(data) {
-  	alert("Here");
-  	callback(data);
+  $.get('/app/deploy/list', function(data) {
+     callback(data);
   }).fail(function() {
       alert("getAllApplicationData Error");
   });
-  });
 };
-function getenvName(callback){
-	var envId = urlParams.envid;
-	$.ajax({
-	    url: '/d4dMasters/env/' + envId,
-	    type: 'GET',
-	    contentType: "application/json",
-	    success: function(dataenvName) {
-	    	callback(dataenvName);
-	    },
-	    error: function(jqxhr) {
-
-	    },
-	    failure: function(data1) {
-
-	    }
-	});
-}
 function getParticularApplicationData(selectedAppName){
   $("#accordion-AppDeploy").empty();
   $.ajax({
@@ -387,7 +365,7 @@ function constructUI(data) {
 	            	var $clone = $accordianTemplate.clone(true);
 	                for (var i = 0; i < data.length; i++) {
 	                    //console.log(data[i]);
-	                    if (data[i].projectId) {
+	                    if (data[i].projectId && data[i].envId == dataenvName) {
 	                        
 	                        if ($('#' + data[i].projectId + data[i].applicationName + data[i].envId + '_parentAccordian').length == 0) {
 	                            //$clone.attr('id', data[i].projectId + data[i].applicationName + data[i].envId + '_parentAccordian');
