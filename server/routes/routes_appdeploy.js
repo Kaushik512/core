@@ -113,13 +113,14 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
     });*/
 
     // Get AppDeploy w.r.t. appName and env
-    /*app.get('/app/deploy/:appName/env/:envId', function(req, res) {
-        AppDeploy.getAppDeployByNameAndEnvId(req.params.appName,req.params.envId, function(err, appDeploy) {
+    app.get('/app/deploy/env/:envId/list', function(req, res) {
+        logger.debug("/app/deploy/env/:envId/list called...");
+        AppDeploy.getAppDeployListByEnvId(req.params.envId, function(err, appDeploy) {
             if (err) {
                 res.send(500, errorResponses.db.error);
                 return;
             }
-            if (appDeploy) {
+            if (appDeploy.length) {
                 res.send(200, appDeploy);
                 return;
             } else {
@@ -127,7 +128,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 return;
             }
         });
-    });*/
+    });
 
     // Update AppDeploy by Name
     /*app.post('/app/deploy/:appName/update', function(req, res) {
