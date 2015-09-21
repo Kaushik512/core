@@ -115,7 +115,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
     // Get AppDeploy w.r.t. appName and env
     app.get('/app/deploy/env/:envId/list', function(req, res) {
         logger.debug("/app/deploy/env/:envId/list called...");
-        AppDeploy.getAppDeployListByEnvId(req.params.envId, function(err, appDeploy) {
+        AppData.getAppDataWithDeployList(req.params.envId, function(err, appDeploy) {
             if (err) {
                 res.send(500, errorResponses.db.error);
                 return;
