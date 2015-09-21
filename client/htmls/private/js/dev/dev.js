@@ -2268,7 +2268,9 @@
                                                                                     //provider logo added - currently included open stack
                                                                                     if(data[i].blueprintType == 'openstack_launch')
                                                                                         $imgprovider = $('<img src="img/openstack-card.png" style="margin-right: 7px; margin-top: 4px; margin-left: 102px;">');
-
+                                                                                    if(data[i].blueprintType == 'hppubliccloud_launch')
+                                                                                        $imgprovider = $('<img src="img/hpcloud-card.png" style="margin-right: 7px; margin-top: 4px; margin-left: 102px;">');
+                                                                                    //alert(data[i].blueprintType);
                                                                                     var $liImage = $('<li></li>').append($imgprovider).append($img);
                                                                                     $ul.append($liImage);
 
@@ -2885,7 +2887,7 @@
                                                                                         }
                                                                                     });
 */
-                                                                                }if(blueprintType === 'openstack_launch'){
+                                                                                }if(blueprintType === 'openstack_launch' || blueprintType === 'hppubliccloud_launch'){
                                                                                     //alert('attempt launch of openstack');
                                                                                     launchBP();
 

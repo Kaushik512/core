@@ -308,7 +308,7 @@ console.log(JSON.stringify(options));
 				}
 				console.log("createServerJson after");
 				console.log(JSON.stringify(createServerJson));
-				var createServerUrl = 'http://'+options.host+':8774/v2/'+tenantId+'/servers';
+				var createServerUrl = options.serviceendpoints.compute + '/'+tenantId+'/servers';
 				console.log('CreateServerURL:' + createServerUrl);
 				client.registerMethod("jsonMethod", createServerUrl, "POST");
 				client.methods.jsonMethod(args,function(data,response){
