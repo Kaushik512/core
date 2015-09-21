@@ -146,8 +146,9 @@ var Puppet = function(settings) {
 
             self.createEnvironment(node.environment, function(err, envRes) {
                 if (err) {
+
                     callback({
-                        message: "Unable to create environment on puppet-master.",
+                        message: err.message || "Unable to create environment on puppet-master.",
                         err: err
                     }, null);
                     return;
@@ -359,6 +360,37 @@ var Puppet = function(settings) {
 
     };
 
+    this.getMasterHostName = function(callback) {
+        var hostNamePuppetMaster = '';
+        runSSHCmdOnMaster('hostname -f', function(err, retCode) {
+            if (err) {
+                callback({
+                    message: "Unable to get hostname of puppet-master. Unable to ssh into puppet master",
+                    err: err
+                }, null);
+                return;
+            }
+            if (retCode !== 0) {
+                message = "Unable to get hostname of puppet-master. Cmd failed with ret code : " + retCode
+                callback({
+                    message: message,
+                    retCode: retCode
+                }, null);
+                return;
+            }
+            hostNamePuppetMaster = hostNamePuppetMaster.replace(/[\t\n\r\b\0\v\f\'\"\\]/g, '');
+            hostNamePuppetMaster = hostNamePuppetMaster.trim();
+            callback(null, hostNamePuppetMaster);
+        }, function(stdOut) {
+            hostNamePuppetMaster = hostNamePuppetMaster + stdOut.toString('utf8');
+        }, function(stdErr) {
+
+        });
+
+
+
+    };
+
     this.getEnvironments = function(callback) {
 
         var stdOutStr = '';
@@ -420,6 +452,12 @@ var Puppet = function(settings) {
                 callback(err, null);
                 return;
             }
+            if (!puppetConfig.environmentpath) {
+                callback({
+                    "message": "Invalid puppet server configuration"
+                }, null);
+                return;
+            }
             var stdOutStr = '';
             var stdErrStr = '';
             runSSHCmdOnMaster(['mkdir -p ' + puppetConfig.environmentpath + '/' + envName + '/manifest', 'mkdir -p ' + puppetConfig.environmentpath + '/' + envName + '/modules'], function(err, retCode) {
@@ -451,45 +489,51 @@ var Puppet = function(settings) {
             }*/
         var stdOutStr = '';
         var stdErrStr = '';
-        runSSHCmdOnMaster('puppet cert list --all', function(err, retCode) {
-            if (err) {
-                callback(err, null);
+        this.getMasterHostName(function(err,masterHostname) {
+            if(err) {
+                callback(err,null);
                 return;
             }
-            if (retCode !== 0) {
-                message = "cmd run failed with ret code : " + retCode
-                callback({
-                    message: message,
-                    retCode: retCode
-                }, null);
-            } else {
-                logger.debug(stdOutStr)
-                //stdOutStr = stdOutStr.replace(/[\t\n\r\b\0\v\f\\]/g, '');
-                //stdOutStr = stdOutStr.split('  ');
-                var regEx = /\+\s*\"(.*?)\"/g;
-                //nodes = stdOutStr.match(regEx)
-                var matches;
-                var nodes = [];
-                while (matches = regEx.exec(stdOutStr)) {
-                    if (matches.length == 2) {
-                        nodes.push(matches[1]);
-                    }
-
+            runSSHCmdOnMaster('puppet cert list --all', function(err, retCode) {
+                if (err) {
+                    callback(err, null);
+                    return;
                 }
-                //var nodes = [];
-                // for (var i = 0; i < stdOutStr.length; i++) {
-                //     if (stdOutStr[i]) {
-                //         var nodeName = stdOutStr[i].replace('.yaml', '');
-                //         nodes.push(nodeName);
-                //     }
-                // }
-                callback(null, nodes);
-            }
-        }, function(stdOut) {
-            stdOutStr = stdOutStr + stdOut.toString('utf8');
+                if (retCode !== 0) {
+                    message = "cmd run failed with ret code : " + retCode
+                    callback({
+                        message: message,
+                        retCode: retCode
+                    }, null);
+                } else {
+                    logger.debug(stdOutStr)
+                    //stdOutStr = stdOutStr.replace(/[\t\n\r\b\0\v\f\\]/g, '');
+                    //stdOutStr = stdOutStr.split('  ');
+                    var regEx = /\+\s*\"(.*?)\"/g;
+                    //nodes = stdOutStr.match(regEx)
+                    var matches;
+                    var nodes = [];
+                    while (matches = regEx.exec(stdOutStr)) {
+                        if (matches.length == 2 && matches[1] !== masterHostname) {
+                            nodes.push(matches[1]);
+                        }
 
-        }, function(stdErr) {
-            stdErrStr = stdErrStr + stdOut.toString('utf8');
+                    }
+                    //var nodes = [];
+                    // for (var i = 0; i < stdOutStr.length; i++) {
+                    //     if (stdOutStr[i]) {
+                    //         var nodeName = stdOutStr[i].replace('.yaml', '');
+                    //         nodes.push(nodeName);
+                    //     }
+                    // }
+                    callback(null, nodes);
+                }
+            }, function(stdOut) {
+                stdOutStr = stdOutStr + stdOut.toString('utf8');
+
+            }, function(stdErr) {
+                stdErrStr = stdErrStr + stdOut.toString('utf8');
+            });
         });
         //});
     };
@@ -574,9 +618,14 @@ var Puppet = function(settings) {
             }
             callback(null, retCode);
         }, function(stdOut) {
-            onStdOut(stdOut);
+            if (typeof onStdOut === 'function') {
+                onStdOut(stdOut);
+            }
         }, function(stdErr) {
-            onStdErr(stdErr);
+            if (typeof onStdErr === 'function') {
+                onStdErr(stdErr);
+            }
+
         });
     };
 

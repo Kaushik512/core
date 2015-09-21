@@ -1760,15 +1760,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                             infraManager.cleanClient(deleteOptions, function(err, retCode) {
                                                 logger.debug("Entering chef.bootstarp");
                                                 infraManager.bootstrapInstance(bootstarpOption, function(err, code, bootstrapData) {
-                                                    if (decryptedCredentials.pemFilePath) {
-                                                        fileIo.removeFile(decryptedCredentials.pemFilePath, function(err) {
-                                                            if (err) {
-                                                                logger.error("Unable to delete temp pem file =>", err);
-                                                            } else {
-                                                                logger.debug("temp pem file deleted");
-                                                            }
-                                                        });
-                                                    }
+
                                                     if (err) {
                                                         logger.error("knife launch err ==>", err);
                                                         instancesDao.updateInstanceBootstrapStatus(instance.id, 'failed', function(err, updateData) {
@@ -1827,56 +1819,96 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                                 timestamp: timestampEnded
                                                             });
                                                             instancesDao.updateActionLog(instance.id, actionLog._id, true, timestampEnded);
+                                                            var hardwareData = {};
+                                                            if (bootstrapData && bootstrapData.puppetNodeName) {
+                                                                var runOptions = {
+                                                                    username: decryptedCredentials.username,
+                                                                    host: instance.instanceIP,
+                                                                    port: 22,
+                                                                }
 
-                                                            // waiting for 30 sec to update node data
-                                                            setTimeout(function() {
-                                                                infraManager.getNode(nodeName, function(err, nodeData) {
+                                                                if (decryptedCredentials.pemFileLocation) {
+                                                                    runOptions.pemFileLocation = decryptedCredentials.pemFileLocation;
+                                                                } else {
+                                                                    runOptions.password = decryptedCredentials.password;
+                                                                }
+
+                                                                infraManager.runClient(runOptions, function(err, retCode) {
+                                                                    if (decryptedCredentials.pemFileLocation) {
+                                                                        fileIo.removeFile(decryptedCredentials.pemFileLocation, function(err) {
+                                                                            if (err) {
+                                                                                logger.debug("Unable to delete temp pem file =>", err);
+                                                                            } else {
+                                                                                logger.debug("temp pem file deleted =>", err);
+                                                                            }
+                                                                        });
+                                                                    }
                                                                     if (err) {
-                                                                        console.log(err);
+                                                                        logger.error("Unable to run puppet client", err);
                                                                         return;
                                                                     }
+                                                                    // waiting for 30 sec to update node data
+                                                                    setTimeout(function() {
+                                                                        infraManager.getNode(nodeName, function(err, nodeData) {
+                                                                            if (err) {
+                                                                                console.log(err);
+                                                                                return;
+                                                                            }
+                                                                            // is puppet node
+                                                                            hardwareData.architecture = nodeData.facts.values.hardwaremodel;
+                                                                            hardwareData.platform = nodeData.facts.values.operatingsystem;
+                                                                            hardwareData.platformVersion = nodeData.facts.values.operatingsystemrelease;
+                                                                            hardwareData.memory = {
+                                                                                total: 'unknown',
+                                                                                free: 'unknown'
+                                                                            };
+                                                                            hardwareData.memory.total = nodeData.facts.values.memorysize;
+                                                                            hardwareData.memory.free = nodeData.facts.values.memoryfree;
+                                                                            hardwareData.os = instance.hardware.os;
+                                                                            instancesDao.setHardwareDetails(instance.id, hardwareData, function(err, updateData) {
+                                                                                if (err) {
+                                                                                    logger.error("Unable to set instance hardware details  code (setHardwareDetails)", err);
+                                                                                } else {
+                                                                                    logger.debug("Instance hardware details set successessfully");
+                                                                                }
+                                                                            });
+                                                                        });
+                                                                    }, 30000);
+                                                                });
 
-                                                                    var hardwareData = {};
-                                                                    // is puppet node
-                                                                    if (bootstrapData && bootstrapData.puppetNodeName) {
-                                                                        hardwareData.architecture = nodeData.facts.values.hardwaremodel;
-                                                                        hardwareData.platform = nodeData.facts.values.operatingsystem;
-                                                                        hardwareData.platformVersion = nodeData.facts.values.operatingsystemrelease;
-                                                                        hardwareData.memory = {
-                                                                            total: 'unknown',
-                                                                            free: 'unknown'
-                                                                        };
-                                                                        hardwareData.memory.total = nodeData.facts.values.memorysize;
-                                                                        hardwareData.memory.free = nodeData.facts.values.memoryfree;
-
+                                                            } else {
+                                                                hardwareData.architecture = nodeData.automatic.kernel.machine;
+                                                                hardwareData.platform = nodeData.automatic.platform;
+                                                                hardwareData.platformVersion = nodeData.automatic.platform_version;
+                                                                hardwareData.memory = {
+                                                                    total: 'unknown',
+                                                                    free: 'unknown'
+                                                                };
+                                                                if (nodeData.automatic.memory) {
+                                                                    hardwareData.memory.total = nodeData.automatic.memory.total;
+                                                                    hardwareData.memory.free = nodeData.automatic.memory.free;
+                                                                }
+                                                                hardwareData.os = instance.hardware.os;
+                                                                instancesDao.setHardwareDetails(instance.id, hardwareData, function(err, updateData) {
+                                                                    if (err) {
+                                                                        logger.error("Unable to set instance hardware details  code (setHardwareDetails)", err);
                                                                     } else {
-                                                                        hardwareData.architecture = nodeData.automatic.kernel.machine;
-                                                                        hardwareData.platform = nodeData.automatic.platform;
-                                                                        hardwareData.platformVersion = nodeData.automatic.platform_version;
-                                                                        hardwareData.memory = {
-                                                                            total: 'unknown',
-                                                                            free: 'unknown'
-                                                                        };
-                                                                        if (nodeData.automatic.memory) {
-                                                                            hardwareData.memory.total = nodeData.automatic.memory.total;
-                                                                            hardwareData.memory.free = nodeData.automatic.memory.free;
-                                                                        }
+                                                                        logger.debug("Instance hardware details set successessfully");
                                                                     }
-                                                                    hardwareData.os = instance.hardware.os;
-
-
-                                                                    //console.log(instance);
-                                                                    //console.log(hardwareData,'==',instance.hardware.os);
-                                                                    instancesDao.setHardwareDetails(instance.id, hardwareData, function(err, updateData) {
+                                                                });
+                                                                if (decryptedCredentials.pemFilePath) {
+                                                                    fileIo.removeFile(decryptedCredentials.pemFilePath, function(err) {
                                                                         if (err) {
-                                                                            logger.error("Unable to set instance hardware details  code (setHardwareDetails)", err);
+                                                                            logger.error("Unable to delete temp pem file =>", err);
                                                                         } else {
-                                                                            logger.debug("Instance hardware details set successessfully");
+                                                                            logger.debug("temp pem file deleted");
                                                                         }
                                                                     });
+                                                                }
 
-                                                                });
-                                                            },30000);
+                                                            }
+
+
 
                                                         } else {
                                                             instancesDao.updateInstanceBootstrapStatus(instance.id, 'failed', function(err, updateData) {
