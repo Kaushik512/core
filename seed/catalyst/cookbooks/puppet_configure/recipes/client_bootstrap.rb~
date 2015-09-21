@@ -100,3 +100,5 @@ execute "Executing puppet_cert_accept command on Puppet Master #{pup_master_ip} 
 	command "#{master_ssh_cmd} 'sudo puppet cert sign #{pup_client_fqdn}' "
 	action :run
 end
+
+
