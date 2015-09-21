@@ -3698,4 +3698,21 @@ module.exports.setRoutes = function(app, sessionVerification) {
             return;
         });
     });
+
+    app.get('/d4dMasters/env/:anId', function(req, res) {
+        logger.debug("Entered to env name...");
+        masterUtil.getEnvironmentName(req.params.anId, function(err, data) {
+            if (err) {
+                logger.debug("Failed to fetch  Environment", err);
+                res.send(500, "Failed to fetch  Environment");
+                return;
+            }
+            if(!data){
+                res.send(404,"No Environment Found.");
+                return;
+            }
+            res.send(data);
+            return;
+        });
+    });
 }
