@@ -201,9 +201,27 @@ AppDeploySchema.statics.getAppDeployLogById = function(appId, callback) {
             logger.debug("Got error while fetching AppDeploy: ", err);
             callback(err, null);
         }
-        if (appDeploy) {
+        if (appDeploy.length) {
             //logger.debug("Got AppDeploy: for log ", JSON.stringify(appDeploy));
             callback(null, appDeploy[0].appLogs);
+        }else{
+            callback(null, []);
+        }
+    });
+};
+
+// Get all AppDeploy informations for env.
+AppDeploySchema.statics.getAppDeployByEnvId = function(envId, callback) {
+    this.find({
+        envId: envId
+    }, function(err, appDeploys) {
+        if (err) {
+            logger.debug("Got error while fetching AppDeploy: ", err);
+            callback(err, null);
+        }
+        if (appDeploys) {
+            logger.debug("Got AppDeploy: ", JSON.stringify(appDeploys));
+            callback(null, appDeploys);
         }
     });
 };

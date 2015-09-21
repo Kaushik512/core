@@ -153,6 +153,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
     // Get all AppData
     app.get('/app/deploy/data/list', function(req, res) {
+        logger.debug("Data list api called...");
         AppData.getAppData(function(err, appDeployes) {
             if (err) {
                 res.send(500, errorResponses.db.error);
@@ -167,7 +168,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
     // Create AppData
     app.post('/app/deploy/data/create', function(req, res) {
-        AppData.createNew(req.body.appDeployData,function(err, appDeployes) {
+        AppData.createNew(req.body.appDeployData, function(err, appDeployes) {
             if (err) {
                 res.send(403, "Application Already Exist.");
                 return;
@@ -181,7 +182,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
     // Get all AppData by name
     app.get('/app/deploy/data/:appName/list', function(req, res) {
-        AppData.getAppDataByName(req.params.appName,function(err, appDatas) {
+        AppData.getAppDataByName(req.params.appName, function(err, appDatas) {
             if (err) {
                 res.send(500, "Please add app name.");
                 return;
@@ -209,16 +210,45 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
     // Get respective Logs
     app.get('/app/deploy/:appId/logs', function(req, res) {
-        AppDeploy.getAppDeployLogById(req.params.appId,function(err, logs) {
+        logger.debug("Logs api called...");
+        AppDeploy.getAppDeployById(req.params.appId, function(err, appDeploy) {
             if (err) {
                 res.send(500, errorResponses.db.error);
                 return;
             }
-            if (logs) {
-                res.send(200, logs);
+            if (!appDeploy) {
+                res.send(404, "appDeploy not found!");
                 return;
-            }else{
-                res.send(404,"Logs not available.");
+            }
+            AppDeploy.getAppDeployLogById(req.params.appId, function(err, logs) {
+                if (err) {
+                    res.send(500, errorResponses.db.error);
+                    return;
+                }
+                if (logs) {
+                    res.send(200, logs);
+                    return;
+                } else {
+                    res.send(404, "Logs not available.");
+                    return;
+                }
+            });
+        });
+    });
+
+    // Get AppDeploy w.r.t. env
+    app.get('/app/deploy/env/:envId', function(req, res) {
+        logger.debug("Filtered by env called..");
+        AppDeploy.getAppDeployByEnvId(req.params.envId, function(err, appDeploy) {
+            if (err) {
+                res.send(500, errorResponses.db.error);
+                return;
+            }
+            if (appDeploy) {
+                res.send(200, appDeploy);
+                return;
+            } else {
+                res.send([]);
                 return;
             }
         });

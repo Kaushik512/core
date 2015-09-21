@@ -1692,12 +1692,18 @@ $.get('../instances/' + urlParams.id, function(data) {
     $domainRolesCaption.find('.instance-details-ip strong').html(data.instanceIP);
     $domainRolesCaption.find('.instance-state').html(data.instanceState);
     //data.instanceState = 'running';
+
+    if(data.instanceState != 'running'){
+      $('.inspectBtn').hide();
+    }
+
     if (data.instanceState == 'running') {
         $domainRolesCaption.find('.componentlistContainer').addClass('started');
         $domainRolesCaption.find('.instance-state').html(data.instanceState).addClass('instance-state-text-started');
     } else if (data.instanceState == 'terminated') {
         $domainRolesCaption.find('.componentlistContainer').addClass('stopped');
         $domainRolesCaption.find('.instance-state').html(data.instanceState).addClass('instance-state-text-stopped');
+
     } else if (data.instanceState == 'stopped') {
         $domainRolesCaption.find('.componentlistContainer').addClass('stopped');
         $domainRolesCaption.find('.instance-state').html(data.instanceState).addClass('instance-state-text-stopped');
