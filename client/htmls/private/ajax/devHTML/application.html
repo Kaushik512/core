@@ -476,6 +476,9 @@ function constructUI(data) {
               logsAppDeploy
           ]);
         }
+        if (typeof data[i].envId == 'undefined') {
+           $('#' + data[i].projectId + data[i].applicationName + data[i].envId + '_parentAccordian').hide();
+        }
       }
       $(".moreinfoAppDeploy").click(function(e){
         var $modal = $('#modalAppCardLogDetails');
