@@ -3960,7 +3960,7 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                 if (data[i].taskType === 'chef') {
                     var $tdType = $('<td style="vertical-align:inherit;text-align:center;"></td>').append("<img style='width:31px;' src='img/chef.png' alt='chef'>&nbsp;&nbsp;<span style='font-size:14px;'></span>");
                 }else if(data[i].taskType === 'composite'){
-                    var $tdType = $('<td style="vertical-align:inherit;text-align:center;"></td>').append("<img style='width:22px;' src='img/composite.jpg' alt='composite'>&nbsp;&nbsp;<span style='font-size:14px;'></span>");
+                    var $tdType = $('<td style="vertical-align:inherit;text-align:center;"></td>').append("<img style='width:31px;' src='img/composite.jpg' alt='composite'>&nbsp;&nbsp;<span style='font-size:14px;'></span>");
                 } else {
                     var $tdType = $('<td style="vertical-align:inherit;text-align:center;"></td>').append("<img style='width:22px;' src='img/jenkins.png' alt='jenkins'>&nbsp;&nbsp;<span style='font-size:14px;'></span>");
                 }
@@ -4026,6 +4026,10 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                         }
                         $('#assignedRunlist').modal('show');
                     });
+                }else if(data[i].taskType === 'composite'){
+                    //if job type is composite..
+                    var $tdComposite = $('<td style="vertical-align:inherit;text-align:center;font-size">N/A</td>');
+                    $tr.append($tdComposite);
                 } else {
                     //if job type is jenkins show job url..
                     var jobURLS = 'http://' + data[i].taskConfig.jobURL;

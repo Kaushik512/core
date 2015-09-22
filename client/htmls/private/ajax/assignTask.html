@@ -35,7 +35,7 @@
                                                       <select id="taskType" class="chooseTasktype width-100">
                                                          <option id="Chef" value="chef">Chef</option>
                                                          <option id="Jenkins" value="jenkins">Jenkins</option>
-                                                         <!-- <option id="Composite" value="composite">Composite</option> -->
+                                                         <option id="Composite" value="composite">Composite</option>
                                                       </select>
                                                    </div>
                                                    <!--chef dropdown starts here-->
@@ -968,14 +968,18 @@ $(document).ready(function() {
     function loadUIData(taskData) {
         //console.log(taskData);
         //   alert(JSON.stringify(taskData));
+        console.log("I am in loadUIData");
         if (taskData) {
+         console.log("I am in loadUIData inside taskDaat");
             $('.widget-header').find('.widget-margin').html('Edit Job');
             $('.inputTaskName').val(taskData.name);
+            $('#compositeTaskName').val(taskData.name);
             $('#taskType').val(taskData.taskType);
             $('#taskType').change();
             $('#taskType').attr('disabled', 'disabled');
             $('textarea#chefDescription').val(taskData.description);
             $('textarea#jenkinsDescription').val(taskData.description);
+            $('textarea#compositeDescription').val(taskData.description);
 
             if (taskData.taskConfig.runlist && taskData.taskConfig.runlist.length) {
                 // alert(taskData.taskConfig.runlist);
@@ -983,6 +987,14 @@ $(document).ready(function() {
                     // alert(taskData.taskConfig.runlist.length);
                     createRunlistTable(taskData.taskConfig.runlist);
                 }
+            }
+            if (taskData && taskData.taskType === 'composite') {
+               if (taskData.taskConfig.assignTasks.length > 0) {
+                  //alert(taskData.taskConfig.assignTasks.length);
+                  var _assignedTasks = taskData.taskConfig.assignTasks;
+                  loadTaskLists(_assignedTasks);
+                  
+               }
             }
 
             // console.log('urls ===> ',taskData.taskConfig.jobResultURL);
@@ -1825,20 +1837,26 @@ $(document).ready(function() {
         }
     }
 
-    $('#saveRunlist').click(function(e) {
-        var $ccrs = $('.runlistContainer').data('$ccrs');
-        // alert($ccrs);
-        console.log($ccrs);
-        console.log($ccrs.getSelectedRunlist());
-        var runlist = $ccrs.getSelectedRunlist();
-       // alert(runlist);
-        
-            // alert('here');
-            createRunlistTable(runlist);
-            $('#chefRunlistModal').modal('hide');
-            return false;
-        
+    function createtaskComposite(assignTasks){
+      var $selectedtaskList = $('#compositeselectedTasksList');
+      for(var i=0;i<assignTasks.length;i++){
+         $("#compositeTasksList option").each(function() {
+            var $this = $(this);
+            var value = $this.val();
+            if(assignTasks[i] == $this.attr('id')){
+               $this.hide();
+               $selectedtaskList.append($('<option class="taskimg" id="' + assignTasks[i] + '" value="' + value + '">' + value + '</option>'));
+            }
+        });
+      }
+    }
 
+    $('#saveRunlist').click(function(e) {
+     var $ccrs = $('.runlistContainer').data('$ccrs');
+     var runlist = $ccrs.getSelectedRunlist();
+     createRunlistTable(runlist);
+     $('#chefRunlistModal').modal('hide');
+     return false;
     });
 
     $('#editAttributesBtn').click(function(e) {
@@ -2132,15 +2150,19 @@ $(document).ready(function() {
             loadTaskLists();
          }
     });
-    function loadTaskLists() {
+    function loadTaskLists(_assignedTasks) {
         //To get Task Lists
         $.get('/tasks/list/all', function(taskLists) {
-            //console.log("TaskLists are:", taskLists);
-            //alert(taskLists.length);
             $('#compositeTasksList').empty();
             for (var i = 0; i < taskLists.length; i++) {
-               //alert(taskLists[i].name);
-               $('#compositeTasksList').append($('<option class="taskimg" id="' + taskLists[i]._id + '" value="' + taskLists[i].name + '">' + taskLists[i].name + '</option>'));
+               //console.log(taskLists[i].taskType);
+               if(taskLists[i].taskType != 'composite'){
+                  $('#compositeTasksList').append($('<option class="taskimg" id="' + taskLists[i]._id + '" value="' + taskLists[i].name + '">' + taskLists[i].name + '</option>'));
+               }
+            }
+            // For the scenario to differenciate between New and Edit.
+            if(_assignedTasks){
+               createtaskComposite(_assignedTasks);
             }
         }).fail(function(jxhr) {
             alert("TaskLists load Failed");
