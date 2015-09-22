@@ -3098,8 +3098,12 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
 
 
 
-                                }).error(function() {
-                                    $launchResultContainer.find('.modal-body').empty().append('<span>Oops!!! Something went wrong. Please try again later</span>');
+                                }).error(function(jxhr) {
+                                    var message = "Server Behaved Unexpectedly";
+                                    if(jxhr.responseJSON && jxhr.responseJSON.message) {
+                                        message = jxhr.responseJSON.message;
+                                    }
+                                    $launchResultContainer.find('.modal-body').empty().append('<span>'+message+'</span>');
                                 });
                             }
 
