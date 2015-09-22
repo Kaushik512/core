@@ -18,7 +18,7 @@
 				    </select>
 				  </div>                                                      
 				</div>
-				<div class="col-lg-6 col-md-6">
+				<div class="col-lg-6 col-md-6 hidden">
 				  <div class="panel-heading">
 				    <span class="pull-right swap-view">
 				      <a class="btn btn-primary envAppDeployList" href="#modalAppCardTableDetails" data-toggle="modal" style="margin-top: 15px;">
@@ -270,7 +270,7 @@ function getDropdownList(){
   // if($chooseApplication){
   //   $chooseApplication.empty();
   // }
-  $.get('/app/deploy/data/list', function(dataTotalList) {
+  $.get('/d4dMasters/readmasterjsonnew/4', function(dataTotalList) {
       var $chooseApplication = $('#chooseApplication');
       $chooseApplication.empty();
       $chooseApplication.append('<option data-selectedAppName="All Application" value="">All Application</option>');
@@ -278,10 +278,10 @@ function getDropdownList(){
       var applicationNameArr = [];
       var applicationDescArr = {};
       $.each(dataTotalList, function(key, val) {
-          if (val.projectId) {
-              applicationNameArr.push(val.applicationName);
-              if (!applicationDescArr[val.applicationName]) {
-                  applicationDescArr[val.applicationName] = val.description;
+          if (val.rowid) {
+              applicationNameArr.push(val.applicationname);
+              if (!applicationDescArr[val.applicationname]) {
+                  applicationDescArr[val.applicationname] = val.description;
               }
           }
       });
@@ -297,13 +297,14 @@ function getDropdownList(){
 function constructDataListTable(){
   var $taskenvArrayTable = $('#tableappParamDeploy').DataTable();
   $taskenvArrayTable.clear().draw(false);
-  $.get('/app/deploy/data/list', function(dataTotalList) {
+  $.get('/d4dMasters/readmasterjsonnew/4', function(dataTotalList) {
+  	alert(JSON.stringify(dataTotalList));
       $.each(dataTotalList, function(key, val) {
           var $taskenvArrayTable = $('#tableappParamDeploy');
           var rowindex1 = $taskenvArrayTable.dataTable().fnGetData().length;
           $taskenvArrayTable.dataTable().fnAddData([
               rowindex1 + 1,
-              val.applicationName,
+              val.applicationname,
               val.description
           ]);
       });
@@ -331,6 +332,7 @@ function getenvName(callback){
 function getAllApplicationData(callback){
 	getenvName(function(envName){
         $.get('/app/deploy/env/' + envName + '/list', function(data) {
+        	//alert(JSON.stringify(data));
             callback(data);
         }).fail(function() {
             alert("getAllApplicationData Error");
@@ -378,9 +380,9 @@ function constructUI(data) {
         if (data && data.length) {
             var $clone = $accordianTemplate.clone(true);
             for (var i = 0; i < data.length; i++) {
-                //console.log(data[i]);
+                console.log(data[i]);
                 if (data[i].projectId) {
-
+                	//alert("hiii");
                     if ($('#' + data[i].projectId + data[i].applicationName + data[i].envId + '_parentAccordian').length == 0) {
                         //$clone.attr('id', data[i].projectId + data[i].applicationName + data[i].envId + '_parentAccordian');
                         //$clone.find('.envAppDeployAnchor').attr('data-parent', '#' + data[i].projectId + data[i].applicationName + data[i].envId + '_parentAccordian');
@@ -568,11 +570,11 @@ $chooseApplication.change(function() {
   }
 });
 $('#parameterAppDeploySaveBtn').on("click", function() {
-  saveRecord();
+  //saveRecord();
   //getDropdownList();
-  getAllApplicationData(function(data){
+  /*getAllApplicationData(function(data){
       constructUI(data);
-    });
+    });*/
 });
 
 $('.envAppDeployModal').click(function(e) {

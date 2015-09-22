@@ -12,6 +12,7 @@ var logger = require('_pr/logger')(module);
 var AppDeploy = require('_pr/model/app-deploy/app-deploy');
 var errorResponses = require('./error_responses');
 var AppData = require('_pr/model/app-deploy/app-data');
+var masterUtil = require('_pr/lib/utils/masterUtil.js');
 
 
 module.exports.setRoutes = function(app, sessionVerificationFunc) {
@@ -115,7 +116,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
     // Get AppDeploy w.r.t. appName and env
     app.get('/app/deploy/env/:envId/list', function(req, res) {
         logger.debug("/app/deploy/env/:envId/list called...");
-        AppData.getAppDataWithDeployList(req.params.envId, function(err, appDeploy) {
+        masterUtil.getAppDataWithDeployList(req.params.envId, function(err, appDeploy) {
             if (err) {
                 res.send(500, errorResponses.db.error);
                 return;
@@ -183,7 +184,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
     // Get all AppData by name
     app.get('/app/deploy/data/:appName/list', function(req, res) {
-        AppData.getAppDataByName(req.params.appName, function(err, appDatas) {
+        masterUtil.getAppDataByName(req.params.appName, function(err, appDatas) {
             if (err) {
                 res.send(500, "Please add app name.");
                 return;
