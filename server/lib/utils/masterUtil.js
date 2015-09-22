@@ -1647,8 +1647,8 @@ var MasterUtil = function() {
     }
 
     // Get all appData informations.
-    this.getAppDataWithDeployList = function(envName, callback) {
-        var that = this;
+    this.getAppDataWithDeployList = function(envName, projectId, callback) {
+        logger.debug("projectId: ", projectId);
         AppDeploy.getAppDeployListByEnvId(envName, function(err, data) {
             if (err) {
                 logger.debug("App deploy fetch error.", err);
@@ -1659,16 +1659,21 @@ var MasterUtil = function() {
                 var count = 0;
                 for (var i = 0; i < data.length; i++) {
                     (function(i) {
+                        var appName = [];
+                        appName.push(data[i].applicationName);
                         d4dModelNew.d4dModelMastersProjects.find({
-                            applicationname: data[i].applicationName,
-                            id: "4"
+                            applicationname: {
+                                $in: appName
+                            },
+                            rowid: projectId
                         }, function(err, appData) {
                             count++;
                             if (err) {
                                 logger.debug("Failed to fetch app data", err);
                                 callback(err, null);
                             }
-                            if (appData) {
+                            logger.debug("++++++++++++++++++++++++++++++++++++++++++++++++============ ", JSON.stringify(appData));
+                            if (appData.length) {
                                 var dummyData = {
                                     _id: data[i].id,
                                     applicationName: data[i].applicationName,
@@ -1689,7 +1694,9 @@ var MasterUtil = function() {
                                     callback(null, appDataList);
                                 }
                             } else {
-                                callback(null, []);
+                                if (count === data.length) {
+                                    callback(null, appDataList);
+                                }
                             }
 
                         });
@@ -1702,10 +1709,14 @@ var MasterUtil = function() {
     };
 
     // Get AppDeploy by name.
-    this.getAppDataByName = function(appName, callback) {
+    this.getAppDataByName = function(envName,appName, projectId, callback) {
+        var applicationName = [];
+        applicationName.push(appName);
         d4dModelNew.d4dModelMastersProjects.find({
-            applicationname: appName,
-            id: "4"
+            applicationname: {
+                $in: applicationName
+            },
+            rowid: projectId
         }, function(err, anAppData) {
             if (err) {
                 logger.debug("Got error while fetching appData: ", err);
@@ -1714,7 +1725,7 @@ var MasterUtil = function() {
             if (anAppData.length) {
                 var appData = [];
 
-                AppDeploy.getAppDeployByName(appName, function(err, data) {
+                AppDeploy.getAppDeployByNameAndEnvId(appName,envName, function(err, data) {
                     if (err) {
                         logger.debug("App deploy fetch error.", err);
                     }
@@ -1748,6 +1759,41 @@ var MasterUtil = function() {
             }
         });
     };
+
+    // Return particular Projects specific to User
+    this.getParticularProject = function(projectId, callback) {
+        var projectList = [];
+        d4dModelNew.d4dModelMastersProjects.find({
+            id: "4",
+            rowid: projectId
+        }, function(err, projects) {
+            if (err) {
+                callback(err, null);
+            }
+            if (projects) {
+                configmgmtDao.getRowids(function(err, rowidlist) {
+                    var allEnvs = '';
+                    for (var i = 0; i < projects.length; i++) {
+                        (function(projectCount) {
+                            if (projects[projectCount].id === '4') {
+                                names = configmgmtDao.convertRowIDToValue(projects[projectCount].orgname_rowid, rowidlist);
+                                bgnames = configmgmtDao.convertRowIDToValue(projects[projectCount].productgroupname_rowid, rowidlist);
+                                projects[projectCount].orgname = names;
+                                projects[projectCount].productgroupname = bgnames;
+                                projectList.push(projects[projectCount]);
+                            }
+                        })(i);
+                    }
+                    logger.debug("Returned Projects: ", JSON.stringify(projectList));
+                    callback(null, projectList);
+                    return;
+                });
+            } else {
+                callback(null, projectList);
+                return;
+            }
+        });
+    }
 }
 
 
