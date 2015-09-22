@@ -35,6 +35,7 @@
                                                       <select id="taskType" class="chooseTasktype width-100">
                                                          <option id="Chef" value="chef">Chef</option>
                                                          <option id="Jenkins" value="jenkins">Jenkins</option>
+                                                         <option id="Puppet" value="puppet">Puppet</option>
                                                          <!-- <option id="Composite" value="composite">Composite</option> -->
                                                       </select>
                                                    </div>
@@ -53,12 +54,29 @@
                                                       </div>
                                                    </div>
                                                    <!--chef dropdown ends here-->
+
+                                                   <!--puppet dropdown starts here-->
+                                                   <div id="Puppet-dropdown">
+                                                      <div class="col-lg-6 col-md-6" style="margin-top:5px;">
+                                                         <label>
+                                                         Job Name <span style="color:red">*</span>
+                                                         </label>
+                                                         <input id="puppetTaskName" type="text" class="form-control inputTaskName" name="puppetTaskName">
+                                                      </div>
+                                                      <!--div for description for task type-->
+                                                      <div class="col-lg-12 col-md-12 margintop15">
+                                                         <label>Job Description</label>
+                                                         <textarea id="puppetDescription" style="width:100%" rows="9" cols="15" name="description"></textarea>
+                                                      </div>
+                                                   </div>
+                                                   <!--puppet dropdown ends here-->
+
                                                    <!--jenkins dropdown starts here-->
                                                    <div id="Jenkins-dropdown">
                                                       <div class="col-lg-6 col-md-6" style="margin-top:5px;">
                                                          <label>Job Name<span style="color:red">*</span>
                                                          </label>
-                                                         <input id="jenkinsTaskName" type="text" cat-validation="required,nospecial" cdata="catalyst" class="form-control inputTaskName" autofocus>                       
+                                                         <input id="jenkinsTaskName" type="text" class="form-control inputTaskName" autofocus>                       
                                                       </div>
                                                       <div class="col-lg-6 col-md-6 margintop15">
                                                          <label>Select Jenkins Server<span style="color:red">*</span>
@@ -86,19 +104,6 @@
                                                          </label>
                                                          <input id="compositeTaskName" type="text" cat-validation="required,nospecial" cdata="catalyst" class="form-control" autofocus>                       
                                                       </div>
-                                                      <!-- <div class="col-lg-6 col-md-6 margintop15">
-                                                         <label>Select Jenkins Server<span style="color:red">*</span>
-                                                         </label>
-                                                         <select id="" class="width-100">
-                                                            <option value="choose">Choose</option>
-                                                         </select>
-                                                      </div>
-                                                      <div class="col-lg-6 col-md-6 margintop15">
-                                                         <label>Select Job<span style="color:red">*</span></label>
-                                                         <label id="spinnerForJob" class="hidden"><img  style="margin-left:5px;margin-right:25px;" src="img/select2-spinner.gif"></label>
-                                                         <select id="jobListJenkins" class="width-100" disabled>
-                                                         </select>
-                                                      </div> -->
                                                       <div class="col-lg-12 col-md-12 margintop15">
                                                          <label>Job Description</label>
                                                          <textarea id="compositeDescription"  style="width:100%" rows="8" cols="15" name="description"></textarea>
@@ -129,7 +134,7 @@
                                                             <img style="margin-top:-5px;" src="img/templateicons/Select-nodes---deployment.png">
                                                             Select Nodes <span style="color:red">*</span>
                                                             </label>
-                                                            <ul id="selectedNodesChefTask" class="deploymentNodeList selectedNodesChefTaskCSS">
+                                                            <ul id="selectedNodesChefTask" class="deploymentNodeList selectedNodesTaskCSS">
                                                             </ul>
                                                          </div>
                                                       </div>
@@ -178,6 +183,39 @@
                                        <!--table 2 ends -->
                                     </div>
                                     <!--chef task type details ends here-->
+
+                                     <!--puppet task type details & select Nodes-->
+                                    <div class="containerTable puppetTaskType col-lg-7 col-md-7">
+                                       <!--table 2 -->
+                                       <table class="table table-bordered">
+                                          <thead>
+                                             <tr>
+                                                <th style="text-align:center" class="puppetServerName">Puppet Server</th>
+                                             </tr>
+                                          </thead>
+                                          <tbody>
+                                             <tr>
+                                                <td>
+                                                   <div class="col-lg-6 col-md-6" style="margin-top:5px;">
+                                                      <div class="col-lg-12 nodesTable">
+                                                         <div class="smart-form">
+                                                            <label>
+                                                            <img style="margin-top:-5px;" src="img/templateicons/Select-nodes---deployment.png">
+                                                            Select Nodes <span style="color:red">*</span>
+                                                            </label>
+                                                            <ul id="selectedNodesPuppetTask" class="deploymentNodeList selectedNodesTaskCSS">
+                                                            </ul>
+                                                         </div>
+                                                      </div>
+                                                   </div>
+                                                </td>
+                                             </tr>
+                                          </tbody>
+                                       </table>
+                                       <!--table 2 ends -->
+                                    </div>
+                                    <!--puppet task type details ends here-->
+
                                     <!--jenkins details for url and parameters-->
                                     <div class="containerTable jenkinsTaskType col-lg-7 col-md-7">
                                        <!--table 2 -->
@@ -1091,6 +1129,8 @@ $(document).ready(function() {
             cookbooks: false
         });
 
+
+        //to get the name of the chef server that is associated with the organisation...
         $.get('/organizations/' + urlParams.org + '/chefserver', function(data) {
             console.log('chef logs ==> ', data);
             if (data && data.configname) {
@@ -2106,6 +2146,8 @@ $(document).ready(function() {
     $('.jenkinsTaskType').hide();
     $("#Composite-dropdown").hide();
     $('.compositeTaskType').hide();
+    $("#Puppet-dropdown").hide();
+    $('.puppetTaskType').hide();
 
     $('#taskType').change(function(e) {
         if (this.value == "chef") {
@@ -2113,24 +2155,39 @@ $(document).ready(function() {
             $('.jenkinsTaskType').hide();
             $("#Composite-dropdown").hide();
             $('.compositeTaskType').hide();
+            $("#Puppet-dropdown").hide();
+            $('.puppetTaskType').hide();
             $("#chef-dropdown").show();
             $('.chefTaskType').show();
         } else if (this.value == "jenkins") {
-            $("#Jenkins-dropdown").show();
-            $('.jenkinsTaskType').show();
             $('.chefTaskType').hide();
             $("#chef-dropdown").hide();
             $("#Composite-dropdown").hide();
             $('.compositeTaskType').hide();
-        } else if (this.value == "composite") {
+            $("#Puppet-dropdown").hide();
+            $('.puppetTaskType').hide();
+            $("#Jenkins-dropdown").show();
+            $('.jenkinsTaskType').show();
+        }  else if (this.value == "puppet") {
             $("#Jenkins-dropdown").hide();
             $('.jenkinsTaskType').hide();
             $('.chefTaskType').hide();
             $("#chef-dropdown").hide();
+            $("#Composite-dropdown").hide();
+            $('.compositeTaskType').hide();
+            $("#Puppet-dropdown").show();
+            $('.puppetTaskType').show();
+         }/* else if (this.value == "composite") {
+            $("#Jenkins-dropdown").hide();
+            $('.jenkinsTaskType').hide();
+            $('.chefTaskType').hide();
+            $("#chef-dropdown").hide();
+            $("#Puppet-dropdown").hide();
+            $('.puppetTaskType').hide();
             $("#Composite-dropdown").show();
             $('.compositeTaskType').show();
             loadTaskLists();
-         }
+         }*/
     });
     function loadTaskLists() {
         //To get Task Lists
