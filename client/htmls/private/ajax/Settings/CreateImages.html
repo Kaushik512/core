@@ -230,6 +230,27 @@
                       str+='<option value="'+data[i]._id+'" username="'+data[i].userName+'" password="'+data[i].password+'" providerType="'+data[i].providerType+'">'+data[i].providerName+'</option>';
                     }
 
+                $.ajax({
+                   type: "GET",
+                   url: "/azure/providers",
+                   success: function (data) {
+                    data= typeof data =="string" ? JSON.parse(data) :data;
+                    console.log(data);
+                    len = data.length;
+                    for(var i=0;i<len;i++){
+                      str+='<option value="'+data[i]._id+'" subscriptionId="'+data[i].subscriptionId+'" storageAccount="'+data[i].storageAccount+'" providerType="'+data[i].providerType+'">'+data[i].providerName+'</option>';
+                    }
+
+                    $('#providerId').html(str);
+                    if($('#providerId').attr('answer')){
+                      $('#providerId').val($('#providerId').attr('answer')).select2();
+                    }
+                    },
+                    failure: function (data) {
+                     alert(data.toString());
+                   }
+                  }); 
+
                     $('#providerId').html(str);
                     if($('#providerId').attr('answer')){
                       $('#providerId').val($('#providerId').attr('answer')).select2();

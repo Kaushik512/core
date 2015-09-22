@@ -232,7 +232,8 @@
                                             for(var u = 0; u < data.length; u++){
                                                 d4ddata.push(data[u]);
                                             }
-                                            startup();
+
+                                            getProviderDataAzure();
                                            // getOrganizationList();
                                             
                                         },
@@ -246,6 +247,38 @@
                                 });
 
                             }
+
+                function getProviderDataAzure(){
+                                var reqBody={};
+                                reqBody.name=''
+                                reqBody.accessKey='';
+                                reqBody.secretKey='';
+                                reqBody.providerType='';
+                                reqBody.regions=[];
+                                //reqBody.instanceUserName='root';
+                                $.ajax({
+                                     method: "GET",
+                                     url: "/azure/providers",data: reqBody,   
+                                     success: function(data, success) {
+                                            data= typeof data=="string" ?JSON.parse(data):data;
+                                            
+                                            for(var u = 0; u < data.length; u++){
+                                                d4ddata.push(data[u]);
+                                            }
+                                            startup();
+                                           // getOrganizationList();
+                                            
+                                        },
+                                        error: function(jqxhr) {
+                                            removeLoader();
+                                            bootbox.alert(jqxhr.status);
+                                        },
+                                        failure: function(data) {
+                                            bootbox.alert(data);
+                                        }
+                                });
+
+                }                        
 
     function startup() {
     //setting the addnew button to launch popup
@@ -508,10 +541,13 @@
 
     function deleteItemFromProvider(docid, key, value, button) {
     //Determining the provider type before delete
-    var provname = 'aws';
+        var provname = 'aws';
 
-    if($(button).closest('tr').find('td[datafield="providerType"]').first().text() == "OPENSTACK")
-        provname = 'openstack';
+        if($(button).closest('tr').find('td[datafield="providerType"]').first().text() == "OPENSTACK"){
+              provname = 'openstack';
+        } else if($(button).closest('tr').find('td[datafield="providerType"]').first().text() == "AZURE"){
+              provname = 'azure';
+         }
 
     bootbox.confirm('You are about to remove this item \" ' + $(button).closest('tr').find('td').first().html() + ' \"', function(result) {
         if (result) {

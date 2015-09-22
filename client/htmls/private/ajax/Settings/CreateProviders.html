@@ -75,6 +75,7 @@
                                                                 <option value="OPENSTACK">OpenStack</option>
                                                                 <option value="HPPUBLICCLOUD">HP Public Cloud</option>
                                                                 <option value="VMWARE">VMware</option>
+                                                                <option value="AZURE">Azure</option>
                                                             </select>
                                                         </div>
                                                         <div class="col-lg-6 col-md-6">
@@ -187,6 +188,14 @@
                                                             <input name="hppubliccloudinstancepem" id="hppubliccloudinstancepem" class="form-control" type="file" cdata="catalyst" placeholder="Enter the Password"> <span data-val-controltovalidate="orgname" id="MainContent_Req_orgname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility: hidden;">Required</span>
                                                         </div>
                                                     </div>
+                                                    <div class="row forazure">
+                                                        <div class="col-lg-6 col-md-6">
+                                                            <label for="">Enter Subscription Id:<span style="color: Red;" class="control-label">&nbsp;*</span></label>
+                                                            <input name="azureSubscriptionId" id="azureSubscriptionId" class="form-control" type="text" cdata="catalyst" cat-validation-azure="required" placeholder="Enter the Subscription Id"> <span data-val-controltovalidate="orgname" id="MainContent_Req_orgname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility: hidden;">Required</span></div>
+                                                        <div class="col-lg-6 col-md-6">
+                                                            <label for="">Enter Storage Account:<span style="color: Red;" class="control-label">&nbsp;*</span></label>
+                                                            <input name="azureStorageAccount" id="azureStorageAccount" class="form-control" type="text" cdata="catalyst" cat-validation-azure="required,min3,max24,nospecial" placeholder="Enter the Storage Account"> <span data-val-controltovalidate="orgname" id="MainContent_Req_orgname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility: hidden;">Required</span></div>
+                                                    </div>
                                                     <div class="row">
                                                         <div class="col-lg-6 col-md-6">
                                                             <label for="name">Organization Name:<span style="color: Red;" class="control-label">&nbsp;*</span></label>
@@ -256,42 +265,62 @@
             },
             triggerRegionChange: function() {},
             providerChanged: function(pv) {
-                if (pv == 'HPPUBLICCLOUD') {
+               // alert(pv);
+                if(pv == 'AZURE'){
+                    $('.foropenstack').hide();
+                    $('.forhppubliccloud').hide();
+                    $('.foraws').hide();
+                    $('.addNewRegion').hide();
+                    $('.forvmware').hide();
+                    $('.forazure').show();
+                    $('#myForm54').attr('action', $('#myForm54').attr('action').replace(/aws/g, 'azure'));
+                    $('#myForm54').attr('action', $('#myForm54').attr('action').replace(/vmware/g, 'azure'));
+                    $('#myForm54').attr('action', $('#myForm54').attr('action').replace(/openstack/g, 'azure'));
+                    $('#myForm54').attr('action', $('#myForm54').attr('action').replace(/hppubliccloud/g, 'azure'));
+                } else if (pv == 'HPPUBLICCLOUD') {
                     $('.foropenstack').show();
                     $('.forhppubliccloud').show();
                     $('.foraws').hide();
                     $('.addNewRegion').hide();
                     $('.forvmware').hide();
+                    $('.forazure').hide();
                     $('#myForm54').attr('action', $('#myForm54').attr('action').replace(/aws/g, 'hppubliccloud'));
                     $('#myForm54').attr('action', $('#myForm54').attr('action').replace(/vmware/g, 'hppubliccloud'));
                     $('#myForm54').attr('action', $('#myForm54').attr('action').replace(/openstack/g, 'hppubliccloud'));
+                    $('#myForm54').attr('action', $('#myForm54').attr('action').replace(/azure/g, 'hppubliccloud'));
                 } else if (pv == 'OPENSTACK') {
                     $('.foropenstack').show();
                     $('.forhppubliccloud').hide();
                     $('.foraws').hide();
                     $('.addNewRegion').hide();
                     $('.forvmware').hide();
+                    $('.forazure').hide();
                     $('#myForm54').attr('action', $('#myForm54').attr('action').replace(/aws/g, 'openstack'));
                     $('#myForm54').attr('action', $('#myForm54').attr('action').replace(/vmware/g, 'openstack'));
                     $('#myForm54').attr('action', $('#myForm54').attr('action').replace(/hppubliccloud/g, 'openstack'));
+                     $('#myForm54').attr('action', $('#myForm54').attr('action').replace(/azure/g, 'openstack'));
                 } else if (pv == 'VMWARE') {
                     $('.foropenstack').hide();
                     $('.forhppubliccloud').hide();
                     $('.foraws').hide();
                     $('.forvmware').show();
                     $('.addNewRegion').hide();
+                    $('.forazure').hide();
                     $('#myForm54').attr('action', $('#myForm54').attr('action').replace(/aws/g, 'vmware'));
                     $('#myForm54').attr('action', $('#myForm54').attr('action').replace(/openstack/g, 'vmware'));
                     $('#myForm54').attr('action', $('#myForm54').attr('action').replace(/hppubliccloud/g, 'vmware'));
+                     $('#myForm54').attr('action', $('#myForm54').attr('action').replace(/azure/g, 'vmware'));
                 } else {
                     $('.foropenstack').hide();
                     $('.forhppubliccloud').hide();
                     $('.foraws').show();
                     $('.addNewRegion').show();
                     $('.forvmware').hide();
+                    $('.forazure').hide();
                     $('#myForm54').attr('action', $('#myForm54').attr('action').replace(/openstack/g, 'aws'));
                     $('#myForm54').attr('action', $('#myForm54').attr('action').replace(/vmware/g, 'aws'));
                     $('#myForm54').attr('action', $('#myForm54').attr('action').replace(/hppubliccloud/g, 'aws'));
+                    $('#myForm54').attr('action', $('#myForm54').attr('action').replace(/azure/g, 'aws'));
                 }
             }
         };
@@ -345,8 +374,6 @@
             $('#masterssavespinner').remove();
             $("form[id*='myForm']").find("div.pull-right > input").removeAttr('disabled');
         }
-
-
 
         function KeyChangeHandler(e) {
             var accessKey = $('#accessKey').val().trim(),
@@ -456,9 +483,18 @@
 
             $('#hppubliccloudkeyname').val(data.keyname);
             $('#hppubliccloudregion').val(data.region).select2();
-            
-            
+        
+        }
 
+        function setValuesAzure(data) {
+            $('#name').val(data.providerName);
+            $('#azureSubscriptionId').val(data.subscriptionId);
+            $('#azureStorageAccount').val(data.storageAccount);
+            $('#providertype').val(data.providerType.toUpperCase()).select2();
+            $('#providertype').trigger('change');
+            $('#orgId').val(data.orgId[0]).attr({
+                'answer': data.orgId[0]
+            }).select2();
 
         }
 
@@ -547,6 +583,12 @@
 
                     } else if ($('#providertype').val() == 'VMWARE') {
                         if (isFormValidOpenStack(null, 'cat-validation-vmware')) {
+                            appendLoader();
+                            return true;
+                        } else
+                            return false;
+                    } else if ($('#providertype').val() == 'AZURE') {
+                        if (isFormValidAzure(null, 'cat-validation-azure')) {
                             appendLoader();
                             return true;
                         } else
@@ -659,7 +701,7 @@
                         },
                         error: function(jqxhr) {
                             //alert('err 1');
-                            
+                            getValuesAzure();
                             removeLoader();
                             bootbox.alert(jqxhr.status);
                         },
@@ -670,6 +712,33 @@
                     }); //else getopenstackprovider
 
                 }
+               
+               var getValuesAzure = function() {
+
+                    $.ajax({
+                        method: "GET",
+                        url: "/azure/providers/" + UtilityMethods.getIdFromURL(),
+                        success: function(data, success) {
+                            data = typeof data == "string" ? JSON.parse(data) : data;
+                            d4ddata = data;
+                            setValuesAzure(data);
+
+                            //checkForKeyPair();
+                        },
+                        error: function(jqxhr) {
+                            //alert('err 1');
+                            
+                            removeLoader();
+                            bootbox.alert(jqxhr.status);
+                        },
+                        failure: function(data) {
+                            alert('fail 1');
+                            bootbox.alert(data);
+                        }
+                    });
+
+                }
+                
             }
         });
 
