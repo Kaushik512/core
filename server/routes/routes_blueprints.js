@@ -1550,7 +1550,9 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                 username: providerdata.username,
                                                 password: providerdata.password,
                                                 tenantName: providerdata.tenantname,
-                                                tenantId: providerdata.tenantid
+                                                tenantId: providerdata.tenantid,
+                                                serviceendpoints: providerdata.serviceendpoints
+
                                             };
                                             var hppubliccloud = new Hppubliccloud(hppubliccloudconfig);
                                             hppubliccloud.createServer(hppubliccloudconfig.tenantId, launchparams, function(err, instanceData) {
@@ -1644,7 +1646,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                         "message": "instance launch success"
                                                     });
                                                     logger.debug('Should have sent the response.');
-                                                    Hppubliccloud.waitforserverready(hppubliccloudconfig.tenantId, instanceData.server.id, function(err, data) {if (!err) {
+                                                    hppubliccloud.waitforserverready(hppubliccloudconfig.tenantId, instanceData.server.id, function(err, data) {if (!err) {
                                                             logger.debug('Instance Ready....');
                                                             logger.debug(JSON.stringify(data)); // logger.debug(data);
                                                             logger.debug('About to bootstrap Instance');
@@ -1750,7 +1752,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                 //res.send(data);
                                             });
                                         }
-                                        launchOpenstackBP(providerdata, blueprint);
+                                        launchHPpubliccloudBP(providerdata, blueprint);
 
                                     });
 
