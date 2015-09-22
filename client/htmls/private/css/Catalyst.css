@@ -6053,7 +6053,7 @@ font-size:14px !important;
 }
 
 
-.moreInfo,.moreinfoBuild,.moreinfoactionHistory, .actionbuttonChefClientRun, .actionbuttonStart,.actionbuttonStartContainer,.actionbuttonCPStart, .actionbuttonShutdown,.actionbuttonShutdownContainer, .sshIcon, .aws, .azure, .rl, .openstack, .cloudstack, .dock, .logo{
+.moreInfo,.moreinfoBuild,.moreinfoactionHistory, .actionbuttonChefClientRun, .actionbuttonStart,.actionbuttonStartContainer,.actionbuttonCPStart, .actionbuttonShutdown,.actionbuttonShutdownContainer, .sshIcon, .aws, .azure, .rl, .openstack, .hppubliccloud, .cloudstack, .dock, .logo{
     background: url(../img/sprites.png) no-repeat;
 }
 
@@ -6125,7 +6125,11 @@ font-size:14px !important;
     width: 35px;
     height: 35px;
 }
-
+.hppubliccloud{
+     background-position: -306px -56px ;
+    width: 35px;
+    height: 35px;
+}
 .cloudstack{
     background-position: -207px -57px ;
     width: 35px;

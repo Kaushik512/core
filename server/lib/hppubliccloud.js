@@ -287,9 +287,57 @@ this.getServers = function(tenantId,callback){
 	})
  }
  
+this.createfloatingip = function(tenantId,networkid,callback){
+	console.log("START:: createServer");
+	//sample response
+	// 	{
+	//     "floatingip": {
+	//         "router_id": null,
+	//         "status": "ACTIVE",
+	//         "tenant_id": "10453306227790",
+	//         "floating_network_id": "122c72de-0924-4b9f-8cf3-b18d5d3d292c",
+	//         "fixed_ip_address": null,
+	//         "floating_ip_address": "15.125.71.116",
+	//         "port_id": null,
+	//         "id": "e11856c7-c3e2-496d-b8c7-64517f5d5844"
+	//     }
+	// 	}
+	console.log(JSON.stringify(options));
+	getAuthToken(options.serviceendpoints.identity,options.username,options.password,options.tenantName,function(err,token){
+		 if(token){
+		 	var fip = {
+			    "floatingip":
+			        {
+			        "floating_network_id": networkid
+			       // "port_id": serverip
+			        }
+			}
+			var args = {
+				       data: fip, 
+					   headers:{"X-Auth-Token": token,"Content-Type": "application/json"} 
+					};
+			client = new Client();
+			var createfloatip = options.serviceendpoints.network + '/floatingips';
+			console.log('CreateServerURL:' + createfloatip);
+			client.registerMethod("jsonMethod", createfloatip, "POST");
+			client.methods.jsonMethod(args,function(data,response){
+				console.log("createfloatingip response:: "+data);
+				if(data.server){
+				   console.log("END:: createServer");	
+				   callback(null,data);
+				   return;
+			    }else{
+					callback(data,null);
+				}
+				
+			}); 
+		 }
+	});
+}
+
  this.createServer = function(tenantId,createServerJson,callback){
 	 console.log("START:: createServer");
-	 
+	 var that = this;
 console.log(JSON.stringify(options));
 	getAuthToken(options.serviceendpoints.identity,options.username,options.password,options.tenantName,function(err,token){
 		 if(token){
@@ -306,22 +354,28 @@ console.log(JSON.stringify(options));
 					delete createServerJson.server.networks;
 					delete createServerJson.server.security_groups;
 				}
-				console.log("createServerJson after");
-				console.log(JSON.stringify(createServerJson));
-				var createServerUrl = 'http://'+options.host+':8774/v2/'+tenantId+'/servers';
-				console.log('CreateServerURL:' + createServerUrl);
-				client.registerMethod("jsonMethod", createServerUrl, "POST");
-				client.methods.jsonMethod(args,function(data,response){
-					console.log("createServer response:: "+data);
-					if(data.server){
-					   console.log("END:: createServer");	
-					   callback(null,data);
-					   return;
-				    }else{
-						callback(data,null);
-					}
+				//Testing floating ip create
+				that.createfloatingip(tenantId,createServerJson.server.networks[0]["uuid"],function(err,data){
+						if(!err){
+							console.log('Added an ip',JSON.stringify(data));
+						}
+				});
+				// console.log("createServerJson after");
+				// console.log(JSON.stringify(createServerJson));
+				// var createServerUrl = options.serviceendpoints.compute + '/'+tenantId+'/servers';
+				// console.log('CreateServerURL:' + createServerUrl);
+				// client.registerMethod("jsonMethod", createServerUrl, "POST");
+				// client.methods.jsonMethod(args,function(data,response){
+				// 	console.log("createServer response:: "+data);
+				// 	if(data.server){
+				// 	   console.log("END:: createServer");	
+				// 	   callback(null,data);
+				// 	   return;
+				//     }else{
+				// 		callback(data,null);
+				// 	}
 					
-				}); 
+				// }); 
 		}else{
 			console.log(err);
 		    callback(err,null);
@@ -341,7 +395,7 @@ console.log(JSON.stringify(options));
 				    headers: {"X-Auth-Token": token, "Content-Type": "application/json"}
 				    };
 			   
-			   var serverDetailUrl = 'http://'+options.host+':8774/v2/'+tenantId+'/servers/'+serverId;
+			   var serverDetailUrl = options.serviceendpoints.compute + '/' + tenantId +'/servers/'+serverId;
 			   client = new Client();
 			   client.registerMethod("getServerDetails",serverDetailUrl,"GET");
 			   client.methods.getServerDetails(args,function(data,response){
@@ -362,6 +416,8 @@ console.log(JSON.stringify(options));
 		 });
 	 
  }
+
+
 this.waitforserverready = function(tenantId,serverId,callback){
         var self = this;
         setTimeout(function(){
@@ -387,6 +443,28 @@ this.waitforserverready = function(tenantId,serverId,callback){
         },360 * 1000);
  }
 
+}
+
+
+this.waitforserverready1 = function(tenantId,serverId,callback){
+	var self = this;
+	var checkifserverready = function(){
+		 self.getServerById(tenantId,serverId,function(err,data){
+	                if (err) {
+	                	callback(err, null);
+	                	return;
+	            	}
+	                if(!err){
+	                        var networks = Object.keys(data.server.addresses);
+	                        if(networks.length > 0){
+
+	                        }
+	                        else{
+
+	                        }
+	                }
+	        });
+	}
 }
 
 
