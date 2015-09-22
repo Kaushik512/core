@@ -308,8 +308,12 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                         }
 
                                         logger.debug('instance length ==>' + instances.length + " , number Of instance ==> " + cloudProvider.cloudProviderData.instanceCount + ' , max ==> ' + appConfig.maxInstanceCount);
+                                        var maxCount = 0;
+                                        if(typeof appConfig.maxInstanceCount === 'undefined') {
+                                            maxCount = appConfig.maxInstanceCount;
+                                        }
 
-                                        if (appConfig.maxInstanceCount !== 0 && instances.length + cloudProvider.cloudProviderData.instanceCount > appConfig.maxInstanceCount) {
+                                        if (maxCount !== 0 && instances.length + cloudProvider.cloudProviderData.instanceCount > maxCount) {
                                             res.send(500, {
                                                 message: "Instance limit reached"
                                             });
