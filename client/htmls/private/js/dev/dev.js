@@ -1568,10 +1568,13 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
             //Updated from above to move docker image out of circle.
             if (data.docker.dockerEngineStatus != '' && data.docker.dockerEngineStatus != null) {
                 var $dockerStatus = $('<img class="dockerIMG" whatever="2" alt="Docker" src="img/galleryIcons/Docker.png">').addClass('dockerenabledinstacne');
-                $divComponentListContainer.append($dockerStatus);
+                //$divComponentListContainer.append($dockerStatus);
+                $divComponentList.append($dockerStatus);
             }
         }
-
+        $divComponentList.find(".dockerIMG").on('click', function(e) {
+            $("a[href$='#l4']").trigger('click');
+        });
         //$rowContainter.append('<td></td>');
         $rowContainter.append('<td><img src="' + data.blueprintData.iconPath + '" style="width:auto;height:30px;" /></td>');
 
