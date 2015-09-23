@@ -1662,8 +1662,10 @@ var MasterUtil = function() {
                         var appName = [];
                         appName.push(data[i].applicationName);
                         d4dModelNew.d4dModelMastersProjects.find({
-                            applicationname: {
-                                $in: appName
+                            appdeploy: {
+                                $elemMatch: {
+                                    applicationname: appName
+                                }
                             },
                             rowid: projectId
                         }, function(err, appData) {
@@ -1709,12 +1711,12 @@ var MasterUtil = function() {
     };
 
     // Get AppDeploy by name.
-    this.getAppDataByName = function(envName,appName, projectId, callback) {
-        var applicationName = [];
-        applicationName.push(appName);
+    this.getAppDataByName = function(envName, appName, projectId, callback) {
         d4dModelNew.d4dModelMastersProjects.find({
-            applicationname: {
-                $in: applicationName
+            appdeploy: {
+                $elemMatch: {
+                    applicationname: appName
+                }
             },
             rowid: projectId
         }, function(err, anAppData) {
@@ -1725,7 +1727,7 @@ var MasterUtil = function() {
             if (anAppData.length) {
                 var appData = [];
 
-                AppDeploy.getAppDeployByNameAndEnvId(appName,envName, function(err, data) {
+                AppDeploy.getAppDeployByNameAndEnvId(appName, envName, function(err, data) {
                     if (err) {
                         logger.debug("App deploy fetch error.", err);
                     }

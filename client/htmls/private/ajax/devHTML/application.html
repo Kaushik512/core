@@ -278,8 +278,8 @@ function getDropdownList() {
             }
         });*/
         //alert(JSON.stringify(dataTotalList));
-        $.each(dataTotalList[0].applicationname, function(key, val) {
-            $option = $('<option value="' + val + '">' + val + '</option>');
+        $.each(dataTotalList[0].appdeploy, function(key, val) {
+            $option = $('<option value="' + val.applicationname + '">' + val.applicationname + '</option>');
             $chooseApplication.append($option);
         });
 
