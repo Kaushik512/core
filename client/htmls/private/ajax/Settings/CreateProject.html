@@ -47,14 +47,30 @@
                                              <option value="">Select Business Group</option>
                                           </select>
                                        </div>
-                                 <div class="col-lg-6 col-md-6 smart-form" style="margin-top:25px;">
-                                 <label for="category">Environments:</label>
-                                    <div  id="environmentname" multiselect="multiselect" datatype="select" sourcepath="3" datapath="masterjson.rows.row"  linkedto="orgname" class="input-group from-control col-md-12 widthBox" cdata="catalyst">
-                                    </div>
-                                 </div>
-                                 <div class="col-lg-6 col-md-6" style="margin-top:25px;">
+                                        <div class="col-lg-6 col-md-6 smart-form" style="margin-top:25px;">
+                                          <label for="category">Environments:</label>
+                                          <div  id="environmentname" multiselect="multiselect" datatype="select" sourcepath="3" datapath="masterjson.rows.row"  linkedto="orgname" class="input-group from-control col-md-12 widthBox" cdata="catalyst">
+                                          </div>
+                                        </div>
+                                        <div class="col-lg-6 col-md-6">
+                                          <a style="cursor:pointer;" data-toggle="modal" data-backdrop="false" id="appanchorDetails" href="#appdetailsModal"> <img title="Add App Details" data-placement="top" rel="tooltip" class="addappDetails" style="float:right;margin-top:20px;" src="img/add.png"></a>
+                                          <div class="table-responsive table-div">
+                                            <table id="tableappDetails" class="table table-striped table-bordered table-hover dataTable envAppDeployTable" style="border:1px solid #eeeeee !important; text-align:center;font-size:12px;margin-top:45px;" width="100%" cellpadding="5px">
+                                                <thead>
+                                                    <tr class="rowCustomStyle" style="font-weight:bold;">
+                                                        <td style="color:#fff;background-color: #2c3742;">App Name</td>
+                                                        <td style="color:#fff;background-color: #2c3742;">App Description</td>
+                                                        <td style="color:#fff;background-color: #2c3742;">Action</td>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="appDeployTbody">
+                                                </tbody>
+                                            </table>
+                                          </div>
+                                        </div>
+                                        <div class="col-lg-6 col-md-6" style="margin-top:25px;display:none">
                                           <label for="name">Application Name:</label>
-                                          <input autofocus name="ctl00$MainContent$orgname" value="" id="applicationname" class="form-control" type="text"  cdata="catalyst">
+                                          <input autofocus name="ctl00$MainContent$orgname" value="" id="appdeploy" class="form-control" type="text"  cdata="catalyst">
                                        </div>
 
                                  <!-- <div class="col-lg-6 col-md-6 smart-form" style="margin-top:25px;">
@@ -95,12 +111,128 @@
       </div>
    </div>
 </div>
+
+<!--modal for App Deploy Details-->
+<div class="modal fade" id="appdetailsModal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+   <div class="modal-dialog">
+      <div class="modal-content">
+         <form class="" id="appDetailsCreate" autocomplete="off">
+            <div class="modal-header">
+               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+               &times;
+               </button>
+               <h4 class="modal-title">
+                  <img style="width:18px;margin-left:6px;" src="img/tasksmall.png">&nbsp;&nbsp;Add App Deploy Details
+               </h4>
+            </div>
+            <div class="modal-body" style="height:100px;">
+               <div class="col-lg-6 col-md-6">
+                  <label for="applicationName">Application Name<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+                  <input type="text" name="applicationName" class="form-control applicationNameCreate" id="applicationName" autofocus/>
+               </div>
+               <div class="col-lg-6 col-md-6">
+                  <label for="applicationDesc">Application Description</label>
+                  <input type="text" name="applicationDesc" class="form-control applicationDescCreate" id="applicationDesc"/>
+               </div>
+            </div>
+            <div class="modal-footer">
+              <a type="button" class="btn btn-default" data-dismiss="modal">
+                <i class="ace-icon fa fa-times bigger-110" style="margin-right: 5px;"></i>Cancel
+              </a>
+              <button class="btn btn-primary btn-mini" id="saveAppDeploy">
+                <i class="ace-icon fa fa-check bigger-110"></i>
+                Save
+              </button>
+               <!-- <input type="submit" class="btn btn-primary" id="saveAppDeploy" value="Save">   -->
+            </div>
+         </form>
+      </div>
+   </div>
+</div>
+<!--modal for App Deploy Details ends here-->
 <script>
    //Form Name
    $(document).ready(function() {
        $(".chooseOrganization").select2();
        $(".chooseBG").select2();
       // isUserTypeSuperAdmin();
+   });
+   $('#appanchorDetails').click(function(e) {
+      $("#appdetailsModal").show();
+      $('#appDetailsCreate').trigger("reset");
+   });
+   if (!$.fn.dataTable.isDataTable('#tableappDetails')) {
+      $appDetails = $('#tableappDetails').DataTable({
+           "pagingType": "full_numbers",
+           "iDisplayLength": 5,
+           "aLengthMenu": [
+               [5, 40, 100, -1],
+               [5, 40, 100, "All"]
+           ],
+           "aoColumns": [
+               {
+                   "bSortable": true
+               }, {
+                   "bSortable": true
+               }, {
+                   "bSortable": true
+               }
+           ]
+       });
+   }
+   $("#tableappDetails_length").hide();
+   $("#tableappDetails_filter").hide();
+
+
+   $("#saveAppDeploy").click(function(e){
+    e.preventDefault();
+    var appName = $("#applicationName").val();
+    var appDesc = $("#applicationDesc").val();
+    if (appName == '') {
+        alert("Please enter Application Name");
+    }
+    if (appName != '') {
+      var $appDeployTbody = $('#appDeployTbody');
+      var $tr = $('<tr class="appDeployRow"></tr>');
+      var $tdName = $('<td class="tdappName" value='+appName+' style="word-break: break-word;"></td>');
+      $tr.data('appName', appName);
+      var $tdDescription = $('<td class="tdappDescription" value='+appDesc+' style="word-break: break-word;"></td>');
+      $tr.data('appDesc', appDesc);
+
+      $tdName.append(appName);
+      $tdDescription.append(appDesc);
+      var $tdAction = $('<td/>');
+      $tdAction.append('<div style="margin-right:17px;float:right;" class="btn-group"><button class="deleteRow" value="Remove" title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></div>');
+
+      $tdAction.find('.deleteRow').click(function() {
+          $appDetails.row($tr).remove().draw(true);
+      });
+
+      $tr.append($tdName).append($tdDescription).append($tdAction);
+      $appDeployTbody.append($tr);
+      $appDetails.row.add($tr).draw();
+      $("#appdetailsModal").hide();
+
+
+
+      var appdeploy = [];
+      var $appDeployTableBody = $('#tableappDetails tbody');
+      var $trs = $appDeployTableBody.find('tr');
+      $trs.each(function(e) {
+          var $this = $(this);
+          var dataDeploy = {
+              "applicationname": $this.data('appName'),
+              "appdescription": $this.data('appDesc'),
+          };
+          //appdeploy.push($this.data('appName'));
+          appdeploy.push(dataDeploy);
+      });
+      alert(JSON.stringify(appdeploy));
+      var appDeployString = JSON.stringify(appdeploy);
+      $('#appdeploy').val(appDeployString);
+
+
+    }
    });
    
    function isUserTypeSuperAdmin(){

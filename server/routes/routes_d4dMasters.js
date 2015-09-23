@@ -2802,7 +2802,18 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                             });
                                         });
 
-                                    } else {
+                                    } else if(req.params.id === '4'){
+                                        var projectModel = new d4dModelNew.d4dModelMastersProjects(bodyJson);
+                                            projectModel.save(function(err, data) {
+                                                if (err) {
+                                                    logger.error('Hit Save error', err);
+                                                    res.send(500);
+                                                    return;
+                                                }
+                                                res.send(200);
+                                                return;
+                                            });
+                                    }else {
                                         logger.debug("FLD>>>>>>>>>>>>> ", FLD);
                                         eval('var mastersrdb =  new d4dModelNew.' + dbtype + '({' + JSON.parse(FLD) + '})');
                                         mastersrdb.save(function(err, data) {
