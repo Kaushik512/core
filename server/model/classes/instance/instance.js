@@ -834,11 +834,11 @@ var InstancesDao = function() {
         });
     };
 
-    this.removeInstancebyCloudFormationIdAndAwsId = function(cfId, awsId, callback) {
+    this.removeInstancebyCloudFormationIdAndAwsId = function(cfId, awsInstanceId, callback) {
         logger.debug("Enter removeInstancebyCloudFormationId (%s)", cfId);
         Instances.remove({
             cloudFormationId: cfId,
-            platformId: awsId
+            platformId: awsInstanceId
         }, function(err, data) {
             if (err) {
                 logger.error("Failed to removeInstancebyCloudFormationIdAndAwsId (%s)", cfId, err);

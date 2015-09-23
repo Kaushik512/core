@@ -58,7 +58,7 @@ Verifies Node and MongoInstances are present
 Catalyst Create Blueprint of Cloud Formation and Save
     Clicks on Design
     Sleep    2s
-    Clicks on OK Button to Create the New Blueprint
+    Clicks on OK Button to Validate in loop for Cloud Formation Blueprint
     Sleep    1s
     Clicks on CloudFormation Template Type
     Clicks on Next Button
@@ -389,8 +389,8 @@ Catalyst Choose Template and Save Setup
     Sleep    6s
     Clicks on Design
     Sleep    10s
-    #Clicks on OK Button to Create the New Blueprint
-    #Sleep    1s
+    Clicks on OK Button to Create the New Blueprint
+    Sleep    1s
     Choose the Template Type Created
     Sleep    3s
     Clicks on Next Button
@@ -426,7 +426,21 @@ Catalyst Choose Template and Save Setup
 
 
 Clicks on OK Button to Create the New Blueprint
-    Click Element    xpath=.//*[text()='OK']
+    ${said}=    Run Keyword and Return Status     Page Should Contain Element    xpath=.//*[text()='OK']
+    Run Keyword If    '${said}' == 'True'     
+    ...    Click Element    xpath=.//*[text()='OK']
+    ...    ELSE IF   '${said}' == 'False'
+    ...    Log    Ok Button is Not Displayed
+
+
+Clicks on OK Button to Validate in loop for Cloud Formation Blueprint
+    ${said}=    Run Keyword and Return Status     Page Should Contain Element    xpath=.//*[text()='OK']
+    Run Keyword If    '${said}' == 'True'     
+    ...    Click Element    xpath=.//*[text()='OK']
+    ...    ELSE IF   '${said}' == 'False'
+    ...    Log    OK Button is Not Displayed
+
+
 
 
 
@@ -722,7 +736,7 @@ Catalyst CHEF CLIENT Action on CentOS Instance
     Sleep    3s
 
 Steps To Run Chef Client
-    Sleep    5 minutes
+    Sleep    6 minutes
     Clicks on > Button to your Environment
     Click on RUNNN of Chef Client
     Sleep    5s
@@ -808,6 +822,7 @@ Select Authentication Type
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='s2id_ssh-pemFileCheckbox']/a
     #Input Text    xpath=.//*[@id='select2-drop']/div/input  
     Click Element    xpath=.//*[@id='select2-drop']/ul/li[2]/div
+    Sleep    1s
 
 Upload the Catalyst PEM File
     Choose File     xpath=.//*[@id='ssh-pemfileInput']    ${CAT_INSTANCES}
@@ -1291,6 +1306,7 @@ Steps to Run SSH of Ubuntu
     Enters the Ubuntu Username in the Terminal
     Select Authentication Type
     Upload the Catalyst PEM File
+    Sleep    2s
     Clicks on Terminlal Submit Button
     Close the SSH Terminal
     Clicks on Contreol Panel

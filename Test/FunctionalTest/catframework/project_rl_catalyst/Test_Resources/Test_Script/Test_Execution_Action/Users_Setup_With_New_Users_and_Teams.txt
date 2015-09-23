@@ -106,6 +106,30 @@ Test Validation of Creation of New users
     #-Validate the No Teams Selected in Users setup
     #-No Teams assigned for user  ${VaildNoTeamsErrMsg}
 
+
+
+Catalyst Validation of Unique User
+    Clicks on USettings
+    Clicks on Users Setup
+    Clicks on Users
+    Clicks on New Button
+    Enters the Registered UserName
+    Enters Email Address
+    Assign Roles
+    Enters LDAP Password
+    Enters Confirm LDAP Password
+    Assign Teams for users
+    Clicks on USave Button
+    Verify the Error Message displayed while duplicating the User
+
+Verify the Error Message displayed while duplicating the User
+    Element should Contain    id=unique_loginname    ${Unique ErrMsg}
+
+Enters the Registered UserName
+    Sleep    2s
+    Input Text    id=loginname    ${ORG ADMIN USER}
+
+
 Devops Config Management New Users
     Users Setup With New Users1
     Users Setup With New Users2
@@ -295,8 +319,27 @@ Catalyst Creation of New Team in Catalyst
     Assigning Both Users and Projects
     Clicks on TSave Button
 
+
+Catalyst Unique Team Validation
+    Clicks on USettings
+    Clicks on Users Setup
+    Clicks on Teams
+    Clicks on New Team Button
+    Enters the New Team Name for Catalyst
+    Enters the Team Description
+    Select particular User Created organization
+    #Assign Users
+    #Assign Projects
+    Clicks on TSave Button
+    Verify the Error Message displayed while duplicating Team
+
+
+
+Verify the Error Message displayed while duplicating Team
+    Element Should Contain    id=unique_teamname    ${Unique ErrMsg}
+
 Enters the New Team Name for Catalyst
-    Wait Until Keyword Succeeds    1 minute     1 seconds       Input Text    id=teamname    NEW CATLYST
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Input Text    id=teamname    NEWCATLYST
 
 Assigning Both Users and Projects
     Click Element    xpath=.//*[@id='loginname']/label[text()='${ORG ADMIN USER}']/i

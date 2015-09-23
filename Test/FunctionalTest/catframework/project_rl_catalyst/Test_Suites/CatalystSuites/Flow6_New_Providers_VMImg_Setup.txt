@@ -10,8 +10,8 @@ Resource           ${COMMON RESOURCES}/catalyst_grid_node.txt
 
 
 *** Test Cases ***
-Catalyst new PROVIDERS setup
-    [Tags]       Sanity               Smoke
+Catalyst Validation and Creation of PROVIDERS setup
+    [Tags]       Sanity            Smoke   
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
     Catalyst Creation of Providers Setup 
@@ -20,8 +20,31 @@ Catalyst new PROVIDERS setup
     [Teardown]     Close Browser
 
 
-Catalyst new VM IMAGE setup
-    [Tags]       Sanity               VMImage
+
+Catalyst Edit Provider Name
+    [Tags]       Sanity             Smoke  
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst Editing the ProviderName
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+
+Catalyst Unique PROVIDERS validation setup
+    [Tags]       Sanity               Smoke
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst Unique Provider Creation Setup 
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+
+
+
+Catalyst Validation and Creation of VM IMAGE setup
+    [Tags]       Sanity               Smoke
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
     Validation of Creation of New Image
@@ -32,6 +55,23 @@ Catalyst new VM IMAGE setup
     [Teardown]     Close Browser
 
 
+
+Catalyst Editing the VM Image Setup
+    [Tags]       Sanity               VMImage
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst VM Image Edit Setup
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+Catalyst Unique VM IMAGE setup
+    [Tags]       Sanity               VMImage
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst Unique VM Image Validation Setup      
+    Catalyst Logout                      
+    [Teardown]     Close Browser
 
 
 

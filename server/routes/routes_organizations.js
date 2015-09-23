@@ -1851,7 +1851,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                                     setTimeout(function() {
                                                                         infraManager.getNode(nodeName, function(err, nodeData) {
                                                                             if (err) {
-                                                                                console.log(err);
+                                                                                logger.error(err);
                                                                                 return;
                                                                             }
                                                                             // is puppet node
@@ -1877,34 +1877,40 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                                 });
 
                                                             } else {
-                                                                hardwareData.architecture = nodeData.automatic.kernel.machine;
-                                                                hardwareData.platform = nodeData.automatic.platform;
-                                                                hardwareData.platformVersion = nodeData.automatic.platform_version;
-                                                                hardwareData.memory = {
-                                                                    total: 'unknown',
-                                                                    free: 'unknown'
-                                                                };
-                                                                if (nodeData.automatic.memory) {
-                                                                    hardwareData.memory.total = nodeData.automatic.memory.total;
-                                                                    hardwareData.memory.free = nodeData.automatic.memory.free;
-                                                                }
-                                                                hardwareData.os = instance.hardware.os;
-                                                                instancesDao.setHardwareDetails(instance.id, hardwareData, function(err, updateData) {
+                                                                infraManager.getNode(nodeName, function(err, nodeData) {
                                                                     if (err) {
-                                                                        logger.error("Unable to set instance hardware details  code (setHardwareDetails)", err);
-                                                                    } else {
-                                                                        logger.debug("Instance hardware details set successessfully");
+                                                                        logger.error(err);
+                                                                        return;
                                                                     }
-                                                                });
-                                                                if (decryptedCredentials.pemFilePath) {
-                                                                    fileIo.removeFile(decryptedCredentials.pemFilePath, function(err) {
+                                                                    hardwareData.architecture = nodeData.automatic.kernel.machine;
+                                                                    hardwareData.platform = nodeData.automatic.platform;
+                                                                    hardwareData.platformVersion = nodeData.automatic.platform_version;
+                                                                    hardwareData.memory = {
+                                                                        total: 'unknown',
+                                                                        free: 'unknown'
+                                                                    };
+                                                                    if (nodeData.automatic.memory) {
+                                                                        hardwareData.memory.total = nodeData.automatic.memory.total;
+                                                                        hardwareData.memory.free = nodeData.automatic.memory.free;
+                                                                    }
+                                                                    hardwareData.os = instance.hardware.os;
+                                                                    instancesDao.setHardwareDetails(instance.id, hardwareData, function(err, updateData) {
                                                                         if (err) {
-                                                                            logger.error("Unable to delete temp pem file =>", err);
+                                                                            logger.error("Unable to set instance hardware details  code (setHardwareDetails)", err);
                                                                         } else {
-                                                                            logger.debug("temp pem file deleted");
+                                                                            logger.debug("Instance hardware details set successessfully");
                                                                         }
                                                                     });
-                                                                }
+                                                                    if (decryptedCredentials.pemFilePath) {
+                                                                        fileIo.removeFile(decryptedCredentials.pemFilePath, function(err) {
+                                                                            if (err) {
+                                                                                logger.error("Unable to delete temp pem file =>", err);
+                                                                            } else {
+                                                                                logger.debug("temp pem file deleted");
+                                                                            }
+                                                                        });
+                                                                    }
+                                                                });
 
                                                             }
 
