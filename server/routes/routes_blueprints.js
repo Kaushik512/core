@@ -297,83 +297,111 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                         });
                                         return;
                                     }
-
-                                    VMImage.getImageById(cloudProvider.cloudProviderData.imageId, function(err, anImage) {
+                                    //putting maximum launchRestriction
+                                    instancesDao.findByProviderId(cloudProvider.cloudProviderId, function(err, instances) {
                                         if (err) {
-                                            logger.error(err);
-                                            res.send(500, errorResponses.db.error);
+                                            logger.error("Unable to fetch instance by providerId ", err);
+                                            res.send(500, {
+                                                message: "Server Behaved Unexpectedly"
+                                            });
                                             return;
                                         }
-                                        logger.debug("Loaded Image -- : >>>>>>>>>>> %s", anImage.providerId);
-                                        AWSProvider.getAWSProviderById(anImage.providerId, function(err, aProvider) {
+
+                                        logger.debug('instance length ==>' + instances.length + " , number Of instance ==> " + cloudProvider.cloudProviderData.instanceCount + ' , max ==> ' + appConfig.maxInstanceCount);
+                                        var maxCount = 0;
+                                        if(typeof appConfig.maxInstanceCount === 'undefined') {
+                                            maxCount = appConfig.maxInstanceCount;
+                                        }
+
+                                        if (maxCount !== 0 && instances.length + cloudProvider.cloudProviderData.instanceCount > maxCount) {
+                                            res.send(500, {
+                                                message: "Instance limit reached"
+                                            });
+                                            return;
+                                        }
+
+                                        VMImage.getImageById(cloudProvider.cloudProviderData.imageId, function(err, anImage) {
                                             if (err) {
                                                 logger.error(err);
                                                 res.send(500, errorResponses.db.error);
                                                 return;
                                             }
-                                            AWSKeyPair.getAWSKeyPairById(cloudProvider.cloudProviderData.keyPairId, function(err, aKeyPair) {
+                                            logger.debug("Loaded Image -- : >>>>>>>>>>> %s", anImage.providerId);
+                                            AWSProvider.getAWSProviderById(anImage.providerId, function(err, aProvider) {
                                                 if (err) {
                                                     logger.error(err);
                                                     res.send(500, errorResponses.db.error);
                                                     return;
                                                 }
-                                                var cryptoConfig = appConfig.cryptoSettings;
-                                                var cryptography = new Cryptography(cryptoConfig.algorithm, cryptoConfig.password);
-                                                var keys = [];
-                                                keys.push(aProvider.accessKey);
-                                                keys.push(aProvider.secretKey);
-                                                cryptography.decryptMultipleText(keys, cryptoConfig.decryptionEncoding, cryptoConfig.encryptionEncoding, function(err, decryptedKeys) {
+
+
+
+
+
+                                                AWSKeyPair.getAWSKeyPairById(cloudProvider.cloudProviderData.keyPairId, function(err, aKeyPair) {
                                                     if (err) {
-                                                        res.send(500, "Failed to decrypt accessKey or secretKey");
+                                                        logger.error(err);
+                                                        res.send(500, errorResponses.db.error);
                                                         return;
                                                     }
-
-                                                    function launchInstance() {
-                                                        logger.debug("Enter launchInstance -- ");
-                                                        // New add
-                                                        //var encryptedPemFileLocation= currentDirectory + '/../catdata/catalyst/provider-pemfiles/';
-
-                                                        var settings = appConfig;
-                                                        //encrypting default pem file
-                                                        var cryptoConfig = appConfig.cryptoSettings;
-                                                        var cryptography = new Cryptography(cryptoConfig.algorithm, cryptoConfig.password);
-                                                        var encryptedPemFileLocation = settings.instancePemFilesDir + aKeyPair._id;
-                                                        var securityGroupIds = [];
-                                                        for (var i = 0; i < cloudProvider.cloudProviderData.securityGroupIds.length; i++) {
-                                                            securityGroupIds.push(cloudProvider.cloudProviderData.securityGroupIds[i]);
+                                                    var cryptoConfig = appConfig.cryptoSettings;
+                                                    var cryptography = new Cryptography(cryptoConfig.algorithm, cryptoConfig.password);
+                                                    var keys = [];
+                                                    keys.push(aProvider.accessKey);
+                                                    keys.push(aProvider.secretKey);
+                                                    cryptography.decryptMultipleText(keys, cryptoConfig.decryptionEncoding, cryptoConfig.encryptionEncoding, function(err, decryptedKeys) {
+                                                        if (err) {
+                                                            res.send(500, "Failed to decrypt accessKey or secretKey");
+                                                            return;
                                                         }
 
-                                                        logger.debug("encryptFile of %s successful", encryptedPemFileLocation);
-                                                        var awsSettings = {
-                                                            "access_key": decryptedKeys[0],
-                                                            "secret_key": decryptedKeys[1],
-                                                            "region": aKeyPair.region,
-                                                            "keyPairName": aKeyPair.keyPairName
-                                                        };
-                                                        var ec2 = new EC2(awsSettings);
-                                                        //Used to ensure that there is a default value of "1" in the count.
-                                                        if(!cloudProvider.cloudProviderData.instanceCount)
-                                                            cloudProvider.cloudProviderData.instanceCount = "1";
+                                                        function launchInstance() {
+                                                            logger.debug("Enter launchInstance -- ");
+                                                            // New add
+                                                            //var encryptedPemFileLocation= currentDirectory + '/../catdata/catalyst/provider-pemfiles/';
 
-                                                        ec2.launchInstance(anImage.imageIdentifier, cloudProvider.cloudProviderData.instanceType, securityGroupIds, cloudProvider.cloudProviderData.subnetId, 'D4D-' + blueprint.name, aKeyPair.keyPairName,cloudProvider.cloudProviderData.instanceCount, function(err, instanceDataAll) {
-                                                            if (err) {
-                                                                logger.error("launchInstance Failed >> ", err);
-                                                                res.send(500);
-                                                                return;
+                                                            var settings = appConfig;
+                                                            //encrypting default pem file
+                                                            var cryptoConfig = appConfig.cryptoSettings;
+                                                            var cryptography = new Cryptography(cryptoConfig.algorithm, cryptoConfig.password);
+                                                            var encryptedPemFileLocation = settings.instancePemFilesDir + aKeyPair._id;
+                                                            var securityGroupIds = [];
+                                                            for (var i = 0; i < cloudProvider.cloudProviderData.securityGroupIds.length; i++) {
+                                                                securityGroupIds.push(cloudProvider.cloudProviderData.securityGroupIds[i]);
                                                             }
 
-                                                            logger.debug("Instance Launched -- . Runlist = ", version.runlist);
-                                                            logger.debug("Instance Launched -- . Instance data = ", instanceDataAll);
-                                                            logger.debug("UserName:::::::::: ", anImage.userName);
-                                                            if (!blueprint.appUrls) {
-                                                                blueprint.appUrls = [];
-                                                            }
-                                                            var appUrls = blueprint.appUrls;
-                                                            if (appConfig.appUrls && appConfig.appUrls.length) {
-                                                                appUrls = appUrls.concat(appConfig.appUrls);
-                                                            }
-                                                            var newinstanceIDs = [];
-                                                            var addinstancewrapper = function(instanceData,instancesLength){
+                                                            logger.debug("encryptFile of %s successful", encryptedPemFileLocation);
+                                                            var awsSettings = {
+                                                                "access_key": decryptedKeys[0],
+                                                                "secret_key": decryptedKeys[1],
+                                                                "region": aKeyPair.region,
+                                                                "keyPairName": aKeyPair.keyPairName
+                                                            };
+                                                            var ec2 = new EC2(awsSettings);
+                                                            //Used to ensure that there is a default value of "1" in the count.
+                                                            if (!cloudProvider.cloudProviderData.instanceCount)
+                                                                cloudProvider.cloudProviderData.instanceCount = "1";
+
+                                                            ec2.launchInstance(anImage.imageIdentifier, cloudProvider.cloudProviderData.instanceType, securityGroupIds, cloudProvider.cloudProviderData.subnetId, 'D4D-' + blueprint.name, aKeyPair.keyPairName, cloudProvider.cloudProviderData.instanceCount, function(err, instanceDataAll) {
+                                                                if (err) {
+                                                                    logger.error("launchInstance Failed >> ", err);
+                                                                    res.send(500);
+                                                                    return;
+                                                                }
+
+                                                                logger.debug("Instance Launched -- . Runlist = ", version.runlist);
+                                                                logger.debug("Instance Launched -- . Instance data = ", instanceDataAll);
+                                                                logger.debug("UserName:::::::::: ", anImage.userName);
+                                                                if (!blueprint.appUrls) {
+                                                                    blueprint.appUrls = [];
+                                                                }
+                                                                var appUrls = blueprint.appUrls;
+                                                                if (appConfig.appUrls && appConfig.appUrls.length) {
+                                                                    appUrls = appUrls.concat(appConfig.appUrls);
+                                                                }
+                                                                var newinstanceIDs = [];
+
+                                                                function addinstancewrapper(instanceData, instancesLength) {
                                                                     logger.debug('Entered addinstancewrapper ++++++' + instancesLength);
                                                                     var instance = {
                                                                         name: blueprint.name,
@@ -431,11 +459,11 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                         //Returning handle when all instances are created
                                                                         newinstanceIDs.push(instance.id);
                                                                         logger.debug('Lengths ---- ' + newinstanceIDs.length + '  ' + instancesLength);
-                                                                        if(newinstanceIDs.length >= instancesLength){
+                                                                        if (newinstanceIDs.length >= instancesLength) {
                                                                             res.send(200, {
-                                                                                    "id": newinstanceIDs,
-                                                                                    "message": "instance launch success"
-                                                                                });
+                                                                                "id": newinstanceIDs,
+                                                                                "message": "instance launch success"
+                                                                            });
                                                                         }
                                                                         var timestampStarted = new Date().getTime();
                                                                         var actionLog = instancesDao.insertBootstrapActionLog(instance.id, instance.runlist, req.session.user.cn, timestampStarted);
@@ -674,46 +702,47 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                             });
                                                                         });
 
-                                                                        
+
                                                                     }); //end of create instance.
-                                                            } //end of createinstancewrapper function
-                                                            //looping through all instances that are launched.
-                                                            for(var ic = 0; ic < instanceDataAll.length;ic++){
-                                                                logger.debug('InstanceDataAll ' + JSON.stringify(instanceDataAll));
-                                                                logger.debug('Length : ' + instanceDataAll.length);
-                                                                addinstancewrapper(instanceDataAll[ic],instanceDataAll.length);
+                                                                } //end of createinstancewrapper function
+                                                                //looping through all instances that are launched.
+                                                                for (var ic = 0; ic < instanceDataAll.length; ic++) {
+                                                                    logger.debug('InstanceDataAll ' + JSON.stringify(instanceDataAll));
+                                                                    logger.debug('Length : ' + instanceDataAll.length);
+                                                                    addinstancewrapper(instanceDataAll[ic], instanceDataAll.length);
+                                                                }
+
+
+                                                            }); //end of launch
+
+                                                        }
+
+
+                                                        chef.getEnvironment(req.query.envId, function(err, env) {
+                                                            if (err) {
+                                                                logger.error("Failed chef.getEnvironment", err);
+                                                                res.send(500);
+                                                                return;
                                                             }
 
+                                                            if (!env) {
+                                                                logger.debug("Blueprint env ID = ", req.query.envId);
+                                                                chef.createEnvironment(req.query.envId, function(err, envName) {
+                                                                    if (err) {
+                                                                        logger.error("Failed chef.createEnvironment", err);
+                                                                        res.send(500);
+                                                                        return;
+                                                                    }
+                                                                    launchInstance();
 
-                                                        }); //end of launch
-
-                                                    }
-
-
-                                                    chef.getEnvironment(req.query.envId, function(err, env) {
-                                                        if (err) {
-                                                            logger.error("Failed chef.getEnvironment", err);
-                                                            res.send(500);
-                                                            return;
-                                                        }
-
-                                                        if (!env) {
-                                                            logger.debug("Blueprint env ID = ", req.query.envId);
-                                                            chef.createEnvironment(req.query.envId, function(err, envName) {
-                                                                if (err) {
-                                                                    logger.error("Failed chef.createEnvironment", err);
-                                                                    res.send(500);
-                                                                    return;
-                                                                }
+                                                                });
+                                                            } else {
                                                                 launchInstance();
+                                                            }
 
-                                                            });
-                                                        } else {
-                                                            launchInstance();
-                                                        }
-
-                                                    });
-                                                }); // decryption
+                                                        });
+                                                    }); // decryption
+                                                });
                                             });
                                         });
                                     });
@@ -729,6 +758,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                         if (err) {
                                             logger.error("Unable to fetch provide", err);
                                             res.send(500, errorResponses.db.error);
+                                            return;
                                         }
                                         var cryptoConfig = appConfig.cryptoSettings;
                                         var cryptography = new Cryptography(cryptoConfig.algorithm, cryptoConfig.password);
@@ -843,16 +873,25 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                                 }
                                                                             }
 
+                                                                            console.log('resources === >', resources);
+
 
                                                                             var ec2 = new EC2(awsSettings);
-                                                                            var stackResources = {};
+                                                                            var ec2Resources = {};
+                                                                            var autoScaleResourceIds = [];
                                                                             for (var i = 0; i < resources.length; i++) {
                                                                                 if (resources[i].ResourceType === 'AWS::EC2::Instance') {
                                                                                     //instanceIds.push(resources[i].PhysicalResourceId);
-                                                                                    stackResources[resources[i].PhysicalResourceId] = resources[i].LogicalResourceId;
+                                                                                    ec2Resources[resources[i].PhysicalResourceId] = resources[i].LogicalResourceId;
+                                                                                } else if (resources[i].ResourceType === 'AWS::AutoScaling::AutoScalingGroup') {
+                                                                                    autoScaleResourceIds.push(resources[i].PhysicalResourceId);
                                                                                 }
                                                                             }
-                                                                            var instanceIds = Object.keys(stackResources);
+                                                                            if (autoScaleResourceIds.length) {
+                                                                                cloudFormation.autoScaleResourceIds = autoScaleResourceIds;
+                                                                                cloudFormation.save();
+                                                                            }
+                                                                            var instanceIds = Object.keys(ec2Resources);
 
                                                                             console.log("instanceIDS length ==>", instanceIds.length);
                                                                             if (instanceIds.length) {
@@ -879,13 +918,13 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
                                                                                     }
                                                                                     logger.debug('Instances length ==>', instances.length, instanceIds);
-                                                                                    //creating jsonAttributesObj
+                                                                                    //creating jsonAttributesObj ??? WHY
                                                                                     var jsonAttributesObj = {
                                                                                         instances: {}
                                                                                     };
 
                                                                                     for (var i = 0; i < instances.length; i++) {
-                                                                                        jsonAttributesObj.instances[stackResources[instances[i].InstanceId]] = instances[i].PublicIpAddress;
+                                                                                        jsonAttributesObj.instances[ec2Resources[instances[i].InstanceId]] = instances[i].PublicIpAddress;
                                                                                     }
                                                                                     for (var i = 0; i < instances.length; i++) {
                                                                                         addAndBootstrapInstance(instances[i], jsonAttributesObj);
@@ -930,7 +969,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
                                                                                             var runlist = [];
                                                                                             var instanceUsername;
-                                                                                            var logicalId = stackResources[instanceData.InstanceId];
+                                                                                            var logicalId = ec2Resources[instanceData.InstanceId];
 
                                                                                             for (var count = 0; count < blueprint.blueprintConfig.instances.length; count++) {
                                                                                                 if (logicalId === blueprint.blueprintConfig.instances[count].logicalId) {
@@ -938,6 +977,9 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                                                     runlist = blueprint.blueprintConfig.instances[count].runlist;
                                                                                                     break;
                                                                                                 }
+                                                                                            }
+                                                                                            if (!instanceUsername) {
+                                                                                                instanceUsername = 'ubuntu'; // hack for default username
                                                                                             }
 
                                                                                             var instance = {

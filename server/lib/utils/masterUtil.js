@@ -1624,6 +1624,26 @@ var MasterUtil = function() {
             });
         });
     }
+
+    // Return Environment Name
+    this.getEnvironmentName = function(envId, callback) {
+        logger.debug("org rowids: ", envId);
+        d4dModelNew.d4dModelMastersEnvironments.find({
+            rowid: envId
+        }, function(err, envs) {
+            if (err) {
+                callback(err, null);
+            }
+            if (envs.length) {
+                logger.debug("Got Environment: ",JSON.stringify(envs));
+                callback(null,envs[0].environmentname);
+                return;
+            } else {
+                callback(null, null);
+                return;
+            }
+        });
+    }
 }
 
 

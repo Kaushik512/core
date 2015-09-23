@@ -85,7 +85,7 @@ AppDataSchema.statics.getAppDataByName = function(appName, callback) {
                 if (data.length) {
                     for (var i = 0; i < data.length; i++) {
                         var dummyData = {
-                             _id: data[i]._id,
+                            _id: data[i]._id,
                             applicationName: data[i].applicationName,
                             applicationInstanceName: data[i].applicationInstanceName,
                             applicationVersion: data[i].applicationVersion,
@@ -102,7 +102,7 @@ AppDataSchema.statics.getAppDataByName = function(appName, callback) {
                         appData.push(dummyData);
                     }
                     callback(null, appData);
-                }else{
+                } else {
                     callback(null, data);
                 }
             });
@@ -114,7 +114,7 @@ AppDataSchema.statics.getAppDataByName = function(appName, callback) {
 };
 
 // Get all appData informations.
-AppDataSchema.statics.getAppDataWithDeploy = function(callback) {
+AppDataSchema.statics.getAppDataWithDeploy = function(envName, callback) {
     this.find(function(err, appData) {
         if (err) {
             logger.debug("Got error while fetching appData: ", err);
@@ -161,6 +161,60 @@ AppDataSchema.statics.getAppDataWithDeploy = function(callback) {
                 })(j);
             }
 
+        } else {
+            callback(null, []);
+        }
+    });
+};
+
+// Get all appData informations.
+AppDataSchema.statics.getAppDataWithDeployList = function(envName, callback) {
+    var that = this;
+    AppDeploy.getAppDeployListByEnvId(envName, function(err, data) {
+        if (err) {
+            logger.debug("App deploy fetch error.", err);
+        }
+        logger.debug("App deploy .", JSON.stringify(data));
+        if (data.length) {
+            var appDataList = [];
+            var count = 0;
+            for (var i = 0; i < data.length; i++) {
+                (function(i) {
+                    that.find({
+                        applicationName: data[i].applicationName
+                    }, function(err, appData) {
+                        count++;
+                        if (err) {
+                            logger.debug("Failed to fetch app data", err);
+                            callback(err, null);
+                        }
+                        if (appData) {
+                            var dummyData = {
+                                _id: data[i].id,
+                                applicationName: data[i].applicationName,
+                                applicationInstanceName: data[i].applicationInstanceName,
+                                applicationVersion: data[i].applicationVersion,
+                                applicationNodeIP: data[i].applicationNodeIP,
+                                applicationLastDeploy: data[i].applicationLastDeploy,
+                                applicationStatus: data[i].applicationStatus,
+                                projectId: appData[0].projectId,
+                                envId: data[i].envId,
+                                description: appData[0].description,
+                                applicationType: data[i].applicationType,
+                                containerId: data[i].containerId,
+                                hostName: data[i].hostName
+                            };
+                            appDataList.push(dummyData);
+                            if (count === data.length) {
+                                callback(null, appDataList);
+                            }
+                        } else {
+                            callback(null, []);
+                        }
+
+                    });
+                })(i);
+            }
         } else {
             callback(null, []);
         }

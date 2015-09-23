@@ -1568,10 +1568,13 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
             //Updated from above to move docker image out of circle.
             if (data.docker.dockerEngineStatus != '' && data.docker.dockerEngineStatus != null) {
                 var $dockerStatus = $('<img class="dockerIMG" whatever="2" alt="Docker" src="img/galleryIcons/Docker.png">').addClass('dockerenabledinstacne');
-                $divComponentListContainer.append($dockerStatus);
+                //$divComponentListContainer.append($dockerStatus);
+                $divComponentList.append($dockerStatus);
             }
         }
-
+        $divComponentList.find(".dockerIMG").on('click', function(e) {
+            $("a[href$='#l4']").trigger('click');
+        });
         //$rowContainter.append('<td></td>');
         $rowContainter.append('<td><img src="' + data.blueprintData.iconPath + '" style="width:auto;height:30px;" /></td>');
 
@@ -3098,8 +3101,12 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
 
 
 
-                                }).error(function() {
-                                    $launchResultContainer.find('.modal-body').empty().append('<span>Oops!!! Something went wrong. Please try again later</span>');
+                                }).error(function(jxhr) {
+                                    var message = "Server Behaved Unexpectedly";
+                                    if(jxhr.responseJSON && jxhr.responseJSON.message) {
+                                        message = jxhr.responseJSON.message;
+                                    }
+                                    $launchResultContainer.find('.modal-body').empty().append('<span>'+message+'</span>');
                                 });
                             }
 
@@ -3839,12 +3846,18 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
             var $outputArea = $modal.find('.outputArea').show();
             var taskType = $outputArea.data('taskType');
 
-            if (taskType === 'chef') {
+            if (taskType === 'chef' || taskType === 'puppet') {
 
 
                 var instances = $outputArea.data('instances');
                 for (var i = 0; i < instances.length; i++) {
-                    var nodeName = instances[i].chef.chefNodeName;
+
+                    var nodeName;
+                    if(instances[i].chef) {
+                        nodeName = instances[i].chef.chefNodeName;
+                    } else {
+                        nodeName = instances[i].puppet.puppetNodeName;
+                    } 
                     if (instances[i].instanceIP) {
                         var nodeName = instances[i].instanceIP;
                     }
@@ -3957,7 +3970,11 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                 if (data[i].taskType === 'chef') {
                     var $tdType = $('<td style="vertical-align:inherit;text-align:center;"></td>').append("<img style='width:31px;' src='img/chef.png' alt='chef'>&nbsp;&nbsp;<span style='font-size:14px;'></span>");
                 }else if(data[i].taskType === 'composite'){
-                    var $tdType = $('<td style="vertical-align:inherit;text-align:center;"></td>').append("<img style='width:22px;' src='img/composite.jpg' alt='composite'>&nbsp;&nbsp;<span style='font-size:14px;'></span>");
+                    var $tdType = $('<td style="vertical-align:inherit;text-align:center;"></td>').append("<img style='width:31px;' src='img/composite.jpg' alt='composite'>&nbsp;&nbsp;<span style='font-size:14px;'></span>");
+                } else if(data[i].taskType === 'puppet'){
+                    var $tdType = $('<td style="vertical-align:inherit;text-align:center;"></td>').append("<img style='width:22px;' src='img/puppeticon.png' alt='Puppet'>&nbsp;&nbsp;<span style='font-size:14px;'></span>");
+                }else if(data[i].taskType === 'composite'){
+                    var $tdType = $('<td style="vertical-align:inherit;text-align:center;"></td>').append("<img style='width:31px;' src='img/composite.jpg' alt='composite'>&nbsp;&nbsp;<span style='font-size:14px;'></span>");
                 } else {
                     var $tdType = $('<td style="vertical-align:inherit;text-align:center;"></td>').append("<img style='width:22px;' src='img/jenkins.png' alt='jenkins'>&nbsp;&nbsp;<span style='font-size:14px;'></span>");
                 }
@@ -3972,8 +3989,12 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                 $tr.append($tdDescription);
 
                 //if job type is chef show runlists and nodes.
-                if (data[i].taskType === 'chef') {
-                    var $tdNodeList = $('<td style="vertical-align:inherit;text-align:center;"></td>').append('<a class="assignedNodesList" rel="tooltip" data-placement="top" data-original-title="View Nodes" style="cursor:pointer;text-decoration:none;" data-toggle="modal"><i style="font-size:20px;color:#40baf1" class="ace-icon fa fa-sitemap"></i></a>').append('<a class="assignedRunlistTable" style="margin-top:5px;text-decoration:none;margin-left:20px;" rel="tooltip" data-placement="top" data-original-title="Assigned Runlists" data-toggle="modal" href="#assignedRunlist"><i style="font-size:20px;color:#40baf1;margin-left:5px;" class="ace-icon fa fa-list-ul"></i></a>');
+                if (data[i].taskType === 'chef' || data[i].taskType === 'puppet' ) {
+
+                    var $tdNodeList = $('<td style="vertical-align:inherit;text-align:center;"></td>').append('<a class="assignedNodesList" rel="tooltip" data-placement="top" data-original-title="View Nodes" style="cursor:pointer;text-decoration:none;" data-toggle="modal"><i style="font-size:20px;color:#40baf1" class="ace-icon fa fa-sitemap"></i></a>');
+                    if(data[i].taskType === 'chef') {
+                        $tdNodeList.append('<a class="assignedRunlistTable" style="margin-top:5px;text-decoration:none;margin-left:20px;" rel="tooltip" data-placement="top" data-original-title="Assigned Runlists" data-toggle="modal" href="#assignedRunlist"><i style="font-size:20px;color:#40baf1;margin-left:5px;" class="ace-icon fa fa-list-ul"></i></a>');
+                    }
                     $tdNodeList.find('a.assignedNodesList').data('nodeList', data[i].taskConfig.nodeIds).click(function(e) {
                         $.post('../instances/', {
                             instanceIds: $(this).data('nodeList')
@@ -3983,7 +4004,13 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                                 var $tr = $('<tr></tr>').css({
                                     'line-height': '2.1'
                                 });
-                                var nodeName = instances[i].chef.chefNodeName;
+                                var nodeName;
+                                if(instances[i].chef) {
+                                    nodeName = instances[i].chef.chefNodeName;
+                                } else {
+                                    nodeName = instances[i].puppet.puppetNodeName;
+                                }
+                                
                                 if (instances[i].instanceIP) {
                                     var nodeName = instances[i].instanceIP;
                                 }
@@ -4023,6 +4050,10 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                         }
                         $('#assignedRunlist').modal('show');
                     });
+                }else if(data[i].taskType === 'composite'){
+                    //if job type is composite..
+                    var $tdComposite = $('<td style="vertical-align:inherit;text-align:center;font-size">N/A</td>');
+                    $tr.append($tdComposite);
                 } else {
                     //if job type is jenkins show job url..
                     var jobURLS = 'http://' + data[i].taskConfig.jobURL;
@@ -4042,7 +4073,7 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
 
                     //alert(JSON.stringify(data[i]));
 
-                    if (data[i].taskType === 'jenkins' || data[i].taskType === 'chef') {
+                    if (data[i].taskType === 'jenkins' || data[i].taskType === 'chef' || data[i].taskType === 'puppet') {
                         //checking for parameterized condition..
                         if (data[i].taskConfig.parameterized) {
 
@@ -4266,7 +4297,7 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                 $tr.append($tdExecute);
 
                 //method for history starts here. depending upon the job type whether it is chef or jenkins....
-                if (data[i].taskType === 'chef') {
+                if (data[i].taskType === 'chef' || data[i].taskType === 'puppet') {
                     var $tdHistory = $('<td style="vertical-align:inherit;text-align:center;"></td>').append('<a rel="tooltip" data-placement="top" data-original-title="History" data-toggle="modal" href="javascript:void(0)" class="btn btn-primary btn-sg tableactionbutton"><i class="ace-icon fa fa-header bigger-120"></i></a>');
                     $tdHistory.find('a').data('taskId', data[i]._id).attr('data-historyTaskId', data[i]._id).click(function(e) {
                         //var $taskHistoryContent = $('#taskHistoryContent').show();
@@ -4324,27 +4355,29 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
 
                                 var $tdMessage = $('<td style="width:42%"></td>');
                                 $trHistoryRow.append($tdMessage);
-                                (function($td) {
-                                    var message = ' - ';
-                                    if (taskHistories[i].nodeIds && taskHistories[i].nodeIds.length == 1) {
-                                        if (taskHistories[i].executionResults && taskHistories[i].executionResults.length == 1) {
-                                            $.get('../chefClientExecution/' + taskHistories[i].executionResults[0].executionId, function(execData) {
-                                                if (execData && execData.message) {
-                                                    $td.append(execData.message);
+                                    if (taskHistories[i].taskType === 'chef') {
+                                        (function($td) {
+                                            var message = ' - ';
+                                            if (taskHistories[i].nodeIds && taskHistories[i].nodeIds.length == 1) {
+                                                if (taskHistories[i].executionResults && taskHistories[i].executionResults.length == 1) {
+                                                    $.get('../chefClientExecution/' + taskHistories[i].executionResults[0].executionId, function(execData) {
+                                                        if (execData && execData.message) {
+                                                            $td.append(execData.message);
+                                                        } else {
+                                                            $td.append(message);
+                                                        }
+
+                                                    }).fail(function() {
+                                                        $td.append(message);
+                                                    });
                                                 } else {
                                                     $td.append(message);
                                                 }
-
-                                            }).fail(function() {
+                                            } else {
                                                 $td.append(message);
-                                            });
-                                        } else {
-                                            $td.append(message);
-                                        }
-                                    } else {
-                                        $td.append(message);
+                                            }
+                                        })($tdMessage)
                                     }
-                                })($tdMessage)
 
 
                                 var $tdUser = $('<td></td>').append(taskHistories[i].user);

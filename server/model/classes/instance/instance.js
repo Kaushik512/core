@@ -435,7 +435,7 @@ var InstancesDao = function() {
                 instanceIP: ip
             }, {
                 'chef.chefNodeName': nodeName
-            },{
+            }, {
                 'puppet.puppetNodeName': nodeName
             }],
         }
@@ -490,6 +490,20 @@ var InstancesDao = function() {
 
     };
 
+    this.findByProviderId = function(providerId, callback) {
+        var queryObj = {
+            providerId: providerId
+        }
+        Instances.find(queryObj, function(err, data) {
+            if (err) {
+                logger.debug("Failed to findByProviderId (%s)", providerId, err);
+                callback(err, null);
+                return;
+            }
+            logger.debug("Exit findByProviderId (%s)", providerId);
+            callback(null, data);
+        });
+    };
 
 
     this.createInstance = function(instanceData, callback) {
@@ -819,6 +833,23 @@ var InstancesDao = function() {
             callback(null, data);
         });
     };
+
+    this.removeInstancebyCloudFormationIdAndAwsId = function(cfId, awsId, callback) {
+        logger.debug("Enter removeInstancebyCloudFormationId (%s)", cfId);
+        Instances.remove({
+            cloudFormationId: cfId,
+            platformId: awsId
+        }, function(err, data) {
+            if (err) {
+                logger.error("Failed to removeInstancebyCloudFormationIdAndAwsId (%s)", cfId, err);
+                callback(err, null);
+                return;
+            }
+            logger.debug("Exit removeInstancebyCloudFormationIdAndAwsId (%s)", cfId);
+            callback(null, data);
+        });
+    };
+
 
     this.updateInstanceLog = function(instanceId, log, callback) {
         logger.debug("Enter updateInstanceLog ", instanceId, log);
@@ -1199,7 +1230,7 @@ var InstancesDao = function() {
             success: false,
             user: user,
             timeStarted: timestampStarted,
-     
+
         };
         var logId = insertActionLog(instanceId, log, callback);
         log._id = logId;

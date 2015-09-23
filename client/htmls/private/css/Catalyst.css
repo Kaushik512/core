@@ -159,7 +159,7 @@
 .padding10{
     padding: 10px !important;
 }
-.selectedNodesChefTaskCSS{
+.selectedNodesTaskCSS{
     border:1px solid #dddddd;
     list-style:none outside none;
     height:153px;
@@ -7843,11 +7843,17 @@ width:51.2%;
 }
 
 }
-.dockerIMG{
+/*.dockerIMG{
     width:auto;
     height:27px;
     float:right;
     margin-top:-55px
+}*/
+.dockerIMG {
+    height: 32px;
+    margin-left: -22px;
+    margin-top: 6px;
+    width: auto;
 }
 .marginSubmit{
     margin-top: 20px;

@@ -361,10 +361,10 @@
  </div>
  </div>
 <!-- Docker Image selection table -->
-<div class="col-lg-12 col-md-12 forDocker notforCFT" style="margin-top:5px;">
-    <label for="category">Docker Images<span style="color:red">*</span>
+<div class="col-lg-12 col-md-12 forDocker notforCFT" style="margin-top:9px;">
+    <label for="category" style="margin-top:5px;">Docker Images<span style="color:red">*</span>
     </label>
-    <a class="btn btn-primary adddockertemplate pull-right" onclick="showdockertemplateadder();">Add</a>
+    <a class="btn btn-primary adddockertemplate pull-right" onclick="showdockertemplateadder();" style="margin-bottom:5px;">Add</a>
     <table class="table table-striped table-bordered table-hover dataTable no-footer" id="compositedockertable" cellpadding="5px" width="100%" style="text-align:center">
         <tr>
             <th>Order</th>
@@ -1831,12 +1831,15 @@
  }
 
 
- function addDockerTemplateToTable(title, repopath, tagname, reponame) {
+ function addDockerTemplateToTable(title, repopath, tagname, reponame,optionallaunchparams) {
      var $cdt = $('#compositedockertable');
      var uniqueid = (Math.floor(Math.random() * 9000) + 1000).toString();
      //remove any empty row message from table
      $('#dockerimageemptytr').detach();
-     var $dockertemplaterow = '<tr class="dockerimagesrow"><td >' + $cdt.find('tr').length + '</td><td paramtype="dockercontainerpathstitle">' + title + '</td><td  paramtype="dockercontainerpaths">' + repopath + '</td><td paramtype="dockerrepotags">' + tagname + '</td><td><input type="text" paramtype="dockerlaunchparameters" id="launchparam' + uniqueid + '" class=""><input type="hidden" paramtype="dockerreponame" id="dockerreponame' + uniqueid + '" class="" value="' + reponame + '"><a onclick="loadLaunchParams(\'launchparam' + uniqueid + '\');" href="javascript:void(0);"><i class="icon-append fa fa-list-alt fa-lg" title="Launch Parameters"></i></a></td><td ><a class="dockerimageselectorup" id="dockerimageselectorup' + uniqueid + '"  href="javascript:movetablerow(\'dockerimageselectorup\',' + uniqueid + ');"><i class="fa fa-chevron-circle-up fa-lg"></i></a><a class="dockerimageselectordown" id="dockerimageselectordown' + uniqueid + '" href="javascript:movetablerow(\'dockerimageselectordown\',' + uniqueid + ');" style="padding-left:5px;"><i class="fa fa-chevron-circle-down fa-lg"></i></a><button class="btn btn-xs btn-danger pull-right" value="Remove" title="Remove" id="dockerimageremove' + uniqueid + '" onClick="javascript:removeimage(\'dockerimageremove\',' + uniqueid + ');"><i class="ace-icon fa fa-trash-o fa-lg"></i></button></td></tr>';
+     if(!optionallaunchparams){
+      optionallaunchparams = '';
+     }
+     var $dockertemplaterow = '<tr class="dockerimagesrow"><td >' + $cdt.find('tr').length + '</td><td paramtype="dockercontainerpathstitle">' + title + '</td><td  paramtype="dockercontainerpaths">' + repopath + '</td><td paramtype="dockerrepotags">' + tagname + '</td><td><input type="text" paramtype="dockerlaunchparameters" id="launchparam' + uniqueid + '" class="" value=" ' + optionallaunchparams + '"><input type="hidden" paramtype="dockerreponame" id="dockerreponame' + uniqueid + '" class="" value="' + reponame + '"><a onclick="loadLaunchParams(\'launchparam' + uniqueid + '\');" href="javascript:void(0);"><i class="icon-append fa fa-list-alt fa-lg" title="Launch Parameters"></i></a></td><td ><a class="dockerimageselectorup" id="dockerimageselectorup' + uniqueid + '"  href="javascript:movetablerow(\'dockerimageselectorup\',' + uniqueid + ');"><i class="fa fa-chevron-circle-up fa-lg"></i></a><a class="dockerimageselectordown" id="dockerimageselectordown' + uniqueid + '" href="javascript:movetablerow(\'dockerimageselectordown\',' + uniqueid + ');" style="padding-left:5px;"><i class="fa fa-chevron-circle-down fa-lg"></i></a><button class="btn btn-xs btn-danger pull-right" value="Remove" title="Remove" id="dockerimageremove' + uniqueid + '" onClick="javascript:removeimage(\'dockerimageremove\',' + uniqueid + ');"><i class="ace-icon fa fa-trash-o fa-lg"></i></button></td></tr>';
 
      $cdt.append($dockertemplaterow);
 
@@ -2634,7 +2637,7 @@
                              for (var cbi = 0; cbi < cb.length; cbi++) {
                                  licb += '<li style="font-size:10px;" path="' + cbpath[cbi] + '" title="Container" blueprinttype="dockercontainer">' + cb[cbi] + '</li>';
                              }
-                             $('#individualTemplateNameGrid').hide();
+                             $('#individualTemplateNameGrid').show();
                          }
 
                          getIndividualData += licb + '</ul></div></div>';
@@ -2647,7 +2650,11 @@
                      //$("#grid0").addClass("role-Selected");
                      //Proceeding to next step when selected type is docker
                      if ($('#tab1').find('.role-Selected').attr('data-templatetype') === "Docker" || $('#tab1').find('.role-Selected').attr('data-templatetype') === "docker") {
-                         $('li.next').find('a').trigger('click');
+                        //above comment will remove the template selection stage
+                         //$('li.next').find('a').trigger('click');
+                         //pre populating docker table with image.
+                       
+
                      }
 
                     var wizard = $wizard.data('bootstrapWizard');
@@ -2715,6 +2722,12 @@
                  $('.divchefrunlist').show();
 
                  if ($('.productdiv2.role-Selected').first().attr('templatetype') == "Docker" || $('.productdiv2.role-Selected').first().attr('templatetype') == "docker") {
+                    //Auto adding the selected template by default
+
+                    var $dockerdiv = $('#tab2').find('.productdiv2.role-Selected').first();
+                    $('.dockerimagesrow').detach();
+                    addDockerTemplateToTable($dockerdiv.attr('templatename'),$dockerdiv.attr('dockercontainerpaths'),'latest',$dockerdiv.attr('dockerreponame'),'--name ' + $dockerdiv.attr('templatename'));
+
                      //Checking if docker then only Edit organization paramerters are to be shown
                      //Checking if docker then only Edit organization paramerters are to be shown
                      if (!$('#CollapseEditorgParam').hasClass('in')) {
@@ -3464,9 +3477,9 @@
          } else if (index === 1) {
              $("#tabheader").html('Choose Templates');
              if ($('#tab1').find('.role-Selected').attr('data-templatetype') === "Docker" || $('#tab1').find('.role-Selected').attr('data-templatetype') === "docker") {
-                 $('#bootstrap-wizard-1').bootstrapWizard('show', 0);
-                var validatorForm = $("#wizard-1").validate();
-                validatorForm.resetForm();
+               $('#bootstrap-wizard-1').bootstrapWizard('show', 2);
+               var validatorForm = $("#wizard-1").validate();
+               // validatorForm.resetForm();
              }
          } else if (index === 2) {
              $("#tabheader").html('Choose Template');
