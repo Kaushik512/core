@@ -490,6 +490,20 @@ var InstancesDao = function() {
 
     };
 
+    this.findByProviderId = function(providerId, callback) {
+        var queryObj = {
+            providerId: providerId
+        }
+        Instances.find(queryObj, function(err, data) {
+            if (err) {
+                logger.debug("Failed to findByProviderId (%s)", providerId, err);
+                callback(err, null);
+                return;
+            }
+            logger.debug("Exit findByProviderId (%s)", providerId);
+            callback(null, data);
+        });
+    };
 
 
     this.createInstance = function(instanceData, callback) {
@@ -835,7 +849,7 @@ var InstancesDao = function() {
             callback(null, data);
         });
     };
-    
+
 
     this.updateInstanceLog = function(instanceId, log, callback) {
         logger.debug("Enter updateInstanceLog ", instanceId, log);
