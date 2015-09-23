@@ -1646,7 +1646,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                         "message": "instance launch success"
                                                     });
                                                     logger.debug('Should have sent the response.');
-                                                    hppubliccloud.waitforserverready(hppubliccloudconfig.tenantId, instanceData.server.id, function(err, data) {if (!err) {
+                                                    hppubliccloud.waitforserverready(hppubliccloudconfig.tenantId, instanceData, function(err, data) {if (!err) {
                                                             logger.debug('Instance Ready....');
                                                             logger.debug(JSON.stringify(data)); // logger.debug(data);
                                                             logger.debug('About to bootstrap Instance');

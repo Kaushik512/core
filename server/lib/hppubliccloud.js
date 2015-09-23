@@ -68,35 +68,37 @@ var Hppubliccloud = function(options) {
 		
     }
     	
-	this.getTenants = function(callback){
-		console.log("START:: getTenants");
-		
-		getAuthToken(options.serviceendpoints.identity,options.username,options.password,options.tenantName,function(err,token){
-			if(token){
-			   console.log("token::"+token);	
-			   var args = {
-					   headers:{"X-Auth-Token": token} 
-					};
-				client = new Client();
-				var tenantsUrl = 'http://'+options.host+':5000/v2.0/tenants';
-				client.registerMethod("jsonMethod", tenantsUrl, "GET");
-				client.methods.jsonMethod(args,function(data,response){
-					if(data.tenants){
-					   var tenants = data.tenants;
-					   console.log("END:: getTenants");
-					   callback(null,data);
-					   return ;
-					}else{
-						console.log("Error in getTenants");
-						callback(data,null);
-					}
-				});    
-			}else{
-				console.log(err);
-				callback(err,null);
-			    return ;
-			}
-		})
+	this.getTenants = function(callback) {
+	    console.log("START:: getTenants");
+
+	    getAuthToken(options.serviceendpoints.identity, options.username, options.password, options.tenantName, function(err, token) {
+	        if (token) {
+	            console.log("token::" + token);
+	            var args = {
+	                headers: {
+	                    "X-Auth-Token": token
+	                }
+	            };
+	            client = new Client();
+	            var tenantsUrl = 'http://' + options.host + ':5000/v2.0/tenants';
+	            client.registerMethod("jsonMethod", tenantsUrl, "GET");
+	            client.methods.jsonMethod(args, function(data, response) {
+	                if (data.tenants) {
+	                    var tenants = data.tenants;
+	                    console.log("END:: getTenants");
+	                    callback(null, data);
+	                    return;
+	                } else {
+	                    console.log("Error in getTenants");
+	                    callback(data, null);
+	                }
+	            });
+	        } else {
+	            console.log(err);
+	            callback(err, null);
+	            return;
+	        }
+	    });
 	}
   
   this.getImages = function(tenantId,callback){
@@ -286,59 +288,106 @@ this.getServers = function(tenantId,callback){
 		}   
 	})
  }
- 
-this.createfloatingip = function(tenantId,networkid,callback){
-	console.log("START:: createServer");
-	//sample response
-	// 	{
-	//     "floatingip": {
-	//         "router_id": null,
-	//         "status": "ACTIVE",
-	//         "tenant_id": "10453306227790",
-	//         "floating_network_id": "122c72de-0924-4b9f-8cf3-b18d5d3d292c",
-	//         "fixed_ip_address": null,
-	//         "floating_ip_address": "15.125.71.116",
-	//         "port_id": null,
-	//         "id": "e11856c7-c3e2-496d-b8c7-64517f5d5844"
-	//     }
-	// 	}
-	console.log(JSON.stringify(options));
-	getAuthToken(options.serviceendpoints.identity,options.username,options.password,options.tenantName,function(err,token){
-		 if(token){
-		 	var fip = {
-			    "floatingip":
-			        {
-			        "floating_network_id": networkid
-			       // "port_id": serverip
-			        }
-			}
-			var args = {
-				       data: fip, 
-					   headers:{"X-Auth-Token": token,"Content-Type": "application/json"} 
-					};
-			client = new Client();
-			var createfloatip = options.serviceendpoints.network + '/floatingips';
-			console.log('CreateServerURL:' + createfloatip);
-			client.registerMethod("jsonMethod", createfloatip, "POST");
-			client.methods.jsonMethod(args,function(data,response){
-				console.log("createfloatingip response:: "+data);
-				if(data.server){
-				   console.log("END:: createServer");	
-				   callback(null,data);
-				   return;
-			    }else{
-					callback(data,null);
-				}
-				
-			}); 
-		 }
-	});
+
+this.updatefloatingip = function(tenantId, floatingipid, serverid, callback) {
+	 console.log("START:: updatefloatingip");
+    console.log(JSON.stringify(options));
+    getAuthToken(options.serviceendpoints.identity, options.username, options.password, options.tenantName, function(err, token) {
+        if (token) {
+            var fip = {
+                "floatingip": {
+                    "port_id": serverid
+
+                }
+            }
+            var args = {
+                data: fip,
+                headers: {
+                    "X-Auth-Token": token,
+                    "Content-Type": "application/json"
+                }
+            };
+            var updatefloatip = options.serviceendpoints.network + '/floatingips/' + floatingipid;
+            console.log('updatefloatingip:' + updatefloatip);
+            console.log('args:' + JSON.stringify(args));
+            client = new Client();
+            client.registerMethod("jsonMethod", updatefloatip, "PUT");
+            client.methods.jsonMethod(args, function(data, response) {
+                console.log("updatefloatingip response:: " + data);
+                if (data) {
+                    console.log("END:: updatefloatingip");
+                    callback(null, data);
+                    return;
+                } else {
+                	console.log("END:: updatefloatingip with error",data);
+                    callback(null, null);
+                }
+
+            });
+
+
+        }
+    });
+
+
+};
+
+
+this.createfloatingip = function(tenantId, networkid, callback) {
+    console.log("START:: createfloatingip");
+    console.log(JSON.stringify(options));
+    this.getNetworks(function(err, data) {
+       // console.log(JSON.stringify(data));
+        if (data) {
+
+            for (var i = 0; i < data.networks.length; i++) {
+                if (data.networks[i]['router:external']) {
+                    var networkid = data.networks[i]['id'];
+                    getAuthToken(options.serviceendpoints.identity, options.username, options.password, options.tenantName, function(err, token) {
+                        if (token) {
+                            var fip = {
+                                "floatingip": {
+                                    "floating_network_id": networkid
+
+                                }
+                            }
+                            var args = {
+                                data: fip,
+                                headers: {
+                                    "X-Auth-Token": token,
+                                    "Content-Type": "application/json"
+                                }
+                            };
+                            var createfloatip = options.serviceendpoints.network + '/floatingips';
+                            console.log('createfloatip:' + createfloatip);
+                            console.log('args:' + JSON.stringify(args));
+                            client = new Client();
+                            client.registerMethod("jsonMethod", createfloatip, "POST");
+                            client.methods.jsonMethod(args, function(data, response) {
+                                console.log("createfloatingip response:: " + data);
+                                if (data) {
+                                    console.log("END:: createfloatingip");
+                                    callback(null, data);
+                                    return;
+                                } else {
+                                    callback(null, null);
+                                }
+
+                            });
+
+
+                        }
+                    });
+                }
+            }
+        }
+    });
 }
 
  this.createServer = function(tenantId,createServerJson,callback){
-	 console.log("START:: createServer");
-	 var that = this;
-console.log(JSON.stringify(options));
+	console.log("START:: createServer");
+	var that = this;
+	console.log(JSON.stringify(options));
 	getAuthToken(options.serviceendpoints.identity,options.username,options.password,options.tenantName,function(err,token){
 		 if(token){
 			   console.log("token::"+token);	
@@ -355,27 +404,33 @@ console.log(JSON.stringify(options));
 					delete createServerJson.server.security_groups;
 				}
 				//Testing floating ip create
-				that.createfloatingip(tenantId,createServerJson.server.networks[0]["uuid"],function(err,data){
+				that.createfloatingip(tenantId,createServerJson.server.networks[0]["uuid"],function(err,floatingipdata){
 						if(!err){
-							console.log('Added an ip',JSON.stringify(data));
+							console.log('Added an ip',JSON.stringify(JSON.parse(floatingipdata)));
+
+							//create an instance and wait for server ready state
+
+							console.log("createServerJson after");
+							console.log(JSON.stringify(createServerJson));
+							var createServerUrl = options.serviceendpoints.compute + '/'+tenantId+'/servers';
+							console.log('CreateServerURL:' + createServerUrl);
+							client.registerMethod("jsonMethod", createServerUrl, "POST");
+							client.methods.jsonMethod(args,function(data,response){
+								console.log("createServer response:: "+data);
+								data['floatingipdata'] = JSON.parse(floatingipdata);
+								if(data.server){
+								   console.log("END:: createServer");
+								   console.log(JSON.stringify(data));
+								   callback(null,data);
+								   return;
+							    }else{
+									callback(data,null);
+								}
+								
+							}); 
 						}
 				});
-				// console.log("createServerJson after");
-				// console.log(JSON.stringify(createServerJson));
-				// var createServerUrl = options.serviceendpoints.compute + '/'+tenantId+'/servers';
-				// console.log('CreateServerURL:' + createServerUrl);
-				// client.registerMethod("jsonMethod", createServerUrl, "POST");
-				// client.methods.jsonMethod(args,function(data,response){
-				// 	console.log("createServer response:: "+data);
-				// 	if(data.server){
-				// 	   console.log("END:: createServer");	
-				// 	   callback(null,data);
-				// 	   return;
-				//     }else{
-				// 		callback(data,null);
-				// 	}
-					
-				// }); 
+				
 		}else{
 			console.log(err);
 		    callback(err,null);
@@ -385,9 +440,9 @@ console.log(JSON.stringify(options));
  }
 
   this.getServerById = function(tenantId,serverId,callback){
-	 console.log("START:: Getting server details by id");
+	 console.log("START:: Getting server details by id",serverId);
 	 
-	 getAuthToken(options.host,options.username,options.password,options.tenantName,function(err,token){
+	 getAuthToken(options.serviceendpoints.identity,options.username,options.password,options.tenantName,function(err,token){
 		   if(token){
 			   console.log("token:"+token);
 			   
@@ -418,54 +473,55 @@ console.log(JSON.stringify(options));
  }
 
 
-this.waitforserverready = function(tenantId,serverId,callback){
+this.waitforserverready = function(tenantId,instanceData,callback){
         var self = this;
-        setTimeout(function(){
-	        self.getServerById(tenantId,serverId,function(err,data){
+        console.log('instanceData received:',JSON.stringify(instanceData));
+        var wfsr = function(){
+	        self.getServerById(tenantId,instanceData.server.id,function(err,data){
 	                if (err) {
 	                	callback(err, null);
 	                	return;
 	            	}
 	                if(!err){
-	                        switch(data.server.status){
-	                                case 'ACTIVE':
-	                                        callback(null,data);
-	                                        return;
-	                                        break;
-	                                default:
-					                    setTimeout(function() {
-					                        self.waitforserverready(tenantId, serverId,callback);
-					                    }, 5000);
-	                    break;
-	                        }
+	                       console.log('Quried server:',JSON.stringify(data));
+	                       if(data.server.status == 'ACTIVE'){
+	                       	//set the floating ip to instance
+	                       	if(instanceData.floatingipdata.floatingip.floating_network_id)
+	                       		self.updatefloatingip(tenantId,instanceData.floatingipdata.floatingip.floating_network_id,instanceData.server.id,function(err,data){
+	                       			if(!err)
+	                       				console.log('Updated with floating ip');
+	                       		});
+	                       }
+	                       setTimeout(wfsr,15000);
 	                }
 	        });
-        },360 * 1000);
+        };
+        setTimeout(wfsr,15000);
  }
-
 }
 
 
-this.waitforserverready1 = function(tenantId,serverId,callback){
-	var self = this;
-	var checkifserverready = function(){
-		 self.getServerById(tenantId,serverId,function(err,data){
-	                if (err) {
-	                	callback(err, null);
-	                	return;
-	            	}
-	                if(!err){
-	                        var networks = Object.keys(data.server.addresses);
-	                        if(networks.length > 0){
 
-	                        }
-	                        else{
+// this.waitforserverready1 = function(tenantId,serverId,callback){
+// 	var self = this;
+// 	var checkifserverready = function(){
+// 		 self.getServerById(tenantId,serverId,function(err,data){
+// 	                if (err) {
+// 	                	callback(err, null);
+// 	                	return;
+// 	            	}
+// 	                if(!err){
+// 	                        var networks = Object.keys(data.server.addresses);
+// 	                        if(networks.length > 0){
 
-	                        }
-	                }
-	        });
-	}
-}
+// 	                        }
+// 	                        else{
+
+// 	                        }
+// 	                }
+// 	        });
+// 	}
+// }
 
 
 module.exports = Hppubliccloud;
