@@ -20,6 +20,22 @@ Catalyst new PROVIDERS setup
     [Teardown]     Close Browser
 
 
+Catalyst Unique PROVIDERS validation setup
+    [Tags]       Sanity               Smoke
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst Creation of Providers Setup 
+    Validation of Adding New Providers
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+
+
+
+
+
+
 Catalyst new VM IMAGE setup
     [Tags]       Sanity               VMImage
 #    Catalyst Login

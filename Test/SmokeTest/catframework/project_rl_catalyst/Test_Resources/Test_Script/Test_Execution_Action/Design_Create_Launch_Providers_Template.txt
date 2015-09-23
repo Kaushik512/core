@@ -424,7 +424,12 @@ Catalyst Choose Template and Save Setup
 
 
 Clicks on OK Button to Create the New Blueprint
-    Click Element    xpath=.//*[text()='OK']
+    ${said}=    Run Keyword and Return Status     Page Should Contain Element    xpath=.//*[text()='OK']
+    Run Keyword If    '${said}' == 'True'     
+    ...    Click Element    xpath=.//*[text()='OK']
+    ...    ELSE IF   '${said}' == 'False'
+    ...    Log OK Button is not displayed
+
 
 
 
