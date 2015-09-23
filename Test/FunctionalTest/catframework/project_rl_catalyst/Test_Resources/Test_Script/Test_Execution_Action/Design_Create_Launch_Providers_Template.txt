@@ -319,7 +319,7 @@ Catalyst Form validation of Blueprint
     Sleep    6s
     Clicks on Design
     Sleep    10s
-    Clicks on OK Button to Create the New Blueprint
+    Clicks on OK Button to Validate in loop
     Sleep    1s
     Choose the Template Type Created
     Sleep    3s
@@ -386,7 +386,7 @@ Catalyst Choose Template and Save Setup of CentOS Blueprint
     Sleep    6s
     Clicks on Design
     Sleep    10s
-    Clicks on OK Button to Create the New Blueprint
+    Clicks on OK Button to Validate in loop
     Sleep    1s
     Choose the Template Type Created
     Sleep    3s
@@ -424,6 +424,23 @@ Catalyst Choose Template and Save Setup of CentOS Blueprint
 
 Clicks on OK Button to Create the New Blueprint
     Click Element    xpath=.//*[text()='OK']
+
+
+
+Clicks on OK Button to Validate in loop
+    ${said}=    Run Keyword and Return Status     Page Should Contain Element    xpath=.//*[text()='OK']
+    Run Keyword If    '${said}' == 'True'     
+    ...    Click Element    xpath=.//*[text()='OK']
+    ...    ELSE IF   '${said}' == 'False'
+    ...    Log    OK Button is not displayed
+    
+
+
+   
+   
+    #Run Keyword And Continue On Failure    Click Element    xpath=.//*[text()='OK']
+    #Log    Test is Continued
+    #Click Element    xpath=.//*[text()='OK']
 
     
 CentOS Blueprint Launched and verify IP,Status,Chef,SSH,Stop,BootStrap
