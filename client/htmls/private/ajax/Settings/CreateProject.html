@@ -184,19 +184,19 @@
    $("#tableappDetails_filter").hide();
 
 
-   $("#saveAppDeploy").click(function(e){
-    e.preventDefault();
-    var appName = $("#applicationName").val();
-    var appDesc = $("#applicationDesc").val();
-    if (appName == '') {
-        alert("Please enter Application Name");
-    }
+   $("#saveAppDeploy").click(function(e) {
+     e.preventDefault();
+     var appName = $("#applicationName").val();
+     var appDesc = $("#applicationDesc").val();
+     if (appName == '') {
+         alert("Please enter Application Name");
+     }
     if (appName != '') {
       var $appDeployTbody = $('#appDeployTbody');
       var $tr = $('<tr class="appDeployRow"></tr>');
-      var $tdName = $('<td class="tdappName" value='+appName+' style="word-break: break-word;"></td>');
+      var $tdName = $('<td class="tdappName" value=' + appName + ' style="word-break: break-word;"></td>');
       $tr.data('appName', appName);
-      var $tdDescription = $('<td class="tdappDescription" value='+appDesc+' style="word-break: break-word;"></td>');
+      var $tdDescription = $('<td class="tdappDescription" value=' + appDesc + ' style="word-break: break-word;"></td>');
       $tr.data('appDesc', appDesc);
 
       $tdName.append(appName);
@@ -221,17 +221,14 @@
       $trs.each(function(e) {
           var $this = $(this);
           var dataDeploy = {
-              "applicationname": $this.data('appName'),
-              "appdescription": $this.data('appDesc'),
+              applicationname: $this.data('appName'),
+              appdescription: $this.data('appDesc'),
           };
-          //appdeploy.push($this.data('appName'));
           appdeploy.push(dataDeploy);
       });
-      alert(JSON.stringify(appdeploy));
+      //alert(JSON.stringify(appdeploy));
       var appDeployString = JSON.stringify(appdeploy);
       $('#appdeploy').val(appDeployString);
-
-
     }
    });
    

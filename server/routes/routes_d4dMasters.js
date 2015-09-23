@@ -2803,6 +2803,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                         });
 
                                     } else if(req.params.id === '4'){
+                                        bodyJson['appdeploy'] = JSON.parse(bodyJson['appdeploy']);
                                         var projectModel = new d4dModelNew.d4dModelMastersProjects(bodyJson);
                                             projectModel.save(function(err, data) {
                                                 if (err) {

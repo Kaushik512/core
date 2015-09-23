@@ -149,8 +149,8 @@ var d4dMastersProjects = new mongoose.Schema(
 	description: {type:String, trim:true, validate:descValidator},
 	active: {type:Boolean, trim:true,default:true},
 	appdeploy: [{
-		applicationname: {type: String, trim:true},
-		appdescription: {type: String}
+		applicationname: String,
+		appdescription: String
 	}],
 	/*teamname: {type:String, trim:true},
 	teamname_rowid: {type:String, trim:true},*/
