@@ -96,10 +96,10 @@ ${KEYPAIRNAME}           cat_instances
 ${REGION NAME}           US West 
 ${SUBNET NAME}           subnet-aed68ce8
 ${NEW CONFIG NAME}       catserver
-${REGION NAME}            US West
+${REGION NAME}            US West    
 ${BLUEPRINT TESTNAME}          TestingNew
 
-
+${Unique ErrMsg}            This entry is already registered. Try another?
 
 ${PHOENIX COMMERNCE WITHOUT COOKBOOK UBUNTUOS}            Phoenix Commernce without Cookbook UbuntuOS
 ${PHOENIX COMMERCE WITH COOKBOOK UBUNTUOS}          Phoenix Commerce With CookBook ubuntuOS

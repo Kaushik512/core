@@ -26,14 +26,20 @@ Catalyst Edit the Teams Setup and Assign Projects
 Catalyst Validate Users Setup
     [Tags]       Sanity               Smoke
 #    Catalyst Login
-    Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
     Sleep    1s
     Test Validation of Creation of New users
     Catalyst Logout                      
     [Teardown]     Close Browser
 
 
-
+Catalyst Unique User Validation Setup
+    [Tags]       Sanity               Smoke
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst Validation of Unique User
+    Catalyst Logout                      
+    [Teardown]     Close Browser
 
 
 Catalyst Validate Teams Setup
@@ -44,4 +50,18 @@ Catalyst Validate Teams Setup
     Catalyst Creation of New Team in Catalyst
     Catalyst Logout                      
     [Teardown]     Close Browser
+
+
+Catalyst Unique Team Validation Setup
+    [Tags]       Sanity               Smoke
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst Unique Team Validation  
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+
+
+
 

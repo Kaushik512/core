@@ -38,6 +38,17 @@ Catalyst Edit the Organization and Domain Name
 
 
 
+Catalyst Verification of Unique Organization Creation
+    [Tags]       Sanity               Smoke
+#    Catalyst Login 
+    Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
+    Catalyst Verification of Unique Organization
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+
+
 Catalyst Creation of New Org Admin 
     [Tags]       Sanity               Smoke
 #    Catalyst Login 
@@ -85,6 +96,18 @@ Catalyst Edit the BusinessGroup Name
 
 
 
+
+Catalyst Verification of Unique Business Group Creation
+    [Tags]       Sanity               Smoke
+#    Catalyst Login 
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst Verification of Unique Business Group
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+
+
 Catalyst Validation and Creation of New Projects
     [Tags]       Sanity               Smoke
 #    Catalyst Login
@@ -102,3 +125,17 @@ Catalyst Edit the ProjectName and Description Name
     Catalyst Editing the Proj and Descrptn Created
     Catalyst Logout                      
     [Teardown]     Close Browser    
+
+
+Catalyst Verification of Unique Project Creation
+    [Tags]       Sanity               Smoke
+#    Catalyst Login 
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst Verification of Unique Project
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+
+
+
