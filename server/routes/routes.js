@@ -24,6 +24,8 @@ var ec2 = require('./routes_aws_ec2');
 var jenkins = require('./routes_jenkins');
 var openstack = require('./routes_openstack');
 var hppubliccloud = require('./routes_hppubliccloud');
+var azure = require('./routes_azure');
+
 var application = require('./routes_application');
 var jira = require('./routes_jira');
 
@@ -79,6 +81,7 @@ module.exports.setRoutes = function(app) {
     jenkins.setRoutes(app, sessionVerificationFunc);
     openstack.setRoutes(app, sessionVerificationFunc);
     hppubliccloud.setRoutes(app, sessionVerificationFunc);
+    azure.setRoutes(app, sessionVerificationFunc);
 
     application.setRoutes(app, sessionVerificationFunc);
 
