@@ -6,8 +6,6 @@
  */
 
 var configmgmtDao = require('../model/d4dmasters/configmgmt.js');
-var Chef = require('../lib/chef');
-
 
 var Jenkins = require('../lib/jenkins');
 

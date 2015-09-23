@@ -11,14 +11,14 @@ Resource           ${COMMON RESOURCES}/catalyst_grid_node.txt
 
 
 *** Test Cases ***
-Catalyst Create New Cloud Formation Blueprint
-    [Tags]       Sanity                         DesignWorkzone
+#-Catalyst Create New Cloud Formation Blueprint
+    #-[Tags]       Sanity                         DesignWorkzone
 #    Catalyst Login
-    Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
-    Catalyst Create Blueprint of Cloud Formation and Save
-    Sleep    2s
-    Catalyst Logout                      
-    [Teardown]     Close Browser
+    #-Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
+    #-Catalyst Create Blueprint of Cloud Formation and Save
+    #-Sleep    2s
+    #-Catalyst Logout                      
+    #-[Teardown]     Close Browser
 
 
 

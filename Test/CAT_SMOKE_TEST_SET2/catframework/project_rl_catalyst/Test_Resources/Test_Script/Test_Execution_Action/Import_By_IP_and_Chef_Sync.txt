@@ -1499,7 +1499,8 @@ Catalyst execution of Chef Task
 
 
 Clicks on Execute Button for Chef task
-    Execute Javascript    $('#tableOrchestration > tbody > tr:nth-child(2) > td:nth-child(5) > a > i').click()
+    #Execute Javascript    $('#tableOrchestration > tbody > tr:nth-child(2) > td:nth-child(5) > a > i').click()
+    Click Element    xpath=.//*[@id='tableOrchestration']/tbody/tr/td[text()='${Cheftask}']/../td[5]/a/i
     Sleep    10s
     Click Element    xpath=//button[text()='OK']      
 
@@ -1512,10 +1513,14 @@ Catalyst checks the Chef task history
 
 
 Clicks on Chef task History button
-    Execute Javascript    $('#tableOrchestration > tbody > tr:nth-child(2) > td:nth-child(6) > a > i').click()    
+    Click Element    xpath=.//*[@id='tableOrchestration']/tbody/tr/td[text()='${Cheftask}']/../td[6]/a/i
+    #Execute Javascript    $('#tableOrchestration > tbody > tr:nth-child(2) > td:nth-child(6) > a > i').click()    
+
 
 Clicks on Chef task Log button in Job output column
     Execute Javascript    $('#tableOrchestration > tbody > tr:nth-child(2) > td:nth-child(6) > a > i').click()
 
 Clicks on Close button in Chef history page
     Click Element    xpath=.//*[@id='chefJobHistory']/div/div/div/div[1]/div/div/button
+
+    

@@ -592,13 +592,14 @@ var Chef = function(settings) {
             // using ssh2
             var cmd = '';
             cmd = "chef-client";
-            if (overrideRunlist) {
-                cmd += " -o";
-            } else {
-                cmd += " -r";
+            if (runlist.length) {
+                if (overrideRunlist) {
+                    cmd += " -o";
+                } else {
+                    cmd += " -r";
+                }
+                cmd += " " + runlist.join();
             }
-            cmd += " " + runlist.join();
-
             var timestamp = new Date().getTime();
             if (lockFile) {
                 cmd += " --lockfile /var/tmp/catalyst_lockFile_" + timestamp;

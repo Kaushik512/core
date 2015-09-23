@@ -35,8 +35,8 @@
                                                       <select id="taskType" class="chooseTasktype width-100">
                                                          <option id="Chef" value="chef">Chef</option>
                                                          <option id="Jenkins" value="jenkins">Jenkins</option>
-                                                         <option id="Puppet" value="puppet">Puppet</option>
                                                          <!-- <option id="Composite" value="composite">Composite</option> -->
+                                                         <option id="Puppet" value="puppet">Puppet</option>
                                                       </select>
                                                    </div>
                                                    <!--chef dropdown starts here-->
@@ -1006,14 +1006,18 @@ $(document).ready(function() {
     function loadUIData(taskData) {
         //console.log(taskData);
         //   alert(JSON.stringify(taskData));
+        console.log("I am in loadUIData");
         if (taskData) {
+         console.log("I am in loadUIData inside taskDaat");
             $('.widget-header').find('.widget-margin').html('Edit Job');
             $('.inputTaskName').val(taskData.name);
+            $('#compositeTaskName').val(taskData.name);
             $('#taskType').val(taskData.taskType);
             $('#taskType').change();
             $('#taskType').attr('disabled', 'disabled');
             $('textarea#chefDescription').val(taskData.description);
             $('textarea#jenkinsDescription').val(taskData.description);
+            $('textarea#compositeDescription').val(taskData.description);
 
             if (taskData.taskConfig.runlist && taskData.taskConfig.runlist.length) {
                 // alert(taskData.taskConfig.runlist);
@@ -1021,6 +1025,14 @@ $(document).ready(function() {
                     // alert(taskData.taskConfig.runlist.length);
                     createRunlistTable(taskData.taskConfig.runlist);
                 }
+            }
+            if (taskData && taskData.taskType === 'composite') {
+               if (taskData.taskConfig.assignTasks.length > 0) {
+                  //alert(taskData.taskConfig.assignTasks.length);
+                  var _assignedTasks = taskData.taskConfig.assignTasks;
+                  loadTaskLists(_assignedTasks);
+                  
+               }
             }
 
             // console.log('urls ===> ',taskData.taskConfig.jobResultURL);
@@ -1079,21 +1091,31 @@ $(document).ready(function() {
 
         }
 
+        var $taskType = $('#taskType');
+
 
         $.get('../organizations/' + urlParams.org + '/businessgroups/' + urlParams['bg'] + '/projects/' + urlParams.projid + '/environments/' + urlParams.envid + '/instances', function(data) {
             var $deploymentNodeList = $('.deploymentNodeList').empty();
             for (var i = 0; i < data.length; i++) {
-                if (!(data[i].chef && data[i].chef.serverId)) {
-                    continue;
-                }
+
+
+                // if (!(data[i].chef && data[i].chef.serverId)) {
+                //     continue;
+                // }
                 if (data[i].instanceState == 'running' || data[i].instanceState == 'pending' || data[i].instanceState == 'unknown') {
                     var checked = false;
-                    if (taskData && taskData.taskType === 'chef' && taskData.taskConfig.nodeIds && taskData.taskConfig.nodeIds.length) {
+                    if (taskData && (taskData.taskType === 'chef' || taskData.taskType === 'puppet') && taskData.taskConfig.nodeIds && taskData.taskConfig.nodeIds.length) {
                         if (taskData.taskConfig.nodeIds.indexOf(data[i]._id) !== -1) {
                             checked = true;
                         }
                     }
-                    var nodeName = data[i].chef.chefNodeName;
+                    var nodeName;
+
+                    if (data[i].chef) {
+                        nodeName = data[i].chef.chefNodeName;
+                    } else {
+                        nodeName = data[i].puppet.puppetNodeName;
+                    }
                     if (data[i].instanceIP) {
                         nodeName = data[i].instanceIP;
                     }
@@ -1104,17 +1126,22 @@ $(document).ready(function() {
                         nodeName = data[i].name;
                     }
 
+
                     var $li = $('<li><label class="checkbox" style="margin: 5px;font-size:13px;"><input type="checkbox" name="deploymentNodesCheckBox" value="' + data[i]._id + '"><i></i>' + nodeName + '</label></li>');
                     if (checked) {
                         $li.find('input')[0].checked = true;
                         //$li.find('label').click();
                     }
-                    $deploymentNodeList.append($li);
+
+                    if (data[i].chef) {
+                        $('#selectedNodesChefTask').append($li);
+                    } else {
+                        $('#selectedNodesPuppetTask').append($li);
+                    }
+
                 }
             }
         });
-
-
 
         var runlist = null;
         if (taskData && taskData.taskType === 'chef') {
@@ -1295,8 +1322,9 @@ $(document).ready(function() {
         var taskData = {};
         //alert(taskType);
         taskData.taskType = taskType;
-
+        
         if (taskType === 'chef') {
+           
             var $saveSpinner = $('#spinnerForSave');
             var taskName = $('#chefTaskName').val();
             if (!taskName) {
@@ -1311,6 +1339,7 @@ $(document).ready(function() {
             var chefJobDescription = $('textarea#chefDescription').val();
 
             taskData.description = chefJobDescription;
+             
             var $selectedNodes = $('#selectedNodesChefTask input[type=checkbox]');
             // var $addParameters = $('#addParameters input[type=checkbox]');
 
@@ -1350,6 +1379,46 @@ $(document).ready(function() {
                 });
             });
             taskData.attributes = attributes;
+            $('.btnSaveTask').attr('disabled', 'disabled');
+            
+        } else if (taskType === 'puppet') {
+           
+            var $saveSpinner = $('#spinnerForSave');
+            var taskName = $('#puppetTaskName').val();
+            if (!taskName) {
+                bootbox.alert({
+                    message: 'Please enter a Task-Name',
+                    title: "Error"
+                });
+                return false;
+            }
+            taskData.name = taskName;
+            var puppetJobDescription = $('#puppetDescription').val();
+
+            taskData.description = puppetJobDescription;
+            
+            var $selectedNodes = $('#selectedNodesPuppetTask input[type=checkbox]');
+            // var $addParameters = $('#addParameters input[type=checkbox]');
+
+            console.log($selectedNodes.length);
+            var nodesList = [];
+            $selectedNodes.each(function() {
+                if (this.checked) {
+                    nodesList.push(this.value);
+                }
+            });
+            if (!nodesList.length) {
+                bootbox.alert({
+                    message: 'Please choose nodes',
+                    title: "Error"
+                });
+                return false;
+            }
+
+            
+            taskData.nodeIds = nodesList;
+            
+            //taskData.attributesjson = $('#attrtextarea').val().trim();
             $('.btnSaveTask').attr('disabled', 'disabled');
         } else if (taskType === 'jenkins') {
             var $saveSpinner = $('#spinnerForSave');
@@ -1600,7 +1669,7 @@ $(document).ready(function() {
 
     function createJobLinksTable(jobResultURL) {
 
-           // alert(jobResultURL);
+        // alert(jobResultURL);
         var $jobListTable = $('#jobListSave');
         var $tr = $('<tr class="jobResultRow"></tr>');
         var $tdName = $('<td class="jobResultDescription" style="word-break: break-word;"></td>');
@@ -1621,81 +1690,81 @@ $(document).ready(function() {
         $jobList.row.add($tr).draw();
     }
 
-    function createParametersTable(param,parameterType) {
+    function createParametersTable(param, parameterType) {
         var parameterType;
-        
-         var parameterized = [];
-        
+
+        var parameterized = [];
+
         var parameterizedObj = {
             parameterName: String,
             name: String,
             defaultValue: [String],
             description: String
         };
-       // alert("parameterType" + JSON.stringify(parameterType));
-       // alert("param" + JSON.stringify(param));
-        if(parameterType){
+        // alert("parameterType" + JSON.stringify(parameterType));
+        // alert("param" + JSON.stringify(param));
+        if (parameterType) {
             if (parameterType === "Boolean") {
-               parameterizedObj.parameterName = "Boolean";
-               parameterizedObj.name = $('#booleanName').val();
-               var defaultValue=[];
-               parameterizedObj.defaultValue = false;
-               parameterizedObj.defaultValue = $('#booleanValueFalse').val();
-               if ($('#booleanValueTrue').is(":checked")) {
-                   parameterizedObj.defaultValue = true;
-               }
-               parameterizedObj.description = $('#booleanDescription').val();
+                parameterizedObj.parameterName = "Boolean";
+                parameterizedObj.name = $('#booleanName').val();
+                var defaultValue = [];
+                parameterizedObj.defaultValue = false;
+                parameterizedObj.defaultValue = $('#booleanValueFalse').val();
+                if ($('#booleanValueTrue').is(":checked")) {
+                    parameterizedObj.defaultValue = true;
+                }
+                parameterizedObj.description = $('#booleanDescription').val();
 
-           } else if(parameterType === "String") {
-               parameterizedObj.parameterName = "String";
-               parameterizedObj.name = $('#stringName').val();
-               var defaultValue=[];
-               parameterizedObj.defaultValue = $('#stringValue').val();
-               parameterizedObj.description = $('#stringDescription').val();
+            } else if (parameterType === "String") {
+                parameterizedObj.parameterName = "String";
+                parameterizedObj.name = $('#stringName').val();
+                var defaultValue = [];
+                parameterizedObj.defaultValue = $('#stringValue').val();
+                parameterizedObj.description = $('#stringDescription').val();
 
-           } else if(parameterType === "Choice") {
-               parameterizedObj.parameterName = "Choice";
-               parameterizedObj.name = $('#choiceName').val();
-               var defaultValue=[];
+            } else if (parameterType === "Choice") {
+                parameterizedObj.parameterName = "Choice";
+                parameterizedObj.name = $('#choiceName').val();
+                var defaultValue = [];
 
-               parameterizedObj.defaultValue = $('#choiceValue').val().trim();
-               alert(parameterizedObj.defaultValue);
-               defaultValue=parameterizedObj.defaultValue.split(',');
+                parameterizedObj.defaultValue = $('#choiceValue').val().trim();
+                alert(parameterizedObj.defaultValue);
+                defaultValue = parameterizedObj.defaultValue.split(',');
 
-               parameterizedObj.defaultValue=defaultValue;
-               
-               //parameterizedObj.defaultValue= parameterizedObj.defaultValue.split(',');
-               parameterizedObj.description = $('#choiceDescription').val();
-               
+                parameterizedObj.defaultValue = defaultValue;
 
-           }
-     }else if(param){
-    //  alert(param);
-         if (param.parameterName === "Boolean") {
-               parameterizedObj.parameterName = "Boolean";
-               parameterizedObj.name = param.name;
-               defaultValue=[];
-               parameterizedObj.defaultValue = param.defaultValue;
-               if ($('#booleanValueTrue').is(":checked")) {
-                   parameterizedObj.defaultValue = true;
-               }
-               parameterizedObj.description = param.description;
+                //parameterizedObj.defaultValue= parameterizedObj.defaultValue.split(',');
+                parameterizedObj.description = $('#choiceDescription').val();
 
-           } else if(param.parameterName === "String") {
-          //  alert('check');
-               parameterizedObj.parameterName = "String";
-               parameterizedObj.name = param.name;
-               defaultValue=[];
-               parameterizedObj.defaultValue = param.defaultValue;
-               parameterizedObj.description = param.description;   
-           } else if(param.parameterName === "Choice") {
-               parameterizedObj.parameterName = "Choice";
-               parameterizedObj.name = param.name;
-               defaultValue=[];
-               parameterizedObj.defaultValue = param.defaultValue;
-               parameterizedObj.description = param.description;   
-           }
-     }
+
+            }
+        } else if (param) {
+            //  alert(param);
+            if (param.parameterName === "Boolean") {
+                parameterizedObj.parameterName = "Boolean";
+                parameterizedObj.name = param.name;
+                defaultValue = [];
+                parameterizedObj.defaultValue = param.defaultValue;
+                if ($('#booleanValueTrue').is(":checked")) {
+                    parameterizedObj.defaultValue = true;
+                }
+                parameterizedObj.description = param.description;
+
+            } else if (param.parameterName === "String") {
+                //  alert('check');
+                parameterizedObj.parameterName = "String";
+                parameterizedObj.name = param.name;
+                defaultValue = [];
+                parameterizedObj.defaultValue = param.defaultValue;
+                parameterizedObj.description = param.description;
+            } else if (param.parameterName === "Choice") {
+                parameterizedObj.parameterName = "Choice";
+                parameterizedObj.name = param.name;
+                defaultValue = [];
+                parameterizedObj.defaultValue = param.defaultValue;
+                parameterizedObj.description = param.description;
+            }
+        }
 
         var $parameterListTable = $('#paramList');
         var $tr = $('<tr class="paramResultRow"></tr>');
@@ -1707,8 +1776,8 @@ $(document).ready(function() {
         });
         var $tdType = $('<td class="paramType"></td>');
         var $tdName = $('<td class="paramName"></td>');
-        var $tdValue = $('<td title="'+ parameterizedObj.defaultValue +'" class="paramValue"></td>');
-        var $tdDescription = $('<td title="'+ parameterizedObj.description +'" class="paramDescription"></td>');
+        var $tdValue = $('<td title="' + parameterizedObj.defaultValue + '" class="paramValue"></td>');
+        var $tdDescription = $('<td title="' + parameterizedObj.description + '" class="paramDescription"></td>');
         var $tdAction = $('<td/>');
         $tdAction.append('<div style="margin-right:17px;float:right;" class="btn-group"><button class="deleteRow" value="Remove" title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></div>');
 
@@ -1865,20 +1934,26 @@ $(document).ready(function() {
         }
     }
 
-    $('#saveRunlist').click(function(e) {
-        var $ccrs = $('.runlistContainer').data('$ccrs');
-        // alert($ccrs);
-        console.log($ccrs);
-        console.log($ccrs.getSelectedRunlist());
-        var runlist = $ccrs.getSelectedRunlist();
-       // alert(runlist);
-        
-            // alert('here');
-            createRunlistTable(runlist);
-            $('#chefRunlistModal').modal('hide');
-            return false;
-        
+    function createtaskComposite(assignTasks){
+      var $selectedtaskList = $('#compositeselectedTasksList');
+      for(var i=0;i<assignTasks.length;i++){
+         $("#compositeTasksList option").each(function() {
+            var $this = $(this);
+            var value = $this.val();
+            if(assignTasks[i] == $this.attr('id')){
+               $this.hide();
+               $selectedtaskList.append($('<option class="taskimg" id="' + assignTasks[i] + '" value="' + value + '">' + value + '</option>'));
+            }
+        });
+      }
+    }
 
+    $('#saveRunlist').click(function(e) {
+     var $ccrs = $('.runlistContainer').data('$ccrs');
+     var runlist = $ccrs.getSelectedRunlist();
+     createRunlistTable(runlist);
+     $('#chefRunlistModal').modal('hide');
+     return false;
     });
 
     $('#editAttributesBtn').click(function(e) {
@@ -2159,6 +2234,7 @@ $(document).ready(function() {
             $('.puppetTaskType').hide();
             $("#chef-dropdown").show();
             $('.chefTaskType').show();
+           
         } else if (this.value == "jenkins") {
             $('.chefTaskType').hide();
             $("#chef-dropdown").hide();
@@ -2168,6 +2244,7 @@ $(document).ready(function() {
             $('.puppetTaskType').hide();
             $("#Jenkins-dropdown").show();
             $('.jenkinsTaskType').show();
+           
         }  else if (this.value == "puppet") {
             $("#Jenkins-dropdown").hide();
             $('.jenkinsTaskType').hide();
@@ -2177,6 +2254,7 @@ $(document).ready(function() {
             $('.compositeTaskType').hide();
             $("#Puppet-dropdown").show();
             $('.puppetTaskType').show();
+            
          }/* else if (this.value == "composite") {
             $("#Jenkins-dropdown").hide();
             $('.jenkinsTaskType').hide();
@@ -2186,18 +2264,24 @@ $(document).ready(function() {
             $('.puppetTaskType').hide();
             $("#Composite-dropdown").show();
             $('.compositeTaskType').show();
+            $('.chefInstance').hide();
+            $('.puppetInstance').hide();
             loadTaskLists();
          }*/
     });
-    function loadTaskLists() {
+    function loadTaskLists(_assignedTasks) {
         //To get Task Lists
         $.get('/tasks/list/all', function(taskLists) {
-            //console.log("TaskLists are:", taskLists);
-            //alert(taskLists.length);
             $('#compositeTasksList').empty();
             for (var i = 0; i < taskLists.length; i++) {
-               //alert(taskLists[i].name);
-               $('#compositeTasksList').append($('<option class="taskimg" id="' + taskLists[i]._id + '" value="' + taskLists[i].name + '">' + taskLists[i].name + '</option>'));
+               //console.log(taskLists[i].taskType);
+               if(taskLists[i].taskType != 'composite'){
+                  $('#compositeTasksList').append($('<option class="taskimg" id="' + taskLists[i]._id + '" value="' + taskLists[i].name + '">' + taskLists[i].name + '</option>'));
+               }
+            }
+            // For the scenario to differenciate between New and Edit.
+            if(_assignedTasks){
+               createtaskComposite(_assignedTasks);
             }
         }).fail(function(jxhr) {
             alert("TaskLists load Failed");
