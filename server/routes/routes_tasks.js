@@ -1,7 +1,7 @@
 /* Copyright (C) Relevance Lab Private Limited- All Rights Reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
- * Written by Gobinda Das <gobinda.das@relevancelab.com>, 
+ * Written by Gobinda Das <gobinda.das@relevancelab.com>,
  * Aug 2015
  */
 
@@ -89,13 +89,15 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 return;
             }
 
-            task.execute(req.session.user.cn, req.protocol + '://' + req.get('host'), choiceParam, function(err, taskRes) {
+            task.execute(req.session.user.cn, req.protocol + '://' + req.get('host'), choiceParam, function(err, taskRes, historyData) {
                 if (err) {
                     logger.error(err);
                     res.send(500, err);
                     return;
                 }
-
+                if (historyData) {
+                    taskRes.historyId = historyData.id;
+                }
                 res.send(taskRes);
             });
         });
@@ -382,6 +384,39 @@ module.exports.setRoutes = function(app, sessionVerification) {
             }
         });
     });
+
+    app.get('/tasks/:taskId/history/:historyId', function(req, res) {
+
+        Tasks.getTaskById(req.params.taskId, function(err, task) {
+            if (err) {
+                logger.error(err);
+                res.send(500, errorResponses.db.error);
+                return;
+            }
+            if (!task) {
+                res.send(404, {
+                    message: "task does not exist"
+                });
+                return;
+            }
+
+            task.getHistoryById(req.params.historyId, function(err, history) {
+                if (err) {
+                    res.send(500, {
+                        message: "Server Behaved Unexpectedly"
+                    });
+                    return;
+                }
+                res.send(200, history);
+
+            });
+
+
+        });
+
+
+    });
+
 
 
     app.post('/tasks', function(req, res) {
