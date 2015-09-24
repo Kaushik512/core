@@ -309,7 +309,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
                                         logger.debug('instance length ==>' + instances.length + " , number Of instance ==> " + cloudProvider.cloudProviderData.instanceCount + ' , max ==> ' + appConfig.maxInstanceCount);
                                         var maxCount = 0;
-                                        if(typeof appConfig.maxInstanceCount === 'undefined') {
+                                        if (typeof appConfig.maxInstanceCount === 'undefined') {
                                             maxCount = appConfig.maxInstanceCount;
                                         }
 
@@ -415,7 +415,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                         runlist: version.runlist,
                                                                         platformId: instanceData.InstanceId,
                                                                         appUrls: appUrls,
-                                                                        instanceIP: instanceData.PublicIpAddress,
+                                                                        instanceIP: instanceData.PublicIpAddress || instanceData.PrivateIpAddress,
                                                                         instanceState: instanceData.State.Name,
                                                                         bootStrapStatus: 'waiting',
                                                                         users: blueprint.users,
@@ -488,8 +488,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                                 return;
                                                                             }
                                                                             logger.debug("Enter waitForInstanceRunnnigState :", instanceData);
-                                                                            instance.instanceIP = instanceData.PublicIpAddress;
-                                                                            instancesDao.updateInstanceIp(instance.id, instanceData.PublicIpAddress, function(err, updateCount) {
+                                                                            instance.instanceIP = instanceData.PublicIpAddress || instanceData.PrivateIpAddress;
+                                                                            instancesDao.updateInstanceIp(instance.id, instance.instanceIP, function(err, updateCount) {
                                                                                 if (err) {
                                                                                     logger.error("instancesDao.updateInstanceIp Failed ==>", err);
                                                                                     return;
@@ -790,6 +790,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                     fileData = fileData.toString('ascii');
                                                 }
 
+
                                                 function launchCloudFormation() {
 
                                                     var awsSettings = {
@@ -820,6 +821,26 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                 return;
                                                             }
                                                             if (stack) {
+
+                                                                // getting autoscale topic arn from templateJSON
+                                                                var topicARN = null;
+                                                                var templateObj = JSON.parse(fileData);
+                                                                var templateResources = templateObj.Resources;
+                                                                if (templateResources && templateResources.AutoScalingNotification) {
+                                                                    if (templateResources.AutoScalingNotification.Type === 'AWS::AutoScaling::AutoScalingGroup') {
+                                                                        var autoScaleProperties = templateResources.AutoScalingNotification.Properties;
+                                                                        if (autoScaleProperties && autoScaleProperties.NotificationConfigurations && autoScaleProperties.NotificationConfigurations.length) {
+                                                                            for (var i = 0; i < autoScaleProperties.NotificationConfigurations.length; i++) {
+                                                                                if (autoScaleProperties.NotificationConfigurations[i].TopicARN) {
+                                                                                    topicARN = autoScaleProperties.NotificationConfigurations[i].TopicARN;
+                                                                                    break;
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+
+
                                                                 CloudFormation.createNew({
                                                                     orgId: blueprint.orgId,
                                                                     bgId: blueprint.bgId,
@@ -836,7 +857,9 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                     status: stack.StackStatus,
                                                                     users: blueprint.users,
                                                                     region: blueprint.blueprintConfig.region,
-                                                                    instanceUsername: blueprint.blueprintConfig.instanceUsername
+                                                                    instanceUsername: blueprint.blueprintConfig.instanceUsername,
+                                                                    autoScaleTopicArn: topicARN
+
                                                                 }, function(err, cloudFormation) {
                                                                     if (err) {
                                                                         logger.error("Unable to save CloudFormation data in DB", err);
@@ -994,7 +1017,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                                                 runlist: runlist,
                                                                                                 platformId: instanceData.InstanceId,
                                                                                                 appUrls: appUrls,
-                                                                                                instanceIP: instanceData.PublicIpAddress,
+                                                                                                instanceIP: instanceData.PublicIpAddress || instanceData.PrivateIpAddress,
                                                                                                 instanceState: instanceData.State.Name,
                                                                                                 bootStrapStatus: 'waiting',
                                                                                                 users: blueprint.users,

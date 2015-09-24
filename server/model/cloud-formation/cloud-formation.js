@@ -63,8 +63,8 @@ var CloudFormationSchema = new Schema({
     users: [String],
     region: String,
     instanceUsername: String,
-    autoScaleResourceIds : [String]
-
+    autoScaleTopicArn: String,
+    autoScaleResourceIds: [String]
 });
 
 
@@ -132,7 +132,8 @@ CloudFormationSchema.statics.createNew = function(cfData, callback) {
         infraManagerType: infraManagerType,
         stackParameters: cfData.stackParameters,
         region: cfData.region,
-        instanceUsername: cfData.instanceUsername
+        instanceUsername: cfData.instanceUsername,
+        autoScaleTopicArn: cfData.autoScaleTopicArn
     };
 
     var that = this;
@@ -225,9 +226,9 @@ CloudFormationSchema.statics.removeById = function(cfId, callback) {
 
 //Get by autoscale Id CloudFormation
 
-CloudFormationSchema.statics.findByAutoScaleId = function(autoScaleId, callback) {
+CloudFormationSchema.statics.findByAutoScaleTopicArn = function(topicArn, callback) {
     this.find({
-        "autoScaleResourceIds": autoScaleId
+        "autoScaleTopicArn": topicArn
     }, function(err, cloudFormations) {
         if (err) {
             callback(err, null);
