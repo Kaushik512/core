@@ -99,7 +99,7 @@
                   <i class="ace-icon fa fa-times bigger-110"></i>
                   Cancel
                   </a>
-                  <button class="btn btn-primary btn-mini">
+                  <button class="btn btn-primary btn-mini" id="savecreateProjectbtn">
                   <i class="ace-icon fa fa-check bigger-110"></i>
                   Save
                   </button>
@@ -153,9 +153,46 @@
 <script>
    //Form Name
    $(document).ready(function() {
-       $(".chooseOrganization").select2();
-       $(".chooseBG").select2();
-      // isUserTypeSuperAdmin();
+      var url = window.location.href;
+      var queryString = url.substring(url.indexOf('?') + 1 );
+      $(".chooseOrganization").select2();
+      $(".chooseBG").select2();
+      if (queryString == 'new') {
+      } else {
+        $.get('/d4dMasters/readmasterjsonnew/4', function(data) {
+            for (var i = 0; i < data.length; i++) {
+                if (queryString == data[i].rowid) {
+                    var appDeployList = data[i].appdeploy;
+                    if (appDeployList.length && appDeployList[0].applicationname) {
+                        for (var j = 0; j < appDeployList.length; j++) {
+                            var $appDeployTbody = $('#appDeployTbody');
+                            var applicationConstructName = appDeployList[j].applicationname;
+                            var applicationConstructDesc = appDeployList[j].appdescription;
+                            var $tr = $('<tr class="appDeployRow"></tr>');
+                            var $tdName = $('<td class="tdappName" value=' + applicationConstructName + ' style="word-break: break-word;"></td>');
+                            $tr.data('appName', applicationConstructName);
+
+                            var $tdDescription = $('<td class="tdappDescription" value=' + applicationConstructDesc + ' style="word-break: break-word;"></td>');
+                            $tr.data('appDesc', applicationConstructDesc);
+
+                            $tdName.append(applicationConstructName);
+                            $tdDescription.append(applicationConstructDesc);
+                            var $tdAction = $('<td/>');
+                            $tdAction.append('<div style="margin-right:17px;float:right;" class="btn-group"><button class="deleteRow" value="Remove" title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></div>');
+
+                            $tdAction.find('.deleteRow').click(function() {
+                                $appDetails.row($tr).remove().draw(true);
+                            });
+
+                            $tr.append($tdName).append($tdDescription).append($tdAction);
+                            $appDeployTbody.append($tr);
+                            $appDetails.row.add($tr).draw();
+                        }
+                    }
+                }
+            }
+        });
+      }
    });
    $('#appanchorDetails').click(function(e) {
       $("#appdetailsModal").show();
@@ -191,46 +228,45 @@
      if (appName == '') {
          alert("Please enter Application Name");
      }
-    if (appName != '') {
-      var $appDeployTbody = $('#appDeployTbody');
-      var $tr = $('<tr class="appDeployRow"></tr>');
-      var $tdName = $('<td class="tdappName" value=' + appName + ' style="word-break: break-word;"></td>');
-      $tr.data('appName', appName);
-      var $tdDescription = $('<td class="tdappDescription" value=' + appDesc + ' style="word-break: break-word;"></td>');
-      $tr.data('appDesc', appDesc);
+     if (appName != '') {
+         var $appDeployTbody = $('#appDeployTbody');
+         var $tr = $('<tr class="appDeployRow"></tr>');
+         var $tdName = $('<td class="tdappName" value=' + appName + ' style="word-break: break-word;"></td>');
+         $tr.data('appName', appName);
+         var $tdDescription = $('<td class="tdappDescription" value=' + appDesc + ' style="word-break: break-word;"></td>');
+         $tr.data('appDesc', appDesc);
 
-      $tdName.append(appName);
-      $tdDescription.append(appDesc);
-      var $tdAction = $('<td/>');
-      $tdAction.append('<div style="margin-right:17px;float:right;" class="btn-group"><button class="deleteRow" value="Remove" title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></div>');
+         $tdName.append(appName);
+         $tdDescription.append(appDesc);
+         var $tdAction = $('<td/>');
+         $tdAction.append('<div style="margin-right:17px;float:right;" class="btn-group"><button class="deleteRow" value="Remove" title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></div>');
 
-      $tdAction.find('.deleteRow').click(function() {
-          $appDetails.row($tr).remove().draw(true);
-      });
+         $tdAction.find('.deleteRow').click(function() {
+             $appDetails.row($tr).remove().draw(true);
+         });
 
-      $tr.append($tdName).append($tdDescription).append($tdAction);
-      $appDeployTbody.append($tr);
-      $appDetails.row.add($tr).draw();
-      $("#appdetailsModal").hide();
-
-
-
-      var appdeploy = [];
-      var $appDeployTableBody = $('#tableappDetails tbody');
-      var $trs = $appDeployTableBody.find('tr');
-      $trs.each(function(e) {
-          var $this = $(this);
-          var dataDeploy = {
-              applicationname: $this.data('appName'),
-              appdescription: $this.data('appDesc'),
-          };
-          appdeploy.push(dataDeploy);
-      });
-      //alert(JSON.stringify(appdeploy));
-      var appDeployString = JSON.stringify(appdeploy);
-      $('#appdeploy').val(appDeployString);
-    }
+         $tr.append($tdName).append($tdDescription).append($tdAction);
+         $appDeployTbody.append($tr);
+         $appDetails.row.add($tr).draw();
+         $("#appdetailsModal").hide();
+     }
    });
+    $("#savecreateProjectbtn").click(function(e) {
+        var appdeploy = [];
+        var $appDeployTableBody = $('#tableappDetails tbody');
+        var $trs = $appDeployTableBody.find('tr');
+        $trs.each(function(e) {
+            var $this = $(this);
+            var dataDeploy = {
+                applicationname: $this.data('appName'),
+                appdescription: $this.data('appDesc'),
+            };
+            appdeploy.push(dataDeploy);
+        });
+        //alert(JSON.stringify(appdeploy));
+        var appDeployString = JSON.stringify(appdeploy);
+        $('#appdeploy').val(appDeployString);
+    });
    
    function isUserTypeSuperAdmin(){
     $.get('/d4dMasters/loggedInUser',function(data){
