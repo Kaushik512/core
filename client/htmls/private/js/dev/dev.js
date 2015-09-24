@@ -3993,7 +3993,7 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
             function showTaskJenkinsLogs(history, isExecuted) {
                 var $ulHeaderArea = $('<ul class="nav nav-tabs bordered taskExecuteTabsHeader"></ul>');
                 var $contentArea = $('<div class="tab-content padding-10 taskExecuteTabsContent"></div>');
-                var tabId = 'tab_jenkinsTask' + history.id;
+                var tabId = 'tab_jenkinsTask' + history._id;
                 var $liHeader = $('<li><a href="#' + tabId + '" data-toggle="tab">Jenkins Job</a></li>');
                 $ulHeaderArea.append($liHeader);
                 var $tabContent = $('<div class="tab-pane fade" id="' + tabId + '"><div class="taskLogArea taskLOGS"></div></div>');
@@ -4483,7 +4483,7 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                     $tr.append($tdExecute);
 
                     //method for history starts here. depending upon the job type whether it is chef or jenkins....
-                    if (data[i].taskType === 'chef' || data[i].taskType === 'puppet') {
+                    if (data[i].taskType === 'chef' || data[i].taskType === 'puppet' || data[i].taskType === 'composite') {
                         var $tdHistory = $('<td style="vertical-align:inherit;text-align:center;"></td>').append('<a rel="tooltip" data-placement="top" data-original-title="History" data-toggle="modal" href="javascript:void(0)" class="btn btn-primary btn-sg tableactionbutton"><i class="ace-icon fa fa-header bigger-120"></i></a>');
                         $tdHistory.find('a').data('taskId', data[i]._id).attr('data-historyTaskId', data[i]._id).click(function(e) {
                             //var $taskHistoryContent = $('#taskHistoryContent').show();
@@ -4502,6 +4502,10 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                             });
                             $taskHistoryDatatable.clear().draw();
                             $('.widget-header').find('h5.chefTitle').html('Chef History For -&nbsp;' + data[i].name);
+                            if(data[i].taskType === 'composite'){
+                                 $('.widget-header').find('h5.chefTitle').html('Composite History For -&nbsp;' + data[i].name);
+                            }
+                            
                             $.get('../tasks/' + taskId + '/history', function(taskHistories) {
                                 for (var i = 0; i < taskHistories.length; i++) {
                                     var $trHistoryRow = $('<tr/>');

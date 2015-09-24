@@ -75,7 +75,12 @@ compositeTaskSchema.methods.execute = function(userName, baseUrl, choiceParam, o
                         onComplete(null, 1);
                     }
                 } else {
-                    onComplete(null, 0);
+                    if (status === 0) {
+                        onComplete(null, 0);
+                    }else{
+                        logger.debug('firing failure');
+                        onComplete(null, 1);
+                    }
                 }
 
             });
