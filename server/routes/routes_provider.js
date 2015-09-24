@@ -2352,4 +2352,290 @@ app.post('/azure/providers/:providerId/update', function(req, res) {
             }
         });
     });
+
+    // Return list of all types of available providers.
+    app.get('/allproviders/list', function(req, res) {
+        logger.debug("Enter get() for /allproviders/list");
+        var loggedInUser = req.session.user.cn;
+        masterUtil.getLoggedInUser(loggedInUser, function(err, anUser) {
+            if (err) {
+                res.send(500, "Failed to fetch User.");
+                return;
+            }
+            if (!anUser) {
+                res.send(500, "Invalid User.");
+                return;
+            }
+            if (anUser.orgname_rowid[0] === "") {
+                masterUtil.getAllActiveOrg(function(err, orgList) {
+                    if (err) {
+                        res.send(500, 'Not able to fetch Orgs.');
+                        return;
+                    }
+                    if (orgList) {
+                         AWSProvider.getAWSProvidersForOrg(orgList, function(err, providers) {
+                            if (err) {
+                                logger.error(err);
+                                res.send(500, errorResponses.db.error);
+                                return;
+                            }
+                            logger.debug("providers>>> ", JSON.stringify(providers));
+                            var providersList = {};
+
+
+                            if (providers.length > 0) {
+                                var awsProviderList = [];
+                                for (var i = 0; i < providers.length; i++) {
+                                    var keys = [];
+                                    keys.push(providers[i].accessKey);
+                                    keys.push(providers[i].secretKey);
+                                    cryptography.decryptMultipleText(keys, cryptoConfig.decryptionEncoding, cryptoConfig.encryptionEncoding, function(err, decryptedKeys) {
+                                        if (err) {
+                                            res.send(500, "Failed to decrypt accessKey or secretKey");
+                                            return;
+                                        }
+                                        providers[i].accessKey = decryptedKeys[0];
+                                        providers[i].secretKey = decryptedKeys[1];
+                                        awsProviderList.push(providers[i]);
+                                        logger.debug("aws providers>>> ", JSON.stringify(providers));
+                                    });
+                                }
+                                providersList.awsProviders = awsProviderList;
+                                //providersList.push(awsProviderList);
+                            } else{
+                                  providersList.awsProviders = [];
+                                  //providersList.push([]);
+                                }
+
+                        openstackProvider.getopenstackProvidersForOrg(orgList, function(err, openstackProviders) {
+                            if (err) {
+                                logger.error(err);
+                                res.send(500, errorResponses.db.error);
+                                return;
+                            }
+
+                             if(openstackProviders!=null){
+                                logger.debug("openstack Providers>>> ", JSON.stringify(openstackProviders));
+                                if (openstackProviders.length > 0) {
+                                     providersList.openstackProviders = openstackProviders;
+                                    //providersList.push(openstackProviders);
+                                }
+                             } else {
+                                     providersList.openstackProviders = [];
+                                     //providersList.push([]);
+                                   }
+
+                        vmwareProvider.getvmwareProvidersForOrg(orgList, function(err, vmwareProviders) {
+                                if (err) {
+                                    logger.error(err);
+                                    res.send(500, errorResponses.db.error);
+                                    return;
+                                }
+                                 if(vmwareProviders!=null){ 
+                                    logger.debug("vmware Providers>>> ", JSON.stringify(vmwareProviders));
+                                    if (vmwareProviders.length > 0) {
+                                        providersList.vmwareProviders = vmwareProviders;
+                                        //providersList.push(vmwareProviders);
+                                    } 
+                                  }else{
+                                      providersList.vmwareProviders = [];
+                                   }
+
+
+                        hppubliccloudProvider.gethppubliccloudProvidersForOrg(orgList, function(err, hpCloudProviders) {
+                            if (err) {
+                                logger.error(err);
+                                res.send(500, errorResponses.db.error);
+                                return;
+                            }
+                            if(hpCloudProviders!=null){
+                                for(var i =0; i < hpCloudProviders.length;i++){
+                                    hpCloudProviders[i]['providerType'] = hpCloudProviders[i]['providerType'].toUpperCase();
+                                }
+                                logger.debug("providers>>> ", JSON.stringify(hpCloudProviders));
+                                if (hpCloudProviders.length > 0) {
+                                    providersList.hpPlublicCloudProviders = hpCloudProviders;
+                                    //providersList.push(hpCloudProviders);
+                                } 
+                           } else{
+                                 providersList.hpPlublicCloudProviders = [];
+                                //providersList.push([]);
+                           }
+
+                        azurecloudProvider.getAzureCloudProvidersForOrg(orgList, function(err, azureProviders) {
+                        
+                            if (err) {
+                                logger.error(err);
+                                res.send(500, errorResponses.db.error);
+                                return;
+                            }
+                            if(azureProviders!= null){
+                                for(var i =0; i < azureProviders.length;i++){
+                                    azureProviders[i]['providerType'] = azureProviders[i]['providerType'].toUpperCase();
+                                }
+                                logger.debug("providers>>> ", JSON.stringify(providers));
+                                if (azureProviders.length > 0) {
+                                    providersList.azureProviders = azureProviders;
+                                    //providersList.push(azureProviders);
+                                    res.send(providersList);
+                                    return;
+                                }
+                            } else {
+                                providersList.azureProviders = [];
+                                //providersList.push([]);
+                                res.send(200, providersList);
+                                return;
+                            }
+                        });   
+
+                        });  
+
+                        });
+
+                        });    
+
+                        });
+                    } else {
+                        res.send(200, []);
+                        return;
+                    }
+                });
+            } else {
+                masterUtil.getOrgs(loggedInUser, function(err, orgList) {
+                    if (err) {
+                        res.send(500, 'Not able to fetch Orgs.');
+                        return;
+                    }
+                    if (orgList) {
+                         AWSProvider.getAWSProvidersForOrg(orgList, function(err, providers) {
+                            if (err) {
+                                logger.error(err);
+                                res.send(500, errorResponses.db.error);
+                                return;
+                            }
+                            logger.debug("providers>>> ", JSON.stringify(providers));
+                            var providersList = {};
+
+
+                            if (providers.length > 0) {
+                                var awsProviderList = [];
+                                for (var i = 0; i < providers.length; i++) {
+                                    var keys = [];
+                                    keys.push(providers[i].accessKey);
+                                    keys.push(providers[i].secretKey);
+                                    cryptography.decryptMultipleText(keys, cryptoConfig.decryptionEncoding, cryptoConfig.encryptionEncoding, function(err, decryptedKeys) {
+                                        if (err) {
+                                            res.send(500, "Failed to decrypt accessKey or secretKey");
+                                            return;
+                                        }
+                                        providers[i].accessKey = decryptedKeys[0];
+                                        providers[i].secretKey = decryptedKeys[1];
+                                        awsProviderList.push(providers[i]);
+                                        logger.debug("aws providers>>> ", JSON.stringify(providers));
+                                    });
+                                }
+                                providersList.awsProviders = awsProviderList;
+                                //providersList.push(awsProviderList);
+                            } else{
+                                  providersList.awsProviders = [];
+                                  //providersList.push([]);
+                                }
+
+                        openstackProvider.getopenstackProvidersForOrg(orgList, function(err, openstackProviders) {
+                            if (err) {
+                                logger.error(err);
+                                res.send(500, errorResponses.db.error);
+                                return;
+                            }
+
+                             if(openstackProviders!=null){
+                                logger.debug("openstack Providers>>> ", JSON.stringify(openstackProviders));
+                                if (openstackProviders.length > 0) {
+                                     providersList.openstackProviders = openstackProviders;
+                                    //providersList.push(openstackProviders);
+                                }
+                             } else {
+                                     providersList.openstackProviders = [];
+                                     //providersList.push([]);
+                                   }
+
+                        vmwareProvider.getvmwareProvidersForOrg(orgList, function(err, vmwareProviders) {
+                                if (err) {
+                                    logger.error(err);
+                                    res.send(500, errorResponses.db.error);
+                                    return;
+                                }
+                                 if(vmwareProviders!=null){ 
+                                    logger.debug("vmware Providers>>> ", JSON.stringify(vmwareProviders));
+                                    if (vmwareProviders.length > 0) {
+                                        providersList.vmwareProviders = vmwareProviders;
+                                        //providersList.push(vmwareProviders);
+                                    } 
+                                  }else{
+                                      providersList.vmwareProviders = [];
+                                   }
+
+
+                        hppubliccloudProvider.gethppubliccloudProvidersForOrg(orgList, function(err, hpCloudProviders) {
+                            if (err) {
+                                logger.error(err);
+                                res.send(500, errorResponses.db.error);
+                                return;
+                            }
+                            if(hpCloudProviders!=null){
+                                for(var i =0; i < hpCloudProviders.length;i++){
+                                    hpCloudProviders[i]['providerType'] = hpCloudProviders[i]['providerType'].toUpperCase();
+                                }
+                                logger.debug("providers>>> ", JSON.stringify(hpCloudProviders));
+                                if (hpCloudProviders.length > 0) {
+                                    providersList.hpPlublicCloudProviders = hpCloudProviders;
+                                    //providersList.push(hpCloudProviders);
+                                } 
+                           } else{
+                                 providersList.hpPlublicCloudProviders = [];
+                                //providersList.push([]);
+                           }
+
+                        azurecloudProvider.getAzureCloudProvidersForOrg(orgList, function(err, azureProviders) {
+                        
+                            if (err) {
+                                logger.error(err);
+                                res.send(500, errorResponses.db.error);
+                                return;
+                            }
+                            if(azureProviders!= null){
+                                for(var i =0; i < azureProviders.length;i++){
+                                    azureProviders[i]['providerType'] = azureProviders[i]['providerType'].toUpperCase();
+                                }
+                                logger.debug("providers>>> ", JSON.stringify(providers));
+                                if (azureProviders.length > 0) {
+                                    providersList.azureProviders = azureProviders;
+                                    //providersList.push(azureProviders);
+                                    res.send(providersList);
+                                    return;
+                                }
+                            } else {
+                                providersList.azureProviders = [];
+                                //providersList.push([]);
+                                res.send(200, providersList);
+                                return;
+                            }
+                        });   
+
+                        });  
+
+                        });
+
+                        });    
+
+                        });
+                    } else {
+                        res.send(200, []);
+                        return;
+                    }
+                });
+            }
+        });
+    });
+
 }

@@ -112,7 +112,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                     return;
                 }*/
 
-                    if(providerType == "openstack" || providerType == "hppubliccloud" ){
+                    if(providerType == "openstack" || providerType == "hppubliccloud" || providerType == "azure"){
+                    
                         logger.debug('Provider Type',providerType);
                         openstackProvider.getopenstackProviderById(providerId, function(err, aProvider) {
                             if (err) {
@@ -123,6 +124,9 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                             logger.debug("Returned Provider: ", aProvider);
                             logger.debug("vmimageData <<<<<<<<<<<<<<<<<<<<< %s", vmimageData);
                             vmimageData.vType = 'openstack';
+                            if(providerType == "azure"){
+                              vmimageData.vType = 'azure';
+                            }
                             VMImage.createNew(vmimageData, function(err, anImage) {
                                 if (err) {
                                     logger.debug("err.....", err);
@@ -360,7 +364,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                     res.send(401,"You don't have permission to perform this operation.");
                     return;
                 }*/
-                    if(providerType == "openstack" || providerType == "hppubliccloud"){
+                    if(providerType == "openstack" || providerType == "hppubliccloud" || providerType == "azure"){
                         logger.debug('Provider Type',providerType);
                         VMImage.getImageById(imageId, function(err, anImage) {
                             if (err) {
@@ -368,7 +372,12 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                 res.send(500, errorResponses.db.error);
                                 return;
                             }
-                            vmimageData.vType = providerType;
+                            vmimageData.vType = 'openstack';
+                            
+                            if(providerType == 'azure'){
+                                vmimageData.vType = 'azure';
+                            }
+
                             logger.debug("ImageData:>>>>>>>>>>> ", JSON.stringify(vmimageData));
                             VMImage.updateImageById(imageId, vmimageData, function(err, updateCount) {
                                 if (err) {
