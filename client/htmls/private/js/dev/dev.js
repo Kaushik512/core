@@ -3807,10 +3807,49 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                     ]
 
                 });
+                var $compositeTaskHistoryDatatable = $('#tablehistoryTask').DataTable({
+                    "pagingType": "full_numbers",
+
+                    "aoColumns": [
+                        null, {
+                            "bSortable": true
+                        }, {
+                            "bSortable": true
+                        }, {
+                            "bSortable": true
+                        }, {
+                            "bSortable": false
+                        }
+                    ]
+
+                });
             }
+
+            if (!$.fn.dataTable.isDataTable('#compositeTablehistoryTask')) {
+                var $compositeTaskHistoryDatatable = $('#compositeTablehistoryTask').DataTable({
+                    "pagingType": "full_numbers",
+
+                    "aoColumns": [
+                        null, {
+                            "bSortable": true
+                        }, {
+                            "bSortable": true
+                        }, {
+                            "bSortable": true
+                        }, {
+                            "bSortable": false
+                        }
+                    ]
+
+                });
+            }
+
+            $('#compositeTablehistoryTask_length').hide();
+            $('#compositeTablehistoryTask_filter').hide();
 
             $('#tablehistoryTask_length').hide();
             $('#tablehistoryTask_filter').hide();
+
 
             if (!$.fn.dataTable.isDataTable('#tablehistoryTaskForJenkins')) {
                 //var $taskListArea = $('.taskListArea').empty();
@@ -4483,7 +4522,7 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                     $tr.append($tdExecute);
 
                     //method for history starts here. depending upon the job type whether it is chef or jenkins....
-                    if (data[i].taskType === 'chef' || data[i].taskType === 'puppet' || data[i].taskType === 'composite') {
+                    if (data[i].taskType === 'chef' || data[i].taskType === 'puppet') {
                         var $tdHistory = $('<td style="vertical-align:inherit;text-align:center;"></td>').append('<a rel="tooltip" data-placement="top" data-original-title="History" data-toggle="modal" href="javascript:void(0)" class="btn btn-primary btn-sg tableactionbutton"><i class="ace-icon fa fa-header bigger-120"></i></a>');
                         $tdHistory.find('a').data('taskId', data[i]._id).attr('data-historyTaskId', data[i]._id).click(function(e) {
                             //var $taskHistoryContent = $('#taskHistoryContent').show();
@@ -4502,9 +4541,6 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                             });
                             $taskHistoryDatatable.clear().draw();
                             $('.widget-header').find('h5.chefTitle').html('Chef History For -&nbsp;' + data[i].name);
-                            if(data[i].taskType === 'composite'){
-                                 $('.widget-header').find('h5.chefTitle').html('Composite History For -&nbsp;' + data[i].name);
-                            }
                             
                             $.get('../tasks/' + taskId + '/history', function(taskHistories) {
                                 for (var i = 0; i < taskHistories.length; i++) {
@@ -4586,6 +4622,97 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                                     $trHistoryRow.append($tdLogs);
 
                                     $taskHistoryDatatable.row.add($trHistoryRow).draw();
+                                }
+                                $modal.find('.loadingContainer').hide();
+                                $modal.find('.outputArea').show();
+                            }).fail(function(jxhr) {
+                                $modal.find('.loadingContainer').hide();
+                                $modal.find('.outputArea').hide();
+                                var $errorContainer = $modal.find('.errorMsgContainer').show();
+                                if (jxhr.responseJSON && jxhr.responseJSON.message) {
+                                    $errorContainer.html(jxhr.responseJSON.message);
+                                } else {
+                                    $errorContainer.html("Server Behaved Unexpectedly");
+                                }
+                            });
+
+                            //$modal.find('.outputArea').hide();
+
+                        });
+                    }else if(data[i].taskType === 'composite'){
+                        var $tdHistory = $('<td style="vertical-align:inherit;text-align:center;"></td>').append('<a rel="tooltip" data-placement="top" data-original-title="History" data-toggle="modal" href="javascript:void(0)" class="btn btn-primary btn-sg tableactionbutton"><i class="ace-icon fa fa-header bigger-120"></i></a>');
+                        $tdHistory.find('a').data('taskId', data[i]._id).attr('data-historyTaskId', data[i]._id).click(function(e) {
+                            //var $taskHistoryContent = $('#taskHistoryContent').show();
+                            //   alert(JSON.stringify(data[i]));
+                            var taskId = $(this).data('taskId');
+                            var $modal = $('#compositeJobHistory');
+                            $modal.find('.loadingContainer').show();
+                            $modal.find('.outputArea').hide();
+                            $modal.find('.errorMsgContainer').hide();
+                            $modal.removeClass('hidden');
+                            $('#orchestrationTable').hide();
+                            $('.hideCompositeJob').click(function(e) {
+                                $modal.addClass('hidden');
+
+                                $('#orchestrationTable').show();
+                            });
+                            //$taskHistoryDatatable.clear().draw();
+                            $compositeTaskHistoryDatatable.clear().draw();
+                            
+                            $('.widget-header').find('h5.compositeTitle').html('Composite History For -&nbsp;' + data[i].name);
+                            
+                            $.get('../tasks/' + taskId + '/history', function(taskHistories) {
+                                for (var i = 0; i < taskHistories.length; i++) {
+                                    var $trHistoryRow = $('<tr/>');
+
+                                    var dateStarted = new Date().setTime(taskHistories[i].timestampStarted);
+                                    dateStarted = new Date(dateStarted).toLocaleString(); //converts to human readable strings
+                                    var $tdTimeStarted = $('<td></td>').append(dateStarted);
+                                    $trHistoryRow.append($tdTimeStarted);
+
+                                    var dateEnded = ' - '
+                                    if (taskHistories[i].timestampEnded) {
+                                        var dateEnded = new Date().setTime(taskHistories[i].timestampEnded);
+                                        dateEnded = new Date(dateEnded).toLocaleString(); //converts to human readable strings
+                                    }
+                                    var $tdTimeEnded = $('<td></td>').append(dateEnded);
+                                    $trHistoryRow.append($tdTimeEnded);
+
+
+
+                                    if (taskHistories[i].status.toLowerCase() === "success") {
+                                        var $tdBuildStatus = $('<td style="background-color:#1c9951;"></td>').append('<span style="color:#fff">SUCCESS</span>');
+                                        $trHistoryRow.append($tdBuildStatus);
+                                    } else if (taskHistories[i].status.toLowerCase() === "failed") {
+                                        var $tdBuildStatusFailure = $('<td style="background-color:red;"></td>').append('<span style="color:#fff;">FAILURE</span>');
+                                        $trHistoryRow.append($tdBuildStatusFailure);
+                                    } else if (taskHistories[i].status.toLowerCase() === "failure") {
+                                        var $tdBuildStatusFailure = $('<td style="background-color:red;"></td>').append('<span style="color:#fff;">FAILURE</span>');
+                                        $trHistoryRow.append($tdBuildStatusFailure);
+                                    } else if (taskHistories[i].status.toLowerCase() === "aborted") {
+                                        var $tdBuildStatusFailure = $('<td style="background-color:red;"></td>').append('<span style="color:#fff;">ABORTED</span>');
+                                        $trHistoryRow.append($tdBuildStatusFailure);
+                                    } else {
+                                        var $tdBuildStatusRunning = $('<td style="background-color:gray;"></td>').append('<span style="color:#fff;">PENDING</span>');
+                                        $trHistoryRow.append($tdBuildStatusRunning);
+                                    }
+
+                                    var $tdUser = $('<td></td>').append(taskHistories[i].user);
+                                    $trHistoryRow.append($tdUser);
+
+                                    var $tdLogs = $('<td></td>').append('<a data-original-title="MoreInfo" data-placement="top" rel="tooltip" class="moreinfoBuild margin-left40per" href="javascript:void(0)" data-toggle="modal"></a>');
+                                    $tdLogs.find('a').data('history', taskHistories[i]).data('taskId', taskId).click(function() {
+
+                                        //$('#assignedTaskHistory').modal('hide');
+                                        var history = $(this).data('history');
+                                        showTaskLogs(history.taskId, history._id);
+
+
+
+                                    });
+                                    $trHistoryRow.append($tdLogs);
+
+                                    $compositeTaskHistoryDatatable.row.add($trHistoryRow).draw();
                                 }
                                 $modal.find('.loadingContainer').hide();
                                 $modal.find('.outputArea').show();
