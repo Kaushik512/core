@@ -96,10 +96,10 @@ ${KEYPAIRNAME}           cat_instances
 ${REGION NAME}           US West 
 ${SUBNET NAME}           subnet-aed68ce8
 ${NEW CONFIG NAME}       catserver
-${REGION NAME}            US West
+${REGION NAME}            US West    
 ${BLUEPRINT TESTNAME}          TestingNew
 
-
+${Unique ErrMsg}            This entry is already registered. Try another?
 
 ${PHOENIX COMMERNCE WITHOUT COOKBOOK UBUNTUOS}            Phoenix Commernce without Cookbook UbuntuOS
 ${PHOENIX COMMERCE WITH COOKBOOK UBUNTUOS}          Phoenix Commerce With CookBook ubuntuOS
@@ -252,10 +252,13 @@ ${SOFTWARE NAME}          setup-2.8.14-20.el6_4.1.noarch
 
 
 #Provider
-${PROVIDER NAME}          AWS RELPRO
+${PROVIDER NAME}          AWS Prov
+${EDIT PROVIDER NANME}    AWS RELPRO
 ${PROVIDERR}                 AWS
 ${SECRET KEY}                  qm/j8lT0/IPc1P5ud8yujUSa61+QjqeyZ/jZkIff
 ${ACCESS KEY}                  AKIAI3ETOOEFHJ62G2NQ
+
+${Provider ErrMsg}         Provider name already exist.
 
 
 

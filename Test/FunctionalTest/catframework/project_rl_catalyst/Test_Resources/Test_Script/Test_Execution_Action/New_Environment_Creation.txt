@@ -62,7 +62,28 @@ Catalyst Addition and Creation of New Envirorments Setup
 
 
 
+Catalyst Unique Environment Validation
+    Clicks on Settings
+    Clicks on DevOps Setup menu
+    Clicks on EEnvironments menu line
+    Sleep    1s
+    Clicks on New button Create New Environment
+    Sleep    2s
+    Select organization for Env
+    #Select the Configuration name
+    #-Clicks on Add Button
+    #-Add the Environment Named1
+    #-Clicks on ADD Chef Env Button
+    Select the Environments1
+    #Assign Teams1
+    Assign Created Project1
+    Clicks on Save Button to save the Environments
+    Verfiy the Error Message displayed while duplicating the Environment
 
+
+Verfiy the Error Message displayed while duplicating the Environment
+    Element Should Contain    id=unique_environmentname    ${Unique ErrMsg}
+    Sleep    2s
 
 Catalyst Addition of New Environments
     Clicks on Settings

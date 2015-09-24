@@ -188,6 +188,20 @@ Catalyst Editing the Organization and Domain name
       Vaildate the Edit Organization domain name fields  ${VaildEditOrgDomainName} 
       
 
+Catalyst Verification of Unique Organization
+    Clicks on Settings
+    Clicks on Organization image
+    Clicks on New button to Create New Organization
+    Sleep    2s
+    Enters New Edit Organization Name
+    Clicks on Save button to save the Organization details  
+    Verify the Error Message displayed while creating duplicate org
+
+
+Verify the Error Message displayed while creating duplicate org
+    Sleep    2s
+    Element Should Contain    id=unique_orgname    ${Unique ErrMsg}
+    Sleep    2s
 
 
 Addition of Random Numbers to Unique Names
@@ -572,8 +586,27 @@ Validation and Creation of New Business Groups
 Catalyst Editing the BusinessGroup Created
      Vaildate the Edit Business Group fields  ${VaildEditBusinessGroup}
                   
+
+
+Catalyst Verification of Unique Business Group
+    Clicks on Settings
+    Clicks on Organzatin Tree 
+    Clicks on Business Groups menu
+    Clicks on New button to create new Business Group
+    Enters New Edit BusinessGroup Name
+    Select organization for business group
+    Clicks on Save button to save the Business group details
+    Verify the Error Message displayed while duplicating BusinessGroup 
+
+
+Verify the Error Message displayed while duplicating BusinessGroup
+    Sleep    2s
+    Element Should Contain    id=unique_productgroupname    ${Unique ErrMsg}
+    Sleep    2s
+
  
 
+  
 #Business Group Validation                                                      #business group start
 Business Group name with more than 15 characters
     [Arguments]    ${Vaildate15ChrErrMsg}     
@@ -760,6 +793,26 @@ Validation and Creation of New Projects
 Catalyst Editing the Proj and Descrptn Created
      Vaildate the Edit Project Name fields  ${VaildEditProject}
      Vaildate the Edit Project Description fields  ${VaildEditDescProject}
+
+
+Catalyst Verification of Unique Project
+    Clicks on Settings
+    Clicks on Organzatin Tree
+    Clicks on projects menu
+    Clicks on New button to create new project
+    Enters New Edit Project Name
+    Enters new Project Description
+    Select organization for project
+    #Select Business Group
+    Clicks on Save button to save the Project details
+    Verify the Error Message displayed while duplicating Project
+
+
+Verify the Error Message displayed while duplicating Project
+    Sleep    2s
+    Element Should Contain    id=unique_projectname    ${Unique ErrMsg}
+    Sleep    2s
+
      
 
 #Project Validation                                                               #project start

@@ -35,7 +35,7 @@
                                                       <select id="taskType" class="chooseTasktype width-100">
                                                          <option id="Chef" value="chef">Chef</option>
                                                          <option id="Jenkins" value="jenkins">Jenkins</option>
-                                                         <option id="Composite" value="composite">Composite</option>
+                                                         <option id="Composite" value="composite">Composite</option> 
                                                          <option id="Puppet" value="puppet">Puppet</option>
                                                       </select>
                                                    </div>
@@ -2255,7 +2255,7 @@ $(document).ready(function() {
             $("#Puppet-dropdown").show();
             $('.puppetTaskType').show();
             
-         }/* else if (this.value == "composite") {
+         } else if (this.value == "composite") {
             $("#Jenkins-dropdown").hide();
             $('.jenkinsTaskType').hide();
             $('.chefTaskType').hide();
@@ -2267,7 +2267,7 @@ $(document).ready(function() {
             $('.chefInstance').hide();
             $('.puppetInstance').hide();
             loadTaskLists();
-         }*/
+         }
     });
     function loadTaskLists(_assignedTasks) {
         //To get Task Lists
