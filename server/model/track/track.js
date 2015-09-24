@@ -17,7 +17,8 @@ var Schema = mongoose.Schema;
 var TrackSchema = new Schema({
     name: String,
     url: String,
-    description: String
+    description: String,
+    type: String
 });
 
 // Get all Track informations.
