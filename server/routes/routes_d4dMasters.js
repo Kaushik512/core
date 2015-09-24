@@ -2866,6 +2866,29 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                 } else {
 
                                     // Update settings
+
+                                    if (req.params.id === '4') {
+                                        bodyJson['appdeploy'] = JSON.parse(bodyJson['appdeploy']);
+                                        delete rowtoedit._id; //fixing the issue of 
+                                        rowtoedit["appdeploy"] = bodyJson['appdeploy'];
+                                        logger.debug('Rowtoedit: %s', JSON.stringify(rowtoedit));
+                                        eval('d4dModelNew.' + dbtype).update({
+                                            rowid: bodyJson["rowid"],
+                                            "id": "4"
+                                        }, {
+                                            $set: rowtoedit
+                                        }, {
+                                            upsert: false
+                                        }, function(err, saveddata) {
+                                            if (err) {
+                                                logger.error('Hit Save error', err);
+                                                res.send(500);
+                                                return;
+                                            }
+                                            res.send(200);
+                                            return;
+                                        });
+                                    }
                                     if (req.params.id === "7") {
                                         d4dModelNew.d4dModelMastersUsers.find({
                                             "id": req.params.id,
