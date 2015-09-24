@@ -1,4 +1,5 @@
 var Client = require('node-rest-client').Client;
+var SSHExec = require('./utils/sshexec');
 
 function getAuthToken(host,username,password,tenantName,callback){
 	console.log("START:: getAuthToken");
@@ -236,7 +237,7 @@ this.getServers = function(tenantId,callback){
 				console.log('networksUrl: ' + networksUrl);
 				client.registerMethod("jsonMethod", networksUrl, "GET");
 				client.methods.jsonMethod(args,function(data,response){
-					console.log("getNetworks response:: "+JSON.stringify(data));
+					console.log("getNetworks response:: "+JSON.stringify(JSON.parse(data)));
 					var json = JSON.parse(data);
 					if(json.networks){
 					   console.log("END:: getNetworks");
@@ -289,16 +290,15 @@ this.getServers = function(tenantId,callback){
 	})
  }
 
-this.updatefloatingip = function(tenantId, floatingipid, serverid, callback) {
-	 console.log("START:: updatefloatingip");
+this.updatefloatingip = function(tenantId, floatingip, serverid, callback) {
+	console.log("START:: updatefloatingip");
     console.log(JSON.stringify(options));
     getAuthToken(options.serviceendpoints.identity, options.username, options.password, options.tenantName, function(err, token) {
         if (token) {
             var fip = {
-                "floatingip": {
-                    "port_id": serverid
-
-                }
+                "addFloatingIp": {
+			        "address": floatingip
+			    }
             }
             var args = {
                 data: fip,
@@ -307,11 +307,11 @@ this.updatefloatingip = function(tenantId, floatingipid, serverid, callback) {
                     "Content-Type": "application/json"
                 }
             };
-            var updatefloatip = options.serviceendpoints.network + '/floatingips/' + floatingipid;
+            var updatefloatip = options.serviceendpoints.compute + '/'+tenantId+'/servers/' + serverid + '/action';
             console.log('updatefloatingip:' + updatefloatip);
             console.log('args:' + JSON.stringify(args));
             client = new Client();
-            client.registerMethod("jsonMethod", updatefloatip, "PUT");
+            client.registerMethod("jsonMethod", updatefloatip, "POST");
             client.methods.jsonMethod(args, function(data, response) {
                 console.log("updatefloatingip response:: " + data);
                 if (data) {
@@ -472,6 +472,28 @@ this.createfloatingip = function(tenantId, networkid, callback) {
 	 
  }
 
+this.updatedfloatingip = false;
+
+
+this.trysshoninstance = function(instanceData,callback){
+	var opts = {
+        privateKey: instanceData.credentials.pemFilePath,
+        username: decryptedCredentials.username,
+        host: instanceData.floatingipdata.floatingip.floating_ip_address,
+        instanceOS: 'linux',
+        port: 22,
+        cmds: ["rm -rf /etc/chef/", "rm -rf /var/chef/"],
+        cmdswin: ["del "]
+    }
+    var cmdString = opts.cmds.join(' && ');
+    var sshExec = new SSHExec(options);
+    sshExec.exec(cmdString, callback, function(err,stdout){
+    	console.log('Out:',stdout);
+    }, function(err,stdout){
+    	console.log('Error Out:',stdout);
+    });
+
+}
 
 this.waitforserverready = function(tenantId,instanceData,callback){
         var self = this;
@@ -486,10 +508,18 @@ this.waitforserverready = function(tenantId,instanceData,callback){
 	                       console.log('Quried server:',JSON.stringify(data));
 	                       if(data.server.status == 'ACTIVE'){
 	                       	//set the floating ip to instance
-	                       	if(instanceData.floatingipdata.floatingip.floating_network_id)
-	                       		self.updatefloatingip(tenantId,instanceData.floatingipdata.floatingip.floating_network_id,instanceData.server.id,function(err,data){
+	                       	if(instanceData.floatingipdata.floatingip.floating_ip_address && !self.updatedfloatingip)
+	                       		self.updatefloatingip(tenantId,instanceData.floatingipdata.floatingip.floating_ip_address,instanceData.server.id,function(err,data){
 	                       			if(!err)
-	                       				console.log('Updated with floating ip');
+	                       				{
+	                       					self.updatedfloatingip = true;
+	                       					console.log('Updated with floating ip');
+	                       				}
+	                       		});
+	                       }
+	                       if(self.updatedfloatingip){
+	                       		self.trysshoninstance(instanceData,function(cdata){
+	                       				console.log('End trysshoninstance:',cdata);
 	                       		});
 	                       }
 	                       setTimeout(wfsr,15000);

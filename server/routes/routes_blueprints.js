@@ -1646,106 +1646,120 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                         "message": "instance launch success"
                                                     });
                                                     logger.debug('Should have sent the response.');
-                                                    hppubliccloud.waitforserverready(hppubliccloudconfig.tenantId, instanceData, function(err, data) {if (!err) {
-                                                            logger.debug('Instance Ready....');
-                                                            logger.debug(JSON.stringify(data)); // logger.debug(data);
-                                                            logger.debug('About to bootstrap Instance');
-                                                            //identifying pulic ip
-                                                            var publicip = '';
-                                                            if (data.server.addresses.public) {
-                                                                for (var i = 0; i < data.server.addresses.public.length; i++) {
-                                                                    if (data.server.addresses.public[i]["version"] == '4') {
-                                                                        publicip = data.server.addresses.public[i].addr;
-                                                                    }
-                                                                }
-                                                            } else {
-                                                                if (data.server.addresses.private) {
-                                                                    for (var i = 0; i < data.server.addresses.private.length; i++) {
-                                                                        if (data.server.addresses.private[i]["version"] == '4') {
-                                                                            publicip = data.server.addresses.private[i].addr;
+                                                    var cryptoConfig = appConfig.cryptoSettings;
+                                                    var cryptography = new Cryptography(cryptoConfig.algorithm, cryptoConfig.password);
+                                                    //decrypting and including key in instancedata
+                                                    
+
+                                                    var tempUncryptedPemFileLoc = appConfig.tempDir + '/' + uuid.v4();
+
+                                                    instance.credentials.pemFileLocation =   appConfig.catalystDataDir + '/' + appConfig.catalysHomeDirName + '/' +  appConfig.instancePemFilesDirName + '/' + blueprint.blueprintConfig.cloudProviderId;
+                                                    cryptography.decryptFile(instance.credentials.pemFileLocation, cryptoConfig.decryptionEncoding, tempUncryptedPemFileLoc, cryptoConfig.encryptionEncoding, function(err) {
+                                                        
+                                                        instanceData.credentials = {
+                                                            "pemFilePath":tempUncryptedPemFileLoc
+                                                        }
+                                                        hppubliccloud.waitforserverready(hppubliccloudconfig.tenantId, instanceData, function(err, data){
+                                                                if (!err) {
+                                                                logger.debug('Instance Ready....');
+                                                                logger.debug(JSON.stringify(data)); // logger.debug(data);
+                                                                logger.debug('About to bootstrap Instance');
+                                                                //identifying pulic ip
+                                                                var publicip = '';
+                                                                if (data.server.addresses.public) {
+                                                                    for (var i = 0; i < data.server.addresses.public.length; i++) {
+                                                                        if (data.server.addresses.public[i]["version"] == '4') {
+                                                                            publicip = data.server.addresses.public[i].addr;
                                                                         }
                                                                     }
                                                                 } else {
-                                                                    logger.error("No IP found", err);
-                                                                    res.send(500);
-                                                                    return;
-                                                                }
-                                                            }
-                                                            instancesDao.updateInstanceIp(instance.id, publicip, function(err, updateCount) {
-                                                                if (err) {
-                                                                    logger.error("instancesDao.updateInstanceIp Failed ==>", err);
-                                                                    return;
-                                                                }
-                                                                logger.debug('Instance ip Updated');
-                                                            });
-                                                            instancesDao.updateInstanceState(instance.id, "running", function(err, updateCount) {
-                                                                if (err) {
-                                                                    logger.error("instancesDao.updateInstanceState Failed ==>", err);
-                                                                    return;
-                                                                }
-                                                                logger.debug('Instance state Updated');
-                                                            });
-
-                                                            logsDao.insertLog({
-                                                                referenceId: logsReferenceIds,
-                                                                err: false,
-                                                                log: "Instance Ready..about to bootstrap",
-                                                                timestamp: timestampStarted
-                                                            });
-                                                            chef.bootstrapInstance({
-                                                                instanceIp: publicip,
-                                                                runlist: version.runlist,
-                                                                instanceUsername: 'ubuntu',
-                                                                pemFilePath: '//etc//ssh//key.pem', //should be the encryped file 
-                                                                nodeName: launchparams.server.name,
-                                                                environment: envName,
-                                                                instanceOS: instance.hardware.os,
-                                                                jsonAttributes: null
-                                                            }, function(err, code) {
-                                                                if (code == 0) {
-                                                                    instancesDao.updateInstanceBootstrapStatus(instance.id, 'success', function(err, updateData) {
-                                                                        if (err) {
-                                                                            logger.error("Unable to set instance bootstarp status. code 0", err);
-                                                                        } else {
-                                                                            logger.debug("Instance bootstrap status set to success");
+                                                                    if (data.server.addresses.private) {
+                                                                        for (var i = 0; i < data.server.addresses.private.length; i++) {
+                                                                            if (data.server.addresses.private[i]["version"] == '4') {
+                                                                                publicip = data.server.addresses.private[i].addr;
+                                                                            }
                                                                         }
-                                                                    });
+                                                                    } else {
+                                                                        logger.error("No IP found", err);
+                                                                        res.send(500);
+                                                                        return;
+                                                                    }
                                                                 }
-                                                            }, function(stdOutData) {
+                                                                instancesDao.updateInstanceIp(instance.id, publicip, function(err, updateCount) {
+                                                                    if (err) {
+                                                                        logger.error("instancesDao.updateInstanceIp Failed ==>", err);
+                                                                        return;
+                                                                    }
+                                                                    logger.debug('Instance ip Updated');
+                                                                });
+                                                                instancesDao.updateInstanceState(instance.id, "running", function(err, updateCount) {
+                                                                    if (err) {
+                                                                        logger.error("instancesDao.updateInstanceState Failed ==>", err);
+                                                                        return;
+                                                                    }
+                                                                    logger.debug('Instance state Updated');
+                                                                });
 
                                                                 logsDao.insertLog({
                                                                     referenceId: logsReferenceIds,
                                                                     err: false,
-                                                                    log: stdOutData.toString('ascii'),
-                                                                    timestamp: new Date().getTime()
+                                                                    log: "Instance Ready..about to bootstrap",
+                                                                    timestamp: timestampStarted
                                                                 });
-                                                                if (stdOutData.toString('ascii').indexOf("Chef Client finished") > 0) {
-                                                                    instancesDao.updateInstanceBootstrapStatus(instance.id, 'success', function(err, updateData) {
-                                                                        if (err) {
-                                                                            logger.error("Unable to set instance bootstarp status. code 0", err);
-                                                                        } else {
-                                                                            logger.debug("Instance bootstrap status set to success");
-                                                                        }
+                                                                chef.bootstrapInstance({
+                                                                    instanceIp: publicip,
+                                                                    runlist: version.runlist,
+                                                                    instanceUsername: 'ubuntu',
+                                                                    pemFilePath: tempUncryptedPemFileLoc,
+                                                                    nodeName: launchparams.server.name,
+                                                                    environment: envName,
+                                                                    instanceOS: instance.hardware.os,
+                                                                    jsonAttributes: null
+                                                                }, function(err, code) {
+                                                                    if (code == 0) {
+                                                                        instancesDao.updateInstanceBootstrapStatus(instance.id, 'success', function(err, updateData) {
+                                                                            if (err) {
+                                                                                logger.error("Unable to set instance bootstarp status. code 0", err);
+                                                                            } else {
+                                                                                logger.debug("Instance bootstrap status set to success");
+                                                                            }
+                                                                        });
+                                                                    }
+                                                                }, function(stdOutData) {
+
+                                                                    logsDao.insertLog({
+                                                                        referenceId: logsReferenceIds,
+                                                                        err: false,
+                                                                        log: stdOutData.toString('ascii'),
+                                                                        timestamp: new Date().getTime()
                                                                     });
-                                                                }
+                                                                    if (stdOutData.toString('ascii').indexOf("Chef Client finished") > 0) {
+                                                                        instancesDao.updateInstanceBootstrapStatus(instance.id, 'success', function(err, updateData) {
+                                                                            if (err) {
+                                                                                logger.error("Unable to set instance bootstarp status. code 0", err);
+                                                                            } else {
+                                                                                logger.debug("Instance bootstrap status set to success");
+                                                                            }
+                                                                        });
+                                                                    }
 
-                                                            }, function(stdErrData) {
+                                                                }, function(stdErrData) {
 
-                                                                //retrying 4 times before giving up.
-                                                                logsDao.insertLog({
-                                                                    referenceId: logsReferenceIds,
-                                                                    err: true,
-                                                                    log: stdErrData.toString('ascii'),
-                                                                    timestamp: new Date().getTime()
+                                                                    //retrying 4 times before giving up.
+                                                                    logsDao.insertLog({
+                                                                        referenceId: logsReferenceIds,
+                                                                        err: true,
+                                                                        log: stdErrData.toString('ascii'),
+                                                                        timestamp: new Date().getTime()
+                                                                    });
+
                                                                 });
-
-                                                            });
-                                                        } else {
-                                                            logger.debug('Err Creating Instance:' + err);
-                                                            return;
-                                                        }
+                                                                } else {
+                                                                logger.debug('Err Creating Instance:' + err);
+                                                                return;
+                                                                }
+                                                        });
                                                     });
-
                                                 });
 
 
