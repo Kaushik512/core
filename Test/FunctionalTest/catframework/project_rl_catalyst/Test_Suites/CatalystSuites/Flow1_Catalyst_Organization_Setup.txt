@@ -68,7 +68,7 @@ Catalyst login as OrgAdmin user and ALL option disabled
 
 
 Catalyst Creation of New Designer and Consumer    
-    [Tags]       Sanity               Smoke
+    [Tags]       Sanity               Des
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
     Catalyst Creation of Designer and Consumer
     Catalyst Logout
