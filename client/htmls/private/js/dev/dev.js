@@ -2297,8 +2297,8 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                                         break;
 
                                 }
-                                // alert(getDesignTypeName);
-
+                                // if condition is to prevent to creation of multiple same accordion panels.
+                                if($("div."+tdata[i]['templatetype']).length === 0){
                                 $containerTemp = '<div class="panel panel-default blueprintContainer hidden">' +
                                     '<div class="panel-heading">' +
 
@@ -2311,6 +2311,7 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                                     '</div>';
                                 $('#accordion-2').append($containerTemp);
                                 // alert($containerTemp);
+                                }
                             }
                         }
                     })(j);
