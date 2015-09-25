@@ -28,6 +28,14 @@ ${ENVIRONMENTSERVER}                http://d4d.rlcatalyst.com/public/login.html
 
 
              
+#Puppet
+${PUPPET SERVERNAME}       	RLPuppetServer
+${PUPPET USERNAME}          ubuntu
+${HOSTNAME}                 52.24.60.123
+${Valid15ChrPuppetName}      RelevanceLabPuppet
+
+${Valid15ChrErrMsg}         limited to 15 chars.
+
 
 #DataBag
 ${DATABAG NAME}        DataRL
