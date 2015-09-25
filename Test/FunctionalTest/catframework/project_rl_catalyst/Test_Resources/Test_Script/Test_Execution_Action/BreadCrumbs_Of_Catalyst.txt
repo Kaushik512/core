@@ -176,3 +176,4 @@ Clicks on Puppet Server
 
 Verification of the Breadcrumb
     Element Should Contain    xpath=.//*[@id='ribbon']/ol/li    ${SETTING}
+
