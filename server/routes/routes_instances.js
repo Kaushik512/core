@@ -64,6 +64,44 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         });
     });
 
+    app.get('/instances/:platformId/list', function(req, res) {
+        logger.debug("Enter get() for /instances/%s", req.params.platformId);
+        instancesDao.getInstanceByPlatformId(req.params.platformId, function(err, data) {
+            if (err) {
+                logger.error("Instance fetch Failed >> ", err);
+                res.send(500);
+                return;
+            }
+
+            if (data.length) {
+                res.send(data[0]);
+            } else {
+                logger.error("No such Instance for >> %s", req.params.platformId);
+                res.send(404);
+            }
+            logger.debug("Exit get() for /instances/%s", req.params.platformId);
+        });
+    });
+
+    app.get('/instances/providers/:providerId/list', function(req, res) {
+        logger.debug("Enter get() for /instances/%s", req.params.providerId);
+        instancesDao.getInstanceByProviderId(req.params.providerId, function(err, data) {
+            if (err) {
+                logger.error("Instance fetch Failed >> ", err);
+                res.send(500);
+                return;
+            }
+
+            if (data.length) {
+                res.send(data);
+            } else {
+                logger.error("No such Instance for >> %s", req.params.providerId);
+                res.send(404);
+            }
+            logger.debug("Exit get() for /instances/%s", req.params.providerId);
+        });
+    });
+
     app.all('/instances/*', sessionVerificationFunc);
 
 
