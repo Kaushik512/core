@@ -1533,7 +1533,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                     name: "D4D-" + blueprint.name,
                                                     imageRef: blueprint.blueprintConfig.instanceImageName,
                                                     flavorRef: blueprint.blueprintConfig.flavor,
-                                                    key_name: 'key',
+                                                    key_name: providerdata.keyname,
                                                     max_count: 1,
                                                     min_count: 1,
                                                     networks: [{
@@ -1657,6 +1657,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                     cryptography.decryptFile(instance.credentials.pemFileLocation, cryptoConfig.decryptionEncoding, tempUncryptedPemFileLoc, cryptoConfig.encryptionEncoding, function(err) {
                                                         
                                                         instanceData.credentials = {
+                                                            "username":"ubuntu", //to be fetched from vm images, based on the image.
                                                             "pemFilePath":tempUncryptedPemFileLoc
                                                         }
                                                         hppubliccloud.waitforserverready(hppubliccloudconfig.tenantId, instanceData, function(err, data){
@@ -1665,26 +1666,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                 logger.debug(JSON.stringify(data)); // logger.debug(data);
                                                                 logger.debug('About to bootstrap Instance');
                                                                 //identifying pulic ip
-                                                                var publicip = '';
-                                                                if (data.server.addresses.public) {
-                                                                    for (var i = 0; i < data.server.addresses.public.length; i++) {
-                                                                        if (data.server.addresses.public[i]["version"] == '4') {
-                                                                            publicip = data.server.addresses.public[i].addr;
-                                                                        }
-                                                                    }
-                                                                } else {
-                                                                    if (data.server.addresses.private) {
-                                                                        for (var i = 0; i < data.server.addresses.private.length; i++) {
-                                                                            if (data.server.addresses.private[i]["version"] == '4') {
-                                                                                publicip = data.server.addresses.private[i].addr;
-                                                                            }
-                                                                        }
-                                                                    } else {
-                                                                        logger.error("No IP found", err);
-                                                                        res.send(500);
-                                                                        return;
-                                                                    }
-                                                                }
+                                                                var publicip = instanceData.floatingipdata.floatingip.floating_ip_address;
+                                                                
                                                                 instancesDao.updateInstanceIp(instance.id, publicip, function(err, updateCount) {
                                                                     if (err) {
                                                                         logger.error("instancesDao.updateInstanceIp Failed ==>", err);
@@ -1709,7 +1692,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                 chef.bootstrapInstance({
                                                                     instanceIp: publicip,
                                                                     runlist: version.runlist,
-                                                                    instanceUsername: 'ubuntu',
+                                                                    instanceUsername: instanceData.credentials.username,
                                                                     pemFilePath: tempUncryptedPemFileLoc,
                                                                     nodeName: launchparams.server.name,
                                                                     environment: envName,

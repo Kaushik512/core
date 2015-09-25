@@ -478,22 +478,27 @@ this.updatedfloatingip = false;
 this.trysshoninstance = function(instanceData,callback){
 	var opts = {
         privateKey: instanceData.credentials.pemFilePath,
-        username: decryptedCredentials.username,
+        username: instanceData.credentials.username,
         host: instanceData.floatingipdata.floatingip.floating_ip_address,
         instanceOS: 'linux',
         port: 22,
-        cmds: ["rm -rf /etc/chef/", "rm -rf /var/chef/"],
+        cmds: ["ls -al"],
         cmdswin: ["del "]
     }
     var cmdString = opts.cmds.join(' && ');
-    var sshExec = new SSHExec(options);
-    sshExec.exec(cmdString, callback, function(err,stdout){
-    	console.log('Out:',stdout);
+    console.log(JSON.stringify(opts));
+    var sshExec = new SSHExec(opts);
+    sshExec.exec(cmdString, function(err,stdout){console.log(stdout);callback(stdout);return;}, function(err,stdout){
+    	console.log('Out:',stdout);//assuming that receiving something out would be a goog sign :)
+    	callback('ok');
+    	return;
     }, function(err,stdout){
     	console.log('Error Out:',stdout);
     });
 
 }
+this.timeouts = [];
+this.callbackdone = false;
 
 this.waitforserverready = function(tenantId,instanceData,callback){
         var self = this;
@@ -520,13 +525,39 @@ this.waitforserverready = function(tenantId,instanceData,callback){
 	                       if(self.updatedfloatingip){
 	                       		self.trysshoninstance(instanceData,function(cdata){
 	                       				console.log('End trysshoninstance:',cdata);
+	                       				if(cdata == 'ok'){
+	                       					//Clearing all timeouts
+	                       					for (var i = 0; i < self.timeouts.length; i++) {
+	                       						console.log('Clearing timeout : ',self.timeouts[i]);
+											    clearTimeout(self.timeouts[i]);
+											}
+											self.timeouts = [];
+											if(!self.callbackdone)
+	                       						{
+	                       							self.callbackdone = true;
+	                       							callback(null,instanceData);
+	                       						}
+
+	                       					return;
+	                       				}
+	                       				else
+	                       				{
+	                       					console.log('Timeout 1 set');
+	                       					self.timeouts.push(setTimeout(wfsr,30000));
+	                       				}
 	                       		});
 	                       }
-	                       setTimeout(wfsr,15000);
+	                       else
+	                       	{
+	                       		console.log('Timeout 2 set');
+	                       		self.timeouts.push(setTimeout(wfsr,30000));
+	                       	}
+	                       
 	                }
 	        });
         };
-        setTimeout(wfsr,15000);
+        console.log('Timeout 3 set');
+        self.timeouts.push(setTimeout(wfsr,15000));
  }
 }
 
