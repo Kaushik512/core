@@ -111,7 +111,7 @@
                                                                                                 </div>
                                                                                             </div>
                                                                                             <div class="col-lg-6 col-md-6 forazure" style="margin-top:15px;">
-                                                                                                <label for="region">Security Group:<span style="color:red">*</span></label>
+                                                                                                <label for="region">Security Group Ports:<span style="color:red">*</span></label>
                                                                                                 <input name="securotyGrp" Placeholder="Enter ports separated by comma" id="securotyGrp" class="required form-control" type="text"  cdata="catalyst">
                                                                                             </div>
                                                                                             <div class="col-lg-6 col-md-6 forazure" style="margin-top:15px;">
@@ -143,6 +143,7 @@
                                                                                             
                                                                                             <div class="col-lg-6 col-md-6 forazure" style="margin-top:15px;">
                                                                                                 <label for="instancesize">Instance Size:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+                                                                                                 <label id="spinnerSize" class="hidden"><img style="margin-left:5px;margin-right:25px;" src="img/select2-spinner.gif"></label>
                                                                                                 <div class="input-groups">
                                                                                                     <select id="instancesize" name="instancesize" class="required chooseOrganization width-100 chooseSelect" style="vertical-align:central">
                                                                                                         <option value="">Choose Instanace Size</option>
@@ -1719,13 +1720,23 @@ function getImagesWithOSFilter() {
                     var data = JSON.parse(JSON.stringify(data));
 
                     for (var i = 0; i < data.length; i++) {
-                        str += '<option value="' + data[i].name + '">' + data[i].name + '</option>';
+                        
+                        var flavorsByLocation = data[i].computeCapabilities.virtualMachinesRoleSizes;
+                        var flavorsList = [];
+
+                        for(var j=0; j<flavorsByLocation.length; j++){
+                            flavorsList.push(flavorsByLocation[j]);
+                        }
+
+                        str += '<option value="' + data[i].name + '"  flavors='+flavorsList.join()+'>' + data[i].name + '</option>';
                     }
 
                     $('#location').html(str);
                     $('#location').select2().trigger('change');
+
                     $('#location').on('change', function() {
-                        // alert($(this).find(':selected').attr('subnets'));
+                                   //var $vpcSpinner = $('#vpcSpinner').addClass('hidden');
+                                   $('#vpcSpinner').removeClass('hidden');
                                    var selectedLocation = $(this).val();
 
                                     $.get('/azure/networks', function(data) {
@@ -1746,7 +1757,7 @@ function getImagesWithOSFilter() {
                                                     subnets.push(data[i].subnets[j].name);
                                                  }
 
-                                                 str += '<option value="' + data[i].id + '" subnets="' + subnets.join() + '">' + data[i].name + '</option>';
+                                                 str += '<option value="' + data[i].name + '" subnets="' + subnets.join() + '">' + data[i].name + '</option>';
                                                  isNetwroksExists = true;
                                                 }
                                             }
@@ -1755,9 +1766,13 @@ function getImagesWithOSFilter() {
                                             }
 
                                             $('#vpcId').html(str);
+                                            $('#vpcSpinner').addClass('hidden');
+
                                             $('#vpcId').select2().trigger('change');
+
                                             $('#vpcId').on('change', function() {
                                                 // alert($(this).find(':selected').attr('subnets'));
+                                                $('#spinnerSubnet').removeClass('hidden');
                                                 var ss = ' <option value="">Select Subnet</option>';
                                                 var subn = $(this).find(':selected').attr('subnets').split(',');
 
@@ -1766,10 +1781,26 @@ function getImagesWithOSFilter() {
                                                 }
 
                                                 $('#subnetId').html(ss);
+                                                $('#spinnerSubnet').addClass('hidden');
                                                 $('#subnetId').select2().trigger('change');
                                             });
                                         }
                                     });
+                                    
+                                    $('#spinnerSize').removeClass('hidden');
+
+                                    var flavors = $(this).find(':selected').attr('flavors').split(',');
+                                    var sizeOption = ' <option value="">Choose Instanace Size</option>';
+
+                                    for(var i=0; i<flavors.length; i++){
+                                       sizeOption += '<option value="' + flavors[i] + '">' + flavors[i] + '</option>';
+                                    }
+
+                                    $('#instancesize').html(sizeOption);
+                                    $('#instancesize').select2().trigger('change');
+
+                                    $('#spinnerSize').addClass('hidden');
+
                     });
                 }
             });
@@ -2918,18 +2949,19 @@ var $wizard = $('#bootstrap-wizard-1').bootstrapWizard({
                             //reqBody.envId = $('#envList').val();
                             var imageIdentifier = $('#imageId').val();
                             var imageId = $('#imageId').find('option:selected').attr('_id');
-                            var securityGroupIds = getSecurityCheckedList();
+                            //var securityGroupIds = getSecurityCheckedList();
+                            var securityGroupPorts = $('#securotyGrp').val();
                             var providerId = $('#providerId').val();
                             var keyPairId = $('#keypairId').val();
                             var instanceType = $('#instancesize').val();
                             var vpcId = $('#vpcId').val();
                             var subnetId = $('#subnetId').val();
-                            var region = $('#region').val();
+                            var region = $('#location').val();
                             // var instanceOS=$('#instanceOS').data('instanceOS')
 
                             // reqBody.providerId=providerId;
                             reqBody.keyPairId = keyPairId;
-                            reqBody.securityGroupIds = securityGroupIds;
+                            reqBody.securityGroupPorts = securityGroupPorts;
                             reqBody.instanceType = instanceType;
                             reqBody.instanceAmiid = imageIdentifier;
                             reqBody.instanceUsername = 'root';
@@ -2937,6 +2969,7 @@ var $wizard = $('#bootstrap-wizard-1').bootstrapWizard({
                             reqBody.subnetId = subnetId;
                             reqBody.imageId = imageId;
                             reqBody.providerId = providerId;
+                            reqBody.region = region;
                             //alert(reqBody.providerId);
                             reqBody.name = $('#blueprintNameInput').val();
                             /*if (($('.role-Selected').data('templatetype')).toLowerCase() != "docker") {
@@ -2980,7 +3013,7 @@ var $wizard = $('#bootstrap-wizard-1').bootstrapWizard({
                             // for cft templates
                             //reqBody.stackName = $('#cftStackNameInput').val();
                             reqBody.cftProviderId = $('#cftProviderInput').val();
-                            reqBody.region = $('#cftRegionInput').val();
+                            //reqBody.region = $('#cftRegionInput').val();
                             var cftParameters = [];
                             $('.cftParameterInput').each(function() {
                                 var $this = $(this);
@@ -3013,11 +3046,6 @@ var $wizard = $('#bootstrap-wizard-1').bootstrapWizard({
                             });
                             reqBody.cftInstances = cftInstances;
 
-
-
-
-
-
                             $('.blueprintMsgContainer').hide();
                             if (($('.role-Selected').data('templatetype')).toLowerCase() != "docker") {
                                 reqBody.blueprintType = "instance_launch";
@@ -3027,6 +3055,11 @@ var $wizard = $('#bootstrap-wizard-1').bootstrapWizard({
                                 if ($('#providerId').find("option:selected").attr('providertype').toLowerCase() == 'hppubliccloud') {
                                     reqBody.blueprintType = 'hppubliccloud_launch';
                                 }
+                                if ($('#providerId').find("option:selected").attr('providertype').toLowerCase() == 'azure') {
+                                    reqBody.blueprintType = 'azure_launch';
+                                }
+
+                                console.log("Blueprint post:",reqBody);
 
                                 $.post('/organizations/' + reqBody.orgId + '/businessgroups/' + reqBody.bgId + '/projects/' + reqBody.projectId + '/blueprints', {
                                     blueprintData: reqBody

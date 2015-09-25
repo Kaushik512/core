@@ -1117,6 +1117,26 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     
                 }
                 blueprintData.instanceData = instanceData;
+            }else if (req.body.blueprintData.blueprintType === 'azure_launch') {
+                logger.debug('req.body.blueprintData.blueprintType ==>', req.body.region);
+                instanceData = {
+                    //keyPairId: req.body.blueprintData.keyPairId,
+                    securityGroupIds: req.body.blueprintData.securityGroupPorts,
+                    instanceType: req.body.blueprintData.instanceType,
+                    instanceAmiid: req.body.blueprintData.instanceAmiid,
+                    vpcId: req.body.blueprintData.vpcId,
+                    subnetId: req.body.blueprintData.subnetId,
+                    imageId: req.body.blueprintData.imageId,
+                    region: req.body.blueprintData.region,
+                    cloudProviderType: 'azure',
+                    cloudProviderId: req.body.blueprintData.providerId,
+                    infraManagerType: 'chef',
+                    infraManagerId: req.body.blueprintData.chefServerId,
+                    runlist: req.body.blueprintData.runlist,
+                    instanceOS: req.body.blueprintData.instanceOS,
+                    instanceCount: req.body.blueprintData.instanceCount
+                }
+                blueprintData.instanceData = instanceData;
             }else if (req.body.blueprintData.blueprintType === 'aws_cf') {
                 console.log('templateFile ==> ', req.body.blueprintData.cftTemplateFile);
                 cloudFormationData = {
@@ -1165,6 +1185,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     });
                     return;
                 }
+                
                 res.send(data);
             });
 
