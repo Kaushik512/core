@@ -17,7 +17,8 @@ var Schema = mongoose.Schema;
 var TrackSchema = new Schema({
     name: String,
     url: String,
-    description: String
+    description: String,
+    type: String
 });
 
 // Get all Track informations.
@@ -64,15 +65,13 @@ TrackSchema.statics.updateTrack = function(trackId, trackData, callback) {
         $set: setData
     }, {
         upsert: false
-    }, function(err, tracks) {
+    }, function(err, updateCount) {
         if (err) {
             logger.debug("Got error while creating tracks: ", err);
             callback(err, null);
         }
-        if (tracks) {
-            logger.debug("Updating Track: ", JSON.stringify(tracks));
-            callback(null, tracks);
-        }
+        callback(null,updateCount);
+        
     });
 };
 
