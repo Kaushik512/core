@@ -3787,6 +3787,7 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
 
                 });
             }
+
             if (!$.fn.dataTable.isDataTable('#tablehistoryTask')) {
                 //var $taskListArea = $('.taskListArea').empty();
                 var $taskHistoryDatatable = $('#tablehistoryTask').DataTable({
@@ -3807,23 +3808,10 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                     ]
 
                 });
-                var $compositeTaskHistoryDatatable = $('#tablehistoryTask').DataTable({
-                    "pagingType": "full_numbers",
-
-                    "aoColumns": [
-                        null, {
-                            "bSortable": true
-                        }, {
-                            "bSortable": true
-                        }, {
-                            "bSortable": true
-                        }, {
-                            "bSortable": false
-                        }
-                    ]
-
-                });
             }
+
+            $('#tablehistoryTask_length').hide();
+            $('#tablehistoryTask_filter').hide();
 
             if (!$.fn.dataTable.isDataTable('#compositeTablehistoryTask')) {
                 var $compositeTaskHistoryDatatable = $('#compositeTablehistoryTask').DataTable({
@@ -3846,9 +3834,6 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
 
             $('#compositeTablehistoryTask_length').hide();
             $('#compositeTablehistoryTask_filter').hide();
-
-            $('#tablehistoryTask_length').hide();
-            $('#tablehistoryTask_filter').hide();
 
 
             if (!$.fn.dataTable.isDataTable('#tablehistoryTaskForJenkins')) {
