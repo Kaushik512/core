@@ -57,15 +57,14 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 res.send(404,"Tracks not found!");
                 return;
             }
-            Track.updateTrack(req.params.trackId, req.body.trackData, function(err, tracks) {
+            Track.updateTrack(req.params.trackId, req.body.trackData, function(err, updateCount) {
                 if (err) {
                     res.send(500, errorResponses.db.error);
                     return;
                 }
-                if (tracks) {
-                    res.send(200, tracks);
-                    return;
-                }
+                res.send(200,{
+                    updateCount:updateCount
+                });
             });
         });
     });

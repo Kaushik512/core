@@ -285,6 +285,40 @@ var InstancesDao = function() {
         });
     };
 
+    this.getInstanceByPlatformId = function(platformId, callback) {
+        logger.debug("Enter getInstanceByPlatformId (%s)", platformId);
+
+        Instances.find({
+            platformId: platformId
+        }, function(err, data) {
+            if (err) {
+                logger.error("Failed getInstanceByPlatformId (%s)", platformId, err);
+                callback(err, null);
+                return;
+            }
+            logger.debug("Exit getInstanceByPlatformId (%s)", platformId);
+            callback(null, data);
+
+        });
+    };
+
+    this.getInstanceByProviderId = function(providerId, callback) {
+        logger.debug("Enter getInstanceByProviderId (%s)", providerId);
+
+        Instances.find({
+            providerId: providerId
+        }, function(err, data) {
+            if (err) {
+                logger.error("Failed getInstanceByProviderId (%s)", providerId, err);
+                callback(err, null);
+                return;
+            }
+            logger.debug("Exit getInstanceByProviderId (%s)", providerId);
+            callback(null, data);
+
+        });
+    };
+
     this.getInstances = function(instanceIds, callback) {
         logger.debug("Enter getInstances :: ", instanceIds);
         var queryObj = {};
