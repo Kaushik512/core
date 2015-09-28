@@ -333,7 +333,7 @@ function getAllApplicationData(callback){
         $.get('/app/deploy/env/' + envName + '/list', function(data) {
             callback(data);
         }).fail(function() {
-            alert("getAllApplicationData Error");
+            //alert("getAllApplicationData Error");
         });
 	});
 };

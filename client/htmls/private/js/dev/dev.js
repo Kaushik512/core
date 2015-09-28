@@ -2014,7 +2014,7 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
         if (data.instanceState == 'running') {
             enableInstanceActionStartBtn(data._id, data.hardware.os);
         }
-        if (data.instanceState == 'pending' || data.instanceState == 'stopping') {
+        if (data.instanceState == 'pending' || data.instanceState == 'stopping' || data.instanceState == 'terminated') {
             disableInstanceActionBtns(data._id);
         }
         if (data.instanceState == 'unknown') {
