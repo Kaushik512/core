@@ -1942,6 +1942,7 @@ $(document).ready(function() {
             var value = $this.val();
             if(assignTasks[i] == $this.attr('id')){
                $this.hide();
+
                $selectedtaskList.append($('<option class="taskimg" id="' + assignTasks[i] + '" value="' + value + '">' + value + '</option>'));
             }
         });
@@ -2276,13 +2277,24 @@ $(document).ready(function() {
             for (var i = 0; i < taskLists.length; i++) {
                //console.log(taskLists[i].taskType);
                if(taskLists[i].taskType != 'composite'){
-                  $('#compositeTasksList').append($('<option class="taskimg" id="' + taskLists[i]._id + '" value="' + taskLists[i].name + '">' + taskLists[i].name + '</option>'));
+                  /*$('#compositeTasksList').append($('<option class="taskimg" id="' + taskLists[i]._id + '" value="' + taskLists[i].name + '">' + taskLists[i].name + '</option>'));*/
+               
+                  if(taskLists[i].taskType == 'chef'){
+                     $('#compositeTasksList').append($('<option class="taskimgchef" id="' + taskLists[i]._id + '" value="' + taskLists[i].name + '">' + taskLists[i].name + '</option>'));
+                  }
+                  if(taskLists[i].taskType == 'puppet'){
+                     $('#compositeTasksList').append($('<option class="taskimgpuppet" id="' + taskLists[i]._id + '" value="' + taskLists[i].name + '">' + taskLists[i].name + '</option>'));
+                  }
+                  if(taskLists[i].taskType == 'jenkins'){
+                     $('#compositeTasksList').append($('<option class="taskimgjenkins" id="' + taskLists[i]._id + '" value="' + taskLists[i].name + '">' + taskLists[i].name + '</option>'));
+                  }
                }
             }
             // For the scenario to differenciate between New and Edit.
-            if(_assignedTasks){
-               createtaskComposite(_assignedTasks);
-            }
+
+            // if(_assignedTasks){
+            //    createtaskComposite(_assignedTasks);
+            // }
         }).fail(function(jxhr) {
             alert("TaskLists load Failed");
         });
