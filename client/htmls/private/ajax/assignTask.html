@@ -1030,7 +1030,8 @@ $(document).ready(function() {
                if (taskData.taskConfig.assignTasks.length > 0) {
                   //alert(taskData.taskConfig.assignTasks.length);
                   var _assignedTasks = taskData.taskConfig.assignTasks;
-                  loadTaskLists(_assignedTasks);
+                  // loadTaskLists(_assignedTasks);
+                  loadTaskLists(taskData);
                   
                }
             }
@@ -1934,19 +1935,48 @@ $(document).ready(function() {
         }
     }
 
-    function createtaskComposite(assignTasks){
-      var $selectedtaskList = $('#compositeselectedTasksList');
-      for(var i=0;i<assignTasks.length;i++){
-         $("#compositeTasksList option").each(function() {
-            var $this = $(this);
-            var value = $this.val();
-            if(assignTasks[i] == $this.attr('id')){
-               $this.hide();
+    // function createtaskComposite(assignTasks){
+    //   var $selectedtaskList = $('#compositeselectedTasksList');
+    //   for(var i=0;i<assignTasks.length;i++){
+    //      $("#compositeTasksList option").each(function() {
+    //         var $this = $(this);
+    //         var value = $this.val();
+    //         if(assignTasks[i] == $this.attr('id')){
+    //            $this.hide();
+    //            $selectedtaskList.append($('<option class="taskimg" id="' + assignTasks[i] + '" value="' + value + '">' + value + '</option>'));
+    //         }
+    //     });
+    //   }
+    // }
 
-               $selectedtaskList.append($('<option class="taskimg" id="' + assignTasks[i] + '" value="' + value + '">' + value + '</option>'));
+    function createtaskComposite(taskData) {
+        var $selectedtaskList = $('#compositeselectedTasksList');
+        var assignTasks = taskData.taskConfig.assignTasks;
+        //alert(JSON.stringify(assignTasks));
+        if (assignTasks.length) {
+            for (var i = 0; i < assignTasks.length; i++) {
+                $("#compositeTasksList option").each(function() {
+                    var $this = $(this);
+                    var value = $this.val();
+                    if (assignTasks[i] == $this.attr('id')) {
+                        $this.hide();
+                        //alert(taskData.taskType);
+                        //if (taskData.taskType == 'composite') {
+                        $.get('/tasks/' + assignTasks[i], function(data) {
+                            if (data.taskType == 'chef') {
+                                $selectedtaskList.append($('<option class="taskimgchef" id="' + data._id + '" value="' + data.name + '">' + data.name + '</option>'));
+                            } else if (data.taskType == 'puppet') {
+                                $selectedtaskList.append($('<option class="taskimgpuppet" id="' + data._id + '" value="' + data.name + '">' + data.name + '</option>'));
+                            } else if (data.taskType == 'jenkins') {
+                                $selectedtaskList.append($('<option class="taskimgjenkins" id="' + data._id + '" value="' + data.name + '">' + data.name + '</option>'));
+                            }
+                        });
+                    }
+
+                    //}
+                });
             }
-        });
-      }
+        }
     }
 
     $('#saveRunlist').click(function(e) {
@@ -2270,31 +2300,50 @@ $(document).ready(function() {
             loadTaskLists();
          }
     });
-    function loadTaskLists(_assignedTasks) {
+    /*function loadTaskLists(_assignedTasks) {
         //To get Task Lists
         $.get('/tasks/list/all', function(taskLists) {
             $('#compositeTasksList').empty();
             for (var i = 0; i < taskLists.length; i++) {
                //console.log(taskLists[i].taskType);
                if(taskLists[i].taskType != 'composite'){
-                  /*$('#compositeTasksList').append($('<option class="taskimg" id="' + taskLists[i]._id + '" value="' + taskLists[i].name + '">' + taskLists[i].name + '</option>'));*/
-               
-                  if(taskLists[i].taskType == 'chef'){
-                     $('#compositeTasksList').append($('<option class="taskimgchef" id="' + taskLists[i]._id + '" value="' + taskLists[i].name + '">' + taskLists[i].name + '</option>'));
-                  }
-                  if(taskLists[i].taskType == 'puppet'){
-                     $('#compositeTasksList').append($('<option class="taskimgpuppet" id="' + taskLists[i]._id + '" value="' + taskLists[i].name + '">' + taskLists[i].name + '</option>'));
-                  }
-                  if(taskLists[i].taskType == 'jenkins'){
-                     $('#compositeTasksList').append($('<option class="taskimgjenkins" id="' + taskLists[i]._id + '" value="' + taskLists[i].name + '">' + taskLists[i].name + '</option>'));
-                  }
+                  $('#compositeTasksList').append($('<option class="taskimg" id="' + taskLists[i]._id + '" value="' + taskLists[i].name + '">' + taskLists[i].name + '</option>'));
                }
             }
             // For the scenario to differenciate between New and Edit.
+            if(_assignedTasks){
+               createtaskComposite(_assignedTasks);
+            }
+        }).fail(function(jxhr) {
+            alert("TaskLists load Failed");
+        });
+    }*/
+    function loadTaskLists(taskData) {
+        //To get Task Lists
+        $.get('/tasks/list/all', function(taskLists) {
+            $('#compositeTasksList').empty();
+            for (var i = 0; i < taskLists.length; i++) {
+               //console.log(taskLists[i].taskType);
+               // if(taskLists[i].taskType != 'composite'){
+               //    $('#compositeTasksList').append($('<option class="taskimg" id="' + taskLists[i]._id + '" value="' + taskLists[i].name + '">' + taskLists[i].name + '</option>'));
+               // }
+               //alert(taskLists[i].taskType);
+               //if (taskLists[i].taskType == 'composite') {
+                  /*$('#compositeTasksList').append($('<option class="taskimg" id="' + taskLists[i]._id + '" value="' + taskLists[i].name + '">' + taskLists[i].name + '</option>'));*/
 
-            // if(_assignedTasks){
-            //    createtaskComposite(_assignedTasks);
-            // }
+                   if (taskLists[i].taskType == 'chef') {
+                       $('#compositeTasksList').append($('<option class="taskimgchef" id="' + taskLists[i]._id + '" value="' + taskLists[i].name + '">' + taskLists[i].name + '</option>'));
+                   }
+                   else if (taskLists[i].taskType == 'puppet') {
+                       $('#compositeTasksList').append($('<option class="taskimgpuppet" id="' + taskLists[i]._id + '" value="' + taskLists[i].name + '">' + taskLists[i].name + '</option>'));
+                   }
+                   else if (taskLists[i].taskType == 'jenkins') {
+                       $('#compositeTasksList').append($('<option class="taskimgjenkins" id="' + taskLists[i]._id + '" value="' + taskLists[i].name + '">' + taskLists[i].name + '</option>'));
+                   }
+               }
+            //}
+            // For the scenario to differenciate between New and Edit.
+                createtaskComposite(taskData);
         }).fail(function(jxhr) {
             alert("TaskLists load Failed");
         });

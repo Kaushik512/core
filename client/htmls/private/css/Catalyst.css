@@ -7906,7 +7906,8 @@ word-break:break-word;
     margin-top: 10px;
 }
 .jenkinsChefModal{
-    height:520px;
+    /*height:520px;*/
+    height:459px;
 }
 .jenkinsChefModalApp{
     height:570px;
