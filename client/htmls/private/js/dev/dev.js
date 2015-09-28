@@ -3136,6 +3136,8 @@
                                                                                 if (attribValue) {
                                                                                     var attribPathParts = attributeKey.split('/');
                                                                                     var attributeObj = {};
+
+                                                                                    
                                                                                     var currentObj = attributeObj;
                                                                                     for (var i = 0; i < attribPathParts.length; i++) {
                                                                                         if (!currentObj[attribPathParts[i]]) {

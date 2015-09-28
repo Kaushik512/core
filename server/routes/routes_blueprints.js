@@ -1595,8 +1595,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                         os: blueprint.blueprintConfig.instanceOS
                                                     },
                                                     credentials: {
-                                                        username: providerdata.username,
-                                                        password: instanceData.server.adminPass
+                                                        username: 'ubuntu',
+                                                        pemFileLocation: appConfig.catalystDataDir + '/' + appConfig.catalysHomeDirName + '/' +  appConfig.instancePemFilesDirName + '/' + blueprint.blueprintConfig.cloudProviderId
                                                     },
                                                     chef: {
                                                         serverId: blueprint.blueprintConfig.infraManagerId,
@@ -1657,13 +1657,15 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
                                                     var tempUncryptedPemFileLoc = appConfig.tempDir + '/' + uuid.v4();
 
-                                                    instance.credentials.pemFileLocation =   appConfig.catalystDataDir + '/' + appConfig.catalysHomeDirName + '/' +  appConfig.instancePemFilesDirName + '/' + blueprint.blueprintConfig.cloudProviderId;
+                                                    //instance.credentials.pemFileLocation =   appConfig.catalystDataDir + '/' + appConfig.catalysHomeDirName + '/' +  appConfig.instancePemFilesDirName + '/' + blueprint.blueprintConfig.cloudProviderId;
+                                                    logger.debug('instance.credentials.pemFileLocation:',instance.credentials.pemFileLocation);
                                                     cryptography.decryptFile(instance.credentials.pemFileLocation, cryptoConfig.decryptionEncoding, tempUncryptedPemFileLoc, cryptoConfig.encryptionEncoding, function(err) {
                                                         
                                                         instanceData.credentials = {
                                                             "username":"ubuntu", //to be fetched from vm images, based on the image.
                                                             "pemFilePath":tempUncryptedPemFileLoc
                                                         }
+                                                        //instanceData.credentials = instance.credentials;
                                                         hppubliccloud.waitforserverready(hppubliccloudconfig.tenantId, instanceData, function(err, data){
                                                                 if (!err) {
                                                                 logger.debug('Instance Ready....');
