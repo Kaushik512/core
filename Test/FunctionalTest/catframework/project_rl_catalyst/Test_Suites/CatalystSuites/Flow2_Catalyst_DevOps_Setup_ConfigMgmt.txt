@@ -63,8 +63,20 @@ Catalyst Duplicate DataBag Setup
 
 
 
+Catalyst Validation of Puppet Server
+    [Tags]       Sanity         puppet
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+#    Catalyst Login
+    Catalyst Validation of the Puppet Server Page
+    Catalyst Logout
+    [Teardown]     Close Browser
 
 
-
-
+Catalyst Creation of Puppet Server
+    [Tags]       Sanity         pup
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+#    Catalyst Login
+    Catalyst Creation of the Puppet Server
+    Catalyst Logout
+    [Teardown]     Close Browser
 
