@@ -28,6 +28,14 @@ ${ENVIRONMENTSERVER}                http://d4d.rlcatalyst.com/public/login.html
 
 
              
+#Puppet
+${PUPPET SERVERNAME}       	RLPuppetServer
+${PUPPET USERNAME}          ubuntu
+${HOSTNAME}                 52.24.60.123
+${Valid15ChrPuppetName}      RelevanceLabPuppet
+
+${Valid15ChrErrMsg}         limited to 15 chars.
+
 
 #DataBag
 ${DATABAG NAME}        DataRL
@@ -232,6 +240,8 @@ ${IP Ubuntu}                54.68.147.50
 ${IP ADD CENTOS}              52.24.178.71
 ${IP Centos}                  52.24.178.71
 
+
+${SETTING}                    Settings
 ${Proj1}                      Catalyst
 ${Proj2}                      Primary_Edu
 ${CookBkName}                 apt
@@ -577,3 +587,16 @@ ${DEF TEAMNAME4}                Relevance_Labs_QA
 
 #Blueprint Validation
 ${ERRROR MESSAGE}              Required.
+${DESIGN BREADCRUMB}         DesignPROVIDERSAWS
+${AZURE BREADCRUMB}          DesignPROVIDERSAzure
+${DATACENTRE BREADCRUMB}     DesignPROVIDERSData Centre
+${OPENSTACK BREADCRUMB}      DesignPROVIDERSOpen Stack
+${CLOUDSTACK BREADCRUMB}     DesignPROVIDERSCloud Stack
+${DOCKER BREADCRUMB}         DesignPROVIDERSDocker
+
+
+
+
+
+
+

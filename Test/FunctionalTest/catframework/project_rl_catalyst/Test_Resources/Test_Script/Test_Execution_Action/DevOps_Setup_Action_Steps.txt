@@ -270,6 +270,100 @@ Vaildate the Empty URL field
     Clicks on Save button to save the ConfigMgmt detail
 
 
+Catalyst Creation of the Puppet Server
+    Clicks on Settings
+    Clicks on DevOps Setup menu
+    Clicks on Puppet Server Link Button
+    Clicks on New Button of Puppet Server Button
+    Sleep    1s
+    Enters the Puppet Server Name
+    Enters the Puppet UserName
+    Enters the Puppet Host Name
+    Select The Organization of the OrgAdmin created
+    Choose the Authentication Type
+    Sleep    1s
+    Upload Pem file for Puppet Server
+    Clicks on Save Button of Puppet Server
+    Verify the Puppet Server is Created
+
+Catalyst Validation of the Puppet Server Page
+    Validate the 15Character PuppetServer Name
+    Verfiy the Error Message displayed limited to 15Characters
+    Validate the Empty Puppet Server Name,HostName,UserName,Organization
+
+
+
+Validate the 15Character PuppetServer Name
+    Clicks on Settings
+    Clicks on DevOps Setup menu
+    Clicks on Puppet Server Link Button
+    Clicks on New Button of Puppet Server Button
+    Sleep    1s
+    Enters the 15Character PuppetServer Name
+    
+Validate the Empty Puppet Server Name,HostName,UserName,Organization
+    Clicks on New Button of Puppet Server Button
+    Sleep    1s
+    Clicks on Save Button of Puppet Server
+    Sleep    3s
+    Verify the Error Message displayed for Empty Puppet Server Name,HostName,UserName,Organization
+
+    
+Verify the Error Message displayed for Empty Puppet Server Name,HostName,UserName,Organization
+    Element Should Contain    id=errmsg_puppetservername    ${REQ}
+    Element Should Contain    id=errmsg_puppetservername    ${REQ}
+    Element Should Contain    id=errmsg_puppetservername    ${REQ}
+    Element Should Contain    id=errmsg_puppetservername    ${REQ}
+
+
+Enters the 15Character PuppetServer Name
+    Input Text    id=puppetservername    ${Valid15ChrPuppetName}
+    Sleep    1s
+    Clicks on Save Button of Puppet Server
+
+Verfiy the Error Message displayed limited to 15Characters
+    Element Should Contain    id=errmsg_puppetservername    ${Valid15ChrErrMsg}
+    Clicks on Cancel Button of puppet Server  
+
+
+
+Clicks on Cancel Button of puppet Server
+    Click Element    id=btncancel
+
+Upload Pem file for Puppet Server
+    Choose File    id=userpemfile     ${CAT_INSTANCES}
+
+Clicks on Save Button of Puppet Server
+    Click Element    css=.btn.btn-primary.btn-mini
+
+Verify the Puppet Server is Created
+    Element Should Contain    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${PUPPET SERVERNAME}']    ${PUPPET SERVERNAME}
+
+
+
+Clicks on Puppet Server Link Button
+    Click Element    xpath=.//*[text()='Puppet Server']
+
+Clicks on New Button of Puppet Server Button
+    Click Element    id=newConfig
+
+Enters the Puppet Server Name
+    Input Text    id=puppetservername    ${PUPPET SERVERNAME}
+
+Enters the Puppet UserName
+    Input Text    id=username    ${PUPPET USERNAME}
+
+Enters the Puppet Host Name
+    Input Text    id=hostname    ${HOSTNAME}
+
+Choose the Authentication Type
+    Click Element    css=#s2id_authType > a > span.select2-arrow
+    Sleep    1s
+    Input Text    css=#select2-drop > div > input    Pem File
+    Sleep    1s
+    Click Element    css=.select2-result-label
+
+
 
 
 

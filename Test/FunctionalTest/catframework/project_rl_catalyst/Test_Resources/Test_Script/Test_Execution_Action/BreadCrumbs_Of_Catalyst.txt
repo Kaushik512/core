@@ -14,190 +14,166 @@ Resource           ${CATALYST TEST DATA}/${TESTDATA}
 
 
 *** Keywords ***
+Catalyst Validation of SETTINGS Setup BreadCrumbs
+    Clicks on Settings
+    Clicks on Organization image
+    Verification of the Breadcrumb
+    Clicks on Business Groups menu
+    Verification of the Breadcrumb
+    Clicks on projects menu
+    Verification of the Breadcrumb
+    Clicks on DevOps Setup menu
+    Verification of the Breadcrumb
+    Clicks on Config Management menu
+    Verification of the Breadcrumb
+    Clicks On Environments 
+    Verification of the Breadcrumb
+    Clicks on Puppet Server
+    Verification of the Breadcrumb
+    Clicks on Docker menu
+    Verification of the Breadcrumb
+    Clicks on Jenkins menu
+    Verification of the Breadcrumb
+    Clicks on Provideers menu
+    Verification of the Breadcrumb
+    Clicks on DevOps Setup menu
+    Sleep    1s
+    Clicks on Users Setup
+    Verification of the Breadcrumb
+    Clicks on User Roles menu
+    Verification of the Breadcrumb
+    Clicks on Users
+    Verification of the Breadcrumb
+    Clicks on Teams
+    Verification of the Breadcrumb
+    Clicks on Users Setup
+    Sleep    1s
+    Clicks on Gallery Setup
+    Verification of the Breadcrumb
+    Clicks on Template Type
+    Verification of the Breadcrumb
+    Clicks on Templates
+    Verification of the Breadcrumb
+    Clicks on Service Command
+    Verification of the Breadcrumb
+    Clicks on VMImage
+    Verification of the Breadcrumb
+    Sleep    1s
+    Clicks on Gallery Setup
 
-Catalyst Validation of Organization Setup BreadCrumbs
-    Steps of Validation for Organization Breadcrumb 
-    Validation Organization Breadcrumbpath
-    Steps of Validation for Business Breadcrumb 
-    Validation Business Breadcrumbpath
-    Steps of Validation for Projects Breadcrumb 
-    Validation Projects Breadcrumbpath
 
 
+Catalyst Validation of Design Breadcrumb
+    Sleep    2s
+    Clicks on Design Link
+    #Get the Text from the Header and Compare
+    Verify the AWS Breadcrumb
 
-#organization setup starts
-Steps of Validation for Organization Breadcrumb
-    BreadCrumbs same path 
-    Click Element    xpath=.//*[@id='setting_tree']/ul/li[2]/a
+    Clicks on Azure Link
+    #Get the Text from the Header and Compare
+    Verfiy the Azure Breadcrumb
 
-Validation Organization Breadcrumbpath
-    Element Should Contain    xpath=.//*[@id='ribbon']/ol    ${ValidationOrgBreadCrumb}
+    Clicks on DataCentre Link
+    Get the Text from the Header and Compare
+    Verfiy the DataCentre Breadcrumb
 
+    Clicks on openStack Link
+    Get the Text from the Header and Compare
+    Verfiy the Open Stack Breadcrumb
 
-Steps of Validation for Environment Breadcrumb 
-    Click Element    xpath=.//*[@id='setting_tree']/ul/li[7]/a
-   
-Validation Environment Breadcrumbpath
-    Element Should Contain    xpath=.//*[@id='ribbon']/ol    ${ValidationEnvBreadCrumb}
+    Clicks on Cloud Stack Link
+    Get the Text from the Header and Compare
+    Verfiy the Cloud Stack Breadcrumb
 
+    Clicks on Docker Link
+    Get the Text from the Header and Compare
+    Verfiy the Docker Breadcrumb
 
-Steps of Validation for Business Breadcrumb
-    Click Element    xpath=.//*[@id='setting_tree']/ul/li[3]/a
 
-Validation Business Breadcrumbpath
-    Element Should Contain    xpath=.//*[@id='ribbon']/ol    ${ValidationBusGrpBreadCrumb}
 
 
-Steps of Validation for Projects Breadcrumb
-    Click Element    xpath=.//*[@id='setting_tree']/ul/li[4]/a
 
-Validation Projects Breadcrumbpath
-    Element Should Contain    xpath=.//*[@id='ribbon']/ol    ${ValidationProjBreadCrumb}
+Clicks on Azure Link
+    Execute Javascript    $('#blueprints > li > ul > li:nth-child(2) > a > div > span').click();
 
-BreadCrumbs same path 
-    Click Element    xpath=.//*[@id='settingsNew']
-    Click Element    xpath=.//*[@id='setting_tree']/ul/li[1]/a         #Organization setup ends
+Clicks on DataCentre Link
+    Execute Javascript    $('#blueprints > li > ul > li:nth-child(3) > a > div > span').click();    
 
+Clicks on openStack Link
+    Execute Javascript    $('#blueprints > li > ul > li:nth-child(4) > a > div > span').click();
 
+Clicks on Cloud Stack Link
+    Execute Javascript    $('#blueprints > li > ul > li:nth-child(5) > a > div > span').click();
 
+Clicks on Docker Link
+    Execute Javascript    $('#blueprints > li > ul > li:nth-child(6) > a > div > span').click();    
 
-Catalyst Validation of DevOps Setup BreadCrumbs
-    Steps of Validation for Config Management Breadcrumb 
-    Validation Config Management Breadcrumbpath
-    Steps of Validation for Environment Breadcrumb 
-    Validation Environment Breadcrumbpath 
-    Steps of Validation for Docker Breadcrumb 
-    Validation Docker Breadcrumbpath 
-    Steps of Validation for Jenkkins Breadcrumb 
-    Validation Jenkins Breadcrumbpath 
-    Steps of Validation for Providers Breadcrumb 
-    Validation Providers Breadcrumbpath
-    Steps of Validation for Jira Breadcrumb 
-    Validation Jira Breadcrumbpath
 
 
 
+Clicks on Design Link
+    Click Element    id=designNew
 
-                                                                    #Devops Config Management starts   
-Steps of Validation for Config Management Breadcrumb
-    BreadCrumbs Devops setup path
-    Click Element    xpath=.//*[@id='setting_tree']/ul/li[6]/a
 
-Validation Config Management Breadcrumbpath 
-    Element Should Contain    xpath=.//*[@id='ribbon']/ol    ${ValidationConfigMgmtBreadCrumb}
 
-Steps of Validation for Jira Breadcrumb
-    BreadCrumbs Devops setup path
-    Click Element    xpath=.//*[@id='setting_tree']/ul/li[11]/a
 
-Validation Jira Breadcrumbpath
-    Element Should Contain    xpath=.//*[@id='ribbon']/ol    ${ValidationJiraBreadCrumb}
 
+Get the Text from the Header and Compare
+    ${Header}=    Get Text    xpath=.//*[@id='ribbon']/ol
 
+Verify the AWS Breadcrumb
+    ${Header}=    Get Text    xpath=.//*[@id='ribbon']/ol
+    Should Be Equal    ${Header}    ${DESIGN BREADCRUMB}
 
-Steps of Validation for Providers Breadcrumb
-    BreadCrumbs Devops setup path
-    Click Element    xpath=.//*[@id='setting_tree']/ul/li[10]/a
+Verfiy the Azure Breadcrumb
+    ${Header}=    Get Text    xpath=.//*[@id='ribbon']/ol
+    Should Be Equal    ${Header}    ${AZURE BREADCRUMB}
 
-Validation Providers Breadcrumbpath
-    Element Should Contain    xpath=.//*[@id='ribbon']/ol    ${ValidationProvidersBreadCrumb}
+Verfiy the DataCentre Breadcrumb
+    ${Header}=    Get Text    xpath=.//*[@id='ribbon']/ol
+    Should Be Equal    ${Header}    ${DATACENTRE BREADCRUMB}
 
+Verfiy the Open Stack Breadcrumb
+    ${Header}=    Get Text    xpath=.//*[@id='ribbon']/ol
+    Should Be Equal    ${Header}    ${OPENSTACK BREADCRUMB}    
 
-Steps of Validation for Docker Breadcrumb 
-    Click Element    xpath=.//*[@id='setting_tree']/ul/li[8]/a
+Verfiy the Cloud Stack Breadcrumb
+    ${Header}=    Get Text    xpath=.//*[@id='ribbon']/ol
+    Should Be Equal    ${Header}    ${CLOUDSTACK BREADCRUMB}
 
-Validation Docker Breadcrumbpath
-    Element Should Contain    xpath=.//*[@id='ribbon']/ol    ${ValidationDockerBreadCrumb}
 
+Verfiy the Docker Breadcrumb
+    ${Header}=    Get Text    xpath=.//*[@id='ribbon']/ol
+    Should Be Equal    ${Header}    ${DOCKER BREADCRUMB}
 
-Steps of Validation for Jenkkins Breadcrumb 
-    Click Element    xpath=.//*[@id='setting_tree']/ul/li[9]/aSteps 
 
-Validation Jenkins Breadcrumbpath 
-    Element Should Contain    xpath=.//*[@id='ribbon']/ol    ${ValidationJenkinsBreadCrumb}
 
-BreadCrumbs Devops setup path
-    Click Element    xpath=.//*[@id='settingsNew']
-    Click Element    xpath=.//*[@id='setting_tree']/ul/li[5]/a
-                                                                 #Devops Config Management setup ends
+Clicks On Environments
+    Click Element    xpath=.//*[text()='Environments']
 
+Clicks on User Roles menu
+    Click Element   xpath=.//*[text()='User Roles']
 
+Clicks on VMImage
+    Click Element    xpath=.//*[text()='VMImage']
 
 
-Catalyst Validation of Users Setup BreadCrumbs
-    Steps of Validation for Users Roles Breadcrumb 
-    Validation Users Roles Breadcrumbpath 
-    Steps of Validation for Users Breadcrumb 
-    Validation Users Breadcrumbpath
-    Steps of Validation for Teams Breadcrumb 
-    Validation Teams Breadcrumbpath
+Clicks on Provideers menu
+    Click Element    xpath=.//*[text()='Providers']
 
-Steps of Validation for Users Roles Breadcrumb                     #Users Setup starts
-    BreadCrumb Users Setup path
-    Click Element    xpath=.//*[@id='setting_tree']/ul/li[7]/a
 
-Validation Users Roles Breadcrumbpath
-    Element Should Contain    xpath=.//*[@id='ribbon']/ol    ${ValidationUsersRolesBreadCrumb}
+Clicks on Jenkins menu
+    Click Element    xpath=.//*[text()='Jenkins']
 
-Steps of Validation for Users Breadcrumb
-    Click Element    xpath=.//*[@id='setting_tree']/ul/li[8]/a
 
-Validation Users Breadcrumbpath
-    Element Should Contain    xpath=.//*[@id='ribbon']/ol    ${ValidationUsersBreadCrumb}
+Clicks on Docker menu
+    Click Element    xpath=.//*[text()='Docker']
 
-Steps of Validation for Teams Breadcrumb
-    Click Element    xpath=.//*[@id='setting_tree']/ul/li[9]/a
 
-Validation Teams Breadcrumbpath
-    Element Should Contain    xpath=.//*[@id='ribbon']/ol    ${ValidationTeamsBreadCrumb}
+Clicks on Puppet Server 
+    Click Element    xpath=.//*[text()='Puppet Server']
 
-BreadCrumb Users Setup path
-    Click Element    xpath=.//*[@id='settingsNew']
-    Click Element    xpath=.//*[@id='setting_tree']/ul/li[6]/a         #Users Setup Ends
 
+Verification of the Breadcrumb
+    Element Should Contain    xpath=.//*[@id='ribbon']/ol/li    ${SETTING}
 
-
-
-Catalyst Validation of Gallery Setup BreadCrumbs
-    Steps of Validation for Templates BreadCrumb
-    Validation Templates BreadCrumb
-    Steps of Validation for Service Command BreadCrumb
-    Validation Service Command BreadCrumb
-    Steps of Validation for Image BreadCrumb
-    Validation Image BreadCrumb
-
-Steps of Validation for Templates BreadCrumb
-    BreadCrumb Gallery Setup path
-    Click Element    xpath=.//*[@id='setting_tree']/ul/li[11]/a
-
-Validation Templates BreadCrumb
-    Element Should Contain    xpath=.//*[@id='ribbon']/ol    ${ValidationTemplatesBreadCrumb}
-
-
-Steps of Validation for Service Command BreadCrumb
-    Click Element    xpath=.//*[@id='setting_tree']/ul/li[12]/a
-
-Validation Service Command BreadCrumb
-    Element Should Contain    xpath=.//*[@id='ribbon']/ol    ${ValidationServiceBreadCrumb}
-
-Steps of Validation for Image BreadCrumb
-    Click Element    xpath=.//*[@id='setting_tree']/ul/li[13]/a
-
-Validation Image BreadCrumb
-    Element Should Contain    xpath=.//*[@id='ribbon']/ol    ${ValidationImageBreadCrumb}
-
-
-
-BreadCrumb Gallery Setup path
-    Click Element    xpath=.//*[@id='settingsNew']
-    Click Element    xpath=.//*[@id='setting_tree']/ul/li[10]/a
-
-
-
-
-
-
-
-
-
- 

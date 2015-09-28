@@ -8345,6 +8345,19 @@ form.cmxform .gray * {
     height:35px;
 }
 }
+.widgetColor{
+    color:#4e5964;
+}
+.widgetHeight{
+    min-height:300px!important;
+}
+.tablePadding{
+    padding-left:0px!important;
+    padding-right:0px!important;
+}
+.tableCenter{
+    text-align:center;
+}
 
 
 
