@@ -2,7 +2,55 @@
 <!--orchestration tab starts here-->
 
                 <div class="tab-pane" id="l3">
-                    <div id="orchestrationTable" class="row">
+                    <div class="jarviswidget jarviswidget-color-blueLight" id="wid-id-applicationww" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false" data-widget-fullscreenbutton="false" data-widget-custombutton="false" data-widget-sortable="false">
+                        <div>
+                            <div class="widget-body no-padding">
+                                <div class="" >
+                                    <div class="panel panel-default"  style="border-top: 0px none;">
+                                        <div class="panel-heading"  style="border-bottom:1px solid rgb(221, 221, 221);height:40px;background-color: #fcfcfc;">
+                                            <h4 class="panel-title" style="width:100%">
+                                              <span style="float:left;padding:0px !important;color:#666 !important;font-size:13px !important">
+                                                List of Tasks
+                                              </span>
+                                                <span style="float:right;margin-top:-6px;">
+                                                    <button class="btn btn-minier btn-primary createTaskLink" href="javascript:void(0)">
+                                                        <i class="ace-icon ace-icon fa fa-plus bigger-110"></i>
+                                                        New
+                                                    </button>
+                                                </span>
+                                            </h4>
+                                        </div>
+                                        <div id="orchestrationTable" class="row">
+                                            <div class="widget-body">
+                                                <div class="widget-main" style="min-height:300px">
+                                                    <div class="col-md-12 table-responsive" style=" padding-top: 40px;">
+                                                        <table id="tableOrchestration" class="table table-striped table-bordered table-hover dataTable no-footer text-align-center table-condensed tablesorter" cellpadding="5px" width="100%">
+                                                            <thead>
+                                                            <tr class="rowCustomStyle">
+                                                                <td style="width:64px;">Job Type</td>
+                                                                <td>Name</td>
+                                                                <td style="width:232px">Job Description</td>
+                                                                <td style="width:80px;">Job Links</td>
+                                                                <td>Execute</td>
+                                                                <td>History</td>
+                                                                <td style="width:80px;">Last Run</td>
+                                                                <td>Action</td>
+                                                            </tr>
+                                                            </thead>
+                                                            <tbody class="taskListArea">
+
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- <div id="orchestrationTable" class="row">
                         <div class="col-md-12">
                             <div class="col-md-12">
 
@@ -50,7 +98,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
 
                     <div id="jenkinsJobHistory" class="row hidden">
                         <div class="col-md-12">

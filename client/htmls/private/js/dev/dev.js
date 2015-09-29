@@ -5125,6 +5125,7 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
         if (localStorage.getItem("SelectedClass") == "Orchestration") {
             localStorage.removeItem("SelectedClass");
             $('#myTab3').find('.Instances').removeClass('active');
+            $('#myTab3').find('.InfrastructureLocalStorage').removeClass('active');
             $('#myTab3').find('.Orchestration').addClass('active');
             $('#myTabContent3').find('#l1').removeClass('active');
             $('#myTabContent3').find('#l3').addClass('active');
