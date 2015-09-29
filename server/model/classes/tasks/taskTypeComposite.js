@@ -4,16 +4,18 @@ var extend = require('mongoose-schema-extend');
 var ObjectId = require('mongoose').Types.ObjectId;
 
 var taskTypeSchema = require('./taskTypeSchema');
-var Tasks;
+var TaskHistory = require('./taskHistory');
+
 
 
 var compositeTaskSchema = taskTypeSchema.extend({
-    jobName: String,
     assignTasks: [String]
 });
 
 // Instance Method :- run composite task
 compositeTaskSchema.methods.execute = function(userName, baseUrl, choiceParam, onExecute, onComplete) {
+    var Tasks;
+    var taskHistory = new TaskHistory();
     if (!Tasks) {
         Tasks = require('_pr/model/classes/tasks/tasks.js');
     }
@@ -27,7 +29,7 @@ compositeTaskSchema.methods.execute = function(userName, baseUrl, choiceParam, o
         }
 
         if (typeof onExecute === 'function') {
-            onExecute(null, null);
+            onExecute(null, null, taskHistory);
         }
 
 
@@ -43,13 +45,20 @@ compositeTaskSchema.methods.execute = function(userName, baseUrl, choiceParam, o
         }
         count = 0;
 
-        function executeTasks() {
-            task[count].execute(userName, baseUrl, choiceParam, function(err, taskExecuteData) {
+        function executeTasks(count) {
+            task[count].execute(userName, baseUrl, choiceParam, function(err, taskExecuteData, history) {
                 logger.debug("Calling...");
                 if (err) {
                     return;
                 }
-
+                if (!(taskHistory.taskHistoryIds && taskHistory.taskHistoryIds.length)) {
+                    taskHistory.taskHistoryIds = [];
+                }
+                taskHistory.taskHistoryIds.push({
+                    taskId: task[count].id,
+                    historyId: history.id
+                });
+                taskHistory.save();
             }, function(err, status) {
                 if (err) {
                     if (typeof onComplete === 'function') {
@@ -61,7 +70,7 @@ compositeTaskSchema.methods.execute = function(userName, baseUrl, choiceParam, o
                 logger.debug("count======= ", count);
                 if (count < tasks.length) {
                     if (status === 0) {
-                        executeTasks();
+                        executeTasks(count);
                     } else {
                         onComplete(null, 1);
                     }
@@ -72,7 +81,7 @@ compositeTaskSchema.methods.execute = function(userName, baseUrl, choiceParam, o
             });
         }
 
-        executeTasks();
+        executeTasks(count);
     });
     logger.debug(this.assignTasks);
 };

@@ -92,7 +92,10 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                         });
 
                                     } else if (autoScaleMsg.Event === 'autoscaling:EC2_INSTANCE_LAUNCH') {
-
+                                        if (!cloudFormation.infraManagerId) {
+                                            logger.error("Inframanager id not found for cloudformation stack id : " + cloudformation.id);
+                                            return;
+                                        }
                                         masterUtil.getCongifMgmtsById(cloudFormation.infraManagerId, function(err, infraManagerDetails) {
                                             if (err) {
                                                 logger.error("Unable to fetch infra manager details ", err);

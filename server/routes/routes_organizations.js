@@ -1567,7 +1567,12 @@ module.exports.setRoutes = function(app, sessionVerification) {
                             res.send(500);
                             return;
                         }
-
+                        if (!req.body.configManagmentId) {
+                            res.send(400, {
+                                message: "Invalid Config Management Id"
+                            });
+                            return;
+                        }
                         masterUtil.getCongifMgmtsById(req.body.configManagmentId, function(err, infraManagerDetails) {
                             if (err) {
                                 res.send(500);
