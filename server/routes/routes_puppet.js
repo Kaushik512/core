@@ -14,6 +14,19 @@ var credentialCryptography = require('_pr/lib/credentialcryptography');
 
 module.exports.setRoutes = function(app, verificationFunc) {
 
+    app.all('/puppet/*',verificationFunc);
+
+    app.all('/puppet/:puppetServerId/*',function(req,res,next){
+        if(req.params.puppetServerId) {
+            next();
+        } else {
+            res.send(400,{
+                message:"Invalid puppet server id"
+            })
+            return;
+        }
+    });
+
 
     app.get('/puppet/:puppetServerId', function(req, res) {
 
