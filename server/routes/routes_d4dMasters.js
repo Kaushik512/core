@@ -2802,7 +2802,19 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                             });
                                         });
 
-                                    } else {
+                                    } else if(req.params.id === '4'){
+                                        bodyJson['appdeploy'] = JSON.parse(bodyJson['appdeploy']);
+                                        var projectModel = new d4dModelNew.d4dModelMastersProjects(bodyJson);
+                                            projectModel.save(function(err, data) {
+                                                if (err) {
+                                                    logger.error('Hit Save error', err);
+                                                    res.send(500);
+                                                    return;
+                                                }
+                                                res.send(200);
+                                                return;
+                                            });
+                                    }else {
                                         logger.debug("FLD>>>>>>>>>>>>> ", FLD);
                                         eval('var mastersrdb =  new d4dModelNew.' + dbtype + '({' + JSON.parse(FLD) + '})');
                                         mastersrdb.save(function(err, data) {
@@ -2854,6 +2866,29 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                 } else {
 
                                     // Update settings
+
+                                    if (req.params.id === '4') {
+                                        bodyJson['appdeploy'] = JSON.parse(bodyJson['appdeploy']);
+                                        delete rowtoedit._id; //fixing the issue of 
+                                        rowtoedit["appdeploy"] = bodyJson['appdeploy'];
+                                        logger.debug('Rowtoedit: %s', JSON.stringify(rowtoedit));
+                                        eval('d4dModelNew.' + dbtype).update({
+                                            rowid: bodyJson["rowid"],
+                                            "id": "4"
+                                        }, {
+                                            $set: rowtoedit
+                                        }, {
+                                            upsert: false
+                                        }, function(err, saveddata) {
+                                            if (err) {
+                                                logger.error('Hit Save error', err);
+                                                res.send(500);
+                                                return;
+                                            }
+                                            res.send(200);
+                                            return;
+                                        });
+                                    }
                                     if (req.params.id === "7") {
                                         d4dModelNew.d4dModelMastersUsers.find({
                                             "id": req.params.id,
@@ -3721,4 +3756,22 @@ module.exports.setRoutes = function(app, sessionVerification) {
             return;
         });
     });
+
+    app.get('/d4dMasters/project/:anId', function(req, res) {
+        logger.debug("Entered to env name...");
+        masterUtil.getParticularProject(req.params.anId, function(err, data) {
+            if (err) {
+                logger.debug("Failed to fetch  Environment", err);
+                res.send(500, "Failed to fetch  Environment");
+                return;
+            }
+            if(!data){
+                res.send(404,"No Environment Found.");
+                return;
+            }
+            res.send(data);
+            return;
+        });
+    });
 }
+
