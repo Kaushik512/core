@@ -171,20 +171,32 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
                     if (req.query.chefRemove && req.query.chefRemove === 'true') {
 
-                        var infraManagerData = instance.chef || instance.puppet;
-                        var infraManagerId = infraManagerData.serverId;
+                        var infraManagerData;
 
+
+                        if (instance.chef && instance.chef.serverId) {
+                            infraManagerData = instance.chef;
+                        } else {
+                            infraManagerData = instance.puppet;
+                        }
+                        var infraManagerId = infraManagerData.serverId;
+                        if (!infraManagerId) {
+                            res.send(500, {
+                                message: "Instance data corrupted"
+                            });
+                            return;
+                        }
                         masterUtil.getCongifMgmtsById(infraManagerId, function(err, infraManagerDetails) {
                             if (err) {
                                 logger.debug("Failed to fetch Infra Manager Details ", err);
                                 res.send(500, errorResponses.db.error);
                                 return;
                             }
-                            console.log('infraManager ==>',infraManagerDetails);
+                            console.log('infraManager ==>', infraManagerDetails);
                             if (!infraManagerDetails) {
                                 logger.debug("Infra Manager details not found", err);
                                 res.send(500, {
-                                    message:"Infra Manager Details Corrupted"
+                                    message: "Infra Manager Details Corrupted"
                                 });
                                 return;
                             }
@@ -226,7 +238,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                 puppet.deleteNode(instance.puppet.puppetNodeName, function(err, deleted) {
                                     if (err) {
                                         logger.debug("Failed to delete node ", err);
-                                        if (err.chefStatusCode && err.chefStatusCode === 404) {
+                                        if (typeof err.retCode !== 'undefined' && err.retCode === 24) {
                                             removeInstanceFromDb();
                                         } else {
                                             res.send(500);
@@ -1105,6 +1117,12 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                             } else {
                                 actionLog = instancesDao.insertPuppetClientRunActionLog(instance.id, req.session.user.cn, new Date().getTime());
                                 configManagmentId = instance.puppet.serverId
+                            }
+                            if (!configManagmentId) {
+                                res.send(500, {
+                                    message: "Instance Data Corrupted"
+                                });
+                                return;
                             }
 
                             var logReferenceIds = [instance.id, actionLog._id];
@@ -2345,7 +2363,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         });
 
     });
-    
+
     app.get('/instances/:instanceId/setAsWorkStation', function(req, res) {
 
         instancesDao.getInstanceById(req.params.instanceId, function(err, instances) {

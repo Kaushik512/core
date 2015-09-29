@@ -1572,7 +1572,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     return;
                 }
                 logger.debug("Got Org: >>>>> ", JSON.stringify(anOrg));
-                if(anOrg.length){
+                if (anOrg.length) {
                     var query = {};
                     query['id'] = req.params.masterid;
                     query['orgname_rowid'] = anOrg[0].rowid;
@@ -1591,7 +1591,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                         }
 
                     });
-                }else{
+                } else {
                     res.send("Org Not Found");
                     return;
                 }
@@ -2527,13 +2527,13 @@ module.exports.setRoutes = function(app, sessionVerification) {
                         bodyJson["configType"] = "puppet";
                         if (bodyJson["puppetpassword"]) {
                             bodyJson["puppetpassword"] = cryptography.encryptText(bodyJson["puppetpassword"], cryptoConfig.encryptionEncoding, cryptoConfig.decryptionEncoding);
-                        }else{
+                        } else {
                             bodyJson["folderpath"] = "/" + bodyJson["username"] + "/.puppet/";
                         }
                         logger.debug("encryptText:>>>>>>>>>>>>> ", bodyJson["puppetpassword"]);
                     }
                     if (req.params.id === "3") {
-                        if(!bodyJson["environmentname"]){
+                        if (!bodyJson["environmentname"]) {
                             bodyJson["environmentname"] = bodyJson["puppetenvironmentname"];
                         }
                     }
@@ -3719,14 +3719,20 @@ module.exports.setRoutes = function(app, sessionVerification) {
     });
 
     app.get('/d4dMasters/configmanagement/:anId', function(req, res) {
+        if (!req.params.anId) {
+            res.send(400, {
+                message: "Invalid Config Management Id"
+            });
+            return;
+        }
         masterUtil.getCongifMgmtsById(req.params.anId, function(err, data) {
             if (err) {
                 logger.debug("Failed to fetch all configmanagement", err);
                 res.send(500, "Failed to fetch all configmanagement");
                 return;
             }
-            if(!data){
-                res.send(404,"No ConfigManagement Found.");
+            if (!data) {
+                res.send(404, "No ConfigManagement Found.");
                 return;
             }
             res.send(data);
@@ -3742,8 +3748,8 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 res.send(500, "Failed to fetch  Environment");
                 return;
             }
-            if(!data){
-                res.send(404,"No Environment Found.");
+            if (!data) {
+                res.send(404, "No Environment Found.");
                 return;
             }
             res.send(data);
@@ -3768,3 +3774,4 @@ module.exports.setRoutes = function(app, sessionVerification) {
         });
     });
 }
+
