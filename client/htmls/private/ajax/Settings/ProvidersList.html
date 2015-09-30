@@ -116,7 +116,7 @@
                                     }
 
                                 }
-                                startup();
+                                
                               });
                             }
 
@@ -128,25 +128,157 @@
                                 reqBody.secretKey='';
                                 reqBody.providerType='';
                                 reqBody.regions=[];
-      //reqBody.instanceUserName='root';
-      $.ajax({
-         method: "GET",url: "/aws/providers",data: reqBody,   
-         success: function(data, success) {
-                data= typeof data=="string" ?JSON.parse(data):data;
-                d4ddata=data;
-                getOrganizationList();
-                
-            },
-            error: function(jqxhr) {
-                removeLoader();
-                bootbox.alert(jqxhr.status);
-            },
-            failure: function(data) {
-                bootbox.alert(data);
-            }
-        });
+                                //reqBody.instanceUserName='root';
+                                $.ajax({
+                                     method: "GET",url: "/aws/providers",data: reqBody,   
+                                     success: function(data, success) {
+                                            data= typeof data=="string" ?JSON.parse(data):data;
+                                            d4ddata=data;
+                                            getOrganizationList();
+                                            getProviderDataopenstack();
+                                        },
+                                        error: function(jqxhr) {
+                                            removeLoader();
+                                            bootbox.alert(jqxhr.status);
+                                        },
+                                        failure: function(data) {
+                                            bootbox.alert(data);
+                                        }
+                                });
 
-    }
+                            }
+                            function getProviderDataopenstack(){
+
+                                var reqBody={};
+                                reqBody.name=''
+                                reqBody.accessKey='';
+                                reqBody.secretKey='';
+                                reqBody.providerType='';
+                                reqBody.regions=[];
+                                //reqBody.instanceUserName='root';
+                                $.ajax({
+                                     method: "GET",
+                                     url: "/openstack/providers",data: reqBody,   
+                                     success: function(data, success) {
+                                            data= typeof data=="string" ?JSON.parse(data):data;
+                                            
+                                            for(var u = 0; u < data.length; u++){
+                                                d4ddata.push(data[u]);
+                                            }
+                                            getProviderDatahppubliccloud();
+                                           
+                                            
+                                           // getOrganizationList();
+                                            
+                                        },
+                                        error: function(jqxhr) {
+                                            removeLoader();
+                                            bootbox.alert(jqxhr.status);
+                                        },
+                                        failure: function(data) {
+                                            bootbox.alert(data);
+                                        }
+                                });
+
+                            }
+                            function getProviderDatahppubliccloud(){
+
+                                var reqBody={};
+                                reqBody.name=''
+                                reqBody.accessKey='';
+                                reqBody.secretKey='';
+                                reqBody.providerType='';
+                                reqBody.regions=[];
+                                //reqBody.instanceUserName='root';
+                                $.ajax({
+                                     method: "GET",
+                                     url: "/hppubliccloud/providers",data: reqBody,   
+                                     success: function(data, success) {
+                                            data= typeof data=="string" ?JSON.parse(data):data;
+                                            
+                                            for(var u = 0; u < data.length; u++){
+                                                d4ddata.push(data[u]);
+                                            }
+                                            getProviderDatavmware();
+                                            
+                                           // getOrganizationList();
+                                            
+                                        },
+                                        error: function(jqxhr) {
+                                            removeLoader();
+                                            bootbox.alert(jqxhr.status);
+                                        },
+                                        failure: function(data) {
+                                            bootbox.alert(data);
+                                        }
+                                });
+
+                            }
+                            function getProviderDatavmware(){
+
+                                var reqBody={};
+                                reqBody.name=''
+                                reqBody.accessKey='';
+                                reqBody.secretKey='';
+                                reqBody.providerType='';
+                                reqBody.regions=[];
+                                //reqBody.instanceUserName='root';
+                                $.ajax({
+                                     method: "GET",
+                                     url: "/vmware/providers",data: reqBody,   
+                                     success: function(data, success) {
+                                            data= typeof data=="string" ?JSON.parse(data):data;
+                                            
+                                            for(var u = 0; u < data.length; u++){
+                                                d4ddata.push(data[u]);
+                                            }
+
+                                            getProviderDataAzure();
+                                           // getOrganizationList();
+                                            
+                                        },
+                                        error: function(jqxhr) {
+                                            removeLoader();
+                                            bootbox.alert(jqxhr.status);
+                                        },
+                                        failure: function(data) {
+                                            bootbox.alert(data);
+                                        }
+                                });
+
+                            }
+
+                function getProviderDataAzure(){
+                                var reqBody={};
+                                reqBody.name=''
+                                reqBody.accessKey='';
+                                reqBody.secretKey='';
+                                reqBody.providerType='';
+                                reqBody.regions=[];
+                                //reqBody.instanceUserName='root';
+                                $.ajax({
+                                     method: "GET",
+                                     url: "/azure/providers",data: reqBody,   
+                                     success: function(data, success) {
+                                            data= typeof data=="string" ?JSON.parse(data):data;
+                                            
+                                            for(var u = 0; u < data.length; u++){
+                                                d4ddata.push(data[u]);
+                                            }
+                                            startup();
+                                           // getOrganizationList();
+                                            
+                                        },
+                                        error: function(jqxhr) {
+                                            removeLoader();
+                                            bootbox.alert(jqxhr.status);
+                                        },
+                                        failure: function(data) {
+                                            bootbox.alert(data);
+                                        }
+                                });
+
+                }                        
 
     function startup() {
     //setting the addnew button to launch popup
@@ -408,6 +540,14 @@
     }
 
     function deleteItemFromProvider(docid, key, value, button) {
+    //Determining the provider type before delete
+        var provname = 'aws';
+
+        if($(button).closest('tr').find('td[datafield="providerType"]').first().text() == "OPENSTACK"){
+              provname = 'openstack';
+        } else if($(button).closest('tr').find('td[datafield="providerType"]').first().text() == "AZURE"){
+              provname = 'azure';
+         }
 
     bootbox.confirm('You are about to remove this item \" ' + $(button).closest('tr').find('td').first().html() + ' \"', function(result) {
         if (result) {
@@ -415,7 +555,7 @@
                 type: "delete",
                 dataType: "text",
                 async: false,
-                url: "/aws/providers/" + value,
+                url: "/" + provname + "/providers/" + value,
                 success: function(data) {
                     // $('#refreshpage').click();
                     if(data != '401')

@@ -35,7 +35,7 @@
                                                       <select id="taskType" class="chooseTasktype width-100">
                                                          <option id="Chef" value="chef">Chef</option>
                                                          <option id="Jenkins" value="jenkins">Jenkins</option>
-                                                         <!-- <option id="Composite" value="composite">Composite</option> -->
+                                                         <option id="Composite" value="composite">Composite</option> 
                                                          <option id="Puppet" value="puppet">Puppet</option>
                                                       </select>
                                                    </div>
@@ -1030,8 +1030,9 @@ $(document).ready(function() {
                if (taskData.taskConfig.assignTasks.length > 0) {
                   //alert(taskData.taskConfig.assignTasks.length);
                   var _assignedTasks = taskData.taskConfig.assignTasks;
-                  loadTaskLists(_assignedTasks);
-                  
+                  // loadTaskLists(_assignedTasks);
+                  loadTaskLists(taskData);
+
                }
             }
 
@@ -1934,18 +1935,47 @@ $(document).ready(function() {
         }
     }
 
-    function createtaskComposite(assignTasks){
-      var $selectedtaskList = $('#compositeselectedTasksList');
-      for(var i=0;i<assignTasks.length;i++){
-         $("#compositeTasksList option").each(function() {
-            var $this = $(this);
-            var value = $this.val();
-            if(assignTasks[i] == $this.attr('id')){
-               $this.hide();
-               $selectedtaskList.append($('<option class="taskimg" id="' + assignTasks[i] + '" value="' + value + '">' + value + '</option>'));
+    function createtaskComposite(taskData) {
+        var $selectedtaskList = $('#compositeselectedTasksList');
+        var assignTasks = taskData.taskConfig.assignTasks;
+        if (assignTasks.length) {
+            for (var i = 0; i < assignTasks.length; i++) {
+                $("#compositeTasksList option").each(function() {
+                    var $this = $(this);
+                    var value = $this.val();
+                    if (assignTasks[i] == $this.attr('id')) {
+                        $this.hide();
+
+                        if ($this.attr('class') == 'taskimgchef') {
+                           var dummychefId = $this.attr('id');
+                           var dummychefValue = $this.attr('value');
+                           $selectedtaskList.append($('<option class="taskimgchef" id="' + dummychefId + '" value="' + dummychefValue + '">' + dummychefValue + '</option>'));
+                        } 
+
+                        else if ($this.attr('class') == 'taskimgpuppet') {
+                           var dummypuppetId = $this.attr('id');
+                           var dummypuppetValue = $this.attr('value');
+                           $selectedtaskList.append($('<option class="taskimgpuppet" id="' + dummypuppetId + '" value="' + dummypuppetValue + '">' + dummypuppetValue + '</option>'));
+                        } 
+
+                        else if ($this.attr('class') == 'taskimgjenkins') {
+                           var dummyjenkinsId = $this.attr('id');
+                           var dummyjenkinsValue = $this.attr('value');
+                            $selectedtaskList.append($('<option class="taskimgjenkins" id="' + dummyjenkinsId + '" value="' + dummyjenkinsValue + '">' + dummyjenkinsValue + '</option>'));
+                        }
+                        /*$.get('/tasks/' + assignTasks[i], function(data) {
+                            if (data.taskType == 'chef') {
+                                $selectedtaskList.append($('<option class="taskimgchef" id="' + data._id + '" value="' + data.name + '">' + data.name + '</option>'));
+                            } else if (data.taskType == 'puppet') {
+                                $selectedtaskList.append($('<option class="taskimgpuppet" id="' + data._id + '" value="' + data.name + '">' + data.name + '</option>'));
+                            } else if (data.taskType == 'jenkins') {
+                                $selectedtaskList.append($('<option class="taskimgjenkins" id="' + data._id + '" value="' + data.name + '">' + data.name + '</option>'));
+                            }
+                        });*/
+                    }
+                });
             }
-        });
-      }
+        }
     }
 
     $('#saveRunlist').click(function(e) {
@@ -2051,12 +2081,7 @@ $(document).ready(function() {
                         } else {
                             $attributeInput = $('<input type="text" class="attribValueInput" data-attribKey="' + attributesNamesList[j] + '" value="' + value + '" data-attribName="' + displayName + '" data-attributeRequired="' + required + '"/>');
                         }
-
                     }
-
-
-
-
 
                     var $tdAttribEditor = $('<td/>').append($attributeInput);
                     var desc = attributesList[i].attributes[attributesNamesList[j]]['description'];
@@ -2255,7 +2280,7 @@ $(document).ready(function() {
             $("#Puppet-dropdown").show();
             $('.puppetTaskType').show();
             
-         }/* else if (this.value == "composite") {
+         } else if (this.value == "composite") {
             $("#Jenkins-dropdown").hide();
             $('.jenkinsTaskType').hide();
             $('.chefTaskType').hide();
@@ -2267,30 +2292,28 @@ $(document).ready(function() {
             $('.chefInstance').hide();
             $('.puppetInstance').hide();
             loadTaskLists();
-         }*/
+         }
     });
-    function loadTaskLists(_assignedTasks) {
+    function loadTaskLists(taskData) {
         //To get Task Lists
         $.get('/tasks/list/all', function(taskLists) {
             $('#compositeTasksList').empty();
+            console.log("I am in Console"+urlParams.envid);
             for (var i = 0; i < taskLists.length; i++) {
-               //console.log(taskLists[i].taskType);
-               if(taskLists[i].taskType != 'composite'){
-                  $('#compositeTasksList').append($('<option class="taskimg" id="' + taskLists[i]._id + '" value="' + taskLists[i].name + '">' + taskLists[i].name + '</option>'));
-               }
+                if (taskLists[i].envId == urlParams.envid) {
+                    if (taskLists[i].taskType == 'chef') {
+                        $('#compositeTasksList').append($('<option class="taskimgchef" id="' + taskLists[i]._id + '" value="' + taskLists[i].name + '">' + taskLists[i].name + '</option>'));
+                    } else if (taskLists[i].taskType == 'puppet') {
+                        $('#compositeTasksList').append($('<option class="taskimgpuppet" id="' + taskLists[i]._id + '" value="' + taskLists[i].name + '">' + taskLists[i].name + '</option>'));
+                    } else if (taskLists[i].taskType == 'jenkins') {
+                        $('#compositeTasksList').append($('<option class="taskimgjenkins" id="' + taskLists[i]._id + '" value="' + taskLists[i].name + '">' + taskLists[i].name + '</option>'));
+                    }
+                }
             }
-            // For the scenario to differenciate between New and Edit.
-            if(_assignedTasks){
-               createtaskComposite(_assignedTasks);
-            }
+            createtaskComposite(taskData);
         }).fail(function(jxhr) {
             alert("TaskLists load Failed");
         });
     }
 });
-
-
-
-//$('#loadimageandtextlabel').find('.fontsize13').text(Runlist);
 </script>
-

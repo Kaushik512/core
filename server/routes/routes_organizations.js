@@ -1079,7 +1079,65 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     instanceCount: req.body.blueprintData.instanceCount
                 }
                 blueprintData.instanceData = instanceData;
-            } else if (req.body.blueprintData.blueprintType === 'aws_cf') {
+            } else if (req.body.blueprintData.blueprintType === 'openstack_launch') {
+                logger.debug('req.body.blueprintData.blueprintType ==>', req.body.blueprintData.blueprintType);
+                instanceData = {
+                    instanceImageID:req.body.blueprintData.imageIdentifier,
+                    flavor:req.body.blueprintData.openstackflavor,
+                    network:req.body.blueprintData.openstacknetwork,
+                    securityGroupIds:req.body.blueprintData.openstacksecurityGroupIds,
+                    subnet:req.body.blueprintData.openstacksubnet,
+                    instanceOS:req.body.blueprintData.instanceOS,
+                    instanceCount:req.body.blueprintData.instanceCount,
+                    cloudProviderType: 'openstack',
+                    cloudProviderId: req.body.blueprintData.providerId,
+                    infraManagerType: 'chef',
+                    infraManagerId: req.body.blueprintData.chefServerId,
+                    runlist: req.body.blueprintData.runlist,
+                    instanceImageName:req.body.blueprintData.instanceImageName
+                    
+                }
+                blueprintData.instanceData = instanceData;
+            }else if (req.body.blueprintData.blueprintType === 'hppubliccloud_launch') {
+                logger.debug('req.body.blueprintData.blueprintType ==>', req.body.blueprintData.blueprintType);
+                instanceData = {
+                    instanceImageID:req.body.blueprintData.imageIdentifier,
+                    flavor:req.body.blueprintData.openstackflavor,
+                    network:req.body.blueprintData.openstacknetwork,
+                    securityGroupIds:req.body.blueprintData.openstacksecurityGroupIds,
+                    subnet:req.body.blueprintData.openstacksubnet,
+                    instanceOS:req.body.blueprintData.instanceOS,
+                    instanceCount:req.body.blueprintData.instanceCount,
+                    cloudProviderType: 'hppubliccloud',
+                    cloudProviderId: req.body.blueprintData.providerId,
+                    infraManagerType: 'chef',
+                    infraManagerId: req.body.blueprintData.chefServerId,
+                    runlist: req.body.blueprintData.runlist,
+                    instanceImageName:req.body.blueprintData.instanceImageName
+                    
+                }
+                blueprintData.instanceData = instanceData;
+            }else if (req.body.blueprintData.blueprintType === 'azure_launch') {
+                logger.debug('req.body.blueprintData.blueprintType ==>', req.body.region);
+                instanceData = {
+                    //keyPairId: req.body.blueprintData.keyPairId,
+                    securityGroupIds: req.body.blueprintData.securityGroupPorts,
+                    instanceType: req.body.blueprintData.instanceType,
+                    instanceAmiid: req.body.blueprintData.instanceAmiid,
+                    vpcId: req.body.blueprintData.vpcId,
+                    subnetId: req.body.blueprintData.subnetId,
+                    imageId: req.body.blueprintData.imageId,
+                    region: req.body.blueprintData.region,
+                    cloudProviderType: 'azure',
+                    cloudProviderId: req.body.blueprintData.providerId,
+                    infraManagerType: 'chef',
+                    infraManagerId: req.body.blueprintData.chefServerId,
+                    runlist: req.body.blueprintData.runlist,
+                    instanceOS: req.body.blueprintData.instanceOS,
+                    instanceCount: req.body.blueprintData.instanceCount
+                }
+                blueprintData.instanceData = instanceData;
+            }else if (req.body.blueprintData.blueprintType === 'aws_cf') {
                 console.log('templateFile ==> ', req.body.blueprintData.cftTemplateFile);
                 cloudFormationData = {
                     cloudProviderId: req.body.blueprintData.cftProviderId,
@@ -1127,6 +1185,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     });
                     return;
                 }
+                
                 res.send(data);
             });
 
@@ -1567,7 +1626,12 @@ module.exports.setRoutes = function(app, sessionVerification) {
                             res.send(500);
                             return;
                         }
-
+                        if (!req.body.configManagmentId) {
+                            res.send(400, {
+                                message: "Invalid Config Management Id"
+                            });
+                            return;
+                        }
                         masterUtil.getCongifMgmtsById(req.body.configManagmentId, function(err, infraManagerDetails) {
                             if (err) {
                                 res.send(500);

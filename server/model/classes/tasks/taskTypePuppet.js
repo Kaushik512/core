@@ -104,12 +104,26 @@ puppetTaskSchema.methods.execute = function(userName, baseUrl, choiceParam, onEx
                     logsDao.insertLog({
                         referenceId: logsReferenceIds,
                         err: true,
-                        log: "Instance IP is not defined. Chef Client run failed",
+                        log: "Instance IP is not defined. Puppet Client run failed",
                         timestamp: timestampEnded
                     });
                     instancesDao.updateActionLog(instance._id, actionLog._id, false, timestampEnded);
                     instanceOnCompleteHandler({
-                        message: "Instance IP is not defined. Chef Client run failed"
+                        message: "Instance IP is not defined. Puppet Client run failed"
+                    }, 1, instance._id, null, actionLog._id);
+                    return;
+                }
+                if (!instance.puppet.serverId) {
+                    var timestampEnded = new Date().getTime();
+                    logsDao.insertLog({
+                        referenceId: logsReferenceIds,
+                        err: true,
+                        log: "puppet server id is not defined. Puppet Client run failed",
+                        timestamp: timestampEnded
+                    });
+                    instancesDao.updateActionLog(instance._id, actionLog._id, false, timestampEnded);
+                    instanceOnCompleteHandler({
+                        message: "puppet server id is not defined. Puppet Client run failed"
                     }, 1, instance._id, null, actionLog._id);
                     return;
                 }

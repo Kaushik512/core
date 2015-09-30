@@ -110,7 +110,15 @@ taskSchema.methods.execute = function(userName, baseUrl, choiceParam, callback, 
         taskHistoryData.nodeIds = this.taskConfig.nodeIds;
 
     } else if (this.taskType === TASK_TYPE.COMPOSITE_TASK) {
-        task = new CompositeTask(this.taskConfig);
+        if (this.taskConfig.assignTasks) {
+            task = new CompositeTask(this.taskConfig);
+            taskHistoryData.assignedTaskIds = this.taskConfig.assignTasks;
+        } else {
+            callback({
+                message: "At least one task required to execute Composite Task."
+            }, null);
+            return;
+        }
 
     } else {
         callback({
@@ -120,11 +128,20 @@ taskSchema.methods.execute = function(userName, baseUrl, choiceParam, callback, 
     }
     var timestamp = new Date().getTime();
     var taskHistory = null;
-    task.execute(userName, baseUrl, choiceParam, function(err, taskExecuteData) {
+    task.execute(userName, baseUrl, choiceParam, function(err, taskExecuteData, taskHistoryEntry) {
         if (err) {
             callback(err, null);
             return;
         }
+        // hack for composite task
+        if (taskHistoryEntry) {
+            var keys = Object.keys(taskHistoryData);
+            for (var i = 0; i < keys.length; i++) {
+                taskHistoryEntry[keys[i]] = taskHistoryData[keys[i]];
+            }
+            taskHistoryData = taskHistoryEntry;
+        }
+
         logger.debug("Task last run timestamp updated", JSON.stringify(taskExecuteData));
         self.lastRunTimestamp = timestamp;
         self.lastTaskStatus = TASK_STATUS.RUNNING;
@@ -163,18 +180,23 @@ taskSchema.methods.execute = function(userName, baseUrl, choiceParam, callback, 
         if (taskExecuteData.buildNumber) {
             taskHistoryData.buildNumber = taskExecuteData.buildNumber;
         }
+        if (taskExecuteData.lastBuildNumber) {
+            taskHistoryData.previousBuildNumber = taskExecuteData.lastBuildNumber;
+        }
         //var arrStr;
         //var x;
         logger.debug("+++++++++++++++++++++++ ", self.taskConfig.jobResultURL);
         var acUrl = [];
-        if (self.jobResultURLPattern.length > 0) {
-            /*arrStr = self.taskConfig.jobResultURL.split("-");
+        if (self.jobResultURLPattern) {
+            if (self.jobResultURLPattern.length > 0) {
+                /*arrStr = self.taskConfig.jobResultURL.split("-");
             if(arrStr.length === 3){
                 x = taskExecuteData.buildNumber+"/"+arrStr[2].substr(arrStr[2].lastIndexOf("/")+1);
                 acUrl = arrStr[0]+"-"+arrStr[1]+"-"+x;
             }*/
-            for (var i = 0; i < self.jobResultURLPattern.length; i++) {
-                acUrl.push(self.jobResultURLPattern[i].replace("$buildNumber", taskExecuteData.buildNumber));
+                for (var i = 0; i < self.jobResultURLPattern.length; i++) {
+                    acUrl.push(self.jobResultURLPattern[i].replace("$buildNumber", taskExecuteData.buildNumber));
+                }
             }
         }
         //self.taskConfig.jobResultURL = acUrl;
@@ -201,19 +223,26 @@ taskSchema.methods.execute = function(userName, baseUrl, choiceParam, callback, 
             });
         }
         logger.debug("before call -----------------------------");
-        TaskHistory.createNew(taskHistoryData, function(err, taskHistoryEntry) {
-            if (err) {
-                logger.error("Unable to make task history entry", err);
-                return;
-            }
-            logger.debug("after call -----------------------------");
-            taskHistory = taskHistoryEntry;
-            logger.debug("Task history created");
-        });
+        // hack for composite task
+        if (taskHistoryEntry) {
+            taskHistoryData.save();
+            taskHistory = taskHistoryData;
+        } else {
+            taskHistory = new TaskHistory(taskHistoryData);
+            taskHistory.save();
+            /*
+            TaskHistory.createNew(taskHistoryData, function(err, taskHistoryEntry) {
+                if (err) {
+                    logger.error("Unable to make task history entry", err);
+                    return;
+                }
+                logger.debug("after call -----------------------------");
+                taskHistory = taskHistoryEntry;
+                logger.debug("Task history created");
+            });*/
+        }
 
-
-
-        callback(null, taskExecuteData);
+        callback(null, taskExecuteData, taskHistory);
     }, function(err, status, resultData) {
         self.timestampEnded = new Date().getTime();
         if (status == 0) {
@@ -282,9 +311,19 @@ taskSchema.methods.getHistory = function(callback) {
     });
 };
 
+taskSchema.methods.getHistoryById = function(historyId, callback) {
+    TaskHistory.getHistoryByTaskIdAndHistoryId(this.id, historyId, function(err, history) {
+        if (err) {
+            callback(err, null);
+            return;
+        }
+        callback(null, history);
+    });
+};
+
 
 var comparer = function compareObject(a, b) {
-    if(!b.buildNumber) {
+    if (!b.buildNumber) {
         return 1;
     }
     if (a.buildNumber === b.buildNumber) {

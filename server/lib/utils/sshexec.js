@@ -24,6 +24,7 @@ module.exports = function(options) {
             // a hack to make a sycnronous call asynchronous 
             setTimeout(function() {
                 if (connectErr.message === 'Cannot parse privateKey: Unsupported key format') {
+                    console.log('Error msg:' + connectErr.message);
                     callback(connectErr, INVALID_CREDENTIALS);
                 } else {
                     callback(connectErr, UNKOWN_EXCEPTION);
@@ -42,7 +43,7 @@ module.exports = function(options) {
             con = null;
             console.log("ERROR EVENT FIRED");
             if (err.level === 'client-authentication') {
-
+                 console.log('Error msg:' + err);
                 callback(err, INVALID_CREDENTIALS);
             } else if (err.level === 'client-timeout') {
                 callback(err, HOST_UNREACHABLE);
@@ -100,6 +101,7 @@ module.exports = function(options) {
     this.exec = function(cmd, onComplete, onStdOut, onStdErr) {
         var execRetCode = null;
         var execSignal = null;
+        console.log('in exec:' + cmd);
         initialize(function(err, initErrorCode) {
             if (err) {
                 onComplete(null, initErrorCode);
