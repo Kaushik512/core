@@ -205,7 +205,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             if (cloudFormation) {
                 AWSProvider.getAWSProviderById(cloudFormation.cloudProviderId, function(err, aProvider) {
                     if (err) {
-                        logger.error("Unable to fetch provide", err);
+                        logger.error("Unable to fetch provider", err);
                         res.send(500, errorResponses.db.error);
                     }
                     var cryptoConfig = appConfig.cryptoSettings;
@@ -250,6 +250,56 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
         });
     });
+
+    app.get('/cloudformation/:cfId/resources', function(req, res) {
+        CloudFormation.getById(req.params.cfId, function(err, cloudFormation) {
+            if (err) {
+                res.send(500, errorResponses.db.error);
+                return;
+            }
+            if (cloudFormation) {
+
+                AWSProvider.getAWSProviderById(cloudFormation.cloudProviderId, function(err, aProvider) {
+                    if (err) {
+                        logger.error("Unable to fetch provide", err);
+                        res.send(500, errorResponses.db.error);
+                    }
+                    var cryptoConfig = appConfig.cryptoSettings;
+                    var cryptography = new Cryptography(cryptoConfig.algorithm, cryptoConfig.password);
+                    var keys = [];
+                    keys.push(aProvider.accessKey);
+                    keys.push(aProvider.secretKey);
+                    cryptography.decryptMultipleText(keys, cryptoConfig.decryptionEncoding, cryptoConfig.encryptionEncoding, function(err, decryptedKeys) {
+                        if (err) {
+                            res.send(500, {
+                                message: "Failed to decrypt accessKey or secretKey"
+                            });
+                            return;
+                        }
+
+                        var awsSettings = {
+                            "access_key": decryptedKeys[0],
+                            "secret_key": decryptedKeys[1],
+                            "region": cloudFormation.region,
+                        };
+                        var awsCF = new AWSCloudFormation(awsSettings);
+                        awsCF.listAllStackResources(cloudFormation.stackId, function(err, resources) {
+                            if (err) {
+                                logger.error("Unable to fetch provide", err);
+                                res.send(500, errorResponses.db.error);
+                            }
+                            res.send(200,resources);
+
+                        });
+                    });
+                });
+
+            }
+        });
+
+    });
+
+
 
 
 };

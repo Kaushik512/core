@@ -5,6 +5,8 @@
          <div class="widget-box">
             <div class="widget-header">
                <h4 class="widget-margin" style="color:black;"></h4>
+               <button style="float:right;margin-top:-24px;margin-right:22px;" class="btn btn-minier btn-primary" onclick="window.history.back();">Close
+                </button>
             </div>
             <div class="widget-body">
                <div class="widget-main">
@@ -425,9 +427,6 @@ $(document).ready(function(e) {
             $('#listNameTable thead').find('tr.rowCustomStyle td').html('Items for -&nbsp;' + k);
         });
         return $tr;
-
-      return $tr;
-
         console.log(">>>>>>>>>>>>>>>>>>>>>>>>");
 
     };
@@ -589,7 +588,7 @@ $(document).ready(function(e) {
                 
             });
         });
-      return $trForItems;
+     // return $trForItems;
 
 
         //for edit
@@ -629,6 +628,7 @@ $(document).ready(function(e) {
             });
             return false;
         });
+        //return $trForItems;
         //for delete
         $tdForItems.find('button.deleteRow').click(function() {
             $('#jsonData').hide();

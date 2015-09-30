@@ -12,14 +12,14 @@ Library            String
 
 *** Test Cases ***
 Catalyst Get the Build Number Step
-    [Tags]       Sanity     Smoke
+    [Tags]       Sanity               Smoke
     Version Number and the Jenkins Buildnumber
     [Teardown]     Close Browser
 
 
 
 Catalyst Validation and Creation of New Organization 
-    [Tags]       Sanity     Smoke
+    [Tags]       Sanity               Smoke
 #    Catalyst Login 
     Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
     Validation and Creation of New Organization
@@ -35,6 +35,17 @@ Catalyst Edit the Organization and Domain Name
     Catalyst Editing the Organization and Domain name
     Catalyst Logout                      
     [Teardown]     Close Browser
+
+
+
+Catalyst Verification of Unique Organization Creation
+    [Tags]       Sanity               Smoke
+#    Catalyst Login 
+    Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
+    Catalyst Verification of Unique Organization
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
 
 
 
@@ -57,7 +68,7 @@ Catalyst login as OrgAdmin user and ALL option disabled
 
 
 Catalyst Creation of New Designer and Consumer    
-    [Tags]       Sanity               Smoke
+    [Tags]       Sanity               Des
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
     Catalyst Creation of Designer and Consumer
     Catalyst Logout
@@ -85,6 +96,18 @@ Catalyst Edit the BusinessGroup Name
 
 
 
+
+Catalyst Verification of Unique Business Group Creation
+    [Tags]       Sanity               Smoke
+#    Catalyst Login 
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst Verification of Unique Business Group
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+
+
 Catalyst Validation and Creation of New Projects
     [Tags]       Sanity               Smoke
 #    Catalyst Login
@@ -102,3 +125,17 @@ Catalyst Edit the ProjectName and Description Name
     Catalyst Editing the Proj and Descrptn Created
     Catalyst Logout                      
     [Teardown]     Close Browser    
+
+
+Catalyst Verification of Unique Project Creation
+    [Tags]       Sanity               Smoke
+#    Catalyst Login 
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst Verification of Unique Project
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+
+
+

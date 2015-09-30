@@ -18,13 +18,13 @@ Resource           ${CATALYST ACTION}/New_Environment_Creation.txt
 
 
 *** Keywords ***
-Catalyst Launch of Cloud Formation Template
+Catalyst Launch of Cloud Formation Blueprint
     Clicks on Workzone Button
-	Sleep    2s
-	Clicks on Cloud FormationBlueprint Section
-	Select Your Cloud Blueprint
-	Clicks on Launch of Cloud Blueprint
-	Enters the unique stack name
+    Sleep    2s
+    Clicks on Cloud FormationBlueprint Section
+    Select Your Cloud Blueprint
+    Clicks on Launch of Cloud Blueprint
+    Enters the unique stack name
     Clicks on Submit button in Enter a Unique Stack Name window
     Clicks on close button in launching blueprint window
     Navigates to Cloud Formation tab
@@ -55,8 +55,11 @@ Verifies Created Cloud Stack is displayed
 Verifies Node and MongoInstances are present
     Sleep    3s
 
-Catalyst Create Template of Cloud Formation and Save
+Catalyst Create Blueprint of Cloud Formation and Save
     Clicks on Design
+    Sleep    2s
+    Clicks on OK Button to Create the New Blueprint
+    Sleep    1s
     Clicks on CloudFormation Template Type
     Clicks on Next Button
     Clicks on User created Template
@@ -119,7 +122,7 @@ Enters the Mongo Instance User Name
 	
 	
 Choose the Cloud Region
-    Click Element    css=#cftRegionInput > option:nth-child(4)
+    Click Element    css=#cftRegionInput > option:nth-child(3)
 
 Choose the Cloud Provider
     Sleep    2s
@@ -163,8 +166,11 @@ Clicks on close Cloud Configure Organization Parameters
 Catalyst Creation of Providers Setup 
     Clicks on Settings
     Clicks on DevOps Setup menu
+    Sleep    2s
     Clicks on Providers
+    Sleep    2s
     Clicks on New Button of Providers
+    Sleep   2s
     Select the Provider
     Enters the Name of the Provider
     Enters the Access Key
@@ -176,7 +182,7 @@ Catalyst Creation of Providers Setup
     Clicks on Save Button of the Provider
 
 Clicks on Providers
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='setting_tree']/ul/li[7]/a
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=//a[contains(text(),'Providers')]
 
 Clicks on New Button of Providers
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    id=addnewitem
@@ -213,23 +219,25 @@ Selects the Region
     Log    after click
     Input Text    css=#select2-drop .select2-input    ${REGION NAME}
     Sleep    4s
-    Click Element    css=#select2-drop > ul > li:nth-child(2) > div > span
+    Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
 
 
 Selects the Key Pair
     Sleep    4s
     Click Element    css=div.row.pemrow > div:first-child > div > a > span:nth-of-type(1)
     Log    after click
-    Input Text    css=#select2-drop .select2-input    ${KeyNAME}
+    Input Text    css=#select2-drop .select2-input    ${Key_Pair}
     Sleep    4s
     Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
 
 Uploads the Pem File for Provider
-    Choose File     xpath=.//*[@class='gui-file file']     ${Goldendemo_pem}
+    Choose File     xpath=.//*[@class='gui-file file']     ${CAT_INSTANCES}
 
 
 Clicks on Save Button of the Provider
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    css=div.btn-group.pull-right > input
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='myForm54']/div/div[3]/div/button
+
+
 
 
   # -------------------------------------------------------------  
@@ -368,7 +376,7 @@ Enters the UserName of WindowsProviders
 
 
 Clicks on Save Button of VMimage page   
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    css=#btnsubmit
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    css=div.widget-toolbox.clearfix > div > button
 
 
 
@@ -379,6 +387,8 @@ Catalyst Choose Template and Save Setup
     Sleep    6s
     Clicks on Design
     Sleep    10s
+    #Clicks on OK Button to Create the New Blueprint
+    #Sleep    1s
     Choose the Template Type Created
     Sleep    3s
     Clicks on Next Button
@@ -389,14 +399,14 @@ Catalyst Choose Template and Save Setup
     Choose the Provider
     Choose the Available Images
     Choose the Region
-    Select the VPC
+    #Select the VPC
     Select the Subnet
     Select the Key Pair
     Choose Instance Size
     Select the Security Group
     Clicks on Configure Provider Parameters
     Clicks on Configure Organization Parameters
-    Chooses Organization
+    #Chooses Organization
     Enters The Blueprint Name
     Chooses The Business Group
     Chooses The Project
@@ -413,6 +423,16 @@ Catalyst Choose Template and Save Setup
     Clicks on Confirm OK Button
 
 
+Clicks on OK Button to Create the New Blueprint
+    ${said}=    Run Keyword and Return Status     Page Should Contain Element    xpath=.//*[text()='OK']
+    Run Keyword If    '${said}' == 'True'     
+    ...    Click Element    xpath=.//*[text()='OK']
+    ...    ELSE IF   '${said}' == 'False'
+    ...    Log OK Button is not displayed
+
+
+
+
 Clicks on Design
     Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       id=designNew
     Click Element    id=designNew
@@ -425,7 +445,7 @@ Clicks on Next Button
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    css=#nextSpecificValue > a.btn.btn-primary
 
 Chooses the Template User Created
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='individualTemplateNameGrid']/div/div/ul/li/u/b[text()="${TEMP_NAME}"]
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='individualTemplateNameGrid']/div/div/ul/li/u/b[text()="${TEMPLATE NAME}"]
 
 Chooses the Operating System as Centos
     Sleep    1s
@@ -439,7 +459,7 @@ Choose the Provider
     Sleep    4s
     Click Element    css=#s2id_providerId > .select2-choice
     Log    after click
-    Input Text    css=#select2-drop .select2-input    ${PROVDR_Name}
+    Input Text    css=#select2-drop .select2-input    ${PROVIDER NAME}
     Sleep    4s
     Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
 
@@ -448,7 +468,7 @@ Choose the Available Images
     Sleep    4s
     Click Element    css=#s2id_imageId > .select2-choice
     Log    after click
-    Input Text    css=#select2-drop .select2-input    ${Centos_IMAGE}
+    Input Text    css=#select2-drop .select2-input    ${IMAGE NAME1}
     Sleep    4s
     Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
 
@@ -519,7 +539,7 @@ Chooses Organization
     Sleep    1s
     Click Element    css=#s2id_orgnameSelect > .select2-choice
     Log    after click
-    Input Text    css=#select2-drop .select2-input    ${ORG_NAME}
+    Input Text    css=#select2-drop .select2-input    ${ORGANIZATION NAME}
     Sleep    1s
     Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
 
@@ -532,7 +552,7 @@ Chooses The Business Group
     Sleep    1s
     Click Element    css=#s2id_bgListInput > .select2-choice
     Log    after click
-    Input Text    css=#select2-drop .select2-input    ${BU_NAME}
+    Input Text    css=#select2-drop .select2-input    ${BUSINESS GROUP NAME1}
     Sleep    1s
     Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
 
@@ -543,7 +563,7 @@ Chooses The Project
     Sleep    1s
     Click Element    css=#s2id_projectListInput > .select2-choice
     Log    after click
-    Input Text    css=#select2-drop .select2-input    ${Proj_Name}
+    Input Text    css=#select2-drop .select2-input    ${PROJECT NAME1}
     Sleep    1s
     Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
 
@@ -1017,14 +1037,14 @@ Catalyst Choose Template and Save Setup for UBUNTU
     Choose the Provider
     Choose the Available Images for Ubuntu
     Choose the Region
-    Select the VPC
+    #Select the VPC
     Select the Subnet
     Select the Key Pair
     Choose Instance Size for Ubuntu
     Select the Security Group
     Clicks on Configure Provider Parameters
     Clicks on Configure Organization Parameters
-    Chooses Organization
+    #Chooses Organization
     Enters The ubuntu Blueprint Name
     Chooses The Business Group
     Chooses The Project
@@ -1055,7 +1075,7 @@ Choose the Available Images for Ubuntu
     Sleep    4s
     Click Element    css=#s2id_imageId > .select2-choice
     Log    after click
-    Input Text    css=#select2-drop .select2-input    ${Ubuntu_Image}
+    Input Text    css=#select2-drop .select2-input    ${IMAGE NAME2}
     Sleep    4s
     Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
 
@@ -1544,10 +1564,11 @@ Clicks on User Created Projects
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=//*[normalize-space(text())="Catalyst"]
 
 Clicks on > Button to your Environment
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=//li[contains(., "Catalyst")]/./span[3]              #Catalyst project
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=//li[contains(., "Catalyst")]/./span[3]
     #Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='tree']/ul/li[contains(., "Catalyst")]/./span[3]
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=//*[normalize-space(text())="Dev"]
-    Sleep    5 seconds  
+    Sleep    5 seconds
+    
 
 
 

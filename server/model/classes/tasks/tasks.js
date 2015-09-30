@@ -9,17 +9,18 @@ var ChefTask = require('./taskTypeChef');
 var JenkinsTask = require('./taskTypeJenkins');
 
 var TaskHistory = require('./taskHistory');
-var configmgmtDao = require('../../../model/d4dmasters/configmgmt');
-var Jenkins = require('../../../lib/jenkins');
-//var js2xmlparser = require("js2xmlparser");
-//var url = require('url');
-
+var configmgmtDao = require('_pr/model/d4dmasters/configmgmt');
+var Jenkins = require('_pr/lib/jenkins');
+var CompositeTask = require('./taskTypeComposite');
+var PuppetTask = require('./taskTypePuppet');
 
 var Schema = mongoose.Schema;
 
 var TASK_TYPE = {
     CHEF_TASK: 'chef',
-    JENKINS_TASK: 'jenkins'
+    JENKINS_TASK: 'jenkins',
+    COMPOSITE_TASK: 'composite',
+    PUPPET_TASK: 'puppet'
 };
 
 var TASK_STATUS = {
@@ -80,13 +81,13 @@ var taskSchema = new Schema({
 // instance method :-  
 
 // Executes a task
-taskSchema.methods.execute = function(userName, baseUrl, callback, onComplete) {
+taskSchema.methods.execute = function(userName, baseUrl, choiceParam, callback, onComplete) {
     logger.debug('Executing');
     var task;
     var self = this;
 
     var taskHistoryData = {
-        taskId: self._id,
+        taskId: self.id,
         taskType: self.taskType,
         user: userName
     };
@@ -104,6 +105,21 @@ taskSchema.methods.execute = function(userName, baseUrl, callback, onComplete) {
         taskHistoryData.jobName = this.taskConfig.jobName;
 
 
+    } else if (this.taskType === TASK_TYPE.PUPPET_TASK) {
+        task = new PuppetTask(this.taskConfig);
+        taskHistoryData.nodeIds = this.taskConfig.nodeIds;
+
+    } else if (this.taskType === TASK_TYPE.COMPOSITE_TASK) {
+        if (this.taskConfig.assignTasks) {
+            task = new CompositeTask(this.taskConfig);
+            taskHistoryData.assignedTaskIds = this.taskConfig.assignTasks;
+        } else {
+            callback({
+                message: "At least one task required to execute Composite Task."
+            }, null);
+            return;
+        }
+
     } else {
         callback({
             message: "Invalid Task Type"
@@ -112,12 +128,21 @@ taskSchema.methods.execute = function(userName, baseUrl, callback, onComplete) {
     }
     var timestamp = new Date().getTime();
     var taskHistory = null;
-    task.execute(userName, baseUrl, function(err, taskExecuteData) {
+    task.execute(userName, baseUrl, choiceParam, function(err, taskExecuteData, taskHistoryEntry) {
         if (err) {
             callback(err, null);
             return;
         }
-        logger.debug("Task last run timestamp updated",JSON.stringify(taskExecuteData));
+        // hack for composite task
+        if (taskHistoryEntry) {
+            var keys = Object.keys(taskHistoryData);
+            for (var i = 0; i < keys.length; i++) {
+                taskHistoryEntry[keys[i]] = taskHistoryData[keys[i]];
+            }
+            taskHistoryData = taskHistoryEntry;
+        }
+
+        logger.debug("Task last run timestamp updated", JSON.stringify(taskExecuteData));
         self.lastRunTimestamp = timestamp;
         self.lastTaskStatus = TASK_STATUS.RUNNING;
         //logger.debug("========================= ",JSON.stringify(self));
@@ -128,7 +153,7 @@ taskSchema.methods.execute = function(userName, baseUrl, callback, onComplete) {
             }
 
             logger.debug("Task last run timestamp updated");
-            
+
 
         });
         if (!taskExecuteData) {
@@ -155,55 +180,69 @@ taskSchema.methods.execute = function(userName, baseUrl, callback, onComplete) {
         if (taskExecuteData.buildNumber) {
             taskHistoryData.buildNumber = taskExecuteData.buildNumber;
         }
+        if (taskExecuteData.lastBuildNumber) {
+            taskHistoryData.previousBuildNumber = taskExecuteData.lastBuildNumber;
+        }
         //var arrStr;
         //var x;
-        logger.debug("+++++++++++++++++++++++ ",self.taskConfig.jobResultURL);
-        var acUrl=[];
-        if(self.jobResultURLPattern.length > 0){
-            /*arrStr = self.taskConfig.jobResultURL.split("-");
+        logger.debug("+++++++++++++++++++++++ ", self.taskConfig.jobResultURL);
+        var acUrl = [];
+        if (self.jobResultURLPattern) {
+            if (self.jobResultURLPattern.length > 0) {
+                /*arrStr = self.taskConfig.jobResultURL.split("-");
             if(arrStr.length === 3){
                 x = taskExecuteData.buildNumber+"/"+arrStr[2].substr(arrStr[2].lastIndexOf("/")+1);
                 acUrl = arrStr[0]+"-"+arrStr[1]+"-"+x;
             }*/
-            for(var i=0;i< self.jobResultURLPattern.length;i++){
-                acUrl.push(self.jobResultURLPattern[i].replace("$buildNumber",taskExecuteData.buildNumber));
+                for (var i = 0; i < self.jobResultURLPattern.length; i++) {
+                    acUrl.push(self.jobResultURLPattern[i].replace("$buildNumber", taskExecuteData.buildNumber));
+                }
             }
         }
         //self.taskConfig.jobResultURL = acUrl;
-        logger.debug(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ",acUrl);
+        logger.debug(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ", acUrl);
         taskHistoryData.jobResultURL = acUrl;
         if (taskHistoryData.taskType === TASK_TYPE.JENKINS_TASK) {
             var taskConfig = self.taskConfig;
             taskConfig.jobResultURL = acUrl;
             Tasks.update({
                 "_id": new ObjectId(self._id)
-            },{
-            $set: {
-                taskConfig: taskConfig
-            }
             }, {
-            upsert: false
-            },function(err, data) {
+                $set: {
+                    taskConfig: taskConfig
+                }
+            }, {
+                upsert: false
+            }, function(err, data) {
                 if (err) {
                     logger.error("Unable to update task jobResultURL");
                     return;
                 }
                 logger.debug("Task jobResultURL updated");
-                
+
             });
         }
-        TaskHistory.createNew(taskHistoryData, function(err, taskHistoryEntry) {
-            if (err) {
-                logger.error("Unable to make task history entry", err);
-                return;
-            }
-            taskHistory = taskHistoryEntry;
-            logger.debug("Task history created");
-        });
+        logger.debug("before call -----------------------------");
+        // hack for composite task
+        if (taskHistoryEntry) {
+            taskHistoryData.save();
+            taskHistory = taskHistoryData;
+        } else {
+            taskHistory = new TaskHistory(taskHistoryData);
+            taskHistory.save();
+            /*
+            TaskHistory.createNew(taskHistoryData, function(err, taskHistoryEntry) {
+                if (err) {
+                    logger.error("Unable to make task history entry", err);
+                    return;
+                }
+                logger.debug("after call -----------------------------");
+                taskHistory = taskHistoryEntry;
+                logger.debug("Task history created");
+            });*/
+        }
 
-
-
-        callback(null, taskExecuteData);
+        callback(null, taskExecuteData, taskHistory);
     }, function(err, status, resultData) {
         self.timestampEnded = new Date().getTime();
         if (status == 0) {
@@ -239,11 +278,60 @@ taskSchema.methods.getChefTaskNodes = function() {
     }
 };
 
-taskSchema.methods.getHistory = function(callback) {
+taskSchema.methods.getPuppetTaskNodes = function() {
+    if (this.taskType === TASK_TYPE.PUPPET_TASK) {
+        var puppetTask = new PuppetTask(this.taskConfig);
+        return puppetTask.getNodes();
+    } else {
+        return [];
+    }
+};
+
+/*taskSchema.methods.getHistory = function(callback) {
     TaskHistory.getHistoryByTaskId(this.id, function(err, tHistories) {
         callback(err, tHistories);
     });
+};*/
+
+taskSchema.methods.getHistory = function(callback) {
+    TaskHistory.getHistoryByTaskId(this.id, function(err, tHistories) {
+        var count = 0;
+        var checker;
+        var uniqueResults = [];
+        for (var i = 0; i < tHistories.length; ++i) {
+            count++;
+            if (!checker || comparer(checker, tHistories[i]) != 0) {
+                checker = tHistories[i];
+                uniqueResults.push(checker);
+            }
+        }
+        if (count === tHistories.length) {
+            callback(err, uniqueResults);
+        }
+    });
 };
+
+taskSchema.methods.getHistoryById = function(historyId, callback) {
+    TaskHistory.getHistoryByTaskIdAndHistoryId(this.id, historyId, function(err, history) {
+        if (err) {
+            callback(err, null);
+            return;
+        }
+        callback(null, history);
+    });
+};
+
+
+var comparer = function compareObject(a, b) {
+    if (!b.buildNumber) {
+        return 1;
+    }
+    if (a.buildNumber === b.buildNumber) {
+        return 0;
+    } else {
+        return 1;
+    }
+}
 
 
 
@@ -253,7 +341,7 @@ taskSchema.methods.getHistory = function(callback) {
 
 // creates a new task
 taskSchema.statics.createNew = function(taskData, callback) {
-
+    logger.debug("Got data: ", JSON.stringify(taskData));
     var taskConfig;
     if (taskData.taskType === TASK_TYPE.JENKINS_TASK) {
         taskConfig = new JenkinsTask({
@@ -274,6 +362,19 @@ taskSchema.statics.createNew = function(taskData, callback) {
             nodeIds: taskData.nodeIds,
             runlist: taskData.runlist,
             attributes: taskData.attributes
+        });
+    } else if (taskData.taskType === TASK_TYPE.PUPPET_TASK) {
+
+        taskConfig = new PuppetTask({
+            taskType: TASK_TYPE.PUPPET_TASK,
+            nodeIds: taskData.nodeIds,
+        });
+    } else if (taskData.taskType === TASK_TYPE.COMPOSITE_TASK) {
+        logger.debug("Incomming tasks: ", JSON.stringify(taskData));
+        taskConfig = new CompositeTask({
+            taskType: TASK_TYPE.COMPOSITE_TASK,
+            assignTasks: taskData.assignTasks,
+            jobName: taskData.jobName
         });
     } else {
         callback({
@@ -398,6 +499,18 @@ taskSchema.statics.updateTaskById = function(taskId, taskData, callback) {
             runlist: taskData.runlist,
             attributes: taskData.attributes
         });
+    } else if (taskData.taskType === TASK_TYPE.PUPPET_TASK) {
+
+        taskConfig = new PuppetTask({
+            taskType: TASK_TYPE.PUPPET_TASK,
+            nodeIds: taskData.nodeIds
+        });
+    } else if (taskData.taskType === TASK_TYPE.COMPOSITE_TASK) {
+        taskConfig = new CompositeTask({
+            taskType: TASK_TYPE.COMPOSITE_TASK,
+            jobName: taskData.jobName,
+            assignTasks: taskData.assignTasks
+        });
     } else {
         callback({
             message: "Invalid Task Type"
@@ -412,7 +525,8 @@ taskSchema.statics.updateTaskById = function(taskId, taskData, callback) {
             name: taskData.name,
             taskConfig: taskConfig,
             taskType: taskData.taskType,
-            description: taskData.description
+            description: taskData.description,
+            jobResultURLPattern: taskData.jobResultURL
         }
     }, {
         upsert: false
@@ -433,7 +547,7 @@ taskSchema.statics.getTasksByNodeIds = function(nodeIds, callback) {
     if (!nodeIds) {
         nodeIds = [];
     }
-    console.log("nodeids ==> ", nodeIds,typeof nodeIds[0]);
+    console.log("nodeids ==> ", nodeIds, typeof nodeIds[0]);
     Tasks.find({
         "taskConfig.nodeIds": {
             "$in": nodeIds
@@ -449,7 +563,7 @@ taskSchema.statics.getTasksByNodeIds = function(nodeIds, callback) {
     });
 };
 
-taskSchema.statics.updateJobUrl = function(taskId,taskConfig, callback) {
+taskSchema.statics.updateJobUrl = function(taskId, taskConfig, callback) {
     Tasks.update({
         "_id": new ObjectId(taskId)
     }, {
@@ -469,6 +583,17 @@ taskSchema.statics.updateJobUrl = function(taskId,taskConfig, callback) {
     });
 };
 
+// get task by ids
+taskSchema.statics.listTasks = function(callback) {
+    this.find(function(err, tasks) {
+        if (err) {
+            logger.error(err);
+            callback(err, null);
+            return;
+        }
+        callback(null, tasks);
+    });
+};
 
 var Tasks = mongoose.model('Tasks', taskSchema);
 

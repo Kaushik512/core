@@ -10,13 +10,12 @@
                         <h4 class="widget-margin" style="color:black;">Create Environment</h4>
                     </div>
                     <div class="widget-body">
-                        <div class="widget-main" style="min-height:200px">
+                        <div class="widget-main" style="min-height:300px">
                             <div>
                                 <section id="widget-grid" class="">
                                     <!-- START ROW -->
                                     <div class="row">
                                         <!-- NEW COL START -->
-
                                         <!-- Widget ID (each widget will need unique ID)-->
                                         <div class="jarviswidget" id="wid-id-3" data-widget-editbutton="false" data-widget-custombutton="false">
                                             <!-- widget div-->
@@ -24,52 +23,58 @@
                                                 <!-- widget content -->
                                                 <div class="widget-body no-padding">
                                                     <div class="col-lg-6 col-md-6">
-
                                                         <label for="category">Organization:<span style="color:Red;" class="control-label">&nbsp;*</span>
                                                         </label>
-
-                                                        <select id="orgname" class="chooseOrganization width-100" sourcepath="1" datapath="masterjson.rows.row" valuelinkfield="costcode" style="vertical-align:central" cdata="catalyst" cat-validation="required" cat-validation="required" linkedfields="['configname','projectname']" onchange="$('#configname').change();">
+                                                        <select id="orgname" class="chooseOrganization width-100" sourcepath="1" datapath="masterjson.rows.row" valuelinkfield="costcode" style="vertical-align:central" cdata="catalyst" cat-validation="required" cat-validation="required" linkedfields="['configname','projectname','puppetservername']" onchange="$('#configname').change();$('#puppetservername').change();">
                                                             <option value="">Select an Organization</option>
                                                         </select>
-
                                                     </div>
-
-                                                    
-                                                        <div class="col-lg-6 col-md-6">
-                                                            <label for="category">Chef Server:<span style="color:Red;" class="control-label">&nbsp;*</span>
-                                                            </label>
-
-                                                            <select id="configname" class="chooseOrganization width-100" sourcepath="10" datapath="masterjson.rows.row" style="vertical-align:central" cdata="catalyst" cat-validation="required" cat-validation="required" linkedto="orgname">
-                                                                <option value="">Select a Chef Server</option>
-                                                            </select>
-                                                        </div>
-
-                                                        <div class="col-lg-6 col-md-6" style="margin-top:25px;">
-                                                            <label for="category">Chef Environment:<span style="color:Red;" class="control-label">&nbsp;*</span>
-                                                            </label>
-                                                            <a href="javascript:void(0)" class="clearfix pull-right" onclick="if(preprocess()) {$('#myModalCreateChefEnv').modal('show')}">Add</a>
-                                                            <select id="environmentname" class="chooseOrganization width-100"  datapath="masterjson.rows.row" style="vertical-align:central" cdata="catalyst" cat-validation="required" cat-validation="required" unique="true" uniqueconditionedby="environmentname,orgname">
-                                                                <option value="">Select an Environment</option>
-                                                            </select>
-                                                        </div>
-                                                    
+                                                    <div class="col-lg-6 col-md-6">
+                                                        <label for="category">Chef Server:
+                                                        </label>
+                                                        <select id="configname" class="chooseOrganization width-100" sourcepath="10" datapath="masterjson.rows.row" style="vertical-align:central" cdata="catalyst" linkedto="orgname">
+                                                            <option value="">Select a Chef Server</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-lg-6 col-md-6" style="margin-top:25px;">
+                                                        <label for="category">Chef Environment:
+                                                        </label>
+                                                        <a href="javascript:void(0)" class="clearfix pull-right" onclick="if(preprocess()) {$('#myModalCreateChefEnv').modal('show')}">Add</a>
+                                                        <select id="environmentname" class="chooseOrganization width-100" datapath="masterjson.rows.row" style="vertical-align:central" cdata="catalyst" unique="true" uniqueconditionedby="environmentname,orgname">
+                                                            <option value="">Select an Chef Environment</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-lg-6 col-md-6" style="margin-top:25px;">
+                                                        <label for="category">Puppet Server:
+                                                        </label>
+                                                        <select id="puppetservername" class="chooseOrganization width-100" sourcepath="25" datapath="masterjson.rows.row" style="vertical-align:central" cdata="catalyst" linkedto="orgname">
+                                                            <option value="">Select a Puppet Server</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-lg-6 col-md-6" style="margin-top:25px;">
+                                                        <label for="category">Puppet Environment:
+                                                        </label>
+                                                        <a href="javascript:void(0)" class="clearfix pull-right" onclick="if(preprocessPuppet()) {$('#myModalCreatePuppetEnv').modal('show')}">Add</a>
+                                                        <select id="puppetenvironmentname" class="chooseOrganization width-100" datapath="masterjson.rows.row" style="vertical-align:central" cdata="catalyst">
+                                                            <option value="">Select an Puppet Environment</option>
+                                                        </select>
+                                                    </div>
                                                     <!-- <div class="col-lg-6 col-md-6 smart-form" style="margin-top:25px;">
                                                         <label for="category">Assign Teams:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
                                                         <div id="teamname" multiselect="multiselect" datatype="select" datapath="masterjson.rows.row" class="input-group from-control col-md-12 widthBox"  sourcepath="21" cdata="catalyst" cat-validation="onechecked" linkedto="orgname">
                                                         </div>
                                                     </div> -->
                                                     <div class="col-lg-6 col-md-6 smart-form" style="margin-top:25px;">
-                                                    <label for="category">Assign Projects:</label>
-                                                    <div  id="projectname" sourcepath="4" multiselect="multiselect" datatype="select" datapath="masterjson.rows.row"  class="input-group from-control col-md-12" style="height:150px;overflow-y:auto;padding:2px;border:1px solid silver;width:100%" cdata="catalyst" linkedto="orgname" >
+                                                        <label for="category">Assign Projects:</label>
+                                                        <div id="projectname" sourcepath="4" multiselect="multiselect" datatype="select" datapath="masterjson.rows.row" class="input-group from-control col-md-12" style="height:150px;overflow-y:auto;padding:2px;border:1px solid silver;width:100%" cdata="catalyst" linkedto="orgname">
+                                                        </div>
                                                     </div>
-                                                 </div>
                                                 </div>
                                                 <!-- end widget content -->
                                             </div>
                                             <!-- end widget div -->
                                         </div>
                                         <!-- end widget -->
-
                                     </div>
                                     <!-- END ROW -->
                                 </section>
@@ -79,14 +84,16 @@
                     </div>
                     <div class="widget-toolbox clearfix">
                         <div class="btn-group pull-right">
-                            <i id="savespinner" class="fa-li fa fa-spinner fa-spin hide"></i>
-                            <button class="btn btn-primary btn-mini" style="margin-right:11px;" oncli>
-                                <i class="ace-icon fa fa-check bigger-110"></i> Save
-                            </button>
-                            <a class="btn btn-primary btn-mini" onclick="window.history.back();" id="btncancel">
-                                <i class="ace-icon fa fa-undo bigger-110"></i> Cancel
-                            </a>
-                        </div>
+                <a class="btn btn-default" onclick="window.history.back();" style="margin-right:11px;" id="btncancel">
+                  <i class="ace-icon fa fa-times bigger-110"></i>
+                  Cancel
+                  </a>
+                  <button class="btn btn-primary btn-mini">
+                  <i class="ace-icon fa fa-check bigger-110"></i>
+                  Save
+                  </button>
+                  
+               </div>
                     </div>
                 </div>
             </form>
@@ -96,41 +103,65 @@
     </div>
 </div>
 <div class="modal fade bs-example-modal-sg" id="myModalCreateChefEnv" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
-  <div class="modal-dialog modal-sg">
-    <div class="modal-content">
-    <form id="createenvinchefform" action="">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-        <h4 class="modal-title">Add a Chef Environment</h4>
-      </div>
-      <div class="modal-body" style="height:100px">
-      
-        
-             
+    <div class="modal-dialog modal-sg">
+        <div class="modal-content">
+            <form id="createenvinchefform" action="">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title">Add a Chef Environment</h4>
+                </div>
+                <div class="modal-body" style="height:100px">
                     <div class="col-lg-6 col-md-6">
                         <label for="category">Environment Name:<span style="color:red">*</span>
                         </label>
-                        
-                           <input type="text" id="chefenvname" name="chefenvname" class=" form-control" tabindex='1'>
-                        
+                        <input type="text" id="chefenvname" name="chefenvname" class=" form-control" tabindex='1'>
                     </div>
                 </div>
-                    <div class="modal-footer">
-                        <div class="btn-group pull-right">
+                <div class="modal-footer">
+                    <div class="btn-group pull-right">
                         <i id="envcreatespinner" class="fa-li fa fa-spinner fa-spin hidden" style="margin-top:9px"></i>
                         <span id="chefenvcreatemsg" style="color:red"></span>
-                         <button class="btn btn-default btn-primary createchefenvbtn" style="margin-right:11px;">
-                          <i class="fa fa-save fa-1x" ></i>&nbsp;Add</button>
-                        <a class="btn btn-primary" data-dismiss="modal">
-                          <i class="fa fa-undo fa-1x"></i>&nbsp;Cancel</a>
-                        </div>
+                        
+                        <a class="btn btn-default" data-dismiss="modal">
+                            <i class="fa fa-times fa-1x"></i>&nbsp;Cancel</a>
+                            <button class="btn btn-default btn-primary createchefenvbtn" style="margin-right:11px;">
+                            <i class="fa fa-save fa-1x"></i>&nbsp;Add</button>
                     </div>
-                
-      
-      
-      </form>
+                </div>
+            </form>
+        </div>
     </div>
-  </div>
+</div>
+<!--row ends here-->
+<div class="modal fade bs-example-modal-sg" id="myModalCreatePuppetEnv" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog modal-sg">
+        <div class="modal-content">
+            <form id="createenvinpuppetform" action="">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title">Add a Puppet Environment</h4>
+                </div>
+                <div class="modal-body" style="height:100px">
+                    <div class="col-lg-6 col-md-6">
+                        <label for="category">Environment Name:<span style="color:red">*</span>
+                        </label>
+                        <input type="text" id="puppetenvnameinput" name="puppetenvnameinput" class=" form-control" tabindex='1'>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="btn-group pull-right">
+                        <i id="envcreatespinner" class="fa-li fa fa-spinner fa-spin hidden" style="margin-top:9px"></i>
+                        <span id="puppetenvcreatemsg" style="color:red"></span>
+                        
+                        <a class="btn btn-default" data-dismiss="modal">
+                            <i class="fa fa-times fa-1x"></i>&nbsp;Cancel</a>
+                            <button class="btn btn-default btn-primary createpuppetenvbtn" style="margin-right:11px;">
+                            <i class="fa fa-save fa-1x"></i>&nbsp;Add</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
 <!--row ends here-->
 <script>
@@ -148,6 +179,63 @@ function isUserTypeSuperAdmin() {
     });
 }
 
+function preprocessPuppet() {
+    $('#createenvinpuppetform')[0].reset();
+    if (typeof $('#puppetservername').find('option:selected').attr('rowid') == 'undefined') {
+        bootbox.alert('Select a Puppet Server before adding an environments.');
+        return (false);
+    } else
+        return (true);
+}
+$('#createenvinpuppetform').submit(function(e) {
+    var reqBodyEnv = {};
+    var puppetId = $('#puppetservername').find('option:selected').attr('rowid');
+    var $crbtn = $('#createenvinpuppetform').find('#createpuppetenvbtn')
+    $crbtn.attr('disabled', 'disabled');
+    var $form = $('#createenvinpuppetform');
+    reqBodyEnv.name = $form.find('#puppetenvnameinput').val();
+    if (!reqBodyEnv.name) {
+        alert('Please Enter Environment Name');
+        return false;
+    }
+    $('#envcreatespinner').removeClass('hidden');
+    //alert('in createchefenvbtn');
+    //if (typeof puppetId != 'undefined') {
+    $.ajax({
+        type: "Post",
+        url: '/puppet/'+puppetId+'/environments',
+        data: {
+            envName: $('#puppetenvnameinput').val()
+        },
+        success: function(envname, success) {
+            if (envname) {
+                $crbtn.removeAttr('disabled');
+                $('#envcreatespinner').addClass('hidden');
+                $('#puppetservername').change();
+                $('#myModalCreatePuppetEnv').modal('hide');
+                $('#puppetenvironmentname').empty();
+            } else {
+                $('#puppetenvcreatemsg').html('Could not complete.' + envname);
+                $crbtn.removeAttr('disabled');
+                $('#envcreatespinner').addClass('hidden');
+                $('#myModalCreatePuppetEnv').modal('hide');
+            }
+        },
+        error: function(jqxhr) {
+            bootbox.alert(jqxhr.responseText);
+            $crbtn.removeAttr('disabled');
+            $('#envcreatespinner').addClass('hidden');
+            $('#myModalCreatePuppetEnv').modal('hide');
+        },
+        failure: function(envname) {
+            bootbox.alert(envname.responseText);
+        }
+    });
+    // }
+    return false;
+});
+
+
 function preprocess() {
     $('#createenvinchefform')[0].reset();
     if (typeof $('#configname').find('option:selected').attr('rowid') == 'undefined') {
@@ -156,20 +244,20 @@ function preprocess() {
     } else
         return (true);
 }
- $('#createenvinchefform').submit(function(e){
-   var reqBodyEnv = {};
-   var chefid =  $('#configname').find('option:selected').attr('rowid');
-   var $crbtn = $('#createenvinchefform').find('#createchefenvbtn')
-   $crbtn.attr('disabled','disabled');
-   var $form = $('#createenvinchefform');
-   reqBodyEnv.name= $form.find('#chefenvname').val();
-   if(!reqBodyEnv.name){
+$('#createenvinchefform').submit(function(e) {
+    var reqBodyEnv = {};
+    var chefid = $('#configname').find('option:selected').attr('rowid');
+    var $crbtn = $('#createenvinchefform').find('#createchefenvbtn')
+    $crbtn.attr('disabled', 'disabled');
+    var $form = $('#createenvinchefform');
+    reqBodyEnv.name = $form.find('#chefenvname').val();
+    if (!reqBodyEnv.name) {
         alert('Please Enter Environment Name');
         return false;
-   }
-   $('#envcreatespinner').removeClass('hidden');
-   //alert('in createchefenvbtn');
-   if(typeof chefid != 'undefined'){   
+    }
+    $('#envcreatespinner').removeClass('hidden');
+    //alert('in createchefenvbtn');
+    if (typeof chefid != 'undefined') {
 
         $.ajax({
             type: "Post",
@@ -177,7 +265,7 @@ function preprocess() {
             data: {
                 envName: $('#chefenvname').val()
             },
-            success: function(envname,success) {
+            success: function(envname, success) {
                 if (envname) {
                     $crbtn.removeAttr('disabled');
                     $('#envcreatespinner').addClass('hidden');
@@ -190,34 +278,42 @@ function preprocess() {
                     $('#envcreatespinner').addClass('hidden');
                     $('#myModalCreateChefEnv').modal('hide');
                 }
-            },error: function(jqxhr) {
+            },
+            error: function(jqxhr) {
                 bootbox.alert(jqxhr.responseText);
-                $crbtn.removeAttr('disabled');
-                    $('#envcreatespinner').addClass('hidden');
-                    $('#myModalCreateChefEnv').modal('hide');
-            },failure: function(envname) {
-                bootbox.alert(envname.responseText);
-            }
-        });
-
-   /*$.post('../chef/environments/create/' + chefid,{envName:$('#chefenvname').val()},function(envname){
-            if(envname){
-            $crbtn.removeAttr('disabled');
-            $('#envcreatespinner').addClass('hidden');
-            $('#configname').change();
-            $('#myModalCreateChefEnv').modal('hide');
-            $('#environmentname').empty();
-            }
-            else{
-                $('#chefenvcreatemsg').html('Could not complete.' + envname);
                 $crbtn.removeAttr('disabled');
                 $('#envcreatespinner').addClass('hidden');
                 $('#myModalCreateChefEnv').modal('hide');
+            },
+            failure: function(envname) {
+                bootbox.alert(envname.responseText);
             }
-   });*/
-   }
-   return false;
+        });
+    }
+    return false;
 });
+
+function loadPuppetEnvs(puppetId) {
+    $('#myForm1').find('button').attr('disabled', 'disabled');
+    $.get('/puppet/'+puppetId+'/environments', function(envList) { //getting the list of env
+
+        if (envList) {
+            var envlist = envList.toString().split(',');
+            var $envselect = $('#puppetenvironmentname').addClass('envselect').addClass('form-control').addClass('width100').addClass('padding0');
+            for (var j = 0; j < envList.length; j++) {
+                if ($envselect.val() === envList[j]) {
+                    //console.log($envselect);
+                    $envselect.html('');
+                }
+                $envselect.append('<option value="' + envList[j] + '">' + envList[j] + '</option>');
+            }
+            $envselect.val($envselect.attr('savedvalue'));
+            $envselect.change();
+            $('#myForm1').find('button').removeAttr('disabled');
+        }
+    });
+}
+
 function loadChefEnvs(chefID) {
     $('#myForm1').find('button').attr('disabled', 'disabled');
     $.get('../chef/servers/' + chefID + '/environments', function(envList) { //getting the list of env
@@ -226,7 +322,7 @@ function loadChefEnvs(chefID) {
             var envlist = envList.toString().split(',');
             var $envselect = $('#environmentname').addClass('envselect').addClass('form-control').addClass('width100').addClass('padding0');
             for (var j = 0; j < envList.length; j++) {
-                if($envselect.val() === envList[j]){
+                if ($envselect.val() === envList[j]) {
                     //console.log($envselect);
                     $envselect.html('');
                 }
@@ -248,6 +344,11 @@ function inLineReady() {
         var chefid = $(this).find('option:selected').attr('rowid');
         if (chefid)
             loadChefEnvs(chefid);
+    });
+    $('#puppetservername').change(function() {
+         var puppetId = $(this).find('option:selected').attr('rowid');
+        if (puppetId)
+            loadPuppetEnvs(puppetId);
     });
 
 
@@ -624,7 +725,7 @@ $("#id-input-file-2").change(function() {
 
 });
 
-inLineReady(); 
+inLineReady();
 </script>
 <script>
 $(document).ready(function() {
@@ -634,11 +735,31 @@ $(document).ready(function() {
 
         if ($(this).valid) {
             /* alert('valid form submitted'); // for demo*/
-if (!saveform('3')) return false;
-} else {
-    alert('invalid valid form submitted'); // for demo
-}
-return false; // for demo
-});
+            var chefEnv = $('#environmentname option:selected').val();
+            var puppetEnv = $('#puppetenvironmentname option:selected').val();
+            if (!chefEnv && !puppetEnv) {
+                alert('Either Chef or Puppet Environment Required.');
+                return false;
+            }
+
+            if(chefEnv && puppetEnv){
+                if(chefEnv != puppetEnv){
+                    alert('Both Chef and Puppet should have same Environment.');
+                    return false;
+                }
+            }
+
+            if (!puppetEnv) {
+                $('#puppetservername').val('');
+            }
+            if (!chefEnv) {
+                $('#configname').val('');
+            }
+            if (!saveform('3')) return false;
+        } else {
+            alert('invalid valid form submitted'); // for demo
+        }
+        return false; // for demo
+    });
 });
 </script>

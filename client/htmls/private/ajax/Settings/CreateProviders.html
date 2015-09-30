@@ -328,17 +328,16 @@
 
     function populateurls($host) {
 
-            if ($('#openstackendpointec2').val() == '')
-                $('#openstackendpointec2').val('http://' + $host.val());
-            if ($('#openstackendpointcompute').val() == '')
-                $('#openstackendpointcompute').val('http://' + $host.val());
-            if ($('#openstackendpointidentity').val() == '')
-                $('#openstackendpointidentity').val('http://' + $host.val());
-            if ($('#openstackendpointimage').val() == '')
-                $('#openstackendpointimage').val('http://' + $host.val());
-            if ($('#openstackendpointnetwork').val() == '')
-                $('#openstackendpointnetwork').val('http://' + $host.val());
-
+        if ($('#openstackendpointec2').val() == '')
+            $('#openstackendpointec2').val('http://' + $host.val());
+        if ($('#openstackendpointcompute').val() == '')
+            $('#openstackendpointcompute').val('http://' + $host.val());
+        if ($('#openstackendpointidentity').val() == '')
+            $('#openstackendpointidentity').val('http://' + $host.val());
+        if ($('#openstackendpointimage').val() == '')
+            $('#openstackendpointimage').val('http://' + $host.val());
+        if ($('#openstackendpointnetwork').val() == '')
+            $('#openstackendpointnetwork').val('http://' + $host.val());
     }
 
     function bindChange_importPemFile() {
@@ -438,96 +437,96 @@
     }
 
     function setValueshppubliccloud(data) {
-            //     var hppubliccloudusername = req.body.openstackusername;
-            // var hppubliccloudpassword = req.body.openstackpassword;
-            // var hppubliccloudhost = req.body.openstackhost;
-            // var hppubliccloudtenantid = req.body.openstacktenantid;
-            // var hppubliccloudtenantname = req.body.openstacktenantname;
-            // var hppubliccloudprojectname = req.body.openstackprojectname;
-            // var providerName = req.body.providerName;
-            // var providerType = req.body.providerType.toLowerCase();
-            // var hppubliccloudkeyname = req.body.hppubliccloudkeyname;
-            // var hppubliccloudregion = req.body.hppubliccloudregion;
+        //     var hppubliccloudusername = req.body.openstackusername;
+        // var hppubliccloudpassword = req.body.openstackpassword;
+        // var hppubliccloudhost = req.body.openstackhost;
+        // var hppubliccloudtenantid = req.body.openstacktenantid;
+        // var hppubliccloudtenantname = req.body.openstacktenantname;
+        // var hppubliccloudprojectname = req.body.openstackprojectname;
+        // var providerName = req.body.providerName;
+        // var providerType = req.body.providerType.toLowerCase();
+        // var hppubliccloudkeyname = req.body.hppubliccloudkeyname;
+        // var hppubliccloudregion = req.body.hppubliccloudregion;
 
-            // var serviceendpoints = {
-            //     compute: req.body.openstackendpointcompute,
-            //     network: req.body.openstackendpointnetwork,
-            //     image: req.body.openstackendpointimage,
-            //     ec2: req.body.openstackendpointec2,
-            //     identity: req.body.openstackendpointidentity,
+        // var serviceendpoints = {
+        //     compute: req.body.openstackendpointcompute,
+        //     network: req.body.openstackendpointnetwork,
+        //     image: req.body.openstackendpointimage,
+        //     ec2: req.body.openstackendpointec2,
+        //     identity: req.body.openstackendpointidentity,
 
-            // };    
+        // };    
 
-            alert(JSON.stringify(data.providerType));
+        //alert(JSON.stringify(data.providerType));
 
-            $('#name').val(data.providerName);
-            $('#providertype').val(data.providerType.toUpperCase()).select2();
-            $('#providertype').trigger('change');
-            $('#openstackusername').val(data.username);
-            $('#openstackpassword').val(data.password);
-            $('#openstackhost').val(data.host);
-            $('#openstacktenantname').val(data.tenantname);
-            $('#openstackprojectname').val(data.projectname);
-            $('#openstacktenantid').val(data.tenantid);
+        $('#name').val(data.providerName);
+        $('#providertype').val(data.providerType.toUpperCase()).select2();
+        $('#providertype').trigger('change');
+        $('#openstackusername').val(data.username);
+        $('#openstackpassword').val(data.password);
+        $('#openstackhost').val(data.host);
+        $('#openstacktenantname').val(data.tenantname);
+        $('#openstackprojectname').val(data.projectname);
+        $('#openstacktenantid').val(data.tenantid);
 
-            $('#orgId').val(data.orgId[0]).attr({
-                'answer': data.orgId[0]
-            }).select2();
+        $('#orgId').val(data.orgId[0]).attr({
+            'answer': data.orgId[0]
+        }).select2();
 
-            $('#openstackendpointec2').val(data.serviceendpoints.ec2);
+        $('#openstackendpointec2').val(data.serviceendpoints.ec2);
 
-            $('#openstackendpointcompute').val(data.serviceendpoints.compute);
+        $('#openstackendpointcompute').val(data.serviceendpoints.compute);
 
-            $('#openstackendpointidentity').val(data.serviceendpoints.identity);
+        $('#openstackendpointidentity').val(data.serviceendpoints.identity);
 
-            $('#openstackendpointimage').val(data.serviceendpoints.image);
+        $('#openstackendpointimage').val(data.serviceendpoints.image);
 
-            $('#openstackendpointnetwork').val(data.serviceendpoints.network);
+        $('#openstackendpointnetwork').val(data.serviceendpoints.network);
 
-            $('#hppubliccloudkeyname').val(data.keyname);
-            $('#hppubliccloudregion').val(data.region).select2();
+        $('#hppubliccloudkeyname').val(data.keyname);
+        $('#hppubliccloudregion').val(data.region).select2();
 
-        }
+    }
 
-        function setValuesAzure(data) {
-            $('#name').val(data.providerName);
-            $('#azureSubscriptionId').val(data.subscriptionId);
-            $('#azureStorageAccount').val(data.storageAccount);
-            $('#providertype').val(data.providerType.toUpperCase()).select2();
-            $('#providertype').trigger('change');
-            $('#orgId').val(data.orgId[0]).attr({
-                'answer': data.orgId[0]
-            }).select2();
+    function setValuesAzure(data) {
+        $('#name').val(data.providerName);
+        $('#azureSubscriptionId').val(data.subscriptionId);
+        $('#azureStorageAccount').val(data.storageAccount);
+        $('#providertype').val(data.providerType.toUpperCase()).select2();
+        $('#providertype').trigger('change');
+        $('#orgId').val(data.orgId[0]).attr({
+            'answer': data.orgId[0]
+        }).select2();
 
-        }
+    }
 
-        function setValuesopenstack(data) {
-            $('#name').val(data.providerName);
-            $('#openstackusername').val(data.username);
-            $('#openstackpassword').val(data.password);
-            $('#openstackhost').val(data.host);
-            $('#openstacktenantname').val(data.tenantname);
-            $('#openstackprojectname').val(data.projectname);
-            $('#openstacktenantid').val(data.tenantid);
-            $('#providertype').val(data.providerType).select2();
-            $('#orgId').val(data.orgId[0]).attr({
-                'answer': data.orgId[0]
-            }).select2();
+    function setValuesopenstack(data) {
+        $('#name').val(data.providerName);
+        $('#openstackusername').val(data.username);
+        $('#openstackpassword').val(data.password);
+        $('#openstackhost').val(data.host);
+        $('#openstacktenantname').val(data.tenantname);
+        $('#openstackprojectname').val(data.projectname);
+        $('#openstacktenantid').val(data.tenantid);
+        $('#providertype').val(data.providerType).select2();
+        $('#orgId').val(data.orgId[0]).attr({
+            'answer': data.orgId[0]
+        }).select2();
 
-            $('#openstackendpointec2').val(data.serviceendpoints.ec2);
+        $('#openstackendpointec2').val(data.serviceendpoints.ec2);
 
-            $('#openstackendpointcompute').val(data.serviceendpoints.compute);
+        $('#openstackendpointcompute').val(data.serviceendpoints.compute);
 
-            $('#openstackendpointidentity').val(data.serviceendpoints.identity);
+        $('#openstackendpointidentity').val(data.serviceendpoints.identity);
 
-            $('#openstackendpointimage').val(data.serviceendpoints.image);
+        $('#openstackendpointimage').val(data.serviceendpoints.image);
 
-            $('#openstackendpointnetwork').val(data.serviceendpoints.network);
+        $('#openstackendpointnetwork').val(data.serviceendpoints.network);
 
 
-            $('#providertype').trigger('change');
+        $('#providertype').trigger('change');
 
-        }
+    }
 
     function setValues(data) {
         $('#name').val(data.providerName);
@@ -577,35 +576,35 @@
                 // [ { name: 'username', value: 'jresig' }, { name: 'password', value: 'secret' } ] 
 
                 // return false to cancel submit       
-               if ($('#providertype').val() == 'OPENSTACK' || $('#providertype').val() == 'HPPUBLICCLOUD') {
-                        //alert('in');
-                        if (isFormValidOpenStack(null, 'cat-validation-openstack')) {
-                            appendLoader();
-                            return true;
-                        } else
-                            return false;
+                if ($('#providertype').val() == 'OPENSTACK' || $('#providertype').val() == 'HPPUBLICCLOUD') {
+                    //alert('in');
+                    if (isFormValidOpenStack(null, 'cat-validation-openstack')) {
+                        appendLoader();
+                        return true;
+                    } else
+                        return false;
 
 
-                    } else if ($('#providertype').val() == 'VMWARE') {
-                        if (isFormValidOpenStack(null, 'cat-validation-vmware')) {
-                            appendLoader();
-                            return true;
-                        } else
-                            return false;
-                    } else if ($('#providertype').val() == 'AZURE') {
-                        if (isFormValidAzure(null, 'cat-validation-azure')) {
-                            appendLoader();
-                            return true;
-                        } else
-                            return false;
+                } else if ($('#providertype').val() == 'VMWARE') {
+                    if (isFormValidOpenStack(null, 'cat-validation-vmware')) {
+                        appendLoader();
+                        return true;
+                    } else
+                        return false;
+                } else if ($('#providertype').val() == 'AZURE') {
+                    if (isFormValidAzure(null, 'cat-validation-azure')) {
+                        appendLoader();
+                        return true;
+                    } else
+                        return false;
+                } else {
+                    if (isFormValid()) {
+                        appendLoader();
+                        return true;
                     } else {
-                        if (isFormValid()) {
-                            appendLoader();
-                            return true;
-                        } else {
-                            return false;
-                        }
+                        return false;
                     }
+                }
             },
             dataType: 'json',
             success: function(data, success) {
@@ -661,7 +660,7 @@
                 },
                 error: function(jqxhr) {
                     removeLoader();
-                     getopenstackprovider();
+                    getopenstackprovider();
                     bootbox.alert(jqxhr.status);
                 },
                 failure: function(data) {
@@ -669,81 +668,81 @@
                 }
             });
             var getopenstackprovider = function() {
-              $.ajax({
-                  method: "GET",
-                  url: "/openstack/providers/" + UtilityMethods.getIdFromURL(),
-                  success: function(data, success) {
-                      data = typeof data == "string" ? JSON.parse(data) : data;
-                      d4ddata = data;
-                      setValuesopenstack(data);
+                $.ajax({
+                    method: "GET",
+                    url: "/openstack/providers/" + UtilityMethods.getIdFromURL(),
+                    success: function(data, success) {
+                        data = typeof data == "string" ? JSON.parse(data) : data;
+                        d4ddata = data;
+                        setValuesopenstack(data);
 
-                      //checkForKeyPair();
-                  },
-                  error: function(jqxhr) {
-                      //alert('err 1');
-                      getValueshppubliccloud();
-                      removeLoader();
-                      bootbox.alert(jqxhr.status);
-                  },
-                  failure: function(data) {
-                      alert('fail 1');
-                      bootbox.alert(data);
-                  }
-              }); //else getopenstackprovider
+                        //checkForKeyPair();
+                    },
+                    error: function(jqxhr) {
+                        //alert('err 1');
+                        getValueshppubliccloud();
+                        removeLoader();
+                        bootbox.alert(jqxhr.status);
+                    },
+                    failure: function(data) {
+                        alert('fail 1');
+                        bootbox.alert(data);
+                    }
+                }); //else getopenstackprovider
 
             }
             var getValueshppubliccloud = function() {
 
-              $.ajax({
-                  method: "GET",
-                  url: "/hppubliccloud/providers/" + UtilityMethods.getIdFromURL(),
-                  success: function(data, success) {
-                      data = typeof data == "string" ? JSON.parse(data) : data;
-                      d4ddata = data;
-                      setValueshppubliccloud(data);
+                $.ajax({
+                    method: "GET",
+                    url: "/hppubliccloud/providers/" + UtilityMethods.getIdFromURL(),
+                    success: function(data, success) {
+                        data = typeof data == "string" ? JSON.parse(data) : data;
+                        d4ddata = data;
+                        setValueshppubliccloud(data);
 
-                      //checkForKeyPair();
-                  },
-                  error: function(jqxhr) {
-                      //alert('err 1');
-                      getValuesAzure();
-                      removeLoader();
-                      bootbox.alert(jqxhr.status);
-                  },
-                  failure: function(data) {
-                      alert('fail 1');
-                      bootbox.alert(data);
-                  }
-              }); //else getopenstackprovider
+                        //checkForKeyPair();
+                    },
+                    error: function(jqxhr) {
+                        //alert('err 1');
+                        getValuesAzure();
+                        removeLoader();
+                        bootbox.alert(jqxhr.status);
+                    },
+                    failure: function(data) {
+                        alert('fail 1');
+                        bootbox.alert(data);
+                    }
+                }); //else getopenstackprovider
 
             }
 
             var getValuesAzure = function() {
 
-              $.ajax({
-                  method: "GET",
-                  url: "/azure/providers/" + UtilityMethods.getIdFromURL(),
-                  success: function(data, success) {
-                      data = typeof data == "string" ? JSON.parse(data) : data;
-                      d4ddata = data;
-                      setValuesAzure(data);
+                $.ajax({
+                    method: "GET",
+                    url: "/azure/providers/" + UtilityMethods.getIdFromURL(),
+                    success: function(data, success) {
+                        data = typeof data == "string" ? JSON.parse(data) : data;
+                        d4ddata = data;
+                        setValuesAzure(data);
 
-                      //checkForKeyPair();
-                  },
-                  error: function(jqxhr) {
-                      //alert('err 1');
+                        //checkForKeyPair();
+                    },
+                    error: function(jqxhr) {
+                        //alert('err 1');
 
-                      removeLoader();
-                      bootbox.alert(jqxhr.status);
-                  },
-                  failure: function(data) {
-                      alert('fail 1');
-                      bootbox.alert(data);
-                  }
-              });
+                        removeLoader();
+                        bootbox.alert(jqxhr.status);
+                    },
+                    failure: function(data) {
+                        alert('fail 1');
+                        bootbox.alert(data);
+                    }
+                });
 
             }
-            
+
         }
     });
 

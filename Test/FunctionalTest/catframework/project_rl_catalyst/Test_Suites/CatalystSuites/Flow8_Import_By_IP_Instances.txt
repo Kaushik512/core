@@ -20,11 +20,29 @@ Catalyst Import CentOS Node By IP
     [Teardown]     Close Browser
     
 
-Catalyst Chef Client Run-SSH,Verification on the Imported Node
+Catalyst Chef Client Run on the CentOS Imported Node
     [Tags]       Sanity       ps
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
-    Catalyst Import By IP Chef Client run,SSH,Stop,Start
+    Catalyst Import By IP Chef Client Run on CentOS Instance
+    Catalyst Logout
+    [Teardown]     Close Browser
+
+
+Catalyst SSH on the CentOS Imported Node
+    [Tags]       Sanity       ps
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst Import By IP perform SSH on CentOS Instance
+    Catalyst Logout
+    [Teardown]     Close Browser
+
+
+
+Catalyst Verification of IP,Status,SSH,Chef of the CentOS Imported Node
+    [Tags]       Sanity       ps
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
     Catalyst Verfication of IP,Status,Chef,SSH,MoreInfo and frm Ctrlpanel
     Catalyst Logout
     [Teardown]     Close Browser
@@ -37,7 +55,6 @@ Catalyst Edit the Instance Name of Inported Instance
     Catalyst Check and Edit the Instance Name
     Catalyst Logout
     [Teardown]     Close Browser
-
 
 
 Catalyst Verify the CentOS Instance Deleted from Chef Server
@@ -62,6 +79,9 @@ Catalyst CentOS Instance Deleted only from Catalyst not from Chef Server
 
 
 
+
+
+
 Catalyst Import Ubuntu Node By IP
     [Tags]       Sanity       ps
 #    Catalyst Login
@@ -73,11 +93,29 @@ Catalyst Import Ubuntu Node By IP
 
 
 
-Catalyst Chef Client Run-SSH,Verification on the Ubuntu Imported Node
+Catalyst Chef Client Run on the Ubuntu Imported Node
     [Tags]       Sanity       ps
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
-    Catalyst Import By IP Chef Client run,SSH,Stop,Start on Ubuntu Instance
+    Catalyst Import By IP Ubuntu Instance Chef Client Run
+    Catalyst Logout
+    [Teardown]     Close Browser
+
+
+Catalyst SSH on the Ubuntu Imported Node
+    [Tags]       Sanity       ps
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst Import By IP Perform SSH on Ubuntu Instance
+    Catalyst Logout
+    [Teardown]     Close Browser
+
+
+
+Catalyst Verification of IP,SSH,Chef,Status of Ubuntu Imported Node
+    [Tags]       Sanity       ps
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
     Catalyst Verfication of IP,Status,Chef,SSH,MoreInfo on UbuntuIns frm Ctrlpanel
     Catalyst Logout
     [Teardown]     Close Browser
@@ -108,62 +146,4 @@ Catalyst Ubuntu Instance Deleted only from Catalyst not from Chef Server
     Catalyst Delete the Ubuntu Node only From Catalyst
     Catalyst Logout
     [Teardown]     Close Browser  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Catalyst new Jenkins Configuration setup
-    [Tags]       Sanity               Jenk
-#    Catalyst Login
-    Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
-    #Validate the Jenkins Configuration Setup
-    Catalyst Create New Jenkins Configuration Setup          
-    Catalyst Logout                      
-    [Teardown]     Close Browser
-
-
-
-Catalyst new Jenkins Executioon of Task Environment Setup
-    [Tags]       Sanity               Smoke
-#    Catalyst Login
-    Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
-    Catalyst Creation of Jenkins Task in Environment
-    #-Catlayst Creation of Chef Task in the Environment       
-    Catalyst Logout                      
-    [Teardown]     Close Browser
-
-
-
-#-Catalyst Execution of Tasks by Creating the App
-    #-[Tags]       Sanity               Smoke
-#    Catalyst Login
-    #-Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
-    #-Creation of New Application for your Project and Executing Tasks         
-    #-Catalyst Logout                    
-    #-[Teardown]     Close Browser
 

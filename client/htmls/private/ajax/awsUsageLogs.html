@@ -1,0 +1,21 @@
+<style>
+#content{
+	height:100%!important;
+}
+</style>
+<script type="text/javascript">
+	$.ajax({
+     method: "GET",
+     url: "/globalsettings",   
+     success: function(data, success) {
+      $("#content").append('<iframe src='+ data[0].awsUsageUrl+' style="width: 101% ! important; height: 97%! important; border: medium none;"></iframe>');
+    },
+    error: function(jqxhr) {
+      removeLoader();
+      bootbox.alert(jqxhr.status);
+    },
+    failure: function(data) {
+      bootbox.alert(data);
+    }
+  });
+</script>

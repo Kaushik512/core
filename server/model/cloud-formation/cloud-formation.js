@@ -62,8 +62,9 @@ var CloudFormationSchema = new Schema({
     status: String,
     users: [String],
     region: String,
-    instanceUsername: String
-
+    instanceUsername: String,
+    autoScaleTopicArn: String,
+    autoScaleResourceIds: [String]
 });
 
 
@@ -131,7 +132,8 @@ CloudFormationSchema.statics.createNew = function(cfData, callback) {
         infraManagerType: infraManagerType,
         stackParameters: cfData.stackParameters,
         region: cfData.region,
-        instanceUsername: cfData.instanceUsername
+        instanceUsername: cfData.instanceUsername,
+        autoScaleTopicArn: cfData.autoScaleTopicArn
     };
 
     var that = this;
@@ -221,6 +223,23 @@ CloudFormationSchema.statics.removeById = function(cfId, callback) {
 
     });
 };
+
+//Get by autoscale Id CloudFormation
+
+CloudFormationSchema.statics.findByAutoScaleTopicArn = function(topicArn, callback) {
+    this.find({
+        "autoScaleTopicArn": topicArn
+    }, function(err, cloudFormations) {
+        if (err) {
+            callback(err, null);
+            return;
+        }
+        //console.log('data ==>', data);
+        callback(null, cloudFormations);
+
+    });
+};
+
 
 
 var CloudFormation = mongoose.model('cloudFormation', CloudFormationSchema);

@@ -39,6 +39,7 @@ var appConfig = require('_pr/config');
 var cloudformation = require('./routes_cloudformation');
 
 var notification = require('./routes_notification');
+
 var globalsettings = require('./routes_globalsettings');
 
 var tracks = require('./routes_track');
@@ -94,12 +95,13 @@ module.exports.setRoutes = function(app) {
     provider.setRoutes(app, sessionVerificationFunc);
 
     vmimage.setRoutes(app, sessionVerificationFunc);
+
     chefClientExecution.setRoutes(app);
 
     cloudformation.setRoutes(app, sessionVerificationFunc);
+
     globalsettings.setRoutes(app, sessionVerificationFunc);
 
-    //openstack.setRoutes(app, sessionVerificationFunc);
     tracks.setRoutes(app, sessionVerificationFunc);
 
     puppet.setRoutes(app, sessionVerificationFunc);

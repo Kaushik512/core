@@ -506,7 +506,6 @@ function CreateTableFromJson(formID, idFieldName, createFileName) {
                 //console.log('v after',v);
             }
 
-
             console.log('k:' + k + ' v :' + JSON.stringify(v));
             if (k == idFieldName) {
                 idFieldValue = v;
@@ -661,7 +660,7 @@ function CreateTableFromJson(formID, idFieldName, createFileName) {
             // var tdorgname = $('.rowtemplate').find('td[datafield="orgname"]');
             //&& tdorgname.length > 0
             if (importbutton && importbutton.length > 0) {
-                if (item.configType === 'puppet') {
+                if (item.configType ==='puppet') {
                     importbutton.attr("href", "#ajax/Settings/puppetSync.html?" + idFieldValue);
                 } else {
                     importbutton.attr("href", "#ajax/Settings/chefSync.html?" + idFieldValue);

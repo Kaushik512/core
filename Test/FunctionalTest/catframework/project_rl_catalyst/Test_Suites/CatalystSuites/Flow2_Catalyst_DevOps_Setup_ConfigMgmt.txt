@@ -42,11 +42,41 @@ Catalyst Verify Unique ChefServer,Organization and Org Disabled
 
 
 
+Catalyst Create New DataBag Setup
+    [Tags]       Sanity         Data
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+#    Catalyst Login
+    Catalyst Create New Data Bag
+    Catalyst Logout
+    [Teardown]     Close Browser
+
+
+
+Catalyst Duplicate DataBag Setup
+    [Tags]       Sanity         Data
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+#    Catalyst Login
+    Catalyst Duplicate DataBag setup
+    Catalyst Logout
+    [Teardown]     Close Browser
 
 
 
 
+Catalyst Validation of Puppet Server
+    [Tags]       Sanity         puppet
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+#    Catalyst Login
+    Catalyst Validation of the Puppet Server Page
+    Catalyst Logout
+    [Teardown]     Close Browser
 
 
-
+Catalyst Creation of Puppet Server
+    [Tags]       Sanity         pup
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+#    Catalyst Login
+    Catalyst Creation of the Puppet Server
+    Catalyst Logout
+    [Teardown]     Close Browser
 

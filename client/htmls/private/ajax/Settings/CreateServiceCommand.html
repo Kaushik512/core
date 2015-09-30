@@ -199,16 +199,16 @@
                </div>
                <div class="widget-toolbox clearfix">
                   <div class="btn-group pull-right">
-                     
-                     <button class="btn btn-primary btn-mini" style="margin-right:11px;">
-                     <i class="ace-icon fa fa-check bigger-110"></i>
-                     Save
-                     </button>
-                     <a class="btn btn-primary btn-mini" onclick="window.history.back();" id="btncancel">
-                     <i class="ace-icon fa fa-undo bigger-110"></i>
-                     Cancel
-                     </a>
-                  </div>
+                <a class="btn btn-default" onclick="window.history.back();" style="margin-right:11px;" id="btncancel">
+                  <i class="ace-icon fa fa-times bigger-110"></i>
+                  Cancel
+                  </a>
+                  <button class="btn btn-primary btn-mini">
+                  <i class="ace-icon fa fa-check bigger-110"></i>
+                  Save
+                  </button>
+                  
+               </div>
                </div>
             </div>
          </form><!--form ends here-->
@@ -266,16 +266,68 @@
         
      });
    }
-   
    function inLineReady() {
        $("input[type='text']").on("click", function () {
            $(this).select();
            $("#msgOrgName").hide();
        });
+       var globalChefServList = JSON.parse(JSON.stringify(readMasterJson('10')) ); 
+
        if(readform(19) == false){
          $('select[cdata="catalyst"]').select2();
+
+         $("#configname option").remove();
+         $("#configname").select2().select2('val', "");
+
+         $('#orgname option:eq(1)').attr("selected","selected");
+         $("#orgname").select2();
+
+         $("#orgname").on('change', function(e){
+            $("#configname option").remove();
+
+            var selected_rowId = $("option:selected", this).attr("rowid");
+            var chefServList = ["Select Chefserver"];
+            //console.log("globalChefServList ", globalChefServList);            
+
+            for(var i=0; i<globalChefServList.length; i++){
+               //console.log(globalChefServList[i].orgname_rowid);
+               //alert(selected_rowId+" :: "+globalChefServList[i].orgname_rowid);
+               if(selected_rowId == globalChefServList[i].orgname_rowid){
+                  chefServList.push(globalChefServList[i]);
+               }
+            }
+            var curSelect = $("#configname");
+
+            curSelect.append('<option>' + chefServList[0] + '</option>');
+            for(var  j=1; j<chefServList.length; j++){
+               if(chefServList[j].orgname_rowid != "undefined"){
+                  orgname_rowid_rowid = chefServList[j].orgname_rowid;
+                  _rowid = chefServList[j].rowid;
+                  //console.log(chefServList[j].orgname_rowid+" :::: "+chefServList[j].rowid);
+                  _configName = chefServList[j].configname;
+                  curSelect.append('<option value="' + _configName + '" rowid = "' + _rowid + '">' + _configName + '</option>');
+               }
+            }
+            var _val = ($('#configname option:eq(1)').val() == undefined) ? "" : $('#configname option:eq(1)').val();
+            $("#configname").select2().select2('val', _val);  
+            $("#configname").trigger('change');
+            chefServList = []; 
+
+            /*$.each(tempJSON, function(i, item) {
+                _rowid = item['rowid'];
+                $.each(item, function(k, v) { //columns
+                    //console.log('1 k:' + k + ' 1 v :' + JSON.stringify(v));
+                    if (k == curSelect.attr("id") && curSelect.attr("ignoreoption") != v) {
+                        curSelect.append('<option value="' + v + '" rowid = "' + _rowid + '">' + v + '</option>');
+                    }
+                });
+            });*/
+
+         });
+         $("#orgname").trigger('change');
+
        }
-       $('#content').css("opacity", "1 !important");
+       /*$('#content').css("opacity", "1 !important");
        //$('#iconpicker').iconpicker({
        //    iconset: 'fontawesome',
        //    icon: 'fa-key',
@@ -301,7 +353,7 @@
                $(this).addClass('active');
        });
        drawBreadCrumb1();
-       enableUniqueCheckingForInputs(19);
+       enableUniqueCheckingForInputs(19);*/
    }
    
    

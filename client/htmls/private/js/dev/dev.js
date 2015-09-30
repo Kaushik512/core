@@ -732,11 +732,13 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                             "bSortable": false,
                             "sWidth": "20%"
                         }
-                    ],
-                    /*"fnRowCallback": function(nRow, aData, iDisplayIndex) {
-          $("td:first", nRow).html(iDisplayIndex + 1);
-          return nRow;
-      }*/
+                    ]
+                        /*"fnRowCallback": function(nRow, aData, iDisplayIndex) {
+
+                      $("td:first", nRow).html(iDisplayIndex + 1);
+                      return nRow;
+                  }*/
+
 
                 });
             }
@@ -2304,7 +2306,6 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
 
                                     $containerTemp = '<div class="panel panel-default blueprintContainer hidden">' +
                                         '<div class="panel-heading">' +
-
                                         '<h4 class="panel-title">' +
                                         '<a href="#collapse' + i + '" data-parent="#accordion-2" data-toggle="collapse" class="collapsed"> ' +
                                         '<i class="fa fa-fw fa-plus-circle txt-color-blue"></i> ' +
@@ -2319,7 +2320,7 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                         })(j);
                     }
                     //To fix template id and template type
-                    // alert('in' + data.length);
+                     alert('in' + data.length);
                     for (var i = 0; i < data.length; i++) {
                         //alert(JSON.stringify(data[i]));
                         //Find a panel-body with the template type class
@@ -2340,18 +2341,18 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                             else
                                 $img = $('<img />').attr('src', 'img/imgo.jpg').attr('alt', data[i].name).addClass('cardLogo');
                             //provider logo added - currently included open stack
+                            var $imgprovider = '';
                             if (data[i].blueprintType == 'openstack_launch')
-                                $imgprovider = $('<img src="img/openstack-card.png" style="margin-right: 7px; margin-top: 4px; margin-left: 102px;">');
+                                $imgprovider = $('<li><img src="img/openstack-card.png" style="margin-left: -94px;margin-right: 7px;margin-top: 48px;"></li>');
                             if (data[i].blueprintType == 'hppubliccloud_launch')
-                                $imgprovider = $('<img src="img/hpcloud-card.png" style="margin-right: 7px; margin-top: 4px; margin-left: 102px;">');
-                            //alert(data[i].blueprintType);
-                            var $liImage = $('<li></li>').append($imgprovider).append($img);
-                            
+                                $imgprovider = $('<li><img src="img/hpcloud-card.png" style="margin-left: -94px;margin-right: 7px;margin-top: 48px;"></li>');
+                            // alert(data[i].blueprintType);
+                            var $liImage = $('<li></li>').append($img);
                             $ul.append($liImage);
 
                             var $liCardName = $('<li title="' + data[i].name + '"></li>').addClass('Cardtextoverflow').html('<u><b>' + data[i].name + '</b></u>');
 
-                            $ul.append($liCardName);
+                            $ul.append($liCardName).append($imgprovider);
                             var $selecteditBtnContainer = $('<div style="position:absolute;padding-left:45px;bottom:11px;"></div>');
                             // if (data[i].blueprintConfig.infraManagerData && data[i].blueprintConfig.infraManagerData.versionsList) {
 
@@ -3151,8 +3152,6 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                                         }
 
                                     });
-
-
                                 } else if (blueprintType === 'openstack_launch' || blueprintType === 'hppubliccloud_launch') {
                                     //alert('attempt launch of openstack');
                                     launchBP();
@@ -4142,10 +4141,11 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                         });
                         headerCount++;
                         //if(headerCount === 1) {
-                        setTimeout(function() {
+
+                            setTimeout(function(){
                                 $liHeader.find('a').click();
-                            }, 2000)
-                            //}
+                            },2000)
+                        //}
                     });
 
                 }
@@ -4415,57 +4415,58 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                                     } //if loop for choice ends here..
                                     /*else {
 
-                  //condition for boolean and string..
-                  //if (data[i].taskConfig.parameterized.length >= 1) {
-                      //  alert(data[i].taskConfig.parameterized.length);
-                      bootbox.confirm({
-                          message: "Are you sure you want to execute this Job?",
-                          title: "Confirmation",
 
-                          callback: function(result) {
-                              if (result) {
-                                  var $taskExecuteTabsHeaderContainer = $('#taskExecuteTabsHeader').empty();
-                                  var $taskExecuteTabsContent = $('#taskExecuteTabsContent').empty();
-                                  var $modal = $('#assignedExecute');
-                                  $modal.find('.loadingContainer').show();
-                                  $modal.find('.errorMsgContainer').hide();
-                                  $modal.find('.outputArea').hide();
-                                  $modal.modal('show');
-                                  var timestampToPoll = new Date().getTime();
-                                  $.post('../tasks/' + taskId + '/run', {}, function(data) {
-                                      //  alert(JSON.stringify(data));
-                                      var date = new Date().setTime(data.timestamp);
-                                      var taskTimestamp = new Date(date).toLocaleString(); //converts to human readable strings
-                                      $('tr[data-taskId="' + taskId + '"] .taskrunTimestamp').html(taskTimestamp);
+                          //condition for boolean and string..
+                          //if (data[i].taskConfig.parameterized.length >= 1) {
+                              //  alert(data[i].taskConfig.parameterized.length);
+                              bootbox.confirm({
+                                  message: "Are you sure you want to execute this Job?",
+                                  title: "Confirmation",
 
-                                      var $outputArea = $modal.find('.outputArea');
+                                  callback: function(result) {
+                                      if (result) {
+                                          var $taskExecuteTabsHeaderContainer = $('#taskExecuteTabsHeader').empty();
+                                          var $taskExecuteTabsContent = $('#taskExecuteTabsContent').empty();
+                                          var $modal = $('#assignedExecute');
+                                          $modal.find('.loadingContainer').show();
+                                          $modal.find('.errorMsgContainer').hide();
+                                          $modal.find('.outputArea').hide();
+                                          $modal.modal('show');
+                                          var timestampToPoll = new Date().getTime();
+                                          $.post('../tasks/' + taskId + '/run', {}, function(data) {
+                                              //  alert(JSON.stringify(data));
+                                              var date = new Date().setTime(data.timestamp);
+                                              var taskTimestamp = new Date(date).toLocaleString(); //converts to human readable strings
+                                              $('tr[data-taskId="' + taskId + '"] .taskrunTimestamp').html(taskTimestamp);
 
-                                      $outputArea.data('taskType', data.taskType);
-                                      $outputArea.data('instances', data.instances);
-                                      $outputArea.data('jenkinsServerId', data.jenkinsServerId);
-                                      $outputArea.data('jobName', data.jobName);
-                                      $outputArea.data('lastBuildNumber', data.lastBuildNumber);
-                                      $outputArea.data('currentBuildNumber', data.currentBuildNumber);
-                                      $outputArea.data('timestampStarted', data.timestamp);
-                                      showTaskLogs();
+                                              var $outputArea = $modal.find('.outputArea');
 
-                                  }).fail(function(jxhr) {
-                                      $modal.find('.loadingContainer').hide();
-                                      $modal.find('.outputArea').hide();
-                                      var $errorContainer = $modal.find('.errorMsgContainer').show();
-                                      if (jxhr.responseJSON && jxhr.responseJSON.message) {
-                                          $errorContainer.html(jxhr.responseJSON.message);
-                                      } else {
-                                          $errorContainer.html("Server Behaved Unexpectedly");
-                                      }
-                                  });
+                                              $outputArea.data('taskType', data.taskType);
+                                              $outputArea.data('instances', data.instances);
+                                              $outputArea.data('jenkinsServerId', data.jenkinsServerId);
+                                              $outputArea.data('jobName', data.jobName);
+                                              $outputArea.data('lastBuildNumber', data.lastBuildNumber);
+                                              $outputArea.data('currentBuildNumber', data.currentBuildNumber);
+                                              $outputArea.data('timestampStarted', data.timestamp);
+                                              showTaskLogs();
 
-                              } //result ends here..
-                          }
-                      });
-              //    }
-                  break;
-              }*/
+                                          }).fail(function(jxhr) {
+                                              $modal.find('.loadingContainer').hide();
+                                              $modal.find('.outputArea').hide();
+                                              var $errorContainer = $modal.find('.errorMsgContainer').show();
+                                              if (jxhr.responseJSON && jxhr.responseJSON.message) {
+                                                  $errorContainer.html(jxhr.responseJSON.message);
+                                              } else {
+                                                  $errorContainer.html("Server Behaved Unexpectedly");
+                                              }
+                                          });
+
+                                      } //result ends here..
+                                  }
+                              });
+                      //    }
+                          break;
+                      }*/
                                 } //for ends here..
                                 //new else starts here..
                             } else {
@@ -4515,8 +4516,8 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
 
                         //alert(data[i].taskConfig.parameterized[a].parameterName);
                         /*if(data[i].taskType==="chef"){
-      
-      }*/
+             
+              }*/
 
                     });
                     $tr.append($tdExecute);
@@ -4541,7 +4542,6 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                             });
                             $taskHistoryDatatable.clear().draw();
                             $('.widget-header').find('h5.chefTitle').html('Chef History For -&nbsp;' + data[i].name);
-
                             $.get('../tasks/' + taskId + '/history', function(taskHistories) {
                                 for (var i = 0; i < taskHistories.length; i++) {
                                     var $trHistoryRow = $('<tr/>');
@@ -4639,7 +4639,8 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                             //$modal.find('.outputArea').hide();
 
                         });
-                    } else if (data[i].taskType === 'composite') {
+
+                    }else if(data[i].taskType === 'composite'){
                         var $tdHistory = $('<td style="vertical-align:inherit;text-align:center;"></td>').append('<a rel="tooltip" data-placement="top" data-original-title="History" data-toggle="modal" href="javascript:void(0)" class="btn btn-primary btn-sg tableactionbutton"><i class="ace-icon fa fa-header bigger-120"></i></a>');
                         $tdHistory.find('a').data('taskId', data[i]._id).attr('data-historyTaskId', data[i]._id).click(function(e) {
                             //var $taskHistoryContent = $('#taskHistoryContent').show();
@@ -4658,10 +4659,10 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                             });
                             //$taskHistoryDatatable.clear().draw();
                             $compositeTaskHistoryDatatable.clear().draw();
-
+                
                             $('.widget-header').find('h5.compositeTitle').html('Composite History For -&nbsp;' + data[i].name);
-
-                            $.get('../tasks/' + taskId + '/history', function(taskHistories) {
+                            
+                              $.get('../tasks/' + taskId + '/history', function(taskHistories) {
                                 for (var i = 0; i < taskHistories.length; i++) {
                                     var $trHistoryRow = $('<tr/>');
 
@@ -5092,10 +5093,9 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                // $allListElements.parent().parent().parent().parent().parent().parent().parent().hide();
                // $matchingListElements.parent().parent().parent().parent().parent().parent().parent().show();
              });
-        }
-        */
 
-
+       }
+       */
         var wzlink = window.location.href.split('#')[1];
         //alert(wzlink);
         $('li[navigation*="Workspace"]').find('a').attr('href', '#' + wzlink);
@@ -5340,9 +5340,10 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
 
         /*if (orgId && urlParams['bg'] && projectId && envId) {
 
-        $('.instanceloaderspinner').removeClass('hidden');
 
-        function getInstances() {
+      $('.instanceloaderspinner').removeClass('hidden');
+
+      function getInstances() {
 
           $.get('../organizations/' + orgId + '/businessgroups/' + urlParams['bg'] + '/projects/' + projectId + '/environments/' + envId + '/', function(data) {
               console.log('success---3---4');
@@ -5363,19 +5364,18 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
               initializeInstanceArea(data.instances);
           });
           setTimeout(getInstances, 120000);
-        }
+      }
 
-        getInstances();
+      getInstances();
 
+      
 
-
-        } else {
-        var $workzoneTab = $('#workZoneNew');
-        if ($workzoneTab.length) {
+  } else {
+      var $workzoneTab = $('#workZoneNew');
+      if ($workzoneTab.length) {
           $workzoneTab.click();
-        }
-        }*/
-
+      }
+  }*/
         //Generating the docker launch parameters
         function generateDockerLaunchParams() {
             if ($('#Containernamefield').val() == '') {
@@ -5874,33 +5874,33 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
 
                 $('#search').on('click', this.updateUI);
                 /*$('.custom-left').click(function() {
-//previous list
-var originalList = $('#divinstancescardview');
-var activeList = originalList.find('.active'),
-    prevList = activeList.prev();
-if (prevList.length == 1) {
-    activeList.removeClass('active');
-    prevList.addClass('active');
-} else {
-    activeList.removeClass('active');
-    originalList.find('.item:last').addClass('active');
-}
-});
 
-$('.custom-right').click(function() {
-var originalList = $('#divinstancescardview');
-var activeList = originalList.find('.active'),
-    nextList = activeList.next();
-if (nextList.length == 1) {
-    nextList.addClass('active');
-    activeList.removeClass('active');
-} else {
-    activeList.removeClass('active');
-    originalList.find('.item:first').addClass('active');
-}
+        //previous list
+        var originalList = $('#divinstancescardview');
+        var activeList = originalList.find('.active'),
+            prevList = activeList.prev();
+        if (prevList.length == 1) {
+            activeList.removeClass('active');
+            prevList.addClass('active');
+        } else {
+            activeList.removeClass('active');
+            originalList.find('.item:last').addClass('active');
+        }
+    });
 
-});*/
+    $('.custom-right').click(function() {
+        var originalList = $('#divinstancescardview');
+        var activeList = originalList.find('.active'),
+            nextList = activeList.next();
+        if (nextList.length == 1) {
+            nextList.addClass('active');
+            activeList.removeClass('active');
+        } else {
+            activeList.removeClass('active');
+            originalList.find('.item:first').addClass('active');
+        }
 
+    });*/
             },
             initData: function(data) {
                 x = data;

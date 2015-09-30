@@ -10,7 +10,9 @@ Resource           catalyst.txt
 
 *** Variables ***
 ${BROWSERTYPE}                    firefox                   
-${ENVIRONMENTSERVER}                http://d4d.relevancelab.com:3001                            
+${ENVIRONMENTSERVER}                http://d4d.rlcatalyst.com/public/login.html
+
+#http://d4d.rlcatalyst.com/public/login.html
 
 #http://10.0.1.206:3003/public/login.html
 
@@ -26,8 +28,21 @@ ${ENVIRONMENTSERVER}                http://d4d.relevancelab.com:3001
 
 
              
+#Puppet
+${PUPPET SERVERNAME}       	RLPuppetServer
+${PUPPET USERNAME}          ubuntu
+${HOSTNAME}                 52.24.60.123
+${Valid15ChrPuppetName}      RelevanceLabPuppet
 
- 
+${Valid15ChrErrMsg}         limited to 15 chars.
+
+
+#DataBag
+${DATABAG NAME}        DataRL
+${INSTANCE ID}         R1267
+${INSTANCE ID1}        S4567
+${DUPLICATE DATABAGMSG}         Data Bag already exist on Chef.  
+
 
 
 
@@ -89,10 +104,10 @@ ${KEYPAIRNAME}           cat_instances
 ${REGION NAME}           US West 
 ${SUBNET NAME}           subnet-aed68ce8
 ${NEW CONFIG NAME}       catserver
-${REGION NAME}            US West
+${REGION NAME}            US West    
 ${BLUEPRINT TESTNAME}          TestingNew
 
-
+${Unique ErrMsg}            This entry is already registered. Try another?
 
 ${PHOENIX COMMERNCE WITHOUT COOKBOOK UBUNTUOS}            Phoenix Commernce without Cookbook UbuntuOS
 ${PHOENIX COMMERCE WITH COOKBOOK UBUNTUOS}          Phoenix Commerce With CookBook ubuntuOS
@@ -108,13 +123,20 @@ ${CONFIG MANAGEMENT URL}             https://api.opscode.com/organizations/catte
 
 
 
+${CLOUD TEMPLATETYPE}        CloudFormation
+${CLOUD TEMP NAME}           RLCloud
+${CFT BLUPRNT NAME}          Rel_CloudBP
+${NODE USERNAME}             ubuntu
+${STACK NAME}                RLStack
+${STACK INSTANCE NAME}       Node
 
 
 ${USERPEMFILE}              ${ROOTPATH}//Chef//mycatqa.pem
-${VALIDATORPEMFILE}      ${ROOTPATH}//Chef//cattest-validator.pem
+${VALIDATORPEMFILE}         ${ROOTPATH}//Chef//cattest-validator.pem
 ${KNIFERBFILE}                ${ROOTPATH}//Chef//knife.rb
 ${CATALYSTPEM}                ${ROOTPATH}//Chef//catalyst.pem
 ${CAT_INSTANCES}              ${ROOTPATH}//Chef//cat_instances.pem
+${CATALYST STACKFILE}         ${ROOTPATH}//Chef//CatalystStack.template
 
 ${CENTOSIMG}                  ${ROOTPATH}//Images//centos.jpg
 ${UBUNTUIMG}                  ${ROOTPATH}//Images//ubuntuu.jpg
@@ -131,7 +153,7 @@ ${JENKINS PASSWORD}       admin@RL123
 ${TASK NAME}              Task1
 ${JENKINS SERVER}         JenkinsRL
 ${JENKINS EDIT}           Jenkins
-${JJOB NAME}               testjob
+${JJOB NAME}               testmail
 ${RECIPE}                  recipe[apt]     
 ${RECIPE1}                 recipe[apt]
 ${Template Type}           Chef
@@ -174,7 +196,7 @@ ${MAT RUNLIST1}            recipe[a],recipe[cron]
 ${MAT OS1}                 ubuntu
 ${UBUNTU MEM}              1016256kB
 ${UBUNTU REC}              recipe[apt],recipe[apt]
-${TEMPLATE TYPENAME}       SoftwareStack                 #CatAutomatn          
+${TEMPLATE TYPENAME}       SoftwareStack                #CatAutomatn          
 ${random}                  adarsh
 ${ADD}                     apache2              #tomcat-all
 ${ACTBOOT1}                 Pending
@@ -208,6 +230,7 @@ ${EDIT_UBUNTU_INSTANCE_NAME}     Instance_Ubuntu
 ${DESIGNER_NAME}            Designer01
 ${DESIGNER_PASWD}           Designer01
 ${CONSUMER_NAME}            Consumer01
+
 ${CONSUMER_PASWD}           Consumer01
 ${CENTOS NAME}              Instance_Centos
 ${UBUNTU NAME}              Instance_Ubuntu
@@ -217,6 +240,8 @@ ${IP Ubuntu}                54.68.147.50
 ${IP ADD CENTOS}              52.24.178.71
 ${IP Centos}                  52.24.178.71
 
+
+${SETTING}                    Settings
 ${Proj1}                      Catalyst
 ${Proj2}                      Primary_Edu
 ${CookBkName}                 apt
@@ -233,13 +258,20 @@ ${SECRTY GRP2}                sg-c06faca4 | HTTP&S_SG
 ${SECRTY GRP3}                sg-038f4d67 | SSH_SG
 ${SECRTY GRP4}                sg-ab6faccf | Tomcat
 
+${SOFTWARE NAME}          setup-2.8.14-20.el6_4.1.noarch
 
 
 #Provider
-${PROVIDER NAME}          AWS RELPRO
+${PROVIDER NAME}          AWS Prov
+${EDIT PROVIDER NANME}    AWS RELPRO
 ${PROVIDERR}                 AWS
 ${SECRET KEY}                  qm/j8lT0/IPc1P5ud8yujUSa61+QjqeyZ/jZkIff
 ${ACCESS KEY}                  AKIAI3ETOOEFHJ62G2NQ
+
+${Provider ErrMsg}         Provider name already exist.
+
+
+
 ${IMAGE NAME1}                 Cent OSIm
 ${IMAGE NAME2}                 UbuntuIm
 ${IMAGE NAME3}                 Windows
@@ -302,6 +334,12 @@ ${UI PERFORMANCE}                http://www.google.com
 
 
 
+#Docker
+${DOCKER NAME}           RelDocker
+${DOCKER REGISTRY}       relevancelab
+${DOCKER USERID}         relevancelab
+${DOCKER EMAILID}        puneet@relevancelab.com
+${DOCKER PASSWD}         RL@123
 
 
 #Organization Name
@@ -337,6 +375,8 @@ ${VaildEditEnvironment}                QA
 ${EnV1}                                Dev
 ${EnV2}                                QA
 ${REQ}                                Required
+${EnV3}                               Preeprod
+
 
 ${Vaildate15ChrErrMsg}              limited to 15 chars            
 ${VaildateBlankSpacesErrMsg}        space(s) not allowed
@@ -547,3 +587,16 @@ ${DEF TEAMNAME4}                Relevance_Labs_QA
 
 #Blueprint Validation
 ${ERRROR MESSAGE}              Required.
+${DESIGN BREADCRUMB}         DesignPROVIDERSAWS
+${AZURE BREADCRUMB}          DesignPROVIDERSAzure
+${DATACENTRE BREADCRUMB}     DesignPROVIDERSData Centre
+${OPENSTACK BREADCRUMB}      DesignPROVIDERSOpen Stack
+${CLOUDSTACK BREADCRUMB}     DesignPROVIDERSCloud Stack
+${DOCKER BREADCRUMB}         DesignPROVIDERSDocker
+
+
+
+
+
+
+

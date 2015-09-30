@@ -43,6 +43,10 @@ var ACTION_LOG_TYPES = {
     SSH: {
         type: 8,
         name: 'SSH-Shell'
+    },
+    PUPPET_RUN: {
+        type: 9,
+        name: "puppet-agent-run"
     }
 
 }
@@ -132,7 +136,7 @@ var InstanceSchema = new Schema({
     runlist: [{
         type: String,
         trim: true
-            //validate: schemaValidator.recipeValidator
+        //validate: schemaValidator.recipeValidator
     }],
     attributes: [{
         name: String,
@@ -169,10 +173,21 @@ var InstanceSchema = new Schema({
     chef: {
         serverId: {
             type: String,
-            required: true,
             trim: true
         },
         chefNodeName: String
+    },
+    puppet: {
+        serverId: {
+            type: String,
+            trim: true
+        },
+        puppetNodeName: String
+    },
+    infraManager: {
+        serverId: String,
+        nodeName: String,
+        type: String,
     },
     software: [{
         name: {
@@ -265,6 +280,40 @@ var InstancesDao = function() {
                 return;
             }
             //logger.debug("Exit getInstanceById (%s)", instanceId);
+            callback(null, data);
+
+        });
+    };
+
+    this.getInstanceByPlatformId = function(platformId, callback) {
+        logger.debug("Enter getInstanceByPlatformId (%s)", platformId);
+
+        Instances.find({
+            platformId: platformId
+        }, function(err, data) {
+            if (err) {
+                logger.error("Failed getInstanceByPlatformId (%s)", platformId, err);
+                callback(err, null);
+                return;
+            }
+            logger.debug("Exit getInstanceByPlatformId (%s)", platformId);
+            callback(null, data);
+
+        });
+    };
+
+    this.getInstanceByProviderId = function(providerId, callback) {
+        logger.debug("Enter getInstanceByProviderId (%s)", providerId);
+
+        Instances.find({
+            providerId: providerId
+        }, function(err, data) {
+            if (err) {
+                logger.error("Failed getInstanceByProviderId (%s)", providerId, err);
+                callback(err, null);
+                return;
+            }
+            logger.debug("Exit getInstanceByProviderId (%s)", providerId);
             callback(null, data);
 
         });
@@ -420,6 +469,8 @@ var InstancesDao = function() {
                 instanceIP: ip
             }, {
                 'chef.chefNodeName': nodeName
+            }, {
+                'puppet.puppetNodeName': nodeName
             }],
         }
         Instances.find(queryObj, function(err, data) {
@@ -473,6 +524,20 @@ var InstancesDao = function() {
 
     };
 
+    this.findByProviderId = function(providerId, callback) {
+        var queryObj = {
+            providerId: providerId
+        }
+        Instances.find(queryObj, function(err, data) {
+            if (err) {
+                logger.debug("Failed to findByProviderId (%s)", providerId, err);
+                callback(err, null);
+                return;
+            }
+            logger.debug("Exit findByProviderId (%s)", providerId);
+            callback(null, data);
+        });
+    };
 
 
     this.createInstance = function(instanceData, callback) {
@@ -751,6 +816,28 @@ var InstancesDao = function() {
         });
     };
 
+    this.updateInstancePuppetNodeName = function(instanceId, nodeName, callback) {
+        logger.debug("Enter updateInstancePuppetNodeName (%s, %s)", instanceId, nodeName);
+        Instances.update({
+            "_id": new ObjectId(instanceId),
+        }, {
+            $set: {
+                "puppet.puppetNodeName": nodeName
+            }
+        }, {
+            upsert: false
+        }, function(err, data) {
+            if (err) {
+                logger.error("Failed to updateInstancePuppetNodeName (%s, %s)", instanceId, nodeName, err);
+                callback(err, null);
+                return;
+            }
+            logger.debug("Exit updateInstancePuppetNodeName (%s, %s)", instanceId, nodeName);
+            callback(null, data);
+        });
+    };
+
+
     this.removeInstancebyId = function(instanceId, callback) {
         logger.debug("Enter removeInstancebyId (%s)", instanceId);
         Instances.remove({
@@ -780,6 +867,23 @@ var InstancesDao = function() {
             callback(null, data);
         });
     };
+
+    this.removeInstancebyCloudFormationIdAndAwsId = function(cfId, awsInstanceId, callback) {
+        logger.debug("Enter removeInstancebyCloudFormationId (%s)", cfId);
+        Instances.remove({
+            cloudFormationId: cfId,
+            platformId: awsInstanceId
+        }, function(err, data) {
+            if (err) {
+                logger.error("Failed to removeInstancebyCloudFormationIdAndAwsId (%s)", cfId, err);
+                callback(err, null);
+                return;
+            }
+            logger.debug("Exit removeInstancebyCloudFormationIdAndAwsId (%s)", cfId);
+            callback(null, data);
+        });
+    };
+
 
     this.updateInstanceLog = function(instanceId, log, callback) {
         logger.debug("Enter updateInstanceLog ", instanceId, log);
@@ -1144,6 +1248,22 @@ var InstancesDao = function() {
             actionData: {
                 runlist: runlist
             }
+
+        };
+        var logId = insertActionLog(instanceId, log, callback);
+        log._id = logId;
+        return log;
+    };
+
+    this.insertPuppetClientRunActionLog = function(instanceId, user, timestampStarted, callback) {
+        logger.debug("Enter insertPuppetClientRunActionLog ", instanceId, user, timestampStarted);
+        var log = {
+            type: ACTION_LOG_TYPES.PUPPET_RUN.type,
+            name: ACTION_LOG_TYPES.PUPPET_RUN.name,
+            completed: false,
+            success: false,
+            user: user,
+            timeStarted: timestampStarted,
 
         };
         var logId = insertActionLog(instanceId, log, callback);

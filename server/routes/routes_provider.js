@@ -25,8 +25,6 @@ var configmgmtDao = require('../model/d4dmasters/configmgmt.js');
 var Cryptography = require('../lib/utils/cryptography');
 var appConfig = require('_pr/config');
 module.exports.setRoutes = function(app, sessionVerificationFunc) {
-    
-
     // Return AWS Provider respect to id.
     app.get('/aws/providers/list', function(req, res) {
 
@@ -138,7 +136,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             }
         });
     });
-
 
     app.all("/aws/providers/*", sessionVerificationFunc);
     var cryptoConfig = appConfig.cryptoSettings;
@@ -2006,62 +2003,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         });
     });
 
-    // Return AWS Provider respect to id.
-    app.get('/aws/providers/:providerId', function(req, res) {
-        logger.debug("Enter get() for /providers/%s", req.params.providerId);
-        var providerId = req.params.providerId.trim();
-        if (typeof providerId === 'undefined' || providerId.length === 0) {
-            res.send(500, "Please Enter ProviderId.");
-            return;
-        }
-        AWSProvider.getAWSProviderById(providerId, function(err, aProvider) {
-            if (err) {
-                logger.error(err);
-                res.send(500, errorResponses.db.error);
-                return;
-            }
-            if (aProvider) {
-                AWSKeyPair.getAWSKeyPairByProviderId(aProvider._id, function(err, keyPair) {
-                    logger.debug("keyPairs length::::: ", keyPair.length);
-                    masterUtil.getOrgById(aProvider.orgId[0], function(err, orgs) {
-                        if (err) {
-                            res.send(500, "Not able to fetch org.");
-                            return;
-                        }
-                        var keys = [];
-                        keys.push(aProvider.accessKey);
-                        keys.push(aProvider.secretKey);
-                        cryptography.decryptMultipleText(keys, cryptoConfig.decryptionEncoding, cryptoConfig.encryptionEncoding, function(err, decryptedKeys) {
-                            if (err) {
-                                res.sned(500, "Failed to decrypt accessKey or secretKey");
-                                return;
-                            }
-                            if (orgs.length > 0) {
-                                if (keyPair) {
-                                    var dommyProvider = {
-                                        _id: aProvider._id,
-                                        id: 9,
-                                        accessKey: decryptedKeys[0],
-                                        secretKey: decryptedKeys[1],
-                                        providerName: aProvider.providerName,
-                                        providerType: aProvider.providerType,
-                                        orgId: aProvider.orgId,
-                                        orgName: orgs[0].orgname,
-                                        __v: aProvider.__v,
-                                        keyPairs: keyPair
-                                    };
-                                    res.send(dommyProvider);
-                                }
-                            }
-                        });
-                    });
-                });
-            } else {
-                res.send(404);
-            }
-        });
-    });
-
     // Update a particular AWS Provider
     app.post('/aws/providers/:providerId/update', function(req, res) {
         logger.debug("Enter post() for /providers/%s/update", req.params.providerId);
@@ -2468,6 +2409,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         });
     });
 
+
     // Return list of all types of available providers.
     app.get('/allproviders/list', function(req, res) {
         logger.debug("Enter get() for /allproviders/list");
@@ -2753,4 +2695,35 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         });
     });
 
+
+    // List out all aws nodes.
+    app.post('/aws/providers/node/list', function(req, res) {
+        logger.debug("Enter List AWS Nodes: ");
+
+        var ec2 = new EC2({
+            "access_key": req.body.accessKey,
+            "secret_key": req.body.secretKey,
+            "region": req.body.region
+        });
+        ec2.listInstances(function(err, nodes) {
+            if (err) {
+                logger.debug("Unable to list nodes from AWS.", err);
+                res.send("Unable to list nodes from AWS.", 500);
+                return;
+            }
+            logger.debug("Success to list nodes from AWS.");
+            var nodeList = [];
+            for (var i = 0; i < nodes.Reservations.length; i++) {
+                var instance = {
+                    "instance": nodes.Reservations[i].Instances[0].InstanceId,
+                    "privateIp": nodes.Reservations[i].Instances[0].PrivateIpAddress,
+                    "publicIp": nodes.Reservations[i].Instances[0].PublicIpAddress,
+                    "privateDnsName": nodes.Reservations[i].Instances[0].PrivateDnsName
+                };
+                nodeList.push(instance);
+            }
+            res.send(nodeList);
+        });
+    });
 }
+

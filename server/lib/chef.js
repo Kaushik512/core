@@ -563,6 +563,10 @@ var Chef = function(settings) {
 
     };
 
+    this.cleanClient = function(options, callback, callbackOnStdOut, callbackOnStdErr) {
+        this.cleanChefonClient(options, callback, callbackOnStdOut, callbackOnStdErr);
+    };
+
     this.runChefClient = function(options, callback, callbackOnStdOut, callbackOnStdErr) {
         var runlist = options.runlist;
         var overrideRunlist = false;
@@ -588,13 +592,14 @@ var Chef = function(settings) {
             // using ssh2
             var cmd = '';
             cmd = "chef-client";
-            if (overrideRunlist) {
-                cmd += " -o";
-            } else {
-                cmd += " -r";
+            if (runlist.length) {
+                if (overrideRunlist) {
+                    cmd += " -o";
+                } else {
+                    cmd += " -r";
+                }
+                cmd += " " + runlist.join();
             }
-            cmd += " " + runlist.join();
-
             var timestamp = new Date().getTime();
             if (lockFile) {
                 cmd += " --lockfile /var/tmp/catalyst_lockFile_" + timestamp;
@@ -617,7 +622,6 @@ var Chef = function(settings) {
 
             var sshExec = new SSHExec(options);
             sshExec.exec(cmd, callback, callbackOnStdOut, callbackOnStdErr);
-
 
         } else {
 
@@ -655,7 +659,9 @@ var Chef = function(settings) {
         }
 
     };
-
+    this.runClient = function(options, callback, callbackOnStdOut, callbackOnStdErr) {
+        this.runChefClient(options, callback, callbackOnStdOut, callbackOnStdErr);
+    };
     this.runKnifeWinrmCmd = function(cmd, options, callback, callbackOnStdOut, callbackOnStdErr) {
         var processOptions = {
             cwd: settings.userChefRepoLocation,
@@ -683,9 +689,7 @@ var Chef = function(settings) {
         //var proc = new Process('knife', ['winrm', options.host, ' "powershell ' + cmd + ' "', '-m', '-P', options.password, '-x', options.username], processOptions);
         var proc = new Process('knife', ['winrm', options.host, "\'" + cmd + "\'", '-m', '-P\"', options.password + '\"', '-x', options.username], processOptions);
         proc.start();
-
-
-    }
+    };
 
 
     this.updateNodeEnvironment = function(nodeName, newEnvironment, callback) {

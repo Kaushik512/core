@@ -189,10 +189,10 @@
  </div>
 
  <div class="col-lg-6 col-md-6" style="margin-top:15px;">
- <label for="instancesize">Instance Size:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+ <label for="instancesize">Instance Type:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
  <div class="input-groups">
  <select id="instancesize" name="instancesize" class="required chooseOrganization width-100 chooseSelect" style="vertical-align:central">
- <option value="">Choose Instanace Size</option>
+ <option value="">Choose Instanace Type</option>
  </select>
  </div>
  </div> 
@@ -361,10 +361,10 @@
  </div>
  </div>
 <!-- Docker Image selection table -->
-<div class="col-lg-12 col-md-12 forDocker notforCFT" style="margin-top:5px;">
-    <label for="category">Docker Images<span style="color:red">*</span>
+<div class="col-lg-12 col-md-12 forDocker notforCFT" style="margin-top:9px;">
+    <label for="category" style="margin-top:5px;">Docker Images<span style="color:red">*</span>
     </label>
-    <a class="btn btn-primary adddockertemplate pull-right" onclick="showdockertemplateadder();">Add</a>
+    <a class="btn btn-primary adddockertemplate pull-right" onclick="showdockertemplateadder();" style="margin-bottom:5px;">Add</a>
     <table class="table table-striped table-bordered table-hover dataTable no-footer" id="compositedockertable" cellpadding="5px" width="100%" style="text-align:center">
         <tr>
             <th>Order</th>
@@ -829,13 +829,13 @@
                             <div class="widget-body no-padding">
                              <form action="">
                               <div class="col-lg-12 awsExisting">
-                               <div class="col-lg-3 col-md-3">
+                               <div class="col-lg-4 col-md-4">
                                  <label for="">Choose Organization <span style="color:red">*</span></label>
                                  <select id="orgnameSelectExisting" class="chooseOrgSelectExisting width-100">
                                  </select>
                                </div>
 
-                                <div class="col-lg-3 col-md-3">
+                                <div class="col-lg-4 col-md-4">
              <label for="">Business Group</label>
 
              <select id="bgListInputExisting" class="chooseBGExisting width-100">
@@ -848,7 +848,7 @@
 
 
          
-         <div class="col-lg-3 col-md-3">
+         <div class="col-lg-4 col-md-4">
            <label for="category">Project
            </label>
 
@@ -858,10 +858,10 @@
 
          </div>
      
-      <div class="col-lg-3 col-md-3">
+      <div class="col-lg-4 col-md-4 hidden">
  <label for="category">Environment</label>
 
- <select  id="envListExisting" class="chooseEnvExisting width-100">
+ <select  id="envListExisting" class="chooseEnvExisting hidden width-100">
 
  </select>
 
@@ -870,6 +870,7 @@
 </div>
                              </form>
                              <div class="col-lg-12">
+                              <label id="spinnerProject" class="hidden"><img  style="margin-left:5px;margin-right:25px;" src="img/select2-spinner.gif"></label>
                                 <div class="panel-group smart-accordion-default hidden" id="accordion-2" style="height:444px;overflow-y: auto;">                                 
 
                                 </div>
@@ -904,7 +905,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title" id="myModalLabel">Blueprint Information</h4>
+                <h4 class="modal-title" id="myModalLabel"></h4>
             </div>
             <div class="modal-body" style="height:480px;overflow-y:auto;">
               <!--os and the 1st tier-->
@@ -922,6 +923,37 @@
  
 </td>
 </tr>
+
+<tr>
+  <td style="padding-left:18px;padding-top:16px">Template Type:</td>
+  <td>
+    <input id="blueprintTemplateType" disabled="disabled" class="form-control">
+  </td>
+</tr>
+
+<tr>
+  <td style="padding-left:18px;padding-top:16px">Organisation Name:</td>
+  <td>
+    <input id="blueprintORG" disabled="disabled" class="form-control">
+  </td>
+</tr>
+
+
+
+<tr>
+  <td style="padding-left:18px;padding-top:16px">Business Group:</td>
+  <td>
+    <input id="blueprintBU" disabled="disabled" class="form-control">
+  </td>
+</tr>
+
+<tr>
+  <td style="padding-left:18px;padding-top:16px">Project Name:</td>
+  <td>
+    <input id="blueprintProject" disabled="disabled" class="form-control">
+  </td>
+</tr>
+
 <tr>
 <td style="padding-left: 18px;padding-top:16px;">Operating System:</td>
 <td>
@@ -933,7 +965,7 @@
 </tr>
 
 <tr>
-    <td style="padding-left: 18px;padding-top:16px;">Instance Size:</td>
+    <td style="padding-left: 18px;padding-top:16px;">Instance Type:</td>
 <td>
   
  <input id="instancesizeNew" disabled="disabled" class="form-control">
@@ -1055,7 +1087,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title" id="myModalLabel">Blueprint Information-CFT</h4>
+                <h4 class="modal-title" class="titleCFTDocker" id="myModalLabel"></h4>
             </div>
             <div class="modal-body" style="height:360px;overflow-y:auto;">
               <!--os and the 1st tier-->
@@ -1075,18 +1107,20 @@
 </tr>
 
 <tr>
+  <td style="padding-left:18px;padding-top:16px">Template Type:</td>
+  <td>
+    <input id="blueprintTemplateTypeCFT" disabled="disabled" class="form-control">
+  </td>
+</tr>
+
+<tr>
   <td style="padding-left:18px;padding-top:16px">Organisation Name:</td>
   <td>
     <input id="blueprintORG" disabled="disabled" class="form-control">
   </td>
 </tr>
 
-<tr>
-  <td style="padding-left:18px;padding-top:16px">Template Type:</td>
-  <td>
-    <input id="blueprintTemplateTypeCFT" disabled="disabled" class="form-control">
-  </td>
-</tr>
+
 
 <tr>
   <td style="padding-left:18px;padding-top:16px">Business Group:</td>
@@ -1387,6 +1421,9 @@
      $tasksRunlist = $('#tableRunlistForBlueprint').DataTable({
          "pagingType": "full_numbers",
          "bInfo": false,
+          "aaSorting": [
+              [0, "desc"]
+          ],
          "bLengthChange": false,
          "paging": false,
          "bFilter": false,
@@ -1481,79 +1518,50 @@
              console.log(data);
              data = JSON.parse(JSON.stringify(data));
              var $orgListInput = $('#orgnameSelectExisting');
-             $orgListInput.append($('<option></option>').val('choose').html('Choose'));
+           //  $orgListInput.append($('<option></option>').val('choose').html('Choose'));
              var $bgList = $('#bgListInputExisting');
              //$bgList.append($('<option></option>').val('choose').html('Choose'));
-
+             var $projectList = $('#projectListInputExisting');
              var $envList = $('#envListExisting');
 
-             for (var i = 0; i < data.length; i++) {
 
-                 console.log(data[i].businessGroups);
-                 $orgListInput.append($('<option></option>').val(data[i].rowid).html(data[i].name).data('bglist', data[i].businessGroups).data('envList', data[i].environments));
-             }
+             
+              
+            var $projectList = $('#projectListInputExisting');
+            $bgList.change(function(e) {
+              //alert('here');
+                var bgName = $(this).val();
+                //alert(bgName);
+                if (bgName == 'choose') {
+                    return;
+                }
+                var $selectedOrgOption = $(this).find(":selected");
+                $projectList.select2('data', null);
+                
+                $projectList.empty();
 
-             //on change of org
-             $orgListInput.change(function(e) {
-                 $('#accordionAttr').addClass('hidden');
-                 var orgName = $(this).val();
+                var getProjs = bgProjects[bgName];
+                for (var i = 0; i < getProjs.length; i++) {
+                  var $option = $('<option></option>').val(getProjs[i].rowid).html(getProjs[i].name);
+                  $projectList.append($option);
+                }
+               $projectList.trigger('change');
 
-                 if (orgName == 'choose') {
-                     return;
-                 }
-                 var $selectedOrgOption = $(this).find(":selected");
-                 $bgList.empty();
-                 //$bgList.append($('<option></option>').val('choose').html('Choose'));
+            });
 
-                 var getBGs = $selectedOrgOption.data('bglist');
-                 if (getBGs != null) {
-                     for (var i = 0; i < getBGs.length; i++) {
-                         $bgList.append($('<option></option>').val(getBGs[i].rowid).html(getBGs[i].name).data('projList', getBGs[i].projects));
-                     }
-                 }
+             var $spinnerProject = $('#spinnerProjectChange').addClass('hidden');
+            $('#projectListInputExisting').change(function(e) {
 
-
-                 $envList.empty();
-                 var getEnv = $selectedOrgOption.data('envList');
-                 if (getEnv != null) {
-                     //alert(JSON.stringify(getEnv));
-                     $envList.append($('<option></option>').val('choose').html('Choose'));
-                     for (var i = 0; i < getEnv.length; i++) {
-                         $envList.append($('<option></option>').val(getEnv[i].rowid).html(getEnv[i].name));
-                     }
-                 }
-
-
-             });
-
-
-             //project List
-             var $projectList = $('#projectListInputExisting');
-             //$projectList.append($('<option></option>').val('choose').html('Choose'));
-             $bgList.change(function(e) {
-                 var bgName = $(this).val();
-                 if (bgName == 'choose') {
-                     return;
-                 }
-                 var $selectedOrgOption = $(this).find(":selected");
-                 $projectList.empty();
-                 //$projectList.append($('<option></option>').val('choose').html('Choose'));
-                 var getProjs = $selectedOrgOption.data('projList');
-                 for (var i = 0; i < getProjs.length; i++) {
-
-                     $projectList.append($('<option></option>').val(getProjs[i].rowid).html(getProjs[i].name));
-                 }
-
-             });
-             //on click of environment
-             $('.chooseEnvExisting').change(function(e) {
+          //    alert('change');
                  var reqBodyNew = {};
 
+                 $spinnerProject.removeClass('hidden');
 
                  reqBodyNew.orgId = $orgListInput.val();
                  reqBodyNew.bgId = $bgList.val();
                  reqBodyNew.projectId = $projectList.val();
                  reqBodyNew.envId = $envList.val();
+                // alert(reqBodyNew.envId);
 
                  $.get('../organizations/' + reqBodyNew.orgId + '/businessgroups/' + reqBodyNew.bgId + '/projects/' + reqBodyNew.projectId + '/environments/' + reqBodyNew.envId + '/', function(data) {
                      console.log('success---3---4');
@@ -1561,24 +1569,141 @@
 
                      //Syncing up the tree view based on url
                      initializeBlueprintAreaNew(data.blueprints);
+                     $spinnerProject.addClass('hidden');
                      if (data.blueprints.length > 0) {
                          $('#accordion-2').removeClass('hidden');
+                         $spinnerProject.addClass('hidden');
                      } else {
                          bootbox.alert('No Blueprints Available. Please Create a New Blueprint');
+                         $spinnerProject.addClass('hidden');
                      }
                  });
 
              }); //choose env gets over
 
-             $('.chooseOrgSelectExisting').change(function(e) {
-                 //$('chooseBGExisting').select2('data',null);   
-                 $('.chooseBGExisting').change();
-                 $('.chooseProjectExisting').select2('data', null);
-                 $('.chooseProjectExisting').change();
-                 $('.chooseEnvExisting').select2('data', null);
-                 //$('chooseEnvExisting').change();
 
-             });
+
+            var bgProjects = {};
+
+            for (var i = 0; i < data.length; i++) {
+
+                console.log(data[i].businessGroups);
+                $orgListInput.append($('<option></option>').val(data[i].rowid).html(data[i].name).data('bglist', data[i].businessGroups).data('envList', data[i].environments));
+                for (var j = 0; j < data[i].businessGroups.length; j++) {
+                    var rowid = data[i].businessGroups[j].rowid;
+                    $bgList.append($('<option></option').val(rowid).html(data[i].businessGroups[j].name));
+                    bgProjects[rowid] = data[i].businessGroups[j].projects;
+                }
+                for (var k = 0; k < data[i].environments.length; k++) {
+                    $envList.append($('<option></option').val(data[i].environments[k].rowid).html(data[i].environments[k].name))
+                }
+            }
+                $bgList.trigger('change');
+                
+               // $('#projectListInputExisting').change(function(e) {
+                  
+                  
+                
+                /*var reqBodyNew = {};
+
+               
+
+                reqBodyNew.orgId = $orgListInput.val();
+                reqBodyNew.bgId = $bgList.val();
+                reqBodyNew.projectId = $projectList.val();
+                reqBodyNew.envId = $envList.val();
+
+                $.get('../organizations/' + reqBodyNew.orgId + '/businessgroups/' + reqBodyNew.bgId + '/projects/' + reqBodyNew.projectId + '/environments/' + reqBodyNew.envId + '/', function(data) {
+                    console.log('success---3---4');
+                    //alert(JSON.stringify(data));
+
+                    //Syncing up the tree view based on url
+                    initializeBlueprintAreaNew(data.blueprints);
+
+                    $spinnerProject.addClass('hidden');
+                    if (data.blueprints.length > 0) {
+                        $('#accordion-2').removeClass('hidden');
+                        $spinnerProject.addClass('hidden');
+                    } else {
+                        bootbox.alert('No Blueprints Available. Please Create a New Blueprint');
+                        $spinnerProject.addClass('hidden');
+                    }
+                });*/
+            // });
+           
+           //  alert($orgListInput);
+
+             /*//on change of org
+            $orgListInput.change(function(e) {
+                $('#accordionAttr').addClass('hidden');
+                var orgName = $(this).val();
+
+                if (orgName == 'choose') {
+                    return;
+                }
+                var $selectedOrgOption = $(this).find(":selected");
+                $bgList.empty();
+                //$bgList.append($('<option></option>').val('choose').html('Choose'));
+
+                var getBGs = $selectedOrgOption.data('bglist');
+                if (getBGs != null) {
+                 // alert(getBGs);
+                    for (var i = 0; i < getBGs.length; i++) {
+                        $bgList.append($('<option></option>').val(getBGs[i].rowid).html(getBGs[i].name).data('projList', getBGs[i].projects));
+                    }
+                }
+                $envList.empty();
+                var getEnv = $selectedOrgOption.data('envList');
+                if (getEnv != null) {
+                    //alert(JSON.stringify(getEnv));
+                   // $envList.append($('<option></option>').val('choose').html('Choose'));
+                    for (var i = 0; i < getEnv.length; i++) {
+                        $envList.append($('<option></option>').val(getEnv[i].rowid).html(getEnv[i].name));
+                    }
+                }
+            });*/
+
+          //  var $projectList = $('#projectListInputExisting');
+            /*$bgList.trigger('change');
+            $bgList.change(function(e) {
+                var bgName = $(this).val();
+                //alert(bgName);
+                if (bgName == 'choose') {
+                    return;
+                }
+                var $selectedOrgOption = $(this).find(":selected");
+                $projectList.empty();
+
+                var getProjs = $selectedOrgOption.data('projList');
+                for (var i = 0; i < getProjs.length; i++) {
+                  $projectList.append($('<option></option>').val(getProjs[i].rowid).html(getProjs[i].name));
+                }
+
+            });*/
+
+
+
+             //project List
+             
+             //on click of environment
+             
+
+            $('.chooseOrgSelectExisting').change(function(e) {
+                //$('chooseBGExisting').select2('data',null);  
+                if ($(this).val() == 'choose') {
+                    $('.chooseBGExisting').select2('val', "");
+                    $('.chooseProjectExisting').select2('val', "");
+                    $('#accordion-2').addClass('hidden');
+                }
+                $('.chooseBGExisting').change();
+                $('.chooseProjectExisting').select2('data', null);
+                $('.chooseProjectExisting').change();
+                $('.chooseEnvExisting').select2('data', null);
+                //$('chooseEnvExisting').change();
+
+            });
+
+
          }
 
 
@@ -1706,12 +1831,15 @@
  }
 
 
- function addDockerTemplateToTable(title, repopath, tagname, reponame) {
+ function addDockerTemplateToTable(title, repopath, tagname, reponame,optionallaunchparams) {
      var $cdt = $('#compositedockertable');
      var uniqueid = (Math.floor(Math.random() * 9000) + 1000).toString();
      //remove any empty row message from table
      $('#dockerimageemptytr').detach();
-     var $dockertemplaterow = '<tr class="dockerimagesrow"><td >' + $cdt.find('tr').length + '</td><td paramtype="dockercontainerpathstitle">' + title + '</td><td  paramtype="dockercontainerpaths">' + repopath + '</td><td paramtype="dockerrepotags">' + tagname + '</td><td><input type="text" paramtype="dockerlaunchparameters" id="launchparam' + uniqueid + '" class=""><input type="hidden" paramtype="dockerreponame" id="dockerreponame' + uniqueid + '" class="" value="' + reponame + '"><a onclick="loadLaunchParams(\'launchparam' + uniqueid + '\');" href="javascript:void(0);"><i class="icon-append fa fa-list-alt fa-lg" title="Launch Parameters"></i></a></td><td ><a class="dockerimageselectorup" id="dockerimageselectorup' + uniqueid + '"  href="javascript:movetablerow(\'dockerimageselectorup\',' + uniqueid + ');"><i class="fa fa-chevron-circle-up fa-lg"></i></a><a class="dockerimageselectordown" id="dockerimageselectordown' + uniqueid + '" href="javascript:movetablerow(\'dockerimageselectordown\',' + uniqueid + ');" style="padding-left:5px;"><i class="fa fa-chevron-circle-down fa-lg"></i></a><button class="btn btn-xs btn-danger pull-right" value="Remove" title="Remove" id="dockerimageremove' + uniqueid + '" onClick="javascript:removeimage(\'dockerimageremove\',' + uniqueid + ');"><i class="ace-icon fa fa-trash-o fa-lg"></i></button></td></tr>';
+     if(!optionallaunchparams){
+      optionallaunchparams = '';
+     }
+     var $dockertemplaterow = '<tr class="dockerimagesrow"><td >' + $cdt.find('tr').length + '</td><td paramtype="dockercontainerpathstitle">' + title + '</td><td  paramtype="dockercontainerpaths">' + repopath + '</td><td paramtype="dockerrepotags">' + tagname + '</td><td><input type="text" paramtype="dockerlaunchparameters" id="launchparam' + uniqueid + '" class="" value=" ' + optionallaunchparams + '"><input type="hidden" paramtype="dockerreponame" id="dockerreponame' + uniqueid + '" class="" value="' + reponame + '"><a onclick="loadLaunchParams(\'launchparam' + uniqueid + '\');" href="javascript:void(0);"><i class="icon-append fa fa-list-alt fa-lg" title="Launch Parameters"></i></a></td><td ><a class="dockerimageselectorup" id="dockerimageselectorup' + uniqueid + '"  href="javascript:movetablerow(\'dockerimageselectorup\',' + uniqueid + ');"><i class="fa fa-chevron-circle-up fa-lg"></i></a><a class="dockerimageselectordown" id="dockerimageselectordown' + uniqueid + '" href="javascript:movetablerow(\'dockerimageselectordown\',' + uniqueid + ');" style="padding-left:5px;"><i class="fa fa-chevron-circle-down fa-lg"></i></a><button class="btn btn-xs btn-danger pull-right" value="Remove" title="Remove" id="dockerimageremove' + uniqueid + '" onClick="javascript:removeimage(\'dockerimageremove\',' + uniqueid + ');"><i class="ace-icon fa fa-trash-o fa-lg"></i></button></td></tr>';
 
      $cdt.append($dockertemplaterow);
 
@@ -1973,7 +2101,7 @@
      $('#imageId').on('change', function() {
          $.get("/vmimages/instancesizes/all/list", function(data) {
              var vType = $('#imageId').find('option:selected').attr('vType'),
-                 str = '<option value=""> Select Instance Size</option>';
+                 str = '<option value=""> Select Instance Type</option>';
              var list = [];
 
              for (var i = 0; i < data.length; i++) {
@@ -2428,6 +2556,7 @@
                             getRowID = data[z]['_id'];
                             
                             getTemplateType = data[z]['osType'];
+                           // alert(getTemplateType);
                             getImage = 'img/osIcons/' + getTemplateType + '.png';
                             getTempName = data[z]['name'];
                             getImageData = '\'' + JSON.stringify(data[z]) + '\'';
@@ -2442,12 +2571,23 @@
                                 '<li><img style="height:40px;width:auto;" alt="" ' +
                                 'src="' + getImage + '">' +
                                 '</li><li style="font-size:12px;"><u><b>' + getTempName + '</b></u></li></ul></div></div>';
+
+                            
+                                
                             if(z >= rowGridLength -1)
                             {
+                            
+
+                                //$wizard.data('secondClick', true);
+
+                                var wizard = $wizard.data('bootstrapWizard');
+                                
+                                
                                 $('#individualTemplateNameGrid').show();
+
                             }
                             continue;
-                        }
+                        } 
 
 
                          //iterate thhrough columns to get correct column and value
@@ -2517,7 +2657,7 @@
                              for (var cbi = 0; cbi < cb.length; cbi++) {
                                  licb += '<li style="font-size:10px;" path="' + cbpath[cbi] + '" title="Container" blueprinttype="dockercontainer">' + cb[cbi] + '</li>';
                              }
-                             $('#individualTemplateNameGrid').hide();
+                             $('#individualTemplateNameGrid').show();
                          }
 
                          getIndividualData += licb + '</ul></div></div>';
@@ -2530,8 +2670,27 @@
                      //$("#grid0").addClass("role-Selected");
                      //Proceeding to next step when selected type is docker
                      if ($('#tab1').find('.role-Selected').attr('data-templatetype') === "Docker" || $('#tab1').find('.role-Selected').attr('data-templatetype') === "docker") {
-                         $('li.next').find('a').trigger('click');
+                        //above comment will remove the template selection stage
+                         //$('li.next').find('a').trigger('click');
+                         //pre populating docker table with image.
+                       
+
                      }
+
+                    var wizard = $wizard.data('bootstrapWizard');
+                    if ($('#individualTemplateNameGrid').children('div').length) {
+                      //alert($('#individualTemplateNameGrid').children('div').length);
+                        wizard.enableNextBtn();
+
+                    } else {
+                        bootbox.alert({
+                          message:"There are no templates available",
+                          title:"Error!"
+                        });
+                        wizard.disableNextBtn();
+                        
+                    }
+
                  }
 
 
@@ -2583,6 +2742,12 @@
                  $('.divchefrunlist').show();
 
                  if ($('.productdiv2.role-Selected').first().attr('templatetype') == "Docker" || $('.productdiv2.role-Selected').first().attr('templatetype') == "docker") {
+                    //Auto adding the selected template by default
+
+                    var $dockerdiv = $('#tab2').find('.productdiv2.role-Selected').first();
+                    $('.dockerimagesrow').detach();
+                    addDockerTemplateToTable($dockerdiv.attr('templatename'),$dockerdiv.attr('dockercontainerpaths'),'latest',$dockerdiv.attr('dockerreponame'),'--name ' + $dockerdiv.attr('templatename'));
+
                      //Checking if docker then only Edit organization paramerters are to be shown
                      //Checking if docker then only Edit organization paramerters are to be shown
                      if (!$('#CollapseEditorgParam').hasClass('in')) {
@@ -2887,6 +3052,7 @@
              $(".chooseDockerContainer").change();
             var validatorForm = $("#wizard-1").validate();
             validatorForm.resetForm();
+            //alert();
 
 
          } else if (index == 3) {
@@ -2895,8 +3061,10 @@
                  return true;
              }
              var isValid = $('#wizard-1').valid();
+             //alert(isValid);
              
              var tempType = $('.role-Selected').data('templatetype').toLowerCase(); 
+             //alert(tempType);
              
 
              if (tempType !== "docker" && tempType !== 'cloudformation' && !isValid) {
@@ -3118,14 +3286,18 @@
                                      var wizard = $wizard.data('bootstrapWizard');
                                      wizard.next();
                                      wizard.disablePreviouBtn();
-                                     if(tempType==='appfactory'){
+                                     if(tempType==='softwarestack'|| tempType ==='osimage'){
                                      $('a#blueprintInfo').attr('href','#modalForRead').click(function(e) {
                                       
                                        
                                          //  alert('check');
                                          var $blueprintReadContainer = $('#modalForRead');
-
-                                       
+                                            if (tempType === 'softwarestack') {
+                                                $('.modal-title').html('Blueprint Information-Software Stack');
+                                            }
+                                            if(tempType==='osimage'){
+                                              $('.modal-title').html('Blueprint Information-OSImage'); 
+                                            }
 
                                          //condition for getting the OS,instanceType,version...
 
@@ -3184,15 +3356,53 @@
                                                  alert(data.toString());
                                              }
                                          });
+                                          $blueprintReadContainer.find('.modal-body #blueprintTemplateType').val(data.templateType);
+                                            $.ajax({
+                                                type: "get",
+                                                dataType: "json",
+
+                                                async: false,
+                                                url: "../organizations/getTreeNew",
+                                                success: function(dataTree) {
+
+                                                    console.log(data);
+                                                    data = JSON.parse(JSON.stringify(data));
+
+                                                    //  alert(JSON.stringify(data));
+                                                    $.get("/d4dMasters/readmasterjsonnew/4", function(tdata) {
+                                                        
+                                                        for (var i = 0; i < tdata.length; i += 1) {
+                                                            if (data.orgId == tdata[i].orgname_rowid) {
+                                                                $blueprintReadContainer.find('.modal-body #blueprintORG').val(tdata[i].orgname[0]);
+
+                                                            }
+
+
+                                                            if (data.bgId == tdata[i].productgroupname_rowid) {
+                                                                $blueprintReadContainer.find('.modal-body #blueprintBU').val(tdata[i].productgroupname);
+                                                                
+                                                            }
+                                                            if (data.projectId == tdata[i].rowid) {
+                                                                $blueprintReadContainer.find('.modal-body #blueprintProject').val(tdata[i].projectname);
+
+                                                            }
+                                                        }
+                                                    });
+
+
+                                                    //  });
+
+                                                }
+                                            });
                                          //for getting the VPC
                                       
                                          
                                        
                                      });
-                                    }else{
+                                    }else if(tempType==='cloudformation'){
                                         $('a#blueprintInfo').attr('href','#modalForReadCFT').click(function(e) {
                                           var $blueprintReadContainerCFT = $('#modalForReadCFT');
-
+                                          $('.modal-title').html('Blueprint Information-CFT');
                                        
                                         //  alert(JSON.stringify(data));
                                          //condition for getting the OS,instanceType,version...
@@ -3207,32 +3417,34 @@
 
                                                 async: false,
                                                 url: "../organizations/getTreeNew",
-                                                success: function(data) {
+                                                success: function(dataTree) {
 
                                                     console.log(data);
                                                     data = JSON.parse(JSON.stringify(data));
-                                                    
-                                                  //  alert(JSON.stringify(data));
-                                                    
 
-                                                    for (var i = 0; i < data.length; i++) {
+                                                    //  alert(JSON.stringify(data));
+                                                    $.get("/d4dMasters/readmasterjsonnew/4", function(tdata) {
+                                                        
+                                                        for (var i = 0; i < tdata.length; i += 1) {
+                                                            if (data.orgId == tdata[i].orgname_rowid) {
+                                                                $blueprintReadContainerCFT.find('.modal-body #blueprintORG').val(tdata[i].orgname[0]);
 
-                                                        (function(i) {
-                                                            $blueprintReadContainerCFT.find('.modal-body #blueprintORG').val(data[i].name);
-                                                            for (var p = 0; p < data[i].businessGroups.length; p++) {
-                                                                (function(p) {
-                                                                    $blueprintReadContainerCFT.find('.modal-body #blueprintBU').val(data[i].businessGroups[p].name);
-                                                                    //}
-                                                                    for (var x = 0; x < data[i].businessGroups[p].projects.length; x++) {
-                                                                        $blueprintReadContainerCFT.find('.modal-body #blueprintProject').val(data[i].businessGroups[p].projects[x].name);
-                                                                    }
-                                                                })(p);
                                                             }
-                                                        })(i);
-                                                    }
-                                                    
 
-                                                    
+
+                                                            if (data.bgId == tdata[i].productgroupname_rowid) {
+                                                                $blueprintReadContainerCFT.find('.modal-body #blueprintBU').val(tdata[i].productgroupname);
+                                                                
+                                                            }
+                                                            if (data.projectId == tdata[i].rowid) {
+                                                                $blueprintReadContainerCFT.find('.modal-body #blueprintProject').val(tdata[i].projectname);
+
+                                                            }
+                                                        }
+                                                    });
+
+
+                                                    //  });
 
                                                 }
                                             });
@@ -3280,12 +3492,15 @@
          if (index === 0) {
              $("#tabheader").html('Choose Template Type');
              $('#viewCreateNew').removeClass('hidden');
+             var wizard = $wizard.data('bootstrapWizard');
+              wizard.enableNextBtn();
+             
          } else if (index === 1) {
              $("#tabheader").html('Choose Templates');
              if ($('#tab1').find('.role-Selected').attr('data-templatetype') === "Docker" || $('#tab1').find('.role-Selected').attr('data-templatetype') === "docker") {
-                 $('#bootstrap-wizard-1').bootstrapWizard('show', 0);
-                var validatorForm = $("#wizard-1").validate();
-                validatorForm.resetForm();
+               $('#bootstrap-wizard-1').bootstrapWizard('show', 2);
+               var validatorForm = $("#wizard-1").validate();
+               // validatorForm.resetForm();
              }
          } else if (index === 2) {
              $("#tabheader").html('Choose Template');
@@ -3660,43 +3875,42 @@
          // alert('in' + data.length);
 
          for (var i = 0; i < data.length; i++) {
-          (function(i){
-             console.log(data[i]);
-            //alert(data[i]);
-             
-             //Find a panel-body with the template type class
-             var $currRolePanel = $('#accordion-2').find('.' + data[i].templateType);
-             //   alert($currRolePanel.length);
-             if ($currRolePanel.length > 0) {
-                 var $itemContainer = $('<div></div>').addClass("productdiv4");
+             console.log("data>>>>>>>>>>>" + JSON.stringify(data[i]));
+             (function(i) {
+                 console.log(data[i]);
+                 //alert(data[i]);
 
-                 var $itemBody = $('<div></div>').addClass('productdiv1 cardimage').attr('data-blueprintId', data[i]._id).attr('data-projectId', data[i].projectId).attr('data-envId', data[i].envId).attr('data-chefServerId', data[i].chefServerId).attr('data-templateType', data[i].templateType);
-                 var $ul = $('<ul></ul>').addClass('list-unstyled system-prop').css({
-                     'text-align': 'center'
-                 });
-                 var $liRead = $('<a style="float:right;margin:5px;cursor:pointer" class="readBtn"><div class="moreInfo"></div></a>').attr('data-toggle', 'tooltip').attr('data-placement', 'top').attr('title', 'More Info');
-                 $ul.append($liRead);
-                 var $img
-                 if (data[i].iconpath)
+                 //Find a panel-body with the template type class
+                 var $currRolePanel = $('#accordion-2').find('.' + data[i].templateType);
+                 //   alert($currRolePanel.length);
+                 if ($currRolePanel.length > 0) {
+                     var $itemContainer = $('<div></div>').addClass("productdiv4");
+
+                     var $itemBody = $('<div></div>').addClass('productdiv1 cardimage').attr('data-blueprintId', data[i]._id).attr('data-projectId', data[i].projectId).attr('data-envId', data[i].envId).attr('data-chefServerId', data[i].chefServerId).attr('data-templateType', data[i].templateType);
+                     var $ul = $('<ul></ul>').addClass('list-unstyled system-prop').css({
+                         'text-align': 'center'
+                     });
+                     var $liRead = $('<a style="float:right;margin:5px;cursor:pointer" class="readBtn"><div class="moreInfo"></div></a>').attr('data-toggle', 'tooltip').attr('data-placement', 'top').attr('title', 'More Info');
+                     $ul.append($liRead);
+                     var $img
+                     if (data[i].iconpath)
 
                      {
-                        if (data[i].templateType == "Docker" || data[i].templateType == "docker") {
+                         if (data[i].templateType == "Docker" || data[i].templateType == "docker") {
                              $img = $('<img />').attr('src', 'img/galleryIcons/Docker.png').attr('alt', data[i].name).addClass('cardLogo');
-                        }
-                        else
-                            $img = $('<img />').attr('src', data[i].iconpath).attr('alt', data[i].name).addClass('cardLogo');
-                    }
-                 else
-                     $img = $('<img />').attr('src', '').attr('alt', data[i].name).addClass('cardLogo');
-                 var $liImage = $('<li></li>').append($img);
-                 $ul.append($liImage);
+                         } else
+                             $img = $('<img />').attr('src', data[i].iconpath).attr('alt', data[i].name).addClass('cardLogo');
+                     } else
+                         $img = $('<img />').attr('src', '').attr('alt', data[i].name).addClass('cardLogo');
+                     var $liImage = $('<li></li>').append($img);
+                     $ul.append($liImage);
 
-                 var $liCardName = $('<li title="' + data[i].name + '"></li>').addClass('Cardtextoverflow').html('<u><b>' + data[i].name + '</b></u>');
+                     var $liCardName = $('<li title="' + data[i].name + '"></li>').addClass('Cardtextoverflow').html('<u><b>' + data[i].name + '</b></u>');
 
-                 $ul.append($liCardName);
+                     $ul.append($liCardName);
 
-                 var $selecteditBtnContainer = $('<div style="position:absolute;padding-left:27px;bottom:11px;"></div>');
-           //      if (data[i].versionsList) {
+                     var $selecteditBtnContainer = $('<div style="position:absolute;padding-left:27px;bottom:11px;"></div>');
+                     //      if (data[i].versionsList) {
 
                      var $selectVerEdit = $('<a style="padding:0px 4px;margin-left:3px;border-radius:5px;" class="bpEditBtn"><i class="ace-icon fa fa-pencil"></i></a>').addClass('btn btn-primary').attr('data-toggle', 'tooltip').attr('data-placement', 'top').attr('title', 'Edit');
                      var $selectVer = null;
@@ -3709,10 +3923,12 @@
                          $itemBody.attr('dockerrepotags', data[i].dockerrepotags);
                          $itemBody.attr('dockercontainerpaths', data[i].dockercontainerpaths);
 
-                         if (data[i].dockerlaunchparameters)
-                             $itemBody.attr('dockerlaunchparameters', 't ' + data[i].dockerlaunchparameters);
-                         var $liDockerRepoName = $('<li title="Docker Repo Name" ><i class="fa fa-check-square" style="padding-right:5px"/>' + data[i].dockerreponame + '</li>');
-                         $ul.append($liDockerRepoName);
+                         if (typeof data[i].blueprintConfig.dockerCompose != 'undefined') {
+                             data[i].blueprintConfig.dockerCompose.forEach(function(k, v) {
+                                 var $liDockerRepoName = $('<li title="Docker Repo Name" class="dockerimagetext" style="text-align:left;margin-left:15px" ><i class="fa fa-check-square" style="padding-right:5px"/>' + data[i].blueprintConfig.dockerCompose[v]["dockercontainerpathstitle"] + '</li>');
+                                 $ul.append($liDockerRepoName);
+                             });
+                         }
                          if (data[i].dockerrepotags && data[i].dockerrepotags != '') {
                              $selectVer.empty();
                              var dockerrepostags = data[i].dockerrepotags.split(',');
@@ -3720,94 +3936,209 @@
                                  $selectVer.append('<option value="' + dockerrepostags[k] + '">' + dockerrepostags[k] + '</option>');
                              });
                          }
-
+                         $selectVer.hide();
                          $selectVerEdit.hide();
-                         tagLabel = '<span>Tags&nbsp;</span';
+                         //tagLabel = '<span>Tags&nbsp;</span>';
+
+
+                         //for CFT and Docker..
+                        
+                         
+                         //ends here..
+
+                         //for software stack and os image
+                        function getOrgProjDetails(id) {
+
+
+                            var orgName = $("#orgnameSelectExisting option:selected").text();
+
+                            var bgName = $('#bgListInputExisting option:selected').text();
+                            var projName = $('#projectListInputExisting option:selected').text();
+
+
+                            var $blueprintReadContainer = $(id);
+                            $blueprintReadContainer.find('.modal-body #blueprintORG').val(orgName);
+                            $blueprintReadContainer.find('.modal-body #blueprintBU').val(bgName);
+                            $blueprintReadContainer.find('.modal-body #blueprintProject').val(projName);
+
+                            var $blueprintReadContainerCFT = $(id);
+                            $blueprintReadContainerCFT.find('.modal-body #blueprintORG').val(orgName);
+                            $blueprintReadContainerCFT.find('.modal-body #blueprintBU').val(bgName);
+                            $blueprintReadContainerCFT.find('.modal-body #blueprintProject').val(projName);
+
+                        }
+                            
+                         
+                         //ends here..
+
+
+
+                        (function(blueprint) {
+                            // alert(JSON.stringify(blueprint));
+                            $liRead.click(function(e) {
+                                var $blueprintReadContainerCFT = $('#modalForReadCFT');
+                                $('.modal-title').html('Blueprint Information-Docker');
+
+                                $blueprintReadContainerCFT.modal('show');
+                                //for getting the blueprint name
+                                $blueprintReadContainerCFT.find('.modal-body #blueprintNameCFT').val(blueprint.name);
+                                $blueprintReadContainerCFT.find('.modal-body #blueprintTemplateTypeCFT').val(blueprint.templateType);
+
+                                getOrgProjDetails($blueprintReadContainerCFT);
+
+                            });
+
+                        })(data[i]);
                          //alert(JSON.stringify(data[i]));
                      } else {
                          $selectVer = $('<select style="padding:1px;padding-left:5px;"></select>').addClass('blueprintVersionDropDown').attr('data-blueprintId', data[i]._id);
 
 
-                         
+                         if (data[i].templateType === 'chef' || data[i].templateType === 'ami') {
+                             $selectVerEdit.hide();
+                             $selectVer.hide();
+                             //  alert(data[i].templateType);
+                             //code for info about blueprints
+                             (function(blueprint) {
+                                 // alert(JSON.stringify(blueprint));
+                                 $liRead.click(function(e) {
 
-                         //code for info about blueprints
-                         (function(blueprint) {
-                           // alert(JSON.stringify(blueprint));
-                             $liRead.click(function(e) {
-
-                                var $blueprintReadContainer = $('#modalForRead');
-                                 $blueprintReadContainer.find('.modal-body #blueprintNameInputNew').val(blueprint.name);
-
-                          
-                            
-                                 //for getting the image Name
-                                 $.ajax({
-                                     type: "GET",
-                                     url: "/vmimages/" + blueprint.blueprintConfig.cloudProviderData.imageId,
-                                     success: function(data) {
-                                         console.log(data);
-                                         $blueprintReadContainer.find('.modal-body #instanceImage').val(data.name);
-                                         //alert(data.name);
+                                     var $blueprintReadContainer = $('#modalForRead');
+                                     $blueprintReadContainer.find('.modal-body #blueprintNameInputNew').val(blueprint.name);
+                                     if (blueprint.templateType === 'chef') {
+                                         $('.modal-title').html('Blueprint Information-Software Stack');
                                      }
-                                 });
+                                     if (blueprint.templateType === 'ami') {
+                                         $('.modal-title').html('Blueprint Information-OSImage');
+                                     }
 
-                                 //for getting the Provider name,Type,Region,KeyPair
-                                 $.ajax({
-                                     type: "GET",
-                                     url: "/aws/providers/" + blueprint.blueprintConfig.cloudProviderId,
-                                     success: function(data) {
-                                         $blueprintReadContainer.find('.modal-body #instanceProviderName').val(data.providerName);
-                                         $blueprintReadContainer.find('.modal-body #instanceProviderType').val(data.providerType);
-                                         // loop for getting region and Keypair
 
-                                         for (var k = 0; k < data.keyPairs.length; k++) {
-
-                                             $blueprintReadContainer.find('.modal-body #instanceRegion').val(data.keyPairs[k].region);
-                                             $blueprintReadContainer.find('.modal-body #instancekeyPair').val(data.keyPairs[k].keyPairName);
+                                     //for getting the image Name
+                                     $.ajax({
+                                         type: "GET",
+                                         url: "/vmimages/" + blueprint.blueprintConfig.cloudProviderData.imageId,
+                                         success: function(data) {
+                                             console.log(data);
+                                             $blueprintReadContainer.find('.modal-body #instanceImage').val(data.name);
+                                             //alert(data.name);
                                          }
-                                         //console.log(data);
-                                     },
-                                     failure: function(data) {
-                                         alert(data.toString());
-                                     }
-                                 });
+                                     });
 
-                                 var $parent = $(this).parents('.cardimage');
-                                 
-                                 var version = $parent.find('.blueprintVersionDropDown').val();
-                                 $blueprintReadContainer.modal('show');
-                                 //for getting the blueprint name
-                                
-                                 //for getting the OsName
-                                 $blueprintReadContainer.find('.modal-body #instanceOSNew').val(blueprint.blueprintConfig.cloudProviderData.instanceOS);
-                                 //for getting the instance Size
-                                 $blueprintReadContainer.find('.modal-body #instancesizeNew').val(blueprint.blueprintConfig.cloudProviderData.instanceType);
-                                 
-                                 //for getting the SubnetId
-                                 $blueprintReadContainer.find('.modal-body #instanceSubnetId').val(blueprint.blueprintConfig.cloudProviderData.subnetId);
-                                 //loop for getting the Security Group
+                                     //for getting the Provider name,Type,Region,KeyPair
+                                     $.ajax({
+                                         type: "GET",
+                                         url: "/aws/providers/" + blueprint.blueprintConfig.cloudProviderId,
+                                         success: function(data) {
+                                             $blueprintReadContainer.find('.modal-body #instanceProviderName').val(data.providerName);
+                                             $blueprintReadContainer.find('.modal-body #instanceProviderType').val(data.providerType);
+                                             // loop for getting region and Keypair
 
-                                 $blueprintReadContainer.find('.modal-body #instanceSecurityGroupId').val(blueprint.blueprintConfig.cloudProviderData.securityGroupIds);
+                                             for (var k = 0; k < data.keyPairs.length; k++) {
 
-                                 //for getting the VPC
-                                 $blueprintReadContainer.find('.modal-body #instanceVPC').val(blueprint.blueprintConfig.cloudProviderData.vpcId)
+                                                 $blueprintReadContainer.find('.modal-body #instanceRegion').val(data.keyPairs[k].region);
+                                                 $blueprintReadContainer.find('.modal-body #instancekeyPair').val(data.keyPairs[k].keyPairName);
+                                             }
+                                             //console.log(data);
+                                         },
+                                         failure: function(data) {
+                                             alert(data.toString());
+                                         }
+                                     });
 
-                                 // loop for getting runlist
-                                 for (var j = 0; j < blueprint.blueprintConfig.infraManagerData.versionsList.length; j++) {
-                                    
+                                     var $parent = $(this).parents('.cardimage');
+
+                                     var version = $parent.find('.blueprintVersionDropDown').val();
+                                     $blueprintReadContainer.modal('show');
+                                     //for getting the blueprint name
+
+                                     //for getting the OsName
+                                     $blueprintReadContainer.find('.modal-body #instanceOSNew').val(blueprint.blueprintConfig.cloudProviderData.instanceOS);
+                                     //for getting the instance Size
+                                     $blueprintReadContainer.find('.modal-body #instancesizeNew').val(blueprint.blueprintConfig.cloudProviderData.instanceType);
+
+                                     //for getting the SubnetId
+                                     $blueprintReadContainer.find('.modal-body #instanceSubnetId').val(blueprint.blueprintConfig.cloudProviderData.subnetId);
+                                     //loop for getting the Security Group
+
+                                     $blueprintReadContainer.find('.modal-body #instanceSecurityGroupId').val(blueprint.blueprintConfig.cloudProviderData.securityGroupIds);
+
+                                     //for getting the VPC
+                                     $blueprintReadContainer.find('.modal-body #instanceVPC').val(blueprint.blueprintConfig.cloudProviderData.vpcId)
+
+                                     // loop for getting runlist
+                                     for (var j = 0; j < blueprint.blueprintConfig.infraManagerData.versionsList.length; j++) {
+
                                          $blueprintReadContainer.find('.modal-body #instanceRunlist').val(blueprint.blueprintConfig.infraManagerData.versionsList[j].runlist);
 
-                                        //for getting the version
-                                        $blueprintReadContainer.find('.modal-body #instanceVersion').val(blueprint.blueprintConfig.infraManagerData.versionsList[j].ver);
-                                   
-                                 }
-                                 
-                             
+                                         //for getting the version
+                                         $blueprintReadContainer.find('.modal-body #instanceVersion').val(blueprint.blueprintConfig.infraManagerData.versionsList[j].ver);
 
-                             });
-                         })(data[i]);
+                                     }
+                                     $blueprintReadContainer.find('.modal-body #blueprintTemplateType').val(blueprint.templateType);
+
+                                     getOrgProjDetails($blueprintReadContainer);
+
+                                 });
+                             })(data[i]);
+
+                         } else if (data[i].templateType === 'cft') {
+                             $selectVerEdit.hide();
+                             $selectVer.hide();
+                             (function(blueprint) {
+                                 // alert(JSON.stringify(blueprint));
+                                 $liRead.click(function(e) {
+                                     var $blueprintReadContainerCFT = $('#modalForReadCFT');
+                                     $('.modal-title').html('Blueprint Information-CFT');
+
+                                     //  alert(JSON.stringify(data));
+                                     //condition for getting the OS,instanceType,version...
+
+                                     $blueprintReadContainerCFT.modal('show');
+                                     //for getting the blueprint name
+                                     $blueprintReadContainerCFT.find('.modal-body #blueprintNameCFT').val(blueprint.name);
+                                     $blueprintReadContainerCFT.find('.modal-body #blueprintTemplateTypeCFT').val(blueprint.templateType);
+                                     $.ajax({
+                                         type: "get",
+                                         dataType: "json",
+
+                                         async: false,
+                                         url: "../organizations/getTreeNew",
+                                         success: function(dataTree) {
+
+                                             console.log(data);
+                                             data = JSON.parse(JSON.stringify(data));
+
+                                             //  alert(JSON.stringify(data));
+
+
+                                             for (var j = 0; j < dataTree.length; j++) {
+
+                                                 (function(j) {
+                                                     $blueprintReadContainerCFT.find('.modal-body #blueprintORG').val(dataTree[j].name);
+                                                     for (var p = 0; p < dataTree[j].businessGroups.length; p++) {
+                                                         (function(p) {
+                                                             $blueprintReadContainerCFT.find('.modal-body #blueprintBU').val(dataTree[j].businessGroups[p].name);
+                                                             //}
+                                                             for (var x = 0; x < dataTree[j].businessGroups[p].projects.length; x++) {
+                                                                 $blueprintReadContainerCFT.find('.modal-body #blueprintProject').val(dataTree[j].businessGroups[p].projects[x].name);
+                                                             }
+                                                         })(p);
+                                                     }
+                                                 })(j);
+                                             }
+
+
+
+
+                                         }
+                                     });
+                                 });
+                             })(data[i]);
+
+                         }
+
                          //info ends here
-                        //  }
+                         //  }
 
                          //for updating 
                          $selectVerEdit.click(function(e) {
@@ -3851,56 +4182,56 @@
                              "font-size": '10px'
                          }).append(tagLabel, $selectVer);
 
-                      
+
                      }
 
                      if ($selectVer.attr('class').indexOf('dockerrepotagselect') < 0) {
-                     //    alert(data[i].blueprintConfig.infraManagerData.versionsList.length);
-                    // console.log("+++++++++++++++ "+i);
-                   //   console.log("sdasadsds" + JSON.stringify(data[i].blueprintConfig.infraManagerData.versionsList));
+                         //    alert(data[i].blueprintConfig.infraManagerData.versionsList.length);
+                         // console.log("+++++++++++++++ "+i);
+                         //   console.log("sdasadsds" + JSON.stringify(data[i].blueprintConfig.infraManagerData.versionsList));
 
-                        if (typeof data[i].blueprintConfig.infraManagerData !=='undefined') {
-                            for (var j = 0; j < data[i].blueprintConfig.infraManagerData.versionsList.length; j++) {
-
-
-
-                                var $options = $('<option></option>').append(data[i].blueprintConfig.infraManagerData.versionsList[j].ver).val(data[i].blueprintConfig.infraManagerData.versionsList[j].ver);
-                                $selectVer.append($options);
+                         if (typeof data[i].blueprintConfig.infraManagerData !== 'undefined') {
+                             for (var j = 0; j < data[i].blueprintConfig.infraManagerData.versionsList.length; j++) {
 
 
-                            }
-                        }
-                   }
+
+                                 var $options = $('<option></option>').append(data[i].blueprintConfig.infraManagerData.versionsList[j].ver).val(data[i].blueprintConfig.infraManagerData.versionsList[j].ver);
+                                 $selectVer.append($options);
+
+
+                             }
+                         }
+                     }
                      $selecteditBtnContainer.append($li);
-                    
 
-                 //}
-                 $itemBody.append($ul);
-                 $itemBody.append($selecteditBtnContainer);
-                 $itemContainer.append($itemBody);
 
-                 //Find the template type container and add to it.
-                 //var $currpanel = $('#accordion-2').find('div[".' +  data[i].templateType + '"]').first();
-                 //alert($currpanel.length);
-                 $currRolePanel.append($itemContainer);
-                 //enabling the bluepintContiner div when item added.
-                 $currRolePanel.closest('.blueprintContainer').removeClass('hidden');
-                 // alert($currRolePanel.html());
-                 $currRolePanel.parent().parent().show();
-                 //Attaching the selection event.
-                 if (i == (data.length - 1)) {
-                     var $productdiv1 = $('.productdiv1');
+                     //}
+                     $itemBody.append($ul);
+                     $itemBody.append($selecteditBtnContainer);
+                     $itemContainer.append($itemBody);
 
-                     $productdiv1.click(function(e) {
+                     //Find the template type container and add to it.
+                     //var $currpanel = $('#accordion-2').find('div[".' +  data[i].templateType + '"]').first();
+                     //alert($currpanel.length);
+                     $currRolePanel.append($itemContainer);
+                     //enabling the bluepintContiner div when item added.
+                     $currRolePanel.closest('.blueprintContainer').removeClass('hidden');
+                     // alert($currRolePanel.html());
+                     $currRolePanel.parent().parent().show();
+                     //Attaching the selection event.
+                     if (i == (data.length - 1)) {
+                         var $productdiv1 = $('.productdiv1');
 
-                         $productdiv1.removeClass('role-Selected1');
-                         $(this).addClass('role-Selected1');
-                     });
+                         $productdiv1.click(function(e) {
+
+                             $productdiv1.removeClass('role-Selected1');
+                             $(this).addClass('role-Selected1');
+                         });
+                     }
+
                  }
+             })(i);
 
-             }
-       })(i);
-           
          }
          //for loop for data ends here...
 
@@ -4007,35 +4338,35 @@
  //for removing the selected blueprint in the Existing Blueprints tab
  function removeSelectedBlueprint() {
      var blueprintId = $('.productdiv1.role-Selected1').attr('data-blueprintid');
-    if (blueprintId) {
-        //found now delete
-        bootbox.confirm("Are you sure you would like to remove this blueprint?", function(result) {
-            //  alert(result);
-            if (!result) {
-                return;
-            } else {
-                //alert(result);
-                $.ajax({
-                    url: '/blueprints/' + blueprintId,
-                    type: 'DELETE',
-                    success: function(data) {
-                        if (data) {
-                            var $bcc = $('.productdiv1.role-Selected1').closest('.blueprintContainer');
-                            $('.productdiv1.role-Selected1').parent().detach();
-                            //Check if the closest bluprintcontainer is empty, if empty then hide it.
-                            // alert($bcc.find('.panel-body').children().length);
-                            if ($bcc.find('.panel-body').children().length <= 0) {
-                                $bcc.addClass('hidden');
-                            }
-                        } else
-                            alert(data);
-                    }
-                });
-            }
-        });
-    } else {
-        alert('Please select a blueprint to remove.');
-    }
+     if (blueprintId) {
+         //found now delete
+         bootbox.confirm("Are you sure you would like to remove this blueprint?", function(result) {
+             //  alert(result);
+             if (!result) {
+                 return;
+             } else {
+                 //alert(result);
+                 $.ajax({
+                     url: '/blueprints/' + blueprintId,
+                     type: 'DELETE',
+                     success: function(data) {
+                         if (data) {
+                             var $bcc = $('.productdiv1.role-Selected1').closest('.blueprintContainer');
+                             $('.productdiv1.role-Selected1').parent().detach();
+                             //Check if the closest bluprintcontainer is empty, if empty then hide it.
+                             // alert($bcc.find('.panel-body').children().length);
+                             if ($bcc.find('.panel-body').children().length <= 0) {
+                                 $bcc.addClass('hidden');
+                             }
+                         } else
+                             alert(data);
+                     }
+                 });
+             }
+         });
+     } else {
+         alert('Please select a blueprint to remove.');
+     }
  }
 
 

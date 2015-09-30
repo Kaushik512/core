@@ -37,6 +37,32 @@ Catalyst User New Template Creation
     Verfiy the Template is Created
 
 
+Catalyst Unique Template Validation Setup
+    Clicks on Settings
+    Clicks on Gallery Setup
+    Clicks on Templates
+    Sleep    2s
+    Clicks on New Button
+    Sleep    3s
+    Enters the duplicate Template Name
+    Chooses Icon
+    Chooses Template Type
+    Select Created organization
+    Select CookBooks
+    #Select Roles
+    Clicks on >> Button
+    Clicks on Save Button
+    Verify the Error Message displayed while duplicating the Template
+
+
+
+
+
+Verify the Error Message displayed while duplicating the Template
+    Element Should Contain    id=unique_templatename    ${Unique ErrMsg}
+    Sleep    2s
+
+
 Verfiy the Template is Created
     Sleep    2s
     Element Should Contain    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${ValidTEditemplName}']    ${ValidTEditemplName}      
@@ -203,6 +229,9 @@ Enters empty Template Name
 
 Enters the New Template Name
     Input Text    id=templatename    ${templatename}
+
+Enters the duplicate Template Name
+    Input Text    id=templatename    ${TEMPLATE NAME}    
 
 Clicks on Edit Button of Temp Created
     Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${TEMP NME}']/../td[6]/div/a
@@ -498,12 +527,12 @@ Choose Service Command Type
 Select Service CookBooks
     Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='s2id_servicecookbook']/a
     Wait Until Keyword Succeeds    1 minute     1 seconds    Input Text    xpath=.//*[@id='select2-drop']/div/input    ${COOKBOOK NAME}
-    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='select2-drop']/ul/li/div        
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    css=ul > li:nth-of-type(2) > div
 
 Select Edit Service CookBooks
     Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='s2id_servicecookbook']/a
     Wait Until Keyword Succeeds    1 minute     1 seconds    Input Text    xpath=.//*[@id='select2-drop']/div/input    ${COOKBOOK NAME1}
-    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='select2-drop']/ul/li/div  
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    css=ul > li:nth-of-type(1) > div
 
 
 

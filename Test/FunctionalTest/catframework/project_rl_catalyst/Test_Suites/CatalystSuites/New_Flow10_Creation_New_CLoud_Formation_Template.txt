@@ -1,0 +1,60 @@
+*** Settings ***
+Documentation     Cloud_Formation_Template_setup_Flow.txt
+
+Resource           catalyst.txt
+Resource           ${CATALYST TEST DATA}/${TESTDATA}
+Resource           ${CATALYST ACTION}/Organization_Setup_Action_Steps.txt
+Resource           ${CATALYST ACTION}/New_Creation_Launch_Cloud_Formation_Template.txt
+Resource           ${COMMON RESOURCES}/catalyst_grid_node.txt
+
+
+*** Test Cases ***
+Catalyst Create New Docker setup
+    [Tags]       Sanity               Smoke
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst Creation of New Docker Setup   
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+
+Catalyst Create New Cloud Formation Template setup
+    [Tags]       Sanity               Smoke
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst Creation of New Cloud Formation Template    
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+
+
+Catalyst Validation of the CloudFormation Blueprint Page
+    [Tags]       Sanity        val
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst Validation of CloudFormation BlueprintPage    
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+
+
+Catalyst Create New Cloud Formation Blueprint setup
+    [Tags]       Sanity               Smoke
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst Creation of New Cloud Formation Blueprint and Save   
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+Catalyst Launch of Cloud Formation Blueprint
+    [Tags]       Sanity               Smoke
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst Launch Cloud Formation Blueprint   
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
