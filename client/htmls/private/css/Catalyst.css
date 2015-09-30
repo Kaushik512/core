@@ -9498,10 +9498,12 @@ table.dataTable td {
     background-position: -15px -12px;
     width: 25px;
     height: 25px;
+    
+}
+.moreInfoabsolute{
     position: absolute;
     margin-left:-28px;
 }
-
 .moreinfoBuild {
     background-position: -15px -12px;
     width: 25px;
@@ -12056,7 +12058,7 @@ body .ui-tooltip {
 .dockerIMG {
     height: 32px;
     margin-left: -22px;
-    margin-top: 26px;
+    margin-top: 13px;
     width: auto;
 }
 
