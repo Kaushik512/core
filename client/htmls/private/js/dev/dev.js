@@ -2320,7 +2320,7 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                         })(j);
                     }
                     //To fix template id and template type
-                     alert('in' + data.length);
+                     //alert('in' + data.length);
                     for (var i = 0; i < data.length; i++) {
                         //alert(JSON.stringify(data[i]));
                         //Find a panel-body with the template type class
