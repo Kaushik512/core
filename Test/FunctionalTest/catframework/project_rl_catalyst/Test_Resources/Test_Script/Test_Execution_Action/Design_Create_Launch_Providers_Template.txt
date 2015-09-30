@@ -152,11 +152,17 @@ Catalyst Creation of New Blueprint and Delete
     Clicks on the Project to go to Environment
     Clicks on the Environment to Launch
     Sleep    5s
-    Clicks on Blueprint Section
+    Clicks on the Infrastructure Tab to select Bluperints section
+    #Clicks on Blueprint Section
     Select the CentosTesingBlueprint
     Deleting the Testing Blueprint
 
 
+Clicks on the Infrastructure Tab to select Bluperints section
+    Click Element    xpath=.//*[@id='myTab3']/li[1]/a/b
+    Sleep    1s
+    Click Element    xpath=.//*[@id='myTab3']/li[1]/ul/li[2]/a
+    Sleep    1s
 
 
 Verify the Blurprint Saved Successfully message
@@ -499,7 +505,8 @@ CentOS Blueprint Launched and verify IP,Status,Chef,SSH,Stop,BootStrap
     Clicks on the Project to go to Environment
     Clicks on the Environment to Launch
     Sleep    5s
-    Clicks on Blueprint Section
+    Clicks on the Infrastructure Tab to select Bluperints section
+    #Clicks on Blueprint Section
     Select the CentosBlueprint
     Sleep    1s
     Clicks on Launch Button
@@ -507,7 +514,8 @@ CentOS Blueprint Launched and verify IP,Status,Chef,SSH,Stop,BootStrap
     Confirmation to launch Blueprint
     Sleep    1s
     Clicks on Instance Close Button
-    Clicks on Instances Button
+    Clicks on the Infrastructure Button to go to Instances    
+    #Clicks on Instances Button
     Verify the IP Address of the Instance
     Verfiy the Status of the Instance
     Sleep    30s
@@ -539,6 +547,13 @@ Catalyst Inspect Functionality Setup
     Verify the Particular Software is listed in list 
 
     
+
+Clicks on the Infrastructure Button to go to Instances
+    Click Element    xpath=.//*[@id='myTab3']/li[1]/a/b
+    Sleep    1s
+    Click Element    xpath=.//*[@id='myTab3']/li[1]/ul/li[1]/a
+    Sleep    2s
+
 
 
 
@@ -760,14 +775,16 @@ Ubuntu Blueprint Launched and verify the IP,Status,Chef,SSH,Stop,BootStrap
     #Clicks on the Project to go to Environment
     Clicks on the Button to the Environment
     Sleep    2s
-    Clicks on Blueprint Section
+    #Clicks on Blueprint Section
+    Clicks on the Infrastructure Tab to select Bluperints section
     Select the BlueprintUbuntu
     Clicks on Launch Button
     Sleep    2s
     Confirmation to launch Blueprint
     Sleep    1s
     Clicks on Instance Close Button
-    Clicks on Instances Button
+    Clicks on the Infrastructure Button to go to Instances
+    #Clicks on Instances Button
     Verify the IP Address of the Ubuntu Instance
     Verfiy the Status of the Ubuntu Instance
     Sleep    30s
