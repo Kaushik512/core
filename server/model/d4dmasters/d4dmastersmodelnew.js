@@ -148,6 +148,10 @@ var d4dMastersProjects = new mongoose.Schema(
 	environmentname_rowid: {type:String, trim:true},
 	description: {type:String, trim:true, validate:descValidator},
 	active: {type:Boolean, trim:true,default:true},
+	appdeploy: [{
+		applicationname: String,
+		appdescription: String
+	}],
 	/*teamname: {type:String, trim:true},
 	teamname_rowid: {type:String, trim:true},*/
 	rowid:{type:String,required:true, trim:true}},{collection:'d4dmastersnew'}

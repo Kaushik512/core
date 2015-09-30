@@ -1572,7 +1572,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     return;
                 }
                 logger.debug("Got Org: >>>>> ", JSON.stringify(anOrg));
-                if(anOrg.length){
+                if (anOrg.length) {
                     var query = {};
                     query['id'] = req.params.masterid;
                     query['orgname_rowid'] = anOrg[0].rowid;
@@ -1591,7 +1591,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                         }
 
                     });
-                }else{
+                } else {
                     res.send("Org Not Found");
                     return;
                 }
@@ -2527,13 +2527,13 @@ module.exports.setRoutes = function(app, sessionVerification) {
                         bodyJson["configType"] = "puppet";
                         if (bodyJson["puppetpassword"]) {
                             bodyJson["puppetpassword"] = cryptography.encryptText(bodyJson["puppetpassword"], cryptoConfig.encryptionEncoding, cryptoConfig.decryptionEncoding);
-                        }else{
+                        } else {
                             bodyJson["folderpath"] = "/" + bodyJson["username"] + "/.puppet/";
                         }
                         logger.debug("encryptText:>>>>>>>>>>>>> ", bodyJson["puppetpassword"]);
                     }
                     if (req.params.id === "3") {
-                        if(!bodyJson["environmentname"]){
+                        if (!bodyJson["environmentname"]) {
                             bodyJson["environmentname"] = bodyJson["puppetenvironmentname"];
                         }
                     }
@@ -2802,7 +2802,19 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                             });
                                         });
 
-                                    } else {
+                                    } else if(req.params.id === '4'){
+                                        bodyJson['appdeploy'] = JSON.parse(bodyJson['appdeploy']);
+                                        var projectModel = new d4dModelNew.d4dModelMastersProjects(bodyJson);
+                                            projectModel.save(function(err, data) {
+                                                if (err) {
+                                                    logger.error('Hit Save error', err);
+                                                    res.send(500);
+                                                    return;
+                                                }
+                                                res.send(200);
+                                                return;
+                                            });
+                                    }else {
                                         logger.debug("FLD>>>>>>>>>>>>> ", FLD);
                                         eval('var mastersrdb =  new d4dModelNew.' + dbtype + '({' + JSON.parse(FLD) + '})');
                                         mastersrdb.save(function(err, data) {
@@ -2854,6 +2866,29 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                 } else {
 
                                     // Update settings
+
+                                    if (req.params.id === '4') {
+                                        bodyJson['appdeploy'] = JSON.parse(bodyJson['appdeploy']);
+                                        delete rowtoedit._id; //fixing the issue of 
+                                        rowtoedit["appdeploy"] = bodyJson['appdeploy'];
+                                        logger.debug('Rowtoedit: %s', JSON.stringify(rowtoedit));
+                                        eval('d4dModelNew.' + dbtype).update({
+                                            rowid: bodyJson["rowid"],
+                                            "id": "4"
+                                        }, {
+                                            $set: rowtoedit
+                                        }, {
+                                            upsert: false
+                                        }, function(err, saveddata) {
+                                            if (err) {
+                                                logger.error('Hit Save error', err);
+                                                res.send(500);
+                                                return;
+                                            }
+                                            res.send(200);
+                                            return;
+                                        });
+                                    }
                                     if (req.params.id === "7") {
                                         d4dModelNew.d4dModelMastersUsers.find({
                                             "id": req.params.id,
@@ -3684,14 +3719,20 @@ module.exports.setRoutes = function(app, sessionVerification) {
     });
 
     app.get('/d4dMasters/configmanagement/:anId', function(req, res) {
+        if (!req.params.anId) {
+            res.send(400, {
+                message: "Invalid Config Management Id"
+            });
+            return;
+        }
         masterUtil.getCongifMgmtsById(req.params.anId, function(err, data) {
             if (err) {
                 logger.debug("Failed to fetch all configmanagement", err);
                 res.send(500, "Failed to fetch all configmanagement");
                 return;
             }
-            if(!data){
-                res.send(404,"No ConfigManagement Found.");
+            if (!data) {
+                res.send(404, "No ConfigManagement Found.");
                 return;
             }
             res.send(data);
@@ -3707,6 +3748,23 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 res.send(500, "Failed to fetch  Environment");
                 return;
             }
+            if (!data) {
+                res.send(404, "No Environment Found.");
+                return;
+            }
+            res.send(data);
+            return;
+        });
+    });
+
+    app.get('/d4dMasters/project/:anId', function(req, res) {
+        logger.debug("Entered to env name...");
+        masterUtil.getParticularProject(req.params.anId, function(err, data) {
+            if (err) {
+                logger.debug("Failed to fetch  Environment", err);
+                res.send(500, "Failed to fetch  Environment");
+                return;
+            }
             if(!data){
                 res.send(404,"No Environment Found.");
                 return;
@@ -3716,3 +3774,4 @@ module.exports.setRoutes = function(app, sessionVerification) {
         });
     });
 }
+
