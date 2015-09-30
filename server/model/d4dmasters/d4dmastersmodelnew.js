@@ -362,6 +362,23 @@ var d4dMastersPuppetServer = new mongoose.Schema(
 var d4dModelMastersPuppetServer = mongoose.model('d4dModelMastersPuppetServer',d4dMastersPuppetServer,'d4dmastersnew');
 
 
+var d4dMastersNexusServer = new mongoose.Schema(
+	{id: {type:String,required:true, trim:true},
+	name: {type:String,trim:true, validate:nameValidator},
+	orgname: {type:[String],required:true, trim:true, validate:nameValidator},
+	orgname_rowid: {type:[String], trim:true},
+	orgrowid: {type:String, trim:true},
+	nexusservername: {type:String,required:true, trim:true},
+	username: {type:String,required:true, trim:true},
+	nexuspassword: {type:String,trim:true},
+	configType: {type:String, trim:true},
+	hostname: {type:String,required:true, trim:true},
+	active: {type:Boolean, trim:true,default:true},
+	rowid:{type:String,required:true, trim:true}},{collection:'d4dmastersnew'}
+);
+var d4dModelMastersNexusServer = mongoose.model('d4dModelMastersNexusServer',d4dMastersNexusServer,'d4dmastersnew');
+
+
 module.exports = d4dModelNew;
 module.exports.d4dModelMastersOrg = d4dModelMastersOrg;
 module.exports.d4dModelMastersProductGroup = d4dModelMastersProductGroup;
@@ -383,3 +400,4 @@ module.exports.d4dModelMastersProviders = d4dModelMastersProviders;
 module.exports.d4dModelMastersImages = d4dModelMastersImages;
 module.exports.d4dModelMastersJira = d4dModelMastersJira;
 module.exports.d4dModelMastersPuppetServer = d4dModelMastersPuppetServer;
+module.exports.d4dModelMastersNexusServer = d4dModelMastersNexusServer;
