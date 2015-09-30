@@ -159,6 +159,37 @@ module.exports.setRoutes = function(app) {
 
     }
 
+    // temp 
+    var SSHExec = require('../lib/utils/sshexec');
+    app.get('/temptest',function(req,res){
+        res.send(200);
+
+        
+
+
+        var opts = {
+            //privateKey: instanceData.credentials.pemFilePath,
+            username: 'admin',
+            host: '23.98.64.107',
+            instanceOS: 'linux',
+            port: 22,
+            cmds: ["ls"]
+        }
+
+        var sshExec = new SSHExec(opts);
+        
+        sshExec.exec('ls', function(err){
+            return;
+        }, function(stdout){
+            console.log('Out:',stdout.toString());//assuming that receiving something out would be a goog sign :)
+            return;
+        }, function(stdout){
+            console.log('Error Out:',stdout);
+        });
+
+
+    })
+
     // for notification
 
     notification.setRoutes(app,sessionVerificationFunc);

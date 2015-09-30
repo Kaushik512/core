@@ -92,6 +92,11 @@
                                  <input name="ctl00$MainContent$orgname" Placeholder="Enter The Admin UserName" id="UserName" class="form-control" type="text"  cdata="catalyst" cat-validation="required,max15">
                                </div> 
 
+                               <div class="col-lg-6 forazurepassword hidden">
+                                 <label for=""> Admin  Password:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+                                 <input name="ctl00$MainContent$orgname" Placeholder="Enter The Admin Password" id="password" class="form-control" type="password"  cdata="catalyst">
+                               </div> 
+
                                <div class="col-lg-6">
                                   <label for="name">Organization Name:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
                                   <select id="orgId" name="orgId" unique="true" uniqueconditionedby="orgname"  class="chooseOrganization width-100" style="vertical-align:central"  cdata="catalyst"  cat-validation="required">
@@ -245,6 +250,22 @@
                     if($('#providerId').attr('answer')){
                       $('#providerId').val($('#providerId').attr('answer')).select2();
                     }
+
+                    $('#providerId').on('change', function() {
+                      var provider = $('#providerId').find("option:selected").attr('providerType');
+                      console.log("provider",provider);
+
+                      if(provider == 'AZURE'){ 
+                          console.log("hidden remove");
+                          $('.forazurepassword').removeClass('hidden');
+                          $('.forazurepassword').find('#password').attr('cat-validation','required,min8');
+                      }else{
+                          $('.forazurepassword').addClass('hidden');
+                          $('.forazurepassword').find('#password').removeAttr('cat-validation');
+                      }
+
+                    });
+
                     },
                     failure: function (data) {
                      alert(data.toString());
@@ -273,6 +294,8 @@
               if($('#providerId').attr('answer')){
                 $('#providerId').val($('#providerId').attr('answer')).select2();
               }
+
+
                 /*.off('change').on('change',function(){
                   debugger;
                   
@@ -307,6 +330,8 @@
     orgId = $('#orgId').val().trim();
     var pt = $('#providerId').find('option:selected').attr('providertype');
     //alert(orgId);
+    
+    var password = $('#password').val().trim();
 
     if(imageIdentifier && providerId && osType && name && osName && userName && orgId){
       appendLoader();
@@ -320,7 +345,7 @@
       $.ajax({
         method:"POST",
         url:url,
-        data:{ "providerId": providerId, "osType": osType, "name": name, "imageIdentifier":imageIdentifier,"osName":osName,"userName":userName,"orgId":orgId,"providertype":pt},
+        data:{ "providerId": providerId, "osType": osType, "name": name, "imageIdentifier":imageIdentifier,"osName":osName,"userName":userName,"orgId":orgId, "providertype":pt, "password":password},
         success: function(data, success) {
           if (data!=500) {
             if ($('#btncancel').length){
@@ -469,6 +494,8 @@ $(document).ready(function () {
           $('select').select2();
 
           if(UtilityMethods.getIdFromURL()){
+            console.log("In updation :",UtilityMethods.getIdFromURL());
+
            $.get('/vmimages/'+UtilityMethods.getIdFromURL(),function(data){
 
             $('#imageidentifire').val(data.imageIdentifier).attr('answer',data.imageidentifire);
@@ -477,6 +504,11 @@ $(document).ready(function () {
             $('#providerId').attr('answer',data.providerId).val(data.providerId).select2();
             $('#UserName').val(data.userName).attr('answer',data.userName);
             $('#orgId').val(data.orgId[0]).attr({'answer': data.orgId[0]}).select2();
+
+            if(data.providerType == 'azure'){
+              $('#password').val(data.instancePassword).attr('answer',data.instancePassword);
+              $('.forazurepassword').removeClass('hidden');
+            }
 
           });
          }

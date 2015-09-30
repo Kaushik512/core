@@ -21,6 +21,7 @@ module.exports = function(options) {
             con.connect(connectionParamsObj);
         } catch (connectErr) {
             con = null;
+            console.log(connectErr);
             // a hack to make a sycnronous call asynchronous 
             setTimeout(function() {
                 if (connectErr.message === 'Cannot parse privateKey: Unsupported key format') {
@@ -40,7 +41,7 @@ module.exports = function(options) {
         con.on('error', function(err) {
             isConnected = false;
             con = null;
-            console.log("ERROR EVENT FIRED");
+            console.log("ERROR EVENT FIRED",err);
             if (err.level === 'client-authentication') {
 
                 callback(err, INVALID_CREDENTIALS);
@@ -55,7 +56,6 @@ module.exports = function(options) {
             isConnected = false;
             con = null;
             console.log('ssh close ', hadError);
-
         });
 
         con.on('end', function() {
@@ -64,15 +64,20 @@ module.exports = function(options) {
             console.log('ssh end');
         });
 
+        con.on('keyboard-interactive', function(name, instructions, instructionsLang, prompts, finish) {
+          console.log('Connection :: keyboard-interactive');
+          finish([options.password]);
+        });
+
     }
 
     function initialize(callback) {
+        console.log("In SSH Initilize");
         if (!con) {
             var connectionParamsObj = {
                 host: options.host,
                 port: options.port,
                 username: options.username
-
             };
 
             if (options.privateKey) {
@@ -88,7 +93,9 @@ module.exports = function(options) {
                     connect(connectionParamsObj, callback);
                 });
             } else {
-                connectionParamsObj.password = options.password;
+                console.log("SSh password...");
+                //connectionParamsObj.password = options.password;
+                connectionParamsObj.tryKeyboard = true;
                 connect(connectionParamsObj, callback);
             }
         } else {
@@ -107,8 +114,8 @@ module.exports = function(options) {
                 return;
             }
             if (con) {
-                console.log('executing cmd' + cmd);
-                con.exec('sudo ' + cmd, {
+                console.log('executing cmd: ' + cmd);
+                con.exec('' + cmd, {
                     pty: true
                 }, function(err, stream) {
                     if (err) {

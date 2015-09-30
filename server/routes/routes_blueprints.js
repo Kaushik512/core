@@ -17,6 +17,8 @@ var VMImage = require('../model/classes/masters/vmImage.js');
 var currentDirectory = __dirname;
 var AWSKeyPair = require('../model/classes/masters/cloudprovider/keyPair.js');
 
+var credentialcryptography = require('../lib/credentialcryptography');
+
 var CloudFormation = require('_pr/model/cloud-formation');
 
 var AWSCloudFormation = require('_pr/lib/awsCloudFormation.js');
@@ -1783,19 +1785,36 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                             
                                             // security_groups: blueprint.blueprintConfig.cloudProviderData.securityGroupIds
 
+                                            logger.debug("Image Id:",blueprint.blueprintConfig.imageId);
+
+                                       VMImage.getImageById(blueprint.blueprintConfig.imageId, function(err, anImage) {
+                                            
+                                            if (err) {
+                                                logger.error(err);
+                                                res.send(500, errorResponses.db.error);
+                                                return;
+                                            }
+
+                                            logger.debug("Loaded Image -- : >>>>>>>>>>> %s", anImage);
+
                                             var launchparams = {
-                                                    VMName: "D4D-" + blueprint.name,
+                                                    VMName: "D4D-" + uuid.v4().split('-')[0],
                                                     imageName: blueprint.blueprintConfig.instanceAmiid,
                                                     size: blueprint.blueprintConfig.instanceType,
                                                     vnet: blueprint.blueprintConfig.vpcId,
-                                                    subnet: blueprint.blueprintConfig.subnetId,
                                                     location: blueprint.blueprintConfig.region,
-                                                    sshPort: "22"
+                                                    subnet: blueprint.blueprintConfig.subnetId,
+                                                    username: anImage.userName,
+                                                    password: anImage.instancePassword,
+                                                    sshPort: "22",
+                                                    endpoints: blueprint.blueprintConfig.securityGroupIds
                                             }
 
                                             logger.debug("Azure VM launch params:"+launchparams);
 
                                             var azureCloud = new AzureCloud();
+
+                                            
                                             azureCloud.createServer(launchparams, function(err, instanceData) {
                                                 if (err) {
                                                     logger.error('azure createServer error', err);
@@ -1803,9 +1822,22 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                     return;
                                                 }
 
+                                                var credentials = {
+                                                        username: launchparams.username,
+                                                        password: launchparams.password
+                                                };
+
+                                        credentialcryptography.encryptCredential(credentials,function(err,encryptedCredentials){
+                                                if (err) {
+                                                    logger.error('azure encryptCredential error', err);
+                                                    res.send(500, err);
+                                                    return;
+                                                }
+                                                logger.debug('Credentials encrypted..');
                                                 logger.debug('OS Launched');
                                                 logger.debug(JSON.stringify(instanceData));
                                                 //Creating instance in catalyst
+
                                                 var instance = {
                                                     name: launchparams.VMName,
                                                     orgId: blueprint.orgId,
@@ -1814,9 +1846,9 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                     envId: req.query.envId,
                                                     providerId: blueprint.blueprintConfig.cloudProviderId,
                                                     keyPairId: 'unknown',
-                                                    chefNodeName: instanceData.server.id,
+                                                    chefNodeName: launchparams.VMName,
                                                     runlist: version.runlist,
-                                                    platformId: instanceData.server.id,
+                                                    platformId: launchparams.VMName,
                                                     appUrls: blueprint.appUrls,
                                                     instanceIP: 'unknown',
                                                     instanceState: 'unknown',
@@ -1833,12 +1865,12 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                         os: blueprint.blueprintConfig.instanceOS
                                                     },
                                                     credentials: {
-                                                        username: providerdata.username,
-                                                        password: instanceData.server.adminPass
+                                                        username: encryptedCredentials.username,
+                                                        password: encryptedCredentials.password
                                                     },
                                                     chef: {
                                                         serverId: blueprint.blueprintConfig.infraManagerId,
-                                                        chefNodeName: instanceData.id
+                                                        chefNodeName: launchparams.VMName
                                                     },
                                                     blueprintData: {
                                                         blueprintId: blueprint._id,
@@ -1853,7 +1885,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                 logger.debug('Instance Data');
                                                 logger.debug(JSON.stringify(instance));
 
-                                                instancesDao.createInstance(instance, function(err, data) {
+                                             instancesDao.createInstance(instance, function(err, data) {
                                                     if (err) {
                                                         logger.error("Failed to create Instance", err);
                                                         res.send(500);
@@ -1891,15 +1923,15 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                     });
                                                     logger.debug('Should have sent the response.');
                                               
-                                              /*      hppubliccloud.waitforserverready(hppubliccloudconfig.tenantId, instanceData, function(err, data) {
+                                                    azureCloud.waitforserverready(instance.name, launchparams.username, launchparams.password, function(err, publicip) {
 
                                                         if (!err) {
                                                             logger.debug('Instance Ready....');
                                                             logger.debug(JSON.stringify(data)); // logger.debug(data);
                                                             logger.debug('About to bootstrap Instance');
                                                             //identifying pulic ip
-                                                            var publicip = '';
-                                                            if (data.server.addresses.public) {
+                                                            //var publicip = '';
+                                                           /* if (data.server.addresses.public) {
                                                                 for (var i = 0; i < data.server.addresses.public.length; i++) {
                                                                     if (data.server.addresses.public[i]["version"] == '4') {
                                                                         publicip = data.server.addresses.public[i].addr;
@@ -1917,7 +1949,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                     res.send(500);
                                                                     return;
                                                                 }
-                                                            }
+                                                            }*/
+
                                                             instancesDao.updateInstanceIp(instance.id, publicip, function(err, updateCount) {
                                                                 if (err) {
                                                                     logger.error("instancesDao.updateInstanceIp Failed ==>", err);
@@ -1942,9 +1975,9 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                             chef.bootstrapInstance({
                                                                 instanceIp: publicip,
                                                                 runlist: version.runlist,
-                                                                instanceUsername: 'ubuntu',
-                                                                pemFilePath: '//etc//ssh//key.pem', //should be the encryped file 
-                                                                nodeName: launchparams.server.name,
+                                                                instanceUsername: launchparams.username,
+                                                                instancePassword: launchparams.password, //should be the encryped file 
+                                                                nodeName: launchparams.VMName,
                                                                 environment: envName,
                                                                 instanceOS: instance.hardware.os,
                                                                 jsonAttributes: null
@@ -1991,14 +2024,17 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                             logger.debug('Err Creating Instance:' + err);
                                                             return;
                                                         }
-                                                    });*/
+                                                    });
 
-                                                });
+                                                 //}); //close of endpoint creation
 
-
+                                                });//close of createInstance
                                                 //res.send(data);
                                             });
+                                            });//close createServer
+                                         })//close of VMImage getImageById
                                         }
+
                                         launchAzureCloudBP(providerdata, blueprint);
 
                                     });
