@@ -83,14 +83,15 @@
 
                         <script>
                             function updateImageListByGivingProviderName(imageList,ProviderList){
-                                for(var i=0;i<imageList.length;i++){
-                                    for(var j=0;j<ProviderList.length;j++){
+                               for(var i=0;i<imageList.length;i++){
+                                    for(var j=0;j<ProviderList.length;j++)
+                                    {
                                         if(imageList[i].providerId ===ProviderList[j]._id){
                                             imageList[i].providerName=ProviderList[j].providerName;
                                             break;
                                         }
                                     }
-
+                                   
                                 }
                                 return imageList;
                             }
@@ -102,14 +103,122 @@
                                 reqBody.secretKey='';
                                 reqBody.providerType='';
                                 reqBody.regions=[];
+
+                                $.ajax({
+                                   method: "GET",url: "/allproviders/list",data: reqBody,   
+                                   success: function(data, success) {
+
+                                            var providerList = [];
+
+                                            for(i=0;i<data.awsProviders.length;i++){
+                                               providerList.push(data.awsProviders[i]);
+                                            }
+                                            for(i=0;i<data.openstackProviders.length;i++){
+                                               providerList.push(data.openstackProviders[i]);
+                                            }
+                                            for(i=0;i<data.vmwareProviders.length;i++){
+                                               providerList.push(data.vmwareProviders[i]);
+                                            }
+                                            for(i=0;i<data.hpPlublicCloudProviders.length;i++){
+                                               providerList.push(data.hpPlublicCloudProviders[i]);
+                                            }
+                                            for(i=0;i<data.azureProviders.length;i++){
+                                               providerList.push(data.azureProviders[i]);
+                                            }
+
+                                            console.log("awsProviders",data.awsProviders);
+                                            console.log("openstackProviders",data.openstackProviders);
+                                            console.log("vmwareProviders",data.vmwareProviders);
+                                            console.log("hpPlublicCloudProviders",data.hpPlublicCloudProviders);
+                                            console.log("azureProviders",data.azureProviders);
+
+                                            d4ddata= updateImageListByGivingProviderName(d4ddata,providerList);
+                                            getOrganizationList();
+                                        },
+                                        error: function(jqxhr) {
+                                            removeLoader();
+                                            bootbox.alert(jqxhr.status);
+                                        },
+                                        failure: function(data) {
+                                            bootbox.alert(data);
+                                        }
+                                });     
+
       //reqBody.instanceUserName='root';
-      $.ajax({
+     /* $.ajax({
        method: "GET",url: "/aws/providers",data: reqBody,   
        success: function(data, success) {
         data= typeof data=="string" ?JSON.parse(data):data;
                 //d4ddata=data;
-               d4ddata= updateImageListByGivingProviderName(d4ddata,data);
-                  getOrganizationList();
+                //pulling in data for openstack
+                    $.ajax({
+                       method: "GET",url: "/openstack/providers",data: reqBody,   
+                       success: function(data1, success) {
+                                data1= typeof data1=="string" ?JSON.parse(data1):data1;
+                                //d4ddata=data;
+                                //pulling in data for hppublic could
+
+                                for(var h = 0;h < data1.length;h++){
+                                                data.push(data1[h]);
+                                            }
+
+                                $.ajax({
+                                   method: "GET",url: "/hppubliccloud/providers",data: reqBody,   
+                                   success: function(data2, success) {
+                                    data2= typeof data2=="string" ?JSON.parse(data2):data2;
+
+                                    for(var h = 0;h < data2.length;h++){
+                                                data.push(data2[h]);
+                                            }
+
+                                $.ajax({
+                                   method: "GET",url: "/azure/providers",data: reqBody,   
+                                   success: function(data3, success) {
+                                    data3= typeof data3=="string" ?JSON.parse(data3):data3;
+
+                                            //d4ddata=data;
+                                            //pulling in data for azure
+                                            for(var h = 0;h < data3.length;h++){
+                                                data.push(data3[h]);
+                                            } 
+                                            
+                                           d4ddata= updateImageListByGivingProviderName(d4ddata,data);
+                                            getOrganizationList();
+                                            //startup();
+                                        },
+                                        error: function(jqxhr) {
+                                            removeLoader();
+                                            bootbox.alert(jqxhr.status);
+                                        },
+                                        failure: function(data) {
+                                            bootbox.alert(data);
+                                        }
+                                });
+                                },
+                            error: function(jqxhr) {
+                                removeLoader();
+                                bootbox.alert(jqxhr.status);
+                            },
+                            failure: function(data) {
+                                bootbox.alert(data);
+                            }
+                          });
+                                //startup();
+                            },
+                            error: function(jqxhr) {
+                                removeLoader();
+                                bootbox.alert(jqxhr.status);
+                            },
+                            failure: function(data) {
+                                bootbox.alert(data);
+                            }
+                    });
+
+
+
+
+              // d4ddata= updateImageListByGivingProviderName(d4ddata,data);
+              //    getOrganizationList();
                 //startup();
             },
             error: function(jqxhr) {
@@ -119,7 +228,7 @@
             failure: function(data) {
                 bootbox.alert(data);
             }
-        });
+        });*/
 
   }
 
@@ -134,12 +243,9 @@
                             $.ajax({
                                 method: "GET",url: "/vmimages",data: reqBody,
                                 success: function(data, success) {
-
                                     data= typeof data=="string" ?JSON.parse(data):data;
                                     d4ddata=data;
                                     getProviderData();
-
-                                    
                                 },
                                 error: function(jqxhr) {
                                     removeLoader();
@@ -192,9 +298,9 @@
                 }
             });
 
-var sRow = $(".rowtemplate").clone();
-sRow.removeClass("hidden");
-sRow.removeClass("rowtemplate");
+            var sRow = $(".rowtemplate").clone();
+            sRow.removeClass("hidden");
+            sRow.removeClass("rowtemplate");
             // $('#envtable').append(sRow);
             imageTD = $('.rowtemplate').find("[datatype='image']");
 
@@ -214,7 +320,6 @@ sRow.removeClass("rowtemplate");
                         imageTD.append($('<img src="' + imgpath + '" style="height:28px;width:auto"/>'));
 
                     }
-
                 }
                 if (editButton) {
                     editButton.attr("href", "#ajax/Settings/" + createFileName + "?" + idFieldValue);
@@ -368,8 +473,6 @@ sRow.removeClass("rowtemplate");
                     deletebutton.addClass('tableactionbutton');
                 }
             }
-
-
             console.log('-----------');
             var sRow = $(".rowtemplate").clone();
             sRow.removeClass("hidden");
