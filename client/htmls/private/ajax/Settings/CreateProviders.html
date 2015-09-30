@@ -69,9 +69,9 @@
                                                         <div class="col-lg-6 col-md-6">
                                                             <label for="name">Provider Type:
                                                                 <span style="color: Red;" class="control-label">&nbsp;*</span></label>
-                                                            <select id="providertype" name="providerType" unique="true" uniqueconditionedby="orgname" class="chooseOrganization width-100" style="vertical-align: central" cat-validation="required" cdata="catalyst" skiprowid="yes" onchange="UtilityMethods.providerChanged($(this).val());">
+                                                            <select id="providertype" name="providerType" unique="true" uniqueconditionedby="orgname" class="chooseOrganization width-100" style="vertical-align: central" cat-validation="required" cdata="catalyst" skiprowid="yes">
                                                                 <option value="">Select Provider</option>
-                                                                <option value="AWS" selected>AWS</option>
+                                                                <option value="AWS">AWS</option>
                                                                 <option value="OPENSTACK">OpenStack</option>
                                                                 <option value="HPPUBLICCLOUD">HP Public Cloud</option>
                                                                 <option value="VMWARE">VMware</option>
@@ -81,7 +81,7 @@
                                                         <div class="col-lg-6 col-md-6">
                                                             <label for="">Name:<span style="color: Red;" class="control-label">&nbsp;*</span></label>
                                                             <!-- <i class="icon-append fa fa-building"></i> -->
-                                                            <input name="providerName" placeholder="Enter Name of the Provider" id="name" class="form-control" type="text" cdata="catalyst" cat-validation="required" cat-validation-openstack="required">
+                                                            <input name="providerName" placeholder="Enter Name of the Provider" id="name" class="form-control" type="text" cdata="catalyst" cat-validation="required">
                                                         </div>
                                                     </div>
                                                     <div class="row foraws">
@@ -205,7 +205,8 @@
                                                         </div>
                                                     </div>
                                                     <!-- end widget div -->
-                                                    <!-- end widget -->
+                                                </div>
+                                                <!-- end widget -->
                                         </article>
                                         <!-- END COL -->
                                         </div>
@@ -213,228 +214,229 @@
                                 </section>
                                 <!-- end widget grid -->
                                 </div>
-                                </div>
-                            </div>
-                            <div class="widget-toolbox clearfix">
-                                <div class="btn-group pull-right">
-                                    <input type="submit" value=" Save" class="btn btn-primary btn-mini" style="margin-right: 11px;" />
-                                    <!--  <button id="btnsubmit" class="btn btn-primary btn-mini" style="margin-right:11px;">
-     <i class="ace-icon fa fa-check bigger-110"></i>
-     Save
-   </button> -->
-                                    <a class="btn btn-primary btn-mini" onclick="window.history.back();" id="btncancel"> <i class="ace-icon fa fa-undo bigger-110"></i> Cancel </a>
-                                </div>
                             </div>
                         </div>
+                        <div class="widget-toolbox clearfix">
+                            <div class="btn-group pull-right">
+                                <a class="btn btn-default" onclick="window.history.back();" style="margin-right:11px;" id="btncancel">
+                                    <i class="ace-icon fa fa-times bigger-110"></i> Cancel
+                                </a>
+                                <button class="btn btn-primary btn-mini">
+                                    <i class="ace-icon fa fa-check bigger-110"></i> Save
+                                </button>
+                            </div>
+                        </div>
+                    </div>
             </form>
             </div>
-            </div>
         </div>
-        <!--row ends here-->
-        <!--Popup for selecting a cloud provider before proceeding-->
-        <script type="text/javascript" src="js/jquery.form.js"></script>
-        <script>
-        var UtilityMethods = {
-            initTooltip: function() {
-                var $tool = $("[rel=tooltip]");
-                if ($tool.length) {
-                    $tool.tooltip();
-                }
-            },
-            getRandomNumber: function() {
-                return parseInt(Math.random() * 10000000000);
-            },
-            getIdFromURL: function() {
-                var options = location.toString().split('?');
-                return options.length > 1 ? (options[1] !== "new" ? options[1] : "") : "";
-            },
-            isEditModeAvailable: function() {
-                return UtilityMethods.getIdFromURL() == "" ? false : true;
-            },
-            initializeSelect2: function() {
-                $('select').select2();
-            },
-            initializeRegionlist: function() {
-                $('select.region').off('change').on('change', checkForKeyPair).select2();
-            },
-            emptyRegion: function() {
-                $('select.region').val('').select2().trigger('change');
-            },
-            emptyKeyPairs: function() {
-                $('select.keyvalue').html('<option value="">Choose Any Key Pair</option>').select2();
-            },
-            triggerRegionChange: function() {},
-            providerChanged: function(pv) {
-               // alert(pv);
-                if(pv == 'AZURE'){
-                    $('.foropenstack').hide();
-                    $('.forhppubliccloud').hide();
-                    $('.foraws').hide();
-                    $('.addNewRegion').hide();
-                    $('.forvmware').hide();
-                    $('.forazure').show();
-                    $('#myForm54').attr('action', $('#myForm54').attr('action').replace(/aws/g, 'azure'));
-                    $('#myForm54').attr('action', $('#myForm54').attr('action').replace(/vmware/g, 'azure'));
-                    $('#myForm54').attr('action', $('#myForm54').attr('action').replace(/openstack/g, 'azure'));
-                    $('#myForm54').attr('action', $('#myForm54').attr('action').replace(/hppubliccloud/g, 'azure'));
-                } else if (pv == 'HPPUBLICCLOUD') {
-                    $('.foropenstack').show();
-                    $('.forhppubliccloud').show();
-                    $('.foraws').hide();
-                    $('.addNewRegion').hide();
-                    $('.forvmware').hide();
-                    $('.forazure').hide();
-                    $('#myForm54').attr('action', $('#myForm54').attr('action').replace(/aws/g, 'hppubliccloud'));
-                    $('#myForm54').attr('action', $('#myForm54').attr('action').replace(/vmware/g, 'hppubliccloud'));
-                    $('#myForm54').attr('action', $('#myForm54').attr('action').replace(/openstack/g, 'hppubliccloud'));
-                    $('#myForm54').attr('action', $('#myForm54').attr('action').replace(/azure/g, 'hppubliccloud'));
-                } else if (pv == 'OPENSTACK') {
-                    $('.foropenstack').show();
-                    $('.forhppubliccloud').hide();
-                    $('.foraws').hide();
-                    $('.addNewRegion').hide();
-                    $('.forvmware').hide();
-                    $('.forazure').hide();
-                    $('#myForm54').attr('action', $('#myForm54').attr('action').replace(/aws/g, 'openstack'));
-                    $('#myForm54').attr('action', $('#myForm54').attr('action').replace(/vmware/g, 'openstack'));
-                    $('#myForm54').attr('action', $('#myForm54').attr('action').replace(/hppubliccloud/g, 'openstack'));
-                     $('#myForm54').attr('action', $('#myForm54').attr('action').replace(/azure/g, 'openstack'));
-                } else if (pv == 'VMWARE') {
-                    $('.foropenstack').hide();
-                    $('.forhppubliccloud').hide();
-                    $('.foraws').hide();
-                    $('.forvmware').show();
-                    $('.addNewRegion').hide();
-                    $('.forazure').hide();
-                    $('#myForm54').attr('action', $('#myForm54').attr('action').replace(/aws/g, 'vmware'));
-                    $('#myForm54').attr('action', $('#myForm54').attr('action').replace(/openstack/g, 'vmware'));
-                    $('#myForm54').attr('action', $('#myForm54').attr('action').replace(/hppubliccloud/g, 'vmware'));
-                     $('#myForm54').attr('action', $('#myForm54').attr('action').replace(/azure/g, 'vmware'));
-                } else {
-                    $('.foropenstack').hide();
-                    $('.forhppubliccloud').hide();
-                    $('.foraws').show();
-                    $('.addNewRegion').show();
-                    $('.forvmware').hide();
-                    $('.forazure').hide();
-                    $('#myForm54').attr('action', $('#myForm54').attr('action').replace(/openstack/g, 'aws'));
-                    $('#myForm54').attr('action', $('#myForm54').attr('action').replace(/vmware/g, 'aws'));
-                    $('#myForm54').attr('action', $('#myForm54').attr('action').replace(/hppubliccloud/g, 'aws'));
-                    $('#myForm54').attr('action', $('#myForm54').attr('action').replace(/azure/g, 'aws'));
-                }
+    </div>
+    <!--row ends here-->
+    <!--Popup for selecting a cloud provider before proceeding-->
+    <script type="text/javascript" src="js/jquery.form.js"></script>
+    <script>
+    var UtilityMethods = {
+        initTooltip: function() {
+            var $tool = $("[rel=tooltip]");
+            if ($tool.length) {
+                $tool.tooltip();
             }
-        };
-
-        function populateurls($host) {
-
-            if ($('#openstackendpointec2').val() == '')
-                $('#openstackendpointec2').val('http://' + $host.val());
-            if ($('#openstackendpointcompute').val() == '')
-                $('#openstackendpointcompute').val('http://' + $host.val());
-            if ($('#openstackendpointidentity').val() == '')
-                $('#openstackendpointidentity').val('http://' + $host.val());
-            if ($('#openstackendpointimage').val() == '')
-                $('#openstackendpointimage').val('http://' + $host.val());
-            if ($('#openstackendpointnetwork').val() == '')
-                $('#openstackendpointnetwork').val('http://' + $host.val());
-
-        }
-
-        function bindChange_importPemFile() {
-            $('input[type="file"]').off('change').on('change', function() {
-                $(this).next().val(this.files[0].name);
-                $(this).next().next().val($(this).val());
-            });
-        }
-
-        function isUserTypeSuperAdmin() {
-            $.get('/d4dMasters/loggedInUser', function(data) {
-                if (!data.isSuperAdmin) {
-                    $('#orgId').attr('disabled', 'disabled').select2();
-                }
-            });
-        }
-
-        function inLineReady() {
-            $("input[type='text']").on("click", function() {
-                $(this).select();
-                $("#msgOrgName").hide();
-            });
-            //enableUniqueCheckingForInputs(9);
-        }
-
-        inLineReady();
-
-        function appendLoader() {
-            removeLoader();
-            $("form[id*='myForm']").find("div.pull-right > input").attr('disabled', 'disabled').parent().prepend('<label id="masterssavespinner" class="" style="float:left;"><img  style="margin-left:5px;margin-right:25px;margin-top:8px;" src="img/select2-spinner.gif" /></label>');
-        }
-
-        function removeLoader() {
-            $('#masterssavespinner').remove();
-            $("form[id*='myForm']").find("div.pull-right > input").removeAttr('disabled');
-        }
-
-        function KeyChangeHandler(e) {
-            var accessKey = $('#accessKey').val().trim(),
-                secretKey = $('#secretKey').val().trim();
-
-            if (accessKey && secretKey) {
-                $('select.region').trigger('change');
+        },
+        getRandomNumber: function() {
+            return parseInt(Math.random() * 10000000000);
+        },
+        getIdFromURL: function() {
+            var options = location.toString().split('?');
+            return options.length > 1 ? (options[1] !== "new" ? options[1] : "") : "";
+        },
+        isEditModeAvailable: function() {
+            return UtilityMethods.getIdFromURL() == "" ? false : true;
+        },
+        initializeSelect2: function() {
+            $('select').select2();
+        },
+        initializeRegionlist: function() {
+            $('select.region').off('change').on('change', checkForKeyPair).select2();
+        },
+        emptyRegion: function() {
+            $('select.region').val('').select2().trigger('change');
+        },
+        emptyKeyPairs: function() {
+            $('select.keyvalue').html('<option value="">Choose Any Key Pair</option>').select2();
+        },
+        triggerRegionChange: function() {},
+        providerChanged: function(pv) {
+            // alert(pv);
+            if (pv == 'AZURE') {
+                $('.foropenstack').hide();
+                $('.forhppubliccloud').hide();
+                $('.foraws').hide();
+                $('.addNewRegion').hide();
+                $('.forvmware').hide();
+                $('.forazure').show();
+                $('#myForm54').attr('action', $('#myForm54').attr('action').replace(/aws/g, 'azure'));
+                $('#myForm54').attr('action', $('#myForm54').attr('action').replace(/vmware/g, 'azure'));
+                $('#myForm54').attr('action', $('#myForm54').attr('action').replace(/openstack/g, 'azure'));
+                $('#myForm54').attr('action', $('#myForm54').attr('action').replace(/hppubliccloud/g, 'azure'));
+            } else if (pv == 'HPPUBLICCLOUD') {
+                $('.foropenstack').show();
+                $('.forhppubliccloud').show();
+                $('.foraws').hide();
+                $('.addNewRegion').hide();
+                $('.forvmware').hide();
+                $('.forazure').hide();
+                $('#myForm54').attr('action', $('#myForm54').attr('action').replace(/aws/g, 'hppubliccloud'));
+                $('#myForm54').attr('action', $('#myForm54').attr('action').replace(/vmware/g, 'hppubliccloud'));
+                $('#myForm54').attr('action', $('#myForm54').attr('action').replace(/openstack/g, 'hppubliccloud'));
+                $('#myForm54').attr('action', $('#myForm54').attr('action').replace(/azure/g, 'hppubliccloud'));
+            } else if (pv == 'OPENSTACK') {
+                $('.foropenstack').show();
+                $('.forhppubliccloud').hide();
+                $('.foraws').hide();
+                $('.addNewRegion').hide();
+                $('.forvmware').hide();
+                $('.forazure').hide();
+                $('#myForm54').attr('action', $('#myForm54').attr('action').replace(/aws/g, 'openstack'));
+                $('#myForm54').attr('action', $('#myForm54').attr('action').replace(/vmware/g, 'openstack'));
+                $('#myForm54').attr('action', $('#myForm54').attr('action').replace(/hppubliccloud/g, 'openstack'));
+                $('#myForm54').attr('action', $('#myForm54').attr('action').replace(/azure/g, 'openstack'));
+            } else if (pv == 'VMWARE') {
+                $('.foropenstack').hide();
+                $('.forhppubliccloud').hide();
+                $('.foraws').hide();
+                $('.forvmware').show();
+                $('.addNewRegion').hide();
+                $('.forazure').hide();
+                $('#myForm54').attr('action', $('#myForm54').attr('action').replace(/aws/g, 'vmware'));
+                $('#myForm54').attr('action', $('#myForm54').attr('action').replace(/openstack/g, 'vmware'));
+                $('#myForm54').attr('action', $('#myForm54').attr('action').replace(/hppubliccloud/g, 'vmware'));
+                $('#myForm54').attr('action', $('#myForm54').attr('action').replace(/azure/g, 'vmware'));
             } else {
-                UtilityMethods.emptyRegion();
-                UtilityMethods.emptyKeyPairs();
+                $('.foropenstack').hide();
+                $('.forhppubliccloud').hide();
+                $('.foraws').show();
+                $('.addNewRegion').show();
+                $('.forvmware').hide();
+                $('.forazure').hide();
+                $('#myForm54').attr('action', $('#myForm54').attr('action').replace(/openstack/g, 'aws'));
+                $('#myForm54').attr('action', $('#myForm54').attr('action').replace(/vmware/g, 'aws'));
+                $('#myForm54').attr('action', $('#myForm54').attr('action').replace(/hppubliccloud/g, 'aws'));
+                $('#myForm54').attr('action', $('#myForm54').attr('action').replace(/azure/g, 'aws'));
             }
         }
+    };
+
+    function populateurls($host) {
+
+        if ($('#openstackendpointec2').val() == '')
+            $('#openstackendpointec2').val('http://' + $host.val());
+        if ($('#openstackendpointcompute').val() == '')
+            $('#openstackendpointcompute').val('http://' + $host.val());
+        if ($('#openstackendpointidentity').val() == '')
+            $('#openstackendpointidentity').val('http://' + $host.val());
+        if ($('#openstackendpointimage').val() == '')
+            $('#openstackendpointimage').val('http://' + $host.val());
+        if ($('#openstackendpointnetwork').val() == '')
+            $('#openstackendpointnetwork').val('http://' + $host.val());
+    }
+
+    function bindChange_importPemFile() {
+        $('input[type="file"]').off('change').on('change', function() {
+            $(this).next().val(this.files[0].name);
+            $(this).next().next().val($(this).val());
+        });
+    }
+
+    function isUserTypeSuperAdmin() {
+        $.get('/d4dMasters/loggedInUser', function(data) {
+            if (!data.isSuperAdmin) {
+                $('#orgId').attr('disabled', 'disabled').select2();
+            }
+        });
+    }
+
+    function inLineReady() {
+        $("input[type='text']").on("click", function() {
+            $(this).select();
+            $("#msgOrgName").hide();
+        });
+        //enableUniqueCheckingForInputs(9);
+    }
+
+    inLineReady();
+
+    function appendLoader() {
+        removeLoader();
+        $("form[id*='myForm']").find("div.pull-right > input").attr('disabled', 'disabled').parent().prepend('<label id="masterssavespinner" class="" style="float:left;"><img  style="margin-left:5px;margin-right:25px;margin-top:8px;" src="img/select2-spinner.gif" /></label>');
+    }
+
+    function removeLoader() {
+        $('#masterssavespinner').remove();
+        $("form[id*='myForm']").find("div.pull-right > input").removeAttr('disabled');
+    }
 
 
-        function checkForKeyPair(e) {
-            function loadKeyPair(accessKey, secretKey, regionValue) {
-                appendLoader();
-                var data1 = new FormData();
-                data1.append('accessKey', accessKey);
-                data1.append('secretKey', secretKey);
-                data1.append('region', regionValue);
-                $.ajax({
-                    method: "POST",
-                    url: "/aws/providers/keypairs/list",
-                    data: data1,
-                    processData: false,
-                    contentType: false,
-                    error: function(XMLHttpRequest, textStatus, errorThrown) {
-                        $('.modal-dialog').find('.close').trigger('click');
-                        bootbox.alert(XMLHttpRequest.responseText);
-                        $region.parents('.addNewRegion').find('select.keyvalue').html('<option value=""> Select Keypair</option>').val("").select2();
-                        removeLoader();
-                    }
-                }).done(function(msg) {
-                    var str = '<option value="">Choose Any Key Pair</option>',
-                        val = msg['KeyPairs'],
-                        len = val.length;
-                    for (var i = 0; i < len; i++) {
-                        str = str + '<option value="' + val[i].KeyName + '">' + val[i].KeyName + '</option>';
-                    }
-                    $region.parents('.addNewRegion').find('select.keyvalue').html(str).val('').select2().each(function() {
-                        console.log($(this).attr('answer'));
-                        $(this).attr('answer') ? $(this).val($(this).attr('answer')).select2() : "";
-                    });
-                    $('#btnsubmit').removeAttr('disabled');
+
+    function KeyChangeHandler(e) {
+        var accessKey = $('#accessKey').val().trim(),
+            secretKey = $('#secretKey').val().trim();
+
+        if (accessKey && secretKey) {
+            $('select.region').trigger('change');
+        } else {
+            UtilityMethods.emptyRegion();
+            UtilityMethods.emptyKeyPairs();
+        }
+    }
+
+
+    function checkForKeyPair(e) {
+        function loadKeyPair(accessKey, secretKey, regionValue) {
+            appendLoader();
+            var data1 = new FormData();
+            data1.append('accessKey', accessKey);
+            data1.append('secretKey', secretKey);
+            data1.append('region', regionValue);
+            $.ajax({
+                method: "POST",
+                url: "/aws/providers/keypairs/list",
+                data: data1,
+                processData: false,
+                contentType: false,
+                error: function(XMLHttpRequest, textStatus, errorThrown) {
+                    $('.modal-dialog').find('.close').trigger('click');
+                    bootbox.alert(XMLHttpRequest.responseText);
+                    $region.parents('.addNewRegion').find('select.keyvalue').html('<option value=""> Select Keypair</option>').val("").select2();
                     removeLoader();
+                }
+            }).done(function(msg) {
+                var str = '<option value="">Choose Any Key Pair</option>',
+                    val = msg['KeyPairs'],
+                    len = val.length;
+                for (var i = 0; i < len; i++) {
+                    str = str + '<option value="' + val[i].KeyName + '">' + val[i].KeyName + '</option>';
+                }
+                $region.parents('.addNewRegion').find('select.keyvalue').html(str).val('').select2().each(function() {
+                    console.log($(this).attr('answer'));
+                    $(this).attr('answer') ? $(this).val($(this).attr('answer')).select2() : "";
                 });
-            }
-
-            var accessKey = $('#accessKey').val(),
-                secretKey = $('#secretKey').val(),
-                $region = $(this);
-            region = $region.val();
-            if (accessKey && secretKey && accessKey !== '' && secretKey !== '' && region && region !== '') {
-                loadKeyPair(accessKey, secretKey, region);
-            } else {
-                $('#btnsubmit').attr('disabled', 'disabled');
-            }
+                $('#btnsubmit').removeAttr('disabled');
+                removeLoader();
+            });
         }
 
-        function setValueshppubliccloud(data) {
+        var accessKey = $('#accessKey').val(),
+            secretKey = $('#secretKey').val(),
+            $region = $(this);
+        region = $region.val();
+        if (accessKey && secretKey && accessKey !== '' && secretKey !== '' && region && region !== '') {
+            loadKeyPair(accessKey, secretKey, region);
+        } else {
+            $('#btnsubmit').attr('disabled', 'disabled');
+        }
+    }
+
+    function setValueshppubliccloud(data) {
         //     var hppubliccloudusername = req.body.openstackusername;
         // var hppubliccloudpassword = req.body.openstackpassword;
         // var hppubliccloudhost = req.body.openstackhost;
@@ -455,392 +457,394 @@
 
         // };    
 
-            alert(JSON.stringify(data.providerType));
+        //alert(JSON.stringify(data.providerType));
 
-            $('#name').val(data.providerName);
-            $('#providertype').val(data.providerType.toUpperCase()).select2();
-            $('#providertype').trigger('change');
-            $('#openstackusername').val(data.username);
-            $('#openstackpassword').val(data.password);
-            $('#openstackhost').val(data.host);
-            $('#openstacktenantname').val(data.tenantname);
-            $('#openstackprojectname').val(data.projectname);
-            $('#openstacktenantid').val(data.tenantid);
-            
-            $('#orgId').val(data.orgId[0]).attr({
-                'answer': data.orgId[0]
-            }).select2();
+        $('#name').val(data.providerName);
+        $('#providertype').val(data.providerType.toUpperCase()).select2();
+        $('#providertype').trigger('change');
+        $('#openstackusername').val(data.username);
+        $('#openstackpassword').val(data.password);
+        $('#openstackhost').val(data.host);
+        $('#openstacktenantname').val(data.tenantname);
+        $('#openstackprojectname').val(data.projectname);
+        $('#openstacktenantid').val(data.tenantid);
 
-            $('#openstackendpointec2').val(data.serviceendpoints.ec2);
+        $('#orgId').val(data.orgId[0]).attr({
+            'answer': data.orgId[0]
+        }).select2();
 
-            $('#openstackendpointcompute').val(data.serviceendpoints.compute);
+        $('#openstackendpointec2').val(data.serviceendpoints.ec2);
 
-            $('#openstackendpointidentity').val(data.serviceendpoints.identity);
+        $('#openstackendpointcompute').val(data.serviceendpoints.compute);
 
-            $('#openstackendpointimage').val(data.serviceendpoints.image);
+        $('#openstackendpointidentity').val(data.serviceendpoints.identity);
 
-            $('#openstackendpointnetwork').val(data.serviceendpoints.network);
+        $('#openstackendpointimage').val(data.serviceendpoints.image);
 
-            $('#hppubliccloudkeyname').val(data.keyname);
-            $('#hppubliccloudregion').val(data.region).select2();
-        
-        }
+        $('#openstackendpointnetwork').val(data.serviceendpoints.network);
 
-        function setValuesAzure(data) {
-            $('#name').val(data.providerName);
-            $('#azureSubscriptionId').val(data.subscriptionId);
-            $('#azureStorageAccount').val(data.storageAccount);
-            $('#providertype').val(data.providerType.toUpperCase()).select2();
-            $('#providertype').trigger('change');
-            $('#orgId').val(data.orgId[0]).attr({
-                'answer': data.orgId[0]
-            }).select2();
+        $('#hppubliccloudkeyname').val(data.keyname);
+        $('#hppubliccloudregion').val(data.region).select2();
 
-        }
+    }
 
-        function setValuesopenstack(data) {
-            $('#name').val(data.providerName);
-            $('#openstackusername').val(data.username);
-            $('#openstackpassword').val(data.password);
-            $('#openstackhost').val(data.host);
-            $('#openstacktenantname').val(data.tenantname);
-            $('#openstackprojectname').val(data.projectname);
-            $('#openstacktenantid').val(data.tenantid);
-            $('#providertype').val(data.providerType).select2();
-            $('#orgId').val(data.orgId[0]).attr({
-                'answer': data.orgId[0]
-            }).select2();
+    function setValuesAzure(data) {
+        $('#name').val(data.providerName);
+        $('#azureSubscriptionId').val(data.subscriptionId);
+        $('#azureStorageAccount').val(data.storageAccount);
+        $('#providertype').val(data.providerType.toUpperCase()).select2();
+        $('#providertype').trigger('change');
+        $('#orgId').val(data.orgId[0]).attr({
+            'answer': data.orgId[0]
+        }).select2();
 
-            $('#openstackendpointec2').val(data.serviceendpoints.ec2);
+    }
 
-            $('#openstackendpointcompute').val(data.serviceendpoints.compute);
+    function setValuesopenstack(data) {
+        $('#name').val(data.providerName);
+        $('#openstackusername').val(data.username);
+        $('#openstackpassword').val(data.password);
+        $('#openstackhost').val(data.host);
+        $('#openstacktenantname').val(data.tenantname);
+        $('#openstackprojectname').val(data.projectname);
+        $('#openstacktenantid').val(data.tenantid);
+        $('#providertype').val(data.providerType).select2();
+        $('#orgId').val(data.orgId[0]).attr({
+            'answer': data.orgId[0]
+        }).select2();
 
-            $('#openstackendpointidentity').val(data.serviceendpoints.identity);
+        $('#openstackendpointec2').val(data.serviceendpoints.ec2);
 
-            $('#openstackendpointimage').val(data.serviceendpoints.image);
+        $('#openstackendpointcompute').val(data.serviceendpoints.compute);
 
-            $('#openstackendpointnetwork').val(data.serviceendpoints.network);
+        $('#openstackendpointidentity').val(data.serviceendpoints.identity);
 
+        $('#openstackendpointimage').val(data.serviceendpoints.image);
 
-            $('#providertype').trigger('change');
-
-        }
+        $('#openstackendpointnetwork').val(data.serviceendpoints.network);
 
 
-        function setValues(data) {
-            $('#name').val(data.providerName);
-            $('#accessKey').val(data.accessKey);
-            $('#secretKey').val(data.secretKey);
-            $('#providertype').val(data.providerType).select2();
-            $('#orgId').val(data.orgId[0]).attr({
-                'answer': data.orgId[0]
-            }).select2();
-            var createTemplateInstance = new createTemplate($('#appender'));
-            for (var i = 0; i < data.keyPairs.length; i++) {
-                if (i == 0) {
-                    $('#appender').append(createTemplateInstance.getFinalTemplate(true));
-                } else {
-                    $('#appender').append(createTemplateInstance.getFinalTemplate(false));
-                }
+        $('#providertype').trigger('change');
 
-            }
+    }
 
-            var parentList = $('.addNewRegion');
-            $('select.region').on('change', checkForKeyPair);
-            for (var i = 0; i < data.keyPairs.length; i++) {
-                parentList.eq(i).find('select.region').attr('answer', data.keyPairs[i].region).attr('disabled', 'disabled').select2();
-
-                parentList.eq(i).find('select.keyvalue').val(data.keyPairs[i].keyPairName).attr({
-                    'disabled': 'disabled',
-                    'keyID': data.keyPairs[i]._id
-                }).attr('answer', data.keyPairs[i].keyPairName).select2();
-                parentList.eq(i).find('.filename').attr('disabled', 'disabled').val(data.keyPairs[i].fileName).removeAttr('cat-validation');
-                parentList.eq(i).find('input.file').attr('disabled', 'disabled').removeAttr('cat-validation');
-            }
-            getRegionList();
-        }
-
-
-
-        $(document).ready(function() {
-            $("#name").focus();
-            //isUserTypeSuperAdmin();
-            $('#accessKey').blur(KeyChangeHandler);
-            $('#secretKey').blur(KeyChangeHandler);
-            $('select').select2().trigger('change');
-            getOrganizationList();
-
-            $('#myForm54').ajaxForm({
-                beforeSubmit: function(arr, $form, options) {
-                    if ($('#providertype').val() == 'OPENSTACK' || $('#providertype').val() == 'HPPUBLICCLOUD') {
-                        //alert('in');
-                        if (isFormValidOpenStack(null, 'cat-validation-openstack')) {
-                            appendLoader();
-                            return true;
-                        } else
-                            return false;
-
-
-                    } else if ($('#providertype').val() == 'VMWARE') {
-                        if (isFormValidOpenStack(null, 'cat-validation-vmware')) {
-                            appendLoader();
-                            return true;
-                        } else
-                            return false;
-                    } else if ($('#providertype').val() == 'AZURE') {
-                        if (isFormValidAzure(null, 'cat-validation-azure')) {
-                            appendLoader();
-                            return true;
-                        } else
-                            return false;
-                    } else {
-                        if (isFormValid()) {
-                            appendLoader();
-                            return true;
-                        } else {
-                            return false;
-                        }
-                    }
-                },
-                dataType: 'json',
-                success: function(data, success) {
-                    if (data != 500) {
-                        if ($('#btncancel').length) {
-                            $('#btncancel').click();
-                        }
-                    } else {
-                        alert(data.toString());
-                    }
-                    removeLoader();
-                },
-                error: function(jqxhr) {
-                    removeLoader();
-                    console.log(jqxhr);
-                    // debugger;
-                    if (jqxhr.status == 409) {
-                        errormessageforInput('name', jqxhr.responseText);
-                    } else {
-                        bootbox.alert(jqxhr.status + " :: " + jqxhr.responseText);
-                    }
-                },
-                failure: function(data) {
-                    removeLoader();
-                    console.log(jqxhr);
-                    // debugger;
-                    if (jqxhr.status == 409) {
-                        errormessageforInput('name', jqxhr.responseText);
-                    } else {
-                        bootbox.alert(jqxhr.status + " :: " + jqxhr.responseText);
-                    }
-                }
-            }); //end ajaxform
-
-            if (!UtilityMethods.getIdFromURL()) {
-                var createTemplateInstance = new createTemplate($('#appender'));
+    function setValues(data) {
+        $('#name').val(data.providerName);
+        $('#accessKey').val(data.accessKey);
+        $('#secretKey').val(data.secretKey);
+        $('#providertype').val(data.providerType).select2();
+        $('#orgId').val(data.orgId[0]).attr({
+            'answer': data.orgId[0]
+        }).select2();
+        var createTemplateInstance = new createTemplate($('#appender'));
+        for (var i = 0; i < data.keyPairs.length; i++) {
+            if (i == 0) {
                 $('#appender').append(createTemplateInstance.getFinalTemplate(true));
-                bindChange_importPemFile();
-                UtilityMethods.initializeSelect2();
-                $('#myForm54').attr('action', '/aws/providers');
-                getRegionList();
-                $('select.region').change(checkForKeyPair);
             } else {
-                $('#myForm54').attr('action', '/aws/providers/' + UtilityMethods.getIdFromURL() + '/update');
-                $.ajax({
-                    method: "GET",
-                    url: "/aws/providers/" + UtilityMethods.getIdFromURL(),
-                    success: function(data, success) {
-                        data = typeof data == "string" ? JSON.parse(data) : data;
-                        d4ddata = data;
-                        setValues(data);
-                        //checkForKeyPair();
-                    },
-                    error: function(jqxhr) {
-                        //when not found try openstack
-                        getopenstackprovider();
-                    },
-                    failure: function(data) {
-                        alert('fail');
-                        bootbox.alert(data);
+                $('#appender').append(createTemplateInstance.getFinalTemplate(false));
+            }
+
+        }
+
+        var parentList = $('.addNewRegion');
+        $('select.region').on('change', checkForKeyPair);
+        for (var i = 0; i < data.keyPairs.length; i++) {
+            parentList.eq(i).find('select.region').attr('answer', data.keyPairs[i].region).attr('disabled', 'disabled').select2();
+
+            parentList.eq(i).find('select.keyvalue').val(data.keyPairs[i].keyPairName).attr({
+                'disabled': 'disabled',
+                'keyID': data.keyPairs[i]._id
+            }).attr('answer', data.keyPairs[i].keyPairName).select2();
+            parentList.eq(i).find('.filename').attr('disabled', 'disabled').val(data.keyPairs[i].fileName).removeAttr('cat-validation');
+            parentList.eq(i).find('input.file').attr('disabled', 'disabled').removeAttr('cat-validation');
+        }
+        getRegionList();
+    }
+
+
+
+    $(document).ready(function() {
+        $("#name").focus();
+        //isUserTypeSuperAdmin();
+        $('#accessKey').blur(KeyChangeHandler);
+        $('#secretKey').blur(KeyChangeHandler);
+        $('select').select2();
+        getOrganizationList();
+        $('#myForm54').ajaxForm({
+            beforeSubmit: function(arr, $form, options) {
+                // The array of form data takes the following form: 
+                // [ { name: 'username', value: 'jresig' }, { name: 'password', value: 'secret' } ] 
+
+                // return false to cancel submit       
+                if ($('#providertype').val() == 'OPENSTACK' || $('#providertype').val() == 'HPPUBLICCLOUD') {
+                    //alert('in');
+                    if (isFormValidOpenStack(null, 'cat-validation-openstack')) {
+                        appendLoader();
+                        return true;
+                    } else
+                        return false;
+
+
+                } else if ($('#providertype').val() == 'VMWARE') {
+                    if (isFormValidOpenStack(null, 'cat-validation-vmware')) {
+                        appendLoader();
+                        return true;
+                    } else
+                        return false;
+                } else if ($('#providertype').val() == 'AZURE') {
+                    if (isFormValidAzure(null, 'cat-validation-azure')) {
+                        appendLoader();
+                        return true;
+                    } else
+                        return false;
+                } else {
+                    if (isFormValid()) {
+                        appendLoader();
+                        return true;
+                    } else {
+                        return false;
                     }
-                });
-                var getopenstackprovider = function() {
-                    $.ajax({
-                        method: "GET",
-                        url: "/openstack/providers/" + UtilityMethods.getIdFromURL(),
-                        success: function(data, success) {
-                            data = typeof data == "string" ? JSON.parse(data) : data;
-                            d4ddata = data;
-                            setValuesopenstack(data);
-
-                            //checkForKeyPair();
-                        },
-                        error: function(jqxhr) {
-                            //alert('err 1');
-                            getValueshppubliccloud();
-                            removeLoader();
-                            bootbox.alert(jqxhr.status);
-                        },
-                        failure: function(data) {
-                            alert('fail 1');
-                            bootbox.alert(data);
-                        }
-                    }); //else getopenstackprovider
-
                 }
-                var getValueshppubliccloud = function() {
-
-                    $.ajax({
-                        method: "GET",
-                        url: "/hppubliccloud/providers/" + UtilityMethods.getIdFromURL(),
-                        success: function(data, success) {
-                            data = typeof data == "string" ? JSON.parse(data) : data;
-                            d4ddata = data;
-                            setValueshppubliccloud(data);
-
-                            //checkForKeyPair();
-                        },
-                        error: function(jqxhr) {
-                            //alert('err 1');
-                            getValuesAzure();
-                            removeLoader();
-                            bootbox.alert(jqxhr.status);
-                        },
-                        failure: function(data) {
-                            alert('fail 1');
-                            bootbox.alert(data);
-                        }
-                    }); //else getopenstackprovider
-
+            },
+            dataType: 'json',
+            success: function(data, success) {
+                if (data != 500) {
+                    if ($('#btncancel').length) {
+                        $('#btncancel').click();
+                    }
+                } else {
+                    alert(data.toString());
                 }
-               
-               var getValuesAzure = function() {
-
-                    $.ajax({
-                        method: "GET",
-                        url: "/azure/providers/" + UtilityMethods.getIdFromURL(),
-                        success: function(data, success) {
-                            data = typeof data == "string" ? JSON.parse(data) : data;
-                            d4ddata = data;
-                            setValuesAzure(data);
-
-                            //checkForKeyPair();
-                        },
-                        error: function(jqxhr) {
-                            //alert('err 1');
-                            
-                            removeLoader();
-                            bootbox.alert(jqxhr.status);
-                        },
-                        failure: function(data) {
-                            alert('fail 1');
-                            bootbox.alert(data);
-                        }
-                    });
-
+                removeLoader();
+            },
+            error: function(jqxhr) {
+                removeLoader();
+                console.log(jqxhr);
+                // debugger;
+                if (jqxhr.status == 409) {
+                    errormessageforInput('name', jqxhr.responseText);
+                } else {
+                    bootbox.alert(jqxhr.status + " :: " + jqxhr.responseText);
                 }
-                
+            },
+            failure: function(data) {
+                removeLoader();
+                console.log(jqxhr);
+                // debugger;
+                if (jqxhr.status == 409) {
+                    errormessageforInput('name', jqxhr.responseText);
+                } else {
+                    bootbox.alert(jqxhr.status + " :: " + jqxhr.responseText);
+                }
             }
         });
 
-        function getOrganizationList() {
-            $.get('/d4dMasters/readmasterjsonnew/1', function(data) {
-                var str = ' <option value="">Select Organization</option>',
-                    len = data.length;
-                for (var i = 0; i < data.length; i++) {
-                    str = str + '<option value="' + data[i]._id + '">' + data[i].orgname + '</option>';
+        if (!UtilityMethods.getIdFromURL()) {
+            var createTemplateInstance = new createTemplate($('#appender'));
+            $('#appender').append(createTemplateInstance.getFinalTemplate(true));
+            bindChange_importPemFile();
+            UtilityMethods.initializeSelect2();
+            $('#myForm54').attr('action', '/aws/providers');
+            getRegionList();
+            $('select.region').change(checkForKeyPair);
+        } else {
+            $('#myForm54').attr('action', '/aws/providers/' + UtilityMethods.getIdFromURL() + '/update');
+            $.ajax({
+                method: "GET",
+                url: "/aws/providers/" + UtilityMethods.getIdFromURL(),
+                success: function(data, success) {
+                    data = typeof data == "string" ? JSON.parse(data) : data;
+                    d4ddata = data;
+                    setValues(data);
+                    //checkForKeyPair();
+                },
+                error: function(jqxhr) {
+                    removeLoader();
+                    getopenstackprovider();
+                    bootbox.alert(jqxhr.status);
+                },
+                failure: function(data) {
+                    bootbox.alert(data);
                 }
-                $('#orgId').html(str);
-                if ($('#orgId').attr('answer')) {
-                    $('#orgId').val($('#orgId').attr('answer')).select2();
-                } else {
-                    $('#orgId').val("").select2();
-                }
-            })
-        }
+            });
+            var getopenstackprovider = function() {
+                $.ajax({
+                    method: "GET",
+                    url: "/openstack/providers/" + UtilityMethods.getIdFromURL(),
+                    success: function(data, success) {
+                        data = typeof data == "string" ? JSON.parse(data) : data;
+                        d4ddata = data;
+                        setValuesopenstack(data);
 
-        function getRegionList() {
-            $.get('/vmimages/regions/list', function(data) {
-                var str = '<option value="">Select Region</option>';
-                for (var i = 0; i < data.length; i++) {
-                    str = str + '<option value="' + data[i].region + '">' + data[i].region_name + ' | ' + data[i].region + '</option>'
-                }
-                UtilityMethods.initializeRegionlist();
-
-                $('select.region').each(function() {
-                    if (!$(this).val()) {
-                        $(this).html(str);
+                        //checkForKeyPair();
+                    },
+                    error: function(jqxhr) {
+                        //alert('err 1');
+                        getValueshppubliccloud();
+                        removeLoader();
+                        bootbox.alert(jqxhr.status);
+                    },
+                    failure: function(data) {
+                        alert('fail 1');
+                        bootbox.alert(data);
                     }
-                }).each(function() {
-                    $(this).attr('answer') ? $(this).val($(this).attr('answer')).select2() : "";
-                    if ($(this).attr('disabled')) {
-                        $(this).trigger('change');
+                }); //else getopenstackprovider
+
+            }
+            var getValueshppubliccloud = function() {
+
+                $.ajax({
+                    method: "GET",
+                    url: "/hppubliccloud/providers/" + UtilityMethods.getIdFromURL(),
+                    success: function(data, success) {
+                        data = typeof data == "string" ? JSON.parse(data) : data;
+                        d4ddata = data;
+                        setValueshppubliccloud(data);
+
+                        //checkForKeyPair();
+                    },
+                    error: function(jqxhr) {
+                        //alert('err 1');
+                        getValuesAzure();
+                        removeLoader();
+                        bootbox.alert(jqxhr.status);
+                    },
+                    failure: function(data) {
+                        alert('fail 1');
+                        bootbox.alert(data);
+                    }
+                }); //else getopenstackprovider
+
+            }
+
+            var getValuesAzure = function() {
+
+                $.ajax({
+                    method: "GET",
+                    url: "/azure/providers/" + UtilityMethods.getIdFromURL(),
+                    success: function(data, success) {
+                        data = typeof data == "string" ? JSON.parse(data) : data;
+                        d4ddata = data;
+                        setValuesAzure(data);
+
+                        //checkForKeyPair();
+                    },
+                    error: function(jqxhr) {
+                        //alert('err 1');
+
+                        removeLoader();
+                        bootbox.alert(jqxhr.status);
+                    },
+                    failure: function(data) {
+                        alert('fail 1');
+                        bootbox.alert(data);
                     }
                 });
 
-                //$('select.region').trigger('change'); 
-            });
+            }
+
         }
+    });
 
-        /* function saveProviderData(){
-           appendLoader();
+    function getOrganizationList() {
+        $.get('/d4dMasters/readmasterjsonnew/1', function(data) {
+            var str = ' <option value="">Select Organization</option>',
+                len = data.length;
+            for (var i = 0; i < data.length; i++) {
+                str = str + '<option value="' + data[i]._id + '">' + data[i].orgname + '</option>';
+            }
+            $('#orgId').html(str);
+            if ($('#orgId').attr('answer')) {
+                $('#orgId').val($('#orgId').attr('answer')).select2();
+            } else {
+                $('#orgId').val("").select2();
+            }
+        })
+    }
+
+    function getRegionList() {
+        $.get('/vmimages/regions/list', function(data) {
+            var str = '<option value="">Select Region</option>';
+            for (var i = 0; i < data.length; i++) {
+                str = str + '<option value="' + data[i].region + '">' + data[i].region_name + ' | ' + data[i].region + '</option>'
+            }
+            UtilityMethods.initializeRegionlist();
+
+            $('select.region').each(function() {
+                if (!$(this).val()) {
+                    $(this).html(str);
+                }
+            }).each(function() {
+                $(this).attr('answer') ? $(this).val($(this).attr('answer')).select2() : "";
+                if ($(this).attr('disabled')) {
+                    $(this).trigger('change');
+                }
+            });
+
+            //$('select.region').trigger('change'); 
+        });
+    }
+
+    /* function saveProviderData(){
+       appendLoader();
 
 
-           var getRegionListForFormSubmission=function(){
-             var list=[];
-             $('select.region').each(function(){
-               var obj={},keyPair=[];
-               obj.region=$(this).val();
-               $(this).parents('.addNewRegion').find('.pemrow').each(function(){
-                 obj["name"]=$(this).find('select.keyvalue').val();
-                 obj["fileName"] =$(this).find('input.filename').val();
-                 //  "file":$(this).find('input.file')[0].files[0]
-               });
-               list.push(obj);
-             });        
-             return list;
-           },appendINObject=function(soruceObj,DestObj){
-             for(key in soruceObj){
-               if(soruceObj.hasOwnProperty(key))
-                 DestObj.append(key,soruceObj[key]);
-             }
-           },
-           reqBody={},
-           formdata1;
+       var getRegionListForFormSubmission=function(){
+         var list=[];
+         $('select.region').each(function(){
+           var obj={},keyPair=[];
+           obj.region=$(this).val();
+           $(this).parents('.addNewRegion').find('.pemrow').each(function(){
+             obj["name"]=$(this).find('select.keyvalue').val();
+             obj["fileName"] =$(this).find('input.filename').val();
+             //  "file":$(this).find('input.file')[0].files[0]
+           });
+           list.push(obj);
+         });        
+         return list;
+       },appendINObject=function(soruceObj,DestObj){
+         for(key in soruceObj){
+           if(soruceObj.hasOwnProperty(key))
+             DestObj.append(key,soruceObj[key]);
+         }
+       },
+       reqBody={},
+       formdata1;
 
-           reqBody.name=$('#name').val().trim();
-           reqBody.accessKey=$('#accessKey').val().trim();
-           reqBody.secretKey=$('#secretKey').val().trim();
-           reqBody.providerType=$('#providertype').val().trim();
-           reqBody.keyPairs=getRegionListForFormSubmission();
+       reqBody.name=$('#name').val().trim();
+       reqBody.accessKey=$('#accessKey').val().trim();
+       reqBody.secretKey=$('#secretKey').val().trim();
+       reqBody.providerType=$('#providertype').val().trim();
+       reqBody.keyPairs=getRegionListForFormSubmission();
 
-           
-           formdata1=new FormData();
-          // formdata.append('regions',reqBody.regions.keyPairs[0].file,reqBody.regions.keyPairs[0].file_name);
-          //appendINObject(reqBody,FormData1);
-          formdata1.append('name',reqBody.name);
-          formdata1.append('accessKey',reqBody.accessKey);
-          formdata1.append('secretKey',reqBody.secretKey);
-          formdata1.append('providerType',reqBody.providerType);
-          formdata1.append('keyPairs',reqBody.keyPairs);
-          formdata1.append("fileName",$('input[type="file"]')[0].files[0]);
-          var serialize=$('form').serialize();
-          console.log(serialize)
-           //console.log(reqBody);
+       
+       formdata1=new FormData();
+      // formdata.append('regions',reqBody.regions.keyPairs[0].file,reqBody.regions.keyPairs[0].file_name);
+      //appendINObject(reqBody,FormData1);
+      formdata1.append('name',reqBody.name);
+      formdata1.append('accessKey',reqBody.accessKey);
+      formdata1.append('secretKey',reqBody.secretKey);
+      formdata1.append('providerType',reqBody.providerType);
+      formdata1.append('keyPairs',reqBody.keyPairs);
+      formdata1.append("fileName",$('input[type="file"]')[0].files[0]);
+      var serialize=$('form').serialize();
+      console.log(serialize)
+       //console.log(reqBody);
 
-           if(!UtilityMethods.getIdFromURL()){
-             var url="/aws/providers"
-           }else{
-             var url="/aws/providers/"+UtilityMethods.getIdFromURL()+"/update"
-           }
+       if(!UtilityMethods.getIdFromURL()){
+         var url="/aws/providers"
+       }else{
+         var url="/aws/providers/"+UtilityMethods.getIdFromURL()+"/update"
+       }
 
-           $.ajax({
-            method: "POST",
-            url: url,
-            data: serialize,  
-          /*  mimeType:"multipart/form-data",
-           contentType: false,
-           cache: false,*/
-        /* processData:false,
+       $.ajax({
+        method: "POST",
+        url: url,
+        data: serialize,  
+      /*  mimeType:"multipart/form-data",
+       contentType: false,
+       cache: false,*/
+    /* processData:false,
     success: function(data, success) {
      // alert(1);
               //alert('Successfully Saved ' + data);
@@ -867,115 +871,115 @@
   }
 */
 
-        function createTemplate(parentToAttach) {
-            var that = this,
-                parentEl = $(parentToAttach).addClass('customTemplateParent');
-            var getAddButton = function(classs) {
-                    var title = ''
-                    if (classs == 'addRegion') {
-                        titile = 'title="Add New Region" data-placement="top"';
-                    } else if (classs == 'addRow') {
-                        titile = 'title="Add New Key Pair" data-placement="top"';
-                    }
-                    return '<img src="img/add.png" class="addimage ' + (classs ? classs : '') + '" ' + titile + ' rel="tooltip" data-placement="top" />'
-                },
-
-                getRemoveButton = function(classs) {
-                    var title = ''
-                    if (classs == 'removeRegion') {
-                        titile = 'title="Remove this Region" data-placement="top"';
-                    } else if (classs == 'removeRow') {
-                        titile = 'title="Remove this Key Pair" data-placement="top"';
-                    }
-                    return '<img src="img/remove.png" class="removeimage ' + (classs ? classs : '') + '" ' + titile + ' rel="tooltip"  />'
-                },
-                getKeyValueList = function() {
-                    return '<div class="col-lg-6 col-md-6" style="width:47%;">' + '<label for="name">Select Key Pair:<span style="color:Red;" class="control-label">&nbsp;*</span></label>' + '<select id="' + UtilityMethods.getRandomNumber() + '" name="keyPairName" unique="true" uniqueconditionedby="orgname"  class="chooseOrganization width-100 keyvalue" ' + 'style="vertical-align:central" cat-validation="required" skiprowid="yes" cdata="catalyst">' + '  <option value="">Select Any Key Pair</option></select>' + '</div>';
-                };
-            var getRegion = function() {
-                return '<div class="row">' + '<div class="col-lg-6 col-md-6" style="width:47%">' + '<label for="name">Region:<span style="color:Red;" class="control-label">&nbsp;*</span></label>' + '<select id="' + UtilityMethods.getRandomNumber() + '" name="region" unique="true" uniqueconditionedby="orgname"  class="region chooseOrganization width-100" style="' + 'vertical-align:central" cat-validation="required" skiprowid="yes" cdata="catalyst">' + '<option value="">Select Region</option>' + '<option value="us-west-2">us-west-2</option>' + '</select>' + '</div></div>';
-            };
-            var getPemFileRow = function() {
-                return '<div class="col-lg-6 col-md-6 authPemFile" style="display: block;"><div class="smart-forms" style="  margin-left: 7%;"><label for="">Upload .pem file for Provider<span style="color:Red;" class="control-label">&nbsp;*</span></label>' + '<label for="templatesicon" name="field" class="file">' + '<span class="button btn-primary btn-importbyIP" style="height:26px;line-height:22px;  padding: 1px ' + '14px;position: absolute;right:4px;margin-top: 4.5%;">Browse</span>' + '<input id="' + UtilityMethods.getRandomNumber() + '" type="file" class="gui-file file" cdata="catalyst" cat-validation="required" name="fileObject">' + '<input type="text" readonly="" class="gui-input filename" name="fileName">' + '<input type="text" class="folderpath" style="visibility:hidden;" cdata="catalyst" />' + '</label></div></div>';
-            };
-
-            this.getRow = function(isAdd, isRemove, notrequired) {
-                var str = '';
-                if (isAdd) {
-                    str = getAddButton('addRow');
-                } else if (isRemove) {
-                    str = getRemoveButton('removeRow');
-                } else if (notrequired) {
-                    str = '';
+    function createTemplate(parentToAttach) {
+        var that = this,
+            parentEl = $(parentToAttach).addClass('customTemplateParent');
+        var getAddButton = function(classs) {
+                var title = ''
+                if (classs == 'addRegion') {
+                    titile = 'title="Add New Region" data-placement="top"';
+                } else if (classs == 'addRow') {
+                    titile = 'title="Add New Key Pair" data-placement="top"';
                 }
-                return '<div class="row pemrow">' + getKeyValueList() + getPemFileRow() + str + '</div>';
-            };
+                return '<img src="img/add.png" class="addimage ' + (classs ? classs : '') + '" ' + titile + ' rel="tooltip" data-placement="top" />'
+            },
 
-            this.getFinalTemplate = function(isAddApplicable, noOfRow) {
-                noOfRow = noOfRow ? parseInt(noOfRow) : 1;
-                var str = '';
-                for (var i = 0; i < noOfRow; i++) {
-                    if (i == 0) {
-                        str = str + that.getRow(false, false, false);
-                    } else {
-                        str = str + that.getRow(false, false, false);
-                    }
-
+            getRemoveButton = function(classs) {
+                var title = ''
+                if (classs == 'removeRegion') {
+                    titile = 'title="Remove this Region" data-placement="top"';
+                } else if (classs == 'removeRow') {
+                    titile = 'title="Remove this Key Pair" data-placement="top"';
                 }
-                return '<div class="addNewRegion">' + (isAddApplicable ? getAddButton('addRegion') : getRemoveButton('removeRegion')) + getRegion() + str + '</div>'
+                return '<img src="img/remove.png" class="removeimage ' + (classs ? classs : '') + '" ' + titile + ' rel="tooltip"  />'
+            },
+            getKeyValueList = function() {
+                return '<div class="col-lg-6 col-md-6" style="width:47%;">' + '<label for="name">Select Key Pair:<span style="color:Red;" class="control-label">&nbsp;*</span></label>' + '<select id="' + UtilityMethods.getRandomNumber() + '" name="keyPairName" unique="true" uniqueconditionedby="orgname"  class="chooseOrganization width-100 keyvalue" ' + 'style="vertical-align:central" cat-validation="required" skiprowid="yes" cdata="catalyst">' + '  <option value="">Select Any Key Pair</option></select>' + '</div>';
             };
+        var getRegion = function() {
+            return '<div class="row">' + '<div class="col-lg-6 col-md-6" style="width:47%">' + '<label for="name">Region:<span style="color:Red;" class="control-label">&nbsp;*</span></label>' + '<select id="' + UtilityMethods.getRandomNumber() + '" name="region" unique="true" uniqueconditionedby="orgname"  class="region chooseOrganization width-100" style="' + 'vertical-align:central" cat-validation="required" skiprowid="yes" cdata="catalyst">' + '<option value="">Select Region</option>' + '<option value="us-west-2">us-west-2</option>' + '</select>' + '</div></div>';
+        };
+        var getPemFileRow = function() {
+            return '<div class="col-lg-6 col-md-6 authPemFile" style="display: block;"><div class="smart-forms" style="  margin-left: 7%;"><label for="">Upload .pem file for Provider<span style="color:Red;" class="control-label">&nbsp;*</span></label>' + '<label for="templatesicon" name="field" class="file">' + '<span class="button btn-primary btn-importbyIP" style="height:26px;line-height:22px;  padding: 1px ' + '14px;position: absolute;right:4px;margin-top: 4.5%;">Browse</span>' + '<input id="' + UtilityMethods.getRandomNumber() + '" type="file" class="gui-file file" cdata="catalyst" cat-validation="required" name="fileObject">' + '<input type="text" readonly="" class="gui-input filename" name="fileName">' + '<input type="text" class="folderpath" style="visibility:hidden;" cdata="catalyst" />' + '</label></div></div>';
+        };
 
-            $(parentEl).delegate('.addimage', 'click', function() {
-                if ($(this).hasClass('addRow')) {
-                    $(this).parent().parent().append(that.getRow(false, true)).find('select').select2();
-                } else if ($(this).hasClass('addRegion')) {
-                    $(this).parents('.customTemplateParent').append(that.getFinalTemplate()).find('select').select2();
-                    getRegionList();
-                }
-                UtilityMethods.initTooltip();
-                bindChange_importPemFile();
-            });
+        this.getRow = function(isAdd, isRemove, notrequired) {
+            var str = '';
+            if (isAdd) {
+                str = getAddButton('addRow');
+            } else if (isRemove) {
+                str = getRemoveButton('removeRow');
+            } else if (notrequired) {
+                str = '';
+            }
+            return '<div class="row pemrow">' + getKeyValueList() + getPemFileRow() + str + '</div>';
+        };
 
-            $(parentEl).delegate('.removeimage', 'click', function() {
-                var parent = $(this).parent();
-                if ($(this).hasClass('removeRow')) {
-
-                    parent.remove();
-
-                } else if ($(this).hasClass('removeRegion') && !parent.find('select.keyvalue').attr('keyID')) {
-
-                    parent.remove();
+        this.getFinalTemplate = function(isAddApplicable, noOfRow) {
+            noOfRow = noOfRow ? parseInt(noOfRow) : 1;
+            var str = '';
+            for (var i = 0; i < noOfRow; i++) {
+                if (i == 0) {
+                    str = str + that.getRow(false, false, false);
                 } else {
-                    bootbox.confirm('You are about to remove this KeyPair <strong>' + parent.find('select.keyvalue').val() + '</strong>', function(result) {
-                        if (result) {
-                            $.ajax({
-                                type: "delete",
-                                dataType: "text",
-                                async: false,
-                                url: "/aws/providers/keypairs/" + parent.find('select.keyvalue').attr('keyID'),
-                                success: function(data) {
-                                    // $('#refreshpage').click();
-                                    if (data != '401') {
-                                        parent.remove();
-                                    } else {
-                                        bootbox.alert('Insufficient permission to perform this operation.');
-                                    }
-                                },
-                                failure: function(data) {
-                                    // debugger;
-                                    bootbox.alert(data.responseText);
-                                },
-                                error: function(data) {
-                                    bootbox.alert(data.responseText);
-                                }
-                            });
-                        }
-                    });
-
+                    str = str + that.getRow(false, false, false);
                 }
 
-                UtilityMethods.initTooltip();
-            });
+            }
+            return '<div class="addNewRegion">' + (isAddApplicable ? getAddButton('addRegion') : getRemoveButton('removeRegion')) + getRegion() + str + '</div>'
+        };
 
-        }
-        </script>
+        $(parentEl).delegate('.addimage', 'click', function() {
+            if ($(this).hasClass('addRow')) {
+                $(this).parent().parent().append(that.getRow(false, true)).find('select').select2();
+            } else if ($(this).hasClass('addRegion')) {
+                $(this).parents('.customTemplateParent').append(that.getFinalTemplate()).find('select').select2();
+                getRegionList();
+            }
+            UtilityMethods.initTooltip();
+            bindChange_importPemFile();
+        });
+
+        $(parentEl).delegate('.removeimage', 'click', function() {
+            var parent = $(this).parent();
+            if ($(this).hasClass('removeRow')) {
+
+                parent.remove();
+
+            } else if ($(this).hasClass('removeRegion') && !parent.find('select.keyvalue').attr('keyID')) {
+
+                parent.remove();
+            } else {
+                bootbox.confirm('You are about to remove this KeyPair <strong>' + parent.find('select.keyvalue').val() + '</strong>', function(result) {
+                    if (result) {
+                        $.ajax({
+                            type: "delete",
+                            dataType: "text",
+                            async: false,
+                            url: "/aws/providers/keypairs/" + parent.find('select.keyvalue').attr('keyID'),
+                            success: function(data) {
+                                // $('#refreshpage').click();
+                                if (data != '401') {
+                                    parent.remove();
+                                } else {
+                                    bootbox.alert('Insufficient permission to perform this operation.');
+                                }
+                            },
+                            failure: function(data) {
+                                // debugger;
+                                bootbox.alert(data.responseText);
+                            },
+                            error: function(data) {
+                                bootbox.alert(data.responseText);
+                            }
+                        });
+                    }
+                });
+
+            }
+
+            UtilityMethods.initTooltip();
+        });
+
+    }
+    </script>

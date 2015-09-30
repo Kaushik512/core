@@ -118,7 +118,7 @@ var Jenkins = function(options) {
         jenkins.last_build_info(jobName, function(err, data) {
             if (err) {
                 logger.error(err);
-                callback(err, null);
+                callback(null, {});
                 return;
             }
             callback(null, data);

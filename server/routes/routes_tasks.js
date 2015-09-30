@@ -1,13 +1,11 @@
 /* Copyright (C) Relevance Lab Private Limited- All Rights Reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
- * Written by Gobinda Das <gobinda.das@relevancelab.com>, 
+ * Written by Gobinda Das <gobinda.das@relevancelab.com>,
  * Aug 2015
  */
 
 var configmgmtDao = require('../model/d4dmasters/configmgmt.js');
-var Chef = require('../lib/chef');
-
 
 var Jenkins = require('../lib/jenkins');
 
@@ -31,6 +29,16 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 return;
             }
             res.send(tHistories);
+        });
+    });
+
+    app.get('/tasks/list/all', function(req, res) {
+        Tasks.listTasks(function(err, tasks) {
+            if (err) {
+                res.send(500, errorResponses.db.error);
+                return;
+            }
+            res.send(tasks);
         });
     });
 
@@ -70,8 +78,9 @@ module.exports.setRoutes = function(app, sessionVerification) {
         });
     });
 
-    app.get('/tasks/:taskId/run', function(req, res) {
-
+    app.post('/tasks/:taskId/run', function(req, res) {
+        var choiceParam = req.body.choiceParam;
+        logger.debug("Choice Param::: ", choiceParam);
         Tasks.getTaskById(req.params.taskId, function(err, task) {
 
             if (err) {
@@ -80,13 +89,15 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 return;
             }
 
-            task.execute(req.session.user.cn, req.protocol + '://' + req.get('host'), function(err, taskRes) {
+            task.execute(req.session.user.cn, req.protocol + '://' + req.get('host'), choiceParam, function(err, taskRes, historyData) {
                 if (err) {
                     logger.error(err);
                     res.send(500, err);
                     return;
                 }
-
+                if (historyData) {
+                    taskRes.historyId = historyData.id;
+                }
                 res.send(taskRes);
             });
         });
@@ -176,7 +187,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                             res.send(500, errorResponses.db.error);
                             return;
                         }
-                        //logger.debug("---------");
+                        //logger.debug("---100 Last histories------",JSON.stringify(histories));
                         var historyResult = [];
                         var jobResult = [];
                         if (histories.length > 0) {
@@ -189,14 +200,14 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                     logger.error('jenkins jobs fetch error', err);
 
                                 }
-                                logger.debug("All Job info: ", JSON.stringify(job));
+                                //logger.debug("All Job info: ", JSON.stringify(job));
                                 if (job) {
                                     for (var j = 0; j < job.builds.length; j++) {
                                         var actualTimeStamp = new Date(job.builds[j].timestamp).setMilliseconds(job.builds[j].duration);
                                         var jobDetails = {
                                             "result": job.builds[j].result,
                                             "timestampEnded": actualTimeStamp,
-                                            "timestampStarted" : job.builds[j].timestamp
+                                            "timestampStarted": job.builds[j].timestamp
                                         };
                                         jobResult.push(job.builds[j].number);
                                         jobInfo.push(jobDetails);
@@ -268,7 +279,6 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                 }
                                             }
                                         })(x);
-
                                     }
                                 } else {
                                     task.getHistory(function(err, tHistories) {
@@ -291,7 +301,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                     logger.error('jenkins jobs fetch error', err);
 
                                 }
-                                logger.debug("All Job info: ", JSON.stringify(job));
+                                //logger.debug("All Job info: ", JSON.stringify(job));
                                 if (job) {
                                     for (var j = 0; j < job.builds.length; j++) {
                                         var actualTimeStamp = new Date(job.builds[j].timestamp).setMilliseconds(job.builds[j].duration);
@@ -374,6 +384,39 @@ module.exports.setRoutes = function(app, sessionVerification) {
             }
         });
     });
+
+    app.get('/tasks/:taskId/history/:historyId', function(req, res) {
+
+        Tasks.getTaskById(req.params.taskId, function(err, task) {
+            if (err) {
+                logger.error(err);
+                res.send(500, errorResponses.db.error);
+                return;
+            }
+            if (!task) {
+                res.send(404, {
+                    message: "task does not exist"
+                });
+                return;
+            }
+
+            task.getHistoryById(req.params.historyId, function(err, history) {
+                if (err) {
+                    res.send(500, {
+                        message: "Server Behaved Unexpectedly"
+                    });
+                    return;
+                }
+                res.send(200, history);
+
+            });
+
+
+        });
+
+
+    });
+
 
 
     app.post('/tasks', function(req, res) {
@@ -458,5 +501,4 @@ module.exports.setRoutes = function(app, sessionVerification) {
             }
         });
     });
-
 };

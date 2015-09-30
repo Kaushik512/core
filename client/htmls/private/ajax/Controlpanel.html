@@ -50,6 +50,7 @@
 
                                         <!-- <a class="instanceActionBtnUpdateRunlist instance-bootstrap-list-image" rel="tooltip" data-placement="top" data-original-title="Chef Client Run"><img src="img/galleryIcons/Chefimport.png" alt="Chefimport" style="width:26px;height:auto;margin-top:1px;"></a> -->
                                         <a class="instanceActionBtnUpdateRunlist instance-bootstrap-list-image chefClientRunlistImageCP" rel="tooltip" data-placement="top" data-original-title="Chef Client Run"></a>
+                                         <a class="instanceActionBtnUpdatePuppetRunlist instance-bootstrap-list-image puppetClientRunlistImageCP" rel="tooltip" data-placement="top" data-original-title="Puppet Client Run"><img style="height:100%" src="img/puppeticon.png"/></a>
                                       
                                       </div>
                                       <div class="actionbutton instance-bootstrap-ActionStart" style="display:none;"><a href="javascript:void(0)" class="actionbuttonStart instanceActionBtn" data-actiontype="Start" data-placement="top" rel="tooltip" data-original-title="Start"></a></div>
@@ -103,7 +104,7 @@
         <li class="active" style="margin-right: 30px;">
               <a style="color: #eee;border-radius: 5px 5px 0 0 ; padding: 9px 10px 13px;" href="#l1" data-toggle="tab" style="font-size: 16px" ><i class="fa fa-fw fa-exclamation-circle" style="font-size: 16px"></i>Information</a>
           </li>
-          <li class="pull-left" style="margin-right: 30px;">
+          <li class="pull-left serviceTabLi" style="margin-right: 30px;">
               <a style="color: #eee;border-radius: 5px 5px 0 0 ; padding: 9px 10px 13px;" href="#l2" data-toggle="tab" style="font-size: 16px"><i class="fa fa-fw fa-share-square-o"></i>Services</a>
           </li>
           <li class="pull-left" style="margin-right: 30px;">
@@ -297,7 +298,7 @@
                    <div class="widget-toolbar no-border">
 
                    <a id="addTaskBtn" class="btn btn-minier btn-primary" data-toggle="modal">
-                   <i class="ace-icon ace-icon fa fa-plus bigger-110"></i>
+                   
                    Edit
                    </a>                                                
 
@@ -326,6 +327,7 @@
                     
                    </div>
 
+
                    </div>
                    </div>
                    </div>
@@ -347,6 +349,7 @@
                      
                     </tbody>
                   </table>
+
 
                 </div>
 
@@ -666,8 +669,8 @@
              </div>
       </div> 
       <div class="modal-footer">
+        <a type="button" class="btn btn-default" data-dismiss="modal">Close</a>
         <button type="button" class="btn btn-default btn-primary btnUpdateInstanceRunlist">Update</button>
-        <button type="button" class="btn btn-default btn-primary" data-dismiss="modal">Close</button>
       </div>
     </div>
   </div>
@@ -1040,7 +1043,8 @@
 
 
 <div class="modal fade" id="instanceTaskModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-    <div class="modal-dialog " style="">
+    <div class="modal-dialog modal-lg" style="">
+
         <div class="modal-content"> 
              <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -1110,8 +1114,9 @@
             </div>
             
                <div class="modal-footer">
+        
+        <a type="button" class="btn btn-default" data-dismiss="modal">Close</a>
         <input type="submit" id="saveTaskBtn" class="btn btn-primary" value="Save" />
-        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
       </div>   
          </div>
     </div>
@@ -1421,68 +1426,66 @@ $.get('../instances/' + urlParams.id, function(data) {
 
     //fetching services list
     //alert(data.chef.serverId);
-    $.get('/d4dMasters/19/chefserverid/' + data.chef.serverId, function(services) {
-        $.get('/d4dMasters/19/commandtype/Service%20Command', function(servicesCmd) {
+    if (data.chef) {
+        $.get('/d4dMasters/19/chefserverid/' + data.chef.serverId, function(services) {
+            $.get('/d4dMasters/19/commandtype/Service%20Command', function(servicesCmd) {
 
-            servicesCmd = JSON.parse(servicesCmd);
-            services = JSON.parse(services);
-            for (var k = 0; k < servicesCmd.length; k++) {
-                if (servicesCmd[k].chefserverid !== data.chef.serverId) {
-                    services.push(servicesCmd[k]);
+                servicesCmd = JSON.parse(servicesCmd);
+                services = JSON.parse(services);
+                for (var k = 0; k < servicesCmd.length; k++) {
+                    if (servicesCmd[k].chefserverid !== data.chef.serverId) {
+                        services.push(servicesCmd[k]);
+                    }
                 }
-            }
-            //alert('Out json :' + JSON.stringify(services)+ services.length);
-            var $serviceList = $('#serviceList');
-            console.log(services, "length==>", services.length);
-            var serviceIds = [];
-            if (data.serviceIds && data.serviceIds.length) {
-                serviceIds = data.serviceIds;
-            }
-
-            for (var i = 0; i < services.length; i++) {
-
-                var name = services[i].servicename;
-                if (!name) {
-                    name = services[i].commandname;
-                }
-                var $tr = $('<tr></tr>').attr('data-listServiceId', services[i].rowid);
-                var $tdName = $('<td></td>').append(name);
-                $tr.append($tdName);
-
-                var commandType = services[i].commandtype;
-                if (commandType === 'Chef Cookbook/Recipe') {
-                    var html = getCookbookActionHtml(services[i].rowid, services[i]);
-                } else {
-                    var html = getCommandActionHtml(services[i].rowid, services[i]);
+                //alert('Out json :' + JSON.stringify(services)+ services.length);
+                var $serviceList = $('#serviceList');
+                console.log(services, "length==>", services.length);
+                var serviceIds = [];
+                if (data.serviceIds && data.serviceIds.length) {
+                    serviceIds = data.serviceIds;
                 }
 
-                var $tdActions = $('<td></td>').append(html);
-                $tr.append($tdActions);
-                var $checkBox = $('<input type="checkbox" name="svcCkb"></input>').val(services[i].rowid).data('serviceData', services[i]);
-                var $tdCheckBox = $('<td></td>').append($checkBox);
-                $tr.append($tdCheckBox);
-                if (serviceIds.indexOf(services[i].rowid) !== -1) {
-                    $tr.addClass('hidden');
-                }
+                for (var i = 0; i < services.length; i++) {
 
-                $serviceList.append($tr);
-            }
+                    var name = services[i].servicename;
+                    if (!name) {
+                        name = services[i].commandname;
+                    }
+                    var $tr = $('<tr></tr>').attr('data-listServiceId', services[i].rowid);
+                    var $tdName = $('<td></td>').append(name);
+                    $tr.append($tdName);
+
+                    var commandType = services[i].commandtype;
+                    if (commandType === 'Chef Cookbook/Recipe') {
+                        var html = getCookbookActionHtml(services[i].rowid, services[i]);
+                    } else {
+                        var html = getCommandActionHtml(services[i].rowid, services[i]);
+                    }
+
+                    var $tdActions = $('<td></td>').append(html);
+                    $tr.append($tdActions);
+                    var $checkBox = $('<input type="checkbox" name="svcCkb"></input>').val(services[i].rowid).data('serviceData', services[i]);
+                    var $tdCheckBox = $('<td></td>').append($checkBox);
+                    $tr.append($tdCheckBox);
+                    if (serviceIds.indexOf(services[i].rowid) !== -1) {
+                        $tr.addClass('hidden');
+                    }
+
+                    $serviceList.append($tr);
+                }
+            });
         });
-        //console.log('hi ==>',serviceList);
-
-
-
-    });
-    if (data.serviceIds && data.serviceIds.length) {
-        $.post('/d4dMasters/getrows/19', {
-            serviceids: data.serviceIds
-        }, function(services) {
-            services = JSON.parse(services);
-            for (var i = 0; i < services.length; i++) {
-                console.log("sd1 = ", services[i]);
-                addServiceToDom(services[i]);
-            }
-        });
+        if (data.serviceIds && data.serviceIds.length) {
+            $.post('/d4dMasters/getrows/19', {
+                serviceids: data.serviceIds
+            }, function(services) {
+                services = JSON.parse(services);
+                for (var i = 0; i < services.length; i++) {
+                    console.log("sd1 = ", services[i]);
+                    addServiceToDom(services[i]);
+                }
+            });
+        }
     }
 
     // setting up action logs
@@ -1590,9 +1593,15 @@ $.get('../instances/' + urlParams.id, function(data) {
             }
         }
 
-
-    var $domainRolesCaption = $('.domain-roles-caption').attr('data-instanceId', data._id).attr('data-chefServerId', data.chef.serverId).attr('data-osType', data.hardware.os).attr('data-instanceIP', data.instanceIP).data('runlist', data.runlist).data('orgId', data.orgId).data('serviceList', data.serviceIds).data('jsonAttributes',data.attributes);
-
+    if(data.chef) {
+      var $domainRolesCaption = $('.domain-roles-caption').attr('data-instanceId', data._id).attr('data-chefServerId', data.chef.serverId).attr('data-osType', data.hardware.os).attr('data-instanceIP', data.instanceIP).data('runlist', data.runlist).data('orgId', data.orgId).data('serviceList', data.serviceIds).data('jsonAttributes',data.attributes);
+      $('.instanceActionBtnUpdatePuppetRunlist').remove();
+    } else {
+      var $domainRolesCaption = $('.domain-roles-caption').attr('data-instanceId', data._id).attr('data-puppetServerId', data.puppet.serverId).attr('data-osType', data.hardware.os).attr('data-instanceIP', data.instanceIP).data('runlist', data.runlist).data('orgId', data.orgId).data('serviceList', data.serviceIds).data('jsonAttributes',data.attributes);
+      $('.instanceActionBtnUpdateRunlist').remove();
+      $('.serviceTabLi').hide();
+    }
+    
     var $divHeadingCP = $domainRolesCaption.find('.domain-roles-heading').empty();
 
     if (data.blueprintData.iconPath == undefined) {
@@ -1659,7 +1668,7 @@ $.get('../instances/' + urlParams.id, function(data) {
                 } else {
                     menuAppTaskLI = "<li style='font-size:10px;color:#3276b1'>No AppLinks Available</li>";
                 }
-                stringmenuAppTask = "<div class='menuAppTask' style='display: none;'><span class='menuAppLinkSpan'>App Links</span><ul class='paddingleft32'>" + menuAppTaskLI + "</ul></div>";
+                stringmenuAppTask = "<div class='menuAppTask' style='display: none;'><span class='menuAppLinkSpan'>AppLinks</span><ul class='paddingleft32'>" + menuAppTaskLI + "</ul></div>";
                 $domainRolesCaption.append(stringmenuAppTask);
                 var $menu = $domainRolesCaption.find('.menuAppTask');
                 if ($menu.is(':visible')) {
@@ -1682,13 +1691,19 @@ $.get('../instances/' + urlParams.id, function(data) {
     // .append('<img src="img/templateicons/'+data.blueprintData.templateId+'.png" style="height:20px;width:20px;margin-right:5px;">').append(data.blueprintData.blueprintName);
     $domainRolesCaption.find('.instance-details-ip strong').html(data.instanceIP);
     $domainRolesCaption.find('.instance-state').html(data.instanceState);
-    data.instanceState = 'running';
+    //data.instanceState = 'running';
+
+    if(data.instanceState != 'running'){
+      $('.inspectBtn').hide();
+    }
+
     if (data.instanceState == 'running') {
         $domainRolesCaption.find('.componentlistContainer').addClass('started');
         $domainRolesCaption.find('.instance-state').html(data.instanceState).addClass('instance-state-text-started');
     } else if (data.instanceState == 'terminated') {
         $domainRolesCaption.find('.componentlistContainer').addClass('stopped');
         $domainRolesCaption.find('.instance-state').html(data.instanceState).addClass('instance-state-text-stopped');
+
     } else if (data.instanceState == 'stopped') {
         $domainRolesCaption.find('.componentlistContainer').addClass('stopped');
         $domainRolesCaption.find('.instance-state').html(data.instanceState).addClass('instance-state-text-stopped');
@@ -2080,7 +2095,7 @@ $.get('../instances/' + urlParams.id, function(data) {
     });
 
 
-    $('.instanceActionBtnUpdateRunlist').click(function(e) {
+    $('.instanceActionBtnUpdateRunlist,.instanceActionBtnUpdatePuppetRunlist').click(function(e) {
         if ($(this).hasClass('isStopedInstance')) {
             return false;
         }
@@ -2094,25 +2109,37 @@ $.get('../instances/' + urlParams.id, function(data) {
         }
         var $this = $(this);
         var $parent = $('.domain-roles-caption');
-        var instanceId = $parent.attr('data-instanceId');
-        var chefServerId = $parent.attr('data-chefServerId');
-        var orgId = $parent.data('orgId');
-        var runlist = $parent.data('runlist');
-        console.log(orgId);
-        var readMode = false;
-        if (localStorage.getItem('userRole') === '[Consumer]') {
-            readMode = true;
-        }
-        var $ccrs = $chefCookbookRoleSelector(urlParams.org, null, runlist, readMode);
         var $controlPanelChefRunModalContainer = $('#controlPanelChefRunModalContainer');
-        $controlPanelChefRunModalContainer.find('.chefRunlistContainer').empty().append($ccrs);
-        $controlPanelChefRunModalContainer.find('.chefRunlistContainer').data('$ccrs', $ccrs);
-        $controlPanelChefRunModalContainer.find('.attributesViewTableBody').empty();
-        var attributes = $parent.data('jsonAttributes');
-        if(attributes) {
-         createAttribTableRowFromJson(attributes);
+        var instanceId = $parent.attr('data-instanceId');
+        $controlPanelChefRunModalContainer.data('data-instanceid', instanceId);
+        var chefServerId = $parent.attr('data-chefServerId');
+
+        if (!chefServerId) {
+            var puppetServerId = $this.attr('data-puppetServerId');
+            $controlPanelChefRunModalContainer.data('infraManagerType', 'puppet');
+            //$chefRunModalContainer.find('.chefRunlistContainer').empty();
+            //$chefRunModalContainer.find('.attributesViewTableBody').empty();
+            $controlPanelChefRunModalContainer.find('.btnUpdateInstanceRunlist').click();
+        } else {
+            $controlPanelChefRunModalContainer.data('infraManagerType', 'chef');
+            var orgId = $parent.data('orgId');
+            var runlist = $parent.data('runlist');
+            console.log(orgId);
+            var readMode = false;
+            if (localStorage.getItem('userRole') === '[Consumer]') {
+                readMode = true;
+            }
+            var $ccrs = $chefCookbookRoleSelector(urlParams.org, null, runlist, readMode);
+            
+            $controlPanelChefRunModalContainer.find('.chefRunlistContainer').empty().append($ccrs);
+            $controlPanelChefRunModalContainer.find('.chefRunlistContainer').data('$ccrs', $ccrs);
+            $controlPanelChefRunModalContainer.find('.attributesViewTableBody').empty();
+            var attributes = $parent.data('jsonAttributes');
+            if (attributes) {
+                createAttribTableRowFromJson(attributes);
+            }
+            $controlPanelChefRunModalContainer.modal('show');
         }
-        $controlPanelChefRunModalContainer.modal('show');
 
     });
 
@@ -2120,71 +2147,87 @@ $.get('../instances/' + urlParams.id, function(data) {
         if ($(this).hasClass('isStopedInstance')) {
             return false;
         }
-        bootbox.confirm("Update runlist?", function(result) {
-            if (!result) {
-                return;
-            }
-            var $parent = $('.domain-roles-caption');
-            var instanceId = $parent.attr('data-instanceId');
-            $chefRunModalContainer = $('#controlPanelChefRunModalContainer');
-            var $ccrs = $chefRunModalContainer.find('.chefRunlistContainer').data('$ccrs');
+        $chefRunModalContainer = $('#controlPanelChefRunModalContainer');
+        var infraType = $chefRunModalContainer.data('infraManagerType');
+        var cnfMsg = "Are you sure you want to Update the runlist? This will run all the cookbooks available in the Runlist";
+        if (infraType === 'puppet') {
+            cnfMsg = "Are you sure you want to run puppet client";
+        }
+        bootbox.confirm({
+            message: cnfMsg,
+            title: "Confirmation",
+            callback: function(result) {
+                if (!result) {
+                    return;
+                }
+                var $parent = $('.domain-roles-caption');
+                var instanceId = $parent.attr('data-instanceId');
+                var runlist = [];
+                var attributes = [];
 
-            var runlist = $ccrs.getSelectedRunlist();
+                if (infraType === 'puppet') {
 
-            if (!runlist.length) {
-                bootbox.alert("Runlist is empty");
-                return;
-            }
-            console.log('runlist == ', runlist);
+                } else {
+                    var $ccrs = $chefRunModalContainer.find('.chefRunlistContainer').data('$ccrs');
 
-            $trAttribute = $chefRunModalContainer.find('.attributesViewTableBody tr');
-            var attributes = [];
-            $trAttribute.each(function() {
-                var $tr = $(this);
-                attributes.push({
-                    name: $tr.attr('data-attributeName'),
-                    jsonObj: $tr.data('jsonObj')
+                    runlist = $ccrs.getSelectedRunlist();
+
+                    if (!runlist.length) {
+                        bootbox.alert("Runlist is empty");
+                        return;
+                    }
+                    console.log('runlist == ', runlist);
+
+                    $trAttribute = $chefRunModalContainer.find('.attributesViewTableBody tr');
+                    attributes = [];
+                    $trAttribute.each(function() {
+                        var $tr = $(this);
+                        attributes.push({
+                            name: $tr.attr('data-attributeName'),
+                            jsonObj: $tr.data('jsonObj')
+                        });
+                    });
+                }
+                $.post('../instances/' + instanceId + '/updateRunlist', {
+                    runlist: runlist,
+                    jsonAttributes: attributes
+                }, function(data) {
+
+                    $chefRunModalContainer.modal('hide');
+                    var $parent = $('.domain-roles-caption[data-instanceId="' + instanceId + '"]');
+                    $parent.find('.instance-bootstrap-list-image').data('runlist', runlist);
+                    $parent.find('.instance-bootstrap-list-image').data('jsonAttributes', attributes);
+                    var $backRunlistContainer = $parent.parents('.card').find('.cardBackRunlistContaner').empty();
+                    console.log($backRunlistContainer.length);
+                    console.log(runlist);
+
+                    for (var j = 0; j < runlist.length; j++) {
+                        var $divComponentItem;
+
+                        $divComponentItem = $('<span title="' + runlist[j] + '" style="margin-top:8px;overflow:hidden;text-overflow:ellipsis;width:130px;color:#3a87ad"></span>').addClass('instance-details-item').append(runlist[j]);
+                        $backRunlistContainer.append($divComponentItem);
+                    }
+                    $('.runlistInfoContainer').empty().append(runlist.join());
+
+                    //$parentTr.find('.instance-bootstrap-list-image').data('runlist', runlist
+                    $parent.data('runlist', runlist);
+                    $parent.data('jsonAttributes', attributes);
+                    $parent.find('.moreInfo').trigger('click');
+                    console.log(data);
+                    if (data.actionLogId) {
+                        $.get('../instances/' + instanceId + '/actionLogs/' + data.actionLogId, function(actionLog) {
+                            addActionLogRow(actionLog);
+                        });
+                    }
+                }).fail(function(jxObj) {
+                    if (jxObj.responseJSON && jxObj.responseJSON.actionLogId) {
+                        $.get('../instances/' + instanceId + '/actionLogs/' + jxObj.responseJSON.actionLogId, function(actionLog) {
+                            addActionLogRow(actionLog);
+                        });
+                    }
                 });
-            });
-            $.post('../instances/' + instanceId + '/updateRunlist', {
-                runlist: runlist,
-                jsonAttributes: attributes
-            }, function(data) {
-                
-                $chefRunModalContainer.modal('hide');
-                var $parent = $('.domain-roles-caption[data-instanceId="' + instanceId + '"]');
-                $parent.find('.instance-bootstrap-list-image').data('runlist', runlist);
-                $parent.find('.instance-bootstrap-list-image').data('jsonAttributes', attributes);
-                var $backRunlistContainer = $parent.parents('.card').find('.cardBackRunlistContaner').empty();
-                console.log($backRunlistContainer.length);
-                console.log(runlist);
 
-                for (var j = 0; j < runlist.length; j++) {
-                    var $divComponentItem;
-
-                    $divComponentItem = $('<span title="' + runlist[j] + '" style="margin-top:8px;overflow:hidden;text-overflow:ellipsis;width:130px;color:#3a87ad"></span>').addClass('instance-details-item').append(runlist[j]);
-                    $backRunlistContainer.append($divComponentItem);
-                }
-                $('.runlistInfoContainer').empty().append(runlist.join());
-
-                //$parentTr.find('.instance-bootstrap-list-image').data('runlist', runlist
-                $parent.data('runlist', runlist);
-                $parent.data('jsonAttributes', attributes);
-                $parent.find('.moreInfo').trigger('click');
-                console.log(data);
-                if (data.actionLogId) {
-                    $.get('../instances/' + instanceId + '/actionLogs/' + data.actionLogId, function(actionLog) {
-                        addActionLogRow(actionLog);
-                    });
-                }
-            }).fail(function(jxObj) {
-                if (jxObj.responseJSON && jxObj.responseJSON.actionLogId) {
-                    $.get('../instances/' + instanceId + '/actionLogs/' + jxObj.responseJSON.actionLogId, function(actionLog) {
-                        addActionLogRow(actionLog);
-                    });
-                }
-            });
-
+            }
         });
     });
 
@@ -2415,7 +2458,7 @@ $.get('../instances/' + urlParams.id, function(data) {
     function memoryCalculation(data) {
         var memoryInitial = data;
         //alert(memoryInitial);
-        if(memoryInitial == 'unknown'){
+        if(memoryInitial == 'unknown' || memoryInitial.indexOf('MB') !== -1){
           return memoryInitial;
         }else{
           var mem = memoryInitial.substring(0, memoryInitial.length - 2);
@@ -2633,7 +2676,7 @@ $.get('../instances/' + urlParams.id, function(data) {
     // $cfmwareTbody.append($tr); //commented as we were receiving the id instead of the name : Vinod
 
     $tr = $('<tr style="line-height:2.3"></tr>');
-    $tr.append('<td scope="col" style="font-size:12px;">Chef Bootstrap</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + data.bootStrapStatus + '</td>');
+    $tr.append('<td scope="col" style="font-size:12px;">Bootstrap</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + data.bootStrapStatus + '</td>');
     $cfmwareTbody.append($tr);
 
     $tr = $('<tr style="line-height:2.3"></tr>');
@@ -3332,6 +3375,7 @@ $(document).ready(function() {
 
  $('#newAppSeries').click(function(e) {
      $('#appURLForm').trigger("reset");
+     $('#modalAppNameURL').find('.modal-title').html('Add Application URL').css('margin-left','18px');
  });
 
  function createAppUrlTableRow(appUrlData) {
@@ -3355,7 +3399,7 @@ $(document).ready(function() {
      $tdAction.find('.appUrlEditLink').click(function() {
          var appUrlData = $row.data('appUrlData');
          var $editModal = $('#modalAppNameURL');
-
+         $('#modalAppNameURL').find('.modal-title').html('Edit Application URL').css('margin-left','18px');
          $editModal.modal('show');
          $editModal.find('.appName').val(appUrlData.name);
          $editModal.find('.appURL').val(appUrlData.url);
@@ -3493,6 +3537,7 @@ $(document).ready(function() {
                      name: reqBody.name,
                      url: reqBody.url
                  })
+                 //alert(url);
 
                  var $a = $('.app-url[data-appUrlId="' + appUrlId + '"]');
                  $a.html(reqBody.name);

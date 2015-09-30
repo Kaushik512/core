@@ -1,0 +1,141 @@
+*** Settings ***
+Documentation      A resource file with reusable keywords and variables.
+...
+...                This file is part of a prototype automated test suite designed to
+...                test web application products built on top of the SLZ platform.
+...
+
+Library            Selenium2Library
+Library            String
+Library            Collections
+
+Resource           catalyst.txt
+Resource           ${CATALYST TEST DATA}/${TESTDATA}
+Resource           ${CATALYST ACTION}/Organization_Setup_Action_Steps.txt
+Resource           ${CATALYST ACTION}/DevOps_Setup_Action_Steps.txt
+Resource           ${CATALYST ACTION}/New_Blueprint_Creation_Action_Steps.txt
+
+
+*** Variables ***
+
+*** Keywords ***
+Clear the Data
+    Reset the Organizations Data   ${ORGANIZATION NAME}
+    Reset the Business Data   ${BUSINESS GROUP NAME}
+    Reset the Project Data   ${PROJECT NAME}
+    Reset the Environments Data   ${ENVIRONMENT NAME}
+    Clicks on DevOps Setup menu
+    Clicks on Config Management menu
+    Reset the Chef Server Data   ${RESET HEADER NAME}
+    Delete all the Instance
+    Delete all the Blueprints    
+    Delete all the orchistration data
+
+Delete all the orchistration data
+    Click on orchistration tab
+        ${maxloop} =        Set Variable     200
+    :FOR    ${INDEX}    IN RANGE    1    ${maxloop}
+    \       ${no more chef server exists} =    Run Keyword and Return Status      Element Should Not Be Visible      xpath=//table[@id='tableOrchestration']/tbody/tr[${INDEX}]/td[6]/div/a[1]
+    \       Exit For Loop If     ${no more chef server exists}
+    \       Click Element        xpath=Element Should Not Be Visible      xpath=//table[@id='tableOrchestration']/tbody/tr[${INDEX}]/td[6]/div/a[1]
+    \       Delete the data
+
+
+Delete all the Blueprints
+    Click on Blueprints Tab
+    Select blueprint card
+        ${maxloop} =        Set Variable     200
+    :FOR    ${INDEX}    IN RANGE    1    ${maxloop}
+    \       ${no more chef server exists} =    Run Keyword and Return Status      Element Should Not Be Visible      xpath=//div[@class='productdiv4']
+    \       Exit For Loop If     ${no more chef server exists}
+    \       Click Element        xpath=//div[@class='productdiv4']
+    \       Delete the data
+
+
+Delete all the Instance
+    Click on Workzone
+    Click on Environment
+        ${maxloop} =        Set Variable     200
+    :FOR    ${INDEX}    IN RANGE    1    ${maxloop}
+    \       ${no more chef server exists} =    Run Keyword and Return Status      Element Should Not Be Visible      xpath=//li[@class='domain-role-thumbnail']
+    \       Exit For Loop If     ${no more chef server exists}
+    \       Click Element        xpath=//li[@class='domain-role-thumbnail']
+    \       Delete the data
+
+Reset the Organizations Data 
+    [Arguments]    ${RESET HEADER NAME}
+    Clicks on Settings
+    Clicks on Organization image
+        ${maxloop} =        Set Variable     200
+    :FOR    ${INDEX}    IN RANGE    1    ${maxloop}
+    \       ${no more chef server exists} =    Run Keyword and Return Status      Element Should Not Be Visible      xpath=//div[@id='envtable_wrapper']/table/tbody/tr[${INDEX}]/td[1]
+    \       Exit For Loop If     ${no more chef server exists}
+    \       Wait Until Keyword Succeeds    1 minute     1 seconds       Element Should Be Visible       xpath=//div[@id='envtable_wrapper']/table/tbody/tr[${INDEX}]
+    \       ${extracted chef server name}          Get Text       xpath=//div[@id='envtable_wrapper']/table/tbody/tr[${INDEX}]/td[1]
+    \       Run Keyword If    '${extracted chef server name}' == '${RESET HEADER NAME}'       Click Element        xpath=//div[@id='envtable_wrapper']/table/tbody/tr[${INDEX}]/td[4]/div/button
+ #   \       Click Element        xpath=//div[@id='envtable_wrapper']/table/tbody/tr[${INDEX}]/td[4]/div/button
+    \       Confirm Action
+    \       Exit For Loop If     '${extracted chef server name}' == '${RESET HEADER NAME}'
+
+Reset the Business Data
+    [Arguments]    ${RESET HEADER NAME}
+    Clicks on Organization setup menu
+    Clicks on Business Groups menu
+        ${maxloop} =        Set Variable     200
+    :FOR    ${INDEX}    IN RANGE    1    ${maxloop}
+    \       ${no more chef server exists} =    Run Keyword and Return Status      Element Should Not Be Visible      xpath=//div[@id='envtable_wrapper']/table/tbody/tr[${INDEX}]/td[1]
+    \       Exit For Loop If     ${no more chef server exists}
+    \       Wait Until Keyword Succeeds    1 minute     1 seconds       Element Should Be Visible       xpath=//div[@id='envtable_wrapper']/table/tbody/tr[${INDEX}]
+    \       ${extracted chef server name}          Get Text       xpath=//div[@id='envtable_wrapper']/table/tbody/tr[${INDEX}]/td[1]
+    \       Run Keyword If    '${extracted chef server name}' == '${RESET HEADER NAME}'       Click Element        xpath=//div[@id='envtable_wrapper']/table/tbody/tr[${INDEX}]/td[4]/div/button
+    \       Confirm Action
+    \       Exit For Loop If     '${extracted chef server name}' == '${RESET HEADER NAME}'
+
+Reset the Project Data 
+    [Arguments]    ${RESET HEADER NAME}
+    Clicks on projects menu
+        ${maxloop} =        Set Variable     200
+    :FOR    ${INDEX}    IN RANGE    1    ${maxloop}
+    \       ${no more chef server exists} =    Run Keyword and Return Status      Element Should Not Be Visible      xpath=//div[@id='envtable_wrapper']/table/tbody/tr[${INDEX}]/td[1]
+    \       Exit For Loop If     ${no more chef server exists}
+    \       Wait Until Keyword Succeeds    1 minute     1 seconds       Element Should Be Visible       xpath=//div[@id='envtable_wrapper']/table/tbody/tr[${INDEX}]
+    \       ${extracted chef server name}          Get Text       xpath=//div[@id='envtable_wrapper']/table/tbody/tr[${INDEX}]/td[1]
+    \       Run Keyword If    '${extracted chef server name}' == '${RESET HEADER NAME}'       xpath=//div[@id='envtable_wrapper']/table/tbody/tr[${INDEX}]/td[7]/div/button
+    \       Confirm Action
+    \       Exit For Loop If     '${extracted chef server name}' == '${RESET HEADER NAME}'
+
+
+
+Reset the Environments Data
+    [Arguments]    ${RESET HEADER NAME}
+    Clicks on Environments menu
+        ${maxloop} =        Set Variable     200
+    :FOR    ${INDEX}    IN RANGE    1    ${maxloop}
+    \       ${no more chef server exists} =    Run Keyword and Return Status      Element Should Not Be Visible      xpath=//div[@id='envtable_wrapper']/table/tbody/tr[${INDEX}]/td[1]
+    \       Exit For Loop If     ${no more chef server exists}
+    \       Wait Until Keyword Succeeds    1 minute     1 seconds       Element Should Be Visible       xpath=//div[@id='envtable_wrapper']/table/tbody/tr[${INDEX}]
+    \       ${extracted chef server name}          Get Text       xpath=//div[@id='envtable_wrapper']/table/tbody/tr[${INDEX}]/td[1]
+    \       Run Keyword If    '${extracted chef server name}' == '${RESET HEADER NAME}'       Click Element        xpath=//div[@id='envtable_wrapper']/table/tbody/tr[${INDEX}]/td[3]/div/button
+    \       Confirm Action
+    \       Exit For Loop If     '${extracted chef server name}' == '${RESET HEADER NAME}'
+
+
+
+Reset the Chef Server Data   ${RESET HEADER NAME}
+    [Arguments]    ${RESET HEADER NAME}
+        ${maxloop} =        Set Variable     200
+    :FOR    ${INDEX}    IN RANGE    1    ${maxloop}
+    \       ${no more chef server exists} =    Run Keyword and Return Status      Element Should Not Be Visible      xpath=//div[@id='envtable_wrapper']/table/tbody/tr[${INDEX}]/td[1]
+    \       Exit For Loop If     ${no more chef server exists}
+    \       Wait Until Keyword Succeeds    1 minute     1 seconds       Element Should Be Visible       xpath=//div[@id='envtable_wrapper']/table/tbody/tr[${INDEX}]
+    \       ${extracted chef server name}          Get Text       xpath=//div[@id='envtable_wrapper']/table/tbody/tr[${INDEX}]/td[1]
+    \       Run Keyword If    '${extracted chef server name}' == '${RESET HEADER NAME}'       Click Element        xpath=//div[@id='envtable_wrapper']/table/tbody/tr[${INDEX}]//td[5]/div/a[1]
+    \       Click Element        xpath=//div[@id='envtable_wrapper']/table/tbody/tr[${INDEX}]//td[5]/div/a[1]
+    \       Confirm Action
+    \       Exit For Loop If     '${extracted chef server name}' == '${RESET HEADER NAME}'
+
+
+
+Delete the data
+    Click Element           xpath=//button[@onclick='removeSelectedInstance()']
+    Confirm Action

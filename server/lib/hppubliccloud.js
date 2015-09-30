@@ -527,6 +527,7 @@ this.waitforserverready = function(tenantId,instanceData,callback){
 	                       				console.log('End trysshoninstance:',cdata);
 	                       				if(cdata == 'ok'){
 	                       					//Clearing all timeouts
+	                       					console.log('Time outs found :',self.timeouts.length);
 	                       					for (var i = 0; i < self.timeouts.length; i++) {
 	                       						console.log('Clearing timeout : ',self.timeouts[i]);
 											    clearTimeout(self.timeouts[i]);
@@ -543,14 +544,16 @@ this.waitforserverready = function(tenantId,instanceData,callback){
 	                       				else
 	                       				{
 	                       					console.log('Timeout 1 set');
-	                       					self.timeouts.push(setTimeout(wfsr,30000));
+	                       					if(!self.callbackdone)
+	                       						self.timeouts.push(setTimeout(wfsr,30000));
 	                       				}
 	                       		});
 	                       }
 	                       else
 	                       	{
 	                       		console.log('Timeout 2 set');
-	                       		self.timeouts.push(setTimeout(wfsr,30000));
+	                       		if(!self.callbackdone)
+	                       			self.timeouts.push(setTimeout(wfsr,30000));
 	                       	}
 	                       
 	                }

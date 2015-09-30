@@ -1,0 +1,43 @@
+*** Settings ***
+Documentation     Inport_IP_setup_Flow.txt
+
+Resource           catalyst.txt
+Resource           ${CATALYST TEST DATA}/${TESTDATA}
+Resource           ${CATALYST ACTION}/Organization_Setup_Action_Steps.txt
+Resource           ${CATALYST ACTION}/Import_By_IP_and_Chef_Sync.txt
+Resource           ${COMMON RESOURCES}/catalyst_grid_node.txt
+Resource           ${CATALYST ACTION}/Gallery_setup_TempService_Steps.txt
+
+
+*** Test Cases ***
+Catalyst new Jenkins Configuration setup
+    [Tags]       Sanity        Settings
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst Create New Jenkins Configuration Setup          
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+
+Catalyst Jenkins Task Creation and Execution
+    [Tags]       Sanity               Workzone
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst Creation of Jenkins Task in Environment
+    Catalyst Execution of the Jenkins Task in Envrnment
+    Catalyst checks the Jenkins task history
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+#-Catalyst Chef task creation and Execution
+    #-[Tags]       Sanity               Chef
+#    Catalyst Login
+    #-Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    #-Catalyst creation of Chef Task
+    #-Catalyst execution of Chef Task
+    #-Catalyst checks the Chef task history
+    #-Catalyst Logout                      
+    #-[Teardown]     Close Browser
+

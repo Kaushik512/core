@@ -25,6 +25,118 @@ var configmgmtDao = require('../model/d4dmasters/configmgmt.js');
 var Cryptography = require('../lib/utils/cryptography');
 var appConfig = require('_pr/config');
 module.exports.setRoutes = function(app, sessionVerificationFunc) {
+    // Return AWS Provider respect to id.
+    app.get('/aws/providers/list', function(req, res) {
+
+        AWSProvider.getAWSProviders(function(err, providers) {
+            if (err) {
+                logger.error(err);
+                res.send(500, errorResponses.db.error);
+                return;
+            }
+            logger.debug("Provider list: ",JSON.stringify(providers));
+            if (providers) {
+                var providerList = [];
+                var count = 0;
+                for (var i = 0; i < providers.length; i++) {
+                    (function(i) {
+
+                        AWSKeyPair.getAWSKeyPairByProviderId(providers[i]._id, function(err, keyPair) {
+                            logger.debug("keyPairs length::::: ", keyPair.length);
+                            var keys = [];
+                            keys.push(providers[i].accessKey);
+                            keys.push(providers[i].secretKey);
+                            cryptography.decryptMultipleText(keys, cryptoConfig.decryptionEncoding, cryptoConfig.encryptionEncoding, function(err, decryptedKeys) {
+                                if (err) {
+                                    res.sned(500, "Failed to decrypt accessKey or secretKey");
+                                    return;
+                                }
+                                count++;
+                                if (keyPair) {
+                                    var dommyProvider = {
+                                        _id: providers[i]._id,
+                                        id: 9,
+                                        accessKey: decryptedKeys[0],
+                                        secretKey: decryptedKeys[1],
+                                        providerName: providers[i].providerName,
+                                        providerType: providers[i].providerType,
+                                        orgId: providers[i].orgId,
+                                        __v: providers[i].__v,
+                                        keyPairs: keyPair
+                                    };
+                                    providerList.push(dommyProvider);
+                                    logger.debug("count: ",count);
+                                    if (count === providers.length) {
+                                        res.send(providerList);
+                                        return;
+                                    }
+                                }
+                            });
+                        });
+                    })(i);
+                }
+            } else {
+                res.send(404);
+            }
+        });
+    });
+
+    // Return AWS Provider respect to id.
+    app.get('/aws/providers/:providerId', function(req, res) {
+        logger.debug("Enter get() for /providers/%s", req.params.providerId);
+        var providerId = req.params.providerId.trim();
+        if (typeof providerId === 'undefined' || providerId.length === 0) {
+            res.send(500, "Please Enter ProviderId.");
+            return;
+        }
+        AWSProvider.getAWSProviderById(providerId, function(err, aProvider) {
+            if (err) {
+                logger.error(err);
+                res.send(500, errorResponses.db.error);
+                return;
+            }
+            if (aProvider) {
+                AWSKeyPair.getAWSKeyPairByProviderId(aProvider._id, function(err, keyPair) {
+                    logger.debug("keyPairs length::::: ", keyPair.length);
+                    masterUtil.getOrgById(aProvider.orgId[0], function(err, orgs) {
+                        if (err) {
+                            res.send(500, "Not able to fetch org.");
+                            return;
+                        }
+                        var keys = [];
+                        keys.push(aProvider.accessKey);
+                        keys.push(aProvider.secretKey);
+                        cryptography.decryptMultipleText(keys, cryptoConfig.decryptionEncoding, cryptoConfig.encryptionEncoding, function(err, decryptedKeys) {
+                            if (err) {
+                                res.sned(500, "Failed to decrypt accessKey or secretKey");
+                                return;
+                            }
+                            if (orgs.length > 0) {
+                                if (keyPair) {
+                                    var dommyProvider = {
+                                        _id: aProvider._id,
+                                        id: 9,
+                                        accessKey: decryptedKeys[0],
+                                        secretKey: decryptedKeys[1],
+                                        providerName: aProvider.providerName,
+                                        providerType: aProvider.providerType,
+                                        orgId: aProvider.orgId,
+                                        orgName: orgs[0].orgname,
+                                        __v: aProvider.__v,
+                                        keyPairs: keyPair
+                                    };
+                                    res.send(dommyProvider);
+                                }
+                            }
+                        });
+                    });
+                });
+            } else {
+                res.send(404);
+            }
+        });
+    });
+
     app.all("/aws/providers/*", sessionVerificationFunc);
     var cryptoConfig = appConfig.cryptoSettings;
     var cryptography = new Cryptography(cryptoConfig.algorithm, cryptoConfig.password);
@@ -199,13 +311,13 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                 res.send(500, errorResponses.db.error);
                                 return;
                             }
-                         if(providers!=null){ 
-                            logger.debug("providers>>> ", JSON.stringify(providers));
-                            if (providers.length > 0) {
-                                res.send(providers);
-                                return;
-                            } 
-                          }else {
+                            if (providers != null) {
+                                logger.debug("providers>>> ", JSON.stringify(providers));
+                                if (providers.length > 0) {
+                                    res.send(providers);
+                                    return;
+                                }
+                            } else {
                                 res.send(200, []);
                                 return;
                             }
@@ -251,7 +363,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         });
     });
 
-   app.post('/hppubliccloud/providers', function(req, res) {
+    app.post('/hppubliccloud/providers', function(req, res) {
 
         logger.debug("Enter post() for /hppubliccloud.", typeof req.files.hppubliccloudinstancepem);
         var user = req.session.user;
@@ -393,7 +505,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                             res.send("Provider name already exist.");
                             return;
                         }
-                        hppubliccloudProvider.createNew(req,providerData, function(err, provider) {
+                        hppubliccloudProvider.createNew(req, providerData, function(err, provider) {
                             if (err) {
                                 logger.debug("err.....", err);
                                 res.status(500);
@@ -438,7 +550,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         });
 
     });
-    
+
     app.get('/hppubliccloud/providers', function(req, res) {
         logger.debug("Enter get() for /hppubliccloud/providers");
         var loggedInUser = req.session.user.cn;
@@ -464,16 +576,16 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                 res.send(500, errorResponses.db.error);
                                 return;
                             }
-                            if(providers!=null){
-                                for(var i =0; i < providers.length;i++){
+                            if (providers != null) {
+                                for (var i = 0; i < providers.length; i++) {
                                     providers[i]['providerType'] = providers[i]['providerType'].toUpperCase();
                                 }
                                 logger.debug("providers>>> ", JSON.stringify(providers));
                                 if (providers.length > 0) {
                                     res.send(providers);
                                     return;
-                                } 
-                           } else {
+                                }
+                            } else {
                                 res.send(200, []);
                                 return;
                             }
@@ -711,8 +823,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
     });
 
-//Creates Azure Provider
- app.post('/azure/providers', function(req, res) {
+    //Creates Azure Provider
+    app.post('/azure/providers', function(req, res) {
 
         logger.debug("Enter post() for Azure.");
         var user = req.session.user;
@@ -723,7 +835,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
         var providerName = req.body.providerName;
         var providerType = req.body.providerType.toLowerCase();
-        
+
         var orgId = req.body.orgId;
 
         if (typeof azureSubscriptionId === 'undefined' || azureSubscriptionId.length === 0) {
@@ -734,7 +846,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             res.send(400, "Please Enter Storage Account.");
             return;
         }
-        
+
         if (typeof providerName === 'undefined' || providerName.length === 0) {
             res.send(400, "Please Enter Name.");
             return;
@@ -748,7 +860,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             res.send("Please Select Any Organization.");
             return;
         }
-        
+
 
         var region;
 
@@ -777,7 +889,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                     var providerData = {
                         id: 9,
                         subscriptionId: azureSubscriptionId,
-                        storageAccount: azureStorageAccount, 
+                        storageAccount: azureStorageAccount,
                         providerName: providerName,
                         providerType: providerType,
                         orgId: orgId
@@ -793,7 +905,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                             res.send("Provider name already exist.");
                             return;
                         }
-                        azurecloudProvider.createNew(req,providerData, function(err, provider) {
+                        azurecloudProvider.createNew(req, providerData, function(err, provider) {
                             if (err) {
                                 logger.debug("err.....", err);
                                 res.status(500);
@@ -813,7 +925,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                         _id: provider._id,
                                         id: 9,
                                         subscriptionId: azureSubscriptionId,
-                                        storageAccount: azureStorageAccount, 
+                                        storageAccount: azureStorageAccount,
                                         providerName: provider.providerName,
                                         providerType: provider.providerType,
                                         orgId: orgs[0].rowid,
@@ -837,7 +949,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
     }); //ends :create Azure provider
 
-//starts: get azure providers
+    //starts: get azure providers
     app.get('/azure/providers', function(req, res) {
         logger.debug("Enter get() for /azure/providers");
         var loggedInUser = req.session.user.cn;
@@ -863,8 +975,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                 res.send(500, errorResponses.db.error);
                                 return;
                             }
-                            if(providers!= null){
-                                for(var i =0; i < providers.length;i++){
+                            if (providers != null) {
+                                for (var i = 0; i < providers.length; i++) {
                                     providers[i]['providerType'] = providers[i]['providerType'].toUpperCase();
                                 }
                                 logger.debug("providers>>> ", JSON.stringify(providers));
@@ -916,9 +1028,9 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 });
             }
         });
-    });//end: get azure providers
+    }); //end: get azure providers
 
-//start: get azure provider by id
+    //start: get azure provider by id
     app.get('/azure/providers/:providerId', function(req, res) {
         logger.debug("Enter get() for /azure/providers//%s", req.params.providerId);
         var providerId = req.params.providerId.trim();
@@ -952,8 +1064,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         });
     }); //end: get azure provider by id
 
-//start: update azure provider
-app.post('/azure/providers/:providerId/update', function(req, res) {
+    //start: update azure provider
+    app.post('/azure/providers/:providerId/update', function(req, res) {
         logger.debug("Enter post() for /providers/azure/%s/update", req.params.providerId);
         var user = req.session.user;
         var category = configmgmtDao.getCategoryFromID("9");
@@ -965,7 +1077,7 @@ app.post('/azure/providers/:providerId/update', function(req, res) {
         var providerType = req.body.providerType.toLowerCase();
 
         var orgId = req.body.orgId;
-       
+
         if (typeof azureSubscriptionId === 'undefined' || azureSubscriptionId.length === 0) {
             res.send(400, "Please Enter Subscription Id.");
             return;
@@ -974,7 +1086,7 @@ app.post('/azure/providers/:providerId/update', function(req, res) {
             res.send(400, "Please Enter Storage Account.");
             return;
         }
-        
+
         if (typeof providerName === 'undefined' || providerName.length === 0) {
             res.send(400, "Please Enter Name.");
             return;
@@ -983,7 +1095,7 @@ app.post('/azure/providers/:providerId/update', function(req, res) {
             res.send(400, "Please Enter ProviderType.");
             return;
         }
-        
+
 
         var providerData = {
             id: 9,
@@ -1034,7 +1146,7 @@ app.post('/azure/providers/:providerId/update', function(req, res) {
                                     _id: req.params.providerId,
                                     id: 9,
                                     subscriptionId: azureSubscriptionId,
-                                    storageAccount: azureStorageAccount, 
+                                    storageAccount: azureStorageAccount,
                                     providerName: providerData.providerName,
                                     providerType: providerData.providerType,
                                     orgId: orgs[0].rowid,
@@ -1049,9 +1161,9 @@ app.post('/azure/providers/:providerId/update', function(req, res) {
                 }
             });
         });
-    });//end: update azure provider
+    }); //end: update azure provider
 
-//start: removes azure provider
+    //start: removes azure provider
     app.delete('/azure/providers/:providerId', function(req, res) {
         logger.debug("Enter delete() for /providers/%s", req.params.providerId);
         var user = req.session.user;
@@ -1325,13 +1437,13 @@ app.post('/azure/providers/:providerId/update', function(req, res) {
                                 res.send(500, errorResponses.db.error);
                                 return;
                             }
-                         if(providers!=null){
-                            logger.debug("providers>>> ", JSON.stringify(providers));
-                            if (providers.length > 0) {
-                                res.send(providers);
-                                return;
-                            }
-                         } else {
+                            if (providers != null) {
+                                logger.debug("providers>>> ", JSON.stringify(providers));
+                                if (providers.length > 0) {
+                                    res.send(providers);
+                                    return;
+                                }
+                            } else {
                                 res.send(200, []);
                                 return;
                             }
@@ -1891,62 +2003,6 @@ app.post('/azure/providers/:providerId/update', function(req, res) {
         });
     });
 
-    // Return AWS Provider respect to id.
-    app.get('/aws/providers/:providerId', function(req, res) {
-        logger.debug("Enter get() for /providers/%s", req.params.providerId);
-        var providerId = req.params.providerId.trim();
-        if (typeof providerId === 'undefined' || providerId.length === 0) {
-            res.send(500, "Please Enter ProviderId.");
-            return;
-        }
-        AWSProvider.getAWSProviderById(providerId, function(err, aProvider) {
-            if (err) {
-                logger.error(err);
-                res.send(500, errorResponses.db.error);
-                return;
-            }
-            if (aProvider) {
-                AWSKeyPair.getAWSKeyPairByProviderId(aProvider._id, function(err, keyPair) {
-                    logger.debug("keyPairs length::::: ", keyPair.length);
-                    masterUtil.getOrgById(aProvider.orgId[0], function(err, orgs) {
-                        if (err) {
-                            res.send(500, "Not able to fetch org.");
-                            return;
-                        }
-                        var keys = [];
-                        keys.push(aProvider.accessKey);
-                        keys.push(aProvider.secretKey);
-                        cryptography.decryptMultipleText(keys, cryptoConfig.decryptionEncoding, cryptoConfig.encryptionEncoding, function(err, decryptedKeys) {
-                            if (err) {
-                                res.sned(500, "Failed to decrypt accessKey or secretKey");
-                                return;
-                            }
-                            if (orgs.length > 0) {
-                                if (keyPair) {
-                                    var dommyProvider = {
-                                        _id: aProvider._id,
-                                        id: 9,
-                                        accessKey: decryptedKeys[0],
-                                        secretKey: decryptedKeys[1],
-                                        providerName: aProvider.providerName,
-                                        providerType: aProvider.providerType,
-                                        orgId: aProvider.orgId,
-                                        orgName: orgs[0].orgname,
-                                        __v: aProvider.__v,
-                                        keyPairs: keyPair
-                                    };
-                                    res.send(dommyProvider);
-                                }
-                            }
-                        });
-                    });
-                });
-            } else {
-                res.send(404);
-            }
-        });
-    });
-
     // Update a particular AWS Provider
     app.post('/aws/providers/:providerId/update', function(req, res) {
         logger.debug("Enter post() for /providers/%s/update", req.params.providerId);
@@ -2353,6 +2409,7 @@ app.post('/azure/providers/:providerId/update', function(req, res) {
         });
     });
 
+
     // Return list of all types of available providers.
     app.get('/allproviders/list', function(req, res) {
         logger.debug("Enter get() for /allproviders/list");
@@ -2373,7 +2430,7 @@ app.post('/azure/providers/:providerId/update', function(req, res) {
                         return;
                     }
                     if (orgList) {
-                         AWSProvider.getAWSProvidersForOrg(orgList, function(err, providers) {
+                        AWSProvider.getAWSProvidersForOrg(orgList, function(err, providers) {
                             if (err) {
                                 logger.error(err);
                                 res.send(500, errorResponses.db.error);
@@ -2402,97 +2459,97 @@ app.post('/azure/providers/:providerId/update', function(req, res) {
                                 }
                                 providersList.awsProviders = awsProviderList;
                                 //providersList.push(awsProviderList);
-                            } else{
-                                  providersList.awsProviders = [];
-                                  //providersList.push([]);
-                                }
-
-                        openstackProvider.getopenstackProvidersForOrg(orgList, function(err, openstackProviders) {
-                            if (err) {
-                                logger.error(err);
-                                res.send(500, errorResponses.db.error);
-                                return;
+                            } else {
+                                providersList.awsProviders = [];
+                                //providersList.push([]);
                             }
 
-                             if(openstackProviders!=null){
-                                logger.debug("openstack Providers>>> ", JSON.stringify(openstackProviders));
-                                if (openstackProviders.length > 0) {
-                                     providersList.openstackProviders = openstackProviders;
-                                    //providersList.push(openstackProviders);
-                                }
-                             } else {
-                                     providersList.openstackProviders = [];
-                                     //providersList.push([]);
-                                   }
-
-                        vmwareProvider.getvmwareProvidersForOrg(orgList, function(err, vmwareProviders) {
+                            openstackProvider.getopenstackProvidersForOrg(orgList, function(err, openstackProviders) {
                                 if (err) {
                                     logger.error(err);
                                     res.send(500, errorResponses.db.error);
                                     return;
                                 }
-                                 if(vmwareProviders!=null){ 
-                                    logger.debug("vmware Providers>>> ", JSON.stringify(vmwareProviders));
-                                    if (vmwareProviders.length > 0) {
-                                        providersList.vmwareProviders = vmwareProviders;
-                                        //providersList.push(vmwareProviders);
-                                    } 
-                                  }else{
-                                      providersList.vmwareProviders = [];
-                                   }
 
-
-                        hppubliccloudProvider.gethppubliccloudProvidersForOrg(orgList, function(err, hpCloudProviders) {
-                            if (err) {
-                                logger.error(err);
-                                res.send(500, errorResponses.db.error);
-                                return;
-                            }
-                            if(hpCloudProviders!=null){
-                                for(var i =0; i < hpCloudProviders.length;i++){
-                                    hpCloudProviders[i]['providerType'] = hpCloudProviders[i]['providerType'].toUpperCase();
+                                if (openstackProviders != null) {
+                                    logger.debug("openstack Providers>>> ", JSON.stringify(openstackProviders));
+                                    if (openstackProviders.length > 0) {
+                                        providersList.openstackProviders = openstackProviders;
+                                        //providersList.push(openstackProviders);
+                                    }
+                                } else {
+                                    providersList.openstackProviders = [];
+                                    //providersList.push([]);
                                 }
-                                logger.debug("providers>>> ", JSON.stringify(hpCloudProviders));
-                                if (hpCloudProviders.length > 0) {
-                                    providersList.hpPlublicCloudProviders = hpCloudProviders;
-                                    //providersList.push(hpCloudProviders);
-                                } 
-                           } else{
-                                 providersList.hpPlublicCloudProviders = [];
-                                //providersList.push([]);
-                           }
 
-                        azurecloudProvider.getAzureCloudProvidersForOrg(orgList, function(err, azureProviders) {
-                        
-                            if (err) {
-                                logger.error(err);
-                                res.send(500, errorResponses.db.error);
-                                return;
-                            }
-                            if(azureProviders!= null){
-                                for(var i =0; i < azureProviders.length;i++){
-                                    azureProviders[i]['providerType'] = azureProviders[i]['providerType'].toUpperCase();
-                                }
-                                logger.debug("providers>>> ", JSON.stringify(providers));
-                                if (azureProviders.length > 0) {
-                                    providersList.azureProviders = azureProviders;
-                                    //providersList.push(azureProviders);
-                                    res.send(providersList);
-                                    return;
-                                }
-                            } else {
-                                providersList.azureProviders = [];
-                                //providersList.push([]);
-                                res.send(200, providersList);
-                                return;
-                            }
-                        });   
+                                vmwareProvider.getvmwareProvidersForOrg(orgList, function(err, vmwareProviders) {
+                                    if (err) {
+                                        logger.error(err);
+                                        res.send(500, errorResponses.db.error);
+                                        return;
+                                    }
+                                    if (vmwareProviders != null) {
+                                        logger.debug("vmware Providers>>> ", JSON.stringify(vmwareProviders));
+                                        if (vmwareProviders.length > 0) {
+                                            providersList.vmwareProviders = vmwareProviders;
+                                            //providersList.push(vmwareProviders);
+                                        }
+                                    } else {
+                                        providersList.vmwareProviders = [];
+                                    }
 
-                        });  
 
-                        });
+                                    hppubliccloudProvider.gethppubliccloudProvidersForOrg(orgList, function(err, hpCloudProviders) {
+                                        if (err) {
+                                            logger.error(err);
+                                            res.send(500, errorResponses.db.error);
+                                            return;
+                                        }
+                                        if (hpCloudProviders != null) {
+                                            for (var i = 0; i < hpCloudProviders.length; i++) {
+                                                hpCloudProviders[i]['providerType'] = hpCloudProviders[i]['providerType'].toUpperCase();
+                                            }
+                                            logger.debug("providers>>> ", JSON.stringify(hpCloudProviders));
+                                            if (hpCloudProviders.length > 0) {
+                                                providersList.hpPlublicCloudProviders = hpCloudProviders;
+                                                //providersList.push(hpCloudProviders);
+                                            }
+                                        } else {
+                                            providersList.hpPlublicCloudProviders = [];
+                                            //providersList.push([]);
+                                        }
 
-                        });    
+                                        azurecloudProvider.getAzureCloudProvidersForOrg(orgList, function(err, azureProviders) {
+
+                                            if (err) {
+                                                logger.error(err);
+                                                res.send(500, errorResponses.db.error);
+                                                return;
+                                            }
+                                            if (azureProviders != null) {
+                                                for (var i = 0; i < azureProviders.length; i++) {
+                                                    azureProviders[i]['providerType'] = azureProviders[i]['providerType'].toUpperCase();
+                                                }
+                                                logger.debug("providers>>> ", JSON.stringify(providers));
+                                                if (azureProviders.length > 0) {
+                                                    providersList.azureProviders = azureProviders;
+                                                    //providersList.push(azureProviders);
+                                                    res.send(providersList);
+                                                    return;
+                                                }
+                                            } else {
+                                                providersList.azureProviders = [];
+                                                //providersList.push([]);
+                                                res.send(200, providersList);
+                                                return;
+                                            }
+                                        });
+
+                                    });
+
+                                });
+
+                            });
 
                         });
                     } else {
@@ -2507,7 +2564,7 @@ app.post('/azure/providers/:providerId/update', function(req, res) {
                         return;
                     }
                     if (orgList) {
-                         AWSProvider.getAWSProvidersForOrg(orgList, function(err, providers) {
+                        AWSProvider.getAWSProvidersForOrg(orgList, function(err, providers) {
                             if (err) {
                                 logger.error(err);
                                 res.send(500, errorResponses.db.error);
@@ -2536,97 +2593,97 @@ app.post('/azure/providers/:providerId/update', function(req, res) {
                                 }
                                 providersList.awsProviders = awsProviderList;
                                 //providersList.push(awsProviderList);
-                            } else{
-                                  providersList.awsProviders = [];
-                                  //providersList.push([]);
-                                }
-
-                        openstackProvider.getopenstackProvidersForOrg(orgList, function(err, openstackProviders) {
-                            if (err) {
-                                logger.error(err);
-                                res.send(500, errorResponses.db.error);
-                                return;
+                            } else {
+                                providersList.awsProviders = [];
+                                //providersList.push([]);
                             }
 
-                             if(openstackProviders!=null){
-                                logger.debug("openstack Providers>>> ", JSON.stringify(openstackProviders));
-                                if (openstackProviders.length > 0) {
-                                     providersList.openstackProviders = openstackProviders;
-                                    //providersList.push(openstackProviders);
-                                }
-                             } else {
-                                     providersList.openstackProviders = [];
-                                     //providersList.push([]);
-                                   }
-
-                        vmwareProvider.getvmwareProvidersForOrg(orgList, function(err, vmwareProviders) {
+                            openstackProvider.getopenstackProvidersForOrg(orgList, function(err, openstackProviders) {
                                 if (err) {
                                     logger.error(err);
                                     res.send(500, errorResponses.db.error);
                                     return;
                                 }
-                                 if(vmwareProviders!=null){ 
-                                    logger.debug("vmware Providers>>> ", JSON.stringify(vmwareProviders));
-                                    if (vmwareProviders.length > 0) {
-                                        providersList.vmwareProviders = vmwareProviders;
-                                        //providersList.push(vmwareProviders);
-                                    } 
-                                  }else{
-                                      providersList.vmwareProviders = [];
-                                   }
 
-
-                        hppubliccloudProvider.gethppubliccloudProvidersForOrg(orgList, function(err, hpCloudProviders) {
-                            if (err) {
-                                logger.error(err);
-                                res.send(500, errorResponses.db.error);
-                                return;
-                            }
-                            if(hpCloudProviders!=null){
-                                for(var i =0; i < hpCloudProviders.length;i++){
-                                    hpCloudProviders[i]['providerType'] = hpCloudProviders[i]['providerType'].toUpperCase();
+                                if (openstackProviders != null) {
+                                    logger.debug("openstack Providers>>> ", JSON.stringify(openstackProviders));
+                                    if (openstackProviders.length > 0) {
+                                        providersList.openstackProviders = openstackProviders;
+                                        //providersList.push(openstackProviders);
+                                    }
+                                } else {
+                                    providersList.openstackProviders = [];
+                                    //providersList.push([]);
                                 }
-                                logger.debug("providers>>> ", JSON.stringify(hpCloudProviders));
-                                if (hpCloudProviders.length > 0) {
-                                    providersList.hpPlublicCloudProviders = hpCloudProviders;
-                                    //providersList.push(hpCloudProviders);
-                                } 
-                           } else{
-                                 providersList.hpPlublicCloudProviders = [];
-                                //providersList.push([]);
-                           }
 
-                        azurecloudProvider.getAzureCloudProvidersForOrg(orgList, function(err, azureProviders) {
-                        
-                            if (err) {
-                                logger.error(err);
-                                res.send(500, errorResponses.db.error);
-                                return;
-                            }
-                            if(azureProviders!= null){
-                                for(var i =0; i < azureProviders.length;i++){
-                                    azureProviders[i]['providerType'] = azureProviders[i]['providerType'].toUpperCase();
-                                }
-                                logger.debug("providers>>> ", JSON.stringify(providers));
-                                if (azureProviders.length > 0) {
-                                    providersList.azureProviders = azureProviders;
-                                    //providersList.push(azureProviders);
-                                    res.send(providersList);
-                                    return;
-                                }
-                            } else {
-                                providersList.azureProviders = [];
-                                //providersList.push([]);
-                                res.send(200, providersList);
-                                return;
-                            }
-                        });   
+                                vmwareProvider.getvmwareProvidersForOrg(orgList, function(err, vmwareProviders) {
+                                    if (err) {
+                                        logger.error(err);
+                                        res.send(500, errorResponses.db.error);
+                                        return;
+                                    }
+                                    if (vmwareProviders != null) {
+                                        logger.debug("vmware Providers>>> ", JSON.stringify(vmwareProviders));
+                                        if (vmwareProviders.length > 0) {
+                                            providersList.vmwareProviders = vmwareProviders;
+                                            //providersList.push(vmwareProviders);
+                                        }
+                                    } else {
+                                        providersList.vmwareProviders = [];
+                                    }
 
-                        });  
 
-                        });
+                                    hppubliccloudProvider.gethppubliccloudProvidersForOrg(orgList, function(err, hpCloudProviders) {
+                                        if (err) {
+                                            logger.error(err);
+                                            res.send(500, errorResponses.db.error);
+                                            return;
+                                        }
+                                        if (hpCloudProviders != null) {
+                                            for (var i = 0; i < hpCloudProviders.length; i++) {
+                                                hpCloudProviders[i]['providerType'] = hpCloudProviders[i]['providerType'].toUpperCase();
+                                            }
+                                            logger.debug("providers>>> ", JSON.stringify(hpCloudProviders));
+                                            if (hpCloudProviders.length > 0) {
+                                                providersList.hpPlublicCloudProviders = hpCloudProviders;
+                                                //providersList.push(hpCloudProviders);
+                                            }
+                                        } else {
+                                            providersList.hpPlublicCloudProviders = [];
+                                            //providersList.push([]);
+                                        }
 
-                        });    
+                                        azurecloudProvider.getAzureCloudProvidersForOrg(orgList, function(err, azureProviders) {
+
+                                            if (err) {
+                                                logger.error(err);
+                                                res.send(500, errorResponses.db.error);
+                                                return;
+                                            }
+                                            if (azureProviders != null) {
+                                                for (var i = 0; i < azureProviders.length; i++) {
+                                                    azureProviders[i]['providerType'] = azureProviders[i]['providerType'].toUpperCase();
+                                                }
+                                                logger.debug("providers>>> ", JSON.stringify(providers));
+                                                if (azureProviders.length > 0) {
+                                                    providersList.azureProviders = azureProviders;
+                                                    //providersList.push(azureProviders);
+                                                    res.send(providersList);
+                                                    return;
+                                                }
+                                            } else {
+                                                providersList.azureProviders = [];
+                                                //providersList.push([]);
+                                                res.send(200, providersList);
+                                                return;
+                                            }
+                                        });
+
+                                    });
+
+                                });
+
+                            });
 
                         });
                     } else {
@@ -2638,4 +2695,35 @@ app.post('/azure/providers/:providerId/update', function(req, res) {
         });
     });
 
+
+    // List out all aws nodes.
+    app.post('/aws/providers/node/list', function(req, res) {
+        logger.debug("Enter List AWS Nodes: ");
+
+        var ec2 = new EC2({
+            "access_key": req.body.accessKey,
+            "secret_key": req.body.secretKey,
+            "region": req.body.region
+        });
+        ec2.listInstances(function(err, nodes) {
+            if (err) {
+                logger.debug("Unable to list nodes from AWS.", err);
+                res.send("Unable to list nodes from AWS.", 500);
+                return;
+            }
+            logger.debug("Success to list nodes from AWS.");
+            var nodeList = [];
+            for (var i = 0; i < nodes.Reservations.length; i++) {
+                var instance = {
+                    "instance": nodes.Reservations[i].Instances[0].InstanceId,
+                    "privateIp": nodes.Reservations[i].Instances[0].PrivateIpAddress,
+                    "publicIp": nodes.Reservations[i].Instances[0].PublicIpAddress,
+                    "privateDnsName": nodes.Reservations[i].Instances[0].PrivateDnsName
+                };
+                nodeList.push(instance);
+            }
+            res.send(nodeList);
+        });
+    });
 }
+

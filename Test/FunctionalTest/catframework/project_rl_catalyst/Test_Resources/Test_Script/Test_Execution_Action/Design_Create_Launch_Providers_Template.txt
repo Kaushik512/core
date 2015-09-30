@@ -149,6 +149,8 @@ Catalyst Creation of New Blueprint and Delete
     Clicks on Next Button
     Clicks on Confirm OK Button
     Clicks on Workzone Button
+    Clicks on the Project to go to Environment
+    Clicks on the Environment to Launch
     Sleep    5s
     Clicks on Blueprint Section
     Select the CentosTesingBlueprint
@@ -167,7 +169,7 @@ Clicks on Add New Blueprint Button
     Sleep    3s
 
 Deleting the Testing Blueprint
-    Click Element    css=button.btn.pull-right.btn-danger.right-button
+    Click Element    xpath=.//*[@id='l2']/footer/div/button
     Sleep    1s
     Click Element    xpath=//*[text()='OK']   
 
@@ -187,11 +189,55 @@ Catalyst Creation of Providers Setup
     Selects the Key Pair
     Uploads the Pem File for Provider
     Clicks on Save Button of the Provider
+    
+
+
+Catalyst Editing the ProviderName
+    Clicks on Settings
+    Clicks on DevOps Setup menu
+    Clicks on Providers
+    Sleep    1s
+    Clicks on Edit Button of Created Provider
+    Sleep    1s
+    Enters the New Edit Provider Name
+    Clicks on Save Button of the Provider
+    Sleep    2s
     Verfiy the Provider is Created
+
+
+Catalyst Unique Provider Creation Setup
+    Clicks on Settings
+    Clicks on DevOps Setup menu
+    Clicks on Providers           
+    Clicks on New Button of Providers
+    Select the Provider
+    Enters the New Edit Provider Name
+    Enters the Access Key
+    Enters the Secret Key
+    Sleep    3s
+    Select organization now
+    Selects the Region
+    Selects the Key Pair
+    Uploads the Pem File for Provider
+    Clicks on Save Button of the Provider
+    Verify the Error Message Displayed while duplicating the provider
+
+
+Verify the Error Message Displayed while duplicating the provider
+    Element Should Contain    id=errmsg_name    ${Provider ErrMsg}
+    Sleep    2s
+
+
+Enters the New Edit Provider Name
+    Input Text    id=name    ${EDIT PROVIDER NANME}
+
+Clicks on Edit Button of Created Provider
+    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${PROVIDER NAME}']/../td[4]/div/a[1]/i
+
 
 Verfiy the Provider is Created
     Sleep    2s
-    Element Should Contain    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${PROVIDER NAME}']    ${PROVIDER NAME}
+    Element Should Contain    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${EDIT PROVIDER NANME}']    ${EDIT PROVIDER NANME}
 
 Validation of Creation of New Image
     Validation of Empty Image Name  ${ValidEmptyImageName}
@@ -207,7 +253,7 @@ Validation of Creation of New Image
             
 
 Catalyst Creation of VM Image Process for CentOS
-    Sleep    5s
+    Sleep    5s    
     Clicks on New Button of VMImage
     Enters the Image Name for CentOS
     Choosess The Provider of Image
@@ -252,10 +298,18 @@ Catalyst Creation of VM Image Process for Windows
     Enters the UserName of WindowsProviders
     Select the Organizatn to Create Windows Img
     Clicks on Save Button of Providers
+
+Catalyst VM Image Edit Setup
     Validate the Edit of VM Image
+
+
 
 Validate the Edit of VM Image
     Sleep    5s
+    Clicks on Settings
+    Clicks on Gallery Setup
+    Clicks on VMImage
+    Sleep    2s
     Clicks on Edit Button of Windows Image
     Sleep    4s
     Enters the New Image name for Windows
@@ -317,6 +371,8 @@ Catalyst Form validation of Blueprint
     Sleep    6s
     Clicks on Design
     Sleep    10s
+    Clicks on OK Button to Validate in loop
+    Sleep    1s
     Choose the Template Type Created
     Sleep    3s
     Clicks on Next Button
@@ -382,6 +438,8 @@ Catalyst Choose Template and Save Setup of CentOS Blueprint
     Sleep    6s
     Clicks on Design
     Sleep    10s
+    Clicks on OK Button to Validate in loop
+    Sleep    1s
     Choose the Template Type Created
     Sleep    3s
     Clicks on Next Button
@@ -416,12 +474,38 @@ Catalyst Choose Template and Save Setup of CentOS Blueprint
     Clicks on Next Button
     Clicks on Confirm OK Button
 
+Clicks on OK Button to Create the New Blueprint
+    Click Element    xpath=.//*[text()='OK']
+
+
+
+Clicks on OK Button to Validate in loop
+    ${said}=    Run Keyword and Return Status     Page Should Contain Element    xpath=.//*[text()='OK']
+    Run Keyword If    '${said}' == 'True'     
+    ...    Click Element    xpath=.//*[text()='OK']
+    ...    ELSE IF   '${said}' == 'False'
+    ...    Log    OK Button is not displayed
     
-CentOS Blueprint Launched and verify IP,Status,Chef,SSH,Stop,BootStrap           
+
+
+   
+   
+    #Run Keyword And Continue On Failure    Click Element    xpath=.//*[text()='OK']
+    #Log    Test is Continued
+    #Click Element    xpath=.//*[text()='OK']
+
+    
+CentOS Blueprint Launched and verify IP,Status,Chef,SSH,Stop,BootStrap
+    Clicks on the Project to go to Environment
+    Clicks on the Environment to Launch
     Sleep    5s
     Clicks on Blueprint Section
     Select the CentosBlueprint
+    Sleep    1s
     Clicks on Launch Button
+    Sleep    2s
+    Confirmation to launch Blueprint
+    Sleep    1s
     Clicks on Instance Close Button
     Clicks on Instances Button
     Verify the IP Address of the Instance
@@ -443,8 +527,54 @@ CentOS Blueprint Launched and verify IP,Status,Chef,SSH,Stop,BootStrap
     Sleep    4s
     
 
+Catalyst Inspect Functionality Setup
+    Clicks on the Project to go to Environment
+    Clicks on the Environment to Launch
+    Sleep    5s
+    Selects the CentOS Blueprint to go to Controlpanel
+    Clicks on Contreol Panel
+    Clicks on Inspect Button
+    Sleep    5s
+    Enter the Installed Software Name in the Filter
+    Verify the Particular Software is listed in list 
+
+    
 
 
+
+Verify the Particular Software is listed in list
+    Sleep    2s 
+    Element Should Contain    css=#paragraphs > p:nth-child(1)    ${SOFTWARE NAME}
+    Sleep    3s
+    Click Element    css=#installedSoftwareModalContainer > div > div > div.modal-footer > button
+
+
+
+Enter the Installed Software Name in the Filter
+    Input Text    css=label > input.form-control    ${SOFTWARE NAME}
+
+
+Clicks on Inspect Button
+    Execute Javascript    $('.btn.btn-primary.inspectBtn').click()
+    
+
+
+Selects the CentOS Blueprint to go to Controlpanel
+    Click Element    xpath=//div[@data-blueprintname='${BLUEPRINT NAME}']
+    Sleep    1s
+
+
+Clicks on the Project to go to Environment
+    Execute Javascript    $('.expand-collapse.click-expand.fa.fa-angle-right').append('${Proj1}').click()
+    Sleep    2s
+
+
+Confirmation to launch Blueprint
+    Click Element    xpath=.//*[text()='OK']
+
+Clicks on the Environment to Launch
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=//*[normalize-space(text())="Dev"]
+    Sleep    5 seconds
 
 
 
@@ -501,6 +631,8 @@ Catalyst STOP Action on CentOS Instance
     Sleep    20s
 
 Catalyst EDIT Instance Name of CentOS Instance
+    Clicks on the Project to go to Environment
+    Clicks on the Environment to Launch
     Sleep    4s
     Clicks on Edit Button of the CentosInstance Imported
     Enters the New Instance Name for Centos
@@ -512,6 +644,8 @@ Catalyst EDIT Instance Name of CentOS Instance
 
 
 Steps To Run Chef Client
+    Clicks on the Project to go to Environment
+    Clicks on the Environment to Launch
     Click on RUNNN of Chef Client
     Sleep    5s
     Update the Run List with Cookbook
@@ -526,6 +660,8 @@ Steps To Run Chef Client
 
 
 Steps to Run SSH
+    Clicks on the Project to go to Environment
+    Clicks on the Environment to Launch
     Click on Verified SSH Instance
     Enters the Username in the Terminal
     Select Authentication Type
@@ -540,6 +676,8 @@ Steps to Run SSH
     Clicks Back Burtton of Instances
     
 Steps to Run Stopping the Instance
+    Clicks on the Project to go to Environment
+    Clicks on the Environment to Launch
     Clicks on STOP of Verfied Instance
     Verfified the STOPPED Status
     Clicks on Contreol Panel
@@ -548,27 +686,29 @@ Steps to Run Stopping the Instance
     Clicks on Back To Instances
     
 
-Catlayst verfication of Instance Stop Setup and Disable
+Catlayst verfication of CentOS Instance Stop Setup and Disable
     #Clicks on Workzone Button
     #Clicks on User Created Organization
     #Clicks on User Created BusinessGroup
     #Clicks on > Button to your Environment
     #-Clicks on your Blueeeprint
+    Clicks on the Project to go to Environment
+    Clicks on the Environment to Launch
     Verfified the STOPPED Status
     Verify the IP Address after Launch of Instance
-    Verify the CHEF Client Run
+    Verify the CHEF Client Run is disabled
     Verfiy the SSH is Disabled
     Verify the Start Button Enabled
-    Verfiy the More Info Button is Dispalyed
+    Verfiy the Applink Button is Dispalyed
     Clicks on Contreol Panel
     Verify the IP Address after Launch of Instance
     Verify the Stopped CHEF Client Run after Updation
     Verfiy the Stopped SSH is Disabled after Updation
     Verify the Start Button Enabled from Contrl Panel
-    Verfiy the More Info Button is Dispalyed from Control panel
+    Verfiy the Applink Button is Dispalyed from Control panel
     Verify the Machine status from CntrlPanel
-    #Verify the Total Memory from CntrlPanel
-    #Verify the Free Memory from CntrlPanel
+    Verify the Total Memory from CntrlPanel
+    Verify the Free Memory from CntrlPanel
     Verfiy the OS Frm ContrlPanel
     Verfify the Chef Bootstrap frm ContrlPanel
     Verify the Runlist from CntrlPanel
@@ -577,9 +717,9 @@ Catlayst verfication of Instance Stop Setup and Disable
 
 
 Catalyst Choose Template and Save Setup for UBUNTU
-    Clicks on Settings
+    Sleep    6s
     Clicks on Design
-    Sleep    5s
+    Sleep    10s
     Choose the Template Type Created
     Sleep    3s
     Clicks on Next Button
@@ -600,8 +740,11 @@ Catalyst Choose Template and Save Setup for UBUNTU
     Enters The ubuntu Blueprint Name
     Chooses The Business Group
     Chooses The Project
-    Select WorkCookBooks for Ubuntu
     Clicks on close of Configure Organization Parameters
+    Sleep    1s
+    Clicks on Configure Runlist Parameters
+    Select WorkCookBooks for Ubuntu
+    Clicks on UpdateRunlist Buttton
     #Chooses The Environment
     Clicks on Configure Application URL
     Clicks on AppNew Button
@@ -612,23 +755,37 @@ Catalyst Choose Template and Save Setup for UBUNTU
     Clicks on Next Button
     Clicks on Confirm OK Button
 
-Catlayst Workzone and Status Setup for Ubuntu
-    Clicks on Workzone Button
-    #Clicks on User Created Organization
-    #Clicks on User Created BusinessGroup
+Ubuntu Blueprint Launched and verify the IP,Status,Chef,SSH,Stop,BootStrap
+    Sleep    5s
+    #Clicks on the Project to go to Environment
     Clicks on the Button to the Environment
+    Sleep    2s
     Clicks on Blueprint Section
     Select the BlueprintUbuntu
     Clicks on Launch Button
+    Sleep    2s
+    Confirmation to launch Blueprint
+    Sleep    1s
     Clicks on Instance Close Button
     Clicks on Instances Button
-    #Clicks on your Ubuntu Blueeeprint
     Verify the IP Address of the Ubuntu Instance
     Verfiy the Status of the Ubuntu Instance
+    Sleep    30s
+    Clicks on Design
+    Sleep    7s
+    Clicks on Workzone Button
+    Sleep    6s
     Verify the CHEF Client Run for Ubuntu
     Verfiy the SSH is Enabled for Ubuntu
     Verfiy the STOP Button is Enabled for Ubuntu
-    Verfiy The More Info Button Is Dispalyed For Ubuntu
+    Verfiy the AppLink Button is Dispalyed for Ubuntu
+    Sleep    2s
+    Clicks on Contreol Panel
+    Clicks on Action History
+    Checking THe BootStrpa Status
+    Clicks on Back To Instances
+    Sleep    4s
+
 
 
 Catalyst Check INFORMATION Status for Ubuntu
@@ -646,11 +803,13 @@ Catalyst Check INFORMATION Status for Ubuntu
     Check the Chef BootStrap
     Clicks on Back To Instances
 
-Catalyst Grid View Verify Start ,Stop ,SSH ,Chef ,Client ,Log Setup and Delete
+Catalyst Grid View Verify Start ,Stop ,SSH ,Chef ,Client ,Log Setup
     #Clicks on Workzone Button
     #Clicks on User Created Organization
     #Clicks on User Created BusinessGroup
     #Clicks on > Button to your Environment
+    Clicks on the Project to go to Environment
+    Clicks on the Environment to Launch
     Sleep    1s
     Clicks on Instances View
     Verfiy the Name of Instance
@@ -671,7 +830,41 @@ Catalyst Grid View Verify Start ,Stop ,SSH ,Chef ,Client ,Log Setup and Delete
     #Verfiy the STOP Toggler Enabled from Grid View
     Clicks on View Instancess Button
 
-Catalyst Grid View Verify Start ,Stop ,SSH ,Chef ,Client ,Log ,Del Setup of Ubuntu
+Catalyst CentOS Deleete the Instance Setup
+    Clicks on the Project to go to Environment
+    Clicks on the Environment to Launch
+    Sleep    4s
+    Clicks on CentOS Instance to Delete
+    Del the CentOS Instance
+
+Catalyst ubuntu OS Deleete the Instance Setup
+    Clicks on the Project to go to Environment
+    Sleep    4s
+    Clicks on the Button to the Environment
+    Sleep    3s
+    Clicks on Ubuntu OS Instance to Delete
+    Del the CentOS Instance
+
+Del the CentOS Instance
+    Click Element    id=removeInstance
+    Sleep    1s
+    Click Element    id=ckbChefDelete
+    Sleep    1s
+    Click Element    xpath=//*[text()='Delete']
+
+
+Clicks on CentOS Instance to Delete
+    Sleep    3s
+    Click Element    xpath=//span[@data-original-title='${NEW BLUEPRINT NAME}']
+
+
+Clicks on Ubuntu OS Instance to Delete
+    Sleep    3s
+    Click Element    xpath=//span[@data-original-title='${NEW UBUNTU BLUPRNT}']
+    
+
+Catalyst Grid View Verify Start ,Stop ,SSH ,Chef ,Client ,Log Setup of Ubuntu
+    #Clicks on the Project to go to Environment
     Clicks on the Button to the Environment
     Sleep    1s
     Clicks on Instances View
@@ -693,6 +886,20 @@ Catalyst Grid View Verify Start ,Stop ,SSH ,Chef ,Client ,Log ,Del Setup of Ubun
     #Verfiy the STOP Toggler Enabled from Grid View
     Clicks on View Instancess Button
 
+
+
+
+
+
+
+Clicks on Configure Runlist Parameters
+    Click Element    xpath=.//*[@id='accordion-Design']/div[3]/div[1]/h4/a/i[1]
+    Sleep    2s
+    Click Element    css=.addList
+    Sleep    2s
+
+Clicks on UpdateRunlist Buttton
+    Click Element    id=saveRunlist
 
 Enable the Next Button 
     Execute JavaScript    $('#bootstrap-wizard-1 > div.tab-content > footer > div').attr('style','display:block')
@@ -728,6 +935,8 @@ Choose the Template Type Created
     Click Element    xpath=//div[@data-templatetype='${TEMPLATE TYPENAME}']
 
 Clicks on the Button to the Environment
+    Execute Javascript    $('.expand-collapse.click-expand.fa.fa-angle-right').append('${Proj1}').click()
+    Sleep    2s
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=//*[normalize-space(text())="QA"]
     Sleep    5 seconds
 
@@ -835,11 +1044,7 @@ SSH in to the Instance from Grid view
 Clicks on View Instancess Button
     Click Element    id=defaultViewButton
     Sleep    3s
-    Click Element    id=removeInstance
-    Sleep    1s
-    Click Element    id=ckbChefDelete
-    Sleep    1s
-    Click Element    xpath=//*[text()='Delete']
+    
 
 
 
@@ -862,6 +1067,7 @@ Catalyst Ubuntu Instance Verfication and BootStrap steps
 
 Catalyst CHEFCLIENT Action on Ubuntu Instance
     Sleep    5s
+    #Clicks on the Project to go to Environment
     Clicks on the Button to the Environment
     Steps To Run Chef Client of Ubuntu
     Sleep    3s
@@ -869,6 +1075,7 @@ Catalyst CHEFCLIENT Action on Ubuntu Instance
 
 Catalyst SSH Action on the Ubuntu Instance
     Sleep    5s
+    #Clicks on the Project to go to Environment
     Clicks on the Button to the Environment
     Steps to Run SSH of Ubuntu
     Sleep    3s
@@ -876,7 +1083,9 @@ Catalyst SSH Action on the Ubuntu Instance
 
 Catalyst STOP Action on the Ubuntu Instance
     Sleep    5s
+    #Clicks on the Project to go to Environment
     Clicks on the Button to the Environment
+    Sleep    3s
     Steps to Run Stopping the Instance of Ubuntu
     Sleep    20s
 
@@ -884,6 +1093,7 @@ Catalyst STOP Action on the Ubuntu Instance
 
 Catalyst EDIT Name of Ubuntu Instance
     Sleep    5s
+    #Clicks on the Project to go to Environment
     Clicks on the Button to the Environment
     Clicks on Edit Button of the UbuntuInstance Imported
     Enters the New Instance Name for Ubuntu
@@ -892,33 +1102,32 @@ Catalyst EDIT Name of Ubuntu Instance
 
 
 Steps To Run Chef Client of Ubuntu
-    #Clicks on your Ubuntu Blueeeprint
     Click on RUNNN of Chef Client of Ubuntu
     Update the Run List with Newwww Cookbook
     Clicks on Update Button of Runlist
+    Sleep    1s
     Clicks on Contreol Panel
     Clicks on Action History
     Checking the Ubuntu BChefClient Run Status
     Clicks on Back To Instances
 
 Steps to Run SSH of Ubuntu
-    #Clicks on your Ubuntu Blueeeprint
     Click on Verified SSH Instance of Ubuntu
     Enters the Ubuntu Username in the Terminal
     Select Authentication Type
     Upload the Catalyst PEM File
     Clicks on Terminlal Submit Button
     Close the SSH Terminal
+    Sleep    4s
     Clicks on Contreol Panel
     Clicks on Action History
+    Sleep    7s
     Verfify the status of SSH Shell
-    Clicks on Back To Instances
+    Clicks Back Burtton of Instances
 
 Steps to Run Stopping the Instance of Ubuntu
-    #Clicks on your Ubuntu Blueeeprint
     Clicks Ubuntu STOP Machine of Verfied Instance    
     Verfified the Ubuntu STOPPED Status
-    #Clicks on your Ubuntu Blueeeprint
     Clicks on Contreol Panel
     Clicks on Action History
     Verfiy the Table contains the Status
@@ -928,11 +1137,12 @@ Catlayst verfication of Instance Stop Setup and Disable of Ubuntu
     #Clicks on Workzone Button
     #Clicks on User Created Organization
     #Clicks on User Created BusinessGroup
+    #Clicks on the Project to go to Environment
     Clicks on the Button to the Environment
     #Clicks on your Ubuntu Blueeeprint
     Verfified the STOPPED Status of Ubuntu
     Verify the IP Address after Launch of Ubuntu Instance
-    Verify the CHEF Client Run off Ubuntu
+    Verify the CHEF Client Run off Ubuntu disabled
     Verfiy the SSH is Disabled off Ubuntu
     Verify the Ubuntuu Start Button Enabled
     Verfiy the More Info Button Dispalyed off Ubuntu
@@ -1014,10 +1224,10 @@ Verify the Runlist for Ubuntu from CntrlPanel
 
 
 Verify the Start Button Enabled
-    Wait Until Keyword Succeeds    1 minute     1 seconds    Element Should Be Visible    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${BLUEPRINT NAME}")]/div/div/div/div/div/div[4]/div[@class='startstoptoggler stopped'] 
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Element Should Be Visible    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${BLUEPRINT NAME}")]/div/div/div/div[4]/div[@class='startstoptoggler stopped']
 
 Verify the Ubuntuu Start Button Enabled
-    Wait Until Keyword Succeeds    1 minute     1 seconds    Element Should Be Visible    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${NEW UBUNTU BLUPRNT}")]/div/div/div/div/div/div[4]/div[@class='startstoptoggler stopped']
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Element Should Be Visible    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${BLUEPRINT NAME1}")]/div/div/div/div[4]/div[@class='startstoptoggler stopped']
 
 
 Verify the Stopped CHEF Client Run after Updation
@@ -1160,13 +1370,13 @@ Verfiy the AppLink Button is Dispalyed
     Wait Until Keyword Succeeds    1 minute     1 seconds     Element Should Be Visible    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${BLUEPRINT NAME}")]/div/div/div/div/div/a[@class='btn1 showmenuAppTaskAnchor']
 
 Verfiy the AppLink Button is Dispalyed for Ubuntu
-    Element Should Be Visible    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${BLUEPRINT NAME1}")]/div/div/div/div/div/a[@class='btn1 showmenuAppTaskAnchor']
+    Wait Until Keyword Succeeds    1 minute     1 seconds     Element Should Be Visible    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${BLUEPRINT NAME1}")]/div/div/div/div/div/a[@class='btn1 showmenuAppTaskAnchor']
 
 Verfiy the More Info Button Dispalyed off Ubuntu
     Element Should Be Visible    xpath=//div[@class='domain-roles-caption'][//div[//span[text()='${NEW UBUNTU BLUPRNT}']]]/div[4]/span
     
 
-Verfiy the More Info Button is Dispalyed from Control panel
+Verfiy the Applink Button is Dispalyed from Control panel
     Wait Until Keyword Succeeds    1 minute     1 seconds     Element Should Be Visible    xpath=.//*[@id='controlPanelContainer']/div/div/ul/li[contains(.,"${BLUEPRINT NAME}")]/div/div/div/div/div/div[4]/span/a[@class='moreInfo']
 
 Verfiy the Ubuntu More Info Button is Dispalyed from Control panel
@@ -1197,10 +1407,11 @@ Clicks on STOP of Verfied Instance
     Sleep    15 seconds
 
 Clicks Ubuntu STOP Machine of Verfied Instance    
-    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${BLUEPRINT NAME1}")]div/div/div/div[4]/div[5]
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${BLUEPRINT NAME1}")]/div/div/div/div[4]/div[5]
     Wait Until Keyword Succeeds    1 minute     5 seconds      Click Element    xpath=//*[text()='OK']
+    Sleep    2s
     Wait Until Keyword Succeeds    2 minute     5 seconds      Click Element    xpath=.//*[@id='instanceLogModalContainer']/div/div/div[3]/button
-    Sleep    10 seconds
+    Sleep    15 seconds
 
 Verfified the STOPPED Status
     Wait Until Keyword Succeeds    2 minute     1 seconds    Element Should Contain    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${BLUEPRINT NAME}")]/div/div/div/div[3]/div/span[2]/span    ${STOPD}
@@ -1209,7 +1420,7 @@ Verfified the Ubuntu STOPPED Status
     Wait Until Keyword Succeeds    2 minute     1 seconds    Element Should Contain    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${BLUEPRINT NAME1}")]/div/div/div/div[3]/div/span[2]/span    ${STOPD}
 
 Verfified the STOPPED Status of Ubuntu
-    Wait Until Keyword Succeeds    2 minute     1 seconds    Element Should Contain    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${NEW UBUNTU BLUPRNT}")]/div/div/div/div/div/div[3]/div/span/span[@class='instance-state instance-state-text-stopped']    ${SUITS}
+    Wait Until Keyword Succeeds    2 minute     1 seconds    Element Should Contain    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${BLUEPRINT NAME1}")]/div/div/div/div[3]/div/span[2]/span    ${STOPD}
 
 
 
@@ -1218,11 +1429,11 @@ Verfified the STOPPED Status of Ubuntu
 
 
 Verify the IP Address after Launch of Instance
-    ${EXTRACTED}=    Get Value       xpath=//.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${BLUEPRINT NAME}")]/div/div/div[1]/div/div/div[3]/div/span[1]/strong[@class='instanceip']
+    ${EXTRACTED}=    Get Text    xpath=//.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${BLUEPRINT NAME}")]/div/div/div[1]/div/div/div[3]/div/span[1]/strong[@class='instanceip']
     Run Keyword If    '${STATS}' != '${EXTRACTED}'    Log    ${PRINTSTMT}
 
 Verify the IP Address after Launch of Ubuntu Instance
-    ${EXTRACTED}=    Get Value       xpath=//.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${BLUEPRINT NAME1}")]/div/div/div[1]/div/div/div[3]/div/span[1]/strong[@class='instanceip']
+    ${EXTRACTED}=    Get Text     xpath=//.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${BLUEPRINT NAME1}")]/div/div/div[1]/div/div/div[3]/div/span[1]/strong[@class='instanceip']
     Run Keyword If    '${STATS}' != '${EXTRACTED}'    Log    ${PRINTSTMT} is the IP Address
 
 
@@ -1295,12 +1506,15 @@ Verify the CHEF Client Run
     Sleep    5s
     Wait Until Keyword Succeeds    1 minute     1 seconds    Element Should Be Visible    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${BLUEPRINT NAME}")]/div/div/div/div/div[1]/a[@class='chefClientRunlistImage actionbuttonChefClientRun instance-bootstrap-list-image']
 
+Verify the CHEF Client Run is disabled
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Element Should Be Visible    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${BLUEPRINT NAME}")]/div/div/div/div/div[1]/a[@class='chefClientRunlistImage instance-bootstrap-list-image isStopedInstance actionbuttonChefClientRundisable']
+
 
 Verify the CHEF Client Run for Ubuntu
     Sleep    5s
     Wait Until Keyword Succeeds    1 minute     1 seconds    Element Should Be Visible    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${BLUEPRINT NAME1}")]/div/div/div/div/div[1]/a[@class='chefClientRunlistImage actionbuttonChefClientRun instance-bootstrap-list-image']
 
-Verify the CHEF Client Run off Ubuntu
+Verify the CHEF Client Run off Ubuntu disabled
     Wait Until Keyword Succeeds    1 minute     1 seconds    Element Should Be Visible    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${NEW UBUNTU BLUPRNT}")]/div/div/div/div/div/div[4]/div[1]/a[@class='chefClientRunlistImage instance-bootstrap-list-image isStopedInstance actionbuttonChefClientRundisable']
 
 
@@ -1311,7 +1525,10 @@ Verfiy the SSH is Enabled for Ubuntu
     Wait Until Keyword Succeeds    1 minute     1 seconds    Element Should Be Visible    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${BLUEPRINT NAME1}")]/div/div/div/div/div[2]/a[@class='sshIcon devTOP']    
 
 Verfiy the SSH is Disabled off Ubuntu
-    Wait Until Keyword Succeeds    1 minute     1 seconds    Element Should Be Visible    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${NEW UBUNTU BLUPRNT}")]/div/div/div[1]/div/div/div[4]/div[2]/a[@class='devTOP isStopedInstance sshIcondisable']    
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Element Should Be Visible    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${BLUEPRINT NAME1}")]/div/div/div/div[4]/div[2]/a[@class='devTOP isStopedInstance sshIcondisable']    
+
+Verfiy the SSH is Disabled
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Element Should Be Visible    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${BLUEPRINT NAME}")]/div/div/div/div[4]/div[2]/a[@class='devTOP isStopedInstance sshIcondisable']
 
 
 
@@ -1350,9 +1567,10 @@ Update the Run List with Newwww Cookbook
     Wait Until Keyword Succeeds    1 minute     10 seconds      Click Element    id=btnaddToRunlist
 
 Clicks on Update Button of Runlist
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='chefRunModalContainer']/div/div/div[3]/button[1]
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[text()='Update']
     Wait Until Keyword Succeeds    1 minute     4 seconds      Click Element    xpath=//*[text()='OK']
-    Wait Until Keyword Succeeds    1 minute     5 seconds      Click Element    xpath=.//*[@id='instanceLogModalContainer']/div/div/div[3]/button      #close
+    Wait Until Keyword Succeeds    1 minute     5 seconds      Click Element    css=#instanceLogModalContainer > div.modal-dialog > div.modal-content > div.modal-footer > button.btn.btn-default.btn-primary
+
 
 
 
@@ -1369,19 +1587,41 @@ Validation of Empty Image Name
     Enters the UserName of Providers
     Select the Organizatn to Create Cent OS Img
     Clicks on Save Button of Providers
-    Clicks on OKX Button
+    #Clicks on OKX Button
+
+
+Catalyst Unique VM Image Validation Setup
+    Clicks on Settings
+    Clicks on Gallery Setup
+    Clicks on VMImage
+    Clicks on New Button of VMImage
+    Enters the Image Name for Ubuntu
+    Choosess The Provider of Image
+    Select the Operating System to Image for Ubuntu 
+    Enters the Image ID for Ubuntu
+    Enters the UserName of UbuntuProviders
+    Select the Organizatn to Create Ubuntu Img
+    Clicks on Save Button of Providers
+    Sleep    4s
+    Verify the Error Message displaye while duplicating VM Image
+
+Verify the Error Message displaye while duplicating VM Image
+    Page Should Contain    Selected is already registered.
+    Sleep    2s
+    Click Element    xpath=.//*[text()='OK']
+    Sleep    1s
 
 Choose the Provider
     Click Element    xpath=.//*[@id='s2id_providerId']/a/span[1]
     Sleep    1s
-    Input Text    xpath=.//*[@id='select2-drop']/div/input    ${PROVIDER NAME}
+    Input Text    xpath=.//*[@id='select2-drop']/div/input    ${EDIT PROVIDER NANME}
     Sleep    1s
     Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
 
 
     #Click Element    css=#s2id_providerId > .select2-choice
     #Sleep    2s
-    #Input Text    css=#select2-search .select2-input    ${PROVIDER NAME}
+    #Input Text    css=#select2-search .select2-input    ${EDIT PROVIDER NANME}
     #Sleep    1s
     #Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
 
@@ -1492,7 +1732,7 @@ Validation of No Selection Provider
     Enters the UserName of Providers
     Select the Organizatn to Create Cent OS Img
     Clicks on Save Button of Providers
-    Clicks on OKX Button
+    #Clicks on OKX Button
 
 Provider field Name Left Empty
     [Arguments]    ${VaildNoNameErrMsg}
@@ -1513,7 +1753,7 @@ Validation of No Operating System
     Enters the UserName of Providers
     Select the Organizatn to Create Cent OS Img
     Clicks on Save Button of Providers
-    Clicks on OKX Button
+    #Clicks on OKX Button
 
 Operating System Left Empty  
     [Arguments]    ${ValidEmptyNoOSErrMsg}
@@ -1533,7 +1773,7 @@ Validation of No Image ID
     Enters the UserName of Providers
     Select the Organizatn to Create Cent OS Img
     Clicks on Save Button of Providers
-    Clicks on OKX Button
+    #Clicks on OKX Button
 
 Image ID Left Empty  
     [Arguments]    ${ValidEmptImgIDErrMsg}
@@ -1553,7 +1793,7 @@ Validation of Image No User Name
     Enters the Image ID for CentOS
     Select the Organizatn to Create Cent OS Img
     Clicks on Save Button of Providers
-    Clicks on OKX Button
+    #Clicks on OKX Button
 
 Image User Name Left Empty
     [Arguments]    ${ValidEmptyIUserNameErrMsg}
@@ -1579,7 +1819,7 @@ Clicks on Provider Cancel Button
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='btncancel']
 
 Clicks on Providers
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='setting_tree']/ul/li[7]/a
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=//a[contains(text(),'Providers')]
 
 Clicks on New Button of Providers
     Sleep    4s
@@ -1648,7 +1888,7 @@ Uploads the Pem File for Provider
     
 
 Clicks on Save Button of the Provider
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='myForm54']/div/div[3]/div/input
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    css=div.widget-toolbox.clearfix > div > button
 
 Clicks on VMImage
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=//a[contains(text(),'VMImage')]
@@ -1671,7 +1911,7 @@ Enters the New Image name for Windows
 
 Choosess The Provider of Image
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='s2id_providerId']/a
-    Input Text    xpath=.//*[@id='select2-drop']/div/input    ${PROVIDER NAME}
+    Input Text    xpath=.//*[@id='select2-drop']/div/input    ${EDIT PROVIDER NANME}
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
 
 Select the Operating System to Image for CentOS
@@ -1703,7 +1943,7 @@ Enters the UserName of Providers
     Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    id=UserName    ${USER}
 
 Clicks on Save Button of Providers
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='btnsubmit']
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    css=div.widget-toolbox.clearfix > div > button
 
 
 

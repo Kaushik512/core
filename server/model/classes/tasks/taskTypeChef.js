@@ -33,7 +33,7 @@ chefTaskSchema.methods.getNodes = function() {
 };
 
 // Instance Method :- run task
-chefTaskSchema.methods.execute = function(userName, baseUrl, onExecute, onComplete) {
+chefTaskSchema.methods.execute = function(userName, baseUrl,choiceParam, onExecute, onComplete) {
     var self = this;
 
     //merging attributes Objects
@@ -96,6 +96,7 @@ chefTaskSchema.methods.execute = function(userName, baseUrl, onExecute, onComple
             }
             instanceResultList.push(result);
             if (!(count < instances.length)) {
+                console.log('Type of onComplete ============> '+typeof onComplete);
                 if (typeof onComplete === 'function') {
                     onComplete(null, overallStatus, {
                         instancesResults: instanceResultList
