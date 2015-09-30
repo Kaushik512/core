@@ -20,7 +20,7 @@ var appConfig = require('_pr/config');
 var RedisStore = require('connect-redis')(express);
 var MongoStore = require('connect-mongo')(express.session);
 
-var mongoDbConnect = require('./lib/mongodb');
+var mongoDbConnect = require('_pr/lib/mongodb');
 
 logger.debug('Starting Catalyst');
 logger.debug('Logger Initialized');
@@ -78,8 +78,7 @@ var mongoStore = new MongoStore({
 app.set('port', process.env.PORT || appConfig.app_run_port);
 app.set('sport', appConfig.app_run_secure_port);
 app.use(express.compress());
-logger.debug(__dirname + '/../client/htmls/private/img/favicons/favicon.ico?v=4');
-app.use(express.favicon(__dirname + '/../client/htmls/private/img/favicons/favicon.ico?v=4'));
+app.use(express.favicon(__dirname + '/../client/htmls/private/img/favicons/favicon.ico'));
 app.use(express.logger({
     format: 'dev',
     stream: {

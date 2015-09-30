@@ -405,7 +405,7 @@ function CreateTableFromJson__(formID, idFieldName, createFileName) {
 
                             //setting the delete button
 
-                            var deletebutton = $('.rowtemplate').find("[title='Delete']").css('margin-left','12px');
+                            var deletebutton = $('.rowtemplate').find("[title='Delete']").css('margin-left', '12px');
                             if (deletebutton) {
                                 deletebutton.attr('onClick', 'deleteItem(\"' + formID + '\", \"' + idFieldName + '\",\"' + tv + '\",this);');
                                 deletebutton.removeClass('btn-xs');
@@ -484,8 +484,29 @@ function CreateTableFromJson(formID, idFieldName, createFileName) {
         var editButton = null;
         var idFieldValue = null;
         var imageTD = null;
+        var configMgmtType;
+        if (item.id === "3") {
+            if (!item.environmentname) {
+                item.environmentname = item.puppetenvironmentname;
+            }
+            //alert(item.puppetservername);
+            if (!item.puppetservername || item.puppetservername === "null") {
+                item.puppetservername = "No Puppet Server";
+            }
+            if (!item.configname || item.configname === "null") {
+                item.configname = "No Chef Server";
+            }
+        }
+
         $.each(item, function(k, v) { //columns
             // var inputC = null;
+            if (typeof v != "undefined") {
+                //console.log('v before',v,typeof v);
+                v = JSON.parse(JSON.stringify(v).replace(/(?=[^,]*$)/, ''));
+                //console.log('v after',v);
+            }
+
+
             console.log('k:' + k + ' v :' + JSON.stringify(v));
             if (k == idFieldName) {
                 idFieldValue = v;
@@ -533,8 +554,8 @@ function CreateTableFromJson(formID, idFieldName, createFileName) {
                         imgpath = '/d4dMasters/image/' + idFieldValue + '__' + imageTD.attr('datafieldoriginal') + '__' + imageTD.html();
                     }
 
-                    if(item.id === "16"){
-                        switch(item.templatetypename){
+                    if (item.id === "16") {
+                        switch (item.templatetypename) {
                             case "AppFactory":
                                 imgpath = '/d4dMasters/image/16ae9c94-19f6-485a-8c17-9af7a0f5f23d__designtemplateicon__Appfactory.png';
                                 break;
@@ -621,6 +642,10 @@ function CreateTableFromJson(formID, idFieldName, createFileName) {
                     if (haspermission('services', 'modify')) {
                         hasEditPermission = true;
                     }
+                } else if (createFileName === 'CreatePuppetServer.html') {
+                    if (haspermission('puppetserver', 'modify')) {
+                        hasEditPermission = true;
+                    }
                 }
                 //user has no permission to edit
                 if (!hasEditPermission) {
@@ -636,7 +661,11 @@ function CreateTableFromJson(formID, idFieldName, createFileName) {
             // var tdorgname = $('.rowtemplate').find('td[datafield="orgname"]');
             //&& tdorgname.length > 0
             if (importbutton && importbutton.length > 0) {
-                importbutton.attr("href", "#ajax/Settings/chefSync.html?" + idFieldValue);
+                if (item.configType === 'puppet') {
+                    importbutton.attr("href", "#ajax/Settings/puppetSync.html?" + idFieldValue);
+                } else {
+                    importbutton.attr("href", "#ajax/Settings/chefSync.html?" + idFieldValue);
+                }
                 importbutton.removeClass('btn-xs');
                 importbutton.addClass('btn-sg');
                 importbutton.addClass('tableactionbutton');
@@ -655,7 +684,7 @@ function CreateTableFromJson(formID, idFieldName, createFileName) {
 
             //setting the delete button
 
-            var deletebutton = $('.rowtemplate').find("[title='Delete']").css('margin-left','12px');
+            var deletebutton = $('.rowtemplate').find("[title='Delete']").css('margin-left', '12px');
             if (deletebutton) {
                 deletebutton.attr('onClick', 'deleteItem(\"' + formID + '\", \"' + idFieldName + '\",\"' + idFieldValue + '\",this);');
                 var hasDeletePermission = false;
@@ -715,6 +744,10 @@ function CreateTableFromJson(formID, idFieldName, createFileName) {
                     }
                 } else if (createFileName === 'CreateImages.html') {
                     if (haspermission('services', 'delete')) {
+                        hasDeletePermission = true;
+                    }
+                } else if (createFileName === 'CreatePuppetServer.html') {
+                    if (haspermission('puppetserver', 'delete')) {
                         hasDeletePermission = true;
                     }
                 }
@@ -827,8 +860,7 @@ function readform__(formID) {
                         }
                     }
                     for (var k = 0; k < item.field.length; k++) {
-                        console.log('Adding --------------------------' + curSelect.attr("ignoreoption"))
-                        if (item.field[k].name == curSelect.attr("id") && (curSelect.attr("ignoreoption") != null && curSelect.attr("ignoreoption") == item.field[k].name)) {
+                        if (item.field[k].name == curSelect.attr("id")) {
                             curSelect.append('<option value="' + item.field[k].values.value + '" rowid = "' + _rowid + '">' + item.field[k].values.value + '</option>');
                             // alert("Added:" + item.field[i].values.value);
                         }
@@ -1031,7 +1063,7 @@ function readform__(formID) {
                         if (inputC.getType().toLowerCase() == "div") {
 
                             $(inputC).attr('savedvalue', v[k1])
-                            //Set saved values to div.
+                                //Set saved values to div.
                             var ctype = '';
                             var csource = '';
                             if ($(inputC).attr('ctype'))
@@ -1102,7 +1134,7 @@ function readform(formID) {
 
                 var tempJSON = JSON.parse(JSON.stringify(readMasterJson($(this).attr('sourcepath'))));
                 var curSelect = $(this);
-                 // alert(JSON.stringify(tempJSON));
+                // alert(JSON.stringify(tempJSON));
                 var _rowid = 0;
                 /*$.each(tempJSON, function(i, item) {
                     _rowid = item['rowid'];
@@ -1114,7 +1146,7 @@ function readform(formID) {
                         }
                     });
                 });*/
-                
+
                 if (formID === 7) {
                     $.ajax({
                         url: '/d4dMasters/loggedInUser',
@@ -1150,8 +1182,7 @@ function readform(formID) {
                         _rowid = item['rowid'];
                         $.each(item, function(k, v) { //columns
                             //console.log('1 k:' + k + ' 1 v :' + JSON.stringify(v));
-
-                            if (k == curSelect.attr("id")  && curSelect.attr("ignoreoption") != v) {
+                            if (k == curSelect.attr("id") && curSelect.attr("ignoreoption") != v) {
                                 curSelect.append('<option value="' + v + '" rowid = "' + _rowid + '">' + v + '</option>');
                             }
                         });
@@ -1180,47 +1211,109 @@ function readform(formID) {
                 // });
             }
             // debugger;
-        if ($(this).attr('linkedfields')) {
+            if ($(this).attr('linkedfields')) {
 
-            $(this).change(function() {
-                //  debugger;
-                $('#content').attr('style', "opacity:1;")
+                $(this).change(function() {
+                    //  debugger;
+                    $('#content').attr('style', "opacity:1;")
 
-                var curCtrl = $(this);
-                var count = 0;
-                $.each(eval($(this).attr('linkedfields')), function(i, item) {
-                    var targetCtrl = $('#' + item);
-                    count++;
-                    targetCtrl.html('');
-                    var opts = getRelatedValues(targetCtrl.attr('sourcepath'), curCtrl.attr("id"), $('#' + curCtrl.attr('id') + ' option:selected').text(), targetCtrl.attr("id"));
-                    //alert(JSON.stringify(opts));
-                    if (formID === 7) {
-                        if (opts.length === 0) {
+                    var curCtrl = $(this);
+                    var count = 0;
+                    $.each(eval($(this).attr('linkedfields')), function(i, item) {
+                        var targetCtrl = $('#' + item);
+                        count++;
+                        targetCtrl.html('');
+                        var opts = getRelatedValues(targetCtrl.attr('sourcepath'), curCtrl.attr("id"), $('#' + curCtrl.attr('id') + ' option:selected').text(), targetCtrl.attr("id"));
+                        //alert(JSON.stringify(opts));
+                        if (formID === 7) {
+                            if (opts.length === 0) {
+                                $.ajax({
+                                    url: '/d4dMasters/readmasterjsonnew/21',
+                                    async: false,
+                                    success: function(data) {
+                                        var dataForAll = [];
+                                        for (var x = 0; x < data.length; x++) {
+                                            dataForAll.push(data[x].teamname + "##" + data[x].rowid);
+                                        }
+                                        $.each(eval(dataForAll), function(j, itm) {
+                                            var itmrowid = '';
+                                            if (itm.indexOf('##') > 0) {
+                                                var breakid = itm.split('##');
+                                                itm = breakid[0];
+                                                itmrowid = breakid[1];
+                                            }
+                                            if (targetCtrl.attr('multiselect'))
+                                                addToSelectList(itm, itmrowid, targetCtrl);
+                                            else
+                                                targetCtrl.append('<option rowid="' + itmrowid + '" value="' + itm + '">' + itm + '</option>');
+
+                                        });
+                                    }
+                                });
+                            } else {
+
+                                $.each(eval(opts), function(j, itm) {
+                                    var itmrowid = '';
+                                    if (itm.indexOf('##') > 0) {
+                                        var breakid = itm.split('##');
+                                        itm = breakid[0];
+                                        itmrowid = breakid[1];
+                                    }
+                                    if (targetCtrl.attr('multiselect'))
+                                        addToSelectList(itm, itmrowid, targetCtrl);
+                                    else
+                                        targetCtrl.append('<option rowid="' + itmrowid + '" value="' + itm + '">' + itm + '</option>');
+
+                                });
+                            }
+                        } else if (formID === 21) {
+                            var allUsers = [];
                             $.ajax({
-                                url: '/d4dMasters/readmasterjsonnew/21',
+                                url: '/d4dMasters/orgs/all/users/7',
                                 async: false,
                                 success: function(data) {
-                                    var dataForAll = [];
-                                    for (var x = 0; x < data.length; x++) {
-                                        dataForAll.push(data[x].teamname + "##" + data[x].rowid);
-                                    }
-                                    $.each(eval(dataForAll), function(j, itm) {
-                                        var itmrowid = '';
-                                        if (itm.indexOf('##') > 0) {
-                                            var breakid = itm.split('##');
-                                            itm = breakid[0];
-                                            itmrowid = breakid[1];
+                                    if (count === 2) {
+                                        if (opts != "") {
+                                            for (var i = 0; i < JSON.stringify(opts).split(",").length; i++) {
+                                                allUsers.push(opts[i]);
+                                            }
                                         }
-                                        if (targetCtrl.attr('multiselect'))
-                                            addToSelectList(itm, itmrowid, targetCtrl);
-                                        else
-                                            targetCtrl.append('<option rowid="' + itmrowid + '" value="' + itm + '">' + itm + '</option>');
 
-                                    });
+                                        for (var x = 0; x < data.length; x++) {
+                                            allUsers.push(data[x].loginname + "##" + data[x].rowid);
+                                        }
+                                        $.each(eval(allUsers), function(j, itm) {
+                                            var itmrowid = '';
+
+                                            if (itm.indexOf('##') > 0) {
+                                                var breakid = itm.split('##');
+                                                itm = breakid[0];
+                                                itmrowid = breakid[1];
+                                            }
+                                            if (targetCtrl.attr('multiselect'))
+                                                addToSelectList(itm, itmrowid, targetCtrl);
+                                            else
+                                                targetCtrl.append('<option rowid="' + itmrowid + '" value="' + itm + '">' + itm + '</option>');
+
+                                        });
+                                    } else {
+                                        $.each(eval(opts), function(j, itm) {
+                                            var itmrowid = '';
+                                            if (itm.indexOf('##') > 0) {
+                                                var breakid = itm.split('##');
+                                                itm = breakid[0];
+                                                itmrowid = breakid[1];
+                                            }
+                                            if (targetCtrl.attr('multiselect'))
+                                                addToSelectList(itm, itmrowid, targetCtrl);
+                                            else
+                                                targetCtrl.append('<option rowid="' + itmrowid + '" value="' + itm + '">' + itm + '</option>');
+
+                                        });
+                                    }
                                 }
                             });
                         } else {
-
                             $.each(eval(opts), function(j, itm) {
                                 var itmrowid = '';
                                 if (itm.indexOf('##') > 0) {
@@ -1235,80 +1328,18 @@ function readform(formID) {
 
                             });
                         }
-                    } else if (formID === 21) {
-                        var allUsers = [];
-                        $.ajax({
-                            url: '/d4dMasters/orgs/all/users/7',
-                            async: false,
-                            success: function(data) {
-                                if (count === 2) {
-                                    if (opts != "") {
-                                        for (var i = 0; i < JSON.stringify(opts).split(",").length; i++) {
-                                            allUsers.push(opts[i]);
-                                        }
-                                    }
+                        //fix for select2 control - Vinod 
+                        if (targetCtrl.attr('multiselect') == null)
+                            targetCtrl.select2();
 
-                                    for (var x = 0; x < data.length; x++) {
-                                        allUsers.push(data[x].loginname + "##" + data[x].rowid);
-                                    }
-                                    $.each(eval(allUsers), function(j, itm) {
-                                        var itmrowid = '';
-
-                                        if (itm.indexOf('##') > 0) {
-                                            var breakid = itm.split('##');
-                                            itm = breakid[0];
-                                            itmrowid = breakid[1];
-                                        }
-                                        if (targetCtrl.attr('multiselect'))
-                                            addToSelectList(itm, itmrowid, targetCtrl);
-                                        else
-                                            targetCtrl.append('<option rowid="' + itmrowid + '" value="' + itm + '">' + itm + '</option>');
-
-                                    });
-                                } else {
-                                    $.each(eval(opts), function(j, itm) {
-                                        var itmrowid = '';
-                                        if (itm.indexOf('##') > 0) {
-                                            var breakid = itm.split('##');
-                                            itm = breakid[0];
-                                            itmrowid = breakid[1];
-                                        }
-                                        if (targetCtrl.attr('multiselect'))
-                                            addToSelectList(itm, itmrowid, targetCtrl);
-                                        else
-                                            targetCtrl.append('<option rowid="' + itmrowid + '" value="' + itm + '">' + itm + '</option>');
-
-                                    });
-                                }
-                            }
-                        });
-                    } else {
-                        $.each(eval(opts), function(j, itm) {
-                            var itmrowid = '';
-                            if (itm.indexOf('##') > 0) {
-                                var breakid = itm.split('##');
-                                itm = breakid[0];
-                                itmrowid = breakid[1];
-                            }
-                            if (targetCtrl.attr('multiselect'))
-                                addToSelectList(itm, itmrowid, targetCtrl);
-                            else
-                                targetCtrl.append('<option rowid="' + itmrowid + '" value="' + itm + '">' + itm + '</option>');
-
-                        });
-                    }
-                    //fix for select2 control - Vinod 
-                    if (targetCtrl.attr('multiselect') == null)
-                        targetCtrl.select2();
-
+                    });
                 });
-            });
 
+            }
         }
-    }
 
-    //alert("Reading" + JSON.stringify(temp));
-});
+        //alert("Reading" + JSON.stringify(temp));
+    });
 
     $('input[sourcepath][cdata="catalyst"]').each(function() {
         //debugger;
@@ -1455,7 +1486,7 @@ function readform(formID) {
         //document.getElementById('password').style.display = "none";
         //document.getElementById('cnfPassword').style.display = "none";
         $(".row1").hide();
-       // $(".editPass").hide();
+        // $(".editPass").hide();
         $(".checkPass").show();
 
         //$(".row2").show();
@@ -1537,7 +1568,7 @@ function readform(formID) {
             if (inputC.getType().toLowerCase() == "div") {
 
                 $(inputC).attr('savedvalue', v)
-                //Set saved values to div.
+                    //Set saved values to div.
                 var ctype = '';
                 var csource = '';
                 if ($(inputC).attr('ctype'))
@@ -1853,7 +1884,7 @@ function readformnew(formID) {
             if (inputC.getType().toLowerCase() == "div") {
 
                 $(inputC).attr('savedvalue', v)
-                //Set saved values to div.
+                    //Set saved values to div.
                 var ctype = '';
                 var csource = '';
                 if ($(inputC).attr('ctype'))
@@ -1996,7 +2027,7 @@ function CreateTableFromJsonNew(formID, idFieldName, createFileName) {
 
             //setting the delete button
 
-            var deletebutton = $('.rowtemplate').find("[title='Delete']").css('margin-left','12px');
+            var deletebutton = $('.rowtemplate').find("[title='Delete']").css('margin-left', '12px');
             if (deletebutton) {
                 deletebutton.attr('onClick', 'deleteItem(\"' + formID + '\", \"' + idFieldName + '\",\"' + idFieldValue + '\",this);');
                 deletebutton.removeClass('btn-xs');
@@ -2039,23 +2070,23 @@ function saveform(formID, operationTypes) {
         if (isFormValid(formID) == false || !validateUserForm(formID)) {
             return (false);
         }
-        if($("#chkadduserldap").is(':checked')){
-            if($('#password').val() === ''){
+        if ($("#chkadduserldap").is(':checked')) {
+            if ($('#password').val() === '') {
                 $(".requiredPassword").show();
                 return (false);
-            }else{
+            } else {
                 $(".requiredPassword").hide();
             }
-            if($('#cnfPassword').val() === ''){
+            if ($('#cnfPassword').val() === '') {
                 $(".requiredCnfPassword").show();
                 return (false);
-            }else{
+            } else {
                 $(".requiredCnfPassword").hide();
             }
         }
-    }else{
+    } else {
         if (isFormValid(formID) == false)
-        return (false);
+            return (false);
     }
 
     var data1 = new FormData();
@@ -2118,7 +2149,7 @@ function saveform(formID, operationTypes) {
         }
     }*/
 
-// End of Not allowing team assignment for superadmin
+    // End of Not allowing team assignment for superadmin
 
     var button = $("form[id*='myForm']").find("div.pull-right > button");
 
@@ -2226,6 +2257,9 @@ function saveform(formID, operationTypes) {
             }
 
         });
+        if (typeof itms != "undefined") {
+            itms = JSON.parse(JSON.stringify(itms).replace(/,(?=[^,]*$)/, ''));
+        }
         v1.push('\"' + itms + '\"');
 
     });
@@ -2945,7 +2979,7 @@ function validateUserForm(formid) {
 }
 
 //Azure form validations
-function isFormValidAzure(formid,option){
+function isFormValidAzure(formid, option) {
     var isValid = true;
 
     if ($('input[unique="true"], select[unique="true"]').length > 0) {
@@ -2960,7 +2994,7 @@ function isFormValidAzure(formid,option){
         });
     }
 
-        $('[' + option + ']').each(function(itm) {
+    $('[' + option + ']').each(function(itm) {
         var currCtrl = $(this);
         var valiarr = $(this).attr(option).split(',');
         //$('#unique_loginname').text().indexOf('NOT') > 0
@@ -2968,7 +3002,7 @@ function isFormValidAzure(formid,option){
             //There is an error message displayed. Do not save form
             isValid = false;
         }
-      
+
         //alert(currCtrl.attr('id'));
         $.each(valiarr, function(vali) {
             switch (valiarr[vali]) {
@@ -3028,7 +3062,7 @@ function isFormValidAzure(formid,option){
 }
 
 //run validation tests on inputs 
-function isFormValidOpenStack(formid,option) {
+function isFormValidOpenStack(formid, option) {
     var isValid = true;
 
     if ($('input[unique="true"], select[unique="true"]').length > 0) {
@@ -3052,7 +3086,7 @@ function isFormValidOpenStack(formid,option) {
             //There is an error message displayed. Do not save form
             isValid = false;
         }
-      
+
         //alert(currCtrl.attr('id'));
         $.each(valiarr, function(vali) {
             switch (valiarr[vali]) {
@@ -3146,7 +3180,7 @@ function isFormValidOpenStack(formid,option) {
 
     });
 
-    
+
 
     return (isValid);
 }
@@ -3178,7 +3212,7 @@ function isFormValid(formid) {
         }
         var password = $('#password').val();
         var cnfPassword = $('#cnfPassword').val();
-            
+
         //alert(currCtrl.attr('id'));
         $.each(valiarr, function(vali) {
             switch (valiarr[vali]) {
@@ -3322,7 +3356,7 @@ function enableUniqueCheckingForInputs(id) {
             //alert(typeof uni);
             if (uni.length > 0)
                 uni.html('');
-                //uni.append('<img style="width:18px;height:18px" src="img/correct.png" alt="success"/>');
+            //uni.append('<img style="width:18px;height:18px" src="img/correct.png" alt="success"/>');
             else {
                 //alert("in");
                 $(this).closest('div').find('label').first().append('<span id="unique_' + $(this).attr("id") + '" style="color:red"></span>');
@@ -3344,7 +3378,7 @@ function enableUniqueCheckingForInputs(id) {
                 } else {
                     uni.css("color", "green");
                     uni.html('available');
-                   // uni.append('<img style="width:18px;height:18px" src="img/correct.png" alt="success"/>');
+                    // uni.append('<img style="width:18px;height:18px" src="img/correct.png" alt="success"/>');
                 }
             }
             if (queryconditionedbyURL) {
@@ -3361,7 +3395,7 @@ function enableUniqueCheckingForInputs(id) {
                 } else {
                     uni.css("color", "green");
                     uni.html('available');
-                   // uni.append('<img style="width:18px;height:18px" src="img/correct.png" alt="success"/>');
+                    // uni.append('<img style="width:18px;height:18px" src="img/correct.png" alt="success"/>');
                 }
             }
             $('button[onclick*="saveform"]').removeAttr('disabled');
