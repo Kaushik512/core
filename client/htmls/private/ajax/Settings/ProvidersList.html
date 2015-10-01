@@ -547,6 +547,8 @@
               provname = 'openstack';
         } else if($(button).closest('tr').find('td[datafield="providerType"]').first().text() == "AZURE"){
               provname = 'azure';
+         }else if($(button).closest('tr').find('td[datafield="providerType"]').first().text() == "HPPUBLICCLOUD"){
+              provname = 'hppubliccloud';
          }
 
     bootbox.confirm('You are about to remove this item \" ' + $(button).closest('tr').find('td').first().html() + ' \"', function(result) {
