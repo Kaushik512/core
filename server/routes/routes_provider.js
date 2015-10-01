@@ -822,6 +822,78 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
 
     });
+    
+    //start: removes azure provider
+    app.delete('/hppubliccloud/providers/:providerId', function(req, res) {
+        logger.debug("Enter delete() for hppubliccloud/providers/%s", req.params.providerId);
+        var user = req.session.user;
+        var category = configmgmtDao.getCategoryFromID("9");
+        var permissionto = 'delete';
+        var providerId = req.params.providerId.trim();
+        if (typeof providerId === 'undefined' || providerId.length === 0) {
+            res.send(500, "Please Enter ProviderId.");
+            return;
+        }
+
+        usersDao.haspermission(user.cn, category, permissionto, null, req.session.user.permissionset, function(err, data) {
+            if (!err) {
+                logger.debug('Returned from haspermission : ' + data + ' : ' + (data == false));
+                if (data == false) {
+                    logger.debug('No permission to ' + permissionto + ' on ' + category);
+                    res.send(401, "You don't have permission to perform this operation.");
+                    return;
+                }
+            } else {
+                logger.error("Hit and error in haspermission:", err);
+                res.send(500);
+                return;
+            }
+
+            masterUtil.getLoggedInUser(user.cn, function(err, anUser) {
+                if (err) {
+                    res.send(500, "Failed to fetch User.");
+                }
+                logger.debug("LoggedIn User:>>>> ", JSON.stringify(anUser));
+                if (anUser) {
+                    //data == true (create permission)
+                    /*if(data && anUser.orgname_rowid[0] !== ""){
+                    logger.debug("Inside check not authorized.");
+                    res.send(401,"You don't have permission to perform this operation.");
+                    return;
+                }*/
+
+                    VMImage.getImageByProviderId(providerId, function(err, anImage) {
+                        if (err) {
+                            logger.error(err);
+                            res.send(500, errorResponses.db.error);
+                            return;
+                        }
+                        if (anImage) {
+                            res.send(403, "Provider already used by Some Images.To delete provider please delete respective Images first.");
+                            return;
+                        }
+
+                        hppubliccloudProvider.removehppubliccloudProviderById(providerId, function(err, deleteCount) {
+                            if (err) {
+                                logger.error(err);
+                                res.send(500, errorResponses.db.error);
+                                return;
+                            }
+                            if (deleteCount) {
+                                logger.debug("Enter delete() for hppubliccloud/providers/%s", req.params.providerId);
+                                res.send({
+                                    deleteCount: deleteCount
+                                });
+                            } else {
+                                res.send(400);
+                            }
+                        });
+                    });
+                }
+            });
+        }); //
+    });
+    
 
     //Creates Azure Provider
     app.post('/azure/providers', function(req, res) {
