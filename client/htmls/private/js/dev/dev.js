@@ -1604,15 +1604,12 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                 $viewAllA.click(function(e) {
                     e.preventDefault();
                     e.stopPropagation();
-
-
                     var $modal = $('#modalTableRunlist');
                     var $modalBody = $('#modalTableRunlist .modal-body').empty();
                     var runlist = $(this).parents('tr').find('.instance-bootstrap-list-image').data('runlist');
                     for (var j = 0; j < runlist.length; j++) {
                         var $divComponentItem;
                         if (j == 0) {
-
                             $divComponentItem = $('<span title="' + runlist[j] + '" style="margin-top:8px;overflow:hidden;text-overflow:ellipsis;width:300px;"></span>').addClass('instance-details-item').append(runlist[j]);
 
                         } else {
@@ -1674,9 +1671,7 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                         cssClasses.ringClass = 'pending';
                         cssClasses.textClass = 'instance-state-text-pending';
                         cssClasses.tableViewStatusClass = "pending";
-
                 }
-
                 return cssClasses;
             }
 
@@ -2130,11 +2125,9 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
             $tableViewInstanceId.find('.instance-bootstrap-ActionStart a').addClass('isStopedInstance').removeClass('actionbuttonStart').addClass('actionbuttonStartdisable');
         }
 
-
         /**************************************Blueprint.js*************************************/
 
         /*Binding Click events to Blueprints*/
-
         function initializeBluePrints() {
             bindClick_bluePrintTab();
             bindClick_LaunchBtn();
@@ -2303,7 +2296,8 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
 
                                     }
                                     // alert(getDesignTypeName);
-
+                                    // if condition is to prevent to creation of multiple same accordion panels.
+                                    if($("div."+tdata[i]['templatetype']).length === 0){
                                     $containerTemp = '<div class="panel panel-default blueprintContainer hidden">' +
                                         '<div class="panel-heading">' +
                                         '<h4 class="panel-title">' +
@@ -2315,6 +2309,7 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                                         '</div>';
                                     $('#accordion-2').append($containerTemp);
                                     // alert($containerTemp);
+                                    }
                                 }
                             }
                         })(j);
