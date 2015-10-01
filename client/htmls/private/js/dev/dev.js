@@ -4140,12 +4140,12 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                             }
                         });
                         headerCount++;
-                        //if(headerCount === 1) {
+                        if(headerCount === 1) {
 
                             setTimeout(function(){
                                 $liHeader.find('a').click();
                             },2000)
-                        //}
+                        }
                     });
 
                 }

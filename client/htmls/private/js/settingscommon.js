@@ -3300,6 +3300,31 @@ function isFormValid(formid) {
                         currCtrl.focus();
                     }
                     break;
+                case "min8":
+                    var str = currCtrl.val();
+                    if (str.length < 8) {
+                        isValid = false;
+                        errormessageforInput(currCtrl.attr('id'), "Atleast 8 characters required.");
+                        currCtrl.focus();
+                    }
+                    if(!/\d/.test(str)){
+                        errormessageforInput(currCtrl.attr('id'), "Atleast a number required.");
+                        currCtrl.focus();
+                    }
+                    if(!/[a-z]/.test(str)){
+                        errormessageforInput(currCtrl.attr('id'), "Atleast a lower case char is required.");
+                        currCtrl.focus();
+                    }
+                    if(!/[A-Z]/.test(str)){
+                        errormessageforInput(currCtrl.attr('id'), "Atleast a upper case char is required.");
+                        currCtrl.focus();
+                    }
+                    if(!/[!@#$%^&*]/.test(str)){
+                        errormessageforInput(currCtrl.attr('id'), "Atleast a special char is required.");
+                        currCtrl.focus();
+                    }
+                    break;    
+                    
                 case "cnfPass":
                     if (password != cnfPassword) {
                         isValid = false;

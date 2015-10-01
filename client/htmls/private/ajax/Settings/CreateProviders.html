@@ -69,7 +69,7 @@
                                                         <div class="col-lg-6 col-md-6">
                                                             <label for="name">Provider Type:
                                                                 <span style="color: Red;" class="control-label">&nbsp;*</span></label>
-                                                            <select id="providertype" name="providerType" unique="true" uniqueconditionedby="orgname" class="chooseOrganization width-100" style="vertical-align: central" cat-validation="required" cdata="catalyst" skiprowid="yes">
+                                                            <select id="providertype" name="providerType" unique="true" uniqueconditionedby="orgname" class="chooseOrganization width-100" style="vertical-align: central" cat-validation="required" cdata="catalyst" skiprowid="yes" onchange="UtilityMethods.providerChanged($(this).val());">
                                                                 <option value="">Select Provider</option>
                                                                 <option value="AWS">AWS</option>
                                                                 <option value="OPENSTACK">OpenStack</option>
@@ -266,7 +266,7 @@
         },
         triggerRegionChange: function() {},
         providerChanged: function(pv) {
-            // alert(pv);
+           // alert(pv);
             if (pv == 'AZURE') {
                 $('.foropenstack').hide();
                 $('.forhppubliccloud').hide();

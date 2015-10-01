@@ -1118,7 +1118,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 }
                 blueprintData.instanceData = instanceData;
             }else if (req.body.blueprintData.blueprintType === 'azure_launch') {
-                logger.debug('req.body.blueprintData.blueprintType ==>', req.body.region);
+                logger.debug('req.body.blueprintData.blueprintType ==>', req.body.blueprintData);
                 instanceData = {
                     //keyPairId: req.body.blueprintData.keyPairId,
                     securityGroupIds: req.body.blueprintData.securityGroupPorts,
