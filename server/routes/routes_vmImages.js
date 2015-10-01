@@ -37,6 +37,12 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         var osType = req.body.osType.trim();
         var osName = req.body.osName.trim();
         var userName = req.body.userName.trim();
+
+        var password = '';
+        if(req.body.password){
+          password = req.body.password.trim();    
+        }
+        
         var orgId = req.body.orgId;
         var providerType = req.body.providertype.toLowerCase().trim();
 
@@ -81,8 +87,10 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             osType: osType,
             osName: osName,
             userName: userName,
+            password: password,
             orgId: orgId,
-            providerType: providerType
+            providerType: providerType,
+            instancePassword: password
         };
 
         usersDao.haspermission(user.cn, category, permissionto, null, req.session.user.permissionset, function(err, data) {
@@ -296,6 +304,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         var userName = req.body.userName.trim();
         var orgId = req.body.orgId;
         var providerType = req.body.providertype.toLowerCase().trim();
+        var password = req.body.password.trim(); //only for azure provider
 
         if (typeof providerId === 'undefined' || providerId.length === 0) {
             res.send(400, "{Please Enter ProviderId.}");
@@ -335,7 +344,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             osName: osName,
             userName: userName,
             orgId: orgId,
-            providerType: providerType
+            providerType: providerType,
+            instancePassword: password
         };
         logger.debug("image >>>>>>>>>>>>", vmimageData);
         usersDao.haspermission(user.cn, category, permissionto, null, req.session.user.permissionset, function(err, data) {
