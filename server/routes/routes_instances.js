@@ -171,6 +171,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
                     if (req.query.chefRemove && req.query.chefRemove === 'true') {
 
+
                         var infraManagerData;
 
 
@@ -186,6 +187,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                             });
                             return;
                         }
+
                         masterUtil.getCongifMgmtsById(infraManagerId, function(err, infraManagerDetails) {
                             if (err) {
                                 logger.debug("Failed to fetch Infra Manager Details ", err);
@@ -1118,6 +1120,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                 actionLog = instancesDao.insertPuppetClientRunActionLog(instance.id, req.session.user.cn, new Date().getTime());
                                 configManagmentId = instance.puppet.serverId
                             }
+
                             if (!configManagmentId) {
                                 res.send(500, {
                                     message: "Instance Data Corrupted"
@@ -1211,7 +1214,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                 req.body.jsonAttributes = [];
                                             }
                                             jsonAttributeObj = utils.mergeObjects([attributeObj, jsonAttributeObj]);
-
 
                                             infraManager = new Chef({
                                                 userChefRepoLocation: infraManagerDetails.chefRepoLocation,

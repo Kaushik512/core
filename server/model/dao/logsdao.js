@@ -62,7 +62,7 @@ var LogsDao = function() {
     }
 
     this.getLogsByReferenceIdAndTimestamp = function(referenceId, timestampStarted, timestampEnded, callback) {
-        logger.debug(timestampStarted, timestampEnded);
+        //logger.debug(timestampStarted, timestampEnded);
         var queryObj = {
             referenceId: {
                 $in: [referenceId]
@@ -77,7 +77,7 @@ var LogsDao = function() {
             }
         }
 
-        logger.debug('queryObj ==>',queryObj);
+        //logger.debug('queryObj ==>',queryObj);
 
 
         Logs.find(queryObj, function(err, data) {

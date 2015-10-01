@@ -110,6 +110,9 @@ function Cryptography(algorithm, password) {
                     callback(err, null);
                     return;
                 }
+                //setting file permission 
+                fs.chmodSync(outputFilepath,'400');
+                logger.debug('Set file ' + outputFilepath + ' permission to 400');
                 callback(null);
             });
         });

@@ -506,7 +506,6 @@ function CreateTableFromJson(formID, idFieldName, createFileName) {
                 //console.log('v after',v);
             }
 
-            
             console.log('k:' + k + ' v :' + JSON.stringify(v));
             if (k == idFieldName) {
                 idFieldValue = v;
@@ -1063,7 +1062,7 @@ function readform__(formID) {
                         if (inputC.getType().toLowerCase() == "div") {
 
                             $(inputC).attr('savedvalue', v[k1])
-                            //Set saved values to div.
+                                //Set saved values to div.
                             var ctype = '';
                             var csource = '';
                             if ($(inputC).attr('ctype'))
@@ -1568,7 +1567,7 @@ function readform(formID) {
             if (inputC.getType().toLowerCase() == "div") {
 
                 $(inputC).attr('savedvalue', v)
-                //Set saved values to div.
+                    //Set saved values to div.
                 var ctype = '';
                 var csource = '';
                 if ($(inputC).attr('ctype'))
@@ -1884,7 +1883,7 @@ function readformnew(formID) {
             if (inputC.getType().toLowerCase() == "div") {
 
                 $(inputC).attr('savedvalue', v)
-                //Set saved values to div.
+                    //Set saved values to div.
                 var ctype = '';
                 var csource = '';
                 if ($(inputC).attr('ctype'))
@@ -2978,9 +2977,217 @@ function validateUserForm(formid) {
     return (isValid);
 }
 
+//Azure form validations
+function isFormValidAzure(formid, option) {
+    var isValid = true;
+
+    if ($('input[unique="true"], select[unique="true"]').length > 0) {
+        // alert('in isFormValid');
+        $('input[unique="true"], select[unique="true"]').each(function() {
+            $(this).trigger('blur');
+
+            if ($(this).closest('div').find('span[id*="unique_"]').length > 0 && $(this).closest('div').find('span[id*="unique_"]').text().indexOf('available') < 0) {
+                // alert('pusing isvalid false');
+                isValid = false;
+            }
+        });
+    }
+
+    $('[' + option + ']').each(function(itm) {
+        var currCtrl = $(this);
+        var valiarr = $(this).attr(option).split(',');
+        //$('#unique_loginname').text().indexOf('NOT') > 0
+        if ($('#unique_' + currCtrl.attr('id')).text().indexOf('NOT') > 0) {
+            //There is an error message displayed. Do not save form
+            isValid = false;
+        }
+
+        //alert(currCtrl.attr('id'));
+        $.each(valiarr, function(vali) {
+            switch (valiarr[vali]) {
+                case "required":
+                    if (currCtrl.val() == '') {
+                        isValid = false;
+                        errormessageforInput(currCtrl.attr('id'), "Required");
+                        currCtrl.focus();
+                    }
+                    break;
+                case "nospecial":
+                    var str = currCtrl.val();
+                    if (/^[a-zA-Z0-9_-]*$/.test(str) == false) {
+                        isValid = false;
+                        errormessageforInput(currCtrl.attr('id'), "special chars not allowed");
+                        currCtrl.focus();
+                    }
+                    break;
+                case "min3":
+                    if (currCtrl.val().length < 3) {
+                        isValid = false;
+                        errormessageforInput(currCtrl.attr('id'), "atleast 3 characters required..");
+                        currCtrl.focus();
+                    }
+                    break;
+                case "max24":
+                    if (currCtrl.val().length > 24) {
+                        isValid = false;
+                        errormessageforInput(currCtrl.attr('id'), "limited to 24 chars.");
+                        currCtrl.focus();
+                    }
+                    break;
+                case "nospace":
+                    var str = currCtrl.val();
+                    if (str.indexOf(' ') > 0 || str.charAt(0) === " ") {
+                        isValid = false;
+                        errormessageforInput(currCtrl.attr('id'), "space(s) not allowed");
+                        currCtrl.focus();
+                    }
+                    break;
+                case "numeric":
+                    var str = currCtrl.val();
+                    if (/^[0-9]*$/.test(str) == false) {
+                        isValid = false;
+                        errormessageforInput(currCtrl.attr('id'), "non numeric not allowed");
+                        currCtrl.focus();
+                    }
+                    break; //
+
+            }
+
+        });
+
+    });
+
+    return (isValid);
+}
+
 //run validation tests on inputs 
+function isFormValidOpenStack(formid, option) {
+    var isValid = true;
+
+    if ($('input[unique="true"], select[unique="true"]').length > 0) {
+        // alert('in isFormValid');
+        $('input[unique="true"], select[unique="true"]').each(function() {
+            $(this).trigger('blur');
+
+            if ($(this).closest('div').find('span[id*="unique_"]').length > 0 && $(this).closest('div').find('span[id*="unique_"]').text().indexOf('available') < 0) {
+                // alert('pusing isvalid false');
+                isValid = false;
+            }
+        });
+    }
+
+
+    $('[' + option + ']').each(function(itm) {
+        var currCtrl = $(this);
+        var valiarr = $(this).attr(option).split(',');
+        //$('#unique_loginname').text().indexOf('NOT') > 0
+        if ($('#unique_' + currCtrl.attr('id')).text().indexOf('NOT') > 0) {
+            //There is an error message displayed. Do not save form
+            isValid = false;
+        }
+
+        //alert(currCtrl.attr('id'));
+        $.each(valiarr, function(vali) {
+            switch (valiarr[vali]) {
+                case "required":
+                    if (currCtrl.val() == '') {
+                        isValid = false;
+                        errormessageforInput(currCtrl.attr('id'), "Required");
+                        currCtrl.focus();
+                    }
+                    break;
+                case "onechecked":
+                    if (currCtrl.find('input:checked').length <= 0) {
+                        isValid = false;
+                        errormessageforInput(currCtrl.attr('id'), "Atleast one required");
+                        currCtrl.focus();
+                    }
+                    break;
+                case "nospecial":
+                    var str = currCtrl.val();
+                    if (/^[a-zA-Z0-9_-]*$/.test(str) == false) {
+                        isValid = false;
+                        errormessageforInput(currCtrl.attr('id'), "special chars not allowed");
+                        currCtrl.focus();
+                    }
+                    break;
+                case "urlcheck":
+                    var str = currCtrl.val();
+                    //regex from stackoverflow(check-if-url-is-valid-or-not)
+                    if (/(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/.test(str) == false) {
+                        isValid = false;
+                        errormessageforInput(currCtrl.attr('id'), "Please enter a valid Url");
+                        currCtrl.focus();
+                    }
+                    break;
+                case "max15":
+                    if (currCtrl.val().length > 15) {
+                        isValid = false;
+                        errormessageforInput(currCtrl.attr('id'), "limited to 15 chars.");
+                        currCtrl.focus();
+                    }
+                    break;
+                case "max22":
+                    if (currCtrl.val().length > 22) {
+                        isValid = false;
+                        errormessageforInput(currCtrl.attr('id'), "limited to 22 chars.");
+                        currCtrl.focus();
+                    }
+                    break;
+                case "nospace":
+                    var str = currCtrl.val();
+                    if (str.indexOf(' ') > 0 || str.charAt(0) === " ") {
+                        isValid = false;
+                        errormessageforInput(currCtrl.attr('id'), "space(s) not allowed");
+                        currCtrl.focus();
+                    }
+                    break;
+                case "numeric":
+                    var str = currCtrl.val();
+                    if (/^[0-9]*$/.test(str) == false) {
+                        isValid = false;
+                        errormessageforInput(currCtrl.attr('id'), "non numeric not allowed");
+                        currCtrl.focus();
+                    }
+                    break; //
+                case "email":
+                    var str = currCtrl.val();
+                    if (/^([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/.test(str) == false && str != '') {
+                        isValid = false;
+                        //updating error message
+                        errormessageforInput(currCtrl.attr('id'), "Invalid Email Address.");
+                        currCtrl.focus();
+                    }
+                    break;
+                case "min6":
+                    if (currCtrl.val().length < 6) {
+                        isValid = false;
+                        errormessageforInput(currCtrl.attr('id'), "Atleast 6 characters required.");
+                        currCtrl.focus();
+                    }
+                    break;
+                case "cnfPass":
+                    if (password != cnfPassword) {
+                        isValid = false;
+                        errormessageforInput(currCtrl.attr('id'), "Password does not match.");
+                        currCtrl.focus();
+                    }
+                    break;
+            }
+
+        });
+
+    });
+
+
+
+    return (isValid);
+}
+
+
 function isFormValid(formid) {
     var isValid = true;
+
     if ($('input[unique="true"], select[unique="true"]').length > 0) {
         // alert('in isFormValid');
         $('input[unique="true"], select[unique="true"]').each(function() {
@@ -3085,6 +3292,31 @@ function isFormValid(formid) {
                         currCtrl.focus();
                     }
                     break;
+                case "min8":
+                    var str = currCtrl.val();
+                    if (str.length < 8) {
+                        isValid = false;
+                        errormessageforInput(currCtrl.attr('id'), "Atleast 8 characters required.");
+                        currCtrl.focus();
+                    }
+                    if(!/\d/.test(str)){
+                        errormessageforInput(currCtrl.attr('id'), "Atleast a number required.");
+                        currCtrl.focus();
+                    }
+                    if(!/[a-z]/.test(str)){
+                        errormessageforInput(currCtrl.attr('id'), "Atleast a lower case char is required.");
+                        currCtrl.focus();
+                    }
+                    if(!/[A-Z]/.test(str)){
+                        errormessageforInput(currCtrl.attr('id'), "Atleast a upper case char is required.");
+                        currCtrl.focus();
+                    }
+                    if(!/[!@#$%^&*]/.test(str)){
+                        errormessageforInput(currCtrl.attr('id'), "Atleast a special char is required.");
+                        currCtrl.focus();
+                    }
+                    break;    
+                    
                 case "cnfPass":
                     if (password != cnfPassword) {
                         isValid = false;
@@ -3097,6 +3329,7 @@ function isFormValid(formid) {
         });
 
     });
+
     if (formid && formid === 19) {
         var selectionMode = $('#commandtype').val();
         if (selectionMode === "Chef Cookbook/Recipe") {

@@ -11,7 +11,7 @@
         <link rel="stylesheet" type="text/css" media="screen" href="css/bootstrap.css">
         <link rel="stylesheet" type="text/css" media="screen" href="css/Catalyst.css">
 
-        <style>
+<style>
 
 #clickdisabler{
     width:100%;
@@ -23,7 +23,10 @@
 #setting_tree > .icon{
     font-size:18px;
 }
-        </style>
+#content{
+    height:100%!important;
+}
+</style>
         <script>
 function showLoader(){
     $('#clickdisabler').show();
@@ -71,7 +74,7 @@ String.prototype.capitalizeFirstLetter = function() {
 
                         <!--track-->
                     <li class="left-projects-links hidden" style="margin-left:16px;margin-right:16px;" data-target="#Track" navigation="Track">
-                                <a class="dropdown-toggle navigationTab" style="font-size:14px!important" href="#ajax/awsusage.html" id="trackNew"  onclick="setleftnavigation(this,'Track');"><i class="fa fa-anchor"></i>&nbsp;TRACK</a>
+                                <a class="dropdown-toggle navigationTab" style="font-size:14px!important" href="#ajax/trackSettings.html" id="trackNew"  onclick="setleftnavigation(this,'Track');"><i class="fa fa-anchor"></i>&nbsp;TRACK</a>
                             </li>
                             <!--track ends here-->
                     
@@ -112,6 +115,20 @@ String.prototype.capitalizeFirstLetter = function() {
             <div id="tree" style="font-size:12px;"></div>
             <!-- <span class="minifyme"> <i class="fa fa-arrow-circle-left hit"></i> </span> -->
         </div>
+        <!--for track-->
+
+        <div id="trackShow" style="display:none;">
+            
+            <div style="height:40px;background-color:#40baf1;color:white;border-right:1px solid silver;"> 
+                
+                <div style="margin-top:0px;font-size:11pt;font-weight:bold;padding-left:10px;padding-top:10px" class="hiddencollapse">TRACK</div>
+                
+            </div>
+            <div id="trackTree" style="font-size:12px;"></div>
+            <!-- <span class="minifyme"> <i class="fa fa-arrow-circle-left hit"></i> </span> -->
+        </div>
+
+        <!--track ends here-->
         <div id="Settings_nav" style="display:none;">
             
             <div style="height:40px;background-color:#40baf1;color:white;border-right:1px solid silver;"> 
@@ -136,87 +153,30 @@ String.prototype.capitalizeFirstLetter = function() {
                 
             </ul>
            <ul class="menu-item-parentdemo hidden" id="Track">
-             <li class="active open">
-                <a href="#" style="background-color:#40baf1;margin-right:1px;"><i class="fa fa-lg fa-fw fa-sitemap"></i><span class="menu-item-parent" style="font-weight:bold">TRACK</span> </a>
-                     <ul style="display:block">
-
-                <!--aws cost-->
-                <li>
-                    <a href="ajax/awsusage.html">
-                        <div>
-                            <i class="fa fa-tasks fa-2x" title="AWS Cost"></i>
-                            <span style="margin-left:5px" class="trackAlign">AWS Cost</span>
-                        </div>
-                    </a>
-                </li> 
-                <!--aws cost ends here-->
-                <!--aws usage-->
-                <li style="margin-top:10px;">
-                    <a href="ajax/awsUsageLogs.html">
-                        <div>
-                            <i class="fa fa-tasks fa-2x" title="AWS Usage"></i>
-                            <span style="margin-left:5px" class="trackAlign2">AWS Usage</span>
-                        </div>
-                    </a>
-                </li> 
-                <!--aws usage ends here-->
-
-                <!--zabbix starts here-->
-                <li style="margin-top:10px;">
-                    <a href="ajax/zabbix.html">
-                        <div>
-                            <i class="fa fa-reorder fa-2x" title="Zabbix"></i>
-                            <span style="margin-left:5px" class="trackAlign1">System Monitoring</span>
-                        </div>
-                    </a>
-                </li>
-                
-                <!--zabbix ends here-->
-
-                <!--kibana-->
-                <li style="margin-top:10px;">
-                    
-                  
-                    <a href="ajax/kibana.html">
-                        <div>
-                            <i class="fa fa-cubes fa-2x" title="Kibana"></i>
-                            <span style="margin-left:5px" class="trackAlign2">Log Monitoring</span>
-                        </div>
-                    </a>
-                </li>
-                <!--kibana ends here-->
-                <!--notification starts here-->
-                <li style="margin-top:10px;">
-                    <a href="ajax/awsnotifications.html">
-                        <div>
-                            <i class="fa fa-tasks fa-2x" title="Notification"></i>
-                            <span style="margin-left:5px" class="trackAlign2">Notifications</span>
-                        </div>
-                    </a>
-                </li>
-                <!--notification ends here-->
-                    </ul>   
-                </li>                    
+                                 
             </ul>
-            <ul class="menu-item-parentdemo hidden" id="blueprints">
+            <ul class="menu-item-parentdemo hidden" id="blueprints" providerselected="aws">
                 <li class="active open">
                     <a href="#" style="background-color:#40baf1;margin-right:1px;"><i class="fa fa-lg fa-fw fa-sitemap"></i><span class="menu-item-parent trackAlign" style="font-weight:bold">PROVIDERS</span>
                     </a>
                     <ul style="display:block">
                         <li>
-                            <a href="ajax/Aws-Production.html" class="devops_providers"><div class="aws" title="AWS"><span class="menu-item-parent provider-images trackAlign">&nbsp;&nbsp;AWS</span></div></a>
+                            <a href="ajax/Aws-Production.html" onclick="$('#blueprints').attr('providerselected','aws');" class="devops_providers"><div class="aws" title="AWS"><span class="menu-item-parent provider-images trackAlign">&nbsp;&nbsp;AWS</span></div></a>
                         </li>
-                        
                         <li>
-                            <a href="ajax/Azure-DevOps.html" class="devops_providers"><div class="azure" title="Azure"><span class="menu-item-parent provider-images trackAlign">&nbsp;&nbsp;Azure</span></div></a>
+                            <a href="ajax/DesignBlueprint.html?provider=os" onclick="$('#blueprints').attr('providerselected','openstack');"  class="devops_providers"><div class="openstack" title="Open Stack"><span class="menu-item-parent provider-images trackAlign">&nbsp;Open Stack</span></div></a>
+                        </li>
+                        <li>
+                            <a href="ajax/DesignBlueprintpc.html?provider=hp" onclick="$('#blueprints').attr('providerselected','hppubliccloud');"  class="devops_providers"><div class="hppubliccloud" title="HP Public Cloud"><span class="menu-item-parent provider-images trackAlign">&nbsp;HP Helion</span></div></a>
+                        </li>
+                        <li>
+                            <a href="ajax/DesignBlueprintAzure.html?provider=azure" onclick="$('#blueprints').attr('providerselected','azure');"  class="devops_providers"><div class="azure" title="Azure"><span class="menu-item-parent provider-images trackAlign">&nbsp;&nbsp;Azure</span></div></a>
                         </li>
                         <li>
                             <a href="ajax/RL-DevOps.html" class="devops_providers"><div class="rl" title="Data Centre"><span class="menu-item-parent provider-images trackAlign">&nbsp;Data Centre</span></div></a>
                         </li>
                         
-                        <li>
-                            <a href="ajax/OpenStack.html" class="devops_providers"><div class="openstack" title="Open Stack"><span class="menu-item-parent provider-images trackAlign">&nbsp;Open Stack</span></div></a>
-                        </li>
+                        
                         <li>
                             <a href="ajax/cloudstack.html" class="devops_providers"><div class="cloudstack" title="Cloud Stack"><span class="menu-item-parent provider-images trackAlign">&nbsp;Cloud Stack</span></div></a>
                         </li>
@@ -338,8 +298,11 @@ $(document).ready(function() {
     if (haspermission("design", "read")) {
         hasDesignPermission = true;
     }
+
     if (!hasDesignPermission) {
         $('#designNew').addClass('hidden');
+        $('#noenvwarning').addClass('hidden');
+        $('#noEnvError').removeClass('hidden');
     }
 });
 
@@ -362,30 +325,40 @@ function setleftnavigation(toplink, breadcrumbHeader) {
 
         $('#Settings_nav').hide();
         $('#Workspace1').show();
+        $('#trackShow').hide();
         // selectFirstEnv();
 
     } else if (TabID === "designNew") {
         $('#Workspace1').hide();
         $('#Settings_nav').hide();
+        $('#trackShow').hide();
 
     } else if (TabID === "settingsNew") {
         $('#tree').empty()
+        $('#trackTree').empty();
         loadSettingsTree();
         foldTreeForSetting();
         $('#Workspace1').hide();
+        $('#trackShow').hide();
         $('#Settings_nav').show();
 
     } else if (TabID === "settingsNewClick") {
-        $('#tree').empty()
+        $('#tree').empty();
+        $('#trackTree').empty();
         loadSettingsTree();
         foldTreeForSetting();
         $('#Workspace1').hide();
+        $('#trackShow').hide();
         $('#Settings_nav').show();
 
     } else if (TabID === "trackNew") {
+        $('#tree').empty();
+        $('#trackTree').empty();
+        getTrackTreeDetails();
+        loadTrackTree();
         $('#Workspace1').hide();
         $('#Settings_nav').hide();
-
+        $('#trackShow').show();
     }
 
     if ($(toplink).hasClass('active')) {
@@ -668,6 +641,164 @@ function loadSettingsTree() {
 
 }
 
+//changes for track Tree....
+
+
+
+
+var trackTree;
+function getTrackTreeDetails(){
+  //  alert('getting tree details');
+    $.ajax({
+        type: "get",
+        dataType: "json",
+        async: false,
+        url: '../track',
+        success: function(data){
+            trackTree = [];
+            var trackObj={Provider:[],Monitoring:[],Logs:[],Notifications:[]};
+           // alert(JSON.stringify(trackObj));
+            for (var i = 0; i < data.length; i++) {
+                //alert("data.type "+data[i].type);
+                if(data[i].type==='Provider'){
+                   // alert(data[i].name);
+                    trackObj.Provider.push({
+                        "name": "providerData",
+                        "text": data[i].name,
+                        "borderColor": "#000",
+                        "href": 'javascript:void(0)',
+                        "parent": "data",
+                        "data-href":data[i].url,
+                        "nodetype": "dataList",
+                        "selectable": true,
+                        "icon": "fa fa-fw fa-1x fa-desktop"
+                    });
+                }else if(data[i].type==='Monitoring'){
+                    trackObj.Monitoring.push({
+                        "name": "monitoringData",
+                        "text": data[i].name,
+                        "borderColor": "#000",
+                        "href": 'javascript:void(0)',
+                        "parent": "data",
+                        "data-href":data[i].url,
+                        "nodetype": "dataList",
+                        "selectable": true,
+                        "icon": "fa fa-fw fa-1x fa-desktop"
+                    });
+                }else if(data[i].type==='Logs'){
+                    trackObj.Logs.push({
+                        "name": "logData",
+                        "text": data[i].name,
+                        "borderColor": "#000",
+                        "href": 'javascript:void(0)',
+                        "parent": "data",
+                        "data-href":data[i].url,
+                        "nodetype": "dataList",
+                        "selectable": true,
+                        "icon": "fa fa-fw fa-1x fa-desktop"
+                    });
+                }else if(data[i].type==='Notifications'){
+                    trackObj.Notifications.push({
+                        "name": "notificationData",
+                        "text": data[i].name,
+                        "borderColor": "#000",
+                        "href": 'javascript:void(0)',
+                        "parent": "data",
+                        "data-href":data[i].url,
+                        "nodetype": "dataList",
+                        "selectable": true,
+                        "icon": "fa fa-fw fa-1x fa-desktop"
+                    });
+                }
+            }
+            
+            console.table(trackObj);
+            if (trackObj.Provider.length > 0) {
+
+                trackTree.push({
+                    "name": "providers",
+                    "text": "Providers",
+                    "icon": "fa fa-tasks",
+                    "nodetype": "providers",
+                    "nodes": trackObj.Provider,
+                    "borderColor": "#000",
+                    "selectable": false,
+                    "href": "javascript:void(0);"
+                });
+            }
+            if (trackObj.Monitoring.length > 0) {
+                trackTree.push({
+                    "name": "monitoring",
+                    "text": "Monitoring",
+                    "icon": "fa fa-line-chart",
+                    "nodetype": "monitoring",
+                    "nodes": trackObj.Monitoring,
+                    "borderColor": "#000",
+                    "selectable": false,
+                    "href": "javascript:void(0);"
+                });
+            }
+            if (trackObj.Logs.length > 0) {
+                trackTree.push({
+                    "name": "logs",
+                    "text": "Logs",
+                    "icon": "fa fa-bar-chart",
+                    "nodetype": "logs",
+                    "nodes": trackObj.Logs,
+                    "borderColor": "#000",
+                    "selectable": false,
+                    "href": "javascript:void(0);"
+                });
+            }
+            if (trackObj.Notifications.length > 0) {
+                trackTree.push({
+                    "name": "notifications",
+                    "text": "Notifications",
+                    "icon": "fa fa-bell-o",
+                    "nodetype": "notifications",
+                    "nodes": trackObj.Notifications,
+                    "borderColor": "#000",
+                    "selectable": false,
+                    "href": "javascript:void(0);"
+                });
+            }
+            
+           // }
+
+            console.log(JSON.stringify(trackTree));
+        }
+    })
+}
+
+
+
+
+function loadTrackTree(){
+   // alert('tree loading');
+    $('#trackTree').treeview({
+        data: trackTree, 
+        enableLinks: true,
+        collapseIcon: 'fa fa-angle-down',
+        expandIcon: 'fa fa-angle-right',
+        levels: -1,
+        onNodeSelected: function(event, node) {
+            //alert(JSON.stringify(node));
+            //alert('click');
+            $("#content").empty();
+            $("#content").append('<iframe src='+ node['data-href']+' style="width: 101% ! important; height: 97%! important; border: medium none;"></iframe>');
+            console.log($("#content")[0].innerHTML);
+            event.stopPropagation();
+            event.preventDefault();
+            event.stopPropagation();
+            return false;
+        }
+    });
+}
+
+
+
+
+
 var treeData;
 function getTreeData(){
     $.ajax({
@@ -902,7 +1033,6 @@ function selectEnv() {
 //loadTreeFuncNew();
 
 
-
 //Renavigate to the tab that was previously selected.
 checkandnavigatetotab = function() {
     //has tab in LS
@@ -923,44 +1053,19 @@ checkandnavigatetotab = function() {
 };
 checkandnavigatetotab();
 loadSettingsTree();
+//getTrackTreeDetails();
+//loadTrackTree();
 foldTreeForSetting();
+
+
+
 
 //function ends
 </script>
 
 <script src="js/chefmodalcommon.js"></script>
 <script src="js/jquerytemplatemin.js"></script>
-    <script src="/private/js/settingscommon.js"></script>
-  <!--  <script src="js/dev/instance.js"></script>
-    <script src="js/dev/blueprint.js"></script>
-    <script src="js/dev/orchestration.js"></script>
-    <script src="js/dev/controlPanel.js"></script>
-    <script src="js/dev/container.js"></script>
--->
-
-
-<script>
-/*function viewlogger(){
-    var socket = io.connect();
-
-    socket.on('log',function(msg){
-        $('#logwin')
-        var _msg = JSON.parse(msg);
-        var dt = new Date(_msg.timestamp);
-
-        if(_msg.level != 'debug')
-           $('#launchcatalystlogwindow').prepend('<br/><u>' + dt.toLocaleDateString() + ' ' + dt.toLocaleTimeString()  + '</u> <br/><span style="color:red">' + _msg.message + '</span><br/>'); 
-        else
-           $('#launchcatalystlogwindow').prepend('<br/>' + '<u>' + dt.toLocaleDateString() + ' ' + dt.toLocaleTimeString()  + '</u> <br/>' + _msg.message + '<br/>'); 
-    });
-    $('#myModal').modal('show');
-    //$('#myModal').resizable();
-    // $('#launchcatalystlogwindow').draggable({
- //      handle: ".modal-header"
- //     });
-    //$( "#resizable" ).resizable();
-}*/
-</script>
+<script src="/private/js/settingscommon.js"></script>
 
 <div id="myModal" class="modal fade">
     <div class="modal-dialog">

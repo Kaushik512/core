@@ -2014,7 +2014,27 @@
              var str = ' <option value="">Select Provider</option>',
                  len = data.length;
              str = str + helperConstructOption(data, ['secretKey', 'accessKey', 'providerType'], 'providerName', '_id');
-             $('#providerId').html(str);
+             //getting openstack provider list
+             
+                $.ajax({
+                       type: "GET",
+                       url: "/openstack/providers",
+                       success: function(data) {
+                           data = typeof data == "string" ? JSON.parse(data) : data;
+                           console.log(data);
+                          
+                               len = data.length;
+                           str += helperConstructOption(data, ['username', 'password', 'providerType'], 'providerName', '_id');
+                          
+                           $('#providerId').html(str);
+                       },
+                       failure: function(data) {
+                           alert(data.toString());
+                       }
+                   });
+                 
+             //end of openstack 
+             
          },
          failure: function(data) {
              alert(data.toString());
@@ -3341,6 +3361,7 @@
                                                      $blueprintReadContainer.find('.modal-body #instancekeyPair').val(data.keyPairs[k].keyPairName);
                                                  }
                                                  //console.log(data);
+                                                 //
                                              },
                                              failure: function(data) {
                                                  alert(data.toString());
