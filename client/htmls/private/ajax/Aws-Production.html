@@ -2948,7 +2948,7 @@
                                         if(resources[resourceKeys[i]].Type === "AWS::EC2::Instance" || resources[resourceKeys[i]].Type === "AWS::AutoScaling::AutoScalingGroup") {
                                             var resourceName = resourceKeys[i];
                                             if (resources[resourceKeys[i]].Type === "AWS::AutoScaling::AutoScalingGroup") {
-                                                resourceName = "autoScaleGroup"
+                                                resourceName = "AutoScaleInstanceResource"
                                             }
                                             var $clone = $panel.clone();
                                             $clone.find('.heading-text').html('Configure Resource : '+resourceName);
