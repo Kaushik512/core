@@ -506,7 +506,7 @@ $(function() {
                     }).fail(function(jxhr) {
                         //console.log(jxhr);
                         var $tr = $tableBody.find('tr[data-nodeName="' + nodeName + '"]');
-                        $tr.find('td').html('error');
+                        $tr.find('td:not(.puppet-nodeName)').html('error');
                     });
                 })(nodeList[i]);
 
