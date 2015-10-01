@@ -3978,7 +3978,8 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                             if (instances[i].name) {
                                 nodeName = instances[i].name;
                             }
-                            var $liHeader = $('<li><a href="#tab_' + instances[i]._id + '" data-toggle="tab" data-taskInstanceId="' + instances[i]._id + '" data-taskActionLogId="' + instances[i].tempActionLogId + '">' + nodeName + '</a></li>');
+                            var tabId = 'tab_'+instances[i]._id+parseInt(Math.random() * (100000 - 10000) + 10000);
+                            var $liHeader = $('<li><a href="#'+tabId+'" data-toggle="tab" data-taskInstanceId="' + instances[i]._id + '" data-taskActionLogId="' + instances[i].tempActionLogId + '">' + nodeName + '</a></li>');
                             if (i === 4) {
                                 var $liMoreHeader = $('<li class="dropdown dropdownlog"><a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">More... <b class="caret"></b></a><ul class="dropdown-menu"></ul></li>');
 
@@ -3988,7 +3989,7 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
 
                             }
                             $ulHeaderArea.append($liHeader);
-                            var $tabContent = $('<div class="tab-pane fade" id="tab_' + instances[i]._id + '"><div class="taskLogArea chefLOGS"></div></div>');
+                            var $tabContent = $('<div class="tab-pane fade" id="'+ tabId + '"><div class="taskLogArea chefLOGS"></div></div>');
                             $contentArea.append($tabContent);
                         }
 
@@ -4135,12 +4136,12 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                             }
                         });
                         headerCount++;
-                        if(headerCount === 1) {
+                        //if(headerCount === 1) {
 
                             setTimeout(function(){
                                 $liHeader.find('a').click();
                             },2000)
-                        }
+                        //}
                     });
 
                 }
