@@ -625,7 +625,7 @@
                                                                     <div class="alert alert-success bootstrapSuccess"><img style="width:50px;height:40px" src="img/correct.png" alt="success" />
                                                                         <span class="blueprintNameSuccess" style="margin-left:20px;"></span>
                                                                         <div style="margin-top:24px;text-align:center;">
-                                                                            <button class="btn btn-primary"><a style="color:white;text-decoration:none" href="#ajax/Aws-Production.html?addnew" id="addanotherlink">&nbsp;&nbsp;Add New Blueprint</a></button>
+                                                                            <button class="btn btn-primary"><a style="color:white;text-decoration:none" href="#ajax/DesignBlueprintAzure.html?addnew" id="addanotherlink">&nbsp;&nbsp;Add New Blueprint</a></button>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -1175,9 +1175,9 @@ $(document).ready(function() {
     $(".chooseEnvExisting").select2();
     var $addal = $("#addanotherlink"); //#ajax/Aws-Production.html?addnew
     if (window.url.indexOf('addnew') > 0)
-        $addal.attr('href', '#ajax/Aws-Production.html?addanother');
+        $addal.attr('href', '#ajax/DesignBlueprintAzure.html?addanother');
     else
-        $addal.attr('href', '#ajax/Aws-Production.html?addnew');
+        $addal.attr('href', '#ajax/DesignBlueprintAzure.html?addnew');
 
 
 
@@ -2838,7 +2838,7 @@ var $wizard = $('#bootstrap-wizard-1').bootstrapWizard({
             if (tempType !== "docker" && tempType !== 'cloudformation' && !isValid) {
 
                 bootbox.alert({
-                    message: "Valiadtion failed. Do check the configuration before submitting." + tempType + ' ' + isValid,
+                    message: "Valiadtion failed. Do check the configuration before submitting.",
                     title: "Error"
                 });
                 return false;
