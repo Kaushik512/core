@@ -320,6 +320,23 @@ var d4dMastersProviders = new mongoose.Schema(
 );
 var d4dModelMastersProviders = mongoose.model('d4dModelMastersProviders',d4dMastersProviders,'d4dmastersnew');
 
+var d4dMastersProvidersOpenStack = new mongoose.Schema(
+		{id: {type:String,required:true, trim:true},
+		providername:{type:String,required:true,trim:true},
+		openstackusername:{type:String,required:true,trim:true},
+		openstackpassword:{type:String,required:true,trim:true},
+        region:{type:String,required:false,trim:true},
+        accesskey:{type:String,required:false,trim:true},
+        secretkey:{type:String,required:false,trim:true},
+        providertype: {type:String,required:true,trim:true},
+        securitygroupids: {type:[String],required:false,trim:true},
+        instanceUserName: {type:String,required:false,trim:true},
+        providerpemfile_filename: {type:String,required:false,trim:true},
+        folderpath: {type:String,required:false,trim:true},
+        rowid:{type:String,required:true, trim:true}},{collection:'d4dmastersnew'}
+);
+var d4dModelMastersProvidersOpenStack = mongoose.model('d4dModelMastersProvidersOpenStack',d4dMastersProviders,'d4dmastersnew');
+
 var d4dMastersImages = new mongoose.Schema(
 		{id: {type:String,required:true, trim:true},
 		imagename:{type:String,required:true,trim:true},
@@ -397,6 +414,7 @@ module.exports.d4dModelJenkinsConfig  = d4dModelJenkinsConfig;//
 module.exports.d4dModelMastersGeneric  = d4dModelMastersGeneric;
 module.exports.d4dModelMastersDynamic  = d4dModelMastersDynamic;
 module.exports.d4dModelMastersProviders = d4dModelMastersProviders;
+module.exports.d4dModelMastersProvidersOpenStack = d4dModelMastersProvidersOpenStack;
 module.exports.d4dModelMastersImages = d4dModelMastersImages;
 module.exports.d4dModelMastersJira = d4dModelMastersJira;
 module.exports.d4dModelMastersPuppetServer = d4dModelMastersPuppetServer;

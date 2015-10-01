@@ -207,7 +207,7 @@ module.exports.setRoutes = function(socketIo) {
             if (err) {
                 logger.debug("Error while getElementBytting instance!");
             }
-            logger.debug("Got instance: ", JSON.stringify(instances));
+           // logger.debug("Got instance: ", JSON.stringify(instances));
             if (instances.length > 0) {
                 AWSProvider.getAWSProviders(function(err, aProvider) {
                     if (err) {
