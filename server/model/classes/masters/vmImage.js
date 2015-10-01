@@ -71,6 +71,11 @@ var imageSchema = new Schema({
         type: [String],
         required: true,
         trim: true
+    },
+    instancePassword: {
+        type: String,
+        required: false,
+        trim: true
     }
 });
 
@@ -175,7 +180,8 @@ imageSchema.statics.updateImageById = function(imageId, imageData, callback) {
             osType: imageData.osType,
             userName: imageData.userName,
             orgId: imageData.orgId,
-            osName: imageData.osName
+            osName: imageData.osName,
+            instancePassword: imageData.instancePassword
         }
     }, {
         upsert: false
