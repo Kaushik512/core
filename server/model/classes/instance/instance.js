@@ -267,7 +267,7 @@ var InstancesDao = function() {
         });
     };
     this.getInstanceById = function(instanceId, callback) {
-        logger.debug("Enter getInstanceById (%s)", instanceId);
+        //logger.debug("Enter getInstanceById (%s)", instanceId);
 
         Instances.find({
             "_id": new ObjectId(instanceId)
@@ -279,7 +279,7 @@ var InstancesDao = function() {
                 callback(err, null);
                 return;
             }
-            logger.debug("Exit getInstanceById (%s)", instanceId);
+            //logger.debug("Exit getInstanceById (%s)", instanceId);
             callback(null, data);
 
         });

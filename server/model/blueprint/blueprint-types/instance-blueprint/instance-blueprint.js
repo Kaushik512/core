@@ -115,7 +115,20 @@ InstanceBlueprintSchema.statics.createNew = function(data) {
         });
     } else if (data.cloudProviderType === CLOUD_PROVIDER_TYPE.AZURE) {
         providerType = CLOUD_PROVIDER_TYPE.AZURE;
-        return null;
+
+        var providerBlueprint = AWSBlueprint.createNew({
+            securityGroupIds: data.securityGroupIds,
+            instanceType: data.instanceType,
+            instanceAmiid: data.instanceAmiid,
+            instanceUsername: data.instanceUsername,
+            vpcId: data.vpcId,
+            subnetId: data.subnetId,
+            imageId: data.imageId,
+            instanceOS: data.instanceOS,
+            instanceCount: data.instanceCount
+        });
+
+        //return null;
     } else {
         return null;
     }

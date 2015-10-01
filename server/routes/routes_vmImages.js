@@ -11,6 +11,7 @@ var logger = require('_pr/logger')(module);
 var EC2 = require('../lib/ec2.js');
 var VMImage = require('../model/classes/masters/vmImage.js');
 var AWSProvider = require('../model/classes/masters/cloudprovider/awsCloudProvider.js');
+var openstackProvider = require('../model/classes/masters/cloudprovider/openstackCloudProvider.js');
 var appConfig = require('_pr/config');
 var blueprintsDao = require('../model/dao/blueprints');
 var AWSKeyPair = require('../model/classes/masters/cloudprovider/keyPair.js');
@@ -36,7 +37,14 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         var osType = req.body.osType.trim();
         var osName = req.body.osName.trim();
         var userName = req.body.userName.trim();
+
+        var password = '';
+        if(req.body.password){
+          password = req.body.password.trim();    
+        }
+        
         var orgId = req.body.orgId;
+        var providerType = req.body.providertype.toLowerCase().trim();
 
 
         logger.debug("orgId: ", orgId);
@@ -66,6 +74,10 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             res.send(400, "{Please Enter OS UserName.}");
             return;
         }
+        if (typeof providerType === 'undefined' || providerType.length === 0) {
+            res.send(400, "{Please Enter OS Provider Type.}");
+            return;
+        }
 
         var vmimageData = {
             id: 22,
@@ -75,7 +87,10 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             osType: osType,
             osName: osName,
             userName: userName,
-            orgId: orgId
+            password: password,
+            orgId: orgId,
+            providerType: providerType,
+            instancePassword: password
         };
 
         usersDao.haspermission(user.cn, category, permissionto, null, req.session.user.permissionset, function(err, data) {
@@ -105,61 +120,90 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                     return;
                 }*/
 
-                    AWSProvider.getAWSProviderById(providerId, function(err, aProvider) {
-                        if (err) {
-                            logger.error(err);
-                            res.send(500, "Image creation failed due to Image name already exist.");
-                            return;
-                        }
-                        logger.debug("Returned Provider: ", aProvider);
-                        AWSKeyPair.getAWSKeyPairByProviderId(providerId, function(err, keyPair) {
-                            logger.debug("keyPairs length::::: ", keyPair[0].region);
+                    if(providerType == "openstack" || providerType == "hppubliccloud" || providerType == "azure"){
+                    
+                        logger.debug('Provider Type',providerType);
+                        openstackProvider.getopenstackProviderById(providerId, function(err, aProvider) {
                             if (err) {
-                                res.send(500, "Error getting to fetch Keypair.")
+                                logger.error(err);
+                                res.send(500, "Image creation failed due to Image name already exist.");
+                                return;
                             }
+                            logger.debug("Returned Provider: ", aProvider);
                             logger.debug("vmimageData <<<<<<<<<<<<<<<<<<<<< %s", vmimageData);
-                            var keys = [];
-                            keys.push(aProvider.accessKey);
-                            keys.push(aProvider.secretKey);
-                            cryptography.decryptMultipleText(keys, cryptoConfig.decryptionEncoding, cryptoConfig.encryptionEncoding, function(err, decryptedKeys) {
+                            vmimageData.vType = 'openstack';
+                            if(providerType == "azure"){
+                              vmimageData.vType = 'azure';
+                            }
+                            VMImage.createNew(vmimageData, function(err, anImage) {
                                 if (err) {
-                                    res.sned(500, "Failed to decrypt accessKey or secretKey");
+                                    logger.debug("err.....", err);
+                                    res.send(500, "Selected is already registered.");
                                     return;
                                 }
-                                var ec2 = new EC2({
-                                    "access_key": decryptedKeys[0],
-                                    "secret_key": decryptedKeys[1],
-                                    "region": keyPair[0].region
-                                });
-                                logger.debug("ec2>>>>>>>>>>>>>>>>> ", JSON.stringify(ec2));
-                                ec2.checkImageAvailability(vmimageData.imageIdentifier, function(err, data) {
+                                logger.debug("Exit post() for /vmimages");
+                                res.send(anImage);
+                                return;
+                            });
+                        }); //end awsprovider
+                    }
+                    else{
+                        AWSProvider.getAWSProviderById(providerId, function(err, aProvider) {
+                            if (err) {
+                                logger.error(err);
+                                res.send(500, "Image creation failed due to Image name already exist.");
+                                return;
+                            }
+                            logger.debug("Returned Provider: ", aProvider);
+                            AWSKeyPair.getAWSKeyPairByProviderId(providerId, function(err, keyPair) {
+                                logger.debug("keyPairs length::::: ", keyPair[0].region);
+                                if (err) {
+                                    res.send(500, "Error getting to fetch Keypair.")
+                                }
+                                logger.debug("vmimageData <<<<<<<<<<<<<<<<<<<<< %s", vmimageData);
+                                var keys = [];
+                                keys.push(aProvider.accessKey);
+                                keys.push(aProvider.secretKey);
+                                cryptography.decryptMultipleText(keys, cryptoConfig.decryptionEncoding, cryptoConfig.encryptionEncoding, function(err, decryptedKeys) {
                                     if (err) {
-                                        logger.debug("Unable to describeImages from AWS.", err);
-                                        res.send(500, "Invalid Image Id.");
+                                        res.sned(500, "Failed to decrypt accessKey or secretKey");
                                         return;
                                     }
-                                    if (data.Images.length > 0) {
-                                        logger.debug("Success to Describe Images from AWS. %s", data.Images[0].VirtualizationType);
-                                        vmimageData.vType = data.Images[0].VirtualizationType;
-                                        VMImage.createNew(vmimageData, function(err, anImage) {
-                                            if (err) {
-                                                logger.debug("err.....", err);
-                                                res.send(500, "Selected is already registered.");
-                                                return;
-                                            }
-                                            logger.debug("Exit post() for /vmimages");
-                                            res.send(anImage);
+                                    var ec2 = new EC2({
+                                        "access_key": decryptedKeys[0],
+                                        "secret_key": decryptedKeys[1],
+                                        "region": keyPair[0].region
+                                    });
+                                    logger.debug("ec2>>>>>>>>>>>>>>>>> ", JSON.stringify(ec2));
+                                    ec2.checkImageAvailability(vmimageData.imageIdentifier, function(err, data) {
+                                        if (err) {
+                                            logger.debug("Unable to describeImages from AWS.", err);
+                                            res.send(500, "Invalid Image Id.");
                                             return;
-                                        });
-                                    } else {
-                                        res.send(500, "The image is empty for amid: " + vmimageData.imageIdentifier);
-                                        return;
-                                    }
+                                        }
+                                        if (data.Images.length > 0) {
+                                            logger.debug("Success to Describe Images from AWS. %s", data.Images[0].VirtualizationType);
+                                            vmimageData.vType = data.Images[0].VirtualizationType;
+                                            VMImage.createNew(vmimageData, function(err, anImage) {
+                                                if (err) {
+                                                    logger.debug("err.....", err);
+                                                    res.send(500, "Selected is already registered.");
+                                                    return;
+                                                }
+                                                logger.debug("Exit post() for /vmimages");
+                                                res.send(anImage);
+                                                return;
+                                            });
+                                        } else {
+                                            res.send(500, "The image is empty for amid: " + vmimageData.imageIdentifier);
+                                            return;
+                                        }
 
+                                    });
                                 });
                             });
-                        });
-                    });
+                        }); //end awsprovider
+                    }
                 }
             });
         });
@@ -259,6 +303,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         var osName = req.body.osName.trim();
         var userName = req.body.userName.trim();
         var orgId = req.body.orgId;
+        var providerType = req.body.providertype.toLowerCase().trim();
+        var password = req.body.password.trim(); //only for azure provider
 
         if (typeof providerId === 'undefined' || providerId.length === 0) {
             res.send(400, "{Please Enter ProviderId.}");
@@ -297,7 +343,9 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             osType: osType,
             osName: osName,
             userName: userName,
-            orgId: orgId
+            orgId: orgId,
+            providerType: providerType,
+            instancePassword: password
         };
         logger.debug("image >>>>>>>>>>>>", vmimageData);
         usersDao.haspermission(user.cn, category, permissionto, null, req.session.user.permissionset, function(err, data) {
@@ -326,69 +374,103 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                     res.send(401,"You don't have permission to perform this operation.");
                     return;
                 }*/
-                    AWSProvider.getAWSProviderById(providerId, function(err, aProvider) {
-                        if (err) {
-                            logger.error(err);
-                            res.send(500, "Image creation failed due to Image name already exist.");
-                            return;
-                        }
-                        logger.debug("Returned Provider: ", aProvider);
-                        AWSKeyPair.getAWSKeyPairByProviderId(providerId, function(err, keyPair) {
-                            logger.debug("keyPairs length::::: ", keyPair[0].region);
+                    if(providerType == "openstack" || providerType == "hppubliccloud" || providerType == "azure"){
+                        logger.debug('Provider Type',providerType);
+                        VMImage.getImageById(imageId, function(err, anImage) {
                             if (err) {
-                                res.send(500, "Error getting to fetch Keypair.")
+                                logger.error(err);
+                                res.send(500, errorResponses.db.error);
+                                return;
                             }
-                            logger.debug("vmimageData <<<<<<<<<<<<<<<<<<<<< %s", vmimageData);
-                            var keys = [];
-                            keys.push(aProvider.accessKey);
-                            keys.push(aProvider.secretKey);
-                            cryptography.decryptMultipleText(keys, cryptoConfig.decryptionEncoding, cryptoConfig.encryptionEncoding, function(err, decryptedKeys) {
+                            vmimageData.vType = 'openstack';
+                            
+                            if(providerType == 'azure'){
+                                vmimageData.vType = 'azure';
+                            }
+
+                            logger.debug("ImageData:>>>>>>>>>>> ", JSON.stringify(vmimageData));
+                            VMImage.updateImageById(imageId, vmimageData, function(err, updateCount) {
                                 if (err) {
-                                    res.sned(500, "Failed to decrypt accessKey or secretKey");
+                                    logger.error(err);
+                                    res.send(500, errorResponses.db.error);
                                     return;
                                 }
-                                var ec2 = new EC2({
-                                    "access_key": decryptedKeys[0],
-                                    "secret_key": decryptedKeys[1],
-                                    "region": keyPair[0].region
-                                });
-                                logger.debug("ec2>>>>>>>>>>>>>>>>> ", JSON.stringify(ec2));
-                                ec2.checkImageAvailability(vmimageData.imageIdentifier, function(err, data) {
+                                if (updateCount) {
+                                    logger.debug("Exit get() for /vmimages/%s/update", req.params.imageId);
+                                    res.send({
+                                        updateCount: updateCount
+                                    });
+                                } else {
+                                    res.send(400);
+                                }
+                            });
+                        });
+                    }
+                    else{
+                        AWSProvider.getAWSProviderById(providerId, function(err, aProvider) {
+                            if (err) {
+                                logger.error(err);
+                                res.send(500, "Image creation failed due to Image name already exist.");
+                                return;
+                            }
+                            logger.debug("Returned Provider: ", aProvider);
+                            AWSKeyPair.getAWSKeyPairByProviderId(providerId, function(err, keyPair) {
+                                logger.debug("keyPairs length::::: ", keyPair[0].region);
+                                if (err) {
+                                    res.send(500, "Error getting to fetch Keypair.")
+                                }
+                                logger.debug("vmimageData <<<<<<<<<<<<<<<<<<<<< %s", vmimageData);
+                                var keys = [];
+                                keys.push(aProvider.accessKey);
+                                keys.push(aProvider.secretKey);
+                                cryptography.decryptMultipleText(keys, cryptoConfig.decryptionEncoding, cryptoConfig.encryptionEncoding, function(err, decryptedKeys) {
                                     if (err) {
-                                        logger.debug("Unable to describeImages from AWS.", err);
-                                        res.send(500, "Invalid Image Id.");
+                                        res.sned(500, "Failed to decrypt accessKey or secretKey");
                                         return;
                                     }
-                                    VMImage.getImageById(imageId, function(err, anImage) {
+                                    var ec2 = new EC2({
+                                        "access_key": decryptedKeys[0],
+                                        "secret_key": decryptedKeys[1],
+                                        "region": keyPair[0].region
+                                    });
+                                    logger.debug("ec2>>>>>>>>>>>>>>>>> ", JSON.stringify(ec2));
+                                    ec2.checkImageAvailability(vmimageData.imageIdentifier, function(err, data) {
                                         if (err) {
-                                            logger.error(err);
-                                            res.send(500, errorResponses.db.error);
+                                            logger.debug("Unable to describeImages from AWS.", err);
+                                            res.send(500, "Invalid Image Id.");
                                             return;
                                         }
-                                        if (anImage) {
-                                            vmimageData.vType = anImage.vType;
-                                        }
-                                        logger.debug("ImageData:>>>>>>>>>>> ", JSON.stringify(vmimageData));
-                                        VMImage.updateImageById(imageId, vmimageData, function(err, updateCount) {
+                                        VMImage.getImageById(imageId, function(err, anImage) {
                                             if (err) {
                                                 logger.error(err);
                                                 res.send(500, errorResponses.db.error);
                                                 return;
                                             }
-                                            if (updateCount) {
-                                                logger.debug("Exit get() for /vmimages/%s/update", req.params.imageId);
-                                                res.send({
-                                                    updateCount: updateCount
-                                                });
-                                            } else {
-                                                res.send(400);
+                                            if (anImage) {
+                                                vmimageData.vType = anImage.vType;
                                             }
-                                        });
+                                            logger.debug("ImageData:>>>>>>>>>>> ", JSON.stringify(vmimageData));
+                                            VMImage.updateImageById(imageId, vmimageData, function(err, updateCount) {
+                                                if (err) {
+                                                    logger.error(err);
+                                                    res.send(500, errorResponses.db.error);
+                                                    return;
+                                                }
+                                                if (updateCount) {
+                                                    logger.debug("Exit get() for /vmimages/%s/update", req.params.imageId);
+                                                    res.send({
+                                                        updateCount: updateCount
+                                                    });
+                                                } else {
+                                                    res.send(400);
+                                                }
+                                            });
+                                        }); //vmimage getimagebyid
                                     });
-                                });
-                            }); //
+                                }); //
+                            });
                         });
-                    });
+                    }
                 }
             });
         });

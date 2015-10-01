@@ -27,7 +27,6 @@
                              
                                 <thead>
                                     <tr class="rowCustomStyle">
-                                        <td>S.No</td>
                                         <td>Name</td>
                                         <td>Type</td>
                                         <td>Description</td>
@@ -117,8 +116,6 @@ if (!$.fn.dataTable.isDataTable('#trackTable')) {
         "paging": false,
         "bFilter": false,
         "aoColumns": [{
-            "bSortable": true
-        }, {
             "bSortable": false
         }, {
             "bSortable": false
@@ -126,11 +123,7 @@ if (!$.fn.dataTable.isDataTable('#trackTable')) {
             "bSortable": false
         }, {
             "bSortable": false
-        }],
-        "fnRowCallback": function(nRow, aData, iDisplayIndex) {
-            $("td:first", nRow).html(iDisplayIndex + 1);
-            return nRow;
-        }
+        }]
 
     });
 }
@@ -204,7 +197,7 @@ var validator = $('#trackItemUrl').validate({
         }
     }
 });
-$('a#addDashboardItem[type="reset"]').on('click',function(e) {
+$('a.addDashboardItem[type="reset"]').on('click',function(e) {
     validator.resetForm();
 });
 $(document).on('change', '.select2-offscreen', function() {
@@ -255,14 +248,13 @@ function createTableForTrack(trackData) {
     var $trackNameList = $('#trackTableInput');
     var $tr = $('<tr class="trackItemRow"></tr>').attr('data-trackId', trackData._id);
     $tr.data('trackData', trackData);
-    var $tdSerial = $('<td/>');
     var $tdDescription = $('<td class="trackDescription">' + trackData.description + '</td>');
     var $tdName = $('<td class="trackName"><a title="' + trackData.url + '" target="_blank" href="' + trackData.url + '">' + trackData.name + '</a></td>');
     var $tdType = $('<td class="trackType">' + trackData.type + '</td>');
     var $tdAction = $('<td/>');
 
     $tdAction.append('<div class="btn-group"><button class="btn btn-info pull-left btn-sg tableactionbutton editRowTrackUrl" data-placement="top" value="Update" title="Edit"><i class="ace-icon fa fa-pencil bigger-120"></i></button></div>').append('<div style="margin-left:14px;" class="btn-group"><button class="btn btn-danger pull-left btn-sg tableactionbutton globalTrackUrlRemove" data-placement="top" value="Remove" title="Delete"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></div>');
-    $tr.append($tdSerial).append($tdName).append($tdType).append($tdDescription).append($tdAction);
+    $tr.append($tdName).append($tdType).append($tdDescription).append($tdAction);
     $trackNameList.append($tr);
     $trackDatatable.row.add($tr).draw();
 
@@ -274,7 +266,7 @@ function createTableForTrack(trackData) {
         $('textarea#trackDescription').val('');
         $editModal.modal('show');
         $editModal.find('#trackEditHiddenInput').val('edit');
-        $editModal.find('h4.modal-title').html('Edit URL for &nbsp;-&nbsp;&nbsp;' + trackData.name);
+        $editModal.find('h4.modal-title').html('Edit Dashboard Item &nbsp;-&nbsp;&nbsp;' + trackData.name);
         $editModal.find('#trackName').val(trackData.name);
         $editModal.find('#trackUrl').val(trackData.url);
         $editModal.find('textarea#trackDescription').val(trackData.description);
@@ -294,7 +286,7 @@ function createTableForTrack(trackData) {
         var trackId = trackData._id;
         // alert(trackId);
         bootbox.confirm({
-            message: 'Are you sure you want to Delete Dashboard Url -&nbsp;' + trackData.name,
+            message: 'Are you sure you want to Delete Dashboard Item -&nbsp;' + trackData.name,
             title: "Warning",
             callback: function(result) {
                 if (result) {
