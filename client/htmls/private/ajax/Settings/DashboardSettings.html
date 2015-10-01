@@ -1,36 +1,34 @@
 <div class="row">
-    <div class="col-md-12">
+    
         <div class="col-md-12">
 
             <div class="widget-box">
                 <div class="widget-header">
-                    <h5 class="widget-title" style="color:#4e5964;">
+                    <h5 class="widget-title widgetColor">
                         <strong>List of Dashboards</strong>
                     </h5>
                     <div class="widget-toolbar no-border">
                         <div>
 
-                          <a class="btn btn-minier btn-primary" id="refreshpage" href="#ajax/Settings/ProjectList.html" style="display:none">
-                            <i class="ace-icon ace-icon fa fa-refresh bigger-110"></i>
-                        </a>   
-                        <a id="newOrg" class="btn btn-minier btn-primary" href="#ajax/Settings/CreateOrg.html?new">
-                                <i class="ace-icon ace-icon fa fa-plus bigger-110"></i>New
+                          <!--new button for adding a new item-->
+                        <a href="#modalForTrackEdit" type="reset" data-backdrop="false" data-toggle="modal" class="btn btn-minier btn-primary addDashboardItem">
+                            <i class="ace-icon ace-icon fa fa-plus bigger-110"></i>&nbsp;New
                         </a>                                                                                                            
                     </div>
                 </div>
 
             </div>
             <div class="widget-body">
-                <div class="widget-main" style="min-height:300px">
-                    <div class="col-md-12 table-responsive" style="padding-left:0px; padding-right:0px;">
+                <div class="widget-main widgetHeight">
+                    <div class="col-md-12 table-responsive tablePadding">
                          
                           
-                         <table id="trackTable" class="tableData table table-striped table-bordered table-hover dataTable no-footer" cellpadding="5px" style="text-align:center;">
+                         <table id="trackTable" class="tableData table table-striped table-bordered table-hover dataTable no-footer tableCenter" cellpadding="5px">
                              
                                 <thead>
                                     <tr class="rowCustomStyle">
-                                        <td>S.No</td>
                                         <td>Name</td>
+                                        <td>Type</td>
                                         <td>Description</td>
                                         <td>Action</td>
                                     </tr>
@@ -46,48 +44,69 @@
                 </div> <!--widget main ends here-->
               </div> <!--widget body ends here-->
             </div> <!--widget box ends here-->  
-        </div>
-    </div>
-</div>          
+        </div>  <!-- col-lg-12 ends here-->
+</div>   <!--row ends here-->           
 
 <!--modal for ItemList-->
 <div class="modal fade" id="modalForTrackEdit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-    <div class="modal-dialog " style="">
-        <div class="modal-content"> 
-            <form role="form" id="trackItemUrl">
-             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">
-                </h4>
-
-            </div> 
-            
-            
-             <div class="modal-body" style="height:150px;">            
-                            <div class="col-lg-12 col-md-12">
-                            <label for="">URL:</label>
-                            
-                            <textarea rows="5" cols="60" name="trackUrlName" class="trackUrlName" id="trackUrlName"></textarea>
-                </div>
-                     <input type="hidden" id="trackEditHiddenInputId">
-                     <input type="hidden" id="trackUrlHiddenName">
-                     <input type="hidden" id="trackNameHidden">
-
+   <div class="modal-dialog " style="">
+      <div class="modal-content">
+         <form role="form" id="trackItemUrl">
+            <div class="modal-header">
+               <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+               <h4 class="modal-title">
+               </h4>
             </div>
-            
-               <div class="modal-footer">
-                <label id="saveItemSpinner" class="hidden"><img  style="margin-left:5px;margin-right:25px;" src="img/select2-spinner.gif"></label>
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <input type="submit" id="saveBtnTrack" class="btn btn-primary" value="Save" />
-      </div>   
-  </form>
-         </div>
-    </div>
+            <div class="modal-body" style="height:300px;">
+               <div class="col-lg-6 col-md-6">
+                  <label for="">Name:</label>
+                  <div class="input-groups">
+                  <input autofocus type="text" name="trackName" class="required trackName form-control" id="trackName"/>
+                  </div>
+               </div>
+               <div class="col-lg-6 col-md-6">
+                  <label for="">Type:</label>
+                  <div class="input-groups">
+                  <select id="trackType" name="trackType" class="required form-control width-100" style="vertical-align:central">
+                     <option value="">Choose Type</option>
+                     <option value="Provider">Provider</option>
+                     <option value="Monitoring">Monitoring</option>
+                     <option value="Logs">Logs</option>
+                     <option value="Notifications">Notifications</option>
+                  </select>
+                  </div>
+               </div>
+               <div class="col-lg-12 col-md-12 margintop15">
+                  <label for="trackUrl">URL:</label>
+                  <div class="input-groups">
+                  <input type="url" name="trackUrl" class="required trackUrl form-control" id="trackUrl"/> 
+                  </div>
+               </div>
+               <div class="col-lg-12 col-md-12 margintop15">
+                  <label for="">Description:</label>
+                  <textarea rows="5" cols="64" name="trackDescription" class="trackDescription" id="trackDescription"></textarea>
+               </div>
+                <input type="hidden" id="trackEditHiddenInputId">
+                <input type="hidden" id="trackEditHiddenInput">
+            </div>
+            <div class="modal-footer">
+               <label id="saveItemSpinner" class="hidden"><img  style="margin-left:5px;margin-right:25px;" src="img/select2-spinner.gif"></label>
+               <a type="button" class="btn btn-default" data-dismiss="modal"><i class="ace-icon fa fa-times bigger-110"></i>&nbsp;Close</a>
+               <button type="submit" id="saveBtnTrack" class="btn btn-primary" value="Save"><i class="ace-icon fa fa-check bigger-110"></i>&nbsp;Save</button>
+            </div>
+         </form>
+      </div>
+   </div>
 </div>
 <!--modal for Itemlist-->   
 
 
 <script>
+
+
+
+
+//initialising the datatable...
 if (!$.fn.dataTable.isDataTable('#trackTable')) {
     //var $taskListArea = $('.taskListArea').empty();
     var $trackDatatable = $('#trackTable').DataTable({
@@ -97,68 +116,182 @@ if (!$.fn.dataTable.isDataTable('#trackTable')) {
         "paging": false,
         "bFilter": false,
         "aoColumns": [{
-            "bSortable": true
-        }, {
-            "bSortable": false
-        },{
             "bSortable": false
         }, {
             "bSortable": false
-        }],
-        "fnRowCallback": function(nRow, aData, iDisplayIndex) {
-              $("td:first", nRow).html(iDisplayIndex + 1);
-              return nRow;
-          }
+        }, {
+            "bSortable": false
+        }, {
+            "bSortable": false
+        }]
 
     });
 }
-$(document).ready(function(e){
 
+//calling the global track functionality when track params are available..
+$(document).ready(function(e) {
     getGlobalTrack();
-    
 });
 
-function createTableForTrack(name,url,key) {
-        var $trackNameList = $('#trackTableInput');
-        var $tr = $('<tr class="trackItemRow"></tr>').attr('data-trackId',key);
-        $tr.data('url', url);
-        var $tdSerial = $('<td/>');
-        var $tdDescription = $('<td/>');
-        var $tdName = $('<td class="trackName"><a title="'+url+'" target="_blank" href="'+url+'">'+name+'</a></td>');
-        /*var $tdURL = $('<td class="trackDashboardURL">'+url+'</td>');*/
-        var $tdAction = $('<td/>');
+//to show the focus on first input ....
+$(document).on('shown.bs.modal', function(e) {
+    $('[autofocus]', e.target).focus();
+});
 
-        $tdAction.append('<div class="btn-group"><button class="btn btn-info pull-left btn-sg tableactionbutton editRowTrackUrl" data-placement="top" value="Update" title="Edit"><i class="ace-icon fa fa-pencil bigger-120"></i></button></div>').append('<div style="margin-left:14px;" class="btn-group"><button class="btn btn-danger pull-left btn-sg tableactionbutton globalTrackUrlRemove" data-placement="top" value="Remove" title="Delete"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></div>');
-        $tr.append($tdSerial).append($tdName).append($tdDescription).append($tdAction);
-        $trackNameList.append($tr);
-        $trackDatatable.row.add($tr).draw();
 
-        //for edit
-        $tdAction.find('button.editRowTrackUrl').click(function() {
-            var trackUrlData = $tr.data('url');
-            var datatrackId = $tr.data('data-trackId');
-            var $editModal = $('#modalForTrackEdit');
-            $('textarea#trackUrlName').val('');
-            $editModal.modal('show');
-           // alert(name);
-            $editModal.find('h4.modal-title').html('Edit URL for &nbsp;-' + name);
-            //alert(trackUrlData);
-            $editModal.find('#trackNameHidden').val(name);
-            $editModal.find('textarea#trackUrlName').val(trackUrlData);
-            $editModal.find('#trackEditHiddenInputId').val();
-            $editModal.find('#trackUrlHiddenName').val(key);
-            return false;
-        });
+//form validation for dashboard save
+var validator = $('#trackItemUrl').validate({
+    rules: {
+       trackUrl : {
+            url: true
+        }
+    },
+    onkeyup: false,
+    errorClass: "error",
 
-        $tdAction.find('button.globalTrackUrlRemove').click(function(){
-            
-            var $this = $(this);
-            var $tr = $this.parents('tr.trackItemRow');
-            var trackIdDelete = $('#trackEditHiddenInputId').val();
-            bootbox.confirm('Are you sure you want to Delete Dashboard Url -&nbsp;' + name, function(result) {
+    //put error message behind each form element
+    errorPlacement: function(error, element) {
+        console.log(error, element);
+        var elem = $(element);
+        if (element.parent('.input-groups').length) {
+            error.insertBefore(element.parent());
+        } else {
+            if (element.parent('div.inputGroups')) {
+                console.log(element);
+                console.log(element.parent);
+                error.insertBefore('div.inputGroups');
+            }
+
+            $("select.select2-me").each(function(index, el) {
+
+                if ($(this).is("[data-rule-required]") &&
+                    $(this).attr("data-rule-required") == "true") {
+                    $(this).on('select2-close', function(e) {
+                        $(this).valid()
+                    });
+                }
+            });
+        }
+    },
+
+    //When there is an error normally you just add the class to the element.
+    // But in the case of select2s you must add it to a UL to make it visible.
+    // The select element, which would otherwise get the class, is hidden from
+    // view.
+    highlight: function(element, errorClass, validClass) {
+        var elem = $(element);
+        if (elem.hasClass("select2-offscreen")) {
+            $("#s2id_" + elem.attr("id") + " ul").addClass(errorClass);
+        } else {
+            elem.addClass(errorClass);
+        }
+    },
+
+    //When removing make the same adjustments as when adding
+    unhighlight: function(element, errorClass, validClass) {
+        var elem = $(element);
+        if (elem.hasClass("select2-offscreen")) {
+            $("#s2id_" + elem.attr("id") + " ul").removeClass(errorClass);
+        } else {
+            elem.removeClass(errorClass);
+        }
+    }
+});
+$('a.addDashboardItem[type="reset"]').on('click',function(e) {
+    validator.resetForm();
+});
+$(document).on('change', '.select2-offscreen', function() {
+    if (!$.isEmptyObject(validator.submitted)) {
+        validator.form();
+    }
+});
+$(document).on("select2-opening", function(arg) {
+    var elem = $(arg.target);
+    if ($("#s2id_" + elem.attr("id") + " ul").hasClass("myErrorClass")) {
+        //jquery checks if the class exists before adding.
+        $(".select2-drop ul").addClass("myErrorClass");
+    } else {
+        $(".select2-drop ul").removeClass("myErrorClass");
+    }
+});
+
+
+//this is a functionality to get the list of global track items that have been created....
+function getGlobalTrack() {
+    //for getting the list of tracks
+
+    var trackUrlDetails = '../track';
+    $.get(trackUrlDetails, function(data) {
+
+        console.log(data);
+        if (data && data.length) {
+            for (var kk = 0; kk < data.length; kk++) {
+                createTableForTrack(data[kk]);
+            }
+        }
+
+
+    }).fail(function(jxhr) {
+        var msg = "Server Behaved Unexpectedly";
+        if (jxhr.responseJSON && jxhr.responseJSON.message) {
+            msg = jxhr.responseJSON.message;
+        } else if (jxhr.responseText) {
+            msg = jxhr.responseText;
+        }
+        bootbox.alert(msg);
+    });
+};
+
+
+//creating a table for showcasing the list of track items on the dashboard page..
+function createTableForTrack(trackData) {
+    var $trackNameList = $('#trackTableInput');
+    var $tr = $('<tr class="trackItemRow"></tr>').attr('data-trackId', trackData._id);
+    $tr.data('trackData', trackData);
+    var $tdDescription = $('<td class="trackDescription">' + trackData.description + '</td>');
+    var $tdName = $('<td class="trackName"><a title="' + trackData.url + '" target="_blank" href="' + trackData.url + '">' + trackData.name + '</a></td>');
+    var $tdType = $('<td class="trackType">' + trackData.type + '</td>');
+    var $tdAction = $('<td/>');
+
+    $tdAction.append('<div class="btn-group"><button class="btn btn-info pull-left btn-sg tableactionbutton editRowTrackUrl" data-placement="top" value="Update" title="Edit"><i class="ace-icon fa fa-pencil bigger-120"></i></button></div>').append('<div style="margin-left:14px;" class="btn-group"><button class="btn btn-danger pull-left btn-sg tableactionbutton globalTrackUrlRemove" data-placement="top" value="Remove" title="Delete"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></div>');
+    $tr.append($tdName).append($tdType).append($tdDescription).append($tdAction);
+    $trackNameList.append($tr);
+    $trackDatatable.row.add($tr).draw();
+
+    //for editing track items from the table...
+    $tdAction.find('button.editRowTrackUrl').click(function() {
+        // var trackUrlData = $tr.data('trackData');
+        var datatrackId = $tr.data('data-trackId');
+        var $editModal = $('#modalForTrackEdit');
+        $('textarea#trackDescription').val('');
+        $editModal.modal('show');
+        $editModal.find('#trackEditHiddenInput').val('edit');
+        $editModal.find('h4.modal-title').html('Edit Dashboard Item &nbsp;-&nbsp;&nbsp;' + trackData.name);
+        $editModal.find('#trackName').val(trackData.name);
+        $editModal.find('#trackUrl').val(trackData.url);
+        $editModal.find('textarea#trackDescription').val(trackData.description);
+       // alert(trackData.type);
+        $editModal.find('#trackType').val(trackData.type);
+        $('#trackType').change();
+        $editModal.find('#trackEditHiddenInputId').val(trackData._id);
+        //  alert(trackData._id);
+        return false;
+    });
+
+    //for deletion of track items from the table..
+    $tdAction.find('button.globalTrackUrlRemove').click(function() {
+
+        var $this = $(this);
+        var $tr = $this.parents('tr.trackItemRow');
+        var trackId = trackData._id;
+        // alert(trackId);
+        bootbox.confirm({
+            message: 'Are you sure you want to Delete Dashboard Item -&nbsp;' + trackData.name,
+            title: "Warning",
+            callback: function(result) {
                 if (result) {
                     $.ajax({
-                        url: '../globalsettings/' + trackIdDelete,
+                        url: '../track/' + trackId,
                         method: 'DELETE',
                         success: function() {
                             $trackDatatable.row($tr).remove().draw(false);
@@ -175,61 +308,103 @@ function createTableForTrack(name,url,key) {
                             bootbox.alert(msg);
                         }
                     });
-                }
-            });
-            return false;
-        });
-    };
-
-    function getGlobalTrack() {
-        var globalSettings = '../globalSettings';
-        $.get(globalSettings, function(data) {
-
-            if (data.length) {
-                $('#trackEditHiddenInputId').val(data[0]._id);
-                var keys = Object.keys(data[0]);
-                for (var i = 0; i < keys.length; i++) {
-                    console.log(JSON.stringify(keys[i]));
-                    
-                    if (keys[i].indexOf('awsCost') !== -1) {
-                        createTableForTrack('AWS Cost', data[0][keys[i]], keys[i]);
-                    } else if (keys[i].indexOf('awsUsage') !== -1) {
-                        createTableForTrack('AWS Usage', data[0][keys[i]], keys[i]);
-                    } else if (keys[i].indexOf('zabbix') !== -1) {
-                        createTableForTrack('System Monitoring', data[0][keys[i]], keys[i]);   
-                    } else if (keys[i].indexOf('kibana') !== -1) {
-                        createTableForTrack('Log Monitoring', data[0][keys[i]], keys[i]);
-                    } else if (keys[i].indexOf('awsNotification') !== -1) {
-                        createTableForTrack('Notifications', data[0][keys[i]], keys[i]);    
-                    }
+                } else {
+                    return;
                 }
             }
         });
-    }
+        return false;
+    });
+};
 
-    $('#trackItemUrl').submit(function(e){
+//when the user clicks on the new button the setting the value to 'new' for the hidden field to know that user is creating the new item..
+$('.addDashboardItem').click(function(e) {
+    $('#trackItemUrl').trigger('reset');
+    $('#trackType').change();
+    $('.modal-header').find('.modal-title').html('Create New Dashboard Item');
+    $('#trackEditHiddenInput').val('new');
+});
+
+//save form for creating a new Dashboard item and updation of the item(name,url & description)..
+$('#trackItemUrl').submit(function(e) {
+    var isValidator = $('#trackItemUrl').valid();
+    if (!isValidator) {
+        e.preventDefault();
+        return false;
+    } else {
+        e.preventDefault();
+        $('#saveItemSpinner').removeClass('hidden');
         var $form = $('#trackItemUrl');
-        var trackEdit = $(this).find('#trackEditHiddenInputId').val();
-        var keyUrl = $(this).find('#trackUrlHiddenName').val();
-        var trackUrl = $(this).find('textarea#trackUrlName').val();
-        var trackUrlName = $(this).find('#trackNameHidden').val();
-        var reqBody ={};
-        var $tr = $('tr[data-trackId="' + keyUrl + '"]');
-        reqBody[keyUrl]=trackUrl;
-         $.ajax({
+        var trackUrlNameDes = [];
+        var trackData = {};
+        trackData.name = $form.find('#trackName').val().trim();
+        trackData.url = $form.find('#trackUrl').val().trim();
+        trackData.description = $form.find('#trackDescription').val().trim();
+        trackData.type = $form.find('#trackType').val();
+        var dashboardEditNew = $(this).find('#trackEditHiddenInput').val();
+        var trackId = $form.find('#trackEditHiddenInputId').val();
 
+        // alert(trackId);
+        var url;
+
+        var reqBody = {
+            trackUrlNameDes: [trackData]
+        }
+
+        //for edit
+        if (dashboardEditNew === 'edit') {
+            console.log(dashboardEditNew);
+            url = '../track/' + trackId + '/update';
+            reqBody = {
+                "name": trackData.name,
+                "url": trackData.url,
+                "description": trackData.description,
+                "type": trackData.type
+            };
+        } else {
+            url = '../track';
+            reqBody = {
+                "name": trackData.name,
+                "url": trackData.url,
+                "description": trackData.description,
+                "type": trackData.type
+            };
+        }
+
+        $.ajax({
             method: "POST",
-            url: '../globalsettings/'+ trackEdit+ '/update',
-            data: {aGlobalSettings:reqBody},
-            success: function(data, success) { 
-               
-               $tr.find('.trackName').html('<a title="'+trackUrl+'" target="_blank" href="'+trackUrl+'">'+trackUrlName+'</a>');
-               $tr.data('url',trackUrl);
-               
-               $('#modalForTrackEdit').modal('hide');
+            url: url,
+            data: {
+                trackData: reqBody
+            },
+            success: function(data, success) {
+                // alert(JSON.stringify(reqBody));
+                console.log("data>>>>>>>" + JSON.stringify(data));
+                $('#modalForTrackEdit').modal('hide');
+                $('#saveItemSpinner').addClass('hidden');
+                $('#saveBtnTrack').removeAttr('disabled');
+                console.log(dashboardEditNew);
+
+                if (dashboardEditNew === 'new') {
+                    createTableForTrack(data);
+                    $('#saveBtnTrack').removeAttr('disabled');
+                } else {
+                    console.log(dashboardEditNew);
+                    var $tr = $('tr[data-trackId="' + trackId + '"]');
+                    $tr.find('.trackName').html('<a style="word-break:break-word;" href="' + reqBody.url + '" target="_blank">' + reqBody.name + '</a> ');
+                    $tr.find('.trackDescription').html(reqBody.description);
+                    $tr.find('.trackType').html(reqBody.type);
+                    $tr.data('trackData', {
+                        _id: trackId,
+                        name: reqBody.name,
+                        url: reqBody.url,
+                        description: reqBody.description,
+                        type: reqBody.type
+                    })
+                }
             },
             error: function(jxhr) {
-              console.log(jxhr);
+                console.log(jxhr);
                 var msg = "Server Behaved Unexpectedly";
                 if (jxhr.responseJSON && jxhr.responseJSON.message) {
                     msg = jxhr.responseJSON.message;
@@ -239,50 +414,25 @@ function createTableForTrack(name,url,key) {
                 bootbox.alert(msg);
 
                 $('#saveItemSpinner').addClass('hidden');
-                $('#saveBTNList').removeAttr('disabled');
+                $('#saveBtnTrack').removeAttr('disabled');
             },
             failure: function(jxhr) {
-              console.log(jxhr);
+                console.log(jxhr);
                 var msg = "Server Behaved Unexpectedly";
                 if (jxhr.responseJSON && jxhr.responseJSON.message) {
                     msg = jxhr.responseJSON.message;
-                } else if(jxhr.responseText) {
-                  msg = jxhr.responseText;
+                } else if (jxhr.responseText) {
+                    msg = jxhr.responseText;
                 }
                 bootbox.alert(msg);
 
                 $('#saveItemSpinner').addClass('hidden');
-                $('#saveBTNList').removeAttr('disabled');
+                $('#saveBtnTrack').removeAttr('disabled');
             }
         });
+
         return false;
-    });
-
-/*$(document).ready(function() {
-    var validator = $('#trackItemUrl').validate({
-        errorPlacement: function(error, element) {
-            // Append error within linked label
-            $(element).closest("form").find("label[for='" + element.attr("id") + "']").append(error).css('font-size','12px');
-
-        },
-        rules: {
-            appNameURL: {
-                required: true,
-                url: true
-            }
-        },
-        messages: {
-            appNameURL: {
-                required: "&nbsp;Required"
-            }
-        },
-        onkeyup: false,
-        errorClass: "error",
-    });
-    $('a#newAppSeries[type="reset"]').on('click', function() {
-         validator.resetForm();
-     });
-});*/
-
+    }
+});
 </script>
                              

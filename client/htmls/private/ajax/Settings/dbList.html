@@ -427,9 +427,6 @@ $(document).ready(function(e) {
             $('#listNameTable thead').find('tr.rowCustomStyle td').html('Items for -&nbsp;' + k);
         });
         return $tr;
-
-      return $tr;
-
         console.log(">>>>>>>>>>>>>>>>>>>>>>>>");
 
     };
@@ -591,7 +588,7 @@ $(document).ready(function(e) {
                 
             });
         });
-      return $trForItems;
+     // return $trForItems;
 
 
         //for edit
@@ -631,6 +628,7 @@ $(document).ready(function(e) {
             });
             return false;
         });
+        //return $trForItems;
         //for delete
         $tdForItems.find('button.deleteRow').click(function() {
             $('#jsonData').hide();

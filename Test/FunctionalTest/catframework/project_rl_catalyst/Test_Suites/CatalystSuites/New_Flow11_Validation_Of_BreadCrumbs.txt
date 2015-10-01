@@ -1,0 +1,35 @@
+*** Settings ***
+Documentation     Organization_setup_Flow.txt
+
+Resource           catalyst.txt
+Resource           ${CATALYST TEST DATA}/${TESTDATA}
+Resource           ${CATALYST ACTION}/Organization_Setup_Action_Steps.txt
+Resource           ${CATALYST ACTION}/Users_Setup_With_New_Users_and_Teams.txt
+Resource           ${CATALYST ACTION}/Users_Setup_With_New_Users_and_Teams.txt
+Resource           ${CATALYST ACTION}/DevOps_Setup_Action_Steps.txt
+Resource           ${CATALYST ACTION}/Gallery_setup_TempService_Steps.txt
+Resource           ${CATALYST ACTION}/BreadCrumbs_Of_Catalyst.txt
+Resource           ${COMMON RESOURCES}/catalyst_grid_node.txt
+Library            String
+
+
+*** Test Cases ***
+Catlayst Validation of SETTINGS Breadcrumbs
+    [Tags]       Sanity               BreadCrumbs
+#    Catalyst Login 
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst Validation of SETTINGS Setup BreadCrumbs
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+
+Catalyst Validation of DESIGN BreadCrumb
+    [Tags]       Sanity               BreadCrumb
+#    Catalyst Login 
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst Validation of Design Breadcrumb
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+

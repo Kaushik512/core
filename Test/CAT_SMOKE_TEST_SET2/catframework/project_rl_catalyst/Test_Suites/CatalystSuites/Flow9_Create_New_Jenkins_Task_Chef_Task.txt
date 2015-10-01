@@ -10,18 +10,18 @@ Resource           ${CATALYST ACTION}/Gallery_setup_TempService_Steps.txt
 
 
 *** Test Cases ***
-Catalyst new Jenkins Configuration setup
-    [Tags]       Sanity                      DesignWorkzone
+#-Catalyst new Jenkins Configuration setup
+    #-[Tags]       Sanity                      ChefTask
 #    Catalyst Login
-    Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
-    Catalyst Create New Jenkins Configuration Setup          
-    Catalyst Logout                      
-    [Teardown]     Close Browser
+    #-Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
+    #-Catalyst Create New Jenkins Configuration Setup          
+    #-Catalyst Logout                      
+    #-[Teardown]     Close Browser
 
 
 
 Catalyst Jenkins Task Creation and Execution
-    [Tags]       Sanity                        DesignWorkzone
+    [Tags]       Sanity                        JenkinsTask
 #    Catalyst Login
     Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
     Catalyst Creation of Jenkins Task in Environment
@@ -32,7 +32,7 @@ Catalyst Jenkins Task Creation and Execution
 
 
 Catalyst Chef task creation and Execution
-    [Tags]       Sanity                       DesignWorkzone
+    [Tags]       Sanity                        ChefTask
 #    Catalyst Login
     Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
     Catalyst creation of Chef Task
@@ -40,4 +40,7 @@ Catalyst Chef task creation and Execution
     Catalyst checks the Chef task history
     Catalyst Logout                      
     [Teardown]     Close Browser
+
+
+
 

@@ -1605,6 +1605,7 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                     e.preventDefault();
                     e.stopPropagation();
 
+<<<<<<< HEAD
 
                     var $modal = $('#modalTableRunlist');
                     var $modalBody = $('#modalTableRunlist .modal-body').empty();
@@ -1613,6 +1614,16 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                         var $divComponentItem;
                         if (j == 0) {
 
+=======
+
+                    var $modal = $('#modalTableRunlist');
+                    var $modalBody = $('#modalTableRunlist .modal-body').empty();
+                    var runlist = $(this).parents('tr').find('.instance-bootstrap-list-image').data('runlist');
+                    for (var j = 0; j < runlist.length; j++) {
+                        var $divComponentItem;
+                        if (j == 0) {
+
+>>>>>>> origin/dev_catalyst
                             $divComponentItem = $('<span title="' + runlist[j] + '" style="margin-top:8px;overflow:hidden;text-overflow:ellipsis;width:300px;"></span>').addClass('instance-details-item').append(runlist[j]);
 
                         } else {
@@ -1674,9 +1685,15 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                         cssClasses.ringClass = 'pending';
                         cssClasses.textClass = 'instance-state-text-pending';
                         cssClasses.tableViewStatusClass = "pending";
+<<<<<<< HEAD
 
                 }
 
+=======
+
+                }
+
+>>>>>>> origin/dev_catalyst
                 return cssClasses;
             }
 
@@ -2130,11 +2147,19 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
             $tableViewInstanceId.find('.instance-bootstrap-ActionStart a').addClass('isStopedInstance').removeClass('actionbuttonStart').addClass('actionbuttonStartdisable');
         }
 
+<<<<<<< HEAD
 
         /**************************************Blueprint.js*************************************/
 
         /*Binding Click events to Blueprints*/
 
+=======
+
+        /**************************************Blueprint.js*************************************/
+
+        /*Binding Click events to Blueprints*/
+
+>>>>>>> origin/dev_catalyst
         function initializeBluePrints() {
             bindClick_bluePrintTab();
             bindClick_LaunchBtn();

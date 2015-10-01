@@ -15,6 +15,7 @@ var d4dModel = require('../../model/d4dmasters/d4dmastersmodel.js');
 var configmgmtDao = require('../../model/d4dmasters/configmgmt.js');
 var appConfig = require('_pr/config');
 var chefSettings = appConfig.chef;
+var AppDeploy = require('_pr/model/app-deploy/app-deploy');
 
 var MasterUtil = function() {
     // Return All Orgs specific to User
@@ -1622,6 +1623,177 @@ var MasterUtil = function() {
                     }
                 });
             });
+        });
+    }
+
+    // Return Environment Name
+    this.getEnvironmentName = function(envId, callback) {
+        logger.debug("org rowids: ", envId);
+        d4dModelNew.d4dModelMastersEnvironments.find({
+            rowid: envId
+        }, function(err, envs) {
+            if (err) {
+                callback(err, null);
+            }
+            if (envs.length) {
+                logger.debug("Got Environment: ", JSON.stringify(envs));
+                callback(null, envs[0].environmentname);
+                return;
+            } else {
+                callback(null, null);
+                return;
+            }
+        });
+    }
+
+    // Get all appData informations.
+    this.getAppDataWithDeployList = function(envName, projectId, callback) {
+        logger.debug("projectId: ", projectId);
+        AppDeploy.getAppDeployListByEnvId(envName, function(err, data) {
+            if (err) {
+                logger.debug("App deploy fetch error.", err);
+            }
+            logger.debug("App deploy .", JSON.stringify(data));
+            if (data.length) {
+                var appDataList = [];
+                var count = 0;
+                for (var i = 0; i < data.length; i++) {
+                    (function(i) {
+                        var appName = [];
+                        appName.push(data[i].applicationName);
+                        d4dModelNew.d4dModelMastersProjects.find({
+                            appdeploy: {
+                                $elemMatch: {
+                                    applicationname: appName
+                                }
+                            },
+                            rowid: projectId
+                        }, function(err, appData) {
+                            count++;
+                            if (err) {
+                                logger.debug("Failed to fetch app data", err);
+                                callback(err, null);
+                            }
+                            logger.debug("++++++++++++++++++++++++++++++++++++++++++++++++============ ", JSON.stringify(appData));
+                            if (appData.length) {
+                                var dummyData = {
+                                    _id: data[i].id,
+                                    applicationName: data[i].applicationName,
+                                    applicationInstanceName: data[i].applicationInstanceName,
+                                    applicationVersion: data[i].applicationVersion,
+                                    applicationNodeIP: data[i].applicationNodeIP,
+                                    applicationLastDeploy: data[i].applicationLastDeploy,
+                                    applicationStatus: data[i].applicationStatus,
+                                    projectId: appData[0].rowid,
+                                    envId: data[i].envId,
+                                    description: appData[0].description,
+                                    applicationType: data[i].applicationType,
+                                    containerId: data[i].containerId,
+                                    hostName: data[i].hostName
+                                };
+                                appDataList.push(dummyData);
+                                if (count === data.length) {
+                                    callback(null, appDataList);
+                                }
+                            } else {
+                                if (count === data.length) {
+                                    callback(null, appDataList);
+                                }
+                            }
+
+                        });
+                    })(i);
+                }
+            } else {
+                callback(null, []);
+            }
+        });
+    };
+
+    // Get AppDeploy by name.
+    this.getAppDataByName = function(envName, appName, projectId, callback) {
+        d4dModelNew.d4dModelMastersProjects.find({
+            appdeploy: {
+                $elemMatch: {
+                    applicationname: appName
+                }
+            },
+            rowid: projectId
+        }, function(err, anAppData) {
+            if (err) {
+                logger.debug("Got error while fetching appData: ", err);
+                callback(err, null);
+            }
+            if (anAppData.length) {
+                var appData = [];
+
+                AppDeploy.getAppDeployByNameAndEnvId(appName, envName, function(err, data) {
+                    if (err) {
+                        logger.debug("App deploy fetch error.", err);
+                    }
+                    if (data.length) {
+                        for (var i = 0; i < data.length; i++) {
+                            var dummyData = {
+                                _id: data[i]._id,
+                                applicationName: data[i].applicationName,
+                                applicationInstanceName: data[i].applicationInstanceName,
+                                applicationVersion: data[i].applicationVersion,
+                                applicationNodeIP: data[i].applicationNodeIP,
+                                applicationLastDeploy: data[i].applicationLastDeploy,
+                                applicationStatus: data[i].applicationStatus,
+                                projectId: anAppData[0].rowid,
+                                envId: data[i].envId,
+                                description: anAppData[0].description,
+                                applicationType: data[i].applicationType,
+                                containerId: data[i].containerId,
+                                hostName: data[i].hostName
+                            };
+                            appData.push(dummyData);
+                        }
+                        callback(null, appData);
+                    } else {
+                        callback(null, data);
+                    }
+                });
+            } else {
+                logger.debug("Else part..");
+                callback(null, anAppData);
+            }
+        });
+    };
+
+    // Return particular Projects specific to User
+    this.getParticularProject = function(projectId, callback) {
+        var projectList = [];
+        d4dModelNew.d4dModelMastersProjects.find({
+            id: "4",
+            rowid: projectId
+        }, function(err, projects) {
+            if (err) {
+                callback(err, null);
+            }
+            if (projects) {
+                configmgmtDao.getRowids(function(err, rowidlist) {
+                    var allEnvs = '';
+                    for (var i = 0; i < projects.length; i++) {
+                        (function(projectCount) {
+                            if (projects[projectCount].id === '4') {
+                                names = configmgmtDao.convertRowIDToValue(projects[projectCount].orgname_rowid, rowidlist);
+                                bgnames = configmgmtDao.convertRowIDToValue(projects[projectCount].productgroupname_rowid, rowidlist);
+                                projects[projectCount].orgname = names;
+                                projects[projectCount].productgroupname = bgnames;
+                                projectList.push(projects[projectCount]);
+                            }
+                        })(i);
+                    }
+                    logger.debug("Returned Projects: ", JSON.stringify(projectList));
+                    callback(null, projectList);
+                    return;
+                });
+            } else {
+                callback(null, projectList);
+                return;
+            }
         });
     }
 }

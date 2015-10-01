@@ -21,14 +21,10 @@ Resource           ${CATALYST ACTION}/Gallery_setup_TempService_Steps.txt
 
 *** Keywords ***
 Catalyst Execution of the Jenkins Task in Envrnment
-    Sleep    3s
-    Clicks on Workzone
-    Sleep    2s
-    Clicks on the Project to go to Environment
-    Sleep    2s
-    Clicks on Button to your > Environment
-    Sleep    2s
-    Clicks on Orchestration Tab of the Environment
+    Sleep    5s
+    #Clicks on > Button to your Environment
+    #Sleep    2s
+    #Clicks on Orchestration Tab of the Environment
     Clicks on Execute Button of the Jenkins Task Created
     Close the Logs Tab after the Task Completion
 
@@ -73,14 +69,9 @@ Clicks on Close button to go back to List of task page
 
 
 Catalyst Import an CentOS Instance By IP
-    #Clicks on Settings
-    #Clicks on Workzone Button
-    #Clicks on User Created Organization
-    #Clicks on User Created BusinessGroup
-    Clicks on the Project to go to Environment
-    Sleep    2s
-    Clicks on Button to your > Environment
     Sleep    5s
+    Clicks on > Button to your Environment
+    Sleep    1s
     Clicks on Import By IP Button
     Enters the IP Address of CentOS Box
     Select the Operating System of the Box
@@ -98,14 +89,9 @@ Catalyst Import an CentOS Instance By IP
     Sleep    5s
 
 Catalyst Import an Ubuntu Instance By IP
-    #Clicks on Settings
-    #Clicks on Workzone Button
-    #Clicks on User Created Organization
-    #Clicks on User Created BusinessGroup
-    Clicks on the Project to go to Environment
-    Sleep    2s
-    Clicks on Button to your > Environment
-    Sleep    3s
+    Sleep    5s
+    Clicks on > Button to your Environment
+    Sleep    1s
     Clicks on Import By IP Button
     Enters the IP Address of Ubuntu Box
     Select the Operating System as Ubuntu
@@ -152,16 +138,11 @@ Clicks on the Project to go to Environment
     Sleep    2s
 
 
-Catalyst Import By IP Chef Client run,SSH,Stop,Start
-    Clicks on Settings
-    Clicks on Workzone Button
-    Sleep    2s
-    Clicks on the Project to go to Environment
-    Sleep    2s
-    Clicks on Button to your > Environment
+Catalyst Import By IP Chef Client Run on CentOS Instance
+    Clicks on > Button to your Environment
     Sleep    5s
     Selects the imported centos node
-    Click on Chef ClientRun    
+    Click on Chef ClientRun 
     Select the CookBook
     Clicks on ADD To RunList
     Clicks on Update Button Of the a Runlist
@@ -172,21 +153,27 @@ Catalyst Import By IP Chef Client run,SSH,Stop,Start
     Verfiy the Chef Client Status after update
     Clicks on Back To Instances
     Sleep    2s
-    #Selects the imported centos node
-    #Clicks on SSH for instance
-    #Sleep    3s
-    #Input the Usrname in Terminal
-    #Select Authenticationtype as PEM
-    #Upload the PemFile to ssh
-    #Clicking on the SubmitButton
-    #Sleep    5s
-    #Clicks on Close the Terminal
-    #Sleep    2s 
-    #Clicks on Contreol Panel
-    #Clicks on Action History
-    #Verfiy the operation as SSH
-    #Verfiy the SSH-Status after update
-    #Clicks on Back To Instances
+
+
+Catalyst SSH Operation on the CentOS Instance
+    Clicks on > Button to your Environment
+    Sleep    5s
+    Selects the imported centos node
+    Clicks on SSH for instance
+    Sleep    3s
+    Input the Usrname in Terminal
+    Select Authenticationtype as PEM
+    Upload the PemFile to ssh
+    Clicking on the SubmitButton
+    Sleep    5s
+    Clicks on Close the Terminal
+    Sleep    2s 
+    Clicks on Contreol Panel
+    Clicks on Action History
+    Verfiy the operation as SSH
+    Verfiy the SSH-Status after update
+    Clicks on Back To Instances
+
 
 Catalyst Verfication of IP,Status,Chef,SSH,MoreInfo and frm Ctrlpanel
     Verfication of IP Address from card view
@@ -207,13 +194,9 @@ Catalyst Verfication of IP,Status,Chef,SSH,MoreInfo and frm Ctrlpanel
     Clicks on Back To Instances
 
 
-Catalyst Import By IP Chef Client run,SSH,Stop,Start on Ubuntu Instance
-    #Clicks on Settings
-    #Clicks on Workzone Button
-    #Sleep    2s
-    Clicks on the Project to go to Environment
+Catalyst Import By IP Chef Client run on Ubuntu Instance
     Sleep    2s
-    Clicks on Button to your > Environment
+    Clicks on > Button to your Environment
     Sleep    5s
     Selects Ubuntu imported node
     Click on Chef ClientRun of Ubuntu Instance   
@@ -227,20 +210,27 @@ Catalyst Import By IP Chef Client run,SSH,Stop,Start on Ubuntu Instance
     Verfiy the Chef Client Status after update
     Clicks on Back To Instances
     Sleep    2s
-    #Clicks on SSH for ubuntu instance
-    #Sleep    3s
-    #Input the Ubuntu Usrname in Terminal
-    #Select Authenticationtype as PEM
-    #Upload the PemFile to ssh
-    #Clicking on the SubmitButton
-    #Sleep    5s
-    #Clicks on Close the Terminal
-    #Sleep    2s 
-    #Clicks on Contreol Panel
-    #Clicks on Action History
-    #Verfiy the operation as SSH
-    #Verfiy the SSH-Status after update
-    #Clicks on Back To Instances
+
+
+Catalyst SSH Operation on the ubuntu Instance
+    Sleep    2s
+    Clicks on > Button to your Environment
+    Sleep    5s
+    Selects Ubuntu imported node
+    Clicks on SSH for ubuntu instance
+    Sleep    3s
+    Input the Ubuntu Usrname in Terminal
+    Select Authenticationtype as PEM
+    Upload the PemFile to ssh
+    Clicking on the SubmitButton
+    Sleep    5s
+    Clicks on Close the Terminal
+    Sleep    2s 
+    Clicks on Contreol Panel
+    Clicks on Action History
+    Verfiy the operation as SSH
+    Verfiy the SSH-Status after update
+    Clicks on Back To Instances
 
 
 Catalyst Verfication of IP,Status,Chef,SSH,MoreInfo on UbuntuIns frm Ctrlpanel
@@ -727,8 +717,7 @@ Verfiy the Chef Client Status after update
     Sleep    1 minute
     ${STAGE}=    Get Element Attribute    xpath=.//*[@id='tableactionHistory']/tbody/tr[2]/td[2]/img@title
     Log    ${STAGE}
-    Log    ${ACTBOOT2}
-    Should Be Equal    ${STAGE}     ${ACTBOOT2} 
+    Should Be Equal    ${STAGE}     ${CHEF STATE}
 
 Verfiy the operation as SSH
     Sleep    1s
@@ -738,8 +727,7 @@ Verfiy the SSH-Status after update
     Sleep    1 minute
     ${STAGE}=    Get Element Attribute    xpath=.//*[@id='tableactionHistory']/tbody/tr[3]/td[2]/img@title
     Log    ${STAGE}
-    Log    ${ACTBOOT2}
-    Should Be Equal    ${STAGE}     ${ACTBOOT2} 
+    Should Be Equal    ${STAGE}     ${SSH STATE}
 
 
 
@@ -806,15 +794,14 @@ Verfify the Status of the CentOAS Instance
     Sleep    50s
     ${STATUSS}=    Get Element Attribute    xpath=.//*[@id='tableactionHistory']/tbody/tr[1]/td[2]/img@title
     Log    ${STATUSS}
-    Log    ${ACTBOOT2}
-    Should Be Equal    ${STATUSS}     ${ACTBOOT2}
+    Should Be Equal    ${STATUSS}     ${BOOTSTRAP STATUS}
+
 
 Verfify the Status of the UbuntuOS Instance 
     Sleep    50s
     ${STATUSS}=    Get Element Attribute    xpath=.//*[@id='tableactionHistory']/tbody/tr[1]/td[2]/img@title
     Log    ${STATUSS}
-    Log    ${ACTBOOT2}
-    Should Be Equal    ${STATUSS}     ${ACTBOOT2}
+    Should Be Equal    ${STATUSS}     ${BOOTSTRAP STATUS}
     
 
 Clicks on Import By IP Button
@@ -1058,12 +1045,8 @@ Enters New Ubun Operating System Template Name
     Input Text    id=templatename    ${TEMP NAMEUBUN}        
 
 Catalyst Creation of Jenkins Task in Environment
-    #Clicks on Workzone
-    #Clicks on User Created Organization
-    #Clicks on User Created BusinessGroup
-    Clicks on the Project to go to Environment
-    Sleep    2s
-    Clicks on Button to your > Environment
+    Sleep    5s
+    Clicks on > Button to your Environment
     Sleep    2s
     Clicks on Orchestration Tab of the Environment
     Clicks on New Button to create task
@@ -1075,9 +1058,13 @@ Catalyst Creation of Jenkins Task in Environment
     Clicks on Save Task Button
     Sleep    4s
     Clicks on Save of the Success Button
-    #Sleep    2s
-    #Clicks on Pop up of Ok Button
+    Sleep    1s
+    Verfiy the Jenkins Task is created in the Table
 
+
+Verfiy the Jenkins Task is created in the Table
+    Element Should Contain    xpath=.//*[@id='tableOrchestration']/tbody/tr/td[text()='${JENTASK NAME}']    ${JENTASK NAME}
+    
 
 Clicks on Pop up of Ok Button
     Execute Javascript    $('body > div.bootbox.modal.fade.bootbox-alert.in > div > div > div.modal-footer > button').click();
@@ -1458,9 +1445,8 @@ Clicks on Jenkins Cancel Button
 
 
 Catalyst creation of Chef Task
-    Clicks on the Project to go to Environment
-    Sleep    2s
-    Clicks on Button to your > Environment
+    Sleep    3s
+    Catalyst Import an CentOS Instance By IP
     Sleep    2s
     Clicks on Orchestration Tab of the Environment
     Clicks on New Button to create task
@@ -1471,18 +1457,21 @@ Catalyst creation of Chef Task
     Clicks on Update runlist button to save runlist
     Clicks on Save button for chef task
     Clicks on Save of the Success Button
-    #Sleep    4s
-    #Clicks on Pop up of Ok Button
+    Verfiy the Chef Task is Created
 
+
+Verfiy the Chef Task is Created
+    Element Should Contain    xpath=.//*[@id='tableOrchestration']/tbody/tr/td[text()='${Cheftask}']     ${Cheftask}
+    Sleep    1s
 
 
 Enters Chef job name
-    Sleep    2s
     Input Text    id=chefTaskName    ${Cheftask}
 
 Select nodes for chef task
-    Click Element    xpath=.//*[@id='selectedNodesChefTask']/li[1]/label/i
-    Click Element    xpath=.//*[@id='selectedNodesChefTask']/li[2]/label/i
+    Sleep    2s
+    Click Element    xpath=.//*[@id='selectedNodesChefTask']/li/label[text()='${IP Centos}']
+    #Click Element    xpath=.//*[@id='selectedNodesChefTask']/li[text()='']/label/i
 
 Clicks on Edit Runlist icon inside chef task page
     Click Element    css=img.addList
@@ -1497,23 +1486,21 @@ Clicks on Update runlist button to save runlist
 
 Clicks on Save button for chef task
     Sleep    3s
-    Click Element    xpath=.//*[@id='taskForm']/div/div[7]/div/button    
+    Click Element    css=.btn.btn-primary.btnSaveTask.btn-mini
     
 Catalyst execution of Chef Task
-    Sleep    2s
-    Clicks on Workzone
-    Sleep    2s
-    Clicks on the Project to go to Environment
-    Sleep    2s
-    Clicks on Button to your > Environment
-    Sleep    2s
-    Clicks on Orchestration Tab of the Environment
+    #Sleep    2s
+    #Clicks on > Button to your Environment
+    #Sleep    2s
+    #Clicks on Orchestration Tab of the Environment
+    Sleep    4s
     Clicks on Execute Button for Chef task
     Close the Logs Tab after the Task Completion
 
 
 Clicks on Execute Button for Chef task
-    Execute Javascript    $('#tableOrchestration > tbody > tr:nth-child(2) > td:nth-child(5) > a > i').click()
+    #Execute Javascript    $('#tableOrchestration > tbody > tr:nth-child(2) > td:nth-child(5) > a > i').click()
+    Click Element    xpath=.//*[@id='tableOrchestration']/tbody/tr/td[text()='${Cheftask}']/../td[5]/a/i
     Sleep    10s
     Click Element    xpath=//button[text()='OK']      
 
@@ -1526,10 +1513,14 @@ Catalyst checks the Chef task history
 
 
 Clicks on Chef task History button
-    Execute Javascript    $('#tableOrchestration > tbody > tr:nth-child(2) > td:nth-child(6) > a > i').click()    
+    Click Element    xpath=.//*[@id='tableOrchestration']/tbody/tr/td[text()='${Cheftask}']/../td[6]/a/i
+    #Execute Javascript    $('#tableOrchestration > tbody > tr:nth-child(2) > td:nth-child(6) > a > i').click()    
+
 
 Clicks on Chef task Log button in Job output column
     Execute Javascript    $('#tableOrchestration > tbody > tr:nth-child(2) > td:nth-child(6) > a > i').click()
 
 Clicks on Close button in Chef history page
     Click Element    xpath=.//*[@id='chefJobHistory']/div/div/div/div[1]/div/div/button
+
+    

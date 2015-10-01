@@ -28,6 +28,14 @@ ${ENVIRONMENTSERVER}                http://d4d.rlcatalyst.com/public/login.html
 
 
              
+#Puppet
+${PUPPET SERVERNAME}       	RLPuppetServer
+${PUPPET USERNAME}          ubuntu
+${HOSTNAME}                 52.24.60.123
+${Valid15ChrPuppetName}      RelevanceLabPuppet
+
+${Valid15ChrErrMsg}         limited to 15 chars.
+
 
 #DataBag
 ${DATABAG NAME}        DataRL
@@ -96,10 +104,10 @@ ${KEYPAIRNAME}           cat_instances
 ${REGION NAME}           US West 
 ${SUBNET NAME}           subnet-aed68ce8
 ${NEW CONFIG NAME}       catserver
-${REGION NAME}            US West
+${REGION NAME}            US West    
 ${BLUEPRINT TESTNAME}          TestingNew
 
-
+${Unique ErrMsg}            This entry is already registered. Try another?
 
 ${PHOENIX COMMERNCE WITHOUT COOKBOOK UBUNTUOS}            Phoenix Commernce without Cookbook UbuntuOS
 ${PHOENIX COMMERCE WITH COOKBOOK UBUNTUOS}          Phoenix Commerce With CookBook ubuntuOS
@@ -232,6 +240,8 @@ ${IP Ubuntu}                54.68.147.50
 ${IP ADD CENTOS}              52.24.178.71
 ${IP Centos}                  52.24.178.71
 
+
+${SETTING}                    Settings
 ${Proj1}                      Catalyst
 ${Proj2}                      Primary_Edu
 ${CookBkName}                 apt
@@ -252,10 +262,13 @@ ${SOFTWARE NAME}          setup-2.8.14-20.el6_4.1.noarch
 
 
 #Provider
-${PROVIDER NAME}          AWS RELPRO
+${PROVIDER NAME}          AWS Prov
+${EDIT PROVIDER NANME}    AWS RELPRO
 ${PROVIDERR}                 AWS
 ${SECRET KEY}                  qm/j8lT0/IPc1P5ud8yujUSa61+QjqeyZ/jZkIff
 ${ACCESS KEY}                  AKIAI3ETOOEFHJ62G2NQ
+
+${Provider ErrMsg}         Provider name already exist.
 
 
 
@@ -574,3 +587,16 @@ ${DEF TEAMNAME4}                Relevance_Labs_QA
 
 #Blueprint Validation
 ${ERRROR MESSAGE}              Required.
+${DESIGN BREADCRUMB}         DesignPROVIDERSAWS
+${AZURE BREADCRUMB}          DesignPROVIDERSAzure
+${DATACENTRE BREADCRUMB}     DesignPROVIDERSData Centre
+${OPENSTACK BREADCRUMB}      DesignPROVIDERSOpen Stack
+${CLOUDSTACK BREADCRUMB}     DesignPROVIDERSCloud Stack
+${DOCKER BREADCRUMB}         DesignPROVIDERSDocker
+
+
+
+
+
+
+

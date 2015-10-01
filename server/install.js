@@ -163,6 +163,7 @@ function getDefaultsConfig() {
         features: {
             appcard: false
         },
+        maxInstanceCount: 0,
 
         //getter methods
         get catalystHome() {
@@ -226,6 +227,10 @@ function parseArguments() {
             name: "ldap-user",
             type: Boolean,
             description: "Setup Ldap user"
+        }, {
+            name: "max-instance-count",
+            type: Number,
+            description: "Maximum number of instance allowed to be launch"
         }
     ]);
 
@@ -263,6 +268,13 @@ function getConfig(config, options) {
     config.db.dbName = options['db-name'] ? options['db-name'] : config.db.dbName;
     config.ldap.host = options['ldap-host'] ? options['ldap-host'] : config.ldap.host;
     config.ldap.port = options['ldap-port'] ? options['ldap-port'] : config.ldap.port;
+    
+    if (options['max-instance-count']) {
+        var maxInstanceCount = parseInt(options['max-instance-count']);
+        if (maxInstanceCount) {
+            config.maxInstanceCount = maxInstanceCount;
+        }
+    }
 
     return config;
 
@@ -271,7 +283,7 @@ function getConfig(config, options) {
 
 function installPackageJson() {
     console.log("Installing node packages from pacakge.json");
-    var procInstall = spawn('npm', ['install','--unsafe-perm']);
+    var procInstall = spawn('npm', ['install', '--unsafe-perm']);
     procInstall.stdout.on('data', function(data) {
         console.log("" + data);
     });
@@ -393,7 +405,7 @@ proc.on('close', function(code) {
         console.log('creating catalyst home directory');
 
         var fsExtra = require('fs-extra');
-        
+
 
         var mkdirp = require('mkdirp');
 

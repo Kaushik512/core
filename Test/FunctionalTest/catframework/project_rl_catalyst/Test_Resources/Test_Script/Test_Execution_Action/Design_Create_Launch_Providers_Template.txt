@@ -152,11 +152,17 @@ Catalyst Creation of New Blueprint and Delete
     Clicks on the Project to go to Environment
     Clicks on the Environment to Launch
     Sleep    5s
-    Clicks on Blueprint Section
+    Clicks on the Infrastructure Tab to select Bluperints section
+    #Clicks on Blueprint Section
     Select the CentosTesingBlueprint
     Deleting the Testing Blueprint
 
 
+Clicks on the Infrastructure Tab to select Bluperints section
+    Click Element    xpath=.//*[@id='myTab3']/li[1]/a/b
+    Sleep    1s
+    Click Element    xpath=.//*[@id='myTab3']/li[1]/ul/li[2]/a
+    Sleep    1s
 
 
 Verify the Blurprint Saved Successfully message
@@ -189,11 +195,55 @@ Catalyst Creation of Providers Setup
     Selects the Key Pair
     Uploads the Pem File for Provider
     Clicks on Save Button of the Provider
+    
+
+
+Catalyst Editing the ProviderName
+    Clicks on Settings
+    Clicks on DevOps Setup menu
+    Clicks on Providers
+    Sleep    1s
+    Clicks on Edit Button of Created Provider
+    Sleep    1s
+    Enters the New Edit Provider Name
+    Clicks on Save Button of the Provider
+    Sleep    2s
     Verfiy the Provider is Created
+
+
+Catalyst Unique Provider Creation Setup
+    Clicks on Settings
+    Clicks on DevOps Setup menu
+    Clicks on Providers           
+    Clicks on New Button of Providers
+    Select the Provider
+    Enters the New Edit Provider Name
+    Enters the Access Key
+    Enters the Secret Key
+    Sleep    3s
+    Select organization now
+    Selects the Region
+    Selects the Key Pair
+    Uploads the Pem File for Provider
+    Clicks on Save Button of the Provider
+    Verify the Error Message Displayed while duplicating the provider
+
+
+Verify the Error Message Displayed while duplicating the provider
+    Element Should Contain    id=errmsg_name    ${Provider ErrMsg}
+    Sleep    2s
+
+
+Enters the New Edit Provider Name
+    Input Text    id=name    ${EDIT PROVIDER NANME}
+
+Clicks on Edit Button of Created Provider
+    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${PROVIDER NAME}']/../td[4]/div/a[1]/i
+
 
 Verfiy the Provider is Created
     Sleep    2s
-    Element Should Contain    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${PROVIDER NAME}']    ${PROVIDER NAME}
+    Element Should Contain    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${EDIT PROVIDER NANME}']    ${EDIT PROVIDER NANME}
 
 Validation of Creation of New Image
     Validation of Empty Image Name  ${ValidEmptyImageName}
@@ -209,7 +259,7 @@ Validation of Creation of New Image
             
 
 Catalyst Creation of VM Image Process for CentOS
-    Sleep    5s
+    Sleep    5s    
     Clicks on New Button of VMImage
     Enters the Image Name for CentOS
     Choosess The Provider of Image
@@ -254,10 +304,18 @@ Catalyst Creation of VM Image Process for Windows
     Enters the UserName of WindowsProviders
     Select the Organizatn to Create Windows Img
     Clicks on Save Button of Providers
+
+Catalyst VM Image Edit Setup
     Validate the Edit of VM Image
+
+
 
 Validate the Edit of VM Image
     Sleep    5s
+    Clicks on Settings
+    Clicks on Gallery Setup
+    Clicks on VMImage
+    Sleep    2s
     Clicks on Edit Button of Windows Image
     Sleep    4s
     Enters the New Image name for Windows
@@ -319,7 +377,7 @@ Catalyst Form validation of Blueprint
     Sleep    6s
     Clicks on Design
     Sleep    10s
-    Clicks on OK Button to Create the New Blueprint
+    Clicks on OK Button to Validate in loop
     Sleep    1s
     Choose the Template Type Created
     Sleep    3s
@@ -386,7 +444,7 @@ Catalyst Choose Template and Save Setup of CentOS Blueprint
     Sleep    6s
     Clicks on Design
     Sleep    10s
-    Clicks on OK Button to Create the New Blueprint
+    Clicks on OK Button to Validate in loop
     Sleep    1s
     Choose the Template Type Created
     Sleep    3s
@@ -425,12 +483,30 @@ Catalyst Choose Template and Save Setup of CentOS Blueprint
 Clicks on OK Button to Create the New Blueprint
     Click Element    xpath=.//*[text()='OK']
 
+
+
+Clicks on OK Button to Validate in loop
+    ${said}=    Run Keyword and Return Status     Page Should Contain Element    xpath=.//*[text()='OK']
+    Run Keyword If    '${said}' == 'True'     
+    ...    Click Element    xpath=.//*[text()='OK']
+    ...    ELSE IF   '${said}' == 'False'
+    ...    Log    OK Button is not displayed
+    
+
+
+   
+   
+    #Run Keyword And Continue On Failure    Click Element    xpath=.//*[text()='OK']
+    #Log    Test is Continued
+    #Click Element    xpath=.//*[text()='OK']
+
     
 CentOS Blueprint Launched and verify IP,Status,Chef,SSH,Stop,BootStrap
     Clicks on the Project to go to Environment
     Clicks on the Environment to Launch
     Sleep    5s
-    Clicks on Blueprint Section
+    Clicks on the Infrastructure Tab to select Bluperints section
+    #Clicks on Blueprint Section
     Select the CentosBlueprint
     Sleep    1s
     Clicks on Launch Button
@@ -438,7 +514,8 @@ CentOS Blueprint Launched and verify IP,Status,Chef,SSH,Stop,BootStrap
     Confirmation to launch Blueprint
     Sleep    1s
     Clicks on Instance Close Button
-    Clicks on Instances Button
+    Clicks on the Infrastructure Button to go to Instances    
+    #Clicks on Instances Button
     Verify the IP Address of the Instance
     Verfiy the Status of the Instance
     Sleep    30s
@@ -470,6 +547,13 @@ Catalyst Inspect Functionality Setup
     Verify the Particular Software is listed in list 
 
     
+
+Clicks on the Infrastructure Button to go to Instances
+    Click Element    xpath=.//*[@id='myTab3']/li[1]/a/b
+    Sleep    1s
+    Click Element    xpath=.//*[@id='myTab3']/li[1]/ul/li[1]/a
+    Sleep    2s
+
 
 
 
@@ -691,14 +775,16 @@ Ubuntu Blueprint Launched and verify the IP,Status,Chef,SSH,Stop,BootStrap
     #Clicks on the Project to go to Environment
     Clicks on the Button to the Environment
     Sleep    2s
-    Clicks on Blueprint Section
+    #Clicks on Blueprint Section
+    Clicks on the Infrastructure Tab to select Bluperints section
     Select the BlueprintUbuntu
     Clicks on Launch Button
     Sleep    2s
     Confirmation to launch Blueprint
     Sleep    1s
     Clicks on Instance Close Button
-    Clicks on Instances Button
+    Clicks on the Infrastructure Button to go to Instances
+    #Clicks on Instances Button
     Verify the IP Address of the Ubuntu Instance
     Verfiy the Status of the Ubuntu Instance
     Sleep    30s
@@ -1520,17 +1606,39 @@ Validation of Empty Image Name
     Clicks on Save Button of Providers
     #Clicks on OKX Button
 
+
+Catalyst Unique VM Image Validation Setup
+    Clicks on Settings
+    Clicks on Gallery Setup
+    Clicks on VMImage
+    Clicks on New Button of VMImage
+    Enters the Image Name for Ubuntu
+    Choosess The Provider of Image
+    Select the Operating System to Image for Ubuntu 
+    Enters the Image ID for Ubuntu
+    Enters the UserName of UbuntuProviders
+    Select the Organizatn to Create Ubuntu Img
+    Clicks on Save Button of Providers
+    Sleep    4s
+    Verify the Error Message displaye while duplicating VM Image
+
+Verify the Error Message displaye while duplicating VM Image
+    Page Should Contain    Selected is already registered.
+    Sleep    2s
+    Click Element    xpath=.//*[text()='OK']
+    Sleep    1s
+
 Choose the Provider
     Click Element    xpath=.//*[@id='s2id_providerId']/a/span[1]
     Sleep    1s
-    Input Text    xpath=.//*[@id='select2-drop']/div/input    ${PROVIDER NAME}
+    Input Text    xpath=.//*[@id='select2-drop']/div/input    ${EDIT PROVIDER NANME}
     Sleep    1s
     Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
 
 
     #Click Element    css=#s2id_providerId > .select2-choice
     #Sleep    2s
-    #Input Text    css=#select2-search .select2-input    ${PROVIDER NAME}
+    #Input Text    css=#select2-search .select2-input    ${EDIT PROVIDER NANME}
     #Sleep    1s
     #Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
 
@@ -1820,7 +1928,7 @@ Enters the New Image name for Windows
 
 Choosess The Provider of Image
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='s2id_providerId']/a
-    Input Text    xpath=.//*[@id='select2-drop']/div/input    ${PROVIDER NAME}
+    Input Text    xpath=.//*[@id='select2-drop']/div/input    ${EDIT PROVIDER NANME}
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
 
 Select the Operating System to Image for CentOS

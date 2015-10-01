@@ -58,7 +58,7 @@ Verifies Node and MongoInstances are present
 Catalyst Create Blueprint of Cloud Formation and Save
     Clicks on Design
     Sleep    2s
-    Clicks on OK Button to Create the New Blueprint
+    Clicks on OK Button to Validate in loop for Cloud Formation Blueprint
     Sleep    1s
     Clicks on CloudFormation Template Type
     Clicks on Next Button
@@ -389,8 +389,8 @@ Catalyst Choose Template and Save Setup
     Sleep    6s
     Clicks on Design
     Sleep    10s
-    #Clicks on OK Button to Create the New Blueprint
-    #Sleep    1s
+    Clicks on OK Button to Create the New Blueprint
+    Sleep    1s
     Choose the Template Type Created
     Sleep    3s
     Clicks on Next Button
@@ -426,7 +426,21 @@ Catalyst Choose Template and Save Setup
 
 
 Clicks on OK Button to Create the New Blueprint
-    Click Element    xpath=.//*[text()='OK']
+    ${said}=    Run Keyword and Return Status     Page Should Contain Element    xpath=.//*[text()='OK']
+    Run Keyword If    '${said}' == 'True'     
+    ...    Click Element    xpath=.//*[text()='OK']
+    ...    ELSE IF   '${said}' == 'False'
+    ...    Log    Ok Button is Not Displayed
+
+
+Clicks on OK Button to Validate in loop for Cloud Formation Blueprint
+    ${said}=    Run Keyword and Return Status     Page Should Contain Element    xpath=.//*[text()='OK']
+    Run Keyword If    '${said}' == 'True'     
+    ...    Click Element    xpath=.//*[text()='OK']
+    ...    ELSE IF   '${said}' == 'False'
+    ...    Log    OK Button is Not Displayed
+
+
 
 
 
@@ -605,26 +619,22 @@ Clicks on Confirm OK Button
 #------------------------------------
 
 Catlayst Workzone and Status Setup           
-    #Clicks on Settings
-    #Sleep    5s
-    #Clicks on Design
-    #Sleep    10s
-    Clicks on Workzone Button
     Sleep    5s
-    #Clicks on User Created Organization
-    #Clicks on User Created BusinessGroup
-    #Clicks on > Button to your Environment
+    Clicks on > Button to your Environment
     Clicks on Blueprint Section
     Select the CentosBlueprint
     Clicks on Launch Button
+    Sleep    5s
     Clicks on Instance Close Button
-    #Clicks on Instances Button
-    #Verify the IP Address of the Instance
-    #Verfiy the Status of the Instance
-    #Verify the CHEF Client Run
-    #Verfiy the SSH is Disabled
-    #Verfiy the STOP Button is Disabled
-    #Verfiy the More Info Button is Dispalyed
+    Sleep    3s
+    Clicks on Instances Button
+    Sleep    1s
+    Verfiy the Instance is Launched
+    
+
+Verfiy the Instance is Launched
+    ${Name}=    Get Text    css=.cardHeadingTextoverflow    
+    Should Be Equal    ${Name}    Apache-Centos
 	
 Clicks on Workzone Button
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    css=#workZoneNew
@@ -638,6 +648,7 @@ Select the CentosBlueprint
 Clicks on Launch Button
     Wait Until Keyword Succeeds    2 minute     2 seconds      Click Element    css=a.btn.pull-left.btn-primary.launchBtn
     Sleep    3 seconds
+    Click Element    xpath=.//*[text()='OK']
 
 Clicks on Instance Close Button
     Wait Until Keyword Succeeds    2 minute     1 seconds      Click Element    xpath=.//*[@id='launchResultContainer']/div/div/div[3]/button
@@ -725,14 +736,23 @@ Catalyst CHEF CLIENT Action on CentOS Instance
     Sleep    3s
 
 Steps To Run Chef Client
+    Sleep    6 minutes
+    Clicks on > Button to your Environment
     Click on RUNNN of Chef Client
     Sleep    5s
     Update the Run List with Cookbook
     Clicks on Update Button of Runlist
+    Sleep    3s
     Clicks on Contreol Panel
     Clicks on Action History
     Checking the BChefClient Run Status
+    Verfiyng the Chef Client Operation is performed
     Clicks on Back To Instances
+
+
+Verfiyng the Chef Client Operation is performed
+    Element Should contain    xpath=.//*[@id='tableactionHistory']/tbody/tr/td[text()='${CHEFCLIENT}']    ${CHEFCLIENT}
+
 
 Click on RUNNN of Chef Client
     Wait Until Keyword Succeeds    2 minute     1 seconds    Click Element    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${BLUEPRINT NAME}")]/div/div/div/div[4]/div[1]/a
@@ -742,26 +762,26 @@ Update the Run List with Cookbook
     #Click Element    xpath=.//*[@id='cookbooksrecipesselectedList']/option[text()='${COOKBOOK NAME1}']
     #Click Element    id=btnremoveFromRunlist
     #Sleep    2s
-    #Click Element    xpath=.//*[@id='cookbooksrecipesselectedList']/option[text()='${COOKBOOK NAME2}']
-    #Click Element    id=btnremoveFromRunlist
-    #Sleep    2s
-    Wait Until Keyword Succeeds    1 minute     10 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[@value='recipe[${COOKBOOK NAME2}]']
+    Click Element    xpath=.//*[@id='cookbooksrecipesselectedList']/option[text()='${COOKBOOK NAME2}']
+    Click Element    id=btnremoveFromRunlist
+    Sleep    2s
+    Wait Until Keyword Succeeds    1 minute     10 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[@value='recipe[${COOKBOOK NAME1}]']
     Wait Until Keyword Succeeds    1 minute     10 seconds      Click Element    id=btnaddToRunlist
 
 Clicks on Update Button of Runlist
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='chefRunModalContainer']/div/div/div[3]/button[1]   
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[text()='Update']   
     Wait Until Keyword Succeeds    1 minute     4 seconds      Click Element    xpath=//*[text()='OK']
     Wait Until Keyword Succeeds    1 minute     5 seconds      Click Element    xpath=.//*[@id='instanceLogModalContainer']/div/div/div[3]/button      #close
 
 Checking the BChefClient Run Status
-    Sleep    2 minute
+    Sleep    40s
     Clicks on Back To Instances
     Sleep    5s
     Clicks on Contreol Panel
     Clicks on Action History
     ${CHEFSUCCESS}=    Get Element Attribute    xpath=.//*[@id='tableactionHistory']/tbody/tr[2]/td[2]/img@title
     Log    ${CHEFSUCCESS}
-    Should Be Equal    ${CHEFSUCCESS}     ${SATSSYY} 
+    Should Be Equal    ${CHEFSUCCESS}     ${CHEF STATE} 
 
 
 
@@ -769,6 +789,7 @@ Checking the BChefClient Run Status
 
 Catalyst SSH Action on CentOS Instance
     Sleep    3s
+    Clicks on > Button to your Environment
     Steps to Run SSH
     Sleep    4s
 
@@ -782,10 +803,16 @@ Steps to Run SSH
     Clicks on Contreol Panel
     Clicks on Action History
     Verfify the status of SSH Shell
+    Verfiy SSH Operation is performed
     Clicks on Back To Instances
 
+
+
+Verfiy SSH Operation is performed
+    Element should Contain    xpath=.//*[@id='tableactionHistory']/tbody/tr/td[text()='${SSH}']    ${SSH}
+
 Click on Verified SSH Instance
-    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='divinstancescardview']/div/div//ul/li[contains(.,"${BLUEPRINT NAME}")]/div/div/div[1]/div/div/div[4]/div[2]/a
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='divinstancescardview']/div/div//ul/li[contains(.,"${BLUEPRINT NAME}")]/div/div/div/div[4]/div[2]/a
 
 Enters the Username in the Terminal
     Sleep    10s
@@ -795,6 +822,7 @@ Select Authentication Type
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='s2id_ssh-pemFileCheckbox']/a
     #Input Text    xpath=.//*[@id='select2-drop']/div/input  
     Click Element    xpath=.//*[@id='select2-drop']/ul/li[2]/div
+    Sleep    1s
 
 Upload the Catalyst PEM File
     Choose File     xpath=.//*[@id='ssh-pemfileInput']    ${CAT_INSTANCES}
@@ -812,36 +840,66 @@ Verfify the status of SSH Shell
     Sleep    5s
     Clicks on Contreol Panel
     Clicks on Action History
-    ${BOOTSTATUS1}=    Get Element Attribute   xpath=//*[@id='tableactionHistory']/tbody/tr[3]/td[2]/img@title
-    Log    ${BOOTSTATUS1}
-    Should Be Equal    ${ACTBOOT2}     ${BOOTSTATUS1}           
+    ${SSH STATUS}=    Get Element Attribute   xpath=//*[@id='tableactionHistory']/tbody/tr[3]/td[2]/img@title
+    Log    ${SSH STATUS}
+    Should Be Equal    ${SSH STATUS}    ${SSH STATE}
     Sleep    2s
+
+
+
+Catalyst Delete the CentOS Instance
+    Sleep    3s
+    Clicks on > Button to your Environment
+    Sleep    3s
+    Select the Centos Instnce
+    Sleep    1s
+    Clicks on Delete button of the Instance
+
+
+Select the Centos Instnce
+    Click Element    xpath=.//div[@data-blueprintname='${BLUEPRINT NAME}']
+
+Clicks on Delete button of the Instance
+    Click Element    xpath=.//*[@id='removeInstance']/i
+    Sleep    2s
+    Click Element    id=ckbChefDelete
+    Sleep    2s
+    Click Element    xpath=.//*[text()='Delete']
+    Sleep    1s
+
+
 
 #--------------------------------Catalyst STOP Action on CentOS Instance----
 
 Catalyst STOP Action on CentOS Instance
     Sleep    3s
+    Clicks on > Button to your Environment
     Steps to Run Stopping the Instance
     Sleep    20s
 
 Steps to Run Stopping the Instance
     Clicks on STOP of Verfied Instance
-    Verfified the STOPPED Status
+    #Verfified the STOPPED status
     Clicks on Contreol Panel
     Clicks on Action History
     Verfiy the Table contains the Status
+    Verfiy the Stop operation is performed
     Clicks on Back To Instances
 
 
-Clicks on STOP of Verfied Instance    
-    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${BLUEPRINT NAME}")]/div/div/div/div/div/div[4]/div[5]
+Verfiy the Stop operation is performed
+    Element Should Contain    xpath=.//*[@id='tableactionHistory']/tbody/tr/td[text()='${STOP STATE}']    ${STOP STATE}
+
+
+Clicks on STOP of Verfied Instance  
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${BLUEPRINT NAME}")]/div/div/div/div[4]/div[5]
     Wait Until Keyword Succeeds    1 minute     5 seconds      Click Element    xpath=//*[text()='OK']
     Sleep    2s
     Wait Until Keyword Succeeds    2 minute     5 seconds      Click Element    xpath=.//*[@id='instanceLogModalContainer']/div/div/div[3]/button
     Sleep    10 seconds
 
 Verfified the STOPPED Status
-    Wait Until Keyword Succeeds    2 minute     1 seconds    Element Should Contain    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${BLUEPRINT NAME}")]/div/div/div/div/div/div[3]/div/span/span[@class='instance-state instance-state-text-stopped']    ${SUITS}
+    Wait Until Keyword Succeeds    2 minute     1 seconds    Element Should Contain    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${BLUEPRINT NAME}")]/div/div/div/div/div/div[3]/div/span/span[@class='instance-state instance-state-text-stopped']    ${STATUS STOPPED}
 
 
 Verfiy the Table contains the Status
@@ -850,9 +908,9 @@ Verfiy the Table contains the Status
     Sleep    5s
     Clicks on Contreol Panel
     Clicks on Action History
-    ${BOTTABLE}=    Get Element Attribute   xpath=//*[@id='tableactionHistory']/tbody/tr[4]/td[2]/img@title
-    Log    ${BOTTABLE}
-    Should Be Equal    ${ACTBOOT2}     ${BOTTABLE}  
+    ${STOPPED}=    Get Element Attribute   xpath=//*[@id='tableactionHistory']/tbody/tr[4]/td[2]/img@title
+    Log    ${STOPPED}
+    Should Be Equal    ${STOPPED}      ${STOP STATUS}  
     Sleep    3s 
 
 #-------------Catalyst EDIT Instance Name of CentOS Instance
@@ -1248,12 +1306,15 @@ Steps to Run SSH of Ubuntu
     Enters the Ubuntu Username in the Terminal
     Select Authentication Type
     Upload the Catalyst PEM File
+    Sleep    2s
     Clicks on Terminlal Submit Button
     Close the SSH Terminal
     Clicks on Contreol Panel
     Clicks on Action History
     Verfify the status of SSH Shell
+    #Verfiy SSH Operation is performed
     Clicks on Back To Instances
+
 
 Click on Verified SSH Instance of Ubuntu
     Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='divinstancescardview']/div/div//ul/li[contains(.,"${BLUEPRINT NAME1}")]/div/div/div[1]/div/div/div[4]/div[2]/a
@@ -1560,9 +1621,9 @@ Clicks on User Created Projects
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=//*[normalize-space(text())="Catalyst"]
 
 Clicks on > Button to your Environment
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=//li[contains(., "Catalyst")]/./span[3]
+    #Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=//li[contains(., "Catalyst")]/./span[3]
     #Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='tree']/ul/li[contains(., "Catalyst")]/./span[3]
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=//*[normalize-space(text())="Dev"]
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=//*[normalize-space(text())="QAEnv"]
     Sleep    5 seconds
     
 
