@@ -68,7 +68,7 @@
                                                                     </div>
                                                                     <div id="templatesDevopsRole" class="templatesdevopsrole templates" style="display:none">
                                                                     </div>
-                                                                    <div class="templatesCloudformation templates" style="display:none">
+                                                                    <div class="templatesCloudformation templates hidden" style="display:none">
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -625,7 +625,7 @@
                                                                     <div class="alert alert-success bootstrapSuccess"><img style="width:50px;height:40px" src="img/correct.png" alt="success" />
                                                                         <span class="blueprintNameSuccess" style="margin-left:20px;"></span>
                                                                         <div style="margin-top:24px;text-align:center;">
-                                                                            <button class="btn btn-primary"><a style="color:white;text-decoration:none" href="#ajax/Aws-Production.html?addnew" id="addanotherlink">&nbsp;&nbsp;Add New Blueprint</a></button>
+                                                                            <button class="btn btn-primary"><a style="color:white;text-decoration:none" href="#ajax/DesignBlueprintAzure.html?addnew" id="addanotherlink">&nbsp;&nbsp;Add New Blueprint</a></button>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -1175,9 +1175,9 @@ $(document).ready(function() {
     $(".chooseEnvExisting").select2();
     var $addal = $("#addanotherlink"); //#ajax/Aws-Production.html?addnew
     if (window.url.indexOf('addnew') > 0)
-        $addal.attr('href', '#ajax/Aws-Production.html?addanother');
+        $addal.attr('href', '#ajax/DesignBlueprintAzure.html?addanother');
     else
-        $addal.attr('href', '#ajax/Aws-Production.html?addnew');
+        $addal.attr('href', '#ajax/DesignBlueprintAzure.html?addnew');
 
 
 
@@ -1679,15 +1679,16 @@ function getImagesWithOSFilter() {
                     data = getFilteredList(data, $('#instanceOS').val()),
                     len = data.length;
                 str = str + helperConstructOption(data, ['providerId', 'vType', 'osType', '_id'], 'name', 'imageIdentifier');
-                $('#imageId').html(str);
+                $('#imageId').html(str).select2().trigger('change');
+                //alert()
 
                 //setting image value for ami type and disabling it- vn
-                if ($('.productdiv2.role-Selected').first().attr('templatetype') == 'ami') {
+/*                if ($('.productdiv2.role-Selected').first().attr('templatetype') == 'ami') {
                     var vmimage = JSON.parse($('.productdiv2.role-Selected').first().attr('imagedata'));
                     $('#imageId').val(vmimage.imageIdentifier).attr('disabled', 'disabled');
                 }
                 //setting the selection
-                $('#imageId').select2().trigger('change');
+                $('#imageId').select2().trigger('change');*/
             });
         } else {
             $('#imageId').html('<option value="">Select Image</option>').select2().trigger('change');
@@ -2255,9 +2256,9 @@ var blueprintstartup = function() {
                     case "docker":
                         getDesignTypeImg = '/d4dMasters/image/b02de7dd-6101-4f0e-a95e-68d74cec86c0__designtemplateicon__Docker.png';
                         break;
-                    case "cft":
+                 /*   case "cft":
                         getDesignTypeImg = '/d4dMasters/image/71e62952-b464-4980-b76b-482a129f5627__designtemplateicon__Cloudformation.png';
-                        break;
+                        break;*/
                 }
 
                 //getDesignTypeImg= data[i]['designtemplateicon_filename'];
@@ -2838,7 +2839,7 @@ var $wizard = $('#bootstrap-wizard-1').bootstrapWizard({
             if (tempType !== "docker" && tempType !== 'cloudformation' && !isValid) {
 
                 bootbox.alert({
-                    message: "Valiadtion failed. Do check the configuration before submitting." + tempType + ' ' + isValid,
+                    message: "Valiadtion failed. Do check the configuration before submitting.",
                     title: "Error"
                 });
                 return false;
@@ -3064,7 +3065,7 @@ var $wizard = $('#bootstrap-wizard-1').bootstrapWizard({
                                 $.post('/organizations/' + reqBody.orgId + '/businessgroups/' + reqBody.bgId + '/projects/' + reqBody.projectId + '/blueprints', {
                                     blueprintData: reqBody
                                 }, function(data) {
-                                    console.log(data);
+                                    console.table(data);
                                     //  alert(JSON.stringify(data));
                                     var validatorForm = $("#wizard-1").validate();
                                     validatorForm.resetForm();
