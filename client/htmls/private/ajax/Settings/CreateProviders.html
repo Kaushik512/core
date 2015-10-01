@@ -570,6 +570,14 @@
         $('#secretKey').blur(KeyChangeHandler);
         $('select').select2();
         getOrganizationList();
+
+        //to enter edit mode..
+        if (location.toString().indexOf('?new') === -1) {
+            $('input#accessKey').removeAttr('type');
+            $('input#accessKey').attr('type','password');
+            $('input#secretKey').removeAttr('type');
+            $('input#secretKey').attr('type','password');
+        }
         $('#myForm54').ajaxForm({
             beforeSubmit: function(arr, $form, options) {
                 // The array of form data takes the following form: 
