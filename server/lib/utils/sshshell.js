@@ -52,7 +52,13 @@ function getConnectionParams(options, callback) {
         if (options.pemFileData) {
             connectionParamsObj.privateKey = options.pemFileData;
         } else {
-            connectionParamsObj.password = options.password;
+            if(true || options.interactiveKeyboard) {
+                connectionParamsObj.interactiveKeyboardPassword = options.password;   
+                connectionParamsObj.tryKeyboard = true;
+            } else {
+              connectionParamsObj.password = options.password;   
+            }
+             
         }
         process.nextTick(function() {
             callback(null, connectionParamsObj);
@@ -111,6 +117,17 @@ function SSHShell(connectionParamsObj) {
         connection = null;
         self.emit(EVENTS.END);
     });
+
+    if(connectionParamsObj.interactiveKeyboardPassword) {
+        connection.on('keyboard-interactive', function(name, instructions, instructionsLang, prompts, finish) {
+            console.log('Connection :: keyboard-interactive');
+            finish([connectionParamsObj.interactiveKeyboardPassword]);
+        });
+
+    }
+
+    
+
     try {
         connection.connect(connectionParamsObj);
     } catch (connectErr) {

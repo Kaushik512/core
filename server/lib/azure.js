@@ -32,6 +32,38 @@ function execute(cmd, isJsonResponse, callback){
 
 var AzureCloud = function() {
 
+	this.setSubscriptionById = function(id,callback){
+		var setSubscriptionCmd = "azure account set "+id;
+
+		execute(setSubscriptionCmd, false, function(err,data){
+            	   if(err){
+					   console.log("Error in setting subscription:",err);
+					   callback(err,null);
+					   return;
+				   }	
+
+				   console.log("Set SubscriptionById is success", data);
+				   callback(null,data);
+				   return;
+	        });	
+	}
+
+	this.setStorageByName = function(name,callback){
+		var setStorageCmd = "azure storage account set "+name;
+
+		execute(setStorageCmd, false, function(err,data){
+            	   if(err){
+					   console.log("Error in setting storage by name:",err);
+					   callback(err,null);
+					   return;
+				   }	
+
+				   console.log("Set StorageByName is success", data);
+				   callback(null,data);
+				   return;
+	        });	
+	}
+
 	this.listVM = function(callback){
             execute("azure vm list --json",true,function(err,data){
             	   if(err){
