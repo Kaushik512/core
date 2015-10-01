@@ -48,6 +48,8 @@ var puppet = require('./routes_puppet.js');
 
 var appdeploy = require('./routes_appdeploy');
 
+var nexus = require('./routes_nexus');
+
 module.exports.setRoutes = function(app) {
 
 
@@ -107,6 +109,8 @@ module.exports.setRoutes = function(app) {
     puppet.setRoutes(app, sessionVerificationFunc);
 
     appdeploy.setRoutes(app, sessionVerificationFunc);
+
+    nexus.setRoutes(app, sessionVerificationFunc);
 
     app.get('/', function(req, res) {
         res.redirect('/private/index.html');

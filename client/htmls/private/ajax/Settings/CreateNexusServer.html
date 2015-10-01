@@ -5,7 +5,7 @@
 <div class="row">
    <div class="col-md-12">
       <div class="col-md-12">
-        <form action="" id="myForm26">
+        <form action="" id="myForm101">
          <div class="widget-box">
             <div class="widget-header">
                <h4 class="widget-margin" style="color:black;">Nexus Configuration Management  <span id="spnconfigmanagement"></span></h4>
@@ -116,8 +116,8 @@
        $("#popupSelectProvider").modal({ keyboard: false, backdrop: "static" });
        readformnew(26); //26 is for Nexus
        //
-       if(typeof $('#myForm26').find('button[rowid]').attr('rowid') != 'undefined')
-          $('#orgname').attr('disabled','disabled');
+      /* if(typeof $('#myForm101').find('button[rowid]').attr('rowid') != 'undefined')
+          $('#orgname').attr('disabled','disabled');*/
         
        $('#content').css("opacity", "1 !important");
        //Force opening the left navigation menu
@@ -145,11 +145,60 @@
 <script>
    $(document).ready(function () {
       $("#nexusservername").focus();
-       $('#myForm26').submit(function() {
-        
- if(validateForm()) {saveform('26');};
+      
+     });
+
+    $('#myForm101').submit(function() {
+
+      var $form = $('#myForm101');
+      var nexusDesc = [];
+      var nexusData = {};
+      nexusData.username = $form.find('#username').val();
+      nexusData.nexuspassword = $form.find('#nexuspassword').val();
+      nexusData.hostname = $form.find('#hostname').val();
+       var reqBody = {
+            nexusDesc: [nexusData]
+        }
+        var url = '../nexus/authenticate'
+        var reqBody = {
+          "username": nexusData.username,
+          "nexuspassword": nexusData.nexuspassword,
+          "hostname": nexusData.hostname
+        };
+        //alert(JSON.stringify(reqBody));
+ /* $.post('/nexus/authenticate',requestBody,
+          function(data){
+            alert(data);
+            if(!data.length){
+              return false;
+            }
+
+            if(validateForm()) {saveform('26');};
            return false; // for demo
        });
-   });
+    });*/
+
+         $.ajax({
+              method: "POST",
+              url: url,
+              data: reqBody,
+              success: function(data, success) {
+              //   alert(data);
+                 /*if(validateForm()) {saveform('26');};
+                      return false; // for demo*/
+                    //  alert(data.length);
+                      if(!data.length){
+                        bootbox.alert('Invalid Nexus Server Details.');
+                      }
+              },
+              error: function(jxhr) {
+                // alert(data);
+              },
+              failure: function(jxhr) {
+                //  alert(data);
+              }
+          });
+         return false;
+        });
        
 </script>
