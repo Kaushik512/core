@@ -1735,7 +1735,7 @@ $.get('../instances/' + urlParams.id, function(data) {
     if (data.instanceState == 'running') {
         enableInstanceActionStartBtn(data._id);
     }
-    if (data.instanceState == 'pending' || data.instanceState == 'stopping') {
+    if (data.instanceState == 'pending' || data.instanceState == 'stopping' || data.instanceState == 'terminated') {
         disableInstanceActionBtns(data._id);
     }
     if (data.instanceState == 'unknown') {
