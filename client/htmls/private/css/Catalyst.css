@@ -12324,6 +12324,16 @@ tr.selectedOne td a {
     font-size: 14px;
 }
 
+.noTrackItems{
+    margin-top: 150px;
+    float:left;
+    margin-left: 246px;
+    width:480px;
+    color:black!important;
+    border-color: #40baf1!important;
+    background-color: #fff!important;
+    font-size: 14px;
+}
 @media(min-width:1201px) {
     .bootstrapSuccess {
         margin-top: 130px;
@@ -12336,29 +12346,57 @@ tr.selectedOne td a {
         font-size: 16px;
     }
 }
-
-@media(min-width:1550px) {
-    .bootstrapSuccess {
-        margin-top: 130px;
-        float: left;
-        margin-left: 572px!important;
-        width: auto;
-        color: black!important;
-        border-color: #40baf1!important;
-        background-color: #fff!important;
-        font-size: 16px;
-    }
+@media(min-width:1550px){
+    .bootstrapSuccess{
+    margin-top: 130px;
+    float:left;
+    margin-left:572px!important;
+    width:auto;
+    color:black!important;
+    border-color: #40baf1!important;
+    background-color: #fff!important;
+    font-size: 16px;
+ }
+ .noEnvWarning{
+    margin-top: 150px;
+    float:left;
+    margin-left: 246px;
+    width:480px;
+    color:black!important;
+    border-color: #40baf1!important;
+    background-color: #fff!important;
+    font-size: 14px;
 }
-
-@media (min-width:768px) and (max-width:1200px) {
-    .bootstrapSuccess {
-        margin-top: 105px;
-        float: left;
-        margin-left: 140px;
-        color: black!important;
-        border-color: #40baf1!important;
-        background-color: #fff!important;
-        font-size: 16px;
+.noTrackItems{
+    margin-top: 150px;
+    float:left;
+    margin-left: 536px;
+    width:480px;
+    color:black!important;
+    border-color: #40baf1!important;
+    background-color: #fff!important;
+    font-size: 14px;
+ }
+ .noEnvWarningConsumerDesigner{
+    margin-top: 150px;
+    float:left;
+    margin-left: 530px!important;
+    width:370px;
+    color:black!important;
+    border-color: #40baf1!important;
+    background-color: #fff!important;
+    font-size: 14px;
+}   
+}
+@media (min-width:768px) and (max-width:1200px){
+    .bootstrapSuccess{
+    margin-top: 105px;
+    float:left;
+    margin-left: 140px;
+    color:black!important;
+    border-color: #40baf1!important;
+    background-color: #fff!important;
+    font-size: 16px;
     }
 }
 
@@ -12584,8 +12622,8 @@ form.cmxform .gray * {
 }
 
 .marginleftright7 {
-    margin-left: 7px;
-    margin-right: 7px;
+  margin-left: 3px;
+  margin-right: 7px;
 }
 
 .serviceClass {

@@ -99,12 +99,18 @@ $(document).ready(function() {
 
 	// COLLAPSE LEFT NAV
 	$('.minifyme').click(function(e) {
+		/*alert('minified trackAlign');*/
 		$('body').toggleClass("minified");
 		$(this).effect("highlight", {}, 500);
 		if($('#setting_tree').hasClass('hide_nav')){
 			$('#setting_tree').removeClass('hide_nav');
 		}else{
 			$('#setting_tree').addClass('hide_nav');
+		}
+		if($('#trackTree').hasClass('hide_nav')){
+			$('#trackTree').removeClass('hide_nav');
+		}else{
+			$('#trackTree').addClass('hide_nav');
 		}
         if ($('body').hasClass("minified")) {
             $('.trackAlign').hide();
