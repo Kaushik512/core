@@ -26,6 +26,7 @@ Catalyst creates environments by selcting from chef server
     Select the Environment1
     Assign Projects for Orgnaization in Environment
     Clicks on Save Button to save the Environment
+    Sleep    2s
     Clicks on New button Create New Environment
     Select organization for Env
     Select the Environment2
@@ -175,8 +176,8 @@ Clicks on Environments menu link
 
 
 Clicks on New button create new Environment
-    Wait Until Keyword Succeeds    1 minute     2 seconds       Wait Until Element Is Visible       css=#newENV
     Click Element    css=#newENV
+    Sleep    2s
 
 Select the Environment1    
     Sleep    4s

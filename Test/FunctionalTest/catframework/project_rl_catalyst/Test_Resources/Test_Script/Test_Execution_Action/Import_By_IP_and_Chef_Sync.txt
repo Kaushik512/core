@@ -21,11 +21,11 @@ Resource           ${CATALYST ACTION}/Gallery_setup_TempService_Steps.txt
 
 *** Keywords ***
 Catalyst Import an CentOS Instance By IP
-    Clicks on Settings
-    Clicks on Workzone Button
+    #Clicks on Settings
+    #Clicks on Workzone Button
     #Clicks on User Created Organization
     #Clicks on User Created BusinessGroup
-    Clicks on the Project to go to Environment
+    ##Clicks on the Project to go to Environment
     Sleep    2s
     Clicks on Button to your > Environment
     Sleep    1s
@@ -33,6 +33,7 @@ Catalyst Import an CentOS Instance By IP
     Enters the IP Address of CentOS Box
     Select the Operating System of the Box
     Input the User Name for IP
+    Select the Config Management Chef Server
     Choose The Authentication Type as Pem File
     Upload the PEM File for Import By IP
     Clicks on Import Button to Import an Instance
@@ -73,6 +74,7 @@ Catalyst Verfication of Duplicate Node
     Enters the IP Address of CentOS Box
     Select the Operating System of the Box
     Input the User Name for IP
+    Select the Config Management Chef Server
     Choose The Authentication Type as Pem File
     Upload the PEM File for Import By IP
     Clicks on Import Button to Import an Instance
@@ -97,10 +99,10 @@ Catalyst Verfication Ubuntu Duplicate Node
 
 
 Catalyst Import By IP Chef Client Run on CentOS Instance
-    Clicks on Settings
-    Clicks on Workzone Button
-    Sleep    2s
-    Clicks on the Project to go to Environment
+    ##Clicks on Settings
+    ##Clicks on Workzone Button
+    ##Sleep    2s
+    ##Clicks on the Project to go to Environment
     Sleep    2s
     Clicks on Button to your > Environment
     Sleep    5s
@@ -121,10 +123,10 @@ Catalyst Import By IP Chef Client Run on CentOS Instance
 
 
 Catalyst Import By IP perform SSH on CentOS Instance
-    Clicks on Settings
-    Clicks on Workzone Button
-    Sleep    2s
-    Clicks on the Project to go to Environment
+    ##Clicks on Settings
+    ##Clicks on Workzone Button
+    ##Sleep    2s
+    ##Clicks on the Project to go to Environment
     Sleep    2s
     Clicks on Button to your > Environment
     Sleep    5s
@@ -144,10 +146,10 @@ Catalyst Import By IP perform SSH on CentOS Instance
     Clicks on Back To Instances
 
 Catalyst Verfication of IP,Status,Chef,SSH,MoreInfo and frm Ctrlpanel
-    Clicks on Settings
-    Clicks on Workzone Button
-    Sleep    2s
-    Clicks on the Project to go to Environment
+    ##Clicks on Settings
+    ##Clicks on Workzone Button
+    ##Sleep    2s
+    ##Clicks on the Project to go to Environment
     Sleep    2s
     Clicks on Button to your > Environment
     Sleep    5s
@@ -259,9 +261,9 @@ Catalyst Verify the Chef BootStrap,SSH,Status,Start,Stop
 
 
 Catalyst Check and Edit the Instance Name
-    Sleep    4s
-    Clicks on Workzone Button
-    Clicks on the Project to go to Environment
+    ##Sleep    4s
+    ##Clicks on Workzone Button
+    ##Clicks on the Project to go to Environment
     Sleep    2s
     Clicks on Button to your > Environment
     Sleep    4s
@@ -295,9 +297,9 @@ Catalyst Check and Edit the Ubuntu Instance Name
 
 
 Catalyst Instance Deleted From Chef Environment
-    Sleep    6s
-    Clicks on Workzone Button
-    Clicks on the Project to go to Environment
+    ##Sleep    6s
+    ##Clicks on Workzone Button
+    ##Clicks on the Project to go to Environment
     Sleep    2s
     Clicks on Button to your > Environment
     Sleep    4s
@@ -310,7 +312,7 @@ Catalyst Instance Deleted From Chef Environment
     Sleep    5s
     Clicks on DevOps Setupp 
     Clicks on ConfgMgmt butn
-    Clicks on Import Nodes Button of Chef Server
+    Clicks on Import Nodes Button of ConfigMgmtChef Server
 
 
 Catalyst Ubuntu Instance Deleted From Chef Environment
@@ -429,7 +431,12 @@ Clicks on Inport New IP Button
     #Sleep    1s
     Click Element    id=ipaddressimport
     
-
+Select the Config Management Chef Server
+    Click Element    css=#s2id_configManagementDropdown > a > span.select2-arrow
+    Sleep    1s
+    Input Text    css=#select2-drop > div > input    ${CONFIG MANAGEMENT NAME}
+    Sleep    1s
+    Click Element    css=.select2-result-label
 
 
 Verfication of IP Address from card view
@@ -617,7 +624,7 @@ Clicks on ConfgMgmt butn
     Click Element    xpath=//*[text()='Chef Server']
 
 
-Clicks on Import Nodes Button of Chef Server
+Clicks on Import Nodes Button of ConfigMgmtChef Server
     Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${CONFIG MANAGEMENT NAME}']/../td[5]/div/a[2]
     Sleep    50s
     Page Should Not Contain    ${IP Centos}

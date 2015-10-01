@@ -287,7 +287,8 @@ Catalyst Creation of VM Image Process for Windows
 
 
 Clicks on New Button of VMImage
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    id=addnewitem
+    Click Element    id=addnewitem
+    Sleep    1s
 
 Enters the Image Name for CentOS
     Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    id=name    ${IMAGE NAME1}
@@ -387,8 +388,8 @@ Catalyst Choose Template and Save Setup
     Sleep    6s
     Clicks on Design
     Sleep    10s
-    #Clicks on OK Button to Create the New Blueprint
-    #Sleep    1s
+    Clicks on OK Button to Create the New Blueprint
+    Sleep    1s
     Choose the Template Type Created
     Sleep    3s
     Clicks on Next Button
@@ -428,7 +429,8 @@ Clicks on OK Button to Create the New Blueprint
     Run Keyword If    '${said}' == 'True'     
     ...    Click Element    xpath=.//*[text()='OK']
     ...    ELSE IF   '${said}' == 'False'
-    ...    Log OK Button is not displayed
+    ...    Log    OK Button is not displayed
+
 
 
 
@@ -1025,9 +1027,10 @@ Verfiy the Chef Run fron Grid View Enabled
 
 
 Catalyst Choose Template and Save Setup for UBUNTU
-    Clicks on Settings
     Clicks on Design
-    Sleep    5s
+    Sleep    10s
+    Clicks on OK Button to Create the New Blueprint
+    Sleep    1s
     Choose the Template Type Created
     Sleep    3s
     Clicks on Next Button
