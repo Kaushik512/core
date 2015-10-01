@@ -826,9 +826,12 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                 var topicARN = null;
                                                                 var templateObj = JSON.parse(fileData);
                                                                 var templateResources = templateObj.Resources;
-                                                                if (templateResources && templateResources.AutoScalingNotification) {
-                                                                    if (templateResources.AutoScalingNotification.Type === 'AWS::AutoScaling::AutoScalingGroup') {
-                                                                        var autoScaleProperties = templateResources.AutoScalingNotification.Properties;
+                                                                var templateResourcesKeys = Object.keys(templateResources);
+                                                                for (var j = 0;j < templateResourcesKeys.length; j++) {
+                                                                    var resource = templateResources[templateResourcesKeys[i]];
+
+                                                                    if (resource && resource.Type === 'AWS::AutoScaling::AutoScalingGroup') {
+                                                                        var autoScaleProperties = resource.Properties;
                                                                         if (autoScaleProperties && autoScaleProperties.NotificationConfigurations && autoScaleProperties.NotificationConfigurations.length) {
                                                                             for (var i = 0; i < autoScaleProperties.NotificationConfigurations.length; i++) {
                                                                                 if (autoScaleProperties.NotificationConfigurations[i].TopicARN) {
