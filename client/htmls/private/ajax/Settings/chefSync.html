@@ -415,11 +415,14 @@ $(function() {
 
                         $tr.append($('<td></td>').addClass('chef-env').append('<img class="center-block" style="height:20px;width:20px;" src="img/loading.gif" />'));
                         $nodecheckboxlabel = $('<label></label>').addClass('checkbox');
-                        $nodecheckboxinput = $('<input class="nodeCheckBox smart-form" data-nodeName="' + nodeList[i] + '" type="checkbox" name="nodesChecked"/><i></i>');
+                        $nodecheckboxinput = $('<input class="nodeCheckBox smart-form" data-nodeName="' + nodeList[i] + '" type="checkbox" name="nodesChecked"/><i class="margin-left40per"></i>');
                         $nodecheckboxlabel.append($nodecheckboxinput);
 
                         // $tr.append($('<td></td>').addClass('chef-checkbox').append($('<input class="nodeCheckBox" data-nodeName="'+nodeList[i]+'" type="checkbox" name="nodesChecked"/>'))); 
                         $tr.append($('<td></td>').addClass('chef-checkbox smart-form').append($nodecheckboxlabel));
+                        $tr.find('td').css({
+                            'text-align': 'center'
+                        })
                         $tableBody.append($tr);
 
                         $.get('../chef/servers/' + urlParams.chefId + '/nodes/' + nodeList[i], function(node) {

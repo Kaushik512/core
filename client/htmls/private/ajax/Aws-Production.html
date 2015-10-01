@@ -2815,6 +2815,8 @@
                      //return (true);
                      //return (true);
                  } else if($('.productdiv2.role-Selected').first().attr('templatetype') == "CloudFormation"){
+                   
+
                     $('.notforCFT').hide();
                     $('.forCFT').show();
                     $('.divconfigureparameterrunlist').hide();
@@ -2943,11 +2945,15 @@
 
 
                                     for(var i=0;i<resourceKeys.length;i++) {
-                                        if(resources[resourceKeys[i]].Type === "AWS::EC2::Instance") {
+                                        if(resources[resourceKeys[i]].Type === "AWS::EC2::Instance" || resources[resourceKeys[i]].Type === "AWS::AutoScaling::AutoScalingGroup") {
+                                            var resourceName = resourceKeys[i];
+                                            if (resources[resourceKeys[i]].Type === "AWS::AutoScaling::AutoScalingGroup") {
+                                                resourceName = "AutoScaleInstanceResource"
+                                            }
                                             var $clone = $panel.clone();
-                                            $clone.find('.heading-text').html('Configure Resource : '+resourceKeys[i]);
-                                            $clone.find('.panel-collapse').attr('id','cftResource-'+resourceKeys[i]);
-                                            $clone.find('.panel-toggle').attr('href','#cftResource-'+resourceKeys[i]);
+                                            $clone.find('.heading-text').html('Configure Resource : '+resourceName);
+                                            $clone.find('.panel-collapse').attr('id','cftResource-'+resourceName);
+                                            $clone.find('.panel-toggle').attr('href','#cftResource-'+resourceName);
 
                                             // for username
                                             var $inputUsernameContainer = $inputContainerTemplate.clone();
@@ -2960,7 +2966,7 @@
                                             var $inputLogicalId = $resourceInputTemplate.clone();
                                             $inputLogicalId.addClass('cftResourceLogicalIdInput');
                                             $inputLogicalId.attr('type','hidden');
-                                            $inputLogicalId.val(resourceKeys[i]);
+                                            $inputLogicalId.val(resourceName);
 
                                             // for chefRunlist
 
@@ -2986,9 +2992,14 @@
 
                                             $panelGroup.append($clone);
                                             hasResource = true;
-                                        }
+                                        } 
 
                                     }
+
+                                    // for aws auto scale
+
+
+
                                     if(hasResource) {
                                         $panelBody.append($panelGroup);
 
