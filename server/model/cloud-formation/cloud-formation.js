@@ -64,7 +64,9 @@ var CloudFormationSchema = new Schema({
     region: String,
     instanceUsername: String,
     autoScaleTopicArn: String,
-    autoScaleResourceIds: [String]
+    autoScaleResourceIds: [String],
+    autoScaleUsername: String,
+    autoScaleRunlist: [String]
 });
 
 
@@ -133,7 +135,9 @@ CloudFormationSchema.statics.createNew = function(cfData, callback) {
         stackParameters: cfData.stackParameters,
         region: cfData.region,
         instanceUsername: cfData.instanceUsername,
-        autoScaleTopicArn: cfData.autoScaleTopicArn
+        autoScaleTopicArn: cfData.autoScaleTopicArn,
+        autoScaleUsername: cfData.autoScaleUsername,
+        autoScaleRunlist: cfData.autoScaleRunlist
     };
 
     var that = this;
