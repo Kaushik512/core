@@ -1493,6 +1493,38 @@ var MasterUtil = function() {
         });
     }
 
+    // Return all Nexus Servers specific to User
+    this.getNexusServers = function(orgList, callback) {
+        var congifMgmtList = [];
+        var rowIds = [];
+        for (var x = 0; x < orgList.length; x++) {
+            rowIds.push(orgList[x].rowid);
+        }
+        logger.debug("org rowids: ", rowIds);
+        d4dModelNew.d4dModelMastersNexusServer.find({
+            orgname_rowid: {
+                $in: rowIds
+            }
+        }, function(err, configMgmt) {
+            if (configMgmt) {
+                configmgmtDao.getRowids(function(err, rowidlist) {
+                    for (var i = 0; i < configMgmt.length; i++) {
+                        if (configMgmt[i].id === '26') {
+                            names = configmgmtDao.convertRowIDToValue(configMgmt[i].orgname_rowid, rowidlist)
+                            configMgmt[i].orgname = names;
+                            congifMgmtList.push(configMgmt[i]);
+                        }
+                    }
+                    callback(null, congifMgmtList);
+                    return;
+                });
+            } else {
+                callback(err, null);
+                return;
+            }
+        });
+    }
+
     // Return all Puppet Servers specific to User
     this.getAllCongifMgmts = function(orgList, callback) {
         var congifMgmtList = [];

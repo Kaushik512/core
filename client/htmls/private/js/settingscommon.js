@@ -645,6 +645,10 @@ function CreateTableFromJson(formID, idFieldName, createFileName) {
                     if (haspermission('puppetserver', 'modify')) {
                         hasEditPermission = true;
                     }
+                } else if (createFileName === 'CreateNexusServer.html') {
+                    if (haspermission('puppetserver', 'modify')) {
+                        hasEditPermission = true;
+                    }
                 }
                 //user has no permission to edit
                 if (!hasEditPermission) {
@@ -746,6 +750,10 @@ function CreateTableFromJson(formID, idFieldName, createFileName) {
                         hasDeletePermission = true;
                     }
                 } else if (createFileName === 'CreatePuppetServer.html') {
+                    if (haspermission('puppetserver', 'delete')) {
+                        hasDeletePermission = true;
+                    }
+                } else if (createFileName === 'CreateNexusServer.html') {
                     if (haspermission('puppetserver', 'delete')) {
                         hasDeletePermission = true;
                     }
