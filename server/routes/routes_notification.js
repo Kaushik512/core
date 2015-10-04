@@ -24,7 +24,20 @@ var credentialCryptography = require('_pr/lib/credentialcryptography');
 
 
 
-module.exports.setRoutes = function(app, sessionVerificationFunc) {
+module.exports.setRoutes = function(app, socketIo) {
+
+
+    // setting up socket.io
+
+    var socketCloudFormationAutoScate = socketIo.of('/cloudFormationAutoScaleGroup');
+
+    socketCloudFormationAutoScate.on('connection', function(socket) {
+        socket.on('joinCFRoom', function(data) {
+            socket.join(data.orgId + ':' + data.bgId + ':' + data.projId + ':' + data.envId);
+        });
+
+    });
+
 
 
     app.post('/notifications/aws/cfAutoScale', function(req, res) {
@@ -87,12 +100,29 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                     if (autoScaleMsg.Event === 'autoscaling:EC2_INSTANCE_TERMINATE') {
                                         logger.debug('removing instance ==> ' + awsInstanceId);
 
-                                        instancesDao.removeInstancebyCloudFormationIdAndAwsId(cloudFormation.id, awsInstanceId, function(err, deleteCount) {
+
+
+                                        instancesDao.findInstancebyCloudFormationIdAndAwsId(cloudFormation.id, awsInstanceId, function(err, instances) {
                                             if (err) {
-                                                logger.error("Unable to delete instance by cloudformation and instance id", err);
+                                                logger.error("Unable to fetch instance by cloudformation and instance id", err);
                                                 return;
                                             }
-                                            logger.debug('notification deleteCount ==>' + deleteCount);
+                                            for (var i = 0; i < instances.length; i++) {
+                                                (function(instance) {
+                                                    instancesDao.removeInstancebyId(instance.id, function(err) {
+                                                        if (err) {
+                                                            logger.error("Unable to delete instance by instance id", err);
+                                                            return;
+                                                        }
+                                                        socketCloudFormationAutoScate.to(instance.orgId + ':' + instance.bgId + ':' + instance.projectId + ':' + instance.envId).emit('cfAutoScaleInstanceRemoved', {
+                                                            instanceId: instance.id,
+                                                            cloudformationId: cloudFormation.id
+                                                        }):
+
+
+                                                    });
+                                                })(instances[i]);
+                                            }
                                         });
 
                                     } else if (autoScaleMsg.Event === 'autoscaling:EC2_INSTANCE_LAUNCH') {
@@ -304,6 +334,13 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                     });
                                                                     logger.debug("Saving logs");
                                                                     logger.debug("Waiting for instance " + instanceData.InstanceId);
+
+                                                                    //emiting socket event
+
+                                                                    socketCloudFormationAutoScate.to(instance.orgId + ':' + instance.bgId + ':' + instance.projectId + ':' + instance.envId).emit('cfAutoScaleInstanceAdded', data):
+
+
+
                                                                     ec2.waitForEvent(instanceData.InstanceId, 'instanceStatusOk', function(err) {
                                                                         logger.debug("Wait Complete " + instanceData.InstanceId);
                                                                         if (err) {

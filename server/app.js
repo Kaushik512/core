@@ -114,9 +114,7 @@ var options = {
     rejectUnauthorized: false
 }
 
-logger.debug('Setting up application routes');
-var routes = require('./routes/routes.js');
-routes.setRoutes(app);
+
 
 var server = http.createServer(app);
 
@@ -124,6 +122,10 @@ var server = http.createServer(app);
 io = io.listen(server, {
     log: false
 });
+
+logger.debug('Setting up application routes');
+var routes = require('./routes/routes.js');
+routes.setRoutes(app,io);
 
 var socketIORoutes = require('./routes/socket.io/routes.js');
 socketIORoutes.setRoutes(io);
