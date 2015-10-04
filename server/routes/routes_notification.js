@@ -33,7 +33,14 @@ module.exports.setRoutes = function(app, socketIo) {
 
     socketCloudFormationAutoScate.on('connection', function(socket) {
         socket.on('joinCFRoom', function(data) {
+            console.log('room joined',data);
             socket.join(data.orgId + ':' + data.bgId + ':' + data.projId + ':' + data.envId);
+            setTimeout(function(){
+             console.log('firing timeout');
+             socketCloudFormationAutoScate.to(data.orgId + ':' + data.bgId + ':' + data.projId + ':' + data.envId).emit('cfAutoScaleInstanceRemoved',{
+                instanceId:'560d17697c5a558126d5b1df'
+             });
+            },15000)
         });
 
     });
@@ -117,7 +124,7 @@ module.exports.setRoutes = function(app, socketIo) {
                                                         socketCloudFormationAutoScate.to(instance.orgId + ':' + instance.bgId + ':' + instance.projectId + ':' + instance.envId).emit('cfAutoScaleInstanceRemoved', {
                                                             instanceId: instance.id,
                                                             cloudformationId: cloudFormation.id
-                                                        }):
+                                                        });
 
 
                                                     });
@@ -337,7 +344,7 @@ module.exports.setRoutes = function(app, socketIo) {
 
                                                                     //emiting socket event
 
-                                                                    socketCloudFormationAutoScate.to(instance.orgId + ':' + instance.bgId + ':' + instance.projectId + ':' + instance.envId).emit('cfAutoScaleInstanceAdded', data):
+                                                                    socketCloudFormationAutoScate.to(instance.orgId + ':' + instance.bgId + ':' + instance.projectId + ':' + instance.envId).emit('cfAutoScaleInstanceAdded', data);
 
 
 
