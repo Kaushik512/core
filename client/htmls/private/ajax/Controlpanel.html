@@ -114,11 +114,29 @@
               <a id="controlPanelLogTab" style="color: #eee;border-radius: 5px 5px 0 0 ; padding: 9px 10px 13px;" href="#l4" data-toggle="tab" style="font-size: 14px"> <i class="fa fa-fw fa-clock-o"></i>Logs</a>
           </li>
     </ul>
-    <div id="myTabContent3" class="nav pull-left tab-content" style="position: auto; left: 0px; width: 80%;margin-top:4px;">
+    <div id="myTabContent3" class="nav pull-left tab-content" style="position: auto; left: 0px; width: 80%;margin-top:4px;
+        margin-bottom:60px;">
         <!-- info tab contents starts here -->
         <div class="tab-pane fade in active " id="l1" style="min-height:405px;overflow-y:auto;">
           <div class="panel-group smart-accordion-default">
-            <div class="panel panel-default" id="accordion-Hardware" style="border-radius:10px 10px 0px 0px;">
+            <div class="panel panel-default" id="accordion-Blueprints" style="border-radius:10px 10px 0px 0px;">
+              <div class="panel-heading">
+                <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion-Blueprints" href="#collapseBlueprints" ><i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i><i class="fa fa-fw fa-rss fa-dot-circle-o" style="font-size:14px;"></i> <b style="color:#3a87ad;font-size:12px;"><u>Blueprint Information</u></b></a></h4>
+              </div>
+              <div id="collapseBlueprints" class="panel-collapse collapse in">
+                <div class="panel-body">
+                  <table align="left">
+                    <tbody > 
+                     
+                    </tbody>
+                  </table>
+
+
+                </div>
+
+              </div><!--collapseRoleAttr ends here-->
+            </div>
+            <div class="panel panel-default" id="accordion-Hardware">
                 <div class="panel-heading">
                   
                   <h4 class="panel-title">
@@ -338,23 +356,7 @@
               </div>
             </div>
             <!--tasks name ends here-->
-            <div class="panel panel-default" id="accordion-Blueprints">
-              <div class="panel-heading">
-                <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion-Blueprints" href="#collapseBlueprints" ><i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i><i class="fa fa-fw fa-rss fa-dot-circle-o" style="font-size:14px;"></i> <b style="color:#3a87ad;font-size:12px;"><u>Blueprint Information</u></b></a></h4>
-              </div>
-              <div id="collapseBlueprints" class="panel-collapse collapse in">
-                <div class="panel-body">
-                  <table align="left">
-                    <tbody > 
-                     
-                    </tbody>
-                  </table>
-
-
-                </div>
-
-              </div><!--collapseRoleAttr ends here-->
-            </div>
+            
              <!--app series-->
              <div class="modal fade" id="modalAppNameURL" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
                <div class="modal-dialog">

@@ -6,6 +6,12 @@ input {
 .jarviswidget .widget-body {
     padding-bottom: 0px !important;
 }
+#spanTextApplication {
+    white-space: nowrap; 
+    width: 10em; 
+    overflow: hidden;
+    text-overflow: ellipsis; 
+}
 </style>
 <div class="tab-pane" id="l6">
     <div class="jarviswidget jarviswidget-color-blueLight" id="wid-id-application" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false" data-widget-fullscreenbutton="false" data-widget-custombutton="false" data-widget-sortable="false">
@@ -84,9 +90,9 @@ input {
                                             <td style="color:#fff;background-color: #2c3742;">Host</td>
                                             <td style="color:#fff;background-color: #2c3742;">Node IP</td>
                                             <td style="color:#fff;background-color: #2c3742;">Last Deploy</td>
-                                            <td style="color:#fff;background-color: #2c3742;">Status</td>
-                                            <td style="color:#fff;background-color: #2c3742;">Application Type</td>
                                             <td style="color:#fff;background-color: #2c3742;">Container ID</td>
+                                            <td style="color:#fff;background-color: #2c3742;">Application Type</td>
+                                            <td style="color:#fff;background-color: #2c3742;">Status</td>
                                             <td style="color:#fff;background-color: #2c3742;">Logs</td>
                                             <!-- <td style="color:#fff;background-color: #2c3742;">App Links</td>
                                         <td style="color:#fff;background-color: #2c3742;">Action</td> -->
@@ -107,9 +113,9 @@ input {
                                             <td style="color:#fff;background-color: #2c3742;">Host</td>
                                             <td style="color:#fff;background-color: #2c3742;">Node IP</td>
                                             <td style="color:#fff;background-color: #2c3742;">Last Deploy</td>
-                                            <td style="color:#fff;background-color: #2c3742;">Status</td>
-                                            <td style="color:#fff;background-color: #2c3742;">Application Type</td>
                                             <td style="color:#fff;background-color: #2c3742;">Container ID</td>
+                                            <td style="color:#fff;background-color: #2c3742;">Application Type</td>
+                                            <td style="color:#fff;background-color: #2c3742;">Status</td>
                                             <td style="color:#fff;background-color: #2c3742;">Logs</td>
                                             <!-- <td style="color:#fff;background-color: #2c3742;">App Links</td>
                                         <td style="color:#fff;background-color: #2c3742;">Action</td> -->
@@ -508,6 +514,9 @@ function constructUI(data) {
                     }
                     if (!data[i].containerId) {
                         data[i].containerId = "NA";
+                    }else{
+                        data[i].containerId = '<div id="spanTextApplication">'+data[i].containerId+'</div>'
+                        //data[i].containerId = '<div id="spanTextApplication" rel="tooltip" data-placement="top" data-original-title="'+data[i].containerId+'">'+data[i].containerId+'</div>'
                     }
                     if (!data[i].hostName) {
                         data[i].hostName = "NA";
@@ -531,9 +540,9 @@ function constructUI(data) {
                         data[i].hostName,
                         data[i].applicationNodeIP,
                         applicationLastDeployTime,
-                        data[i].applicationStatus,
-                        data[i].applicationType,
                         data[i].containerId,
+                        data[i].applicationType,
+                        data[i].applicationStatus,
                         logsAppDeploy
                     ]);
                 }
