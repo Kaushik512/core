@@ -62,7 +62,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                     console.log(' Notification Message  ==> ', reqBody.Message);
                     var autoScaleMsg = JSON.parse(reqBody.Message);
                     console.log("service ==> " + typeof autoScaleMsg);
-                    if (autoScaleMsg.Service == "AWS Auto Scaling") {
+                    if (autoScaleMsg.Service == "AWS Auto Scaling" && autoScaleMsg.StatusCode !== 'Failed') {
                         var autoScaleId = autoScaleMsg.AutoScalingGroupName;
                         if (autoScaleId) {
                             console.log('finding by autoscale topic arn ==>' + topicArn);
@@ -80,6 +80,10 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
                                     var cloudFormation = cloudFormations[0];
                                     var awsInstanceId = autoScaleMsg.EC2InstanceId;
+                                    if (!awsInstanceId) {
+                                        logger.error('Unable to get instance Id from notification');
+                                        return;
+                                    }
                                     if (autoScaleMsg.Event === 'autoscaling:EC2_INSTANCE_TERMINATE') {
                                         logger.debug('removing instance ==> ' + awsInstanceId);
 
@@ -213,19 +217,18 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                     }
                                                                 }
 
-                                                                var runlist = [];
-                                                                var instanceUsername;
-
-                                                                /*for (var count = 0; count < blueprint.blueprintConfig.instances.length; count++) {
+                                                                var runlist = cloudFormation.autoScaleRunlist || [];
+                                                                var instanceUsername = cloudFormation.autoScaleUsername || 'ubuntu';
+                                                                /*
+                                                                for (var count = 0; count < blueprint.blueprintConfig.instances.length; count++) {
                                                                 if (logicalId === blueprint.blueprintConfig.instances[count].logicalId) {
                                                                     instanceUsername = blueprint.blueprintConfig.instances[count].username;
                                                                     runlist = blueprint.blueprintConfig.instances[count].runlist;
                                                                     break;
                                                                 }
-                                                            }*/
-                                                                if (!instanceUsername) {
-                                                                    instanceUsername = 'ubuntu'; // hack for default username
-                                                                }
+                                                                }*/
+
+
 
                                                                 var instance = {
                                                                     name: instanceName,
@@ -369,7 +372,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                                         instanceUsername: instance.credentials.username,
                                                                                         nodeName: instance.chef.chefNodeName,
                                                                                         environment: envName,
-                                                                                        instanceOS: instance.hardware.os
+                                                                                        instanceOS: instance.hardware.os,
+                                                                                        runlist: instance.runlist
                                                                                     };
                                                                                 } else {
                                                                                     var puppetSettings = {

@@ -2682,7 +2682,16 @@ function loadcookbooksinto(cookbookctrl, chefserverid) {
         $servicecookbookspinner.addClass('hidden');
 
 
-    });
+    }).fail(function(jxhr){
+          var msg = "Server Behaved Unexpectedly";
+            if (jxhr.responseJSON && jxhr.responseJSON.message) {
+                msg = jxhr.responseJSON.message;
+            } else if (jxhr.responseText) {
+                msg = jxhr.responseText;
+            }
+          bootbox.alert(msg);
+          $('.servicecookbookspinner').addClass('hidden');
+        });
 
 
 }
