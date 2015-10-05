@@ -177,11 +177,11 @@
                       return false; // for demo
                       }
               },
-              error: function(jxhr) {
-                 bootbox.alert('Invalid Nexus Server Details.');
+              error: function(jqxhr) {
+                 bootbox.alert(jqxhr.responseText);
               },
-              failure: function(jxhr) {
-                  bootbox.alert('Invalid Nexus Server Details.');
+              failure: function(jqxhr) {
+                 bootbox.alert(jqxhr.responseText);
               }
           });
          return false;
