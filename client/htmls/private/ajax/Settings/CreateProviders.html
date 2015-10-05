@@ -328,17 +328,18 @@
     };
 
     function populateurls($host) {
-
-        if ($('#openstackendpointec2').val() == '')
-            $('#openstackendpointec2').val('http://' + $host.val());
-        if ($('#openstackendpointcompute').val() == '')
-            $('#openstackendpointcompute').val('http://' + $host.val());
-        if ($('#openstackendpointidentity').val() == '')
-            $('#openstackendpointidentity').val('http://' + $host.val());
-        if ($('#openstackendpointimage').val() == '')
-            $('#openstackendpointimage').val('http://' + $host.val());
-        if ($('#openstackendpointnetwork').val() == '')
-            $('#openstackendpointnetwork').val('http://' + $host.val());
+        if($('#providertype').val() == 'HPPUBLICCLOUD' && $host.val() != ''){
+            if ($('#openstackendpointec2').val() == '')
+                $('#openstackendpointec2').val($host.val());
+            if ($('#openstackendpointcompute').val() == '')
+                $('#openstackendpointcompute').val($host.val().replace('block','compute') + '/v2');
+            if ($('#openstackendpointidentity').val() == '')
+                $('#openstackendpointidentity').val($host.val().replace('block','identity') + ':35357/v2.0/');
+            if ($('#openstackendpointimage').val() == '')
+                $('#openstackendpointimage').val($host.val().replace('block','images') + ':443/v1.0');
+            if ($('#openstackendpointnetwork').val() == '')
+                $('#openstackendpointnetwork').val($host.val().replace('block','network') + '/v2.0');
+        }
     }
 
     function bindChange_importPemFile() {
