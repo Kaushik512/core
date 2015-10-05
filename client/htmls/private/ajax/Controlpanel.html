@@ -1202,7 +1202,7 @@ function populateJsonData(instanceId) {
         },
         error: function(jqxhr) {
           $('#installedSoftwareModalContainer').modal('hide');
-          alert('error');
+         
           var failureText;
             if(jqxhr.responseJSON && jqxhr.responseJSON.message) {
                 failureText = jqxhr.responseJSON.message;
