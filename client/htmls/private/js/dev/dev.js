@@ -5347,6 +5347,7 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                 table.row('[data-instanceid=' + instanceData.instanceId + ']').remove().draw(false);
             });
             socket.on('cfAutoScaleInstanceAdded', function(instanceData) {
+                console.log('add event fired ==> ',instanceData);
                 addInstanceToDOM(instanceData);
             });
 
