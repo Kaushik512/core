@@ -43,7 +43,7 @@
                                               <div class="col-lg-6 col-md-6" style="margin-top:25px">
                                                 <label for="link">Host Name:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
                                                 <!-- <i class="icon-append fa fa-building"></i> -->
-                                                <input type="text" unique="true" name="ctl00$MainContent$orgname" value="" id="hostname" class="form-control" type="text"  cdata="catalyst"  cat-validation="required">
+                                                <input type="text" unique="true" name="ctl00$MainContent$orgname" value="" id="hostname" class="form-control" type="text"  cdata="catalyst"  cat-validation="required" type="url"  name="website">
                                              </div>
                                              <div class="col-lg-6 col-md-6" style="margin-top:25px">
                                                 <label for="name">Organization:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
@@ -149,7 +149,6 @@
      });
 
     $('#myForm101').submit(function() {
-
       var $form = $('#myForm101');
       var nexusDesc = [];
       var nexusData = {};
@@ -165,37 +164,24 @@
           "nexuspassword": nexusData.nexuspassword,
           "hostname": nexusData.hostname
         };
-        //alert(JSON.stringify(reqBody));
- /* $.post('/nexus/authenticate',requestBody,
-          function(data){
-            alert(data);
-            if(!data.length){
-              return false;
-            }
-
-            if(validateForm()) {saveform('26');};
-           return false; // for demo
-       });
-    });*/
 
          $.ajax({
               method: "POST",
               url: url,
               data: reqBody,
               success: function(data, success) {
-              //   alert(data);
-                 /*if(validateForm()) {saveform('26');};
-                      return false; // for demo*/
-                    //  alert(data.length);
                       if(!data.length){
                         bootbox.alert('Invalid Nexus Server Details.');
+                      }else{
+                        if(validateForm()) {saveform('26');};
+                      return false; // for demo
                       }
               },
               error: function(jxhr) {
-                // alert(data);
+                 bootbox.alert('Invalid Nexus Server Details.');
               },
               failure: function(jxhr) {
-                //  alert(data);
+                  bootbox.alert('Invalid Nexus Server Details.');
               }
           });
          return false;

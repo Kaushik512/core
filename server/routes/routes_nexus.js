@@ -15,6 +15,10 @@ module.exports.setRoutes = function(app, verificationFunc) {
 
     app.post('/nexus/authenticate', function(req, res) {
     	logger.debug("Called nexus authenticate");
+    	if(req.body.hostname.indexOf("http://") === -1){
+    		res.send(500);
+    		return;
+    	}
         nexus.authenticateNexus(req.body, function(data) {
             if (!data.length) {
                 logger.debug("Nexus Authentication Failed: ");
