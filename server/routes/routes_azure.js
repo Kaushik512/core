@@ -21,7 +21,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
                     return;
                 }
                 res.send(networks);
-                logger.debug('Exit azure get networks' + JSON.stringify(networks));
+                logger.debug('Exit azure get networks:' + JSON.stringify(networks));
             });
     });
 
@@ -38,7 +38,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
                     return;
                 }
                 res.send(locations);
-                logger.debug('Exit azure get locations' + JSON.stringify(locations));
+                logger.debug('Exit azure get locations:' + JSON.stringify(locations));
             });
     });
 
