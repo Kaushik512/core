@@ -64,7 +64,7 @@
                                                 </select>
                                              </div>
                                              <!--choose operating system-->
-                                             <div class="col-lg-6 col-md-6 CommandName" style="padding-top:10px;">
+                                             <div class="col-lg-6 col-md-6 CommandName margintop15">
                                                 <label class="">Choose Operating System</label>
                                                 <div class="inline-group">
                                                    <select class="chooseActiontype width-100" id="operatingsystem" cdata="catalyst">
@@ -74,7 +74,7 @@
                                                 </div>
                                              </div>
                                              <!--choose operating system ends here-->
-                                             <div class="col-lg-6 col-md-6 CommandName" style="padding-top:10px;">
+                                             <div class="col-lg-6 col-md-6 CommandName margintop15">
                                                    <label>Command</label>
                                                    <input type="text" id="command" class="form-control" cdata="catalyst">
                                              </div>
@@ -220,6 +220,7 @@
    $(document).ready(function() {
    $("#commandtype").select2();
    $("#commandtype").trigger('change').select2();
+   $(".CommandName").hide();
    //isUserTypeSuperAdmin();
    });
 
@@ -227,11 +228,10 @@
    
    $('#commandtype').change(function(e) {
    if(this.value=="Chef Cookbook/Recipe"){
+      $(".CommandName").hide();
       $("#customScript-dropdown").hide();
       $("#chefCookbook-dropdown").show();
       $(".ServiceCookbooks").show();
-      
-      $(".CommandName").hide();
       $(".chooseChefServer").show();
    }else{
        $("#customScript-dropdown").show();
