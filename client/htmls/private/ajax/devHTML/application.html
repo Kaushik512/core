@@ -94,6 +94,7 @@ input {
                                             <td style="color:#fff;background-color: #2c3742;">Application Type</td>
                                             <td style="color:#fff;background-color: #2c3742;">Status</td>
                                             <td style="color:#fff;background-color: #2c3742;">Logs</td>
+                                            <td style="color:#fff;background-color: #2c3742;">Upgrade</td>
                                             <!-- <td style="color:#fff;background-color: #2c3742;">App Links</td>
                                         <td style="color:#fff;background-color: #2c3742;">Action</td> -->
                                         </tr>
@@ -117,6 +118,7 @@ input {
                                             <td style="color:#fff;background-color: #2c3742;">Application Type</td>
                                             <td style="color:#fff;background-color: #2c3742;">Status</td>
                                             <td style="color:#fff;background-color: #2c3742;">Logs</td>
+                                            <td style="color:#fff;background-color: #2c3742;">Upgrade</td>
                                             <!-- <td style="color:#fff;background-color: #2c3742;">App Links</td>
                                         <td style="color:#fff;background-color: #2c3742;">Action</td> -->
                                         </tr>
@@ -235,12 +237,116 @@ input {
                         </div>
                     </div>
                 </div>
+
+                <div class="modal fade" id="modalUpgradeAppDeploy" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <form role="form" id="formUpgradeAppDeploy" autocomplete="off">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                        X
+                                    </button>
+                                    <h4 class="modal-title">
+                                    <i class="fa fa-th-list txt-color-blue"></i>&nbsp;&nbsp;Upgrade
+                                </h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="upgradeForAppDeploy">
+                                        <fieldset class="fieldsetCustom">
+                                            <legend  class="legendCustom">Repository Details:</legend>
+                                            <div class="col-lg-6 col-md-6">
+                                                <label for="">Repository:<span style="color:red">*</span></label>
+                                                <div class="input-groups">
+                                                    <select id="chooseRepository" name="" class="required width-100">
+                                                        <option value="">All Repository</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6 col-md-6">
+                                                <label>Repository URL:<span style="color:red">*</span></label>
+                                                <input id="repositoryUrl" type="text" class="form-control" name="" disabled>
+                                            </div>
+
+                                            <div class="col-lg-6 col-md-6 margintop15">
+                                                <label for="">Artifacts:<span style="color:red">*</span></label>
+                                                <div class="input-groups">
+                                                    <select id="chooseArtifacts" name="" class="required width-100">
+                                                       <option value="">All Artifacts</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-lg-6 col-md-6 margintop15">
+                                                <label for="">Versions:<span style="color:red">*</span></label>
+                                                <div class="input-groups">
+                                                    <select id="chooseVersions" name="" class="required width-100">
+                                                        <option value="">All Versions</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+
+                                        <fieldset class="fieldsetCustom"  style="margin-top: 20px ! important;">
+                                            <legend  class="legendCustom">Server Details:</legend>
+                                            <div class="col-lg-6 col-md-6">
+                                                <label for="">RunDeck Project:<span style="color:red">*</span></label>
+                                                <div class="input-groups">
+                                                    <select id="chooseRundeckProject" name="" class="required width-100">
+                                                        <option value="">All Rundeck Project</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6 col-md-6">
+                                                <label for="">Environment:<span style="color:red">*</span></label>
+                                                <div class="input-groups">
+                                                    <select id="chooseEnvironment" name="" class="required width-100">
+                                                       <option value="">All Environment</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="col-lg-6 col-md-6 margintop15">
+                                                <label for="">Nodes : </label>
+                                                <select class="custom-scroll" multiple="" style="border: 1px solid rgb(204, 204, 204);padding:4px">
+                                                    <option value="1">Node Test1</option>
+                                                    <option value="2">Node Test2</option>
+                                                    <option value="3">Node Test3</option>
+                                                    <option value="4">Node Test4</option>
+                                                    <option value="5">Node Test5</option>
+                                                    <option value="6">Node Test6</option>
+                                                    <option value="7">Node Test7</option>
+                                                    <option value="8">Node Test8</option>
+                                                    <option value="9">Node Test9</option>
+                                                </select> 
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <div class="btn-group" style="margin-left:200px;">
+                                        <a style="margin-left:10px;" class="btn btn-primary saveUpgradeAppDeploy">
+                                            <i class="ace-icon fa fa-save bigger-110"></i> Upgrade
+                                        </a>
+                                        <a style="margin-left:10px;" class="btn btn-primary cancelUpgradeAppDeploy" data-dismiss="modal">
+                                            <i class="ace-icon fa fa-undo bigger-110"></i> Cancel
+                                        </a>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
 <script type="text/javascript">
 $(document).ready(function() {
+    $('#chooseRepository').select2();
+    $('#chooseArtifacts').select2();
+    $('#chooseVersions').select2();
+    $('#chooseRundeckProject').select2();
+    $('#chooseEnvironment').select2();
     // $('#chooseApplication').select2();
     //debugger;
     //getDropdownList();
@@ -471,6 +577,8 @@ function constructUI(data) {
                                         "bSortable": true
                                     }, {
                                         "bSortable": false
+                                    }, {
+                                        "bSortable": false
                                     }
                                 ]
                             });
@@ -488,13 +596,21 @@ function constructUI(data) {
                     // var appLinks = '<img style="height: 18px;margin-left: -5px;"src="img/projectdemo/app-performanceblack.png" title="App-Performance"><img style="height: 18px;margin-left: 5px;" src="img/projectdemo/logsblack.png" title="App-Logs"><img style="height: 18px;margin-left: 5px;" src="img/projectdemo/code_healthblack.png" title="Code-Health"><img style="height: 18px;margin-left: 5px;" src="img/projectdemo/UI_performanceblack.png" title="UI-Performance">';
                     //var logs = '<div class="moreinfoAppDeploy" id="" title="Logs Info" style="margin-left:27%"></div>';
                     //console.log(data[i].appLogs);
+                    var upgradeAppDeploy;
+                    if (!data[i]._id) {
+                        upgradeAppDeploy = "NA";
+                    } else {
+                        upgradeAppDeploy = '<a class="btn btn-primary btn-sg tableactionbutton moreinfoUpgradeAppDeploy" style="box-shadow: none ! important; height: 25px; width: 25px; padding: 2px; font-size: 12px;"><i class="ace-icon fa fa-upload bigger-120"></i></a>';
+                        //upgradeAppDeploy = '<a class="updateupgrade" id=' + data[i]._id + ' target="_blank" title="Logs Info" style="margin-left:27%"></a>';
+                    }
+
 
 
                     var logsAppDeploy;
                     if (!data[i]._id) {
                         logsAppDeploy = "NA";
                     } else {
-                        logsAppDeploy = '<a class="moreinfoAppDeploy" id=' + data[i]._id + ' target="_blank" title="Logs Info" style="margin-left:27%"></a>';
+                        logsAppDeploy = '<a class="moreinfoAppDeploy" id=' + data[i]._id + ' title="Logs Info" style="margin-left:27%"></a>';
                     }
                     if (!data[i].applicationName) {
                         data[i].applicationName = "NA";
@@ -543,7 +659,8 @@ function constructUI(data) {
                         data[i].containerId,
                         data[i].applicationType,
                         data[i].applicationStatus,
-                        logsAppDeploy
+                        logsAppDeploy,
+                        upgradeAppDeploy
                     ]);
                 }
                 if (typeof data[i].envId == 'undefined') {
@@ -579,6 +696,38 @@ function constructUI(data) {
 
                     }
                 });
+            });
+            $(".moreinfoUpgradeAppDeploy").click(function(e) {
+                //alert("clicked on upgrade");
+                var $modal = $('#modalUpgradeAppDeploy');
+                var $logContainer = $modal.find('.upgradeForAppDeploy').show();
+                //$logContainer.empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
+                $modal.modal('show');
+                // $.ajax({
+                //     url: '/app/deploy/' + this.id + '/logs',
+                //     type: 'GET',
+                //     contentType: "application/json",
+                //     success: function(data) {
+                //         var datahttp = data.indexOf("http://");
+                //         if (datahttp == 0) {
+                //             $logContainer.empty();
+                //             window.open(data, "_blank");
+                //         } else {
+                //             $logContainer.empty();
+                //             $modal.modal('show');
+                //             data = data.replace(/,/g, "<br />");
+                //             $logContainer.append(data);
+                //         }
+                //     },
+                //     error: function(jqxhr) {
+                //         $logContainer.empty();
+                //         $modal.modal('show');
+                //         $logContainer.append('No Logs Available');
+                //     },
+                //     failure: function(data) {
+
+                //     }
+                // });
             });
         }
     } else {
@@ -617,6 +766,8 @@ function constructUI(data) {
                         "bSortable": true
                     }, {
                         "bSortable": true
+                    }, {
+                        "bSortable": false
                     }, {
                         "bSortable": false
                     }
