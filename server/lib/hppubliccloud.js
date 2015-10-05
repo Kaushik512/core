@@ -267,6 +267,38 @@ this.getServers = function(tenantId,callback){
 					   headers:{"X-Auth-Token": token,"Content-Type": "application/json"} 
 					};
 				client = new Client();
+				var securityGroupsUrl = options.serviceendpoints.network + '/security-groups';
+				console.log('securityGroupsUrl: ' + securityGroupsUrl);
+				client.registerMethod("jsonMethod", securityGroupsUrl, "GET");
+				client.methods.jsonMethod(args,function(data,response){
+					//console.log("getSecurityGroups response:: "+data);
+					var json = JSON.parse(data);
+					if(json.security_groups){
+					   console.log("END:: getSecurityGroups");
+					   callback(null,json);
+					   return ;
+					}else{
+						console.log("Error in getSecurityGroups");
+						callback(data,null);
+					}
+				}); 
+		}else{
+			console.log(err);
+		    callback(err,null);
+		    return;
+		}   
+	});
+ }
+this.getEndpoints = function(callback){
+	console.log("START:: getEndpoints");
+	 
+	 getAuthToken(options.serviceendpoints.identity,options.username,options.password,options.tenantName,function(err,token){
+		 if(token){
+			   console.log("token::"+token);	
+			   var args = {
+					   headers:{"X-Auth-Token": token,"Content-Type": "application/json"} 
+					};
+				client = new Client();
 				var securityGroupsUrl = options.serviceendpoints.network + '/' + '/security-groups';
 				console.log('securityGroupsUrl: ' + securityGroupsUrl);
 				client.registerMethod("jsonMethod", securityGroupsUrl, "GET");
@@ -287,9 +319,8 @@ this.getServers = function(tenantId,callback){
 		    callback(err,null);
 		    return;
 		}   
-	})
- }
-
+	});
+}
 this.updatefloatingip = function(tenantId, floatingip, serverid, callback) {
 	console.log("START:: updatefloatingip");
     console.log(JSON.stringify(options));
