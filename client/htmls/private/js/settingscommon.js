@@ -645,6 +645,10 @@ function CreateTableFromJson(formID, idFieldName, createFileName) {
                     if (haspermission('puppetserver', 'modify')) {
                         hasEditPermission = true;
                     }
+                } else if (createFileName === 'CreateNexusServer.html') {
+                    if (haspermission('puppetserver', 'modify')) {
+                        hasEditPermission = true;
+                    }
                 }
                 //user has no permission to edit
                 if (!hasEditPermission) {
@@ -746,6 +750,10 @@ function CreateTableFromJson(formID, idFieldName, createFileName) {
                         hasDeletePermission = true;
                     }
                 } else if (createFileName === 'CreatePuppetServer.html') {
+                    if (haspermission('puppetserver', 'delete')) {
+                        hasDeletePermission = true;
+                    }
+                } else if (createFileName === 'CreateNexusServer.html') {
                     if (haspermission('puppetserver', 'delete')) {
                         hasDeletePermission = true;
                     }
@@ -2674,7 +2682,16 @@ function loadcookbooksinto(cookbookctrl, chefserverid) {
         $servicecookbookspinner.addClass('hidden');
 
 
-    });
+    }).fail(function(jxhr){
+          var msg = "Server Behaved Unexpectedly";
+            if (jxhr.responseJSON && jxhr.responseJSON.message) {
+                msg = jxhr.responseJSON.message;
+            } else if (jxhr.responseText) {
+                msg = jxhr.responseText;
+            }
+          bootbox.alert(msg);
+          $('.servicecookbookspinner').addClass('hidden');
+        });
 
 
 }
