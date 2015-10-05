@@ -884,6 +884,22 @@ var InstancesDao = function() {
         });
     };
 
+    this.findInstancebyCloudFormationIdAndAwsId = function(cfId, awsInstanceId, callback) {
+        logger.debug("Enter findInstancebyCloudFormationIdAndAwsId (%s)", cfId, awsInstanceId);
+        Instances.find({
+            cloudFormationId: cfId,
+            platformId: awsInstanceId
+        }, function(err, data) {
+            if (err) {
+                logger.error("Failed to findInstancebyCloudFormationIdAndAwsId (%s)", cfId, awsInstanceId, err);
+                callback(err, null);
+                return;
+            }
+            logger.debug("Exit findInstancebyCloudFormationIdAndAwsId (%s)", cfId, awsInstanceId);
+            callback(null, data);
+        });
+    };
+
 
     this.updateInstanceLog = function(instanceId, log, callback) {
         logger.debug("Enter updateInstanceLog ", instanceId, log);
