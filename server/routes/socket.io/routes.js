@@ -28,6 +28,7 @@ module.exports.setRoutes = function(socketIo) {
         socketList.push[socket];
         //console.log('socket ==>',socket);
         socket.on('open', function(instanceData) {
+            logger.debug("instanceData:",instanceData);
             instancesDao.getInstanceById(instanceData.id, function(err, instances) {
                 logger.debug(instanceData.id);
                 if (err) {
