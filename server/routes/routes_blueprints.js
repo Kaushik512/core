@@ -2089,7 +2089,15 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                                 if (err) {
                                                                                     logger.error("Unable to set instance bootstarp status. code 0", err);
                                                                                 } else {
-                                                                                    logger.debug("Instance bootstrap status set to success");
+                                                                                    logsDao.insertLog({
+                                                                                    referenceId: logsReferenceIds,
+                                                                                    err: false,
+                                                                                    log: 'Instance Bootstraped Successfully',
+                                                                                    timestamp: new Date().getTime()
+                                                                                });
+                                                                                 
+                                                                                 logger.debug("Instance bootstrap status set to success");
+
                                                                                 }
                                                                             });
                                                                         }

@@ -219,7 +219,8 @@ var AzureCloud = function() {
             instanceOS: 'linux',
             port: 22,
             cmds: ["ls -al"],
-            cmdswin: ["del "]
+            cmdswin: ["del "],
+            interactiveKeyboard: true
         }
         var cmdString = opts.cmds.join(' && ');
         //console.log(JSON.stringify(opts));
