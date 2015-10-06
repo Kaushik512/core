@@ -171,7 +171,7 @@
                                                         <!-- -->
                                                         <div class="col-lg-6 col-md-6">
                                                             <label for="">Region:</label>
-                                                            <select id="hppubliccloudregion" name="hppubliccloudregion" class="chooseOrganization width-100" style="vertical-align: central" cat-validation="required" cdata="catalyst" skiprowid="yes">
+                                                            <select id="hppubliccloudregion" name="hppubliccloudregion" class="chooseOrganization width-100" style="vertical-align: central" cdata="catalyst" skiprowid="yes">
                                                                 <option value="">Select Region</option>
                                                                 <option value="region-a.geo-1.identity.hpcloudsvc.com">US West</option>
                                                                 <option value="region-b.geo-1.identity.hpcloudsvc.com">US East</option>
@@ -289,6 +289,7 @@
                 $('#myForm54').attr('action', $('#myForm54').attr('action').replace(/vmware/g, 'hppubliccloud'));
                 $('#myForm54').attr('action', $('#myForm54').attr('action').replace(/openstack/g, 'hppubliccloud'));
                 $('#myForm54').attr('action', $('#myForm54').attr('action').replace(/azure/g, 'hppubliccloud'));
+                $('.widget-main').css('height','425px').css('overflow-y','scroll'); //to be removed after the the class if fixed globally
             } else if (pv == 'OPENSTACK') {
                 $('.foropenstack').show();
                 $('.forhppubliccloud').hide();
@@ -327,17 +328,18 @@
     };
 
     function populateurls($host) {
-
-        if ($('#openstackendpointec2').val() == '')
-            $('#openstackendpointec2').val('http://' + $host.val());
-        if ($('#openstackendpointcompute').val() == '')
-            $('#openstackendpointcompute').val('http://' + $host.val());
-        if ($('#openstackendpointidentity').val() == '')
-            $('#openstackendpointidentity').val('http://' + $host.val());
-        if ($('#openstackendpointimage').val() == '')
-            $('#openstackendpointimage').val('http://' + $host.val());
-        if ($('#openstackendpointnetwork').val() == '')
-            $('#openstackendpointnetwork').val('http://' + $host.val());
+        if($('#providertype').val() == 'HPPUBLICCLOUD' && $host.val() != ''){
+            if ($('#openstackendpointec2').val() == '')
+                $('#openstackendpointec2').val($host.val());
+            if ($('#openstackendpointcompute').val() == '')
+                $('#openstackendpointcompute').val($host.val().replace('block','compute') + '/v2');
+            if ($('#openstackendpointidentity').val() == '')
+                $('#openstackendpointidentity').val($host.val().replace('block','identity') + ':35357/v2.0/');
+            if ($('#openstackendpointimage').val() == '')
+                $('#openstackendpointimage').val($host.val().replace('block','images') + ':443/v1.0');
+            if ($('#openstackendpointnetwork').val() == '')
+                $('#openstackendpointnetwork').val($host.val().replace('block','network') + '/v2.0');
+        }
     }
 
     function bindChange_importPemFile() {
@@ -569,7 +571,17 @@
         $('#accessKey').blur(KeyChangeHandler);
         $('#secretKey').blur(KeyChangeHandler);
         $('select').select2();
+        $('.widget-main').css('height','450px').css('overflow-y','scroll'); //to be removed after the the class if fixed globally
+        $('#providertype').val('AWS').trigger('change');
         getOrganizationList();
+
+        //to enter edit mode..
+        if (location.toString().indexOf('?new') === -1) {
+            $('input#accessKey').removeAttr('type');
+            $('input#accessKey').attr('type','password');
+            $('input#secretKey').removeAttr('type');
+            $('input#secretKey').attr('type','password');
+        }
         $('#myForm54').ajaxForm({
             beforeSubmit: function(arr, $form, options) {
                 // The array of form data takes the following form: 

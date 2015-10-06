@@ -91,6 +91,10 @@ function Configmgmt() {
                 logger.log('Exting getDBModelFromID ' + id.toString());
                 callback(null, 'd4dModelMastersPuppetServer');
                 break;
+            case "26":
+                logger.log('Exting getDBModelFromID ' + id.toString());
+                callback(null, 'd4dModelMastersNexusServer');
+                break;
         }
     };
 
@@ -160,6 +164,10 @@ function Configmgmt() {
             case "25":
                  logger.log('Exting getDBModelFromID ' + id.toString());
                return('puppetserver');
+                break;
+            case "26":
+                 logger.log('Exting getDBModelFromID ' + id.toString());
+               return('nexusserver');
                 break;
 
         };

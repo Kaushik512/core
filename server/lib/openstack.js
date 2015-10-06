@@ -8,8 +8,9 @@ function getAuthToken(host,username,password,tenantName,callback){
 		   };
 		
 		client = new Client();
-		var authUrl = 'http://'+host+':5000/v2.0/tokens';
+		var authUrl = host+'/tokens';
 		client.registerMethod("postMethod", authUrl, "POST");
+		console.log('Auth Url:',authUrl);
 		client.methods.postMethod(args,function(data,response){
 			 if(data.access){
 				console.log("Auth Token: "+data.access.token.id); 
@@ -17,7 +18,7 @@ function getAuthToken(host,username,password,tenantName,callback){
 				callback(null,data.access.token.id);
 				return;
 			   }else{
-				 console.log("Error in getAuthToken");
+				 console.log("Error in getAuthToken",data,response);
 				 callback(data,null);
 			   }
 			}); 
@@ -171,7 +172,7 @@ this.getServers = function(tenantId,callback){
   this.getFlavors = function(tenantId,callback){
 	console.log("START:: getFlavors");	
 
-			 getAuthToken(options.host,options.username,options.password,options.tenantName,function(err,token){
+			 getAuthToken(options.serviceendpoints.identity,options.username,options.password,options.tenantName,function(err,token){
 				if(token){ 
 					console.log("Token Id::"+token);
 					console.log("Tenant Id::"+tenantId);
@@ -182,7 +183,7 @@ this.getServers = function(tenantId,callback){
 					
 					client = new Client();
 					
-					var flavorsUrl = 'http://'+options.host+':8774/v2/'+tenantId+'/flavors';
+					var flavorsUrl = options.serviceendpoints.compute + '/' + tenantId + '/flavors';
 					
 					console.log("flavorsUrl:"+flavorsUrl);
 					client.registerMethod("jsonMethod", flavorsUrl, "GET");
@@ -210,14 +211,14 @@ this.getServers = function(tenantId,callback){
   this.getNetworks= function(callback){
        console.log("START:: getNetworks");
        
-       getAuthToken(options.host,options.username,options.password,options.tenantName,function(err,token){
+       getAuthToken(options.serviceendpoints.identity,options,options.username,options.password,options.tenantName,function(err,token){
 		   if(token){   
 			   console.log("token::"+token);	
 			   var args = {
 					   headers:{"X-Auth-Token": token,"Content-Type": "application/json"} 
 					};
 				client = new Client();
-				var networksUrl = 'http://'+options.host+':9696/v2.0/networks'; //9696
+				var networksUrl = options.serviceendpoints.network + '/networks'; //9696
 				console.log('networksUrl: ' + networksUrl);
 				client.registerMethod("jsonMethod", networksUrl, "GET");
 				client.methods.jsonMethod(args,function(data,response){
@@ -244,14 +245,14 @@ this.getServers = function(tenantId,callback){
  this.getSecurityGroups = function(callback){
 	 console.log("START:: getSecurityGroups");
 	 
-	 getAuthToken(options.host,options.username,options.password,options.tenantName,function(err,token){
+	 getAuthToken(options.serviceendpoints.identity,options,options.username,options.password,options.tenantName,function(err,token){
 		 if(token){
 			   console.log("token::"+token);	
 			   var args = {
 					   headers:{"X-Auth-Token": token,"Content-Type": "application/json"} 
 					};
 				client = new Client();
-				var securityGroupsUrl = 'http://'+options.host+':9696/v2.0/security-groups';
+				var securityGroupsUrl = options.serviceendpoints.network + '/security-groups';
 				console.log('securityGroupsUrl: ' + securityGroupsUrl);
 				client.registerMethod("jsonMethod", securityGroupsUrl, "GET");
 				client.methods.jsonMethod(args,function(data,response){

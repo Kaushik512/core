@@ -118,7 +118,7 @@ function devCall() {
                     for (var i = 0; i < len; i++) {
                         str = str + '<option value="' + data[i]["osType"] + '" ostype="' + data[i]["os_name"] + '">' + data[i]["os_name"] + '</option>';
                     }
-                    $('#importinstanceOS').html(str).select2();
+                    $('#importinstanceOS').html(str);
                 },
                 failure: function(data) {
                     alert(data.toString());
@@ -733,7 +733,7 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                             "sWidth": "20%"
                         }
                     ]
-                        /*"fnRowCallback": function(nRow, aData, iDisplayIndex) {
+                    /*"fnRowCallback": function(nRow, aData, iDisplayIndex) {
 
                       $("td:first", nRow).html(iDisplayIndex + 1);
                       return nRow;
@@ -2297,25 +2297,25 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                                     }
                                     // alert(getDesignTypeName);
                                     // if condition is to prevent to creation of multiple same accordion panels.
-                                    if($("div."+tdata[i]['templatetype']).length === 0){
-                                    $containerTemp = '<div class="panel panel-default blueprintContainer hidden">' +
-                                        '<div class="panel-heading">' +
-                                        '<h4 class="panel-title">' +
-                                        '<a href="#collapse' + i + '" data-parent="#accordion-2" data-toggle="collapse" class="collapsed"> ' +
-                                        '<i class="fa fa-fw fa-plus-circle txt-color-blue"></i> ' +
-                                        '<i class="fa fa-fw fa-minus-circle txt-color-red"></i>' + getDesignTypeName + '</a>' +
-                                        '</h4></div><div class="panel-collapse collapse" id="collapse' + i + '">' +
-                                        '<div class="panel-body ' + getDesignType + ' ' + getDesignTypeName + '"></div>' +
-                                        '</div>';
-                                    $('#accordion-2').append($containerTemp);
-                                    // alert($containerTemp);
+                                    if ($("div." + tdata[i]['templatetype']).length === 0) {
+                                        $containerTemp = '<div class="panel panel-default blueprintContainer hidden">' +
+                                            '<div class="panel-heading">' +
+                                            '<h4 class="panel-title">' +
+                                            '<a href="#collapse' + i + '" data-parent="#accordion-2" data-toggle="collapse" class="collapsed"> ' +
+                                            '<i class="fa fa-fw fa-plus-circle txt-color-blue"></i> ' +
+                                            '<i class="fa fa-fw fa-minus-circle txt-color-red"></i>' + getDesignTypeName + '</a>' +
+                                            '</h4></div><div class="panel-collapse collapse" id="collapse' + i + '">' +
+                                            '<div class="panel-body ' + getDesignType + ' ' + getDesignTypeName + '"></div>' +
+                                            '</div>';
+                                        $('#accordion-2').append($containerTemp);
+                                        // alert($containerTemp);
                                     }
                                 }
                             }
                         })(j);
                     }
                     //To fix template id and template type
-                     //alert('in' + data.length);
+                    //alert('in' + data.length);
                     for (var i = 0; i < data.length; i++) {
                         //alert(JSON.stringify(data[i]));
                         //Find a panel-body with the template type class
@@ -3152,10 +3152,7 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                                     launchBP();
 
 
-                                }
-
-
-                                else {
+                                } else {
                                     launchBP();
                                 }
                             }
@@ -3978,7 +3975,8 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                             if (instances[i].name) {
                                 nodeName = instances[i].name;
                             }
-                            var $liHeader = $('<li><a href="#tab_' + instances[i]._id + '" data-toggle="tab" data-taskInstanceId="' + instances[i]._id + '" data-taskActionLogId="' + instances[i].tempActionLogId + '">' + nodeName + '</a></li>');
+                            var tabId = 'tab_' + instances[i]._id + parseInt(Math.random() * (100000 - 10000) + 10000);
+                            var $liHeader = $('<li><a href="#' + tabId + '" data-toggle="tab" data-taskInstanceId="' + instances[i]._id + '" data-taskActionLogId="' + instances[i].tempActionLogId + '">' + nodeName + '</a></li>');
                             if (i === 4) {
                                 var $liMoreHeader = $('<li class="dropdown dropdownlog"><a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">More... <b class="caret"></b></a><ul class="dropdown-menu"></ul></li>');
 
@@ -3988,7 +3986,7 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
 
                             }
                             $ulHeaderArea.append($liHeader);
-                            var $tabContent = $('<div class="tab-pane fade" id="tab_' + instances[i]._id + '"><div class="taskLogArea chefLOGS"></div></div>');
+                            var $tabContent = $('<div class="tab-pane fade" id="' + tabId + '"><div class="taskLogArea chefLOGS"></div></div>');
                             $contentArea.append($tabContent);
                         }
 
@@ -4135,12 +4133,12 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                             }
                         });
                         headerCount++;
-                        if(headerCount === 1) {
+                        //if(headerCount === 1) {
 
-                            setTimeout(function(){
-                                $liHeader.find('a').click();
-                            },2000)
-                        }
+                        setTimeout(function() {
+                            $liHeader.find('a').click();
+                        }, 2000)
+                        //}
                     });
 
                 }
@@ -4635,7 +4633,7 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
 
                         });
 
-                    }else if(data[i].taskType === 'composite'){
+                    } else if (data[i].taskType === 'composite') {
                         var $tdHistory = $('<td style="vertical-align:inherit;text-align:center;"></td>').append('<a rel="tooltip" data-placement="top" data-original-title="History" data-toggle="modal" href="javascript:void(0)" class="btn btn-primary btn-sg tableactionbutton"><i class="ace-icon fa fa-header bigger-120"></i></a>');
                         $tdHistory.find('a').data('taskId', data[i]._id).attr('data-historyTaskId', data[i]._id).click(function(e) {
                             //var $taskHistoryContent = $('#taskHistoryContent').show();
@@ -4654,10 +4652,10 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                             });
                             //$taskHistoryDatatable.clear().draw();
                             $compositeTaskHistoryDatatable.clear().draw();
-                
+
                             $('.widget-header').find('h5.compositeTitle').html('Composite History For -&nbsp;' + data[i].name);
-                            
-                              $.get('../tasks/' + taskId + '/history', function(taskHistories) {
+
+                            $.get('../tasks/' + taskId + '/history', function(taskHistories) {
                                 for (var i = 0; i < taskHistories.length; i++) {
                                     var $trHistoryRow = $('<tr/>');
 
@@ -5126,9 +5124,9 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
             $('[autofocus]', e.target).focus();
         });
 
-        $('#importinstanceOS').select2();
-        $('#configManagementDropdown').select2();
-        $('#pemFileDropdown').select2();
+       // $('#importinstanceOS').select2();
+      //  $('#configManagementDropdown').select2();
+      //  $('#pemFileDropdown').select2();
 
 
 
@@ -5325,6 +5323,36 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                     }
                 });
             }
+
+            // socket connection for cloudformation autoscale event
+
+            var socket = io.connect('/cloudFormationAutoScaleGroup', {
+                'force new connection': true,
+                reconnection: false
+            });
+
+            socket.on('connect', function() {
+                socket.emit('joinCFRoom', {
+                    orgId: orgId,
+                    bgId: urlParams['bg'],
+                    projId: projectId,
+                    envId: envId
+                });
+            });
+
+            socket.on('cfAutoScaleInstanceRemoved', function(instanceData) {
+                console.log('delete event fired');
+                $('#divinstancescardview').find('.domain-roles-caption[data-instanceId=' + instanceData.instanceId + ']').parents('.domain-role-thumbnailDev').remove();
+                var table = $('#tableinstanceview').DataTable();
+                table.row('[data-instanceid=' + instanceData.instanceId + ']').remove().draw(false);
+            });
+            socket.on('cfAutoScaleInstanceAdded', function(instanceData) {
+                console.log('add event fired ==> ',instanceData);
+                addInstanceToDOM(instanceData);
+            });
+
+
+
         } else {
             var $workzoneTab = $('#workZoneNew');
             if ($workzoneTab.length) {

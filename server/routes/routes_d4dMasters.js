@@ -772,6 +772,16 @@ module.exports.setRoutes = function(app, sessionVerification) {
                             res.send(pList);
                             return;
                         });
+                    } else if (req.params.id === '26') {
+                        // For Puppet Server
+                        masterUtil.getNexusServers(orgList, function(err, pList) {
+                            if (err) {
+                                res.send(500, 'Not able to fetch Puppet Server.');
+                            }
+                            //logger.debug("Returned Team List:>>>>> ", JSON.stringify(teamList));
+                            res.send(pList);
+                            return;
+                        });
                     } else {
                         logger.debug('nothin here');
                         res.send([]);
@@ -939,6 +949,16 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     } else if (req.params.id === '25') {
                         // For Puppet Server
                         masterUtil.getPuppetServers(orgList, function(err, pList) {
+                            if (err) {
+                                res.send(500, 'Not able to fetch Puppet Server.');
+                            }
+                            //logger.debug("Returned Team List:>>>>> ", JSON.stringify(teamList));
+                            res.send(pList);
+                            return;
+                        });
+                    }  else if (req.params.id === '26') {
+                        // For Puppet Server
+                        masterUtil.getNexusServers(orgList, function(err, pList) {
                             if (err) {
                                 res.send(500, 'Not able to fetch Puppet Server.');
                             }
@@ -2521,6 +2541,9 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
                     if (req.params.id === "10") {
                         bodyJson["configType"] = "chef";
+                    }
+                    if (req.params.id === "26") {
+                        bodyJson["configType"] = "nexus";
                     }
                     logger.debug("Full bodyJson:::: ", JSON.stringify(bodyJson));
                     if (req.params.id === "25") {
