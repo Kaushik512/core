@@ -1,5 +1,6 @@
 var fileIo = require('./fileio');
 var sshConnection = require('ssh2').Client;
+var logger = require('_pr/logger')(module);
 
 var HOST_UNREACHABLE = -5000;
 var INVALID_CREDENTIALS = -5001;
@@ -42,9 +43,9 @@ module.exports = function(options) {
         con.on('error', function(err) {
             isConnected = false;
             con = null;
-            console.log("ERROR EVENT FIRED",err);
+            console.log("ERROR EVENT FIRED", err);
             if (err.level === 'client-authentication') {
-                 console.log('Error msg:' + err);
+                console.log('Error msg:' + err);
                 callback(err, INVALID_CREDENTIALS);
             } else if (err.level === 'client-timeout') {
                 callback(err, HOST_UNREACHABLE);
@@ -66,8 +67,8 @@ module.exports = function(options) {
         });
 
         con.on('keyboard-interactive', function(name, instructions, instructionsLang, prompts, finish) {
-          console.log('Connection :: keyboard-interactive');
-          finish([options.password]);
+            logger.debug('Connection :: keyboard-interactive');
+            finish([options.password]);
         });
 
     }
@@ -94,10 +95,14 @@ module.exports = function(options) {
                     connect(connectionParamsObj, callback);
                 });
             } else {
-                console.log("SSh password...");
-                //connectionParamsObj.password = options.password;
-                connectionParamsObj.tryKeyboard = true;
-                connect(connectionParamsObj, callback);
+                logger.debug("SSh password...");
+                if (options.interactiveKeyboard) {
+                    logger.debug("Authrnticating in keyboard-interactive way");
+                    connectionParamsObj.tryKeyboard = true;
+                    connect(connectionParamsObj, callback);
+                } else {
+                    connectionParamsObj.password = options.password;
+                }
             }
         } else {
             callback(null);
