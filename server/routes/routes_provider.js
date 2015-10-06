@@ -1322,6 +1322,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         var openstackprojectname = req.body.openstackprojectname;
         var providerName = req.body.providerName;
         var providerType = req.body.providerType;
+        var openstackkeyname = req.body.openstackkeyname;
         var serviceendpoints = {
             compute: req.body.openstackendpointcompute,
             network: req.body.openstackendpointnetwork,
@@ -1424,6 +1425,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                         tenantname: openstacktenantname,
                         projectname: openstackprojectname,
                         serviceendpoints: serviceendpoints,
+                        keyname: openstackkeyname,
                         orgId: orgId
                     };
                     openstackProvider.getopenstackProviderByName(providerData.providerName, providerData.orgId, function(err, prov) {
@@ -1437,7 +1439,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                             res.send("Provider name already exist.");
                             return;
                         }
-                        openstackProvider.createNew(providerData, function(err, provider) {
+                        openstackProvider.createNew(req,providerData, function(err, provider) {
                             if (err) {
                                 logger.debug("err.....", err);
                                 res.status(500);
@@ -1610,6 +1612,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         var providerName = req.body.providerName.trim();
         var providerType = req.body.providerType.trim();
         var providerId = req.params.providerId.trim();
+        var openstackkeyname = req.body.openstackkeyname;
         var serviceendpoints = {
             compute: req.body.openstackendpointcompute,
             network: req.body.openstackendpointnetwork,
@@ -1677,6 +1680,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             providerName: providerName,
             providerType: providerType,
             serviceendpoints: serviceendpoints,
+            keyname: openstackkeyname,
+
             orgId: orgId
         };
         logger.debug("provider>>>>>>>>>>>> %s", providerData.providerType);
