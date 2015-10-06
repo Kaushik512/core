@@ -55,7 +55,9 @@ Browser is opened to login catalyst
 #    Set Selenium Timeout    ${DELAY SECONDS}
     Maximize Browser Window
     ${height}=  Get Window Size
+    ${width}=  Get Window Size
     Log    ${height}
+    Log    ${width}
     Sleep      3s      Wait for screenshot to be captured and saved
     Capture Page Screenshot     ${SEARCH RESULTS SCREENSHOT PATH}
     Sleep      3s      Wait for screenshot to be captured and saved
