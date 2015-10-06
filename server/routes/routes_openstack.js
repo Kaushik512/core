@@ -14,7 +14,15 @@ module.exports.setRoutes = function(app, verificationFunc) {
         var password = "ADMIN_PASS";
         var tenantName = "demo";
         var tenantid = "64371fa53f804417900e32c367d800b9";
-	    var openstackconfig = {host: host,username: username, password: password, tenantName: tenantName,tenantId: tenantid};
+	    var openstackconfig = {
+            host: host,
+            username: username,
+            password: password,
+            tenantName: tenantName,
+            tenantId: tenantid,
+            serviceendpoints: {
+            }
+        };
 
 	    openstackProvider.getopenstackProviderById(providerid,function(err,data){
 	    		logger.debug('IN getopenstackProviderById: data: ');
@@ -25,6 +33,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
 	    		openstackconfig.password = data.password;
 	    		openstackconfig.tenantName = data.tenantname;
 	    		openstackconfig.tenantId = data.tenantid;
+	    		openstackconfig.serviceendpoints = data.serviceendpoints;
 	    		logger.debug('IN getopenstackProviderById: openstackconfig: ');
 	    		logger.debug(JSON.stringify(openstackconfig));
 	    	//	data.tenantName = "demo";
