@@ -247,13 +247,21 @@ input {
                                         X
                                     </button>
                                     <h4 class="modal-title">
-                                    <i class="fa fa-th-list txt-color-blue"></i>&nbsp;&nbsp;Upgrade
+                                    <i class="fa fa-th-list txt-color-blue"></i>&nbsp;&nbsp;Upgrade : <span id="upgradeAppName"></span> (<span id="upgradeNodeIp"></span>)
                                 </h4>
                                 </div>
                                 <div class="modal-body">
                                     <div class="upgradeForAppDeploy">
                                         <fieldset class="fieldsetCustom">
                                             <legend  class="legendCustom">Repository Details:</legend>
+                                            <div class="col-lg-6 col-md-6">
+                                                <label for="">Nexus Server:<span style="color:red">*</span></label>
+                                                <div class="input-groups">
+                                                    <select id="chooseNexusServer" name="" class="required width-100">
+                                                        <option value="">All Nexus Server</option>
+                                                    </select>
+                                                </div>
+                                            </div>
                                             <div class="col-lg-6 col-md-6">
                                                 <label for="">Repository:<span style="color:red">*</span></label>
                                                 <div class="input-groups">
@@ -262,7 +270,7 @@ input {
                                                     </select>
                                                 </div>
                                             </div>
-                                            <div class="col-lg-6 col-md-6">
+                                            <div class="col-lg-6 col-md-6 margintop15">
                                                 <label>Repository URL:<span style="color:red">*</span></label>
                                                 <input id="repositoryUrl" type="text" class="form-control" name="" disabled>
                                             </div>
@@ -289,6 +297,10 @@ input {
                                         <fieldset class="fieldsetCustom"  style="margin-top: 20px ! important;">
                                             <legend  class="legendCustom">Server Details:</legend>
                                             <div class="col-lg-6 col-md-6">
+                                                <label>Node :<span style="color:red">*</span></label>
+                                                <input id="upgradeNode" type="text" class="form-control" name="" disabled>
+                                            </div>
+                                            <!-- <div class="col-lg-6 col-md-6">
                                                 <label for="">RunDeck Project:<span style="color:red">*</span></label>
                                                 <div class="input-groups">
                                                     <select id="chooseRundeckProject" name="" class="required width-100">
@@ -318,7 +330,7 @@ input {
                                                     <option value="8">Node Test8</option>
                                                     <option value="9">Node Test9</option>
                                                 </select> 
-                                            </div>
+                                            </div> -->
                                         </fieldset>
                                     </div>
                                 </div>
@@ -342,6 +354,7 @@ input {
 </div>
 <script type="text/javascript">
 $(document).ready(function() {
+    $('#chooseNexusServer').select2();
     $('#chooseRepository').select2();
     $('#chooseArtifacts').select2();
     $('#chooseVersions').select2();
@@ -551,6 +564,20 @@ function constructUI(data) {
         }
 
         function moreInfoUpgradeAppDeployClickHandler(e) {
+            var tabletrIndex = $(".moreinfoUpgradeAppDeploy").index($(this));
+            
+            var upgradeAppNameText = $('#tableappDeploydetails tbody tr:eq('+tabletrIndex+') td:first').html();
+            var upgradeNodeIpText = $('#tableappDeploydetails tbody tr:eq('+tabletrIndex+') td:nth-child(5)').html();
+
+            $("#upgradeAppName").empty();
+            $("#upgradeNodeIp").empty();
+
+            $("#upgradeAppName").append(upgradeAppNameText);
+            $("#upgradeNodeIp").append(upgradeNodeIpText);
+            $("#upgradeNode").val(upgradeNodeIpText);
+
+            
+
             var $modal = $('#modalUpgradeAppDeploy');
             var $logContainer = $modal.find('.upgradeForAppDeploy').show();
             //$logContainer.empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
