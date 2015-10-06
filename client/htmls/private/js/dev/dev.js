@@ -118,7 +118,7 @@ function devCall() {
                     for (var i = 0; i < len; i++) {
                         str = str + '<option value="' + data[i]["osType"] + '" ostype="' + data[i]["os_name"] + '">' + data[i]["os_name"] + '</option>';
                     }
-                    $('#importinstanceOS').html(str).select2();
+                    $('#importinstanceOS').html(str);
                 },
                 failure: function(data) {
                     alert(data.toString());
@@ -5124,9 +5124,9 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
             $('[autofocus]', e.target).focus();
         });
 
-        $('#importinstanceOS').select2();
-        $('#configManagementDropdown').select2();
-        $('#pemFileDropdown').select2();
+       // $('#importinstanceOS').select2();
+      //  $('#configManagementDropdown').select2();
+      //  $('#pemFileDropdown').select2();
 
 
 
