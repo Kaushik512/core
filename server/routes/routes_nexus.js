@@ -59,7 +59,8 @@ module.exports.setRoutes = function(app, verificationFunc) {
     			return;
     		}
     		logger.debug("Got nexus repositories: ",JSON.stringify(repositories));
-    		res.send(repositories);
+    		repositories = JSON.parse(repositories);
+    		res.send(repositories.repositories.data['repositories-item']);
     	});
     });
 
