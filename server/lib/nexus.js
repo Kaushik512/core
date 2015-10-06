@@ -82,7 +82,8 @@ var Nexus = function() {
                     password: nexus[0].nexuspassword
                 };
                 client = new Client(options_auth);
-                var nexusUrl = nexus[0].hostname + '/service/local/data_index?q=org.javaee7.sample';
+                //var nexusUrl = nexus[0].hostname + '/service/local/data_index?q=org.javaee7.sample';
+                var nexusUrl = nexus[0].hostname + '/service/local/data_index?q='+nexus[0].groupid;
                 client.registerMethod("jsonMethod", nexusUrl, "GET");
                 client.methods.jsonMethod(function(data, response) {
                     //logger.debug("response: ", response);
