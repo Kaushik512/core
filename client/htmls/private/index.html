@@ -390,7 +390,7 @@ function setleftnavigation(toplink, breadcrumbHeader) {
         //selecting the first item in the org tree.
     } else {
         //Reverting the warning message when no org present
-        $('#content').removeClass('hidden');
+        $('#content').removeClass('hidden').removeAttr('style','height:100% !important');
         $('#noenvwarning').addClass('hidden');
         $('#noEnvError').addClass('hidden');
         $('ol.breadcrumb').removeClass('hidden');
@@ -793,8 +793,7 @@ function loadTrackTree(){
             //alert(JSON.stringify(node));
             //alert('click');
             $("#content").empty();
-            $('#content').attr('style', 'height: 100%!important');
-            $("#content").append('<iframe src='+ node['data-href']+' style="width: 101% ! important; height: 97%! important; border: medium none;"></iframe>');
+            $("#content").attr('style', 'height: 100%!important').append('<iframe src='+ node['data-href']+' style="width: 101% ! important; height: 97%! important; border: medium none;"></iframe>');
             console.log($("#content")[0].innerHTML);
             event.stopPropagation();
             event.preventDefault();
@@ -1028,7 +1027,7 @@ function selectEnv() {
         $('#noenvwarning').removeClass('hidden');
         $('ol.breadcrumb').addClass('hidden');
     } else {
-        $('#content').removeClass('hidden');
+        $('#content').removeClass('hidden').removeAttr('style','height:100% !important');
     }
 
 
