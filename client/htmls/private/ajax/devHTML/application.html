@@ -531,7 +531,13 @@ function constructUI(data) {
                         data[i].applicationStatus = "NA";
                     }
                     var applicationLastDeployTime = data[i].applicationLastDeploy;
-                    applicationLastDeployTime = applicationLastDeployTime.slice(0, -6);;
+
+                    if( (applicationLastDeployTime.toLowerCase().indexOf("am") > -1) || (applicationLastDeployTime.toLowerCase().indexOf("pm") > -1) ){
+                        applicationLastDeployTime = applicationLastDeployTime;
+                    }else{
+                        applicationLastDeployTime = getLocaleTime(applicationLastDeployTime);
+                    }
+
                     $taskenvArray.dataTable().fnAddData([
                         //rowindex + 1,
                         data[i].applicationName,
@@ -712,4 +718,24 @@ var urlParams = {};
         }
     }
 })();
+function getLocaleTime(str){
+    var findTimeStamp=function(x){
+        x=x.replace(' +0000','');
+        var temp=str.split(' ');
+        var date=temp[0].split('-');
+        var time=temp[1].split(":");
+        var ddate=new Date( Date.UTC(parseInt(date[0]),parseInt(date[1]),parseInt(date[2]),parseInt(time[0]),parseInt(time[1]),parseInt(time[2]) ));
+        return ddate.getTime();
+    }
+    var t=findTimeStamp(str);
+    if(t != undefined || t != null){
+        try {
+            return new Date(findTimeStamp(str)).toLocaleString();
+        }catch (err){
+            return applicationLastDeployTime.slice(0, -6);
+        }
+    }else{
+        return applicationLastDeployTime.slice(0, -6);
+    }
+}
 </script>
