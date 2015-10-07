@@ -257,7 +257,7 @@ input {
                                             <div class="col-lg-6 col-md-6">
                                                 <label for="">Nexus Server:<span style="color:red">*</span></label>
                                                 <div class="input-groups">
-                                                    <select id="chooseNexusServer" name="" class="required width-100">
+                                                    <select id="chooseNexusServer" name="" class="required width-100 form-control">
                                                         <option value="">Choose Nexus Server</option>
                                                     </select>
                                                 </div>
@@ -265,7 +265,7 @@ input {
                                             <div class="col-lg-6 col-md-6">
                                                 <label for="">Repository:<span style="color:red">*</span></label>
                                                 <div class="input-groups">
-                                                    <select id="chooseRepository" name="" class="required width-100">
+                                                    <select id="chooseRepository" name="" class="required width-100 form-control">
                                                         <option value="">Choose Repositories</option>
                                                     </select>
                                                 </div>
@@ -279,7 +279,7 @@ input {
                                             <div class="col-lg-6 col-md-6 margintop15">
                                                 <label for="">Artifacts:<span style="color:red">*</span></label>
                                                 <div class="input-groups">
-                                                    <select id="chooseArtifacts" name="" class="required width-100">
+                                                    <select id="chooseArtifacts" name="" class="required width-100 form-control">
                                                        <option value="">Choose Artifacts</option>
                                                     </select>
                                                 </div>
@@ -288,7 +288,7 @@ input {
                                             <div class="col-lg-6 col-md-6 margintop15">
                                                 <label for="">Versions:<span style="color:red">*</span></label>
                                                 <div class="input-groups">
-                                                    <select id="chooseVersions" name="" class="required width-100">
+                                                    <select id="chooseVersions" name="" class="required width-100 form-control">
                                                         <option value="">Choose Versions</option>
                                                     </select>
                                                 </div>
@@ -297,10 +297,14 @@ input {
                                         </fieldset>
 
                                         <fieldset class="fieldsetCustom"  style="margin-top: 20px ! important;">
-                                            <legend  class="legendCustom">Server Details:</legend>
+                                            <legend  class="legendCustom">Job Details:</legend>
                                             <div class="col-lg-6 col-md-6">
-                                                <label>Node :<span style="color:red">*</span></label>
-                                                <input id="upgradeNode" type="text" class="form-control" name="" disabled>
+                                                <label>Jobs:<span style="color:red">*</span></label>
+                                                <div class="input-groups">
+                                                    <select id="chooseJobType" name="" class="required width-100 form-control">
+                                                        <option value="">Choose Job</option>
+                                                    </select>
+                                                </div>
                                             </div>
                                             <!-- <div class="col-lg-6 col-md-6">
                                                 <label for="">RunDeck Project:<span style="color:red">*</span></label>
@@ -356,12 +360,15 @@ input {
 </div>
 <script type="text/javascript">
 $(document).ready(function() {
-    $('#chooseNexusServer').select2();
-    $('#chooseRepository').select2();
-    $('#chooseArtifacts').select2();
-    $('#chooseVersions').select2();
-    $('#chooseRundeckProject').select2();
-    $('#chooseEnvironment').select2();
+    // $('#chooseNexusServer').select2();
+    // $('#chooseRepository').select2();
+    // $('#chooseArtifacts').select2();
+    // $('#chooseVersions').select2();
+    // $('#chooseRundeckProject').select2();
+    // $('#chooseEnvironment').select2();
+
+
+
     // $('#chooseApplication').select2();
     //debugger;
     //getDropdownList();
@@ -372,7 +379,8 @@ $(document).ready(function() {
 });
 
 function getNexusServer(){
-    $('#formUpgradeAppDeploy').trigger('reset');
+    // var $formUpgradeAppDeploy = $('#formUpgradeAppDeploy')[0];
+    // $formUpgradeAppDeploy.reset();
     var $nexusServer = $('#chooseNexusServer');
     $nexusServer.empty();
     $('#chooseNexusServer').append('<option value="">Choose Nexus Server</option>');
@@ -661,14 +669,8 @@ function constructUI(data) {
                 }
             });
         }
-        
-        // $('.cancelUpgradeAppDeploy').click(function(e) {
-        //     $('#formUpgradeAppDeploy').trigger("reset");
-        // });
         function moreInfoUpgradeAppDeployClickHandler(e) {
-            //alert($('#formUpgradeAppDeploy').length);
-            //$('#formUpgradeAppDeploy').
-             //$('#formUpgradeAppDeploy').trigger('reset');
+            $('#formUpgradeAppDeploy')[0].reset();
             var tabletrIndex = $(".moreinfoUpgradeAppDeploy").index($(this));
             
             var upgradeAppNameText = $('#tableappDeploydetails tbody tr:eq('+tabletrIndex+') td:first').html();
@@ -679,7 +681,7 @@ function constructUI(data) {
 
             $("#upgradeAppName").append(upgradeAppNameText);
             $("#upgradeNodeIp").append(upgradeNodeIpText);
-            $("#upgradeNode").val(upgradeNodeIpText);
+            //$("#upgradeNode").val(upgradeNodeIpText);
 
             
             getNexusServer();
