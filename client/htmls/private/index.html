@@ -23,9 +23,9 @@
 #setting_tree > .icon{
     font-size:18px;
 }
-#content{
+/*#content{
     height:100%!important;
-}
+}*/
 </style>
         <script>
 function showLoader(){
@@ -793,6 +793,7 @@ function loadTrackTree(){
             //alert(JSON.stringify(node));
             //alert('click');
             $("#content").empty();
+            $('#content').attr('style', 'height: 100%!important');
             $("#content").append('<iframe src='+ node['data-href']+' style="width: 101% ! important; height: 97%! important; border: medium none;"></iframe>');
             console.log($("#content")[0].innerHTML);
             event.stopPropagation();
