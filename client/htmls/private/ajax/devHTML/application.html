@@ -413,6 +413,37 @@ function constructUI(data) {
         });
         var $accordianTemplate = $('.accordianTemplateContainer').find('.accordianTemplate');
         var dataenvAccordianName;
+        function moreInfoAppDeployClickHandler(e) {
+            var $modal = $('#modalAppCardLogDetails');
+            var $logContainer = $modal.find('.logsForAppDeploy').show();
+            $logContainer.empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
+            $.ajax({
+                url: '/app/deploy/' + this.id + '/logs',
+                type: 'GET',
+                contentType: "application/json",
+                success: function(data) {
+                    var datahttp = data.indexOf("http://");
+                    if (datahttp == 0) {
+                        $logContainer.empty();
+                        window.open(data, "_blank");
+                    } else {
+                        $logContainer.empty();
+                        $modal.modal('show');
+                        data = data.replace(/,/g, "<br />");
+                        $logContainer.append(data);
+                    }
+                },
+                error: function(jqxhr) {
+                    $logContainer.empty();
+                    $modal.modal('show');
+                    $logContainer.append('No Logs Available');
+                },
+                failure: function(data) {
+
+                }
+            });
+        }
+        $('#tableappDeploydetails').on('click', '.moreinfoAppDeploy', moreInfoAppDeployClickHandler);
         if (data && data.length) {
             var $clone = $accordianTemplate.clone(true);
             for (var i = 0; i < data.length; i++) {
@@ -556,36 +587,36 @@ function constructUI(data) {
                     $('#' + data[i].projectId + data[i].applicationName + data[i].envId + '_parentAccordian').hide();
                 }
             }
-            $(".moreinfoAppDeploy").click(function(e) {
-                var $modal = $('#modalAppCardLogDetails');
-                var $logContainer = $modal.find('.logsForAppDeploy').show();
-                $logContainer.empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
-                $.ajax({
-                    url: '/app/deploy/' + this.id + '/logs',
-                    type: 'GET',
-                    contentType: "application/json",
-                    success: function(data) {
-                        var datahttp = data.indexOf("http://");
-                        if (datahttp == 0) {
-                            $logContainer.empty();
-                            window.open(data, "_blank");
-                        } else {
-                            $logContainer.empty();
-                            $modal.modal('show');
-                            data = data.replace(/,/g, "<br />");
-                            $logContainer.append(data);
-                        }
-                    },
-                    error: function(jqxhr) {
-                        $logContainer.empty();
-                        $modal.modal('show');
-                        $logContainer.append('No Logs Available');
-                    },
-                    failure: function(data) {
+            // $(".moreinfoAppDeploy").click(function(e) {
+            //     var $modal = $('#modalAppCardLogDetails');
+            //     var $logContainer = $modal.find('.logsForAppDeploy').show();
+            //     $logContainer.empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
+            //     $.ajax({
+            //         url: '/app/deploy/' + this.id + '/logs',
+            //         type: 'GET',
+            //         contentType: "application/json",
+            //         success: function(data) {
+            //             var datahttp = data.indexOf("http://");
+            //             if (datahttp == 0) {
+            //                 $logContainer.empty();
+            //                 window.open(data, "_blank");
+            //             } else {
+            //                 $logContainer.empty();
+            //                 $modal.modal('show');
+            //                 data = data.replace(/,/g, "<br />");
+            //                 $logContainer.append(data);
+            //             }
+            //         },
+            //         error: function(jqxhr) {
+            //             $logContainer.empty();
+            //             $modal.modal('show');
+            //             $logContainer.append('No Logs Available');
+            //         },
+            //         failure: function(data) {
 
-                    }
-                });
-            });
+            //         }
+            //     });
+            // });
         }
     } else {
         $("#nodataAppDeploy").empty();
