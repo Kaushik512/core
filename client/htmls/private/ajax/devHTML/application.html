@@ -379,8 +379,6 @@ $(document).ready(function() {
 });
 
 function getNexusServer(){
-    // var $formUpgradeAppDeploy = $('#formUpgradeAppDeploy')[0];
-    // $formUpgradeAppDeploy.reset();
     var $nexusServer = $('#chooseNexusServer');
     $nexusServer.empty();
     $('#chooseNexusServer').append('<option value="">Choose Nexus Server</option>');
@@ -400,6 +398,12 @@ function getNexusServerRepo(nexusId){
     var $chooseRepository = $('#chooseRepository');
     $chooseRepository.empty();
     $('#chooseRepository').append('<option value="">Choose Repositories</option>');
+    var $chooseArtifacts = $('#chooseArtifacts');
+    $chooseArtifacts.empty();
+    $('#chooseArtifacts').append('<option value="">Choose Artifacts</option>');
+    var $chooseVersions = $('#chooseVersions');
+    $chooseVersions.empty();
+    $('#chooseVersions').append('<option value="">Choose Versions</option>');
     $.get('/nexus/'+nexusId+'/repositories',function(nexusRepos){
         if(nexusRepos.length){
             for(var i=0;i< nexusRepos.length;i++){
@@ -423,12 +427,11 @@ function getNexusServerRepoArtifact(nexusId,repoName){
             var uniqueArtifacts =[];
             var checker;
             for(var i=0;i< artifacts.length;i++){
-                    if (!checker || comparer(checker, artifacts[i]) != 0) {
-                        checker = artifacts[i];
-                        uniqueArtifacts.push(checker);
-                    }
+                if (!checker || comparer(checker, artifacts[i]) != 0) {
+                    checker = artifacts[i];
+                    uniqueArtifacts.push(checker);
+                }
             }
-            //alert(uniqueArtifacts.length);
             for(var j=0;j< uniqueArtifacts.length;j++){
                 $('#chooseArtifacts').append('<option data-groupId="'+uniqueArtifacts[j].groupId+'" value='+uniqueArtifacts[j].artifactId+'>'+uniqueArtifacts[j].artifactId+'</option>');
             }
@@ -473,6 +476,21 @@ function getNexusServerRepoArtifactVersions(nexusId,repoName,reqBody){
             error: function(jqxhr) {
                  alert(jqxhr.responseText);
             }
+    });
+}
+
+function getTasks(){
+    var orgId = urlParams.org;
+    var bgId = urlParams.bg;
+    var projectId = urlParams.projid;
+    var envId = urlParams.envid;
+
+    $.get('/organizations/'+orgId+'/businessgroups/'+bgId+'/projects/'+projectId+'/environments/'+envId+'/tasks',function(tasks){
+        if(tasks.length){
+            for(var i=0;i< tasks.length;i++){
+                $('#chooseJobType').append('<option value='+tasks[i]._id+'>'+tasks[i].name+'</option>');
+            }
+        }
     });
 }
 
@@ -671,6 +689,7 @@ function constructUI(data) {
         }
         function moreInfoUpgradeAppDeployClickHandler(e) {
             $('#formUpgradeAppDeploy')[0].reset();
+            //$('#chooseRepository').empty();
             var tabletrIndex = $(".moreinfoUpgradeAppDeploy").index($(this));
             
             var upgradeAppNameText = $('#tableappDeploydetails tbody tr:eq('+tabletrIndex+') td:first').html();
@@ -685,6 +704,7 @@ function constructUI(data) {
 
             
             getNexusServer();
+            getTasks();
             var $modal = $('#modalUpgradeAppDeploy');
             var $logContainer = $modal.find('.upgradeForAppDeploy').show();
             //$logContainer.empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
