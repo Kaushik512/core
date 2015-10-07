@@ -275,12 +275,12 @@ input {
                                                 <label>Repository URL:<span style="color:red">*</span></label>
                                                 <input id="repositoryUrl" type="text" class="form-control" name="" disabled>
                                             </div>
-                                            
+
                                             <div class="col-lg-6 col-md-6 margintop15">
                                                 <label for="">Artifacts:<span style="color:red">*</span></label>
                                                 <div class="input-groups">
                                                     <select id="chooseArtifacts" name="" class="required width-100">
-                                                       <option value="">All Artifacts</option>
+                                                       <option value="">Choose Artifacts</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -289,7 +289,7 @@ input {
                                                 <label for="">Versions:<span style="color:red">*</span></label>
                                                 <div class="input-groups">
                                                     <select id="chooseVersions" name="" class="required width-100">
-                                                        <option value="">All Versions</option>
+                                                        <option value="">Choose Versions</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -371,8 +371,8 @@ $(document).ready(function() {
     // });
 });
 
-
 function getNexusServer(){
+    $('#formUpgradeAppDeploy').trigger('reset');
     var $nexusServer = $('#chooseNexusServer');
     $nexusServer.empty();
     $('#chooseNexusServer').append('<option value="">Choose Nexus Server</option>');
@@ -395,25 +395,76 @@ function getNexusServerRepo(nexusId){
     $.get('/nexus/'+nexusId+'/repositories',function(nexusRepos){
         if(nexusRepos.length){
             for(var i=0;i< nexusRepos.length;i++){
-                $('#chooseRepository').append('<option data-repoUrl="'+nexusRepos[i].resourceURI+'" value="'+nexusRepos[i].id+'">'+nexusRepos[i].name+'</option>');
+                $('#chooseRepository').append('<option data-repoName="'+nexusRepos[i].name+'" data-repoUrl="'+nexusRepos[i].resourceURI+'" value="'+nexusRepos[i].id+'">'+nexusRepos[i].name+'</option>');
             }
         }
     });
     $chooseRepository.change(function(e){
         $('#repositoryUrl').val($(this).find('option:selected').attr('data-repoUrl'));
-        });
+        var repoName = $(this).find('option:selected').attr('data-repoName');
+        getNexusServerRepoArtifact(nexusId,repoName);
+    });
 }
 
-function getNexusServerRepoArtifact(nexusId){
-    var $chooseRepository = $('#chooseRepository');
-    $chooseRepository.empty();
-    $('#chooseRepository').append('<option value="">Choose Repositories</option>');
-    $.get('/nexus/'+nexusId+'/repositories',function(nexusRepos){
-        if(nexusRepos.length){
-            for(var i=0;i< nexusRepos.length;i++){
-                $('#chooseRepository').append('<option value='+nexusRepos[i].id+'>'+nexusRepos[i].name+'</option>');
+function getNexusServerRepoArtifact(nexusId,repoName){
+    var $chooseArtifacts = $('#chooseArtifacts');
+    $chooseArtifacts.empty();
+    $('#chooseArtifacts').append('<option value="">Choose Artifacts</option>');
+    $.get('/nexus/'+nexusId+'/repositories/'+repoName+'/artifact',function(artifacts){
+        if(artifacts.length){
+            var uniqueArtifacts =[];
+            var checker;
+            for(var i=0;i< artifacts.length;i++){
+                    if (!checker || comparer(checker, artifacts[i]) != 0) {
+                        checker = artifacts[i];
+                        uniqueArtifacts.push(checker);
+                    }
+            }
+            //alert(uniqueArtifacts.length);
+            for(var j=0;j< uniqueArtifacts.length;j++){
+                $('#chooseArtifacts').append('<option data-groupId="'+uniqueArtifacts[j].groupId+'" value='+uniqueArtifacts[j].artifactId+'>'+uniqueArtifacts[j].artifactId+'</option>');
             }
         }
+    });
+    $chooseArtifacts.change(function(e){
+        var groupId = $(this).find('option:selected').attr('data-groupId');
+        var reqBody = {
+        "groupId": groupId,
+        "artifactId": $(this).val()
+        };
+        getNexusServerRepoArtifactVersions(nexusId,repoName,reqBody);
+    });
+}
+
+var comparer = function compareObject(a, b) {
+    if (a.artifactId === b.artifactId) {
+        return 0;
+    } else {
+        return 1;
+    }
+}
+
+function getNexusServerRepoArtifactVersions(nexusId,repoName,reqBody){
+    var $chooseVersions = $('#chooseVersions');
+    $chooseVersions.empty();
+    $('#chooseVersions').append('<option value="">Choose Versions</option>');
+
+    $.ajax({
+            url: '/nexus/'+nexusId+'/repositories/'+repoName+'/artifact/versions',
+            data: JSON.stringify(reqBody),
+            type: 'POST',
+            contentType: "application/json",
+            success: function(data) {
+                if(data){
+                    var versions = data.metadata.versioning[0].versions[0].version;
+                    for(var i=0;i< versions.length;i++){
+                        $('#chooseVersions').append('<option value='+versions[i]+'>'+versions[i]+'</option>');
+                    }
+                }
+            },
+            error: function(jqxhr) {
+                 alert(jqxhr.responseText);
+            }
     });
 }
 
@@ -610,8 +661,14 @@ function constructUI(data) {
                 }
             });
         }
-
+        
+        // $('.cancelUpgradeAppDeploy').click(function(e) {
+        //     $('#formUpgradeAppDeploy').trigger("reset");
+        // });
         function moreInfoUpgradeAppDeployClickHandler(e) {
+            //alert($('#formUpgradeAppDeploy').length);
+            //$('#formUpgradeAppDeploy').
+             //$('#formUpgradeAppDeploy').trigger('reset');
             var tabletrIndex = $(".moreinfoUpgradeAppDeploy").index($(this));
             
             var upgradeAppNameText = $('#tableappDeploydetails tbody tr:eq('+tabletrIndex+') td:first').html();
