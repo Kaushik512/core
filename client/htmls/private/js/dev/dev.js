@@ -1872,7 +1872,7 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
             dataTable.row.add($rowContainter).draw();
 
 
-            if (data.instanceState === 'pending' || data.instanceState === 'stopping') {
+            if (data.instanceState === 'pending' || data.instanceState === 'stopping' || data.instanceState === 'unknown') {
                 pollInstanceState(data._id, data.instanceState, 2000);
                 // To be removed from comment later - Vinod
             }

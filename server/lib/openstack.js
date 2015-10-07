@@ -528,7 +528,8 @@ var Openstack = function(options) {
             host: instanceData.floatingipdata.floatingip.floating_ip_address,
             instanceOS: 'linux',
             port: 22,
-            cmds: ["ls -al"],
+           // cmds: ["ls -al"],
+           cmds: ["sudo ntpdate -s ntp.ubuntu.com;ls -al"],
             cmdswin: ["del "]
         }
         var cmdString = opts.cmds.join(' && ');
