@@ -12,6 +12,7 @@ var Client = require('node-rest-client').Client;
 var logger = require('_pr/logger')(module);
 var d4dModelNew = require('../model/d4dmasters/d4dmastersmodelnew.js');
 var parser = require('xml2json');
+var masterUtil = require('./utils/masterUtil.js');
 
 var Nexus = function() {
     this.authenticateNexus = function(requestBody, callback) {
@@ -134,6 +135,36 @@ var Nexus = function() {
                 callback(null, null);
             }
         });
+    }
+
+    this.updateNexusRepoUrl = function(orgId,reqBody,callback){
+    	masterUtil.getAllCongifMgmtsForOrg(orgId,function(err,configMgmt){
+    		if(err){
+    			callback(err,null);
+    		}
+    		if(configMgmt.length){
+    			for(var i =0; i<configMgmt.length;i++){
+    				if(configMgmt[i].configType === 'chef'){
+    					masterUtil.getCongifMgmtsById(configMgmt[0].rowid,function(err,chefServer){
+    						if(err){
+    							callback(err,null);
+    						}
+    						if(chefServer){
+    							logger.debug("Chef location: ",chefServer.chefRepoLocation);
+    							callback(null,chefServer);
+    						}else{
+    							callback(null,null);
+    						}
+
+    					});
+    				}else{
+    					callback(null,null);
+    				}
+    			}
+    		}else{
+    			callback(null,null);
+    		}
+    	});
     }
 }
 

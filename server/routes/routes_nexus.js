@@ -104,4 +104,23 @@ module.exports.setRoutes = function(app, verificationFunc) {
     	});
     });
 
+    // This endpoint will capture nexus repo url and update in knife.rb file
+    app.post('/nexus/organization/:orgId/chef',function(req,res){
+    	logger.debug("Called nexus url update knife.rb..");
+    	nexus.updateNexusRepoUrl(req.params.orgId,req.body,function(err,data){
+    		if(err){
+    			logger.debug("Error: ",err);
+    			res.send(500,"Error got.");
+    			return;
+    		}
+    		if(data){
+    			res.send(data);
+    			return;
+    		}else{
+    			res.send(404,"No data found.");
+    			return;
+    		}
+    	});
+    });
+
 }
