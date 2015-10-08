@@ -18,6 +18,22 @@ ${width}           1400
 #http://d4d.rlcatalyst.com/public/login.html
 
 
+
+
+
+
+
+
+#SuperCatalyst
+${SUPERCAT TEMP}                               NodeJStemps
+${PROVIDER}                                AWS RELPRO
+${SUPERCAT ENV}                            RL_QA
+
+
+
+
+
+
 #AWS COST
 ${AWS}                         AWS Cost
 
@@ -28,6 +44,8 @@ ${JAVA}                      Java
 ${MYSQL}                     MySql
 ${BOOTSTRAP}                 Bootstrap
 ${STACK STATUS}              CREATE_COMPLETE
+${EDIT STACK1}               TestJava
+${EDIT STACK2}               TestSQL
 
 ${ENV}                 QA.txt
 ${VALID USER}             superadmin
@@ -37,9 +55,9 @@ ${ORGANIZATION DOMAIN NAME}          www.relevancelab.com
 ${ORG ADMIN USER}               smoke_admin
 ${ORG ADMIN PASSWORD}           smoke_admin
 ${ORGADMN EMAILADD}             relevancelab@gmail.com
-${BUSINESS GROUP NAME1}           Digi_learning
+${BUSINESS GROUP NAME1}          Product
 ${BUSINESS GROUP NAME2}           SecurityBG
-${PROJECT NAME1}                  Scholastic
+${PROJECT NAME1}                  Catalyst
 ${PROJECT NAME2}                  Jira-Catalyst
 ${PROJECT DESCRIPTION}           Catalyst product automation Description
 ${ENVIRONMENT NAME}              Dev
@@ -74,11 +92,11 @@ ${SUITS}                stopped
 ${UserName}             root
 
 
-${USERPEMFILE}              ${ROOTPATH}\\Chef\\jagadeesh12.pem
+${USERPEMFILE}              ${ROOTPATH}//Chef//jagadeesh12.pem
 ${VALIDATORPEMFILE}      ${ROOTPATH}//Chef//jm012-validator.pem
-${KNIFERBFILE}                ${ROOTPATH}\\Chef\\knife.rb
+${KNIFERBFILE}                ${ROOTPATH}//Chef//knife.rb
 ${CATALYSTPEM}                ${ROOTPATH}//Chef//catalyst.pem
-${CAT_INSTANCES}              ${ROOTPATH}\\Chef\\cat_instances.pem
+${CAT_INSTANCES}              ${ROOTPATH}//Chef//cat_instances.pem
 ${TEMPLATE FILE}              ${ROOTPATH}//Chef//CatalystStack.template
 ${Goldendemo_pem}             ${ROOTPATH}//Chef//GoldenDemo.pem
 
@@ -101,7 +119,7 @@ ${RECIPE1}                 recipe[apt]
 ${OPERATING SYSTEM}        Cent OS
 ${CentosInstanceSize}      t1.micro
 ${UbuntuInstanceSize}      t2.micro
-${BLUEPRINT NAME}          Apache-Centos
+${BLUEPRINT NAME}          Apache-TestCentos
 ${BLUEPRINT NAME1}         Ubuntu-Apache
 ${NEW BLUEPRINT NAME}      ApacheNew-Edited
 ${NEW UBUNTU BLUPRNT}      UbuntuNew-Edited
@@ -204,7 +222,7 @@ ${PROVDR_Name}               AWSProvider
 ${PROVIDERR}                 AWS
 ${SECRET KEY}                  qm/j8lT0/IPc1P5ud8yujUSa61+QjqeyZ/jZkIff
 ${ACCESS KEY}                  AKIAI3ETOOEFHJ62G2NQ
-${IMAGE NAME1}                 smoke_CentOS
+${IMAGE NAME1}                 Cent OSIm
 ${IMAGE NAME2}                 smoke_ubuntu
 ${IMAGE NAME3}                 smoke_Win08
 ${IMAGE NAME4}                 smoke_Win2012
