@@ -550,14 +550,12 @@ $('.saveUpgradeAppDeploy').on('click',function(){
         return false;
     }
     var taskId = $('#chooseJobType').find('option:selected').val();
-        if(taskId){
-            $.post('/tasks/'+taskId+'/run',{},function(data){
-           //$('#formUpgradeAppDeploy').dialog('close');
-        });
-    }else{
+    if(!taskId){
         alert("Please select job.");
         return false;
     }
+    $('a[data-executetaskid='+taskId+']').click();
+    $('#modalUpgradeAppDeploy').modal('hide');
 });
 
 function saveRecord() {
