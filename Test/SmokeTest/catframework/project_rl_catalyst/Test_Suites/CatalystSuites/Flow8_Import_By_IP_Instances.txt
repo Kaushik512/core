@@ -21,7 +21,7 @@ Catalyst Import CentOS Node By IP
     
 
 
-Catalyst Chef Client Run-SSH,Verification on the Imported Node
+Catalyst Chef Client Run-SSH on the Imported Node
     [Tags]       Sanity       Workzone
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
@@ -32,25 +32,26 @@ Catalyst Chef Client Run-SSH,Verification on the Imported Node
 
 
 
-Catalyst Import Ubuntu Node By IP
-    [Tags]       Sanity       Workzone
+
+#Catalyst Import Ubuntu Node By IP
+    #[Tags]       Sanity       Workzone
 #    Catalyst Login
-    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
-    Catalyst Import an Ubuntu Instance By IP
-    #Catalyst Verfication Ubuntu Duplicate Node
-    Catalyst Logout
-    [Teardown]     Close Browser
+    #Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    #Catalyst Import an Ubuntu Instance By IP
+    ##Catalyst Verfication Ubuntu Duplicate Node
+    #Catalyst Logout
+    #[Teardown]     Close Browser
 
 
 
-Catalyst Chef Client Run-SSH,Verification on the Ubuntu Imported Node
-    [Tags]       Sanity       Workzone
+#Catalyst Chef Client Run-SSH,Verification on the Ubuntu Imported Node
+    #[Tags]       Sanity       Workzone
 #    Catalyst Login
-    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
-    Catalyst Import By IP Chef Client run,SSH,Stop,Start on Ubuntu Instance
+    #Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    #Catalyst Import By IP Chef Client run,SSH,Stop,Start on Ubuntu Instance
     #Catalyst Verfication of IP,Status,Chef,SSH,MoreInfo on UbuntuIns frm Ctrlpanel
-    Catalyst Logout
-    [Teardown]     Close Browser
+    #Catalyst Logout
+    #[Teardown]     Close Browser
 
 
 

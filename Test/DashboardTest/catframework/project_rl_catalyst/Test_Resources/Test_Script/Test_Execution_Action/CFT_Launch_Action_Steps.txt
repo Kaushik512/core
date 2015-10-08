@@ -39,12 +39,15 @@ Catalyst Launch of Cloud Formation Blueprint
     Clicks on Submit Button
     Sleep    3s
     Clicks on Close of Launching Blueprint popup
-    Sleep    1 minute
+    Sleep    2 minute
     Clicks on Infrastructure Tab
     Clicks on Instances Tab
     Sleep    2s
     Capture Screen Shot of the page
     Verfiy the Java Stack in the Instances Page
+    Sleep    4s
+    Editing the Names of the Stack
+    Sleep    1s
     Select the Java Stack Instance to verify Bootstrap
     Clicks on ControlPanel
     Sleep    2s
@@ -58,25 +61,71 @@ Catalyst Launch of Cloud Formation Blueprint
     Clicks on ControlPanel
     Sleep    2s
     Capture Screen Shot of the page
+    Sleep    3s
     Clicks on Action History Tab
+    Sleep    1s
     Verify the MySql Bootstrap text and Status in the Table
+    Sleep    1s
     Capture Screen Shot of the page
+    Sleep    2s
     Clicks on Back To Instances
+    Sleep    1s
     Clicks on Infrastructure Tab
     Clicks on CloudFormation Tab
     Sleep    1s
     Capture Screen Shot of the page
     Verify the Stacks with your Stackame is created
-    Select the Stack to delete
+    Sleep    1s
     Clicks on Infrastructure Tab
     Clicks on Instances Tab
-    Sleep    4s
+    Select the Java Stack Instance to verify Bootstrap
+    Delete the Java and SQL Stack Instance
+    Sleep    1s
+    Select the MySql Stack Instance to verify Bootstrap
+    Delete the Java and SQL Stack Instance
+    Sleep    1s
     Verify the Stack Instances are Deleted
+    Clicks on Infrastructure Tab
+    Clicks on CloudFormation Tab
+    Sleep    4s
+    Select the Stack to delete
+    Verify the Stack is Deleted
+
+
+
+Catalyst Logout
+    Clicks on LogOut link
+
+
+Clicks on LogOut link
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       xpath=.//*[@id='logout']/span/a/i
+    Focus    xpath=.//*[@id='logout']/span/a/i
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='logout']/span/a/i
+
+
+Verify the Stack is Deleted
+    Page Should Not Contain    ${STACK NAME}
+
+Delete the Java and SQL Stack Instance
+    Click Element    id=removeInstance
+    Click Element    id=ckbChefDelete
+    Click Element    xpath=.//*[text()='Delete']
+
+
+Editing the Names of the Stack
+    Click Element    xpath=.//*[@id='divinstancescardview']//span[@data-original-title='${JAVA}']/../a[@class='glyphicon glyphicon-pencil editInstanceNameBtn glyphiconNew']
+    Sleep    1s
+    Input Text    id=instanceEditName    ${EDIT STACK1}
+    Click Element    id=editSaveBTN
+    Click Element    xpath=.//*[@id='divinstancescardview']//span[@data-original-title='${MYSQL}']/../a[@class='glyphicon glyphicon-pencil editInstanceNameBtn glyphiconNew']
+    Sleep    1s
+    Input Text    id=instanceEditName    ${EDIT STACK2}
+    Click Element    id=editSaveBTN
 
 
 Verify the Stack Instances are Deleted
-    Page Should Not Contain    ${JAVA}
-    Page Should Not Contain    ${MYSQL}
+    Page Should Not Contain    ${EDIT STACK1}
+    Page Should Not Contain    ${EDIT STACK2}
 
 Select the Stack to delete
     Click Element    xpath=//b[text()='${STACK NAME}']
@@ -98,7 +147,7 @@ Clicks on Back To Instances
 
 
 Verify the Java Bootstrap text and Status in the Table
-    Sleep    3 minutes
+    Sleep    5 minutes
     Element Should Contain    xpath=.//*[@id='tableactionHistory']/tbody/tr/td[text()='${BOOTSTRAP}']    ${BOOTSTRAP}
     Sleep    1s
     ${BOOTSTRAP STATUSS}=    Get Element Attribute    xpath=.//*[@id='tableactionHistory']/tbody/tr/td[2]/img@title
@@ -107,7 +156,7 @@ Verify the Java Bootstrap text and Status in the Table
 
 
 Verify the MySql Bootstrap text and Status in the Table
-    Sleep    2 minutes
+    Sleep    3 minutes
     Element Should Contain    xpath=.//*[@id='tableactionHistory']/tbody/tr/td[text()='${BOOTSTRAP}']    ${BOOTSTRAP}
     Sleep    1s
     ${BOOTSTRAP STATUSS}=    Get Element Attribute    xpath=.//*[@id='tableactionHistory']/tbody/tr/td[2]/img@title
@@ -121,12 +170,12 @@ Clicks on Action History Tab
     Click Element    xpath=.//*[@id='myTab3']/li[3]/a
 
 Select the Java Stack Instance to verify Bootstrap
-    Click Element    xpath=.//span[@data-original-title='${JAVA}']
+    Click Element    xpath=.//span[@data-original-title='${EDIT STACK1}']
 
 
 Select the MySql Stack Instance to verify Bootstrap
     Sleep    3s
-    Click Element    xpath=.//span[@data-original-title='${MYSQL}']    
+    Click Element    xpath=.//span[@data-original-title='${EDIT STACK2}']    
 
 
 Clicks on ControlPanel
@@ -177,10 +226,6 @@ Clicks on Infrastructure Tab
 
 Clicks on Blueprints Section
     Click Element    css=.Blueprints>a
-
-
-
-
 
 Clicks on Workzone
     Click Element    id=workZoneNew    
