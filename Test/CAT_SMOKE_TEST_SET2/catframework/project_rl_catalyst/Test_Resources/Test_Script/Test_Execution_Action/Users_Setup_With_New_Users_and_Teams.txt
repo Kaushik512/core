@@ -190,6 +190,7 @@ Select particular User Created organization
 
 Assign Users
     Click Element    xpath=.//*[@id='loginname']/label[text()="${VALID USER}"]/i
+    Click Element    xpath=.//*[@id='loginname']/label[text()="${ORG ADMIN USER}"]/i
 #    Click Element    xpath=.//*[@id='loginname']/label[text()="${Org_Admin1}"]/i
 #    Click Element    xpath=.//*[@id='loginname']/label[text()="${Org_Designer}"]/i
 #    Click Element    xpath=.//*[@id='loginname']/label[text()="${Org_Consumer}"]/i

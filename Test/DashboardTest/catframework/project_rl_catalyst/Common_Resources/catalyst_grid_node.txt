@@ -60,6 +60,7 @@ Browser is opened to login catalyst
     Capture Page Screenshot     ${SEARCH RESULTS SCREENSHOT PATH}
     Sleep      3s      Wait for screenshot to be captured and saved
 
+
 Open Browser in Grid Node
     [Arguments]            ${site_url}
     ${browser_name} =            Get Variable Value    ${BROWSER}
