@@ -4325,7 +4325,7 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                                         var $tr = $('<tr/>');
                                         var $tdName = $('<td></td>');
                                         var $tdValue = $('<td id="selectValue"></td>');
-                                        var selectForparam = $('<select style="width:60%;"></select>').attr('key', name);
+                                        var selectForparam = $('<select style="width:60%;" class="form-controlSelect"></select>').attr('key', name);
                                         var nameForParam = data[i].taskConfig.parameterized[a].parameterName;
                                         if (nameForParam === 'Choice') {
                                             var label = $('<label style="font-size:14px;">Are you sure you want to execute? Choose the Parameter for-&nbsp <b>' + name + '<b></label>');
@@ -4349,7 +4349,7 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
 
                                                 str = '<option>' + defaultValueCheck[k] + '</option>';
 
-                                                selectForparam.append(str).select2();
+                                                selectForparam.append(str);
 
                                             } //for loop for default value ends here..
 
