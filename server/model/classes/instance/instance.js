@@ -267,7 +267,7 @@ var InstancesDao = function() {
         });
     };
     this.getInstanceById = function(instanceId, callback) {
-        logger.debug("Enter getInstanceById (%s)", instanceId);
+        //logger.debug("Enter getInstanceById (%s)", instanceId);
 
         Instances.find({
             "_id": new ObjectId(instanceId)
@@ -279,7 +279,7 @@ var InstancesDao = function() {
                 callback(err, null);
                 return;
             }
-            logger.debug("Exit getInstanceById (%s)", instanceId);
+            //logger.debug("Exit getInstanceById (%s)", instanceId);
             callback(null, data);
 
         });
@@ -880,6 +880,22 @@ var InstancesDao = function() {
                 return;
             }
             logger.debug("Exit removeInstancebyCloudFormationIdAndAwsId (%s)", cfId);
+            callback(null, data);
+        });
+    };
+
+    this.findInstancebyCloudFormationIdAndAwsId = function(cfId, awsInstanceId, callback) {
+        logger.debug("Enter findInstancebyCloudFormationIdAndAwsId (%s)", cfId, awsInstanceId);
+        Instances.find({
+            cloudFormationId: cfId,
+            platformId: awsInstanceId
+        }, function(err, data) {
+            if (err) {
+                logger.error("Failed to findInstancebyCloudFormationIdAndAwsId (%s)", cfId, awsInstanceId, err);
+                callback(err, null);
+                return;
+            }
+            logger.debug("Exit findInstancebyCloudFormationIdAndAwsId (%s)", cfId, awsInstanceId);
             callback(null, data);
         });
     };

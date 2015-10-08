@@ -114,11 +114,28 @@
               <a id="controlPanelLogTab" style="color: #eee;border-radius: 5px 5px 0 0 ; padding: 9px 10px 13px;" href="#l4" data-toggle="tab" style="font-size: 14px"> <i class="fa fa-fw fa-clock-o"></i>Logs</a>
           </li>
     </ul>
-    <div id="myTabContent3" class="nav pull-left tab-content" style="position: auto; left: 0px; width: 80%;margin-top:4px;">
+    <div id="myTabContent3" class="nav pull-left tab-content" style="position: auto; left: 0px; width: 80%;margin-top:4px;margin-bottom:60px;">
         <!-- info tab contents starts here -->
         <div class="tab-pane fade in active " id="l1" style="min-height:405px;overflow-y:auto;">
           <div class="panel-group smart-accordion-default">
-            <div class="panel panel-default" id="accordion-Hardware" style="border-radius:10px 10px 0px 0px;">
+            <div class="panel panel-default" id="accordion-Blueprints" style="border-radius:10px 10px 0px 0px;">
+              <div class="panel-heading">
+                <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion-Blueprints" href="#collapseBlueprints" ><i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i><i class="fa fa-fw fa-rss fa-dot-circle-o" style="font-size:14px;"></i> <b style="color:#3a87ad;font-size:12px;"><u>Blueprint Information</u></b></a></h4>
+              </div>
+              <div id="collapseBlueprints" class="panel-collapse collapse in">
+                <div class="panel-body">
+                  <table align="left">
+                    <tbody > 
+                     
+                    </tbody>
+                  </table>
+
+
+                </div>
+
+              </div><!--collapseRoleAttr ends here-->
+            </div>
+            <div class="panel panel-default" id="accordion-Hardware">
                 <div class="panel-heading">
                   
                   <h4 class="panel-title">
@@ -299,7 +316,7 @@
 
                    <a id="addTaskBtn" class="btn btn-minier btn-primary" data-toggle="modal">
                    
-                   Edit
+                   Assign Job
                    </a>                                                
 
                    </div>
@@ -338,23 +355,7 @@
               </div>
             </div>
             <!--tasks name ends here-->
-            <div class="panel panel-default" id="accordion-Blueprints">
-              <div class="panel-heading">
-                <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion-Blueprints" href="#collapseBlueprints" ><i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i><i class="fa fa-fw fa-rss fa-dot-circle-o" style="font-size:14px;"></i> <b style="color:#3a87ad;font-size:12px;"><u>Blueprint Information</u></b></a></h4>
-              </div>
-              <div id="collapseBlueprints" class="panel-collapse collapse in">
-                <div class="panel-body">
-                  <table align="left">
-                    <tbody > 
-                     
-                    </tbody>
-                  </table>
-
-
-                </div>
-
-              </div><!--collapseRoleAttr ends here-->
-            </div>
+            
              <!--app series-->
              <div class="modal fade" id="modalAppNameURL" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
                <div class="modal-dialog">
@@ -403,12 +404,12 @@
                <div class="modal-footer">
                <label id="nodeAppspinner" class=" hidden"><img  style="margin-left:5px;margin-right:25px;" src="img/select2-spinner.gif"></label>
                <div class="marginForButtons">
-               <button id="addAppBtn" class="btn btn-primary" type="submit">
-               <i class="fa fa-upload fa-1x"></i>&nbsp;Add
-               </button>
-               <a class="btn btn-primary" type="submit" data-dismiss="modal">
-               <i class="fa fa-undo fa-1x"></i>&nbsp;Cancel
+               <a class="btn btn-default" type="submit" data-dismiss="modal">
+               <i class="fa fa-times fa-1x"></i>&nbsp;Cancel
                </a>
+               <button id="addAppBtn" class="btn btn-primary" type="submit">
+               <i class="fa fa-check fa-1x"></i>&nbsp;Save
+               </button>
                </div>
                </div>
                </form>
@@ -431,15 +432,15 @@
                     <table  id="tableServices" class="table table-striped table-bordered table-hover dataTable no-footer text-align-center table-condensed tablesorter" style="margin-top:72px;">
                         <thead>
                           <tr>
-                            <th style="font-size: 13px;">
+                            <th style="font-size: 13px;text-align:center;">
                               <i class="fa fa-fw fa-archive "></i>
                               <strong style="color:#3a87ad">Service Name</strong>
                             </th>
-                            <th style="font-size: 13px;">
+                            <th style="font-size: 13px;text-align:center;">
                               <i class="fa fa-fw fa-sort-amount-asc "></i>
                               <strong style="color:#3a87ad">Actions </strong>
                             </th>
-                            <th style="font-size: 13px;">
+                            <th style="font-size: 13px;text-align:center;">
                               <i class="fa fa-fw fa-flash "></i>
                               <strong style="color:#3a87ad">Options</strong>
                             </th>
@@ -450,7 +451,7 @@
                               
                             </tbody> 
                         </tbody>
-                        <a class="btn btn-primary addServiceBtn" style="float:right;padding-right:10px;margin-right:10px;" data-toggle="modal" href="#serviceModalContainer">Add New Service</a>
+                        <a class="btn btn-primary addServiceBtn" style="float:right;padding-right:10px;margin-right:10px;margin-top:32px;" data-toggle="modal" href="#serviceModalContainer">Add New Service</a>
                     </table>
 
                 </div>
@@ -482,9 +483,9 @@
                   <table  class="table table-striped table-bordered table-hover dataTable no-footer" cellpadding="5px" width="100%" style="text-align:center";>
                    <thead>
                     <tr>
-                      <th>Name</th>
-                      <th>Actions</th>
-                      <th>Select</th>
+                      <th style="text-align:center;">Select</th>
+                      <th style="text-align:center;">Name</th>
+                      <th style="text-align:center;">Actions</th>
                     </tr>
                    </thead>
                    <tbody id="serviceList">
@@ -496,8 +497,8 @@
               </div>
               
               <div class="modal-footer">
+                <a type="button" class="btn btn-default" data-dismiss="modal"><i class="ace-icon fa fa-times bigger-110"></i>&nbsp;Cancel</a>
                 <button type="button" class="btn btn-default btn-primary btnsaveDeploymentBP btnSaveService"><i class="ace-icon fa fa-check bigger-110"></i>&nbsp;Save</button>
-                <button type="button" class="btn btn-default btn-primary" data-dismiss="modal"><i class="ace-icon fa fa-undo bigger-110"></i>&nbsp;Cancel</button>
               </div>
             </div>
           </div>
@@ -529,7 +530,7 @@
               
               <div class="modal-footer">
                 <!-- <button type="button" class="btn btn-default btn-primary btnsaveDeploymentBP btnSaveService"><i class="ace-icon fa fa-check bigger-110"></i>&nbsp;Save</button> -->
-                <button type="button" class="btn btn-default btn-primary" data-dismiss="modal"><i class="ace-icon fa fa-undo bigger-110"></i>&nbsp;Cancel</button>
+                <button type="button" class="btn btn-default btn-primary" data-dismiss="modal"><i class="ace-icon fa fa-times bigger-110"></i>&nbsp;Cancel</button>
               </div>
             </div>
           </div>
@@ -710,9 +711,8 @@
                 </form>
             </div>
            <div class="modal-footer">
-        <button type="button" class="btn btn-primary btnSaveInstanceRunlistAttributes">Save</button>
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        
+            <a type="button" class="btn btn-default" data-dismiss="modal"><i class="ace-icon fa fa-times bigger-110"></i>&nbsp;Close</a>
+            <button type="button" class="btn btn-primary btnSaveInstanceRunlistAttributes"><i class="ace-icon fa fa-check bigger-110"></i>&nbsp;Save</button>
       </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
@@ -1033,8 +1033,8 @@
             </div>
             
                <div class="modal-footer">
-        <input type="submit" id="editSaveBTN" class="btn btn-primary" value="Save" />
-        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+        <a type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times fa-1x"></i>&nbsp;Cancel</a>
+        <button type="submit" id="editSaveBTN" class="btn btn-primary" value="Save"><i class="fa fa-check fa-1x"></i>&nbsp;Save</button>
       </div>   
   </form>
          </div>
@@ -1085,7 +1085,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="col-lg-6">
+                <div class="col-lg-6" id="selectedTaskForSave">
                   <div class="input-group width100">
                     <label class="input searchTaskLabel">
                       <strong class="fontsize13">Selected Task</strong>
@@ -1098,25 +1098,12 @@
                   </div>
                 </div>
               </div>
-                <!-- <div class="col-lg-6 col-md-6" style="margin-left:-15px">
-
-                  <label for="">
-                    <input type="checkbox" name="my_checkbox" id="my_checkbox"/>&nbsp;Select/Unselect Task
-                  </label>
-                  
-
-                  <select class="form-control customNew" id="taskList" multiple> </select>
-                            
-                </div> -->
-                
-                
-
             </div>
             
                <div class="modal-footer">
         
-        <a type="button" class="btn btn-default" data-dismiss="modal">Close</a>
-        <input type="submit" id="saveTaskBtn" class="btn btn-primary" value="Save" />
+        <a type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times fa-1x"></i>&nbsp;Close</a>
+        <button type="submit" id="saveTaskBtn" class="btn btn-primary" value="Save"><i class="fa fa-check fa-1x"></i>&nbsp;Save</button>
       </div>   
          </div>
     </div>
@@ -1213,21 +1200,19 @@ function populateJsonData(instanceId) {
             $('.paraHeightModal').show();
             $('#paragraphs').append(temp);
         },
-        // failure: function(data) {
-        //    var failureText = "Server Behaved Unexpectedly. Please try again later";
-        //     if(jqxhr.responseJSON && jqxhr.responseJSON.message) {
-        //         failureText = jqxhr.responseJSON.message;
-        //     }
-        //     bootbox.alert(failureText);
-        //     $('.loadingContainerimageInspectCSS').hide();
-        //     $('.paraHeightModal').hide();
-        // },
         error: function(jqxhr) {
-          var failureText = "Server Behaved Unexpectedly. Please try again later";
+          $('#installedSoftwareModalContainer').modal('hide');
+         
+          var failureText;
             if(jqxhr.responseJSON && jqxhr.responseJSON.message) {
                 failureText = jqxhr.responseJSON.message;
             }
-            bootbox.alert(failureText);
+            //bootbox.alert(failureText);
+            bootbox.alert({
+              size:'small',
+              title:'<span style="font-size:22px;">Error!</span>',
+              message:failureText
+            });
             
             $('.loadingContainerimageInspectCSS').hide();
             $('.paraHeightModal').hide();
@@ -1452,6 +1437,9 @@ $.get('../instances/' + urlParams.id, function(data) {
                         name = services[i].commandname;
                     }
                     var $tr = $('<tr></tr>').attr('data-listServiceId', services[i].rowid);
+                    var $checkBox = $('<input type="checkbox" name="svcCkb"></input>').val(services[i].rowid).data('serviceData', services[i]);
+                    var $tdCheckBox = $('<td></td>').append($checkBox);
+                    $tr.append($tdCheckBox);
                     var $tdName = $('<td></td>').append(name);
                     $tr.append($tdName);
 
@@ -1464,9 +1452,6 @@ $.get('../instances/' + urlParams.id, function(data) {
 
                     var $tdActions = $('<td></td>').append(html);
                     $tr.append($tdActions);
-                    var $checkBox = $('<input type="checkbox" name="svcCkb"></input>').val(services[i].rowid).data('serviceData', services[i]);
-                    var $tdCheckBox = $('<td></td>').append($checkBox);
-                    $tr.append($tdCheckBox);
                     if (serviceIds.indexOf(services[i].rowid) !== -1) {
                         $tr.addClass('hidden');
                     }
@@ -1562,7 +1547,7 @@ $.get('../instances/' + urlParams.id, function(data) {
             return '<div class="startstoptoggler ' + data.instanceState + '" instanceID="' + data._id + '" style="float:left;margin-left:14px;margin-top:4px;" data-placement="top" data-original-title="' + title + '" rel="tooltip"></div>'
         },
         startAndStopToggler = function(e) {
-            if ($(this).hasClass('unknown') || $(this).hasClass('pending') || $(this).hasClass('stopping')) {
+            if ($(this).hasClass('unknown') || $(this).hasClass('pending') || $(this).hasClass('stopping') || $(this).hasClass('terminated')) {
                 console.log('pending or Unknow State');
                 return false;
             } else if ($(this).hasClass('running')) {
@@ -1632,60 +1617,81 @@ $.get('../instances/' + urlParams.id, function(data) {
 
     //$domainRolesCaption.append(menuAppTaskVar.getmenuAppTask(data));
     $domainRolesCaption.find('.showmenuAppTask').click(function() {
-      
-      $.get('../instances/' + instanceId ,function(data1){
-        if(data1.orgId){
-        $.get('../organizations/' + data1.orgId + '/businessgroups/' + data1.bgId + '/projects/' + data1.projectId + '/environments/' + data1.envId + '/', function(data2) {
-            console.log('success---3---4');
-            var urls;
-            var instanceIp;
-            for(var i in data2.instances){
-              console.log(data2.instances[i]);
-              if(data2.instances[i]._id == instanceId){
-                urls = data2.instances[i].appUrls;
-                instanceIp = data2.instances[i].instanceIP;
-                break;
-              }
-            }
-            //var urls= data2.instances[0].appUrls;
-            //console.log("data2 is:"+urls);
-            var stringmenuAppTask = '';
-            
-            if(urls && urls.length){
-              
-              var menuAppTaskLI ='';
-                  for(var i = 0; i< urls.length;i++){
-                    $domainRolesCaption.find('.menuAppTask').empty();
-                  console.log("I am inside the Loop");
-                      var url = urls[i].url;
-                      if (url) {
-                          url = url.replace('$host', instanceIp);
-                      }
-                      var tempApp = "<li><a style='font-size:10px;' data-appUrlId='" + urls[i]._id + "' class='app-url' title='" + url + "' href='" + url + "'' target='_blank' >" + urls[i].name + "</a></li>";
 
-                      menuAppTaskLI = menuAppTaskLI + tempApp;
+        $.get('../instances/' + instanceId, function(data1) {
+            if (data1.orgId) {
+                $.get('../organizations/' + data1.orgId + '/businessgroups/' + data1.bgId + '/projects/' + data1.projectId + '/environments/' + data1.envId + '/', function(data2) {
+                    console.log('success---3---4');
+                    var urls;
+                    var instanceIp;
+                    var tasks;
+                    for (var i in data2.instances) {
+                        console.log("data2>>>>>>>>" + JSON.stringify(data2.instances[i]));
+                        if (data2.instances[i]._id == instanceId) {
+                            urls = data2.instances[i].appUrls;
+                            instanceIp = data2.instances[i].instanceIP;
+                            tasks = data2.instances[i].taskIds;
+                            break;
+                        }
                     }
-                } else {
-                    menuAppTaskLI = "<li style='font-size:10px;color:#3276b1'>No AppLinks Available</li>";
-                }
-                stringmenuAppTask = "<div class='menuAppTask' style='display: none;'><span class='menuAppLinkSpan'>AppLinks</span><ul class='paddingleft32'>" + menuAppTaskLI + "</ul></div>";
-                $domainRolesCaption.append(stringmenuAppTask);
-                var $menu = $domainRolesCaption.find('.menuAppTask');
-                if ($menu.is(':visible')) {
-                  $domainRolesCaption.find('.menuAppTask').remove();
-                  $menu.hide();
-                } else {
-                    $('.menuAppTask').hide();
-                    $menu.show();
-                    var $anchor = $('.app-url').parent();
-                    $anchor.click(function() {
-                      $domainRolesCaption.find('.menuAppTask').remove();
-                      $menu.hide();                                                                                          
-                    });  
-                }
-          });
-        }
-      });
+                    //var urls= data2.instances[0].appUrls;
+                    //console.log("data2 is:"+urls);
+                    var stringmenuAppTask = '';
+                    if (tasks && tasks.length) {
+                        $.post('../tasks', {
+                            taskIds: tasks
+                        }, function(tasks) {
+                            var $ul = $('.domain-roles-caption[data-instanceId="' + data._id + '"]').find('.instanceTaskListUL');
+                            $ul.empty();
+                            for (var ll = 0; ll < tasks.length; ll++) {
+                                var $taskLi = "<li><a style='font-size:10px;' href='javascript:void(0)' data-taskId='" + tasks[ll]._id + "'>" + tasks[ll].name + "</a></li>";
+                                console.log("tasksLiName" + $taskLi);
+                                $ul.append($taskLi);
+                            }
+                        });
+                        var menuTaskLI = "<li style='font-size:10px;color:#3276b1'>Fetching</li>";
+                    } else {
+                        var menuTaskLI = "<li style='font-size:10px;color:#3276b1'>No TaskLinks Available</li>";
+                    }
+
+                    if (urls && urls.length) {
+
+                        var menuAppTaskLI = '';
+                        for (var i = 0; i < urls.length; i++) {
+                            $domainRolesCaption.find('.menuAppTask').empty();
+                            console.log("I am inside the Loop");
+                            var url = urls[i].url;
+                            if (url) {
+                                url = url.replace('$host', instanceIp);
+                            }
+                            var tempApp = "<li><a style='font-size:10px;' data-appUrlId='" + urls[i]._id + "' class='app-url' title='" + url + "' href='" + url + "'' target='_blank' >" + urls[i].name + "</a></li>";
+
+                            menuAppTaskLI = menuAppTaskLI + tempApp;
+                        }
+                    } else {
+                        menuAppTaskLI = "<li style='font-size:10px;color:#3276b1'>No AppLinks Available</li>";
+                    }
+
+                    stringmenuAppTask = "<div class='menuAppTask' style='display: none;'><span class='menuAppLinkSpan'>AppLinks</span><ul class='paddingleft32'>" + menuAppTaskLI + "</ul><span class='menuTaskSpan'>TaskLinks</span><ul class='paddingleft32 instanceTaskListUL' style='list-style-type: square;'>" + menuTaskLI + "</ul></div>";
+
+                    
+                    $domainRolesCaption.append(stringmenuAppTask);
+                    var $menu = $domainRolesCaption.find('.menuAppTask');
+                    if ($menu.is(':visible')) {
+                        $domainRolesCaption.find('.menuAppTask').remove();
+                        $menu.hide();
+                    } else {
+                        $('.menuAppTask').hide();
+                        $menu.show();
+                        var $anchor = $('.app-url').parent();
+                        $anchor.click(function() {
+                            $domainRolesCaption.find('.menuAppTask').remove();
+                            $menu.hide();
+                        });
+                    }
+                });
+            }
+        });
     });
     $('.startstoptoggler').click(startAndStopToggler);
     // .append('<img src="img/templateicons/'+data.blueprintData.templateId+'.png" style="height:20px;width:20px;margin-right:5px;">').append(data.blueprintData.blueprintName);
@@ -1735,7 +1741,7 @@ $.get('../instances/' + urlParams.id, function(data) {
     if (data.instanceState == 'running') {
         enableInstanceActionStartBtn(data._id);
     }
-    if (data.instanceState == 'pending' || data.instanceState == 'stopping') {
+    if (data.instanceState == 'pending' || data.instanceState == 'stopping' || data.instanceState == 'terminated') {
         disableInstanceActionBtns(data._id);
     }
     if (data.instanceState == 'unknown') {
@@ -2729,41 +2735,30 @@ $.get('../instances/' + urlParams.id, function(data) {
 
 
     $('#addTaskBtn').click(function(e) {
-        // var $select = $('#taskList').empty();
-        // var taskIds = [];
-        // if (data.taskIds && data.taskIds.length) {
-        //     taskIds = data.taskIds;
-        // }
-        // $.get('/tasks?orgId=' + data.orgId + '&bgId=' + data.bgId + '&projectId=' + data.projectId + '&envId=' + data.envId, function(taskList) {
-        //     for (var i = 0; i < taskList.length; i++) {
-        //         var $option = $("<option></option>").val(taskList[i]._id).html(taskList[i].name).attr('data-taskName', taskList[i].name);
-        //         if (taskIds.indexOf(taskList[i]._id) !== -1) {
-        //             $option.attr('selected', 'selected');
-        //         }
-        //         $select.append($option);
-                
-        //     }
-            
-        //     $('#instanceTaskModal').modal('show');
-        // });
         var $select = $('#selectavailbleTaskList').empty();
         var taskIds = [];
         if (data.taskIds && data.taskIds.length) {
             taskIds = data.taskIds;
         }
         $.get('/tasks?orgId=' + data.orgId + '&bgId=' + data.bgId + '&projectId=' + data.projectId + '&envId=' + data.envId, function(taskList) {
-            for (var i = 0; i < taskList.length; i++) {
-              var $option = $("<option></option>").val(taskList[i]._id).html(taskList[i].name).attr('data-taskName', taskList[i].name).addClass('taskimg');
-              // if (taskIds.indexOf(taskList[i]._id) !== -1) {
-              //     $option.attr('selected', 'selected');
-              // }
-              var $selectedOptionsValues = $('#selectedTaskList').find('option[value="'+ taskList[i]._id +'"]').length;
-              $select.append($option);
-              if($selectedOptionsValues){
-                $('#selectavailbleTaskList option[value="'+ taskList[i]._id +'"]').hide();
-              }                
+            if (taskList.length == 0) {
+                bootbox.alert({
+                    size: 'small',
+                    message: '<div style="margin-left:6px;"><img style="width:50px;height:40px" src="img/warning.png" alt="warning"/><span style="margin-left:20px;font-size:16px;">There are no Jobs associated to this Instance. Navigate to <span style="margin-left:72px;">Orchestration Tab on the Instances Page to create one.</span></span></div>',
+                    title: '<span style="font-size:22px;">Warning</span>'
+                });
+                $('#instanceTaskModal').modal('hide');
+            } else {
+                for (var i = 0; i < taskList.length; i++) {
+                    var $option = $("<option></option>").val(taskList[i]._id).html(taskList[i].name).attr('data-taskName', taskList[i].name).addClass('taskimg');
+                    var $selectedOptionsValues = $('#selectedTaskList').find('option[value="' + taskList[i]._id + '"]').length;
+                    $select.append($option);
+                    if ($selectedOptionsValues) {
+                        $('#selectavailbleTaskList option[value="' + taskList[i]._id + '"]').hide();
+                    }
+                }
+                $('#instanceTaskModal').modal('show');
             }
-            $('#instanceTaskModal').modal('show');
         });
     });
 
@@ -2956,7 +2951,7 @@ function addServiceToDom(serviceData) {
 
     addActionToServiceDom(serviceData.rowid, serviceData, $tr);
 
-    var $tdOption = $('<td></td>').append('<div class="btn-group tableactionWidth"><button class="btn btn-danger pull-left btn-sg tableactionbutton deleteServiceBtn" rel="tooltip" data-placement="top" data-original-title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></div>');
+    var $tdOption = $('<td></td>').append('<div class="btn-group"><button class="btn btn-danger pull-left btn-sg tableactionbutton deleteServiceBtn" rel="tooltip" data-placement="top" data-original-title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></div>');
     $tdOption.find('.deleteServiceBtn').click(function(e) {
         $.ajax({
             url: '../instances/' + urlParams.id + '/services/' + serviceData.rowid,
@@ -3286,6 +3281,7 @@ $(document).ready(function(e) {
       //var $taskListArea = $('.taskListArea').empty();
       $servicesDatatable = $('#tableServices').DataTable({
           "pagingType": "full_numbers",
+          "bLengthChange": false,
           "aoColumns": [{
               "bSortable": true
           }, {

@@ -320,6 +320,23 @@ var d4dMastersProviders = new mongoose.Schema(
 );
 var d4dModelMastersProviders = mongoose.model('d4dModelMastersProviders',d4dMastersProviders,'d4dmastersnew');
 
+var d4dMastersProvidersOpenStack = new mongoose.Schema(
+		{id: {type:String,required:true, trim:true},
+		providername:{type:String,required:true,trim:true},
+		openstackusername:{type:String,required:true,trim:true},
+		openstackpassword:{type:String,required:true,trim:true},
+        region:{type:String,required:false,trim:true},
+        accesskey:{type:String,required:false,trim:true},
+        secretkey:{type:String,required:false,trim:true},
+        providertype: {type:String,required:true,trim:true},
+        securitygroupids: {type:[String],required:false,trim:true},
+        instanceUserName: {type:String,required:false,trim:true},
+        providerpemfile_filename: {type:String,required:false,trim:true},
+        folderpath: {type:String,required:false,trim:true},
+        rowid:{type:String,required:true, trim:true}},{collection:'d4dmastersnew'}
+);
+var d4dModelMastersProvidersOpenStack = mongoose.model('d4dModelMastersProvidersOpenStack',d4dMastersProviders,'d4dmastersnew');
+
 var d4dMastersImages = new mongoose.Schema(
 		{id: {type:String,required:true, trim:true},
 		imagename:{type:String,required:true,trim:true},
@@ -362,6 +379,23 @@ var d4dMastersPuppetServer = new mongoose.Schema(
 var d4dModelMastersPuppetServer = mongoose.model('d4dModelMastersPuppetServer',d4dMastersPuppetServer,'d4dmastersnew');
 
 
+var d4dMastersNexusServer = new mongoose.Schema(
+	{id: {type:String,required:true, trim:true},
+	name: {type:String,trim:true, validate:nameValidator},
+	orgname: {type:[String],required:true, trim:true, validate:nameValidator},
+	orgname_rowid: {type:[String], trim:true},
+	orgrowid: {type:String, trim:true},
+	nexusservername: {type:String,required:true, trim:true},
+	username: {type:String,required:true, trim:true},
+	nexuspassword: {type:String,trim:true},
+	configType: {type:String, trim:true},
+	hostname: {type:String,required:true, trim:true},
+	active: {type:Boolean, trim:true,default:true},
+	rowid:{type:String,required:true, trim:true}},{collection:'d4dmastersnew'}
+);
+var d4dModelMastersNexusServer = mongoose.model('d4dModelMastersNexusServer',d4dMastersNexusServer,'d4dmastersnew');
+
+
 module.exports = d4dModelNew;
 module.exports.d4dModelMastersOrg = d4dModelMastersOrg;
 module.exports.d4dModelMastersProductGroup = d4dModelMastersProductGroup;
@@ -380,6 +414,8 @@ module.exports.d4dModelJenkinsConfig  = d4dModelJenkinsConfig;//
 module.exports.d4dModelMastersGeneric  = d4dModelMastersGeneric;
 module.exports.d4dModelMastersDynamic  = d4dModelMastersDynamic;
 module.exports.d4dModelMastersProviders = d4dModelMastersProviders;
+module.exports.d4dModelMastersProvidersOpenStack = d4dModelMastersProvidersOpenStack;
 module.exports.d4dModelMastersImages = d4dModelMastersImages;
 module.exports.d4dModelMastersJira = d4dModelMastersJira;
 module.exports.d4dModelMastersPuppetServer = d4dModelMastersPuppetServer;
+module.exports.d4dModelMastersNexusServer = d4dModelMastersNexusServer;

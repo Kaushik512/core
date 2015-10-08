@@ -118,7 +118,7 @@ function devCall() {
                     for (var i = 0; i < len; i++) {
                         str = str + '<option value="' + data[i]["osType"] + '" ostype="' + data[i]["os_name"] + '">' + data[i]["os_name"] + '</option>';
                     }
-                    $('#importinstanceOS').html(str).select2();
+                    $('#importinstanceOS').html(str);
                 },
                 failure: function(data) {
                     alert(data.toString());
@@ -732,11 +732,13 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                             "bSortable": false,
                             "sWidth": "20%"
                         }
-                    ],
+                    ]
                     /*"fnRowCallback": function(nRow, aData, iDisplayIndex) {
-                  $("td:first", nRow).html(iDisplayIndex + 1);
-                  return nRow;
-              }*/
+
+                      $("td:first", nRow).html(iDisplayIndex + 1);
+                      return nRow;
+                  }*/
+
 
                 });
             }
@@ -1602,15 +1604,12 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                 $viewAllA.click(function(e) {
                     e.preventDefault();
                     e.stopPropagation();
-
-
                     var $modal = $('#modalTableRunlist');
                     var $modalBody = $('#modalTableRunlist .modal-body').empty();
                     var runlist = $(this).parents('tr').find('.instance-bootstrap-list-image').data('runlist');
                     for (var j = 0; j < runlist.length; j++) {
                         var $divComponentItem;
                         if (j == 0) {
-
                             $divComponentItem = $('<span title="' + runlist[j] + '" style="margin-top:8px;overflow:hidden;text-overflow:ellipsis;width:300px;"></span>').addClass('instance-details-item').append(runlist[j]);
 
                         } else {
@@ -1672,9 +1671,7 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                         cssClasses.ringClass = 'pending';
                         cssClasses.textClass = 'instance-state-text-pending';
                         cssClasses.tableViewStatusClass = "pending";
-
                 }
-
                 return cssClasses;
             }
 
@@ -2014,7 +2011,7 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
             if (data.instanceState == 'running') {
                 enableInstanceActionStartBtn(data._id, data.hardware.os);
             }
-            if (data.instanceState == 'pending' || data.instanceState == 'stopping') {
+            if (data.instanceState == 'pending' || data.instanceState == 'stopping' || data.instanceState == 'terminated') {
                 disableInstanceActionBtns(data._id);
             }
             if (data.instanceState == 'unknown') {
@@ -2128,17 +2125,15 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
             $tableViewInstanceId.find('.instance-bootstrap-ActionStart a').addClass('isStopedInstance').removeClass('actionbuttonStart').addClass('actionbuttonStartdisable');
         }
 
-
         /**************************************Blueprint.js*************************************/
 
         /*Binding Click events to Blueprints*/
-
         function initializeBluePrints() {
             bindClick_bluePrintTab();
             bindClick_LaunchBtn();
             bindClick_bluePrintUpdate();
             bindClick_updateInstanceRunList();
-            // bindClick_dockercontainertablerefreshbutton();
+            bindClick_dockercontainertablerefreshbutton();
         }
 
         //setting the breadcrumb when the user clicks on the blueprint tab
@@ -2301,25 +2296,26 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
 
                                     }
                                     // alert(getDesignTypeName);
-
-                                    $containerTemp = '<div class="panel panel-default blueprintContainer hidden">' +
-                                        '<div class="panel-heading">' +
-
-                                    '<h4 class="panel-title">' +
-                                        '<a href="#collapse' + i + '" data-parent="#accordion-2" data-toggle="collapse" class="collapsed"> ' +
-                                        '<i class="fa fa-fw fa-plus-circle txt-color-blue"></i> ' +
-                                        '<i class="fa fa-fw fa-minus-circle txt-color-red"></i>' + getDesignTypeName + '</a>' +
-                                        '</h4></div><div class="panel-collapse collapse" id="collapse' + i + '">' +
-                                        '<div class="panel-body ' + getDesignType + ' ' + getDesignTypeName + '"></div>' +
-                                        '</div>';
-                                    $('#accordion-2').append($containerTemp);
-                                    // alert($containerTemp);
+                                    // if condition is to prevent to creation of multiple same accordion panels.
+                                    if ($("div." + tdata[i]['templatetype']).length === 0) {
+                                        $containerTemp = '<div class="panel panel-default blueprintContainer hidden">' +
+                                            '<div class="panel-heading">' +
+                                            '<h4 class="panel-title">' +
+                                            '<a href="#collapse' + i + '" data-parent="#accordion-2" data-toggle="collapse" class="collapsed"> ' +
+                                            '<i class="fa fa-fw fa-plus-circle txt-color-blue"></i> ' +
+                                            '<i class="fa fa-fw fa-minus-circle txt-color-red"></i>' + getDesignTypeName + '</a>' +
+                                            '</h4></div><div class="panel-collapse collapse" id="collapse' + i + '">' +
+                                            '<div class="panel-body ' + getDesignType + ' ' + getDesignTypeName + '"></div>' +
+                                            '</div>';
+                                        $('#accordion-2').append($containerTemp);
+                                        // alert($containerTemp);
+                                    }
                                 }
                             }
                         })(j);
                     }
                     //To fix template id and template type
-                    // alert('in' + data.length);
+                    //alert('in' + data.length);
                     for (var i = 0; i < data.length; i++) {
                         //alert(JSON.stringify(data[i]));
                         //Find a panel-body with the template type class
@@ -2332,19 +2328,26 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                             var $ul = $('<ul></ul>').addClass('list-unstyled system-prop').css({
                                 'text-align': 'center'
                             });
-                            var $liRead = $('<a style="float:right;margin:5px;cursor:pointer" class="readBtn"><div class="moreInfo"></div></a>').attr('data-toggle', 'tooltip').attr('data-placement', 'top').attr('title', 'More Info');
+                            var $liRead = $('<a style="float:right;margin:5px;cursor:pointer" class="readBtn"><div class="moreInfo moreInfoabsolute"></div></a>').attr('data-toggle', 'tooltip').attr('data-placement', 'top').attr('title', 'More Info');
                             $ul.append($liRead);
                             var $img
                             if (data[i].iconpath)
                                 $img = $('<img />').attr('src', data[i].iconpath).attr('alt', data[i].name).addClass('cardLogo');
                             else
                                 $img = $('<img />').attr('src', 'img/imgo.jpg').attr('alt', data[i].name).addClass('cardLogo');
+                            //provider logo added - currently included open stack
+                            var $imgprovider = '';
+                            if (data[i].blueprintType == 'openstack_launch')
+                                $imgprovider = $('<li><img src="img/openstack-card.png" style="margin-left: -94px;margin-right: 7px;margin-top: 48px;"></li>');
+                            if (data[i].blueprintType == 'hppubliccloud_launch')
+                                $imgprovider = $('<li><img src="img/hpcloud-card.png" style="margin-left: -94px;margin-right: 7px;margin-top: 48px;"></li>');
+                            // alert(data[i].blueprintType);
                             var $liImage = $('<li></li>').append($img);
                             $ul.append($liImage);
 
                             var $liCardName = $('<li title="' + data[i].name + '"></li>').addClass('Cardtextoverflow').html('<u><b>' + data[i].name + '</b></u>');
 
-                            $ul.append($liCardName);
+                            $ul.append($liCardName).append($imgprovider);
                             var $selecteditBtnContainer = $('<div style="position:absolute;padding-left:45px;bottom:11px;"></div>');
                             // if (data[i].blueprintConfig.infraManagerData && data[i].blueprintConfig.infraManagerData.versionsList) {
 
@@ -3144,6 +3147,9 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                                         }
 
                                     });
+                                } else if (blueprintType === 'openstack_launch' || blueprintType === 'hppubliccloud_launch') {
+                                    //alert('attempt launch of openstack');
+                                    launchBP();
 
 
                                 } else {
@@ -3969,7 +3975,8 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                             if (instances[i].name) {
                                 nodeName = instances[i].name;
                             }
-                            var $liHeader = $('<li><a href="#tab_' + instances[i]._id + '" data-toggle="tab" data-taskInstanceId="' + instances[i]._id + '" data-taskActionLogId="' + instances[i].tempActionLogId + '">' + nodeName + '</a></li>');
+                            var tabId = 'tab_' + instances[i]._id + parseInt(Math.random() * (100000 - 10000) + 10000);
+                            var $liHeader = $('<li><a href="#' + tabId + '" data-toggle="tab" data-taskInstanceId="' + instances[i]._id + '" data-taskActionLogId="' + instances[i].tempActionLogId + '">' + nodeName + '</a></li>');
                             if (i === 4) {
                                 var $liMoreHeader = $('<li class="dropdown dropdownlog"><a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">More... <b class="caret"></b></a><ul class="dropdown-menu"></ul></li>');
 
@@ -3979,7 +3986,7 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
 
                             }
                             $ulHeaderArea.append($liHeader);
-                            var $tabContent = $('<div class="tab-pane fade" id="tab_' + instances[i]._id + '"><div class="taskLogArea chefLOGS"></div></div>');
+                            var $tabContent = $('<div class="tab-pane fade" id="' + tabId + '"><div class="taskLogArea chefLOGS"></div></div>');
                             $contentArea.append($tabContent);
                         }
 
@@ -4127,9 +4134,10 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                         });
                         headerCount++;
                         //if(headerCount === 1) {
-                            setTimeout(function(){
-                                $liHeader.find('a').click();
-                            },2000)
+
+                        setTimeout(function() {
+                            $liHeader.find('a').click();
+                        }, 2000)
                         //}
                     });
 
@@ -4400,6 +4408,7 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                                     } //if loop for choice ends here..
                                     /*else {
 
+
                           //condition for boolean and string..
                           //if (data[i].taskConfig.parameterized.length >= 1) {
                               //  alert(data[i].taskConfig.parameterized.length);
@@ -4500,7 +4509,7 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
 
                         //alert(data[i].taskConfig.parameterized[a].parameterName);
                         /*if(data[i].taskType==="chef"){
-              
+             
               }*/
 
                     });
@@ -4526,7 +4535,6 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                             });
                             $taskHistoryDatatable.clear().draw();
                             $('.widget-header').find('h5.chefTitle').html('Chef History For -&nbsp;' + data[i].name);
-                            
                             $.get('../tasks/' + taskId + '/history', function(taskHistories) {
                                 for (var i = 0; i < taskHistories.length; i++) {
                                     var $trHistoryRow = $('<tr/>');
@@ -4624,7 +4632,8 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                             //$modal.find('.outputArea').hide();
 
                         });
-                    }else if(data[i].taskType === 'composite'){
+
+                    } else if (data[i].taskType === 'composite') {
                         var $tdHistory = $('<td style="vertical-align:inherit;text-align:center;"></td>').append('<a rel="tooltip" data-placement="top" data-original-title="History" data-toggle="modal" href="javascript:void(0)" class="btn btn-primary btn-sg tableactionbutton"><i class="ace-icon fa fa-header bigger-120"></i></a>');
                         $tdHistory.find('a').data('taskId', data[i]._id).attr('data-historyTaskId', data[i]._id).click(function(e) {
                             //var $taskHistoryContent = $('#taskHistoryContent').show();
@@ -4643,9 +4652,9 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                             });
                             //$taskHistoryDatatable.clear().draw();
                             $compositeTaskHistoryDatatable.clear().draw();
-                            
+
                             $('.widget-header').find('h5.compositeTitle').html('Composite History For -&nbsp;' + data[i].name);
-                            
+
                             $.get('../tasks/' + taskId + '/history', function(taskHistories) {
                                 for (var i = 0; i < taskHistories.length; i++) {
                                     var $trHistoryRow = $('<tr/>');
@@ -5077,10 +5086,9 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                // $allListElements.parent().parent().parent().parent().parent().parent().parent().hide();
                // $matchingListElements.parent().parent().parent().parent().parent().parent().parent().show();
              });
+
        }
        */
-
-
         var wzlink = window.location.href.split('#')[1];
         //alert(wzlink);
         $('li[navigation*="Workspace"]').find('a').attr('href', '#' + wzlink);
@@ -5116,9 +5124,9 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
             $('[autofocus]', e.target).focus();
         });
 
-        $('#importinstanceOS').select2();
-        $('#configManagementDropdown').select2();
-        $('#pemFileDropdown').select2();
+       // $('#importinstanceOS').select2();
+      //  $('#configManagementDropdown').select2();
+      //  $('#pemFileDropdown').select2();
 
 
 
@@ -5315,6 +5323,36 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                     }
                 });
             }
+
+            // socket connection for cloudformation autoscale event
+
+            var socket = io.connect('/cloudFormationAutoScaleGroup', {
+                'force new connection': true,
+                reconnection: false
+            });
+
+            socket.on('connect', function() {
+                socket.emit('joinCFRoom', {
+                    orgId: orgId,
+                    bgId: urlParams['bg'],
+                    projId: projectId,
+                    envId: envId
+                });
+            });
+
+            socket.on('cfAutoScaleInstanceRemoved', function(instanceData) {
+                console.log('delete event fired');
+                $('#divinstancescardview').find('.domain-roles-caption[data-instanceId=' + instanceData.instanceId + ']').parents('.domain-role-thumbnailDev').remove();
+                var table = $('#tableinstanceview').DataTable();
+                table.row('[data-instanceid=' + instanceData.instanceId + ']').remove().draw(false);
+            });
+            socket.on('cfAutoScaleInstanceAdded', function(instanceData) {
+                console.log('add event fired ==> ',instanceData);
+                addInstanceToDOM(instanceData);
+            });
+
+
+
         } else {
             var $workzoneTab = $('#workZoneNew');
             if ($workzoneTab.length) {
@@ -5324,6 +5362,7 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
 
 
         /*if (orgId && urlParams['bg'] && projectId && envId) {
+
 
       $('.instanceloaderspinner').removeClass('hidden');
 
@@ -5360,7 +5399,6 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
           $workzoneTab.click();
       }
   }*/
-
         //Generating the docker launch parameters
         function generateDockerLaunchParams() {
             if ($('#Containernamefield').val() == '') {
@@ -5859,6 +5897,7 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
 
                 $('#search').on('click', this.updateUI);
                 /*$('.custom-left').click(function() {
+
         //previous list
         var originalList = $('#divinstancescardview');
         var activeList = originalList.find('.active'),
@@ -5885,7 +5924,6 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
         }
 
     });*/
-
             },
             initData: function(data) {
                 x = data;

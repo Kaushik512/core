@@ -24,15 +24,33 @@ var credentialCryptography = require('_pr/lib/credentialcryptography');
 
 
 
-module.exports.setRoutes = function(app, sessionVerificationFunc) {
+module.exports.setRoutes = function(app, socketIo) {
+
+
+    // setting up socket.io
+
+    var socketCloudFormationAutoScate = socketIo.of('/cloudFormationAutoScaleGroup');
+
+    socketCloudFormationAutoScate.on('connection', function(socket) {
+        socket.on('joinCFRoom', function(data) {
+            console.log('room joined',data);
+            socket.join(data.orgId + ':' + data.bgId + ':' + data.projId + ':' + data.envId);
+            // setTimeout(function(){
+            //  console.log('firing timeout');
+            //  socketCloudFormationAutoScate.to(data.orgId + ':' + data.bgId + ':' + data.projId + ':' + data.envId).emit('cfAutoScaleInstanceRemoved',{
+            //     instanceId:'560d17697c5a558126d5b1df'
+            //  });
+            // },15000)
+        });
+
+    });
+
 
 
     app.post('/notifications/aws/cfAutoScale', function(req, res) {
-        console.log('POST request');
         var notificationType = req.headers['x-amz-sns-message-type'];
         var topicArn = req.headers['x-amz-sns-topic-arn'];
-        console.log('headers ==> ', req.headers);
-
+       
         var bodyarr = [];
         var reqBody;
         req.on('data', function(chunk) {
@@ -43,8 +61,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             if (notificationType) {
                 if (notificationType === 'SubscriptionConfirmation') { // confirmation notification
                     var confirmationURL = reqBody.SubscribeURL;
-                    console.log('url ===> ', confirmationURL);
-
+                    
                     if (confirmationURL) {
                         https.get(confirmationURL, function(res) {
                             console.log("Got response: " + res.statusCode);
@@ -62,7 +79,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                     console.log(' Notification Message  ==> ', reqBody.Message);
                     var autoScaleMsg = JSON.parse(reqBody.Message);
                     console.log("service ==> " + typeof autoScaleMsg);
-                    if (autoScaleMsg.Service == "AWS Auto Scaling") {
+                    if (autoScaleMsg.Service == "AWS Auto Scaling" && autoScaleMsg.StatusCode !== 'Failed') {
                         var autoScaleId = autoScaleMsg.AutoScalingGroupName;
                         if (autoScaleId) {
                             console.log('finding by autoscale topic arn ==>' + topicArn);
@@ -80,15 +97,37 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
                                     var cloudFormation = cloudFormations[0];
                                     var awsInstanceId = autoScaleMsg.EC2InstanceId;
+                                    if (!awsInstanceId) {
+                                        logger.error('Unable to get instance Id from notification');
+                                        return;
+                                    }
                                     if (autoScaleMsg.Event === 'autoscaling:EC2_INSTANCE_TERMINATE') {
                                         logger.debug('removing instance ==> ' + awsInstanceId);
 
-                                        instancesDao.removeInstancebyCloudFormationIdAndAwsId(cloudFormation.id, awsInstanceId, function(err, deleteCount) {
+
+
+                                        instancesDao.findInstancebyCloudFormationIdAndAwsId(cloudFormation.id, awsInstanceId, function(err, instances) {
                                             if (err) {
-                                                logger.error("Unable to delete instance by cloudformation and instance id", err);
+                                                logger.error("Unable to fetch instance by cloudformation and instance id", err);
                                                 return;
                                             }
-                                            logger.debug('notification deleteCount ==>' + deleteCount);
+                                            for (var i = 0; i < instances.length; i++) {
+                                                (function(instance) {
+                                                    instancesDao.removeInstancebyId(instance.id, function(err) {
+                                                        if (err) {
+                                                            logger.error("Unable to delete instance by instance id", err);
+                                                            return;
+                                                        }
+                                                        console.log('emiting delete event');
+                                                        socketCloudFormationAutoScate.to(instance.orgId + ':' + instance.bgId + ':' + instance.projectId + ':' + instance.envId).emit('cfAutoScaleInstanceRemoved', {
+                                                            instanceId: instance.id,
+                                                            cloudformationId: cloudFormation.id
+                                                        });
+
+
+                                                    });
+                                                })(instances[i]);
+                                            }
                                         });
 
                                     } else if (autoScaleMsg.Event === 'autoscaling:EC2_INSTANCE_LAUNCH') {
@@ -213,19 +252,18 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                     }
                                                                 }
 
-                                                                var runlist = [];
-                                                                var instanceUsername;
-
-                                                                /*for (var count = 0; count < blueprint.blueprintConfig.instances.length; count++) {
+                                                                var runlist = cloudFormation.autoScaleRunlist || [];
+                                                                var instanceUsername = cloudFormation.autoScaleUsername || 'ubuntu';
+                                                                /*
+                                                                for (var count = 0; count < blueprint.blueprintConfig.instances.length; count++) {
                                                                 if (logicalId === blueprint.blueprintConfig.instances[count].logicalId) {
                                                                     instanceUsername = blueprint.blueprintConfig.instances[count].username;
                                                                     runlist = blueprint.blueprintConfig.instances[count].runlist;
                                                                     break;
                                                                 }
-                                                            }*/
-                                                                if (!instanceUsername) {
-                                                                    instanceUsername = 'ubuntu'; // hack for default username
-                                                                }
+                                                                }*/
+
+
 
                                                                 var instance = {
                                                                     name: instanceName,
@@ -301,6 +339,13 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                     });
                                                                     logger.debug("Saving logs");
                                                                     logger.debug("Waiting for instance " + instanceData.InstanceId);
+
+                                                                    //emiting socket event
+
+                                                                    socketCloudFormationAutoScate.to(instance.orgId + ':' + instance.bgId + ':' + instance.projectId + ':' + instance.envId).emit('cfAutoScaleInstanceAdded', data);
+
+
+
                                                                     ec2.waitForEvent(instanceData.InstanceId, 'instanceStatusOk', function(err) {
                                                                         logger.debug("Wait Complete " + instanceData.InstanceId);
                                                                         if (err) {
@@ -369,7 +414,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                                         instanceUsername: instance.credentials.username,
                                                                                         nodeName: instance.chef.chefNodeName,
                                                                                         environment: envName,
-                                                                                        instanceOS: instance.hardware.os
+                                                                                        instanceOS: instance.hardware.os,
+                                                                                        runlist: instance.runlist
                                                                                     };
                                                                                 } else {
                                                                                     var puppetSettings = {

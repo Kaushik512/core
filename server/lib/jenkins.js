@@ -144,6 +144,7 @@ var Jenkins = function(options) {
         var options_auth={user:options.username,password:options.password};
         client = new Client(options_auth);
         var jenkinsUrl1 = parsedUrl.href+'job/'+jobName+'/api/json?depth=1';
+        logger.debug('jenkinsUrl',jenkinsUrl1);
         client.registerMethod("jsonMethod", jenkinsUrl1, "GET");
         client.methods.jsonMethod(function(data,response){
             callback(null,data);

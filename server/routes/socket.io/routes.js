@@ -28,6 +28,7 @@ module.exports.setRoutes = function(socketIo) {
         socketList.push[socket];
         //console.log('socket ==>',socket);
         socket.on('open', function(instanceData) {
+            logger.debug("instanceData:",instanceData);
             instancesDao.getInstanceById(instanceData.id, function(err, instances) {
                 logger.debug(instanceData.id);
                 if (err) {
@@ -207,7 +208,7 @@ module.exports.setRoutes = function(socketIo) {
             if (err) {
                 logger.debug("Error while getElementBytting instance!");
             }
-            logger.debug("Got instance: ", JSON.stringify(instances));
+           // logger.debug("Got instance: ", JSON.stringify(instances));
             if (instances.length > 0) {
                 AWSProvider.getAWSProviders(function(err, aProvider) {
                     if (err) {
