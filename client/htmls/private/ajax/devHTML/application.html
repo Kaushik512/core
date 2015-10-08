@@ -526,6 +526,40 @@ function getTasks(){
     });
 }
 
+
+// on click of Upgrade button
+$('.saveUpgradeAppDeploy').on('click',function(){
+    var nexusId = $('#chooseNexusServer').find('option:selected').val();
+    if(!nexusId){
+        alert("Please select repository server.");
+        return false;
+    }
+    var repoId = $('#chooseRepository').find('option:selected').val();
+    if(!repoId){
+        alert("Please select repository.");
+        return false;
+    }
+    var artifactId = $('#chooseArtifacts').find('option:selected').val();
+    if(!artifactId){
+        alert("Please select artifact.");
+        return false;
+    }
+    var versionId = $('#chooseVersions').find('option:selected').val();
+    if(!versionId){
+        alert("Please select version.");
+        return false;
+    }
+    var taskId = $('#chooseJobType').find('option:selected').val();
+        if(taskId){
+            $.post('/tasks/'+taskId+'/run',{},function(data){
+           //$('#formUpgradeAppDeploy').dialog('close');
+        });
+    }else{
+        alert("Please select job.");
+        return false;
+    }
+});
+
 function saveRecord() {
     var dataDeploy = {
         "appDeployData": {
@@ -719,6 +753,7 @@ function constructUI(data) {
                 }
             });
         }
+
         function moreInfoUpgradeAppDeployClickHandler(e) {
             $('#formUpgradeAppDeploy')[0].reset();
             //$('#chooseRepository').empty();
