@@ -255,7 +255,12 @@ input {
                                         <fieldset class="fieldsetCustom">
                                             <legend  class="legendCustom">Repository Details:</legend>
                                             <div class="col-lg-6 col-md-6">
-                                                <label for="">Repository Server:<span style="color:red">*</span></label>
+                                                <label for="">Repository Server:<span style="color:red">*</span>
+                                                    <span>
+                                                        <img class="reposerverspinner" src="img/select2-spinner.gif" style="display:none">
+                                                        </img>
+                                                    </span>
+                                                </label>
                                                 <div class="input-groups">
                                                     <select id="chooseNexusServer" name="" class="required width-100 form-control">
                                                         <option value="">Choose Server</option>
@@ -263,7 +268,11 @@ input {
                                                 </div>
                                             </div>
                                             <div class="col-lg-6 col-md-6">
-                                                <label for="">Repository:<span style="color:red">*</span></label>
+                                                <label for="">Repository:<span style="color:red">*</span>
+                                                    <span>
+                                                        <img class="repospinner" src="img/select2-spinner.gif" style="display:none"></img>
+                                                    </span>
+                                                </label>
                                                 <div class="input-groups">
                                                     <select id="chooseRepository" name="" class="required width-100 form-control">
                                                         <option value="">Choose Repositories</option>
@@ -272,12 +281,22 @@ input {
                                             </div>
                                             
                                             <div class="col-lg-12 col-md-12 margintop15">
-                                                <label>Repository URL:<span style="color:red">*</span></label>
+                                                <label>Repository URL:<span style="color:red">*</span>
+                                                    <span>
+                                                        <img class="repourlspinner" src="img/select2-spinner.gif" style="display:none">
+                                                        </img>
+                                                    </span>
+                                                </label>
                                                 <input id="repositoryUrl" type="text" class="form-control" name="" disabled>
                                             </div>
 
                                             <div class="col-lg-6 col-md-6 margintop15">
-                                                <label for="">Artifacts:<span style="color:red">*</span></label>
+                                                <label for="">Artifacts:<span style="color:red">*</span>
+                                                    <span>
+                                                        <img class="artifactsspinner" src="img/select2-spinner.gif" style="display:none">
+                                                        </img>
+                                                    </span>
+                                                </label>
                                                 <div class="input-groups">
                                                     <select id="chooseArtifacts" name="" class="required width-100 form-control">
                                                        <option value="">Choose Artifacts</option>
@@ -286,7 +305,12 @@ input {
                                             </div>
 
                                             <div class="col-lg-6 col-md-6 margintop15">
-                                                <label for="">Versions:<span style="color:red">*</span></label>
+                                                <label for="">Versions:<span style="color:red">*</span>
+                                                    <span>
+                                                        <img class="versionspinner" src="img/select2-spinner.gif" style="display:none">
+                                                        </img>
+                                                    </span>
+                                                </label>
                                                 <div class="input-groups">
                                                     <select id="chooseVersions" name="" class="required width-100 form-control">
                                                         <option value="">Choose Versions</option>
@@ -299,7 +323,12 @@ input {
                                         <fieldset class="fieldsetCustom"  style="margin-top: 20px ! important;">
                                             <legend  class="legendCustom">Job Details:</legend>
                                             <div class="col-lg-6 col-md-6">
-                                                <label>Jobs:<span style="color:red">*</span></label>
+                                                <label>Jobs:<span style="color:red">*</span>
+                                                    <span>
+                                                        <img class="jobdetailsspinner" src="img/select2-spinner.gif" style="display:none">
+                                                        </img>
+                                                    </span>
+                                                </label>
                                                 <div class="input-groups">
                                                     <select id="chooseJobType" name="" class="required width-100 form-control">
                                                         <option value="">Choose Job</option>
@@ -400,7 +429,9 @@ function getNexusServer(){
     var $chooseJobType = $('#chooseJobType');
     $chooseJobType.empty();
     $('#chooseJobType').append('<option value="">Choose Job</option>');
+    $('.reposerverspinner').css('display','inline-block');
     $.get('/d4dMasters/readmasterjsonnew/26',function(nexus){
+        $('.reposerverspinner').css('display','none');
         if(nexus.length){
             for(var i=0;i< nexus.length;i++){
                 $('#chooseNexusServer').append('<option value='+nexus[i].rowid+'>'+nexus[i].nexusservername+'</option>');
@@ -415,16 +446,26 @@ $nexusServer.change(function(e){
     getTasks();
 });
 
-function getNexusServerRepo(nexusId){
+function getNexusServerRepo(nexusId) {
+
     //resetAllFields();
+    $('.repospinner').css('display', 'inline-block');
+    /*if(nexusId == '' && nexusId == null){
+        $('.repospinner').css('display','none');
+    }*/
     var $chooseRepository = $('#chooseRepository');
-    $.get('/nexus/'+nexusId+'/repositories',function(nexusRepos){
-        if(nexusRepos.length){
-            for(var i=0;i< nexusRepos.length;i++){
-                $('#chooseRepository').append('<option data-repoName="'+nexusRepos[i].name+'" data-repoUrl="'+nexusRepos[i].resourceURI+'" value="'+nexusRepos[i].id+'">'+nexusRepos[i].name+'</option>');
+    if (nexusId) {
+        $.get('/nexus/' + nexusId + '/repositories', function(nexusRepos) {
+            $('.repospinner').css('display', 'none');
+            if (nexusRepos.length) {
+                for (var i = 0; i < nexusRepos.length; i++) {
+                    $('#chooseRepository').append('<option data-repoName="' + nexusRepos[i].name + '" data-repoUrl="' + nexusRepos[i].resourceURI + '" value="' + nexusRepos[i].id + '">' + nexusRepos[i].name + '</option>');
+                }
             }
-        }
-    });
+        });
+    } else {
+        $('.repospinner').css('display', 'none');
+    }
 }
 var $chooseRepository = $('#chooseRepository');
 $chooseRepository.change(function(e){
@@ -443,24 +484,30 @@ $chooseRepository.change(function(e){
     });
 
 function getNexusServerRepoArtifact(nexusId,repoName){
+    $('.artifactsspinner').css('display','inline-block');
     var $chooseArtifacts = $('#chooseArtifacts');
     $chooseArtifacts.empty();
     $('#chooseArtifacts').append('<option value="">Choose Artifacts</option>');
-    $.get('/nexus/'+nexusId+'/repositories/'+repoName+'/artifact',function(artifacts){
-        if(artifacts.length){
-            var uniqueArtifacts =[];
-            var checker;
-            for(var i=0;i< artifacts.length;i++){
-                if (!checker || comparer(checker, artifacts[i]) != 0) {
-                    checker = artifacts[i];
-                    uniqueArtifacts.push(checker);
+    if (nexusId && repoName) {
+        $.get('/nexus/'+nexusId+'/repositories/'+repoName+'/artifact',function(artifacts){
+            $('.artifactsspinner').css('display','none');
+            if(artifacts.length){
+                var uniqueArtifacts =[];
+                var checker;
+                for(var i=0;i< artifacts.length;i++){
+                    if (!checker || comparer(checker, artifacts[i]) != 0) {
+                        checker = artifacts[i];
+                        uniqueArtifacts.push(checker);
+                    }
+                }
+                for(var j=0;j< uniqueArtifacts.length;j++){
+                    $('#chooseArtifacts').append('<option data-groupId="'+uniqueArtifacts[j].groupId+'" value='+uniqueArtifacts[j].artifactId+'>'+uniqueArtifacts[j].artifactId+'</option>');
                 }
             }
-            for(var j=0;j< uniqueArtifacts.length;j++){
-                $('#chooseArtifacts').append('<option data-groupId="'+uniqueArtifacts[j].groupId+'" value='+uniqueArtifacts[j].artifactId+'>'+uniqueArtifacts[j].artifactId+'</option>');
-            }
-        }
-    });
+        });
+    }else{
+        $('.artifactsspinner').css('display','none');
+    }
 }
 var $chooseArtifacts = $('#chooseArtifacts');
 $chooseArtifacts.change(function(e){
@@ -486,26 +533,35 @@ var comparer = function compareObject(a, b) {
 }
 
 function getNexusServerRepoArtifactVersions(nexusId,repoName,reqBody){
+    $('.versionspinner').css('display','inline-block');
     var $chooseVersions = $('#chooseVersions');
     $chooseVersions.empty();
     $('#chooseVersions').append('<option value="">Choose Versions</option>');
-    $.ajax({
-            url: '/nexus/'+nexusId+'/repositories/'+repoName+'/artifact/versions',
-            data: JSON.stringify(reqBody),
-            type: 'POST',
-            contentType: "application/json",
-            success: function(data) {
-                if(data){
-                  var versions = data.metadata.versioning[0].versions[0].version;
-                    for(var i=0;i< versions.length;i++){
-                        $('#chooseVersions').append('<option value='+versions[i]+'>'+versions[i]+'</option>');
+    // console.log(reqBody.groupId);
+    // console.log(reqBody.artifactId);
+    if (nexusId && repoName && reqBody.groupId && reqBody.artifactId) {
+        $.ajax({
+                url: '/nexus/'+nexusId+'/repositories/'+repoName+'/artifact/versions',
+                data: JSON.stringify(reqBody),
+                type: 'POST',
+                contentType: "application/json",
+                success: function(data) {
+                    $('.versionspinner').css('display','none');
+                    if(data){
+                      var versions = data.metadata.versioning[0].versions[0].version;
+                        for(var i=0;i< versions.length;i++){
+                            $('#chooseVersions').append('<option value='+versions[i]+'>'+versions[i]+'</option>');
+                        }
                     }
+                },
+                error: function(jqxhr) {
+                    $('.versionspinner').css('display','none');
+                     alert(jqxhr.responseText);
                 }
-            },
-            error: function(jqxhr) {
-                 alert(jqxhr.responseText);
-            }
-    });
+        });
+    }else{
+        $('.versionspinner').css('display','none');
+    }
 }
 
 function getTasks(){
@@ -890,8 +946,7 @@ function constructUI(data) {
                     if (!data[i].containerId) {
                         data[i].containerId = "NA";
                     }else{
-                        data[i].containerId = '<div id="spanTextApplication">'+data[i].containerId+'</div>'
-                        //data[i].containerId = '<div id="spanTextApplication" rel="tooltip" data-placement="top" data-original-title="'+data[i].containerId+'">'+data[i].containerId+'</div>'
+                        data[i].containerId = '<div id="spanTextApplication" title="'+data[i].containerId+'">'+data[i].containerId+'</div>'
                     }
                     if (!data[i].hostName) {
                         data[i].hostName = "NA";
