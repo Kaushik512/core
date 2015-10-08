@@ -148,11 +148,9 @@ Catalyst Verfication Ubuntu Duplicate Node
 
  
  Select the Config Management Chef Server
-    Click Element    css=#s2id_configManagementDropdown > a > span.select2-arrow
+    Click Element    id=configManagementDropdown
     Sleep    1s
-    Input Text    css=#select2-drop > div > input    ${CONFIG MANAGEMENT NAME}
-    Sleep    1s
-    Click Element    css=.select2-result-label
+    Click Element    xpath=.//*[text()='${CONFIG MANAGEMENT NAME}']
    
 
 
@@ -839,12 +837,14 @@ Enters the IP Address of Ubuntu Box
 
 
 Select the Operating System of the Box
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='s2id_importinstanceOS']/a/span[1]
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    id=importinstanceOS
     #-Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    xpath=.//*[@id='select2-drop']/div/input    ${OPERATING SYSTEM1}
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='select2-drop']/ul/li[2]/div
+    #Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='select2-drop']/ul/li[2]/div
+    Sleep    1s
+    Click Element    xpath=//option[@ostype='${CENT OS}']
 
 Select the Operating System as Ubuntu
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='s2id_importinstanceOS']/a/span[1]
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    id=importinstanceOS
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='select2-drop']/ul/li[4]/div
 
 
@@ -859,9 +859,9 @@ Input the Ubuntu User Name for IP
 
 
 Choose The Authentication Type as Pem File
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='s2id_pemFileDropdown']/a/span[1]
-    Input Text    xpath=.//*[@id='select2-drop']/div/input    ${AUTHN}
-    Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    id=pemFileDropdown
+    Sleep    1s
+    Click Element    xpath=.//option[@value='pemFile']
 
 
 Upload the PEM File for Import By IP

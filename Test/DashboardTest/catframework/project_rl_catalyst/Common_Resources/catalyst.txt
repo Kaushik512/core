@@ -1,0 +1,37 @@
+*** Settings ***
+Documentation     A common resource file with standard directory path prefixes.
+...
+...               Variables defined here are project-wide globals.
+...
+...               File paths used in this project must be prefixed with
+...               one of the following prefix variables,
+...               so that they can be easily located by the framework.
+...
+
+Resource           ${CATALYST TEST DATA}/${TESTDATA}
+
+
+
+
+*** Variables ***
+${SERVER}                   ${ENVIRONMENT SERVER}
+${BROWSER}                  ${BROWSER TYPE}
+${TESTDATA}                ${ENV}.txt
+#${DELAY}             4
+${DELAY}               2             #15
+#${SHORT DELAY}       1
+${SHORT DELAY}       0
+${DELAY SECONDS}       5 seconds
+
+${ROOTPATH}              /home/ubuntu/development/catalyst/D4D/Test/SmokeTest/catframework/project_rl_catalyst
+${CATALYST SUITES}           ${ROOTPATH}/Test_Suites
+
+${COMMON RESOURCES}            ${ROOTPATH}/Common_Resources
+${TEST RESOURCES}              ${ROOTPATH}/Test_Resources
+${CATALYST TESTCASES}          ${CATALYST SUITES}/CatalystSuites
+${CATALYST ACTION}             ${TEST RESOURCES}/Test_Script/Test_Execution_Action
+${CATALYST TEST DATA}          ${TEST RESOURCES}/Test_Data
+${CATALYST UI CONFIG}          ${TEST RESOURCES}/Test_Script/UI_Configuration
+${CATALYST TEST RESULTS}       ${CATALYST TESTCASES}/Test_Results
+${SEARCH RESULTS SCREENSHOT PATH}      ${CATALYST TEST RESULTS}/search_results_screenshot.png
+

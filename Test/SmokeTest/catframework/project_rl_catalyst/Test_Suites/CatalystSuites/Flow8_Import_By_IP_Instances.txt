@@ -11,7 +11,7 @@ Resource           ${CATALYST ACTION}/Gallery_setup_TempService_Steps.txt
 
 *** Test Cases ***
 Catalyst Import CentOS Node By IP
-    [Tags]       Sanity       Workzone
+    [Tags]       Sanity       Import
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
     Catalyst Import an CentOS Instance By IP
