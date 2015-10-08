@@ -10,15 +10,24 @@ Resource           catalyst.txt
 
 *** Variables ***
 ${BROWSER TYPE}                  firefox 
-${ENVIRONMENT SERVER}              http://d4d.rlcatalyst.com/public/login.html
+${ENVIRONMENT SERVER}              http://supercatalyst.relevancelab.com/public/login.html
 
-${height}              744
-${width}               1400
+${height}             744
+${width}           1400
+
+#http://d4d.rlcatalyst.com/public/login.html
 
 
+#AWS COST
+${AWS}                         AWS Cost
 
- ${height}              744
- ${width}               1400
+#CFT
+${CLOUD BP}                 JAVA_Stack
+${STACK NAME}               RLStacK
+${JAVA}                      Java
+${MYSQL}                     MySql
+${BOOTSTRAP}                 Bootstrap
+${STACK STATUS}              CREATE_COMPLETE
 
 ${ENV}                 QA.txt
 ${VALID USER}             superadmin
@@ -65,11 +74,11 @@ ${SUITS}                stopped
 ${UserName}             root
 
 
-${USERPEMFILE}              ${ROOTPATH}//Chef//jagadeesh12.pem
+${USERPEMFILE}              ${ROOTPATH}\\Chef\\jagadeesh12.pem
 ${VALIDATORPEMFILE}      ${ROOTPATH}//Chef//jm012-validator.pem
-${KNIFERBFILE}                ${ROOTPATH}//Chef//knife.rb
+${KNIFERBFILE}                ${ROOTPATH}\\Chef\\knife.rb
 ${CATALYSTPEM}                ${ROOTPATH}//Chef//catalyst.pem
-${CAT_INSTANCES}              ${ROOTPATH}//Chef//cat_instances.pem
+${CAT_INSTANCES}              ${ROOTPATH}\\Chef\\cat_instances.pem
 ${TEMPLATE FILE}              ${ROOTPATH}//Chef//CatalystStack.template
 ${Goldendemo_pem}             ${ROOTPATH}//Chef//GoldenDemo.pem
 

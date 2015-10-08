@@ -48,11 +48,9 @@ module.exports.setRoutes = function(app, socketIo) {
 
 
     app.post('/notifications/aws/cfAutoScale', function(req, res) {
-        console.log('POST request');
         var notificationType = req.headers['x-amz-sns-message-type'];
         var topicArn = req.headers['x-amz-sns-topic-arn'];
-        console.log('headers ==> ', req.headers);
-
+       
         var bodyarr = [];
         var reqBody;
         req.on('data', function(chunk) {
@@ -63,8 +61,7 @@ module.exports.setRoutes = function(app, socketIo) {
             if (notificationType) {
                 if (notificationType === 'SubscriptionConfirmation') { // confirmation notification
                     var confirmationURL = reqBody.SubscribeURL;
-                    console.log('url ===> ', confirmationURL);
-
+                    
                     if (confirmationURL) {
                         https.get(confirmationURL, function(res) {
                             console.log("Got response: " + res.statusCode);

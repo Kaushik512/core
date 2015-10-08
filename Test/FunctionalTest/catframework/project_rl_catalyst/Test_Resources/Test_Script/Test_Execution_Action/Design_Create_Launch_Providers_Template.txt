@@ -198,6 +198,54 @@ Catalyst Creation of Providers Setup
     
 
 
+Catalyst Validation of OpenStack page
+    Clicks on Settings
+    Clicks on DevOps Setup menu
+    Clicks on Providers           
+    Clicks on New Button of Providers
+    Select the OpenStack Provider
+    Clicks on Save Button of the Provider
+    Verfiy the Error Message Displayed for OpenStack
+    Clicks on Cancel Button of provider page
+
+
+Catalyst Validation of Public Cloud page
+    Clicks on Settings
+    Clicks on DevOps Setup menu
+    Clicks on Providers           
+    Clicks on New Button of Providers
+    Select the HP Public Cloud Provider
+    Clicks on Save Button of the Provider
+    Verify the Error Message Displayed for HP cloud
+    Clicks on Cancel Button of provider page
+
+
+
+Catalyst Validation of VMware page
+    Clicks on Settings
+    Clicks on DevOps Setup menu
+    Clicks on Providers           
+    Clicks on New Button of Providers
+    Select the VMware Provider
+    Clicks on Save Button of the Provider
+    Verify the Error Message Displayed for VMware
+    Clicks on Cancel Button of provider page
+
+
+
+
+
+
+
+
+
+
+
+Clicks on Cancel Button of provider page
+    Click Element    css=#btncancel
+
+
+
 Catalyst Editing the ProviderName
     Clicks on Settings
     Clicks on DevOps Setup menu
@@ -227,6 +275,36 @@ Catalyst Unique Provider Creation Setup
     Uploads the Pem File for Provider
     Clicks on Save Button of the Provider
     Verify the Error Message Displayed while duplicating the provider
+
+
+
+Verfiy the Error Message Displayed for OpenStack
+    Element Should Contain    id=errmsg_openstackusername    ${REQ}
+    Element Should Contain    id=errmsg_openstackpassword    ${REQ}
+    Element Should Contain    id=errmsg_openstackhost    ${REQ}
+    Element Should Contain    id=errmsg_openstackprojectname    ${REQ}
+    Element Should Contain    id=errmsg_openstacktenantid    ${REQ}
+    Element Should Contain    id=errmsg_openstacktenantname    ${REQ}
+    Element Should Contain    id=errmsg_orgId    ${REQ}
+    Sleep    1s
+    
+
+Verify the Error Message Displayed for HP cloud
+    Element Should Contain    id=errmsg_openstackusername    ${REQ}
+    Element Should Contain    id=errmsg_openstackpassword    ${REQ}
+    Element Should Contain    id=errmsg_openstackhost   ${REQ}
+    Element Should Contain    id=errmsg_openstackprojectname    ${REQ}
+    Element Should Contain    id=errmsg_openstacktenantid    ${REQ}
+    Element Should Contain    id=errmsg_openstacktenantname    ${REQ}
+    Element Should Contain    id=errmsg_orgId    ${REQ}
+
+
+Verify the Error Message Displayed for VMware
+    Element Should Contain    id=errmsg_vmwareusername    ${REQ}
+    Element Should Contain    id=errmsg_vmwarepassword    ${REQ}
+    Element Should Contain    id=errmsg_vmwarehost    ${REQ}
+    Element Should Contain    id=errmsg_vmwaredc   ${REQ}
+    #Element Should Contain    id=errmsg_orgId    ${REQ}
 
 
 Verify the Error Message Displayed while duplicating the provider
@@ -1851,6 +1929,31 @@ Select the Provider
     Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
 
 
+Select the OpenStack Provider
+    Sleep    4s
+    Click Element    css=#s2id_providertype > .select2-choice
+    Log    after click
+    Input Text    css=#select2-drop .select2-input    ${OPENSTACK PROVIDERR}
+    Sleep    3s
+    Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
+
+
+Select the HP Public Cloud Provider
+    Sleep    4s
+    Click Element    css=#s2id_providertype > .select2-choice
+    Log    after click
+    Input Text    css=#select2-drop .select2-input    ${HP CLOUD PROVIDERR}
+    Sleep    3s
+    Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
+
+
+Select the VMware Provider
+    Sleep    4s
+    Click Element    css=#s2id_providertype > .select2-choice
+    Log    after click
+    Input Text    css=#select2-drop .select2-input    ${VMWARE PROVIDERR}
+    Sleep    3s
+    Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span    
 
 
 Enters the Name of the Provider

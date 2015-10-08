@@ -10,7 +10,7 @@ Resource           ${COMMON RESOURCES}/catalyst_grid_node.txt
 
 
 *** Test Cases ***
-Catalyst Validation and Creation of PROVIDERS setup
+Catalyst Validation and Creation of AWS PROVIDERS setup
     [Tags]       Sanity            Smoke   
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
@@ -38,6 +38,43 @@ Catalyst Unique PROVIDERS validation setup
     Catalyst Unique Provider Creation Setup 
     Catalyst Logout                      
     [Teardown]     Close Browser
+
+
+
+
+
+Catalyst Validation of OpenStack Providers Setup
+    [Tags]       Sanity               Smoke
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst Validation of OpenStack page
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+
+Catalyst Validation of HP Public Cloud Providers Setup
+    [Tags]       Sanity               Smoke
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst Validation of Public Cloud page
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+
+Catalyst Validation of VMware Providers Setup
+    [Tags]       Sanity               Smoke
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst Validation of VMware page
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+
+
+
 
 
 

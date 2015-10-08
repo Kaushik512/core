@@ -17,6 +17,7 @@
     }
     .border-right{
         border-right: 1px solid #ccc;
+        margin-left: 21px;
     }
 
     .clock{
@@ -34,7 +35,7 @@
         margin: 10px 10px;            
     }
     .tab-pane {
-        min-height: 600px;
+        min-height: auto;
         border-left: 1px solid #ddd;
         border-bottom: 1px solid #ddd;
         border-right: 1px solid #ddd;
@@ -62,6 +63,12 @@
         position: relative;
         display:none;
 
+    }
+    .update-time{
+        float:left;
+        margin-top:16px;
+        color:#000;
+        margin-left: 1px;
     }
     .monitoring-label-on{
         float:left;
@@ -174,29 +181,29 @@
         padding-top: 15px;
     }
     .cats-eye-accounts{
-        font-size: 30px;
+        font-size: 20px;
         top: 25px;
         text-align: center;
     }
-    .cats-eye-accounts-row{
+    /*.cats-eye-accounts-row{
         background-color: #F0F8FF;
-    }
+    }*/
     .cats-eye-instances{
         font-size: 20px;
         top: 25px;
         text-align: center;
     }
-    .cats-eye-instances-row{
+    /*.cats-eye-instances-row{
         background-color: #F0F8FF;
-    }
+    }*/
     .cats-eye-monitoring{
-        font-size: 30px;
+        font-size: 20px;
         top: 25px;
         text-align: center;
     }
-    .cats-eye-monitoring-row{
+    /*.cats-eye-monitoring-row{
         background-color: #F0F8FF;
-    }
+    }*/
     .total{
         color: blue;
     }
@@ -237,7 +244,7 @@
     .metric-row{
         border-left : 1px solid #eee; 
         border-bottom: 1px solid #eee ;   
-        min-height: 150px;    
+        min-height: 180px;    
     }
 
     .instance-identity{
@@ -293,125 +300,276 @@
         color: #D9534F;
         font-weight: bold;
     }
+    .instance-stopped{
+        border: 1px dashed red;
+    }
+    .instance-terminated{
+        border: 1px dashed red;
+    }
+
+    .lastContacted{
+        margin: 0 auto;
+        width: 53%;
+    }
+        /* -- Circle Tiles */
+
+.circle-tile {
+    margin-bottom: 64px;
+    text-align: center;
+}
+
+.circle-tile-heading {
+    position: relative;
+    width: 80px;
+    height: 80px;
+    margin: 0 auto -40px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    color: #fff;
+    transition: all ease-in-out .3s;
+}
+
+.circle-tile-heading .fa {
+    line-height: 80px;
+}
+
+.circle-tile-content {
+    padding-top: 50px;
+}
+
+.circle-tile-number {
+    padding: 5px 0 15px;
+    font-size: 26px;
+    font-weight: 700;
+    line-height: 1;
+    text-align: center;
+}
+
+.circle-tile-description {
+    text-transform: uppercase;
+}
+
+.circle-tile-footer {
+    display: block;
+    padding: 5px;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.circle-tile-footer:hover {
+    text-decoration: none;
+    color: #fff;
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+.circle-tile-heading.dark-blue:hover {
+    background-color: #2c3e50;
+}
+
+.circle-tile-heading.green:hover {
+    background-color: #2a4747;
+}
+
+.circle-tile-heading.orange:hover {
+    background-color: #901515;
+}
+
+.circle-tile-heading.blue:hover {
+    background-color: #54677a;
+}
+
+.circle-tile-heading.red:hover {
+    background-color: #cf4435;
+}
+
+.circle-tile-heading.purple:hover {
+    background-color: #7f3d9b;
+}
+
+.circle-tile-heading.grey:hover {
+    background-color: #517398;
+}
+
+.light-blue {
+    background-color: #40baf1;
+}
+
+.light-black {
+    background-color: #2c3638;
+}
+
+/* Circle Tile Ends*/
+
+.text-faded {
+    color: rgba(255, 255, 255, 0.7);
+}
     </style>    
     
     <script>
-        // Create a Socketio connection
-        function distanceInSeconds(endTime, startTime){            
-            distance = Math.round((endTime.getTime() - startTime.getTime())/1000);  
+         // Create a Socketio connection
+        function distanceInSeconds(endTime, startTime) {
+            distance = Math.round((endTime.getTime() - startTime.getTime()) / 1000);
             return distance;
         }
-        
-        function secsUpCounter(counterId, updateData){            
-            setInterval(function(){                
-                lastUpdated = distanceInSeconds(new Date(), new Date(updateData.timestamp));                
+
+        function secsUpCounter(counterId, updateData) {
+            setInterval(function() {
+                lastUpdated = distanceInSeconds(new Date(), new Date(updateData.timestamp));
                 ++lastUpdated;
                 $(counterId).html(lastUpdated + " s ago");
             }, 1000);
         }
 
-        function establishSocketForTelemetry(instanceId){
-            socket.on(instanceId, function (telemetryData){                
-                console.log("Telemtry for InstanceId: " + instanceId);
-                console.log(telemetryData);
-                
+        function establishSocketForTelemetry(instanceId) {
+            socket.on(instanceId, function(telemetryData) {
+                //console.log("Telemtry for InstanceId: " + instanceId);
+                //console.log(telemetryData);
+                if (telemetryData.checkName === "keepalive" && telemetryData.checkStatus === 0 && $("#" + instanceId).hasClass("instance-stopped")) {
+                    $("#" + instanceId).removeClass("instance-stopped");
+                    $("#" + instanceId + "_state").removeClass("progress-bar-danger");
+                    $("#" + instanceId + "_state").addClass("progress-bar-success");
+                    $("#" + instanceId + "_state").html("running");
+                    $("#" + instanceId + "_sys_health").html("");
+                }
+                if (telemetryData.checkName === "keepalive" && telemetryData.checkStatus === 2) {
+                    $("#" + instanceId).addClass("instance-stopped");
+                    $("#" + instanceId + "_state").removeClass("progress-bar-success");
+                    $("#" + instanceId + "_state").addClass("progress-bar-danger");
+                    $("#" + instanceId + "_state").html("stopped");
+                    $("#" + instanceId + "_sys_health").html("");
+                }
                 var secondsElapsed = distanceInSeconds(new Date(), new Date(telemetryData.checkIssued));
-                var divId = instanceId + "_" + telemetryData.checkName + "_health"                
-                console.log(divId);
+                var divId = instanceId + "_" + telemetryData.checkName + "_health"
+                    //console.log(divId);
                 var alertClass = '';
-                if(telemetryData.checkStatus === 0){
+                if (telemetryData.checkStatus === 0) {
                     alertClass = '<span class="badge progress-bar-success">&nbsp;</span>'
                 }
-                if(telemetryData.checkStatus === 1){
+                if (telemetryData.checkStatus === 1) {
                     alertClass = '<span class="badge progress-bar-warning">&nbsp;</span>'
                 }
-                if(telemetryData.checkStatus === 2){
+                if (telemetryData.checkStatus === 2) {
                     alertClass = '<span class="badge progress-bar-danger">&nbsp;</span>'
                 }
-                                    
-                var content = '<div class="raw-metric" id ="'+ divId +'"><span class="badge progress-bar-success success">&nbsp;</span>' + 
-                                    '<span>' + telemetryData.checkName +  '</span>' +
-                                    '<span class="metric-time-ago">'+ secondsElapsed + ' s ago</span></div>' ;
-                console.log(content);
-                $("#" + instanceId + "_sys_health").html(content);
-                //$(content).appendTo("#" + instanceId + "_sys_health")
-                
-                
 
+                if ($("#" + instanceId).hasClass("instance-stopped") || $("#" + instanceId).hasClass("instance-terminated")) {
+                    if (telemetryData.checkName === "keepalive") {
+                        var alertOutput = telemetryData.checkOutput;
+                        var alertRegEx = /No keepalive sent from client for (\d*) seconds/;
+                        var match = alertRegEx.exec(alertOutput);
+                        var lastContacted = parseInt(match[1]);
+                        var lastContactText = "";
+                        if (lastContacted < 120) {
+                            lastContactText = "Last contacted nearly " + lastContacted + " seconds ago";
+                        } else if (lastContacted < 180) {
+                            lastContactText = "Last contacted nearly 3 mintutes ago";
+                        } else if (lastContacted > 180) {
+                            lastContactText = "Last contacted nearly " + Math.round(lastContacted / 60) + " minutes ago";
+                        } else if (lastContacted > 3600 && lastContacted < 7200) {
+                            lastContactText = "Last contacted nearly " + Math.round(lastContacted / 3600) + " hour ago";
+                        } else if (lastContacted < 7200) {
+                            lastContactText = "Last contacted nearly " + Math.round(lastContacted / 3600) + " hours ago";
+                        }
+                        var content = '<div class="lastContacted" id ="' + divId + '">' +
+                            '<span><h3>' + lastContactText + ' seconds ago</h3></span>' +
+                            '</div>';
+                        $("#" + instanceId + "_sys_health").html(content);
+                    }
+
+                } else {
+                    var content = '<div class="raw-metric" id ="' + divId + '"><span class="badge progress-bar-success success">&nbsp;</span>' +
+                        '<span>' + telemetryData.checkName + '</span>' +
+                        '<span class="metric-time-ago">' + secondsElapsed + ' s ago</span></div>';
+                    //console.log(content);
+                    $("#" + instanceId + "_sys_health").html(content);
+                    //$(content).appendTo("#" + instanceId + "_sys_health")
+                }
             });
         }
 
-        function establishSocketForAlerts(){
+        function establishSocketForAlerts() {
             console.log("Establishing socket for alerts");
-            
+
         }
 
-        function instanceRowBuilder(listOfInstances){
-            for(var i=0; i < listOfInstances.length; i++){
-                if( $('#' + listOfInstances[i].instanceId).length){
-                }
-                else{
-                    var row = '<div class="row" id="' + listOfInstances[i].instanceId + '" >' +
-                                '<div class="col-md-2 instance-row">' +
-                                    '<h4>' + listOfInstances[i].instanceId + '</h4>' +
-                                    '<div><span class="instance-identity">' + listOfInstances[i].instanceName + '</span></div>' + 
-                                    '<div><span class="ip-cell-public">Public:  '+  listOfInstances[i].publicIp + '</span></div>' +
-                                    '<div><span class="ip-cell-private"> Private:  '+  listOfInstances[i].privateIp +'</span></div>' +
-                                    '<div><span class="provider-zone-sizing-cell">' + listOfInstances[i].placement + ' , </span><span class="provider-zone-sizing-cell">'+ listOfInstances[i].instanceType +'</span></div><div><span class="uptime">( ' + listOfInstances[i].uptime + 
-                                ' )<span></div></div>' +
+        function instanceRowBuilder(listOfInstances) {
+            for (var i = 0; i < listOfInstances.length; i++) {
+                if ($('#' + listOfInstances[i].instanceId).length) {} else {
+                    var stateClass;
+                    var instanceState;
+                    if (listOfInstances[i].state === "stopped") {
+                        instanceState = "instance-stopped"
+                        stateClass = "progress-bar-danger";
+                    } else if (listOfInstances[i].state === "terminated") {
+                        stateClass = "progress-bar-danger instance-terminated";
+                        instanceState = "instance-terminated";
+                    } else {
+                        stateClass = "progress-bar-success";
+                        instanceState = "";
+                    }
+                    var row = '<div class="row ' + instanceState + '" id="' + listOfInstances[i].instanceId + '" >' +
+                        '<div class="col-md-2 instance-row">' +
+                        '<h4>' + listOfInstances[i].instanceId + '</h4>' +
+                        '<div><span class="instance-identity">' + listOfInstances[i].instanceName + '</span></div>' +
+                        '<div><span class="ip-cell-public">Public:  ' + listOfInstances[i].publicIp + '</span></div>' +
+                        '<div><span class="ip-cell-private"> Private:  ' + listOfInstances[i].privateIp + '</span></div>' +
+                        '<div><span class="provider-zone-sizing-cell">' + listOfInstances[i].placement + ' , </span><span class="provider-zone-sizing-cell">' + listOfInstances[i].instanceType + '</span></div><div><span class="uptime">( ' + listOfInstances[i].uptime +
+                        ' )<span></div>' +
+                        '<div><span class="badge ' + stateClass + '" id="' + listOfInstances[i].instanceId + '_state">' + listOfInstances[i].state + '</span></div>' +
+                        '</div>' +
 
-                                '<div class="col-md-10 metric-row" id="'+ listOfInstances[i].instanceId +'_metrics">' +
-                                    '<div class="row metric-cell" id="'+ listOfInstances[i].instanceId+'_sys_health">' + 
-                                    '</div>'+                                    
-                                '</div>';
+                        '<div class="col-md-10 metric-row" id="' + listOfInstances[i].instanceId + '_metrics">' +
+                        '<div class="row metric-cell" id="' + listOfInstances[i].instanceId + '_sys_health">' +
+                        '</div>' +
+                        '</div>';
                     $('#telemetry-container').append(row);
                 }
-            //Create a socket for each instance and update the row accordingly
-            establishSocketForTelemetry(listOfInstances[i].instanceId);            
-            }            
+                //Create a socket for each instance and update the row accordingly
+                establishSocketForTelemetry(listOfInstances[i].instanceId);
+            }
         }
 
         var startTime = new Date();
         var failedTime, connectedTime, disconnectedTime, secsElapsed;
-        var socket = io.connect('http://127.0.0.1:5555');  
+        var socket = io.connect('http://127.0.0.1:5555');
 
-        //On Socket Connect Error, either get start time or disconnected Time
-        socket.on('connect_error', function(){          
-            failedTime = new Date();          
-            if(disconnectedTime){            
+         //On Socket Connect Error, either get start time or disconnected Time
+        socket.on('connect_error', function() {
+            failedTime = new Date();
+            if (disconnectedTime) {
                 //secsElapsed = Math.round((failedTime.getTime() - disconnectedTime.getTime())/1000);  
                 secsElapsed = distanceInSeconds(failedTime, disconnectedTime);
-            }else{
+            } else {
                 //secsElapsed = Math.round((failedTime.getTime() - startTime.getTime())/1000);
                 secsElapsed = distanceInSeconds(failedTime, startTime);
-            }          
-            $(".clock").text( secsElapsed  + " s");          
+            }
+            $(".clock").text(secsElapsed + " s");
             $('#pulse-holder-monitoring-initial').css('display', 'none');
             $('#pulse-holder-monitoring-on').css('display', 'none');
             $('#pulse-holder-monitoring-off').css('display', 'block');
         });
 
-        // On Socket Connect, get connected Timestamp and update the connection status as well
-        socket.on('connect', function(){
-            connectedTime = new Date();          
+         // On Socket Connect, get connected Timestamp and update the connection status as well
+        socket.on('connect', function() {
+            connectedTime = new Date();
             $('#pulse-holder-monitoring-initial').css('display', 'none');
             $('#pulse-holder-monitoring-on').css('display', 'block');
             $('#pulse-holder-monitoring-off').css('display', 'none');
         });
 
-        //On Disconnection get the time stamp to update the clock
-        socket.on('disconnect', function () {
-            disconnectedTime = new Date();            
+         //On Disconnection get the time stamp to update the clock
+        socket.on('disconnect', function() {
+            disconnectedTime = new Date();
         });
 
-        //On listening to catsEye
-        socket.on('catsEye', function(catsEyeBody){                        
+         //On listening to catsEye
+        socket.on('catsEye', function(catsEyeBody) {
             $('#cats-eye-aws-accounts').html(catsEyeBody.accounts);
             $('#cats-eye-total-instances').html(catsEyeBody.totalInstances);
             $('#cats-eye-running-instances').html(catsEyeBody.totalRunning);
             $('#cats-eye-stoppped-instances').html(catsEyeBody.totalNonRunning);
-            $('#cats-eye-monitored').html(catsEyeBody.catalystMonitored);                                                            
-            $('#cats-eye-lastupdated').html(catsEyeBody.timestamp);                                                            
+            $('#cats-eye-monitored').html(catsEyeBody.catalystMonitored);
+            $('#cats-eye-lastupdated').html(catsEyeBody.timestamp);
             // clearInterval(x);
             // var x = setInterval(function(){                                                
             //     var lastUpdatedAgo = distanceInSeconds(new Date(), new Date(catsEyeBody.timestamp));                    
@@ -420,89 +578,80 @@
             // }, 1000);            
         });
 
-        socket.on('listInstances', function(listInstancesData){
-            console.log(listInstancesData)
-            listInstancesBody = listInstancesData;                    
-            instanceRowBuilder(listInstancesBody);            
+        socket.on('listInstances', function(listInstancesData) {
+            //console.log(listInstancesData)
+            listInstancesBody = listInstancesData;
+            instanceRowBuilder(listInstancesBody);
         });
 
-        socket.on("alert", function(alertData){
-            console.log(alertData);
+        socket.on("alert", function(alertData) {
+            //console.log(alertData);
             var alertClass = "";
             var alertLabel = "";
             var alertRow = '';
             var checkName = '';
-            var notiCounter = $("#notification-counter").text();            
+            var notiCounter = $("#notification-counter").text();
             $("#notification-counter").text(++notiCounter);
-            if(alertData.checkName === "keepalive"){
+            if (alertData.checkName === "keepalive") {
                 checkName = "Node status";
-            }else{
+            } else {
                 checkName = alertData.checkName;
             }
-            if(alertData.status === 2){
+
+            if (alertData.checkName === "keepalive" && alertData.status === 0 && $("#" + alertData.instanceId).hasClass("instance-stopped")) {
+                $("#" + alertData.instanceId).removeClass("instance-stopped");
+                $("#" + alertData.instanceId + "_state").removeClass("progress-bar-danger");
+                $("#" + alertData.instanceId + "_state").addClass("progress-bar-success");
+                $("#" + alertData.instanceId + "_state").html("running");
+                $("#" + alertData.instanceId + "_sys_health").html("");
+            }
+            if (alertData.checkName === "keepalive" && alertData.status === 2) {
+                $("#" + alertData.instanceId).addClass("instance-stopped");
+                $("#" + alertData.instanceId + "_state").removeClass("progress-bar-success");
+                $("#" + alertData.instanceId + "_state").addClass("progress-bar-danger");
+                $("#" + alertData.instanceId + "_state").html("stopped");
+                $("#" + alertData.instanceId + "_sys_health").html("");
+            }
+
+            if (alertData.status === 2) {
                 // Add Toaster Message
                 // Increment Alert Count
                 toastr["error"](checkName + ' on ' + alertData.instanceId + ' went offline ');
                 alertClass = "progress-bar-danger";
                 alertLabel = "critical";
-                alertRow = '<div><span class="badge ' + alertClass + ' event">' + alertLabel +'</span><span class="alertData">'+  alertData.timestamp + ' : ' + checkName +  ' on ' +  alertData.instanceId +  ' went offline<span></div>';
+                alertRow = '<div><span class="badge ' + alertClass + ' event">' + alertLabel + '</span><span class="alertData">' + alertData.timestamp + ' : ' + checkName + ' on ' + alertData.instanceId + ' went offline<span></div>';
             }
-            if(alertData.status === 1){
+            if (alertData.status === 1) {
                 // Add Toaster Message
                 // Increment Alert Count
-                toastr["warning"](checkName +  ' on ' +  alertData.instanceId +  ' switched to warning state');
+                toastr["warning"](checkName + ' on ' + alertData.instanceId + ' switched to warning state');
                 alertClass = "progress-bar-warning";
                 alertLabel = "warning";
-                alertRow = '<div><span class="badge ' + alertClass + ' event">' + alertLabel +'</span><span class="alertData">'+  alertData.timestamp + ' : ' + checkName +  ' on ' +  alertData.instanceId +  'switched to warning state <span></div>';
+                alertRow = '<div><span class="badge ' + alertClass + ' event">' + alertLabel + '</span><span class="alertData">' + alertData.timestamp + ' : ' + checkName + ' on ' + alertData.instanceId + 'switched to warning state <span></div>';
             }
-            if(alertData.status === 0){
+            if (alertData.status === 0) {
                 // Add Toaster Message
                 // Increment Alert Count
-                toastr["success"](checkName +  ' on ' +  alertData.instanceId +  ' came online and healthy');
+                toastr["success"](checkName + ' on ' + alertData.instanceId + ' came online and healthy');
                 alertClass = "progress-bar-success";
                 alertLabel = "info";
-                alertRow = '<div><span class="badge ' + alertClass + ' event">' + alertLabel +'</span><span class="alertData">'+  alertData.timestamp + ' : ' + checkName +  ' on ' +  alertData.instanceId +  ' came online and healthy<span></div>';
-            }                        
-            
-            if($('#' + alertData.msgId).length){                
+                alertRow = '<div><span class="badge ' + alertClass + ' event">' + alertLabel + '</span><span class="alertData">' + alertData.timestamp + ' : ' + checkName + ' on ' + alertData.instanceId + ' came online and healthy<span></div>';
             }
-            else{
+
+            if ($('#' + alertData.msgId).length) {} else {
                 // Remove No Alerts Class
-                if($('#no-alerts').length){
+                if ($('#no-alerts').length) {
                     $('#no-alerts').remove();
                 }
-                $("#adverse-events-container").prepend(alertRow);    
+                $("#adverse-events-container").prepend(alertRow);
             }
-            
-        });
 
+        });
         </script>
     </head>
     <body>    
         <div class="container-fluid">
-            <div class="row top-row">
-                <div class="col-sm-2 border-right">
-                    <div id="pulse-holder-monitoring-initial">                    
-                        <div class="monitoring-label-initial">Connecting ...</div>                  
-                    </div>
-                    <div id="pulse-holder-monitoring-on">
-                        <div class="green-dot dot"></div>
-                        <div class="green-pulse pulse"></div>  
-                        <div class="monitoring-label-on">Connected</div>                  
-                    </div>
-                    <div id="pulse-holder-monitoring-off">
-                        <div class="red-dot dot"></div>
-                        <div class="red-pulse pulse"></div>  
-                        <div class="monitoring-label-off">Connection failed !! <span class="clock"></span></div>                  
-                    </div>
-                </div>
-                <!-- <div class="col-sm-2 border-right">
-                    <div class="last-updated">Last updated 1000 s ago</div>                
-                </div>
-                <div class="col-sm-8">
-                    <i class="fa fa-check fa-3"></i>
-                </div> -->
-            </div>
+            
             <div class="row tab-container">
                 <ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
                     <li class="active"><a href="#catseye" data-toggle="tab">Cats Eye</a></li>        
@@ -513,26 +662,76 @@
                 <div id="telemetry-tab-content" class="tab-content">
                     <div class="tab-pane active" id="catseye">
                         <div class="container-fluid">
-                            <div class="row cats-eye-row cats-eye-accounts-row">
-                              <div class="col-md-6 cats-eye-accounts">AWS Accounts</div>
-                              <div class="col-md-6 cats-eye-accounts" id="cats-eye-aws-accounts">0</div>
-                            </div>
-                            <div class="row cats-eye-row cats-eye-instances-row">
-                                <div class="col-md-2 cats-eye-instances">Total instances</div>
-                                <div class="col-md-2 cats-eye-instances total" id="cats-eye-total-instances">0</div>
-                                <div class="col-md-2 cats-eye-instances">Running</div>
-                                <div class="col-md-2 cats-eye-instances running" id="cats-eye-running-instances">0</div>
-                                <div class="col-md-2 cats-eye-instances ">Stopped</div>
-                                <div class="col-md-2 cats-eye-instances stopped" id="cats-eye-stoppped-instances">0</div>
-                            </div>
-                            <div class="row cats-eye-row cats-eye-monitoring-row">
-                                <div class="col-md-6 cats-eye-monitoring">Monitoring</div>
-                                <div class="col-md-6 cats-eye-monitoring" id="cats-eye-monitored">0</div>
-                            </div>
-                            <div class="row cats-eye-row cats-eye-monitoring-row">
-                                <div class="col-md-6 cats-eye-monitoring">Last Updated</div>
-                                <div class="col-md-6 cats-eye-monitoring" id="cats-eye-lastupdated">0</div>
-                            </div>
+                            
+                            <!--aws accounts-->
+                        <div class="col-lg-3 col-md-6">
+                            <div class="circle-tile cats-eye-row cats-eye-accounts-row">
+                          
+                              <div class="circle-tile-heading light-blue">
+                                <i class="fa fa-calculator fa-fw fa-3x"></i>
+                              </div>
+                              <div class="circle-tile-content light-blue">
+                              
+                                <div class="circle-tile-description text-faded cats-eye-accounts">AWS Accounts</div>
+                                <div class="cats-eye-accounts text-faded circle-tile-number" id="cats-eye-aws-accounts">0</div>
+                              </div>
+                            </div> <!--heading dark-blue ends-->
+                        </div>
+                        
+                        <!--aws account ends here-->
+                            
+                            <!--number of running instances-->
+
+                            <div class="col-lg-3 col-md-6">
+                            <div class="circle-tile cats-eye-row cats-eye-instances-row">
+                          
+                              <div class="circle-tile-heading light-black">
+                                <i class="fa fa-building fa-fw fa-3x"></i>
+                              </div>
+                              <div class="circle-tile-content light-black">
+                              
+                                <div class="circle-tile-description text-faded cats-eye-instances">Total Running</div>
+                                <div class="cats-eye-instances running text-faded circle-tile-number" id="cats-eye-running-instances">0</div>
+                              </div>
+                            </div> <!--heading dark-blue ends-->
+                        </div>
+                        <!--number of running instances ends here--> 
+
+                            <!--numner of stopped instances-->
+
+                            <div class="col-lg-3 col-md-6">
+                            <div class="circle-tile cats-eye-row cats-eye-instances-row">
+                          
+                              <div class="circle-tile-heading light-blue">
+                                <i class="fa fa-building fa-fw fa-3x"></i>
+                              </div>
+                              <div class="circle-tile-content light-blue">
+                              
+                                <div class="circle-tile-description text-faded cats-eye-instances">Stopped</div>
+                                <div class="cats-eye-instances stopped text-faded circle-tile-number" id="cats-eye-stoppped-instances">0</div>
+                              </div>
+                            </div> <!--heading dark-blue ends-->
+                        </div>
+                            <!--number of stopped instances ends here-->
+
+                            <!--monitoring starts here-->
+ 
+                            <div class="col-lg-3 col-md-6">
+                            <div class="circle-tile cats-eye-row cats-eye-monitoring-row">
+                          
+                              <div class="circle-tile-heading light-black">
+                                <i class="fa fa-desktop fa-fw fa-3x"></i>
+                              </div>
+                              <div class="circle-tile-content light-black">
+                              
+                                <div class="circle-tile-description text-faded cats-eye-monitoring">Monitoring</div>
+                                <div class="cats-eye-monitoring text-faded circle-tile-number" id="cats-eye-monitored">0</div>
+                              </div>
+                            </div> <!--heading dark-blue ends-->
+                        </div>
+                        
+                            <!--monitoring ends here-->
+                        
                         </div>
                     </div>                                                             
               
@@ -549,10 +748,32 @@
                     <!-- Alerts -->
                     <div class="tab-pane" id="adverse-events"> 
                         <div class="adverse-events-container" id="adverse-events-container">                            
-                            <div class="no-alerts" id="no-alerts"><h3> Yay !! No alerts so far ... Go fishing !!  \o/<h3></div>
+                            <div class="no-alerts" id="no-alerts"><h3> There are No Alerts so far ...<h3></div>
                         </div>            
                     </div>        
                 </div>                
+            </div>
+            <div class="row top-row">
+                <div class="col-sm-3 border-right">
+                    <div id="pulse-holder-monitoring-initial">                    
+                        <div class="monitoring-label-initial">Connecting ...</div>                  
+                    </div>
+                    <div id="pulse-holder-monitoring-on">
+                        <div class="green-dot dot"></div>
+                        <div class="green-pulse pulse"></div>  
+                        <div class="monitoring-label-on">Connected</div>                  
+                    </div>
+                    <div id="pulse-holder-monitoring-off">
+                        <div class="red-dot dot"></div>
+                        <div class="red-pulse pulse"></div>  
+                        <div class="monitoring-label-off">Connection failed !! <span class="clock"></span></div>                  
+                    </div>
+                </div>
+                <div class="col-sm-3">
+
+                    <div class="update-time">Last Updated&nbsp;&nbsp;-&nbsp;&nbsp;<span id="cats-eye-lastupdated">0</span></div>
+                                
+                </div>
             </div>
         </div> 
         <script>

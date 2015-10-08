@@ -268,6 +268,11 @@ ${PROVIDERR}                 AWS
 ${SECRET KEY}                  qm/j8lT0/IPc1P5ud8yujUSa61+QjqeyZ/jZkIff
 ${ACCESS KEY}                  AKIAI3ETOOEFHJ62G2NQ
 
+${OPENSTACK PROVIDERR}      OpenStack
+${HP CLOUD PROVIDERR}       HP Public Cloud
+${VMWARE PROVIDERR}         VMware
+
+
 ${Provider ErrMsg}         Provider name already exist.
 
 
