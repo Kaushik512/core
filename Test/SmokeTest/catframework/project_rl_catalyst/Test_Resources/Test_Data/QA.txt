@@ -12,7 +12,8 @@ Resource           catalyst.txt
 ${BROWSER TYPE}                  firefox 
 ${ENVIRONMENT SERVER}              http://d4d.rlcatalyst.com/public/login.html
 
-
+${height}              744
+${width}               1400
 
 
 

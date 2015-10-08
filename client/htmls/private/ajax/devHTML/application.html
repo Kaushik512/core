@@ -255,10 +255,10 @@ input {
                                         <fieldset class="fieldsetCustom">
                                             <legend  class="legendCustom">Repository Details:</legend>
                                             <div class="col-lg-6 col-md-6">
-                                                <label for="">Nexus Server:<span style="color:red">*</span></label>
+                                                <label for="">Repository Server:<span style="color:red">*</span></label>
                                                 <div class="input-groups">
                                                     <select id="chooseNexusServer" name="" class="required width-100 form-control">
-                                                        <option value="">Choose Nexus Server</option>
+                                                        <option value="">Choose Server</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -396,7 +396,7 @@ function getNexusServer(){
     resetAllFields();
     var $nexusServer = $('#chooseNexusServer');
     $nexusServer.empty();
-    $('#chooseNexusServer').append('<option value="">Choose Nexus Server</option>');
+    $('#chooseNexusServer').append('<option value="">Choose Server</option>');
     var $chooseJobType = $('#chooseJobType');
     $chooseJobType.empty();
     $('#chooseJobType').append('<option value="">Choose Job</option>');
@@ -893,44 +893,6 @@ function constructUI(data) {
                     $('#' + data[i].projectId + data[i].applicationName + data[i].envId + '_parentAccordian').hide();
                 }
             }
-
-
-          
-            // $(".moreinfoAppDeploy").click(function(e) {
-               
-            // });
-            // $(".moreinfoUpgradeAppDeploy").click(function(e) {
-            //     //alert("clicked on upgrade");
-            //     var $modal = $('#modalUpgradeAppDeploy');
-            //     var $logContainer = $modal.find('.upgradeForAppDeploy').show();
-            //     //$logContainer.empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
-            //     $modal.modal('show');
-            //     // $.ajax({
-            //     //     url: '/app/deploy/' + this.id + '/logs',
-            //     //     type: 'GET',
-            //     //     contentType: "application/json",
-            //     //     success: function(data) {
-            //     //         var datahttp = data.indexOf("http://");
-            //     //         if (datahttp == 0) {
-            //     //             $logContainer.empty();
-            //     //             window.open(data, "_blank");
-            //     //         } else {
-            //     //             $logContainer.empty();
-            //     //             $modal.modal('show');
-            //     //             data = data.replace(/,/g, "<br />");
-            //     //             $logContainer.append(data);
-            //     //         }
-            //     //     },
-            //     //     error: function(jqxhr) {
-            //     //         $logContainer.empty();
-            //     //         $modal.modal('show');
-            //     //         $logContainer.append('No Logs Available');
-            //     //     },
-            //     //     failure: function(data) {
-
-            //     //     }
-            //     // });
-            // });
         }
     } else {
         $("#nodataAppDeploy").empty();
