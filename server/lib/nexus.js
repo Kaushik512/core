@@ -13,6 +13,7 @@ var logger = require('_pr/logger')(module);
 var d4dModelNew = require('../model/d4dmasters/d4dmastersmodelnew.js');
 var parser = require('xml2json');
 var masterUtil = require('./utils/masterUtil.js');
+var fs = require('fs');
 
 var Nexus = function() {
     this.authenticateNexus = function(requestBody, callback) {
@@ -84,7 +85,7 @@ var Nexus = function() {
                 };
                 client = new Client(options_auth);
                 //var nexusUrl = nexus[0].hostname + '/service/local/data_index?q=org.javaee7.sample';
-                var nexusUrl = nexus[0].hostname + '/service/local/data_index?q='+nexus[0].groupid;
+                var nexusUrl = nexus[0].hostname + '/service/local/data_index?q=' + nexus[0].groupid;
                 client.registerMethod("jsonMethod", nexusUrl, "GET");
                 client.methods.jsonMethod(function(data, response) {
                     //logger.debug("response: ", response);
@@ -137,34 +138,56 @@ var Nexus = function() {
         });
     }
 
-    this.updateNexusRepoUrl = function(orgId,reqBody,callback){
-    	masterUtil.getAllCongifMgmtsForOrg(orgId,function(err,configMgmt){
-    		if(err){
-    			callback(err,null);
-    		}
-    		if(configMgmt.length){
-    			for(var i =0; i<configMgmt.length;i++){
-    				if(configMgmt[i].configType === 'chef'){
-    					masterUtil.getCongifMgmtsById(configMgmt[0].rowid,function(err,chefServer){
-    						if(err){
-    							callback(err,null);
-    						}
-    						if(chefServer){
-    							logger.debug("Chef location: ",chefServer.chefRepoLocation);
-    							callback(null,chefServer);
-    						}else{
-    							callback(null,null);
-    						}
+    this.updateNexusRepoUrl = function(orgId, reqBody, callback) {
+        masterUtil.getAllCongifMgmtsForOrg(orgId, function(err, configMgmt) {
+            if (err) {
+                callback(err, null);
+            }
+            if (configMgmt.length) {
+                for (var i = 0; i < configMgmt.length; i++) {
+                    if (configMgmt[i].configType === 'chef') {
+                        masterUtil.getCongifMgmtsById(configMgmt[0].rowid, function(err, chefServer) {
+                            if (err) {
+                                callback(err, null);
+                            }
+                            if (chefServer) {
+                                logger.debug("Chef location: ", chefServer.chefRepoLocation);
+                                fs.readFile(chefServer.chefRepoLocation + '.chef/knife.rb', 'utf8', function(err, fileData) {
+                                    if (err) {
+                                        logger.debug("Failed to read knife.rb file: ", err);
+                                        callback(err, null);
+                                    }
+                                    var lines = fileData.trim().split('\n');
+                                    var lastLine = lines.splice(-1)[0];
+                                    logger.debug("======= ",JSON.stringify(lines));
+                                    if(lastLine.indexOf("url    ") === -1){
+                                    	fileData=fileData+'\r\n'+'url     http://54.193.72.201:8081/nexus/service/local/repositories/supercatalyst/content/org/rlcatalyst/D4D/2.10.0/D4D-2.10.0.zip';
+                                    }else{
+                                    	lines.push("url     http://54.193.72.201:8081/nexus/service/local/repositories/supercatalyst/content/org/rlcatalyst/D4D/2.10.0/D4D-2.10.3.zip")
+                                    	fileData = lines.join('\n');
+                                    }
+                                    logger.debug("File Data: ",fileData);
+                                    fs.writeFile(chefServer.chefRepoLocation + '.chef/knife.rb', fileData, function(err) {
+                                        if (err) {
+                                            logger.debug("Failed to update kinfe.rb: ", err);
+                                            callback(err, null);
+                                        }
+                                        callback(null, fileData);
+                                    });
+                                });
+                            } else {
+                                callback(null, null);
+                            }
 
-    					});
-    				}else{
-    					callback(null,null);
-    				}
-    			}
-    		}else{
-    			callback(null,null);
-    		}
-    	});
+                        });
+                    } else {
+                        callback(null, null);
+                    }
+                }
+            } else {
+                callback(null, null);
+            }
+        });
     }
 }
 
