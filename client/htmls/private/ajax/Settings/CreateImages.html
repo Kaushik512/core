@@ -41,16 +41,15 @@
                                        <span data-val-controltovalidate="domainname" id="name" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility:hidden;">Required</span>
                                      </div>                                                         
 
-
                                      <div class="col-lg-6">
-                                      <label for="name">Choose Provider:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
-                                      <select id="providerId" unique="true" uniqueconditionedby="orgname"  class="chooseOrganization width-100" datapath="masterjson.rows.row" valuelinkfield="costcode" style="vertical-align:central"  cdata="catalyst"  cat-validation="required">
-                                        <option value="">Choose Provider</option>
+                                      <label for="name">Organization Name:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+                                      <select id="orgId" name="orgId" unique="true" uniqueconditionedby="orgname"  class="chooseOrganization width-100" style="vertical-align:central"  cdata="catalyst"  cat-validation="required">
+                                       <option value="">Select Organization</option>
+                                     </select>
+                                     <span data-val-controltovalidate="domainname" id="MainContent_Req_domainname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility:hidden;">Required</span>
+                                   </div>
 
-
-                                      </select>
-                                      <span data-val-controltovalidate="domainname" id="MainContent_Req_domainname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility:hidden;">Required</span>
-                                    </div>   
+                                        
 
 
                                   </div>
@@ -73,19 +72,28 @@
 
                               <div class="row">
                                 <div class="col-lg-6">
+                                  <label for="name">Choose Provider:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+                                  <select id="providerId" disabled="true" unique="true" uniqueconditionedby="orgname"  class="chooseOrganization width-100" datapath="masterjson.rows.row" valuelinkfield="costcode" style="vertical-align:central"  cdata="catalyst"  cat-validation="required">
+                                    <option value="">Choose Provider</option>
+
+
+                                  </select>
+                                  <span data-val-controltovalidate="domainname" id="MainContent_Req_domainname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility:hidden;">Required</span>
+                                </div>
+                                <div class="col-lg-6">
                                   <label for="name">Operating System:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
                                   <select id="osType" unique="true" uniqueconditionedby="orgname"  class="chooseOrganization width-100" style="vertical-align:central"  cdata="catalyst"  cat-validation="required">
                                    <option value="">Select OS</option>
                                  </select>
                                  <span data-val-controltovalidate="domainname" id="MainContent_Req_domainname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility:hidden;">Required</span>
-                               </div>
+                               </div>                               
+                             </div>
+                             <div class="row">
                                <div class="col-lg-6">
                                  <label for=""> Image ID:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
                                  <!-- <i class="icon-append fa fa-building"></i> -->
                                  <input name="ctl00$MainContent$orgname" Placeholder="Enter Image Identifier" id="imageidentifire" class="form-control" type="text"  cdata="catalyst" cat-validation="required">
                                </div>
-                             </div>
-                             <div class="row">
                                <div class="col-lg-6">
                                  <label for=""> Admin  User Name:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
                                  <!-- <i class="icon-append fa fa-building"></i> -->
@@ -96,14 +104,7 @@
                                  <label for=""> Admin  Password:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
                                  <input name="ctl00$MainContent$orgname" Placeholder="Enter The Admin Password" id="password" class="form-control" type="password"  cdata="catalyst">
                                </div> 
-
-                               <div class="col-lg-6">
-                                  <label for="name">Organization Name:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
-                                  <select id="orgId" name="orgId" unique="true" uniqueconditionedby="orgname"  class="chooseOrganization width-100" style="vertical-align:central"  cdata="catalyst"  cat-validation="required">
-                                   <option value="">Select Organization</option>
-                                 </select>
-                                 <span data-val-controltovalidate="domainname" id="MainContent_Req_domainname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility:hidden;">Required</span>
-                               </div>
+                               
                               </div>
                            </fieldset>
                          </div>
@@ -198,8 +199,58 @@
             $('#masterssavespinner').remove();
             $("form[id*='myForm']").find("div.pull-right > button").removeAttr('disabled');
           }
+          function getProviderList(_val){
+            $.ajax({
+              type:"GET",
+              url:"/allproviders/list",
+              success:function(data){
+                var str="";
+                for (var key in data) {
+                  if (data.hasOwnProperty(key)) {                    
+                    for(var i=0;i<data[key].length;i++){
+                      //alert("orgid is: "+data[key][i].orgId);
+                      if(_val == data[key][i].orgId){
+                        //console.log(data[key][i]._id+" :: "+key);
+                        if(key === "awsProviders"){
+                          str=str+'<option value="'+data[key][i]._id+'" secretKey="'+data[key][i].secretKey+'" accessKey="'+data[key][i].accessKey+'" providerType="'+data[key][i].providerType+'">'+data[key][i].providerName+'</option>';
+                        }else if(key === "openstackProviders"){
+                            str+='<option value="'+data[key][i]._id+'" username="'+data[key][i].userName+'" password="'+data[key][i].password+'" providerType="'+data[key][i].providerType+'">'+data[key][i].providerName+'</option>';
+                        }else if(key === "vmwareProviders"){
+                            str+='<option value="'+data[key][i]._id+'" username="'+data[key][i].userName+'" password="'+data[key][i].password+'" providerType="'+data[key][i].providerType+'">'+data[key][i].providerName+'</option>';
+                        }else if(key === "hpPlublicCloudProviders"){
+                            str+='<option value="'+data[key][i]._id+'" username="'+data[key][i].userName+'" password="'+data[key][i].password+'" providerType="'+data[key][i].providerType+'">'+data[key][i].providerName+'</option>';
+                        }else if(key === "azureProviders"){
+                            str+='<option value="'+data[key][i]._id+'" subscriptionId="'+data[key][i].subscriptionId+'" storageAccount="'+data[key][i].storageAccount+'" providerType="'+data[key][i].providerType+'">'+data[key][i].providerName+'</option>';
+                        }
+                      }
+                    }
+                  }
+                }
+                $('#providerId').html(str);
+                $('#providerId option:eq(0)').attr('selected','selected');
+                $('#providerId').select2();                
+                $('#providerId').prop("disabled",false);
 
-          function getProviderList(){
+                if($('#providerId').attr('answer')){
+                  $('#providerId').val($('#providerId').attr('answer')).select2();
+                }
+                $('#providerId').on('change', function() {
+                  var provider = $('#providerId').find("option:selected").attr('providerType');
+                  //console.log("provider",provider);
+
+                  if(provider == 'AZURE'){
+                      $('.forazurepassword').removeClass('hidden');
+                      $('.forazurepassword').find('#password').attr('cat-validation','required,min8');
+                  }else{
+                      $('.forazurepassword').addClass('hidden');
+                      $('.forazurepassword').find('#password').removeAttr('cat-validation');
+                  }
+                });
+              }
+
+            });
+          }
+          /*function getProviderList(){
             $.ajax({
              type: "GET",
              url: "/aws/providers",
@@ -296,21 +347,12 @@
                 $('#providerId').val($('#providerId').attr('answer')).select2();
               }
 
-
-                /*.off('change').on('change',function(){
-                  debugger;
-                  
-                  var val=$(this).val(),region=
-                  $(this).find('[value="'+val+'"]').attr('region');
-                  $('#region').html('<option value="'+region+'">'+region+'</option>').val(region);
-                });*/
-
           },
           failure: function (data) {
            alert(data.toString());
          }
         }); 
-  }
+  }*/
   function isUserTypeSuperAdmin(){
     $.get('/d4dMasters/loggedInUser',function(data){
       if(!data.isSuperAdmin){
@@ -384,6 +426,9 @@
     }else{
     $('#orgId').val("").select2();
     }
+    $("#orgId").on('change',function(e){
+      getProviderList(e.val);
+    });
   });
 }
 
@@ -490,7 +535,7 @@ $(document).ready(function () {
 
           // populateVirtualizationType();
           populateOSList();
-          getProviderList();
+          //getProviderList();
           getOrganizationList();
           $('select').select2();
 
