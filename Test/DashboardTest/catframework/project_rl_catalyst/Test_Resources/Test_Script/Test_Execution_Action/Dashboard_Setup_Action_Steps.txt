@@ -54,7 +54,9 @@ Catalyst AWS Cost Dashboard Verification
     Clicks on Tracks Button
     Sleep    8s
     Clicks on AWS Cost link
+    Sleep    2s
     Clicks on Left Panel Button
+    Sleep    18s
     Verify Page contains Cost Usage for Month
     Verify Page contains Cost Usage for Day
     Verify Page contains Summary
@@ -74,7 +76,7 @@ Catalyst AWS Usage Dashboard Verification
     Clicks on AWS Usage Link
     Sleep    3s
     Clicks on Left Panel Button
-    Sleep    8s
+    Sleep    18s
     Verfiy the Availabiltiy zone
     Verify the Low Usage
     Verify the Total Instances
@@ -93,7 +95,7 @@ Catalyst System Monitoring Dashboard Verification
     Clicks on System Monitoring Link
     Sleep    3s
     Clicks on Left Panel Button
-    Sleep    8s
+    Sleep    18s
     Verify Page Contains Ping
     Verify Page Contains Traffic
     Verify Page Contains DiskUse
@@ -111,7 +113,7 @@ Catalyst Log Monitoring Dashboard Verification
     Clicks on Log Monitoring Link
     Sleep    3s
     Clicks on Left Panel Button
-    Sleep    8s
+    Sleep    18s
     Capture the Screen Shot of the Dashboard
     Verify Page Contains Access-Layer-Performance
     Verify Page Contains Access-Layer-Uptime
@@ -131,8 +133,9 @@ Catalyst Notifications Dashboard Verification
     Clicks on Notifications link
     Sleep    1s
     Clicks on the Link to dashboard
+    Sleep    2s
     Clicks on Left Panel Button
-    Sleep    8s
+    Sleep    18s
     Verify Page Contains Connected
     Verify Page Contains CatsEye
     Verify Page Contains Telemetry
