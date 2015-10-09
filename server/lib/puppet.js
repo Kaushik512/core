@@ -465,7 +465,7 @@ var Puppet = function(settings) {
             }
             var stdOutStr = '';
             var stdErrStr = '';
-            runSSHCmdOnMaster(['mkdir -p ' + puppetConfig.environmentpath + '/' + envName + '/manifest', 'mkdir -p ' + puppetConfig.environmentpath + '/' + envName + '/modules'], function(err, retCode) {
+            runSSHCmdOnMaster(['mkdir -p ' + puppetConfig.environmentpath + '/' + envName + '/manifests', 'mkdir -p ' + puppetConfig.environmentpath + '/' + envName + '/modules'], function(err, retCode) {
                 if (err) {
                     callback(err, null);
                     return;

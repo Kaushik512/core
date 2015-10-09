@@ -17,7 +17,8 @@ ${width}               1400
 
 
 
- 
+ ${height}              744
+ ${width}               1400
 
 ${ENV}                 QA.txt
 ${VALID USER}             superadmin

@@ -1,0 +1,231 @@
+*** Settings ***
+Documentation      A resource file with reusable keywords and variables.
+...
+...                This file is part of a prototype automated test suite designed to
+...                test web application products built on top of the SLZ platform.
+...
+
+Library            Selenium2Library
+Library            String
+Library            Collections
+
+
+Resource           catalyst.txt
+Resource           ${CATALYST TEST DATA}/${TESTDATA}
+Resource           ${COMMON RESOURCES}/catalyst_grid_node.txt
+
+
+
+
+*** Variables ***
+
+*** Keywords ***
+Catalyst Launch of Cloud Formation Blueprint
+    Clicks on Workzone
+    Sleep    1s
+    Clicks on RL_QA Environment
+    Sleep    2s
+    Clicks on Infrastructure Tab
+    Clicks on Blueprints Section
+    Sleep    1s
+    Clicks on close of Software Stack accordion
+    Sleep    1s
+    Clicks on Cloud Formation Accordion
+    Select the Cloud Formation Blueprint
+    Sleep    1s
+    Clicks on Launch Button
+    Clicks on Confirmation of OK Button
+    Enters the Unique StackName
+    Clicks on Submit Button
+    Sleep    3s
+    Clicks on Close of Launching Blueprint popup
+    Sleep    2 minute
+    Clicks on Infrastructure Tab
+    Clicks on Instances Tab
+    Sleep    2s
+    Capture Screen Shot of the page
+    Verfiy the Java Stack in the Instances Page
+    Sleep    4s
+    Editing the Names of the Stack
+    Sleep    1s
+    Select the Java Stack Instance to verify Bootstrap
+    Clicks on ControlPanel
+    Sleep    2s
+    Capture Screen Shot of the page
+    Clicks on Action History Tab
+    Verify the Java Bootstrap text and Status in the Table
+    Capture Screen Shot of the page
+    Clicks on Back To Instances
+    Sleep    3s
+    Select the MySql Stack Instance to verify Bootstrap
+    Clicks on ControlPanel
+    Sleep    2s
+    Capture Screen Shot of the page
+    Sleep    3s
+    Clicks on Action History Tab
+    Sleep    1s
+    Verify the MySql Bootstrap text and Status in the Table
+    Sleep    1s
+    Capture Screen Shot of the page
+    Sleep    2s
+    Clicks on Back To Instances
+    Sleep    1s
+    Clicks on Infrastructure Tab
+    Clicks on CloudFormation Tab
+    Sleep    1s
+    Capture Screen Shot of the page
+    Verify the Stacks with your Stackame is created
+    Sleep    1s
+    Clicks on Infrastructure Tab
+    Clicks on Instances Tab
+    Select the Java Stack Instance to verify Bootstrap
+    Delete the Java and SQL Stack Instance
+    Sleep    1s
+    Select the MySql Stack Instance to verify Bootstrap
+    Delete the Java and SQL Stack Instance
+    Sleep    1s
+    Verify the Stack Instances are Deleted
+    Clicks on Infrastructure Tab
+    Clicks on CloudFormation Tab
+    Sleep    4s
+    Select the Stack to delete
+    Verify the Stack is Deleted
+
+
+
+Catalyst Logout
+    Clicks on LogOut link
+
+
+Clicks on LogOut link
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       xpath=.//*[@id='logout']/span/a/i
+    Focus    xpath=.//*[@id='logout']/span/a/i
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='logout']/span/a/i
+
+
+Verify the Stack is Deleted
+    Page Should Not Contain    ${STACK NAME}
+
+Delete the Java and SQL Stack Instance
+    Click Element    id=removeInstance
+    Click Element    id=ckbChefDelete
+    Click Element    xpath=.//*[text()='Delete']
+
+
+Editing the Names of the Stack
+    Click Element    xpath=.//*[@id='divinstancescardview']//span[@data-original-title='${JAVA}']/../a[@class='glyphicon glyphicon-pencil editInstanceNameBtn glyphiconNew']
+    Sleep    1s
+    Input Text    id=instanceEditName    ${EDIT STACK1}
+    Click Element    id=editSaveBTN
+    Click Element    xpath=.//*[@id='divinstancescardview']//span[@data-original-title='${MYSQL}']/../a[@class='glyphicon glyphicon-pencil editInstanceNameBtn glyphiconNew']
+    Sleep    1s
+    Input Text    id=instanceEditName    ${EDIT STACK2}
+    Click Element    id=editSaveBTN
+
+
+Verify the Stack Instances are Deleted
+    Page Should Not Contain    ${EDIT STACK1}
+    Page Should Not Contain    ${EDIT STACK2}
+
+Select the Stack to delete
+    Click Element    xpath=//b[text()='${STACK NAME}']
+    Click Element    xpath=.//*[@title='Delete Stack']
+    Sleep    1s
+    Click Element    xpath=.//*[text()='OK']
+
+Verify the Stacks with your Stackame is created
+    Page Should Contain    ${STACK NAME}
+    Element Should Contain    xpath=.//*[@id='cftStackContainer']/div/div[@data-stackname='${STACK NAME}']/div/span[2]/span    ${STACK STATUS}
+
+
+Clicks on CloudFormation Tab
+    Click Element    css=.CloudFormation>a
+
+
+Clicks on Back To Instances
+    Click Element    xpath=.//*[@id='getViewAttr']
+
+
+Verify the Java Bootstrap text and Status in the Table
+    Sleep    5 minutes
+    Element Should Contain    xpath=.//*[@id='tableactionHistory']/tbody/tr/td[text()='${BOOTSTRAP}']    ${BOOTSTRAP}
+    Sleep    1s
+    ${BOOTSTRAP STATUSS}=    Get Element Attribute    xpath=.//*[@id='tableactionHistory']/tbody/tr/td[2]/img@title
+    Log    ${BOOTSTRAP STATUSS}
+    Should Be Equal    ${BOOTSTRAP STATUSS}     ${ACTBOOT2}
+
+
+Verify the MySql Bootstrap text and Status in the Table
+    Sleep    3 minutes
+    Element Should Contain    xpath=.//*[@id='tableactionHistory']/tbody/tr/td[text()='${BOOTSTRAP}']    ${BOOTSTRAP}
+    Sleep    1s
+    ${BOOTSTRAP STATUSS}=    Get Element Attribute    xpath=.//*[@id='tableactionHistory']/tbody/tr/td[2]/img@title
+    Log    ${BOOTSTRAP STATUSS}
+    Should Be Equal    ${BOOTSTRAP STATUSS}     ${ACTBOOT2}
+    
+
+
+
+Clicks on Action History Tab
+    Click Element    xpath=.//*[@id='myTab3']/li[3]/a
+
+Select the Java Stack Instance to verify Bootstrap
+    Click Element    xpath=.//span[@data-original-title='${EDIT STACK1}']
+
+
+Select the MySql Stack Instance to verify Bootstrap
+    Sleep    3s
+    Click Element    xpath=.//span[@data-original-title='${EDIT STACK2}']    
+
+
+Clicks on ControlPanel
+    Click Element    css=.btn.btn-primary.actionControlPanel
+
+Verfiy the Java Stack in the Instances Page
+    Page Should Contain    Java
+    Page Should Contain    MySql
+    Element Text Should Be    xpath=.//span[@data-original-title='${JAVA}']    ${JAVA}
+    Element Text Should Be    xpath=.//span[@data-original-title='${MYSQL}']    ${MYSQL}
+
+Capture Screen Shot of the page
+    Capture Page Screenshot
+
+Clicks on Instances Tab
+    Click Element    css=.Instances>a
+
+Clicks on Close of Launching Blueprint popup
+    Click Element    xpath=.//*[@id='launchResultContainer']/div/div/div[3]/button
+
+Clicks on Submit Button
+    Click Element    xpath=//input[@value='Submit']
+
+Clicks on Confirmation of OK Button
+    Click Element    xpath=.//*[text()='OK']
+
+Enters the Unique StackName
+    Input Text    id=cftInput    ${STACK NAME}
+
+Clicks on Launch Button
+    Click Element    css=.btn.pull-left.btn-primary.launchBtn
+
+
+Select the Cloud Formation Blueprint
+    Click Element    xpath=.//*[text()='${CLOUD BP}']
+
+Clicks on Cloud Formation Accordion
+    Click Element    xpath=.//*[@id='accordion-2']/div[3]/div[1]/h4/a/i[1]
+
+Clicks on close of Software Stack accordion
+    Click Element    xpath=.//*[@id='accordion-2']/div[1]/div[1]/h4/a/i[2]
+
+Clicks on RL_QA Environment    
+    Click Element    xpath=//*[normalize-space(text())="RL_QA"]
+
+Clicks on Infrastructure Tab
+    Click Element    css=.caret
+
+Clicks on Blueprints Section
+    Click Element    css=.Blueprints>a
+
+Clicks on Workzone
+    Click Element    id=workZoneNew    
