@@ -1,7 +1,7 @@
 		<div class="row">
 			<div class="col-md-12">
 				<div class="col-md-12">
-              <form action="" id="configForm">
+              <form action="" id="configForm" autocomplete="off">
 					<div class="widget-box">
 						<div class="widget-header">
 							<h5 class="widget-title" style="color:#4e5964;">
@@ -37,7 +37,7 @@
                                              <div class="col-lg-6 col-md-6" style="margin-top:25px">
                                                 <label for="link">UserName:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
                                                 <!-- <i class="icon-append fa fa-building"></i> -->
-                                                <input type="text" name="" value="" id="username" class="form-control" type="text"  name="website"  cdata="catalyst"  cat-validation="required">
+                                                <input type="text" name="" value="" id="username" class="form-control" type="text"  name="website"  cdata="catalyst"  cat-validation="required" autocomplete="off">
                                              </div>
                                           
                                           <hr/>
@@ -45,20 +45,20 @@
                                              <div class="col-lg-6 col-md-6" style="margin-top:25px">
                                                 <label for="link">Password:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
                                                 <!-- <i class="icon-append fa fa-building"></i> -->
-                                                <input name="" value="" id="password" class="form-control" type="password"  name="website"  cdata="catalyst"  cat-validation="required">
+                                                <input name="" value="" id="password" class="form-control" type="password"  name="website"  cdata="catalyst"  cat-validation="required" autocomplete="off">
                                              </div>
 
-                                             <div class="col-lg-6 col-md-6" style="margin-top:25px">
+                                             <!-- <div class="col-lg-6 col-md-6" style="margin-top:25px">
                                                 <label for="name">ChefServer:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
                                                 <select id="chefserver" unique="true" uniqueconditionedby="chefserver"  class="chooseChefserver width-100" sourcepath="1" datapath="masterjson.rows.row" valuelinkfield="costcode" style="vertical-align:central"  cdata="catalyst"  cat-validation="required">
                                                    <option value="">Select a ChefServer</option>
                                                 </select>
                                                 <span data-val-controltovalidate="domainname" id="MainContent_Req_domainname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility:hidden;">Required</span>
-                                             </div>
+                                             </div> -->
 
                                               <div class="col-lg-6 col-md-6" style="margin-top:25px">
                                                 <label for="name">Organization:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
-                                                <select id="orgname" unique="true" uniqueconditionedby="orgname"  class="chooseOrganization width-100" sourcepath="1" datapath="masterjson.rows.row" valuelinkfield="costcode" style="vertical-align:central"  cdata="catalyst"  cat-validation="required">
+                                                <select id="orgname" unique="true" uniqueconditionedby="orgname"  class="chooseOrganization width-100 form-control" sourcepath="1" datapath="masterjson.rows.row" valuelinkfield="costcode" style="vertical-align:central"  cdata="catalyst"  cat-validation="required">
                                                    <option value="">Select an Organization</option>
                                                 </select>
                                                 <span data-val-controltovalidate="domainname" id="MainContent_Req_domainname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility:hidden;">Required</span>
@@ -100,9 +100,7 @@
    
         $(document).ready(function () {
             
-            $(".chooseOrganization").select2();
-            $(".chooseChefserver").select2();
-
+            //$(".chooseOrganization").select2();
             $.get('/d4dMasters/readmasterjsonnew/1',function(data){
                
                var $select = $('#orgname');
@@ -113,40 +111,47 @@
                }
             });//end of get organizations action
             
-            $.get('/d4dMasters/readmasterjsonnew/10',function(data){
+            /*$.get('/d4dMasters/readmasterjsonnew/10',function(data){
                
                var $select = $('#chefserver');
-
                for(i=0;i<data.length;i++){
                  $select.append('<option value="'+data[i].configname+'">'+data[i].configname+'</option>');
                 }
-             });//end of get chef servers action
+
+             });//end of get chef servers action*/
 
             $('#configForm').submit(function() {
                   console.log("In config form");
+
                   
-                  var configname = $('#configname').val().trim();
-                  var servicenowurl = $('#url').val().trim();
-                  var username = $('#username').val().trim();
-                  var password = $('#password').val().trim();
-                  var chefserver = $('#chefserver').val().trim();
-                  var org = $('#orgname').val().trim();
-                  var orgname_rowid = $('#orgname').find(':selected').attr('orgname_rowid');
-                   
-                  //console.log("orgname_rowid",orgname_rowid);
-                  var body = {};
+                  if(isFormValid(null, 'cat-validation')){
 
-                  body.configname = configname;
-                  body.servicenowurl = servicenowurl;
-                  body.username = username;
-                  body.password = password;
-                  body.chefserver = chefserver;
-                  body.org = org;
-                  body.orgname_rowid = orgname_rowid;
+                     var configname = $('#configname').val().trim();
+                     var servicenowurl = $('#url').val().trim();
+                     var username = $('#username').val().trim();
+                     var password = $('#password').val().trim();
+                     //var chefserver = $('#chefserver').val().trim();
+                     var org = $('#orgname').val().trim();
+                     var orgname_rowid = $('#orgname').find(':selected').attr('orgname_rowid');
+                      
+                     //console.log("orgname_rowid",orgname_rowid);
+                     var body = {};
 
-                  $.post('/servicenow/saveconfig',body,function(data){
-                     console.log("Saveconfig Response::"+data);
-                  });
+                     body.configname = configname;
+                     body.servicenowurl = servicenowurl;
+                     body.username = username;
+                     body.password = password;
+                     //body.chefserver = chefserver;
+                     body.org = org;
+                     body.orgname_rowid = orgname_rowid;
+
+                     $.post('/servicenow/saveconfig',body,function(data){
+                        console.log("Saveconfig Response::"+data);
+                        $('#btncancel').click();
+                     });
+
+                  }
+                  
              });//end of save config action
            
            });//end of document load

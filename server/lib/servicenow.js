@@ -31,11 +31,6 @@ var CMDBConfigSchema = new mongoose.Schema({
         required: true,
         trim: true
     },
-    chefserver: {
-        type: String,
-        required: true,
-        trim: true
-    },
     orgname: {
         type: [String],
         required: true,
@@ -162,7 +157,7 @@ CMDBConfigSchema.statics.getConfigItemByName = function(name, tableName, options
         
         for (i = 0; i < data.result.length; i++) {
             if (data.result[i].name == name) {
-                logger.debug("Node found");
+                logger.debug("Node found >>>",data.result[i]);
                 callback(null, data.result[i]);
                 return;
             }

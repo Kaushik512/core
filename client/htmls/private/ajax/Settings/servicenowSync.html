@@ -140,23 +140,6 @@
             </label>
         </div>
       </div>
-
-     
-<!--       <div class="col-lg-6 hidden" style="margin-top:15px;">
-          <label class="">Assign Users<span style="color:Red;" class="control-label">&nbsp;*</span></label>
-          
-              <div class="userListLoadingContainer"></div>
-              <select class="custom-scroll" multiple="" id="userListSelect" style="display:none" cdata="catalyst" cat-validation="required">
-                  <option value="1">User1</option>
-                  <option value="2">User2</option>
-                  <option value="3">User3</option>
-                  <option value="4">User4</option>
-                  <option value="5">User5</option>
-              </select> 
-          
-      </div> -->
-    
-    
          
       </div>
       <div class="modal-footer">
@@ -191,32 +174,11 @@ $(function() {
            console.log("ImportData Response:",data);
 
            if(data.result){
-               var $tableBody = $('.cmdbData').find('tbody');
-               $tableBody.empty();
-               
-               var nodeList = data.result; 
-
-               for(i=0;i<nodeList.length;i++){
-
-                   var $tr = $('<tr></tr>');
-                   $tr.append('<td>'+ nodeList[i].name +'</td>');
-                   $tr.append('<td>'+ nodeList[i].ip_address +'</td>');
-                   $tr.append('<td>'+ nodeList[i].fqdn +'</td>');
-                   $tr.append('<td>'+ nodeList[i].os +'</td>');
-                   $tr.append('<td></td>');
-                   $tr.append('<td>'+ nodeList[i].classification +'</td>');
-                   
-                    $nodecheckboxlabel = $('<label></label>').addClass('checkbox');
-                    $nodecheckboxinput = $('<input class="nodeCheckBox smart-form" data-nodeName="' + nodeList[i].name + '" type="checkbox" name="nodesChecked"/><i></i>');
-                    $nodecheckboxlabel.append($nodecheckboxinput);
-
-                    $tr.append($('<td></td>').addClass('chef-checkbox smart-form').append($nodecheckboxlabel));
-
-                    $tableBody.append($tr);
-               }
+               createTableFromJson(data);
 
                $('.nodeListContainer img').remove();
                $('.nodeListContainer').find('.tabContent').attr('style','');
+
          }else{
                $('.nodeListContainer img').remove();
                $('.nodeListContainer').find('.tabContent').attr('style','').append('<label>Please check your servicenow settings</label>');
@@ -233,23 +195,6 @@ $(function() {
         console.log('chefServer ==>', data);
         $orgListInput.append($('<option></option>').val(data.orgname_rowid).html(data.orgname).attr('selected', 'selected'));
         $orgListInput.select2();
-        /*var getProviders = getRelatedValues_Top(9, "providername", '', "providername");
-        var $providerlist = $('#chefImportProviderSelect');
-        $providerlist.append($('<option></option>').val('choose').html('Choose'));
-        for (var i = 0; i < getProviders.length; i++) {
-            $providerlist.append($('<option></option>').val(getProviders[i]).html(getProviders[i]));
-        }
-        $providerlist.append($('<option></option>').val('azure').html('Azure Data Center'));
-        $providerlist.append($('<option></option>').val('datacenter').html('Data Center'));
-
-        $providerlist.change(function(e) {
-            var val = $providerlist.val();
-            if (val == 'datacenter' || val == 'azure') {
-                $('.credentialSection').show();
-            } else {
-                $('.credentialSection').hide();
-            }
-        });*/
 
         $bgList.empty();
         $bgList.append($('<option></option>').val('choose').html('Choose'));
@@ -284,28 +229,47 @@ $(function() {
             }
         });
 
-/*        $projectList.change(function(e) {
-            var projName = $(this).val();
-            if (projName == 'choose') {
-                return;
-            }
-            var getEnvs_ = getRelatedValues_Top_rowid(4, "rowid", projName, "environmentname");
-            //debugger;
-            //alert(JSON.stringify(getEnvs_));
-            var getEnvs = getEnvs_.toString().replace(/"/g, '').split(',');
-            // alert(getEnvs.length);
-            // var getEnvs = JSON.parse(getEnvs_);
-            for (var i = 0; i < getEnvs.length; i++) {
-              if(getEnvs[i].indexOf('|') >= 0)
-                {
-                    var txtval = getEnvs[i].split('|');
-                   $envList.append($('<option></option>').val(txtval[0]).html(txtval[1]));
-                  // alert('Env: ' + txtval[0] + ' ' +  txtval[1]);
-                }
-            }
-        });*/
-
     }); 
+
+
+    function createTableFromJson(data){
+            var $tableBody = $('.cmdbData').find('tbody');
+             $tableBody.empty();
+             
+             var nodeList = data.result; 
+
+             for(i=0;i<nodeList.length;i++){
+
+                 var $tr = $('<tr></tr>');
+                 $tr.append('<td>'+ nodeList[i].name +'</td>');
+                 $tr.append('<td>'+ nodeList[i].ip_address +'</td>');
+                 $tr.append('<td>'+ nodeList[i].fqdn +'</td>');
+                 $tr.append('<td>'+ nodeList[i].os +'</td>');
+                 $tr.append('<td></td>');
+                 $tr.append('<td>'+ nodeList[i].classification +'</td>');
+                 
+                  $nodecheckboxlabel = $('<label></label>').addClass('checkbox');
+                  $nodecheckboxinput = $('<input class="nodeCheckBox" data-nodeName="' + nodeList[i].name + '" type="checkbox" name="nodesChecked"/><i></i>');
+
+                  /*$('.nodeCheckBox').click(function(){
+                    // alert('hi');
+                    //alert('click');
+                     $(".nodeCheckBox").attr('checked', false);
+                     $(this).attr('checked', true);
+                   //  $(this).find(".nodeCheckBox").attr('checked', true);
+                     
+                  });*/
+                  $('input.nodeCheckBox').on('change', function() {
+                      $('input.nodeCheckBox').not(this).attr('checked', false);
+                  });
+
+                  $nodecheckboxlabel.append($nodecheckboxinput);
+
+                  $tr.append($('<td></td>').addClass('chef-checkbox').append($nodecheckboxlabel));
+
+                  $tableBody.append($tr);
+             }
+    }
 
     var serviceURL = "../d4dMasters/";
 
@@ -396,7 +360,7 @@ $(function() {
         }
 
         reqBody.selectedNodeName = $checkBoxes.attr('data-nodeName');
-        
+        alert(reqBody.selectedNodeName);
         reqBody.credentials = {};
         reqBody.credentials.username = $('#importUsernameInput').val();
 
@@ -417,7 +381,7 @@ $(function() {
                 return;
             }*/
             console.log(reqBody);
-
+            $('#chefImportNodesModal').modal('hide');
             makeRequest();
         } else {
             var pemFileInput = $('#importPemfileInput').get(0);
@@ -457,7 +421,7 @@ $(function() {
                 var $chefResultModalContainer = $('#chefImportNodesResultModal');
                 var $modalBody = $chefResultModalContainer.find('.modal-body');
                 $modalBody.empty();
-                var $progressBar = $('<progress value="0" max="' + reqBody.selectedNodes.length + '"></progress>').css({
+                var $progressBar = $('<progress value="0" max="1"></progress>').css({
                     width: '100%'
                 });
                 var $msgDiv = $('<div class="messageDiv"></div>').css({

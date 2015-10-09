@@ -391,7 +391,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
                                     console.log('orgId ==>', orgId);
                                     console.log('bgid ==>', bgId);
                                     // console.log('node ===>', node);
-                                    environmentsDao.createEnv(node.classification, orgId, bgId, projectId, envId, function(err, data) {
+                                    environmentsDao.createEnv(node.classification, orgId, bgId, projectId, function(err, data) {
 
                                         if (err) {
                                             console.log(err, 'occured in creating environment in mongo');
@@ -475,7 +475,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
 
         var json = JSON.parse(JSON.stringify(req.body));
         logger.debug("req body:" + req.body);
-        logger.debug("chefserver:" + req.body.chefserver);
+        //logger.debug("chefserver:" + req.body.chefserver);
         logger.debug("orgname:" + req.body.org);
 
         var rowid = uuid.v4();
@@ -484,7 +484,6 @@ module.exports.setRoutes = function(app, verificationFunc) {
             "url": req.body.servicenowurl,
             "servicenowusername": req.body.username,
             "servicenowpassword": req.body.password,
-            "chefserver": req.body.chefserver,
             "rowid": rowid,
             "orgname": req.body.org,
             "orgname_rowid": req.body.orgname_rowid,

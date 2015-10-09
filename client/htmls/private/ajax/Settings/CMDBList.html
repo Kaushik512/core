@@ -19,43 +19,18 @@
 						<div class="widget-body">
 							<div class="widget-main" style="min-height:300px">
 								<div class="col-md-12 table-responsive" style="padding-left:0px; padding-right:0px;">
-									<table id="cmdbtable" class="table table-striped table-bordered table-hover table-condensed" cellpadding="5px" width="100%" style="text-align:center">
+									<table id="cmdbtable" class="tableData table table-striped table-bordered table-hover dataTable no-footer tableCenter" cellpadding="5px" width="100%" style="text-align:center">
                                 		<thead>
                                     		<tr class="rowCustomStyle">
 		                                        <td>ServiceNow Server Name</td>
 		                                        <td>User Name</td>
 		                                        <td>URL</td>
 		                                        <td>Organization</td>
-		                                        <td>Chef Server</td>
 		                                        <td class="">Action</td>
                                     		</tr>
                                			 </thead> 
                                			 <tbody>
-			                               	  <tr class="hidden rowtemplate">
-			                                        <td datafield="configname"></td>
-			                                        <td datafield="loginname"></td>
-			                                        <td datafield="url"></td>
-			                                        <td datafield="orgname"></td>
-			                                        <td>
-                                                    <div class="btn-group tableactionWidthCheficon">
-			                                                <a class="btn btn-xs btn-danger pull-left" value="Remove" title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></a>
-
-			                                                <a class="btn btn-xs btn-info pull-left" title="Update">
-			                                                    <i class="ace-icon fa fa-pencil bigger-120"></i>
-			                                                </a>
-			                                                
-			                                                <a class="btn btn-xs btn-primary tableactionbuttonpadding" title="Import Nodes">
-			                                                    <i class="ace-icon fa fa-download bigger-120"></i>
-			                                                </a>
-			                                                
-			                                                <a class="btn btn-xs btn-primary tableactionbuttonpadding" title="DataBag">
-			                                                    <i class="ace-icon fa fa-folder bigger-120"></i>
-			                                                </a>
-			                                            </div>
-			                                            
-			                                        </td>
-
-			                                    </tr>
+			                               	  
                                			 </tbody>        
                             		</table>
                         		</div>
@@ -68,6 +43,31 @@
 
 		<script>
           $(document).ready(function () {
+
+          	var $trackDatatable = '';
+
+          	if (!$.fn.dataTable.isDataTable('#cmdbtable')) {
+				//var $taskListArea = $('.taskListArea').empty();
+				 $trackDatatable = $('#cmdbtable').DataTable({
+				    "pagingType": "full_numbers",
+				    "bInfo": false,
+				    "bLengthChange": false,
+				    "paging": false,
+				    "bFilter": false,
+				    "aoColumns": [{
+				        "bSortable": false
+				    }, {
+				        "bSortable": false
+				    }, {
+				        "bSortable": false
+				    }, {
+				        "bSortable": false
+				    }, {
+				        "bSortable": false
+				    }]
+
+				});
+				}
 
           	$.get('/cmdb/list',function(data){
 
@@ -89,7 +89,7 @@
 
 		            $tr.append('<td scope="col" style="font-size:12px;">'+data[i].orgname[0]+'</td>');
 
-		            $tr.append('<td scope="col" style="font-size:12px;">'+data[i].chefserver+'</td>');
+		            //$tr.append('<td scope="col" style="font-size:12px;">'+data[i].chefserver+'</td>');
 
 		            var $td = $('<td></td>');
                     
@@ -127,12 +127,14 @@
 	            	console.log('deleting..');
         	        var id = $(this).attr('data');
                     console.log(id);
+                    var $tr = $(this);
 
              	   $.ajax({
                          url: '/servicenow/removeItem/id/'+id,
                          type: 'DELETE',
                          success: function(data) {
-                           console.log("after deletion"+data);
+                           //console.log("after deletion"+data);
+                           $trackDatatable.row($tr).remove().draw(false);
                          }
                       }); 
 	            });
