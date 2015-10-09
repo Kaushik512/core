@@ -16,6 +16,7 @@ module.exports = function(options) {
 
     function connect(connectionParamsObj, callback) {
         con = new sshConnection();
+        connectionParamsObj.readyTimeout = 40000; //timeout increased to support azure based vms
         console.log("ConnectionParamsObj==>", connectionParamsObj);
 
         try {
@@ -44,6 +45,7 @@ module.exports = function(options) {
             isConnected = false;
             con = null;
             console.log("ERROR EVENT FIRED", err);
+
             if (err.level === 'client-authentication') {
                 console.log('Error msg:' + err);
                 callback(err, INVALID_CREDENTIALS);
@@ -97,11 +99,14 @@ module.exports = function(options) {
             } else {
                 logger.debug("SSh password...");
                 if (options.interactiveKeyboard) {
+
                     logger.debug("Authrnticating in keyboard-interactive way");
                     connectionParamsObj.tryKeyboard = true;
                     connect(connectionParamsObj, callback);
                 } else {
                     connectionParamsObj.password = options.password;
+                    logger.debug('About to callback');
+                    connect(connectionParamsObj, callback);
                 }
             }
         } else {

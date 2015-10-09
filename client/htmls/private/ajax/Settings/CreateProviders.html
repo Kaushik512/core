@@ -72,9 +72,9 @@
                                                             <select id="providertype" name="providerType" unique="true" uniqueconditionedby="orgname" class="chooseOrganization width-100" style="vertical-align: central" cat-validation="required" cdata="catalyst" skiprowid="yes" onchange="UtilityMethods.providerChanged($(this).val());">
                                                                 <option value="">Select Provider</option>
                                                                 <option value="AWS">AWS</option>
-                                                                <!-- <option value="OPENSTACK">OpenStack</option> -->
+                                                                <option value="OPENSTACK">OpenStack</option>
                                                                 <option value="HPPUBLICCLOUD">HP Public Cloud</option>
-                                                                <!-- <option value="VMWARE">VMware</option> -->
+                                                                <option value="VMWARE">VMware</option>
                                                                 <option value="AZURE">Azure</option>
                                                             </select>
                                                         </div>
@@ -539,6 +539,19 @@
         $('#providertype').trigger('change');
 
     }
+    function setValuesvmware(data){
+        $('#providertype').val(data.providerType).select2();
+        $('#providertype').trigger('change');
+        $('#name').val(data.providerName);
+        $('#vmwareusername').val(data.username);
+        $('#vmwarepassword').val(data.password);
+        $('#vmwarehost').val(data.host);
+        $('#vmwaredc').val(data.dc);
+        $('#orgId').val(data.orgId[0]).attr({
+            'answer': data.orgId[0]
+        }).select2();
+
+    }
 
     function setValues(data) {
         $('#name').val(data.providerName);
@@ -728,8 +741,7 @@
                     error: function(jqxhr) {
                         //alert('err 1');
                         getValuesAzure();
-                        removeLoader();
-                        bootbox.alert(jqxhr.status);
+                        
                     },
                     failure: function(data) {
                         alert('fail 1');
@@ -748,11 +760,39 @@
                         data = typeof data == "string" ? JSON.parse(data) : data;
                         d4ddata = data;
                         setValuesAzure(data);
-
+                        
                         //checkForKeyPair();
                     },
                     error: function(jqxhr) {
                         //alert('err 1');
+                        getValuesVmware();
+                        removeLoader();
+                        bootbox.alert(jqxhr.status);
+                    },
+                    failure: function(data) {
+                        alert('fail 1');
+                        bootbox.alert(data);
+                    }
+                });
+
+            }
+
+            var getValuesVmware = function() {
+               
+                $.ajax({
+                    method: "GET",
+                    url: "/vmware/providers/" + UtilityMethods.getIdFromURL(),
+                    success: function(data, success) {
+                        data = typeof data == "string" ? JSON.parse(data) : data;
+                        d4ddata = data;
+                        
+                        setValuesvmware(data);
+                        removeLoader();
+                        bootbox.alert(jqxhr.status);
+                        //checkForKeyPair();
+                    },
+                    error: function(jqxhr) {
+                        alert('err 1');
 
                         removeLoader();
                         bootbox.alert(jqxhr.status);

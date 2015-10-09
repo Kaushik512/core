@@ -116,20 +116,24 @@ module.exports.setRoutes = function(app, verificationFunc) {
     });
 
     app.get('/openstack/:providerid/networks', function(req, res) {
-    	logger.debug('Inside openstack get networks');
+    	logger.debug('Inside openstack get networks:');
        getopenstackprovider(req.params.providerid,function(err,openstackconfig){
 
 	        var openstack = new Openstack(openstackconfig);
-
-	        openstack.getNetworks(function(err,networks){
-	        	if(err){
-	                 logger.error('openstack networks fetch error', err);
-	                 res.send(500,err);
-	                 return;
-	        	}
-				res.send(networks);
-				logger.debug('Exit openstack get networks' + JSON.stringify(networks));
-			});
+	        if(openstackconfig.serviceendpoints.network){
+		        openstack.getNetworks(function(err,networks){
+		        	if(err){
+		                 logger.error('openstack networks fetch error', err);
+		                 res.send(500,err);
+		                 return;
+		        	}
+					res.send(networks);
+					logger.debug('Exit openstack get networks' + JSON.stringify(networks));
+				});
+			}
+			else{
+				res.send([]);
+			}
 	     });	
     });
 
@@ -153,21 +157,26 @@ module.exports.setRoutes = function(app, verificationFunc) {
     });
 
     app.get('/openstack/:providerid/securityGroups', function(req, res) {
-    	logger.debug('Inside openstack get securityGroups');
+    	logger.debug('Inside openstack get securityGroups',JSON.stringify(openstackconfig));
+
         getopenstackprovider(req.params.providerid,function(err,openstackconfig){
 
 	        var openstack = new Openstack(openstackconfig);
-
-	        openstack.getSecurityGroups(function(err,securityGroups){
-	        	if(err){
-	                 logger.error('openstack securityGroups fetch error', err);
-	                 res.send(500,err);
-	                 return;
-	        	}
-	            
-				res.send(securityGroups);
-				logger.debug('Exit openstack get securityGroups' + JSON.stringify(securityGroups));
-			});
+	        if(openstackconfig.serviceendpoints.network){
+		        openstack.getSecurityGroups(function(err,securityGroups){
+		        	if(err){
+		                 logger.error('openstack securityGroups fetch error', err);
+		                 res.send(500,err);
+		                 return;
+		        	}
+		            
+					res.send(securityGroups);
+					logger.debug('Exit openstack get securityGroups' + JSON.stringify(securityGroups));
+				});
+	    	}
+	    	else{
+	    		res.send([]);
+	    	}
 	    });
     });
 
