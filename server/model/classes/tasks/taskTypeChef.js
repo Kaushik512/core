@@ -44,16 +44,20 @@ chefTaskSchema.methods.execute = function(userName, baseUrl, choiceParam, nexusD
     }
     if (nexusData) {
         objectArray.push({
-            "name": "Nexus Url D4D",
-            "jsonObj": {
                 "catalyst-repo": {
                     "nexusUrl": nexusData.nexusUrl
-                }
+            }
+        });
+        objectArray.push({
+                "catalyst-repo": {
+                    "version": nexusData.version
             }
         });
     }
 
     var attributeObj = utils.mergeObjects(objectArray);
+
+    logger.debug("-===============-------------========== ",JSON.stringify(attributeObj));
 
 
     var instanceIds = this.nodeIds;
