@@ -256,22 +256,23 @@ Catalyst Creation of VM Image Process for CentOS
     Sleep    5s
     Clicks on New Button of VMImage
     Enters the Image Name for CentOS
+    Select organization now
     Choosess The Provider of Image
     Select the Operating System to Image for CentOS
     Enters the Image ID for CentOS
     Enters the UserName of CentOSProviders
-    Select organization now
+    
     Clicks on Save Button of VMimage page
 
 Catalyst Creation of VM Image Process for Ubutnu
     Sleep    5s
     Clicks on New Button of VMImage
     Enters the Image Name for Ubuntu
+    Select organization now
     Choosess The Provider of Image
     Select the Operating System to Image for Ubuntu 
     Enters the Image ID for Ubuntu
     Enters the UserName of UbuntuProviders
-    Select organization now
     Clicks on Save Button of VMimage page
 
 Catalyst Creation of VM Image Process for Windows
