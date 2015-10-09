@@ -28,7 +28,7 @@ puppetTaskSchema.methods.getNodes = function() {
 };
 
 // Instance Method :- run task
-puppetTaskSchema.methods.execute = function(userName, baseUrl, choiceParam, onExecute, onComplete) {
+puppetTaskSchema.methods.execute = function(userName, baseUrl, choiceParam, nexusData, onExecute, onComplete) {
     var self = this;
 
 

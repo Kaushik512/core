@@ -1374,6 +1374,7 @@ $(document).ready(function() {
             var attributes = [];
             $trAttribute.each(function() {
                 var $tr = $(this);
+                alert($tr.data('jsonObj'));
                 attributes.push({
                     name: $tr.attr('data-attributeName'),
                     jsonObj: $tr.data('jsonObj')

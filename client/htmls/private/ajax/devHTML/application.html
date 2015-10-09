@@ -434,7 +434,7 @@ function getNexusServer(){
         $('.reposerverspinner').css('display','none');
         if(nexus.length){
             for(var i=0;i< nexus.length;i++){
-                $('#chooseNexusServer').append('<option value='+nexus[i].rowid+'>'+nexus[i].nexusservername+'</option>');
+                $('#chooseNexusServer').append('<option data-nexusUrl = "'+nexus[i].hostname+'" value='+nexus[i].rowid+'>'+nexus[i].nexusservername+'</option>');
             }
         }
     });
@@ -610,8 +610,42 @@ $('.saveUpgradeAppDeploy').on('click',function(){
         alert("Please select job.");
         return false;
     }
-    $('a[data-executetaskid='+taskId+']').click();
-    $('#modalUpgradeAppDeploy').modal('hide');
+    var orgId = urlParams.org;
+    var bgId = urlParams.bg;
+    var projectId = urlParams.projid;
+    var envId = urlParams.envid;
+    var groupId = $('#chooseArtifacts').find('option:selected').attr('data-groupId').replace(/\./g, '/');
+    var nexusUrl = $('#chooseNexusServer').find('option:selected').attr('data-nexusUrl');
+    var nexusRepoUrl = nexusUrl+"/service/local/repositories/"+repoId+"/content/"+groupId+"/"+artifactId+"/"+versionId+"/"+artifactId+"-"+versionId+".zip";
+
+    /*$.get('/organizations/'+orgId+'/businessgroups/'+bgId+'/projects/'+projectId+'/environments/'+envId+'/tasks',function(tasks){
+        if(tasks.length){
+            for(var i=0;i< tasks.length;i++){
+                if(taskId === tasks[i]._id){
+                    if(tasks[i].taskConfig){
+                        var attributes = tasks[i].taskConfig.attributes;
+                        if(attributes){
+                            attributes.push({
+                                name: "",
+                                jsonObj: $tr.data('jsonObj')
+                            });
+                        }
+                    }
+                }
+            }
+        }
+    });*/
+    
+
+    var nexusData={
+        "nexusData":{
+            "nexusUrl": nexusRepoUrl
+        }
+    }   
+    //setTimeout(function(){
+        $('a[data-executetaskid='+taskId+']').trigger('click',nexusData);
+        $('#modalUpgradeAppDeploy').modal('hide');
+    //},200);
 });
 
 function saveRecord() {

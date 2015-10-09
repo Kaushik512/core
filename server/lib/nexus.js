@@ -161,9 +161,9 @@ var Nexus = function() {
                                     var lastLine = lines.splice(-1)[0];
                                     logger.debug("======= ",JSON.stringify(lines));
                                     if(lastLine.indexOf("url    ") === -1){
-                                    	fileData=fileData+'\r\n'+'url     http://54.193.72.201:8081/nexus/service/local/repositories/supercatalyst/content/org/rlcatalyst/D4D/2.10.0/D4D-2.10.0.zip';
+                                    	fileData=fileData+'\r\n'+reqBody.url;
                                     }else{
-                                    	lines.push("url     http://54.193.72.201:8081/nexus/service/local/repositories/supercatalyst/content/org/rlcatalyst/D4D/2.10.0/D4D-2.10.3.zip")
+                                    	lines.push(reqBody.url);
                                     	fileData = lines.join('\n');
                                     }
                                     logger.debug("File Data: ",fileData);
