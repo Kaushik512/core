@@ -53,10 +53,10 @@ Clicks on LogOut link
 Catalyst AWS Cost Dashboard Verification
     Clicks on Tracks Button
     Sleep    8s
-    Clicks on AWS Cost link
-    Sleep    10s
+    #Clicks on AWS Cost link
+    #Sleep    10s
     #Clicks on Left Panel Button
-    Sleep    2 minute
+    Sleep    5 minute
     Verify Page contains Cost Usage for Month
     Verify Page contains Cost Usage for Day
     Verify Page contains Summary
