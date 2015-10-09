@@ -18,3 +18,11 @@ Catalyst Launch of Cloud Formation Blueprints
     Catalyst Logout                      
     [Teardown]     Close Browser
 
+
+Catalyst Chef Client Run ,SSH of RLCatalyst Role and Delete
+    [Tags]       Sanity               dash
+#    Catalyst Login 
+    Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
+    Catalyst Chef Client Run and SSH on Cloud Formation Instance
+    Catalyst Logout                      
+    [Teardown]     Close Browser
