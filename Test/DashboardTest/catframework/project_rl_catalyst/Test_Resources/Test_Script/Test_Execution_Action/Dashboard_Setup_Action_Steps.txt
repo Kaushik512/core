@@ -56,7 +56,7 @@ Catalyst AWS Cost Dashboard Verification
     Clicks on AWS Cost link
     Sleep    10s
     Clicks on Left Panel Button
-    Sleep    1 minute
+    Sleep    2 minute
     Verify Page contains Cost Usage for Month
     Verify Page contains Cost Usage for Day
     Verify Page contains Summary
