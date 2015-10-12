@@ -78,7 +78,54 @@ Catalyst Launch of Cloud Formation Blueprint
     Sleep    1s
     Clicks on Infrastructure Tab
     Clicks on Instances Tab
+    
+    #Select the Java Stack Instance to verify Bootstrap
+    #Delete the Java and SQL Stack Instance
+    #Sleep    1s
+    #Select the MySql Stack Instance to verify Bootstrap
+    #Delete the Java and SQL Stack Instance
+    #Sleep    1s
+    #Verify the Stack Instances are Deleted
+    #Clicks on Infrastructure Tab
+    #Clicks on CloudFormation Tab
+    #Sleep    4s
+    #Select the Stack to delete
+    #Verify the Stack is Deleted
+
+
+Catalyst Chef Client Run and SSH on Cloud Formation Instance
+    Clicks on Workzone
+    Sleep    1s
+    Clicks on RL_QA Environment
+    Sleep    2s
+    Clicks on Chef Client Run of Java instance
+    Sleep    5s
+    Update the Run List with Cookbook
+    Select the RLCatalyst Cookbook
+    Clicks on Update Button
     Select the Java Stack Instance to verify Bootstrap
+    Clicks on ControlPanel
+    Sleep    2s
+    Clicks on Action History Tab
+    Sleep    1s
+    Verfiy the Chefclient Text and Success Status
+    Clicks on Back To Instances
+    Sleep    1s
+    Click on Verified SSH Instance
+    Enters the Username in the Terminal
+    Select Authentication Type
+    Upload the Catalyst PEM File
+    Clicks on Terminlal Submit Button
+    Close the SSH Terminal
+    Sleep    4s
+    Clicks on ControlPanel
+    Sleep    2s
+    Clicks on Action History Tab
+    Sleep    1s
+    Sleep    7s
+    Verfify the status of SSH Shell
+    Sleep    1s
+    Clicks on Back To Instances
     Delete the Java and SQL Stack Instance
     Sleep    1s
     Select the MySql Stack Instance to verify Bootstrap
@@ -91,6 +138,119 @@ Catalyst Launch of Cloud Formation Blueprint
     Select the Stack to delete
     Verify the Stack is Deleted
 
+
+
+Catalyst Verification of Jobs in RL_QA Environment
+    Clicks on Workzone
+    Sleep    1s
+    Clicks on RL_QA Environment
+    Sleep    2s
+    Capture Screen Shot of the page
+    Sleep    1s
+    Clicks on Orchestration Tab
+    Verify the Image is displayed for SMOKE_TEST_CONTAINER_STOP
+    Verify the Name of the Job
+    Clicks on History Button
+    Capture Screen Shot of the page
+    Sleep    6s
+    Click on Job Link Button
+    Clicks on Close Button
+
+
+
+Click on Job Link Button
+    Click Element    xpath=.//*[@id='tablehistoryTaskForJenkins']/tbody/tr[1]/td[2]/a
+
+Clicks on Close Button
+    Click Element    css=.btn.btn-minier.btn-primary.hideJenkinsJob
+
+Clicks on History Button
+    Execute Javascript    $('#tableOrchestration > tbody > tr:nth-child(1) > td:nth-child(6) > a > i').click()
+
+
+Verify the Image is displayed for SMOKE_TEST_CONTAINER_STOP
+    ${JENKINS IMAGE}=    Get Element Attribute    xpath=.//*[@id='tableOrchestration']/tbody/tr[1]/td[1]/img[@src]
+    Log    ${JENKINS IMAGE}
+    Should Be Equal    ${JENKINS IMAGE}    ${JENKINS IMGNAME}   
+
+
+
+Verify the Name of the Job
+    Element Should Contain    xpath=.//*[@id='tableOrchestration']/tbody/tr[1]/td[2]    ${JENKINS JOB1}
+
+
+Clicks on Orchestration Tab
+    Click Element    xpath=.//*[@id='myTab3']/li[2]/a
+
+
+
+Verfify the status of SSH Shell
+    Element Should Contain    xpath=.//*[@id='tableactionHistory']/tbody/tr[3]/td[1]    ${SSH}
+    ${SSH STATUS}=    Get Element Attribute   xpath=//*[@id='tableactionHistory']/tbody/tr[3]/td[2]/img@title
+    Log    ${SSH STATUS}
+    Should Be Equal    ${ACTBOOT2}     ${SSH STATUS}           
+    Sleep    2s
+
+Close the SSH Terminal
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='modalSSHShellContainer']/div/div/div[1]/button
+
+
+Clicks on Terminlal Submit Button
+    Wait Until Keyword Succeeds    2 minute     1 seconds      Click Element    xpath=.//*[@id='ssh-login-form']/div[7]/button[1]
+    Sleep      4s  
+
+Upload the Catalyst PEM File
+    Choose File     xpath=.//*[@id='ssh-pemfileInput']    ${Goldendemo_pem}   
+
+    
+Select Authentication Type
+    Click Element    xpath=.//*[@id='s2id_ssh-pemFileCheckbox']/a/span[1]   
+    Sleep    1s
+    Input Text    xpath=.//*[@id='select2-drop']/div/input    Pem File
+    Sleep    1s
+    Click Element    xpath=.//*[@id='select2-drop']/ul/li[2]/div
+
+
+Enters the Username in the Terminal
+    Sleep    10s
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    id=ssh-username    ${IP UBUNTUSERNAME}
+
+
+
+Verfiy the Chefclient Text and Success Status
+    Element Should Contain    xpath=.//*[@id='tableactionHistory']/tbody/tr[2]/td[1]    ${CHEF CLIENT}
+    ${CHEFSUCCESS}=    Get Element Attribute    xpath=.//*[@id='tableactionHistory']/tbody/tr[2]/td[2]/img@title
+    Log    ${CHEFSUCCESS}
+    Should Be Equal    ${CHEFSUCCESS}     ${SATSSYY}
+
+
+
+Click on Verified SSH Instance
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='divinstancescardview']/div/div//ul/li[contains(.,"${EDIT STACK1}")]/div/div/div/div[4]/div[2]/a
+
+
+
+Clicks on Update Button
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[text()='Update']
+    Wait Until Keyword Succeeds    1 minute     4 seconds      Click Element    xpath=//*[text()='OK']
+    Sleep    10 minutes
+    Wait Until Keyword Succeeds    1 minute     5 seconds      Click Element    css=#instanceLogModalContainer > div.modal-dialog > div.modal-content > div.modal-footer > button.btn.btn-default.btn-primary
+
+
+
+
+
+Select the RLCatalyst Cookbook
+    Wait Until Keyword Succeeds    2 minute     1 seconds    Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[text()='${ROLE NAME}']
+    Click Element    id=btnaddToRunlist
+
+
+ Update the Run List with Cookbook
+     Click Element    css=div.row > div:first-child > label:nth-of-type(2) > i
+
+
+Clicks on Chef Client Run of Java instance
+    Wait Until Keyword Succeeds    2 minute     1 seconds    Click Element    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${EDIT STACK1}")]/div/div/div/div[4]/div[1]/a
 
 
 Catalyst Logout
@@ -175,7 +335,8 @@ Select the Java Stack Instance to verify Bootstrap
 
 Select the MySql Stack Instance to verify Bootstrap
     Sleep    3s
-    Click Element    xpath=.//span[@data-original-title='${EDIT STACK2}']    
+    Click Element    xpath=.//span[@data-original-title='${EDIT STACK2}']  
+
 
 
 Clicks on ControlPanel
