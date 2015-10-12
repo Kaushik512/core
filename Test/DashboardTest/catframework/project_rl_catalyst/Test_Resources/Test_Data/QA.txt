@@ -25,11 +25,16 @@ ${width}           1400
 
 
 #SuperCatalyst
-${SUPERCAT TEMP}                               NodeJStemps
+${SUPERCAT TEMP}                               NodeJStemp
 ${PROVIDER}                                AWS RELPRO
 ${SUPERCAT ENV}                            RL_QA
+${ROLE NAME}                              rlcatalyst
+${SSH}                                    SSH-Shell
+${JENKINS IMGNAME}                     img/jenkins.png
 
 
+
+${JENKINS JOB1}             CATALYST_SMOKE_TEST
 
 
 
@@ -39,13 +44,15 @@ ${AWS}                         AWS Cost
 
 #CFT
 ${CLOUD BP}                 JAVA_Stack
-${STACK NAME}               RLStacK
+${STACK NAME}               RLstacK
 ${JAVA}                      Java
 ${MYSQL}                     MySql
 ${BOOTSTRAP}                 Bootstrap
 ${STACK STATUS}              CREATE_COMPLETE
 ${EDIT STACK1}               TestJava
 ${EDIT STACK2}               TestSQL
+${CHEF CLIENT}               Chef-Client-Run
+
 
 ${ENV}                 QA.txt
 ${VALID USER}             superadmin
