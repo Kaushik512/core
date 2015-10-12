@@ -423,32 +423,54 @@ var Openstack = function(options) {
                     delete createServerJson.server.security_groups;
                 }
                 //Testing floating ip create
-                that.createfloatingip(tenantId, createServerJson.server.networks[0]["uuid"], function(err, floatingipdata) {
-                    if (!err) {
-                        console.log('Added an ip', JSON.stringify(JSON.parse(floatingipdata)));
+                if(typeof createServerJson.server.networks[0] != "undefined"){
+                        that.createfloatingip(tenantId, createServerJson.server.networks[0]["uuid"], function(err, floatingipdata) {
+                            if (!err) {
+                                console.log('Added an ip', JSON.stringify(JSON.parse(floatingipdata)));
 
-                        //create an instance and wait for server ready state
+                                //create an instance and wait for server ready state
 
-                        console.log("createServerJson after");
-                        console.log(JSON.stringify(createServerJson));
-                        var createServerUrl = options.serviceendpoints.compute + '/' + tenantId + '/servers';
-                        console.log('CreateServerURL:' + createServerUrl);
-                        client.registerMethod("jsonMethod", createServerUrl, "POST");
-                        client.methods.jsonMethod(args, function(data, response) {
-                            console.log("createServer response:: " + data);
-                            data['floatingipdata'] = JSON.parse(floatingipdata);
-                            if (data.server) {
-                                console.log("END:: createServer");
-                                console.log(JSON.stringify(data));
-                                callback(null, data);
-                                return;
-                            } else {
-                                callback(data, null);
+                                console.log("createServerJson after");
+                                console.log(JSON.stringify(createServerJson));
+                                var createServerUrl = options.serviceendpoints.compute + '/' + tenantId + '/servers';
+                                console.log('CreateServerURL:' + createServerUrl);
+                                client.registerMethod("jsonMethod", createServerUrl, "POST");
+                                client.methods.jsonMethod(args, function(data, response) {
+                                    console.log("createServer response:: " + data);
+                                    data['floatingipdata'] = JSON.parse(floatingipdata);
+                                    if (data.server) {
+                                        console.log("END:: createServer");
+                                        console.log(JSON.stringify(data));
+                                        callback(null, data);
+                                        return;
+                                    } else {
+                                        callback(data, null);
+                                    }
+
+                                });
                             }
-
                         });
-                    }
-                });
+                }
+                else{ //cannot create floating ip no external network found
+
+                    console.log("createServerJson after");
+                    console.log(JSON.stringify(createServerJson));
+                    var createServerUrl = options.serviceendpoints.compute + '/' + tenantId + '/servers';
+                    console.log('CreateServerURL:' + createServerUrl);
+                    client.registerMethod("jsonMethod", createServerUrl, "POST");
+                    client.methods.jsonMethod(args, function(data, response) {
+                        console.log("createServer response:: " + data);
+                        if (data.server) {
+                            console.log("END:: createServer");
+                            console.log(JSON.stringify(data));
+                            callback(null, data);
+                            return;
+                        } else {
+                            callback(data, null);
+                        }
+
+                    });
+                }
 
             } else {
                 console.log(err);
@@ -564,13 +586,23 @@ var Openstack = function(options) {
                     console.log('Quried server:', JSON.stringify(data));
                     if (data.server.status == 'ACTIVE') {
                         //set the floating ip to instance
-                        if (instanceData.floatingipdata.floatingip.floating_ip_address && !self.updatedfloatingip)
-                            self.updatefloatingip(tenantId, instanceData.floatingipdata.floatingip.floating_ip_address, instanceData.server.id, function(err, data) {
-                                if (!err) {
-                                    self.updatedfloatingip = true;
-                                    console.log('Updated with floating ip');
-                                }
-                            });
+                        if(instanceData.floatingipdata)
+                        {
+                            if (instanceData.floatingipdata.floatingip.floating_ip_address && !self.updatedfloatingip)
+                                self.updatefloatingip(tenantId, instanceData.floatingipdata.floatingip.floating_ip_address, instanceData.server.id, function(err, data) {
+                                    if (!err) {
+                                        self.updatedfloatingip = true;
+                                        console.log('Updated with floating ip');
+                                    }
+                                });
+                        }
+                        else{
+                            if(server.addresses.private){
+                                 self.updatedfloatingip = true; 
+                                 instanceData.floatingipdata.floatingip.floating_ip_address = data.server.addresses.private[0].addr;
+                                 console.log('Updated with private with floating ip');
+                            }
+                        }
                     }
                     if (self.updatedfloatingip) {
                         self.trysshoninstance(instanceData, function(cdata) {
