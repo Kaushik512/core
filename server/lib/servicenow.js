@@ -2,6 +2,7 @@ var Client = require('node-rest-client').Client;
 var logger = require('_pr/logger')(module);
 var mongoose = require('mongoose');
 var request = require('request');
+var ObjectId = require('mongoose').Types.ObjectId;
 
 var CMDBConfigSchema = new mongoose.Schema({
     id: {
@@ -99,9 +100,8 @@ CMDBConfigSchema.statics.getConfigItems = function(tableName, options, callback)
 
         } else {
             logger.error("Error");
-            callback(error, null);
+            callback("Error in getting CMDB data", null);
         }
-
     });
 }
 
@@ -138,7 +138,7 @@ CMDBConfigSchema.statics.saveConfig = function(config, callback) {
 
 CMDBConfigSchema.statics.removeServerById = function(serverId, callback) {
     this.remove({
-        "_id": serverId
+        "rowid": serverId
     }, function(err, data) {
         if (err) {
             logger.error("Failed to remove item (%s)", err);
@@ -169,6 +169,35 @@ CMDBConfigSchema.statics.getConfigItemByName = function(name, tableName, options
         
         return;
     });
+}
+
+CMDBConfigSchema.statics.updateConfigItemById = function(configData,callback){
+
+    logger.debug("Enter updateConfigItemById");
+    this.update({
+        "_id": new ObjectId(configData._id)
+    }, {
+        $set: {
+            configname: configData.configname,
+            url: configData.url,
+            servicenowusername: configData.servicenowusername,
+            servicenowpassword: configData.servicenowpassword,
+            orgname: configData.orgname   
+        }
+    }, {
+        upsert: false
+    }, function(err, updateCount) {
+        if (err) {
+            logger.debug("Exit updateConfigItemById with no update.");
+            callback(err, null);
+            return;
+        }
+        logger.debug("Exit updateConfigItemById with update success.");
+        callback(null, updateCount);
+        return;
+
+    });
+
 }
 
 var CMDBConfig = mongoose.model('CMDBConfig', CMDBConfigSchema);

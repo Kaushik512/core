@@ -21,47 +21,48 @@
                                     <!-- widget content -->
                                     	<div class="widget-body no-padding">
                                        <div class="col-lg-6 col-md-6">
-                                             <label for="">Configuration Name:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+                                             <label for="configname">Configuration Name:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
                                              <!-- <i class="icon-append fa fa-building"></i> -->
-                                             <input name="" value="" id="configname" class="form-control" type="text"  cdata="catalyst" unique="true"  cat-validation="required,max15" uniqueconditionedby="configname">
+                                            <div class="input-groups"> 
+                                             <input name="configname" value="" id="configname" class="form-control required" type="text"  cdata="catalyst" unique="true" uniqueconditionedby="configname">
+                                             </div>
                                           </div>
                                           
                                           
                                              <div class="col-lg-6 col-md-6">
-                                                <label for="name">ServiceNow URL:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+                                                <label for="url">ServiceNow URL:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
                                                 <!-- <i class="icon-append fa fa-building"></i> -->
-                                                <input name="" value="" id="url" class="form-control" type="url"  cdata="catalyst"  cat-validation="required,urlcheck">
+                                                <div class="input-groups">
+                                                <input name="url" value="" id="url" class="form-control required" type="url"  cdata="catalyst
+                                                " ></div>
                                              </div>
                                           <hr>
                                           
                                              <div class="col-lg-6 col-md-6" style="margin-top:25px">
-                                                <label for="link">UserName:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+                                                <label for="username">UserName:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
                                                 <!-- <i class="icon-append fa fa-building"></i> -->
-                                                <input type="text" name="" value="" id="username" class="form-control" type="text"  name="website"  cdata="catalyst"  cat-validation="required" autocomplete="off">
+                                                <div class="input-groups">
+                                                <input type="text" name="username" value="" id="username" class="form-control required" type="text"  name="website"  cdata="catalyst"  autocomplete="off">
+                                                </div>
                                              </div>
                                           
                                           <hr/>
                                           
                                              <div class="col-lg-6 col-md-6" style="margin-top:25px">
-                                                <label for="link">Password:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+                                                <label for="password">Password:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
                                                 <!-- <i class="icon-append fa fa-building"></i> -->
-                                                <input name="" value="" id="password" class="form-control" type="password"  name="website"  cdata="catalyst"  cat-validation="required" autocomplete="off">
+                                                <div class="input-groups">
+                                                <input name="password" value="" id="password" class="form-control required" type="password"  name="website"  cdata="catalyst"  autocomplete="off">
+                                                </div>
                                              </div>
 
-                                             <!-- <div class="col-lg-6 col-md-6" style="margin-top:25px">
-                                                <label for="name">ChefServer:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
-                                                <select id="chefserver" unique="true" uniqueconditionedby="chefserver"  class="chooseChefserver width-100" sourcepath="1" datapath="masterjson.rows.row" valuelinkfield="costcode" style="vertical-align:central"  cdata="catalyst"  cat-validation="required">
-                                                   <option value="">Select a ChefServer</option>
-                                                </select>
-                                                <span data-val-controltovalidate="domainname" id="MainContent_Req_domainname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility:hidden;">Required</span>
-                                             </div> -->
-
                                               <div class="col-lg-6 col-md-6" style="margin-top:25px">
-                                                <label for="name">Organization:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
-                                                <select id="orgname" unique="true" uniqueconditionedby="orgname"  class="chooseOrganization width-100 form-control" sourcepath="1" datapath="masterjson.rows.row" valuelinkfield="costcode" style="vertical-align:central"  cdata="catalyst"  cat-validation="required">
+                                                <label for="orgname">Organization:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+                                                <div class="input-groups">
+                                                <select name="orgname" id="orgname" unique="true" uniqueconditionedby="orgname"  class="chooseOrganization width-100 form-control required" sourcepath="1" datapath="masterjson.rows.row" valuelinkfield="costcode" style="vertical-align:central"  cdata="catalyst">
                                                    <option value="">Select an Organization</option>
                                                 </select>
-                                                <span data-val-controltovalidate="domainname" id="MainContent_Req_domainname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility:hidden;">Required</span>
+                                                </div>
                                              </div>
                                     </div>
                                     <!-- end widget content -->
@@ -97,9 +98,93 @@
 		</div>
 
       <script >
+
+        var UtilityMethods={
+             initTooltip:function(){
+              var $tool=$("[rel=tooltip]");
+              if ($tool.length) {
+               $tool.tooltip();
+             }
+           },
+           getRandomNumber:function(){      
+             return parseInt(Math.random()*10000000000);
+           },
+           getIdFromURL:function(){
+             var options=location.toString().split('?');
+             return options.length >1 ? (options[1]!=="new" ? options[1]:"" ):"";
+           },
+           initializeSelect2:function(){
+             $('select').select2();
+           }
+         };
    
         $(document).ready(function () {
             
+            var isEditMode = false;
+
+            var id = UtilityMethods.getIdFromURL();
+
+            if(id){
+               console.log("In updation :", id);
+               isEditMode = true;
+
+              $.get('/cmdb/servers/' + id ,function(data){
+                  $('#configname').val(data.configname);
+                  $('#url').val(data.url);
+                  $('#username').val(data.servicenowusername);
+                  $('#password').val(data.servicenowpassword);
+                  $('#orgname').val(data.orgname).attr('orgname_rowid',data.orgname_rowid).trigger('change');
+             });
+            }
+
+            //form validation for dashboard save
+             var validator = $('#configForm').validate({
+                 onkeyup: false,
+                 errorClass: "error",
+
+                 //put error message behind each form element
+                 errorPlacement: function(error, element) {
+                     console.log(error, element);
+                     var elem = $(element);
+                     if (element.parent('.input-groups').length) {
+                         error.insertBefore(element.parent());
+                     } else {
+                         if (element.parent('div.inputGroups')) {
+                             console.log(element);
+                             console.log(element.parent);
+                             error.insertBefore('div.inputGroups');
+                         }
+                     }
+                 },
+
+                 //When there is an error normally you just add the class to the element.
+                 // But in the case of select2s you must add it to a UL to make it visible.
+                 // The select element, which would otherwise get the class, is hidden from
+                 // view.
+                 highlight: function(element, errorClass, validClass) {
+                     var elem = $(element);
+                     if (elem.hasClass("select2-offscreen")) {
+                         $("#s2id_" + elem.attr("id") + " ul").addClass(errorClass);
+                     } else {
+                         elem.addClass(errorClass);
+                     }
+                 },
+
+                 //When removing make the same adjustments as when adding
+                 unhighlight: function(element, errorClass, validClass) {
+                     var elem = $(element);
+                     if (elem.hasClass("select2-offscreen")) {
+                         $("#s2id_" + elem.attr("id") + " ul").removeClass(errorClass);
+                     } else {
+                         elem.removeClass(errorClass);
+                     }
+                 }
+             });
+             $('a.addDashboardItem[type="reset"]').on('click', function(e) {
+                 validator.resetForm();
+             });
+             
+
             //$(".chooseOrganization").select2();
             $.get('/d4dMasters/readmasterjsonnew/1',function(data){
                
@@ -110,22 +195,22 @@
                  $select.append('<option value="'+data[i].orgname+'" orgname_rowid="'+orgname_rowid+'">'+data[i].orgname+'</option>');
                }
             });//end of get organizations action
-            
-            /*$.get('/d4dMasters/readmasterjsonnew/10',function(data){
-               
-               var $select = $('#chefserver');
-               for(i=0;i<data.length;i++){
-                 $select.append('<option value="'+data[i].configname+'">'+data[i].configname+'</option>');
-                }
 
-             });//end of get chef servers action*/
+             $('#configForm').submit(function(e) {
+                 console.log("In config form");
+                 var isValidate = $("#configForm").valid();
+                 //alert(isValidate);
+                 if (!isValidate) {
+                     e.preventDefault();
+                 } else {
+                     var url = '/servicenow/saveconfig';
 
-            $('#configForm').submit(function() {
-                  console.log("In config form");
+                     if(isEditMode){
+                       url = '/servicenow/config/update/' + id;
+                     }
 
-                  
-                  if(isFormValid(null, 'cat-validation')){
-
+                     e.preventDefault();
+                     console.log('Form validation is success');
                      var configname = $('#configname').val().trim();
                      var servicenowurl = $('#url').val().trim();
                      var username = $('#username').val().trim();
@@ -133,7 +218,7 @@
                      //var chefserver = $('#chefserver').val().trim();
                      var org = $('#orgname').val().trim();
                      var orgname_rowid = $('#orgname').find(':selected').attr('orgname_rowid');
-                      
+
                      //console.log("orgname_rowid",orgname_rowid);
                      var body = {};
 
@@ -145,15 +230,15 @@
                      body.org = org;
                      body.orgname_rowid = orgname_rowid;
 
-                     $.post('/servicenow/saveconfig',body,function(data){
-                        console.log("Saveconfig Response::"+data);
-                        $('#btncancel').click();
+                     $.post(url, body, function(data) {
+                         console.log("Saveconfig Response::" + data);
+                         $('#btncancel').click();
                      });
+                     // }
+                 }
 
-                  }
-                  
-             });//end of save config action
-           
-           });//end of document load
+             }); //end of save config action
+
+         }); //end of document load
 
       </script>

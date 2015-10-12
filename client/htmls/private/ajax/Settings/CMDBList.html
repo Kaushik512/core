@@ -44,7 +44,7 @@
 		<script>
           $(document).ready(function () {
 
-          	var $trackDatatable = '';
+          	
 
           	if (!$.fn.dataTable.isDataTable('#cmdbtable')) {
 				//var $taskListArea = $('.taskListArea').empty();
@@ -68,80 +68,80 @@
 
 				});
 				}
+			});
 
-          	$.get('/cmdb/list',function(data){
+          	$.get('/cmdb/list', function(data) {
+          	    console.log("In CMDBList::" + data);
+                createTableFromJson(data);
+          	});
 
-                console.log("In CMDBList::"+ data);
+            function createTableFromJson(data){
+            	 var $taskbody = $('#cmdbtable').find('tbody');
+          	    // $taskbody.empty();
 
-                var $taskbody = $('#cmdbtable').find('tbody');
-	            $taskbody.empty();
+          	    for (i = 0; i < data.length; i++) {
 
-              for(i=0;i<data.length;i++){
-               	
-               	if(data[i].servicenowusername){
+          	        if (data[i].servicenowusername) {
 
-		            var $tr = $('<tr style="line-height:2.3" id="'+data[i]._id+'"></tr>');
-		            $tr.append('<td scope="col" style="font-size:12px;">'+data[i].configname+'</td>');
+          	            var $tr = $('<tr style="line-height:2.3" class="cmdbRow" id="' + data[i].rowid + '"></tr>');
+          	            $tr.append('<td scope="col" style="font-size:12px;">' + data[i].configname + '</td>');
 
-		            $tr.append('<td scope="col" style="font-size:12px;">'+data[i].servicenowusername+'</td>');
+          	            $tr.append('<td scope="col" style="font-size:12px;">' + data[i].servicenowusername + '</td>');
 
-		            $tr.append('<td scope="col" style="font-size:12px;">'+data[i].url+'</td>');
+          	            $tr.append('<td scope="col" style="font-size:12px;">' + data[i].url + '</td>');
 
-		            $tr.append('<td scope="col" style="font-size:12px;">'+data[i].orgname[0]+'</td>');
+          	            $tr.append('<td scope="col" style="font-size:12px;">' + data[i].orgname[0] + '</td>');
 
-		            //$tr.append('<td scope="col" style="font-size:12px;">'+data[i].chefserver+'</td>');
+          	            //$tr.append('<td scope="col" style="font-size:12px;">'+data[i].chefserver+'</td>');
 
-		            var $td = $('<td></td>');
-                    
-                    var $div = $('<div class="btn-group tableactionWidthCheficon"></div');
+          	            var $td = $('<td></td>');
 
-		            var $removeButton = '<a class="btn btn-danger pull-left btn-sg '
-		            	     + 'tableactionbutton removeAction" data="'+data[i]._id+'" value="Remove" title="Remove"'
-		            	     + '><i class="ace-icon fa fa-trash-o '
-		            	     + 'bigger-120"></ i></a>';
+          	            var $div = $('<div class="btn-group tableactionWidthCheficon"></div');
 
-		            var $updateButton = '<a class="btn btn-info pull-left ' 
-		               + 'tableactionbutton tableactionbuttonpadding btn-sg updateAction" '
-		               + 'title="Update" href="#ajax/Settings/ConfigCMDB.html?'+data[i]._id
-		               + '"><i class="ace-icon fa fa-pencil bigger-120"></i></a>'; 	     
+          	            var $removeButton = '<a class="btn btn-danger pull-left btn-sg ' + 'tableactionbutton removeAction" value="Remove" title="Remove" '
+          	                //+'onclick="deleteItem("10", "rowid","'+ data[i].rowid +'",this);"'
+          	                + '><i class="ace-icon fa fa-trash-o ' + 'bigger-120"></ i></a>';
 
-		            var $importButton='<a class="btn btn-sg btn-primary tableactionbutton '
-		             + 'tableactionbuttonpadding importAction" title="Import Nodes" '
-		             + 'href="#ajax/Settings/servicenowSync.html?'+data[i]._id+'"><i class="ace-'
-		             + 'icon fa fa-download bigger-120"></i></a>';   
+          	            var $updateButton = '<a class="btn btn-info pull-left ' + 'tableactionbutton tableactionbuttonpadding btn-sg updateAction" ' + 'title="Update" href="#ajax/Settings/ConfigCMDB.html?' + data[i]._id + '"><i class="ace-icon fa fa-pencil bigger-120"></i></a>';
 
-		            $div.append($removeButton);	     
-		            $div.append($updateButton);
-		            $div.append($importButton);
-		            
-		            $td.append($div);
-                    $tr.append($td);
+          	            var $importButton = '<a class="btn btn-sg btn-primary tableactionbutton ' + 'tableactionbuttonpadding importAction" title="Import Nodes" ' + 'href="#ajax/Settings/servicenowSync.html?' + data[i]._id + '"><i class="ace-' + 'icon fa fa-download bigger-120"></i></a>';
 
-		            $taskbody.append($tr);
-	             }
+          	            $div.append($removeButton);
+          	            $div.append($updateButton);
+          	            $div.append($importButton);
 
-	           }
-	           
-	           $(".removeAction").on('click', function(e){
-	           		//alert($(this).attr('data'));
-	            	console.log('deleting..');
-        	        var id = $(this).attr('data');
-                    console.log(id);
-                    var $tr = $(this);
+          	            $td.append($div);
+          	            $tr.append($td);
 
-             	   $.ajax({
-                         url: '/servicenow/removeItem/id/'+id,
-                         type: 'DELETE',
-                         success: function(data) {
-                           //console.log("after deletion"+data);
-                           $trackDatatable.row($tr).remove().draw(false);
-                         }
-                      }); 
-	            });
-               });
+          	            $taskbody.append($tr);
+          	            $trackDatatable.row.add($tr).draw();
+          	            
+          	            $div.find("a.removeAction").on('click', function(e) {
+          	            
+          	                console.log($(this));
+          	                var $tr = $(this).parents('tr');
+          	                var id = $tr.attr('id');
+          	                console.log(id);
+          	                //alert(id);
+          	                //alert($tr.length);
 
+          	                $.ajax({
+          	                    url: '/servicenow/removeItem/id/' + id,
+          	                    type: 'DELETE',
+          	                    success: function() {
+          	                        console.log("removed tr:", $tr)
+          	                        $trackDatatable.row($tr).remove().draw(false);
+          	                        console.log('remove action complete');
+          	                    }
+          	                });
 
-          });
+          	                return false;
+          	            });
+          	        }
 
+          	    }
+
+            }
+          
 
 		</script>

@@ -43,14 +43,13 @@ module.exports.setRoutes = function(app, verificationFunc) {
                     return;
                 }
 
-                logger.debug("getConfigItems : data.result length..", data.result.length);
-
                 if (!data.result) {
                     logger.error("ServiceNow CI data fetch error");
                     res.send(data);
                     return;
                 }
-
+                
+                logger.debug("getConfigItems : data.result length..", data.result.length);
                 logger.debug("Success :Getting Servicenow Config Items");
 
                 res.send(data);
@@ -501,6 +500,40 @@ module.exports.setRoutes = function(app, verificationFunc) {
             }
 
             logger.debug("save response:" + data);
+            res.send(data);
+        });
+    });
+
+
+      app.post('/servicenow/config/update/:id', function(req, res) {
+
+        logger.debug('Starting servicenow update');
+
+        var json = JSON.parse(JSON.stringify(req.body));
+        
+        logger.debug("orgname:" + req.body.org);
+
+        var rowid = uuid.v4();
+        var config = {
+            "_id": req.params.id,
+            "configname": req.body.configname,
+            "url": req.body.servicenowurl,
+            "servicenowusername": req.body.username,
+            "servicenowpassword": req.body.password,
+            "orgname": req.body.org
+        };
+
+        logger.debug("config" + config);
+
+        CMDBConfig.updateConfigItemById(config, function(err, data) {
+            logger.debug("Upadted config");
+            if (err) {
+                logger.error("Error updating CMDB config:", err);
+                res.send(500, "Failed to update CMDB config.");
+                return;
+            }
+
+            logger.debug("update response:" + data);
             res.send(data);
         });
     });

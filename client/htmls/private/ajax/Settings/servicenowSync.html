@@ -9,7 +9,7 @@
         <th style="text-align: center">IP Address</th>
         <th style="text-align: center">FQDN</th>
         <th style="text-align: center">Platform</th>
-        <th style="text-align: center">Uptime</th>
+        <th style="text-align: center">Created On</th>
       
         <th style="text-align: center">Environment</th>
       
@@ -175,7 +175,6 @@ $(function() {
 
            if(data.result){
                createTableFromJson(data);
-
                $('.nodeListContainer img').remove();
                $('.nodeListContainer').find('.tabContent').attr('style','');
 
@@ -184,6 +183,9 @@ $(function() {
                $('.nodeListContainer').find('.tabContent').attr('style','').append('<label>Please check your servicenow settings</label>');
          }
 
+    }).fail(function(){
+        $('.nodeListContainer img').remove();
+        $('.nodeListContainer').append("Not able to fetch CMDB data.Please check your configuration");
     });
 
     var $orgListInput = $('#chefImportOrgSelect');
@@ -239,17 +241,37 @@ $(function() {
              var nodeList = data.result; 
 
              for(i=0;i<nodeList.length;i++){
+                 var ip_address = nodeList[i].ip_address;
+                 var fqdn = nodeList[i].fqdn;
+                 console.log(ip_address);
+                 if(!ip_address){
+                   ip_address = 'machine is down';
+                 }
+                 if(!fqdn){
+                   fqdn = '&nbsp -';
+                 }
 
                  var $tr = $('<tr></tr>');
                  $tr.append('<td>'+ nodeList[i].name +'</td>');
-                 $tr.append('<td>'+ nodeList[i].ip_address +'</td>');
-                 $tr.append('<td>'+ nodeList[i].fqdn +'</td>');
+                 $tr.append('<td>'+ ip_address +'</td>');
+                 $tr.append('<td>'+ fqdn +'</td>');
                  $tr.append('<td>'+ nodeList[i].os +'</td>');
-                 $tr.append('<td></td>');
+                 $tr.append('<td>'+ nodeList[i].sys_created_on +'</td>');
                  $tr.append('<td>'+ nodeList[i].classification +'</td>');
                  
                   $nodecheckboxlabel = $('<label></label>').addClass('checkbox');
                   $nodecheckboxinput = $('<input class="nodeCheckBox" data-nodeName="' + nodeList[i].name + '" type="checkbox" name="nodesChecked"/><i></i>');
+                  
+                  //console.log(nodeList[i].sys_created_on);
+
+                  /*var time1 = new Date(nodeList[i].sys_created_on);
+                  var time2 = new Date();
+
+                  var diff = time1-time2;
+                  var lapse = new Date(diff);  
+
+                  console.log("diff:",diff);
+                  console.log("lapse:", lapse.getHours());*/
 
                   /*$('.nodeCheckBox').click(function(){
                     // alert('hi');
@@ -360,7 +382,7 @@ $(function() {
         }
 
         reqBody.selectedNodeName = $checkBoxes.attr('data-nodeName');
-        alert(reqBody.selectedNodeName);
+        //alert(reqBody.selectedNodeName);
         reqBody.credentials = {};
         reqBody.credentials.username = $('#importUsernameInput').val();
 
