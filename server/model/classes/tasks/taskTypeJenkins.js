@@ -25,7 +25,7 @@ var jenkinsTaskSchema = taskTypeSchema.extend({
 });
 
 // Instance Method :- run task
-jenkinsTaskSchema.methods.execute = function(userName, baseUrl, choiceParam, onExecute, onComplete) {
+jenkinsTaskSchema.methods.execute = function(userName, baseUrl, choiceParam, nexusData, onExecute, onComplete) {
     logger.debug("Choice Param in:::  anshul ",choiceParam);
     var self = this;
     //this.parameterized.name = choiceParam;

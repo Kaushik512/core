@@ -2,7 +2,19 @@
     position: relative;
     left: 32%;
 }
-
+.legendCustom{
+    border:0 none !important;
+    padding:0 !important;
+    width: auto !important;
+    margin-bottom: 0 !important;
+    font-size:15px !important;
+    color:#666 !important;
+}
+.fieldsetCustom{
+    border: 1px solid #dddddd !important;
+    margin: 0 2px !important;
+    padding: 0.35em 0.625em 0.75em !important;
+}
 .updateupgrade {
     background: url("../img/updateupgrade.png");
     background-repeat: no-repeat;
@@ -6065,7 +6077,7 @@ button {
 }
 
 .domain-role-thumbnailDev > .container {
-    -webkit-perspective: 0 !important;
+    -webkit-perspective: none !important;
 }
 
 .flip-toggle.flip .card {

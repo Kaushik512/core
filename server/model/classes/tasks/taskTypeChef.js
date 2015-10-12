@@ -33,7 +33,7 @@ chefTaskSchema.methods.getNodes = function() {
 };
 
 // Instance Method :- run task
-chefTaskSchema.methods.execute = function(userName, baseUrl,choiceParam, onExecute, onComplete) {
+chefTaskSchema.methods.execute = function(userName, baseUrl, choiceParam, nexusData, onExecute, onComplete) {
     var self = this;
 
     //merging attributes Objects
@@ -42,8 +42,22 @@ chefTaskSchema.methods.execute = function(userName, baseUrl,choiceParam, onExecu
     for (var i = 0; i < self.attributes.length; i++) {
         objectArray.push(self.attributes[i].jsonObj);
     }
+    if (nexusData) {
+        objectArray.push({
+                "catalyst-repo": {
+                    "nexusUrl": nexusData.nexusUrl
+            }
+        });
+        objectArray.push({
+                "catalyst-repo": {
+                    "version": nexusData.version
+            }
+        });
+    }
 
     var attributeObj = utils.mergeObjects(objectArray);
+
+    logger.debug("-===============-------------========== ",JSON.stringify(attributeObj));
 
 
     var instanceIds = this.nodeIds;
@@ -96,7 +110,7 @@ chefTaskSchema.methods.execute = function(userName, baseUrl,choiceParam, onExecu
             }
             instanceResultList.push(result);
             if (!(count < instances.length)) {
-                console.log('Type of onComplete ============> '+typeof onComplete);
+                console.log('Type of onComplete ============> ' + typeof onComplete);
                 if (typeof onComplete === 'function') {
                     onComplete(null, overallStatus, {
                         instancesResults: instanceResultList
