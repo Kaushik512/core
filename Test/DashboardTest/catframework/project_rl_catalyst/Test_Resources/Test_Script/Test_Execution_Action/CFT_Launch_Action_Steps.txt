@@ -154,21 +154,25 @@ Catalyst Verification of Jobs in RL_QA Environment
     Sleep    4s
     Capture Screen Shot of the page
     Sleep    6s
+    
+
     Click on Job Dashboard Button
     Sleep    2s
     Selects the Window
     Capture Screen Shot of the page
     Verify the Details of Dashboard
     Close Window
-    Select the Catalyst Window
-    Sleep    1s
+    #Select the Catalyst Window
+    Sleep    6s
     Clicks on Job LogHtml Button
+    Sleep    2s
+    Capture Screen Shot of the page
     Sleep    3s
     Select the Catalyst Suites Window
     Capture Screen Shot of the page
     verify the Log Page
     Close Window
-    Select the Catalyst Window
+    #Select the Catalyst Window
     Sleep    1s
     Clicks on Job Status Button
     Sleep    1s
@@ -422,7 +426,11 @@ Clicks on Confirmation of OK Button
     Click Element    xpath=.//*[text()='OK']
 
 Enters the Unique StackName
-    Input Text    id=cftInput    ${STACK NAME}
+    ${STACK UNIQUE}=    Generate Random String    3    [NUMBERS]
+    ${STACK STORE}=    Catenate  SEPARATOR=    ${STACK NAME}${STACK UNIQUE}
+    Log     ${STACK STORE}
+    Set Global Variable    ${STACK STORE}
+    Input Text    id=cftInput    ${STACK STORE}
 
 Clicks on Launch Button
     Click Element    css=.btn.pull-left.btn-primary.launchBtn
