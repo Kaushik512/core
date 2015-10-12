@@ -57,9 +57,9 @@
                                              </div>
 
                                               <div class="col-lg-6 col-md-6" style="margin-top:25px">
-                                                <label for="orgname">Organization:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+                                                <label for="">Organization:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
                                                 <div class="input-groups">
-                                                <select name="orgname" id="orgname" unique="true" uniqueconditionedby="orgname"  class="chooseOrganization width-100 form-control required" sourcepath="1" datapath="masterjson.rows.row" valuelinkfield="costcode" style="vertical-align:central"  cdata="catalyst">
+                                                <select name="orgname" id="orgname" class="width-100 form-control required"  style="vertical-align:central">
                                                    <option value="">Select an Organization</option>
                                                 </select>
                                                 </div>
@@ -112,9 +112,6 @@
            getIdFromURL:function(){
              var options=location.toString().split('?');
              return options.length >1 ? (options[1]!=="new" ? options[1]:"" ):"";
-           },
-           initializeSelect2:function(){
-             $('select').select2();
            }
          };
    
@@ -123,6 +120,7 @@
             var isEditMode = false;
 
             var id = UtilityMethods.getIdFromURL();
+
 
             if(id){
                console.log("In updation :", id);
@@ -133,8 +131,20 @@
                   $('#url').val(data.url);
                   $('#username').val(data.servicenowusername);
                   $('#password').val(data.servicenowpassword);
-                  $('#orgname').val(data.orgname).attr('orgname_rowid',data.orgname_rowid).trigger('change');
+                  var $option = '<option selected value="'+data.orgname+'" orgname_rowid="'+data.orgname_rowid+'">'+data.orgname+'</option>';
+                  $('#orgname').append($option).attr('disabled','disabled');
              });
+            }else{
+                $.get('/d4dMasters/readmasterjsonnew/1',function(data){
+               //alert('data');
+                  var $select = $('#orgname');
+
+                  for(i=0;i<data.length;i++){
+                    var orgname_rowid = data[i].rowid;
+                    $select.append('<option value="'+data[i].orgname+'" orgname_rowid="'+orgname_rowid+'">'+data[i].orgname+'</option>');
+                  }
+               });//end of get organizations action
+
             }
 
             //form validation for dashboard save
@@ -154,6 +164,15 @@
                              console.log(element.parent);
                              error.insertBefore('div.inputGroups');
                          }
+                         $("select.select2-me").each(function(index, el) {
+
+                             if ($(this).is("[data-rule-required]") &&
+                                 $(this).attr("data-rule-required") == "true") {
+                                 $(this).on('select2-close', function(e) {
+                                     $(this).valid()
+                                 });
+                             }
+                         });
                      }
                  },
 
@@ -180,22 +199,7 @@
                      }
                  }
              });
-             $('a.addDashboardItem[type="reset"]').on('click', function(e) {
-                 validator.resetForm();
-             });
-             
-
-            //$(".chooseOrganization").select2();
-            $.get('/d4dMasters/readmasterjsonnew/1',function(data){
-               
-               var $select = $('#orgname');
-
-               for(i=0;i<data.length;i++){
-                 var orgname_rowid = data[i].rowid;
-                 $select.append('<option value="'+data[i].orgname+'" orgname_rowid="'+orgname_rowid+'">'+data[i].orgname+'</option>');
-               }
-            });//end of get organizations action
-
+           
              $('#configForm').submit(function(e) {
                  console.log("In config form");
                  var isValidate = $("#configForm").valid();
