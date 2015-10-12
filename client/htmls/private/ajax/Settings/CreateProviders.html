@@ -298,7 +298,7 @@
                 $('#myForm54').attr('action', $('#myForm54').attr('action').replace(/vmware/g, 'hppubliccloud'));
                 $('#myForm54').attr('action', $('#myForm54').attr('action').replace(/openstack/g, 'hppubliccloud'));
                 $('#myForm54').attr('action', $('#myForm54').attr('action').replace(/azure/g, 'hppubliccloud'));
-                $('.widget-main').css('height','425px').css('overflow-y','scroll'); //to be removed after the the class if fixed globally
+               // $('.widget-main').css('height','425px').css('overflow-y','scroll'); //to be removed after the the class if fixed globally
             } else if (pv == 'OPENSTACK') {
                 $('.foropenstack').show();
                 $('.forhppubliccloud').hide();
@@ -594,7 +594,7 @@
         $('#accessKey').blur(KeyChangeHandler);
         $('#secretKey').blur(KeyChangeHandler);
         $('select').select2();
-        $('.widget-main').css('height','450px').css('overflow-y','scroll'); //to be removed after the the class if fixed globally
+       // $('.widget-main').css('height','450px').css('overflow-y','scroll'); //to be removed after the the class if fixed globally
         $('#providertype').val('AWS').trigger('change');
         getOrganizationList();
 

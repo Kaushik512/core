@@ -176,6 +176,7 @@ Clicks on Environments menu link
 
 
 Clicks on New button create new Environment
+    Sleep    2s
     Click Element    css=#newENV
     Sleep    2s
 
