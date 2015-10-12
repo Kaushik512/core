@@ -403,35 +403,35 @@
 .text-faded {
     color: rgba(255, 255, 255, 0.7);
 }
-    </style>    
+    </style>        
     
     <script>
-         // Create a Socketio connection
-        function distanceInSeconds(endTime, startTime) {
-            distance = Math.round((endTime.getTime() - startTime.getTime()) / 1000);
+        // Create a Socketio connection
+        function distanceInSeconds(endTime, startTime){            
+            distance = Math.round((endTime.getTime() - startTime.getTime())/1000);  
             return distance;
         }
-
-        function secsUpCounter(counterId, updateData) {
-            setInterval(function() {
-                lastUpdated = distanceInSeconds(new Date(), new Date(updateData.timestamp));
+        
+        function secsUpCounter(counterId, updateData){            
+            setInterval(function(){                
+                lastUpdated = distanceInSeconds(new Date(), new Date(updateData.timestamp));                
                 ++lastUpdated;
                 $(counterId).html(lastUpdated + " s ago");
             }, 1000);
         }
 
-        function establishSocketForTelemetry(instanceId) {
-            socket.on(instanceId, function(telemetryData) {
+        function establishSocketForTelemetry(instanceId){
+            socket.on(instanceId, function (telemetryData){                
                 //console.log("Telemtry for InstanceId: " + instanceId);
                 //console.log(telemetryData);
-                if (telemetryData.checkName === "keepalive" && telemetryData.checkStatus === 0 && $("#" + instanceId).hasClass("instance-stopped")) {
+                if(telemetryData.checkName === "keepalive" && telemetryData.checkStatus === 0 && $("#" + instanceId).hasClass("instance-stopped")){
                     $("#" + instanceId).removeClass("instance-stopped");
                     $("#" + instanceId + "_state").removeClass("progress-bar-danger");
                     $("#" + instanceId + "_state").addClass("progress-bar-success");
                     $("#" + instanceId + "_state").html("running");
                     $("#" + instanceId + "_sys_health").html("");
                 }
-                if (telemetryData.checkName === "keepalive" && telemetryData.checkStatus === 2) {
+                if(telemetryData.checkName === "keepalive" && telemetryData.checkStatus === 2){
                     $("#" + instanceId).addClass("instance-stopped");
                     $("#" + instanceId + "_state").removeClass("progress-bar-success");
                     $("#" + instanceId + "_state").addClass("progress-bar-danger");
@@ -439,137 +439,159 @@
                     $("#" + instanceId + "_sys_health").html("");
                 }
                 var secondsElapsed = distanceInSeconds(new Date(), new Date(telemetryData.checkIssued));
-                var divId = instanceId + "_" + telemetryData.checkName + "_health"
-                    //console.log(divId);
+                var divId = instanceId + "_" + telemetryData.checkName + "_health"                
+                //console.log(divId);
                 var alertClass = '';
-                if (telemetryData.checkStatus === 0) {
+                if(telemetryData.checkStatus === 0){
                     alertClass = '<span class="badge progress-bar-success">&nbsp;</span>'
                 }
-                if (telemetryData.checkStatus === 1) {
+                if(telemetryData.checkStatus === 1){
                     alertClass = '<span class="badge progress-bar-warning">&nbsp;</span>'
                 }
-                if (telemetryData.checkStatus === 2) {
+                if(telemetryData.checkStatus === 2){
                     alertClass = '<span class="badge progress-bar-danger">&nbsp;</span>'
-                }
-
-                if ($("#" + instanceId).hasClass("instance-stopped") || $("#" + instanceId).hasClass("instance-terminated")) {
-                    if (telemetryData.checkName === "keepalive") {
+                }                                                    
+                
+                if($("#" + instanceId).hasClass("instance-stopped") || $("#" + instanceId).hasClass("instance-terminated")) {
+                    if(telemetryData.checkName === "keepalive"){
                         var alertOutput = telemetryData.checkOutput;
                         var alertRegEx = /No keepalive sent from client for (\d*) seconds/;
                         var match = alertRegEx.exec(alertOutput);
                         var lastContacted = parseInt(match[1]);
-                        var lastContactText = "";
-                        if (lastContacted < 120) {
-                            lastContactText = "Last contacted nearly " + lastContacted + " seconds ago";
-                        } else if (lastContacted < 180) {
-                            lastContactText = "Last contacted nearly 3 mintutes ago";
-                        } else if (lastContacted > 180) {
-                            lastContactText = "Last contacted nearly " + Math.round(lastContacted / 60) + " minutes ago";
-                        } else if (lastContacted > 3600 && lastContacted < 7200) {
-                            lastContactText = "Last contacted nearly " + Math.round(lastContacted / 3600) + " hour ago";
-                        } else if (lastContacted < 7200) {
-                            lastContactText = "Last contacted nearly " + Math.round(lastContacted / 3600) + " hours ago";
+                        var lastContactText="";
+                        if(lastContacted < 120){
+                            lastContactText = "Last contacted nearly " + lastContacted + " seconds ago";                            
                         }
-                        var content = '<div class="lastContacted" id ="' + divId + '">' +
-                            '<span><h3>' + lastContactText + ' seconds ago</h3></span>' +
-                            '</div>';
-                        $("#" + instanceId + "_sys_health").html(content);
+                        else if(lastContacted < 180){
+                            lastContactText = "Last contacted nearly 3 mintutes ago";                               
+                        }
+                        else if(lastContacted > 180){
+                            lastContactText = "Last contacted nearly " + Math.round(lastContacted/60)  +  " minutes ago";                               
+                        }
+                        else if(lastContacted > 3600 && lastContacted < 7200 ){
+                            lastContactText = "Last contacted nearly " + Math.round(lastContacted/3600)  +  " hour ago";                               
+                        }
+                        else if(lastContacted < 7200 ){
+                            lastContactText = "Last contacted nearly " + Math.round(lastContacted/3600)  +  " hours ago";                               
+                        }
+                        var content = '<div class="lastContacted" id ="'+ divId +'">' + 
+                                    '<span><h3>' +  lastContactText +' seconds ago</h3></span>' +
+                                    '</div>' ;                        
+                        $("#" + instanceId + "_sys_health").html(content);    
                     }
 
-                } else {
-                    var content = '<div class="raw-metric" id ="' + divId + '"><span class="badge progress-bar-success success">&nbsp;</span>' +
-                        '<span>' + telemetryData.checkName + '</span>' +
-                        '<span class="metric-time-ago">' + secondsElapsed + ' s ago</span></div>';
+                }else{
+                    var stateClass="";
+                    if(telemetryData.checkStatus === 0){
+                        stateClass="progress-bar-success";
+                    }else if(telemetryData.checkStatus === 1){
+                        stateClass="progress-bar-warning";
+                    }
+                    else if(telemetryData.checkStatus === 2){
+                        stateClass="progress-bar-danger";
+                    }
+                    var content = '<div class="raw-metric" id ="'+ divId +'"><span class="badge ' + stateClass + '">&nbsp;</span>' + 
+                                    '<span>' + telemetryData.checkName +  '</span>' +
+                                    '<span class="metric-time-ago" id="'+ divId + '_time">'+ secondsElapsed + ' s ago</span></div>' ;
                     //console.log(content);
-                    $("#" + instanceId + "_sys_health").html(content);
-                    //$(content).appendTo("#" + instanceId + "_sys_health")
-                }
+                    //$("#" + instanceId + "_sys_health").html(content);                    
+                    if($("#" + divId).length){
+                        $("#" + divId).replaceWith(content);
+                    }else{
+                        $(content).appendTo("#" + instanceId + "_sys_health");
+                    }
+
+                }                                
             });
         }
 
-        function establishSocketForAlerts() {
+        function establishSocketForAlerts(){
             console.log("Establishing socket for alerts");
-
+            
         }
 
-        function instanceRowBuilder(listOfInstances) {
-            for (var i = 0; i < listOfInstances.length; i++) {
-                if ($('#' + listOfInstances[i].instanceId).length) {} else {
+        function instanceRowBuilder(listOfInstances){
+            for(var i=0; i < listOfInstances.length; i++){
+                if( $('#' + listOfInstances[i].instanceId).length){
+                }
+                else{
                     var stateClass;
                     var instanceState;
-                    if (listOfInstances[i].state === "stopped") {
-                        instanceState = "instance-stopped"
-                        stateClass = "progress-bar-danger";
-                    } else if (listOfInstances[i].state === "terminated") {
-                        stateClass = "progress-bar-danger instance-terminated";
+                    if(listOfInstances[i].state === "stopped"){
+                        instanceState = "instance-stopped" 
+                        stateClass = "progress-bar-danger";                        
+                    }
+                    else if(listOfInstances[i].state === "terminated"){
+                        stateClass = "progress-bar-danger instance-terminated";                        
                         instanceState = "instance-terminated";
-                    } else {
-                        stateClass = "progress-bar-success";
-                        instanceState = "";
+                    }
+                    else{
+                        stateClass = "progress-bar-success";  
+                        instanceState = "";                      
                     }
                     var row = '<div class="row ' + instanceState + '" id="' + listOfInstances[i].instanceId + '" >' +
-                        '<div class="col-md-2 instance-row">' +
-                        '<h4>' + listOfInstances[i].instanceId + '</h4>' +
-                        '<div><span class="instance-identity">' + listOfInstances[i].instanceName + '</span></div>' +
-                        '<div><span class="ip-cell-public">Public:  ' + listOfInstances[i].publicIp + '</span></div>' +
-                        '<div><span class="ip-cell-private"> Private:  ' + listOfInstances[i].privateIp + '</span></div>' +
-                        '<div><span class="provider-zone-sizing-cell">' + listOfInstances[i].placement + ' , </span><span class="provider-zone-sizing-cell">' + listOfInstances[i].instanceType + '</span></div><div><span class="uptime">( ' + listOfInstances[i].uptime +
-                        ' )<span></div>' +
-                        '<div><span class="badge ' + stateClass + '" id="' + listOfInstances[i].instanceId + '_state">' + listOfInstances[i].state + '</span></div>' +
-                        '</div>' +
+                                '<div class="col-md-2 instance-row">' +
+                                    '<h4>' + listOfInstances[i].instanceId + '</h4>' +
+                                    '<div><span class="instance-identity">' + listOfInstances[i].instanceName + '</span></div>' + 
+                                    '<div><span class="ip-cell-public">Public:  '+  listOfInstances[i].publicIp + '</span></div>' +
+                                    '<div><span class="ip-cell-private"> Private:  '+  listOfInstances[i].privateIp +'</span></div>' +
+                                    '<div><span class="provider-zone-sizing-cell">' + listOfInstances[i].placement + ' , </span><span class="provider-zone-sizing-cell">'+ listOfInstances[i].instanceType +'</span></div><div><span class="uptime">( ' + listOfInstances[i].uptime + 
+                                ' )<span></div>' + 
+                                '<div><span class="badge ' + stateClass + '" id="'+ listOfInstances[i].instanceId +'_state">'+ listOfInstances[i].state +'</span></div>' +
+                                '</div>' +
 
-                        '<div class="col-md-10 metric-row" id="' + listOfInstances[i].instanceId + '_metrics">' +
-                        '<div class="row metric-cell" id="' + listOfInstances[i].instanceId + '_sys_health">' +
-                        '</div>' +
-                        '</div>';
+                                '<div class="col-md-10 metric-row" id="'+ listOfInstances[i].instanceId +'_metrics">' +
+                                    '<div class="row metric-cell" id="'+ listOfInstances[i].instanceId+'_sys_health">' + 
+                                    '</div>'+                                    
+                                '</div>';
                     $('#telemetry-container').append(row);
                 }
-                //Create a socket for each instance and update the row accordingly
-                establishSocketForTelemetry(listOfInstances[i].instanceId);
-            }
+            //Create a socket for each instance and update the row accordingly
+            establishSocketForTelemetry(listOfInstances[i].instanceId);            
+            }            
         }
 
         var startTime = new Date();
         var failedTime, connectedTime, disconnectedTime, secsElapsed;
-        var socket = io.connect('http://127.0.0.1:5555');
+        var socket = io.connect('http://127.0.0.1:5555');  
 
-         //On Socket Connect Error, either get start time or disconnected Time
-        socket.on('connect_error', function() {
-            failedTime = new Date();
-            if (disconnectedTime) {
+        //On Socket Connect Error, either get start time or disconnected Time
+        socket.on('connect_error', function(){          
+            failedTime = new Date();          
+            if(disconnectedTime){            
                 //secsElapsed = Math.round((failedTime.getTime() - disconnectedTime.getTime())/1000);  
                 secsElapsed = distanceInSeconds(failedTime, disconnectedTime);
-            } else {
+            }else{
                 //secsElapsed = Math.round((failedTime.getTime() - startTime.getTime())/1000);
                 secsElapsed = distanceInSeconds(failedTime, startTime);
-            }
-            $(".clock").text(secsElapsed + " s");
+            }          
+            $(".clock").text( secsElapsed  + " s");          
             $('#pulse-holder-monitoring-initial').css('display', 'none');
             $('#pulse-holder-monitoring-on').css('display', 'none');
             $('#pulse-holder-monitoring-off').css('display', 'block');
         });
 
-         // On Socket Connect, get connected Timestamp and update the connection status as well
-        socket.on('connect', function() {
-            connectedTime = new Date();
+        // On Socket Connect, get connected Timestamp and update the connection status as well
+        socket.on('connect', function(){
+            connectedTime = new Date();          
             $('#pulse-holder-monitoring-initial').css('display', 'none');
             $('#pulse-holder-monitoring-on').css('display', 'block');
             $('#pulse-holder-monitoring-off').css('display', 'none');
         });
 
-         //On Disconnection get the time stamp to update the clock
-        socket.on('disconnect', function() {
-            disconnectedTime = new Date();
+        //On Disconnection get the time stamp to update the clock
+        socket.on('disconnect', function () {
+            disconnectedTime = new Date();            
         });
 
-         //On listening to catsEye
-        socket.on('catsEye', function(catsEyeBody) {
+        //On listening to catsEye
+        socket.on('catsEye', function(catsEyeBody){                        
             $('#cats-eye-aws-accounts').html(catsEyeBody.accounts);
             $('#cats-eye-total-instances').html(catsEyeBody.totalInstances);
             $('#cats-eye-running-instances').html(catsEyeBody.totalRunning);
             $('#cats-eye-stoppped-instances').html(catsEyeBody.totalNonRunning);
-            $('#cats-eye-monitored').html(catsEyeBody.catalystMonitored);
-            $('#cats-eye-lastupdated').html(catsEyeBody.timestamp);
+            $('#cats-eye-monitored').html(catsEyeBody.catalystMonitored);                                                            
+            $('#cats-eye-lastupdated').html(catsEyeBody.timestamp);                                                            
             // clearInterval(x);
             // var x = setInterval(function(){                                                
             //     var lastUpdatedAgo = distanceInSeconds(new Date(), new Date(catsEyeBody.timestamp));                    
@@ -578,34 +600,38 @@
             // }, 1000);            
         });
 
-        socket.on('listInstances', function(listInstancesData) {
+        socket.on('listInstances', function(listInstancesData){
             //console.log(listInstancesData)
-            listInstancesBody = listInstancesData;
-            instanceRowBuilder(listInstancesBody);
+            listInstancesBody = listInstancesData;                    
+            instanceRowBuilder(listInstancesBody);            
         });
 
-        socket.on("alert", function(alertData) {
+        socket.on("alert", function(alertData){
             //console.log(alertData);
             var alertClass = "";
             var alertLabel = "";
             var alertRow = '';
             var checkName = '';
-            var notiCounter = $("#notification-counter").text();
-            $("#notification-counter").text(++notiCounter);
-            if (alertData.checkName === "keepalive") {
+            var toastMsg;
+            var toastState="";
+            var notiCounter = $("#notification-counter").text();                
+            var timeStamp = new Date(alertData.timestamp * 1000);            
+            var divId = alertData.msgId;
+            
+            if(alertData.checkName === "keepalive"){
                 checkName = "Node status";
-            } else {
+            }else{
                 checkName = alertData.checkName;
             }
 
-            if (alertData.checkName === "keepalive" && alertData.status === 0 && $("#" + alertData.instanceId).hasClass("instance-stopped")) {
+            if(alertData.checkName === "keepalive" && alertData.status === 0 && $("#" + alertData.instanceId).hasClass("instance-stopped")){
                 $("#" + alertData.instanceId).removeClass("instance-stopped");
                 $("#" + alertData.instanceId + "_state").removeClass("progress-bar-danger");
                 $("#" + alertData.instanceId + "_state").addClass("progress-bar-success");
                 $("#" + alertData.instanceId + "_state").html("running");
                 $("#" + alertData.instanceId + "_sys_health").html("");
             }
-            if (alertData.checkName === "keepalive" && alertData.status === 2) {
+            if(alertData.checkName === "keepalive" && alertData.status === 2){
                 $("#" + alertData.instanceId).addClass("instance-stopped");
                 $("#" + alertData.instanceId + "_state").removeClass("progress-bar-success");
                 $("#" + alertData.instanceId + "_state").addClass("progress-bar-danger");
@@ -613,40 +639,117 @@
                 $("#" + alertData.instanceId + "_sys_health").html("");
             }
 
-            if (alertData.status === 2) {
+            if(alertData.status === 2){
                 // Add Toaster Message
                 // Increment Alert Count
-                toastr["error"](checkName + ' on ' + alertData.instanceId + ' went offline ');
+                toastState = "error";
+                toastMsg = checkName + ' on ' + alertData.instanceId + ' went offline ';
+                //toastMsg = toastr["error"](checkName + ' on ' + alertData.instanceId + ' went offline ');
                 alertClass = "progress-bar-danger";
                 alertLabel = "critical";
-                alertRow = '<div><span class="badge ' + alertClass + ' event">' + alertLabel + '</span><span class="alertData">' + alertData.timestamp + ' : ' + checkName + ' on ' + alertData.instanceId + ' went offline<span></div>';
+                alertRow = '<div id="' + divId + '"><span class="badge ' + alertClass + ' event">' + alertLabel +'</span><span class="alertData">'+  timeStamp + ' : ' + checkName +  ' on ' +  alertData.instanceId +  ' ( IP: ' + alertData.address + ' ) went offline</span></div>';
             }
-            if (alertData.status === 1) {
+            if(alertData.status === 1){
                 // Add Toaster Message
                 // Increment Alert Count
-                toastr["warning"](checkName + ' on ' + alertData.instanceId + ' switched to warning state');
+                toastState = "warning";
+                toastMsg = checkName +  ' on ' +  alertData.instanceId +  ' switched to warning state';
+                //toastMsg = toastr["warning"](checkName +  ' on ' +  alertData.instanceId +  ' switched to warning state');
                 alertClass = "progress-bar-warning";
                 alertLabel = "warning";
-                alertRow = '<div><span class="badge ' + alertClass + ' event">' + alertLabel + '</span><span class="alertData">' + alertData.timestamp + ' : ' + checkName + ' on ' + alertData.instanceId + 'switched to warning state <span></div>';
+                alertRow = '<div id="' + divId + '"><span class="badge ' + alertClass + ' event">' + alertLabel +'</span><span class="alertData">'+  timeStamp + ' : ' + checkName +  ' on ' +  alertData.instanceId + ' ( IP: ' + alertData.address +  ' ) switched to warning state </span></div>';
             }
-            if (alertData.status === 0) {
+            if(alertData.status === 0){
                 // Add Toaster Message
                 // Increment Alert Count
-                toastr["success"](checkName + ' on ' + alertData.instanceId + ' came online and healthy');
+                toastState = "success";
+                toastMsg = checkName +  ' on ' +  alertData.instanceId +  ' came online and healthy';
+                //toastMsg = toastr["success"](checkName +  ' on ' +  alertData.instanceId +  ' came online and healthy');
                 alertClass = "progress-bar-success";
                 alertLabel = "info";
-                alertRow = '<div><span class="badge ' + alertClass + ' event">' + alertLabel + '</span><span class="alertData">' + alertData.timestamp + ' : ' + checkName + ' on ' + alertData.instanceId + ' came online and healthy<span></div>';
+                alertRow = '<div id="' + divId + '"><span class="badge ' + alertClass + ' event">' + alertLabel +'</span><span class="alertData">'+  timeStamp + ' : ' + checkName +  ' on ' +  alertData.instanceId + ' ( IP: ' + alertData.address +  ' ) came online and healthy</span></div>';
+            }                        
+            
+            if($('#' + divId).length){                
             }
-
-            if ($('#' + alertData.msgId).length) {} else {
+            else{
                 // Remove No Alerts Class
-                if ($('#no-alerts').length) {
+                if($('#no-alerts').length){
                     $('#no-alerts').remove();
                 }
-                $("#adverse-events-container").prepend(alertRow);
+                
+                toastr[toastState](toastMsg);
+                $("#notification-counter").text(++notiCounter);
+                $("#adverse-events-container").prepend(alertRow);    
+            }
+            
+        });
+    
+        socket.on("alertHistory", function(alertData){
+            //console.log("Alert History");
+            var alertClass = "";
+            var alertLabel = "";
+            var alertRow = '';
+            var checkName = '';            
+            var notiCounter = $("#notification-counter").text();                
+            var timeStamp = new Date(alertData.timestamp * 1000);            
+            var divId = alertData.msgId;
+            
+            if(alertData.checkName === "keepalive"){
+                checkName = "Node status";
+            }else{
+                checkName = alertData.checkName;
             }
 
+            if(alertData.checkName === "keepalive" && alertData.status === 0 && $("#" + alertData.instanceId).hasClass("instance-stopped")){
+                $("#" + alertData.instanceId).removeClass("instance-stopped");
+                $("#" + alertData.instanceId + "_state").removeClass("progress-bar-danger");
+                $("#" + alertData.instanceId + "_state").addClass("progress-bar-success");
+                $("#" + alertData.instanceId + "_state").html("running");
+                $("#" + alertData.instanceId + "_sys_health").html("");
+            }
+            if(alertData.checkName === "keepalive" && alertData.status === 2){
+                $("#" + alertData.instanceId).addClass("instance-stopped");
+                $("#" + alertData.instanceId + "_state").removeClass("progress-bar-success");
+                $("#" + alertData.instanceId + "_state").addClass("progress-bar-danger");
+                $("#" + alertData.instanceId + "_state").html("stopped");
+                $("#" + alertData.instanceId + "_sys_health").html("");
+            }
+
+            if(alertData.status === 2){
+                
+                alertClass = "progress-bar-danger";
+                alertLabel = "critical";
+                alertRow = '<div id="' + divId + '"><span class="badge ' + alertClass + ' event">' + alertLabel +'</span><span class="alertData"> From Alert History'+  timeStamp + ' : ' + checkName +  ' on ' +  alertData.instanceId + ' ( IP: ' + alertData.address + ' ) went offline</span></div>';
+            }
+            if(alertData.status === 1){
+                
+                alertClass = "progress-bar-warning";
+                alertLabel = "warning";
+                alertRow = '<div id="' + divId + '"><span class="badge ' + alertClass + ' event">' + alertLabel +'</span><span class="alertData">'+  timeStamp + ' : ' + checkName +  ' on ' +  alertData.instanceId + ' ( IP: ' + alertData.address +   ' ) switched to warning state </span></div>';
+            }
+            if(alertData.status === 0){
+                // Add Toaster Message
+                // Increment Alert Count
+                                
+                alertClass = "progress-bar-success";
+                alertLabel = "info";
+                alertRow = '<div id="' + divId + '"><span class="badge ' + alertClass + ' event">' + alertLabel +'</span><span class="alertData">'+  timeStamp + ' : ' + checkName +  ' on ' +  alertData.instanceId +  ' ( IP: ' + alertData.address + ' ) came online and healthy</span></div>';
+            }                        
+            
+            if($('#' + divId).length){                
+            }
+            else{
+                // Remove No Alerts Class
+                if($('#no-alerts').length){
+                    $('#no-alerts').remove();
+                }                
+                $("#notification-counter").text(++notiCounter);
+                $("#adverse-events-container").prepend(alertRow);    
+            }
+            
         });
+
         </script>
     </head>
     <body>    
@@ -769,7 +872,7 @@
                         <div class="monitoring-label-off">Connection failed !! <span class="clock"></span></div>                  
                     </div>
                 </div>
-                <div class="col-sm-3">
+                <div class="col-sm-4">
 
                     <div class="update-time">Last Updated&nbsp;&nbsp;-&nbsp;&nbsp;<span id="cats-eye-lastupdated">0</span></div>
                                 
