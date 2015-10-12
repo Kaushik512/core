@@ -209,8 +209,6 @@ var AzureCloud = function() {
     }
 
     this.updatedfloatingip = false;
-
-
     this.trysshoninstance = function(ostype,ip_address, username, pwd, callback) {
             var opts = {
                 //privateKey: instanceData.credentials.pemFilePath,
@@ -226,13 +224,15 @@ var AzureCloud = function() {
             var cmdString = '';
             if(ostype == "Windows"){
                 cmdString = opts.cmdswin[0] + ' ' + opts.host + ' -m' ;
-                curl.executecurl(cmdString,function(err,stdout){
-                    logger.debug(stdout);
+
+                execute(cmdString,false,function(err,stdout){
+
                     if(stdout.indexOf('Connected successfully') >= 0){
                         callback('ok');
                         return;
                     }
                 });
+
 
             }
             else{
@@ -253,6 +253,7 @@ var AzureCloud = function() {
             }
 
     }
+
     this.timeouts = [];
     this.callbackdone = false;
 
@@ -268,12 +269,13 @@ var AzureCloud = function() {
                 }
                 if (!err) {
                     logger.debug('Quried server:', JSON.stringify(data));
-                    var ip_address = '';
-                    if(data.Network.Endpoints)
+                   var ip_address = '';
+                    if(data.Network.Endpoints.length > 0)
                          ip_address = data.Network.Endpoints[0].virtualIPAddress;
                     else
                         ip_address = data.VirtualIPAddresses.address;
-
+ 
+		   // var ip_address = data.Network.Endpoints[0].virtualIPAddress;
                     logger.debug('Azure VM ip address:', ip_address);
 
                     if (data.InstanceStatus == 'ReadyRole') {
@@ -286,7 +288,8 @@ var AzureCloud = function() {
                     }
 
                     if (self.updatedfloatingip) {
-                       self.trysshoninstance(data.OSDisk.operatingSystem,ip_address, username, pwd, function(cdata) {
+
+                        self.trysshoninstance(data.OSDisk.operatingSystem,ip_address, username, pwd, function(cdata) {
                             logger.debug('End trysshoninstance:', cdata);
                             if (cdata == 'ok') {
                                 //Clearing all timeouts
