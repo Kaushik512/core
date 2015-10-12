@@ -10,7 +10,7 @@ Resource           catalyst.txt
 
 *** Variables ***
 ${BROWSER TYPE}                  firefox 
-${ENVIRONMENT SERVER}              http://10.0.1.94:3001/public/login.html
+${ENVIRONMENT SERVER}              http://supercatalyst.relevancelab.com/public/login.html
 
 ${height}             744
 ${width}           1400
