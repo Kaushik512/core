@@ -69,8 +69,9 @@ Catalyst Launch of Cloud Formation Blueprint
     Capture Screen Shot of the page
     Sleep    2s
     Clicks on Back To Instances
-    Sleep    1s
+    Sleep    3s
     Clicks on Infrastructure Tab
+    Sleep    2s
     Clicks on CloudFormation Tab
     Sleep    1s
     Capture Screen Shot of the page
@@ -126,13 +127,17 @@ Catalyst Chef Client Run and SSH on Cloud Formation Instance
     Verfify the status of SSH Shell
     Sleep    1s
     Clicks on Back To Instances
+    Sleep    3s
     Delete the Java and SQL Stack Instance
     Sleep    1s
     Select the MySql Stack Instance to verify Bootstrap
+    Sleep    1s
     Delete the Java and SQL Stack Instance
     Sleep    1s
     Verify the Stack Instances are Deleted
+    Sleep    1s
     Clicks on Infrastructure Tab
+    Sleep    1s
     Clicks on CloudFormation Tab
     Sleep    4s
     Select the Stack to delete
@@ -163,8 +168,8 @@ Catalyst Verification of Jobs in RL_QA Environment
     Sleep    1s
     Select the Catalyst Window
     Sleep    6s
-    Get the Success path text
-    Verify if no status is there
+    ##Get the Success path text
+    ##Verify if no status is there
     #Sleep    2s
     #Capture Screen Shot of the page
     #Sleep    3s
@@ -174,7 +179,7 @@ Catalyst Verification of Jobs in RL_QA Environment
     #Close Window
     #Sleep    2s
     #Select the Catalyst Window
-    Sleep    1s
+    ##Sleep    1s
     Clicks on Job Status Button
     Sleep    1s
     Capture Screen Shot of the page
@@ -183,13 +188,13 @@ Catalyst Verification of Jobs in RL_QA Environment
         
 
 Get the Success path text
-    ${TEXT NEW}=    Get Text    xpath=.//*[@id='tablehistoryTaskForJenkins']/tbody/tr[3]/td[3]/span
+    ${TEXT NEW}=    Get Text    xpath=.//*[@id='tablehistoryTaskForJenkins']/tbody/tr[1]/td[3]/span
     Log    ${TEXT NEW}
     Set Global Variable    ${TEXT NEW}
 
 
 Verify if no status is there
-    ${NO TEXT}=    Get Text    xpath=.//*[@id='tablehistoryTaskForJenkins']/tbody/tr[3]/td[3]/span
+    ${NO TEXT}=    Get Text    xpath=.//*[@id='tablehistoryTaskForJenkins']/tbody/tr[1]/td[3]/span
     Log    ${NO TEXT}
     Set Global Variable    ${NO TEXT}
     Run Keyword If    '${NO TEXT}' == '${SMOKE STATUS}'
@@ -202,12 +207,11 @@ Steps to Go
     Sleep    6s
     Clicks on Job LogHtml Button
     Sleep    5s
-    Capture Screen Shot of the page
-    Sleep    3s
     Select the Catalyst Suites Window
     Capture Screen Shot of the page
     verify the Log Page
     Close Window
+    Sleep    1s
     Select the Catalyst Window
 
 
@@ -243,8 +247,8 @@ Verify the Details of Dashboard
 
 
 Clicks on Job LogHtml Button
-    Execute Javascript    $('#tablehistoryTaskForJenkins > tbody > tr:nth-child(1) > td:nth-child(2) > a:nth-child(2)').click();
-    #Click Element    xpath=.//*[@id='tablehistoryTaskForJenkins']/tbody/tr[1]/td[2]/a[2]/i
+    #Execute Javascript    $('#tablehistoryTaskForJenkins > tbody > tr:nth-child(1) > td:nth-child(2) > a:nth-child(2)').click();
+    Click Element    xpath=.//*[@id='tablehistoryTaskForJenkins']/tbody/tr[1]/td[2]/a[2]
 
 Clicks on Job Status Button
     Click Element    xpath=.//*[@id='tablehistoryTaskForJenkins']/tbody/tr[1]/td[2]/a[3]
