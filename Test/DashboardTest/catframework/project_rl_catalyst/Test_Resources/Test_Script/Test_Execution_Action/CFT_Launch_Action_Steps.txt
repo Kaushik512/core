@@ -154,8 +154,6 @@ Catalyst Verification of Jobs in RL_QA Environment
     Sleep    4s
     Capture Screen Shot of the page
     Sleep    6s
-        
-
     Click on Job Dashboard Button
     Sleep    2s
     Selects the Window
@@ -165,16 +163,17 @@ Catalyst Verification of Jobs in RL_QA Environment
     Sleep    1s
     Select the Catalyst Window
     Sleep    6s
-    Clicks on Job LogHtml Button
-    Sleep    2s
-    Capture Screen Shot of the page
-    Sleep    3s
-    Select the Catalyst Suites Window
-    Capture Screen Shot of the page
-    verify the Log Page
-    Close Window
-    Sleep    2s
-    Select the Catalyst Window
+    Get the Success path text
+    Verify if no status is there
+    #Sleep    2s
+    #Capture Screen Shot of the page
+    #Sleep    3s
+    #Select the Catalyst Suites Window
+    #Capture Screen Shot of the page
+    #verify the Log Page
+    #Close Window
+    #Sleep    2s
+    #Select the Catalyst Window
     Sleep    1s
     Clicks on Job Status Button
     Sleep    1s
@@ -183,13 +182,41 @@ Catalyst Verification of Jobs in RL_QA Environment
     Sleep    1s
         
 
+Get the Success path text
+    ${TEXT NEW}=    Get Text    xpath=.//*[@id='tablehistoryTaskForJenkins']/tbody/tr[1]/td[3]/span
+    Log    ${TEXT NEW}
+    Set Global Variable    ${TEXT NEW}
+
+
+Verify if no status is there
+    ${NO TEXT}=    Get Text    xpath=.//*[@id='tablehistoryTaskForJenkins']/tbody/tr[1]/td[3]/span
+    Log    ${NO TEXT}
+    Set Global Variable    ${NO TEXT}
+    Run Keyword If    '${NO TEXT}' == '${SMOKE STATUS}'
+    ...    Log    Smoke Test has no Status
+    ...    ELSE IF    '${TEXT NEW}' == '${NEW SUCCESS}'
+    ...    Steps to Go
+
+
+Steps to Go
+    Sleep    6s
+    Clicks on Job LogHtml Button
+    Sleep    5s
+    Capture Screen Shot of the page
+    Sleep    3s
+    Select the Catalyst Suites Window
+    Capture Screen Shot of the page
+    verify the Log Page
+    Close Window
+    Select the Catalyst Window
+
 
 
 Select the Catalyst Window
     Select Window    title=Catalyst
 
 Select the Catalyst Suites Window
-    Select Window    title=CatalystSuites Test Log
+    Select Window    title=${JOB TITLE}
 
 Selects the Window
     Select Window    title=Continuous Integration Dashboard
@@ -216,7 +243,8 @@ Verify the Details of Dashboard
 
 
 Clicks on Job LogHtml Button
-    Click Element    xpath=.//*[@id='tablehistoryTaskForJenkins']/tbody/tr[1]/td[2]/a[2]
+    Execute Javascript    $('#tablehistoryTaskForJenkins > tbody > tr:nth-child(1) > td:nth-child(2) > a:nth-child(2)').click();
+    #Click Element    xpath=.//*[@id='tablehistoryTaskForJenkins']/tbody/tr[1]/td[2]/a[2]/i
 
 Clicks on Job Status Button
     Click Element    xpath=.//*[@id='tablehistoryTaskForJenkins']/tbody/tr[1]/td[2]/a[3]

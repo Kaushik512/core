@@ -48,6 +48,8 @@ var puppet = require('./routes_puppet.js');
 
 var appdeploy = require('./routes_appdeploy');
 
+var servicenow = require('./routes_servicenow');
+
 module.exports.setRoutes = function(app,socketIo) {
 
 
@@ -107,6 +109,8 @@ module.exports.setRoutes = function(app,socketIo) {
     puppet.setRoutes(app, sessionVerificationFunc);
 
     appdeploy.setRoutes(app, sessionVerificationFunc);
+
+    servicenow.setRoutes(app, sessionVerificationFunc);
 
     app.get('/', function(req, res) {
         res.redirect('/private/index.html');
