@@ -390,8 +390,8 @@ Select the Stack to delete
     Click Element    xpath=.//*[text()='OK']
 
 Verify the Stacks with your Stackame is created
-    Page Should Contain    ${STACK NAME}
-    Element Should Contain    xpath=.//*[@id='cftStackContainer']/div/div[@data-stackname='${STACK NAME}']/div/span[2]/span    ${STACK STATUS}
+    Page Should Contain    ${STACK STORE}
+    Element Should Contain    xpath=.//*[@id='cftStackContainer']/div/div[@data-stackname='${STACK STORE}']/div/span[2]/span    ${STACK STATUS}
 
 
 Clicks on CloudFormation Tab
