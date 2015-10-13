@@ -160,6 +160,7 @@ Catalyst Verification of Jobs in RL_QA Environment
     Capture Screen Shot of the page
     Verify the Details of Dashboard
     Close Window
+    Capture Screen Shot of the page
     Sleep    1s
     Select the Catalyst Window
     Sleep    6s
@@ -216,7 +217,7 @@ Select the Catalyst Window
     Select Window    title=Catalyst
 
 Select the Catalyst Suites Window
-    Select Window    title=CatalystSuites Test Log
+    Select Window    title=${JOB TITLE}
 
 Selects the Window
     Select Window    title=Continuous Integration Dashboard
@@ -243,7 +244,8 @@ Verify the Details of Dashboard
 
 
 Clicks on Job LogHtml Button
-    Click Element    xpath=.//*[@id='tablehistoryTaskForJenkins']/tbody/tr[1]/td[2]/a[2]/i
+    Execute Javascript    $('#tablehistoryTaskForJenkins > tbody > tr:nth-child(1) > td:nth-child(2) > a:nth-child(2)').click();
+    #Click Element    xpath=.//*[@id='tablehistoryTaskForJenkins']/tbody/tr[1]/td[2]/a[2]/i
 
 Clicks on Job Status Button
     Click Element    xpath=.//*[@id='tablehistoryTaskForJenkins']/tbody/tr[1]/td[2]/a[3]
