@@ -44,20 +44,27 @@ chefTaskSchema.methods.execute = function(userName, baseUrl, choiceParam, nexusD
     }
     if (nexusData) {
         objectArray.push({
-                "catalyst-repo": {
-                    "nexusUrl": nexusData.nexusUrl
+            "catalyst-repo": {
+                "nexusUrl": nexusData.nexusUrl
             }
         });
         objectArray.push({
-                "catalyst-repo": {
-                    "version": nexusData.version
+            "catalyst-repo": {
+                "version": nexusData.version
             }
         });
+        if (nexusData.containerId) {
+            objectArray.push({
+                "catalyst-repo": {
+                    "containerId": nexusData.containerId
+                }
+            });
+        }
     }
 
     var attributeObj = utils.mergeObjects(objectArray);
 
-    logger.debug("-===============-------------========== ",JSON.stringify(attributeObj));
+    logger.debug("-===============-------------========== ", JSON.stringify(attributeObj));
 
 
     var instanceIds = this.nodeIds;
