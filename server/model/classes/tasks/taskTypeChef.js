@@ -44,18 +44,18 @@ chefTaskSchema.methods.execute = function(userName, baseUrl, choiceParam, nexusD
     }
     if (nexusData) {
         objectArray.push({
-            "catalyst-repo": {
+            "upgrade_rlcatalyst": {
                 "nexusUrl": nexusData.nexusUrl
             }
         });
         objectArray.push({
-            "catalyst-repo": {
+            "upgrade_rlcatalyst": {
                 "version": nexusData.version
             }
         });
         if (nexusData.containerId) {
             objectArray.push({
-                "catalyst-repo": {
+                "upgrade_rlcatalyst": {
                     "containerId": nexusData.containerId
                 }
             });
