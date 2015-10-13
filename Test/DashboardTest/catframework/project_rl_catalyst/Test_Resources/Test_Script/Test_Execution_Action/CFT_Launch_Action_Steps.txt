@@ -398,7 +398,7 @@ Clicks on Back To Instances
     Click Element    xpath=.//*[@id='getViewAttr']
 
 
-    Verify the Java Bootstrap text and Status in the Table
+Verify the Java Bootstrap text and Status in the Table
     Sleep    5 minutes
     Element Should Contain    xpath=.//*[@id='tableactionHistory']/tbody/tr/td[text()='${BOOTSTRAP}']    ${BOOTSTRAP}
     Sleep    1s
