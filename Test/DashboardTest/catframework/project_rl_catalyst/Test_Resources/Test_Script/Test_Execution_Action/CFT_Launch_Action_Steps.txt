@@ -161,7 +161,7 @@ Catalyst Verification of Jobs in RL_QA Environment
     Verify the Details of Dashboard
     Close Window
     Sleep    1s
-    ##Select the Catalyst Window
+    Select the Catalyst Window
     Sleep    6s
     Get the Success path text
     Verify if no status is there
