@@ -17,6 +17,7 @@ var currentDirectory = __dirname;
 var AWSKeyPair = require('../model/classes/masters/cloudprovider/keyPair.js');
 
 var CloudFormation = require('_pr/model/cloud-formation');
+var AwsAutoScaleInstance = require('_pr/model/aws-auto-scale-instance');
 var AWSCloudFormation = require('_pr/lib/awsCloudFormation.js');
 var masterUtil = require('_pr/lib/utils/masterUtil.js');
 var credentialCryptography = require('_pr/lib/credentialcryptography');
@@ -33,7 +34,7 @@ module.exports.setRoutes = function(app, socketIo) {
 
     socketCloudFormationAutoScate.on('connection', function(socket) {
         socket.on('joinCFRoom', function(data) {
-            console.log('room joined',data);
+            console.log('room joined', data);
             socket.join(data.orgId + ':' + data.bgId + ':' + data.projId + ':' + data.envId);
             // setTimeout(function(){
             //  console.log('firing timeout');
@@ -50,7 +51,7 @@ module.exports.setRoutes = function(app, socketIo) {
     app.post('/notifications/aws/cfAutoScale', function(req, res) {
         var notificationType = req.headers['x-amz-sns-message-type'];
         var topicArn = req.headers['x-amz-sns-topic-arn'];
-       
+
         var bodyarr = [];
         var reqBody;
         req.on('data', function(chunk) {
@@ -61,7 +62,7 @@ module.exports.setRoutes = function(app, socketIo) {
             if (notificationType) {
                 if (notificationType === 'SubscriptionConfirmation') { // confirmation notification
                     var confirmationURL = reqBody.SubscribeURL;
-                    
+
                     if (confirmationURL) {
                         https.get(confirmationURL, function(res) {
                             console.log("Got response: " + res.statusCode);
@@ -87,7 +88,7 @@ module.exports.setRoutes = function(app, socketIo) {
                             if (!topicArn) {
                                 return;
                             }
-                            CloudFormation.findByAutoScaleTopicArn(topicArn, function(err, cloudFormations) {
+                            CloudFormation.findByAutoScaleResourceId(autoScaleId, function(err, cloudFormations) {
                                 if (err) {
                                     logger.error(err);
                                     return;
@@ -657,6 +658,38 @@ module.exports.setRoutes = function(app, socketIo) {
 
                                         });
                                     }
+                                } else {
+                                    // creating or removing a temp entry in database for this notification
+                                    var awsInstanceId = autoScaleMsg.EC2InstanceId;
+                                    if (!awsInstanceId) {
+                                        logger.error('Unable to get instance Id from notification');
+                                        return;
+                                    }
+                                    if (autoScaleMsg.Event === 'autoscaling:EC2_INSTANCE_TERMINATE') {
+                                        // removing the entry from temp database if any
+                                        AwsAutoScaleInstance.removeByAutoScaleResourceAndInstanceId(autoScaleId, awsInstanceId, function(err, deleteCount) {
+                                            if (err) {
+                                                logger.error("Unable to delete by resourceId and instanceId", autoScaleId, awsInstanceId);
+                                                return;
+                                            }
+                                            logger.debug("Deleted ==>" + JSON.stringify(deleteCount));
+                                        });
+
+                                    } else if (autoScaleMsg.Event === 'autoscaling:EC2_INSTANCE_LAUNCH') {
+                                        AwsAutoScaleInstance.createNew({
+                                            autoScaleResourceId: autoScaleId,
+                                            awsInstanceId: awsInstanceId
+                                        }, function(err, autoScaleInstance) {
+                                            if(err) {
+                                                logger.error("Unable to create aws autoscale instance");
+                                                return;
+                                            }
+                                            logger.debug("Added instance notification in temp database");
+
+                                        });
+                                    }
+
+
                                 }
                             });
                         }
