@@ -34,7 +34,7 @@ ${JENKINS IMGNAME}                     img/jenkins.png
 
 
 
-${JENKINS JOB1}             SMOKE_TEST_CONTAINER_STOP
+${JENKINS JOB1}             CATALYST_SMOKE_TEST
 
 
 
@@ -44,7 +44,7 @@ ${AWS}                         AWS Cost
 
 #CFT
 ${CLOUD BP}                 JAVA_Stack
-${STACK NAME}               RLStacK
+${STACK NAME}               RLstacK
 ${JAVA}                      Java
 ${MYSQL}                     MySql
 ${BOOTSTRAP}                 Bootstrap

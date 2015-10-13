@@ -78,19 +78,19 @@ Catalyst Launch of Cloud Formation Blueprint
     Sleep    1s
     Clicks on Infrastructure Tab
     Clicks on Instances Tab
-    
-    #Select the Java Stack Instance to verify Bootstrap
-    #Delete the Java and SQL Stack Instance
-    #Sleep    1s
-    #Select the MySql Stack Instance to verify Bootstrap
-    #Delete the Java and SQL Stack Instance
-    #Sleep    1s
-    #Verify the Stack Instances are Deleted
-    #Clicks on Infrastructure Tab
-    #Clicks on CloudFormation Tab
-    #Sleep    4s
-    #Select the Stack to delete
-    #Verify the Stack is Deleted
+        
+        #Select the Java Stack Instance to verify Bootstrap
+        #Delete the Java and SQL Stack Instance
+        #Sleep    1s
+        #Select the MySql Stack Instance to verify Bootstrap
+        #Delete the Java and SQL Stack Instance
+        #Sleep    1s
+        #Verify the Stack Instances are Deleted
+        #Clicks on Infrastructure Tab
+        #Clicks on CloudFormation Tab
+        #Sleep    4s
+        #Select the Stack to delete
+        #Verify the Stack is Deleted
 
 
 Catalyst Chef Client Run and SSH on Cloud Formation Instance
@@ -148,24 +148,88 @@ Catalyst Verification of Jobs in RL_QA Environment
     Capture Screen Shot of the page
     Sleep    1s
     Clicks on Orchestration Tab
-    Verify the Image is displayed for SMOKE_TEST_CONTAINER_STOP
+    #Verify the Image is displayed for SMOKE_TEST_CONTAINER_STOP
     Verify the Name of the Job
     Clicks on History Button
+    Sleep    4s
     Capture Screen Shot of the page
     Sleep    6s
-    Click on Job Link Button
-    Clicks on Close Button
+        
+
+    Click on Job Dashboard Button
+    Sleep    2s
+    Selects the Window
+    Capture Screen Shot of the page
+    Verify the Details of Dashboard
+    Close Window
+    Sleep    1s
+    Select the Catalyst Window
+    Sleep    6s
+    Clicks on Job LogHtml Button
+    Sleep    2s
+    Capture Screen Shot of the page
+    Sleep    3s
+    Select the Catalyst Suites Window
+    Capture Screen Shot of the page
+    verify the Log Page
+    Close Window
+    Sleep    2s
+    Select the Catalyst Window
+    Sleep    1s
+    Clicks on Job Status Button
+    Sleep    1s
+    Capture Screen Shot of the page
+    Verfiy the Execute Logs Page
+    Sleep    1s
+        
 
 
 
-Click on Job Link Button
-    Click Element    xpath=.//*[@id='tablehistoryTaskForJenkins']/tbody/tr[1]/td[2]/a
+Select the Catalyst Window
+    Select Window    title=Catalyst
+
+Select the Catalyst Suites Window
+    Select Window    title=CatalystSuites Test Log
+
+Selects the Window
+    Select Window    title=Continuous Integration Dashboard
+
+
+Verfiy the Execute Logs Page
+    Page Should Contain    Execute Logs
+    Page Should Contain    Jenkins Job
+    Click Element    xpath=.//*[@id='assignedExecute']/div/div/div[3]/a
+        
+
+verify the Log Page
+    Page Should Contain    CatalystSuites Test Log
+    Page Should Contain    Test Statistics
+
+Verify the Details of Dashboard
+    Page Should Contain    Catalyst Build
+    Page Should Contain    Critical Test Trend
+    Page Should Contain    Statistics by Suite
+    Page Should Contain    Critical Tests Failed
+    Page Should Contain    Last Test
+    Page Should Contain    Test Coverage
+        
+
+
+Clicks on Job LogHtml Button
+    Click Element    xpath=.//*[@id='tablehistoryTaskForJenkins']/tbody/tr[1]/td[2]/a[2]
+
+Clicks on Job Status Button
+    Click Element    xpath=.//*[@id='tablehistoryTaskForJenkins']/tbody/tr[1]/td[2]/a[3]
+
+Click on Job Dashboard Button
+    Click Element    xpath=.//*[@id='tablehistoryTaskForJenkins']/tbody/tr[1]/td[2]/a[1]
 
 Clicks on Close Button
     Click Element    css=.btn.btn-minier.btn-primary.hideJenkinsJob
 
 Clicks on History Button
-    Execute Javascript    $('#tableOrchestration > tbody > tr:nth-child(1) > td:nth-child(6) > a > i').click()
+    Click Element    xpath=.//*[@id='tableOrchestration']/tbody/tr/td[text()='${JENKINS JOB1}']/../td[6]/a/i
+    #Execute Javascript    $('#tableOrchestration > tbody > tr:nth-child(1) > td:nth-child(6) > a > i').click()
 
 
 Verify the Image is displayed for SMOKE_TEST_CONTAINER_STOP
@@ -176,7 +240,7 @@ Verify the Image is displayed for SMOKE_TEST_CONTAINER_STOP
 
 
 Verify the Name of the Job
-    Element Should Contain    xpath=.//*[@id='tableOrchestration']/tbody/tr[1]/td[2]    ${JENKINS JOB1}
+    Element Should Contain    xpath=.//*[@id='tableOrchestration']/tbody/tr/td[text()='CATALYST_SMOKE_TEST']    ${JENKINS JOB1}
 
 
 Clicks on Orchestration Tab
@@ -202,7 +266,7 @@ Clicks on Terminlal Submit Button
 Upload the Catalyst PEM File
     Choose File     xpath=.//*[@id='ssh-pemfileInput']    ${Goldendemo_pem}   
 
-    
+        
 Select Authentication Type
     Click Element    xpath=.//*[@id='s2id_ssh-pemFileCheckbox']/a/span[1]   
     Sleep    1s
@@ -245,8 +309,8 @@ Select the RLCatalyst Cookbook
     Click Element    id=btnaddToRunlist
 
 
- Update the Run List with Cookbook
-     Click Element    css=div.row > div:first-child > label:nth-of-type(2) > i
+Update the Run List with Cookbook
+    Click Element    css=div.row > div:first-child > label:nth-of-type(2) > i
 
 
 Clicks on Chef Client Run of Java instance
@@ -306,7 +370,7 @@ Clicks on Back To Instances
     Click Element    xpath=.//*[@id='getViewAttr']
 
 
-Verify the Java Bootstrap text and Status in the Table
+    Verify the Java Bootstrap text and Status in the Table
     Sleep    5 minutes
     Element Should Contain    xpath=.//*[@id='tableactionHistory']/tbody/tr/td[text()='${BOOTSTRAP}']    ${BOOTSTRAP}
     Sleep    1s
@@ -322,7 +386,7 @@ Verify the MySql Bootstrap text and Status in the Table
     ${BOOTSTRAP STATUSS}=    Get Element Attribute    xpath=.//*[@id='tableactionHistory']/tbody/tr/td[2]/img@title
     Log    ${BOOTSTRAP STATUSS}
     Should Be Equal    ${BOOTSTRAP STATUSS}     ${ACTBOOT2}
-    
+        
 
 
 
@@ -364,7 +428,11 @@ Clicks on Confirmation of OK Button
     Click Element    xpath=.//*[text()='OK']
 
 Enters the Unique StackName
-    Input Text    id=cftInput    ${STACK NAME}
+    ${STACK UNIQUE}=    Generate Random String    3    [NUMBERS]
+    ${STACK STORE}=    Catenate  SEPARATOR=    ${STACK NAME}${STACK UNIQUE}
+    Log     ${STACK STORE}
+    Set Global Variable    ${STACK STORE}
+    Input Text    id=cftInput    ${STACK STORE}
 
 Clicks on Launch Button
     Click Element    css=.btn.pull-left.btn-primary.launchBtn
