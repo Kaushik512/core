@@ -154,8 +154,6 @@ Catalyst Verification of Jobs in RL_QA Environment
     Sleep    4s
     Capture Screen Shot of the page
     Sleep    6s
-        
-
     Click on Job Dashboard Button
     Sleep    2s
     Selects the Window
@@ -165,6 +163,42 @@ Catalyst Verification of Jobs in RL_QA Environment
     Sleep    1s
     Select the Catalyst Window
     Sleep    6s
+    Get the Success path text
+    Verify if no status is there
+    #Sleep    2s
+    #Capture Screen Shot of the page
+    #Sleep    3s
+    #Select the Catalyst Suites Window
+    #Capture Screen Shot of the page
+    #verify the Log Page
+    #Close Window
+    #Sleep    2s
+    #Select the Catalyst Window
+    Sleep    1s
+    Clicks on Job Status Button
+    Sleep    1s
+    Capture Screen Shot of the page
+    Verfiy the Execute Logs Page
+    Sleep    1s
+        
+
+Get the Success path text
+    ${TEXT NEW}=    Get Text    xpath=.//*[@id='tablehistoryTaskForJenkins']/tbody/tr[1]/td[3]/span
+    Log    ${TEXT NEW}
+    Set Global Variable    ${TEXT NEW}
+
+
+Verify if no status is there
+    ${NO TEXT}=    Get Text    xpath=.//*[@id='tablehistoryTaskForJenkins']/tbody/tr[1]/td[3]/span
+    Log    ${NO TEXT}
+    Set Global Variable    ${NO TEXT}
+    Run Keyword If    '${NO TEXT}' == '${SMOKE STATUS}'
+    ...    Log    Smoke Test has no Status
+    ...    ELSE IF    '${TEXT NEW}' == '${NEW SUCCESS}'
+    ...    Steps to Go
+
+
+Steps to Go
     Clicks on Job LogHtml Button
     Sleep    2s
     Capture Screen Shot of the page
@@ -173,15 +207,7 @@ Catalyst Verification of Jobs in RL_QA Environment
     Capture Screen Shot of the page
     verify the Log Page
     Close Window
-    Sleep    2s
     Select the Catalyst Window
-    Sleep    1s
-    Clicks on Job Status Button
-    Sleep    1s
-    Capture Screen Shot of the page
-    Verfiy the Execute Logs Page
-    Sleep    1s
-        
 
 
 
