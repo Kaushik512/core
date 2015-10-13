@@ -231,7 +231,6 @@ $(function() {
         });
 
         socket.on('error', function(err) {
-            alert('fired');
             if(err && err.reason) {
                 $errorArea.empty().append(err.reason);
             } else {

@@ -17,7 +17,6 @@
     }
     .border-right{
         border-right: 1px solid #ccc;
-        margin-left: 21px;
     }
 
     .clock{
@@ -63,12 +62,6 @@
         position: relative;
         display:none;
 
-    }
-    .update-time{
-        float:left;
-        margin-top:16px;
-        color:#000;
-        margin-left: 1px;
     }
     .monitoring-label-on{
         float:left;
@@ -269,6 +262,7 @@
     .metric-cell{
         padding: 5px;
         height: 30px;
+        line-height: 30px;
     }
     .success{
         padding-left: 9px;
@@ -278,7 +272,8 @@
         padding-left: 9px;
     }
     .metric-time-ago{
-        margin-right: 5px;
+        margin-right: -1px;
+        margin-left: 4px;
         font-style: italic;
         color: #ccc;
     }
@@ -306,12 +301,15 @@
     .instance-terminated{
         border: 1px dashed red;
     }
-
     .lastContacted{
         margin: 0 auto;
         width: 53%;
     }
-        /* -- Circle Tiles */
+    .metric-output{
+        font-size: 10px;
+        margin-right: 5px;
+    }
+            /* -- Circle Tiles */
 
 .circle-tile {
     margin-bottom: 64px;
@@ -403,10 +401,23 @@
 .text-faded {
     color: rgba(255, 255, 255, 0.7);
 }
-    </style>        
+.timeMargin{
+    margin-top: 16px;
+    margin-left: 40px;
+}
+.monitorStyle{
+    float:right!important;
+    margin-top: -9px;
+}
+    </style>    
     
     <script>
+
         // Create a Socketio connection
+        var startTime = new Date();
+        var failedTime, connectedTime, disconnectedTime, secsElapsed;
+        var socket = io.connect('http://54.67.35.103:5555');  
+
         function distanceInSeconds(endTime, startTime){            
             distance = Math.round((endTime.getTime() - startTime.getTime())/1000);  
             return distance;
@@ -421,9 +432,7 @@
         }
 
         function establishSocketForTelemetry(instanceId){
-            socket.on(instanceId, function (telemetryData){                
-                //console.log("Telemtry for InstanceId: " + instanceId);
-                //console.log(telemetryData);
+            socket.on(instanceId, function (telemetryData){                                
                 if(telemetryData.checkName === "keepalive" && telemetryData.checkStatus === 0 && $("#" + instanceId).hasClass("instance-stopped")){
                     $("#" + instanceId).removeClass("instance-stopped");
                     $("#" + instanceId + "_state").removeClass("progress-bar-danger");
@@ -439,8 +448,7 @@
                     $("#" + instanceId + "_sys_health").html("");
                 }
                 var secondsElapsed = distanceInSeconds(new Date(), new Date(telemetryData.checkIssued));
-                var divId = instanceId + "_" + telemetryData.checkName + "_health"                
-                //console.log(divId);
+                var divId = instanceId + "_" + telemetryData.checkName + "_health"                                
                 var alertClass = '';
                 if(telemetryData.checkStatus === 0){
                     alertClass = '<span class="badge progress-bar-success">&nbsp;</span>'
@@ -491,10 +499,11 @@
                         stateClass="progress-bar-danger";
                     }
                     var content = '<div class="raw-metric" id ="'+ divId +'"><span class="badge ' + stateClass + '">&nbsp;</span>' + 
-                                    '<span>' + telemetryData.checkName +  '</span>' +
-                                    '<span class="metric-time-ago" id="'+ divId + '_time">'+ secondsElapsed + ' s ago</span></div>' ;
-                    //console.log(content);
-                    //$("#" + instanceId + "_sys_health").html(content);                    
+                                    '<span>' + telemetryData.checkName +  '</span>' +                                    
+                                    '<span class="metric-time-ago" id="'+ divId + '_time">'+ secondsElapsed + ' s ago</span>' + 
+                                    '<span> | </span>' +
+                                    '<span class="metric-output">'+ telemetryData.checkOutput + '</span>' + 
+                                    '</div>' ;                    
                     if($("#" + divId).length){
                         $("#" + divId).replaceWith(content);
                     }else{
@@ -511,10 +520,12 @@
         }
 
         function instanceRowBuilder(listOfInstances){
-            for(var i=0; i < listOfInstances.length; i++){
+            for(var i=0; i < listOfInstances.length; i++){                
                 if( $('#' + listOfInstances[i].instanceId).length){
+
                 }
                 else{
+                    
                     var stateClass;
                     var instanceState;
                     if(listOfInstances[i].state === "stopped"){
@@ -549,11 +560,7 @@
             //Create a socket for each instance and update the row accordingly
             establishSocketForTelemetry(listOfInstances[i].instanceId);            
             }            
-        }
-
-        var startTime = new Date();
-        var failedTime, connectedTime, disconnectedTime, secsElapsed;
-        var socket = io.connect('http://127.0.0.1:5555');  
+        }        
 
         //On Socket Connect Error, either get start time or disconnected Time
         socket.on('connect_error', function(){          
@@ -590,8 +597,9 @@
             $('#cats-eye-total-instances').html(catsEyeBody.totalInstances);
             $('#cats-eye-running-instances').html(catsEyeBody.totalRunning);
             $('#cats-eye-stoppped-instances').html(catsEyeBody.totalNonRunning);
-            $('#cats-eye-monitored').html(catsEyeBody.catalystMonitored);                                                            
-            $('#cats-eye-lastupdated').html(catsEyeBody.timestamp);                                                            
+            $('#cats-eye-monitored').html(catsEyeBody.catalystMonitored);             
+            $('#cats-eye-lastupdated').html(catsEyeBody.timestamp);
+
             // clearInterval(x);
             // var x = setInterval(function(){                                                
             //     var lastUpdatedAgo = distanceInSeconds(new Date(), new Date(catsEyeBody.timestamp));                    
@@ -600,14 +608,14 @@
             // }, 1000);            
         });
 
-        socket.on('listInstances', function(listInstancesData){
-            //console.log(listInstancesData)
+        socket.on('listInstances', function(listInstancesData){            
             listInstancesBody = listInstancesData;                    
             instanceRowBuilder(listInstancesBody);            
         });
+        
 
         socket.on("alert", function(alertData){
-            //console.log(alertData);
+            console.log(alertData);
             var alertClass = "";
             var alertLabel = "";
             var alertRow = '';
@@ -685,12 +693,12 @@
             
         });
     
-        socket.on("alertHistory", function(alertData){
-            //console.log("Alert History");
+        socket.on("alertHistory", function(alertData){            
             var alertClass = "";
             var alertLabel = "";
             var alertRow = '';
-            var checkName = '';            
+            var checkName = '';
+            
             var notiCounter = $("#notification-counter").text();                
             var timeStamp = new Date(alertData.timestamp * 1000);            
             var divId = alertData.msgId;
@@ -720,7 +728,7 @@
                 
                 alertClass = "progress-bar-danger";
                 alertLabel = "critical";
-                alertRow = '<div id="' + divId + '"><span class="badge ' + alertClass + ' event">' + alertLabel +'</span><span class="alertData"> From Alert History'+  timeStamp + ' : ' + checkName +  ' on ' +  alertData.instanceId + ' ( IP: ' + alertData.address + ' ) went offline</span></div>';
+                alertRow = '<div id="' + divId + '"><span class="badge ' + alertClass + ' event">' + alertLabel +'</span><span class="alertData">'+  timeStamp + ' : ' + checkName +  ' on ' +  alertData.instanceId + ' ( IP: ' + alertData.address + ' ) went offline</span></div>';
             }
             if(alertData.status === 1){
                 
@@ -759,8 +767,24 @@
                 <ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
                     <li class="active"><a href="#catseye" data-toggle="tab">Cats Eye</a></li>        
                     <li><a href="#telemetry" data-toggle="tab">Telemetry</a></li>
-                    <li><a href="#adverse-events" data-toggle="tab">Adverse Events ( <span class="notification-counter" id="notification-counter"> 0 </span> )</a></li>                
+                    <li><a href="#adverse-events" data-toggle="tab">Adverse Events ( <span class="notification-counter" id="notification-counter"> 0 </span> )</a></li>
+                    <li class="col-sm-3 border-right monitorStyle">
+                        <div id="pulse-holder-monitoring-initial">                    
+                            <div class="monitoring-label-initial">Connecting ...</div>                  
+                        </div>
+                        <div id="pulse-holder-monitoring-on">
+                            <div class="green-dot dot"></div>
+                            <div class="green-pulse pulse"></div>  
+                            <div class="monitoring-label-on">Connected</div>                  
+                        </div>
+                        <div id="pulse-holder-monitoring-off">
+                            <div class="red-dot dot"></div>
+                            <div class="red-pulse pulse"></div>  
+                            <div class="monitoring-label-off">Connection failed !! <span class="clock"></span></div>                  
+                        </div>
+                    </li>
                 </ul>
+
                 <!-- Cat's Eye -->
                 <div id="telemetry-tab-content" class="tab-content">
                     <div class="tab-pane active" id="catseye">
@@ -840,10 +864,10 @@
               
                     <!-- Telemetry -->
                     <div class="tab-pane" id="telemetry">
-                        <div class="container-fluid telemetry-container" id="telemetry-container">  
-                            <div class="row search-n-filter">
+                        <div class="container-fluid telemetry-container" id="telemetry-container">  <!--commented out since the search is not functioning-->
+                            <!-- <div class="row search-n-filter">
                                 Search: <input type="text"> Filter By: Healthy, Alert
-                            </div>
+                            </div> -->
                             <!-- Append Rows here -->                                                                                                     
                         </div>
                     </div>
@@ -857,24 +881,9 @@
                 </div>                
             </div>
             <div class="row top-row">
-                <div class="col-sm-3 border-right">
-                    <div id="pulse-holder-monitoring-initial">                    
-                        <div class="monitoring-label-initial">Connecting ...</div>                  
-                    </div>
-                    <div id="pulse-holder-monitoring-on">
-                        <div class="green-dot dot"></div>
-                        <div class="green-pulse pulse"></div>  
-                        <div class="monitoring-label-on">Connected</div>                  
-                    </div>
-                    <div id="pulse-holder-monitoring-off">
-                        <div class="red-dot dot"></div>
-                        <div class="red-pulse pulse"></div>  
-                        <div class="monitoring-label-off">Connection failed !! <span class="clock"></span></div>                  
-                    </div>
-                </div>
                 <div class="col-sm-4">
 
-                    <div class="update-time">Last Updated&nbsp;&nbsp;-&nbsp;&nbsp;<span id="cats-eye-lastupdated">0</span></div>
+                    <div class="update-time timeMargin">Last Updated&nbsp;&nbsp;-&nbsp;&nbsp;<span id="cats-eye-lastupdated">0</span></div>
                                 
                 </div>
             </div>
