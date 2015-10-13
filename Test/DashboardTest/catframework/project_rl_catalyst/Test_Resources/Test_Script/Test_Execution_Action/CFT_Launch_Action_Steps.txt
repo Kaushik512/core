@@ -360,7 +360,7 @@ Clicks on LogOut link
 
 
 Verify the Stack is Deleted
-    Page Should Not Contain    ${STACK NAME}
+    Page Should Not Contain    ${STACK STORE}
 
 Delete the Java and SQL Stack Instance
     Click Element    id=removeInstance
@@ -384,7 +384,7 @@ Verify the Stack Instances are Deleted
     Page Should Not Contain    ${EDIT STACK2}
 
 Select the Stack to delete
-    Click Element    xpath=//b[text()='${STACK NAME}']
+    Click Element    xpath=//b[text()='${STACK STORE}']
     Click Element    xpath=.//*[@title='Delete Stack']
     Sleep    1s
     Click Element    xpath=.//*[text()='OK']
