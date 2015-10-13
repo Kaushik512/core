@@ -10,10 +10,10 @@ Library            String
 
 
 *** Test Cases ***
-Catalyst Verification of Jobs In Environment 
-    [Tags]       Sanity               Job
+#Catalyst Verification of Jobs In Environment 
+    #[Tags]       Sanity               Job
 #    Catalyst Login 
-    Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
-    Catalyst Verification of Jobs in RL_QA Environment
-    Catalyst Logout                      
-    [Teardown]     Close Browser
+    #Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
+    #Catalyst Verification of Jobs in RL_QA Environment
+    #Catalyst Logout                      
+    #[Teardown]     Close Browser
