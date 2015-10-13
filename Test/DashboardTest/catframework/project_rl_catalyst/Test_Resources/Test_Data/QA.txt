@@ -18,7 +18,7 @@ ${width}           1400
 #http://d4d.rlcatalyst.com/public/login.html
 
 ${NEW SUCCESS}              SUCCESS
-
+${JOB TITLE}                    CatalystSuites Test Log
 
 
 
