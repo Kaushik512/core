@@ -199,8 +199,9 @@ Verify if no status is there
 
 
 Steps to Go
+    Sleep    6s
     Clicks on Job LogHtml Button
-    Sleep    2s
+    Sleep    5s
     Capture Screen Shot of the page
     Sleep    3s
     Select the Catalyst Suites Window
