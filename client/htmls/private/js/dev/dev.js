@@ -2343,6 +2343,8 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                                 $imgprovider = $('<li><img src="img/hpcloud-card.png" style="margin-left: -94px;margin-right: 7px;margin-top: 48px;" title="HP Helion"></li>');
                             if (data[i].blueprintType == 'azure_launch')
                                 $imgprovider = $('<li><img src="img/azure-card.png" style="margin-left: -94px;margin-right: 7px;margin-top: 48px;" title="Windows Azure"></li>');
+                            if (data[i].blueprintType == 'vmware_launch')
+                                $imgprovider = $('<li><img src="img/vmware-card.png" style="margin-left: -94px;margin-right: 7px;margin-top: 48px;" title="Vmware"></li>');
                             
                             // alert(data[i].blueprintType);
                             var $liImage = $('<li></li>').append($img);

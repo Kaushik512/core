@@ -1664,131 +1664,29 @@ function getImagesWithOSFilter() {
             $('#imageId').html('<option value="">Select Image</option>').select2().trigger('change');
         }
        // alert(providerselected);
-        if (providerselected == 'azure') {
+        if (providerselected == 'vmware') {
           //  alert('in hp');
-            $('.forazure').show();
-           // $('.foropenstack').hide();
-            //$('.foraws select').removeClass('required'); //removing all aws required fields. when openstatck
-            //load each of the dropdowns
-            //flavour
-            /*$.get('/azure/' + providerVal + '/flavors', function(data) {
+            $('.forvmware').show();
+          
+            $.get('/vmware/' + providerVal + '/datastores', function(data) {
+                console.log("datastores:",data);
                 if (data) {
-                    var str = ' <option value="">Select Flavors</option>';
+                    var str = ' <option value="">Select Data Store</option>';
                     var data = JSON.parse(JSON.stringify(data));
-                    for (var i = 0; i < data.flavors.length; i++) {
-                        str += '<option value="' + data.flavors[i].id + '">' + data.flavors[i].name + '</option>';
-                        //alert(str);
-                    }
-                    $('#openstackflavour').html(str);
-                    $('#openstackflavour').select2().trigger('change');
-                }
-            });*/
+                    alert(data.datastores.length);
+                    if(data.datastores){
+                        for (var i = 0; i < data.datastores.length; i++) {
 
-            $.get('/azure/locations', function(data) {
-                console.log("locations:",data);
-                if (data) {
-                    var str = ' <option value="">Select Location</option>';
-                    var data = JSON.parse(JSON.stringify(data));
-
-                    for (var i = 0; i < data.length; i++) {
-                        
-                        var flavorsByLocation = data[i].computeCapabilities.virtualMachinesRoleSizes;
-                        var flavorsList = [];
-
-                        for(var j=0; j<flavorsByLocation.length; j++){
-                            flavorsList.push(flavorsByLocation[j]);
+                            str += '<option value="' + data.datastores[i].name + '">' + data.datastores[i].name + '</option>';
                         }
-
-                        str += '<option value="' + data[i].name + '"  flavors='+flavorsList.join()+'>' + data[i].name + '</option>';
                     }
 
-                    $('#location').html(str);
-                    $('#location').select2().trigger('change');
+                    $('#vmwareds').html(str);
+                    $('#vmwareds').select2().trigger('change');
 
-                    $('#location').on('change', function() {
-                                   //var $vpcSpinner = $('#vpcSpinner').addClass('hidden');
-                                   $('#vpcSpinner').removeClass('hidden');
-                                   var selectedLocation = $(this).val();
-
-                                    $.get('/azure/networks', function(data) {
-                                        console.log("networks:",data);
-
-                                        if (data) {
-                                            var str = ' <option value="">Select VPC</option>';
-                                            var data = JSON.parse(JSON.stringify(data));
-
-                                            var isNetwroksExists = false;
-
-                                            for (var i = 0; i < data.length; i++) {
-                                              if(selectedLocation == data[i].location){
-
-                                                 var subnets = [];
-
-                                                 for(var j=0; j<data[i].subnets.length;j++){
-                                                    subnets.push(data[i].subnets[j].name);
-                                                 }
-
-                                                 str += '<option value="' + data[i].name + '" subnets="' + subnets.join() + '">' + data[i].name + '</option>';
-                                                 isNetwroksExists = true;
-                                                }
-                                            }
-                                            if(!isNetwroksExists){
-                                                str = '<option value="">No Networks exists in this location</option>';
-                                            }
-
-                                            $('#vpcId').html(str);
-                                            $('#vpcSpinner').addClass('hidden');
-
-                                            $('#vpcId').select2().trigger('change');
-
-                                            $('#vpcId').on('change', function() {
-                                                // alert($(this).find(':selected').attr('subnets'));
-                                                $('#spinnerSubnet').removeClass('hidden');
-                                                var ss = ' <option value="">Select Subnet</option>';
-                                                var subn = $(this).find(':selected').attr('subnets').split(',');
-
-                                                for (var i = 0; i < subn.length; i++) {
-                                                    ss += '<option value="' + subn[i] + '">' + subn[i] + '</option>';
-                                                }
-
-                                                $('#subnetId').html(ss);
-                                                $('#spinnerSubnet').addClass('hidden');
-                                                $('#subnetId').select2().trigger('change');
-                                            });
-                                        }
-                                    });
-                                    
-                                    $('#spinnerSize').removeClass('hidden');
-
-                                    var flavors = $(this).find(':selected').attr('flavors').split(',');
-                                    var sizeOption = ' <option value="">Choose Instanace Size</option>';
-
-                                    for(var i=0; i<flavors.length; i++){
-                                       sizeOption += '<option value="' + flavors[i] + '">' + flavors[i] + '</option>';
-                                    }
-
-                                    $('#instancesize').html(sizeOption);
-                                    $('#instancesize').select2().trigger('change');
-
-                                    $('#spinnerSize').addClass('hidden');
-
-                    });
+                   
                 }
             });
-
-/*            $.get('/hppubliccloud/' + providerVal + '/securityGroups', function(data) {
-                if (data) {
-                    var str = ' <option value="">Select Group</option>';
-                    var data = JSON.parse(JSON.stringify(data));
-                    for (var i = 0; i < data.security_groups.length; i++) {
-                        str += '<option value="' + data.security_groups[i].id + '">' + data.security_groups[i].name + '</option>';
-                        //alert(str);
-                    }
-                    $('#openstacksecuritygroup').html(str);
-                    $('#openstacksecuritygroup').select2().trigger('change');
-                }
-            });*/
-
         }
         else if (providerselected == 'openstack') {
             $('.foraws').hide();
@@ -2836,6 +2734,11 @@ var $wizard = $('#bootstrap-wizard-1').bootstrapWizard({
                                 return false;
                             }
 
+                            if($('#vmwareds').val().indexOf('Choose') >= 0){
+                                alert('Please choose a Data Store');
+                                return false;
+                            }
+
 
                             reqBody = {};
                             reqBody.templateId = $selectedItem.attr('data-templateId');
@@ -2948,14 +2851,11 @@ var $wizard = $('#bootstrap-wizard-1').bootstrapWizard({
                         }*/
                             //Openstack variables.
                             reqBody.imageIdentifier = imageId;
-                            reqBody.openstackflavor = $('#openstackflavour').val();
-                            reqBody.openstacknetwork = $('#openstacknetwork').val();
-                            reqBody.openstacksecurityGroupIds = $('#openstacksecuritygroup').val();
-                            reqBody.openstacksubnet = $('#openstacksubnet').val();
-
+                            
                             reqBody.instanceCount = 1;
                             reqBody.instanceImageName = imageIdentifier;
-
+                            //for vmware
+                            reqBody.datastore = $('#vmwareds').val();
 
                             $('#userListSelect').find('option').attr('selected', 'selected');
                             reqBody.users = $('#userListSelect').val();
@@ -3029,6 +2929,11 @@ var $wizard = $('#bootstrap-wizard-1').bootstrapWizard({
                                 if ($('#providerId').find("option:selected").attr('providertype').toLowerCase() == 'azure') {
                                     reqBody.blueprintType = 'azure_launch';
                                 }
+                                 if ($('#providerId').find("option:selected").attr('providertype').toLowerCase() == 'vmware') {
+                                    reqBody.blueprintType = 'vmware_launch';
+                                }
+                                
+
 
                                 console.log("Blueprint post:",reqBody);
 

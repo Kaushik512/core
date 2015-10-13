@@ -135,7 +135,7 @@ function getDefaultsConfig() {
             }]
         },
         vmware:{
-            serviceHost:"http://192.168.102.43:3000"
+            serviceHost:"http://localhost:3000"
         },
         db: {
             dbName: 'devops_new',

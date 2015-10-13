@@ -55,12 +55,13 @@ var vmwareservice = function(options) {
 
     this.getDatastores = function(servicehost,callback){
         client = new Client();
-        var datastoresUrl = servicehost + '/datastores?id=' + options.host + '&user=' + options.username + '&passwd=' + options.password + '&dc=' + options.dc;
+        var datastoresUrl = servicehost + '/datastores?ip=' + options.host + '&user=' + options.username + '&passwd=' + options.password + '&dc=' + options.dc;
         console.log(datastoresUrl);
         client.registerMethod("jsonMethod", datastoresUrl, "GET");
         var args = {};
         client.methods.jsonMethod(args, function(data, response) {
             console.log("get datastoresUrl response::" + data);
+            callback(null,data);
         });
     }
 
@@ -78,6 +79,17 @@ var vmwareservice = function(options) {
         "ds" : " ",
         "no_of_vm" : " "
         } */
+        client = new Client();
+        var datastoresUrl = servicehost + '/' + templatename + '/?ip=' + options.host + '&user=' + options.username + '&passwd=' + options.password + '&dc=' + options.dc;
+        console.log(datastoresUrl);
+        client.registerMethod("jsonMethod", datastoresUrl, "GET");
+        var args = {
+            data: serverjson
+        };
+        client.methods.jsonMethod(args, function(data, response) {
+            console.log("get datastoresUrl response::" + data);
+            callback(null,data);
+        });
     }
 
 

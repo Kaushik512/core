@@ -32,6 +32,9 @@ var hppubliccloudProvider = require('_pr/model/classes/masters/cloudprovider/hpp
 var AzureCloud = require('_pr/lib/azure.js');
 var azureProvider = require('_pr/model/classes/masters/cloudprovider/azureCloudProvider.js');
 
+var VmwareCloud = require('_pr/lib/vmware.js');
+var vmwareProvider = require('_pr/model/classes/masters/cloudprovider/vmwareCloudProvider.js');
+
 module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
     app.all('/blueprints/*', sessionVerificationFunc);
@@ -2148,7 +2151,58 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
                                     });
 
-                                } else {
+                                } else if (blueprint.blueprintType === 'vmware_launch') {
+                                    logger.debug("In Vmware blueprint launch");
+                                    logger.debug(blueprint);
+                                    logger.debug(req.query.version);
+                                    var version = blueprint.getVersionData(req.query.version);
+                                    if (!version) {
+                                        res.send(400, {
+                                            message: "No blueprint version available"
+                                        });
+                                        return;
+                                    } else {
+                                        logger.debug('Runlist version:');
+                                        logger.debug(JSON.stringify(version.runlist));
+                                    }
+                                    
+                                    vmwareProvider.getvmwareProviderById(blueprint.blueprintConfig.cloudProviderId, function(err, providerdata) {
+                                        if (err) {
+                                            logger.error('getAzureCloudProviderById ' + err);
+                                            return;
+                                        }
+                                        else{
+                                            logger.debug('***********************Blueprint Launch of VMWARE *******************');
+                                            
+                                            var launchvmwareBP = function(providerdata, blueprint) {
+                                                VMImage.getImageById(blueprint.blueprintConfig.imageId, function(err, anImage) {
+                                                    if(!err){
+                                                           logger.debug(JSON.stringify(anImage)); 
+                                                           logger.debug('providerdata',JSON.stringify(providerdata));
+                                                           var serverjson = {"vm_name" : "D4D-" + blueprint.name,
+                                                            "ds" : blueprint.blueprintConfig.dataStore,
+                                                            "no_of_vm" : blueprint.blueprintConfig.instanceCount
+                                                            }
+
+                                                            
+                                                           var vmwareCloud = new VmwareCloud(providerdata);
+
+
+                                                           vmwareCloud.createServer(appConfig.vmware.serviceHost,anImage.imageIdentifier,serverjson,function(err,createserverdata){
+
+                                                           });
+
+
+
+                                                    }
+                                                });
+                                            }
+                                            launchvmwareBP(providerdata,blueprint);
+                                        }
+                                    });
+                                        
+                                    
+                                }else {
                                     res.send(400, {
                                         message: "Invalid Blueprint Type"
                                     })
