@@ -231,6 +231,12 @@ CloudFormationSchema.statics.removeById = function(cfId, callback) {
 //Get by autoscale Id CloudFormation
 
 CloudFormationSchema.statics.findByAutoScaleTopicArn = function(topicArn, callback) {
+    if (!topicArn) {
+        process.nextTick(function() {
+            callback(new Error("Invalid topicArn"));
+        });
+        return;
+    }
     this.find({
         "autoScaleTopicArn": topicArn
     }, function(err, cloudFormations) {
@@ -243,6 +249,29 @@ CloudFormationSchema.statics.findByAutoScaleTopicArn = function(topicArn, callba
 
     });
 };
+
+CloudFormationSchema.statics.findByAutoScaleResourceId = function(resourceId, callback) {
+    if (!resourceId) {
+        process.nextTick(function() {
+            callback(new Error("Invalid resourceId"));
+        });
+        return;
+    }
+    this.find({
+        "autoScaleResourceIds": {
+            '$in': [resourceId]
+        }
+    }, function(err, cloudFormations) {
+        if (err) {
+            callback(err, null);
+            return;
+        }
+        //console.log('data ==>', data);
+        callback(null, cloudFormations);
+
+    });
+};
+
 
 
 
