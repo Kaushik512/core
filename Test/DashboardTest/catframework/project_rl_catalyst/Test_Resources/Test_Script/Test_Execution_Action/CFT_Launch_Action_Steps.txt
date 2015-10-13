@@ -242,7 +242,7 @@ Verify the Details of Dashboard
 
 
 Clicks on Job LogHtml Button
-    Click Element    xpath=.//*[@id='tablehistoryTaskForJenkins']/tbody/tr[1]/td[2]/a[2]
+    Click Element    xpath=.//*[@id='tablehistoryTaskForJenkins']/tbody/tr[1]/td[2]/a[2]/i
 
 Clicks on Job Status Button
     Click Element    xpath=.//*[@id='tablehistoryTaskForJenkins']/tbody/tr[1]/td[2]/a[3]
