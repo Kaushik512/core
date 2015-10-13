@@ -135,13 +135,13 @@ Catalyst Notifications Dashboard Verification
     Clicks on the Link to dashboard
     Sleep    10s
     Clicks on Left Panel Button
-    Sleep    40s
-    Verify Page Contains Connected
+    Sleep    50s
+    #Verify Page Contains Connected
     Verify Page Contains CatsEye
     Verify Page Contains Telemetry
     Verify Page Contains Adverse Events
     Verfiy Page Contains Aws Accounts
-    Verify Page Contains Tottal Instances
+    #Verify Page Contains Tottal Instances
     Verify Page Contains Running
     Verify Page Contains Stopped
     Verify Page Contains Monitoring
@@ -174,13 +174,13 @@ Verify Page Contains Adverse Events
     Page Should Contain    Adverse Events
 
 Verfiy Page Contains Aws Accounts
-    Page Should Contain    AWS Accounts    
+    Page Should Contain    AWS Accounts
 
 Verify Page Contains Tottal Instances
     Page Should Contain    Total instances
 
 Verify Page Contains Running
-    Page Should Contain    Running
+    Page Should Contain    Total Running
 
 Verify Page Contains Stopped
     Page Should Contain    Stopped

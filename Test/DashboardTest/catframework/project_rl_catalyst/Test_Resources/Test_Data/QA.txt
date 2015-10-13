@@ -17,7 +17,8 @@ ${width}           1400
 
 #http://d4d.rlcatalyst.com/public/login.html
 
-
+${NEW SUCCESS}              SUCCESS
+${JOB TITLE}                    CatalystSuites Test Log
 
 
 
@@ -31,10 +32,10 @@ ${SUPERCAT ENV}                            RL_QA
 ${ROLE NAME}                              rlcatalyst
 ${SSH}                                    SSH-Shell
 ${JENKINS IMGNAME}                     img/jenkins.png
+${SMOKE STATUS}                        No Status
 
 
-
-${JENKINS JOB1}             SMOKE_TEST_CONTAINER_STOP
+${JENKINS JOB1}             CATALYST_SMOKE_TEST
 
 
 
@@ -44,7 +45,7 @@ ${AWS}                         AWS Cost
 
 #CFT
 ${CLOUD BP}                 JAVA_Stack
-${STACK NAME}               RLStacK
+${STACK NAME}               RLstacK
 ${JAVA}                      Java
 ${MYSQL}                     MySql
 ${BOOTSTRAP}                 Bootstrap

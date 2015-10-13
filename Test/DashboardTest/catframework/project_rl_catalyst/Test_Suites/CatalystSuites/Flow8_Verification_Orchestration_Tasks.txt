@@ -11,7 +11,7 @@ Library            String
 
 *** Test Cases ***
 Catalyst Verification of Jobs In Environment 
-    [Tags]       Sanity               BP
+    [Tags]       Sanity               Job
 #    Catalyst Login 
     Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
     Catalyst Verification of Jobs in RL_QA Environment

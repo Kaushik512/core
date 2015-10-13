@@ -5125,9 +5125,9 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
             $('[autofocus]', e.target).focus();
         });
 
-       // $('#importinstanceOS').select2();
-      //  $('#configManagementDropdown').select2();
-      //  $('#pemFileDropdown').select2();
+        // $('#importinstanceOS').select2();
+        //  $('#configManagementDropdown').select2();
+        //  $('#pemFileDropdown').select2();
 
 
 
@@ -5327,29 +5327,29 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
 
             // socket connection for cloudformation autoscale event
 
-            var socket = io.connect('/cloudFormationAutoScaleGroup', {
-                'force new connection': true,
-                reconnection: false
-            });
 
-            socket.on('connect', function() {
-                socket.emit('joinCFRoom', {
+
+
+            //socketAutoScale.on('connect', function() {
+                window.socketAutoScale.emit('joinCFRoom', {
                     orgId: orgId,
                     bgId: urlParams['bg'],
                     projId: projectId,
                     envId: envId
                 });
-            });
+            //});
 
-            socket.on('cfAutoScaleInstanceRemoved', function(instanceData) {
+            window.socketAutoScale.on('cfAutoScaleInstanceRemoved', function(instanceData) {
                 console.log('delete event fired');
                 $('#divinstancescardview').find('.domain-roles-caption[data-instanceId=' + instanceData.instanceId + ']').parents('.domain-role-thumbnailDev').remove();
                 var table = $('#tableinstanceview').DataTable();
                 table.row('[data-instanceid=' + instanceData.instanceId + ']').remove().draw(false);
             });
-            socket.on('cfAutoScaleInstanceAdded', function(instanceData) {
-                console.log('add event fired ==> ',instanceData);
-                addInstanceToDOM(instanceData);
+            window.socketAutoScale.on('cfAutoScaleInstanceAdded', function(instanceData) {
+                console.log('add event fired ==> ', instanceData);
+                if(orgId === instanceData.orgId && urlParams['bg'] === instanceData.bgId &&projectId ===  instanceData.projectId && envId === instanceData.envId) {
+                    addInstanceToDOM(instanceData);
+                }
             });
 
 
@@ -6019,3 +6019,12 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
 
 
 }
+
+window.socketAutoScale = io.connect('/cloudFormationAutoScaleGroup', {
+    'force new connection': true,
+    reconnection: false
+});
+
+window.socketAutoScale.on('connect', function() {
+    console.log('connected to autoscale socket');
+});
