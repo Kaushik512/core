@@ -183,13 +183,13 @@ Catalyst Verification of Jobs in RL_QA Environment
         
 
 Get the Success path text
-    ${TEXT NEW}=    Get Text    xpath=.//*[@id='tablehistoryTaskForJenkins']/tbody/tr[1]/td[3]/span
+    ${TEXT NEW}=    Get Text    xpath=.//*[@id='tablehistoryTaskForJenkins']/tbody/tr[3]/td[3]/span
     Log    ${TEXT NEW}
     Set Global Variable    ${TEXT NEW}
 
 
 Verify if no status is there
-    ${NO TEXT}=    Get Text    xpath=.//*[@id='tablehistoryTaskForJenkins']/tbody/tr[1]/td[3]/span
+    ${NO TEXT}=    Get Text    xpath=.//*[@id='tablehistoryTaskForJenkins']/tbody/tr[3]/td[3]/span
     Log    ${NO TEXT}
     Set Global Variable    ${NO TEXT}
     Run Keyword If    '${NO TEXT}' == '${SMOKE STATUS}'
@@ -199,8 +199,9 @@ Verify if no status is there
 
 
 Steps to Go
+    Sleep    6s
     Clicks on Job LogHtml Button
-    Sleep    2s
+    Sleep    5s
     Capture Screen Shot of the page
     Sleep    3s
     Select the Catalyst Suites Window
@@ -215,7 +216,7 @@ Select the Catalyst Window
     Select Window    title=Catalyst
 
 Select the Catalyst Suites Window
-    Select Window    title=CatalystSuites Test Log
+    Select Window    title=${JOB TITLE}
 
 Selects the Window
     Select Window    title=Continuous Integration Dashboard
@@ -242,7 +243,8 @@ Verify the Details of Dashboard
 
 
 Clicks on Job LogHtml Button
-    Click Element    xpath=.//*[@id='tablehistoryTaskForJenkins']/tbody/tr[1]/td[2]/a[2]
+    Execute Javascript    $('#tablehistoryTaskForJenkins > tbody > tr:nth-child(1) > td:nth-child(2) > a:nth-child(2)').click();
+    #Click Element    xpath=.//*[@id='tablehistoryTaskForJenkins']/tbody/tr[1]/td[2]/a[2]/i
 
 Clicks on Job Status Button
     Click Element    xpath=.//*[@id='tablehistoryTaskForJenkins']/tbody/tr[1]/td[2]/a[3]
@@ -396,7 +398,7 @@ Clicks on Back To Instances
     Click Element    xpath=.//*[@id='getViewAttr']
 
 
-    Verify the Java Bootstrap text and Status in the Table
+Verify the Java Bootstrap text and Status in the Table
     Sleep    5 minutes
     Element Should Contain    xpath=.//*[@id='tableactionHistory']/tbody/tr/td[text()='${BOOTSTRAP}']    ${BOOTSTRAP}
     Sleep    1s
