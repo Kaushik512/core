@@ -47,7 +47,8 @@
         "node-crontab": "0.0.8",
         "node-rest-client" : "1.5.1",
         "yamljs":"0.2.3",
-        "xml2json":"0.9.0"
+        "xml2json":"0.9.0",
+        "request": "2.65.0"
     },
     "devDependencies": {
         "grunt": "0.4.5",

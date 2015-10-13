@@ -32,6 +32,8 @@ var hppubliccloudProvider = require('_pr/model/classes/masters/cloudprovider/hpp
 var AzureCloud = require('_pr/lib/azure.js');
 var azureProvider = require('_pr/model/classes/masters/cloudprovider/azureCloudProvider.js');
 
+var AwsAutoScaleInstance = require('_pr/model/aws-auto-scale-instance');
+
 module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
     app.all('/blueprints/*', sessionVerificationFunc);
@@ -929,11 +931,13 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                             var ec2 = new EC2(awsSettings);
                                                                             var ec2Resources = {};
                                                                             var autoScaleResourceIds = [];
+                                                                            var autoScaleResourceId = 'temp-Id';
                                                                             for (var i = 0; i < resources.length; i++) {
                                                                                 if (resources[i].ResourceType === 'AWS::EC2::Instance') {
                                                                                     //instanceIds.push(resources[i].PhysicalResourceId);
                                                                                     ec2Resources[resources[i].PhysicalResourceId] = resources[i].LogicalResourceId;
                                                                                 } else if (resources[i].ResourceType === 'AWS::AutoScaling::AutoScalingGroup') {
+                                                                                    autoScaleResourceId = resources[i].PhysicalResourceId;
                                                                                     autoScaleResourceIds.push(resources[i].PhysicalResourceId);
                                                                                 }
                                                                             }
@@ -941,353 +945,376 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                                 cloudFormation.autoScaleResourceIds = autoScaleResourceIds;
                                                                                 cloudFormation.save();
                                                                             }
-                                                                            var instanceIds = Object.keys(ec2Resources);
 
-                                                                            console.log("instanceIDS length ==>", instanceIds.length);
-                                                                            if (instanceIds.length) {
-                                                                                var instances = [];
+                                                                            // fetching autoscale resouce if any 
+                                                                            AwsAutoScaleInstance.findByAutoScaleResourceId(autoScaleResourceId, function(err, autoScaleInstances) {
+                                                                                if (err) {
+                                                                                    logger.error('Unable to fetch autoscale instance resources', err);
+                                                                                    return;
+                                                                                }
+                                                                                for (var i = 0; i < autoScaleInstances.length; i++) {
+                                                                                    //instanceIds.push(autoScaleInstances[0].awsInstanceId);
+                                                                                    ec2Resources[autoScaleInstances[i].awsInstanceId] = 'autoScaleAwsInstance';
+                                                                                }
+                                                                                var instanceIds = Object.keys(ec2Resources);
+                                                                                console.log("instanceIDS length ==>", instanceIds.length);
+                                                                                if (instanceIds.length) {
+                                                                                    var instances = [];
 
-                                                                                ec2.describeInstances(instanceIds, function(err, awsRes) {
-                                                                                    if (err) {
-                                                                                        logger.error("Unable to get instance details from aws", err);
-                                                                                        return;
-                                                                                    }
-                                                                                    if (!(awsRes.Reservations && awsRes.Reservations.length)) {
-                                                                                        return;
-                                                                                    }
-                                                                                    var reservations = awsRes.Reservations;
-                                                                                    for (var k = 0; k < reservations.length; k++) {
-
-                                                                                        if (reservations[k].Instances && reservations[k].Instances.length) {
-                                                                                            //instances = reservations[k].Instances;
-                                                                                            instances = instances.concat(reservations[k].Instances);
-                                                                                        }
-
-
-                                                                                        console.log(awsRes);
-
-                                                                                    }
-                                                                                    logger.debug('Instances length ==>', instances.length, instanceIds);
-                                                                                    //creating jsonAttributesObj ??? WHY
-                                                                                    var jsonAttributesObj = {
-                                                                                        instances: {}
-                                                                                    };
-
-                                                                                    for (var i = 0; i < instances.length; i++) {
-                                                                                        jsonAttributesObj.instances[ec2Resources[instances[i].InstanceId]] = instances[i].PublicIpAddress;
-                                                                                    }
-                                                                                    for (var i = 0; i < instances.length; i++) {
-                                                                                        addAndBootstrapInstance(instances[i], jsonAttributesObj);
-                                                                                    }
-
-                                                                                });
-
-                                                                                function addAndBootstrapInstance(instanceData, jsonAttributesObj) {
-
-                                                                                    var keyPairName = instanceData.KeyName;
-                                                                                    AWSKeyPair.getAWSKeyPairByProviderIdAndKeyPairName(cloudFormation.cloudProviderId, keyPairName, function(err, keyPairs) {
+                                                                                    ec2.describeInstances(instanceIds, function(err, awsRes) {
                                                                                         if (err) {
-                                                                                            logger.error("Unable to get keypairs", err);
+                                                                                            logger.error("Unable to get instance details from aws", err);
                                                                                             return;
                                                                                         }
-                                                                                        if (keyPairs && keyPairs.length) {
-                                                                                            var keyPair = keyPairs[0];
-                                                                                            var encryptedPemFileLocation = appConfig.instancePemFilesDir + keyPair._id;
+                                                                                        if (!(awsRes.Reservations && awsRes.Reservations.length)) {
+                                                                                            return;
+                                                                                        }
+                                                                                        var reservations = awsRes.Reservations;
+                                                                                        for (var k = 0; k < reservations.length; k++) {
 
-                                                                                            if (!blueprint.appUrls) {
-                                                                                                blueprint.appUrls = [];
+                                                                                            if (reservations[k].Instances && reservations[k].Instances.length) {
+                                                                                                //instances = reservations[k].Instances;
+                                                                                                instances = instances.concat(reservations[k].Instances);
                                                                                             }
-                                                                                            var appUrls = blueprint.appUrls;
-                                                                                            if (appConfig.appUrls && appConfig.appUrls.length) {
-                                                                                                appUrls = appUrls.concat(appConfig.appUrls);
+
+
+                                                                                            console.log(awsRes);
+
+                                                                                        }
+                                                                                        logger.debug('Instances length ==>', instances.length, instanceIds);
+                                                                                        //creating jsonAttributesObj ??? WHY
+                                                                                        var jsonAttributesObj = {
+                                                                                            instances: {}
+                                                                                        };
+
+                                                                                        for (var i = 0; i < instances.length; i++) {
+                                                                                            jsonAttributesObj.instances[ec2Resources[instances[i].InstanceId]] = instances[i].PublicIpAddress;
+                                                                                        }
+                                                                                        for (var i = 0; i < instances.length; i++) {
+                                                                                            addAndBootstrapInstance(instances[i], jsonAttributesObj);
+                                                                                        }
+
+                                                                                    });
+
+                                                                                    function addAndBootstrapInstance(instanceData, jsonAttributesObj) {
+
+                                                                                        var keyPairName = instanceData.KeyName;
+                                                                                        AWSKeyPair.getAWSKeyPairByProviderIdAndKeyPairName(cloudFormation.cloudProviderId, keyPairName, function(err, keyPairs) {
+                                                                                            if (err) {
+                                                                                                logger.error("Unable to get keypairs", err);
+                                                                                                return;
                                                                                             }
-                                                                                            var os = instanceData.Platform;
-                                                                                            if (os) {
-                                                                                                os = 'windows';
-                                                                                            } else {
-                                                                                                os = 'linux';
-                                                                                            }
-                                                                                            var instanceName = blueprint.name;
-                                                                                            if (instanceData.Tags && instanceData.Tags.length) {
-                                                                                                for (var j = 0; j < instanceData.Tags.length; j++) {
-                                                                                                    if (instanceData.Tags[j].Key === 'Name') {
-                                                                                                        instanceName = instanceData.Tags[j].Value;
+                                                                                            if (keyPairs && keyPairs.length) {
+                                                                                                var keyPair = keyPairs[0];
+                                                                                                var encryptedPemFileLocation = appConfig.instancePemFilesDir + keyPair._id;
+
+                                                                                                if (!blueprint.appUrls) {
+                                                                                                    blueprint.appUrls = [];
+                                                                                                }
+                                                                                                var appUrls = blueprint.appUrls;
+                                                                                                if (appConfig.appUrls && appConfig.appUrls.length) {
+                                                                                                    appUrls = appUrls.concat(appConfig.appUrls);
+                                                                                                }
+                                                                                                var os = instanceData.Platform;
+                                                                                                if (os) {
+                                                                                                    os = 'windows';
+                                                                                                } else {
+                                                                                                    os = 'linux';
+                                                                                                }
+
+
+                                                                                                var instanceName;
+
+                                                                                                var runlist = [];
+                                                                                                var instanceUsername;
+                                                                                                var logicalId = ec2Resources[instanceData.InstanceId];
+
+                                                                                                if (logicalId === 'autoScaleAwsInstance') {
+                                                                                                    runlist = cloudFormation.autoScaleRunlist || [];
+                                                                                                    instanceUsername = cloudFormation.autoScaleUsername || 'ubuntu';
+                                                                                                    instanceName = cloudFormation.stackName + '-AutoScale';
+                                                                                                    
+                                                                                                } else {
+                                                                                                    for (var count = 0; count < blueprint.blueprintConfig.instances.length; count++) {
+                                                                                                        if (logicalId === blueprint.blueprintConfig.instances[count].logicalId) {
+                                                                                                            instanceUsername = blueprint.blueprintConfig.instances[count].username;
+                                                                                                            runlist = blueprint.blueprintConfig.instances[count].runlist;
+                                                                                                            break;
+                                                                                                        }
                                                                                                     }
-
+                                                                                                    instanceName = blueprint.name;
                                                                                                 }
-                                                                                            }
 
-                                                                                            var runlist = [];
-                                                                                            var instanceUsername;
-                                                                                            var logicalId = ec2Resources[instanceData.InstanceId];
+                                                                                                if (instanceData.Tags && instanceData.Tags.length) {
+                                                                                                    for (var j = 0; j < instanceData.Tags.length; j++) {
+                                                                                                        if (instanceData.Tags[j].Key === 'Name') {
+                                                                                                            instanceName = instanceData.Tags[j].Value;
+                                                                                                        }
 
-                                                                                            for (var count = 0; count < blueprint.blueprintConfig.instances.length; count++) {
-                                                                                                if (logicalId === blueprint.blueprintConfig.instances[count].logicalId) {
-                                                                                                    instanceUsername = blueprint.blueprintConfig.instances[count].username;
-                                                                                                    runlist = blueprint.blueprintConfig.instances[count].runlist;
-                                                                                                    break;
+                                                                                                    }
                                                                                                 }
-                                                                                            }
-                                                                                            if (!instanceUsername) {
-                                                                                                instanceUsername = 'ubuntu'; // hack for default username
-                                                                                            }
 
-                                                                                            var instance = {
-                                                                                                name: instanceName,
-                                                                                                orgId: blueprint.orgId,
-                                                                                                bgId: blueprint.bgId,
-                                                                                                projectId: blueprint.projectId,
-                                                                                                envId: req.query.envId,
-                                                                                                providerId: cloudFormation.cloudProviderId,
-                                                                                                keyPairId: keyPair._id,
-                                                                                                chefNodeName: instanceData.InstanceId,
-                                                                                                runlist: runlist,
-                                                                                                platformId: instanceData.InstanceId,
-                                                                                                appUrls: appUrls,
-                                                                                                instanceIP: instanceData.PublicIpAddress || instanceData.PrivateIpAddress,
-                                                                                                instanceState: instanceData.State.Name,
-                                                                                                bootStrapStatus: 'waiting',
-                                                                                                users: blueprint.users,
-                                                                                                hardware: {
-                                                                                                    platform: 'unknown',
-                                                                                                    platformVersion: 'unknown',
-                                                                                                    architecture: 'unknown',
-                                                                                                    memory: {
-                                                                                                        total: 'unknown',
-                                                                                                        free: 'unknown',
+                                                                                                if (!instanceUsername) {
+                                                                                                    instanceUsername = 'ubuntu'; // hack for default username
+                                                                                                }
+
+                                                                                                var instance = {
+                                                                                                    name: instanceName,
+                                                                                                    orgId: blueprint.orgId,
+                                                                                                    bgId: blueprint.bgId,
+                                                                                                    projectId: blueprint.projectId,
+                                                                                                    envId: req.query.envId,
+                                                                                                    providerId: cloudFormation.cloudProviderId,
+                                                                                                    keyPairId: keyPair._id,
+                                                                                                    chefNodeName: instanceData.InstanceId,
+                                                                                                    runlist: runlist,
+                                                                                                    platformId: instanceData.InstanceId,
+                                                                                                    appUrls: appUrls,
+                                                                                                    instanceIP: instanceData.PublicIpAddress || instanceData.PrivateIpAddress,
+                                                                                                    instanceState: instanceData.State.Name,
+                                                                                                    bootStrapStatus: 'waiting',
+                                                                                                    users: blueprint.users,
+                                                                                                    hardware: {
+                                                                                                        platform: 'unknown',
+                                                                                                        platformVersion: 'unknown',
+                                                                                                        architecture: 'unknown',
+                                                                                                        memory: {
+                                                                                                            total: 'unknown',
+                                                                                                            free: 'unknown',
+                                                                                                        },
+                                                                                                        os: os
                                                                                                     },
-                                                                                                    os: os
-                                                                                                },
-                                                                                                credentials: {
-                                                                                                    username: instanceUsername,
-                                                                                                    pemFileLocation: encryptedPemFileLocation,
-                                                                                                },
-                                                                                                chef: {
-                                                                                                    serverId: infraManager.infraManagerId,
-                                                                                                    chefNodeName: instanceData.InstanceId
-                                                                                                },
-                                                                                                blueprintData: {
-                                                                                                    blueprintId: blueprint._id,
-                                                                                                    blueprintName: blueprint.name,
-                                                                                                    templateId: blueprint.templateId,
-                                                                                                    templateType: blueprint.templateType,
-                                                                                                    templateComponents: blueprint.templateComponents,
-                                                                                                    iconPath: blueprint.iconpath
-                                                                                                },
-                                                                                                cloudFormationId: cloudFormation._id
-                                                                                            };
+                                                                                                    credentials: {
+                                                                                                        username: instanceUsername,
+                                                                                                        pemFileLocation: encryptedPemFileLocation,
+                                                                                                    },
+                                                                                                    chef: {
+                                                                                                        serverId: infraManager.infraManagerId,
+                                                                                                        chefNodeName: instanceData.InstanceId
+                                                                                                    },
+                                                                                                    blueprintData: {
+                                                                                                        blueprintId: blueprint._id,
+                                                                                                        blueprintName: blueprint.name,
+                                                                                                        templateId: blueprint.templateId,
+                                                                                                        templateType: blueprint.templateType,
+                                                                                                        templateComponents: blueprint.templateComponents,
+                                                                                                        iconPath: blueprint.iconpath
+                                                                                                    },
+                                                                                                    cloudFormationId: cloudFormation._id
+                                                                                                };
 
-                                                                                            logger.debug('Creating instance in catalyst');
-                                                                                            instancesDao.createInstance(instance, function(err, data) {
-                                                                                                if (err) {
-                                                                                                    logger.error("Failed to create Instance", err);
-                                                                                                    res.send(500);
-                                                                                                    return;
-                                                                                                }
-                                                                                                instance.id = data._id;
-                                                                                                var timestampStarted = new Date().getTime();
-                                                                                                var actionLog = instancesDao.insertBootstrapActionLog(instance.id, instance.runlist, req.session.user.cn, timestampStarted);
-                                                                                                var logsReferenceIds = [instance.id, actionLog._id];
-                                                                                                logsDao.insertLog({
-                                                                                                    referenceId: logsReferenceIds,
-                                                                                                    err: false,
-                                                                                                    log: "Waiting for instance ok state",
-                                                                                                    timestamp: timestampStarted
-                                                                                                });
-                                                                                                ec2.waitForEvent(instanceData.InstanceId, 'instanceStatusOk', function(err) {
+                                                                                                logger.debug('Creating instance in catalyst');
+                                                                                                instancesDao.createInstance(instance, function(err, data) {
                                                                                                     if (err) {
-                                                                                                        instancesDao.updateInstanceBootstrapStatus(instance.id, 'failed', function(err, updateData) {
-
-                                                                                                        });
-                                                                                                        var timestampEnded = new Date().getTime();
-                                                                                                        logsDao.insertLog({
-                                                                                                            referenceId: logsReferenceIds,
-                                                                                                            err: true,
-                                                                                                            log: "Bootstrap failed",
-                                                                                                            timestamp: timestampEnded
-                                                                                                        });
-                                                                                                        instancesDao.updateActionLog(instance.id, actionLog._id, false, timestampEnded);
+                                                                                                        logger.error("Failed to create Instance", err);
+                                                                                                        res.send(500);
                                                                                                         return;
                                                                                                     }
-
-                                                                                                    //decrypting pem file
-                                                                                                    var cryptoConfig = appConfig.cryptoSettings;
-                                                                                                    var tempUncryptedPemFileLoc = appConfig.tempDir + uuid.v4();
-                                                                                                    cryptography.decryptFile(instance.credentials.pemFileLocation, cryptoConfig.decryptionEncoding, tempUncryptedPemFileLoc, cryptoConfig.encryptionEncoding, function(err) {
+                                                                                                    instance.id = data._id;
+                                                                                                    var timestampStarted = new Date().getTime();
+                                                                                                    var actionLog = instancesDao.insertBootstrapActionLog(instance.id, instance.runlist, req.session.user.cn, timestampStarted);
+                                                                                                    var logsReferenceIds = [instance.id, actionLog._id];
+                                                                                                    logsDao.insertLog({
+                                                                                                        referenceId: logsReferenceIds,
+                                                                                                        err: false,
+                                                                                                        log: "Waiting for instance ok state",
+                                                                                                        timestamp: timestampStarted
+                                                                                                    });
+                                                                                                    ec2.waitForEvent(instanceData.InstanceId, 'instanceStatusOk', function(err) {
                                                                                                         if (err) {
                                                                                                             instancesDao.updateInstanceBootstrapStatus(instance.id, 'failed', function(err, updateData) {
-                                                                                                                if (err) {
-                                                                                                                    logger.error("Unable to set instance bootstarp status", err);
-                                                                                                                } else {
-                                                                                                                    logger.debug("Instance bootstrap status set to failed");
-                                                                                                                }
+
                                                                                                             });
                                                                                                             var timestampEnded = new Date().getTime();
                                                                                                             logsDao.insertLog({
                                                                                                                 referenceId: logsReferenceIds,
                                                                                                                 err: true,
-                                                                                                                log: "Unable to decrpt pem file. Bootstrap failed",
+                                                                                                                log: "Bootstrap failed",
                                                                                                                 timestamp: timestampEnded
                                                                                                             });
                                                                                                             instancesDao.updateActionLog(instance.id, actionLog._id, false, timestampEnded);
-
-                                                                                                            if (instance.hardware.os != 'windows')
-                                                                                                                return;
+                                                                                                            return;
                                                                                                         }
-                                                                                                        chef.bootstrapInstance({
-                                                                                                            instanceIp: instance.instanceIP,
-                                                                                                            pemFilePath: tempUncryptedPemFileLoc,
-                                                                                                            runlist: instance.runlist,
-                                                                                                            instanceUsername: instance.credentials.username,
-                                                                                                            nodeName: instance.chef.chefNodeName,
-                                                                                                            environment: envName,
-                                                                                                            instanceOS: instance.hardware.os,
-                                                                                                            jsonAttributes: jsonAttributesObj
-                                                                                                        }, function(err, code) {
 
-                                                                                                            fileIo.removeFile(tempUncryptedPemFileLoc, function(err) {
-                                                                                                                if (err) {
-                                                                                                                    logger.error("Unable to delete temp pem file =>", err);
-                                                                                                                } else {
-                                                                                                                    logger.debug("temp pem file deleted =>", err);
-                                                                                                                }
-                                                                                                            });
-
-
-                                                                                                            logger.error('process stopped ==> ', err, code);
+                                                                                                        //decrypting pem file
+                                                                                                        var cryptoConfig = appConfig.cryptoSettings;
+                                                                                                        var tempUncryptedPemFileLoc = appConfig.tempDir + uuid.v4();
+                                                                                                        cryptography.decryptFile(instance.credentials.pemFileLocation, cryptoConfig.decryptionEncoding, tempUncryptedPemFileLoc, cryptoConfig.encryptionEncoding, function(err) {
                                                                                                             if (err) {
-                                                                                                                logger.error("knife launch err ==>", err);
                                                                                                                 instancesDao.updateInstanceBootstrapStatus(instance.id, 'failed', function(err, updateData) {
-
+                                                                                                                    if (err) {
+                                                                                                                        logger.error("Unable to set instance bootstarp status", err);
+                                                                                                                    } else {
+                                                                                                                        logger.debug("Instance bootstrap status set to failed");
+                                                                                                                    }
                                                                                                                 });
                                                                                                                 var timestampEnded = new Date().getTime();
                                                                                                                 logsDao.insertLog({
                                                                                                                     referenceId: logsReferenceIds,
                                                                                                                     err: true,
-                                                                                                                    log: "Bootstrap failed",
+                                                                                                                    log: "Unable to decrpt pem file. Bootstrap failed",
                                                                                                                     timestamp: timestampEnded
                                                                                                                 });
                                                                                                                 instancesDao.updateActionLog(instance.id, actionLog._id, false, timestampEnded);
 
+                                                                                                                if (instance.hardware.os != 'windows')
+                                                                                                                    return;
+                                                                                                            }
+                                                                                                            chef.bootstrapInstance({
+                                                                                                                instanceIp: instance.instanceIP,
+                                                                                                                pemFilePath: tempUncryptedPemFileLoc,
+                                                                                                                runlist: instance.runlist,
+                                                                                                                instanceUsername: instance.credentials.username,
+                                                                                                                nodeName: instance.chef.chefNodeName,
+                                                                                                                environment: envName,
+                                                                                                                instanceOS: instance.hardware.os,
+                                                                                                                jsonAttributes: jsonAttributesObj
+                                                                                                            }, function(err, code) {
 
-                                                                                                            } else {
-                                                                                                                if (code == 0) {
-                                                                                                                    instancesDao.updateInstanceBootstrapStatus(instance.id, 'success', function(err, updateData) {
-                                                                                                                        if (err) {
-                                                                                                                            logger.error("Unable to set instance bootstarp status. code 0", err);
-                                                                                                                        } else {
-                                                                                                                            logger.debug("Instance bootstrap status set to success");
-                                                                                                                        }
-                                                                                                                    });
-                                                                                                                    var timestampEnded = new Date().getTime();
-                                                                                                                    logsDao.insertLog({
-                                                                                                                        referenceId: logsReferenceIds,
-                                                                                                                        err: false,
-                                                                                                                        log: "Instance Bootstraped successfully",
-                                                                                                                        timestamp: timestampEnded
-                                                                                                                    });
-                                                                                                                    instancesDao.updateActionLog(instance.id, actionLog._id, true, timestampEnded);
+                                                                                                                fileIo.removeFile(tempUncryptedPemFileLoc, function(err) {
+                                                                                                                    if (err) {
+                                                                                                                        logger.error("Unable to delete temp pem file =>", err);
+                                                                                                                    } else {
+                                                                                                                        logger.debug("temp pem file deleted =>", err);
+                                                                                                                    }
+                                                                                                                });
 
 
-                                                                                                                    chef.getNode(instance.chefNodeName, function(err, nodeData) {
-                                                                                                                        if (err) {
-                                                                                                                            logger.error("Failed chef.getNode", err);
-                                                                                                                            return;
-                                                                                                                        }
-                                                                                                                        var hardwareData = {};
-                                                                                                                        hardwareData.architecture = nodeData.automatic.kernel.machine;
-                                                                                                                        hardwareData.platform = nodeData.automatic.platform;
-                                                                                                                        hardwareData.platformVersion = nodeData.automatic.platform_version;
-                                                                                                                        hardwareData.memory = {
-                                                                                                                            total: 'unknown',
-                                                                                                                            free: 'unknown'
-                                                                                                                        };
-                                                                                                                        if (nodeData.automatic.memory) {
-                                                                                                                            hardwareData.memory.total = nodeData.automatic.memory.total;
-                                                                                                                            hardwareData.memory.free = nodeData.automatic.memory.free;
-                                                                                                                        }
-                                                                                                                        hardwareData.os = instance.hardware.os;
-                                                                                                                        instancesDao.setHardwareDetails(instance.id, hardwareData, function(err, updateData) {
-                                                                                                                            if (err) {
-                                                                                                                                logger.error("Unable to set instance hardware details  code (setHardwareDetails)", err);
-                                                                                                                            } else {
-                                                                                                                                logger.debug("Instance hardware details set successessfully");
-                                                                                                                            }
-                                                                                                                        });
-                                                                                                                        //Checking docker status and updating
-                                                                                                                        var _docker = new Docker();
-                                                                                                                        _docker.checkDockerStatus(instance.id,
-                                                                                                                            function(err, retCode) {
-                                                                                                                                if (err) {
-                                                                                                                                    logger.error("Failed _docker.checkDockerStatus", err);
-                                                                                                                                    res.send(500);
-                                                                                                                                    return;
-                                                                                                                                    //res.end('200');
-
-                                                                                                                                }
-                                                                                                                                logger.debug('Docker Check Returned:' + retCode);
-                                                                                                                                if (retCode == '0') {
-                                                                                                                                    instancesDao.updateInstanceDockerStatus(instance.id, "success", '', function(data) {
-                                                                                                                                        logger.debug('Instance Docker Status set to Success');
-                                                                                                                                    });
-
-                                                                                                                                }
-                                                                                                                            });
-
-                                                                                                                    });
-
-                                                                                                                } else {
+                                                                                                                logger.error('process stopped ==> ', err, code);
+                                                                                                                if (err) {
+                                                                                                                    logger.error("knife launch err ==>", err);
                                                                                                                     instancesDao.updateInstanceBootstrapStatus(instance.id, 'failed', function(err, updateData) {
-                                                                                                                        if (err) {
-                                                                                                                            logger.error("Unable to set instance bootstarp status code != 0", err);
-                                                                                                                        } else {
-                                                                                                                            logger.debug("Instance bootstrap status set to failed");
-                                                                                                                        }
+
                                                                                                                     });
                                                                                                                     var timestampEnded = new Date().getTime();
                                                                                                                     logsDao.insertLog({
                                                                                                                         referenceId: logsReferenceIds,
-                                                                                                                        err: false,
-                                                                                                                        log: "Bootstrap Failed",
+                                                                                                                        err: true,
+                                                                                                                        log: "Bootstrap failed",
                                                                                                                         timestamp: timestampEnded
                                                                                                                     });
                                                                                                                     instancesDao.updateActionLog(instance.id, actionLog._id, false, timestampEnded);
 
+
+                                                                                                                } else {
+                                                                                                                    if (code == 0) {
+                                                                                                                        instancesDao.updateInstanceBootstrapStatus(instance.id, 'success', function(err, updateData) {
+                                                                                                                            if (err) {
+                                                                                                                                logger.error("Unable to set instance bootstarp status. code 0", err);
+                                                                                                                            } else {
+                                                                                                                                logger.debug("Instance bootstrap status set to success");
+                                                                                                                            }
+                                                                                                                        });
+                                                                                                                        var timestampEnded = new Date().getTime();
+                                                                                                                        logsDao.insertLog({
+                                                                                                                            referenceId: logsReferenceIds,
+                                                                                                                            err: false,
+                                                                                                                            log: "Instance Bootstraped successfully",
+                                                                                                                            timestamp: timestampEnded
+                                                                                                                        });
+                                                                                                                        instancesDao.updateActionLog(instance.id, actionLog._id, true, timestampEnded);
+
+
+                                                                                                                        chef.getNode(instance.chefNodeName, function(err, nodeData) {
+                                                                                                                            if (err) {
+                                                                                                                                logger.error("Failed chef.getNode", err);
+                                                                                                                                return;
+                                                                                                                            }
+                                                                                                                            var hardwareData = {};
+                                                                                                                            hardwareData.architecture = nodeData.automatic.kernel.machine;
+                                                                                                                            hardwareData.platform = nodeData.automatic.platform;
+                                                                                                                            hardwareData.platformVersion = nodeData.automatic.platform_version;
+                                                                                                                            hardwareData.memory = {
+                                                                                                                                total: 'unknown',
+                                                                                                                                free: 'unknown'
+                                                                                                                            };
+                                                                                                                            if (nodeData.automatic.memory) {
+                                                                                                                                hardwareData.memory.total = nodeData.automatic.memory.total;
+                                                                                                                                hardwareData.memory.free = nodeData.automatic.memory.free;
+                                                                                                                            }
+                                                                                                                            hardwareData.os = instance.hardware.os;
+                                                                                                                            instancesDao.setHardwareDetails(instance.id, hardwareData, function(err, updateData) {
+                                                                                                                                if (err) {
+                                                                                                                                    logger.error("Unable to set instance hardware details  code (setHardwareDetails)", err);
+                                                                                                                                } else {
+                                                                                                                                    logger.debug("Instance hardware details set successessfully");
+                                                                                                                                }
+                                                                                                                            });
+                                                                                                                            //Checking docker status and updating
+                                                                                                                            var _docker = new Docker();
+                                                                                                                            _docker.checkDockerStatus(instance.id,
+                                                                                                                                function(err, retCode) {
+                                                                                                                                    if (err) {
+                                                                                                                                        logger.error("Failed _docker.checkDockerStatus", err);
+                                                                                                                                        res.send(500);
+                                                                                                                                        return;
+                                                                                                                                        //res.end('200');
+
+                                                                                                                                    }
+                                                                                                                                    logger.debug('Docker Check Returned:' + retCode);
+                                                                                                                                    if (retCode == '0') {
+                                                                                                                                        instancesDao.updateInstanceDockerStatus(instance.id, "success", '', function(data) {
+                                                                                                                                            logger.debug('Instance Docker Status set to Success');
+                                                                                                                                        });
+
+                                                                                                                                    }
+                                                                                                                                });
+
+                                                                                                                        });
+
+                                                                                                                    } else {
+                                                                                                                        instancesDao.updateInstanceBootstrapStatus(instance.id, 'failed', function(err, updateData) {
+                                                                                                                            if (err) {
+                                                                                                                                logger.error("Unable to set instance bootstarp status code != 0", err);
+                                                                                                                            } else {
+                                                                                                                                logger.debug("Instance bootstrap status set to failed");
+                                                                                                                            }
+                                                                                                                        });
+                                                                                                                        var timestampEnded = new Date().getTime();
+                                                                                                                        logsDao.insertLog({
+                                                                                                                            referenceId: logsReferenceIds,
+                                                                                                                            err: false,
+                                                                                                                            log: "Bootstrap Failed",
+                                                                                                                            timestamp: timestampEnded
+                                                                                                                        });
+                                                                                                                        instancesDao.updateActionLog(instance.id, actionLog._id, false, timestampEnded);
+
+                                                                                                                    }
                                                                                                                 }
-                                                                                                            }
 
-                                                                                                        }, function(stdOutData) {
+                                                                                                            }, function(stdOutData) {
 
-                                                                                                            logsDao.insertLog({
-                                                                                                                referenceId: logsReferenceIds,
-                                                                                                                err: false,
-                                                                                                                log: stdOutData.toString('ascii'),
-                                                                                                                timestamp: new Date().getTime()
+                                                                                                                logsDao.insertLog({
+                                                                                                                    referenceId: logsReferenceIds,
+                                                                                                                    err: false,
+                                                                                                                    log: stdOutData.toString('ascii'),
+                                                                                                                    timestamp: new Date().getTime()
+                                                                                                                });
+
+                                                                                                            }, function(stdErrData) {
+
+                                                                                                                //retrying 4 times before giving up.
+                                                                                                                logsDao.insertLog({
+                                                                                                                    referenceId: logsReferenceIds,
+                                                                                                                    err: true,
+                                                                                                                    log: stdErrData.toString('ascii'),
+                                                                                                                    timestamp: new Date().getTime()
+                                                                                                                });
+
+
                                                                                                             });
-
-                                                                                                        }, function(stdErrData) {
-
-                                                                                                            //retrying 4 times before giving up.
-                                                                                                            logsDao.insertLog({
-                                                                                                                referenceId: logsReferenceIds,
-                                                                                                                err: true,
-                                                                                                                log: stdErrData.toString('ascii'),
-                                                                                                                timestamp: new Date().getTime()
-                                                                                                            });
-
 
                                                                                                         });
-
                                                                                                     });
                                                                                                 });
-                                                                                            });
-                                                                                        }
-                                                                                    });
+                                                                                            }
+                                                                                        });
 
+
+                                                                                    }
 
                                                                                 }
-
-                                                                            }
+                                                                            });
 
                                                                         });
 
