@@ -62,6 +62,12 @@ ${CENT OS}            Cent OS
 ${UBUNTU OS}            ubuntu
 ${STATUS STOPPED}                stopped
 ${UserName}             root
+${CHEF SERVER}            PhoenixChef
+${ORG NAME}                Phoenix
+${PROJ NAME}                PhoenixApp
+
+
+
 
 
 ${USERPEMFILE}              ${ROOTPATH}//Chef//jagadeesh12.pem
@@ -262,7 +268,7 @@ ${VaildateNoOrgEName}                  RLdev
 ${VaildEnvName1}                       Dev
 ${VaildEnvName2}                       QTest
 ${VaildEditEnvironment}                QA
-${EnV1}                                Dev
+${EnV1}                                DEV
 ${EnV2}                                QA
 ${REQ}                                Required
 
@@ -412,7 +418,7 @@ ${Vaild15ChrTemplateName}                ReelvanceLabsTemplat
 ${ValidTEditemplName}                    ApacRelevance
 ${Vaild15ChrTempName}                    CatalystAutomation
 ${VaildSpacesTEmpTyName}                 Catlsyt Auto
-${TEMPLATE NAME}                         Apache
+${TEMPLATE NAME}                         ApacheAptTest
 ${TEMP_NAME}                             Apache
 
 ${VaildEmptyTemplateNameErrMsg}              Required
