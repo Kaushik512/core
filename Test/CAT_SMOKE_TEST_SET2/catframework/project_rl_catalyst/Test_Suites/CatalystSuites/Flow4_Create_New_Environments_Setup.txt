@@ -11,7 +11,7 @@ Resource           ${COMMON RESOURCES}/catalyst_grid_node.txt
 
 *** Test Cases ***
 Catalyst new Environments setup
-    [Tags]       Sanity      Settings
+    [Tags]       Sanity      DevopsSetup
 #    Catalyst Login
     Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
     Catalyst creates environments by selcting from chef server  
@@ -21,7 +21,7 @@ Catalyst new Environments setup
 
 
 Catalyst Adding New Envirornments to the Chef          
-    [Tags]       Sanity      Settings
+    [Tags]       Sanity      DevopsSetup
 #    Catalyst Login
     Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
     Catalyst Addition of New Environments

@@ -83,6 +83,8 @@ Verify the Blueprint is created
 Delete the Blueprint
     Click Element    xpath=.//*[text()='${BLUEPRINT NAME}']
     Sleep    1s
+    Click Element    xpath=.//*[@id='l2']/footer/div/button
+    Sleep    1s
     Click Element    xpath=.//*[text()='OK']
  
 Clicks on RL_QA Environment

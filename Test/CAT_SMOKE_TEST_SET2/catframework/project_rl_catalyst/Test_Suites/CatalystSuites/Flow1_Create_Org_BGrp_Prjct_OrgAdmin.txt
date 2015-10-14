@@ -12,13 +12,13 @@ Library            String
 
 *** Test Cases ***
 Catalyst Get the Build Number Step
-    [Tags]       Sanity      Settings
+    [Tags]       Sanity      OrganizationSetup
     Version Number and the Jenkins Buildnumber
     [Teardown]     Close Browser
 
 
 Catalyst Creation of New Organization and Org Admin
-    [Tags]       Sanity      Settings
+    [Tags]       Sanity      OrganizationSetup
 #    Catalyst Login 
     Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
     Creates New Organization
@@ -28,7 +28,7 @@ Catalyst Creation of New Organization and Org Admin
 
 
 Catalyst Creation of Business Group And Projects
-    [Tags]       Sanity      Settings
+    [Tags]       Sanity      OrganizationSetup
 #    Catalyst Login
     Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
     Create New Business Group 
@@ -41,4 +41,4 @@ Catalyst Creation of Business Group And Projects
 
 
 
-    
+  

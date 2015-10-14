@@ -12,7 +12,7 @@ Resource           ${CATALYST ACTION}/Organization_Setup_Action_Steps.txt
 
 *** Test Cases ***
 Catalyst New Teams Setup
-    [Tags]       Sanity      Settings
+    [Tags]       Sanity      OrganizationSetup
 #    Catalyst Login
     Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
     Catalyst Creates New Teams             

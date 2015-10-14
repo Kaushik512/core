@@ -84,13 +84,13 @@ Clicks Save Button in Template type page
     Click Element    css=div.btn-group.pull-right > button
 
 Select Created organization
-    Wait Until Keyword Succeeds    1 minute     1 seconds     Select From List     id=orgname      ${ORGANIZATION NAME}
+    Wait Until Keyword Succeeds    1 minute     1 seconds     Select From List     id=orgname      ${ORG NAME}
 
 Select type of the template
     Sleep    4s
     Click Element    css=#s2id_templatetype > .select2-choice
     Log    after click
-    Input Text    css=#select2-drop .select2-input    ${Template Type}
+    Input Text    css=#select2-drop .select2-input    ${TEMPLATE TYPENAME}
     Sleep    4s
     Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span    
 
