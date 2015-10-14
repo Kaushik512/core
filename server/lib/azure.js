@@ -209,49 +209,33 @@ var AzureCloud = function() {
     }
 
     this.updatedfloatingip = false;
-    this.trysshoninstance = function(ostype,ip_address, username, pwd, callback) {
-            var opts = {
-                //privateKey: instanceData.credentials.pemFilePath,
-                password: pwd,
-                username: username,
-                host: ip_address,
-                instanceOS: 'linux',
-                port: 22,
-                cmds: ["ls -al"],
-                cmdswin: ["knife wsman test"],
-                interactiveKeyboard: true
-            }
-            var cmdString = '';
-            if(ostype == "Windows"){
-                cmdString = opts.cmdswin[0] + ' ' + opts.host + ' -m' ;
-
-                execute(cmdString,false,function(err,stdout){
-
-                    if(stdout.indexOf('Connected successfully') >= 0){
-                        callback('ok');
-                        return;
-                    }
-                });
-
-
-            }
-            else{
-            opts.cmds.join(' && ');
-            //console.log(JSON.stringify(opts));
-            var sshExec = new SSHExec(opts);
-            sshExec.exec(cmdString, function(err, stdout) {
-                logger.debug(stdout);
-                callback(stdout);
-                return;
-            }, function(err, stdout) {
-                logger.debug('Out:', stdout); //assuming that receiving something out would be a goog sign :)
-                callback('ok');
-                return;
-            }, function(err, stdout) {
-                logger.error('Error Out:', stdout);
-            });
-            }
-
+ 
+    this.trysshoninstance = function(ip_address, username, pwd, callback) {
+        var opts = {
+            //privateKey: instanceData.credentials.pemFilePath,
+            password: pwd,
+            username: username,
+            host: ip_address,
+            instanceOS: 'linux',
+            port: 22,
+            cmds: ["ls -al"],
+            cmdswin: ["del "],
+            interactiveKeyboard: true
+        }
+        var cmdString = opts.cmds.join(' && ');
+        //console.log(JSON.stringify(opts));
+        var sshExec = new SSHExec(opts);
+        sshExec.exec(cmdString, function(err, stdout) {
+            logger.debug(stdout);
+            callback(stdout);
+            return;
+        }, function(err, stdout) {
+            logger.debug('Out:', stdout); //assuming that receiving something out would be a goog sign :)
+            callback('ok');
+            return;
+        }, function(err, stdout) {
+            logger.error('Error Out:', stdout);
+        });
     }
 
     this.timeouts = [];

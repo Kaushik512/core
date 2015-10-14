@@ -162,7 +162,7 @@ Clicks on Organization setup
 
 Select organization for Env
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='s2id_orgname']/a
-    Input Text    xpath=.//*[@id='select2-drop']/div/input     ${ORGANIZATION NAME}
+    Input Text    xpath=.//*[@id='select2-drop']/div/input     ${ORG NAME}
     Click Element    xpath=.//*[@id='select2-drop']/ul/li/div 
 
 Select the EConfiguration name
@@ -213,7 +213,7 @@ Select the Environment2
 
 
 Assign Projects for Orgnaization in Environment
-    Click Element    xpath=.//*[@id='projectname']/label[text()='${PROJECT NAME1}']
+    Click Element    xpath=.//*[@id='projectname']/label[text()='${PROJ NAME}']
     #Click Element    xpath=.//*[@id='projectname']/label[text()='${PROJECT NAME2}']
 
 
