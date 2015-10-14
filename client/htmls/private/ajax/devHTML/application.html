@@ -473,14 +473,14 @@ $(document).ready(function() {
     //   constructUI(data);
     // });
     $("#divapplicationtableview").hide();
-    $(".up,.down").click(function(){
-        var row = $(this).parents("tr:first");
-        if ($(this).is(".up")) {
-            row.insertBefore(row.prev());
-        } else {
-            row.insertAfter(row.next());
-        }
-    });
+    // $(".up,.down").click(function(){
+    //     var row = $(this).parents("tr:first");
+    //     if ($(this).is(".up")) {
+    //         row.insertBefore(row.prev());
+    //     } else {
+    //         row.insertAfter(row.next());
+    //     }
+    // });
 });
 
 
@@ -544,13 +544,21 @@ $('.createAppConfigure').click(function(){
             var $tr = $('<tr/>').attr({'data-configureApplication': individualenvName[i]});
             var $tdenvName = $('<td/>').html(individualenvName[i]);
             var $tdActive = $('<td/>').html("*****");
-            var $tdupdown = $('<td/>').html("*****");
+            var $tdupdown = $('<td/>').html("<a class='btn btn-default btn-primary up' style='border-radius:50%;height:27px;width:27px;padding-top:0px' type='button'><i style='font-size:12px;margin-left:-5px;' class='fa  fa-chevron-up'></i></a><a class='btn btn-default btn-primary down' style='border-radius:50%;height:27px;width:27px;padding-top:0px' type='button'><i style='font-size:12px;margin-left:-5px;' class='fa  fa-chevron-down'></i></a>");
             $tr.append($tdenvName).append($tdActive).append($tdupdown);
             $tbody.append($tr);
         }
     });
     $tableconfigureapplication.append($tbody);
-
+    $tableconfigureapplication.find(".up,.down").click(function(){
+        alert("Clicked");
+        var row = $(this).parents("tr:first");
+        if ($(this).is(".up")) {
+            row.insertBefore(row.prev());
+        } else {
+            row.insertAfter(row.next());
+        }
+    });
 });
 function getEnvNameforConfigure(){
     var projectId = urlParams.projid;
