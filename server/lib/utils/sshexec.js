@@ -73,11 +73,7 @@ module.exports = function(opts) {
         });
 
         con.on('keyboard-interactive', function(name, instructions, instructionsLang, prompts, finish) {
-<<<<<<< HEAD
-            logger.debug('Connection :: keyboard-interactive');
-=======
             console.log('Connection :: keyboard-interactive');
->>>>>>> origin/dev_catalyst
             finish([options.password]);
         });
 
@@ -106,24 +102,13 @@ module.exports = function(opts) {
                     connect(connectionParamsObj, callback);
                 });
             } else {
-<<<<<<< HEAD
-                logger.debug("SSh password...");
-                if (options.interactiveKeyboard) {
-
-                    logger.debug("Authrnticating in keyboard-interactive way");
-=======
                 console.log("SSh password...");
 
                 if (options.interactiveKeyboard) {
->>>>>>> origin/dev_catalyst
                     connectionParamsObj.tryKeyboard = true;
                     connect(connectionParamsObj, callback);
                 } else {
                     connectionParamsObj.password = options.password;
-<<<<<<< HEAD
-                    logger.debug('About to callback');
-=======
->>>>>>> origin/dev_catalyst
                     connect(connectionParamsObj, callback);
                 }
             }
