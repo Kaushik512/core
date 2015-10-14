@@ -13,7 +13,7 @@
 
 var crypto = require('crypto');
 var fs = require('fs');
-var logger = require('../../lib/logger')(module);
+var logger = require('_pr/logger')(module);
 
 function Cryptography(algorithm, password) {
 
@@ -110,6 +110,9 @@ function Cryptography(algorithm, password) {
                     callback(err, null);
                     return;
                 }
+                //setting file permission 
+                fs.chmodSync(outputFilepath,'400');
+                logger.debug('Set file ' + outputFilepath + ' permission to 400');
                 callback(null);
             });
         });

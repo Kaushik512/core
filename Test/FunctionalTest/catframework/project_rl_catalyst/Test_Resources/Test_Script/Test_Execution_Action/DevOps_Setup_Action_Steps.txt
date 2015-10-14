@@ -17,16 +17,113 @@ Resource           ${CATALYST ACTION}/Organization_Setup_Action_Steps.txt
 
 *** Keywords ***
 Testing All New Config Management Conditions
-    Vaildate the Empty URL field  ${VaildEmptyURL}
+    Vaildate the Empty URL field
     URL field left Empty  ${VaildEmptyURLErrMsg} 
-    Vaildate Empty Config Name  ${VaildEmptyConfigname}
+    Vaildate Empty Config Name
     Config Name left empty  ${VaildEmptyConfignameErrMsg}
-    Vaildate Empty User Name  ${VaildEmptyUsername}
+    Vaildate Empty User Name
     User Name left empty  ${VaildEmptyUsernameErrMsg}
-    Vaildate Empty User Pem and Validator Pem and Knife File 
+
+
+
+
+Catalyst Create New Data Bag
+    Clicks on Settings
+    Clicks on DevOps Setup menu
+    Clicks on Config Management menu
+    Sleep    2s
+    Clicks on the User Creted Chef Server
+    Clicks on New Button of DataBag
+    Sleep    2s
+    Enters the DataBag Name
+    Clicks on Save Button of DataBag
+    Sleep    3s
+    Verify the Data Bag is Created
+    Sleep    1s
+    Clicks on Add New Item Button
+    Enters the Instance List ID
+    Clicks on Save Button List
+    Sleep    2s
+    Clicks on Add New Item Button
+    Enters the another Instance List ID
+    Clicks on Save Button List
+    Clicks on the Item1 User Created
+    
+
+Catalyst Duplicate DataBag setup
+    Clicks on Settings
+    Clicks on DevOps Setup menu
+    Clicks on Config Management menu
+    Sleep    2s
+    Clicks on the User Creted Chef Server
+    Clicks on New Button of DataBag
+    Sleep    2s
+    Enters the DataBag Name
+    Clicks on Save Button of DataBag
+    Sleep    3s
+    Verfiy the Duplicate Message of DataBag
+    Delete the DataBag Created
+
+
+
+Verfiy the Duplicate Message of DataBag
+    Element Should Contain    css=div.bootbox-body    ${DUPLICATE DATABAGMSG}
+    Sleep    2s
+    Click Element    xpath=.//*[text()='OK']
+    Sleep    2s
+    Click Element    xpath=.//*[text()='Close']
+    Sleep    1s
+
+
+Clicks on Save Button List
+    Click Element    id=saveBTNList
+
+Verify the Data Bag is Created
+    Element Should Contain    xpath=.//*[@id='dbNameTableTest']/tr/td/a[text()='${DATABAG NAME}']    ${DATABAG NAME}  
+
+
+Delete the DataBag Created
+    Click Element    xpath=.//*[@id='dbNameTableTest']/tr/td/a[text()='${DATABAG NAME}']/../div/button/i
+    Sleep    1s
+    Click Element    xpath=.//*[text()='OK']
+    Sleep    1s
+    Page Should Not Contain    ${DATABAG NAME}
+
+Clicks on the Item1 User Created
+    Click Element    xpath=.//*[@id='listNameTable']/tbody/tr/td/a[text()='${INSTANCE ID}']
+    Sleep    2s
+    Click Element    xpath=.//*[@id='listNameTable']/tbody/tr/td/a[text()='${INSTANCE ID1}']
+    Sleep    2s
+
+
+
+Enters the another Instance List ID
+    Input Text    id=instanceListID    ${INSTANCE ID1}
+
+Enters the Instance List ID
+    Input Text    id=instanceListID    ${INSTANCE ID}
+
+Clicks on Add New Item Button
+    Click Element    xpath=.//*[@title='Add New Item']
+
+Clicks on Save Button of DataBag
+    Click Element    id=saveBTN
+
+Enters the DataBag Name
+    Input Text    id=instanceDataName    ${DATABAG NAME}
+
+Clicks on the User Creted Chef Server
+    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${CONFIG MANAGEMENT NAME}']/../td[5]/div/a[3]
+
+Clicks on New Button of DataBag
+    Click Element    xpath=.//*[@title='Add New Data Bag']
 
 
 Create New Config Management
+    Clicks on Settings
+    Clicks on DevOps Setup menu
+    Clicks on Config Management menu
+    Sleep    2s
     Clicks on New button to Create New Config Management
     Enters config management name
     Enters config management user name
@@ -35,14 +132,21 @@ Create New Config Management
     Upload user Pem File
     Upload Validator Pem File
     Upload Validator Knife File
-    Clicks on Save button to save the Environment detail
+    Sleep    4s
+    Clicks on Save button to save the ConfigMgmt detail
+    Sleep    2s
+    Verfiy the ChefServer is Created in the Table
 
 
 Unique Devops Configuration Management
+    Clicks on Settings
+    Clicks on DevOps Setup menu
+    Clicks on Config Management menu
+    Sleep    2s
     Clicks on New button to Create New Config Management
     Validate the Unique Configuration Name   ${ValidateAlrdyExistConfigName}
     Validate the Unique Organization   ${ValidateAlrdyExistOrgName}
-    Clicks on Save button to save the Environment detail
+    Clicks on Save button to save the ConfigMgmt detail
     Configuration name already exists    ${ValidateAlrdyExistConfigNameErrMsg}
     Organization name already exists     ${ValidateAlrdyExistOrgNameErrMsg}
     Clicks on ButtonCancel Button
@@ -52,7 +156,7 @@ Devops Click on Update of Your org and Org is disabled
     Devops click on Created Config Mgmt
     Organization is Disabled
     Verify the Organziation
-    Clicks on Save button to save the Environment detail
+    Clicks on Save button to save the ConfigMgmt detail
 
 Catlayst Unique Organization Validation
     Clicks on New button to Create New Config Management
@@ -63,15 +167,20 @@ Catlayst Unique Organization Validation
     Upload user Pem File
     Upload Validator Pem File
     Upload Validator Knife File
-    Clicks on Save button to save the Environment detail
+    Clicks on Save button to save the ConfigMgmt detail
     Validate the Organization of Already Created
 
 Enters New Configrtn Name to check
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    id=configname    CatServer
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    id=configname    ${NEW CONFIG NAME}
 
 Validate the Organization of Already Created
     Element Should Contain    id=unique_orgname    ${AlreadyExistOrg}
     Clicks on Config Cancel Button
+
+Verfiy the ChefServer is Created in the Table
+    Sleep    2s
+    Element Should Contain    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${CONFIG MANAGEMENT NAME}']    ${CONFIG MANAGEMENT NAME}
+    Log    ${CONFIG MANAGEMENT NAME} Chef Server is Created
 
     
 Vaildate Empty User Pem and Validator Pem and Knife File
@@ -80,25 +189,33 @@ Vaildate Empty User Pem and Validator Pem and Knife File
     Enters config management user name
     Select organization for config management
     Enters config management URL
-    Clicks on Save button to save the Environment detail
+    Clicks on Save button to save the ConfigMgmt detail
+    Sleep    2s
+    Confirming Userpem and Knife files are mandatory
     Clicks on Config Cancel Button
 
 
 Vaildate Empty User Name
-    [Arguments]    ${loginname}
     Clicks on New button to Create New Config Management
     Enters config management name
-    Enters Empty User Name
     Select organization for config management
     Enters config management URL
     Upload user Pem File
     Upload Validator Pem File
     Upload Validator Knife File
-    Clicks on Save button to save the Environment detail
+    Clicks on Save button to save the ConfigMgmt detail
 
 
-Enters Empty User Name
-    Input Text    id=loginname    ${loginname}
+Confirming Userpem and Knife files are mandatory
+    ${USER PEM MANDATORY}=    Get Text    xpath=.//*[@id='userpemfile'][@cat-validation]
+    Log    ${USER KNIFE}
+    Should Be Equal    ${USER KNIFE}    ${REQ}
+    ${KNIFE PEM MANDATORY}=    Get Text    xpath=.//*[@id='kniferbfile'][@cat-validation]
+    Log    ${KNIFE PEM MANDATORY}
+    Should Be Equal    ${KNIFE PEM MANDATORY}    ${REQ}
+
+
+
 
 User Name left empty  
     [Arguments]    ${VaildEmptyUsernameErrMsg}
@@ -126,7 +243,6 @@ Vaildate the Empty config field
 
 
 Vaildate Empty Config Name
-    [Arguments]    ${configname}
     Clicks on New button to Create New Config Management
     Enters config management user name
     Select organization for config management
@@ -134,14 +250,13 @@ Vaildate Empty Config Name
     Upload user Pem File
     Upload Validator Pem File
     Upload Validator Knife File
-    Clicks on Save button to save the Environment detail
+    Clicks on Save button to save the ConfigMgmt detail
 
 
 Enters Empty Configuration name
     Input Text   id=configname    ${configname}
 
 Vaildate the Empty URL field
-    [Arguments]    ${url}
     Clicks on Settings
     Clicks on DevOps Setup menu
     Clicks on Config Management menu
@@ -149,15 +264,106 @@ Vaildate the Empty URL field
     Enters config management name
     Enters config management user name
     Select organization for config management
-    Enters empty config management URL
     Upload user Pem File
     Upload Validator Pem File
     Upload Validator Knife File
-    Clicks on Save button to save the Environment detail
+    Clicks on Save button to save the ConfigMgmt detail
 
 
-Enters empty config management URL
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    id=url    ${url}
+Catalyst Creation of the Puppet Server
+    Clicks on Settings
+    Clicks on DevOps Setup menu
+    Clicks on Puppet Server Link Button
+    Clicks on New Button of Puppet Server Button
+    Sleep    1s
+    Enters the Puppet Server Name
+    Enters the Puppet UserName
+    Enters the Puppet Host Name
+    Select The Organization of the OrgAdmin created
+    Choose the Authentication Type
+    Sleep    1s
+    Upload Pem file for Puppet Server
+    Clicks on Save Button of Puppet Server
+    Verify the Puppet Server is Created
+
+Catalyst Validation of the Puppet Server Page
+    Validate the 15Character PuppetServer Name
+    Verfiy the Error Message displayed limited to 15Characters
+    Validate the Empty Puppet Server Name,HostName,UserName,Organization
+
+
+
+Validate the 15Character PuppetServer Name
+    Clicks on Settings
+    Clicks on DevOps Setup menu
+    Clicks on Puppet Server Link Button
+    Clicks on New Button of Puppet Server Button
+    Sleep    1s
+    Enters the 15Character PuppetServer Name
+    
+Validate the Empty Puppet Server Name,HostName,UserName,Organization
+    Clicks on New Button of Puppet Server Button
+    Sleep    1s
+    Clicks on Save Button of Puppet Server
+    Sleep    3s
+    Verify the Error Message displayed for Empty Puppet Server Name,HostName,UserName,Organization
+
+    
+Verify the Error Message displayed for Empty Puppet Server Name,HostName,UserName,Organization
+    Element Should Contain    id=errmsg_puppetservername    ${REQ}
+    Element Should Contain    id=errmsg_puppetservername    ${REQ}
+    Element Should Contain    id=errmsg_puppetservername    ${REQ}
+    Element Should Contain    id=errmsg_puppetservername    ${REQ}
+
+
+Enters the 15Character PuppetServer Name
+    Input Text    id=puppetservername    ${Valid15ChrPuppetName}
+    Sleep    1s
+    Clicks on Save Button of Puppet Server
+
+Verfiy the Error Message displayed limited to 15Characters
+    Element Should Contain    id=errmsg_puppetservername    ${Valid15ChrErrMsg}
+    Clicks on Cancel Button of puppet Server  
+
+
+
+Clicks on Cancel Button of puppet Server
+    Click Element    id=btncancel
+
+Upload Pem file for Puppet Server
+    Choose File    id=userpemfile     ${CAT_INSTANCES}
+
+Clicks on Save Button of Puppet Server
+    Click Element    css=.btn.btn-primary.btn-mini
+
+Verify the Puppet Server is Created
+    Element Should Contain    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${PUPPET SERVERNAME}']    ${PUPPET SERVERNAME}
+
+
+
+Clicks on Puppet Server Link Button
+    Click Element    xpath=.//*[text()='Puppet Server']
+
+Clicks on New Button of Puppet Server Button
+    Click Element    id=newConfig
+
+Enters the Puppet Server Name
+    Input Text    id=puppetservername    ${PUPPET SERVERNAME}
+
+Enters the Puppet UserName
+    Input Text    id=username    ${PUPPET USERNAME}
+
+Enters the Puppet Host Name
+    Input Text    id=hostname    ${HOSTNAME}
+
+Choose the Authentication Type
+    Click Element    css=#s2id_authType > a > span.select2-arrow
+    Sleep    1s
+    Input Text    css=#select2-drop > div > input    Pem File
+    Sleep    1s
+    Click Element    css=.select2-result-label
+
+
 
 
 
@@ -172,7 +378,7 @@ Vaildate the Empty field
     Clicks on Config Cancel Button
 
 Clicks on Config Cancel Button
-    Click Element    xpath=.//*[@id='btncancel']
+    Click Element    css=#btncancel
 
 
     
@@ -215,8 +421,8 @@ Clicks on DevOps Setup menu
     Click Element    xpath=//a[contains(text(),'DevOps Setup')]
 
 Clicks on Config Management menu
-    Wait Until Keyword Succeeds    1 minute     1 seconds    Wait Until Element Is Visible       xpath=//a[contains(text(),'Config Management')]
-    Click Element    xpath=//a[contains(text(),'Config Management')]
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Wait Until Element Is Visible       xpath=//a[contains(text(),'Chef Server')]
+    Click Element    xpath=//a[contains(text(),'Chef Server')]
     
 Clicks on New button to Create New Config Management
         Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       link=New
@@ -249,8 +455,9 @@ Upload Validator Knife File
     #C:\\Users\\adarsh.RLINDIA\\Desktop\\caty\\Chef\\knife.rb     
    
 
-Clicks on Save button to save the Environment detail
-    Click Element    xpath=//button[@class='btn btn-primary btn-mini'][1]   
+Clicks on Save button to save the ConfigMgmt detail
+    Sleep    3s
+    Click Element    css=div.btn-group.pull-right > button
     Sleep    2s   
 
 
@@ -297,20 +504,20 @@ Validate the ConOrganization name
 
 
 Clicks on ButtonCancel Button
-    Click Element    xpath=.//*[@id='btncancel']   
+    Click Element    css=#btncancel
 
 
 Devops click on Created Config Mgmt
-    Wait Until keyword Succeeds    1 minute     1 seconds    Wait Until Element Is Visible    xpath=.//*[@id='envtable']/tbody/tr/td[text()='Relevance_Labs']/../td/div/a[2]/i 
-    Click Element    xpath =.//*[@id='envtable']/tbody/tr/td[text()='Relevance_Labs']/../td/div/a[2]/i                                                              
+    Wait Until keyword Succeeds    1 minute     1 seconds    Wait Until Element Is Visible    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${CONFIG MANAGEMENT NAME}']/../td[5]/div/a[1]
+    Click Element    xpath =.//*[@id='envtable']/tbody/tr/td[text()='${CONFIG MANAGEMENT NAME}']/../td[5]/div/a[1]                                                      
 
 Organization is Disabled
      Wait Until keyword Succeeds    1 minute     1 seconds    Wait Until Element Is Visible    id=orgname
      Element Should Be Disabled       id=orgname
 
 Verify the Organziation
-    Get Text    xpath=.//*[@id='s2id_orgname']/a/span[1]
-    Element Should Contain    xpath=.//*[@id='s2id_orgname']/a/span[1]    ${ORGANIZATION NAME}    
+    Get Text    css=#s2id_orgname > a > span.select2-chosen
+    Element Should Contain    css=#s2id_orgname > a > span.select2-chosen    ${ORGANIZATION NAME}    
 #Unique Devops Config name Ends
 
 #Environments setup starts

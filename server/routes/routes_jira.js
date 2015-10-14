@@ -1,4 +1,11 @@
-var logger = require('../lib/logger')(module);
+/* Copyright (C) Relevance Lab Private Limited- All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Gobinda Das <gobinda.das@relevancelab.com>, 
+ * Aug 2015
+ */
+
+var logger = require('_pr/logger')(module);
 var Jira = require('../lib/jira');
 module.exports.setRoutes = function(app,sessionVerificationFunc){
 	app.all('/jira/*',sessionVerificationFunc);

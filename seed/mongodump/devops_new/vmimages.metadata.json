@@ -1,1 +1,1 @@
-{"options":{},"indexes":[{"v":NumberInt(1),"key":{"_id":NumberInt(1)},"name":"_id_","ns":"devops_new.vmimages"},{"v":NumberInt(1),"unique":true,"key":{"name":1},"name":"name_1","background":true,"safe":null,"ns":"devops_new.vmimages"}]}
+{ "indexes" : [ { "v" : 1, "key" : { "_id" : 1 }, "name" : "_id_", "ns" : "devops_new.vmimages" }, { "v" : 1, "unique" : true, "key" : { "name" : 1 }, "name" : "name_1", "ns" : "devops_new.vmimages", "background" : true, "safe" : null } ] }

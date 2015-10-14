@@ -9,9 +9,39 @@ Resource           catalyst.txt
 
 
 *** Variables ***
-${BROWSERTYPE}                    chrome             
-${ENVIRONMENTSERVER}         http://52.26.87.125:3001/public/login.html
+${BROWSERTYPE}                    firefox                   
+${ENVIRONMENTSERVER}                http://d4d.rlcatalyst.com/public/login.html
 
+#http://d4d.rlcatalyst.com/public/login.html
+
+#http://10.0.1.206:3003/public/login.html
+
+#http://d4d.relevancelab.com:3001                            
+
+#http://d4d.relevancelab.com:3001                
+
+
+#http://supercatalyst.relevancelab.com
+#http://10.0.1.206:3003/public/login.html
+#http://10.0.1.206:3002/private/index.html#ajax/Settings/Dashboard.html
+
+
+
+             
+#Puppet
+${PUPPET SERVERNAME}       	RLPuppetServer
+${PUPPET USERNAME}          ubuntu
+${HOSTNAME}                 52.24.60.123
+${Valid15ChrPuppetName}      RelevanceLabPuppet
+
+${Valid15ChrErrMsg}         limited to 15 chars.
+
+
+#DataBag
+${DATABAG NAME}        DataRL
+${INSTANCE ID}         R1267
+${INSTANCE ID1}        S4567
+${DUPLICATE DATABAGMSG}         Data Bag already exist on Chef.  
 
 
 
@@ -28,9 +58,10 @@ ${BUSINESS GROUP NAME}           Devops
 ${PROJECT NAME}                  Catalyst
 ${PROJECT DESCRIPTION}           Catalyst product automation Description
 ${ENVIRONMENT NAME}              Dev
-${CONFIG MANAGEMENT NAME}             RLChefServer
-${CONFIG MANAGEMENT USER NAME}         mycatqa
-${CONFIG MANAGEMENT URL}         https://api.opscode.com/organizations/cattest
+${CONFIG MANAGEMENT NAME}             RLChefServer                       
+
+
+
 ${PROVIDER}             Data Center
 ${ASSIGN USERS}         Designer
 ${ASSIGN USERS1}        superadmin          #Consumer
@@ -45,11 +76,11 @@ ${TOTAL MEMORY}     604680kB
 ${FREE MEMORY}      298024kB
 ${ENVIRONMENTSER NAME}          _default
 ${NEW EMAIL}                  crickinfo@gmail.com
-${AlreadyExistOrg}            Selected is already registered
+${AlreadyExistOrg}            This entry is already registered. Try another?
 ${IPTEXT}                   undefined
 ${STATS}                    pending
 ${STATSYY}                  Pending
-${STATS RUN}                running
+${STATUS RUN}                running
 ${VAR}            54.75.4.3
 ${PRINTSTMT}            The Instance has an IP Address
 ${SATSS}                         success
@@ -66,8 +97,17 @@ ${SERVER TIME COOKBOOK}            starter
 ${DISABLED}           disabled
 ${CENT OS}            Cent OS
 ${UBUNTU OS}            ubuntu
-${SUITS}                stopped
+${STOPD}                stopped
 ${UserName}             root
+${RUNLIST}              recipe[apache2]
+${KEYPAIRNAME}           cat_instances
+${REGION NAME}           US West 
+${SUBNET NAME}           subnet-aed68ce8
+${NEW CONFIG NAME}       catserver
+${REGION NAME}            US West    
+${BLUEPRINT TESTNAME}          TestingNew
+
+${Unique ErrMsg}            This entry is already registered. Try another?
 
 ${PHOENIX COMMERNCE WITHOUT COOKBOOK UBUNTUOS}            Phoenix Commernce without Cookbook UbuntuOS
 ${PHOENIX COMMERCE WITH COOKBOOK UBUNTUOS}          Phoenix Commerce With CookBook ubuntuOS
@@ -76,28 +116,47 @@ ${PHOENIX COMMERNCE WITHOUT COOKBOOK CENTOS}            Phoenix Commernce withou
 ${PHOENIX COMMERCE WITH COOKBOOK CENTOS}          Phoenix Commerce With CookBook CENTOS
 ${TASK NAME}          Test Task
 
-${USERPEMFILE}              ${ROOTPATH}\\Chef\\mycatqa.pem 
-${VALIDATORPEMFILE}      ${ROOTPATH}\\Chef\\cattest-validator.pem
-${KNIFERBFILE}                ${ROOTPATH}\\Chef\\knife.rb
-${CATALYSTPEM}                ${ROOTPATH}\\Chef\\catalyst.pem
-${CAT_INSTANCES}              ${ROOTPATH}\\Chef\\cat_instances.pem
 
-${CENTOSIMG}                  ${ROOTPATH}\\Images\\centos.jpg
-${UBUNTUIMG}                  ${ROOTPATH}\\Images\\ubuntuu.jpg
-${APPICON}                    ${ROOTPATH}\\Images\\rel.jpg    
-${TEMPLTYPEICON}              ${ROOTPATH}\\Images\\index.jpg           
-${APACHEIMG}                  ${ROOTPATH}\\Images\\apache.jpg
 
-${JENKINSNAME}            JenkinsTAT
-${JENKINS URL}               http://54.68.204.110:9091/
+${CONFIG MANAGEMENT USER NAME}              mycatqa             
+${CONFIG MANAGEMENT URL}             https://api.opscode.com/organizations/cattest
+
+
+
+${CLOUD TEMPLATETYPE}        CloudFormation
+${CLOUD TEMP NAME}           RLCloud
+${CFT BLUPRNT NAME}          Rel_CloudBP
+${NODE USERNAME}             ubuntu
+${STACK NAME}                RLStack
+${STACK INSTANCE NAME}       Node
+
+
+${USERPEMFILE}              ${ROOTPATH}//Chef//mycatqa.pem
+${VALIDATORPEMFILE}         ${ROOTPATH}//Chef//cattest-validator.pem
+${KNIFERBFILE}                ${ROOTPATH}//Chef//knife.rb
+${CATALYSTPEM}                ${ROOTPATH}//Chef//catalyst.pem
+${CAT_INSTANCES}              ${ROOTPATH}//Chef//cat_instances.pem
+${CATALYST STACKFILE}         ${ROOTPATH}//Chef//CatalystStack.template
+
+${CENTOSIMG}                  ${ROOTPATH}//Images//centos.jpg
+${UBUNTUIMG}                  ${ROOTPATH}//Images//ubuntuu.jpg
+${APPICON}                    ${ROOTPATH}//Images//rel.jpg    
+${TEMPLTYPEICON}              ${ROOTPATH}//Images//index.jpg           
+${APACHEIMG}                  ${ROOTPATH}//Images//apache.jpg
+
+
+${JENTASK NAME}            JenkinsJob
+${JENKINSNAME}            JenkinsRL
+${JENKINS URL}               http://jenkins.rlcatalyst.com
 ${JENKINS USERID}         admin    
 ${JENKINS PASSWORD}       admin@RL123
 ${TASK NAME}              Task1
-${JENKINS SERVER}         Jenkins
+${JENKINS SERVER}         JenkinsRL
 ${JENKINS EDIT}           Jenkins
-${JOB NAME}               catalyst_Get
-${RECIPE}                  recipe[apt]      
-
+${JJOB NAME}               testmail
+${RECIPE}                  recipe[apt]     
+${RECIPE1}                 recipe[apt]
+${Template Type}           Chef
 ${OPERATING SYSTEM}        Cent OS
 ${CentosInstanceSize}           m1.small
 ${UbuntuInstanceSize}      t2.small      
@@ -122,7 +181,7 @@ ${IP ADDRESS}             52.10.69.55
 ${IP USERNAME}            root
 ${IP APPNAME}             RelevanceApp
 ${IP URL}                 http://www.google.com
-${REG}                    US West (Oregon) | us-west-2
+${REG}                    US West
 ${CHEF BOOTSTRAP}         waiting
 ${MACHINE STATS}           unknown
 ${APPLICATION NAME}       RelRio
@@ -136,17 +195,18 @@ ${MAT RUNLIST}             recipe[apt]          #recipe[cron]
 ${MAT RUNLIST1}            recipe[a],recipe[cron]
 ${MAT OS1}                 ubuntu
 ${UBUNTU MEM}              1016256kB
-${UBUNTU REC}              recipe[apt]
-${TEMPLATE TYPENAME}       CatAutomatn          #AppFactory
+${UBUNTU REC}              recipe[apt],recipe[apt]
+${TEMPLATE TYPENAME}       SoftwareStack                #CatAutomatn          
 ${random}                  adarsh
 ${ADD}                     apache2              #tomcat-all
 ${ACTBOOT1}                 Pending
 ${ACTBOOT2}                 Success
-${IP Centos}                 52.24.73.49
+${RUN}                       running
 ${AUTHN}                    Pem File 
 ${NAME}                     Bootstrap
 ${DUP MSG}                  An Instance with the same IP already exists.
 ${NAME1}                    Chef-Client-Run
+${NAME2}                    SSH-Shell
 ${TEAM1}                    Rel_Designer
 ${TEAM DESCRPN1}            Designer of Catalyst
 ${TEAM2}                    Rel_Consumer
@@ -160,34 +220,63 @@ ${PASSWD2}                  Consumer
 ${PASSWD11}                 Designer
 ${PASSWD22}                 Consumer 
 ${EDIT_INSTANCE_NAME}       Instance_Centos
-${ERRORMESSAGE}             Please enter instance name
+${ERRORMESSAGE}             Required        #Please enter instance name
 ${MORE INFO}                 SSH Terminal
 ${NO MATCH}                 No matches found
 ${ENVNAME}                  QA
 ${NAMEOFINSTANCE}           Instance_Centos
-${IP Ubuntu}                52.10.75.4
 ${IP UBUNTUSERNAME}         ubuntu
 ${EDIT_UBUNTU_INSTANCE_NAME}     Instance_Ubuntu
 ${DESIGNER_NAME}            Designer01
 ${DESIGNER_PASWD}           Designer01
 ${CONSUMER_NAME}            Consumer01
+
 ${CONSUMER_PASWD}           Consumer01
-${CENTOS NAME}              "Instance_Centos"
-${UBUNTU NAME}              "Instance_Ubuntu"
-${IP ADD UBUNTU}             "52.10.75.4"
-${IP ADD CENTOS}             "52.24.73.49" 
+${CENTOS NAME}              Instance_Centos
+${UBUNTU NAME}              Instance_Ubuntu
+${IP ADD UBUNTU}            54.68.147.50
+${IP Ubuntu}                54.68.147.50
+
+${IP ADD CENTOS}              52.24.178.71
+${IP Centos}                  52.24.178.71
+
+
+${SETTING}                    Settings
 ${Proj1}                      Catalyst
 ${Proj2}                      Primary_Edu
 ${CookBkName}                 apt
+${UbuntuUser}                 ubuntu
+${MAT OS1}                    ubuntu
+${RUNLIST1}                   recipe[tomcat-all]
+${RUNLIST2}                   cron 
+${RUNLIST3}                   recipe[cron]
+${ALL}                        ALL
+${REQ}                        Required
+${VPC}                        vpc-b1f3ecd3 (172.31.0.0/16) Default
+${SECRTY GRP1}                sg-c00ee1a5 | all_open
+${SECRTY GRP2}                sg-c06faca4 | HTTP&S_SG
+${SECRTY GRP3}                sg-038f4d67 | SSH_SG
+${SECRTY GRP4}                sg-ab6faccf | Tomcat
 
-
+${SOFTWARE NAME}          setup-2.8.14-20.el6_4.1.noarch
 
 
 #Provider
-${PROVIDER NAME}          AWS RELPRO
+${PROVIDER NAME}          AWS Prov
+${EDIT PROVIDER NANME}    AWS RELPRO
 ${PROVIDERR}                 AWS
 ${SECRET KEY}                  qm/j8lT0/IPc1P5ud8yujUSa61+QjqeyZ/jZkIff
 ${ACCESS KEY}                  AKIAI3ETOOEFHJ62G2NQ
+
+${OPENSTACK PROVIDERR}      OpenStack
+${HP CLOUD PROVIDERR}       HP Public Cloud
+${VMWARE PROVIDERR}         VMware
+
+
+${Provider ErrMsg}         Provider name already exist.
+
+
+
 ${IMAGE NAME1}                 Cent OSIm
 ${IMAGE NAME2}                 UbuntuIm
 ${IMAGE NAME3}                 Windows
@@ -202,6 +291,7 @@ ${USER}                        superadmin
 ${COOKBOOK NAME1}              apache2                #service_apache       #apache2
 ${SERVICE NAME1}               ApacheServce
 ${ValidEditVMImage}            Windows 2008
+${COOKBOOK NAME2}              tomcat-all
 
 
 #${ValidateNotExistLDAP}             0564ghs
@@ -209,9 +299,9 @@ ${ValidEditVMImage}            Windows 2008
 #${LOG2}                        ConsmrRL15j                        
 #${LOG3}                        DesgnrRL15j
 
-${CATE1}                   AdminRL15j
-${CATE2}                   ConsmrRL15j
-${CATE3}                   DesgnrRL15j
+#${CATE1}                   AdminRL15j
+#${CATE2}                   ConsmrRL15j
+#${CATE3}                   DesgnrRL15j
 
 #provider
 ${VaildNoProvider}   
@@ -249,6 +339,12 @@ ${UI PERFORMANCE}                http://www.google.com
 
 
 
+#Docker
+${DOCKER NAME}           RelDocker
+${DOCKER REGISTRY}       relevancelab
+${DOCKER USERID}         relevancelab
+${DOCKER EMAILID}        puneet@relevancelab.com
+${DOCKER PASSWD}         RL@123
 
 
 #Organization Name
@@ -257,7 +353,7 @@ ${VaildateBlankSpacesOrgName}       Relevance Labs
 ${VaildateEmptyOrgName}            
 ${VaildateSpecialChrOrgName}       RL&@Testing
 ${VaildateAlreadyExistChrOrgName}  phoenixInc
-${VaildOrgName}                    Relevance_Labs
+${VaildOrgName}                    Relevance
 ${VaildEditOrg}                    Relevance_Labs
 ${VaildEditOrgDomainName}       http://www.relevancelab.com
 
@@ -265,7 +361,7 @@ ${VaildEditOrgDomainName}       http://www.relevancelab.com
 ${Vaildate15ChrErrMsg}            limited to 15 chars
 ${VaildateBlankSpacesErrMsg}      space(s) not allowed
 ${VaildateEmptyErrMsg}            Required
-${VaildateSpecialChrErrMsg}       special chars not allowed
+${VaildateSpecialChrErrMsg}        special chars not allowed
 ${VaildateAlreadyExistErrMsg}     Selected is already registered
 ${OrganizationMsg}                Relevance_Labs
 ${OrganizationDomainMsg}        http://www.relevancelab.com
@@ -284,11 +380,13 @@ ${VaildEditEnvironment}                QA
 ${EnV1}                                Dev
 ${EnV2}                                QA
 ${REQ}                                Required
+${EnV3}                               Preeprod
+
 
 ${Vaildate15ChrErrMsg}              limited to 15 chars            
 ${VaildateBlankSpacesErrMsg}        space(s) not allowed
 ${VaildateEmptyErrMsg}              Required
-${VaildateSpecialChrErrMsg}         special chars not allowed
+${VaildateSpecialChrErrMsg}          special chars not allowed
 ${VaildateAlreadyExistErrMsg}       Selected is already registered
 ${VaildateNoOrgErrMsg}                 Required
 ${EnvironmentMsg}                      QA
@@ -376,8 +474,8 @@ ${VaildEmptyValidatorname}
 ${VaildEmptyKnifename}
 
 
-${ValidateAlrdyExistConfigNameErrMsg}    Selected is already registered
-${ValidateAlrdyExistOrgNameErrMsg}       Selected is already registered
+${ValidateAlrdyExistConfigNameErrMsg}    This entry is already registered. Try another?
+${ValidateAlrdyExistOrgNameErrMsg}       This entry is already registered. Try another?
 ${VaildEmptyURLErrMsg}                   Please enter a valid Url
 ${VaildEmptyConfignameErrMsg}           Required
 ${VaildEmptyUsernameErrMsg}             Required
@@ -414,11 +512,13 @@ ${VaildateEmptyEmailName}
 ${ValidAldyExistLogName}             userc
 ${EDIT EMAIL}                        AdminDave@gmail.com
 ${NEW USER}                           newipl
+${UserLoginName}                         JohnsonM
 
 ${VaildateEmptyUserNameErrMsg}           Required    
 ${VaildateEmptyEmailNameErrMsg}          Required
 ${ValidNotLDAPExistErrMsg}              selected is NOT in LDAP.
 ${ValidAldyExistLogNameErrMsg}          Selected is already registered
+${VaildNoRolesErrMsg}                     Atleast one required
 
 
 #Gallery Setup
@@ -431,11 +531,12 @@ ${TEMPLATE NAME}                        ApacRelevance
 
 
 ${VaildEmptyTemplateNameErrMsg}              Required
-${Vaild15ChrTemplateNameErrMsg}             limited to 15 chars
+${Vaild15ChrTemplateNameErrMsg}             limited to 15 chars.
 ${VaildOrGErrMsg}                           Required
 ${VaildEmptyTempName}                       Required
 ${Vaild15ChrTempErrMsg}                     limited to 15 chars
 ${VaildBlankspErrMsg}                       space(s) not allowed
+${VaildNoOrgTemplErrMsg}                    Required
 
 
 #Service Setup
@@ -487,3 +588,20 @@ ${DEF TEAMNAME1}                Relevance_Labs_Admins
 ${DEF TEAMNAME2}                Relevance_Labs_DEV
 ${DEF TEAMNAME3}                Relevance_Labs_DevOps
 ${DEF TEAMNAME4}                Relevance_Labs_QA
+
+
+#Blueprint Validation
+${ERRROR MESSAGE}              Required.
+${DESIGN BREADCRUMB}         DesignPROVIDERSAWS
+${AZURE BREADCRUMB}          DesignPROVIDERSAzure
+${DATACENTRE BREADCRUMB}     DesignPROVIDERSData Centre
+${OPENSTACK BREADCRUMB}      DesignPROVIDERSOpen Stack
+${CLOUDSTACK BREADCRUMB}     DesignPROVIDERSCloud Stack
+${DOCKER BREADCRUMB}         DesignPROVIDERSDocker
+
+
+
+
+
+
+

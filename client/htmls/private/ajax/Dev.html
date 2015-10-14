@@ -7,20 +7,65 @@
         <div id="widget_body_container" class="widget-body" style="font-size:12px;">
 
             <ul id="myTab3" class="nav nav-tabs tabs-pull-left">
-                <li class="active Instances">
-                    <a href="#l1" style="display:block!important" data-toggle="tab" ><i class="fa fa-reorder"></i>&nbsp;Instances <label id="instanceSpinner" class="hidden"><img  style="margin-left:5px;margin-right:25px;" src="img/select2-spinner.gif"></label></a>
-                </li>
-                <li class="pull-left Blueprints">
-                    <a href="#l2" style="display:block!important" data-toggle="tab"><i class="fa fa-crosshairs"></i>&nbsp;Blueprints</a>
+                <li class="dropdown active InfrastructureLocalStorage">
+                    <a data-toggle="dropdown" class="dropdown-toggle" href="javascript:void(0);">Infrastructure<b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+
+                        <li class="active Instances">
+                            <a href="#l1" style="display:block!important" data-toggle="tab" ><i class="fa fa-reorder"></i>&nbsp;Instances <label id="instanceSpinner" class="hidden"><img  style="margin-left:5px;margin-right:25px;" src="img/select2-spinner.gif"></label></a>
+                            
+                        </li>
+                        <li class="Blueprints">
+                            <a href="#l2" style="display:block!important" data-toggle="tab"><i class="fa fa-crosshairs"></i>&nbsp;Blueprints</a>
+                        </li>
+                        <li class="CloudFormation">
+                            <a href="#l5" style="display:block!important" data-toggle="tab"><i class="fa fa-indent"></i>&nbsp;CloudFormation</a>
+                        </li>
+                        <li class="Containers">
+                            <a href="#l4" style="display:block!important" data-toggle="tab"><i class="fa fa-briefcase"></i>&nbsp;Containers</a>
+                        </li>
+                    </ul>
                 </li>
 
                 <li class="pull-left Orchestration">
                     <a href="#l3" style="display:block!important" data-toggle="tab"><i class="fa fa-indent"></i>&nbsp;Orchestration</a>
                 </li>
-                <li class="pull-left Containers">
-                    <a href="#l4" style="display:block!important" data-toggle="tab"><i class="fa fa-briefcase"></i>&nbsp;Containers</a>
+                
+                <li class="pull-left Applications">
+                    <a href="#l6" style="display:block!important" data-toggle="tab"><i class="fa fa-shield"></i>&nbsp;Applications</a>
                 </li>
+
             </ul>
+
+
+
+            <!-- <ul class="nav nav-tabs bordered" id="myTab1TestID" style="border-top:none;border-right:none;">
+                <li class="dropdown active">
+                    <a data-toggle="dropdown" class="dropdown-toggle" href="javascript:void(0);">Infrastructure<b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li class="active">
+                            <a data-toggle="tab" href="#InstancesTestID"><i class="fa fa-fw fa-lg fa-reorder" style="margin-right: 4px;"></i>Instances</a>
+                        </li>
+                        <li class="">
+                            <a data-toggle="tab" href="#BlueprintsTestID"><i class="fa fa-fw fa-lg fa-crosshairs" style="margin-right: 4px;"></i>Blueprints</a>
+                        </li>
+                        <li class="">
+                            <a data-toggle="tab" href="#CloudformationTestID"><i class="fa fa-fw fa-lg fa-ticket" style="margin-right: 4px;"></i>Cloud Formation</a>
+                        </li>
+                        <li>
+                            <a data-toggle="tab" href="#ContainersTestID"><i class="fa fa-fw fa-briefcase" style="margin-right: 4px;"></i>
+                            Containers</a>
+                        </li>
+                    </ul>
+                </li>
+                
+                <li class="">
+                    <a data-toggle="tab" href="#OrchestrationTestID"><i class="fa fa-fw fa-indent" style="margin-right: 2px;"></i>Orchestration</a>
+                </li>
+                <li>
+                    <a data-toggle="tab" href="#ApplicationsTestID"><i class="fa fa-fw fa-shield" style="margin-right: 2px;"></i>Applications</a>
+                </li>
+            </ul> -->
  <div id="myTabContent3" class="nav tab-content">
 
 
@@ -69,59 +114,7 @@
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
-<!-- Modal for desktop provisioning-->
-<div class="modal fade" id="modalDesktopProvisioningLaunch" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                    &times;
-                </button>
-                <h4 class="modal-title">
-                    Enter instance details
-                </h4>
-            </div>
-            <div class="modal-body no-padding">
-                <form role="form" class="smart-form1">
-                    <fieldset>
-                        <div class="">
-                            <section class="col col-12">
-                                <div class="form-group">
-                                    <label for="exampleInputEmail1">Instance IP</label>
-                                    <div class="">
-                                        <input type="text" id="instanceIPInput">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="exampleInputEmail1">Instance Username</label>
-                                    <div class="">
-                                        <input type="text" id="instanceUsernameInput">
-                                    </div>
-                                </div>
 
-                                <div class="form-group">
-                                    <label for="exampleInputEmail1">Instance Password</label>
-                                    <div class="">
-                                        <input type="password" id="instancePasswordInput">
-                                    </div>
-                                </div>
-                            </section>
-
-                        </div>
-
-                    </fieldset>
-                </form>
-
-
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default btn-primary desktopProvisioningLaunchBtn">Provision</button>
-                <button type="button" class="btn btn-default btn-primary" data-dismiss="modal">Close</button>
-            </div>
-
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
 
     </article>
 </div>
@@ -135,14 +128,16 @@ var htmlTabs={
 docker:'docker.html',
 blueprint:'blueprint.html',
 instance:'instance.html',
-orchestration:'orchestration.html'
+cloudformation:'cloudformation.html',
+orchestration:'orchestration.html',
+application: 'application.html'
 };
 window.count=0;
 
 /**/
 $(document).on('devPagesLoaded',function(){
 window.count++;
-if(window.count===3){
+if(window.count===4){
 /*var el=document.createElement('script');
 el.setAttribute('src','js/dev/dev.js');
 $('head').append(el);
@@ -162,7 +157,10 @@ var callback=function(){
 loadHTMLFile(basePath+htmlTabs.instance,$('#myTabContent3'));
 loadHTMLFile(basePath+htmlTabs.blueprint,$('#myTabContent3'));
 loadHTMLFile(basePath+htmlTabs.orchestration,$('#myTabContent3'));
+loadHTMLFile(basePath+htmlTabs.cloudformation,$('#myTabContent3'));
 loadHTMLFile(basePath+htmlTabs.docker,$('#myTabContent3'));
+
+loadHTMLFile(basePath+htmlTabs.application,$('#myTabContent3'));
 
 function loadHTMLFile(url,parentToAppend){
     $.ajax({

@@ -39,7 +39,7 @@
                                              <div class="col-lg-6 col-md-6" style="margin-top:25px">
                                                 <label for="link">URL:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
                                                 <!-- <i class="icon-append fa fa-building"></i> -->
-                                                <input type="text" unique="true" uniqueconditionedby="url" name="ctl00$MainContent$orgname" value="" id="url" class="form-control" type="url"  name="website"  cdata="catalyst"  cat-validation="required,urlcheck">
+                                                <input type="text" unique="true" uniqueconditionedbyUrl="url" name="ctl00$MainContent$orgname" value="" id="url" class="form-control" type="url"  name="website"  cdata="catalyst"  cat-validation="required,urlcheck">
                                              </div>
                                              <div class="col-lg-6 col-md-6" style="margin-top:25px">
                                                 <label for="name">Organization:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
@@ -50,6 +50,10 @@
                                              </div>
                                           
                                           <hr/>
+                                            <!-- <div class="col-lg-6 col-md-6 display:none" >
+                                                <input name="ctl00$MainContent$orgname" value="chef" id="configType" class="form-control" type="text"  cdata="catalyst" hidden>
+                                             </div> -->
+                                             <input type="hidden" name="ctl00$MainContent$orgname" value="chef" id="configType" class="form-control"  cdata="catalyst">
                                           
                                              <div class="col-lg-6 col-md-6" id="frmconfigmanagement" style="margin-top:20px">
                                                 <div class="smart-forms">
@@ -60,17 +64,7 @@
                                                    </label>
                                                 </div>
                                              </div>
-                                             <div class="col-lg-6 col-md-6" style="margin-top:20px">
-                                                <div class="smart-forms">
-                                                   <label>Validator Pem File:</label>
-                                                   <label for="validatorpemfile" class="field file">
-                                                      <div class="imgdiv" value="1"></div>
-                                                      <span class="button btn-primary">Browse</span><input id="validatorpemfile" keyfield="configname" type="file" onchange="this.nextSibling.value = this.value"  cdata="catalyst" class="gui-file"><input type="text" readonly="" class="gui-input">
-                                                   </label>
-                                                </div>
-                                             </div>
-                                          
-                                          
+                                             
                                              <div class="col-lg-6 col-md-6" style="margin-top:20px">
                                                 <div class="smart-forms">
                                                    <label>Knife.rb File:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
@@ -78,6 +72,16 @@
                                                       <div class="imgdiv" value="1"></div>
                                                       <span class="button btn-primary">Browse</span><input id="kniferbfile" keyfield="configname" type="file" onchange="this.nextSibling.value = this.value" class="gui-file"  cdata="catalyst" cat-validation="required"><input type="text" readonly="" class="gui-input">
                                                       <input id="folderpath"  cdata="catalyst" type="text" value="" style="display:none"/>
+                                                   </label>
+                                                </div>
+                                             </div>
+
+                                             <div class="col-lg-6 col-md-6" style="margin-top:20px">
+                                                <div class="smart-forms">
+                                                   <label>Validator Pem File:</label>
+                                                   <label for="validatorpemfile" class="field file">
+                                                      <div class="imgdiv" value="1"></div>
+                                                      <span class="button btn-primary">Browse</span><input id="validatorpemfile" keyfield="configname" type="file" onchange="this.nextSibling.value = this.value"  cdata="catalyst" class="gui-file"><input type="text" readonly="" class="gui-input">
                                                    </label>
                                                 </div>
                                              </div>
@@ -118,14 +122,15 @@
             </div>
             <div class="widget-toolbox clearfix">
                <div class="btn-group pull-right">
-                  <button class="btn btn-primary btn-mini" style="margin-right:11px;">
+                <a class="btn btn-default" onclick="window.history.back();" style="margin-right:11px;" id="btncancel">
+                  <i class="ace-icon fa fa-times bigger-110"></i>
+                  Cancel
+                  </a>
+                  <button class="btn btn-primary btn-mini">
                   <i class="ace-icon fa fa-check bigger-110"></i>
                   Save
                   </button>
-                  <a class="btn btn-primary btn-mini" onclick="window.history.back();" id="btncancel">
-                  <i class="ace-icon fa fa-undo bigger-110"></i>
-                  Cancel
-                  </a>
+                  
                </div>
             </div>
          </div>

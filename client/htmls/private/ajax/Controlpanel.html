@@ -1,3 +1,8 @@
+<style type="text/css">
+.appNameIndex{
+  width:5% !important;
+}
+</style>
 <script src="js/jquery.sieve.min.js" type="text/javascript"></script>
 <div class="row">
 
@@ -22,10 +27,10 @@
                                     <hr>
                                     <div class="componentlistContainer">
                                       <div class="instance-bootstrap-list">
-                                        <span style="overflow:hidden;text-overflow:ellipsis;width:62px;" class="instance-details-item">
+                                        <!-- <span style="overflow:hidden;text-overflow:ellipsis;width:62px;" class="instance-details-item">
                                           <a class="btn instance-bootstrap-list-faimage" href="javascript:void(0);" rel="tooltip" data-placement="top" data-original-title="View All Runlist"><i class="fa fa-2x fa-exchange txt-color-blue"></i>
                                           </a>
-                                        </span>
+                                        </span> -->
                                       </div>
                                       <div class="forURL">
                                       
@@ -45,6 +50,7 @@
 
                                         <!-- <a class="instanceActionBtnUpdateRunlist instance-bootstrap-list-image" rel="tooltip" data-placement="top" data-original-title="Chef Client Run"><img src="img/galleryIcons/Chefimport.png" alt="Chefimport" style="width:26px;height:auto;margin-top:1px;"></a> -->
                                         <a class="instanceActionBtnUpdateRunlist instance-bootstrap-list-image chefClientRunlistImageCP" rel="tooltip" data-placement="top" data-original-title="Chef Client Run"></a>
+                                         <a class="instanceActionBtnUpdatePuppetRunlist instance-bootstrap-list-image puppetClientRunlistImageCP" rel="tooltip" data-placement="top" data-original-title="Puppet Client Run"><img style="height:100%" src="img/puppeticon.png"/></a>
                                       
                                       </div>
                                       <div class="actionbutton instance-bootstrap-ActionStart" style="display:none;"><a href="javascript:void(0)" class="actionbuttonStart instanceActionBtn" data-actiontype="Start" data-placement="top" rel="tooltip" data-original-title="Start"></a></div>
@@ -56,17 +62,17 @@
                                         <a href="javascript:void(0)" class='sshShellBtn cpTop sshTerminalBtn' data-actiontype="SSH" data-placement="top" rel="tooltip" data-original-title="SSH">
                                         </a>
                                       </div>
-                                      <!--rdp-->
                                         <div class="rdpContainer actionbutton instance-bootstrap-ActionRDP">
                                         <a class='rdpIcon rdpShellBtn cpTop'>
                                         </a>
                                       </div>
-                                      <!--rdp ends here-->
+                                      
                                     </div>
+
                                   </div>
                                 </div>
                               </div>
-                              <div class="back card-backflip">                            
+                              <!-- <div class="back card-backflip">
                                   <span class="card-backflip-margin">
                                     <a style="color:#333;">
                                       <i class="fa fa-lg fa-fw fa-book txt-color-blue"></i>
@@ -75,15 +81,13 @@
                                   </span>
                                   <hr>
                                   <div class="cardBackRunlistContaner">
-                                    <!-- <span class="instance-details-item" style="margin-top:8px;overflow:hidden;text-overflow:ellipsis;
-                                    width:130px;color:#3a87ad"></span> -->
-                                    <!-- append(data.runlist[j]) -->
+                                    
                                   </div>
-                                <hr>
-                                <span style="width:160px;text-align:center;display:block;margin-top:8px" class="goback">
-                                  <a style="color:#333;cursor:pointer">Go Back</a>
-                                </span>
-                              </div>
+                                  <hr>
+                                  <span style="width:160px;text-align:center;display:block;margin-top:8px" class="goback">
+                                    <a style="color:#333;cursor:pointer">Go Back</a>
+                                  </span>
+                              </div> -->
                             </div>
                           </div>
                       </li>
@@ -93,14 +97,14 @@
 
                 </div>
 
-<!--<div style="height:200px;border:1px solid blue;margin-left:200px;width:0px"></div>-->
+    <!--<div style="height:200px;border:1px solid blue;margin-left:200px;width:0px"></div>-->
 
     <ul id="myTab3" class="nav nav-tabs pull-left" style="padding: 10px 0 0 40px;border-bottom: medium none; position: auto; width: 80%; background-color: #2c3742;border-radius:11px 11px 0px 0px;">
 
         <li class="active" style="margin-right: 30px;">
               <a style="color: #eee;border-radius: 5px 5px 0 0 ; padding: 9px 10px 13px;" href="#l1" data-toggle="tab" style="font-size: 16px" ><i class="fa fa-fw fa-exclamation-circle" style="font-size: 16px"></i>Information</a>
           </li>
-          <li class="pull-left" style="margin-right: 30px;">
+          <li class="pull-left serviceTabLi" style="margin-right: 30px;">
               <a style="color: #eee;border-radius: 5px 5px 0 0 ; padding: 9px 10px 13px;" href="#l2" data-toggle="tab" style="font-size: 16px"><i class="fa fa-fw fa-share-square-o"></i>Services</a>
           </li>
           <li class="pull-left" style="margin-right: 30px;">
@@ -110,474 +114,475 @@
               <a id="controlPanelLogTab" style="color: #eee;border-radius: 5px 5px 0 0 ; padding: 9px 10px 13px;" href="#l4" data-toggle="tab" style="font-size: 14px"> <i class="fa fa-fw fa-clock-o"></i>Logs</a>
           </li>
     </ul>
-    <div id="myTabContent3" class="nav pull-left tab-content" style="position: auto; left: 0px; width: 80%;margin-top:4px;">
+    <div id="myTabContent3" class="nav pull-left tab-content" style="position: auto; left: 0px; width: 80%;margin-top:4px;margin-bottom:60px;">
+        <!-- info tab contents starts here -->
+        <div class="tab-pane fade in active " id="l1" style="min-height:405px;overflow-y:auto;">
+          <div class="panel-group smart-accordion-default">
+            <div class="panel panel-default" id="accordion-Blueprints" style="border-radius:10px 10px 0px 0px;">
+              <div class="panel-heading">
+                <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion-Blueprints" href="#collapseBlueprints" ><i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i><i class="fa fa-fw fa-rss fa-dot-circle-o" style="font-size:14px;"></i> <b style="color:#3a87ad;font-size:12px;"><u>Blueprint Information</u></b></a></h4>
+              </div>
+              <div id="collapseBlueprints" class="panel-collapse collapse in">
+                <div class="panel-body">
+                  <table align="left">
+                    <tbody > 
+                     
+                    </tbody>
+                  </table>
 
-            <!-- info tab contents starts here -->
-            <div class="tab-pane fade in active " id="l1" style="min-height:405px;overflow-y:auto;">
 
+                </div>
+
+              </div><!--collapseRoleAttr ends here-->
+            </div>
+            <div class="panel panel-default" id="accordion-Hardware">
+                <div class="panel-heading">
+                  
+                  <h4 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#accordion-Hardware" href="#collapseHardware" > 
+                      <i class="fa fa-fw fa-plus-circle txt-color-blue"></i> 
+                      <i class="fa fa-fw fa-minus-circle txt-color-red"></i>
+                      <i class="fa fa-fw fa-wrench" style="font-size:14px;"></i>
+                      <b style="color:#3a87ad;font-size:12px;"><u>Hardware</u></b>
+                    </a>
+                 </h4>
+                </div>
+                <div id="collapseHardware" class="panel-collapse collapse in">
+                  <div class="panel-body">
+                    <table align="left">
+                           <thead>
+                               
+                           </thead>
+
+                           <tbody>
+   
+
+                              </tbody>
+
+                          </table>
+
+                  </div>
                  
-
-                      <div class="panel-group smart-accordion-default">
-                        <div class="panel panel-default" id="accordion-Hardware" style="border-radius:10px 10px 0px 0px;">
-                            <div class="panel-heading">
-                              
-                              <h4 class="panel-title">
-                                <a data-toggle="collapse" data-parent="#accordion-Hardware" href="#collapseHardware" > 
-                                  <i class="fa fa-fw fa-plus-circle txt-color-blue"></i> 
-                                  <i class="fa fa-fw fa-minus-circle txt-color-red"></i>
-                                  <i class="fa fa-fw fa-wrench" style="font-size:14px;"></i>
-                                  <b style="color:#3a87ad;font-size:12px;"><u>Hardware</u></b>
-                                </a>
-                             </h4>
-                            </div>
-                            <div id="collapseHardware" class="panel-collapse collapse in">
-                              <div class="panel-body">
-                                <table align="left">
-                                       <thead>
-                                           
-                                       </thead>
-
-                                       <tbody>
-               
-
-                                          </tbody>
-
-                                      </table>
-
-                              </div>
-                             
-                            </div>
-                        </div>
-
-                        <!--Role Attributes Starts here-->
-                        <div class="panel panel-default" id="accordion-Software">
-                          <div class="panel-heading">
-                            <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion-Software" href="#collapseSoftware" ><i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i><i class="fa fa-fw fa-rss fa-dot-circle-o" style="font-size:14px;"></i> <b style="color:#3a87ad;font-size:12px;"><u>Software</u></b></a></h4>
-
-                            <a class="btn btn-primary inspectBtn" data-toggle="modal" href="#installedSoftwareModalContainer" style="float: right; margin-right: 5px; margin-top: 2px;">
-                              <i class="fa fa-fw fa-search" style="font-size:14px;"></i>
-                              Inspect
-                            </a>
-
-                          </div>
-                          <div id="collapseSoftware" class="panel-collapse collapse in">
-                            <div class="panel-body">
-                              <table align="left">
-                              
-
-                               <tbody > 
-                                 
-                                </tbody>
-                              </table>
-
-                            </div>
-
-                          </div><!--collapseRoleAttr ends here-->
-                        </div>
-                        <!--Role Attributes ends here-->
-
-                        <!--Configmgmt Attributes Starts here-->
-                        <div class="panel panel-default">
-                          <div class="panel-heading">
-                            <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion-configmgmt" href="#collapseConfigmgmt"> <i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i><i class="fa fa-fw fa-bar-chart-o" style="font-size:14px;"></i> <b style="color:#3a87ad;font-size:12px;"><u>Configuration Management</u></b></a></h4>
-
-                            <label id="saveSpinner" class="hidden"><img style="margin-left:400px;" src="img/select2-spinner.gif"></label>
-                            <a class="btn btn-primary workstationBtn" data-toggle="modal" style="float: right; margin-right: 5px; margin-top: 2px;">
-                              <i class="fa fa-check" style="font-size:14px;"></i>
-                              Convert To Workstation
-                            </a>
-
-                          </div>
-                          <div id="collapseConfigmgmt" class="panel-collapse collapse in">
-                            <div class="panel-body">
-                                <table align="left">
-                                 
-                                 <tbody > 
-                                    
-                                </tbody>
-                              </table>
-                            </div>
-                          </div>
-                        </div>
-
-                         <!--Configmgmt Attributes Starts here-->
-                       
-                        <!--Configmgmt Attributes Ends here-->
-
-                        <!--Application URL-->
-                        <div class="panel panel-default">
-                          <div class="panel-heading">
-                            <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion-configmgmt" href="#collapseAppURL"> <i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i><i class="fa fa-fw fa-bar-chart-o" style="font-size:14px;"></i> <b style="color:#3a87ad;font-size:12px;"><u>Additional Parameters</u></b></a></h4>
-                          </div>
-                          <div id="collapseAppURL" class="panel-collapse collapse in">
-                            <div class="panel-body">
-                              <!--row starts AWS-->
-                               <div class="row">
- <div class="col-md-12">
- <div class="col-md-12">
-
- <div class="widget-box">
- <div class="widget-header">
- <h5 class="widget-title" style="color:#4e5964;">
- <strong>Application URL</strong>
- </h5>
- <div class="widget-toolbar no-border">
-
- <a type="reset" id="newAppSeries" class="btn btn-minier btn-primary" href="#modalAppNameURL" data-toggle="modal">
- <i class="ace-icon ace-icon fa fa-plus bigger-110"></i>
- New
- </a>                                                
-
- </div>
-
- </div>
- <div class="widget-body">
- <div class="widget-main" style="min-height:100px">
- <div class="col-md-12 table-responsive" style="padding-left:0px; padding-right:0px;">
-   
- 
- <table id="appUrlTable" class="table table-striped table-bordered table-hover dataTable no-footer" cellpadding="5px" width="100%" style="text-align:center";>
- <!-- <div class="applicationURLContainer" id="appSeries12"> -->
- <thead>
- <tr class="rowCustomStyle">
-
-                                                                            
- <td style="width:20%">Name</td>
- <td style="width:40%">URL</td>
- <td style="width:20%" class="">Action</td>
-
- </tr>
- </thead>
- <tbody>
-  
- </tbody>
- </table>
-  
- <div id="envtable_tools1"></div>
-
- <div class="col-md-5">
-
- </div>
- </div>
-
- </div>
- <div class="widget-toolbox padding-8 clearfix dataTables_wrapper">
- <div id="tableFooterLeft" class="pull-left"></div>
- <div id="tableFooterRight" class="pull-right"></div>
- </div>
-
-
- </div>
- </div>
- </div>
- </div>
- </div>
-                              <!--row ends from Aws--> 
-                             
-                                
-
-                              
-                            </div>
-                          </div>
-                        </div>
-                        <!--Application URL Ends here-->
-                        <!--tasks start here-->
-                         <div class="panel panel-default">
-                          <div class="panel-heading">
-                            <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion-configmgmt" href="#collapseTaskArea"> <i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i><i class="fa fa-fw fa-bar-chart-o" style="font-size:14px;"></i> <b style="color:#3a87ad;font-size:12px;"><u>Task</u></b></a></h4>
-                          </div>
-                          <div id="collapseTaskArea" class="panel-collapse collapse in">
-                            <div class="panel-body">
-                                <!-- <table align="left">
-                                 
-                                 <tbody > 
-                                  <tr>
-                                    <td>Task Name</td><td> : </td><td class="taskNameTd"></td><td class=""><button id="addTaskBtn">Edit</button></td>
-                                  </tr>
-                                    
-                                </tbody>
-                              </table> -->
-                                     <div class="row">
- <div class="col-md-12">
- <div class="col-md-12">
-
- <div class="widget-box">
- <div class="widget-header">
- <h5 class="widget-title" style="color:#4e5964;">
- <strong>List of Tasks</strong>
- </h5>
- <div class="widget-toolbar no-border">
-
- <a id="addTaskBtn" class="btn btn-minier btn-primary" data-toggle="modal">
- <i class="ace-icon ace-icon fa fa-plus bigger-110"></i>
- Edit
- </a>                                                
-
- </div>
-
- </div>
- <div class="widget-body">
- <div class="widget-main" style="min-height:100px">
- <div class="col-md-12 table-responsive" style="padding-left:0px; padding-right:0px;">
-   
- 
- <table id="tasksLists"  class="table table-striped table-bordered table-hover dataTable no-footer" cellpadding="5px" width="100%" style="text-align:center";>
- <!-- <div class="applicationURLContainer" id="appSeries12"> -->
- <thead>
- <tr class="rowCustomStyle">
-
- <td>S.No </td>                                                                      
- <td>Tasks Name</td>
-
-
- </tr>
- </thead>
- <tbody>
- </tbody>
- </table>
-  
- </div>
-
- </div>
- </div>
- </div>
- </div>
- </div>
- </div>
-                            </div>
-                          </div>
-                        </div>
-                        <!--tasks name ends here-->
- <!--app series-->
- <div class="modal fade" id="modalAppNameURL" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
- <div class="modal-dialog">
- <div class="modal-content">
- <form role="form" class="cmxform" id="appURLForm" autocomplete="off">
- <div class="modal-header">
- <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
- &times;
- </button>
- <h4 class="modal-title">
- <i class="fa fa-th-list txt-color-blue"></i>&nbsp;&nbsp;Add Application URL
- </h4>
- </div>
-
- <div class="modal-body appSeriesHeight">
-
-
-
- <!--app series-->
- <div class="applicationURLContainer" id="appSeries"> 
- <div class="col-lg-6 col-md-6 projectRepo">
-
- <label for="appNameInput">Name:</label>
-
- <input type="hidden" class="form-control appUrlId">
- <input placeholder="AppName" type="text" maxlength="8" name="appNameInput" id="appNameInput" class="form-control appName">
- <b class="tooltip tooltip-top-right">
- <i class="fa fa-user txt-color-teal"></i> Please enter Application</b>
-
-
- </div>
-
- <div class="col-lg-6 col-md-6 projectRepo">
-
- <label for="appNameURL">URL:</label>
-
- <input placeholder="http://$host[:port]/appname" name="appNameURL" id="appNameURL" class="form-control appURL" type="text">
- <b class="tooltip tooltip-top-right">
- <i class="fa fa-user txt-color-teal"></i> Please enter URL</b>
- </div>
- </div>
-
-
-
- </div>
- <div class="modal-footer">
- <label id="nodeAppspinner" class=" hidden"><img  style="margin-left:5px;margin-right:25px;" src="img/select2-spinner.gif"></label>
- <div class="marginForButtons">
- <button id="addAppBtn" class="btn btn-primary" type="submit">
- <i class="fa fa-upload fa-1x"></i>&nbsp;Add
- </button>
- <a class="btn btn-primary" type="submit" data-dismiss="modal">
- <i class="fa fa-undo fa-1x"></i>&nbsp;Cancel
- </a>
- </div>
- </div>
- </form>
- </div><!-- /.modal-content -->
- </div><!-- /.modal-dialog -->
- </div><!-- /.modal for appSeries ends-->
-
-
-
-                      </div>
-            </div> <!-- info tab contents ends here-->
-
-            <!-- tab of Actions starts here -->
-            <div class="tab-pane" id="l2" style="height:415px;overflow-y: auto;border-radius:11px;">
-
-
-                
-                <div role="content">
-
-                    <!-- widget content -->
-                    <div class="table-responsive" style="border:1px solid #dddddd;min-height:400px;border-radius:11px">
-                        <!-- class="table table-hover" -->
-                        <table  id="tableServices" class="table table-striped table-bordered table-hover dataTable no-footer text-align-center table-condensed tablesorter" style="margin-top:72px;">
-                            <thead>
-                              <tr>
-                                <th style="font-size: 13px;">
-                                  <i class="fa fa-fw fa-archive "></i>
-                                  <strong style="color:#3a87ad">Service Name</strong>
-                                </th>
-                                <th style="font-size: 13px;">
-                                  <i class="fa fa-fw fa-sort-amount-asc "></i>
-                                  <strong style="color:#3a87ad">Actions </strong>
-                                </th>
-                                <th style="font-size: 13px;">
-                                  <i class="fa fa-fw fa-flash "></i>
-                                  <strong style="color:#3a87ad">Options</strong>
-                                </th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                                <tbody class="servicesTbody">
-                                  
-                                </tbody> 
-                            </tbody>
-                            <a class="btn btn-primary addServiceBtn" style="float:right;padding-right:10px;margin-right:10px;" data-toggle="modal" href="#serviceModalContainer">Add New Service</a>
-                        </table>
-
-                    </div>
-                    <!-- end widget content -->
-
                 </div>
-                <!-- end widget div -->
-
-            </div> <!-- Tab of Action ends here -->
-            <div class="modal fade" id="serviceModalContainer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
-                <div class="modal-dialog">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                    <h4 class="modal-title" id="myModalLabel">Add New Service</h4>
-                  </div>
-                  <div class="modal-body">
-                    
-                    <!--<select id="serviceList" class="col col-6" multiple></select>-->
-                      <table  class="table table-striped table-bordered table-hover dataTable no-footer" cellpadding="5px" width="100%" style="text-align:center";>
-                       <thead>
-                        <tr>
-                          <th>Name</th>
-                          <th>Actions</th>
-                          <th>Select</th>
-                        </tr>
-                       </thead>
-                       <tbody id="serviceList">
-                            <tr><td colspan=3>No Data Available</td></tr>
-
-                       </tbody>
-                      </table>
-
-                  </div>
-                  
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-default btn-primary btnsaveDeploymentBP btnSaveService"><i class="ace-icon fa fa-check bigger-110"></i>&nbsp;Save</button>
-                    <button type="button" class="btn btn-default btn-primary" data-dismiss="modal"><i class="ace-icon fa fa-undo bigger-110"></i>&nbsp;Cancel</button>
-                  </div>
-                </div>
-              </div>
             </div>
-          
 
-            <div class="modal fade" id="installedSoftwareModalContainer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
-                <div class="modal-dialog">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                    <h4 class="modal-title" id="myModalLabel"><i class="fa fa-list txt-color-blue"></i>&nbsp;&nbsp;Inspect Installed Software</h4>
-                  </div>
-                  <div class="modal-body">
-                    <div class="row">
+            <!--Role Attributes Starts here-->
+            <div class="panel panel-default" id="accordion-Software">
+              <div class="panel-heading">
+                <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion-Software" href="#collapseSoftware" ><i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i><i class="fa fa-fw fa-rss fa-dot-circle-o" style="font-size:14px;"></i> <b style="color:#3a87ad;font-size:12px;"><u>Software</u></b></a></h4>
 
-                      <div class="col-md-12 heightModal400">
+                <a class="btn btn-primary inspectBtn" data-toggle="modal" href="#installedSoftwareModalContainer" style="float: right; margin-right: 5px; margin-top: 2px;">
+                  <i class="fa fa-fw fa-search" style="font-size:14px;"></i>
+                  Inspect
+                </a>
+
+              </div>
+              <div id="collapseSoftware" class="panel-collapse collapse in">
+                <div class="panel-body">
+                  <table align="left">
+                  
+
+                   <tbody > 
+                     
+                    </tbody>
+                  </table>
+
+                </div>
+
+              </div><!--collapseRoleAttr ends here-->
+            </div>
+            <!--Role Attributes ends here-->
+
+            <!--Configmgmt Attributes Starts here-->
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion-configmgmt" href="#collapseConfigmgmt"> <i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i><i class="fa fa-fw fa-bar-chart-o" style="font-size:14px;"></i> <b style="color:#3a87ad;font-size:12px;"><u>Configuration Management</u></b></a></h4>
+              </div>
+              <div id="collapseConfigmgmt" class="panel-collapse collapse in">
+                <div class="panel-body">
+                    <table align="left">
+                     
+                     <tbody > 
                         
-                        <div id="paragraphs" class="p-sieve paraHeightModal">
-                         
-                        </div>
-                        <div class="loadingContainerimageInspectCSS">
-                          <img  style="margin-left:140px;" src="img/spinner.gif">
-                        </div>
-                      </div>
-                    </div>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+             <!--Configmgmt Attributes Starts here-->
+           
+            <!--Configmgmt Attributes Ends here-->
+
+            <!--Application URL-->
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion-configmgmt" href="#collapseAppURL"> <i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i><i class="fa fa-fw fa-list-ul" style="font-size:14px;"></i> <b style="color:#3a87ad;font-size:12px;"><u>Additional Parameters</u></b></a></h4>
+              </div>
+              <div id="collapseAppURL" class="panel-collapse collapse in">
+                <div class="panel-body">
+                  <!--row starts AWS-->
+                   <div class="row">
+                   <div class="col-md-12">
+                   <div class="col-md-12">
+
+                   <div class="widget-box">
+                   <div class="widget-header">
+                   <h5 class="widget-title" style="color:#4e5964;">
+                   <strong>Application URLs</strong>
+                   </h5>
+                   <div class="widget-toolbar no-border">
+
+                   <a type="reset" id="newAppSeries" class="btn btn-minier btn-primary" href="#modalAppNameURL" data-toggle="modal">
+                   <i class="ace-icon ace-icon fa fa-plus bigger-110"></i>
+                   New
+                   </a>                                                
+
+                   </div>
+
+                   </div>
+                   <div class="widget-body">
+                   <div class="widget-main" style="min-height:100px">
+                   <div class="col-md-12 table-responsive" style="padding-left:0px; padding-right:0px;">
+                     
+                   
+                   <table id="appUrlTable" class="table table-striped table-bordered table-hover dataTable no-footer" cellpadding="5px" width="100%" style="text-align:center";>
+                   <!-- <div class="applicationURLContainer" id="appSeries12"> -->
+                   <thead>
+                   <tr class="rowCustomStyle">
+
+                                                                                              
+                   <td style="width:5%">S.No</td>
+                   <td style="width:40%">Name</td>
+                   <td style="width:20%" class="">Action</td>
+
+                   </tr>
+                   </thead>
+                   <tbody>
                     
-                  </div>
-                  
-                  <div class="modal-footer">
-                    <!-- <button type="button" class="btn btn-default btn-primary btnsaveDeploymentBP btnSaveService"><i class="ace-icon fa fa-check bigger-110"></i>&nbsp;Save</button> -->
-                    <button type="button" class="btn btn-default btn-primary" data-dismiss="modal"><i class="ace-icon fa fa-undo bigger-110"></i>&nbsp;Cancel</button>
+                   </tbody>
+                   </table>
+                    
+                   <div id="envtable_tools1"></div>
+
+                   <div class="col-md-5">
+
+                   </div>
+                   </div>
+
+                   </div>
+                   <div class="widget-toolbox padding-8 clearfix dataTables_wrapper">
+                   <div id="tableFooterLeft" class="pull-left"></div>
+                   <div id="tableFooterRight" class="pull-right"></div>
+                   </div>
+
+
+                   </div>
+                   </div>
+                   </div>
+                   </div>
+                   </div>
+                  <!--row ends from Aws--> 
+                </div>
+              </div>
+            </div>
+            <!--Application URL Ends here-->
+            <!--tasks start here-->
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion-configmgmt" href="#collapseTaskArea"> <i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i><i class="fa fa-fw fa-newspaper-o" style="font-size:14px;"></i> <b style="color:#3a87ad;font-size:12px;"><u>Tasks</u></b></a></h4>
+              </div>
+              <div id="collapseTaskArea" class="panel-collapse collapse in">
+                <div class="panel-body">
+                    <!-- <table align="left">
+                     
+                     <tbody > 
+                      <tr>
+                        <td>Task Name</td><td> : </td><td class="taskNameTd"></td><td class=""><button id="addTaskBtn">Edit</button></td>
+                      </tr>
+                        
+                    </tbody>
+                  </table> -->
+                 <div class="row">
+                   <div class="col-md-12">
+                   <div class="col-md-12">
+
+                   <div class="widget-box">
+                   <div class="widget-header">
+                   <h5 class="widget-title" style="color:#4e5964;">
+                   <strong>List of Tasks</strong>
+                   </h5>
+                   <div class="widget-toolbar no-border">
+
+                   <a id="addTaskBtn" class="btn btn-minier btn-primary" data-toggle="modal">
+                   
+                   Assign Job
+                   </a>                                                
+
+                   </div>
+
+                   </div>
+                   <div class="widget-body">
+                   <div class="widget-main" style="min-height:100px">
+                   <div class="col-md-12 table-responsive" style="padding-left:0px; padding-right:0px;">
+                     
+                   
+                   <table id="tasksLists"  class="table table-striped table-bordered table-hover dataTable no-footer" cellpadding="5px" width="100%" style="text-align:center";>
+                   <!-- <div class="applicationURLContainer" id="appSeries12"> -->
+                   <thead>
+                   <tr class="rowCustomStyle">
+
+                   <td width="50px">S.No </td>                                                                      
+                   <td>Tasks Name</td>
+
+
+                   </tr>
+                   </thead>
+                   <tbody>
+                   </tbody>
+                   </table>
+                    
+                   </div>
+
+
+                   </div>
+                   </div>
+                   </div>
+                   </div>
+                   </div>
                   </div>
                 </div>
               </div>
             </div>
-           
-            <!-- Configure tab contents starts here -->
-            <div class="tab-pane" id="l3" style="height:415px;overflow-y: auto;">
-              <div class="table-responsive" style="border:1px solid #dddddd;min-height:400px;border-radius:11px">
+            <!--tasks name ends here-->
+            
+             <!--app series-->
+             <div class="modal fade" id="modalAppNameURL" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+               <div class="modal-dialog">
+               <div class="modal-content">
+               <form role="form" class="cmxform" id="appURLForm" autocomplete="off">
+               <div class="modal-header">
+               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+               &times;
+               </button>
+               <h4 class="modal-title">
+               <i class="fa fa-th-list txt-color-blue"></i>&nbsp;&nbsp;Add Application URL
+               </h4>
+               </div>
 
-                        <table id="tableactionHistory" class="table table-striped table-bordered table-hover dataTable no-footer" cellpadding="5px" width="100%" style="text-align:center";>
-                            <thead style="font-size: 13px">
-                              <tr>
-                              <td>
-                                <!-- <i class="fa fa-fw fa-archive "></i> -->
-                                <strong style="color:#3a87ad";>Type</strong>
-                              </td>
-                              <td>
-    
-                                <strong style="color:#3a87ad;">Status</strong>
-                              </td>
-                              <td>
-    
-                                <strong style="color:#3a87ad;">Data</strong>
-                              </td>
-                              <td>
-                                
-                                <strong style="color:#3a87ad;">Timestamp</strong>
-                              </td>
-                              <td>
-                                
-                                <strong style="color:#3a87ad;">Users</strong>
-                              </td>
-                              <td>
-                                
-                                <strong style="color:#3a87ad;">MoreInfo</strong>
-                              </td> 
-                            </tr>
-                            </thead>
-                            <tbody>
-                             
-                                
-                            </tbody>
-                        </table>
-                    </div>
+               <div class="modal-body appSeriesHeight">
 
-            </div> <!--Configure tab contents ends here -->
 
-            <div class="tab-pane" id="l4" style="height:415px;overflow-y: auto;overflow-x:hidden;border:1px solid #ddd;border-radius:11px;">
-              <div class="logsArea"></div>
+
+               <!--app series-->
+               <div class="applicationURLContainer" id="appSeries"> 
+               <div class="col-lg-6 col-md-6 projectRepo">
+
+               <label for="appNameInput">Name:</label>
+
+               <input type="hidden" class="form-control appUrlId">
+               <input placeholder="AppName" type="text" maxlength="8" name="appNameInput" id="appNameInput" class="form-control appName">
+               <b class="tooltip tooltip-top-right">
+               <i class="fa fa-user txt-color-teal"></i> Please enter Application</b>
+
+
+               </div>
+
+               <div class="col-lg-6 col-md-6 projectRepo">
+
+               <label for="appNameURL">URL:</label>
+
+               <input placeholder="http://$host[:port]/appname" name="appNameURL" id="appNameURL" class="form-control appURL" type="text">
+               <b class="tooltip tooltip-top-right">
+               <i class="fa fa-user txt-color-teal"></i> Please enter URL</b>
+               </div>
+               </div>
+
+
+
+               </div>
+               <div class="modal-footer">
+               <label id="nodeAppspinner" class=" hidden"><img  style="margin-left:5px;margin-right:25px;" src="img/select2-spinner.gif"></label>
+               <div class="marginForButtons">
+               <a class="btn btn-default" type="submit" data-dismiss="modal">
+               <i class="fa fa-times fa-1x"></i>&nbsp;Cancel
+               </a>
+               <button id="addAppBtn" class="btn btn-primary" type="submit">
+               <i class="fa fa-check fa-1x"></i>&nbsp;Save
+               </button>
+               </div>
+               </div>
+               </form>
+               </div><!-- /.modal-content -->
+               </div><!-- /.modal-dialog -->
+             </div><!-- /.modal for appSeries ends-->
+          </div>
+        </div> <!-- info tab contents ends here-->
+
+        <!-- tab of Actions starts here -->
+        <div class="tab-pane" id="l2" style="height:415px;overflow-y: auto;border-radius:11px;">
+
+
+            
+            <div role="content">
+
+                <!-- widget content -->
+                <div class="table-responsive" style="border:1px solid #dddddd;border-radius:11px">
+                    <!-- class="table table-hover" -->
+                    <table  id="tableServices" class="table table-striped table-bordered table-hover dataTable no-footer text-align-center table-condensed tablesorter" style="margin-top:72px;">
+                        <thead>
+                          <tr>
+                            <th style="font-size: 13px;text-align:center;">
+                              <i class="fa fa-fw fa-archive "></i>
+                              <strong style="color:#3a87ad">Service Name</strong>
+                            </th>
+                            <th style="font-size: 13px;text-align:center;">
+                              <i class="fa fa-fw fa-sort-amount-asc "></i>
+                              <strong style="color:#3a87ad">Actions </strong>
+                            </th>
+                            <th style="font-size: 13px;text-align:center;">
+                              <i class="fa fa-fw fa-flash "></i>
+                              <strong style="color:#3a87ad">Options</strong>
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                            <tbody class="servicesTbody">
+                              
+                            </tbody> 
+                        </tbody>
+                        <a class="btn btn-primary addServiceBtn" style="float:right;padding-right:10px;margin-right:10px;margin-top:32px;" data-toggle="modal" href="#serviceModalContainer">Add New Service</a>
+                    </table>
+
+                </div>
+                <div class="col-lg-6 col-md-6" style="margin-top:20px;border:1px solid black;padding:5px 5px 5px 5px;width:380px;">
+                  <label class="serviceClass">Special Services:</label>
+                <label id="saveSpinner" class="hidden" style="float:left"><img style="margin-left:8px;margin-top:8px;" src="img/select2-spinner.gif"></label>
+
+                <a class="btn btn-primary workstationBtn" data-toggle="modal" style="float: left; margin-left:32px; margin-top:2px;">
+                  <i class="fa fa-check" style="font-size:14px;"></i>
+                  Convert To Workstation
+                </a>
+              </div>
+                <!-- end widget content -->
+
             </div>
-            <!-- History tab contents starts here -->
-        
+            <!-- end widget div -->
 
+        </div> <!-- Tab of Action ends here -->
+        <div class="modal fade" id="serviceModalContainer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+            <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">Add New Service</h4>
+              </div>
+              <div class="modal-body">
+                
+                <!--<select id="serviceList" class="col col-6" multiple></select>-->
+                  <table  class="table table-striped table-bordered table-hover dataTable no-footer" cellpadding="5px" width="100%" style="text-align:center";>
+                   <thead>
+                    <tr>
+                      <th style="text-align:center;">Select</th>
+                      <th style="text-align:center;">Name</th>
+                      <th style="text-align:center;">Actions</th>
+                    </tr>
+                   </thead>
+                   <tbody id="serviceList">
+                        <tr><td colspan=3>No Data Available</td></tr>
 
-           <!--  <div class="row" > -->
+                   </tbody>
+                  </table>
+
+              </div>
               
-            <!-- </div> -->
+              <div class="modal-footer">
+                <a type="button" class="btn btn-default" data-dismiss="modal"><i class="ace-icon fa fa-times bigger-110"></i>&nbsp;Cancel</a>
+                <button type="button" class="btn btn-default btn-primary btnsaveDeploymentBP btnSaveService"><i class="ace-icon fa fa-check bigger-110"></i>&nbsp;Save</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      
 
+        <div class="modal fade" id="installedSoftwareModalContainer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+            <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel"><i class="fa fa-list txt-color-blue"></i>&nbsp;&nbsp;Inspect Installed Software</h4>
+              </div>
+              <div class="modal-body">
+                <div class="row">
+
+                  <div class="col-md-12 heightModal400">
+                    
+                    <div id="paragraphs" class="p-sieve paraHeightModal">
+                     
+                    </div>
+                    <div class="loadingContainerimageInspectCSS">
+                      <img  style="margin-left:140px;" src="img/spinner.gif">
+                    </div>
+                  </div>
+                </div>
+                
+              </div>
+              
+              <div class="modal-footer">
+                <!-- <button type="button" class="btn btn-default btn-primary btnsaveDeploymentBP btnSaveService"><i class="ace-icon fa fa-check bigger-110"></i>&nbsp;Save</button> -->
+                <button type="button" class="btn btn-default btn-primary" data-dismiss="modal"><i class="ace-icon fa fa-times bigger-110"></i>&nbsp;Cancel</button>
+              </div>
+            </div>
+          </div>
+        </div>
+       
+        <!-- Configure tab contents starts here -->
+        <div class="tab-pane" id="l3" style="height:415px;overflow-y: auto;">
+          <div class="table-responsive" style="border:1px solid #dddddd;min-height:400px;border-radius:11px">
+
+                    <table id="tableactionHistory" class="table table-striped table-bordered table-hover dataTable no-footer" cellpadding="5px" width="100%" style="text-align:center";>
+                        <thead style="font-size: 13px">
+                          <tr>
+                          <td>
+                            <!-- <i class="fa fa-fw fa-archive "></i> -->
+                            <strong style="color:#3a87ad";>Type</strong>
+                          </td>
+                          <td>
+
+                            <strong style="color:#3a87ad;">Status</strong>
+                          </td>
+                          <td>
+
+                            <strong style="color:#3a87ad;">Data</strong>
+                          </td>
+                          <td>
+                            
+                            <strong style="color:#3a87ad;">Timestamp</strong>
+                          </td>
+                          <td>
+                            
+                            <strong style="color:#3a87ad;">Users</strong>
+                          </td>
+                          <td>
+                            
+                            <strong style="color:#3a87ad;">MoreInfo</strong>
+                          </td> 
+                        </tr>
+                        </thead>
+                        <tbody>
+                         
+                            
+                        </tbody>
+                    </table>
+                </div>
+
+        </div> <!--Configure tab contents ends here -->
+
+        <div class="tab-pane" id="l4" style="height:415px;overflow-y: auto;overflow-x:hidden;border:1px solid #ddd;border-radius:11px;">
+          <div class="logsArea"></div>
+        </div>
     </div> 
-
-</div>
+  </div>
 </article>
 <!-- <div class="col-md-10 col-lg-10 col-xs-12 col-sm-12" style="bottom:0px;position:fixed;">
                 <div class="clearfix form-actions" style="text-align:center">
@@ -665,8 +670,8 @@
              </div>
       </div> 
       <div class="modal-footer">
+        <a type="button" class="btn btn-default" data-dismiss="modal">Close</a>
         <button type="button" class="btn btn-default btn-primary btnUpdateInstanceRunlist">Update</button>
-        <button type="button" class="btn btn-default btn-primary" data-dismiss="modal">Close</button>
       </div>
     </div>
   </div>
@@ -706,9 +711,8 @@
                 </form>
             </div>
            <div class="modal-footer">
-        <button type="button" class="btn btn-primary btnSaveInstanceRunlistAttributes">Save</button>
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        
+            <a type="button" class="btn btn-default" data-dismiss="modal"><i class="ace-icon fa fa-times bigger-110"></i>&nbsp;Close</a>
+            <button type="button" class="btn btn-primary btnSaveInstanceRunlistAttributes"><i class="ace-icon fa fa-check bigger-110"></i>&nbsp;Save</button>
       </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
@@ -1029,8 +1033,8 @@
             </div>
             
                <div class="modal-footer">
-        <input type="submit" id="editSaveBTN" class="btn btn-primary" value="Save" />
-        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+        <a type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times fa-1x"></i>&nbsp;Cancel</a>
+        <button type="submit" id="editSaveBTN" class="btn btn-primary" value="Save"><i class="fa fa-check fa-1x"></i>&nbsp;Save</button>
       </div>   
   </form>
          </div>
@@ -1039,7 +1043,8 @@
 
 
 <div class="modal fade" id="instanceTaskModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-    <div class="modal-dialog " style="">
+    <div class="modal-dialog modal-lg" style="">
+
         <div class="modal-content"> 
              <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -1050,23 +1055,55 @@
             </div> 
             
             
-             <div class="modal-body" style="height:140px;">
-                <div class="col-lg-6 col-md-6" style="margin-left:-15px">
-
-                            <label for=""><input type="checkbox" name="my_checkbox" id="my_checkbox"/>&nbsp;Select/Unselect Task</label>
-                            
-
-                            <select class="form-control customNew" id="taskList" multiple> </select>
-                            
+             <div class="modal-body" style="min-height:300px;">
+              <div>
+                <div class="col-lg-6">
+                  <div class="input-group width100">
+                    <label class="input searchTaskLabel">
+                      <strong class="fontsize13">Available Task</strong>
+                    </label>
+                    <div class="btn-group selectTasksdiv">
+                      <div class="loadingContainerGap" style="display: none;">
+                      </div>
+                      <select multiple="multiple" size="10" id="selectavailbleTaskList" class="btn-group selectavailbleTask">
+                        <option style="display:block" value="recipe[7-zip]" class="taskimg">
+                          Hi
+                        </option>
+                        <option style="display:block" value="recipe[7-zip]" class="taskimg">
+                          GO
+                        </option>
+                      </select>
+                    </div>
+                    <div class="btn-group marginleft5">
+                      <button type="button" id="btnaddToTasklist" class="btn btn-default btn-primary anchorAdd">
+                        <i class="fa fa-chevron-right anchorAddi"></i>
+                      </button>
+                      <div class="clearfix"></div>
+                      <button type="button" id="btnremoveFromTasklist" class="btn btn-default btn-primary anchorRemove">
+                        <i class="fa fa-chevron-left anchorRemovei"></i>
+                      </button>
+                    </div>
+                  </div>
                 </div>
-                
-                
+                <div class="col-lg-6" id="selectedTaskForSave">
+                  <div class="input-group width100">
+                    <label class="input searchTaskLabel">
+                      <strong class="fontsize13">Selected Task</strong>
+                    </label>
+                    <div class="btn-group selectTasksdiv">
+                      <select multiple="multiple" size="10" id="selectedTaskList" class="btn-group selectavailbleTask">
 
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
             
                <div class="modal-footer">
-        <input type="submit" id="saveTaskBtn" class="btn btn-primary" value="Save" />
-        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+        
+        <a type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times fa-1x"></i>&nbsp;Close</a>
+        <button type="submit" id="saveTaskBtn" class="btn btn-primary" value="Save"><i class="fa fa-check fa-1x"></i>&nbsp;Save</button>
       </div>   
          </div>
     </div>
@@ -1085,6 +1122,47 @@
 </style>
 
 <script type="text/javascript">
+$(document).ready(function(){
+        //To Add
+        $('#selectavailbleTaskList').on('dblclick','option',function(){
+            var $this = $(this);
+            var $selectedList = $("#selectedTaskList");
+            $selectedList.append($this.clone());
+            $this.hide();
+        });
+        //To Remove
+        $('#selectedTaskList').on('dblclick','option',function(){
+            var $instanceCookbookList = $('#selectavailbleTaskList');
+            var $this = $(this);
+            var value = $this.val();
+            $this.remove();
+            $instanceCookbookList.find('option[value="'+value+'"]').show();
+        });
+    });
+
+    //To add the wizard
+    $("#btnaddToTasklist").on('click', function () {
+        var $options = $('#selectavailbleTaskList option:selected');
+        var $selectedList = $("#selectedTaskList");
+        $options.each(function(){
+            var $this = $(this);
+            $selectedList.append($this.clone());
+            $this.hide();
+        });
+    });
+
+    $("#btnremoveFromTasklist").on('click', function () {
+        var $instanceCookbookList = $('#selectavailbleTaskList');
+
+        $("#selectedTaskList option:selected").each(function(){
+           var $this = $(this);
+           var value = $this.val();
+           $this.remove();
+           $instanceCookbookList.find('option[value="'+value+'"]').show();
+
+        });
+        //$("#cookbooksrecipesselectedList option:selected").remove();
+    });
 var urlParams = {};
 (window.onpopstate = function() {
     var url = window.location.href;
@@ -1122,21 +1200,19 @@ function populateJsonData(instanceId) {
             $('.paraHeightModal').show();
             $('#paragraphs').append(temp);
         },
-        // failure: function(data) {
-        //    var failureText = "Server Behaved Unexpectedly. Please try again later";
-        //     if(jqxhr.responseJSON && jqxhr.responseJSON.message) {
-        //         failureText = jqxhr.responseJSON.message;
-        //     }
-        //     bootbox.alert(failureText);
-        //     $('.loadingContainerimageInspectCSS').hide();
-        //     $('.paraHeightModal').hide();
-        // },
         error: function(jqxhr) {
-          var failureText = "Server Behaved Unexpectedly. Please try again later";
+          $('#installedSoftwareModalContainer').modal('hide');
+         
+          var failureText;
             if(jqxhr.responseJSON && jqxhr.responseJSON.message) {
                 failureText = jqxhr.responseJSON.message;
             }
-            bootbox.alert(failureText);
+            //bootbox.alert(failureText);
+            bootbox.alert({
+              size:'small',
+              title:'<span style="font-size:22px;">Error!</span>',
+              message:failureText
+            });
             
             $('.loadingContainerimageInspectCSS').hide();
             $('.paraHeightModal').hide();
@@ -1176,7 +1252,18 @@ function populateWorkstation(){
     });
 }
 
-$('.workstationBtn').click(populateWorkstation);
+//bootbox alert for setting it as a workstation..
+$('.workstationBtn').click(function() {
+    bootbox.confirm({
+        message: "Are you sure you want to Convert this to a Workstation?",
+        title: "Confirmation",
+        callback: function(result) {
+            if (result) {
+              populateWorkstation();
+            }
+        }
+    });
+});
 
 function disableSSHBtn(instanceId) {
     var $cardViewInstanceId = $(".domain-roles-caption[data-instanceId='" + instanceId + "']");
@@ -1324,75 +1411,101 @@ $.get('../instances/' + urlParams.id, function(data) {
 
     //fetching services list
     //alert(data.chef.serverId);
-    $.get('/d4dMasters/19/chefserverid/' + data.chef.serverId, function(services) {
-        $.get('/d4dMasters/19/commandtype/Service%20Command', function(servicesCmd) {
+    if (data.chef) {
+        $.get('/d4dMasters/19/chefserverid/' + data.chef.serverId, function(services) {
+            $.get('/d4dMasters/19/commandtype/Service%20Command', function(servicesCmd) {
 
-            servicesCmd = JSON.parse(servicesCmd);
-            services = JSON.parse(services);
-            for (var k = 0; k < servicesCmd.length; k++) {
-                if (servicesCmd[k].chefserverid !== data.chef.serverId) {
-                    services.push(servicesCmd[k]);
+                servicesCmd = JSON.parse(servicesCmd);
+                services = JSON.parse(services);
+                for (var k = 0; k < servicesCmd.length; k++) {
+                    if (servicesCmd[k].chefserverid !== data.chef.serverId) {
+                        services.push(servicesCmd[k]);
+                    }
                 }
-            }
-            //alert('Out json :' + JSON.stringify(services)+ services.length);
-            var $serviceList = $('#serviceList');
-            console.log(services, "length==>", services.length);
-            var serviceIds = [];
-            if (data.serviceIds && data.serviceIds.length) {
-                serviceIds = data.serviceIds;
-            }
-
-            for (var i = 0; i < services.length; i++) {
-
-                var name = services[i].servicename;
-                if (!name) {
-                    name = services[i].commandname;
-                }
-                var $tr = $('<tr></tr>').attr('data-listServiceId', services[i].rowid);
-                var $tdName = $('<td></td>').append(name);
-                $tr.append($tdName);
-
-                var commandType = services[i].commandtype;
-                if (commandType === 'Chef Cookbook/Recipe') {
-                    var html = getCookbookActionHtml(services[i].rowid, services[i]);
-                } else {
-                    var html = getCommandActionHtml(services[i].rowid, services[i]);
+                //alert('Out json :' + JSON.stringify(services)+ services.length);
+                var $serviceList = $('#serviceList');
+                console.log(services, "length==>", services.length);
+                var serviceIds = [];
+                if (data.serviceIds && data.serviceIds.length) {
+                    serviceIds = data.serviceIds;
                 }
 
-                var $tdActions = $('<td></td>').append(html);
-                $tr.append($tdActions);
-                var $checkBox = $('<input type="checkbox" name="svcCkb"></input>').val(services[i].rowid).data('serviceData', services[i]);
-                var $tdCheckBox = $('<td></td>').append($checkBox);
-                $tr.append($tdCheckBox);
-                if (serviceIds.indexOf(services[i].rowid) !== -1) {
-                    $tr.addClass('hidden');
+                for (var i = 0; i < services.length; i++) {
+
+                    var name = services[i].servicename;
+                    if (!name) {
+                        name = services[i].commandname;
+                    }
+                    var $tr = $('<tr></tr>').attr('data-listServiceId', services[i].rowid);
+                    var $checkBox = $('<input type="checkbox" name="svcCkb"></input>').val(services[i].rowid).data('serviceData', services[i]);
+                    var $tdCheckBox = $('<td></td>').append($checkBox);
+                    $tr.append($tdCheckBox);
+                    var $tdName = $('<td></td>').append(name);
+                    $tr.append($tdName);
+
+                    var commandType = services[i].commandtype;
+                    if (commandType === 'Chef Cookbook/Recipe') {
+                        var html = getCookbookActionHtml(services[i].rowid, services[i]);
+                    } else {
+                        var html = getCommandActionHtml(services[i].rowid, services[i]);
+                    }
+
+                    var $tdActions = $('<td></td>').append(html);
+                    $tr.append($tdActions);
+                    if (serviceIds.indexOf(services[i].rowid) !== -1) {
+                        $tr.addClass('hidden');
+                    }
+
+                    $serviceList.append($tr);
                 }
-
-                $serviceList.append($tr);
-            }
-        })
-        //console.log('hi ==>',serviceList);
-
-
-
-    });
-    if (data.serviceIds && data.serviceIds.length) {
-        $.post('/d4dMasters/getrows/19', {
-            serviceids: data.serviceIds
-        }, function(services) {
-            services = JSON.parse(services);
-            for (var i = 0; i < services.length; i++) {
-                console.log("sd1 = ", services[i]);
-                addServiceToDom(services[i]);
-            }
+            });
         });
+        if (data.serviceIds && data.serviceIds.length) {
+            $.post('/d4dMasters/getrows/19', {
+                serviceids: data.serviceIds
+            }, function(services) {
+                services = JSON.parse(services);
+                for (var i = 0; i < services.length; i++) {
+                    console.log("sd1 = ", services[i]);
+                    addServiceToDom(services[i]);
+                }
+            });
+        }
     }
 
     // setting up action logs
     $.get('/instances/' + urlParams.id + '/actionLogs', function(actionLogs) {
         addActionLogsToTable(actionLogs);
     });
-
+    var showmenuAppTaskVar = {
+      getshowmenuAppTask: function() {
+        return '<div class="showmenuAppTask"><a class="btn1 showmenuAppTaskAnchor"><i class="fa fa-ellipsis-h showmenuAppTaskAnchorI"></i></a></div>';
+    }};
+    var menuAppTaskLI = '';
+    var menuTaskListLI = '';
+    /*var menuAppTaskVar = {
+      getmenuAppTask: function(data) {
+        //alert("I am in function");
+        //alert(data.appUrls.length);
+        if (data.appUrls && data.appUrls.length) {
+            for (var k = 0; k < data.appUrls.length; k++) {
+                // if (k == 2) {
+                //     break;
+                // }
+                var url = data.appUrls[k].url;
+                if (data.appUrls[k].url) {
+                    url = url.replace('$host', data.instanceIP);
+                }
+                var tempApp = "<li><a style='font-size:10px;' data-appUrlId='" + data.appUrls[k]._id + "' class='app-url' title='" + url + "' href='" + url + "'' target='_blank' >" + data.appUrls[k].name + "</a></li>";
+                menuAppTaskLI = menuAppTaskLI + tempApp;
+            }
+        } else {
+            menuAppTaskLI = "<li style='font-size:10px;color:#3276b1'>No AppLinks Available</li>";
+        }
+        
+        //alert(menuAppTaskLI);
+        return '<div class="menuAppTask" style="display: none;"><span class="menuAppLinkSpan">App Links</span><ul class="paddingleft32">' + menuAppTaskLI + '</ul></div>';
+    }};*/
     var getOS = function(data) {
             if (data.bootStrapStatus === 'waiting') {
                 console.log('polling bootStrapStatus');
@@ -1434,7 +1547,7 @@ $.get('../instances/' + urlParams.id, function(data) {
             return '<div class="startstoptoggler ' + data.instanceState + '" instanceID="' + data._id + '" style="float:left;margin-left:14px;margin-top:4px;" data-placement="top" data-original-title="' + title + '" rel="tooltip"></div>'
         },
         startAndStopToggler = function(e) {
-            if ($(this).hasClass('unknown') || $(this).hasClass('pending') || $(this).hasClass('stopping')) {
+            if ($(this).hasClass('unknown') || $(this).hasClass('pending') || $(this).hasClass('stopping') || $(this).hasClass('terminated')) {
                 console.log('pending or Unknow State');
                 return false;
             } else if ($(this).hasClass('running')) {
@@ -1465,9 +1578,15 @@ $.get('../instances/' + urlParams.id, function(data) {
             }
         }
 
-
-    var $domainRolesCaption = $('.domain-roles-caption').attr('data-instanceId', data._id).attr('data-chefServerId', data.chef.serverId).attr('data-osType', data.hardware.os).attr('data-instanceIP', data.instanceIP).data('runlist', data.runlist).data('orgId', data.orgId).data('serviceList', data.serviceIds).data('jsonAttributes',data.attributes);
-
+    if(data.chef) {
+      var $domainRolesCaption = $('.domain-roles-caption').attr('data-instanceId', data._id).attr('data-chefServerId', data.chef.serverId).attr('data-osType', data.hardware.os).attr('data-instanceIP', data.instanceIP).data('runlist', data.runlist).data('orgId', data.orgId).data('serviceList', data.serviceIds).data('jsonAttributes',data.attributes);
+      $('.instanceActionBtnUpdatePuppetRunlist').remove();
+    } else {
+      var $domainRolesCaption = $('.domain-roles-caption').attr('data-instanceId', data._id).attr('data-puppetServerId', data.puppet.serverId).attr('data-osType', data.hardware.os).attr('data-instanceIP', data.instanceIP).data('runlist', data.runlist).data('orgId', data.orgId).data('serviceList', data.serviceIds).data('jsonAttributes',data.attributes);
+      $('.instanceActionBtnUpdateRunlist').remove();
+      $('.serviceTabLi').hide();
+    }
+    
     var $divHeadingCP = $domainRolesCaption.find('.domain-roles-heading').empty();
 
     if (data.blueprintData.iconPath == undefined) {
@@ -1483,7 +1602,7 @@ $.get('../instances/' + urlParams.id, function(data) {
     var $spanheadingRightCP = $('<span></span>').css({
         'float': 'left',
         'margin-top': '4px',
-        'margin-left': '8px'
+        'margin-left': '37px'
     }).append($('<a href="javascript:void(0)" data-instanceId="' + data._id + '"></a>').addClass('moreInfo').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'MoreInfo'));
 
     $divHeadingCP.append($spanheadingLeftCP);
@@ -1491,19 +1610,106 @@ $.get('../instances/' + urlParams.id, function(data) {
     $divHeadingCP.append($(getOS(data)));
 
     $('.instanceActionBtnCtr').append([$(getStartStopToggler(data)), $spanheadingRightCP]);
+    $('.instanceActionBtnCtr').append(showmenuAppTaskVar.getshowmenuAppTask());
+    $('.instance-bootstrap-list').append($spanheadingRightCP);
     //$divHeadingCP.append($spanheadingRightCP);
     //$domainRolesCaption.append($divHeadingCP);
 
+    //$domainRolesCaption.append(menuAppTaskVar.getmenuAppTask(data));
+    $domainRolesCaption.find('.showmenuAppTask').click(function() {
+
+        $.get('../instances/' + instanceId, function(data1) {
+            if (data1.orgId) {
+                $.get('../organizations/' + data1.orgId + '/businessgroups/' + data1.bgId + '/projects/' + data1.projectId + '/environments/' + data1.envId + '/', function(data2) {
+                    console.log('success---3---4');
+                    var urls;
+                    var instanceIp;
+                    var tasks;
+                    for (var i in data2.instances) {
+                        console.log("data2>>>>>>>>" + JSON.stringify(data2.instances[i]));
+                        if (data2.instances[i]._id == instanceId) {
+                            urls = data2.instances[i].appUrls;
+                            instanceIp = data2.instances[i].instanceIP;
+                            tasks = data2.instances[i].taskIds;
+                            break;
+                        }
+                    }
+                    //var urls= data2.instances[0].appUrls;
+                    //console.log("data2 is:"+urls);
+                    var stringmenuAppTask = '';
+                    if (tasks && tasks.length) {
+                        $.post('../tasks', {
+                            taskIds: tasks
+                        }, function(tasks) {
+                            var $ul = $('.domain-roles-caption[data-instanceId="' + data._id + '"]').find('.instanceTaskListUL');
+                            $ul.empty();
+                            for (var ll = 0; ll < tasks.length; ll++) {
+                                var $taskLi = "<li><a style='font-size:10px;' href='javascript:void(0)' data-taskId='" + tasks[ll]._id + "'>" + tasks[ll].name + "</a></li>";
+                                console.log("tasksLiName" + $taskLi);
+                                $ul.append($taskLi);
+                            }
+                        });
+                        var menuTaskLI = "<li style='font-size:10px;color:#3276b1'>Fetching</li>";
+                    } else {
+                        var menuTaskLI = "<li style='font-size:10px;color:#3276b1'>No TaskLinks Available</li>";
+                    }
+
+                    if (urls && urls.length) {
+
+                        var menuAppTaskLI = '';
+                        for (var i = 0; i < urls.length; i++) {
+                            $domainRolesCaption.find('.menuAppTask').empty();
+                            console.log("I am inside the Loop");
+                            var url = urls[i].url;
+                            if (url) {
+                                url = url.replace('$host', instanceIp);
+                            }
+                            var tempApp = "<li><a style='font-size:10px;' data-appUrlId='" + urls[i]._id + "' class='app-url' title='" + url + "' href='" + url + "'' target='_blank' >" + urls[i].name + "</a></li>";
+
+                            menuAppTaskLI = menuAppTaskLI + tempApp;
+                        }
+                    } else {
+                        menuAppTaskLI = "<li style='font-size:10px;color:#3276b1'>No AppLinks Available</li>";
+                    }
+
+                    stringmenuAppTask = "<div class='menuAppTask' style='display: none;'><span class='menuAppLinkSpan'>AppLinks</span><ul class='paddingleft32'>" + menuAppTaskLI + "</ul><span class='menuTaskSpan'>TaskLinks</span><ul class='paddingleft32 instanceTaskListUL' style='list-style-type: square;'>" + menuTaskLI + "</ul></div>";
+
+                    
+                    $domainRolesCaption.append(stringmenuAppTask);
+                    var $menu = $domainRolesCaption.find('.menuAppTask');
+                    if ($menu.is(':visible')) {
+                        $domainRolesCaption.find('.menuAppTask').remove();
+                        $menu.hide();
+                    } else {
+                        $('.menuAppTask').hide();
+                        $menu.show();
+                        var $anchor = $('.app-url').parent();
+                        $anchor.click(function() {
+                            $domainRolesCaption.find('.menuAppTask').remove();
+                            $menu.hide();
+                        });
+                    }
+                });
+            }
+        });
+    });
     $('.startstoptoggler').click(startAndStopToggler);
     // .append('<img src="img/templateicons/'+data.blueprintData.templateId+'.png" style="height:20px;width:20px;margin-right:5px;">').append(data.blueprintData.blueprintName);
     $domainRolesCaption.find('.instance-details-ip strong').html(data.instanceIP);
     $domainRolesCaption.find('.instance-state').html(data.instanceState);
+    //data.instanceState = 'running';
+
+    if(data.instanceState != 'running'){
+      $('.inspectBtn').hide();
+    }
+
     if (data.instanceState == 'running') {
         $domainRolesCaption.find('.componentlistContainer').addClass('started');
         $domainRolesCaption.find('.instance-state').html(data.instanceState).addClass('instance-state-text-started');
     } else if (data.instanceState == 'terminated') {
         $domainRolesCaption.find('.componentlistContainer').addClass('stopped');
         $domainRolesCaption.find('.instance-state').html(data.instanceState).addClass('instance-state-text-stopped');
+
     } else if (data.instanceState == 'stopped') {
         $domainRolesCaption.find('.componentlistContainer').addClass('stopped');
         $domainRolesCaption.find('.instance-state').html(data.instanceState).addClass('instance-state-text-stopped');
@@ -1535,7 +1741,7 @@ $.get('../instances/' + urlParams.id, function(data) {
     if (data.instanceState == 'running') {
         enableInstanceActionStartBtn(data._id);
     }
-    if (data.instanceState == 'pending' || data.instanceState == 'stopping') {
+    if (data.instanceState == 'pending' || data.instanceState == 'stopping' || data.instanceState == 'terminated') {
         disableInstanceActionBtns(data._id);
     }
     if (data.instanceState == 'unknown') {
@@ -1895,7 +2101,7 @@ $.get('../instances/' + urlParams.id, function(data) {
     });
 
 
-    $('.instanceActionBtnUpdateRunlist').click(function(e) {
+    $('.instanceActionBtnUpdateRunlist,.instanceActionBtnUpdatePuppetRunlist').click(function(e) {
         if ($(this).hasClass('isStopedInstance')) {
             return false;
         }
@@ -1909,25 +2115,37 @@ $.get('../instances/' + urlParams.id, function(data) {
         }
         var $this = $(this);
         var $parent = $('.domain-roles-caption');
-        var instanceId = $parent.attr('data-instanceId');
-        var chefServerId = $parent.attr('data-chefServerId');
-        var orgId = $parent.data('orgId');
-        var runlist = $parent.data('runlist');
-        console.log(orgId);
-        var readMode = false;
-        if (localStorage.getItem('userRole') === '[Consumer]') {
-            readMode = true;
-        }
-        var $ccrs = $chefCookbookRoleSelector(urlParams.org, null, runlist, readMode);
         var $controlPanelChefRunModalContainer = $('#controlPanelChefRunModalContainer');
-        $controlPanelChefRunModalContainer.find('.chefRunlistContainer').empty().append($ccrs);
-        $controlPanelChefRunModalContainer.find('.chefRunlistContainer').data('$ccrs', $ccrs);
-        $controlPanelChefRunModalContainer.find('.attributesViewTableBody').empty();
-        var attributes = $parent.data('jsonAttributes');
-        if(attributes) {
-         createAttribTableRowFromJson(attributes);
+        var instanceId = $parent.attr('data-instanceId');
+        $controlPanelChefRunModalContainer.data('data-instanceid', instanceId);
+        var chefServerId = $parent.attr('data-chefServerId');
+
+        if (!chefServerId) {
+            var puppetServerId = $this.attr('data-puppetServerId');
+            $controlPanelChefRunModalContainer.data('infraManagerType', 'puppet');
+            //$chefRunModalContainer.find('.chefRunlistContainer').empty();
+            //$chefRunModalContainer.find('.attributesViewTableBody').empty();
+            $controlPanelChefRunModalContainer.find('.btnUpdateInstanceRunlist').click();
+        } else {
+            $controlPanelChefRunModalContainer.data('infraManagerType', 'chef');
+            var orgId = $parent.data('orgId');
+            var runlist = $parent.data('runlist');
+            console.log(orgId);
+            var readMode = false;
+            if (localStorage.getItem('userRole') === '[Consumer]') {
+                readMode = true;
+            }
+            var $ccrs = $chefCookbookRoleSelector(urlParams.org, null, runlist, readMode);
+            
+            $controlPanelChefRunModalContainer.find('.chefRunlistContainer').empty().append($ccrs);
+            $controlPanelChefRunModalContainer.find('.chefRunlistContainer').data('$ccrs', $ccrs);
+            $controlPanelChefRunModalContainer.find('.attributesViewTableBody').empty();
+            var attributes = $parent.data('jsonAttributes');
+            if (attributes) {
+                createAttribTableRowFromJson(attributes);
+            }
+            $controlPanelChefRunModalContainer.modal('show');
         }
-        $controlPanelChefRunModalContainer.modal('show');
 
     });
 
@@ -1935,71 +2153,87 @@ $.get('../instances/' + urlParams.id, function(data) {
         if ($(this).hasClass('isStopedInstance')) {
             return false;
         }
-        bootbox.confirm("Update runlist?", function(result) {
-            if (!result) {
-                return;
-            }
-            var $parent = $('.domain-roles-caption');
-            var instanceId = $parent.attr('data-instanceId');
-            $chefRunModalContainer = $('#controlPanelChefRunModalContainer');
-            var $ccrs = $chefRunModalContainer.find('.chefRunlistContainer').data('$ccrs');
+        $chefRunModalContainer = $('#controlPanelChefRunModalContainer');
+        var infraType = $chefRunModalContainer.data('infraManagerType');
+        var cnfMsg = "Are you sure you want to Update the runlist? This will run all the cookbooks available in the Runlist";
+        if (infraType === 'puppet') {
+            cnfMsg = "Are you sure you want to run puppet client";
+        }
+        bootbox.confirm({
+            message: cnfMsg,
+            title: "Confirmation",
+            callback: function(result) {
+                if (!result) {
+                    return;
+                }
+                var $parent = $('.domain-roles-caption');
+                var instanceId = $parent.attr('data-instanceId');
+                var runlist = [];
+                var attributes = [];
 
-            var runlist = $ccrs.getSelectedRunlist();
+                if (infraType === 'puppet') {
 
-            if (!runlist.length) {
-                bootbox.alert("Runlist is empty");
-                return;
-            }
-            console.log('runlist == ', runlist);
+                } else {
+                    var $ccrs = $chefRunModalContainer.find('.chefRunlistContainer').data('$ccrs');
 
-            $trAttribute = $chefRunModalContainer.find('.attributesViewTableBody tr');
-            var attributes = [];
-            $trAttribute.each(function() {
-                var $tr = $(this);
-                attributes.push({
-                    name: $tr.attr('data-attributeName'),
-                    jsonObj: $tr.data('jsonObj')
+                    runlist = $ccrs.getSelectedRunlist();
+
+                    if (!runlist.length) {
+                        bootbox.alert("Runlist is empty");
+                        return;
+                    }
+                    console.log('runlist == ', runlist);
+
+                    $trAttribute = $chefRunModalContainer.find('.attributesViewTableBody tr');
+                    attributes = [];
+                    $trAttribute.each(function() {
+                        var $tr = $(this);
+                        attributes.push({
+                            name: $tr.attr('data-attributeName'),
+                            jsonObj: $tr.data('jsonObj')
+                        });
+                    });
+                }
+                $.post('../instances/' + instanceId + '/updateRunlist', {
+                    runlist: runlist,
+                    jsonAttributes: attributes
+                }, function(data) {
+
+                    $chefRunModalContainer.modal('hide');
+                    var $parent = $('.domain-roles-caption[data-instanceId="' + instanceId + '"]');
+                    $parent.find('.instance-bootstrap-list-image').data('runlist', runlist);
+                    $parent.find('.instance-bootstrap-list-image').data('jsonAttributes', attributes);
+                    var $backRunlistContainer = $parent.parents('.card').find('.cardBackRunlistContaner').empty();
+                    console.log($backRunlistContainer.length);
+                    console.log(runlist);
+
+                    for (var j = 0; j < runlist.length; j++) {
+                        var $divComponentItem;
+
+                        $divComponentItem = $('<span title="' + runlist[j] + '" style="margin-top:8px;overflow:hidden;text-overflow:ellipsis;width:130px;color:#3a87ad"></span>').addClass('instance-details-item').append(runlist[j]);
+                        $backRunlistContainer.append($divComponentItem);
+                    }
+                    $('.runlistInfoContainer').empty().append(runlist.join());
+
+                    //$parentTr.find('.instance-bootstrap-list-image').data('runlist', runlist
+                    $parent.data('runlist', runlist);
+                    $parent.data('jsonAttributes', attributes);
+                    $parent.find('.moreInfo').trigger('click');
+                    console.log(data);
+                    if (data.actionLogId) {
+                        $.get('../instances/' + instanceId + '/actionLogs/' + data.actionLogId, function(actionLog) {
+                            addActionLogRow(actionLog);
+                        });
+                    }
+                }).fail(function(jxObj) {
+                    if (jxObj.responseJSON && jxObj.responseJSON.actionLogId) {
+                        $.get('../instances/' + instanceId + '/actionLogs/' + jxObj.responseJSON.actionLogId, function(actionLog) {
+                            addActionLogRow(actionLog);
+                        });
+                    }
                 });
-            });
-            $.post('../instances/' + instanceId + '/updateRunlist', {
-                runlist: runlist,
-                jsonAttributes: attributes
-            }, function(data) {
-                
-                $chefRunModalContainer.modal('hide');
-                var $parent = $('.domain-roles-caption[data-instanceId="' + instanceId + '"]');
-                $parent.find('.instance-bootstrap-list-image').data('runlist', runlist);
-                $parent.find('.instance-bootstrap-list-image').data('jsonAttributes', attributes);
-                var $backRunlistContainer = $parent.parents('.card').find('.cardBackRunlistContaner').empty();
-                console.log($backRunlistContainer.length);
-                console.log(runlist);
 
-                for (var j = 0; j < runlist.length; j++) {
-                    var $divComponentItem;
-
-                    $divComponentItem = $('<span title="' + runlist[j] + '" style="margin-top:8px;overflow:hidden;text-overflow:ellipsis;width:130px;color:#3a87ad"></span>').addClass('instance-details-item').append(runlist[j]);
-                    $backRunlistContainer.append($divComponentItem);
-                }
-                $('.runlistInfoContainer').empty().append(runlist.join());
-
-                //$parentTr.find('.instance-bootstrap-list-image').data('runlist', runlist
-                $parent.data('runlist', runlist);
-                $parent.data('jsonAttributes', attributes);
-                $parent.find('.moreInfo').trigger('click');
-                console.log(data);
-                if (data.actionLogId) {
-                    $.get('../instances/' + instanceId + '/actionLogs/' + data.actionLogId, function(actionLog) {
-                        addActionLogRow(actionLog);
-                    });
-                }
-            }).fail(function(jxObj) {
-                if (jxObj.responseJSON && jxObj.responseJSON.actionLogId) {
-                    $.get('../instances/' + instanceId + '/actionLogs/' + jxObj.responseJSON.actionLogId, function(actionLog) {
-                        addActionLogRow(actionLog);
-                    });
-                }
-            });
-
+            }
         });
     });
 
@@ -2227,14 +2461,206 @@ $.get('../instances/' + urlParams.id, function(data) {
     var $tr = $('<tr style="line-height:2.3"></tr>');
     $tr.append('<td scope="col" style="font-size:12px;">Machine</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + data.hardware.architecture + '</td>');
     $hrdwareTbody.append($tr);
-
+    function memoryCalculation(data) {
+        var memoryInitial = data;
+        //alert(memoryInitial);
+        if(memoryInitial == 'unknown' || memoryInitial.indexOf('MB') !== -1){
+          return memoryInitial;
+        }else{
+          var mem = memoryInitial.substring(0, memoryInitial.length - 2);
+          var mem1 = mem / 1000;
+          var intvalue = Math.round(mem1);
+          var mem2 = intvalue + ' MB';
+          return mem2;
+        }
+    }
     $tr = $('<tr style="line-height:2.3"></tr>');
-    $tr.append('<td scope="col" style="font-size:12px;">Total Memory</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + data.hardware.memory.total + '</td>');
+    $tr.append('<td scope="col" style="font-size:12px;">Total Memory</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + memoryCalculation(data.hardware.memory.total) + '</td>');
     $hrdwareTbody.append($tr);
 
     $tr = $('<tr style="line-height:2.3"></tr>');
-    $tr.append('<td scope="col" style="font-size:12px;">Free Memory</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + data.hardware.memory.free + '</td>');
+    $tr.append('<td scope="col" style="font-size:12px;">Free Memory</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + memoryCalculation(data.hardware.memory.free) + '</td>');
     $hrdwareTbody.append($tr);
+
+    // $tr = $('<tr style="line-height:2.3"></tr>');
+    // $tr.append('<td scope="col" style="font-size:12px;">Total Memory</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + data.hardware.memory.total + '</td>');
+    // $hrdwareTbody.append($tr);
+
+    // $tr = $('<tr style="line-height:2.3"></tr>');
+    // $tr.append('<td scope="col" style="font-size:12px;">Free Memory</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + data.hardware.memory.free + '</td>');
+    // $hrdwareTbody.append($tr);
+
+
+
+
+
+    //Blueprint Information Arab
+    var $blueprintTbody = $('#collapseBlueprints').find('tbody');
+    $blueprintTbody.empty();
+    // var $tr = $('<tr style="line-height:2.3"></tr>');
+    // $tr.append('<td scope="col" style="font-size:12px;">Blueprint Id</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + data.blueprintData.blueprintId + '</td>');
+    // $blueprintTbody.append($tr);
+
+    // $tr = $('<tr style="line-height:2.3"></tr>');
+    // $tr.append('<td scope="col" style="font-size:12px;">Blueprint Name</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + data.blueprintData.blueprintName + '</td>');
+    // $blueprintTbody.append($tr);
+
+    // $tr = $('<tr style="line-height:2.3"></tr>');
+    // $tr.append('<td scope="col" style="font-size:12px;">Template Id</td><td scope="col"> : </td><td scope="col" style="font-size:12px;">' + data.blueprintData.templateId + '</td>');
+    // $blueprintTbody.append($tr);
+
+    // $tr = $('<tr style="line-height:2.3"></tr>');
+    // $tr.append('<td scope="col" style="font-size:12px;">Template Type</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + data.blueprintData.templateType + '</td>');
+    // $blueprintTbody.append($tr);
+    //Arab
+    $.get('../instances/' + instanceId ,function(data1){
+      //console.log('success---1---2===');
+        if(data1.orgId){
+        $.get('../organizations/' + data1.orgId + '/businessgroups/' + data1.bgId + '/projects/' + data1.projectId + '/environments/' + data1.envId + '/', function(data2) {
+            console.log('success---3---4===');
+            var urls;
+            var instanceIp;
+            for(var i in data2.instances){
+              console.log(data2.instances[i]);
+              if(data2.instances[i]._id == instanceId){
+                urls = data2.instances[i].appUrls;
+                instanceIp = data2.instances[i].instanceIP;
+                break;
+              }
+            }
+            var subnetID;
+            var instanceType;
+            for(var j in data2.blueprints){
+              console.log(data2.blueprints[j]);
+              //debugger;
+              if(data2.blueprints[j]._id == data.blueprintData.blueprintId){
+                if(typeof data2.blueprints[j].blueprintConfig.cloudProviderData != "undefined"){
+
+                  securityGroupIDs=data2.blueprints[j].blueprintConfig.cloudProviderData.securityGroupIds[0];
+                  instanceSIZE = data2.blueprints[j].blueprintConfig.cloudProviderData.instanceType;
+                  vpcTYPE = data2.blueprints[j].blueprintConfig.cloudProviderData.vpcId;
+                  subnetID = data2.blueprints[j].blueprintConfig.cloudProviderData.subnetId;
+                  versionLatest = data2.blueprints[j].blueprintConfig.infraManagerData.latestVersion;
+                  
+
+                  $tr = $('<tr style="line-height:2.3"></tr>');
+                  $tr.append('<td scope="col" style="font-size:12px;">Blueprint Name</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + data2.blueprints[j].name + '</td>');
+                  $blueprintTbody.append($tr);
+
+
+
+                  //alert(subnetID);
+                  $tr = $('<tr style="line-height:2.3"></tr>');
+                  $tr.append('<td scope="col" style="font-size:12px;">Instance Size</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + instanceSIZE + '</td>');
+                  $blueprintTbody.append($tr);
+
+                  $tr = $('<tr style="line-height:2.3"></tr>');
+                  $tr.append('<td scope="col" style="font-size:12px;">VPC ID</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + vpcTYPE + '</td>');
+                  $blueprintTbody.append($tr);
+
+
+                  $tr = $('<tr style="line-height:2.3"></tr>');
+                  $tr.append('<td scope="col" style="font-size:12px;">Subnet ID</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + subnetID + '</td>');
+                  $blueprintTbody.append($tr);
+                  
+
+                  $tr = $('<tr style="line-height:2.3"></tr>');
+                  $tr.append('<td scope="col" style="font-size:12px;">Security Group</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + securityGroupIDs + '</td>');
+                  $blueprintTbody.append($tr);
+
+                  $tr = $('<tr style="line-height:2.3"></tr>');
+                  $tr.append('<td scope="col" style="font-size:12px;">Version</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + versionLatest + '</td>');
+                  $blueprintTbody.append($tr);
+                  
+                  // urls = data2.instances[i].appUrls;
+                  // instanceIp = data2.instances[i].instanceIP;
+                  // break;
+                  //for getting the Provider name,Type,Region,KeyPair
+                 $.ajax({
+                     type: "GET",
+                     url: "/aws/providers/" + data2.blueprints[j].blueprintConfig.cloudProviderId,
+                     success: function(data3) {
+                         // $blueprintReadContainer.find('.modal-body #instanceProviderName').val(data.providerName);
+                         // $blueprintReadContainer.find('.modal-body #instanceProviderType').val(data.providerType);
+                         // // loop for getting region and Keypair
+                         // for (var k = 0; k < data.keyPairs.length; k++) {
+
+                         //     $blueprintReadContainer.find('.modal-body #instanceRegion').val(data.keyPairs[k].region);
+                         //     $blueprintReadContainer.find('.modal-body #instancekeyPair').val(data.keyPairs[k].keyPairName);
+                         // }
+                         var providerTYPE = data3.providerType
+                         var providerNAME = data3.providerName;
+                         var regionNAME   = data3.keyPairs[0].region;
+                         var keypairNAME  = data3.keyPairs[0].keyPairName;
+                         $tr = $('<tr style="line-height:2.3"></tr>');
+                          $tr.append('<td scope="col" style="font-size:12px;">Provider Type</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + providerTYPE + '</td>');
+                          $blueprintTbody.append($tr);
+
+
+                          $tr = $('<tr style="line-height:2.3"></tr>');
+                          $tr.append('<td scope="col" style="font-size:12px;">Provider Name</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + providerNAME + '</td>');
+                          $blueprintTbody.append($tr);
+
+                          $tr = $('<tr style="line-height:2.3"></tr>');
+                          $tr.append('<td scope="col" style="font-size:12px;">Region Name</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + regionNAME + '</td>');
+                          $blueprintTbody.append($tr);
+
+                          $tr = $('<tr style="line-height:2.3"></tr>');
+                          $tr.append('<td scope="col" style="font-size:12px;">Keypair Name</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + keypairNAME + '</td>');
+                          $blueprintTbody.append($tr);
+                    
+                         console.log("Provider Details:"+data3);
+                     },
+                     failure: function(data) {
+                         alert(data.toString());
+                     }
+                  });
+                 $.ajax({
+                     type: "GET",
+                     url: "/vmimages/" + data2.blueprints[j].blueprintConfig.cloudProviderData.imageId,
+                     success: function(data4) {
+                      var imageNAME = data4.name;
+                      var imageIDENTIFIER = data4.imageIdentifier;
+                      $tr = $('<tr style="line-height:2.3"></tr>');
+                      $tr.append('<td scope="col" style="font-size:12px;">Image Name</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + imageNAME + '</td>');
+                      $blueprintTbody.append($tr);
+
+
+                      $tr = $('<tr style="line-height:2.3"></tr>');
+                      $tr.append('<td scope="col" style="font-size:12px;">Image Identifier</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + imageIDENTIFIER + '</td>');
+                      $blueprintTbody.append($tr);
+                     },
+                     failure: function(data) {
+                         alert(data.toString());
+                     }
+                  });
+                }
+              }
+              // else{
+              //   alert("I am in else part");
+              //     //$('#accordion-Blueprints').hide();
+              // }
+            }
+            
+          });
+        }
+    });
+    
+    
+    $tr = $('<tr style="line-height:2.3"></tr>');
+    $tr.append('<td scope="col" style="font-size:12px;">Template</td><td scope="col"> : </td><td scope="col" style="font-size:12px;">' + data.blueprintData.templateId + '</td>');
+    $blueprintTbody.append($tr);
+
+    $tr = $('<tr style="line-height:2.3"></tr>');
+    $tr.append('<td scope="col" style="font-size:12px;">Template Type</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + data.blueprintData.templateType + '</td>');
+    $blueprintTbody.append($tr);
+
+    if(data.blueprintData.templateId == 'chef_import'){
+      $("#accordion-Blueprints").hide();
+    }
+
+
+
 
 
     //software
@@ -2256,7 +2682,7 @@ $.get('../instances/' + urlParams.id, function(data) {
     // $cfmwareTbody.append($tr); //commented as we were receiving the id instead of the name : Vinod
 
     $tr = $('<tr style="line-height:2.3"></tr>');
-    $tr.append('<td scope="col" style="font-size:12px;">Chef Bootstrap</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + data.bootStrapStatus + '</td>');
+    $tr.append('<td scope="col" style="font-size:12px;">Bootstrap</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + data.bootStrapStatus + '</td>');
     $cfmwareTbody.append($tr);
 
     $tr = $('<tr style="line-height:2.3"></tr>');
@@ -2267,11 +2693,15 @@ $.get('../instances/' + urlParams.id, function(data) {
     //$collapseTaskAreaTbody.empty();
     if (data.taskIds && data.taskIds.length) {
         var $collapseTaskAreaTbody = $('#collapseTaskArea').find('tbody');
+
+        var $selectedTaskList = $('#selectedTaskList').empty();
         $.post('../tasks', {
             taskIds: data.taskIds
         }, function(tasks) {
             var str = '';
             for (var i = 0; i < tasks.length; i++) {
+              var $option = $("<option></option>").val(tasks[i]._id).html(tasks[i].name).attr('data-taskName', tasks[i].name).addClass('taskimg');
+              $selectedTaskList.append($option);
                 var $trTask = $('<tr style="line-height:2.3"></tr>');
                 var $tdSerial = $('<td/>')
                 var $tdName = $('<td class="taskNameTd"/>');
@@ -2289,7 +2719,8 @@ $.get('../instances/' + urlParams.id, function(data) {
     if (data.appUrls && data.appUrls.length) {
         for (var kk = 0; kk < data.appUrls.length; kk++) {
             createAppUrlTableRow(data.appUrls[kk]);
-            createAppUrlCardLink(data.appUrls[kk], data.instanceIP);
+            //menuAppTaskVar.getmenuAppTask(data);
+            //createAppUrlCardLink(data.appUrls[kk], data.instanceIP);
         }
     }
     /*else {
@@ -2304,50 +2735,59 @@ $.get('../instances/' + urlParams.id, function(data) {
 
 
     $('#addTaskBtn').click(function(e) {
-        var $select = $('#taskList').empty();
+        var $select = $('#selectavailbleTaskList').empty();
         var taskIds = [];
         if (data.taskIds && data.taskIds.length) {
             taskIds = data.taskIds;
         }
         $.get('/tasks?orgId=' + data.orgId + '&bgId=' + data.bgId + '&projectId=' + data.projectId + '&envId=' + data.envId, function(taskList) {
-            for (var i = 0; i < taskList.length; i++) {
-                var $option = $("<option></option>").val(taskList[i]._id).html(taskList[i].name).attr('data-taskName', taskList[i].name);
-                if (taskIds.indexOf(taskList[i]._id) !== -1) {
-                    $option.attr('selected', 'selected');
+            if (taskList.length == 0) {
+                bootbox.alert({
+                    size: 'small',
+                    message: '<div style="margin-left:6px;"><img style="width:50px;height:40px" src="img/warning.png" alt="warning"/><span style="margin-left:20px;font-size:16px;">There are no Jobs associated to this Instance. Navigate to <span style="margin-left:72px;">Orchestration Tab on the Instances Page to create one.</span></span></div>',
+                    title: '<span style="font-size:22px;">Warning</span>'
+                });
+                $('#instanceTaskModal').modal('hide');
+            } else {
+                for (var i = 0; i < taskList.length; i++) {
+                    var $option = $("<option></option>").val(taskList[i]._id).html(taskList[i].name).attr('data-taskName', taskList[i].name).addClass('taskimg');
+                    var $selectedOptionsValues = $('#selectedTaskList').find('option[value="' + taskList[i]._id + '"]').length;
+                    $select.append($option);
+                    if ($selectedOptionsValues) {
+                        $('#selectavailbleTaskList option[value="' + taskList[i]._id + '"]').hide();
+                    }
                 }
-                $select.append($option);
-                
+                $('#instanceTaskModal').modal('show');
             }
-            
-            $('#instanceTaskModal').modal('show');
         });
     });
 
-    var checkbox = $('#my_checkbox');
-    var listbox = $('#taskList');
+    // var checkbox = $('#my_checkbox');
+    // var listbox = $('#taskList');
 
-    $(checkbox).click(function() {
-        selectDeselect(listbox, checkbox);
-    });
+    // $(checkbox).click(function() {
+    //     selectDeselect(listbox, checkbox);
+    // });
 
-    function selectDeselect(listbox, checkbox) {
-        var select_all = $(checkbox).prop('checked') ? true : false;
-        var select = $(listbox);
-        if (select_all) {
-            var clone = select.clone();
-            $('option', clone).attr('selected', select_all);
-            var html = clone.html();
-            select.html(html);
-        } else $('option', select).removeAttr('selected');
-    }
+    // function selectDeselect(listbox, checkbox) {
+    //     var select_all = $(checkbox).prop('checked') ? true : false;
+    //     var select = $(listbox);
+    //     if (select_all) {
+    //         var clone = select.clone();
+    //         $('option', clone).attr('selected', select_all);
+    //         var html = clone.html();
+    //         select.html(html);
+    //     } else $('option', select).removeAttr('selected');
+    // }
 
     $('#saveTaskBtn').click(function() {
-        var $taskSelect = $('#taskList');
-        var $selectedOptions = $taskSelect.find('option:selected');
-        var taskIds = $taskSelect.val();
-        if (!taskIds) {
-            taskIds = [];
-        }
+        var $taskSelect = $('#selectedTaskList');
+        var $selectedOptions = $taskSelect.find('option');
+        var taskIds = [];
+        $selectedOptions.each(function(){
+          taskIds.push($(this).val());
+
+        });
         $.post('../instances/' + data._id + '/addTask', {
             taskIds: taskIds
         }, function() {
@@ -2365,6 +2805,7 @@ $.get('../instances/' + urlParams.id, function(data) {
             }
             $('#instanceTaskModal').modal('hide');
             data.taskIds = taskIds;
+            //alert("data with Task ID"+data.taskIds);
         });
 
     });
@@ -2510,7 +2951,7 @@ function addServiceToDom(serviceData) {
 
     addActionToServiceDom(serviceData.rowid, serviceData, $tr);
 
-    var $tdOption = $('<td></td>').append('<div class="btn-group tableactionWidth"><button class="btn btn-danger pull-left btn-sg tableactionbutton deleteServiceBtn" rel="tooltip" data-placement="top" data-original-title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></div>');
+    var $tdOption = $('<td></td>').append('<div class="btn-group"><button class="btn btn-danger pull-left btn-sg tableactionbutton deleteServiceBtn" rel="tooltip" data-placement="top" data-original-title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></div>');
     $tdOption.find('.deleteServiceBtn').click(function(e) {
         $.ajax({
             url: '../instances/' + urlParams.id + '/services/' + serviceData.rowid,
@@ -2556,10 +2997,10 @@ function pollActionLogCompleteStatus(instanceId, actionLogId, $td) {
             actionLogsPollTimeouts.push(timeout);
         } else {
         //for failure
-            var status = '<img rel="tooltip" data-placement="top" title="Failed"  src="img/indicator_stopped.png"/>'
+            var status = '<img title="Failed"  src="img/indicator_stopped.png"/>'
             if (actionLog.success) {
                 //for success
-                status = '<img rel="tooltip" data-placement="top" title="Success" src="img/indicator_started.png"/>';
+                status = '<img title="Success" src="img/indicator_started.png"/>';
             }
             $td.html(status);
       }
@@ -2572,11 +3013,11 @@ function addActionLogRow(actionLog) {
     $tr.append($tdName);
 
     var $tdStatus = $('<td></td>');
-    var status = '<img rel="tooltip" data-placement="top" title="Failed" src="img/indicator_stopped.png"/>';
+    var status = '<img title="Failed" src="img/indicator_stopped.png"/>';
 
     //for condition when polling or unknown
     if (!actionLog.completed) {
-        status = '<img rel="tooltip" data-placement="top" title="Pending" src="img/indicator_unknown.png"/>';
+        status = '<img title="Pending" src="img/indicator_unknown.png"/>';
         //polling
         if (actionLog.type !== 8) {
             pollActionLogCompleteStatus(urlParams['id'], actionLog._id, $tdStatus);
@@ -2585,7 +3026,7 @@ function addActionLogRow(actionLog) {
         //for success
     } else {
         if (actionLog.success) {
-            status = '<img rel="tooltip" data-placement="top" title="Success" src="img/indicator_started.png"/>';
+            status = '<img title="Success" src="img/indicator_started.png"/>';
         }
     }
     $tdStatus.append(status);
@@ -2840,6 +3281,7 @@ $(document).ready(function(e) {
       //var $taskListArea = $('.taskListArea').empty();
       $servicesDatatable = $('#tableServices').DataTable({
           "pagingType": "full_numbers",
+          "bLengthChange": false,
           "aoColumns": [{
               "bSortable": true
           }, {
@@ -2929,26 +3371,31 @@ $(document).ready(function() {
 
  $('#newAppSeries').click(function(e) {
      $('#appURLForm').trigger("reset");
+     $('#modalAppNameURL').find('.modal-title').html('Add Application URL').css('margin-left','18px');
  });
 
  function createAppUrlTableRow(appUrlData) {
      var $appUrlTableBody = $('#appUrlTable tbody');
+
+     var $index=$('#appUrlTable tbody').find('tr');
      var $row = $('<tr/>').attr('data-appUrlIdTableRow', appUrlData._id);
      $row.data('appUrlData', appUrlData);
-     var $tdName = $('<td class="appNameTable"/>');
-     $tdName.append(appUrlData.name);
+
+     var $tdName = $('<td class="appNameIndex"/>');
+     $tdName.append($index.length+1);
+
      var url = appUrlData.url;
      if (url) {
          url = url.replace('$host', window.instanceIPForAppLink);
      }
-     var $tdURL = $('<td class="appUrlTable"/>').append('<a href="' + url + '" target="_blank">' + url + '</a> ');
+     var $tdURL = $('<td class="appUrlTable"/>').append('<a style="word-break:break-word" href="' + url + '" target="_blank">' + appUrlData.name + '</a> ');
      var $tdAction = $('<td/>');
-     $tdAction.append('<div class="btn-group"><button class="btn btn-info pull-left btn-sg tableactionbutton appUrlEditLink" value="Update" title="Update"><i class="ace-icon fa fa-pencil bigger-120"></i></button></div>').append('<div style="margin-left:5px;" class="btn-group"><button class="btn btn-danger pull-left btn-sg tableactionbutton appUrlRemoveLink" value="Remove" title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></div>');
+     $tdAction.append('<div class="btn-group"><button class="btn btn-info pull-left btn-sg tableactionbutton appUrlEditLink" data-placement="top" value="Update" title="Edit"><i class="ace-icon fa fa-pencil bigger-120"></i></button></div>').append('<div style="margin-left:5px;" class="btn-group"><button class="btn btn-danger pull-left btn-sg tableactionbutton appUrlRemoveLink" data-placement="top" value="Remove" title="Delete"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></div>');
 
      $tdAction.find('.appUrlEditLink').click(function() {
          var appUrlData = $row.data('appUrlData');
          var $editModal = $('#modalAppNameURL');
-
+         $('#modalAppNameURL').find('.modal-title').html('Edit Application URL').css('margin-left','18px');
          $editModal.modal('show');
          $editModal.find('.appName').val(appUrlData.name);
          $editModal.find('.appURL').val(appUrlData.url);
@@ -2978,40 +3425,56 @@ $(document).ready(function() {
  }
 
  function removeAppUrlCardLink(appUrlId) {
+  //alert(appUrlId);
      var $anchor = $('a[data-appUrlId="' + appUrlId + '"]').parent();
      if (!$anchor.length) {
          return;
-
      }
-     console.log($anchor.index());
-     var index = $anchor.index();
-     if (index < 3) {
-         var $nextLink;
-         if (index == 1) {
-             $nextLink = $anchor.next().next();
-         } else {
-             $nextLink = $anchor.next();
-         }
-         console.log($nextLink.length);
-         $nextLink.show();
-     }
-     $anchor.remove();
+     // console.log($anchor);
+     // console.log($anchor.index());
+     // //alert($anchor.index());
+     // var index = $anchor.index();
+     
+     // if (index < 3) {
+     //     var $nextLink;
+     //     if (index == 1) {console.log(data[0]);
+     //         $nextLink = $anchor.next().next();
+     //     } else {
+     //         $nextLink = $anchor.next();
+     //     }
+     //     console.log($nextLink.length);
+     //     $nextLink.show();
+     // }
+      // var $nextLink;
+      // if (index == 1) {console.log(data[0]);
+      //     $nextLink = $anchor.next().next();
+      // } else {
+      //    $nextLink = $anchor.next();
+      // }
+      // console.log($nextLink.length);
+      // $nextLink.show();
+    $anchor.remove();
  }
 
- function createAppUrlCardLink(appUrlData, instanceIP) {
-     var $cardAppUrlListContanier = $('.instance-bootstrap-list');
-     var url = appUrlData.url;
-     if (url) {
-         url = url.replace('$host', instanceIP);
-     }
-     var anchor = "<span class='marginForURLCP'><a class='app-url' data-instanceIP='" + instanceIP + "' data-appUrlId='" + appUrlData._id + "' href='" + url + "'' target='_blank' title='" + appUrlData.name + "'>" + appUrlData.name + "</a></span>";
-     var $anchor = $(anchor);
-     if ($cardAppUrlListContanier.children().length > 2) {
-         $anchor.hide();
-     }
-     $cardAppUrlListContanier.last().append($anchor);
+ 
+ // function createAppUrlCardLink(appUrlData, instanceIP) {
+ //    //menuAppTaskVar.getmenuAppTask(appUrlData);
+ //     var $cardAppUrlListContanier = $('.instance-bootstrap-list');
+ //     var url = appUrlData.url;
+ //     if (url) {
+ //         url = url.replace('$host', instanceIP);
+ //     }
+ //     var anchor = "<span class='marginForURLCP'><a class='app-url' data-instanceIP='" + instanceIP + "' data-appUrlId='" + appUrlData._id + "' href='" + url + "'' target='_blank' title='" + appUrlData.name + "'>" + appUrlData.name + "</a></span>";
+ //     var $anchor = $(anchor);
+ //     // if ($cardAppUrlListContanier.find('.marginForURLCP').length > 1) {
+ //     //     $anchor.hide();
+ //     // }
+ //     //$cardAppUrlListContanier.last().append($anchor);
+ //     // $('.instanceActionBtnCtr').find('.showmenuAppTask').click();
+ //     // $('.instanceActionBtnCtr').find('.menuAppTask').append($anchor);
+ //     //alert($('.instanceActionBtnCtr').html());
 
- }
+ // }
 
 
 
@@ -3024,8 +3487,9 @@ $(document).ready(function() {
          e.preventDefault();
          var appUrls = []
          var appUrlData = {};
-
-
+         //alert($('#appUrlTable tbody').find('tr').length);
+         var rowIndex = $('#appUrlTable tbody').find('tr').length;
+         appUrlData.Index = rowIndex;
          appUrlData.name = $(this).find('.appName').val();
          appUrlData.url = $(this).find('.appURL').val();
          var appUrlId = $(this).find('.appUrlId').val();
@@ -3037,31 +3501,39 @@ $(document).ready(function() {
              url = '../instances/' + urlParams.id + '/appUrl/' + appUrlId + '/update';
              reqBody = {
                  url: appUrlData.url,
-                 name: appUrlData.name
+                 name: appUrlData.name,
+                 index: appUrlData.Index
              }
          }
 
          var $appUrlIdInput = $(this).find('.appUrlId');
 
          $.post(url, reqBody, function(data) {
+          //console.log("URL ====>"+url);
+          //console.log("reqBody ====>"+reqBody);
              $appUrlIdInput.val('');
              console.log(data);
              if (!appUrlId) {
+                //alert("appUrlId ====>"+appUrlId);
+                console.log("DATA:"+data[0]);
                  createAppUrlTableRow(data[0]);
-                 createAppUrlCardLink(data[0], window.instanceIPForAppLink);
+                 //createAppUrlCardLink(data[0], window.instanceIPForAppLink);
              } else {
+                //When edit button clicked in a row it's executed.
                  var $tr = $('tr[data-appUrlIdTableRow="' + appUrlId + '"]');
-                 $tr.find('.appNameTable').text(reqBody.name);
+                 //$tr.find('.appNameTable').text(reqBody.name);
+                 $tr.find('.appNameIndex').text(reqBody.index);
                  var url = reqBody.url;
                  if (url) {
                      url = url.replace('$host', window.instanceIPForAppLink);
                  }
-                 $tr.find('.appUrlTable').html('<a href="' + url + '" target="_blank">' + url + '</a> ');
+                 $tr.find('.appUrlTable').html('<a style="word-break:break-word;" href="' + url + '" target="_blank">' + reqBody.name + '</a> ');
                  $tr.data('appUrlData', {
                      _id: appUrlId,
                      name: reqBody.name,
                      url: reqBody.url
                  })
+                 //alert(url);
 
                  var $a = $('.app-url[data-appUrlId="' + appUrlId + '"]');
                  $a.html(reqBody.name);

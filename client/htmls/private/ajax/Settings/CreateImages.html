@@ -92,6 +92,11 @@
                                  <input name="ctl00$MainContent$orgname" Placeholder="Enter The Admin UserName" id="UserName" class="form-control" type="text"  cdata="catalyst" cat-validation="required,max15">
                                </div> 
 
+                               <div class="col-lg-6 forazurepassword hidden">
+                                 <label for=""> Admin  Password:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+                                 <input name="ctl00$MainContent$orgname" Placeholder="Enter The Admin Password" id="password" class="form-control" type="password"  cdata="catalyst">
+                               </div> 
+
                                <div class="col-lg-6">
                                   <label for="name">Organization Name:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
                                   <select id="orgId" name="orgId" unique="true" uniqueconditionedby="orgname"  class="chooseOrganization width-100" style="vertical-align:central"  cdata="catalyst"  cat-validation="required">
@@ -123,15 +128,16 @@
 
          <div class="widget-toolbox clearfix">
            <div class="btn-group pull-right">
-            <button id="btnsubmit" class="btn btn-primary btn-mini" style="margin-right:11px;">
-              <i class="ace-icon fa fa-check bigger-110"></i>
-              Save
-            </button>
-            <a class="btn btn-primary btn-mini" onclick="window.history.back();" id="btncancel">
-              <i class="ace-icon fa fa-undo bigger-110"></i>
-              Cancel
-            </a>
-          </div>
+                <a class="btn btn-default" onclick="window.history.back();" style="margin-right:11px;" id="btncancel">
+                  <i class="ace-icon fa fa-times bigger-110"></i>
+                  Cancel
+                  </a>
+                  <button class="btn btn-primary btn-mini">
+                  <i class="ace-icon fa fa-check bigger-110"></i>
+                  Save
+                  </button>
+                  
+               </div>
         </div>
       </div>
 
@@ -204,10 +210,93 @@
               for(var i=0;i<len;i++){
                 str=str+'<option value="'+data[i]._id+'" secretKey="'+data[i].secretKey+'" accessKey="'+data[i].accessKey+'" providerType="'+data[i].providerType+'">'+data[i].providerName+'</option>';
               }
+              //Reading providers from openstack
+
+                
+              $.ajax({
+               type: "GET",
+               url: "/openstack/providers",
+               success: function (data) {
+                data= typeof data =="string" ? JSON.parse(data) :data;
+                console.log(data);
+                len = data.length;
+                for(var i=0;i<len;i++){
+                  str+='<option value="'+data[i]._id+'" username="'+data[i].userName+'" password="'+data[i].password+'" providerType="'+data[i].providerType+'">'+data[i].providerName+'</option>';
+                }
+
+
+                $.ajax({
+                   type: "GET",
+                   url: "/hppubliccloud/providers",
+                   success: function (data) {
+                    data= typeof data =="string" ? JSON.parse(data) :data;
+                    console.log(data);
+                    len = data.length;
+                    for(var i=0;i<len;i++){
+                      str+='<option value="'+data[i]._id+'" username="'+data[i].userName+'" password="'+data[i].password+'" providerType="'+data[i].providerType+'">'+data[i].providerName+'</option>';
+                    }
+
+                $.ajax({
+                   type: "GET",
+                   url: "/azure/providers",
+                   success: function (data) {
+                    data= typeof data =="string" ? JSON.parse(data) :data;
+                    console.log(data);
+                    len = data.length;
+                    for(var i=0;i<len;i++){
+                      str+='<option value="'+data[i]._id+'" subscriptionId="'+data[i].subscriptionId+'" storageAccount="'+data[i].storageAccount+'" providerType="'+data[i].providerType+'">'+data[i].providerName+'</option>';
+                    }
+
+                    $('#providerId').html(str);
+                    if($('#providerId').attr('answer')){
+                      $('#providerId').val($('#providerId').attr('answer')).select2();
+                    }
+
+                    $('#providerId').on('change', function() {
+                      var provider = $('#providerId').find("option:selected").attr('providerType');
+                      console.log("provider",provider);
+
+                      if(provider == 'AZURE'){ 
+                          console.log("hidden remove");
+                          $('.forazurepassword').removeClass('hidden');
+                          $('.forazurepassword').find('#password').attr('cat-validation','required,min8');
+                      }else{
+                          $('.forazurepassword').addClass('hidden');
+                          $('.forazurepassword').find('#password').removeAttr('cat-validation');
+                      }
+
+                    });
+
+                    },
+                    failure: function (data) {
+                     alert(data.toString());
+                   }
+                  }); 
+
+                    $('#providerId').html(str);
+                    if($('#providerId').attr('answer')){
+                      $('#providerId').val($('#providerId').attr('answer')).select2();
+                    }
+                    },
+                    failure: function (data) {
+                     alert(data.toString());
+                   }
+                  }); 
+
+                },
+                failure: function (data) {
+                 alert(data.toString());
+               }
+              }); 
+        
+
+
               $('#providerId').html(str);
               if($('#providerId').attr('answer')){
                 $('#providerId').val($('#providerId').attr('answer')).select2();
               }
+
+
                 /*.off('change').on('change',function(){
                   debugger;
                   
@@ -216,11 +305,11 @@
                   $('#region').html('<option value="'+region+'">'+region+'</option>').val(region);
                 });*/
 
-  },
-  failure: function (data) {
-   alert(data.toString());
- }
-}); 
+          },
+          failure: function (data) {
+           alert(data.toString());
+         }
+        }); 
   }
   function isUserTypeSuperAdmin(){
     $.get('/d4dMasters/loggedInUser',function(data){
@@ -240,7 +329,11 @@
     ,osType=$('#osType').find('option:selected').attr('ostype'),
     userName=$('#UserName').val(),
     orgId = $('#orgId').val().trim();
+    var pt = $('#providerId').find('option:selected').attr('providertype');
     //alert(orgId);
+    
+    var password = $('#password').val().trim();
+
     if(imageIdentifier && providerId && osType && name && osName && userName && orgId){
       appendLoader();
       if(!UtilityMethods.getIdFromURL()){
@@ -253,7 +346,7 @@
       $.ajax({
         method:"POST",
         url:url,
-        data:{ "providerId": providerId, "osType": osType, "name": name, "imageIdentifier":imageIdentifier,"osName":osName,"userName":userName,"orgId":orgId},
+        data:{ "providerId": providerId, "osType": osType, "name": name, "imageIdentifier":imageIdentifier,"osName":osName,"userName":userName,"orgId":orgId, "providertype":pt, "password":password},
         success: function(data, success) {
           if (data!=500) {
             if ($('#btncancel').length){
@@ -402,6 +495,8 @@ $(document).ready(function () {
           $('select').select2();
 
           if(UtilityMethods.getIdFromURL()){
+            console.log("In updation :",UtilityMethods.getIdFromURL());
+
            $.get('/vmimages/'+UtilityMethods.getIdFromURL(),function(data){
 
             $('#imageidentifire').val(data.imageIdentifier).attr('answer',data.imageidentifire);
@@ -410,6 +505,11 @@ $(document).ready(function () {
             $('#providerId').attr('answer',data.providerId).val(data.providerId).select2();
             $('#UserName').val(data.userName).attr('answer',data.userName);
             $('#orgId').val(data.orgId[0]).attr({'answer': data.orgId[0]}).select2();
+
+            if(data.providerType == 'azure'){
+              $('#password').val(data.instancePassword).attr('answer',data.instancePassword);
+              $('.forazurepassword').removeClass('hidden');
+            }
 
           });
          }

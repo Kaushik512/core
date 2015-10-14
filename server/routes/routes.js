@@ -22,6 +22,10 @@ var taskStatus = require('./routes_taskstatus');
 var ec2 = require('./routes_aws_ec2');
 
 var jenkins = require('./routes_jenkins');
+var openstack = require('./routes_openstack');
+var hppubliccloud = require('./routes_hppubliccloud');
+var azure = require('./routes_azure');
+
 var application = require('./routes_application');
 var jira = require('./routes_jira');
 
@@ -30,11 +34,21 @@ var vmimage = require('./routes_vmImages');
 
 var chefClientExecution = require('./routes_chefClientExecutionResponse');
 
-var appConfig = require('../config/app_config');
+var appConfig = require('_pr/config');
+
+var cloudformation = require('./routes_cloudformation');
 
 var notification = require('./routes_notification');
 
-module.exports.setRoutes = function(app) {
+var globalsettings = require('./routes_globalsettings');
+
+var tracks = require('./routes_track');
+
+var puppet = require('./routes_puppet.js');
+
+var appdeploy = require('./routes_appdeploy');
+
+module.exports.setRoutes = function(app,socketIo) {
 
 
     app.all('*', function(req, res, next) {
@@ -70,6 +84,9 @@ module.exports.setRoutes = function(app) {
     ec2.setRoutes(app, sessionVerificationFunc);
 
     jenkins.setRoutes(app, sessionVerificationFunc);
+    openstack.setRoutes(app, sessionVerificationFunc);
+    hppubliccloud.setRoutes(app, sessionVerificationFunc);
+    azure.setRoutes(app, sessionVerificationFunc);
 
     application.setRoutes(app, sessionVerificationFunc);
 
@@ -78,7 +95,18 @@ module.exports.setRoutes = function(app) {
     provider.setRoutes(app, sessionVerificationFunc);
 
     vmimage.setRoutes(app, sessionVerificationFunc);
+
     chefClientExecution.setRoutes(app);
+
+    cloudformation.setRoutes(app, sessionVerificationFunc);
+
+    globalsettings.setRoutes(app, sessionVerificationFunc);
+
+    tracks.setRoutes(app, sessionVerificationFunc);
+
+    puppet.setRoutes(app, sessionVerificationFunc);
+
+    appdeploy.setRoutes(app, sessionVerificationFunc);
 
     app.get('/', function(req, res) {
         res.redirect('/private/index.html');
@@ -102,7 +130,7 @@ module.exports.setRoutes = function(app) {
             if (req.session.user.authorizedfiles) {
                 var authfiles = req.session.user.authorizedfiles.split(','); //To be moved to login page an hold a static variable.
                 authfiles += ',index.html,settings.html,design.html,Tracker.html,noaccess.html'
-                // console.log(authfiles.length, req.originalUrl.indexOf('.html'));
+                    // console.log(authfiles.length, req.originalUrl.indexOf('.html'));
                 if (req.originalUrl.indexOf('.html') > 0) //its a html file.
                 {
                     var urlpart = req.originalUrl.split('/');
@@ -142,8 +170,10 @@ module.exports.setRoutes = function(app) {
 
     }
 
+    
+
     // for notification
 
-    notification.setRoutes(app,sessionVerificationFunc);
+    notification.setRoutes(app, socketIo);
 
 }

@@ -360,7 +360,7 @@ function CreateTableFromJson__(formID, idFieldName, createFileName) {
                         //get all image tags
                         imageTD = $('.rowtemplate').find("[datatype='image']");
 
-                        editButton = $('.rowtemplate').find("[title='Update']");
+                        editButton = $('.rowtemplate').find("[title='Edit']");
                         if (editButton) {
                             var tv = '';
                             $.each(v, function(k1, v1) {
@@ -405,7 +405,7 @@ function CreateTableFromJson__(formID, idFieldName, createFileName) {
 
                             //setting the delete button
 
-                            var deletebutton = $('.rowtemplate').find("[title='Remove']");
+                            var deletebutton = $('.rowtemplate').find("[title='Delete']").css('margin-left', '12px');
                             if (deletebutton) {
                                 deletebutton.attr('onClick', 'deleteItem(\"' + formID + '\", \"' + idFieldName + '\",\"' + tv + '\",this);');
                                 deletebutton.removeClass('btn-xs');
@@ -462,6 +462,14 @@ function CreateTableFromJson(formID, idFieldName, createFileName) {
                 console.log("Value for all");
                 d4ddata[x].orgname[0] = "All";
             }
+            d4ddata[x]["cnfPassword"] = d4ddata[x].password;
+            /*if(d4ddata[x].password.length > 0){
+                //alert(d4ddata[x].password);
+                d4ddata[x] = {
+                    "cnfPassword" : d4ddata[x].password
+                };
+                //d4ddata[x].cnfPassword = d4ddata[x].password;
+            }*/
             /*else if(d4ddata[x].orgname === ""){
                     d4ddata[x].orgname = "All";
                 }*/
@@ -476,8 +484,28 @@ function CreateTableFromJson(formID, idFieldName, createFileName) {
         var editButton = null;
         var idFieldValue = null;
         var imageTD = null;
+        var configMgmtType;
+        if (item.id === "3") {
+            if (!item.environmentname) {
+                item.environmentname = item.puppetenvironmentname;
+            }
+            //alert(item.puppetservername);
+            if (!item.puppetservername || item.puppetservername === "null") {
+                item.puppetservername = "No Puppet Server";
+            }
+            if (!item.configname || item.configname === "null") {
+                item.configname = "No Chef Server";
+            }
+        }
+
         $.each(item, function(k, v) { //columns
             // var inputC = null;
+            if (typeof v != "undefined") {
+                //console.log('v before',v,typeof v);
+                v = JSON.parse(JSON.stringify(v).replace(/(?=[^,]*$)/, ''));
+                //console.log('v after',v);
+            }
+
             console.log('k:' + k + ' v :' + JSON.stringify(v));
             if (k == idFieldName) {
                 idFieldValue = v;
@@ -512,7 +540,7 @@ function CreateTableFromJson(formID, idFieldName, createFileName) {
         // $('#envtable').append(sRow);
         imageTD = $('.rowtemplate').find("[datatype='image']");
 
-        editButton = $('.rowtemplate').find("[title='Update']");
+        editButton = $('.rowtemplate').find("[title='Edit']");
         if (idFieldValue) {
             if (imageTD) {
                 if (imageTD.length > 0) {
@@ -523,6 +551,29 @@ function CreateTableFromJson(formID, idFieldName, createFileName) {
                         console.log(imageTD);
                     } else {
                         imgpath = '/d4dMasters/image/' + idFieldValue + '__' + imageTD.attr('datafieldoriginal') + '__' + imageTD.html();
+                    }
+
+                    if (item.id === "16") {
+                        switch (item.templatetypename) {
+                            case "AppFactory":
+                                imgpath = '/d4dMasters/image/16ae9c94-19f6-485a-8c17-9af7a0f5f23d__designtemplateicon__Appfactory.png';
+                                break;
+                            case "DevOpsRoles":
+                                imgpath = '/d4dMasters/image/9d14d362-493e-4d62-b029-a6761610b017__designtemplateicon__DevopsRoles.png';
+                                break;
+                            case "Docker":
+                                imgpath = '/d4dMasters/image/b02de7dd-6101-4f0e-a95e-68d74cec86c0__designtemplateicon__Docker.png';
+                                break;
+                            case "Desktop":
+                                imgpath = '/d4dMasters/image/02fcfdaf-0d35-42c7-aef4-ac0019911e21__designtemplateicon__Desktop Provisining.png';
+                                break;
+                            case "Environment":
+                                imgpath = '/d4dMasters/image/71e62952-b464-4980-b76b-482a129f5627__designtemplateicon__Environment.png';
+                                break;
+                            case "CloudFormation":
+                                imgpath = '/d4dMasters/image/4fdda07b-c1bd-4bad-b1f4-aca3a3d7ebd9__designtemplateicon__Cloudformation.png';
+                                break;
+                        }
                     }
 
                     imageTD.html('');
@@ -590,6 +641,14 @@ function CreateTableFromJson(formID, idFieldName, createFileName) {
                     if (haspermission('services', 'modify')) {
                         hasEditPermission = true;
                     }
+                } else if (createFileName === 'CreatePuppetServer.html') {
+                    if (haspermission('puppetserver', 'modify')) {
+                        hasEditPermission = true;
+                    }
+                } else if (createFileName === 'CreateNexusServer.html') {
+                    if (haspermission('puppetserver', 'modify')) {
+                        hasEditPermission = true;
+                    }
                 }
                 //user has no permission to edit
                 if (!hasEditPermission) {
@@ -605,7 +664,11 @@ function CreateTableFromJson(formID, idFieldName, createFileName) {
             // var tdorgname = $('.rowtemplate').find('td[datafield="orgname"]');
             //&& tdorgname.length > 0
             if (importbutton && importbutton.length > 0) {
-                importbutton.attr("href", "#ajax/Settings/chefSync.html?" + idFieldValue);
+                if (item.configType ==='puppet') {
+                    importbutton.attr("href", "#ajax/Settings/puppetSync.html?" + idFieldValue);
+                } else {
+                    importbutton.attr("href", "#ajax/Settings/chefSync.html?" + idFieldValue);
+                }
                 importbutton.removeClass('btn-xs');
                 importbutton.addClass('btn-sg');
                 importbutton.addClass('tableactionbutton');
@@ -624,7 +687,7 @@ function CreateTableFromJson(formID, idFieldName, createFileName) {
 
             //setting the delete button
 
-            var deletebutton = $('.rowtemplate').find("[title='Remove']");
+            var deletebutton = $('.rowtemplate').find("[title='Delete']").css('margin-left', '12px');
             if (deletebutton) {
                 deletebutton.attr('onClick', 'deleteItem(\"' + formID + '\", \"' + idFieldName + '\",\"' + idFieldValue + '\",this);');
                 var hasDeletePermission = false;
@@ -684,6 +747,14 @@ function CreateTableFromJson(formID, idFieldName, createFileName) {
                     }
                 } else if (createFileName === 'CreateImages.html') {
                     if (haspermission('services', 'delete')) {
+                        hasDeletePermission = true;
+                    }
+                } else if (createFileName === 'CreatePuppetServer.html') {
+                    if (haspermission('puppetserver', 'delete')) {
+                        hasDeletePermission = true;
+                    }
+                } else if (createFileName === 'CreateNexusServer.html') {
+                    if (haspermission('puppetserver', 'delete')) {
                         hasDeletePermission = true;
                     }
                 }
@@ -999,7 +1070,7 @@ function readform__(formID) {
                         if (inputC.getType().toLowerCase() == "div") {
 
                             $(inputC).attr('savedvalue', v[k1])
-                            //Set saved values to div.
+                                //Set saved values to div.
                             var ctype = '';
                             var csource = '';
                             if ($(inputC).attr('ctype'))
@@ -1070,7 +1141,7 @@ function readform(formID) {
 
                 var tempJSON = JSON.parse(JSON.stringify(readMasterJson($(this).attr('sourcepath'))));
                 var curSelect = $(this);
-                 // alert(JSON.stringify(tempJSON));
+                // alert(JSON.stringify(tempJSON));
                 var _rowid = 0;
                 /*$.each(tempJSON, function(i, item) {
                     _rowid = item['rowid'];
@@ -1118,7 +1189,7 @@ function readform(formID) {
                         _rowid = item['rowid'];
                         $.each(item, function(k, v) { //columns
                             //console.log('1 k:' + k + ' 1 v :' + JSON.stringify(v));
-                            if (k == curSelect.attr("id")) {
+                            if (k == curSelect.attr("id") && curSelect.attr("ignoreoption") != v) {
                                 curSelect.append('<option value="' + v + '" rowid = "' + _rowid + '">' + v + '</option>');
                             }
                         });
@@ -1147,47 +1218,109 @@ function readform(formID) {
                 // });
             }
             // debugger;
-        if ($(this).attr('linkedfields')) {
+            if ($(this).attr('linkedfields')) {
 
-            $(this).change(function() {
-                //  debugger;
-                $('#content').attr('style', "opacity:1;")
+                $(this).change(function() {
+                    //  debugger;
+                    $('#content').attr('style', "opacity:1;")
 
-                var curCtrl = $(this);
-                var count = 0;
-                $.each(eval($(this).attr('linkedfields')), function(i, item) {
-                    var targetCtrl = $('#' + item);
-                    count++;
-                    targetCtrl.html('');
-                    var opts = getRelatedValues(targetCtrl.attr('sourcepath'), curCtrl.attr("id"), $('#' + curCtrl.attr('id') + ' option:selected').text(), targetCtrl.attr("id"));
-                    //alert(JSON.stringify(opts));
-                    if (formID === 7) {
-                        if (opts.length === 0) {
+                    var curCtrl = $(this);
+                    var count = 0;
+                    $.each(eval($(this).attr('linkedfields')), function(i, item) {
+                        var targetCtrl = $('#' + item);
+                        count++;
+                        targetCtrl.html('');
+                        var opts = getRelatedValues(targetCtrl.attr('sourcepath'), curCtrl.attr("id"), $('#' + curCtrl.attr('id') + ' option:selected').text(), targetCtrl.attr("id"));
+                        //alert(JSON.stringify(opts));
+                        if (formID === 7) {
+                            if (opts.length === 0) {
+                                $.ajax({
+                                    url: '/d4dMasters/readmasterjsonnew/21',
+                                    async: false,
+                                    success: function(data) {
+                                        var dataForAll = [];
+                                        for (var x = 0; x < data.length; x++) {
+                                            dataForAll.push(data[x].teamname + "##" + data[x].rowid);
+                                        }
+                                        $.each(eval(dataForAll), function(j, itm) {
+                                            var itmrowid = '';
+                                            if (itm.indexOf('##') > 0) {
+                                                var breakid = itm.split('##');
+                                                itm = breakid[0];
+                                                itmrowid = breakid[1];
+                                            }
+                                            if (targetCtrl.attr('multiselect'))
+                                                addToSelectList(itm, itmrowid, targetCtrl);
+                                            else
+                                                targetCtrl.append('<option rowid="' + itmrowid + '" value="' + itm + '">' + itm + '</option>');
+
+                                        });
+                                    }
+                                });
+                            } else {
+
+                                $.each(eval(opts), function(j, itm) {
+                                    var itmrowid = '';
+                                    if (itm.indexOf('##') > 0) {
+                                        var breakid = itm.split('##');
+                                        itm = breakid[0];
+                                        itmrowid = breakid[1];
+                                    }
+                                    if (targetCtrl.attr('multiselect'))
+                                        addToSelectList(itm, itmrowid, targetCtrl);
+                                    else
+                                        targetCtrl.append('<option rowid="' + itmrowid + '" value="' + itm + '">' + itm + '</option>');
+
+                                });
+                            }
+                        } else if (formID === 21) {
+                            var allUsers = [];
                             $.ajax({
-                                url: '/d4dMasters/readmasterjsonnew/21',
+                                url: '/d4dMasters/orgs/all/users/7',
                                 async: false,
                                 success: function(data) {
-                                    var dataForAll = [];
-                                    for (var x = 0; x < data.length; x++) {
-                                        dataForAll.push(data[x].teamname + "##" + data[x].rowid);
-                                    }
-                                    $.each(eval(dataForAll), function(j, itm) {
-                                        var itmrowid = '';
-                                        if (itm.indexOf('##') > 0) {
-                                            var breakid = itm.split('##');
-                                            itm = breakid[0];
-                                            itmrowid = breakid[1];
+                                    if (count === 2) {
+                                        if (opts != "") {
+                                            for (var i = 0; i < JSON.stringify(opts).split(",").length; i++) {
+                                                allUsers.push(opts[i]);
+                                            }
                                         }
-                                        if (targetCtrl.attr('multiselect'))
-                                            addToSelectList(itm, itmrowid, targetCtrl);
-                                        else
-                                            targetCtrl.append('<option rowid="' + itmrowid + '" value="' + itm + '">' + itm + '</option>');
 
-                                    });
+                                        for (var x = 0; x < data.length; x++) {
+                                            allUsers.push(data[x].loginname + "##" + data[x].rowid);
+                                        }
+                                        $.each(eval(allUsers), function(j, itm) {
+                                            var itmrowid = '';
+
+                                            if (itm.indexOf('##') > 0) {
+                                                var breakid = itm.split('##');
+                                                itm = breakid[0];
+                                                itmrowid = breakid[1];
+                                            }
+                                            if (targetCtrl.attr('multiselect'))
+                                                addToSelectList(itm, itmrowid, targetCtrl);
+                                            else
+                                                targetCtrl.append('<option rowid="' + itmrowid + '" value="' + itm + '">' + itm + '</option>');
+
+                                        });
+                                    } else {
+                                        $.each(eval(opts), function(j, itm) {
+                                            var itmrowid = '';
+                                            if (itm.indexOf('##') > 0) {
+                                                var breakid = itm.split('##');
+                                                itm = breakid[0];
+                                                itmrowid = breakid[1];
+                                            }
+                                            if (targetCtrl.attr('multiselect'))
+                                                addToSelectList(itm, itmrowid, targetCtrl);
+                                            else
+                                                targetCtrl.append('<option rowid="' + itmrowid + '" value="' + itm + '">' + itm + '</option>');
+
+                                        });
+                                    }
                                 }
                             });
                         } else {
-
                             $.each(eval(opts), function(j, itm) {
                                 var itmrowid = '';
                                 if (itm.indexOf('##') > 0) {
@@ -1202,80 +1335,18 @@ function readform(formID) {
 
                             });
                         }
-                    } else if (formID === 21) {
-                        var allUsers = [];
-                        $.ajax({
-                            url: '/d4dMasters/orgs/all/users/7',
-                            async: false,
-                            success: function(data) {
-                                if (count === 2) {
-                                    if (opts != "") {
-                                        for (var i = 0; i < JSON.stringify(opts).split(",").length; i++) {
-                                            allUsers.push(opts[i]);
-                                        }
-                                    }
+                        //fix for select2 control - Vinod 
+                        if (targetCtrl.attr('multiselect') == null)
+                            targetCtrl.select2();
 
-                                    for (var x = 0; x < data.length; x++) {
-                                        allUsers.push(data[x].loginname + "##" + data[x].rowid);
-                                    }
-                                    $.each(eval(allUsers), function(j, itm) {
-                                        var itmrowid = '';
-
-                                        if (itm.indexOf('##') > 0) {
-                                            var breakid = itm.split('##');
-                                            itm = breakid[0];
-                                            itmrowid = breakid[1];
-                                        }
-                                        if (targetCtrl.attr('multiselect'))
-                                            addToSelectList(itm, itmrowid, targetCtrl);
-                                        else
-                                            targetCtrl.append('<option rowid="' + itmrowid + '" value="' + itm + '">' + itm + '</option>');
-
-                                    });
-                                } else {
-                                    $.each(eval(opts), function(j, itm) {
-                                        var itmrowid = '';
-                                        if (itm.indexOf('##') > 0) {
-                                            var breakid = itm.split('##');
-                                            itm = breakid[0];
-                                            itmrowid = breakid[1];
-                                        }
-                                        if (targetCtrl.attr('multiselect'))
-                                            addToSelectList(itm, itmrowid, targetCtrl);
-                                        else
-                                            targetCtrl.append('<option rowid="' + itmrowid + '" value="' + itm + '">' + itm + '</option>');
-
-                                    });
-                                }
-                            }
-                        });
-                    } else {
-                        $.each(eval(opts), function(j, itm) {
-                            var itmrowid = '';
-                            if (itm.indexOf('##') > 0) {
-                                var breakid = itm.split('##');
-                                itm = breakid[0];
-                                itmrowid = breakid[1];
-                            }
-                            if (targetCtrl.attr('multiselect'))
-                                addToSelectList(itm, itmrowid, targetCtrl);
-                            else
-                                targetCtrl.append('<option rowid="' + itmrowid + '" value="' + itm + '">' + itm + '</option>');
-
-                        });
-                    }
-                    //fix for select2 control - Vinod 
-                    if (targetCtrl.attr('multiselect') == null)
-                        targetCtrl.select2();
-
+                    });
                 });
-            });
 
+            }
         }
-    }
 
-    //alert("Reading" + JSON.stringify(temp));
-});
+        //alert("Reading" + JSON.stringify(temp));
+    });
 
     $('input[sourcepath][cdata="catalyst"]').each(function() {
         //debugger;
@@ -1416,6 +1487,25 @@ function readform(formID) {
         $('#configname').attr('disabled', 'disabled').select2();
     }
 
+    if (formID === 7 && editMode === true) {
+        //$('#password').attr('disabled', 'disabled').select2();
+        //$('#cnfPassword').attr('disabled', 'disabled').select2();
+        //document.getElementById('password').style.display = "none";
+        //document.getElementById('cnfPassword').style.display = "none";
+        $(".row1").hide();
+        // $(".editPass").hide();
+        $(".checkPass").show();
+
+        //$(".row2").show();
+        /*var checkBoxForUser = $('<input type="checkbox" id="chkadduserldap" >&nbsp;<label for="chkadduserldap">Add User to LDAP</label></label><label id="msgchkadduserldap" style="display:none;color:red;"></label><br/></div>');
+        $('body').append(checkBoxForUser);*/
+
+    }
+
+    /*if (formID === 7 && editMode === false) {
+       $(".row2").hide(); 
+    }*/
+
     //Setting the header of the form to Edit if shown as Create
     var head = $('.widget-header').html().replace('Create', 'Edit').replace('New', 'Edit');
     $('.widget-header').html(head);
@@ -1485,7 +1575,7 @@ function readform(formID) {
             if (inputC.getType().toLowerCase() == "div") {
 
                 $(inputC).attr('savedvalue', v)
-                //Set saved values to div.
+                    //Set saved values to div.
                 var ctype = '';
                 var csource = '';
                 if ($(inputC).attr('ctype'))
@@ -1801,7 +1891,7 @@ function readformnew(formID) {
             if (inputC.getType().toLowerCase() == "div") {
 
                 $(inputC).attr('savedvalue', v)
-                //Set saved values to div.
+                    //Set saved values to div.
                 var ctype = '';
                 var csource = '';
                 if ($(inputC).attr('ctype'))
@@ -1905,7 +1995,7 @@ function CreateTableFromJsonNew(formID, idFieldName, createFileName) {
         // $('#envtable').append(sRow);
         imageTD = $('.rowtemplate').find("[datatype='image']");
 
-        editButton = $('.rowtemplate').find("[title='Update']");
+        editButton = $('.rowtemplate').find("[title='Edit']");
 
         if (idFieldValue) {
             if (imageTD) {
@@ -1944,7 +2034,7 @@ function CreateTableFromJsonNew(formID, idFieldName, createFileName) {
 
             //setting the delete button
 
-            var deletebutton = $('.rowtemplate').find("[title='Remove']");
+            var deletebutton = $('.rowtemplate').find("[title='Delete']").css('margin-left', '12px');
             if (deletebutton) {
                 deletebutton.attr('onClick', 'deleteItem(\"' + formID + '\", \"' + idFieldName + '\",\"' + idFieldValue + '\",this);');
                 deletebutton.removeClass('btn-xs');
@@ -1983,15 +2073,35 @@ function CreateTableFromJsonNew(formID, idFieldName, createFileName) {
 function saveform(formID, operationTypes) {
     //Validating the form
 
-    if (isFormValid(formID) == false)
-        return (false);
-
+    if (formID === "7") {
+        if (isFormValid(formID) == false || !validateUserForm(formID)) {
+            return (false);
+        }
+        if ($("#chkadduserldap").is(':checked')) {
+            if ($('#password').val() === '') {
+                $(".requiredPassword").show();
+                return (false);
+            } else {
+                $(".requiredPassword").hide();
+            }
+            if ($('#cnfPassword').val() === '') {
+                $(".requiredCnfPassword").show();
+                return (false);
+            } else {
+                $(".requiredCnfPassword").hide();
+            }
+        }
+    } else {
+        if (isFormValid(formID) == false)
+            return (false);
+    }
 
     var data1 = new FormData();
     var fileNames = '';
     var orgName = $('#orgname').val().trim();
     var orgnamecheck = true;
-
+    /*var password = $('#password1').val();
+    console.log(password);*/
     // Not allowing team assignment for superadmin
 
     /*if (orgName === '') {
@@ -2046,7 +2156,7 @@ function saveform(formID, operationTypes) {
         }
     }*/
 
-// End of Not allowing team assignment for superadmin
+    // End of Not allowing team assignment for superadmin
 
     var button = $("form[id*='myForm']").find("div.pull-right > button");
 
@@ -2154,6 +2264,9 @@ function saveform(formID, operationTypes) {
             }
 
         });
+        if (typeof itms != "undefined") {
+            itms = JSON.parse(JSON.stringify(itms).replace(/,(?=[^,]*$)/, ''));
+        }
         v1.push('\"' + itms + '\"');
 
     });
@@ -2212,6 +2325,9 @@ function saveform(formID, operationTypes) {
             data1.append('osusername', 'ubuntu');
         }
     }
+    /*if(formID === "7" && password.length > 0){
+        data1.append('password', password);
+    }*/
     console.log(orgName);
     // alert(serviceURL + "savemasterjsonrownew/" + formID + "/" + fileNames + "/" + orgName );
     $.ajax({
@@ -2566,7 +2682,16 @@ function loadcookbooksinto(cookbookctrl, chefserverid) {
         $servicecookbookspinner.addClass('hidden');
 
 
-    });
+    }).fail(function(jxhr){
+          var msg = "Server Behaved Unexpectedly";
+            if (jxhr.responseJSON && jxhr.responseJSON.message) {
+                msg = jxhr.responseJSON.message;
+            } else if (jxhr.responseText) {
+                msg = jxhr.responseText;
+            }
+          bootbox.alert(msg);
+          $('.servicecookbookspinner').addClass('hidden');
+        });
 
 
 }
@@ -2826,9 +2951,136 @@ function errormessageforInput(id, msg) {
     }
 }
 
-//run validation tests on inputs 
-function isFormValid(formid) {
+function validateUserForm(formid) {
     var isValid = true;
+    if ($('input[unique="true"], select[unique="true"]').length > 0) {
+        // alert('in isFormValid');
+        $('input[unique="true"], select[unique="true"]').each(function() {
+            $(this).trigger('blur');
+
+            if ($(this).closest('div').find('span[id*="unique_"]').length > 0 && $(this).closest('div').find('span[id*="unique_"]').text().indexOf('available') < 0) {
+                // alert('pusing isvalid false');
+                isValid = false;
+            }
+        });
+    }
+    if (location.toString().indexOf('?new') != -1) {
+        $('[cat-custom-validation]').each(function(itm) {
+            var currCtrl = $(this);
+            var valiarr = $(this).attr('cat-custom-validation').split(',');
+            //$('#unique_loginname').text().indexOf('NOT') > 0
+            if ($('#unique_' + currCtrl.attr('id')).text().indexOf('NOT') > 0) {
+                //There is an error message displayed. Do not save form
+                isValid = false;
+            }
+            var password = $('#password').val();
+            var cnfPassword = $('#cnfPassword').val();
+
+            //alert(currCtrl.attr('id'));
+            $.each(valiarr, function(vali) {
+                switch (valiarr[vali]) {
+                    case "required":
+                        if (currCtrl.val() == '') {
+                            isValid = false;
+                            errormessageforInput(currCtrl.attr('id'), "Required");
+                            currCtrl.focus();
+                        }
+                        break;
+                }
+            });
+        });
+        return (isValid);
+    }
+    return (isValid);
+}
+
+//Azure form validations
+function isFormValidAzure(formid, option) {
+    var isValid = true;
+
+    if ($('input[unique="true"], select[unique="true"]').length > 0) {
+        // alert('in isFormValid');
+        $('input[unique="true"], select[unique="true"]').each(function() {
+            $(this).trigger('blur');
+
+            if ($(this).closest('div').find('span[id*="unique_"]').length > 0 && $(this).closest('div').find('span[id*="unique_"]').text().indexOf('available') < 0) {
+                // alert('pusing isvalid false');
+                isValid = false;
+            }
+        });
+    }
+
+    $('[' + option + ']').each(function(itm) {
+        var currCtrl = $(this);
+        var valiarr = $(this).attr(option).split(',');
+        //$('#unique_loginname').text().indexOf('NOT') > 0
+        if ($('#unique_' + currCtrl.attr('id')).text().indexOf('NOT') > 0) {
+            //There is an error message displayed. Do not save form
+            isValid = false;
+        }
+
+        //alert(currCtrl.attr('id'));
+        $.each(valiarr, function(vali) {
+            switch (valiarr[vali]) {
+                case "required":
+                    if (currCtrl.val() == '') {
+                        isValid = false;
+                        errormessageforInput(currCtrl.attr('id'), "Required");
+                        currCtrl.focus();
+                    }
+                    break;
+                case "nospecial":
+                    var str = currCtrl.val();
+                    if (/^[a-zA-Z0-9_-]*$/.test(str) == false) {
+                        isValid = false;
+                        errormessageforInput(currCtrl.attr('id'), "special chars not allowed");
+                        currCtrl.focus();
+                    }
+                    break;
+                case "min3":
+                    if (currCtrl.val().length < 3) {
+                        isValid = false;
+                        errormessageforInput(currCtrl.attr('id'), "atleast 3 characters required..");
+                        currCtrl.focus();
+                    }
+                    break;
+                case "max24":
+                    if (currCtrl.val().length > 24) {
+                        isValid = false;
+                        errormessageforInput(currCtrl.attr('id'), "limited to 24 chars.");
+                        currCtrl.focus();
+                    }
+                    break;
+                case "nospace":
+                    var str = currCtrl.val();
+                    if (str.indexOf(' ') > 0 || str.charAt(0) === " ") {
+                        isValid = false;
+                        errormessageforInput(currCtrl.attr('id'), "space(s) not allowed");
+                        currCtrl.focus();
+                    }
+                    break;
+                case "numeric":
+                    var str = currCtrl.val();
+                    if (/^[0-9]*$/.test(str) == false) {
+                        isValid = false;
+                        errormessageforInput(currCtrl.attr('id'), "non numeric not allowed");
+                        currCtrl.focus();
+                    }
+                    break; //
+
+            }
+
+        });
+
+    });
+
+    return (isValid);
+}
+
+//run validation tests on inputs 
+function isFormValidOpenStack(formid, option) {
+    var isValid = true;
+
     if ($('input[unique="true"], select[unique="true"]').length > 0) {
         // alert('in isFormValid');
         $('input[unique="true"], select[unique="true"]').each(function() {
@@ -2842,14 +3094,15 @@ function isFormValid(formid) {
     }
 
 
-    $('[cat-validation]').each(function(itm) {
+    $('[' + option + ']').each(function(itm) {
         var currCtrl = $(this);
-        var valiarr = $(this).attr('cat-validation').split(',');
+        var valiarr = $(this).attr(option).split(',');
         //$('#unique_loginname').text().indexOf('NOT') > 0
         if ($('#unique_' + currCtrl.attr('id')).text().indexOf('NOT') > 0) {
             //There is an error message displayed. Do not save form
             isValid = false;
         }
+
         //alert(currCtrl.attr('id'));
         $.each(valiarr, function(vali) {
             switch (valiarr[vali]) {
@@ -2923,11 +3176,177 @@ function isFormValid(formid) {
                         currCtrl.focus();
                     }
                     break;
+                case "min6":
+                    if (currCtrl.val().length < 6) {
+                        isValid = false;
+                        errormessageforInput(currCtrl.attr('id'), "Atleast 6 characters required.");
+                        currCtrl.focus();
+                    }
+                    break;
+                case "cnfPass":
+                    if (password != cnfPassword) {
+                        isValid = false;
+                        errormessageforInput(currCtrl.attr('id'), "Password does not match.");
+                        currCtrl.focus();
+                    }
+                    break;
             }
 
         });
 
     });
+
+
+
+    return (isValid);
+}
+
+
+function isFormValid(formid) {
+    var isValid = true;
+
+    if ($('input[unique="true"], select[unique="true"]').length > 0) {
+        // alert('in isFormValid');
+        $('input[unique="true"], select[unique="true"]').each(function() {
+            $(this).trigger('blur');
+
+            if ($(this).closest('div').find('span[id*="unique_"]').length > 0 && $(this).closest('div').find('span[id*="unique_"]').text().indexOf('available') < 0) {
+                // alert('pusing isvalid false');
+                isValid = false;
+            }
+        });
+    }
+
+
+    $('[cat-validation]').each(function(itm) {
+        var currCtrl = $(this);
+        var valiarr = $(this).attr('cat-validation').split(',');
+        //$('#unique_loginname').text().indexOf('NOT') > 0
+        if ($('#unique_' + currCtrl.attr('id')).text().indexOf('NOT') > 0) {
+            //There is an error message displayed. Do not save form
+            isValid = false;
+        }
+        var password = $('#password').val();
+        var cnfPassword = $('#cnfPassword').val();
+
+        //alert(currCtrl.attr('id'));
+        $.each(valiarr, function(vali) {
+            switch (valiarr[vali]) {
+                case "required":
+                    if (currCtrl.val() == '') {
+                        isValid = false;
+                        errormessageforInput(currCtrl.attr('id'), "Required");
+                        currCtrl.focus();
+                    }
+                    break;
+                case "onechecked":
+                    if (currCtrl.find('input:checked').length <= 0) {
+                        isValid = false;
+                        errormessageforInput(currCtrl.attr('id'), "Atleast one required");
+                        currCtrl.focus();
+                    }
+                    break;
+                case "nospecial":
+                    var str = currCtrl.val();
+                    if (/^[a-zA-Z0-9_-]*$/.test(str) == false) {
+                        isValid = false;
+                        errormessageforInput(currCtrl.attr('id'), "special chars not allowed");
+                        currCtrl.focus();
+                    }
+                    break;
+                case "urlcheck":
+                    var str = currCtrl.val();
+                    //regex from stackoverflow(check-if-url-is-valid-or-not)
+                    if (/(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/.test(str) == false) {
+                        isValid = false;
+                        errormessageforInput(currCtrl.attr('id'), "Please enter a valid Url");
+                        currCtrl.focus();
+                    }
+                    break;
+                case "max15":
+                    if (currCtrl.val().length > 15) {
+                        isValid = false;
+                        errormessageforInput(currCtrl.attr('id'), "limited to 15 chars.");
+                        currCtrl.focus();
+                    }
+                    break;
+                case "max22":
+                    if (currCtrl.val().length > 22) {
+                        isValid = false;
+                        errormessageforInput(currCtrl.attr('id'), "limited to 22 chars.");
+                        currCtrl.focus();
+                    }
+                    break;
+                case "nospace":
+                    var str = currCtrl.val();
+                    if (str.indexOf(' ') > 0 || str.charAt(0) === " ") {
+                        isValid = false;
+                        errormessageforInput(currCtrl.attr('id'), "space(s) not allowed");
+                        currCtrl.focus();
+                    }
+                    break;
+                case "numeric":
+                    var str = currCtrl.val();
+                    if (/^[0-9]*$/.test(str) == false) {
+                        isValid = false;
+                        errormessageforInput(currCtrl.attr('id'), "non numeric not allowed");
+                        currCtrl.focus();
+                    }
+                    break; //
+                case "email":
+                    var str = currCtrl.val();
+                    if (/^([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/.test(str) == false && str != '') {
+                        isValid = false;
+                        //updating error message
+                        errormessageforInput(currCtrl.attr('id'), "Invalid Email Address.");
+                        currCtrl.focus();
+                    }
+                    break;
+                case "min6":
+                    if (currCtrl.val().length < 6) {
+                        isValid = false;
+                        errormessageforInput(currCtrl.attr('id'), "Atleast 6 characters required.");
+                        currCtrl.focus();
+                    }
+                    break;
+                case "min8":
+                    var str = currCtrl.val();
+                    if (str.length < 8) {
+                        isValid = false;
+                        errormessageforInput(currCtrl.attr('id'), "Atleast 8 characters required.");
+                        currCtrl.focus();
+                    }
+                    if(!/\d/.test(str)){
+                        errormessageforInput(currCtrl.attr('id'), "Atleast a number required.");
+                        currCtrl.focus();
+                    }
+                    if(!/[a-z]/.test(str)){
+                        errormessageforInput(currCtrl.attr('id'), "Atleast a lower case char is required.");
+                        currCtrl.focus();
+                    }
+                    if(!/[A-Z]/.test(str)){
+                        errormessageforInput(currCtrl.attr('id'), "Atleast a upper case char is required.");
+                        currCtrl.focus();
+                    }
+                    if(!/[!@#$%^&*]/.test(str)){
+                        errormessageforInput(currCtrl.attr('id'), "Atleast a special char is required.");
+                        currCtrl.focus();
+                    }
+                    break;    
+                    
+                case "cnfPass":
+                    if (password != cnfPassword) {
+                        isValid = false;
+                        errormessageforInput(currCtrl.attr('id'), "Password does not match.");
+                        currCtrl.focus();
+                    }
+                    break;
+            }
+
+        });
+
+    });
+
     if (formid && formid === 19) {
         var selectionMode = $('#commandtype').val();
         if (selectionMode === "Chef Cookbook/Recipe") {
@@ -2978,12 +3397,14 @@ function enableUniqueCheckingForInputs(id) {
             //alert(typeof uni);
             if (uni.length > 0)
                 uni.html('');
+            //uni.append('<img style="width:18px;height:18px" src="img/correct.png" alt="success"/>');
             else {
                 //alert("in");
                 $(this).closest('div').find('label').first().append('<span id="unique_' + $(this).attr("id") + '" style="color:red"></span>');
                 uni = $('#unique_' + $(this).attr("id"));
             }
             var queryconditionedby = $(this).attr("uniqueconditionedby");
+            var queryconditionedbyURL = $(this).attr("uniqueconditionedbyUrl");
             if (queryconditionedby) {
 
                 // alert(queryconditionedby);
@@ -2993,11 +3414,29 @@ function enableUniqueCheckingForInputs(id) {
                 //alert(getBG != "" && uni.attr("id"));
                 if (getBG != 'Not Found') { //this ensures that its present
                     uni.css("color", "red");
-                    uni.html('Selected is already registered');
+                    uni.html('This entry is already registered. Try another?');
                     $(this).focus();
                 } else {
                     uni.css("color", "green");
                     uni.html('available');
+                    // uni.append('<img style="width:18px;height:18px" src="img/correct.png" alt="success"/>');
+                }
+            }
+            if (queryconditionedbyURL) {
+
+                // alert(queryconditionedby);
+                var getBG = getRelatedValuesForUniqueCheck(id, queryconditionedbyURL);
+                //alert(getBG);
+                //  alert('getBG !=' + getBG);
+                //alert(getBG != "" && uni.attr("id"));
+                if (getBG != 'Not Found') { //this ensures that its present
+                    uni.css("color", "red");
+                    uni.html('This Chef Server is already associated with an Organisation in Catalyst.');
+                    $(this).focus();
+                } else {
+                    uni.css("color", "green");
+                    uni.html('available');
+                    // uni.append('<img style="width:18px;height:18px" src="img/correct.png" alt="success"/>');
                 }
             }
             $('button[onclick*="saveform"]').removeAttr('disabled');
@@ -3025,7 +3464,7 @@ function checkusernameexistsinldap(inputID) {
             $.get('/auth/userexists/' + inp.val(), function(data) {
                 if (data == "false") {
                     uni.css("color", "red");
-                    uni.html('selected is NOT in LDAP.');
+                    uni.html('This entry is not available in LDAP.');
                     $(this).focus();
                 }
                 $('button[onclick*="saveform"]').removeAttr('disabled');

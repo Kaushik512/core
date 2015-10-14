@@ -11,19 +11,47 @@
                                 <div class="panel-group smart-accordion-default" id="accordion-1" style="overflow-y: auto;">
                                     <div class="panel panel-default">
                                         <div class="panel-heading">
-                                            <h4 class="panel-title">
-                                            <a data-toggle="collapse">Instances</a>
+                                            <h4 class="panel-title" style="width:86%">
+                                            <a data-toggle="collapse" style="float:left;font-size:13px;">Instances</a>
+                                            <div class="instanceloaderspinner hidden"><img   src="img/select2-spinner.gif"> Loading Instances</div>
+                                            <form type="post" id="instancesearchform">
+
+                                            <div class="input-group-btn hidden" style="float:right;margin-top:0px;width:312px">
+                                                <button  id="instancesearch" type="submit"  class="btn btn-primary" style="float: right;height: 26px;margin-left: -29px;margin-top: 6px;"><i class="glyphicon glyphicon-search" style="margin-top:4px;"></i></button>
+                                                <input type="text" placeholder="Search Here.." id="instanceSearchQuery" class="instancesearch" style="float: right; height: 26px;margin: 6px; margin-right: -10px; margin-top: 6px; width: 300px;"><!-- <i class="glyphicon glyphicon-search"></i> --></input>
+                                            
+                                            </div><label id="instancesearchmessage" style="float: right;margin-top: 10px;font-size:small"></label>
+                                            <!--  <div class="float-right">
+                                                 <div style="width:80%">
+                                                 <div class="right-inner-addon float-right">
+                                                     <i class="glyphicon glyphicon-search"></i>
+                                                        <input type="search"
+                                                               class="form-control" 
+                                                               placeholder="Search" />
+                                                 </div>
+                                                 </div>
+                                             </div> -->
+                                            <!-- <input type="text" placeholder="Search Here.." id="instanceSearchQuery" class="instancesearch" style="margin:6px;padding:4px;float:right"><i class="glyphicon glyphicon-search"></i></input> -->
+                                            
+                                            </form>
+
                                             </h4>
 
 
+
+                                
                                 <span class="pull-right swap-view">
-                                    
+                                    <span class="pull-right importButton">
+                                    <a type="reset" id="ipaddressimport" data-original-title="Import Instance" data-placement="top" title="Import By IP" rel="tooltip" href="#modalContainerimportInstance" data-backdrop="false" data-toggle="modal">
+                                     <i class="fa fa-th fa-2x fa-laptop"/>
+                                    </a>
+                                    </span>
                                     <a class="btn1" id="defaultViewButton" style="" onclick="showHideControl(this.id)"> <i class="fa fa-th fa-2x txt-color-deactive font-size18" title="Card View"/></a>&nbsp;
                                     <a id="instanceview" class="btn1" onclick="showHideControl(this.id)"> <i class="fa fa-align-justify fa-2x txt-color-deactive font-size18" title="Table View"/></a></span>
                                         </div>
                                         <div id="collapseOne-1" class="panel-collapse collapse in">
                                             <div class="panel-body" style="padding:0px !important;">
-                                                <div id="tabInstanceStatus">&nbsp;</div>
+                                             <!--    <div id="tabInstanceStatus">&nbsp;</div> -->
                                                 <div class="widget-box" id="divinstancestableview">
                                                     <div class="widget-body">
                                                         <div class="widget-main " style="min-height:300px">
@@ -33,19 +61,18 @@
                                                                     <table id="tableinstanceview" class="table table-bordered dataTable" cellpadding="5px" width="100%" style="border:1px solid #eeeeee !important; text-align:center;">
                                                                         <thead>
                                                                         <tr class="rowCustomStyle" style="font-weight:bold;">
-                                                                            <td>S.No.</td>
+                                                                            
                                                                             <td>Logo</td>
                                                                             <td>Name</td>
                                                                             <td>IPAddress</td>
                                                                             <td>Runlists</td>
                                                                             <td>Status</td>
-                                                                            <td>URL Links</td>
                                                                             <td>Log Info</td>
                                                                             <td>Chef Run</td>
                                                                             <td class="widthAdjustment">Action</td>
                                                                         </tr>
                                                                         </thead>
-                                                                        <tbody>
+                                                                        <tbody class="customRow" id="customRow">
 
 
                                                                         </tbody>
@@ -87,13 +114,10 @@
 
 
                             </div>
-                            <a class="btn pull-right btn-danger right-button" title="Remove Instance" id="removeInstance" >
+                            <a class="btn pull-right btn-danger right-button" title="Delete Instance" id="removeInstance" >
                                 <i class="fa fa-trash-o"></i>
                             </a>&nbsp;
-                            <a type="reset" class="btn pull-right btn-info right-button" id="ipaddressimport" data-original-title="Import Instance" data-placement="top" title="Import By IP" rel="tooltip" href="#modalContainerimportInstance" data-backdrop="false" data-toggle="modal">
-                                <i class="fa fa-laptop"/>
-                            </a>
-
+                            
                             &nbsp;&nbsp;<a  data-toggle="modal" href="#mybootstrapandimport" class="btn pull-right btn-primary hidden" title="Bootstrap & Import" onClick="$('#bootstrapandimportnode').modal('show');" style="margin-right:10px;"> <i class="fa fa-plug"></i></a>
 
                         </div>
@@ -130,7 +154,7 @@
 <div class="modal fade" id="modalforInstanceEdit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog " style="">
         <div class="modal-content"> 
-            <form role="form" class="class="cmxform"" id="instanceEditNew">
+            <form role="form" class="cmxform" id="instanceEditNew">
              <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title">
@@ -194,7 +218,7 @@
                             
                             <label for="importinstanceOS">Choose Operating System<span style="color:Red;">&nbsp;*</span></label>
                             <div class="input-groups">
-                            <select id="importinstanceOS" name="importinstanceOS"  class="width-100" >
+                            <select id="importinstanceOS" name="importinstanceOS"  class="width-100 form-control" >
                             </select>
                         </div>
                         </div>
@@ -210,31 +234,41 @@
                         </div>
                         <div class="col-lg-6 col-md-6" style="margin-top:15px">
 
+                            <label for="">Config Management<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+                            <select id="configManagementDropdown"  class="width-100 form-control" >
+                              
+                            </select>
+
+                        </div>
+                        <div class="col-lg-6 col-md-6" style="margin-top:15px">
+
                             <label for="">Choose Authentication Type<span style="color:Red;" class="control-label">&nbsp;*</span></label>
-                            <select id="pemFileDropdown"  class="authenticationType width-100" >
+                            <select id="pemFileDropdown"  class="authenticationType width-100 form-control">
                                 <option value="password">Password</option>
                                 <option value="pemFile">Pem File</option>
                             </select>
 
                         </div>
                     
-                    <div class="col-lg-12 ipLEFT">
-                        <div class="col-lg-6 col-md-6 authPassword ipWidth">
+                    <!-- <div class="col-lg-12 ipLEFT"> -->
+                        <div class="col-lg-6 col-md-6 authPassword" style="margin-top:15px">
                             <label for="instancePassword">Password<span style="color:Red;" class="control-label">&nbsp;*</span></label>
                                 <div class="input-groups">
                             <input type="password" name="instancePassword" class="form-control" id="instancePassword" />
                         </div>
                     </div>
-                    </div>
-                    <div class="col-lg-12 ipLEFT">
-                        <div class="col-lg-6 col-md-6 authPemFile ipWidth">
+                    <!-- </div> -->
+                    <!-- <div class="col-lg-12 ipLEFT"> -->
+                        <div class="col-lg-6 col-md-6 authPemFile" style="margin-top:15px">
                             
                                 <label for="importPemfileInput">Pem File<span style="color:Red;" class="control-label">&nbsp;*</span><span style="color:Red;" id="requiredPemFile" class="hidden">&nbsp;Required</span></label>
                                 <div class="input-groups">
                                     <input id="importPemfileInput" class="required form-control form-controls" multiple extension="pem" name="importPemfileInput" type="file">
                             </div>
                         </div>
-                    </div>
+                         
+                    <!-- </div> -->
+                     
                         <!--app series-->
                         <div class="applicationURLContainer" id="appSeries12"> 
                             <div class="col-lg-6 col-md-6" style="margin-top:15px;">
@@ -261,7 +295,7 @@
                     <label id="nodeimportipresultmsg" class=" hidden"></label>
                     <div class="marginForButtons">
                         <a class="btn btn-default" type="submit" data-dismiss="modal">
-                            <i class="fa fa-undo fa-1x"></i>&nbsp;Cancel
+                            <i class="fa fa-times fa-1x"></i>&nbsp;Cancel
                         </a>
                         <button id="addInstanceBtn" class="btn btn-primary" type="submit">
                             <i class="fa fa-upload fa-1x"></i>&nbsp;Import
@@ -395,8 +429,8 @@
 
             
             <div class="modal-footer" style="margin-top:0px !important;">
+                <a type="button" class="btn btn-default" data-dismiss="modal">Close</a>
                 <button type="button" class="btn btn-default btn-primary btnUpdateInstanceRunlist">Update</button>
-                <button type="button" class="btn btn-default btn-primary" data-dismiss="modal">Close</button>
             </div>
             </div>
         </div>

@@ -12,10 +12,10 @@ var childProcess = require('child_process');
 var exec = childProcess.exec;
 var fileIo = require('./utils/fileio');
 var chefApi = require('chef');
-var appConfig = require('../config/app_config');
+var appConfig = require('_pr/config');
 var chefDefaults = appConfig.chef;
 //var javaSSHWrapper = require('./../model/javaSSHWrapper.js');
-var logger = require('./logger.js')(module);
+var logger = require('_pr/logger')(module);
 var getDefaultCookbook = require('./defaultTaskCookbook');
 var currentDirectory = __dirname;
 var fs = require('fs');
@@ -490,6 +490,13 @@ var Chef = function(settings) {
         procEnv.on('close', function(code) {
             logger.debug('procEnv closed: ');
         });
+
+        if (params.jsonAttributes) {
+            argList.push('-j');
+            var jsonAttributesString = JSON.stringify(params.jsonAttributes);
+            jsonAttributesString = jsonAttributesString.split('"').join('\\\"');
+            argList.push(jsonAttributesString);
+        }
         procNodeDelete.on('close', function(code) {
             logger.debug('procNodeDelete closed');
             //logger.debug('Command : knife ' + argList.join());
@@ -511,7 +518,7 @@ var Chef = function(settings) {
             var cmds = ["rm -rf /etc/chef/", "rm -rf /var/chef/"];
             var cmdString = cmds.join(' && ');
 
-           
+
             var sudoCmd = 'sudo ';
             if (options.password) {
                 sudoCmd = 'echo \"' + options.password + '\" | sudo -S ';
@@ -556,6 +563,10 @@ var Chef = function(settings) {
 
     };
 
+    this.cleanClient = function(options, callback, callbackOnStdOut, callbackOnStdErr) {
+        this.cleanChefonClient(options, callback, callbackOnStdOut, callbackOnStdErr);
+    };
+
     this.runChefClient = function(options, callback, callbackOnStdOut, callbackOnStdErr) {
         var runlist = options.runlist;
         var overrideRunlist = false;
@@ -581,13 +592,14 @@ var Chef = function(settings) {
             // using ssh2
             var cmd = '';
             cmd = "chef-client";
-            if (overrideRunlist) {
-                cmd += " -o";
-            } else {
-                cmd += " -r";
+            if (runlist.length) {
+                if (overrideRunlist) {
+                    cmd += " -o";
+                } else {
+                    cmd += " -r";
+                }
+                cmd += " " + runlist.join();
             }
-            cmd += " " + runlist.join();
-
             var timestamp = new Date().getTime();
             if (lockFile) {
                 cmd += " --lockfile /var/tmp/catalyst_lockFile_" + timestamp;
@@ -610,7 +622,6 @@ var Chef = function(settings) {
 
             var sshExec = new SSHExec(options);
             sshExec.exec(cmd, callback, callbackOnStdOut, callbackOnStdErr);
-
 
         } else {
 
@@ -642,13 +653,15 @@ var Chef = function(settings) {
             if (!options.password) {
                 options.password = 'Zaq!2wsx'; // temp hack
             }
-            var proc = new Process('knife', ['winrm', options.host, ' "chef-client -o ' + runlist.join() + '"', '-m', '-P' + options.password, '-x' + options.username], processOptions);
+            var proc = new Process('knife', ['winrm', options.host, ' "chef-client -o ' + runlist.join() + '"', '-m', '-P\"' + options.password + '\"', '-x' + options.username], processOptions);
             proc.start();
             //[7:04:22 PM] Ashna Abbas:  knife winrm 54.69.130.187 'chef-client -r recipe[apache2-windows]' -P 'Zaq!2wsx' -xadministrator -m
         }
 
     };
-
+    this.runClient = function(options, callback, callbackOnStdOut, callbackOnStdErr) {
+        this.runChefClient(options, callback, callbackOnStdOut, callbackOnStdErr);
+    };
     this.runKnifeWinrmCmd = function(cmd, options, callback, callbackOnStdOut, callbackOnStdErr) {
         var processOptions = {
             cwd: settings.userChefRepoLocation,
@@ -671,14 +684,12 @@ var Chef = function(settings) {
             }
         }
         if (!options.password) {
-            options.password = '\"Zaq!2wsx\"'; // temp hack
+            options.password = 'Zaq!2wsx'; // temp hack
         }
         //var proc = new Process('knife', ['winrm', options.host, ' "powershell ' + cmd + ' "', '-m', '-P', options.password, '-x', options.username], processOptions);
-        var proc = new Process('knife', ['winrm', options.host, "\'" + cmd + "\'", '-m', '-P', options.password, '-x', options.username], processOptions);
+        var proc = new Process('knife', ['winrm', options.host, "\'" + cmd + "\'", '-m', '-P\"', options.password + '\"', '-x', options.username], processOptions);
         proc.start();
-
-
-    }
+    };
 
 
     this.updateNodeEnvironment = function(nodeName, newEnvironment, callback) {

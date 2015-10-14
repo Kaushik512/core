@@ -1,6 +1,6 @@
 var ping = require('net-ping');
 var aws = require('aws-sdk');
-var logger = require('../lib/logger')(module);
+var logger = require('_pr/logger')(module);
 
 
 if (process.env.http_proxy) {
@@ -28,8 +28,9 @@ var EC2 = function(awsSettings) {
     var that = this;
 
     this.describeInstances = function(instanceIds, callback) {
-
+        logger.debug('fetching instances for ==>',instanceIds);
         var options = {};
+
         if (instanceIds && instanceIds.length) {
             options.InstanceIds = instanceIds;
         } else {
@@ -61,12 +62,12 @@ var EC2 = function(awsSettings) {
 
 
 
-    this.launchInstance = function(image_id, intanceType, securityGroupIds,subnetId,instanceName,keyPairName, callback) {
+    this.launchInstance = function(image_id, intanceType, securityGroupIds,subnetId,instanceName,keyPairName,instanceCount, callback) {
         logger.debug("SecurityGroupIds and SubnetId %s %s ",securityGroupIds,subnetId);
         var that = this; //"m1.small"
         var param = {
           ImageId: image_id, /* required */
-          MaxCount: 1, /* required */
+          MaxCount: parseInt(instanceCount), /* required */
           MinCount: 1, /* required */
           InstanceType: intanceType, /* required */
           KeyName: keyPairName, /* required */
@@ -74,6 +75,10 @@ var EC2 = function(awsSettings) {
           SubnetId: subnetId /* required if use vpc*/
       };
       logger.debug("Param obj:>>>>  ",JSON.stringify(param));
+     
+        // var data = {"ReservationId":"r-d9fdb910","OwnerId":"549974527830","Groups":[],"Instances":[{"InstanceId":"i-8fd77354","ImageId":"ami-3d50120d","State":{"Code":0,"Name":"pending"},"PrivateDnsName":"ip-172-31-12-248.us-west-2.compute.internal","PublicDnsName":"","StateTransitionReason":"","KeyName":"cat_instances","AmiLaunchIndex":1,"ProductCodes":[],"InstanceType":"t2.micro","LaunchTime":"2015-08-12T05:33:45.000Z","Placement":{"AvailabilityZone":"us-west-2c","GroupName":"","Tenancy":"default"},"Monitoring":{"State":"disabled"},"SubnetId":"subnet-aed68ce8","VpcId":"vpc-b1f3ecd3","PrivateIpAddress":"172.31.12.248","StateReason":{"Code":"pending","Message":"pending"},"Architecture":"x86_64","RootDeviceType":"ebs","RootDeviceName":"/dev/sda1","BlockDeviceMappings":[],"VirtualizationType":"hvm","ClientToken":"","Tags":[],"SecurityGroups":[{"GroupName":"all_open","GroupId":"sg-c00ee1a5"}],"SourceDestCheck":true,"Hypervisor":"xen","NetworkInterfaces":[{"NetworkInterfaceId":"eni-3273ba69","SubnetId":"subnet-aed68ce8","VpcId":"vpc-b1f3ecd3","Description":"","OwnerId":"549974527830","Status":"in-use","MacAddress":"0a:c0:e3:ea:d4:b7","PrivateIpAddress":"172.31.12.248","PrivateDnsName":"ip-172-31-12-248.us-west-2.compute.internal","SourceDestCheck":true,"Groups":[{"GroupName":"all_open","GroupId":"sg-c00ee1a5"}],"Attachment":{"AttachmentId":"eni-attach-74c8e654","DeviceIndex":0,"Status":"attaching","AttachTime":"2015-08-12T05:33:45.000Z","DeleteOnTermination":true},"PrivateIpAddresses":[{"PrivateIpAddress":"172.31.12.248","PrivateDnsName":"ip-172-31-12-248.us-west-2.compute.internal","Primary":true}]}],"EbsOptimized":false},{"InstanceId":"i-8ed77355","ImageId":"ami-3d50120d","State":{"Code":0,"Name":"pending"},"PrivateDnsName":"ip-172-31-12-247.us-west-2.compute.internal","PublicDnsName":"","StateTransitionReason":"","KeyName":"cat_instances","AmiLaunchIndex":0,"ProductCodes":[],"InstanceType":"t2.micro","LaunchTime":"2015-08-12T05:33:45.000Z","Placement":{"AvailabilityZone":"us-west-2c","GroupName":"","Tenancy":"default"},"Monitoring":{"State":"disabled"},"SubnetId":"subnet-aed68ce8","VpcId":"vpc-b1f3ecd3","PrivateIpAddress":"172.31.12.247","StateReason":{"Code":"pending","Message":"pending"},"Architecture":"x86_64","RootDeviceType":"ebs","RootDeviceName":"/dev/sda1","BlockDeviceMappings":[],"VirtualizationType":"hvm","ClientToken":"","Tags":[],"SecurityGroups":[{"GroupName":"all_open","GroupId":"sg-c00ee1a5"}],"SourceDestCheck":true,"Hypervisor":"xen","NetworkInterfaces":[{"NetworkInterfaceId":"eni-3373ba68","SubnetId":"subnet-aed68ce8","VpcId":"vpc-b1f3ecd3","Description":"","OwnerId":"549974527830","Status":"in-use","MacAddress":"0a:99:31:96:73:9f","PrivateIpAddress":"172.31.12.247","PrivateDnsName":"ip-172-31-12-247.us-west-2.compute.internal","SourceDestCheck":true,"Groups":[{"GroupName":"all_open","GroupId":"sg-c00ee1a5"}],"Attachment":{"AttachmentId":"eni-attach-75c8e655","DeviceIndex":0,"Status":"attaching","AttachTime":"2015-08-12T05:33:45.000Z","DeleteOnTermination":true},"PrivateIpAddresses":[{"PrivateIpAddress":"172.31.12.247","PrivateDnsName":"ip-172-31-12-247.us-west-2.compute.internal","Primary":true}]}],"EbsOptimized":false}]};
+        // callback(null,data.Instances);
+        // return;
         ec.runInstances(param, function(err, data) {
             if (err) {
                 console.log("error occured while launching instance");
@@ -81,17 +86,25 @@ var EC2 = function(awsSettings) {
                 callback(err, null);
                 return;
             }
-            var params = {
-                Resources: [data.Instances[0].InstanceId],
-                Tags: [{
-                    Key: 'Name',
-                    Value: instanceName
-                }]
-            };
-            ec.createTags(params, function(err) {
-                console.log("Tagging instance", err ? "failure" : "success");
-            });
-            callback(null, data.Instances[0]);
+            logger.debug('>>>>>>>>>runInstances : data');
+            logger.debug(JSON.stringify(data));
+
+
+            for(var j = 0; j < data.Instances.length; j++)
+            {
+                var params = {
+                    Resources: [data.Instances[j].InstanceId],
+                    Tags: [{
+                        Key: 'Name',
+                        Value: instanceName
+                    }]
+                };
+                ec.createTags(params, function(err) {
+                    console.log("Tagging instance", err ? "failure" : "success");
+                });
+                if(j >= data.Instances.length - 1)
+                    callback(null, data.Instances);
+            }
 
         });
     };
@@ -114,31 +127,31 @@ var EC2 = function(awsSettings) {
                     if (instanceState === instanceStateList.RUNNING) {
                         console.log("instance has started running ");
                         var instanceData = data.Reservations[0].Instances[0];
+                         callback(null, instanceData);
 
+                        // function pingTimeoutFunc(instanceIp) {
+                        //     console.log("pinging instance");
+                        //     var ping_timeout = setTimeout(function() {
 
-                        function pingTimeoutFunc(instanceIp) {
-                            console.log("pinging instance");
-                            var ping_timeout = setTimeout(function() {
-
-                                var session = ping.createSession();
-                                session.pingHost(instanceIp, function(pingError, target) {
-                                    if (pingError) {
-                                        if (pingError instanceof ping.RequestTimedOutError) {
-                                            console.log(instanceIp + ": Not alive");
-                                        } else {
-                                            console.log(instanceIp + ": " + pingError.toString());
-                                        }
-                                        pingTimeoutFunc(instanceIp);
-                                    } else {
-                                        console.log(instanceIp + ": Alive");
-                                        setTimeout(function() {
-                                            callback(null, instanceData);
-                                        }, 60000);
-                                    }
-                                });
-                            }, 45000);
-                        }
-                        pingTimeoutFunc(instanceData.PublicIpAddress);
+                        //         var session = ping.createSession();
+                        //         session.pingHost(instanceIp, function(pingError, target) {
+                        //             if (pingError) {
+                        //                 if (pingError instanceof ping.RequestTimedOutError) {
+                        //                     console.log(instanceIp + ": Not alive");
+                        //                 } else {
+                        //                     console.log(instanceIp + ": " + pingError.toString());
+                        //                 }
+                        //                 pingTimeoutFunc(instanceIp);
+                        //             } else {
+                        //                 console.log(instanceIp + ": Alive");
+                        //                 setTimeout(function() {
+                        //                     callback(null, instanceData);
+                        //                 }, 60000);
+                        //             }
+                        //         });
+                        //     }, 45000);
+                        // }
+                        // pingTimeoutFunc(instanceData.PublicIpAddress);
 
                     } else if (instanceState === instanceStateList.PENDING) {
                         timeoutFunc(instanceId);
@@ -351,6 +364,18 @@ var EC2 = function(awsSettings) {
                 console.log(data);
                 callback(null, data);
             } // successful response
+        });
+    };
+
+    this.listInstances = function(callback){
+        ec.describeInstances(function(err,instances){
+            if(err){
+                logger.debug("Error occurred for listing aws instances: ",err);
+                callback(err,null);
+            }else{
+                logger.debug("Able to list all aws instances: ");
+                callback(null,instances);
+            }
         });
     };
 

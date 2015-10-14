@@ -7,21 +7,20 @@ var https = require("https");
 var fs = require('fs');
 var childProcess = require('child_process');
 var io = require('socket.io');
-var logger = require('./lib/logger')(module);
-var expressLogger = require('./lib/logger').ExpressLogger();
+var logger = require('_pr/logger')(module);
+var expressLogger = require('_pr/logger').ExpressLogger();
 var passport = require('passport');
 var passportLdapStrategy = require('./lib/ldapPassportStrategy.js');
 var passportADStrategy = require('./lib/adPassportStrategy.js');
 var Tail = require('tail').Tail;
 
 
-var appConfig = require('./config/app_config');
+var appConfig = require('_pr/config');
 
 var RedisStore = require('connect-redis')(express);
 var MongoStore = require('connect-mongo')(express.session);
 
-var mongoDbConnect = require('./lib/mongodb');
-
+var mongoDbConnect = require('_pr/lib/mongodb');
 
 logger.debug('Starting Catalyst');
 logger.debug('Logger Initialized');
@@ -79,7 +78,7 @@ var mongoStore = new MongoStore({
 app.set('port', process.env.PORT || appConfig.app_run_port);
 app.set('sport', appConfig.app_run_secure_port);
 app.use(express.compress());
-app.use(express.favicon());
+app.use(express.favicon(__dirname + '/../client/htmls/private/img/favicons/favicon.ico'));
 app.use(express.logger({
     format: 'dev',
     stream: {
@@ -115,9 +114,7 @@ var options = {
     rejectUnauthorized: false
 }
 
-logger.debug('Setting up application routes');
-var routes = require('./routes/routes.js');
-routes.setRoutes(app);
+
 
 var server = http.createServer(app);
 
@@ -125,6 +122,10 @@ var server = http.createServer(app);
 io = io.listen(server, {
     log: false
 });
+
+logger.debug('Setting up application routes');
+var routes = require('./routes/routes.js');
+routes.setRoutes(app,io);
 
 var socketIORoutes = require('./routes/socket.io/routes.js');
 socketIORoutes.setRoutes(io);

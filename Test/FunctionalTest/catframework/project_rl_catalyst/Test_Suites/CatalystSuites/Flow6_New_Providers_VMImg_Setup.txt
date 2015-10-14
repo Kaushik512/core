@@ -1,0 +1,116 @@
+*** Settings ***
+Documentation     Providers_VMImage_Launch_Verfiy_Blueprint_setup_Flow.txt
+
+Resource           catalyst.txt
+Resource           ${CATALYST TEST DATA}/${TESTDATA}
+Resource           ${CATALYST ACTION}/Organization_Setup_Action_Steps.txt
+Resource           ${CATALYST ACTION}/Design_Create_Launch_Providers_Template.txt
+Resource           ${COMMON RESOURCES}/catalyst_grid_node.txt
+
+
+
+*** Test Cases ***
+Catalyst Validation and Creation of AWS PROVIDERS setup
+    [Tags]       Sanity            Smoke   
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst Creation of Providers Setup 
+    Validation of Adding New Providers
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+
+Catalyst Edit Provider Name
+    [Tags]       Sanity             Smoke  
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst Editing the ProviderName
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+
+Catalyst Unique PROVIDERS validation setup
+    [Tags]       Sanity               Smoke
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst Unique Provider Creation Setup 
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+
+
+
+Catalyst Validation of OpenStack Providers Setup
+    [Tags]       Sanity               Smoke
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst Validation of OpenStack page
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+
+Catalyst Validation of HP Public Cloud Providers Setup
+    [Tags]       Sanity               Smoke
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst Validation of Public Cloud page
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+
+Catalyst Validation of VMware Providers Setup
+    [Tags]       Sanity               Smoke
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst Validation of VMware page
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+
+
+
+
+
+
+
+
+Catalyst Validation and Creation of VM IMAGE setup
+    [Tags]       Sanity               Smoke
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Validation of Creation of New Image
+    Catalyst Creation of VM Image Process for CentOS
+    Catalyst Creation of VM Image Process for Ubutnu
+    Catalyst Creation of VM Image Process for Windows      
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+
+Catalyst Editing the VM Image Setup
+    [Tags]       Sanity               VMImage
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst VM Image Edit Setup
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+Catalyst Unique VM IMAGE setup
+    [Tags]       Sanity               VMImage
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst Unique VM Image Validation Setup      
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+
+
+

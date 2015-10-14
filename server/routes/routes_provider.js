@@ -7,10 +7,14 @@
 
 // This file act as a Controller which contains provider related all end points.
 
-var logger = require('../lib/logger')(module);
+var logger = require('_pr/logger')(module);
 var EC2 = require('../lib/ec2.js');
 var d4dModelNew = require('../model/d4dmasters/d4dmastersmodelnew.js');
 var AWSProvider = require('../model/classes/masters/cloudprovider/awsCloudProvider.js');
+var openstackProvider = require('../model/classes/masters/cloudprovider/openstackCloudProvider.js');
+var hppubliccloudProvider = require('../model/classes/masters/cloudprovider/hppublicCloudProvider.js');
+var azurecloudProvider = require('../model/classes/masters/cloudprovider/azureCloudProvider.js');
+var vmwareProvider = require('../model/classes/masters/cloudprovider/vmwareCloudProvider.js');
 var VMImage = require('../model/classes/masters/vmImage.js');
 var AWSKeyPair = require('../model/classes/masters/cloudprovider/keyPair.js');
 var blueprints = require('../model/dao/blueprints');
@@ -19,11 +23,1797 @@ var masterUtil = require('../lib/utils/masterUtil.js');
 var usersDao = require('../model/users.js');
 var configmgmtDao = require('../model/d4dmasters/configmgmt.js');
 var Cryptography = require('../lib/utils/cryptography');
-var appConfig = require('../config/app_config');
+var appConfig = require('_pr/config');
 module.exports.setRoutes = function(app, sessionVerificationFunc) {
+    // Return AWS Provider respect to id.
+    app.get('/aws/providers/list', function(req, res) {
+
+        AWSProvider.getAWSProviders(function(err, providers) {
+            if (err) {
+                logger.error(err);
+                res.send(500, errorResponses.db.error);
+                return;
+            }
+            logger.debug("Provider list: ",JSON.stringify(providers));
+            if (providers) {
+                var providerList = [];
+                var count = 0;
+                for (var i = 0; i < providers.length; i++) {
+                    (function(i) {
+
+                        AWSKeyPair.getAWSKeyPairByProviderId(providers[i]._id, function(err, keyPair) {
+                            logger.debug("keyPairs length::::: ", keyPair.length);
+                            var keys = [];
+                            keys.push(providers[i].accessKey);
+                            keys.push(providers[i].secretKey);
+                            cryptography.decryptMultipleText(keys, cryptoConfig.decryptionEncoding, cryptoConfig.encryptionEncoding, function(err, decryptedKeys) {
+                                if (err) {
+                                    res.sned(500, "Failed to decrypt accessKey or secretKey");
+                                    return;
+                                }
+                                count++;
+                                if (keyPair) {
+                                    var dommyProvider = {
+                                        _id: providers[i]._id,
+                                        id: 9,
+                                        accessKey: decryptedKeys[0],
+                                        secretKey: decryptedKeys[1],
+                                        providerName: providers[i].providerName,
+                                        providerType: providers[i].providerType,
+                                        orgId: providers[i].orgId,
+                                        __v: providers[i].__v,
+                                        keyPairs: keyPair
+                                    };
+                                    providerList.push(dommyProvider);
+                                    logger.debug("count: ",count);
+                                    if (count === providers.length) {
+                                        res.send(providerList);
+                                        return;
+                                    }
+                                }
+                            });
+                        });
+                    })(i);
+                }
+            } else {
+                res.send(404);
+            }
+        });
+    });
+
+    // Return AWS Provider respect to id.
+    app.get('/aws/providers/:providerId', function(req, res) {
+        logger.debug("Enter get() for /providers/%s", req.params.providerId);
+        var providerId = req.params.providerId.trim();
+        if (typeof providerId === 'undefined' || providerId.length === 0) {
+            res.send(500, "Please Enter ProviderId.");
+            return;
+        }
+        AWSProvider.getAWSProviderById(providerId, function(err, aProvider) {
+            if (err) {
+                logger.error(err);
+                res.send(500, errorResponses.db.error);
+                return;
+            }
+            if (aProvider) {
+                AWSKeyPair.getAWSKeyPairByProviderId(aProvider._id, function(err, keyPair) {
+                    logger.debug("keyPairs length::::: ", keyPair.length);
+                    masterUtil.getOrgById(aProvider.orgId[0], function(err, orgs) {
+                        if (err) {
+                            res.send(500, "Not able to fetch org.");
+                            return;
+                        }
+                        var keys = [];
+                        keys.push(aProvider.accessKey);
+                        keys.push(aProvider.secretKey);
+                        cryptography.decryptMultipleText(keys, cryptoConfig.decryptionEncoding, cryptoConfig.encryptionEncoding, function(err, decryptedKeys) {
+                            if (err) {
+                                res.sned(500, "Failed to decrypt accessKey or secretKey");
+                                return;
+                            }
+                            if (orgs.length > 0) {
+                                if (keyPair) {
+                                    var dommyProvider = {
+                                        _id: aProvider._id,
+                                        id: 9,
+                                        accessKey: decryptedKeys[0],
+                                        secretKey: decryptedKeys[1],
+                                        providerName: aProvider.providerName,
+                                        providerType: aProvider.providerType,
+                                        orgId: aProvider.orgId,
+                                        orgName: orgs[0].orgname,
+                                        __v: aProvider.__v,
+                                        keyPairs: keyPair
+                                    };
+                                    res.send(dommyProvider);
+                                }
+                            }
+                        });
+                    });
+                });
+            } else {
+                res.send(404);
+            }
+        });
+    });
+
     app.all("/aws/providers/*", sessionVerificationFunc);
     var cryptoConfig = appConfig.cryptoSettings;
     var cryptography = new Cryptography(cryptoConfig.algorithm, cryptoConfig.password);
+
+    //Create VMWare Provider
+    app.post('/vmware/providers', function(req, res) {
+
+        logger.debug("Enter post() for /vmware.providers.", typeof req.body.fileName);
+        var user = req.session.user;
+        var category = configmgmtDao.getCategoryFromID("9");
+        var permissionto = 'create';
+        var vmwareusername = req.body.vmwareusername;
+        var vmwarepassword = req.body.vmwarepassword;
+        var vmwarehost = req.body.vmwarehost;
+        var vmwaredc = req.body.vmwaredc;
+        var providerName = req.body.providerName;
+        var providerType = req.body.providerType;
+        var orgId = req.body.orgId;
+
+        if (typeof vmwareusername === 'undefined' || vmwareusername.length === 0) {
+            res.send(400, "Please Enter Username.");
+            return;
+        }
+        if (typeof vmwarepassword === 'undefined' || vmwarepassword.length === 0) {
+            res.send(400, "Please Enter Password.");
+            return;
+        }
+        if (typeof vmwarehost === 'undefined' || vmwarehost.length === 0) {
+            res.send(400, "Please Enter a Host.");
+            return;
+        }
+        if (typeof vmwaredc === 'undefined' || vmwaredc.length === 0) {
+            res.send(400, "Please Enter a Tenant ID");
+            return;
+        }
+        if (typeof providerName === 'undefined' || providerName.length === 0) {
+            res.send(400, "Please Enter Name.");
+            return;
+        }
+        if (typeof providerType === 'undefined' || providerType.length === 0) {
+            res.send(400, "Please Enter ProviderType.");
+            return;
+        }
+        if (typeof orgId === 'undefined' || orgId.length === 0) {
+            res.status(400);
+            res.send("Please Select Any Organization.");
+            return;
+        }
+
+        var region;
+        // if (typeof req.body.region === 'string') {
+        //     logger.debug("inside single region: ", req.body.region);
+        //     region = req.body.region;
+        // } else {
+        //     region = req.body.region[0];
+        // }
+        // logger.debug("Final Region:  ", region)
+
+        usersDao.haspermission(user.cn, category, permissionto, null, req.session.user.permissionset, function(err, data) {
+            if (!err) {
+                logger.debug('Returned from haspermission : ' + data + ' : ' + (data == false));
+                if (data == false) {
+                    logger.debug('No permission to ' + permissionto + ' on ' + category);
+                    res.send(401, "You don't have permission to perform this operation.");
+                    return;
+                }
+            } else {
+                logger.error("Hit and error in haspermission:", err);
+                res.send(500);
+                return;
+            }
+
+            masterUtil.getLoggedInUser(user.cn, function(err, anUser) {
+                if (err) {
+                    res.send(500, "Failed to fetch User.");
+                    return;
+                }
+                logger.debug("LoggedIn User:>>>> ", JSON.stringify(anUser));
+                if (anUser) {
+
+                    var providerData = {
+                        id: 9,
+                        username: vmwareusername,
+                        password: vmwarepassword,
+                        host: vmwarehost,
+                        providerName: providerName,
+                        providerType: providerType,
+                        dc: vmwaredc,
+                        orgId: orgId
+                    };
+                    vmwareProvider.getvmwareProviderByName(providerData.providerName, providerData.orgId, function(err, prov) {
+                        if (err) {
+                            logger.debug("err.....", err);
+                        }
+                        if (prov) {
+                            logger.debug("getAWSProviderByName: ", JSON.stringify(prov));
+                            logger.debug("err.....", err);
+                            res.status(409);
+                            res.send("Provider name already exist.");
+                            return;
+                        }
+                        vmwareProvider.createNew(providerData, function(err, provider) {
+                            if (err) {
+                                logger.debug("err.....", err);
+                                res.status(500);
+                                res.send("Failed to create Provider.");
+                                return;
+                            }
+                            logger.debug("Provider id:  %s", JSON.stringify(provider._id));
+
+                            masterUtil.getOrgById(providerData.orgId, function(err, orgs) {
+                                if (err) {
+                                    res.send(500, "Not able to fetch org.");
+                                    return;
+                                }
+                                if (orgs.length > 0) {
+
+                                    var dommyProvider = {
+                                        _id: provider._id,
+                                        id: 9,
+                                        username: vmwareusername,
+                                        password: vmwarepassword,
+                                        host: vmwarehost,
+                                        dc: vmwaredc,
+                                        providerName: provider.providerName,
+                                        providerType: provider.providerType,
+                                        orgId: orgs[0].rowid,
+                                        orgName: orgs[0].orgname,
+
+                                        __v: provider.__v,
+
+                                    };
+                                    res.send(dommyProvider);
+                                    return;
+
+                                }
+                            });
+
+                            logger.debug("Exit post() for /providers");
+                        });
+                    });
+
+                } //end anuser
+            });
+        });
+
+    });
+
+    //get vmware providers
+    app.get('/vmware/providers', function(req, res) {
+        logger.debug("Enter get() for /providers");
+        var loggedInUser = req.session.user.cn;
+        masterUtil.getLoggedInUser(loggedInUser, function(err, anUser) {
+            if (err) {
+                res.send(500, "Failed to fetch User.");
+                return;
+            }
+            if (!anUser) {
+                res.send(500, "Invalid User.");
+                return;
+            }
+            if (anUser.orgname_rowid[0] === "") {
+                masterUtil.getAllActiveOrg(function(err, orgList) {
+                    if (err) {
+                        res.send(500, 'Not able to fetch Orgs.');
+                        return;
+                    }
+                    if (orgList) {
+                        vmwareProvider.getvmwareProvidersForOrg(orgList, function(err, providers) {
+                            if (err) {
+                                logger.error(err);
+                                res.send(500, errorResponses.db.error);
+                                return;
+                            }
+                            if (providers != null) {
+                                logger.debug("providers>>> ", JSON.stringify(providers));
+                                if (providers.length > 0) {
+                                    res.send(providers);
+                                    return;
+                                }
+                            } else {
+                                res.send(200, []);
+                                return;
+                            }
+                        });
+                    } else {
+                        res.send(200, []);
+                        return;
+                    }
+                });
+            } else {
+                masterUtil.getOrgs(loggedInUser, function(err, orgList) {
+                    if (err) {
+                        res.send(500, 'Not able to fetch Orgs.');
+                        return;
+                    }
+                    if (orgList) {
+                        vmwareProvider.getvmwareForOrg(orgList, function(err, providers) {
+                            if (err) {
+                                logger.error(err);
+                                res.send(500, errorResponses.db.error);
+                                return;
+                            }
+                            var providersList = [];
+                            logger.debug("Providers::::::::::::::::::: ", providers === null);
+                            if (providers === null) {
+                                res.send(providersList);
+                                return;
+                            }
+                            if (providers.length > 0) {
+                                res.send(providers);
+                                return;
+                            } else {
+                                res.send(providersList);
+                                return;
+                            }
+                        });
+                    } else {
+                        res.send(200, []);
+                        return;
+                    }
+                });
+            }
+        });
+    });
+
+    app.post('/hppubliccloud/providers', function(req, res) {
+
+        logger.debug("Enter post() for /hppubliccloud.", typeof req.files.hppubliccloudinstancepem);
+        var user = req.session.user;
+        var category = configmgmtDao.getCategoryFromID("9");
+        var permissionto = 'create';
+        var hppubliccloudusername = req.body.openstackusername;
+        var hppubliccloudpassword = req.body.openstackpassword;
+        var hppubliccloudhost = req.body.openstackhost;
+        var hppubliccloudtenantid = req.body.openstacktenantid;
+        var hppubliccloudtenantname = req.body.openstacktenantname;
+        var hppubliccloudprojectname = req.body.openstackprojectname;
+        var providerName = req.body.providerName;
+        var providerType = req.body.providerType.toLowerCase();
+        var hppubliccloudkeyname = req.body.hppubliccloudkeyname;
+        var hppubliccloudregion = req.body.hppubliccloudregion;
+
+        var serviceendpoints = {
+            compute: req.body.openstackendpointcompute,
+            network: req.body.openstackendpointnetwork,
+            image: req.body.openstackendpointimage,
+            ec2: req.body.openstackendpointec2,
+            identity: req.body.openstackendpointidentity,
+
+        };
+
+
+
+        var orgId = req.body.orgId;
+
+        if (typeof hppubliccloudusername === 'undefined' || hppubliccloudusername.length === 0) {
+            res.send(400, "Please Enter Username.");
+            return;
+        }
+        if (typeof hppubliccloudpassword === 'undefined' || hppubliccloudpassword.length === 0) {
+            res.send(400, "Please Enter Password.");
+            return;
+        }
+        if (typeof hppubliccloudhost === 'undefined' || hppubliccloudhost.length === 0) {
+            res.send(400, "Please Enter a Host.");
+            return;
+        }
+        if (typeof hppubliccloudtenantid === 'undefined' || hppubliccloudtenantid.length === 0) {
+            res.send(400, "Please Enter a Tenant ID");
+            return;
+        }
+        if (typeof hppubliccloudregion === 'undefined' || hppubliccloudregion.length === 0) {
+            res.send(400, "Please Enter Region.");
+            return;
+        }
+        if (typeof hppubliccloudkeyname === 'undefined' || hppubliccloudkeyname.length === 0) {
+            res.send(400, "Please Enter a Key name.");
+            return;
+        }
+        if (typeof providerName === 'undefined' || providerName.length === 0) {
+            res.send(400, "Please Enter Name.");
+            return;
+        }
+        if (typeof providerType === 'undefined' || providerType.length === 0) {
+            res.send(400, "Please Enter ProviderType.");
+            return;
+        }
+        if (typeof orgId === 'undefined' || orgId.length === 0) {
+            res.status(400);
+            res.send("Please Select Any Organization.");
+            return;
+        }
+        if (typeof hppubliccloudtenantname === 'undefined' || hppubliccloudtenantname.length === 0) {
+            res.send(400, "Please Enter Tenant Name.");
+            return;
+        }
+        if (typeof hppubliccloudprojectname === 'undefined' || hppubliccloudprojectname.length === 0) {
+            res.send(400, "Please Enter Project Name.");
+            return;
+        }
+        if (typeof serviceendpoints.compute === 'undefined' || serviceendpoints.compute.length === 0) {
+            res.send(400, "Please Enter Compute Endpoint Name.");
+            return;
+        }
+        if (typeof serviceendpoints.identity === 'undefined' || serviceendpoints.identity.length === 0) {
+            res.send(400, "Please Enter Identity Endpoint Name.");
+            return;
+        }
+
+
+        var region;
+        // if (typeof req.body.region === 'string') {
+        //     logger.debug("inside single region: ", req.body.region);
+        //     region = req.body.region;
+        // } else {
+        //     region = req.body.region[0];
+        // }
+        // logger.debug("Final Region:  ", region)
+
+        usersDao.haspermission(user.cn, category, permissionto, null, req.session.user.permissionset, function(err, data) {
+            if (!err) {
+                logger.debug('Returned from haspermission : ' + data + ' : ' + (data == false));
+                if (data == false) {
+                    logger.debug('No permission to ' + permissionto + ' on ' + category);
+                    res.send(401, "You don't have permission to perform this operation.");
+                    return;
+                }
+            } else {
+                logger.error("Hit and error in haspermission:", err);
+                res.send(500);
+                return;
+            }
+
+            masterUtil.getLoggedInUser(user.cn, function(err, anUser) {
+                if (err) {
+                    res.send(500, "Failed to fetch User.");
+                    return;
+                }
+                logger.debug("LoggedIn User:>>>> ", JSON.stringify(anUser));
+                if (anUser) {
+
+                    var providerData = {
+                        id: 9,
+                        username: hppubliccloudusername,
+                        password: hppubliccloudpassword,
+                        host: hppubliccloudhost,
+                        providerName: providerName,
+                        providerType: providerType,
+                        tenantid: hppubliccloudtenantid,
+                        tenantname: hppubliccloudtenantname,
+                        projectname: hppubliccloudprojectname,
+                        serviceendpoints: serviceendpoints,
+                        region: hppubliccloudregion,
+                        keyname: hppubliccloudkeyname,
+                        orgId: orgId
+                    };
+                    hppubliccloudProvider.gethppubliccloudProviderByName(providerData.providerName, providerData.orgId, function(err, prov) {
+                        if (err) {
+                            logger.debug("err.....", err);
+                        }
+                        if (prov) {
+                            logger.debug("getAWSProviderByName: ", JSON.stringify(prov));
+                            logger.debug("err.....", err);
+                            res.status(409);
+                            res.send("Provider name already exist.");
+                            return;
+                        }
+                        hppubliccloudProvider.createNew(req, providerData, function(err, provider) {
+                            if (err) {
+                                logger.debug("err.....", err);
+                                res.status(500);
+                                res.send("Failed to create Provider.");
+                                return;
+                            }
+                            logger.debug("Provider id:  %s", JSON.stringify(provider._id));
+
+                            masterUtil.getOrgById(providerData.orgId, function(err, orgs) {
+                                if (err) {
+                                    res.send(500, "Not able to fetch org.");
+                                    return;
+                                }
+                                if (orgs.length > 0) {
+
+                                    var dommyProvider = {
+                                        _id: provider._id,
+                                        id: 9,
+                                        username: hppubliccloudusername,
+                                        password: hppubliccloudpassword,
+                                        host: hppubliccloudhost,
+                                        providerName: provider.providerName,
+                                        providerType: provider.providerType,
+                                        orgId: orgs[0].rowid,
+                                        orgName: orgs[0].orgname,
+                                        tenantid: hppubliccloudtenantid,
+                                        __v: provider.__v,
+
+                                    };
+                                    res.send(dommyProvider);
+                                    return;
+
+                                }
+                            });
+
+                            logger.debug("Exit post() for /providers");
+                        });
+                    });
+
+                } //end anuser
+            });
+        });
+
+    });
+
+    app.get('/hppubliccloud/providers', function(req, res) {
+        logger.debug("Enter get() for /hppubliccloud/providers");
+        var loggedInUser = req.session.user.cn;
+        masterUtil.getLoggedInUser(loggedInUser, function(err, anUser) {
+            if (err) {
+                res.send(500, "Failed to fetch User.");
+                return;
+            }
+            if (!anUser) {
+                res.send(500, "Invalid User.");
+                return;
+            }
+            if (anUser.orgname_rowid[0] === "") {
+                masterUtil.getAllActiveOrg(function(err, orgList) {
+                    if (err) {
+                        res.send(500, 'Not able to fetch Orgs.');
+                        return;
+                    }
+                    if (orgList) {
+                        hppubliccloudProvider.gethppubliccloudProvidersForOrg(orgList, function(err, providers) {
+                            if (err) {
+                                logger.error(err);
+                                res.send(500, errorResponses.db.error);
+                                return;
+                            }
+                            if (providers != null) {
+                                for (var i = 0; i < providers.length; i++) {
+                                    providers[i]['providerType'] = providers[i]['providerType'].toUpperCase();
+                                }
+                                logger.debug("providers>>> ", JSON.stringify(providers));
+                                if (providers.length > 0) {
+                                    res.send(providers);
+                                    return;
+                                }
+                            } else {
+                                res.send(200, []);
+                                return;
+                            }
+                        });
+                    } else {
+                        res.send(200, []);
+                        return;
+                    }
+                });
+            } else {
+                masterUtil.getOrgs(loggedInUser, function(err, orgList) {
+                    if (err) {
+                        res.send(500, 'Not able to fetch Orgs.');
+                        return;
+                    }
+                    if (orgList) {
+                        hppubliccloudProvider.gethppubliccloudProvidersForOrg(orgList, function(err, providers) {
+                            if (err) {
+                                logger.error(err);
+                                res.send(500, errorResponses.db.error);
+                                return;
+                            }
+                            var providersList = [];
+                            logger.debug("Providers::::::::::::::::::: ", providers === null);
+                            if (providers === null) {
+                                res.send(providersList);
+                                return;
+                            }
+                            if (providers.length > 0) {
+                                res.send(providers);
+                                return;
+                            } else {
+                                res.send(providersList);
+                                return;
+                            }
+                        });
+                    } else {
+                        res.send(200, []);
+                        return;
+                    }
+                });
+            }
+        });
+    });
+
+    app.get('/hppubliccloud/providers/:providerId', function(req, res) {
+        logger.debug("Enter get() for /hppubliccloud/providers//%s", req.params.providerId);
+        var providerId = req.params.providerId.trim();
+        if (typeof providerId === 'undefined' || providerId.length === 0) {
+            res.send(500, "Please Enter ProviderId.");
+            return;
+        }
+        hppubliccloudProvider.gethppubliccloudProviderById(providerId, function(err, aProvider) {
+            if (err) {
+                logger.error(err);
+                res.send(500, errorResponses.db.error);
+                return;
+            }
+            if (aProvider) {
+
+                masterUtil.getOrgById(aProvider.orgId[0], function(err, orgs) {
+                    if (err) {
+                        res.send(500, "Not able to fetch org.");
+                        return;
+                    }
+                    aProvider.orgname = orgs[0].orgname;
+
+                    if (orgs.length > 0) {
+                        res.send(aProvider);
+                    }
+                });
+
+            } else {
+                res.send(404);
+            }
+        });
+    });
+
+
+    app.post('/hppubliccloud/providers/:providerId/update', function(req, res) {
+        logger.debug("Enter post() for /providers/hppubliccloud/%s/update", req.params.providerId);
+        var user = req.session.user;
+        var category = configmgmtDao.getCategoryFromID("9");
+        var permissionto = 'create';
+        var hppubliccloudusername = req.body.openstackusername;
+        var hppubliccloudpassword = req.body.openstackpassword;
+        var hppubliccloudhost = req.body.openstackhost;
+        var hppubliccloudtenantid = req.body.openstacktenantid;
+        var hppubliccloudtenantname = req.body.openstacktenantname;
+        var hppubliccloudprojectname = req.body.openstackprojectname;
+        var providerName = req.body.providerName;
+        var providerType = req.body.providerType.toLowerCase();
+        var hppubliccloudkeyname = req.body.hppubliccloudkeyname;
+        var hppubliccloudregion = req.body.hppubliccloudregion;
+
+        var serviceendpoints = {
+            compute: req.body.openstackendpointcompute,
+            network: req.body.openstackendpointnetwork,
+            image: req.body.openstackendpointimage,
+            ec2: req.body.openstackendpointec2,
+            identity: req.body.openstackendpointidentity,
+
+        };
+
+        var orgId = req.body.orgId;
+        if (typeof hppubliccloudusername === 'undefined' || hppubliccloudusername.length === 0) {
+            res.send(400, "Please Enter Username.");
+            return;
+        }
+        if (typeof hppubliccloudpassword === 'undefined' || hppubliccloudpassword.length === 0) {
+            res.send(400, "Please Enter Password.");
+            return;
+        }
+        if (typeof hppubliccloudhost === 'undefined' || hppubliccloudhost.length === 0) {
+            res.send(400, "Please Enter a Host.");
+            return;
+        }
+        if (typeof hppubliccloudtenantid === 'undefined' || hppubliccloudtenantid.length === 0) {
+            res.send(400, "Please Enter a Tenant ID");
+            return;
+        }
+        if (typeof hppubliccloudregion === 'undefined' || hppubliccloudregion.length === 0) {
+            res.send(400, "Please Enter Region.");
+            return;
+        }
+        if (typeof hppubliccloudkeyname === 'undefined' || hppubliccloudkeyname.length === 0) {
+            res.send(400, "Please Enter a Key name.");
+            return;
+        }
+        if (typeof providerName === 'undefined' || providerName.length === 0) {
+            res.send(400, "Please Enter Name.");
+            return;
+        }
+        if (typeof providerType === 'undefined' || providerType.length === 0) {
+            res.send(400, "Please Enter ProviderType.");
+            return;
+        }
+        if (typeof hppubliccloudtenantname === 'undefined' || hppubliccloudtenantname.length === 0) {
+            res.send(400, "Please Enter Tenant Name.");
+            return;
+        }
+        if (typeof hppubliccloudprojectname === 'undefined' || hppubliccloudprojectname.length === 0) {
+            res.send(400, "Please Enter Project Name.");
+            return;
+        }
+        if (typeof orgId === 'undefined' || orgId.length === 0) {
+            res.status(400);
+            res.send("Please Select Any Organization.");
+            return;
+        }
+        if (typeof serviceendpoints.compute === 'undefined' || serviceendpoints.compute.length === 0) {
+            res.send(400, "Please Enter Compute Endpoint Name.");
+            return;
+        }
+        if (typeof serviceendpoints.identity === 'undefined' || serviceendpoints.identity.length === 0) {
+            res.send(400, "Please Enter Identity Endpoint Name.");
+            return;
+        }
+
+
+        var providerData = {
+            id: 9,
+            username: hppubliccloudusername,
+            password: hppubliccloudpassword,
+            host: hppubliccloudhost,
+            providerName: providerName,
+            providerType: providerType,
+            tenantid: hppubliccloudtenantid,
+            tenantname: hppubliccloudtenantname,
+            projectname: hppubliccloudprojectname,
+            serviceendpoints: serviceendpoints,
+            region: hppubliccloudregion,
+            keyname: hppubliccloudkeyname,
+            orgId: orgId
+        };
+        logger.debug("provider>>>>>>>>>>>> %s", providerData.providerType);
+        logger.debug("provider data>>>>>>>>>>>> %s", JSON.stringify(providerData));
+
+        usersDao.haspermission(user.cn, category, permissionto, null, req.session.user.permissionset, function(err, data) {
+            if (!err) {
+                logger.debug('Returned from haspermission : ' + data + ' : ' + (data == false));
+                if (data == false) {
+                    logger.debug('No permission to ' + permissionto + ' on ' + category);
+                    res.send(401, "You don't have permission to perform this operation.");
+                    return;
+                }
+            } else {
+                logger.error("Hit and error in haspermission:", err);
+                res.send(500);
+                return;
+            }
+
+            masterUtil.getLoggedInUser(user.cn, function(err, anUser) {
+                if (err) {
+                    res.send(500, "Failed to fetch User.");
+                }
+                logger.debug("LoggedIn User:>>>> ", JSON.stringify(anUser));
+                if (anUser) {
+
+                    logger.debug("Able to get AWS Keypairs. %s", JSON.stringify(data));
+                    hppubliccloudProvider.updatehppubliccloudProviderById(req.params.providerId, providerData, function(err, updateCount) {
+                        if (err) {
+                            logger.error(err);
+                            res.send(500, errorResponses.db.error);
+                            return;
+                        }
+                        masterUtil.getOrgById(providerData.orgId, function(err, orgs) {
+                            if (err) {
+                                res.send(500, "Not able to fetch org.");
+                                return;
+                            }
+                            if (orgs.length > 0) {
+                                var dommyProvider = {
+                                    _id: req.params.providerId,
+                                    id: 9,
+                                    username: hppubliccloudusername,
+                                    password: hppubliccloudpassword,
+                                    host: hppubliccloudhost,
+                                    providerName: providerData.providerName,
+                                    providerType: providerData.providerType,
+                                    orgId: orgs[0].rowid,
+                                    orgName: orgs[0].orgname
+                                };
+                                res.send(dommyProvider);
+                                return;
+                            }
+                        });
+                    });
+
+                }
+            });
+        });
+
+
+
+    });
+    
+    //start: removes azure provider
+    app.delete('/hppubliccloud/providers/:providerId', function(req, res) {
+        logger.debug("Enter delete() for hppubliccloud/providers/%s", req.params.providerId);
+        var user = req.session.user;
+        var category = configmgmtDao.getCategoryFromID("9");
+        var permissionto = 'delete';
+        var providerId = req.params.providerId.trim();
+        if (typeof providerId === 'undefined' || providerId.length === 0) {
+            res.send(500, "Please Enter ProviderId.");
+            return;
+        }
+
+        usersDao.haspermission(user.cn, category, permissionto, null, req.session.user.permissionset, function(err, data) {
+            if (!err) {
+                logger.debug('Returned from haspermission : ' + data + ' : ' + (data == false));
+                if (data == false) {
+                    logger.debug('No permission to ' + permissionto + ' on ' + category);
+                    res.send(401, "You don't have permission to perform this operation.");
+                    return;
+                }
+            } else {
+                logger.error("Hit and error in haspermission:", err);
+                res.send(500);
+                return;
+            }
+
+            masterUtil.getLoggedInUser(user.cn, function(err, anUser) {
+                if (err) {
+                    res.send(500, "Failed to fetch User.");
+                }
+                logger.debug("LoggedIn User:>>>> ", JSON.stringify(anUser));
+                if (anUser) {
+                    //data == true (create permission)
+                    /*if(data && anUser.orgname_rowid[0] !== ""){
+                    logger.debug("Inside check not authorized.");
+                    res.send(401,"You don't have permission to perform this operation.");
+                    return;
+                }*/
+
+                    VMImage.getImageByProviderId(providerId, function(err, anImage) {
+                        if (err) {
+                            logger.error(err);
+                            res.send(500, errorResponses.db.error);
+                            return;
+                        }
+                        if (anImage) {
+                            res.send(403, "Provider already used by Some Images.To delete provider please delete respective Images first.");
+                            return;
+                        }
+
+                        hppubliccloudProvider.removehppubliccloudProviderById(providerId, function(err, deleteCount) {
+                            if (err) {
+                                logger.error(err);
+                                res.send(500, errorResponses.db.error);
+                                return;
+                            }
+                            if (deleteCount) {
+                                logger.debug("Enter delete() for hppubliccloud/providers/%s", req.params.providerId);
+                                res.send({
+                                    deleteCount: deleteCount
+                                });
+                            } else {
+                                res.send(400);
+                            }
+                        });
+                    });
+                }
+            });
+        }); //
+    });
+    
+
+    //Creates Azure Provider
+    app.post('/azure/providers', function(req, res) {
+
+        logger.debug("Enter post() for Azure.");
+        var user = req.session.user;
+        var category = configmgmtDao.getCategoryFromID("9");
+        var permissionto = 'create';
+        var azureSubscriptionId = req.body.azureSubscriptionId;
+        var azureStorageAccount = req.body.azureStorageAccount;
+
+        var providerName = req.body.providerName;
+        var providerType = req.body.providerType.toLowerCase();
+
+        var orgId = req.body.orgId;
+
+        if (typeof azureSubscriptionId === 'undefined' || azureSubscriptionId.length === 0) {
+            res.send(400, "Please Enter SubscriptionId.");
+            return;
+        }
+        if (typeof azureStorageAccount === 'undefined' || azureStorageAccount.length === 0) {
+            res.send(400, "Please Enter Storage Account.");
+            return;
+        }
+
+        if (typeof providerName === 'undefined' || providerName.length === 0) {
+            res.send(400, "Please Enter Name.");
+            return;
+        }
+        if (typeof providerType === 'undefined' || providerType.length === 0) {
+            res.send(400, "Please Enter ProviderType.");
+            return;
+        }
+        if (typeof orgId === 'undefined' || orgId.length === 0) {
+            res.status(400);
+            res.send("Please Select Any Organization.");
+            return;
+        }
+
+
+        var region;
+
+        usersDao.haspermission(user.cn, category, permissionto, null, req.session.user.permissionset, function(err, data) {
+            if (!err) {
+                logger.debug('Returned from haspermission : ' + data + ' : ' + (data == false));
+                if (data == false) {
+                    logger.debug('No permission to ' + permissionto + ' on ' + category);
+                    res.send(401, "You don't have permission to perform this operation.");
+                    return;
+                }
+            } else {
+                logger.error("Hit and error in haspermission:", err);
+                res.send(500);
+                return;
+            }
+
+            masterUtil.getLoggedInUser(user.cn, function(err, anUser) {
+                if (err) {
+                    res.send(500, "Failed to fetch User.");
+                    return;
+                }
+                logger.debug("LoggedIn User:>>>> ", JSON.stringify(anUser));
+                if (anUser) {
+
+                    var providerData = {
+                        id: 9,
+                        subscriptionId: azureSubscriptionId,
+                        storageAccount: azureStorageAccount,
+                        providerName: providerName,
+                        providerType: providerType,
+                        orgId: orgId
+                    };
+                    azurecloudProvider.getAzureCloudProviderByName(providerData.providerName, providerData.orgId, function(err, prov) {
+                        if (err) {
+                            logger.debug("err.....", err);
+                        }
+                        if (prov) {
+                            logger.debug("getAzureCloudProviderByName: ", JSON.stringify(prov));
+                            logger.debug("err.....", err);
+                            res.status(409);
+                            res.send("Provider name already exist.");
+                            return;
+                        }
+                        azurecloudProvider.createNew(req, providerData, function(err, provider) {
+                            if (err) {
+                                logger.debug("err.....", err);
+                                res.status(500);
+                                res.send("Failed to create Provider.");
+                                return;
+                            }
+                            logger.debug("Provider id:  %s", JSON.stringify(provider._id));
+
+                            masterUtil.getOrgById(providerData.orgId, function(err, orgs) {
+                                if (err) {
+                                    res.send(500, "Not able to fetch org.");
+                                    return;
+                                }
+                                if (orgs.length > 0) {
+
+                                    var dommyProvider = {
+                                        _id: provider._id,
+                                        id: 9,
+                                        subscriptionId: azureSubscriptionId,
+                                        storageAccount: azureStorageAccount,
+                                        providerName: provider.providerName,
+                                        providerType: provider.providerType,
+                                        orgId: orgs[0].rowid,
+                                        orgName: orgs[0].orgname,
+                                        __v: provider.__v,
+
+                                    };
+                                    res.send(dommyProvider);
+                                    return;
+
+                                }
+                            });
+
+                            logger.debug("Exit post() for /providers");
+                        });
+                    });
+
+                } //end anuser
+            });
+        });
+
+    }); //ends :create Azure provider
+
+    //starts: get azure providers
+    app.get('/azure/providers', function(req, res) {
+        logger.debug("Enter get() for /azure/providers");
+        var loggedInUser = req.session.user.cn;
+        masterUtil.getLoggedInUser(loggedInUser, function(err, anUser) {
+            if (err) {
+                res.send(500, "Failed to fetch User.");
+                return;
+            }
+            if (!anUser) {
+                res.send(500, "Invalid User.");
+                return;
+            }
+            if (anUser.orgname_rowid[0] === "") {
+                masterUtil.getAllActiveOrg(function(err, orgList) {
+                    if (err) {
+                        res.send(500, 'Not able to fetch Orgs.');
+                        return;
+                    }
+                    if (orgList) {
+                        azurecloudProvider.getAzureCloudProvidersForOrg(orgList, function(err, providers) {
+                            if (err) {
+                                logger.error(err);
+                                res.send(500, errorResponses.db.error);
+                                return;
+                            }
+                            if (providers != null) {
+                                for (var i = 0; i < providers.length; i++) {
+                                    providers[i]['providerType'] = providers[i]['providerType'].toUpperCase();
+                                }
+                                logger.debug("providers>>> ", JSON.stringify(providers));
+                                if (providers.length > 0) {
+                                    res.send(providers);
+                                    return;
+                                }
+                            } else {
+                                res.send(200, []);
+                                return;
+                            }
+                        });
+                    } else {
+                        res.send(200, []);
+                        return;
+                    }
+                });
+            } else {
+                masterUtil.getOrgs(loggedInUser, function(err, orgList) {
+                    if (err) {
+                        res.send(500, 'Not able to fetch Orgs.');
+                        return;
+                    }
+                    if (orgList) {
+                        azurecloudProvider.getAzureCloudProvidersForOrg(orgList, function(err, providers) {
+                            if (err) {
+                                logger.error(err);
+                                res.send(500, errorResponses.db.error);
+                                return;
+                            }
+                            var providersList = [];
+                            logger.debug("Providers::::::::::::::::::: ", providers === null);
+                            if (providers === null) {
+                                res.send(providersList);
+                                return;
+                            }
+                            if (providers.length > 0) {
+                                res.send(providers);
+                                return;
+                            } else {
+                                res.send(providersList);
+                                return;
+                            }
+                        });
+                    } else {
+                        res.send(200, []);
+                        return;
+                    }
+                });
+            }
+        });
+    }); //end: get azure providers
+
+    //start: get azure provider by id
+    app.get('/azure/providers/:providerId', function(req, res) {
+        logger.debug("Enter get() for /azure/providers//%s", req.params.providerId);
+        var providerId = req.params.providerId.trim();
+        if (typeof providerId === 'undefined' || providerId.length === 0) {
+            res.send(500, "Please Enter ProviderId.");
+            return;
+        }
+        azurecloudProvider.getAzureCloudProviderById(providerId, function(err, aProvider) {
+            if (err) {
+                logger.error(err);
+                res.send(500, errorResponses.db.error);
+                return;
+            }
+            if (aProvider) {
+
+                masterUtil.getOrgById(aProvider.orgId[0], function(err, orgs) {
+                    if (err) {
+                        res.send(500, "Not able to fetch org.");
+                        return;
+                    }
+                    aProvider.orgname = orgs[0].orgname;
+
+                    if (orgs.length > 0) {
+                        res.send(aProvider);
+                    }
+                });
+
+            } else {
+                res.send(404);
+            }
+        });
+    }); //end: get azure provider by id
+
+    //start: update azure provider
+    app.post('/azure/providers/:providerId/update', function(req, res) {
+        logger.debug("Enter post() for /providers/azure/%s/update", req.params.providerId);
+        var user = req.session.user;
+        var category = configmgmtDao.getCategoryFromID("9");
+        var permissionto = 'create';
+
+        var azureSubscriptionId = req.body.azureSubscriptionId;
+        var azureStorageAccount = req.body.azureStorageAccount;
+        var providerName = req.body.providerName;
+        var providerType = req.body.providerType.toLowerCase();
+
+        var orgId = req.body.orgId;
+
+        if (typeof azureSubscriptionId === 'undefined' || azureSubscriptionId.length === 0) {
+            res.send(400, "Please Enter Subscription Id.");
+            return;
+        }
+        if (typeof azureStorageAccount === 'undefined' || azureStorageAccount.length === 0) {
+            res.send(400, "Please Enter Storage Account.");
+            return;
+        }
+
+        if (typeof providerName === 'undefined' || providerName.length === 0) {
+            res.send(400, "Please Enter Name.");
+            return;
+        }
+        if (typeof providerType === 'undefined' || providerType.length === 0) {
+            res.send(400, "Please Enter ProviderType.");
+            return;
+        }
+
+
+        var providerData = {
+            id: 9,
+            azureSubscriptionId: azureSubscriptionId,
+            azureStorageAccount: azureStorageAccount,
+            providerName: providerName,
+            providerType: providerType,
+            orgId: orgId
+        };
+        logger.debug("provider>>>>>>>>>>>> %s", providerData.providerType);
+        logger.debug("provider data>>>>>>>>>>>> %s", JSON.stringify(providerData));
+
+        usersDao.haspermission(user.cn, category, permissionto, null, req.session.user.permissionset, function(err, data) {
+            if (!err) {
+                logger.debug('Returned from haspermission : ' + data + ' : ' + (data == false));
+                if (data == false) {
+                    logger.debug('No permission to ' + permissionto + ' on ' + category);
+                    res.send(401, "You don't have permission to perform this operation.");
+                    return;
+                }
+            } else {
+                logger.error("Hit and error in haspermission:", err);
+                res.send(500);
+                return;
+            }
+
+            masterUtil.getLoggedInUser(user.cn, function(err, anUser) {
+                if (err) {
+                    res.send(500, "Failed to fetch User.");
+                }
+                logger.debug("LoggedIn User:>>>> ", JSON.stringify(anUser));
+                if (anUser) {
+
+                    logger.debug("Able to get AWS Keypairs. %s", JSON.stringify(data));
+                    azurecloudProvider.updateAzureCloudProviderById(req.params.providerId, providerData, function(err, updateCount) {
+                        if (err) {
+                            logger.error(err);
+                            res.send(500, errorResponses.db.error);
+                            return;
+                        }
+                        masterUtil.getOrgById(providerData.orgId, function(err, orgs) {
+                            if (err) {
+                                res.send(500, "Not able to fetch org.");
+                                return;
+                            }
+                            if (orgs.length > 0) {
+                                var dommyProvider = {
+                                    _id: req.params.providerId,
+                                    id: 9,
+                                    subscriptionId: azureSubscriptionId,
+                                    storageAccount: azureStorageAccount,
+                                    providerName: providerData.providerName,
+                                    providerType: providerData.providerType,
+                                    orgId: orgs[0].rowid,
+                                    orgName: orgs[0].orgname
+                                };
+                                res.send(dommyProvider);
+                                return;
+                            }
+                        });
+                    });
+
+                }
+            });
+        });
+    }); //end: update azure provider
+
+    //start: removes azure provider
+    app.delete('/azure/providers/:providerId', function(req, res) {
+        logger.debug("Enter delete() for /providers/%s", req.params.providerId);
+        var user = req.session.user;
+        var category = configmgmtDao.getCategoryFromID("9");
+        var permissionto = 'delete';
+        var providerId = req.params.providerId.trim();
+        if (typeof providerId === 'undefined' || providerId.length === 0) {
+            res.send(500, "Please Enter ProviderId.");
+            return;
+        }
+
+        usersDao.haspermission(user.cn, category, permissionto, null, req.session.user.permissionset, function(err, data) {
+            if (!err) {
+                logger.debug('Returned from haspermission : ' + data + ' : ' + (data == false));
+                if (data == false) {
+                    logger.debug('No permission to ' + permissionto + ' on ' + category);
+                    res.send(401, "You don't have permission to perform this operation.");
+                    return;
+                }
+            } else {
+                logger.error("Hit and error in haspermission:", err);
+                res.send(500);
+                return;
+            }
+
+            masterUtil.getLoggedInUser(user.cn, function(err, anUser) {
+                if (err) {
+                    res.send(500, "Failed to fetch User.");
+                }
+                logger.debug("LoggedIn User:>>>> ", JSON.stringify(anUser));
+                if (anUser) {
+                    //data == true (create permission)
+                    /*if(data && anUser.orgname_rowid[0] !== ""){
+                    logger.debug("Inside check not authorized.");
+                    res.send(401,"You don't have permission to perform this operation.");
+                    return;
+                }*/
+
+                    VMImage.getImageByProviderId(providerId, function(err, anImage) {
+                        if (err) {
+                            logger.error(err);
+                            res.send(500, errorResponses.db.error);
+                            return;
+                        }
+                        if (anImage) {
+                            res.send(403, "Provider already used by Some Images.To delete provider please delete respective Images first.");
+                            return;
+                        }
+
+                        azurecloudProvider.removeAzureCloudProviderById(providerId, function(err, deleteCount) {
+                            if (err) {
+                                logger.error(err);
+                                res.send(500, errorResponses.db.error);
+                                return;
+                            }
+                            if (deleteCount) {
+                                logger.debug("Enter delete() for /providers/%s", req.params.providerId);
+                                res.send({
+                                    deleteCount: deleteCount
+                                });
+                            } else {
+                                res.send(400);
+                            }
+                        });
+                    });
+                }
+            });
+        }); //
+    });
+
+
+    //Create Openstack provider
+    app.post('/openstack/providers', function(req, res) {
+
+        logger.debug("Enter post() for /providers.", typeof req.body.fileName);
+        var user = req.session.user;
+        var category = configmgmtDao.getCategoryFromID("9");
+        var permissionto = 'create';
+        var openstackusername = req.body.openstackusername;
+        var openstackpassword = req.body.openstackpassword;
+        var openstackhost = req.body.openstackhost;
+        var openstacktenantid = req.body.openstacktenantid;
+        var openstacktenantname = req.body.openstacktenantname;
+        var openstackprojectname = req.body.openstackprojectname;
+        var providerName = req.body.providerName;
+        var providerType = req.body.providerType;
+        var serviceendpoints = {
+            compute: req.body.openstackendpointcompute,
+            network: req.body.openstackendpointnetwork,
+            image: req.body.openstackendpointimage,
+            ec2: req.body.openstackendpointec2,
+            identity: req.body.openstackendpointidentity,
+
+        };
+
+
+
+        var orgId = req.body.orgId;
+
+        if (typeof openstackusername === 'undefined' || openstackusername.length === 0) {
+            res.send(400, "Please Enter Username.");
+            return;
+        }
+        if (typeof openstackpassword === 'undefined' || openstackpassword.length === 0) {
+            res.send(400, "Please Enter Password.");
+            return;
+        }
+        if (typeof openstackhost === 'undefined' || openstackhost.length === 0) {
+            res.send(400, "Please Enter a Host.");
+            return;
+        }
+        if (typeof openstacktenantid === 'undefined' || openstacktenantid.length === 0) {
+            res.send(400, "Please Enter a Tenant ID");
+            return;
+        }
+        if (typeof providerName === 'undefined' || providerName.length === 0) {
+            res.send(400, "Please Enter Name.");
+            return;
+        }
+        if (typeof providerType === 'undefined' || providerType.length === 0) {
+            res.send(400, "Please Enter ProviderType.");
+            return;
+        }
+        if (typeof orgId === 'undefined' || orgId.length === 0) {
+            res.status(400);
+            res.send("Please Select Any Organization.");
+            return;
+        }
+        if (typeof openstacktenantname === 'undefined' || openstacktenantname.length === 0) {
+            res.send(400, "Please Enter Tenant Name.");
+            return;
+        }
+        if (typeof openstackprojectname === 'undefined' || openstackprojectname.length === 0) {
+            res.send(400, "Please Enter Project Name.");
+            return;
+        }
+        if (typeof serviceendpoints.compute === 'undefined' || serviceendpoints.compute.length === 0) {
+            res.send(400, "Please Enter Compute Endpoint Name.");
+            return;
+        }
+        if (typeof serviceendpoints.identity === 'undefined' || serviceendpoints.identity.length === 0) {
+            res.send(400, "Please Enter Identity Endpoint Name.");
+            return;
+        }
+
+
+        var region;
+        // if (typeof req.body.region === 'string') {
+        //     logger.debug("inside single region: ", req.body.region);
+        //     region = req.body.region;
+        // } else {
+        //     region = req.body.region[0];
+        // }
+        // logger.debug("Final Region:  ", region)
+
+        usersDao.haspermission(user.cn, category, permissionto, null, req.session.user.permissionset, function(err, data) {
+            if (!err) {
+                logger.debug('Returned from haspermission : ' + data + ' : ' + (data == false));
+                if (data == false) {
+                    logger.debug('No permission to ' + permissionto + ' on ' + category);
+                    res.send(401, "You don't have permission to perform this operation.");
+                    return;
+                }
+            } else {
+                logger.error("Hit and error in haspermission:", err);
+                res.send(500);
+                return;
+            }
+
+            masterUtil.getLoggedInUser(user.cn, function(err, anUser) {
+                if (err) {
+                    res.send(500, "Failed to fetch User.");
+                    return;
+                }
+                logger.debug("LoggedIn User:>>>> ", JSON.stringify(anUser));
+                if (anUser) {
+
+                    var providerData = {
+                        id: 9,
+                        username: openstackusername,
+                        password: openstackpassword,
+                        host: openstackhost,
+                        providerName: providerName,
+                        providerType: providerType,
+                        tenantid: openstacktenantid,
+                        tenantname: openstacktenantname,
+                        projectname: openstackprojectname,
+                        serviceendpoints: serviceendpoints,
+                        orgId: orgId
+                    };
+                    openstackProvider.getopenstackProviderByName(providerData.providerName, providerData.orgId, function(err, prov) {
+                        if (err) {
+                            logger.debug("err.....", err);
+                        }
+                        if (prov) {
+                            logger.debug("getAWSProviderByName: ", JSON.stringify(prov));
+                            logger.debug("err.....", err);
+                            res.status(409);
+                            res.send("Provider name already exist.");
+                            return;
+                        }
+                        openstackProvider.createNew(providerData, function(err, provider) {
+                            if (err) {
+                                logger.debug("err.....", err);
+                                res.status(500);
+                                res.send("Failed to create Provider.");
+                                return;
+                            }
+                            logger.debug("Provider id:  %s", JSON.stringify(provider._id));
+
+                            masterUtil.getOrgById(providerData.orgId, function(err, orgs) {
+                                if (err) {
+                                    res.send(500, "Not able to fetch org.");
+                                    return;
+                                }
+                                if (orgs.length > 0) {
+
+                                    var dommyProvider = {
+                                        _id: provider._id,
+                                        id: 9,
+                                        username: openstackusername,
+                                        password: openstackpassword,
+                                        host: openstackhost,
+                                        providerName: provider.providerName,
+                                        providerType: provider.providerType,
+                                        orgId: orgs[0].rowid,
+                                        orgName: orgs[0].orgname,
+                                        tenantid: openstacktenantid,
+                                        __v: provider.__v,
+
+                                    };
+                                    res.send(dommyProvider);
+                                    return;
+
+                                }
+                            });
+
+                            logger.debug("Exit post() for /providers");
+                        });
+                    });
+
+                } //end anuser
+            });
+        });
+
+    });
+
+    // Return list of all available AWS Providers.
+    app.get('/openstack/providers', function(req, res) {
+        logger.debug("Enter get() for /providers");
+        var loggedInUser = req.session.user.cn;
+        masterUtil.getLoggedInUser(loggedInUser, function(err, anUser) {
+            if (err) {
+                res.send(500, "Failed to fetch User.");
+                return;
+            }
+            if (!anUser) {
+                res.send(500, "Invalid User.");
+                return;
+            }
+            if (anUser.orgname_rowid[0] === "") {
+                masterUtil.getAllActiveOrg(function(err, orgList) {
+                    if (err) {
+                        res.send(500, 'Not able to fetch Orgs.');
+                        return;
+                    }
+                    if (orgList) {
+                        openstackProvider.getopenstackProvidersForOrg(orgList, function(err, providers) {
+                            if (err) {
+                                logger.error(err);
+                                res.send(500, errorResponses.db.error);
+                                return;
+                            }
+                            if (providers != null) {
+                                logger.debug("providers>>> ", JSON.stringify(providers));
+                                if (providers.length > 0) {
+                                    res.send(providers);
+                                    return;
+                                }
+                            } else {
+                                res.send(200, []);
+                                return;
+                            }
+                        });
+                    } else {
+                        res.send(200, []);
+                        return;
+                    }
+                });
+            } else {
+                masterUtil.getOrgs(loggedInUser, function(err, orgList) {
+                    if (err) {
+                        res.send(500, 'Not able to fetch Orgs.');
+                        return;
+                    }
+                    if (orgList) {
+                        openstackProvider.getopenstackProvidersForOrg(orgList, function(err, providers) {
+                            if (err) {
+                                logger.error(err);
+                                res.send(500, errorResponses.db.error);
+                                return;
+                            }
+                            var providersList = [];
+                            logger.debug("Providers::::::::::::::::::: ", providers === null);
+                            if (providers === null) {
+                                res.send(providersList);
+                                return;
+                            }
+                            if (providers.length > 0) {
+                                res.send(providers);
+                                return;
+                            } else {
+                                res.send(providersList);
+                                return;
+                            }
+                        });
+                    } else {
+                        res.send(200, []);
+                        return;
+                    }
+                });
+            }
+        });
+    });
+
+    // Return AWS Provider respect to id.
+    app.get('/openstack/providers/:providerId', function(req, res) {
+        logger.debug("Enter get() for /providers/%s", req.params.providerId);
+        var providerId = req.params.providerId.trim();
+        if (typeof providerId === 'undefined' || providerId.length === 0) {
+            res.send(500, "Please Enter ProviderId.");
+            return;
+        }
+        openstackProvider.getopenstackProviderById(providerId, function(err, aProvider) {
+            if (err) {
+                logger.error(err);
+                res.send(500, errorResponses.db.error);
+                return;
+            }
+            if (aProvider) {
+
+                masterUtil.getOrgById(aProvider.orgId[0], function(err, orgs) {
+                    if (err) {
+                        res.send(500, "Not able to fetch org.");
+                        return;
+                    }
+                    aProvider.orgname = orgs[0].orgname;
+
+                    if (orgs.length > 0) {
+                        res.send(aProvider);
+                    }
+                });
+
+            } else {
+                res.send(404);
+            }
+        });
+    });
+
+    // Update a particular AWS Provider
+    app.post('/openstack/providers/:providerId/update', function(req, res) {
+        logger.debug("Enter post() for /providers/%s/update", req.params.providerId);
+        var user = req.session.user;
+        var category = configmgmtDao.getCategoryFromID("9");
+        var permissionto = 'modify';
+        var openstackusername = req.body.openstackusername;
+        var openstackpassword = req.body.openstackpassword;
+        var openstackhost = req.body.openstackhost;
+        var openstacktenantid = req.body.openstacktenantid;
+        var openstacktenantname = req.body.openstacktenantname;
+        var openstackprojectname = req.body.openstackprojectname;
+        var providerName = req.body.providerName.trim();
+        var providerType = req.body.providerType.trim();
+        var providerId = req.params.providerId.trim();
+        var serviceendpoints = {
+            compute: req.body.openstackendpointcompute,
+            network: req.body.openstackendpointnetwork,
+            image: req.body.openstackendpointimage,
+            ec2: req.body.openstackendpointec2,
+            identity: req.body.openstackendpointidentity
+
+        };
+        var orgId = req.body.orgId;
+        if (typeof openstackusername === 'undefined' || openstackusername.length === 0) {
+            res.send(400, "Please Enter Username.");
+            return;
+        }
+        if (typeof openstackpassword === 'undefined' || openstackpassword.length === 0) {
+            res.send(400, "Please Enter Password.");
+            return;
+        }
+        if (typeof openstackhost === 'undefined' || openstackhost.length === 0) {
+            res.send(400, "Please Enter a Host");
+            return;
+        }
+        if (typeof openstacktenantid === 'undefined' || openstacktenantid.length === 0) {
+            res.send(400, "Please Enter a Tenant ID");
+            return;
+        }
+        if (typeof providerName === 'undefined' || providerName.length === 0) {
+            res.send(400, "Please Enter Name.");
+            return;
+        }
+        if (typeof providerType === 'undefined' || providerType.length === 0) {
+            res.send(400, "Please Enter ProviderType.");
+            return;
+        }
+        if (typeof openstacktenantname === 'undefined' || openstacktenantname.length === 0) {
+            res.send(400, "Please Enter Tenant Name.");
+            return;
+        }
+        if (typeof openstackprojectname === 'undefined' || openstackprojectname.length === 0) {
+            res.send(400, "Please Enter Project Name.");
+            return;
+        }
+        if (typeof orgId === 'undefined' || orgId.length === 0) {
+            res.status(400);
+            res.send("Please Select Any Organization.");
+            return;
+        }
+        if (typeof serviceendpoints.compute === 'undefined' || serviceendpoints.compute.length === 0) {
+            res.send(400, "Please Enter Compute Endpoint Name.");
+            return;
+        }
+        if (typeof serviceendpoints.identity === 'undefined' || serviceendpoints.identity.length === 0) {
+            res.send(400, "Please Enter Identity Endpoint Name.");
+            return;
+        }
+
+
+        var providerData = {
+            id: 9,
+            username: openstackusername,
+            password: openstackpassword,
+            host: openstackhost,
+            tenantid: openstacktenantid,
+            tenantname: openstacktenantname,
+            projectname: openstackprojectname,
+            providerName: providerName,
+            providerType: providerType,
+            serviceendpoints: serviceendpoints,
+            orgId: orgId
+        };
+        logger.debug("provider>>>>>>>>>>>> %s", providerData.providerType);
+        logger.debug("provider data>>>>>>>>>>>> %s", JSON.stringify(providerData));
+
+        usersDao.haspermission(user.cn, category, permissionto, null, req.session.user.permissionset, function(err, data) {
+            if (!err) {
+                logger.debug('Returned from haspermission : ' + data + ' : ' + (data == false));
+                if (data == false) {
+                    logger.debug('No permission to ' + permissionto + ' on ' + category);
+                    res.send(401, "You don't have permission to perform this operation.");
+                    return;
+                }
+            } else {
+                logger.error("Hit and error in haspermission:", err);
+                res.send(500);
+                return;
+            }
+
+            masterUtil.getLoggedInUser(user.cn, function(err, anUser) {
+                if (err) {
+                    res.send(500, "Failed to fetch User.");
+                }
+                logger.debug("LoggedIn User:>>>> ", JSON.stringify(anUser));
+                if (anUser) {
+
+                    logger.debug("Able to get AWS Keypairs. %s", JSON.stringify(data));
+                    openstackProvider.updateopenstackProviderById(req.params.providerId, providerData, function(err, updateCount) {
+                        if (err) {
+                            logger.error(err);
+                            res.send(500, errorResponses.db.error);
+                            return;
+                        }
+                        masterUtil.getOrgById(providerData.orgId, function(err, orgs) {
+                            if (err) {
+                                res.send(500, "Not able to fetch org.");
+                                return;
+                            }
+                            if (orgs.length > 0) {
+                                var dommyProvider = {
+                                    _id: req.params.providerId,
+                                    id: 9,
+                                    username: openstackusername,
+                                    password: openstackpassword,
+                                    host: openstackhost,
+                                    providerName: providerData.providerName,
+                                    providerType: providerData.providerType,
+                                    orgId: orgs[0].rowid,
+                                    orgName: orgs[0].orgname
+                                };
+                                res.send(dommyProvider);
+                                return;
+                            }
+                        });
+                    });
+
+                }
+            });
+        });
+
+
+
+    });
+
+
+
+    // Delete a particular AWS Provider.
+    app.delete('/openstack/providers/:providerId', function(req, res) {
+        logger.debug("Enter delete() for /openstack/providers/%s", req.params.providerId);
+        var user = req.session.user;
+        var category = configmgmtDao.getCategoryFromID("9");
+        var permissionto = 'delete';
+        var providerId = req.params.providerId.trim();
+        if (typeof providerId === 'undefined' || providerId.length === 0) {
+            res.send(500, "Please Enter ProviderId.");
+            return;
+        }
+
+        usersDao.haspermission(user.cn, category, permissionto, null, req.session.user.permissionset, function(err, data) {
+            if (!err) {
+                logger.debug('Returned from haspermission : ' + data + ' : ' + (data == false));
+                if (data == false) {
+                    logger.debug('No permission to ' + permissionto + ' on ' + category);
+                    res.send(401, "You don't have permission to perform this operation.");
+                    return;
+                }
+            } else {
+                logger.error("Hit and error in haspermission:", err);
+                res.send(500);
+                return;
+            }
+
+            masterUtil.getLoggedInUser(user.cn, function(err, anUser) {
+                if (err) {
+                    res.send(500, "Failed to fetch User.");
+                }
+                logger.debug("LoggedIn User:>>>> ", JSON.stringify(anUser));
+                if (anUser) {
+                    //data == true (create permission)
+                    /*if(data && anUser.orgname_rowid[0] !== ""){
+                    logger.debug("Inside check not authorized.");
+                    res.send(401,"You don't have permission to perform this operation.");
+                    return;
+                }*/
+
+                    VMImage.getImageByProviderId(providerId, function(err, anImage) {
+                        if (err) {
+                            logger.error(err);
+                            res.send(500, errorResponses.db.error);
+                            return;
+                        }
+                        if (anImage) {
+                            res.send(403, "Provider already used by Some Images.To delete provider please delete respective Images first.");
+                            return;
+                        }
+
+                        openstackProvider.removeopenstackProviderById(providerId, function(err, deleteCount) {
+                            if (err) {
+                                logger.error(err);
+                                res.send(500, errorResponses.db.error);
+                                return;
+                            }
+                            if (deleteCount) {
+                                logger.debug("Enter delete() for /providers/%s", req.params.providerId);
+                                res.send({
+                                    deleteCount: deleteCount
+                                });
+                            } else {
+                                res.send(400);
+                            }
+                        });
+                    });
+                }
+            });
+        }); //
+    });
+
 
     // Create AWS Provider.
     app.post('/aws/providers', function(req, res) {
@@ -123,7 +1913,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                     logger.debug("err.....", err);
                                 }
                                 if (prov) {
-                                    logger.debug("getAWSProviderByName: ",JSON.stringify(prov));
+                                    logger.debug("getAWSProviderByName: ", JSON.stringify(prov));
                                     logger.debug("err.....", err);
                                     res.status(409);
                                     res.send("Provider name already exist.");
@@ -223,7 +2013,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                     });
                                 }
                             } else {
-                                res.send(200,[]);
+                                res.send(200, []);
                                 return;
                             }
                         });
@@ -246,8 +2036,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                 return;
                             }
                             var providersList = [];
-                            logger.debug("Providers::::::::::::::::::: ",providers === null);
-                            if(providers === null){
+                            logger.debug("Providers::::::::::::::::::: ", providers === null);
+                            if (providers === null) {
                                 res.send(providersList);
                                 return;
                             }
@@ -281,62 +2071,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                         return;
                     }
                 });
-            }
-        });
-    });
-
-    // Return AWS Provider respect to id.
-    app.get('/aws/providers/:providerId', function(req, res) {
-        logger.debug("Enter get() for /providers/%s", req.params.providerId);
-        var providerId = req.params.providerId.trim();
-        if (typeof providerId === 'undefined' || providerId.length === 0) {
-            res.send(500, "Please Enter ProviderId.");
-            return;
-        }
-        AWSProvider.getAWSProviderById(providerId, function(err, aProvider) {
-            if (err) {
-                logger.error(err);
-                res.send(500, errorResponses.db.error);
-                return;
-            }
-            if (aProvider) {
-                AWSKeyPair.getAWSKeyPairByProviderId(aProvider._id, function(err, keyPair) {
-                    logger.debug("keyPairs length::::: ", keyPair.length);
-                    masterUtil.getOrgById(aProvider.orgId[0], function(err, orgs) {
-                        if (err) {
-                            res.send(500, "Not able to fetch org.");
-                            return;
-                        }
-                        var keys = [];
-                        keys.push(aProvider.accessKey);
-                        keys.push(aProvider.secretKey);
-                        cryptography.decryptMultipleText(keys, cryptoConfig.decryptionEncoding, cryptoConfig.encryptionEncoding, function(err, decryptedKeys) {
-                            if (err) {
-                                res.sned(500, "Failed to decrypt accessKey or secretKey");
-                                return;
-                            }
-                            if (orgs.length > 0) {
-                                if (keyPair) {
-                                    var dommyProvider = {
-                                        _id: aProvider._id,
-                                        id: 9,
-                                        accessKey: decryptedKeys[0],
-                                        secretKey: decryptedKeys[1],
-                                        providerName: aProvider.providerName,
-                                        providerType: aProvider.providerType,
-                                        orgId: aProvider.orgId,
-                                        orgName: orgs[0].orgname,
-                                        __v: aProvider.__v,
-                                        keyPairs: keyPair
-                                    };
-                                    res.send(dommyProvider);
-                                }
-                            }
-                        });
-                    });
-                });
-            } else {
-                res.send(404);
             }
         });
     });
@@ -746,4 +2480,322 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             }
         });
     });
+
+
+    // Return list of all types of available providers.
+    app.get('/allproviders/list', function(req, res) {
+        logger.debug("Enter get() for /allproviders/list");
+        var loggedInUser = req.session.user.cn;
+        masterUtil.getLoggedInUser(loggedInUser, function(err, anUser) {
+            if (err) {
+                res.send(500, "Failed to fetch User.");
+                return;
+            }
+            if (!anUser) {
+                res.send(500, "Invalid User.");
+                return;
+            }
+            if (anUser.orgname_rowid[0] === "") {
+                masterUtil.getAllActiveOrg(function(err, orgList) {
+                    if (err) {
+                        res.send(500, 'Not able to fetch Orgs.');
+                        return;
+                    }
+                    if (orgList) {
+                        AWSProvider.getAWSProvidersForOrg(orgList, function(err, providers) {
+                            if (err) {
+                                logger.error(err);
+                                res.send(500, errorResponses.db.error);
+                                return;
+                            }
+                            logger.debug("providers>>> ", JSON.stringify(providers));
+                            var providersList = {};
+
+
+                            if (providers.length > 0) {
+                                var awsProviderList = [];
+                                for (var i = 0; i < providers.length; i++) {
+                                    var keys = [];
+                                    keys.push(providers[i].accessKey);
+                                    keys.push(providers[i].secretKey);
+                                    cryptography.decryptMultipleText(keys, cryptoConfig.decryptionEncoding, cryptoConfig.encryptionEncoding, function(err, decryptedKeys) {
+                                        if (err) {
+                                            res.send(500, "Failed to decrypt accessKey or secretKey");
+                                            return;
+                                        }
+                                        providers[i].accessKey = decryptedKeys[0];
+                                        providers[i].secretKey = decryptedKeys[1];
+                                        awsProviderList.push(providers[i]);
+                                        logger.debug("aws providers>>> ", JSON.stringify(providers));
+                                    });
+                                }
+                                providersList.awsProviders = awsProviderList;
+                                //providersList.push(awsProviderList);
+                            } else {
+                                providersList.awsProviders = [];
+                                //providersList.push([]);
+                            }
+
+                            openstackProvider.getopenstackProvidersForOrg(orgList, function(err, openstackProviders) {
+                                if (err) {
+                                    logger.error(err);
+                                    res.send(500, errorResponses.db.error);
+                                    return;
+                                }
+
+                                if (openstackProviders != null) {
+                                    logger.debug("openstack Providers>>> ", JSON.stringify(openstackProviders));
+                                    if (openstackProviders.length > 0) {
+                                        providersList.openstackProviders = openstackProviders;
+                                        //providersList.push(openstackProviders);
+                                    }
+                                } else {
+                                    providersList.openstackProviders = [];
+                                    //providersList.push([]);
+                                }
+
+                                vmwareProvider.getvmwareProvidersForOrg(orgList, function(err, vmwareProviders) {
+                                    if (err) {
+                                        logger.error(err);
+                                        res.send(500, errorResponses.db.error);
+                                        return;
+                                    }
+                                    if (vmwareProviders != null) {
+                                        logger.debug("vmware Providers>>> ", JSON.stringify(vmwareProviders));
+                                        if (vmwareProviders.length > 0) {
+                                            providersList.vmwareProviders = vmwareProviders;
+                                            //providersList.push(vmwareProviders);
+                                        }
+                                    } else {
+                                        providersList.vmwareProviders = [];
+                                    }
+
+
+                                    hppubliccloudProvider.gethppubliccloudProvidersForOrg(orgList, function(err, hpCloudProviders) {
+                                        if (err) {
+                                            logger.error(err);
+                                            res.send(500, errorResponses.db.error);
+                                            return;
+                                        }
+                                        if (hpCloudProviders != null) {
+                                            for (var i = 0; i < hpCloudProviders.length; i++) {
+                                                hpCloudProviders[i]['providerType'] = hpCloudProviders[i]['providerType'].toUpperCase();
+                                            }
+                                            logger.debug("providers>>> ", JSON.stringify(hpCloudProviders));
+                                            if (hpCloudProviders.length > 0) {
+                                                providersList.hpPlublicCloudProviders = hpCloudProviders;
+                                                //providersList.push(hpCloudProviders);
+                                            }
+                                        } else {
+                                            providersList.hpPlublicCloudProviders = [];
+                                            //providersList.push([]);
+                                        }
+
+                                        azurecloudProvider.getAzureCloudProvidersForOrg(orgList, function(err, azureProviders) {
+
+                                            if (err) {
+                                                logger.error(err);
+                                                res.send(500, errorResponses.db.error);
+                                                return;
+                                            }
+                                            if (azureProviders != null) {
+                                                for (var i = 0; i < azureProviders.length; i++) {
+                                                    azureProviders[i]['providerType'] = azureProviders[i]['providerType'].toUpperCase();
+                                                }
+                                                logger.debug("providers>>> ", JSON.stringify(providers));
+                                                if (azureProviders.length > 0) {
+                                                    providersList.azureProviders = azureProviders;
+                                                    //providersList.push(azureProviders);
+                                                    res.send(providersList);
+                                                    return;
+                                                }
+                                            } else {
+                                                providersList.azureProviders = [];
+                                                //providersList.push([]);
+                                                res.send(200, providersList);
+                                                return;
+                                            }
+                                        });
+
+                                    });
+
+                                });
+
+                            });
+
+                        });
+                    } else {
+                        res.send(200, []);
+                        return;
+                    }
+                });
+            } else {
+                masterUtil.getOrgs(loggedInUser, function(err, orgList) {
+                    if (err) {
+                        res.send(500, 'Not able to fetch Orgs.');
+                        return;
+                    }
+                    if (orgList) {
+                        AWSProvider.getAWSProvidersForOrg(orgList, function(err, providers) {
+                            if (err) {
+                                logger.error(err);
+                                res.send(500, errorResponses.db.error);
+                                return;
+                            }
+                            logger.debug("providers>>> ", JSON.stringify(providers));
+                            var providersList = {};
+
+
+                            if (providers.length > 0) {
+                                var awsProviderList = [];
+                                for (var i = 0; i < providers.length; i++) {
+                                    var keys = [];
+                                    keys.push(providers[i].accessKey);
+                                    keys.push(providers[i].secretKey);
+                                    cryptography.decryptMultipleText(keys, cryptoConfig.decryptionEncoding, cryptoConfig.encryptionEncoding, function(err, decryptedKeys) {
+                                        if (err) {
+                                            res.send(500, "Failed to decrypt accessKey or secretKey");
+                                            return;
+                                        }
+                                        providers[i].accessKey = decryptedKeys[0];
+                                        providers[i].secretKey = decryptedKeys[1];
+                                        awsProviderList.push(providers[i]);
+                                        logger.debug("aws providers>>> ", JSON.stringify(providers));
+                                    });
+                                }
+                                providersList.awsProviders = awsProviderList;
+                                //providersList.push(awsProviderList);
+                            } else {
+                                providersList.awsProviders = [];
+                                //providersList.push([]);
+                            }
+
+                            openstackProvider.getopenstackProvidersForOrg(orgList, function(err, openstackProviders) {
+                                if (err) {
+                                    logger.error(err);
+                                    res.send(500, errorResponses.db.error);
+                                    return;
+                                }
+
+                                if (openstackProviders != null) {
+                                    logger.debug("openstack Providers>>> ", JSON.stringify(openstackProviders));
+                                    if (openstackProviders.length > 0) {
+                                        providersList.openstackProviders = openstackProviders;
+                                        //providersList.push(openstackProviders);
+                                    }
+                                } else {
+                                    providersList.openstackProviders = [];
+                                    //providersList.push([]);
+                                }
+
+                                vmwareProvider.getvmwareProvidersForOrg(orgList, function(err, vmwareProviders) {
+                                    if (err) {
+                                        logger.error(err);
+                                        res.send(500, errorResponses.db.error);
+                                        return;
+                                    }
+                                    if (vmwareProviders != null) {
+                                        logger.debug("vmware Providers>>> ", JSON.stringify(vmwareProviders));
+                                        if (vmwareProviders.length > 0) {
+                                            providersList.vmwareProviders = vmwareProviders;
+                                            //providersList.push(vmwareProviders);
+                                        }
+                                    } else {
+                                        providersList.vmwareProviders = [];
+                                    }
+
+
+                                    hppubliccloudProvider.gethppubliccloudProvidersForOrg(orgList, function(err, hpCloudProviders) {
+                                        if (err) {
+                                            logger.error(err);
+                                            res.send(500, errorResponses.db.error);
+                                            return;
+                                        }
+                                        if (hpCloudProviders != null) {
+                                            for (var i = 0; i < hpCloudProviders.length; i++) {
+                                                hpCloudProviders[i]['providerType'] = hpCloudProviders[i]['providerType'].toUpperCase();
+                                            }
+                                            logger.debug("providers>>> ", JSON.stringify(hpCloudProviders));
+                                            if (hpCloudProviders.length > 0) {
+                                                providersList.hpPlublicCloudProviders = hpCloudProviders;
+                                                //providersList.push(hpCloudProviders);
+                                            }
+                                        } else {
+                                            providersList.hpPlublicCloudProviders = [];
+                                            //providersList.push([]);
+                                        }
+
+                                        azurecloudProvider.getAzureCloudProvidersForOrg(orgList, function(err, azureProviders) {
+
+                                            if (err) {
+                                                logger.error(err);
+                                                res.send(500, errorResponses.db.error);
+                                                return;
+                                            }
+                                            if (azureProviders != null) {
+                                                for (var i = 0; i < azureProviders.length; i++) {
+                                                    azureProviders[i]['providerType'] = azureProviders[i]['providerType'].toUpperCase();
+                                                }
+                                                logger.debug("providers>>> ", JSON.stringify(providers));
+                                                if (azureProviders.length > 0) {
+                                                    providersList.azureProviders = azureProviders;
+                                                    //providersList.push(azureProviders);
+                                                    res.send(providersList);
+                                                    return;
+                                                }
+                                            } else {
+                                                providersList.azureProviders = [];
+                                                //providersList.push([]);
+                                                res.send(200, providersList);
+                                                return;
+                                            }
+                                        });
+
+                                    });
+
+                                });
+
+                            });
+
+                        });
+                    } else {
+                        res.send(200, []);
+                        return;
+                    }
+                });
+            }
+        });
+    });
+
+
+    // List out all aws nodes.
+    app.post('/aws/providers/node/list', function(req, res) {
+        logger.debug("Enter List AWS Nodes: ");
+
+        var ec2 = new EC2({
+            "access_key": req.body.accessKey,
+            "secret_key": req.body.secretKey,
+            "region": req.body.region
+        });
+        ec2.listInstances(function(err, nodes) {
+            if (err) {
+                logger.debug("Unable to list nodes from AWS.", err);
+                res.send("Unable to list nodes from AWS.", 500);
+                return;
+            }
+            logger.debug("Success to list nodes from AWS.");
+            var nodeList = [];
+            for (var i = 0; i < nodes.Reservations.length; i++) {
+                var instance = {
+                    "instance": nodes.Reservations[i].Instances[0].InstanceId,
+                    "privateIp": nodes.Reservations[i].Instances[0].PrivateIpAddress,
+                    "publicIp": nodes.Reservations[i].Instances[0].PublicIpAddress,
+                    "privateDnsName": nodes.Reservations[i].Instances[0].PrivateDnsName
+                };
+                nodeList.push(instance);
+            }
+            res.send(nodeList);
+        });
+    });
 }
+

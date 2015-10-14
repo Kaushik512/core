@@ -2,12 +2,12 @@
 This is a temproray class. these methods will me moved to model once mvc comes into pictured
 */
 var Cryptography = require('./utils/cryptography');
-var appConfig = require('../config/app_config');
+var appConfig = require('_pr/config');
 var uuid = require('node-uuid');
 var fileIo = require('./utils/fileio');
-
+var fs = require('fs');
 module.exports.encryptCredential = function(credentials, callback) {
-	console.log(credentials);
+    console.log(credentials);
     var cryptoConfig = appConfig.cryptoSettings;
     var encryptedCredentials = {};
 
@@ -55,10 +55,18 @@ module.exports.decryptCredential = function(credentials, callback) {
             if (err) {
                 console.log(err);
                 callback(err, null);
-
+                return;
             }
-            decryptedCredentials.pemFileLocation = tempUncryptedPemFileLoc;
-            callback(null, decryptedCredentials);
+            fs.chmod(tempUncryptedPemFileLoc, 0600, function(err) {
+                if (err) {
+                    console.log(err);
+                    callback(err, null);
+                    return;
+                }
+                decryptedCredentials.pemFileLocation = tempUncryptedPemFileLoc;
+                callback(null, decryptedCredentials);
+            });
+
         });
 
     } else {

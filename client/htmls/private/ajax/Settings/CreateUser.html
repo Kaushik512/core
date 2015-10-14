@@ -31,6 +31,20 @@
                                           <input type="text" name="ctl00$MainContent$orgname" value="" id="email" class="form-control" type="email" cdata="catalyst" cat-validation="required,email">
                                        </div>
                                        </div>
+                                       <label style="margin-top:25px; margin-left:16px" for="" class="checkPass"> <input type="checkbox" id="chkadduserldap">Update Password</label>
+                                       <div class="row1" style="margin:0px">
+                                       <div class="col-lg-6 col-md-6 editPass" style="margin-top:25px">
+                                          <label for="">Password:<span style="color:Red;" class="control-label">&nbsp;*</span>
+                                          <span style="color:Red;display:none" class="requiredPassword">Required</span></label>
+  
+                                          <input type="password" name="ctl00$MainContent$orgname" id="password" class="form-control" cdata="catalyst" cat-custom-validation="required">
+                                       </div>
+                                       <div class="col-lg-6 col-md-6 editPass" style="margin-top:25px">
+                                          <label for="">Confirm Password:<span style="color:Red;" class="control-label">&nbsp;*</span><span style="color:Red;display:none" class="requiredCnfPassword">Required</span></label>
+  
+                                          <input type="password" name="ctl00$MainContent$orgname" id="cnfPassword" class="form-control" cdata="catalyst" cat-validation="cnfPass" cat-custom-validation="required">
+                                       </div>
+                                       </div>
                                        <div class="row" style="margin:0px">
                                        <div class="col-lg-6 col-md-6" style="margin-top:25px">
                                           <label for="category">Organization:<span style="color:Red;" class="control-label">&nbsp;*</span>
@@ -41,14 +55,16 @@
                                           </select>
 
                                       </div>
-                                      <div class="col-lg-6 col-md-6 smart-form divldapcheckbox" style="margin-top:25px">
-                                          <label for=""><input type="checkbox" id="chkadduserldap" >&nbsp;<label for="chkadduserldap">Add User to LDAP</label></label>
+                                      <!-- </div>
+                                      <div class="row2" style="margin:0px"> -->
+                                      <!-- <div class="updatePass" style="margin-top:29px">
+                                          <label for=""><input type="checkbox" id="chkadduserldap" >&nbsp;<label for="chkadduserldap">Update Password</label></label>
                                           <label id="msgchkadduserldap" style="display:none;color:red;"></label><br/>
-                                          <div id="ldappasswordsection" class="hidden">
-                                          Password: <span style="color:Red;" class="control-label">&nbsp;*</span><label id="msgpasswordmatch" style="display:none;color:red;">Passwords entered do not match or left blank</label><input style="padding-left:5px;" name="ctl00$MainContent$orgname" value="" id="userpassword" class="form-control userpass" type="password"><br/>
-                                          Confirm Password: <span style="color:Red;" class="control-label">&nbsp;*</span><input style="padding-left:5px;" name="ctl00$MainContent$orgname" value="" id="userpassword1" class="form-control userpass" type="password">
+                                          <div id="ldappasswordsection" class="hidden col-lg-6 col-md-6">
+                                          Password: <span style="color:Red;" class="control-label">&nbsp;*</span><label id="msgpasswordmatch" style="display:none;color:red;">Password does not match.</label><input style="padding-left:5px;" name="ctl00$MainContent$orgname" value="" id="password1" class="form-control userpass" type="password"><br/>
+                                          Confirm Password: <span style="color:Red;" class="control-label">&nbsp;*</span><input style="padding-left:5px;" name="ctl00$MainContent$orgname" value="" id="cnfPassword1" class="form-control userpass" type="password">
                                         </div>
-                                       </div>
+                                       </div> -->
                                        </div>
                                        <div class="row" style="margin:0px">
                                          <div class="col-lg-6 col-md-6 smart-form" style="margin-top:25px">
@@ -78,16 +94,17 @@
                   </div>
                </div>
                <div class="widget-toolbox clearfix">
-                  <div class="btn-group pull-right">
-                     <button class="btn btn-primary btn-mini" style="margin-right:11px;">
-                     <i class="ace-icon fa fa-check bigger-110"></i>
-                     Save
-                     </button>
-                     <a class="btn btn-primary btn-mini" onclick="window.history.back();" id="btncancel">
-                     <i class="ace-icon fa fa-undo bigger-110"></i>
-                     Cancel
-                     </a>
-                  </div>
+               <div class="btn-group pull-right">
+                <a class="btn btn-default" onclick="window.history.back();" style="margin-right:11px;" id="btncancel">
+                  <i class="ace-icon fa fa-times bigger-110"></i>
+                  Cancel
+                  </a>
+                  <button class="btn btn-primary btn-mini">
+                  <i class="ace-icon fa fa-check bigger-110"></i>
+                  Save
+                  </button>
+                  
+               </div>
                </div>
             </div>
          </form>
@@ -98,6 +115,7 @@
 <!--row ends here-->
 <!--Popup for selecting a cloud provider before proceeding-->
 <script>
+
    //Form Name
    function cancelClicked() {
        $("#popupSelectProvider").modal('hide');
@@ -161,10 +179,12 @@
    $('#chkadduserldap').change(function(){
       if($(this).is(":checked"))
         {
-          $('#ldappasswordsection').removeClass('hidden');
+          //$('.editPass').removeClass('hidden');
+          $(".row1").show();
         }
         else{
-            $('#ldappasswordsection').addClass('hidden');
+            //$('.editPass').addClass('hidden');
+            $(".row1").hide();
         }
 
    });
@@ -172,7 +192,7 @@
    function createUserInLdap(){
     var data1 = new FormData();
       data1.append("username",$('#loginname').val());
-      data1.append("password",$('#userpassword').val());
+      data1.append("password",$('#password').val());
       data1.append("fname",$('#loginname').val());
       data1.append("lname","cuser");
       //data1.append("ldaprootusername","Admin");
@@ -197,6 +217,15 @@
 </script>
 <script>
    $(document).ready(function () {
+    var pass = $("#password").val();
+    $("#cnfPassword").val(pass);
+    //alert(location.toString().indexOf('?new')!=-1);
+    if(location.toString().indexOf('?new')!==-1){
+     // $(".updatePass").hide();
+      $(".checkPass").hide();
+    }else{
+      //$(".updatePass").show();
+    }
       $("#loginname").focus();
       //isUserTypeSuperAdmin();
       $("select").select2();
@@ -206,9 +235,11 @@
             
            if($(this).valid){
                 //if user has to be created in ldap
-                if($('#chkadduserldap').is(':checked')){
+                /*if($('#chkadduserldap').is(':checked')){
+                  console.log($('#password').val());
+                  console.log($('#cnfPassword').val());
                   //confirm if passwords match
-                  if($('#userpassword').val() != $('#userpassword1').val() || $('#userpassword').val() == ''){
+                  if($('#password').val() != $('#cnfPassword').val() || $('#password').val() == ''){
                     //alert('in here');
                     console.log('invalid pass');
                     $('#msgpasswordmatch').css("display","block");
@@ -217,7 +248,7 @@
                     });
                     return false;
                   }
-                 createUserInLdap();
+                  //createUserInLdap();
                 }
                 else{
                   if($('#unique_loginname')){
@@ -225,11 +256,13 @@
                       return false;
                     }
                   }
-                }
-
+                }*/
+                //alert("out")
+                console.log($('#password').val());
                 /*alert('valid form submitted'); // for demo*/
                if(validateForm()) {
-
+                //alert("in");
+                createUserInLdap();
                 saveform('7');
               }
            }else{

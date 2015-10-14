@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 var ObjectId = require('mongoose').Types.ObjectId;
 var validate = require('mongoose-validator');
-var logger = require('../../../lib/logger')(module);
+var logger = require('_pr/logger')(module);
 var schemaValidator = require('../../dao/schema-validator');
 
 var Schema = mongoose.Schema;
@@ -19,11 +19,18 @@ var taskHistorySchema = new Schema({
     jenkinsServerId: String,
     jobName: String,
     buildNumber: Number,
+    previousBuildNumber: Number,
     status: String,
     user: String,
     timestampStarted: Number,
     timestampEnded: Number,
-    executionResults: [Schema.Types.Mixed]
+    jobResultURL: [String],
+    executionResults: [Schema.Types.Mixed],
+    assignedTaskIds: [String],
+    taskHistoryIds: [{
+        taskId: String,
+        historyId: String
+    }]
 });
 
 taskHistorySchema.method.update = function(status, timestampEnded, callback) {
@@ -54,10 +61,60 @@ taskHistorySchema.statics.createNew = function(historyData, callback) {
 };
 
 taskHistorySchema.statics.getHistoryByTaskId = function(taskId, callback) {
+    this.find({
+        $query: {
+            taskId: taskId
+        },
+        $orderby: {
+            "buildNumber": -1
+        }
+    }, function(err, tHistories) {
+        if (err) {
+            callback(err, null);
+            return;
+        }
+        callback(null, tHistories);
+    });
+};
+
+
+
+taskHistorySchema.statics.getHistoryByTaskIdAndHistoryId = function(taskId, historyId, callback) {
+    this.find({
+        taskId: taskId,
+        _id: new ObjectId(historyId)
+    }, function(err, tHistories) {
+        if (err) {
+            callback(err, null);
+            return;
+        }
+        if (tHistories.length) {
+            callback(null, tHistories[0]);
+        } else {
+            callback(null, null);
+        }
+    });
+};
+
+
+taskHistorySchema.statics.getLast100HistoriesByTaskId = function(taskId, callback) {
 
     this.find({
         taskId: taskId
     }, function(err, tHistories) {
+        if (err) {
+            callback(err, null);
+            return;
+        }
+        callback(null, tHistories);
+    }).sort({
+        buildNumber: -1
+    }).limit(100);
+};
+
+taskHistorySchema.statics.listHistory = function(callback) {
+
+    this.find(function(err, tHistories) {
         if (err) {
             callback(err, null);
             return;

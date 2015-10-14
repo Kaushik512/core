@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 var ObjectId = require('mongoose').Types.ObjectId;
-var logger = require('../../lib/logger')(module);
+var logger = require('_pr/logger')(module);
 
 var Schema = mongoose.Schema;
 var LogSchema = new Schema({
@@ -62,7 +62,7 @@ var LogsDao = function() {
     }
 
     this.getLogsByReferenceIdAndTimestamp = function(referenceId, timestampStarted, timestampEnded, callback) {
-        logger.debug(timestampStarted, timestampEnded);
+        //logger.debug(timestampStarted, timestampEnded);
         var queryObj = {
             referenceId: {
                 $in: [referenceId]
@@ -77,7 +77,7 @@ var LogsDao = function() {
             }
         }
 
-        logger.debug('queryObj ==>',queryObj);
+        //logger.debug('queryObj ==>',queryObj);
 
 
         Logs.find(queryObj, function(err, data) {
