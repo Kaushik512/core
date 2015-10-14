@@ -10,8 +10,8 @@ Library            String
 
 
 *** Test Cases ***
-Catalyst Launch of Cloud Formation Blueprints
-    [Tags]       Sanity               dash
+Catalyst Launch of Cloud Formation Blueprint
+    [Tags]       Sanity               dash1
 #    Catalyst Login 
     Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
     Catalyst Launch of Cloud Formation Blueprint

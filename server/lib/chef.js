@@ -435,7 +435,7 @@ var Chef = function(settings) {
             //    credentialArg = '-i' + params.pemFilePath;
 
         } else {
-            if (params.instanceOS != 'windows') {
+            if (params.instanceOS != 'windows' && !params.noSudo) {
                 argList.push('--use-sudo-password');
             }
             argList.push('-P');
@@ -450,7 +450,9 @@ var Chef = function(settings) {
             argList.push('-p');
             argList.push('5985');
         } else {
-            argList.push('--sudo');
+            if(!params.noSudo){
+              argList.push('--sudo');
+            }
         }
 
         if (runlist.length) {
