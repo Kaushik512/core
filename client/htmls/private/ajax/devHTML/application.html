@@ -64,6 +64,11 @@ input {
                         </div>
                     </article>
                 </div>
+                <div class="row loadingAppDeploySpinner">
+                    <article class="col-sm-12 col-md-12 col-lg-12">
+                        <img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif"/>
+                    </article>
+                </div>
                 <div class="accordianTemplateContainer" style="display:none">
                     <div class="panel panel-default accordianTemplate">
                         <div class="panel-heading"  style="border-bottom:1px solid rgb(221, 221, 221);height:40px;background-color:#fcfcfc;">
@@ -421,6 +426,14 @@ function resetAllFields(){
     var $repositoryUrl = $('#repositoryUrl');
     $repositoryUrl.val("");
 }
+function resetSpinners(){
+    $('.reposerverspinner').css('display', 'none');
+    $('.repospinner').css('display', 'none');
+    $('.repourlspinner').css('display', 'none');
+    $('.artifactsspinner').css('display', 'none');
+    $('.versionspinner').css('display', 'none');
+    $('.jobdetailsspinner').css('display', 'none');
+}
 
 function getNexusServer(){
     resetAllFields();
@@ -776,6 +789,7 @@ function getParticularApplicationData(selectedAppName) {
 
 function constructUI(data) {
     //alert(data);
+    $('.loadingAppDeploySpinner').hide();
     $("#accordion-AppDeploy").empty();
     if (data.length) {
         var $chooseApplication = $('#chooseApplication');
@@ -796,6 +810,7 @@ function constructUI(data) {
             "padding-top": "20px",
             "display": "none"
         });
+
         var $accordianTemplate = $('.accordianTemplateContainer').find('.accordianTemplate');
         var dataenvAccordianName;
         function moreInfoAppDeployClickHandler(e) {
@@ -831,6 +846,7 @@ function constructUI(data) {
 
         function moreInfoUpgradeAppDeployClickHandler(e) {
             $('#formUpgradeAppDeploy')[0].reset();
+            resetSpinners();
             //$('#chooseRepository').empty();
             var tabletrIndex = $(".moreinfoUpgradeAppDeploy").index($(this));
             
