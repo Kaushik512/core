@@ -251,6 +251,7 @@ hppubliccloudProviderSchema.statics.updatehppubliccloudProviderById = function(p
             tenantid: providerData.tenantid,
             tenantname: providerData.tenantname,
             providerType: providerData.providerType,
+            keyname: providerData.keyname,
             serviceendpoints:{
                 compute: providerData.serviceendpoints.compute,
                 network: providerData.serviceendpoints.network,
@@ -267,6 +268,7 @@ hppubliccloudProviderSchema.statics.updatehppubliccloudProviderById = function(p
             callback(err, null);
             return;
         }
+        
         logger.debug("Exit updatehppubliccloudProviderById with update success.");
         callback(null, updateCount);
         return;

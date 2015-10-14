@@ -83,6 +83,7 @@ imageSchema.statics.createNew = function(imageData, callback) {
     logger.debug("Enter createNew");
     var that = this;
     var vmimage = new that(imageData);
+    logger.debug(imageData);
     vmimage.save(function(err, imageData) {
         if (err) {
             logger.error(err);

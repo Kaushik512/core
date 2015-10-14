@@ -9489,6 +9489,7 @@ table.dataTable td {
 .openstack,
 .hppubliccloud,
 .cloudstack,
+.vmware,
 .dock,
 .logo {
     background: url(../img/sprites.png) no-repeat;
@@ -9569,6 +9570,13 @@ table.dataTable td {
     width: 35px;
     height: 35px;
 }
+
+.vmware {
+    background-position: -346px -56px;
+    width: 35px;
+    height: 35px;
+}
+
 
 .rl {
     background-position: -107px -55px;
