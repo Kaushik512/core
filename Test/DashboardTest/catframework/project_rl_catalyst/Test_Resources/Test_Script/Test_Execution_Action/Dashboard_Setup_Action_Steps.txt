@@ -136,7 +136,7 @@ Catalyst Notifications Dashboard Verification
     Sleep    10s
     Clicks on Left Panel Button
     Sleep    50s
-    Verify Page Contains Connected
+    #Verify Page Contains Connected
     Verify Page Contains CatsEye
     Verify Page Contains Telemetry
     Verify Page Contains Adverse Events
