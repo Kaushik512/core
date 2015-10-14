@@ -80,18 +80,38 @@ var vmwareservice = function(options) {
         "no_of_vm" : " "
         } */
         client = new Client();
-        var datastoresUrl = servicehost + '/' + templatename + '/?ip=' + options.host + '&user=' + options.username + '&passwd=' + options.password + '&dc=' + options.dc;
+        var datastoresUrl = servicehost + '/' + templatename + '/clone?ip=' + options.host + '&user=' + options.username + '&passwd=' + options.password + '&dc=' + options.dc;
         console.log(datastoresUrl);
-        client.registerMethod("jsonMethod", datastoresUrl, "GET");
+
+        client.registerMethod("postMethod", datastoresUrl, "POST");
         var args = {
-            data: serverjson
+            data: JSON.stringify(serverjson),
+            headers:{"Content-Type": "application/json"} 
         };
-        client.methods.jsonMethod(args, function(data, response) {
+        //console.log(JSON.stringify(args));
+        callback(null,serverjson);
+        /* client.methods.postMethod(args, function(data, response) {
             console.log("get datastoresUrl response::" + data);
-            callback(null,data);
-        });
+            if(data.indexOf('Completed') >= 0){
+                callback(null,data);    
+            }
+            else
+                callback("Error",null);
+            
+        }); */
     }
 
+    this.getServerDetails = function(servicehost,servername,callbackdonellback){
+            client = new Client();
+        var datastoresUrl = servicehost + '/' + servername + '?ip=' + options.host + '&user=' + options.username + '&passwd=' + options.password + '&dc=' + options.dc;
+        console.log(datastoresUrl);
+        client.registerMethod("jsonMethod", datastoresUrl, "GET");
+        var args = {};
+        client.methods.jsonMethod(args, function(data, response) {
+            console.log("get getServerDetails response::" + data);
+            callback(null,data);
+        });
+    };
 
     
 

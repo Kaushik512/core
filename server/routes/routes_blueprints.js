@@ -2208,17 +2208,158 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                     if(!err){
                                                            logger.debug(JSON.stringify(anImage)); 
                                                            logger.debug('providerdata',JSON.stringify(providerdata));
-                                                           var serverjson = {"vm_name" : "D4D-" + blueprint.name,
-                                                            "ds" : blueprint.blueprintConfig.dataStore,
-                                                            "no_of_vm" : blueprint.blueprintConfig.instanceCount
-                                                            }
-
-                                                            
+                                                           // var serverjson = {"vm_name" : \""D4D-" + blueprint.name + "\"",
+                                                           //  "ds" : "\"" + blueprint.blueprintConfig.dataStore + "\"",
+                                                           //  "no_of_vm" : blueprint.blueprintConfig.instanceCount
+                                                           //  }
+                                                           var serverjson = {};
+                                                           serverjson["vm_name"] = "D4D-" + blueprint.name;
+                                                           serverjson["ds"] = blueprint.blueprintConfig.dataStore;
+                                                           serverjson["no_of_vm"] =  blueprint.blueprintConfig.instanceCount;
+                                                           
                                                            var vmwareCloud = new VmwareCloud(providerdata);
 
 
                                                            vmwareCloud.createServer(appConfig.vmware.serviceHost,anImage.imageIdentifier,serverjson,function(err,createserverdata){
+                                                                if(!err){
+                                                                    //send the response back and create the instance 
+                                                                    var credentials = {
+                                                                        username: anImage.userName,
+                                                                        password: anImage.instancePassword
+                                                                    };
 
+                                                                    credentialcryptography.encryptCredential(credentials, function(err, encryptedCredentials) {
+                                                                        if (err) {
+                                                                            logger.error('vmware encryptCredential error', err);
+                                                                            res.send(500, err);
+                                                                            return;
+                                                                        }
+
+                                                                        //create instaance
+                                                                        logger.debug('Credentials encrypted..');
+                                                                        logger.debug('OS Launched');
+                                                                        logger.debug(JSON.stringify(createserverdata));
+                                                                        //Creating instance in catalyst
+
+                                                                        var instance = {
+                                                                            name: serverjson["vm_name"],
+                                                                            orgId: blueprint.orgId,
+                                                                            bgId: blueprint.bgId,
+                                                                            projectId: blueprint.projectId,
+                                                                            envId: req.query.envId,
+                                                                            providerId: blueprint.blueprintConfig.cloudProviderId,
+                                                                            keyPairId: 'unknown',
+                                                                            chefNodeName: serverjson["vm_name"],
+                                                                            runlist: version.runlist,
+                                                                            platformId: serverjson["vm_name"],
+                                                                            appUrls: blueprint.appUrls,
+                                                                            instanceIP: 'unknown',
+                                                                            instanceState: 'unknown',
+                                                                            bootStrapStatus: 'waiting',
+                                                                            users: blueprint.users,
+                                                                            hardware: {
+                                                                                platform: 'azure',
+                                                                                platformVersion: 'unknown',
+                                                                                architecture: 'unknown',
+                                                                                memory: {
+                                                                                    total: 'unknown',
+                                                                                    free: 'unknown',
+                                                                                },
+                                                                                os: blueprint.blueprintConfig.instanceOS
+                                                                            },
+                                                                            credentials: {
+                                                                                username: encryptedCredentials.username,
+                                                                                password: encryptedCredentials.password
+                                                                            },
+                                                                            chef: {
+                                                                                serverId: blueprint.blueprintConfig.infraManagerId,
+                                                                                chefNodeName: serverjson["vm_name"]
+                                                                            },
+                                                                            blueprintData: {
+                                                                                blueprintId: blueprint._id,
+                                                                                blueprintName: blueprint.name,
+                                                                                templateId: blueprint.templateId,
+                                                                                templateType: blueprint.templateType,
+                                                                                iconPath: blueprint.iconpath
+                                                                            }
+
+                                                                        };
+
+                                                                        logger.debug('Instance Data');
+                                                                        logger.debug(JSON.stringify(instance));
+
+                                                                        instancesDao.createInstance(instance, function(err, data) {
+                                                                            if (err) {
+                                                                                logger.error("Failed to create Instance", err);
+                                                                                res.send(500);
+                                                                                return;
+                                                                            }
+
+                                                                            instance.id = data._id;
+                                                                            var timestampStarted = new Date().getTime();
+                                                                            var actionLog = instancesDao.insertBootstrapActionLog(instance.id, instance.runlist, req.session.user.cn, timestampStarted);
+                                                                            var logsReferenceIds = [instance.id, actionLog._id];
+                                                                            logsDao.insertLog({
+                                                                                referenceId: logsReferenceIds,
+                                                                                err: false,
+                                                                                log: "Waiting for instance ok state",
+                                                                                timestamp: timestampStarted
+                                                                            });
+                                                                            //var actionLog = instancesDao.insertBootstrapActionLog(instance.id, instance.runlist, req.session.user.cn, timestampStarted);
+                                                                            //var logsReferenceIds = [instance.id, actionLog._id];
+                                                                            //logsDao.insertLog({
+                                                                            //    referenceId: logsReferenceIds,
+                                                                            //    err: false,
+                                                                            //    log: "Waiting for instance ok state",
+                                                                            //     timestamp: timestampStarted
+                                                                            //  });
+
+                                                                            logger.debug('Returned from Create Instance. About to wait for instance ready state');
+
+
+                                                                            //waiting for server to become active
+                                                                            logger.debug('Returned from Create Instance. About to send response');
+                                                                            //res.send(200);
+                                                                            res.send(200, {
+                                                                                "id": [instance.id],
+                                                                                "message": "instance launch success"
+                                                                            });
+                                                                            logger.debug('Should have sent the response.');
+
+                                                                            vmwareCloud.waitforserverready(instance.name, instance.username, instance.password, function(err, publicip) {
+                                                                                if (!err) {
+                                                                                    logger.debug('Instance Ready....');
+                                                                                    logger.debug(JSON.stringify(data)); // logger.debug(data);
+                                                                                    logger.debug('About to bootstrap Instance');
+                                                                                   
+                                                                                    instancesDao.updateInstanceIp(instance.id, publicip, function(err, updateCount) {
+                                                                                        if (err) {
+                                                                                            logger.error("instancesDao.updateInstanceIp Failed ==>", err);
+                                                                                            return;
+                                                                                        }
+                                                                                        logger.debug('Instance ip Updated');
+                                                                                    });
+                                                                                    instancesDao.updateInstanceState(instance.id, "running", function(err, updateCount) {
+                                                                                        if (err) {
+                                                                                            logger.error("instancesDao.updateInstanceState Failed ==>", err);
+                                                                                            return;
+                                                                                        }
+                                                                                        logger.debug('Instance state Updated');
+                                                                                    });
+
+                                                                                    logsDao.insertLog({
+                                                                                        referenceId: logsReferenceIds,
+                                                                                        err: false,
+                                                                                        log: "Instance Ready..about to bootstrap",
+                                                                                        timestamp: timestampStarted
+                                                                                    });
+                                                                                }
+                                                                            }); //end of waitforserverready
+
+                                                                        }); //end of createInstance
+
+                                                                    });
+                                                                }
                                                            });
 
 
