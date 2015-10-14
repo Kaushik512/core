@@ -134,6 +134,9 @@ function getDefaultsConfig() {
                 osType: "linux"
             }]
         },
+        vmware:{
+            serviceHost:"http://localhost:3000"
+        },
         db: {
             dbName: 'devops_new',
             host: 'localhost',

@@ -623,6 +623,7 @@ var Chef = function(settings) {
             cmd = sudoCmd + " " + cmd;
 
             var sshExec = new SSHExec(options);
+            logger.debug('***********************',options);
             sshExec.exec(cmd, callback, callbackOnStdOut, callbackOnStdErr);
 
         } else {
