@@ -69,8 +69,9 @@ Catalyst Launch of Cloud Formation Blueprint
     Capture Screen Shot of the page
     Sleep    2s
     Clicks on Back To Instances
-    Sleep    1s
+    Sleep    3s
     Clicks on Infrastructure Tab
+    Sleep    2s
     Clicks on CloudFormation Tab
     Sleep    1s
     Capture Screen Shot of the page
@@ -126,13 +127,17 @@ Catalyst Chef Client Run and SSH on Cloud Formation Instance
     Verfify the status of SSH Shell
     Sleep    1s
     Clicks on Back To Instances
+    Sleep    3s
     Delete the Java and SQL Stack Instance
     Sleep    1s
     Select the MySql Stack Instance to verify Bootstrap
+    Sleep    1s
     Delete the Java and SQL Stack Instance
     Sleep    1s
     Verify the Stack Instances are Deleted
+    Sleep    1s
     Clicks on Infrastructure Tab
+    Sleep    1s
     Clicks on CloudFormation Tab
     Sleep    4s
     Select the Stack to delete
@@ -163,8 +168,8 @@ Catalyst Verification of Jobs in RL_QA Environment
     Sleep    1s
     Select the Catalyst Window
     Sleep    6s
-    Get the Success path text
-    Verify if no status is there
+    ##Get the Success path text
+    ##Verify if no status is there
     #Sleep    2s
     #Capture Screen Shot of the page
     #Sleep    3s
@@ -174,7 +179,7 @@ Catalyst Verification of Jobs in RL_QA Environment
     #Close Window
     #Sleep    2s
     #Select the Catalyst Window
-    Sleep    1s
+    ##Sleep    1s
     Clicks on Job Status Button
     Sleep    1s
     Capture Screen Shot of the page
@@ -355,7 +360,7 @@ Clicks on LogOut link
 
 
 Verify the Stack is Deleted
-    Page Should Not Contain    ${STACK NAME}
+    Page Should Not Contain    ${STACK STORE}
 
 Delete the Java and SQL Stack Instance
     Click Element    id=removeInstance
@@ -379,14 +384,14 @@ Verify the Stack Instances are Deleted
     Page Should Not Contain    ${EDIT STACK2}
 
 Select the Stack to delete
-    Click Element    xpath=//b[text()='${STACK NAME}']
+    Click Element    xpath=//b[text()='${STACK STORE}']
     Click Element    xpath=.//*[@title='Delete Stack']
     Sleep    1s
     Click Element    xpath=.//*[text()='OK']
 
 Verify the Stacks with your Stackame is created
-    Page Should Contain    ${STACK NAME}
-    Element Should Contain    xpath=.//*[@id='cftStackContainer']/div/div[@data-stackname='${STACK NAME}']/div/span[2]/span    ${STACK STATUS}
+    Page Should Contain    ${STACK STORE}
+    Element Should Contain    xpath=.//*[@id='cftStackContainer']/div/div[@data-stackname='${STACK STORE}']/div/span[2]/span    ${STACK STATUS}
 
 
 Clicks on CloudFormation Tab

@@ -6,7 +6,7 @@ input {
 .jarviswidget .widget-body {
     padding-bottom: 0px !important;
 }
-#spanTextApplication {
+.spanTextApplication {
     white-space: nowrap; 
     width: 10em; 
     overflow: hidden;
@@ -62,6 +62,11 @@ input {
                         </div>
                       </div> -->
                         </div>
+                    </article>
+                </div>
+                <div class="row loadingAppDeploySpinner">
+                    <article class="col-sm-12 col-md-12 col-lg-12">
+                        <img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif"/>
                     </article>
                 </div>
                 <div class="accordianTemplateContainer" style="display:none">
@@ -319,6 +324,7 @@ input {
                                 </div>
                                 <div class="modal-body">
                                     <div class="upgradeForAppDeploy">
+                                        <input type="hidden" id="containerIdInput">
                                         <fieldset class="fieldsetCustom">
                                             <legend  class="legendCustom">Repository Details:</legend>
                                             <div class="col-lg-6 col-md-6">
@@ -584,6 +590,14 @@ function resetAllFields(){
     var $repositoryUrl = $('#repositoryUrl');
     $repositoryUrl.val("");
 }
+function resetSpinners(){
+    $('.reposerverspinner').css('display', 'none');
+    $('.repospinner').css('display', 'none');
+    $('.repourlspinner').css('display', 'none');
+    $('.artifactsspinner').css('display', 'none');
+    $('.versionspinner').css('display', 'none');
+    $('.jobdetailsspinner').css('display', 'none');
+}
 
 function getNexusServer(){
     resetAllFields();
@@ -781,13 +795,19 @@ $('.saveUpgradeAppDeploy').on('click',function(){
     var groupId = $('#chooseArtifacts').find('option:selected').attr('data-groupId').replace(/\./g, '/');
     var nexusUrl = $('#chooseNexusServer').find('option:selected').attr('data-nexusUrl');
     var nexusRepoUrl = nexusUrl+"/service/local/repositories/"+repoId+"/content/"+groupId+"/"+artifactId+"/"+versionId+"/"+artifactId+"-"+versionId+".zip";
-
+    var containerId = $('#containerIdInput').val();
     var nexusData={
         "nexusData":{
             "nexusUrl": nexusRepoUrl,
-            "version": versionId
+            "version": versionId,
+            "containerId": ""
         }
-    }   
+    };
+
+    if(containerId && containerId != "NA"){
+        nexusData.nexusData.containerId = containerId;
+    }
+        //alert(JSON.stringify(nexusData));
         $('a[data-executetaskid='+taskId+']').trigger('click',nexusData);
         $('#modalUpgradeAppDeploy').modal('hide');
 });
@@ -933,6 +953,7 @@ function getParticularApplicationData(selectedAppName) {
 
 function constructUI(data) {
     //alert(data);
+    $('.loadingAppDeploySpinner').hide();
     $("#accordion-AppDeploy").empty();
     if (data.length) {
         var $chooseApplication = $('#chooseApplication');
@@ -953,6 +974,7 @@ function constructUI(data) {
             "padding-top": "20px",
             "display": "none"
         });
+
         var $accordianTemplate = $('.accordianTemplateContainer').find('.accordianTemplate');
         var dataenvAccordianName;
         function moreInfoAppDeployClickHandler(e) {
@@ -988,23 +1010,27 @@ function constructUI(data) {
 
         function moreInfoUpgradeAppDeployClickHandler(e) {
             $('#formUpgradeAppDeploy')[0].reset();
+            resetSpinners();
             //$('#chooseRepository').empty();
             var tabletrIndex = $(".moreinfoUpgradeAppDeploy").index($(this));
             
             var upgradeAppNameText = $('#tableappDeploydetails tbody tr:eq('+tabletrIndex+') td:first').html();
             var upgradeNodeIpText = $('#tableappDeploydetails tbody tr:eq('+tabletrIndex+') td:nth-child(5)').html();
-
-            $("#upgradeAppName").empty();
-            $("#upgradeNodeIp").empty();
-
-            $("#upgradeAppName").append(upgradeAppNameText);
-            $("#upgradeNodeIp").append(upgradeNodeIpText);
+            var containerId = $('#tableappDeploydetails tbody tr:eq('+tabletrIndex+') td:nth-child(7)').html();
+            containerId = containerId.split("</div>")[0].split(">")[1];
+            //$("#upgradeAppName").empty();
+            //$("#upgradeNodeIp").empty();
+            if(!containerId){
+                containerId = "NA";
+            }
+            $("#upgradeAppName").html(upgradeAppNameText);
+            $("#upgradeNodeIp").html(upgradeNodeIpText);
             //$("#upgradeNode").val(upgradeNodeIpText);
 
             
             getNexusServer();
             var $modal = $('#modalUpgradeAppDeploy');
-            var $logContainer = $modal.find('.upgradeForAppDeploy').show();
+            $('#containerIdInput').val(containerId);
             //$logContainer.empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
             $modal.modal('show');
         }
@@ -1124,7 +1150,7 @@ function constructUI(data) {
                     if (!data[i].containerId) {
                         data[i].containerId = "NA";
                     }else{
-                        data[i].containerId = '<div id="spanTextApplication" title="'+data[i].containerId+'">'+data[i].containerId+'</div>'
+                        data[i].containerId = '<div class="spanTextApplication" title="'+data[i].containerId+'">'+data[i].containerId+'</div>'
                     }
                     if (!data[i].hostName) {
                         data[i].hostName = "NA";
