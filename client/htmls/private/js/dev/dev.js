@@ -1872,7 +1872,7 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
             dataTable.row.add($rowContainter).draw();
 
 
-            if (data.instanceState === 'pending' || data.instanceState === 'stopping') {
+            if (data.instanceState === 'pending' || data.instanceState === 'stopping' || data.instanceState === 'unknown') {
                 pollInstanceState(data._id, data.instanceState, 2000);
                 // To be removed from comment later - Vinod
             }
@@ -2338,9 +2338,14 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                             //provider logo added - currently included open stack
                             var $imgprovider = '';
                             if (data[i].blueprintType == 'openstack_launch')
-                                $imgprovider = $('<li><img src="img/openstack-card.png" style="margin-left: -94px;margin-right: 7px;margin-top: 48px;"></li>');
+                                $imgprovider = $('<li><img src="img/openstack-card.png" style="margin-left: -94px;margin-right: 7px;margin-top: 48px;" title="Openstack"></li>');
                             if (data[i].blueprintType == 'hppubliccloud_launch')
-                                $imgprovider = $('<li><img src="img/hpcloud-card.png" style="margin-left: -94px;margin-right: 7px;margin-top: 48px;"></li>');
+                                $imgprovider = $('<li><img src="img/hpcloud-card.png" style="margin-left: -94px;margin-right: 7px;margin-top: 48px;" title="HP Helion"></li>');
+                            if (data[i].blueprintType == 'azure_launch')
+                                $imgprovider = $('<li><img src="img/azure-card.png" style="margin-left: -94px;margin-right: 7px;margin-top: 48px;" title="Windows Azure"></li>');
+                            if (data[i].blueprintType == 'vmware_launch')
+                                $imgprovider = $('<li><img src="img/vmware-card.png" style="margin-left: -94px;margin-right: 7px;margin-top: 48px;" title="Vmware"></li>');
+                            
                             // alert(data[i].blueprintType);
                             var $liImage = $('<li></li>').append($img);
                             $ul.append($liImage);
@@ -4325,7 +4330,7 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                                         var $tr = $('<tr/>');
                                         var $tdName = $('<td></td>');
                                         var $tdValue = $('<td id="selectValue"></td>');
-                                        var selectForparam = $('<select style="width:60%;"></select>').attr('key', name);
+                                        var selectForparam = $('<select style="width:60%;" class="form-controlSelect"></select>').attr('key', name);
                                         var nameForParam = data[i].taskConfig.parameterized[a].parameterName;
                                         if (nameForParam === 'Choice') {
                                             var label = $('<label style="font-size:14px;">Are you sure you want to execute? Choose the Parameter for-&nbsp <b>' + name + '<b></label>');
@@ -4349,7 +4354,7 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
 
                                                 str = '<option>' + defaultValueCheck[k] + '</option>';
 
-                                                selectForparam.append(str).select2();
+                                                selectForparam.append(str);
 
                                             } //for loop for default value ends here..
 

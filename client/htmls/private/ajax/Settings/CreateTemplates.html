@@ -25,7 +25,7 @@
                                     <div class="row zero-margin" >
                                        <div class="col-lg-6 col-md-6">
                                           <label for="">Template Name:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
-                                          <label id="msgOrgName" style="display:none;color:red;float:right;">Required</label>
+                                          <label id="msgOrgName"></label>
                                           <input name="ctl00$MainContent$orgname" value="" id="templatename" class="form-control"  cdata="catalyst" unique="true" uniqueconditionedby="templatename,templatetypename" type="text" cat-validation="required,max15"><span data-val-controltovalidate="orgname" id="MainContent_Req_orgname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility:hidden;">Required</span>
                                        </div>
                                        <div class="col-lg-6 col-md-6">
@@ -88,16 +88,13 @@
 
                                        <div class="col-lg-6 col-md-6 notforDocker forCFT" style="margin-top:20px">
                                                 <div class="smart-forms">
-                                                   <label>Template File:</label>
-                                                   <!-- <span class="templateFile"data-original-title='Jenkins Log' data-placement='top' rel='tooltip'><i class='fa fa-question'></i>
-                                                   </span> -->
-                                                   
+                                                   <label>Template File:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
                                                    <label for="validatorpemfile" class="field file">
                                                       <div class="imgdiv" value="1"></div>
-                                                      <span class="button btn-primary">Browse</span><input id="template" keyfield="configname" type="file" onchange="this.nextSibling.value = this.value"  cdata="catalyst" class="gui-file"><input type="text" readonly="" class="gui-input">
+                                                      <span class="button btn-primary">Browse</span><input id="template" keyfield="configname" type="file" onchange="this.nextSibling.value = this.value" cdata="catalyst" class="gui-file"><input type="text" readonly="" class="gui-input">
                                                    </label>
                                                 </div>
-                                             </div>
+                                       </div>
                                        
                                     
                                        
@@ -736,6 +733,10 @@
    $('#configname').trigger('change');
    $('#templatetypename').trigger('change');
 
+   /*$('#templatetypename').on('change',function(){
+      var templateType = $('#templatetypename').val();
+      
+   })*/
    
    
    // $chefItemdiv.find('.searchoptionforCookbooks').keyup(function(e){
@@ -757,22 +758,39 @@
    //      $allListElements.hide();
    //      $matchingListElements.show();
    //   });
-   
 </script>
 <script>
-   $(document).ready(function () {
-      $("#templatename").focus();
-       $('#myForm6').submit(function() {
-           $(this).validate();
-   
-           if($(this).valid){
-                /*alert('valid form submitted'); // for demo*/
-               if(validateForm()){ setfolderpath();saveform('17');};
-           }else{
-                alert('invalid valid form submitted'); // for demo
-           }
-           return false; // for demo
-       });
-   });
+   $(document).ready(function() {
+           $("#templatename").focus();
+           $('#myForm6').submit(function() {
+                   $(this).validate();
+                   var templateType = $('#templatetypename').val();
+                   if (templateType === 'Docker' || templateType === 'SoftwareStack' || location.toString().indexOf('?new') === -1) {
+                       $('#template').removeAttr('cat-validation', 'required');
+                       if ($(this).valid) {
+                           /*alert('valid form submitted'); // for demo*/
+                           if (validateForm()) {
+                               setfolderpath();
+                               saveform('17');
+                           };
+                       } else {
+                           alert('invalid valid form submitted'); // for demo
+                       }
+                   } else if (templateType === 'CloudFormation'){
+                     
+                           $('#template').attr('cat-validation', 'required');
+                           if ($(this).valid) {
+                               /*alert('valid form submitted'); // for demo*/
+                               if (validateForm()) {
+                                   setfolderpath();
+                                   saveform('17');
+                               };
+                           } else {
+                               alert('invalid valid form submitted'); // for demo
+                           }
+                       }
+                       return false; // for demo
+                   });
+           });
        
 </script>

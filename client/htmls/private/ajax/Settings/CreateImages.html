@@ -100,7 +100,7 @@
                                  <input name="ctl00$MainContent$orgname" Placeholder="Enter The Admin UserName" id="UserName" class="form-control" type="text"  cdata="catalyst" cat-validation="required,max15">
                                </div> 
 
-                               <div class="col-lg-6 forazurepassword hidden">
+                               <div class="col-lg-6 forazurepassword hidden" style="margin-top:15px">
                                  <label for=""> Admin  Password:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
                                  <input name="ctl00$MainContent$orgname" Placeholder="Enter The Admin Password" id="password" class="form-control" type="password"  cdata="catalyst">
                                </div> 
@@ -171,6 +171,10 @@
                 //alert('in');
                 $('#createproviderbody').css('display','');
                 $('#spnprovidertype').html($('#providertype').val());
+
+              }
+              else{
+                $('#orgId').trigger('change');
               }
 
               $('#content').css("opacity", "1 !important");
@@ -200,13 +204,15 @@
             $("form[id*='myForm']").find("div.pull-right > button").removeAttr('disabled');
           }
           function getProviderList(_val){
+            
             $.ajax({
               type:"GET",
               url:"/allproviders/list",
               success:function(data){
                 var str="";
                 for (var key in data) {
-                  if (data.hasOwnProperty(key)) {                    
+                  if (data.hasOwnProperty(key)) {   
+
                     for(var i=0;i<data[key].length;i++){
                       //alert("orgid is: "+data[key][i].orgId);
                       if(_val == data[key][i].orgId){
@@ -238,7 +244,7 @@
                   var provider = $('#providerId').find("option:selected").attr('providerType');
                   //console.log("provider",provider);
 
-                  if(provider == 'AZURE'){
+                  if(provider == 'AZURE' || provider == 'VMWARE'){
                       $('.forazurepassword').removeClass('hidden');
                       $('.forazurepassword').find('#password').attr('cat-validation','required,min8');
                   }else{
@@ -427,7 +433,7 @@
     $('#orgId').val("").select2();
     }
     $("#orgId").on('change',function(e){
-      getProviderList(e.val);
+      getProviderList($("#orgId").val());
     });
   });
 }
@@ -551,7 +557,7 @@ $(document).ready(function () {
             $('#UserName').val(data.userName).attr('answer',data.userName);
             $('#orgId').val(data.orgId[0]).attr({'answer': data.orgId[0]}).select2();
 
-            if(data.providerType == 'azure'){
+            if(data.providerType == 'azure' || data.providerType == 'vmware'){
               $('#password').val(data.instancePassword).attr('answer',data.instancePassword);
               $('.forazurepassword').removeClass('hidden');
             }
