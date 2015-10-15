@@ -1,0 +1,80 @@
+<style>
+.footer {
+    background: white none repeat scroll 0 0;
+    bottom: 0;
+    left: 0;
+    position: fixed;
+    right: 0;
+}
+</style>
+<div class="row" style="height:96%;border:1px solid red">
+    <div id="rootwizard">
+        <div class="navbar">
+            <div class="navbar-inner">
+                <div class="">
+                    <ul class="hidden">
+                        <li><a href="#tab1" data-toggle="tab">First</a></li>
+                        <li><a href="#tab2" data-toggle="tab">Second</a></li>
+                        <li><a href="#tab3" data-toggle="tab">Third</a></li>
+                        <li><a href="#tab4" data-toggle="tab">Forth</a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane" id="tab1">
+                            <div id="templatetype" pageurl="templatetype.html"></div>
+                        </div>
+                        <div class="tab-pane" id="tab2">
+                            <div id="templatetype1" pageurl="templates.html"></div>
+                        </div>
+                        <div class="tab-pane" id="tab3">
+                            3
+                        </div>
+                        <div class="tab-pane" id="tab4">
+                            4
+                        </div>
+                       
+                    </div>
+                </div>
+                <div style="bottom: 7px;margin-left: 10px;position: fixed;width: 80%;">
+                	<div class="row">
+                		<div class="col-md-6">
+	                		<div style="float:right">
+	                   			  <input type='button' class='btn btn-primary button-previous' name='previous' value='Previous' />
+	                   		</div>
+	                    <!-- <input type='button' class='btn btn-primary button-last' name='last' value='Last' /> -->
+	                	</div>
+	               		<div class="col-md-6">
+			                <div  style="float:left">
+			                    <!-- <input type='button' class='btn btn-primary button-first' name='first' value='First' /> -->
+			                   
+			                    <input type='button' class='btn btn-primary button-next' name='next' value='Next' />
+			                </div>
+	            		</div>
+	            	</div>
+            	</div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+
+// $
+$(document).ready(function() {
+	$('#content').css('height', '98% !important');
+    $('#rootwizard').bootstrapWizard({
+        'nextSelector': '.button-next',
+        'previousSelector': '.button-previous',
+        'firstSelector': '.button-first',
+        'lastSelector': '.button-last'
+    });
+    $('div[pageurl]').each(function(){
+    	loadURL('ajax/' + $(this).attr('pageurl'),$(this));
+    });
+    
+    $('#rootwizard').on('wizard.step',function(){
+    	alert('test');
+    });   
+    // var $wizardul = $('.wizardul').clone();
+    // $wizardul.removeClass('hidden');
+    // $('footer').append($wizardul);
+});
+</script>
