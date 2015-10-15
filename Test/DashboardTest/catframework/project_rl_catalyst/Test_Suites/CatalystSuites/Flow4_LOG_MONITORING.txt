@@ -11,9 +11,19 @@ Library            String
 
 *** Test Cases ***
 Catalyst Log Monitoring Dashboard Automation
-    [Tags]       Sanity               dashboard
+    [Tags]       Sanity               dashboard1
 #    Catalyst Login 
     Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
     Catalyst Log Monitoring Dashboard Verification
     Catalyst Logout                      
     [Teardown]     Close Browser
+
+
+Catalyst Log Monitoring Dashboard Visibility within 20seconds
+    [Tags]       Sanity               dashboard1
+#    Catalyst Login 
+    Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
+    Catalyst Log Monitoring Dashboard Visibility
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
