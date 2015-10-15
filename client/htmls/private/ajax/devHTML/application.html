@@ -6,7 +6,7 @@ input {
 .jarviswidget .widget-body {
     padding-bottom: 0px !important;
 }
-#spanTextApplication {
+.spanTextApplication {
     white-space: nowrap; 
     width: 10em; 
     overflow: hidden;
@@ -64,6 +64,11 @@ input {
                         </div>
                     </article>
                 </div>
+                <div class="row loadingAppDeploySpinner">
+                    <article class="col-sm-12 col-md-12 col-lg-12">
+                        <img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif"/>
+                    </article>
+                </div>
                 <div class="accordianTemplateContainer" style="display:none">
                     <div class="panel panel-default accordianTemplate">
                         <div class="panel-heading"  style="border-bottom:1px solid rgb(221, 221, 221);height:40px;background-color:#fcfcfc;">
@@ -94,6 +99,7 @@ input {
                                             <td style="color:#fff;background-color: #2c3742;">Application Type</td>
                                             <td style="color:#fff;background-color: #2c3742;">Status</td>
                                             <td style="color:#fff;background-color: #2c3742;">Logs</td>
+                                            <td style="color:#fff;background-color: #2c3742;">Upgrade</td>
                                             <!-- <td style="color:#fff;background-color: #2c3742;">App Links</td>
                                         <td style="color:#fff;background-color: #2c3742;">Action</td> -->
                                         </tr>
@@ -117,6 +123,7 @@ input {
                                             <td style="color:#fff;background-color: #2c3742;">Application Type</td>
                                             <td style="color:#fff;background-color: #2c3742;">Status</td>
                                             <td style="color:#fff;background-color: #2c3742;">Logs</td>
+                                            <td style="color:#fff;background-color: #2c3742;">Upgrade</td>
                                             <!-- <td style="color:#fff;background-color: #2c3742;">App Links</td>
                                         <td style="color:#fff;background-color: #2c3742;">Action</td> -->
                                         </tr>
@@ -235,12 +242,179 @@ input {
                         </div>
                     </div>
                 </div>
+
+                <div class="modal fade" id="modalUpgradeAppDeploy" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <form role="form" id="formUpgradeAppDeploy" autocomplete="off">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                        X
+                                    </button>
+                                    <h4 class="modal-title">
+                                    <i class="fa fa-th-list txt-color-blue"></i>&nbsp;&nbsp;Upgrade : <span id="upgradeAppName"></span> (<span id="upgradeNodeIp"></span>)
+                                </h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="upgradeForAppDeploy">
+                                        <input type="hidden" id="containerIdInput">
+                                        <fieldset class="fieldsetCustom">
+                                            <legend  class="legendCustom">Repository Details:</legend>
+                                            <div class="col-lg-6 col-md-6">
+                                                <label for="">Repository Server:<span style="color:red">*</span>
+                                                    <span>
+                                                        <img class="reposerverspinner" src="img/select2-spinner.gif" style="display:none">
+                                                        </img>
+                                                    </span>
+                                                </label>
+                                                <div class="input-groups">
+                                                    <select id="chooseNexusServer" name="" class="required width-100 form-control">
+                                                        <option value="">Choose Server</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6 col-md-6">
+                                                <label for="">Repository:<span style="color:red">*</span>
+                                                    <span>
+                                                        <img class="repospinner" src="img/select2-spinner.gif" style="display:none"></img>
+                                                    </span>
+                                                </label>
+                                                <div class="input-groups">
+                                                    <select id="chooseRepository" name="" class="required width-100 form-control">
+                                                        <option value="">Choose Repositories</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="col-lg-12 col-md-12 margintop15">
+                                                <label>Repository URL:<span style="color:red">*</span>
+                                                    <span>
+                                                        <img class="repourlspinner" src="img/select2-spinner.gif" style="display:none">
+                                                        </img>
+                                                    </span>
+                                                </label>
+                                                <input id="repositoryUrl" type="text" class="form-control" name="" disabled>
+                                            </div>
+
+                                            <div class="col-lg-12 col-md-12 margintop15 containerClass">
+                                                <label>Container ID:<span style="color:red">*</span>
+                                                    <span>
+                                                        <img class="containerIdspinner" src="img/select2-spinner.gif" style="display:none">
+                                                        </img>
+                                                    </span>
+                                                </label>
+                                                <input id="containerIdDiv" type="text" class="form-control" name="" disabled>
+                                            </div>
+
+
+                                            <div class="col-lg-6 col-md-6 margintop15">
+                                                <label for="">Artifacts:<span style="color:red">*</span>
+                                                    <span>
+                                                        <img class="artifactsspinner" src="img/select2-spinner.gif" style="display:none">
+                                                        </img>
+                                                    </span>
+                                                </label>
+                                                <div class="input-groups">
+                                                    <select id="chooseArtifacts" name="" class="required width-100 form-control">
+                                                       <option value="">Choose Artifacts</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-lg-6 col-md-6 margintop15">
+                                                <label for="">Versions:<span style="color:red">*</span>
+                                                    <span>
+                                                        <img class="versionspinner" src="img/select2-spinner.gif" style="display:none">
+                                                        </img>
+                                                    </span>
+                                                </label>
+                                                <div class="input-groups">
+                                                    <select id="chooseVersions" name="" class="required width-100 form-control">
+                                                        <option value="">Choose Versions</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                        </fieldset>
+
+                                        <fieldset class="fieldsetCustom"  style="margin-top: 20px ! important;">
+                                            <legend  class="legendCustom">Job Details:</legend>
+                                            <div class="col-lg-6 col-md-6">
+                                                <label>Jobs:<span style="color:red">*</span>
+                                                    <span>
+                                                        <img class="jobdetailsspinner" src="img/select2-spinner.gif" style="display:none">
+                                                        </img>
+                                                    </span>
+                                                </label>
+                                                <div class="input-groups">
+                                                    <select id="chooseJobType" name="" class="required width-100 form-control">
+                                                        <option value="">Choose Job</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <!-- <div class="col-lg-6 col-md-6">
+                                                <label for="">RunDeck Project:<span style="color:red">*</span></label>
+                                                <div class="input-groups">
+                                                    <select id="chooseRundeckProject" name="" class="required width-100">
+                                                        <option value="">All Rundeck Project</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6 col-md-6">
+                                                <label for="">Environment:<span style="color:red">*</span></label>
+                                                <div class="input-groups">
+                                                    <select id="chooseEnvironment" name="" class="required width-100">
+                                                       <option value="">All Environment</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="col-lg-6 col-md-6 margintop15">
+                                                <label for="">Nodes : </label>
+                                                <select class="custom-scroll" multiple="" style="border: 1px solid rgb(204, 204, 204);padding:4px">
+                                                    <option value="1">Node Test1</option>
+                                                    <option value="2">Node Test2</option>
+                                                    <option value="3">Node Test3</option>
+                                                    <option value="4">Node Test4</option>
+                                                    <option value="5">Node Test5</option>
+                                                    <option value="6">Node Test6</option>
+                                                    <option value="7">Node Test7</option>
+                                                    <option value="8">Node Test8</option>
+                                                    <option value="9">Node Test9</option>
+                                                </select> 
+                                            </div> -->
+                                        </fieldset>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <div class="btn-group" style="margin-left:200px;">
+                                        <a style="margin-left:10px;" class="btn btn-primary saveUpgradeAppDeploy">
+                                            <i class="ace-icon fa fa-save bigger-110"></i> Upgrade
+                                        </a>
+                                        <a style="margin-left:10px;" class="btn btn-primary cancelUpgradeAppDeploy" data-dismiss="modal">
+                                            <i class="ace-icon fa fa-undo bigger-110"></i> Cancel
+                                        </a>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
 <script type="text/javascript">
 $(document).ready(function() {
+    // $('#chooseNexusServer').select2();
+    // $('#chooseRepository').select2();
+    // $('#chooseArtifacts').select2();
+    // $('#chooseVersions').select2();
+    // $('#chooseRundeckProject').select2();
+    // $('#chooseEnvironment').select2();
+
+
+
     // $('#chooseApplication').select2();
     //debugger;
     //getDropdownList();
@@ -248,6 +422,252 @@ $(document).ready(function() {
     // getAllApplicationData(function(data){
     //   constructUI(data);
     // });
+});
+
+function resetAllFields(){
+    var $chooseRepository = $('#chooseRepository');
+    $chooseRepository.empty();
+    $('#chooseRepository').append('<option value="">Choose Repositories</option>');
+    var $chooseArtifacts = $('#chooseArtifacts');
+    $chooseArtifacts.empty();
+    $('#chooseArtifacts').append('<option value="">Choose Artifacts</option>');
+    var $chooseVersions = $('#chooseVersions');
+    $chooseVersions.empty();
+    $('#chooseVersions').append('<option value="">Choose Versions</option>');
+    var $repositoryUrl = $('#repositoryUrl');
+    $repositoryUrl.val("");
+    var $containerId = $('#containerIdDiv');
+    $containerId.val("");
+}
+function resetSpinners(){
+    $('.reposerverspinner').css('display', 'none');
+    $('.repospinner').css('display', 'none');
+    $('.repourlspinner').css('display', 'none');
+    $('.artifactsspinner').css('display', 'none');
+    $('.versionspinner').css('display', 'none');
+    $('.jobdetailsspinner').css('display', 'none');
+}
+
+function getNexusServer(){
+    resetAllFields();
+    var $nexusServer = $('#chooseNexusServer');
+    $nexusServer.empty();
+    $('#chooseNexusServer').append('<option value="">Choose Server</option>');
+    var $chooseJobType = $('#chooseJobType');
+    $chooseJobType.empty();
+    $('#chooseJobType').append('<option value="">Choose Job</option>');
+    $('.reposerverspinner').css('display','inline-block');
+    $.get('/d4dMasters/readmasterjsonnew/26',function(nexus){
+        $('.reposerverspinner').css('display','none');
+        if(nexus.length){
+            for(var i=0;i< nexus.length;i++){
+                $('#chooseNexusServer').append('<option data-nexusUrl = "'+nexus[i].hostname+'" value='+nexus[i].rowid+'>'+nexus[i].nexusservername+'</option>');
+            }
+        }
+    });
+}
+var $nexusServer = $('#chooseNexusServer');
+$nexusServer.change(function(e){
+    resetAllFields();
+    getNexusServerRepo($(this).val());
+    getTasks();
+});
+
+function getNexusServerRepo(nexusId) {
+
+    //resetAllFields();
+    $('.repospinner').css('display', 'inline-block');
+    /*if(nexusId == '' && nexusId == null){
+        $('.repospinner').css('display','none');
+    }*/
+    var $chooseRepository = $('#chooseRepository');
+    if (nexusId) {
+        $.get('/nexus/' + nexusId + '/repositories', function(nexusRepos) {
+            $('.repospinner').css('display', 'none');
+            if (nexusRepos.length) {
+                for (var i = 0; i < nexusRepos.length; i++) {
+                    $('#chooseRepository').append('<option data-repoName="' + nexusRepos[i].name + '" data-repoUrl="' + nexusRepos[i].resourceURI + '" value="' + nexusRepos[i].id + '">' + nexusRepos[i].name + '</option>');
+                }
+            }
+        });
+    } else {
+        $('.repospinner').css('display', 'none');
+    }
+}
+var $chooseRepository = $('#chooseRepository');
+$chooseRepository.change(function(e){
+        var $repositoryUrl = $('#repositoryUrl');
+        $repositoryUrl.val("");
+        var $containerId = $('#containerIdDiv');
+        $containerId.val("");
+        var $chooseArtifacts = $('#chooseArtifacts');
+        $chooseArtifacts.empty();
+        $('#chooseArtifacts').append('<option value="">Choose Artifacts</option>');
+        var $chooseVersions = $('#chooseVersions');
+        $chooseVersions.empty();
+        $('#chooseVersions').append('<option value="">Choose Versions</option>');
+        $('#repositoryUrl').val($(this).find('option:selected').attr('data-repoUrl'));
+        var containerIdName = $('#containerIdInput').val();
+        if(containerIdName == 'NA'){
+         $('.containerClass').hide();   
+        }else{
+            $('.containerClass').show();
+            $('#containerIdDiv').val($('#containerIdInput').val());
+        }
+        var repoName = $(this).find('option:selected').attr('data-repoName');
+        var nexusId = $('#chooseNexusServer').val();
+        getNexusServerRepoArtifact(nexusId,repoName);
+    });
+
+function getNexusServerRepoArtifact(nexusId,repoName){
+    $('.artifactsspinner').css('display','inline-block');
+    var $chooseArtifacts = $('#chooseArtifacts');
+    $chooseArtifacts.empty();
+    $('#chooseArtifacts').append('<option value="">Choose Artifacts</option>');
+    if (nexusId && repoName) {
+        $.get('/nexus/'+nexusId+'/repositories/'+repoName+'/artifact',function(artifacts){
+            $('.artifactsspinner').css('display','none');
+            if(artifacts.length){
+                var uniqueArtifacts =[];
+                var checker;
+                for(var i=0;i< artifacts.length;i++){
+                    if (!checker || comparer(checker, artifacts[i]) != 0) {
+                        checker = artifacts[i];
+                        uniqueArtifacts.push(checker);
+                    }
+                }
+                for(var j=0;j< uniqueArtifacts.length;j++){
+                    $('#chooseArtifacts').append('<option data-groupId="'+uniqueArtifacts[j].groupId+'" value='+uniqueArtifacts[j].artifactId+'>'+uniqueArtifacts[j].artifactId+'</option>');
+                }
+            }
+        });
+    }else{
+        $('.artifactsspinner').css('display','none');
+    }
+}
+var $chooseArtifacts = $('#chooseArtifacts');
+$chooseArtifacts.change(function(e){
+        var $chooseVersions = $('#chooseVersions');
+        $chooseVersions.empty();
+        $('#chooseVersions').append('<option value="">Choose Versions</option>');
+        var repoName = $('#chooseRepository').find('option:selected').attr('data-repoName');
+        var nexusId = $('#chooseNexusServer').val();
+        var groupId = $(this).find('option:selected').attr('data-groupId');
+        var reqBody = {
+        "groupId": groupId,
+        "artifactId": $(this).val()
+        };
+        getNexusServerRepoArtifactVersions(nexusId,repoName,reqBody);
+    });
+
+var comparer = function compareObject(a, b) {
+    if (a.artifactId === b.artifactId) {
+        return 0;
+    } else {
+        return 1;
+    }
+}
+
+function getNexusServerRepoArtifactVersions(nexusId,repoName,reqBody){
+    $('.versionspinner').css('display','inline-block');
+    var $chooseVersions = $('#chooseVersions');
+    $chooseVersions.empty();
+    $('#chooseVersions').append('<option value="">Choose Versions</option>');
+    // console.log(reqBody.groupId);
+    // console.log(reqBody.artifactId);
+    if (nexusId && repoName && reqBody.groupId && reqBody.artifactId) {
+        $.ajax({
+                url: '/nexus/'+nexusId+'/repositories/'+repoName+'/artifact/versions',
+                data: JSON.stringify(reqBody),
+                type: 'POST',
+                contentType: "application/json",
+                success: function(data) {
+                    $('.versionspinner').css('display','none');
+                    if(data){
+                      var versions = data.metadata.versioning[0].versions[0].version;
+                        for(var i=0;i< versions.length;i++){
+                            $('#chooseVersions').append('<option value='+versions[i]+'>'+versions[i]+'</option>');
+                        }
+                    }
+                },
+                error: function(jqxhr) {
+                    $('.versionspinner').css('display','none');
+                     alert(jqxhr.responseText);
+                }
+        });
+    }else{
+        $('.versionspinner').css('display','none');
+    }
+}
+
+function getTasks(){
+    var orgId = urlParams.org;
+    var bgId = urlParams.bg;
+    var projectId = urlParams.projid;
+    var envId = urlParams.envid;
+    var $chooseJobType = $('#chooseJobType');
+    $chooseJobType.empty();
+    $('#chooseJobType').append('<option value="">Choose Job</option>');
+
+    $.get('/organizations/'+orgId+'/businessgroups/'+bgId+'/projects/'+projectId+'/environments/'+envId+'/tasks',function(tasks){
+        if(tasks.length){
+            for(var i=0;i< tasks.length;i++){
+                $('#chooseJobType').append('<option value='+tasks[i]._id+'>'+tasks[i].name+'</option>');
+            }
+        }
+    });
+}
+
+
+// on click of Upgrade button
+$('.saveUpgradeAppDeploy').on('click',function(){
+    var nexusId = $('#chooseNexusServer').find('option:selected').val();
+    if(!nexusId){
+        alert("Please select repository server.");
+        return false;
+    }
+    var repoId = $('#chooseRepository').find('option:selected').val();
+    if(!repoId){
+        alert("Please select repository.");
+        return false;
+    }
+    var artifactId = $('#chooseArtifacts').find('option:selected').val();
+    if(!artifactId){
+        alert("Please select artifact.");
+        return false;
+    }
+    var versionId = $('#chooseVersions').find('option:selected').val();
+    if(!versionId){
+        alert("Please select version.");
+        return false;
+    }
+    var taskId = $('#chooseJobType').find('option:selected').val();
+    if(!taskId){
+        alert("Please select job.");
+        return false;
+    }
+    var orgId = urlParams.org;
+    var bgId = urlParams.bg;
+    var projectId = urlParams.projid;
+    var envId = urlParams.envid;
+    var groupId = $('#chooseArtifacts').find('option:selected').attr('data-groupId').replace(/\./g, '/');
+    var nexusUrl = $('#chooseNexusServer').find('option:selected').attr('data-nexusUrl');
+    var nexusRepoUrl = nexusUrl+"/service/local/repositories/"+repoId+"/content/"+groupId+"/"+artifactId+"/"+versionId+"/"+artifactId+"-"+versionId+".zip";
+    var containerId = $('#containerIdInput').val();
+    var nexusData={
+        "nexusData":{
+            "nexusUrl": nexusRepoUrl,
+            "version": versionId,
+            "containerId": ""
+        }
+    };
+
+    if(containerId && containerId != "NA"){
+        nexusData.nexusData.containerId = containerId;
+    }
+        //alert(JSON.stringify(nexusData));
+        $('a[data-executetaskid='+taskId+']').trigger('click',nexusData);
+        $('#modalUpgradeAppDeploy').modal('hide');
 });
 
 function saveRecord() {
@@ -391,6 +811,7 @@ function getParticularApplicationData(selectedAppName) {
 
 function constructUI(data) {
     //alert(data);
+    $('.loadingAppDeploySpinner').hide();
     $("#accordion-AppDeploy").empty();
     if (data.length) {
         var $chooseApplication = $('#chooseApplication');
@@ -411,6 +832,7 @@ function constructUI(data) {
             "padding-top": "20px",
             "display": "none"
         });
+
         var $accordianTemplate = $('.accordianTemplateContainer').find('.accordianTemplate');
         var dataenvAccordianName;
         function moreInfoAppDeployClickHandler(e) {
@@ -443,7 +865,38 @@ function constructUI(data) {
                 }
             });
         }
+
+        function moreInfoUpgradeAppDeployClickHandler(e) {
+            $('#formUpgradeAppDeploy')[0].reset();
+            $('.containerClass').hide();
+            resetSpinners();
+            //$('#chooseRepository').empty();
+            var tabletrIndex = $(".moreinfoUpgradeAppDeploy").index($(this));
+            
+            var upgradeAppNameText = $('#tableappDeploydetails tbody tr:eq('+tabletrIndex+') td:first').html();
+            var upgradeNodeIpText = $('#tableappDeploydetails tbody tr:eq('+tabletrIndex+') td:nth-child(5)').html();
+            var containerId = $('#tableappDeploydetails tbody tr:eq('+tabletrIndex+') td:nth-child(7)').html();
+            containerId = containerId.split("</div>")[0].split(">")[1];
+            //$("#upgradeAppName").empty();
+            //$("#upgradeNodeIp").empty();
+            if(!containerId){
+                containerId = "NA";
+            }
+            $("#upgradeAppName").html(upgradeAppNameText);
+            $("#upgradeNodeIp").html(upgradeNodeIpText);
+            //$("#upgradeNode").val(upgradeNodeIpText);
+
+            
+            getNexusServer();
+            var $modal = $('#modalUpgradeAppDeploy');
+            $('#containerIdInput').val(containerId);
+            //$logContainer.empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
+            $modal.modal('show');
+        }
+
         $('#tableappDeploydetails').on('click', '.moreinfoAppDeploy', moreInfoAppDeployClickHandler);
+        $('#tableappDeploydetails').on('click', '.moreinfoUpgradeAppDeploy', moreInfoUpgradeAppDeployClickHandler);
+        // $('.moreinfoAppDeploy').on('click',moreInfoClickHandler);
         if (data && data.length) {
             var $clone = $accordianTemplate.clone(true);
             for (var i = 0; i < data.length; i++) {
@@ -502,6 +955,8 @@ function constructUI(data) {
                                         "bSortable": true
                                     }, {
                                         "bSortable": false
+                                    }, {
+                                        "bSortable": false
                                     }
                                 ]
                             });
@@ -519,13 +974,21 @@ function constructUI(data) {
                     // var appLinks = '<img style="height: 18px;margin-left: -5px;"src="img/projectdemo/app-performanceblack.png" title="App-Performance"><img style="height: 18px;margin-left: 5px;" src="img/projectdemo/logsblack.png" title="App-Logs"><img style="height: 18px;margin-left: 5px;" src="img/projectdemo/code_healthblack.png" title="Code-Health"><img style="height: 18px;margin-left: 5px;" src="img/projectdemo/UI_performanceblack.png" title="UI-Performance">';
                     //var logs = '<div class="moreinfoAppDeploy" id="" title="Logs Info" style="margin-left:27%"></div>';
                     //console.log(data[i].appLogs);
+                    var upgradeAppDeploy;
+                    if (!data[i]._id) {
+                        upgradeAppDeploy = "NA";
+                    } else {
+                        upgradeAppDeploy = '<a class="btn btn-primary btn-sg tableactionbutton moreinfoUpgradeAppDeploy" style="box-shadow: none ! important; height: 25px; width: 25px; padding: 2px; font-size: 12px;"><i class="ace-icon fa fa-upload bigger-120"></i></a>';
+                        //upgradeAppDeploy = '<a class="updateupgrade" id=' + data[i]._id + ' target="_blank" title="Logs Info" style="margin-left:27%"></a>';
+                    }
+
 
 
                     var logsAppDeploy;
                     if (!data[i]._id) {
                         logsAppDeploy = "NA";
                     } else {
-                        logsAppDeploy = '<a class="moreinfoAppDeploy" id=' + data[i]._id + ' target="_blank" title="Logs Info" style="margin-left:27%"></a>';
+                        logsAppDeploy = '<a class="moreinfoAppDeploy" id=' + data[i]._id + ' title="Logs Info" style="margin-left:27%"></a>';
                     }
                     if (!data[i].applicationName) {
                         data[i].applicationName = "NA";
@@ -546,8 +1009,7 @@ function constructUI(data) {
                     if (!data[i].containerId) {
                         data[i].containerId = "NA";
                     }else{
-                        data[i].containerId = '<div id="spanTextApplication">'+data[i].containerId+'</div>'
-                        //data[i].containerId = '<div id="spanTextApplication" rel="tooltip" data-placement="top" data-original-title="'+data[i].containerId+'">'+data[i].containerId+'</div>'
+                        data[i].containerId = '<div class="spanTextApplication" title="'+data[i].containerId+'">'+data[i].containerId+'</div>'
                     }
                     if (!data[i].hostName) {
                         data[i].hostName = "NA";
@@ -580,43 +1042,14 @@ function constructUI(data) {
                         data[i].containerId,
                         data[i].applicationType,
                         data[i].applicationStatus,
-                        logsAppDeploy
+                        logsAppDeploy,
+                        upgradeAppDeploy
                     ]);
                 }
                 if (typeof data[i].envId == 'undefined') {
                     $('#' + data[i].projectId + data[i].applicationName + data[i].envId + '_parentAccordian').hide();
                 }
             }
-            // $(".moreinfoAppDeploy").click(function(e) {
-            //     var $modal = $('#modalAppCardLogDetails');
-            //     var $logContainer = $modal.find('.logsForAppDeploy').show();
-            //     $logContainer.empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
-            //     $.ajax({
-            //         url: '/app/deploy/' + this.id + '/logs',
-            //         type: 'GET',
-            //         contentType: "application/json",
-            //         success: function(data) {
-            //             var datahttp = data.indexOf("http://");
-            //             if (datahttp == 0) {
-            //                 $logContainer.empty();
-            //                 window.open(data, "_blank");
-            //             } else {
-            //                 $logContainer.empty();
-            //                 $modal.modal('show');
-            //                 data = data.replace(/,/g, "<br />");
-            //                 $logContainer.append(data);
-            //             }
-            //         },
-            //         error: function(jqxhr) {
-            //             $logContainer.empty();
-            //             $modal.modal('show');
-            //             $logContainer.append('No Logs Available');
-            //         },
-            //         failure: function(data) {
-
-            //         }
-            //     });
-            // });
         }
     } else {
         $("#nodataAppDeploy").empty();
@@ -654,6 +1087,8 @@ function constructUI(data) {
                         "bSortable": true
                     }, {
                         "bSortable": true
+                    }, {
+                        "bSortable": false
                     }, {
                         "bSortable": false
                     }
