@@ -755,7 +755,7 @@ function getLocaleTime(str){
         var temp=str.split(' ');
         var date=temp[0].split('-');
         var time=temp[1].split(":");
-        var ddate=new Date( Date.UTC(parseInt(date[0]),parseInt(date[1]),parseInt(date[2]),parseInt(time[0]),parseInt(time[1]),parseInt(time[2]) ));
+        var ddate=new Date( Date.UTC(parseInt(date[0]),parseInt(date[1])-1,parseInt(date[2]),parseInt(time[0]),parseInt(time[1]),parseInt(time[2]) ));
         return ddate.getTime();
     }
     var t=findTimeStamp(str);
