@@ -296,6 +296,17 @@ input {
                                                 <input id="repositoryUrl" type="text" class="form-control" name="" disabled>
                                             </div>
 
+                                            <div class="col-lg-12 col-md-12 margintop15 containerClass">
+                                                <label>Container ID:<span style="color:red">*</span>
+                                                    <span>
+                                                        <img class="containerIdspinner" src="img/select2-spinner.gif" style="display:none">
+                                                        </img>
+                                                    </span>
+                                                </label>
+                                                <input id="containerIdDiv" type="text" class="form-control" name="" disabled>
+                                            </div>
+
+
                                             <div class="col-lg-6 col-md-6 margintop15">
                                                 <label for="">Artifacts:<span style="color:red">*</span>
                                                     <span>
@@ -425,6 +436,8 @@ function resetAllFields(){
     $('#chooseVersions').append('<option value="">Choose Versions</option>');
     var $repositoryUrl = $('#repositoryUrl');
     $repositoryUrl.val("");
+    var $containerId = $('#containerIdDiv');
+    $containerId.val("");
 }
 function resetSpinners(){
     $('.reposerverspinner').css('display', 'none');
@@ -485,6 +498,8 @@ var $chooseRepository = $('#chooseRepository');
 $chooseRepository.change(function(e){
         var $repositoryUrl = $('#repositoryUrl');
         $repositoryUrl.val("");
+        var $containerId = $('#containerIdDiv');
+        $containerId.val("");
         var $chooseArtifacts = $('#chooseArtifacts');
         $chooseArtifacts.empty();
         $('#chooseArtifacts').append('<option value="">Choose Artifacts</option>');
@@ -492,6 +507,13 @@ $chooseRepository.change(function(e){
         $chooseVersions.empty();
         $('#chooseVersions').append('<option value="">Choose Versions</option>');
         $('#repositoryUrl').val($(this).find('option:selected').attr('data-repoUrl'));
+        var containerIdName = $('#containerIdInput').val();
+        if(containerIdName == 'NA'){
+         $('.containerClass').hide();   
+        }else{
+            $('.containerClass').show();
+            $('#containerIdDiv').val($('#containerIdInput').val());
+        }
         var repoName = $(this).find('option:selected').attr('data-repoName');
         var nexusId = $('#chooseNexusServer').val();
         getNexusServerRepoArtifact(nexusId,repoName);
@@ -846,6 +868,7 @@ function constructUI(data) {
 
         function moreInfoUpgradeAppDeployClickHandler(e) {
             $('#formUpgradeAppDeploy')[0].reset();
+            $('.containerClass').hide();
             resetSpinners();
             //$('#chooseRepository').empty();
             var tabletrIndex = $(".moreinfoUpgradeAppDeploy").index($(this));

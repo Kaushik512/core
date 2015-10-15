@@ -35,27 +35,29 @@ chefTaskSchema.methods.getNodes = function() {
 // Instance Method :- run task
 chefTaskSchema.methods.execute = function(userName, baseUrl, choiceParam, nexusData, onExecute, onComplete) {
     var self = this;
-
+    logger.debug("self: ",JSON.stringify(self));
     //merging attributes Objects
     var attributeObj = {};
     var objectArray = [];
     for (var i = 0; i < self.attributes.length; i++) {
         objectArray.push(self.attributes[i].jsonObj);
     }
+    //var cookbookName = self.runlist[0].split("role[")[1].split("]")[0];
+    //logger.debug("cookbook name: ",cookbookName);
     if (nexusData) {
         objectArray.push({
-            "upgrade_rlcatalyst": {
+            "rlcatalyst": {
                 "nexusUrl": nexusData.nexusUrl
             }
         });
         objectArray.push({
-            "upgrade_rlcatalyst": {
+            "rlcatalyst": {
                 "version": nexusData.version
             }
         });
         if (nexusData.containerId) {
             objectArray.push({
-                "upgrade_rlcatalyst": {
+                "rlcatalyst": {
                     "containerId": nexusData.containerId
                 }
             });
