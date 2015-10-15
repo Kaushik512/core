@@ -113,7 +113,7 @@ Catalyst Log Monitoring Dashboard Verification
     Clicks on Log Monitoring Link
     Sleep    10s
     Clicks on Left Panel Button
-    Sleep    40s
+    Sleep    50s
     Capture the Screen Shot of the Dashboard
     Verify Page Contains Access-Layer-Performance
     Verify Page Contains Access-Layer-Uptime
@@ -126,6 +126,27 @@ Catalyst Log Monitoring Dashboard Verification
     Verify Page Contains Cat-Access-Errors
     Capture the Screen Shot of the Dashboard
  
+
+Catalyst Log Monitoring Dashboard Visibility
+    Clicks on Tracks Button
+    Sleep    4s
+    Clicks on Monitoring Link
+    Sleep    1s
+    Clicks on Log Monitoring Link
+    Verify Page Contains Average Wiating,timestamp
+    Capture the Screen Shot of the Dashboard
+    Verify Page Contains Access-Layer-Performance
+    Verify Page Contains Access-Layer-Uptime
+    Verify Page Contains Access-Layer-Response
+    Verify Page Contains Cat-Uptime
+    Verify Page Contains Cat-App-Usage
+    Verify Page Contains Cat-Bootstrap-Perday
+    Verify Page Contains Cat-LogLevel-Percent
+    Verify Page Contains Cat_Errors
+    Verify Page Contains Cat-Access-Errors
+    Capture the Screen Shot of the Dashboard    
+
+
 
 Catalyst Notifications Dashboard Verification
     Clicks on Tracks Button
@@ -153,6 +174,13 @@ Catalyst Notifications Dashboard Verification
     #Sleep    1s
     #Clicks on AdverseEvents tab
     #Capture the Screen Shot of the Dashboard
+
+
+
+Verify Page Contains Average Wiating,timestamp
+    Wait Until Keyword Succeeds    0 minutes    19 seconds     Page Should Contain    Legend
+    #Wait Until Keyword Succeeds    5 minutes    19 seconds     Page Should Contain    Legend
+    Page Should Contain    Average Waiting
 
 
 Clicks on AdverseEvents tab
