@@ -199,6 +199,7 @@
                                             for(var u = 0; u < data.length; u++){
                                                 d4ddata.push(data[u]);
                                             }
+
                                           //  getProviderDatavmware();
                                               getProviderDataAzure();
                                            // getOrganizationList();
@@ -233,7 +234,7 @@
                                                 d4ddata.push(data[u]);
                                             }
 
-                                            getProviderDataAzure();
+                                            startup();
                                            // getOrganizationList();
                                             
                                         },
@@ -248,7 +249,7 @@
 
                             }
 
-                function getProviderDataAzure(){
+                            function getProviderDataAzure(){
                                 var reqBody={};
                                 reqBody.name=''
                                 reqBody.accessKey='';
@@ -265,7 +266,8 @@
                                             for(var u = 0; u < data.length; u++){
                                                 d4ddata.push(data[u]);
                                             }
-                                            startup();
+                                            getProviderDatavmware();
+                                            
                                            // getOrganizationList();
                                             
                                         },
@@ -547,6 +549,8 @@
               provname = 'openstack';
         } else if($(button).closest('tr').find('td[datafield="providerType"]').first().text() == "AZURE"){
               provname = 'azure';
+         }else if($(button).closest('tr').find('td[datafield="providerType"]').first().text() == "VMWARE"){
+              provname = 'vmware';
          }else if($(button).closest('tr').find('td[datafield="providerType"]').first().text() == "HPPUBLICCLOUD"){
               provname = 'hppubliccloud';
          }

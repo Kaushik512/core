@@ -33,6 +33,29 @@ Create New Config Management
     Clicks on Save button to save the Chef server
 
 
+Checking the Inport Nodes of ChefServer
+    Clicks on Import Nodes Button of chefserver
+    Capture Screen shot of the Impot Noded page
+
+
+
+Clicks on Import Nodes Button of chefserver
+    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${CHEF SERVER}']/../td[5]/div/a[2]
+    Sleep    6s
+    Page Should Contain    Node Name
+    Page Should Contain    IP Address
+    Page Should Contain    FQDN
+    Page Should Contain    Platform
+    Page Should Contain    Uptime
+    Page Should Contain    Environment 
+    Page Should Contain    Actions
+    Page Should Contain    centos
+    Page Should Contain    ubuntu
+
+Capture Screen shot of the Impot Noded page
+    Capture Page Screenshot
+
+
 Clicks on DevOps Setup menu
     Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       xpath=//a[contains(text(),'DevOps Setup')]
     Click Element    xpath=//a[contains(text(),'DevOps Setup')]

@@ -220,11 +220,13 @@ vmwareProviderSchema.statics.removevmwareProviderById = function(providerId, cal
             return;
         }
         logger.debug("Exit removevmwareProviderById with delete success.");
+
         callback(null, deleteCount);
         return;
 
     });
 };
+
 
 vmwareProviderSchema.statics.getvmwareProvidersByOrgId = function(orgId,callback) {
     logger.debug("Enter getvmwareProvidersByOrgId");

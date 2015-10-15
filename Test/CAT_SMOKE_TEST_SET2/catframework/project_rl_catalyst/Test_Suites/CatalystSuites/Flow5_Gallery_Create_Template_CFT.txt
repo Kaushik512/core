@@ -11,7 +11,7 @@ Resource           ${COMMON RESOURCES}/catalyst_grid_node.txt
 
 *** Test Cases ***
 Catalyst Gallery Templates Creation
-    [Tags]       Sanity      Settings
+    [Tags]       Sanity      GallerySetup
 #    Catalyst Login
     Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
     Catalyst User New Template Creation
@@ -20,7 +20,7 @@ Catalyst Gallery Templates Creation
 
 
 Catalyst Create Cloud Formation Template
-    [Tags]       Sanity      Settings
+    [Tags]       Sanity      GallerySetup
 #    Catalyst Login
     Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
     Catalyst Create New Cloud Formation Template

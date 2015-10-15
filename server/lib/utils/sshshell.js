@@ -2,7 +2,7 @@ var fileIo = require('./fileio');
 var sshConnection = require('ssh2').Client;
 var EventEmitter = require('events').EventEmitter;
 var util = require("util");
-
+var extend = require('extend');
 
 
 var HOST_UNREACHABLE = -5000;
@@ -11,6 +11,8 @@ var JSCH_EXCEPTION = -5002;
 var UNKOWN_EXCEPTION = -5003;
 var PEM_FILE_READ_ERROR = -5004;
 var STREAM_ERROR = -5005;
+
+
 
 var EVENTS = {
     ERROR: 'error',
@@ -52,13 +54,13 @@ function getConnectionParams(options, callback) {
         if (options.pemFileData) {
             connectionParamsObj.privateKey = options.pemFileData;
         } else {
-            if(true || options.interactiveKeyboard) {
-                connectionParamsObj.interactiveKeyboardPassword = options.password;   
+            if (options.interactiveKeyboard) {
+                connectionParamsObj.interactiveKeyboardPassword = options.password;
                 connectionParamsObj.tryKeyboard = true;
             } else {
-              connectionParamsObj.password = options.password;   
+                connectionParamsObj.password = options.password;
             }
-             
+
         }
         process.nextTick(function() {
             callback(null, connectionParamsObj);
@@ -105,28 +107,26 @@ function SSHShell(connectionParamsObj) {
     });
 
     connection.on('close', function(hadError) {
-      
+
         sshStream = null;
         connection = null;
         self.emit(EVENTS.CLOSE);
     });
 
     connection.on('end', function() {
-        
+
         sshStream = null;
         connection = null;
         self.emit(EVENTS.END);
     });
 
-    if(connectionParamsObj.interactiveKeyboardPassword) {
+    if (connectionParamsObj.interactiveKeyboardPassword) {
         connection.on('keyboard-interactive', function(name, instructions, instructionsLang, prompts, finish) {
             console.log('Connection :: keyboard-interactive');
             finish([connectionParamsObj.interactiveKeyboardPassword]);
         });
 
     }
-
-    
 
     try {
         connection.connect(connectionParamsObj);
@@ -148,7 +148,7 @@ function SSHShell(connectionParamsObj) {
         }
     };
     this.close = function() {
-        
+
         if (connection) {
             connection.end();
         }
@@ -157,10 +157,9 @@ function SSHShell(connectionParamsObj) {
 
 util.inherits(SSHShell, EventEmitter);
 
-module.exports.open = function(options, callback) {
-    
+function initiateNewShell(sshTry, options, callback) {
+    sshTry++;
     getConnectionParams(options, function(err, connectionParamsObj) {
-        
         if (err) {
             callback(err, null);
             return;
@@ -169,8 +168,15 @@ module.exports.open = function(options, callback) {
         var callbackFired = false;
         shell.on(EVENTS.ERROR, function(errObj) {
             if (!callbackFired) {
-                callback(errObj, null);
-                callbackFired = true;
+                if (errObj.errCode === -5001 && sshTry === 1) {
+                    // trying with keyboard interactive
+                    shell.close();
+                    options.interactiveKeyboard = true;
+                    initiateNewShell(sshTry++, options, callback);
+                } else {
+                    callback(errObj, null);
+                    callbackFired = true;
+                }
             } else {
                 shell.emit(EVENTS.ERROR, errObj);
                 shell.close();
@@ -184,4 +190,10 @@ module.exports.open = function(options, callback) {
             }
         });
     });
+}
+
+
+module.exports.open = function(opts, callback) {
+    var options = extend({},opts);
+    initiateNewShell(0, options, callback);
 };
