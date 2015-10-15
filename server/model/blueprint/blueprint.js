@@ -10,6 +10,7 @@ var DockerBlueprint = require('./blueprint-types/docker-blueprint/docker-bluepri
 var InstanceBlueprint = require('./blueprint-types/instance-blueprint/instance-blueprint');
 var OpenstackBlueprint = require('./blueprint-types/instance-blueprint/openstack-blueprint/openstack-blueprint');
 var AzureBlueprint = require('./blueprint-types/instance-blueprint/azure-blueprint/azure-blueprint');
+var VmwareBlueprint = require('./blueprint-types/instance-blueprint/vmware-blueprint/vmware-blueprint');
 
 var CloudFormationBlueprint = require('./blueprint-types/cloud-formation-blueprint/cloud-formation-blueprint');
 
@@ -19,7 +20,8 @@ var BLUEPRINT_TYPE = {
     INSTANCE_LAUNCH: "instance_launch",
     OPENSTACK_LAUNCH: "openstack_launch",
     HPPUBLICCLOUD_LAUNCH: "hppubliccloud_launch",
-    AZURE_LAUNCH: "azure_launch"
+    AZURE_LAUNCH: "azure_launch",
+    VMWARE_LAUNCH: "vmware_launch"
 };
 
 var Schema = mongoose.Schema;
@@ -93,7 +95,10 @@ function getBlueprintConfigType(blueprint) {
         BlueprintConfigType = OpenstackBlueprint;
     } else if ((blueprint.blueprintType === BLUEPRINT_TYPE.AZURE_LAUNCH) && blueprint.blueprintConfig) {
         BlueprintConfigType = InstanceBlueprint;
-    } else {
+    } else if ((blueprint.blueprintType === BLUEPRINT_TYPE.VMWARE_LAUNCH) && blueprint.blueprintConfig) {
+        logger.debug('this is test');
+        BlueprintConfigType = VmwareBlueprint;
+    }else {
         return;
     }
     var blueprintConfigType = new BlueprintConfigType(blueprint.blueprintConfig);
@@ -196,6 +201,11 @@ BlueprintSchema.statics.createNew = function(blueprintData, callback) {
         blueprintType = BLUEPRINT_TYPE.AZURE_LAUNCH;
         logger.debug('blueprintData azure instacedata ==>',blueprintData.instanceData);
         blueprintConfig = AzureBlueprint.createNew(blueprintData.instanceData);
+    } else if ((blueprintData.blueprintType === BLUEPRINT_TYPE.VMWARE_LAUNCH) && blueprintData.instanceData) {
+        blueprintType = BLUEPRINT_TYPE.VMWARE_LAUNCH;
+        logger.debug('blueprintData vmware instacedata ==>',blueprintData.instanceData);
+        blueprintConfig = VmwareBlueprint.createNew(blueprintData.instanceData);
+
     }   else {
         process.nextTick(function() {
             callback({
@@ -218,6 +228,8 @@ BlueprintSchema.statics.createNew = function(blueprintData, callback) {
         blueprintConfig: blueprintConfig,
         blueprintType: blueprintType
     };
+
+    logger.debug('-------------blueprintObj',JSON.stringify(blueprintObj));
 
     var blueprint = new Blueprints(blueprintObj);
     console.log('saving');

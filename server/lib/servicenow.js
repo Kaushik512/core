@@ -154,24 +154,24 @@ CMDBConfigSchema.statics.getConfigItemByName = function(name, tableName, options
     logger.debug("START getConfigItemByName..");
 
     this.getConfigItems(tableName, options, function(err, data) {
-        
+
         for (i = 0; i < data.result.length; i++) {
             if (data.result[i].name == name) {
-                logger.debug("Node found >>>",data.result[i]);
+                logger.debug("Node found >>>", data.result[i]);
                 callback(null, data.result[i]);
                 return;
             }
 
         }
         callback({
-          erroMsg: "Selected Node not found"
-        },null);
-        
+            erroMsg: "Selected Node not found"
+        }, null);
+
         return;
     });
 }
 
-CMDBConfigSchema.statics.updateConfigItemById = function(configData,callback){
+CMDBConfigSchema.statics.updateConfigItemById = function(configData, callback) {
 
     logger.debug("Enter updateConfigItemById");
     this.update({
@@ -182,7 +182,7 @@ CMDBConfigSchema.statics.updateConfigItemById = function(configData,callback){
             url: configData.url,
             servicenowusername: configData.servicenowusername,
             servicenowpassword: configData.servicenowpassword,
-            orgname: configData.orgname   
+            orgname: configData.orgname
         }
     }, {
         upsert: false

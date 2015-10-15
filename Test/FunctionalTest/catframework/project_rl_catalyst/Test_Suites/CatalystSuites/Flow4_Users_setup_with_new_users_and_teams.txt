@@ -1,0 +1,54 @@
+*** Settings ***
+Documentation     Users_Teams_Flow.txt
+
+Resource           catalyst.txt
+Resource           ${CATALYST TEST DATA}/${TESTDATA}
+Resource           ${CATALYST ACTION}/DevOps_Setup_Action_Steps.txt
+Resource           ${CATALYST ACTION}/Users_Setup_With_New_Users_and_Teams.txt
+Resource           ${COMMON RESOURCES}/catalyst_grid_node.txt
+Resource           ${CATALYST ACTION}/Organization_Setup_Action_Steps.txt
+
+
+
+*** Test Cases ***
+Catalyst Edit the Teams Setup and Assign Projects
+    [Tags]       Sanity               Smoke
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Sleep    1s
+    #Catalyst Creation of Team and assign to the User
+    #Catalyst Creation of Users and Assign the Teams created
+    Catalyst assigning of the projects to the default Teams         
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+
+
+
+
+
+
+#-Catalyst new users setup
+    #-[Tags]       Sanity               Smoke
+#    Catalyst Login
+    #-Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
+    #-Sleep    1s
+    #-Addition of Random Numbers to Unique Names
+    #-Test Validation of Creation of New users
+    #-Devops Config Management New Users
+    #-Devops Edit Users Setup               
+    #-Catalyst Logout                      
+    #-[Teardown]     Close Browser
+
+
+#-Catalyst new teams setup
+    #-[Tags]       Sanity               Smoke
+#    Catalyst Login
+    #-Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    #-Test Validation of Creation of New Teams
+    #-Devops Config Management New Teams  
+    #-Devops Edit Teams Setup             
+    #-Catalyst Logout                      
+    #-[Teardown]     Close Browser
+

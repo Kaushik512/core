@@ -32,7 +32,12 @@ var hppubliccloudProvider = require('_pr/model/classes/masters/cloudprovider/hpp
 var AzureCloud = require('_pr/lib/azure.js');
 var azureProvider = require('_pr/model/classes/masters/cloudprovider/azureCloudProvider.js');
 
+
+var VmwareCloud = require('_pr/lib/vmware.js');
+var vmwareProvider = require('_pr/model/classes/masters/cloudprovider/vmwareCloudProvider.js');
+
 var AwsAutoScaleInstance = require('_pr/model/aws-auto-scale-instance');
+
 
 module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
@@ -1409,7 +1414,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                 username: providerdata.username,
                                                 password: providerdata.password,
                                                 tenantName: providerdata.tenantname,
-                                                tenantId: providerdata.tenantid
+                                                tenantId: providerdata.tenantid,
+                                                serviceendpoints: providerdata.serviceendpoints
                                             };
                                             var openstack = new Openstack(openstackconfig);
                                             openstack.createServer(openstackconfig.tenantId, launchparams, function(err, instanceData) {
@@ -1448,8 +1454,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                         os: blueprint.blueprintConfig.instanceOS
                                                     },
                                                     credentials: {
-                                                        username: providerdata.username,
-                                                        password: instanceData.server.adminPass
+                                                        username: 'ubuntu',
+                                                        pemFileLocation: appConfig.catalystDataDir + '/' + appConfig.catalysHomeDirName + '/' + appConfig.instancePemFilesDirName + '/' + blueprint.blueprintConfig.cloudProviderId
                                                     },
                                                     chef: {
                                                         serverId: blueprint.blueprintConfig.infraManagerId,
@@ -1502,106 +1508,120 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                         "id": [instance.id],
                                                         "message": "instance launch success"
                                                     });
-                                                    logger.debug('Should have sent the response.');
-                                                    openstack.waitforserverready(openstackconfig.tenantId, instanceData.server.id, function(err, data) {
-                                                        if (!err) {
-                                                            logger.debug('Instance Ready....');
-                                                            logger.debug(JSON.stringify(data)); // logger.debug(data);
-                                                            logger.debug('About to bootstrap Instance');
-                                                            //identifying pulic ip
-                                                            var publicip = '';
-                                                            if (data.server.addresses.public) {
-                                                                for (var i = 0; i < data.server.addresses.public.length; i++) {
-                                                                    if (data.server.addresses.public[i]["version"] == '4') {
-                                                                        publicip = data.server.addresses.public[i].addr;
-                                                                    }
-                                                                }
-                                                            } else {
-                                                                if (data.server.addresses.private) {
-                                                                    for (var i = 0; i < data.server.addresses.private.length; i++) {
-                                                                        if (data.server.addresses.private[i]["version"] == '4') {
-                                                                            publicip = data.server.addresses.private[i].addr;
-                                                                        }
-                                                                    }
-                                                                } else {
-                                                                    logger.error("No IP found", err);
-                                                                    res.send(500);
-                                                                    return;
-                                                                }
-                                                            }
-                                                            instancesDao.updateInstanceIp(instance.id, publicip, function(err, updateCount) {
-                                                                if (err) {
-                                                                    logger.error("instancesDao.updateInstanceIp Failed ==>", err);
-                                                                    return;
-                                                                }
-                                                                logger.debug('Instance ip Updated');
-                                                            });
-                                                            instancesDao.updateInstanceState(instance.id, "running", function(err, updateCount) {
-                                                                if (err) {
-                                                                    logger.error("instancesDao.updateInstanceState Failed ==>", err);
-                                                                    return;
-                                                                }
-                                                                logger.debug('Instance state Updated');
-                                                            });
+                                                    logger.debug('Should have sent the response & Entering wait state for instance ready:',JSON.stringify(instanceData));
+                                                    var cryptoConfig = appConfig.cryptoSettings;
+                                                    var cryptography = new Cryptography(cryptoConfig.algorithm, cryptoConfig.password);
+                                                    //decrypting and including key in instancedata
 
-                                                            logsDao.insertLog({
-                                                                referenceId: logsReferenceIds,
-                                                                err: false,
-                                                                log: "Instance Ready..about to bootstrap",
-                                                                timestamp: timestampStarted
-                                                            });
-                                                            chef.bootstrapInstance({
-                                                                instanceIp: publicip,
-                                                                runlist: version.runlist,
-                                                                instanceUsername: 'ubuntu',
-                                                                pemFilePath: '//etc//ssh//key.pem',
-                                                                nodeName: launchparams.server.name,
-                                                                environment: envName,
-                                                                instanceOS: instance.hardware.os,
-                                                                jsonAttributes: null
-                                                            }, function(err, code) {
-                                                                if (code == 0) {
-                                                                    instancesDao.updateInstanceBootstrapStatus(instance.id, 'success', function(err, updateData) {
-                                                                        if (err) {
-                                                                            logger.error("Unable to set instance bootstarp status. code 0", err);
-                                                                        } else {
-                                                                            logger.debug("Instance bootstrap status set to success");
-                                                                        }
+
+                                                    var tempUncryptedPemFileLoc = appConfig.tempDir + '/' + uuid.v4();
+                                                    logger.debug('instance.credentials.pemFileLocation:', instance.credentials.pemFileLocation);
+                                                    cryptography.decryptFile(instance.credentials.pemFileLocation, cryptoConfig.decryptionEncoding, tempUncryptedPemFileLoc, cryptoConfig.encryptionEncoding, function(err) {
+
+                                                        instanceData.credentials = {
+                                                            "username": "ubuntu", //to be fetched from vm images, based on the image.
+                                                            "pemFilePath": tempUncryptedPemFileLoc
+                                                        }
+
+                                                        openstack.waitforserverready(openstackconfig.tenantId, instanceData, function(err, data) {
+                                                            if (!err) {
+                                                                logger.debug('Instance Ready....');
+                                                                logger.debug(JSON.stringify(data)); // logger.debug(data);
+                                                                logger.debug('About to bootstrap Instance');
+                                                                //identifying pulic ip
+                                                                var publicip = '';
+                                                                if (data.floatingipdata) {
+                                                                    publicip = data.floatingipdata.floatingip.floating_ip_address;
+                                                                   
+                                                                } else {
+                                                                  //to be handled if floating ip is not received.
+                                                                   logsDao.insertLog({
+                                                                        referenceId: logsReferenceIds,
+                                                                        err: false,
+                                                                        log: "Instance was not associated with an IP",
+                                                                        timestamp: timestampStarted
                                                                     });
                                                                 }
-                                                            }, function(stdOutData) {
+                                                                instancesDao.updateInstanceIp(instance.id, publicip, function(err, updateCount) {
+                                                                    if (err) {
+                                                                        logger.error("instancesDao.updateInstanceIp Failed ==>", err);
+                                                                        return;
+                                                                    }
+                                                                    logger.debug('Instance ip Updated');
+                                                                });
+                                                                instancesDao.updateInstanceState(instance.id, "running", function(err, updateCount) {
+                                                                    if (err) {
+                                                                        logger.error("instancesDao.updateInstanceState Failed ==>", err);
+                                                                        return;
+                                                                    }
+                                                                    logger.debug('Instance state Updated');
+                                                                });
 
                                                                 logsDao.insertLog({
                                                                     referenceId: logsReferenceIds,
                                                                     err: false,
-                                                                    log: stdOutData.toString('ascii'),
-                                                                    timestamp: new Date().getTime()
+                                                                    log: "Instance Ready..about to bootstrap",
+                                                                    timestamp: timestampStarted
                                                                 });
-                                                                if (stdOutData.toString('ascii').indexOf("Chef Client finished") > 0) {
-                                                                    instancesDao.updateInstanceBootstrapStatus(instance.id, 'success', function(err, updateData) {
-                                                                        if (err) {
-                                                                            logger.error("Unable to set instance bootstarp status. code 0", err);
-                                                                        } else {
-                                                                            logger.debug("Instance bootstrap status set to success");
-                                                                        }
+                                                                chef.bootstrapInstance({
+                                                                    instanceIp: publicip,
+                                                                    runlist: version.runlist,
+                                                                    instanceUsername: 'ubuntu',
+                                                                    pemFilePath: tempUncryptedPemFileLoc,
+                                                                    nodeName: launchparams.server.name,
+                                                                    environment: envName,
+                                                                    instanceOS: instance.hardware.os,
+                                                                    jsonAttributes: null
+                                                                }, function(err, code) {
+                                                                    if (code == 0) {
+                                                                        instancesDao.updateInstanceBootstrapStatus(instance.id, 'success', function(err, updateData) {
+                                                                            if (err) {
+                                                                                logger.error("Unable to set instance bootstarp status. code 0", err);
+                                                                            } else {
+                                                                                logger.debug("Instance bootstrap status set to success");
+                                                                            }
+                                                                        });
+                                                                    }
+                                                                }, function(stdOutData) {
+
+                                                                    logsDao.insertLog({
+                                                                        referenceId: logsReferenceIds,
+                                                                        err: false,
+                                                                        log: stdOutData.toString('ascii'),
+                                                                        timestamp: new Date().getTime()
                                                                     });
-                                                                }
+                                                                    if (stdOutData.toString('ascii').indexOf("Chef Client finished") > 0) {
+                                                                        instancesDao.updateInstanceBootstrapStatus(instance.id, 'success', function(err, updateData) {
+                                                                            if (err) {
+                                                                                logger.error("Unable to set instance bootstarp status. code 0", err);
+                                                                            } else {
+                                                                                logger.debug("Instance bootstrap status set to success");
+                                                                                logsDao.insertLog({
+                                                                                    referenceId: logsReferenceIds,
+                                                                                    err: false,
+                                                                                    log: "Instance Bootstraped successfully",
+                                                                                    timestamp: new Date().getTime()
+                                                                                });
+                                                                            }
+                                                                        });
+                                                                    }
 
-                                                            }, function(stdErrData) {
+                                                                }, function(stdErrData) {
 
-                                                                //retrying 4 times before giving up.
-                                                                logsDao.insertLog({
-                                                                    referenceId: logsReferenceIds,
-                                                                    err: true,
-                                                                    log: stdErrData.toString('ascii'),
-                                                                    timestamp: new Date().getTime()
+                                                                    //retrying 4 times before giving up.
+                                                                    logsDao.insertLog({
+                                                                        referenceId: logsReferenceIds,
+                                                                        err: true,
+                                                                        log: stdErrData.toString('ascii'),
+                                                                        timestamp: new Date().getTime()
+                                                                    });
+
                                                                 });
-
-                                                            });
-                                                        } else {
-                                                            logger.debug('Err Creating Instance:' + err);
-                                                            return;
-                                                        }
+                                                            } else {
+                                                                logger.debug('Err Creating Instance:' + err);
+                                                                return;
+                                                            }
+                                                        });
                                                     });
 
                                                 });
@@ -2116,7 +2136,15 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                                 if (err) {
                                                                                     logger.error("Unable to set instance bootstarp status. code 0", err);
                                                                                 } else {
-                                                                                    logger.debug("Instance bootstrap status set to success");
+                                                                                    logsDao.insertLog({
+                                                                                    referenceId: logsReferenceIds,
+                                                                                    err: false,
+                                                                                    log: 'Instance Bootstraped Successfully',
+                                                                                    timestamp: new Date().getTime()
+                                                                                });
+                                                                                 
+                                                                                 logger.debug("Instance bootstrap status set to success");
+
                                                                                 }
                                                                             });
                                                                         }
@@ -2152,7 +2180,199 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
                                     });
 
-                                } else {
+                                } else if (blueprint.blueprintType === 'vmware_launch') {
+                                    logger.debug("In Vmware blueprint launch");
+                                    logger.debug(blueprint);
+                                    logger.debug(req.query.version);
+                                    var version = blueprint.getVersionData(req.query.version);
+                                    if (!version) {
+                                        res.send(400, {
+                                            message: "No blueprint version available"
+                                        });
+                                        return;
+                                    } else {
+                                        logger.debug('Runlist version:');
+                                        logger.debug(JSON.stringify(version.runlist));
+                                    }
+                                    
+                                    vmwareProvider.getvmwareProviderById(blueprint.blueprintConfig.cloudProviderId, function(err, providerdata) {
+                                        if (err) {
+                                            logger.error('getAzureCloudProviderById ' + err);
+                                            return;
+                                        }
+                                        else{
+                                            logger.debug('***********************Blueprint Launch of VMWARE *******************');
+                                            
+                                            var launchvmwareBP = function(providerdata, blueprint) {
+                                                VMImage.getImageById(blueprint.blueprintConfig.imageId, function(err, anImage) {
+                                                    if(!err){
+                                                           logger.debug(JSON.stringify(anImage)); 
+                                                           logger.debug('providerdata',JSON.stringify(providerdata));
+                                                           // var serverjson = {"vm_name" : \""D4D-" + blueprint.name + "\"",
+                                                           //  "ds" : "\"" + blueprint.blueprintConfig.dataStore + "\"",
+                                                           //  "no_of_vm" : blueprint.blueprintConfig.instanceCount
+                                                           //  }
+                                                           var serverjson = {};
+                                                           serverjson["vm_name"] = "D4D-" + blueprint.name;
+                                                           serverjson["ds"] = blueprint.blueprintConfig.dataStore;
+                                                           serverjson["no_of_vm"] =  blueprint.blueprintConfig.instanceCount;
+                                                           
+                                                           var vmwareCloud = new VmwareCloud(providerdata);
+
+
+                                                           vmwareCloud.createServer(appConfig.vmware.serviceHost,anImage.imageIdentifier,serverjson,function(err,createserverdata){
+                                                                if(!err){
+                                                                    //send the response back and create the instance 
+                                                                    var credentials = {
+                                                                        username: anImage.userName,
+                                                                        password: anImage.instancePassword
+                                                                    };
+
+                                                                    credentialcryptography.encryptCredential(credentials, function(err, encryptedCredentials) {
+                                                                        if (err) {
+                                                                            logger.error('vmware encryptCredential error', err);
+                                                                            res.send(500, err);
+                                                                            return;
+                                                                        }
+
+                                                                        //create instaance
+                                                                        logger.debug('Credentials encrypted..');
+                                                                        logger.debug('OS Launched');
+                                                                        logger.debug(JSON.stringify(createserverdata));
+                                                                        //Creating instance in catalyst
+
+                                                                        var instance = {
+                                                                            name: serverjson["vm_name"],
+                                                                            orgId: blueprint.orgId,
+                                                                            bgId: blueprint.bgId,
+                                                                            projectId: blueprint.projectId,
+                                                                            envId: req.query.envId,
+                                                                            providerId: blueprint.blueprintConfig.cloudProviderId,
+                                                                            keyPairId: 'unknown',
+                                                                            chefNodeName: serverjson["vm_name"],
+                                                                            runlist: version.runlist,
+                                                                            platformId: serverjson["vm_name"],
+                                                                            appUrls: blueprint.appUrls,
+                                                                            instanceIP: 'unknown',
+                                                                            instanceState: 'unknown',
+                                                                            bootStrapStatus: 'waiting',
+                                                                            users: blueprint.users,
+                                                                            hardware: {
+                                                                                platform: 'azure',
+                                                                                platformVersion: 'unknown',
+                                                                                architecture: 'unknown',
+                                                                                memory: {
+                                                                                    total: 'unknown',
+                                                                                    free: 'unknown',
+                                                                                },
+                                                                                os: blueprint.blueprintConfig.instanceOS
+                                                                            },
+                                                                            credentials: {
+                                                                                username: encryptedCredentials.username,
+                                                                                password: encryptedCredentials.password
+                                                                            },
+                                                                            chef: {
+                                                                                serverId: blueprint.blueprintConfig.infraManagerId,
+                                                                                chefNodeName: serverjson["vm_name"]
+                                                                            },
+                                                                            blueprintData: {
+                                                                                blueprintId: blueprint._id,
+                                                                                blueprintName: blueprint.name,
+                                                                                templateId: blueprint.templateId,
+                                                                                templateType: blueprint.templateType,
+                                                                                iconPath: blueprint.iconpath
+                                                                            }
+
+                                                                        };
+
+                                                                        logger.debug('Instance Data');
+                                                                        logger.debug(JSON.stringify(instance));
+
+                                                                        instancesDao.createInstance(instance, function(err, data) {
+                                                                            if (err) {
+                                                                                logger.error("Failed to create Instance", err);
+                                                                                res.send(500);
+                                                                                return;
+                                                                            }
+
+                                                                            instance.id = data._id;
+                                                                            var timestampStarted = new Date().getTime();
+                                                                            var actionLog = instancesDao.insertBootstrapActionLog(instance.id, instance.runlist, req.session.user.cn, timestampStarted);
+                                                                            var logsReferenceIds = [instance.id, actionLog._id];
+                                                                            logsDao.insertLog({
+                                                                                referenceId: logsReferenceIds,
+                                                                                err: false,
+                                                                                log: "Waiting for instance ok state",
+                                                                                timestamp: timestampStarted
+                                                                            });
+                                                                            //var actionLog = instancesDao.insertBootstrapActionLog(instance.id, instance.runlist, req.session.user.cn, timestampStarted);
+                                                                            //var logsReferenceIds = [instance.id, actionLog._id];
+                                                                            //logsDao.insertLog({
+                                                                            //    referenceId: logsReferenceIds,
+                                                                            //    err: false,
+                                                                            //    log: "Waiting for instance ok state",
+                                                                            //     timestamp: timestampStarted
+                                                                            //  });
+
+                                                                            logger.debug('Returned from Create Instance. About to wait for instance ready state');
+
+
+                                                                            //waiting for server to become active
+                                                                            logger.debug('Returned from Create Instance. About to send response');
+                                                                            //res.send(200);
+                                                                            res.send(200, {
+                                                                                "id": [instance.id],
+                                                                                "message": "instance launch success"
+                                                                            });
+                                                                            logger.debug('Should have sent the response.');
+
+                                                                            vmwareCloud.waitforserverready(instance.name, instance.username, instance.password, function(err, publicip) {
+                                                                                if (!err) {
+                                                                                    logger.debug('Instance Ready....');
+                                                                                    logger.debug(JSON.stringify(data)); // logger.debug(data);
+                                                                                    logger.debug('About to bootstrap Instance');
+                                                                                   
+                                                                                    instancesDao.updateInstanceIp(instance.id, publicip, function(err, updateCount) {
+                                                                                        if (err) {
+                                                                                            logger.error("instancesDao.updateInstanceIp Failed ==>", err);
+                                                                                            return;
+                                                                                        }
+                                                                                        logger.debug('Instance ip Updated');
+                                                                                    });
+                                                                                    instancesDao.updateInstanceState(instance.id, "running", function(err, updateCount) {
+                                                                                        if (err) {
+                                                                                            logger.error("instancesDao.updateInstanceState Failed ==>", err);
+                                                                                            return;
+                                                                                        }
+                                                                                        logger.debug('Instance state Updated');
+                                                                                    });
+
+                                                                                    logsDao.insertLog({
+                                                                                        referenceId: logsReferenceIds,
+                                                                                        err: false,
+                                                                                        log: "Instance Ready..about to bootstrap",
+                                                                                        timestamp: timestampStarted
+                                                                                    });
+                                                                                }
+                                                                            }); //end of waitforserverready
+
+                                                                        }); //end of createInstance
+
+                                                                    });
+                                                                }
+                                                           });
+
+
+
+                                                    }
+                                                });
+                                            }
+                                            launchvmwareBP(providerdata,blueprint);
+                                        }
+                                    });
+                                        
+                                    
+                                }else {
                                     res.send(400, {
                                         message: "Invalid Blueprint Type"
                                     })

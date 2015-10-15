@@ -118,23 +118,40 @@
           	            
           	            $div.find("a.removeAction").on('click', function(e) {
           	            
-          	                console.log($(this));
-          	                var $tr = $(this).parents('tr');
-          	                var id = $tr.attr('id');
-          	                console.log(id);
-          	                //alert(id);
-          	                //alert($tr.length);
+                           var $tr = $(this).parents('tr');
+                           var id = $tr.attr('id');
+                           console.log(id);
 
-          	                $.ajax({
-          	                    url: '/servicenow/removeItem/id/' + id,
-          	                    type: 'DELETE',
-          	                    success: function() {
-          	                        console.log("removed tr:", $tr)
-          	                        $trackDatatable.row($tr).remove().draw(false);
-          	                        console.log('remove action complete');
-          	                    }
-          	                });
-
+                           bootbox.confirm({
+                                      message: 'Are you sure you want to Delete ?&nbsp;',
+                                      title: "Warning",
+                                      callback: function(result) {
+                                          if (result) {
+                                              $.ajax({
+                                                  url: '/servicenow/removeItem/id/' + id,
+                                                  method: 'DELETE',
+                                                  success: function() {
+                                                      $trackDatatable.row($tr).remove().draw(false);
+                                                      console.log('remove action complete');
+                                                  },
+                                                  error: function(jxhr) {
+                                                      //alert(result);
+                                                      var msg = "Unable to Delete URL please try again later";
+                                                      if (jxhr.responseJSON && jxhr.responseJSON.message) {
+                                                          msg = jxhr.responseJSON.message;
+                                                      } else if (jxhr.responseText) {
+                                                          msg = jxhr.responseText;
+                                                      }
+                                                      bootbox.alert(msg);
+                                                  }
+                                              });
+                                          } else {
+                                              //alert(result);
+                                              return;
+                                          }
+                                      }
+                                  });
+          	               
           	                return false;
           	            });
           	        }

@@ -25,6 +25,7 @@ var jenkins = require('./routes_jenkins');
 var openstack = require('./routes_openstack');
 var hppubliccloud = require('./routes_hppubliccloud');
 var azure = require('./routes_azure');
+var vmware = require('./routes_vmware.js');
 
 var application = require('./routes_application');
 var jira = require('./routes_jira');
@@ -48,7 +49,11 @@ var puppet = require('./routes_puppet.js');
 
 var appdeploy = require('./routes_appdeploy');
 
+
+var vmware = require('./routes_vmware.js');
+
 var servicenow = require('./routes_servicenow');
+
 
 module.exports.setRoutes = function(app,socketIo) {
 
@@ -89,6 +94,7 @@ module.exports.setRoutes = function(app,socketIo) {
     openstack.setRoutes(app, sessionVerificationFunc);
     hppubliccloud.setRoutes(app, sessionVerificationFunc);
     azure.setRoutes(app, sessionVerificationFunc);
+    vmware.setRoutes(app,sessionVerificationFunc);
 
     application.setRoutes(app, sessionVerificationFunc);
 
