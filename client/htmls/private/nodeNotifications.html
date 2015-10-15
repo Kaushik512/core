@@ -10,6 +10,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment-range/2.0.3/moment-range.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script src="http://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>    
     <style>
     .top-row{
         border-bottom: 1px solid #ccc;
@@ -41,7 +42,7 @@
         margin: 10px 10px;            
     }
     .tab-pane {
-        min-height: auto;
+        min-height: 438px;
         border-left: 1px solid #b7b6b6;
         border-bottom: 1px solid #b7b6b6;
         border-right: 1px solid #b7b6b6;
@@ -415,8 +416,14 @@
     float:right!important;
     margin-top: -9px;
     }
+    .chartBox{
+        margin-left: -14px;
+        margin-top: 40px;
+    }
+    .chartBoxMargin{
+        margin-top: 52px;
+    }
     </style>    
-    
     <script>
 
         // Create a Socketio connection
@@ -799,7 +806,7 @@
                         <div class="container-fluid">
                             
                             <!--aws accounts-->
-                        <div class="col-lg-3 col-md-6">
+                        <div class="col-lg-3 col-md-3">
                             <div class="circle-tile cats-eye-row cats-eye-accounts-row">
                           
                               <div class="circle-tile-heading light-blue">
@@ -817,7 +824,7 @@
                             
                             <!--number of running instances-->
 
-                            <div class="col-lg-3 col-md-6">
+                            <div class="col-lg-3 col-md-3">
                             <div class="circle-tile cats-eye-row cats-eye-instances-row">
                           
                               <div class="circle-tile-heading light-black">
@@ -834,7 +841,7 @@
 
                             <!--numner of stopped instances-->
 
-                            <div class="col-lg-3 col-md-6">
+                            <div class="col-lg-3 col-md-3">
                             <div class="circle-tile cats-eye-row cats-eye-instances-row">
                           
                               <div class="circle-tile-heading light-blue">
@@ -851,7 +858,7 @@
 
                             <!--monitoring starts here-->
  
-                            <div class="col-lg-3 col-md-6">
+                            <div class="col-lg-3 col-md-3">
                             <div class="circle-tile cats-eye-row cats-eye-monitoring-row">
                           
                               <div class="circle-tile-heading light-black">
@@ -867,6 +874,17 @@
                         
                             <!--monitoring ends here-->
                         
+                        </div>
+                        <div class="col-lg-6 col-md-6 chartBox">
+                             <div id="chart_div"></div>
+                        </div> 
+                        <div class="col-lg-6 col-md-6 chartBoxMargin">
+                             <div id="columnchart_material"></div>
+                        </div> 
+                        <div class="col-lg-4 col-md-4 pull-right">
+
+                            <div class="update-time timeMargin">Last Updated&nbsp;&nbsp;-&nbsp;&nbsp;<span id="cats-eye-lastupdated">0</span></div>
+                                        
                         </div>
                     </div>                                                             
               
@@ -889,13 +907,10 @@
                 </div>                
             </div>
             <!-- <div class="row top-row"> -->
-                <div class="col-lg-4 col-md-4 pull-right">
-
-                    <div class="update-time timeMargin">Last Updated&nbsp;&nbsp;-&nbsp;&nbsp;<span id="cats-eye-lastupdated">0</span></div>
-                                
-                </div>
+                
             <!-- </div> -->
-        </div> 
+        </div>
+        
         <script>
             $( document ).ready(function() {     
               // Setup Toaster Options
@@ -917,6 +932,98 @@
                 "hideMethod": "fadeOut"
               };                              
             });
+        </script>
+        <script>
+          google.load('visualization', '1', {packages: ['corechart']});
+    google.setOnLoadCallback(drawChartLine);
+
+    function drawChartLine() {
+
+      var data = new google.visualization.DataTable();
+      data.addColumn('datetime', 'Time of Day');
+      data.addColumn('number', 'Events');
+
+      data.addRows([
+        [new Date(2015, 9, 13, 0), 2],    [new Date(2015, 9, 13, 0, 30), 6],
+        [new Date(2015, 9, 13, 1), 2],  [new Date(2015, 9, 13, 2), 3],
+        [new Date(2015, 9, 13, 3), 6],  [new Date(2015, 9, 13, 4), 5],
+        [new Date(2015, 9, 13, 5), 4],    [new Date(2015, 9, 13, 6), 2],
+        [new Date(2015, 9, 13, 7), 1],    [new Date(2015, 9, 13, 8), 3],
+        [new Date(2015, 9, 13, 9), 4],  [new Date(2015, 9, 13, 10), 8],
+        [new Date(2015, 9, 13, 11), 5],   [new Date(2015, 9, 13, 12), 7],
+        [new Date(2015, 9, 13, 13), 4], [new Date(2015, 9, 13, 14), 8],
+        [new Date(2015, 9, 13, 15), 8],   [new Date(2015, 9, 13, 16), 6],
+        [new Date(2015, 9, 13, 17), 7], [new Date(2015, 9, 13, 18), 3],
+        [new Date(2015, 9, 13, 19), 5], [new Date(2015, 9, 13, 20), 6],
+        [new Date(2015, 9, 13, 21), 7],   [new Date(2015, 9, 13, 22), 4],
+        [new Date(2015, 9, 13, 23), 2], [new Date(2015, 9, 14, 0), 6],
+      ]);
+
+      var options = {
+        title: 'Events Per Hour (Last 24 hrs)',
+        titleTextStyle: {
+            color: 'rgb(117, 117, 117)',
+            fontName: 'Roboto2',
+            fontSize: 16,
+            bold: false
+        },
+        hAxis: {
+          viewWindow: {
+            min: new Date(2015, 9, 13, 0),
+            max: new Date(2015, 9, 14, 0)
+          },
+          gridlines: {
+            count: -1,
+            units: {
+              days: {format: ['MMM dd']},
+              hours: {format: ['HH:mm', 'ha']},
+            }
+          },
+          minorGridlines: {
+            units: {
+              hours: {format: ['hh:mm:ss a', 'ha']},
+              minutes: {format: ['HH:mm a Z', ':mm']}
+            }
+          },
+          title:'Time',
+        },
+        vAxis: {
+            title: 'Events'
+        }
+      };
+
+      var chart = new google.visualization.LineChart(
+        document.getElementById('chart_div'));
+
+      chart.draw(data, options);
+    }
+
+    google.load("visualization", "1.1", {
+        packages: ["bar"]
+    });
+    google.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+            ['Events/Type', 'Info', 'Critical', 'Warning'],
+            ['6:00', 1, 4, 2],
+            ['12:00', 5, 6, 1],
+            ['18:00', 6, 4, 3],
+            ['0:00', 10, 5, 2]
+        ]);
+
+        var options = {
+            chart: {
+                title: 'Events by Type (Last 24 hrs)',
+            }
+        };
+
+        var chart = new google.charts.Bar(document.getElementById('columnchart_material'));
+
+        chart.draw(data, options);
+    }
+
+
         </script>
     </body>
 </html>
