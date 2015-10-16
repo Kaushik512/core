@@ -32,7 +32,7 @@
                                                       <label>
                                                       Select Job Type
                                                       </label>
-                                                      <select id="taskType" class="chooseTasktype width-100">
+                                                      <select id="taskType" class="chooseTasktype width-100 form-control">
                                                          <option id="Chef" value="chef">Chef</option>
                                                          <option id="Jenkins" value="jenkins">Jenkins</option>
                                                          <option id="Composite" value="composite">Composite</option> 
@@ -81,14 +81,14 @@
                                                       <div class="col-lg-6 col-md-6 margintop15">
                                                          <label>Select Jenkins Server<span style="color:red">*</span>
                                                          </label>
-                                                         <select id="jenkinsServerList" class="width-100">
+                                                         <select id="jenkinsServerList" class="width-100 form-control">
                                                             <option value="choose">Choose</option>
                                                          </select>
                                                       </div>
                                                       <div class="col-lg-6 col-md-6 margintop15">
                                                          <label>Select Job<span style="color:red">*</span></label>
                                                          <label id="spinnerForJob" class="hidden"><img  style="margin-left:5px;margin-right:25px;" src="img/select2-spinner.gif"></label>
-                                                         <select id="jobListJenkins" class="width-100" disabled>
+                                                         <select id="jobListJenkins" class="width-100 form-control" disabled>
                                                          </select>
                                                       </div>
                                                       <div class="col-lg-12 col-md-12 margintop15">
@@ -336,11 +336,6 @@
                                                                   </label>
                                                                    <div class="btn-group" style="width: 80%;">
                                                                        <select id="compositeTasksList" class="form-control" size="10" multiple="multiple" style="height:250px;">
-                                                                        <!-- <option class="taskimg" value="Adarsh">Adarsh</option>
-                                                                        <option class="taskimg" value="Anshul">Anshul</option>
-                                                                        <option class="taskimg" value="Arab">Arabinda</option>
-                                                                        <option class="taskimg" value="Gobinda">Gobinda</option>
-                                                                        <option class="taskimg" value="Jagdeesh">Jagdeesh</option> -->
                                                                        </select>
                                                                    </div>
                                                                    <div class="btn-group" style="margin-left:10px;margin-top:20px;">
@@ -475,12 +470,14 @@
          <div class="modal-body" style="height:320px">
             <!--dropdown for selecting the parameter type-->
          <label style="margin-left:10px;">Select Paremeter:</label>
-         <select id="parametersSelect" style="width:40%">
+         <span>
+         <select id="parametersSelect" style="width:40%" class="form-controlSelect">
          <option value="">Choose Parameter</option>
          <option value="Boolean">Boolean Parameter</option>
          <option value="String">String Parameter</option>
          <option value="Choice">Choice Parameter</option>
          </select>
+         </span>
          <br/><br/>
          <hr/>
          <!--dropdown ends here-->
@@ -936,7 +933,7 @@ $(document).ready(function() {
     });
     $('.addListParam').click(function(e) {
         $('#parameterCreate').trigger('reset');
-        $('#parametersSelect').select2("val","");
+       // $('#parametersSelect').("val","");
         $('#booleanTable').addClass('hidden');
         $('#stringTable').addClass('hidden');
         $('#choiceTable').addClass('hidden');
@@ -974,11 +971,11 @@ function validatejson(attrctrl) {
 }
 
 $(document).ready(function() {
-    $(".chooseTasktype").select2();
-    $("#jenkinsServerList").select2();
-    $("#jobListJenkins").select2();
-    $("#parametersSelect").select2();
-    $(".assignuserListJenkins").select2();
+   // $(".chooseTasktype").select2();
+   // $("#jenkinsServerList").select2();
+   // $("#jobListJenkins").select2();
+   // $("#parametersSelect").select2();
+   // $(".assignuserListJenkins").select2();
 
 
     $(document).on('shown.bs.modal', function(e) {
@@ -1729,7 +1726,7 @@ $(document).ready(function() {
                 var defaultValue = [];
 
                 parameterizedObj.defaultValue = $('#choiceValue').val().trim();
-                alert(parameterizedObj.defaultValue);
+               // alert(parameterizedObj.defaultValue);
                 defaultValue = parameterizedObj.defaultValue.split(',');
 
                 parameterizedObj.defaultValue = defaultValue;
