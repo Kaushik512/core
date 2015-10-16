@@ -12,7 +12,7 @@ Resource           ${COMMON RESOURCES}/catalyst_grid_node.txt
 
 *** Test Cases ***
 Catalyst Create New Cloud Formation Blueprint
-    [Tags]       Sanity               Settings
+    [Tags]       Sanity               Workzone
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
     Catalyst Create Blueprint of Cloud Formation and Save
