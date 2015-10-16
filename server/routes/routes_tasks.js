@@ -81,6 +81,8 @@ module.exports.setRoutes = function(app, sessionVerification) {
     app.post('/tasks/:taskId/run', function(req, res) {
         var choiceParam = req.body.choiceParam;
         logger.debug("Choice Param::: ", choiceParam);
+        var nexusData = req.body.nexusData;
+        logger.debug("nexusData>>>>>>>>>>>>> ",JSON.stringify(nexusData));
         Tasks.getTaskById(req.params.taskId, function(err, task) {
 
             if (err) {
@@ -89,7 +91,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 return;
             }
 
-            task.execute(req.session.user.cn, req.protocol + '://' + req.get('host'), choiceParam, function(err, taskRes, historyData) {
+            task.execute(req.session.user.cn, req.protocol + '://' + req.get('host'), choiceParam,nexusData, function(err, taskRes, historyData) {
                 if (err) {
                     logger.error(err);
                     res.send(500, err);
