@@ -7,7 +7,7 @@
     right: 0;
 }
 </style>
-<div class="row" style="height:96%;border:1px solid red">
+<div class="row" style="height:96%;border:0px solid red">
     <div id="rootwizard">
         <div class="navbar">
             <div class="navbar-inner">
@@ -23,13 +23,13 @@
                             <div id="templatetype" pageurl="templatetype.html"></div>
                         </div>
                         <div class="tab-pane" id="tab2">
-                            <div id="templatetype1" pageurl="templates.html"></div>
+                            <div id="templates" pageurl="templates.html"></div>
                         </div>
-                        <div class="tab-pane" id="tab3">
-                            3
+                        <div class="tab-pane" id="tab3" >
+                            <div id="blueprintconfig" pageurl="blueprintconfighp.html"></div>
                         </div>
                         <div class="tab-pane" id="tab4">
-                            4
+                            Saved successfully.
                         </div>
                        
                     </div>
@@ -56,7 +56,8 @@
     </div>
 </div>
 <script>
-
+var selectedstack = "one";
+localStorage.setItem('blueprintwizardcontet','{selectedstack:"one"}');
 // $
 $(document).ready(function() {
 	$('#content').css('height', '98% !important');
@@ -64,13 +65,26 @@ $(document).ready(function() {
         'nextSelector': '.button-next',
         'previousSelector': '.button-previous',
         'firstSelector': '.button-first',
-        'lastSelector': '.button-last'
+        'lastSelector': '.button-last',
+         onNext: function(tab, navigation, index) {
+          //  alert($('#templateContent').html());
+          //  alert($('#whatever').html());
+           // return(false);
+           if(index == 1){ //about to go to template page
+                inittemplates(index);
+           }
+           if(index == 2){
+            initblueprintconfig();
+           }
+           //alert(JSON.stringify(index));
+        }
+        
     });
     $('div[pageurl]').each(function(){
     	loadURL('ajax/' + $(this).attr('pageurl'),$(this));
     });
     
-    $('#rootwizard').on('wizard.step',function(){
+    $('#rootwizard').on('wizard.stepped',function(){
     	alert('test');
     });   
     // var $wizardul = $('.wizardul').clone();
