@@ -51,12 +51,17 @@ Catalyst Creation of New Blueprint
     #Clicks on >>T Button
     Clicks on close of Configure Organization Parameters
     #Chooses The Environment
+    Clicks on Configure Runlist parameters
+    Clicks on Edit Runlist
+    Sleep    1s
+    Clicks on Cookbooks and Selection
+    Clicks on Close of Runlist Tab
     Clicks on Configure Application URL
     Clicks on AppNew Button
     Enters the Application URL Name
     Enters the AppURL
     Clicks on AppADD Button
-    Enable the Next Button 
+    Enable the Next Button
     Clicks on Next Button
     Clicks on Confirm OK Button
     Sleep    1s
@@ -69,6 +74,24 @@ Catalyst Creation of New Blueprint
     Verify the Blueprint is created
     Delete the Blueprint
 
+
+Clicks on Close of Runlist Tab
+    Click Element    xpath=.//*[@id='accordion-Design']/div[3]/div[1]/h4/a/i[2]
+
+
+Clicks on Cookbooks and Selection
+    #Click Element    id=cookbooks
+    #Sleep    1s
+    Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[text()='nodejs']
+    Click Element    id=btnaddToRunlist
+    Sleep    1s
+    Click Element    id=saveRunlist
+
+Clicks on Edit Runlist
+    Click Element    xpath=.//*[@title='Edit Runlist']
+
+Clicks on Configure Runlist parameters
+    Click Element    xpath=.//*[@id='accordion-Design']/div[3]/div[1]/h4/a/i[1]
 
 Clicks on Infrastructure Tab
     Click Element    css=.caret
@@ -191,7 +214,7 @@ Select the Security Group
     Sleep    3s
     Log    after scroll
     Sleep    1s
-    Click Element    xpath=.//*[@id='securityGroupIds']/label[contains(.,'${SECRTY GRP1}')]/i
+    Click Element    xpath=.//*[@id='securityGroupIds']/label[contains(.,'${SECRTY GRP}')]/i
 
 
 Clicks on Configure Provider Parameters

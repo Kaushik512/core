@@ -27,7 +27,7 @@ ${JOB TITLE}                    CatalystSuites Test Log
 
 #SuperCatalyst
 ${SUPERCAT TEMP}                               NodeJStemp
-${PROVIDER}                                AWS RELPRO
+${PROVIDER}                                AWS_N.Cal
 ${SUPERCAT ENV}                            RL_QA
 ${ROLE NAME}                              rlcatalyst
 ${SSH}                                    SSH-Shell
@@ -142,9 +142,10 @@ ${SERVICE NAME}             MongoDB
 ${TEMP NME}                 Apac
 ${REGION NAME}           US West 
 ${VPC NAME}              vpc-b1f3ecd3
-${SUBNET NAME}           subnet-aed68ce8
-${Key_Pair}               cat_instances
+${SUBNET NAME}           subnet-e49e8286
+${Key_Pair}               GoldenDemo
 ${SECRTY GRP1}                sg-c00ee1a5 | all_open
+${SECRTY GRP}                 sg-99a3bcfb | default
 ${SECRTY GRP2}                sg-c06faca4 | HTTP&S_SG
 ${SECRTY GRP3}                sg-038f4d67 | SSH_SG
 ${SECRTY GRP4}                sg-ab6faccf | Tomcat
@@ -230,7 +231,7 @@ ${PROVDR_Name}               AWSProvider
 ${PROVIDERR}                 AWS
 ${SECRET KEY}                  qm/j8lT0/IPc1P5ud8yujUSa61+QjqeyZ/jZkIff
 ${ACCESS KEY}                  AKIAI3ETOOEFHJ62G2NQ
-${IMAGE NAME1}                 Cent OSIm
+${IMAGE NAME1}                 CentOS_N.C6.5
 ${IMAGE NAME2}                 smoke_ubuntu
 ${IMAGE NAME3}                 smoke_Win08
 ${IMAGE NAME4}                 smoke_Win2012

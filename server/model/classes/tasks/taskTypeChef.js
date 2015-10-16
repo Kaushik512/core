@@ -33,17 +33,40 @@ chefTaskSchema.methods.getNodes = function() {
 };
 
 // Instance Method :- run task
-chefTaskSchema.methods.execute = function(userName, baseUrl,choiceParam, onExecute, onComplete) {
+chefTaskSchema.methods.execute = function(userName, baseUrl, choiceParam, nexusData, onExecute, onComplete) {
     var self = this;
-
+    logger.debug("self: ",JSON.stringify(self));
     //merging attributes Objects
     var attributeObj = {};
     var objectArray = [];
     for (var i = 0; i < self.attributes.length; i++) {
         objectArray.push(self.attributes[i].jsonObj);
     }
+    //var cookbookName = self.runlist[0].split("role[")[1].split("]")[0];
+    //logger.debug("cookbook name: ",cookbookName);
+    if (nexusData) {
+        objectArray.push({
+            "rlcatalyst": {
+                "nexusUrl": nexusData.nexusUrl
+            }
+        });
+        objectArray.push({
+            "rlcatalyst": {
+                "version": nexusData.version
+            }
+        });
+        if (nexusData.containerId) {
+            objectArray.push({
+                "rlcatalyst": {
+                    "containerId": nexusData.containerId
+                }
+            });
+        }
+    }
 
     var attributeObj = utils.mergeObjects(objectArray);
+
+    logger.debug("-===============-------------========== ", JSON.stringify(attributeObj));
 
 
     var instanceIds = this.nodeIds;
@@ -96,7 +119,7 @@ chefTaskSchema.methods.execute = function(userName, baseUrl,choiceParam, onExecu
             }
             instanceResultList.push(result);
             if (!(count < instances.length)) {
-                console.log('Type of onComplete ============> '+typeof onComplete);
+                console.log('Type of onComplete ============> ' + typeof onComplete);
                 if (typeof onComplete === 'function') {
                     onComplete(null, overallStatus, {
                         instancesResults: instanceResultList

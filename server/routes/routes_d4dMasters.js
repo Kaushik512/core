@@ -776,7 +776,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                         // For Puppet Server
                         masterUtil.getNexusServers(orgList, function(err, pList) {
                             if (err) {
-                                res.send(500, 'Not able to fetch Puppet Server.');
+                                res.send(500, 'Not able to fetch Nexus Server.');
                             }
                             //logger.debug("Returned Team List:>>>>> ", JSON.stringify(teamList));
                             res.send(pList);
@@ -960,7 +960,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                         // For Puppet Server
                         masterUtil.getNexusServers(orgList, function(err, pList) {
                             if (err) {
-                                res.send(500, 'Not able to fetch Puppet Server.');
+                                res.send(500, 'Not able to fetch Nexus Server.');
                             }
                             //logger.debug("Returned Team List:>>>>> ", JSON.stringify(teamList));
                             res.send(pList);

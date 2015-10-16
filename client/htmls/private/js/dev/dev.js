@@ -4309,10 +4309,11 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
 
                     //method for executing the chef and jenkins job...
                     var $tdExecute = $('<td style="vertical-align:inherit;text-align:center;"></td>').append('<a rel="tooltip" data-placement="top" data-original-title="Execute" data-toggle="modal" href="javascript:void(0)" class="btn btn-primary btn-sg tableactionbutton"><i class="ace-icon fa fa-play bigger-120"></i></a>');
-                    $tdExecute.find('a').data('taskId', data[i]._id).attr('data-executeTaskId', data[i]._id).click(function(e) {
+                    $tdExecute.find('a').data('taskId', data[i]._id).attr('data-executeTaskId', data[i]._id).click(function(e,nexusData) {
                         var taskId = $(this).data('taskId');
 
-                        //alert(JSON.stringify(data[i]));
+                      //  alert(JSON.stringify(e.data));
+                        console.log("e == >",nexusData)
 
                         if (data[i].taskType === 'jenkins' || data[i].taskType === 'chef' || data[i].taskType === 'puppet' || data[i].taskType === 'composite') {
                             //checking for parameterized condition..
@@ -4330,7 +4331,7 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                                         var $tr = $('<tr/>');
                                         var $tdName = $('<td></td>');
                                         var $tdValue = $('<td id="selectValue"></td>');
-                                        var selectForparam = $('<select style="width:60%;"></select>').attr('key', name);
+                                        var selectForparam = $('<select style="width:60%;" class="form-controlSelect"></select>').attr('key', name);
                                         var nameForParam = data[i].taskConfig.parameterized[a].parameterName;
                                         if (nameForParam === 'Choice') {
                                             var label = $('<label style="font-size:14px;">Are you sure you want to execute? Choose the Parameter for-&nbsp <b>' + name + '<b></label>');
@@ -4354,7 +4355,7 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
 
                                                 str = '<option>' + defaultValueCheck[k] + '</option>';
 
-                                                selectForparam.append(str).select2();
+                                                selectForparam.append(str);
 
                                             } //for loop for default value ends here..
 
@@ -4483,7 +4484,7 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                                             $modal.find('.outputArea').hide();
                                             $modal.modal('show');
                                             var timestampToPoll = new Date().getTime();
-                                            $.post('../tasks/' + taskId + '/run', {}, function(data) {
+                                            $.post('../tasks/' + taskId + '/run', nexusData, function(data) {
                                                 //  alert(JSON.stringify(data));
                                                 var date = new Date().setTime(data.timestamp);
                                                 var taskTimestamp = new Date(date).toLocaleString(); //converts to human readable strings
