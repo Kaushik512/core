@@ -19,11 +19,11 @@ Catalyst Log Monitoring Dashboard Automation
     [Teardown]     Close Browser
 
 
-Catalyst Log Monitoring Dashboard Visibility within 20seconds
-    [Tags]       Sanity               dashboard1
+#Catalyst Log Monitoring Dashboard Visibility within 20seconds
+    #[Tags]       Sanity               dashboard1
 #    Catalyst Login 
-    Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
-    Catalyst Log Monitoring Dashboard Visibility
-    Catalyst Logout                      
-    [Teardown]     Close Browser
+    #Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
+    #Catalyst Log Monitoring Dashboard Visibility
+    #Catalyst Logout                      
+    #[Teardown]     Close Browser
 
