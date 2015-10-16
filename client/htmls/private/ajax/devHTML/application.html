@@ -34,6 +34,10 @@ input {
     padding-top: 4px;
     padding-bottom: 4px;
 }
+.paddingleftright0{
+    padding-left: 0px;
+    padding-right: 0px;
+}
 .domain-roles-icon{
     margin-top: 10px;
     float:left;
@@ -61,12 +65,21 @@ input {
     font-weight: bold;
     margin-top:15px;
 }
-.envColumnforSpecificAppname{
+.envSpecificAppTemplate{
+    border-right: 1px solid #ddd; 
+    min-height: 450px;
+}
+.newEnvSpecificAppTemplate{
     border-right: 1px solid #ddd; 
     min-height: 450px;
 }
 .envSpecificAppInstanceUniqueCard{
     max-width: 150px !important;
+    margin-top:15px;
+}
+.newEnvSpecificAppInstanceUniqueCard{
+    max-width: 150px !important; 
+    margin-top:15px;  
 }
 .appCard-inner-panel{
     border-radius: 12px !important;
@@ -412,6 +425,64 @@ input {
                         </div>
                     </article>
                 </div>
+                <div class="col-sm-3 col-md-3 col-lg-2 envSpecificAppTemplate" style="display:none">
+                    <div class="envSpecificAppname"><u></u></div>
+                </div>
+
+
+                <div class="col-sm-12 col-md-12 col-lg-12 col-xs-6 no-padding envSpecificAppInstanceUniqueCard padding-right5-mobile" style="display:none">
+                    <div class="panel panel-primary appCard-inner-panel role-Selectedcard-app">
+                        <div class="panel-heading appCard-inner-panel-heading">
+                            <div contenteditable="false" class="domain-roles-icon">
+                              <img class="domain-roles-icon-image" src="img/app-store-icons/Docker.png">
+                            </div>
+                            <div class="appInstanceNameCard">
+                              <span class="appInstanceNameCardSpan">Supercatalyst</span>
+                            </div>
+                        </div>
+                        <div class="appCardBody">
+                            <div class="panel-body panel-primary appCardInfo">
+                                <div class="">
+                                    <div class="col-lg-12 col-sm-12 col-xs-12 text-align-center">
+                                      <img src="img/rsz_logo.png">
+                                    </div>
+                                    <div class="col-lg-12 col-sm-12 col-xs-12 paddingtopbottom4 text-align-center">
+                                      <div class="font-size-10">
+                                        <span>Version :</span><span class="versionAppDeploy">2.10.477</span>
+                                      </div>
+                                    </div>
+                                    <div class="col-lg-12 col-sm-12 col-xs-12 paddingtopbottom4 text-align-center paddingleftright0">
+                                      <div class="font-size-10">
+                                        <span>Last Deploy :</span><span class="lastdeployAppDeploy">21/11/2015 10:57:54 pm </span>
+                                      </div>
+                                    </div>
+                                </div> 
+                            </div>
+                            <div class="panel-footer clearfix appCard-inner-panel-footer">
+                                <div class="col-lg-12 col-sm-12 col-xs-12 appCard-panel-foot-actiondiv">
+                                    <div class="col-lg-4 col-sm-4 col-xs-4 appCard-panel-foot-actionchildfirstDiv">
+                                        <a class="btn btn-primary btn-sm width27borderradius50" data-toggle="modal" href="#modalDetailsAppDeploy" data-actiontype="start" rel="tooltip" data-placement="top" data-original-title="Details">
+                                            <i class="fa fa-th font-size-12"> </i> 
+                                        </a> 
+                                    </div>
+                                    <div class="col-lg-4 col-sm-4 col-xs-4 appCard-panel-foot-actionchildsecondDiv">
+                                        <a class="btn btn-primary btn-sm width27borderradius50" data-toggle="modal" href="#modalAppCardLogDetails" data-actiontype="start" rel="tooltip" data-placement="top" data-original-title="Logs info">
+                                            <i class="fa fa-info font-size-14"> </i>
+                                        </a>
+                                    </div>
+                                    <div class="col-lg-4 col-sm-4 col-xs-4 appCard-panel-foot-actionchildthirdDiv">
+                                        <a class="btn btn-primary btn-sm width27borderradius50" data-toggle="modal" href="#modalUpgradeAppDeploy" data-actiontype="start" rel="tooltip" data-placement="top" data-original-title="Upgrade">
+                                            <i class="fa fa-upload font-size-12"> </i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
                 <div class="row loadingAppDeploySpinner">
                     <article class="col-sm-12 col-md-12 col-lg-12">
                         <img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif"/>
@@ -499,58 +570,10 @@ input {
                             </div>
                         </div>
                         <div id="divapplicationcardview">
-                            <div class="col-sm-12 col-md-12 col-lg-12">
-                                <div class="col-sm-3 col-md-3 col-lg-2 envColumnforSpecificAppname">
-                                    <div class="envSpecificAppname"><u>Dev</u></div>
-                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xs-6 no-padding envSpecificAppInstanceUniqueCard padding-right5-mobile">
-                                        <div class="panel panel-primary appCard-inner-panel role-Selectedcard-app">
-                                            <div class="panel-heading appCard-inner-panel-heading">
-                                                <div contenteditable="false" class="domain-roles-icon">
-                                                  <img class="domain-roles-icon-image" src="img/app-store-icons/Docker.png">
-                                                </div>
-                                                <div class="appInstanceNameCard">
-                                                  <span class="appInstanceNameCardSpan">Supercatalyst</span>
-                                                </div>
-                                            </div>
-                                            <div class="appCardBody">
-                                                <div class="panel-body panel-primary appCardInfo">
-                                                    <div class="">
-                                                        <div class="col-lg-12 col-sm-12 col-xs-12 text-align-center">
-                                                          <img src="img/rsz_logo.png">
-                                                        </div>
-                                                        <div class="col-lg-12 col-sm-12 col-xs-12 paddingtopbottom4 text-align-center">
-                                                          <div class="font-size-10">
-                                                            <span>Version :</span><span>2.10.477</span>
-                                                          </div>
-                                                        </div>
-                                                    </div> 
-                                                </div>
-                                                <div class="panel-footer clearfix appCard-inner-panel-footer">
-                                                    <div class="col-lg-12 col-sm-12 col-xs-12 appCard-panel-foot-actiondiv">
-                                                        <div class="col-lg-4 col-sm-4 col-xs-4 appCard-panel-foot-actionchildfirstDiv">
-                                                            <a class="btn btn-primary btn-sm width27borderradius50" data-toggle="modal" href="#modalDetailsAppDeploy" data-actiontype="start" rel="tooltip" data-placement="top" data-original-title="Details">
-                                                                <i class="fa fa-th font-size-12"> </i> 
-                                                            </a> 
-                                                        </div>
-                                                        <div class="col-lg-4 col-sm-4 col-xs-4 appCard-panel-foot-actionchildsecondDiv">
-                                                            <a class="btn btn-primary btn-sm width27borderradius50" data-toggle="modal" href="#modalAppCardLogDetails" data-actiontype="start" rel="tooltip" data-placement="top" data-original-title="Logs info">
-                                                                <i class="fa fa-info font-size-14"> </i>
-                                                            </a>
-                                                        </div>
-                                                        <div class="col-lg-4 col-sm-4 col-xs-4 appCard-panel-foot-actionchildthirdDiv">
-                                                            <a class="btn btn-primary btn-sm width27borderradius50" data-toggle="modal" href="#modalUpgradeAppDeploy" data-actiontype="start" rel="tooltip" data-placement="top" data-original-title="Upgrade">
-                                                                <i class="fa fa-upload font-size-12"> </i>
-                                                            </a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-3 col-md-3 col-lg-2 envColumnforSpecificAppname">
+                            <div class="col-sm-12 col-md-12 col-lg-12 stageContainer">
+                                <!-- <div class="col-sm-3 col-md-3 col-lg-2 envSpecificAppTemplate">
                                     <div class="envSpecificAppname"><u>QA</u></div>
-                                </div>
+                                </div> -->
                             </div>
                         </div>
                     </div>
@@ -578,122 +601,7 @@ input {
                                             <th>UP/DOWN</th>
                                         </tr>
                                     </thead>
-                                    <tbody><!-- 
-                                        <tr>
-                                            <td>Dev</td>
-                                            <td>
-                                                <div class="iphone-toggle-buttons">
-                                                    <ul style="padding: 0px; margin: 0px;list-style-type: none;">
-                                                        <li>
-                                                            <label for="checkbox-0">
-                                                                <input type="checkbox" name="checkbox-0" id="checkbox-0" checked="checked" />
-                                                                <span></span>
-                                                            </label>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <a class="btn btn-default btn-primary up" style="border-radius:50%;height:27px;width:27px;padding-top:0px"   type="button">
-                                                    <i style="font-size:12px;margin-left:-5px;" class="fa  fa-chevron-up"></i>
-                                                </a>
-                                                <a class="btn btn-default btn-primary down" style="border-radius:50%;height:27px;width:27px;padding-top:0px"   type="button">
-                                                    <i style="font-size:12px;margin-left:-5px;" class="fa  fa-chevron-down"></i>
-                                                </a>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>QA</td>
-                                            <td>
-                                                <div class="iphone-toggle-buttons">
-                                                    <ul style="padding: 0px; margin: 0px;list-style-type: none;">
-                                                        <li>
-                                                            <label for="checkbox-1">
-                                                                <input type="checkbox" name="checkbox-1" id="checkbox-1" checked />
-                                                                <span></span>
-                                                            </label>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <a class="btn btn-default btn-primary up" style="border-radius:50%;height:27px;width:27px;padding-top:0px"   type="button">
-                                                    <i style="font-size:12px;margin-left:-5px;" class="fa  fa-chevron-up"></i>
-                                                </a>
-                                                <a class="btn btn-default btn-primary down" style="border-radius:50%;height:27px;width:27px;padding-top:0px"   type="button">
-                                                    <i style="font-size:12px;margin-left:-5px;" class="fa  fa-chevron-down"></i>
-                                                </a>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>UAT</td>
-                                            <td>
-                                                <div class="iphone-toggle-buttons">
-                                                    <ul style="padding: 0px; margin: 0px;list-style-type: none;">
-                                                        <li>
-                                                            <label for="checkbox-1">
-                                                                <input type="checkbox" name="checkbox-1" id="checkbox-1" checked=""/>
-                                                                <span></span>
-                                                            </label>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </td>
-                                            <td>
-                                               <a class="btn btn-default btn-primary up" style="border-radius:50%;height:27px;width:27px;padding-top:0px"   type="button">
-                                                    <i style="font-size:12px;margin-left:-5px;" class="fa  fa-chevron-up"></i>
-                                                </a>
-                                                <a class="btn btn-default btn-primary down" style="border-radius:50%;height:27px;width:27px;padding-top:0px"   type="button">
-                                                    <i style="font-size:12px;margin-left:-5px;" class="fa  fa-chevron-down"></i>
-                                                </a>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Stage</td>
-                                            <td>
-                                                <div class="iphone-toggle-buttons">
-                                                    <ul style="padding: 0px; margin: 0px;list-style-type: none;">
-                                                        <li>
-                                                            <label for="checkbox-1">
-                                                                <input type="checkbox" name="checkbox-1" id="checkbox-1" checked />
-                                                                <span></span>
-                                                            </label>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <a class="btn btn-default btn-primary up" style="border-radius:50%;height:27px;width:27px;padding-top:0px"   type="button">
-                                                    <i style="font-size:12px;margin-left:-5px;" class="fa  fa-chevron-up"></i>
-                                                </a>
-                                                <a class="btn btn-default btn-primary down" style="border-radius:50%;height:27px;width:27px;padding-top:0px"   type="button">
-                                                    <i style="font-size:12px;margin-left:-5px;" class="fa  fa-chevron-down"></i>
-                                                </a>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Production</td>
-                                            <td>
-                                                <div class="iphone-toggle-buttons">
-                                                    <ul style="padding: 0px; margin: 0px;list-style-type: none;">
-                                                        <li>
-                                                            <label for="checkbox-1">
-                                                                <input type="checkbox" name="checkbox-2" id="checkbox-2" checked />
-                                                                <span></span>
-                                                            </label>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <a class="btn btn-default btn-primary up" style="border-radius:50%;height:27px;width:27px;padding-top:0px"   type="button">
-                                                    <i style="font-size:12px;margin-left:-5px;" class="fa  fa-chevron-up"></i>
-                                                </a>
-                                                <a class="btn btn-default btn-primary down" style="border-radius:50%;height:27px;width:27px;padding-top:0px"   type="button">
-                                                    <i style="font-size:12px;margin-left:-5px;" class="fa  fa-chevron-down"></i>
-                                                </a>
-                                            </td>
-                                        </tr> -->
+                                    <tbody>
                                     </tbody>
                                 </table>
                               </form>
@@ -1071,28 +979,172 @@ $('.createAppConfigure').click(function(){
     });
 });
 //Arab
-function constructPipelineUI(data){
+function constructPipelineUI(data,envUniqueName){
     //alert(JSON.stringify(data));
     alert(data.length);
-    
-    $.get('https://in.yahoo.com/?p=us', function(data) {
-        constructPipelineUI(data);
-    }).fail(function() {});
+    var $stageContainer = $('.stageContainer');
+    var $envSpecificAppTemplate = $('.envSpecificAppTemplate');
+
+    var $clonePipeline = $envSpecificAppTemplate.clone(true);
+    $clonePipeline.css({display:'block'});
+    $clonePipeline.addClass('newEnvSpecificAppTemplate').removeClass('envSpecificAppTemplate');
+    $clonePipeline.find('.envSpecificAppname u').html(envUniqueName);
+
+    for (var i = 0; i < data.length; i++) {
+
+        //var $envSpecificAppInstanceUniqueCard = $clonePipeline.find('.envSpecificAppInstanceUniqueCard');
+        //var $envSpecificAppTemplate = $('.envSpecificAppTemplate');
+        var $envSpecificAppInstanceUniqueCard = $('.envSpecificAppInstanceUniqueCard');
+
+        var $cloneAppInstanceUniqueCard = $envSpecificAppInstanceUniqueCard.clone(true);
+        $cloneAppInstanceUniqueCard.css({display:'block'});
+        $cloneAppInstanceUniqueCard.addClass('newEnvSpecificAppInstanceUniqueCard').removeClass('envSpecificAppInstanceUniqueCard');
+        
+
+
+        //console.log(data[i]);
+        if (data[i].projectId) {
+
+            //Application Type as Image in Card.
+            if (!data[i].applicationType) {
+                data[i].applicationType = "NA";
+            }
+            //var $envSpecificAppInstanceUniqueCard = $clonePipeline.find('.envSpecificAppInstanceUniqueCard');
+            if(data[i].applicationType == 'Package'){
+                var loc = 'img/package.png';
+                $cloneAppInstanceUniqueCard.find('.domain-roles-icon img').attr("src",loc);
+            }else if(data[i].applicationType == 'Docker'){
+                var loc = 'img/app-store-icons/Docker.png';
+                $cloneAppInstanceUniqueCard.find('.domain-roles-icon img').attr("src",loc);
+            }else if(data[i].applicationType == 'NA'){
+                var loc = 'img/blank.png';
+                $cloneAppInstanceUniqueCard.find('.domain-roles-icon img').attr("src",loc);
+            }
+
+            //Application Instance Name in Card.
+            if (!data[i].applicationInstanceName) {
+                if (data[i].hostName) {
+                    data[i].applicationInstanceName = data[i].hostName;
+                } else {
+                    data[i].applicationInstanceName = "NA";
+                }
+            }
+            var $appInstanceNameCardSpan = $cloneAppInstanceUniqueCard.find('.appInstanceNameCardSpan');
+            $appInstanceNameCardSpan.html(data[i].applicationInstanceName);
+
+            //Application Version in Card
+            if (!data[i].applicationVersion) {
+                data[i].applicationVersion = "NA";
+            }
+            var $appInstanceNameCardSpan = $cloneAppInstanceUniqueCard.find('.versionAppDeploy');
+            $appInstanceNameCardSpan.html(data[i].applicationVersion);
+
+            //Application Last Deploy in Card
+            // if (!data[i].applicationLastDeploy) {
+            //     data[i].applicationLastDeploy = "NA";
+            // }
+            // var $appInstanceNameCardSpan = $cloneAppInstanceUniqueCard.find('.lastdeployAppDeploy');
+            // $appInstanceNameCardSpan.html(data[i].applicationLastDeploy);
+
+
+            //$clonePipeline.append($envSpecificAppInstanceUniqueCard);
+            
+            //$envSpecificAppInstanceUniqueCard.find('.domain-roles-icon img').attr("src",loc);
+            // var src = $(this).attr("src").replace("over.gif", ".gif");
+            // $(this).attr("src", src);
+
+
+
+        //     var $taskenvArray = $('#tableappDeploydetails');
+        //     var upgradeAppDeploy;
+        //     if (!data[i]._id) {
+        //         upgradeAppDeploy = "NA";
+        //     } else {
+        //         upgradeAppDeploy = '<a class="btn btn-primary btn-sg tableactionbutton moreinfoUpgradeAppDeploy" style="box-shadow: none ! important; height: 25px; width: 25px; padding: 2px; font-size: 12px;"><i class="ace-icon fa fa-upload bigger-120"></i></a>';
+        //     }
+
+
+
+        //     var logsAppDeploy;
+        //     if (!data[i]._id) {
+        //         logsAppDeploy = "NA";
+        //     } else {
+        //         logsAppDeploy = '<a class="moreinfoAppDeploy" id=' + data[i]._id + ' title="Logs Info" style="margin-left:27%"></a>';
+        //     }
+        //     if (!data[i].applicationName) {
+        //         data[i].applicationName = "NA";
+        //     }
+        //     if (!data[i].applicationInstanceName) {
+        //         if (data[i].hostName) {
+        //             data[i].applicationInstanceName = data[i].hostName;
+        //         } else {
+        //             data[i].applicationInstanceName = "NA";
+        //         }
+        //     }
+        //     if (!data[i].applicationVersion) {
+        //         data[i].applicationVersion = "NA";
+        //     }
+        //     if (!data[i].applicationType) {
+        //         data[i].applicationType = "NA";
+        //     }
+        //     if (!data[i].containerId) {
+        //         data[i].containerId = "NA";
+        //     } else {
+        //         data[i].containerId = '<div class="spanTextApplication" title="' + data[i].containerId + '">' + data[i].containerId + '</div>'
+        //     }
+        //     if (!data[i].hostName) {
+        //         data[i].hostName = "NA";
+        //     }
+        //     if (!data[i].applicationNodeIP) {
+        //         data[i].applicationNodeIP = "NA";
+        //     }
+        //     if (!data[i].applicationLastDeploy) {
+        //         data[i].applicationLastDeploy = "NA";
+        //     }
+        //     if (!data[i].applicationStatus) {
+        //         data[i].applicationStatus = "NA";
+        //     }
+        //     var applicationLastDeployTime = data[i].applicationLastDeploy;
+
+        //     if ((applicationLastDeployTime.toLowerCase().indexOf("am") > -1) || (applicationLastDeployTime.toLowerCase().indexOf("pm") > -1)) {
+        //         applicationLastDeployTime = applicationLastDeployTime;
+        //     } else {
+        //         applicationLastDeployTime = getLocaleTime(applicationLastDeployTime);
+        //     }
+
+        //     $taskenvArray.dataTable().fnAddData([
+        //         //rowindex + 1,
+        //         data[i].applicationName,
+        //         data[i].applicationInstanceName,
+        //         data[i].applicationVersion,
+        //         data[i].hostName,
+        //         data[i].applicationNodeIP,
+        //         applicationLastDeployTime,
+        //         data[i].containerId,
+        //         data[i].applicationType,
+        //         data[i].applicationStatus,
+        //         logsAppDeploy,
+        //         upgradeAppDeploy
+        //     ]);
+        }
+        $clonePipeline.append($cloneAppInstanceUniqueCard);
+    }
+    $stageContainer.append($clonePipeline);
 }
 $('.appdeployConfigureSaveBtn').click(function(){
     var $tableconfigureapplication = $('#tableconfigureapplication');
     var projectId = urlParams.projid;
+    $('.stageContainer').empty();
     $tableconfigureapplication.find('tbody tr').filter(':has(:checkbox:checked)').each(function() {
         // this = tr
         $tr = $(this);
-        $('.configAppDeployUniqueName', $tr).each(function() {
-            var envUniqueText = $(this).text();
-            alert("Arab Env"+envUniqueText);
-            $.get('/app/deploy/env/' + envUniqueText + '/project/' + projectId + '/list', function(data) {
-                constructPipelineUI(data);
-            }).fail(function() {});
-        });
+        var envUniqueText = $tr.find('.configAppDeployUniqueName').text();
+        //alert("Arab Env: "+envUniqueText);
+        $.get('/app/deploy/env/' + envUniqueText + '/project/' + projectId + '/list', function(data) {
+            constructPipelineUI(data,envUniqueText);
+        }).fail(function() {});
     });
+    $('#modalappcardConfigure').modal('hide');
 });
 
 function getEnvNameforConfigure(){
