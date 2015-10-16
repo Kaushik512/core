@@ -66,9 +66,7 @@ Catalyst Create Blueprint of Cloud Formation and Save
     Clicks on Next Button
     Enters the New Cloud Blueprint Name
     Chooses The Business Group
-    Sleep    1s
     Chooses The Project
-    Sleep    1s
     Clicks on close Cloud Configure Organization Parameters
     Clicks on Configure Stack Parameters
     Choose the Cloud Region
@@ -84,9 +82,6 @@ Catalyst Create Blueprint of Cloud Formation and Save
     Enable the Configure Resource Node,Imageid and Instance Type
     Clicks on Next Button
     Clicks on OKK Button of Cloud Page
-
-
-
 
 	
 Select Your Cloud Blueprint
@@ -185,6 +180,12 @@ Catalyst Creation of Providers Setup
     Selects the Key Pair
     Uploads the Pem File for Provider
     Clicks on Save Button of the Provider
+    Verify Provider is created
+
+
+Verify Provider is created
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Element Should Contain    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${PROVIDER NAME}']    ${PROVIDER NAME}
+
 
 Clicks on Providers
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=//a[contains(text(),'Providers')]
@@ -262,23 +263,26 @@ Catalyst Creation of VM Image Process for CentOS
     Clicks on New Button of VMImage
     Enters the Image Name for CentOS
     Select organization now
+    Sleep    1s
     Choosess The Provider of Image
     Select the Operating System to Image for CentOS
     Enters the Image ID for CentOS
     Enters the UserName of CentOSProviders
-    
     Clicks on Save Button of VMimage page
+    Verify Centos image is created
 
 Catalyst Creation of VM Image Process for Ubutnu
     Sleep    5s
     Clicks on New Button of VMImage
     Enters the Image Name for Ubuntu
     Select organization now
+    Sleep    1s
     Choosess The Provider of Image
     Select the Operating System to Image for Ubuntu 
     Enters the Image ID for Ubuntu
     Enters the UserName of UbuntuProviders
     Clicks on Save Button of VMimage page
+    Verify ubuntu image is created
 
 Catalyst Creation of VM Image Process for Windows
     Sleep    5s
@@ -292,9 +296,15 @@ Catalyst Creation of VM Image Process for Windows
     Clicks on Save Button of VMimage page
 
 
+Verify Centos image is created
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Element Should Contain    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${IMAGE NAME1}']    ${IMAGE NAME1}
+
+Verify ubuntu image is created
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Element Should Contain    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${IMAGE NAME2}']    ${IMAGE NAME2}
+
+
 Clicks on New Button of VMImage
-    Click Element    id=addnewitem
-    Sleep    1s
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    id=addnewitem
 
 Enters the Image Name for CentOS
     Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    id=name    ${IMAGE NAME1}
@@ -394,8 +404,8 @@ Catalyst Choose Template and Save Setup
     Sleep    6s
     Clicks on Design
     Sleep    10s
-    Clicks on OK Button to Create the New Blueprint
-    Sleep    1s
+    #Clicks on OK Button to Create the New Blueprint
+    #Sleep    1s
     Choose the Template Type Created
     Sleep    3s
     Clicks on Next Button
@@ -431,13 +441,7 @@ Catalyst Choose Template and Save Setup
 
 
 Clicks on OK Button to Create the New Blueprint
-    ${said}=    Run Keyword and Return Status     Page Should Contain Element    xpath=.//*[text()='OK']
-    Run Keyword If    '${said}' == 'True'     
-    ...    Click Element    xpath=.//*[text()='OK']
-    ...    ELSE IF   '${said}' == 'False'
-    ...    Log    OK Button is not displayed
-
-
+    Click Element    xpath=.//*[text()='OK']
 
 
 
@@ -457,29 +461,36 @@ Chooses the Template User Created
 
 Chooses the Operating System as Centos
     Sleep    1s
-    #Click Element    id=instanceOS
-    #Log    after click    
-    #Sleep    1s
-    Click Element    xpath=.//*[@id='instanceOS']/option[text()='${OPERATING SYSTEM1}']
+    Click Element    css=#s2id_instanceOS > .select2-choice
+    Log    after click
+    Input Text    css=#select2-drop .select2-input    ${OPERATING SYSTEM1}    
+    Sleep    1s
+    Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
 
 Choose the Provider
     Sleep    4s
-    #Click Element    id=providerId
-    #Log    after click
-    #Sleep    4s
-    Click Element    xpath=.//*[@id='providerId']/option[text()='${PROVIDER NAME}']
+    Click Element    css=#s2id_providerId > .select2-choice
+    Log    after click
+    Input Text    css=#select2-drop .select2-input    ${PROVIDER NAME}
+    Sleep    4s
+    Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
 
 
 Choose the Available Images
-    #Sleep    4s
-    #Click Element    id=imageId
-    #Log    after click
-    #Sleep    4s
-    Click Element    xpath=.//*[@id='imageId']/option[text()='${IMAGE NAME1}']
+    Sleep    4s
+    Click Element    css=#s2id_imageId > .select2-choice
+    Log    after click
+    Input Text    css=#select2-drop .select2-input    ${IMAGE NAME1}
+    Sleep    4s
+    Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
 
 Choose the Region
     Sleep    4s
-    Click Element    xpath=.//*[@id='region']/option[2]
+    Click Element    css=#s2id_region > .select2-choice
+    Log    after click
+    Input Text    css=#select2-drop .select2-input    ${REGION NAME}
+    Sleep    4s
+    Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
 
 
  Select the VPC
@@ -491,16 +502,33 @@ Choose the Region
     Click Element    css=ul > li > div
 
 Select the Subnet
+    Sleep    2s
+    Click Element    css=#s2id_subnetId > a > span.select2-chosen
     Sleep    1s
-    Click Element    xpath=.//*[@id='subnetId']/option[2]
+    Input Text    css=#select2-drop > div > input    ${SUBNET NAME}
+    Sleep    1s
+    Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
 
 Select the Key Pair
     Execute JavaScript    $('#bootstrap-wizard-1 > div.tab-content > footer > div').attr('style','display:none')
-    Click Element    xpath=.//*[@id='keypairId']/option[text()='${Key_Pair}']
+    Sleep    3s
+    Log    after scroll
+    Sleep    1s
+    Click Element    css=#s2id_keypairId > .select2-choice
+    Log    after click
+    Input Text    css=#select2-drop .select2-input    ${Key_Pair}
+    Sleep    1s
+    Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
 
 Choose Instance Size
+    Sleep    3s
+    Log    after scroll
     Sleep    1s
-    Click Element    xpath=.//*[@id='instancesize']/option[text()='${CentosInstanceSize}']
+    Click Element    css=#s2id_instancesize > .select2-choice
+    Log    after click
+    Input Text    css=#select2-drop .select2-input    ${CentosInstanceSize}
+    Sleep    1s
+    Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span  
 
 Select the Security Group
     Sleep    3s
@@ -532,17 +560,24 @@ Enters The Blueprint Name
 
 Chooses The Business Group
     Sleep    3s
-    #Click Element    id=bgListInput
-    Click Element    xpath=.//*[@id='bgListInput']/option[text()='${BUSINESS GROUP NAME1}']
-
-    
+    Log    after scroll
+    Sleep    1s
+    Click Element    css=#s2id_bgListInput > .select2-choice
+    Log    after click
+    Input Text    css=#select2-drop .select2-input    ${BUSINESS GROUP NAME1}
+    Sleep    1s
+    Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
 
 
 Chooses The Project
     Sleep    3s
-    #Click Element    id=projectListInput
-    Click Element    xpath=.//*[@id='projectListInput']/option[text()='${PROJECT NAME1}']
-    
+    Log    after scroll
+    Sleep    1s
+    Click Element    css=#s2id_projectListInput > .select2-choice
+    Log    after click
+    Input Text    css=#select2-drop .select2-input    ${PROJECT NAME1}
+    Sleep    1s
+    Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
 
 
 Clicks on close of Configure Organization Parameters
@@ -1002,10 +1037,9 @@ Verfiy the Chef Run fron Grid View Enabled
 
 
 Catalyst Choose Template and Save Setup for UBUNTU
+    Clicks on Settings
     Clicks on Design
-    Sleep    10s
-    Clicks on OK Button to Create the New Blueprint
-    Sleep    1s
+    Sleep    5s
     Choose the Template Type Created
     Sleep    3s
     Clicks on Next Button
