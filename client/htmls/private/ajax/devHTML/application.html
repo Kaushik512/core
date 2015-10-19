@@ -402,7 +402,7 @@ input {
                 </div>
                 <div class="row">
                     <article class="col-sm-12 col-md-12 col-lg-12">
-                        <div class="widget-body font-size12" id="widgetAppDeploy" style="border-left: 1px solid rgb(221, 221, 221); border-right: 1px solid rgb(221, 221, 221); border-bottom: 1px solid rgb(221, 221, 221);">
+                        <div class="widget-body font-size12" id="widgetAppDeploy" style="">
                             <div class="panel-group smart-accordion-default" id="accordion-AppDeploy">
                             </div>
                             <div id="nodataAppDeploy" style="display:none">
@@ -1565,6 +1565,11 @@ function constructUI(data) {
         //console.log(selectedAppName);
         if (typeof selectedAppName != 'undefined') {
             $('#appDeployName').append().text("  for '" + selectedAppName + "'");
+            $("#widgetAppDeploy").css({
+                "border-left": "1px solid rgb(221, 221, 221)",
+                "border-right": "1px solid rgb(221, 221, 221)",
+                "border-bottom": "1px solid rgb(221, 221, 221)"
+            });
             $('#widgetAppDeploy').show();
         } else {
             $('#appDeployName').append().text("");
@@ -1870,6 +1875,11 @@ $chooseApplication.change(function() {
     console.log(selectedAppName);
     if (typeof selectedAppName != 'undefined') {
         $('#appDeployName').append().text("  for '" + selectedAppName + "'");
+        $("#widgetAppDeploy").css({
+            "border-left": "1px solid rgb(221, 221, 221)",
+            "border-right": "1px solid rgb(221, 221, 221)",
+            "border-bottom": "1px solid rgb(221, 221, 221)"
+        });
         $('#widgetAppDeploy').show();
     } else {
         $('#appDeployName').append().text("");
