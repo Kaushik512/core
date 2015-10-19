@@ -172,56 +172,56 @@ String.prototype.capitalizeFirstLetter = function() {
                     </a>
 
                     <ul id="designTree" class="tree-main-menu" style="display:block">
-                        <li class='treeItem' id="treeAWSItem" data-ref="awsProviders" data-link="ajax/Aws-Production.html?provider=aws">
+                        <li class='providerType' id="treeAWSItem" data-ref="awsProviders" data-link="ajax/Aws-Production.html?provider=aws">
                             <a href="" class="devops_providers" onclick="$('#blueprints').attr('providerselected','aws');">
                                 <div class="iconSprite awsIcon" title="AWS"></div>
                                 <span class="title"> AWS </span>
                                 <span class="icon-arrow"></span>
                             </a>
                         </li>
-                        <li class='treeItem' id="treeAzureItem" data-ref="azureProviders" data-link="ajax/DesignBlueprintAzure.html?provider=azure" >
+                        <li class='providerType' id="treeAzureItem" data-ref="azureProviders" data-link="ajax/DesignBlueprintAzure.html?provider=azure" >
                             <a href="" onclick="$('#blueprints').attr('providerselected','azure');" class="devops_providers">
                                 <div class="iconSprite azureIcon" title="Azure"></div>
                                 <span class="title"> Azure </span>
                                 <span class="icon-arrow"></span>
                             </a>                        
                         </li>
-                        <li class='treeItem' id="treeDataCentreItem" data-ref="datacenterProviders" data-link="ajax/RL-DevOps.html?provider=dataCenter">
+                        <li class='providerType' id="treeDataCentreItem" data-ref="datacenterProviders" data-link="ajax/RL-DevOps.html?provider=dataCenter">
                             <a href="" class="devops_providers" onclick="$('#blueprints').attr('providerselected','dataCenter');">
                                 <div class="iconSprite dataCentreIcon" title="Data Centre"></div>
                                 <span class="title"> Data Center </span>
                                 <span class="icon-arrow"></span>
                             </a>                    
                        </li>
-                        <li class='treeItem' id="treeOpenStackItem" data-ref="openstackProviders" data-link="ajax/DesignBlueprint.html?provider=os">
+                        <li class='providerType' id="treeOpenStackItem" data-ref="openstackProviders" data-link="ajax/DesignBlueprint.html?provider=os">
                             <a href="" onclick="$('#blueprints').attr('providerselected','openstack');" class="devops_providers">
                                 <div class="iconSprite openstackIcon" title="Open Stack"></div>
                                 <span class="title"> Open Stack </span>
                                 <span class="icon-arrow"></span>
                             </a>
                         </li>
-                        <li class='treeItem' id="treeHPItem" data-ref="hpPlublicCloudProviders" data-link="ajax/DesignBlueprintpc.html?provider=hp">
+                        <li class='providerType' id="treeHPItem" data-ref="hpPlublicCloudProviders" data-link="ajax/DesignBlueprintpc.html?provider=hp">
                             <a href="" onclick="$('#blueprints').attr('providerselected','hppubliccloud');"  class="devops_providers">
                                 <div class="iconSprite hpIcon" title="HP Public Cloud"></div>
                                 <span class="title"> HP Helion </span>
                                 <span class="icon-arrow"></span>
                             </a>
                         </li>
-                        <li class='treeItem' id="treeVMWareItem" data-ref="vmwareProviders" data-link="vmware.html?provider=vmw">
+                        <li class='providerType' id="treeVMWareItem" data-ref="vmwareProviders" data-link="vmware.html?provider=vmw">
                             <a href="" onclick=""  class="devops_providers" onclick="$('#blueprints').attr('providerselected','vmw');">
                                 <div class="iconSprite awsIcon" title="AWS"></div>
                                 <span class="title"> VMWare </span>
                                 <span class="icon-arrow"></span>
                             </a>
                         </li>
-                        <li class='treeItem' id="treeCloudStackItem" data-ref="cloudstackProviders" data-link="ajax/cloudstack.html?provider=cloudstack">
+                        <li class='providerType' id="treeCloudStackItem" data-ref="cloudstackProviders" data-link="ajax/cloudstack.html?provider=cloudstack">
                             <a href="" class="devops_providers" onclick="$('#blueprints').attr('providerselected','cloudstack');">
                                 <div class="iconSprite cloudstackIcon" title="Cloud Stack"></div>
                                 <span class="title">Cloud Stack</span>
                                 <span class="icon-arrow"></span>
                             </a>                    
                         </li>
-                        <li class='treeItem' id="treeDockerItem" data-ref="dockerProviders" data-link="ajax/Docker.html?provider=docker">
+                        <li class='providerType' id="treeDockerItem" data-ref="dockerProviders" data-link="ajax/Docker.html?provider=docker">
                             <a  href="" class="devops_providers" onclick="$('#blueprints').attr('providerselected','docker');">
                                 <div class="iconSprite dockerIcon" title="Docker"></div>
                                 <span class="title"> DOCKER</span>
@@ -377,7 +377,6 @@ $(document).ready(function() {
     }
 });
 
-
 function foldTreeForSetting() {
     var list = $('#setting_tree').find('.fa-angle-down'),
         len = list.length;
@@ -385,7 +384,24 @@ function foldTreeForSetting() {
         list.eq(i).trigger('click');
     }
 }
+function resetProviderMenu(){
+    //As soon as click on "Design" button, reset the first provider available.
+    $("#designTree > li").removeClass("open activ selectedProvider");
+    var providerLinkBool = true;
 
+    $("#designTree li.providerAccount").find("a").removeClass("itemSelected");
+    $("#designTree > li").each(function(index,elm){        
+        $(elm).has("ul").find("li").each(function(index,el){
+            if(providerLinkBool){
+                $(el).find("a").attr('class', 'itemSelected');
+                location.href = $(el).find("a").attr("href");
+                providerLinkBool = false;
+                $(el).parents("li").removeClass("open active").addClass("open activ");                
+                $("#designTree").attr("lastSelected", $(el).parents("li").attr("treeIndex"));
+            }
+        });
+    });
+}
 
 function setleftnavigation(toplink, breadcrumbHeader) {
     //alert('setting left navigation');
@@ -404,7 +420,8 @@ function setleftnavigation(toplink, breadcrumbHeader) {
         $('#Settings_nav').hide();
         $('#trackShow').hide();
 
-        //As soon as click on "Design" button, show the first provider available.
+        resetProviderMenu();
+        /*//As soon as click on "Design" button, show the first provider available.
         var providerLinkBool = true;
         $("#designTree > li").each(function(index,elm){
             $(elm).has("ul").find("li").each(function(index,el){
@@ -417,8 +434,7 @@ function setleftnavigation(toplink, breadcrumbHeader) {
                     
                 }
             });
-        });
-
+        });*/
 
     } else if (TabID === "settingsNew") {
         $('#tree').empty()
