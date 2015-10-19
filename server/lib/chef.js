@@ -450,8 +450,8 @@ var Chef = function(settings) {
             argList.push('-p');
             argList.push('5985');
         } else {
-            if(!params.noSudo){
-              argList.push('--sudo');
+            if (!params.noSudo) {
+                argList.push('--sudo');
             }
         }
 
@@ -623,7 +623,7 @@ var Chef = function(settings) {
             cmd = sudoCmd + " " + cmd;
 
             var sshExec = new SSHExec(options);
-            logger.debug('***********************',options);
+            logger.debug('***********************', options);
             sshExec.exec(cmd, callback, callbackOnStdOut, callbackOnStdErr);
 
         } else {
@@ -745,6 +745,82 @@ var Chef = function(settings) {
         proc.start();
     };
 
+    this.syncCookbooks = function(callback) {
+        var self = this;
+
+        var options = {
+            cwd: settings.userChefRepoLocation,
+            onError: function(err) {
+                callback(err, null);
+            },
+            onClose: function(code) {
+                logger.debug(code);
+                if (code === 0) {
+                    callback(null, true);
+                } else {
+                    callback({
+                        message: "cmd return code is " + code,
+                        retCode: code
+                    }, false);
+                }
+
+            },
+            onStdOut: function(stdOut) {
+                logger.debug('stdout ==>' + stdOut.toString());
+            },
+            onStdErr: function(stdErr) {
+                logger.debug('stdErr ==>' + stdErr.toString());
+            }
+        };
+        var argList = ['download', 'cookbooks'];
+        // if (cookbookDir) {
+        //     argList.push('-d');
+        //     argList.push(cookbookDir);
+        // }
+        argList.push('--force');
+        //argList.push('--latest');
+        var proc = new Process('knife', argList, options);
+        proc.start();
+    };
+
+    this.syncRoles = function(callback) {
+        var self = this;
+
+        var options = {
+            cwd: settings.userChefRepoLocation,
+            onError: function(err) {
+                callback(err, null);
+            },
+            onClose: function(code) {
+                logger.debug(code);
+                if (code === 0) {
+                    callback(null, true);
+                } else {
+                    callback({
+                        message: "cmd return code is " + code,
+                        retCode: code
+                    }, false);
+                }
+
+            },
+            onStdOut: function(stdOut) {
+                logger.debug('stdout ==>' + stdOut.toString());
+            },
+            onStdErr: function(stdErr) {
+                logger.debug('stdErr ==>' + stdErr.toString());
+            }
+        };
+        var argList = ['download', 'roles'];
+        // if (cookbookDir) {
+        //     argList.push('-d');
+        //     argList.push(cookbookDir);
+        // }
+        argList.push('--force');
+        //argList.push('--latest');
+        var proc = new Process('knife', argList, options);
+        proc.start();
+    };
+
     this.createCookbook = function(cookbookName, cookbookDir, callback) {
         var createCookbookOption = {
             cwd: settings.userChefRepoLocation,
@@ -784,15 +860,18 @@ var Chef = function(settings) {
                 if (code === 0) {
                     callback(null, true);
                 } else {
-                    callback(null, false);
+                    callback({
+                        message: "Cmd exited with code : " + code,
+                        retCode: code
+                    }, false);
                 }
 
             },
             onStdOut: function(outData) {
-                logger.debug(outData);
+                logger.debug('out ==> '+outData.toString());
             },
             onStdErr: function(outData) {
-                logger.debug("err ==> " + outData);
+                logger.debug("err ==> " + outData.toString());
             }
         };
         var procUploadCookbook = new Process('knife', ['cookbook', 'upload', cookbookName, '--force'], uploadCookbookOption);
