@@ -24,5 +24,31 @@ var AppDeployPipelineSchema = new Schema({
     isEnabled: Boolean
 });
 
+// Save all appData informations.
+AppDeployPipelineSchema.statics.createNew = function(appDeployPipelineData, callback) {
+    var aDeploy = new this(appDeployPipelineData);
+    this.find({
+        projectId: appDeployPipelineData.projectId
+    }, function(err, data) {
+        //logger.debug("I am in appdeploy_Pipeline");
+        //logger.debug(data);
+        if (err) {
+            logger.debug("Error fetching record.", err);
+        }
+        else {
+            aDeploy.save(function(err, appDeploy) {
+                if (err) {
+                    logger.debug("Got error while creating AppDeploy: ", err);
+                    callback(err, null);
+                }
+                if (appDeploy) {
+                    logger.debug("Creating AppDeploy: ", JSON.stringify(appDeploy));
+                    callback(null, appDeploy);
+                }
+            });
+        }
+    });
+};
+
 var AppDataPipeline = mongoose.model("appDataPipeline", AppDeployPipelineSchema);
 module.exports = AppDataPipeline;

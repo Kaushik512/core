@@ -1150,6 +1150,33 @@ $('.appdeployConfigureSaveBtn').click(function(){
         // this = tr
         $tr = $(this);
         var envUniqueText = $tr.find('.configAppDeployUniqueName').text();
+        //POST Call
+        //alert($tr.index());
+        var dataDeployPipeline = {
+            "appDeployPipelineData": {
+                "loggedInUser": "",
+                "isEnabled": "",
+                "projectId": "",
+                "envId": ""
+            }
+        };
+        var projectId = urlParams.projid;
+        dataDeployPipeline.appDeployPipelineData.projectId = projectId;
+        dataDeployPipeline.appDeployPipelineData.isEnabled = true;
+        dataDeployPipeline.appDeployPipelineData.envId = envUniqueText;
+        $.ajax({
+            url: '/app/deploy/data/pipeline/configure',
+            data: JSON.stringify(dataDeployPipeline),
+            type: 'POST',
+            contentType: "application/json",
+            success: function(data) {
+                console.log("I am in Post call of configure");
+                console.log(data);
+            },
+            error: function(jqxhr) {
+            }
+        });
+        
         //alert("Arab Env: "+envUniqueText);
         $.get('/app/deploy/env/' + envUniqueText + '/project/' + projectId + '/list', function(data) {
             constructPipelineUI(data,envUniqueText);

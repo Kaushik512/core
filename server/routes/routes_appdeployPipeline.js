@@ -18,4 +18,22 @@ var AppDeployPipeline = require('_pr/model/app-deploy/appdeploy-pipeline');
 
 module.exports.setRoutes = function(app, sessionVerificationFunc) {
     app.all('/app/deploy/*', sessionVerificationFunc);
+    // Create AppData with check isEnabled.
+    app.post('/app/deploy/data/pipeline/configure', function(req, res) {
+    	//var loggedInUser = req.session.user.cn;
+    	//console.log(req.session.user.cn);
+    	//dataDeployPipeline.appDeployPipelineData.loggedInUser = req.session.user.cn;
+        AppDeployPipeline.createNew(req.body.appDeployPipelineData, function(err, appDeployes) {
+        	//logger.debug("I am in routes_appPipeline");
+            if (err) {
+                res.send(403, "Pipeline Data Already Exist.");
+                return;
+            }
+            if (appDeployes) {
+                res.send(200, appDeployes);
+                return;
+            }
+        });
+    });
+
 };
