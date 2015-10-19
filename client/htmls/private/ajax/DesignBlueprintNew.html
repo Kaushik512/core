@@ -7,7 +7,7 @@
     right: 0;
 }
 </style>
-<div class="row" style="height:96%;border:0px solid red">
+<div class="row basediv" style="height:96%;border:0px solid red;padding-left:10px">
     <div id="rootwizard">
         <div class="navbar">
             <div class="navbar-inner">
@@ -26,7 +26,7 @@
                             <div id="templates" pageurl="templates.html"></div>
                         </div>
                         <div class="tab-pane" id="tab3" >
-                            <div id="blueprintconfig" pageurl="blueprintconfighp.html"></div>
+                            <div id="blueprintconfig" configurl="blueprintconfigaws.html"></div>
                         </div>
                         <div class="tab-pane" id="tab4">
                             Saved successfully.
@@ -57,36 +57,228 @@
 </div>
 <script>
 var selectedstack = "one";
-localStorage.setItem('blueprintwizardcontet','{selectedstack:"one"}');
-// $
+//localStorage.setItem('blueprintwizardcontet','{selectedstack:"one"}');
+//To Do
+//Ensure provider tree is selected.
+//function to read providerid
+var getProviderJsonFromUrl = function(param,callback){
+    var params = getUrlParams(location.href);
+    //alert(JSON.stringify(params));
+    //return(params[param]);
+    //End point to get provider name and orgid
+
+    $.get('/allproviders/getproviderbyid/' +params[param] ,function(data){
+       // alert(JSON.stringify(data));
+        if(data.providerType){
+            callback(data);
+        }
+        else{
+            alert('Provider details could not be found.',data);
+            callback({});
+            return;
+        }
+    });
+
+}
+function getFilteredList(data, value) {
+    if (!value) {
+        return data;
+    }
+    var list = [];
+    for (var i = 0; i < data.length; i++) {
+        if (data[i].osName.toLowerCase() === value.toLowerCase()) {
+            list.push(data[i]);
+        }
+    }
+    console.log(list);
+    return list;
+}
+
+var loadOrgParams = function(orgIds){
+   // alert(orgIds);
+    $.ajax({
+        type: "get",
+        dataType: "json",
+
+        async: false,
+        url: "../organizations/getTreeNew",
+        success: function(data) {
+
+            console.log('logging data',data);
+            
+            data = JSON.parse(JSON.stringify(data));
+           // alert('Hit loadOrgParams',data.length);
+            var $orgListInput = $('#orgnameSelect');
+            //$orgListInput.append($('<option></option>').val('choose').html('Choose'));
+            $bgList = $('#bgListInput');
+            var $envList = $('#envList');
+
+            for (var i = 0; i < data.length; i++) {
+                //alert(data[i].businessGroups);
+                console.log(data[i].businessGroups);
+               // if($.inArray(orgIds,data[i].rowid) >= 0)// append only if the provider belongs to the org
+                     $orgListInput.append($('<option></option>').val(data[i].rowid).html(data[i].name).data('bglist', data[i].businessGroups).data('envList', data[i].environments));
+            }
+            $('#orgnameSelect').change(function(e) {
+              //  alert('changed');
+                var orgName = $(this).val();
+
+                if (orgName == 'choose') {
+                    return;
+                }
+                var $selectedOrgOption = $(this).find(":selected");
+                $bgList.empty();
+                $bgList.append($('<option></option>').val('choose').html('Choose'));
+                //alert('in' + JSON.stringify($selectedOrgOption.data('bglist')));
+
+                var getBGs = $selectedOrgOption.data('bglist');
+                if (getBGs != null) {
+                    for (var i = 0; i < getBGs.length; i++) {
+                        $bgList.append($('<option></option>').val(getBGs[i].rowid).html(getBGs[i].name).data('projList', getBGs[i].projects));
+                    }
+                }
+
+                var $cookbookShow = $('.cookbookShow').empty();
+                $cookbookShow.append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
+                //alert('here');
+                var tcb = [];
+                var $card = $('#tab3').find('div[class*="productdiv2"]').first();
+                if ($card.length) {
+                    var templatescookbooks = $card.attr('templatescookbooks');
+                    if (templatescookbooks) {
+                        tcb = templatescookbooks.split(',');
+                    }
+                }
+                /*var tcb = $('#tab3').find('div[class*="productdiv2"]').first().attr('templatescookbooks').split(',');*/
+
+                console.log(tcb);
+                console.log('tcbdhd == >', tcb);
+                var $ccrs = $chefCookbookRoleSelector(orgName, function(data) {
+
+                }, tcb);
+                console.log("Variables>>>>>" + $ccrs);
+                $cookbookShow.empty();
+                $cookbookShow.append($ccrs);
+                // console.log($ccrs.substring($ccrs.lastIndexOf("[") + 1, $ccrs.lastIndexOf("]")));
+                /*var $runlistList = $('#tableRunlistForBlueprint');
+                var $tr = $('<tr class="runlistRow"></tr>');
+                var $tdName = $('<td class="runlistDescription"></td>');
+
+                $tdName.append($ccrs);*/
+                // alert($ccrs);
+                // createRunlistTable($ccrs);
+                $tasksRunlist.clear().draw();
+                for (var i = 0; i < tcb.length; i++) {
+                    //alert('check');
+                    if (tcb.length > 0) {
+                        //alert('ch');
+                        console.log(tcb[i].substring(tcb[i].lastIndexOf("[") + 1, tcb[i].lastIndexOf("]")));
+                        var $runlistList = $('#tableRunlistForBlueprint');
+                        var $tr = $('<tr class="runlistRow"></tr>');
+                        var $tdName = $('<td class="runlistDescription"></td>');
+
+                        $tdName.append(tcb[i].substring(tcb[i].lastIndexOf("[") + 1, tcb[i].lastIndexOf("]")));
+                        $tr.append($tdName);
+                        $runlistList.append($tr);
+                        $tasksRunlist.row.add($tr).draw();
+                    }
+                }
+
+                $cookbookShow.data('$ccrs', $ccrs)
+
+
+
+            });
+
+            var $projectList = $('#projectListInput');
+            $bgList.change(function(e) {
+                var bgName = $(this).val();
+                if (bgName == 'choose') {
+                    return;
+                }
+                var $selectedOrgOption = $(this).find(":selected");
+                $projectList.empty();
+                $projectList.append($('<option></option>').val('choose').html('Choose'));
+                var getProjs = $selectedOrgOption.data('projList');
+                // alert(getProjs.length);
+                for (var i = 0; i < getProjs.length; i++) {
+
+                    $projectList.append($('<option></option>').val(getProjs[i].rowid).html(getProjs[i].name));
+                }
+            });
+
+
+
+        }
+    });
+}
+
+
+var initblueprintconfig = function(index){
+    if ($('#individualTemplateNameGrid .role-Selected').length > 0) {
+            console.log('cloning');
+            $('#blueprintconfigdiv .selectedTemplateArea').empty().append($('#individualTemplateNameGrid .role-Selected').clone());
+        }
+}
+var selectedProvider = {};
+
 $(document).ready(function() {
 	$('#content').css('height', '98% !important');
-    $('#rootwizard').bootstrapWizard({
-        'nextSelector': '.button-next',
-        'previousSelector': '.button-previous',
-        'firstSelector': '.button-first',
-        'lastSelector': '.button-last',
-         onNext: function(tab, navigation, index) {
-          //  alert($('#templateContent').html());
-          //  alert($('#whatever').html());
-           // return(false);
-           if(index == 1){ //about to go to template page
-                inittemplates(index);
-           }
-           if(index == 2){
-            initblueprintconfig();
-           }
-           //alert(JSON.stringify(index));
-        }
-        
+    getProviderJsonFromUrl("providerid",function(providerdata){
+        if(providerdata){
+            //setting the corresponding config page for provider type
+            selectedProvider = providerdata; //setting the selected provider data
+
+            $('#blueprintconfig').attr('configurl','blueprintconfig' + providerdata.providerType + '.html');
+            switch(providerdata.providerType.toLowerCase()){
+                case 'hppubliccloud':
+                    loadURL('ajax/' + $('#blueprintconfig').attr('configurl'),$('#blueprintconfig'));
+
+                    break;
+                case 'aws':
+                    loadURL('ajax/Aws-Production.html',$('.basediv').first());
+                    break;
+                case 'azure':
+                    loadURL('ajax/DesignBlueprintAzure.html',$('.basediv').first());
+                    break;
+                case 'openstack':
+                    loadURL('ajax/DesignBlueprint.html',$('.basediv').first());
+                    break;
+                case 'vmware':
+                    loadURL('ajax/DesignBlueprintVmware.html',$('.basediv').first());
+                    break;
+            }
+
+            //initializing the wizard            
+            $('#rootwizard').bootstrapWizard({
+                'nextSelector': '.button-next',
+                'previousSelector': '.button-previous',
+                'firstSelector': '.button-first',
+                'lastSelector': '.button-last',
+                 onNext: function(tab, navigation, index) {
+                  //  alert($('#templateContent').html());
+                  //  alert($('#whatever').html());
+                   // return(false);
+                   if(index == 1){ //about to go to template page
+                        inittemplates(index);
+                   }
+                   if(index == 2){
+                        //to handle any more initializations.
+                        initblueprintconfig();
+                   }
+                   //alert(JSON.stringify(index));
+                }
+            });
+        } //end providerdata
     });
     $('div[pageurl]').each(function(){
+       // alert($(this).attr('pageurl'));
     	loadURL('ajax/' + $(this).attr('pageurl'),$(this));
     });
     
-    $('#rootwizard').on('wizard.stepped',function(){
-    	alert('test');
-    });   
+    // $('#rootwizard').on('wizard.stepped',function(){
+    // 	alert('test');
+    // });   
     // var $wizardul = $('.wizardul').clone();
     // $wizardul.removeClass('hidden');
     // $('footer').append($wizardul);

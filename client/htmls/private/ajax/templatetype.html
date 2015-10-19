@@ -1,3 +1,8 @@
+<ul class="nav nav-tabs">
+<li class="pull-left active">
+ <a href="#l2" id="tabheader1" data-toggle="tab">Choose a Template Type</a>
+ </li>
+</ul>
 <div id="templateContent">
 </div>
 
@@ -99,7 +104,7 @@ $('document').ready(function(){
                         '</div></div></div>';
                 }
             }
-            alert(selectedstack);
+            //alert(selectedstack);
             $("#templateContent").append(containerTemp);
             $("#templateContent #grid0").addClass("role-Selected");
             $('#templateContent').on("click", '.blueprintdiv', function() {

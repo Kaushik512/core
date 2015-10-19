@@ -1,9 +1,16 @@
+<ul class="nav nav-tabs">
+<li class="pull-left active">
+ <a href="#l2" id="tabheader3" data-toggle="tab">Configure Blueprint</a>
+ </li>
+</ul>
 <div class="tab-pane" id="blueprintconfigdiv" style="padding-bottom:20px;">
-    <div class="row">
+    <div class="row" style="padding-top:5px">
         <div class="col-lg-12">
             <div class="col-lg-2">
                 <div class="row  selectedTemplateArea" style="margin-bottom:10px;padding-left:10px;margin-left:0px;margin-right:0px;">
                 </div>
+                <select id="providerId" name="providerId" class="required chooseOSProvider width-100 ">
+                                        </select>
             </div>
             <div class="col-lg-10">
                 <div class="panel-group smart-accordion-default" id="accordion-Design">
@@ -25,14 +32,13 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-lg-6 col-md-6">
+                                <!-- <div class="col-lg-6 col-md-6">
                                     <label for="providerId">Choose Provider:<span style="color:red">*</span></label>
                                     <div class="input-groups">
-                                        <select id="providerId" name="providerId" class="required chooseOSProvider width-100">
-                                        </select>
+                                        
                                     </div>
-                                </div>
-                                <div class="col-lg-6 col-md-6" style="margin-top:15px;">
+                                </div> -->
+                                <div class="col-lg-6 col-md-6">
                                     <label for="imageId">Choose Available Images:<span style="color:red">*</span></label>
                                     <div class="input-groups">
                                         <select id="imageId" name="imageId" class="required chooseSecurity width-100">
@@ -71,69 +77,8 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-lg-6 col-md-6 foraws" style="margin-top:15px;">
-                                    <label for="region">Choose Region:<span style="color:red">*</span></label>
-                                    <div class="input-groups">
-                                        <select id="region" name="region" class="required chooseSecurity width-100">
-                                            <option value="">Select Region</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 col-md-6 foraws" style="margin-top:15px;">
-                                    <label for="vpcId">Select VPC:<span style="color:red">*</span></label>
-                                    <label id="vpcSpinner" class="hidden"><img style="margin-left:5px;margin-right:25px;" src="img/select2-spinner.gif"></label>
-                                    <div class="input-groups">
-                                        <select id="vpcId" name="vpcId" class="required chooseSelect chooseImage width-100">
-                                            <option value="">Select VPC</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 col-md-6 foraws" style="margin-top:15px;">
-                                    <label for="subnetId">Select Subnet:<span style="color:red">*</span></label>
-                                    <label id="spinnerSubnet" class="hidden"><img style="margin-left:5px;margin-right:25px;" src="img/select2-spinner.gif"></label>
-                                    <div class="input-groups">
-                                        <select id="subnetId" name="subnetId" class="required chooseSelect chooseImage width-100">
-                                            <option value="">Select Subnet</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 col-md-6 foraws" style="margin-top:15px;">
-                                    <label for="keypairId">Select KeyPair :<span style="color:red">*</span></label>
-                                    <div class="input-groups">
-                                        <select id="keypairId" name="keypairId" class="required instanceType chooseInstance width-100">
-                                            <option value="">Choose KeyPair </option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 col-md-6 foraws" style="margin-top:15px;">
-                                    <label for="instancesize">Instance Size:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
-                                    <div class="input-groups">
-                                        <select id="instancesize" name="instancesize" class="required chooseOrganization width-100 chooseSelect" style="vertical-align:central">
-                                            <option value="">Choose Instanace Size</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 col-md-6 foraws" style="margin-top:15px;">
-                                    <label for="checkbox-toggle">Security Group:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
-                                    <label id="spinnerSecurityGroup" class="hidden"><img style="margin-left:5px;margin-right:25px;" src="img/select2-spinner.gif"></label>
-                                    <div class="col-lg-6 smart-form multiselect inputGroups" style="  height: 140px;overflow-y: scroll;border:1px solid gray;padding: 0px;width:100%">
-                                        <div id="securityGroupIds" name="securityGroupIds" multiselect="multiselect" datatype="select" datapath="" class="input-group col-md-12 widthBox" style="width:99%;margin-top:-1px;border:0px">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 col-md-6 foraws" style="margin-top:15px;">
-                                    <label for="instanceCount">Instances to Launch:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
-                                    <div class="input-groups">
-                                        <select id="instanceCount" name="instanceCount" class="required chooseOrganization width-100 chooseSelect" style="vertical-align:central">
-                                            <option value="1">1</option>
-                                            <option value="2">2</option>
-                                            <option value="3">3</option>
-                                            <option value="4">4</option>
-                                            <option value="5">5</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <!--To add the Swipe Functionality-->
+                                
+                              
                             </div>
                         </div>
                         <div class="panel panel-default divOrganizationParameter">
@@ -285,13 +230,129 @@
         </div>
     </div>
     <script>
-    $('document').ready(function() {
+
+    // var initblueprintconfig = function(index){
+    // 	if ($('#individualTemplateNameGrid .role-Selected').length > 0) {
+    //             console.log('cloning');
+    //             $('#blueprintconfigdiv .selectedTemplateArea').empty().append($('#individualTemplateNameGrid .role-Selected').clone());
+    //         }
+    // }
+     $('document').ready(function() {
         $('select').select2().trigger('change');
+        //alert(JSON.stringify(selectedProvider));
+        if(selectedProvider){
+            var option = '<option selected="selected" value="' + selectedProvider.providerId + '">' + selectedProvider.providerName + '</option>';
+            
+            $('#providerId').on('change',function(){
+                loadData();
+            });
+            $('#providerId').append(option).select2().trigger('change');
+        }
     });
-    var initblueprintconfig = function(index){
-    	if ($('#individualTemplateNameGrid .role-Selected').length > 0) {
-                console.log('cloning');
-                $('#blueprintconfigdiv .selectedTemplateArea').empty().append($('#individualTemplateNameGrid .role-Selected').clone());
+    function loadData() {
+        //loading images for provider
+        $.get("/vmimages/providers/" + selectedProvider.providerId, function(data) {
+            var str = ' <option value="">Select Image</option>',
+                data = getFilteredList(data, $('#instanceOS').val()),
+                len = data.length;
+           // alert('in');
+            str = str + helperConstructOption(data, ['providerId', 'vType', 'osType', '_id'], 'name', 'imageIdentifier');
+            $('#imageId').html(str);
+
+            //setting image value for ami type and disabling it- vn
+            if ($('.productdiv2.role-Selected').first().attr('templatetype') == 'ami') {
+                var vmimage = JSON.parse($('.productdiv2.role-Selected').first().attr('imagedata'));
+                $('#imageId').val(vmimage.imageIdentifier).attr('disabled', 'disabled');
             }
+            //setting the selection
+            $('#imageId').select2().trigger('change');
+        });
+
+        //loading os's
+        $.get('../aws/ec2/amiids', function(data) {
+            var $instanceOS = $('#instanceOS');
+            $instanceOS.append('<option value="">Select Operating System</option>')
+            for (var i = 0; i < data.length; i++) {
+                $option = $('<option data-instanceOS="' + data[i].osType + '" value="' + data[i].os_name + '">' + data[i].os_name + '</option>');
+                $option.data('supportedInstanceType', data[i].supportedInstanceType);
+                $instanceOS.append($option);
+            }
+            var $instanceType = $('#intanceTypeControl');
+            $instanceOS.change(function(e) {
+                $instanceType.empty();
+
+                $selectedOption = $(this).find('option:selected');
+                var supportedInstanceType = $selectedOption.data('supportedInstanceType');
+                console.log(supportedInstanceType);
+                if (typeof supportedInstanceType != 'undefined') {
+                    for (var i = 0; i < supportedInstanceType.length; i++) {
+                        var $option = $('<option></option>').val(supportedInstanceType[i]).html(supportedInstanceType[i]);
+                        $instanceType.append($option);
+                    }
+                }
+                $instanceType.select2();
+
+
+            });
+            $instanceOS.select2();
+            $instanceOS.trigger('change');
+        });
+        
+        //load org parms
+       // alert(JSON.stringify(selectedProvider));
+        loadOrgParams(selectedProvider.orgId);
+
+        //loading provider specific selections
+        $.get('/hppubliccloud/' + selectedProvider.providerId + '/flavors', function(data) {
+                if (data) {
+                    var str = ' <option value="">Select Flavors</option>';
+                    var data = JSON.parse(JSON.stringify(data));
+                    for (var i = 0; i < data.flavors.length; i++) {
+                        str += '<option value="' + data.flavors[i].id + '">' + data.flavors[i].name + '</option>';
+                        //alert(str);
+                    }
+                    $('#openstackflavour').html(str);
+                    $('#openstackflavour').select2().trigger('change');
+                }
+            });
+
+            $.get('/hppubliccloud/' + selectedProvider.providerId + '/networks', function(data) {
+                if (data) {
+                    var str = ' <option value="">Select Network</option>';
+                    var data = JSON.parse(JSON.stringify(data));
+                    for (var i = 0; i < data.networks.length; i++) {
+                        str += '<option value="' + data.networks[i].id + '" subnets="' + data.networks[i].subnets.join() + '">' + data.networks[i].name + '</option>';
+                        //alert(str);
+                    }
+                    $('#openstacknetwork').html(str);
+                    $('#openstacknetwork').select2().trigger('change');
+                    $('#openstacknetwork').on('change', function() {
+                        // alert($(this).find(':selected').attr('subnets'));
+                        var ss = ' <option value="">Select Subnet</option>';
+                        var subn = $(this).find(':selected').attr('subnets').split(',');
+
+                        for (var i = 0; i < subn.length; i++) {
+                            ss += '<option value="' + subn[i] + '">' + subn[i] + '</option>';
+                        }
+
+                        $('#openstacksubnet').html(ss);
+                        $('#openstacksubnet').select2().trigger('change');
+                    });
+                }
+            });
+
+            $.get('/hppubliccloud/' + selectedProvider.providerId + '/securityGroups', function(data) {
+                if (data) {
+                    var str = ' <option value="">Select Group</option>';
+                    var data = JSON.parse(JSON.stringify(data));
+                    for (var i = 0; i < data.security_groups.length; i++) {
+                        str += '<option value="' + data.security_groups[i].id + '">' + data.security_groups[i].name + '</option>';
+                        //alert(str);
+                    }
+                    $('#openstacksecuritygroup').html(str);
+                    $('#openstacksecuritygroup').select2().trigger('change');
+                }
+            });
     }
+
     </script>
