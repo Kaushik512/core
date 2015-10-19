@@ -162,7 +162,7 @@ String.prototype.capitalizeFirstLetter = function() {
             </ul>
             <ul class="hidden" id="blueprints" providerselected="aws">
                 <li id="designMenu" class="tree-container active open">
-                    <a href="#" style="background-color:#40baf1;margin-right:1px;">
+                    <a href="#">
                         <!-- <i class="fa fa-lg fa-fw fa-sitemap"></i> -->
                         <span class="menu-item-parent trackAlign" style="font-weight:bold">PROVIDERS</span>
 
@@ -179,7 +179,7 @@ String.prototype.capitalizeFirstLetter = function() {
                                 <span class="icon-arrow"></span>
                             </a>
                         </li>
-                        <li class='treeItem' id="treeAzureItem" data-ref="azureProviders" data-link="ajax/DesignBlueprintAzure.html?provider=azure?provider=azure" >
+                        <li class='treeItem' id="treeAzureItem" data-ref="azureProviders" data-link="ajax/DesignBlueprintAzure.html?provider=azure" >
                             <a href="" onclick="$('#blueprints').attr('providerselected','azure');" class="devops_providers">
                                 <div class="iconSprite azureIcon" title="Azure"></div>
                                 <span class="title"> Azure </span>
@@ -412,7 +412,8 @@ function setleftnavigation(toplink, breadcrumbHeader) {
                     $(el).find("a").attr('class', 'itemSelected');
                     location.href = $(el).find("a").attr("href");
                     providerLinkBool = false;
-                    $(el).parents("li").addClass("open active");
+                    $(el).parents("li").removeClass("open active").addClass("open activ");
+
                     
                 }
             });

@@ -65,26 +65,9 @@ $(document).ready(function(){
                 lastSelected=$(this).attr('treeIndex');
             }else{
                 lastSelected=$(this).attr('treeIndex');
-                $(treeParent).children("li.treeItem").removeClass('open active');
-                var a=$(this).addClass('open active').find('li').eq(0).find('a');
+                $(treeParent).children("li.treeItem").removeClass('open activ');
+                var a=$(this).addClass('open activ').find('li').eq(0).find('a');
             }
-            /*if(lastSelected === $(this).attr('treeIndex')){
-                //alert($(this).find("ul").children().length );
-                if($(this).hasClass("active")){
-                    $(this).removeClass('open active');
-                }else{
-                    $(this).addClass('open active'); 
-                }
-                lastSelected=$(this).attr('treeIndex');
-            }else{
-                lastSelected=$(this).attr('treeIndex');
-                $(treeParent).children("li").removeClass('open active');
-                var a=$(this).addClass('open active').find('li').eq(0).find('a');
-                //if(a.length){
-                    //var hash=a.eq(0).addClass('itemSelected').attr('href')
-                    //location.hash=hash;
-                //}
-            }*/
         });
         $(treeParent).find('li.childItem').find('a').click(function(e){
             e.stopPropagation();
@@ -93,7 +76,6 @@ $(document).ready(function(){
 
             var $parentLiElm = $(this).parent().parent().parent();
             var dataId = $(this).parent().attr('data-id');
-            //console.log("$parentLiElm  ", $parentLiElm.attr('data-ref'), $(this).parent().attr('data-id') );
 
             if(data[$parentLiElm.attr('data-ref')]){
                 var iteminfo = data[$parentLiElm.attr('data-ref')];
@@ -104,10 +86,8 @@ $(document).ready(function(){
                     }
                 });
             }
-            setTimeout(function(){
-                $parentLiElm.addClass('active');
-            }, 20);
-            
+            $(treeParent).children("li.treeItem").removeClass('activ open');
+            $parentLiElm.addClass('activ open');
 
         });
     }
