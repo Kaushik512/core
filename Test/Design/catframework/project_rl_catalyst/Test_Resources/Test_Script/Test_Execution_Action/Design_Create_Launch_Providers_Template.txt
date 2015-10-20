@@ -57,18 +57,14 @@ Verifies Node and MongoInstances are present
 
 Catalyst Create Blueprint of Cloud Formation and Save
     Clicks on Design
-    Sleep    2s
     Clicks on OK Button to Create the New Blueprint
-    Sleep    1s
     Clicks on CloudFormation Template Type
     Clicks on Next Button
     Clicks on User created Template
     Clicks on Next Button
     Enters the New Cloud Blueprint Name
     Chooses The Business Group
-    Sleep    1s
     Chooses The Project
-    Sleep    1s
     Clicks on close Cloud Configure Organization Parameters
     Clicks on Configure Stack Parameters
     Choose the Cloud Region
@@ -84,9 +80,13 @@ Catalyst Create Blueprint of Cloud Formation and Save
     Enable the Configure Resource Node,Imageid and Instance Type
     Clicks on Next Button
     Clicks on OKK Button of Cloud Page
+    Capture Screen shot of the page
 
 
 
+
+Capture Screen shot of the page
+    Capture Page Screenshot
 
 	
 Select Your Cloud Blueprint
@@ -138,11 +138,11 @@ Clicks on Configure Stack Parameters
     Click Element    xpath=.//*[@id='accordion-Design']/div[7]/div[1]/h4/a/i[1]
 	
 	
-Enters the New Cloud Blueprint Name	
+Enters the New Cloud Blueprint Name
     Input Text    id=blueprintNameInput    ${CLOUD BLUEPRNTNAME}
 
 Clicks on User created Template
-    Click Element    xpath=.//*[@id='individualTemplateNameGrid']/div/div/ul/li/u/b[text()="${CLOUD TEMPNAME}"]
+    Click Element    xpath=.//*[@id='individualTemplateNameGrid']/div/div/ul/li/u/b[text()="${CLOUD TEMPLATENAME}"]
 
 Clicks on CloudFormation Template Type
     Sleep    5s
@@ -185,6 +185,12 @@ Catalyst Creation of Providers Setup
     Selects the Key Pair
     Uploads the Pem File for Provider
     Clicks on Save Button of the Provider
+    Verify Provider is created
+
+
+Verify Provider is created
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Element Should Contain    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${PROVIDER NAME}']    ${PROVIDER NAME}
+
 
 Clicks on Providers
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=//a[contains(text(),'Providers')]
@@ -262,23 +268,26 @@ Catalyst Creation of VM Image Process for CentOS
     Clicks on New Button of VMImage
     Enters the Image Name for CentOS
     Select organization now
+    Sleep    1s
     Choosess The Provider of Image
     Select the Operating System to Image for CentOS
     Enters the Image ID for CentOS
     Enters the UserName of CentOSProviders
-    
     Clicks on Save Button of VMimage page
+    Verify Centos image is created
 
 Catalyst Creation of VM Image Process for Ubutnu
     Sleep    5s
     Clicks on New Button of VMImage
     Enters the Image Name for Ubuntu
     Select organization now
+    Sleep    1s
     Choosess The Provider of Image
     Select the Operating System to Image for Ubuntu 
     Enters the Image ID for Ubuntu
     Enters the UserName of UbuntuProviders
     Clicks on Save Button of VMimage page
+    Verify ubuntu image is created
 
 Catalyst Creation of VM Image Process for Windows
     Sleep    5s
@@ -292,9 +301,15 @@ Catalyst Creation of VM Image Process for Windows
     Clicks on Save Button of VMimage page
 
 
+Verify Centos image is created
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Element Should Contain    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${IMAGE NAME1}']    ${IMAGE NAME1}
+
+Verify ubuntu image is created
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Element Should Contain    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${IMAGE NAME2}']    ${IMAGE NAME2}
+
+
 Clicks on New Button of VMImage
-    Click Element    id=addnewitem
-    Sleep    1s
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    id=addnewitem
 
 Enters the Image Name for CentOS
     Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    id=name    ${IMAGE NAME1}
@@ -391,13 +406,11 @@ Clicks on Save Button of VMimage page
 
 
 Catalyst Choose Template and Save Setup
-    Sleep    6s
     Clicks on Design
-    Sleep    10s
     Clicks on OK Button to Create the New Blueprint
     Sleep    1s
     Choose the Template Type Created
-    Sleep    3s
+    Sleep    2s
     Clicks on Next Button
     Chooses the Template User Created
     Clicks on Next Button
@@ -420,6 +433,10 @@ Catalyst Choose Template and Save Setup
     #Select WorkCookBooks
     #Clicks on >>T Button
     Clicks on close of Configure Organization Parameters
+    Clicks on Configure runlist parameters
+    Clicks on Edit Runlist icon
+    Select the cookbooks to add
+    Clicks on Update Runlist button
     Clicks on Configure Application URL
     Clicks on AppNew Button
     Enters the Application URL Name
@@ -428,6 +445,25 @@ Catalyst Choose Template and Save Setup
     Enable the Next Button 
     Clicks on Next Button
     Clicks on Confirm OK Button
+    Capture Screen shot of the page
+
+
+
+Select the cookbooks to add
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[text()='${CookBkName}']
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element    id=btnaddToRunlist
+
+Clicks on Configure runlist parameters
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element    xpath=.//*[@id='accordion-Design']/div[3]/div[1]/h4/a/i[1]
+
+Clicks on Edit Runlist icon
+    Sleep    2s
+    Click Element    css=img.addList
+
+Clicks on Update Runlist button
+    Sleep    2s
+    Click Element    id=saveRunlist
+
 
 
 Clicks on OK Button to Create the New Blueprint
@@ -435,7 +471,7 @@ Clicks on OK Button to Create the New Blueprint
     Run Keyword If    '${said}' == 'True'     
     ...    Click Element    xpath=.//*[text()='OK']
     ...    ELSE IF   '${said}' == 'False'
-    ...    Log    OK Button is not displayed
+    ...    Log    OK button is not displayed
 
 
 
@@ -453,7 +489,7 @@ Clicks on Next Button
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    css=#nextSpecificValue > a.btn.btn-primary
 
 Chooses the Template User Created
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='individualTemplateNameGrid']/div/div/ul/li/u/b[text()="${TEMPLATE NAME}"]
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='individualTemplateNameGrid']/div/div/ul/li/u/b[text()="${TEMP_NAME}"]
 
 Chooses the Operating System as Centos
     Sleep    1s
@@ -467,11 +503,11 @@ Choose the Provider
     #Click Element    id=providerId
     #Log    after click
     #Sleep    4s
-    Click Element    xpath=.//*[@id='providerId']/option[text()='${PROVIDER NAME}']
+    Click Element    xpath=.//*[@id='providerId']/option[text()='${PROVDR_Name}']
 
 
 Choose the Available Images
-    #Sleep    4s
+   #Sleep    4s
     #Click Element    id=imageId
     #Log    after click
     #Sleep    4s
@@ -533,31 +569,18 @@ Enters The Blueprint Name
 Chooses The Business Group
     Sleep    3s
     #Click Element    id=bgListInput
-    Click Element    xpath=.//*[@id='bgListInput']/option[text()='${BUSINESS GROUP NAME1}']
-
-    
-
+    Click Element    xpath=.//*[@id='bgListInput']/option[text()='${BU_NAME}']
 
 Chooses The Project
     Sleep    3s
     #Click Element    id=projectListInput
-    Click Element    xpath=.//*[@id='projectListInput']/option[text()='${PROJECT NAME1}']
-    
+    Click Element    xpath=.//*[@id='projectListInput']/option[text()='${Proj_Name}']
 
 
 Clicks on close of Configure Organization Parameters
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='accordion-Design']/div[2]/div[1]/h4/a/i[2]
 
-Clicks on Configure Runlist Parameters
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=//*[@id="accordion-Design"]/div[3]/div[1]/h4/a/i[1]
 
-Clicks on Edit Runlist icon
-    Sleep    2s
-    Click Element    css=img.addList
-
-Clicks on Update Runlist button
-    Sleep    2s
-    Click Element    id=saveRunlist
 
 Clicks on Configure Application URL
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='accordion-Design']/div[6]/div[1]/h4/a/i[1]
@@ -1002,10 +1025,9 @@ Verfiy the Chef Run fron Grid View Enabled
 
 
 Catalyst Choose Template and Save Setup for UBUNTU
+    Clicks on Settings
     Clicks on Design
-    Sleep    10s
-    Clicks on OK Button to Create the New Blueprint
-    Sleep    1s
+    Sleep    5s
     Choose the Template Type Created
     Sleep    3s
     Clicks on Next Button
