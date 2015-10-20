@@ -740,12 +740,14 @@ var MasterUtil = function() {
         d4dModelNew.d4dModelMastersOrg.find({
             _id: new ObjectId(orgId)
         }, function(err, orgs) {
+            
             if (orgs) {
                 for (var i = 0; i < orgs.length; i++) {
                     if (orgs[i].id === '1') {
                         orgList.push(orgs[i]);
                     }
                 }
+                logger.debug('Orgs',JSON.stringify(orgList));
                 callback(null, orgList);
             } else {
                 callback(err, null);
