@@ -51,6 +51,34 @@
 	            		</div>
 	            	</div>
             	</div>
+
+                <div class="modal fade" id="chefRunlistModal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+                    <div class="modal-dialog">
+                        <div class="modal-content" style="width:800px">
+                            <form role="form" class="cmxform" id="chefTaskRunlist" autocomplete="off">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                        &times;
+                                    </button>
+                                    <h4 class="modal-title">
+                            <i class="fa fa-th-list txt-color-blue"></i>&nbsp;&nbsp;Edit Runlist</h4>
+                                </div>
+                                <div class="modal-body modal-height">
+                                    <div class="cookbookShow">
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <a type="button" class="btn btn-default" data-dismiss="modal">Close</a>
+                                    <button type="submit" class="btn btn-primary" id="saveRunlist">Update Runlist</button>
+                                </div>
+                            </form>
+                        </div>
+                        <!-- /.modal-content -->
+                    </div>
+                    <!-- /.modal-dialog -->
+                </div>
+
+                
             </div>
         </div>
     </div>
@@ -136,7 +164,11 @@ var loadOrgParams = function(orgIds){
                     for (var i = 0; i < getBGs.length; i++) {
                         $bgList.append($('<option></option>').val(getBGs[i].rowid).html(getBGs[i].name).data('projList', getBGs[i].projects));
                     }
+                    //selecting the first bg in list
+                    $bgList.val($bgList.find('option').eq(1).val());
+                    $bgList.select2().trigger('change');
                 }
+
 
                 var $cookbookShow = $('.cookbookShow').empty();
                 $cookbookShow.append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
@@ -205,8 +237,13 @@ var loadOrgParams = function(orgIds){
 
                     $projectList.append($('<option></option>').val(getProjs[i].rowid).html(getProjs[i].name));
                 }
-            });
+                //selecting the first projecct in the list
 
+                    $projectList.val($projectList.find('option').eq(1).val());
+                    $projectList.select2().trigger('change');
+            });
+            //forcing an orgname change event
+            $('#orgnameSelect').select2().trigger('change');
 
 
         }
