@@ -3,6 +3,7 @@ var exec = require('child_process').exec;
 var SSHExec = require('./utils/sshexec');
 var logger = require('_pr/logger')(module);
 var Process = require("./utils/process");
+var curl = require("./utils/curl.js");
 
 function execute(cmd, isJsonResponse, callback) {
     // logger.debug("START of executing issued command");
@@ -208,8 +209,7 @@ var AzureCloud = function() {
     }
 
     this.updatedfloatingip = false;
-
-
+ 
     this.trysshoninstance = function(ip_address, username, pwd, callback) {
         var opts = {
             //privateKey: instanceData.credentials.pemFilePath,
@@ -236,8 +236,8 @@ var AzureCloud = function() {
         }, function(err, stdout) {
             logger.error('Error Out:', stdout);
         });
-
     }
+
     this.timeouts = [];
     this.callbackdone = false;
 
@@ -253,7 +253,13 @@ var AzureCloud = function() {
                 }
                 if (!err) {
                     logger.debug('Quried server:', JSON.stringify(data));
-                    var ip_address = data.Network.Endpoints[0].virtualIPAddress;
+                   var ip_address = '';
+                    if(data.Network.Endpoints.length > 0)
+                         ip_address = data.Network.Endpoints[0].virtualIPAddress;
+                    else
+                        ip_address = data.VirtualIPAddresses.address;
+ 
+		   // var ip_address = data.Network.Endpoints[0].virtualIPAddress;
                     logger.debug('Azure VM ip address:', ip_address);
 
                     if (data.InstanceStatus == 'ReadyRole') {
@@ -266,7 +272,8 @@ var AzureCloud = function() {
                     }
 
                     if (self.updatedfloatingip) {
-                        self.trysshoninstance(ip_address, username, pwd, function(cdata) {
+
+                        self.trysshoninstance(data.OSDisk.operatingSystem,ip_address, username, pwd, function(cdata) {
                             logger.debug('End trysshoninstance:', cdata);
                             if (cdata == 'ok') {
                                 //Clearing all timeouts

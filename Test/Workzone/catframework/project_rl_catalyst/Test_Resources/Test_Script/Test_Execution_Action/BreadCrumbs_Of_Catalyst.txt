@@ -1,0 +1,203 @@
+    *** Settings ***
+Documentation      A resource file with reusable keywords and variables.
+...
+...                This file is part of a prototype automated test suite designed to
+...                test web application products built on top of the SLZ platform.
+...
+
+Library            Selenium2Library
+Library            String
+Library            Collections
+
+Resource           catalyst.txt
+Resource           ${CATALYST TEST DATA}/${TESTDATA}
+
+
+*** Keywords ***
+
+Catalyst Validation of Organization Setup BreadCrumbs
+    Steps of Validation for Organization Breadcrumb 
+    Validation Organization Breadcrumbpath
+    Steps of Validation for Business Breadcrumb 
+    Validation Business Breadcrumbpath
+    Steps of Validation for Projects Breadcrumb 
+    Validation Projects Breadcrumbpath
+
+
+
+#organization setup starts
+Steps of Validation for Organization Breadcrumb
+    BreadCrumbs same path 
+    Click Element    xpath=.//*[@id='setting_tree']/ul/li[2]/a
+
+Validation Organization Breadcrumbpath
+    Element Should Contain    xpath=.//*[@id='ribbon']/ol    ${ValidationOrgBreadCrumb}
+
+
+Steps of Validation for Environment Breadcrumb 
+    Click Element    xpath=.//*[@id='setting_tree']/ul/li[7]/a
+   
+Validation Environment Breadcrumbpath
+    Element Should Contain    xpath=.//*[@id='ribbon']/ol    ${ValidationEnvBreadCrumb}
+
+
+Steps of Validation for Business Breadcrumb
+    Click Element    xpath=.//*[@id='setting_tree']/ul/li[3]/a
+
+Validation Business Breadcrumbpath
+    Element Should Contain    xpath=.//*[@id='ribbon']/ol    ${ValidationBusGrpBreadCrumb}
+
+
+Steps of Validation for Projects Breadcrumb
+    Click Element    xpath=.//*[@id='setting_tree']/ul/li[4]/a
+
+Validation Projects Breadcrumbpath
+    Element Should Contain    xpath=.//*[@id='ribbon']/ol    ${ValidationProjBreadCrumb}
+
+BreadCrumbs same path 
+    Click Element    xpath=.//*[@id='settingsNew']
+    Click Element    xpath=.//*[@id='setting_tree']/ul/li[1]/a         #Organization setup ends
+
+
+
+
+Catalyst Validation of DevOps Setup BreadCrumbs
+    Steps of Validation for Config Management Breadcrumb 
+    Validation Config Management Breadcrumbpath
+    Steps of Validation for Environment Breadcrumb 
+    Validation Environment Breadcrumbpath 
+    Steps of Validation for Docker Breadcrumb 
+    Validation Docker Breadcrumbpath 
+    Steps of Validation for Jenkkins Breadcrumb 
+    Validation Jenkins Breadcrumbpath 
+    Steps of Validation for Providers Breadcrumb 
+    Validation Providers Breadcrumbpath
+    Steps of Validation for Jira Breadcrumb 
+    Validation Jira Breadcrumbpath
+
+
+
+
+                                                                    #Devops Config Management starts   
+Steps of Validation for Config Management Breadcrumb
+    BreadCrumbs Devops setup path
+    Click Element    xpath=.//*[@id='setting_tree']/ul/li[6]/a
+
+Validation Config Management Breadcrumbpath 
+    Element Should Contain    xpath=.//*[@id='ribbon']/ol    ${ValidationConfigMgmtBreadCrumb}
+
+Steps of Validation for Jira Breadcrumb
+    BreadCrumbs Devops setup path
+    Click Element    xpath=.//*[@id='setting_tree']/ul/li[11]/a
+
+Validation Jira Breadcrumbpath
+    Element Should Contain    xpath=.//*[@id='ribbon']/ol    ${ValidationJiraBreadCrumb}
+
+
+
+Steps of Validation for Providers Breadcrumb
+    BreadCrumbs Devops setup path
+    Click Element    xpath=.//*[@id='setting_tree']/ul/li[10]/a
+
+Validation Providers Breadcrumbpath
+    Element Should Contain    xpath=.//*[@id='ribbon']/ol    ${ValidationProvidersBreadCrumb}
+
+
+Steps of Validation for Docker Breadcrumb 
+    Click Element    xpath=.//*[@id='setting_tree']/ul/li[8]/a
+
+Validation Docker Breadcrumbpath
+    Element Should Contain    xpath=.//*[@id='ribbon']/ol    ${ValidationDockerBreadCrumb}
+
+
+Steps of Validation for Jenkkins Breadcrumb 
+    Click Element    xpath=.//*[@id='setting_tree']/ul/li[9]/aSteps 
+
+Validation Jenkins Breadcrumbpath 
+    Element Should Contain    xpath=.//*[@id='ribbon']/ol    ${ValidationJenkinsBreadCrumb}
+
+BreadCrumbs Devops setup path
+    Click Element    xpath=.//*[@id='settingsNew']
+    Click Element    xpath=.//*[@id='setting_tree']/ul/li[5]/a
+                                                                 #Devops Config Management setup ends
+
+
+
+
+Catalyst Validation of Users Setup BreadCrumbs
+    Steps of Validation for Users Roles Breadcrumb 
+    Validation Users Roles Breadcrumbpath 
+    Steps of Validation for Users Breadcrumb 
+    Validation Users Breadcrumbpath
+    Steps of Validation for Teams Breadcrumb 
+    Validation Teams Breadcrumbpath
+
+Steps of Validation for Users Roles Breadcrumb                     #Users Setup starts
+    BreadCrumb Users Setup path
+    Click Element    xpath=.//*[@id='setting_tree']/ul/li[7]/a
+
+Validation Users Roles Breadcrumbpath
+    Element Should Contain    xpath=.//*[@id='ribbon']/ol    ${ValidationUsersRolesBreadCrumb}
+
+Steps of Validation for Users Breadcrumb
+    Click Element    xpath=.//*[@id='setting_tree']/ul/li[8]/a
+
+Validation Users Breadcrumbpath
+    Element Should Contain    xpath=.//*[@id='ribbon']/ol    ${ValidationUsersBreadCrumb}
+
+Steps of Validation for Teams Breadcrumb
+    Click Element    xpath=.//*[@id='setting_tree']/ul/li[9]/a
+
+Validation Teams Breadcrumbpath
+    Element Should Contain    xpath=.//*[@id='ribbon']/ol    ${ValidationTeamsBreadCrumb}
+
+BreadCrumb Users Setup path
+    Click Element    xpath=.//*[@id='settingsNew']
+    Click Element    xpath=.//*[@id='setting_tree']/ul/li[6]/a         #Users Setup Ends
+
+
+
+
+Catalyst Validation of Gallery Setup BreadCrumbs
+    Steps of Validation for Templates BreadCrumb
+    Validation Templates BreadCrumb
+    Steps of Validation for Service Command BreadCrumb
+    Validation Service Command BreadCrumb
+    Steps of Validation for Image BreadCrumb
+    Validation Image BreadCrumb
+
+Steps of Validation for Templates BreadCrumb
+    BreadCrumb Gallery Setup path
+    Click Element    xpath=.//*[@id='setting_tree']/ul/li[11]/a
+
+Validation Templates BreadCrumb
+    Element Should Contain    xpath=.//*[@id='ribbon']/ol    ${ValidationTemplatesBreadCrumb}
+
+
+Steps of Validation for Service Command BreadCrumb
+    Click Element    xpath=.//*[@id='setting_tree']/ul/li[12]/a
+
+Validation Service Command BreadCrumb
+    Element Should Contain    xpath=.//*[@id='ribbon']/ol    ${ValidationServiceBreadCrumb}
+
+Steps of Validation for Image BreadCrumb
+    Click Element    xpath=.//*[@id='setting_tree']/ul/li[13]/a
+
+Validation Image BreadCrumb
+    Element Should Contain    xpath=.//*[@id='ribbon']/ol    ${ValidationImageBreadCrumb}
+
+
+
+BreadCrumb Gallery Setup path
+    Click Element    xpath=.//*[@id='settingsNew']
+    Click Element    xpath=.//*[@id='setting_tree']/ul/li[10]/a
+
+
+
+
+
+
+
+
+
+ 

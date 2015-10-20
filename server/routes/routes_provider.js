@@ -288,6 +288,9 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
     //get vmware providers
     app.get('/vmware/providers', function(req, res) {
         logger.debug("Enter get() for /providers");
+
+
+
         var loggedInUser = req.session.user.cn;
         masterUtil.getLoggedInUser(loggedInUser, function(err, anUser) {
             if (err) {
@@ -362,6 +365,231 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             }
         });
     });
+
+    //start: get azure provider by id
+    app.get('/vmware/providers/:providerId', function(req, res) {
+        logger.debug("Enter get() for /azure/providers//%s", req.params.providerId);
+        var providerId = req.params.providerId.trim();
+        if (typeof providerId === 'undefined' || providerId.length === 0) {
+            res.send(500, "Please Enter ProviderId.");
+            return;
+        }
+        vmwareProvider.getvmwareProviderById(providerId, function(err, aProvider) {
+            if (err) {
+                logger.error(err);
+                res.send(500, errorResponses.db.error);
+                return;
+            }
+            if (aProvider) {
+
+                masterUtil.getOrgById(aProvider.orgId[0], function(err, orgs) {
+                    if (err) {
+                        res.send(500, "Not able to fetch org.");
+                        return;
+                    }
+                    aProvider.orgname = orgs[0].orgname;
+
+                    if (orgs.length > 0) {
+                        res.send(aProvider);
+                    }
+                });
+
+            } else {
+                res.send(404);
+            }
+        });
+    }); //end: get azure provider by id
+    
+     //start: removes azure provider
+    app.delete('/vmware/providers/:providerId', function(req, res) {
+        logger.debug("Enter delete__________() for vmware/providers/%s", req.params.providerId);
+        var user = req.session.user;
+        var category = configmgmtDao.getCategoryFromID("9");
+        var permissionto = 'delete';
+        var providerId = req.params.providerId.trim();
+        if (typeof providerId === 'undefined' || providerId.length === 0) {
+            res.send(500, "Please Enter ProviderId.");
+            return;
+        }
+
+        usersDao.haspermission(user.cn, category, permissionto, null, req.session.user.permissionset, function(err, data) {
+            if (!err) {
+                logger.debug('Returned from haspermission : ' + data + ' : ' + (data == false));
+                if (data == false) {
+                    logger.debug('No permission to ' + permissionto + ' on ' + category);
+                    res.send(401, "You don't have permission to perform this operation.");
+                    return;
+                }
+            } else {
+                logger.error("Hit and error in haspermission:", err);
+                res.send(500);
+                return;
+            }
+
+            masterUtil.getLoggedInUser(user.cn, function(err, anUser) {
+                if (err) {
+                    res.send(500, "Failed to fetch User.");
+                }
+                logger.debug("LoggedIn User:>>>> ", JSON.stringify(anUser));
+                if (anUser) {
+                    //data == true (create permission)
+                    /*if(data && anUser.orgname_rowid[0] !== ""){
+                    logger.debug("Inside check not authorized.");
+                    res.send(401,"You don't have permission to perform this operation.");
+                    return;
+                }*/
+
+                    VMImage.getImageByProviderId(providerId, function(err, anImage) {
+                        if (err) {
+                            logger.error(err);
+                            res.send(500, errorResponses.db.error);
+                            return;
+                        }
+                        if (anImage) {
+                            res.send(403, "Provider already used by Some Images.To delete provider please delete respective Images first.");
+                            return;
+                        }
+                        logger.debug('Providerid +++++++',providerId);
+                        vmwareProvider.removevmwareProviderById(providerId, function(err, deleteCount) {
+                            if (err) {
+                                logger.error(err);
+                                res.send(500, errorResponses.db.error);
+                                return;
+                            }
+                            if (deleteCount) {
+                                logger.debug("Enter delete() for vmware/providers/%s", req.params.providerId);
+                                res.send({
+                                    deleteCount: deleteCount
+                                });
+                            } else {
+                                res.send(400);
+                            }
+                        });
+                    });
+                }
+            });
+        }); //
+    });
+    
+
+    app.post('/vmware/providers/:providerId/update', function(req, res) {
+        logger.debug("Enter post() for /providers/vmware/%s/update", req.params.providerId);
+         logger.debug("Enter post() for /vmware.providers.", typeof req.body.fileName);
+        var user = req.session.user;
+        var category = configmgmtDao.getCategoryFromID("9");
+        var permissionto = 'create';
+        var vmwareusername = req.body.vmwareusername;
+        var vmwarepassword = req.body.vmwarepassword;
+        var vmwarehost = req.body.vmwarehost;
+        var vmwaredc = req.body.vmwaredc;
+        var providerName = req.body.providerName;
+        var providerType = req.body.providerType;
+        var orgId = req.body.orgId;
+
+        if (typeof vmwareusername === 'undefined' || vmwareusername.length === 0) {
+            res.send(400, "Please Enter Username.");
+            return;
+        }
+        if (typeof vmwarepassword === 'undefined' || vmwarepassword.length === 0) {
+            res.send(400, "Please Enter Password.");
+            return;
+        }
+        if (typeof vmwarehost === 'undefined' || vmwarehost.length === 0) {
+            res.send(400, "Please Enter a Host.");
+            return;
+        }
+        if (typeof vmwaredc === 'undefined' || vmwaredc.length === 0) {
+            res.send(400, "Please Enter a Tenant ID");
+            return;
+        }
+        if (typeof providerName === 'undefined' || providerName.length === 0) {
+            res.send(400, "Please Enter Name.");
+            return;
+        }
+        if (typeof providerType === 'undefined' || providerType.length === 0) {
+            res.send(400, "Please Enter ProviderType.");
+            return;
+        }
+        if (typeof orgId === 'undefined' || orgId.length === 0) {
+            res.status(400);
+            res.send("Please Select Any Organization.");
+            return;
+        }
+
+
+        var providerData = {
+            id: 9,
+            username: vmwareusername,
+            password: vmwarepassword,
+            host: vmwarehost,
+            providerName: providerName,
+            providerType: providerType,
+            dc: vmwaredc,
+            orgId: orgId
+        };
+        logger.debug("provider>>>>>>>>>>>> %s", providerData.providerType);
+        logger.debug("provider data>>>>>>>>>>>> %s", JSON.stringify(providerData));
+
+        usersDao.haspermission(user.cn, category, permissionto, null, req.session.user.permissionset, function(err, data) {
+            if (!err) {
+                logger.debug('Returned from haspermission : ' + data + ' : ' + (data == false));
+                if (data == false) {
+                    logger.debug('No permission to ' + permissionto + ' on ' + category);
+                    res.send(401, "You don't have permission to perform this operation.");
+                    return;
+                }
+            } else {
+                logger.error("Hit and error in haspermission:", err);
+                res.send(500);
+                return;
+            }
+
+            masterUtil.getLoggedInUser(user.cn, function(err, anUser) {
+                if (err) {
+                    res.send(500, "Failed to fetch User.");
+                }
+                logger.debug("LoggedIn User:>>>> ", JSON.stringify(anUser));
+                if (anUser) {
+
+                    logger.debug("vmwareProvider data", JSON.stringify(data));
+                    vmwareProvider.updatevmwareProviderById(req.params.providerId, providerData, function(err, updateCount) {
+                        if (err) {
+                            logger.error(err);
+                            res.send(500, errorResponses.db.error);
+                            return;
+                        }
+                        masterUtil.getOrgById(providerData.orgId, function(err, orgs) {
+                            if (err) {
+                                res.send(500, "Not able to fetch org.");
+                                return;
+                            }
+                            if (orgs.length > 0) {
+                                var dommyProvider = {
+                                    _id: req.params.providerId,
+                                    id: 9,
+                                    username: vmwareusername,
+                                    password: vmwarepassword,
+                                    host: vmwarehost,
+                                    providerName: providerName,
+                                    providerType: providerType,
+                                    dc: vmwaredc,
+                                    orgId: orgs[0].rowid,
+                                    orgName: orgs[0].orgname
+                                };
+                                res.send(dommyProvider);
+                                return;
+                            }
+                        });
+                    });
+
+                }
+            });
+        });
+
+
+
+    });
+
 
     app.post('/hppubliccloud/providers', function(req, res) {
 
@@ -1322,6 +1550,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         var openstackprojectname = req.body.openstackprojectname;
         var providerName = req.body.providerName;
         var providerType = req.body.providerType;
+        var openstackkeyname = req.body.openstackkeyname;
         var serviceendpoints = {
             compute: req.body.openstackendpointcompute,
             network: req.body.openstackendpointnetwork,
@@ -1424,6 +1653,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                         tenantname: openstacktenantname,
                         projectname: openstackprojectname,
                         serviceendpoints: serviceendpoints,
+                        keyname: openstackkeyname,
                         orgId: orgId
                     };
                     openstackProvider.getopenstackProviderByName(providerData.providerName, providerData.orgId, function(err, prov) {
@@ -1437,7 +1667,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                             res.send("Provider name already exist.");
                             return;
                         }
-                        openstackProvider.createNew(providerData, function(err, provider) {
+                        openstackProvider.createNew(req,providerData, function(err, provider) {
                             if (err) {
                                 logger.debug("err.....", err);
                                 res.status(500);
@@ -1610,6 +1840,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         var providerName = req.body.providerName.trim();
         var providerType = req.body.providerType.trim();
         var providerId = req.params.providerId.trim();
+        var openstackkeyname = req.body.openstackkeyname;
         var serviceendpoints = {
             compute: req.body.openstackendpointcompute,
             network: req.body.openstackendpointnetwork,
@@ -1677,6 +1908,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             providerName: providerName,
             providerType: providerType,
             serviceendpoints: serviceendpoints,
+            keyname: openstackkeyname,
+
             orgId: orgId
         };
         logger.debug("provider>>>>>>>>>>>> %s", providerData.providerType);

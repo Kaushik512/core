@@ -1,0 +1,377 @@
+*** Settings ***
+Documentation      A resource file with reusable keywords and variables.
+...
+...                This file is part of a prototype automated test suite designed to
+...                test web application products built on top of the SLZ platform.
+...
+
+Library            Selenium2Library
+Library            String
+Library            Collections
+
+Resource           catalyst.txt
+Resource           ${CATALYST TEST DATA}/${TESTDATA}
+Resource           ${COMMON RESOURCES}/catalyst_grid_node.txt
+Resource           ${CATALYST ACTION}/DevOps_Setup_Action_Steps.txt
+
+*** Variables ***
+
+*** Keywords ***
+Create CENT OS New blueprint without cookbook
+    Click on Design Link
+    Select blueprint card
+    Click on Next Button
+    Select Stack from Standard Gallery     ${TOMCAT STACK}
+    Click on Next Button
+    Choose Operating System     ${CENT OS}
+#    Click Configure Chef Runlist link
+#    Click on Next Button
+    Edit Organization Parameters link
+    Enter Blueprint Name       ${PHOENIX COMMERNCE WITHOUT COOKBOOK CENTOS}
+    Select Business Group
+    Select Multiple Assign User
+    Select project from the dropdown
+    Select Environment from the dropdown
+    Click on Next Button
+    Click on Workzone
+    Click on Environment
+    Click on Blueprints Tab
+    Select AppFactory     ${PHOENIX COMMERNCE WITHOUT COOKBOOK CENTOS}
+    Click on Launch button
+#    Wait for instance to be created
+    Wait for few minutes and click on Launching Blueprint close button
+    Click on Instances tab
+    Select last instance from the list
+    Click on instances table view
+    Select instance from the list and verify the instance status
+
+
+Create CENT OS New blueprint with cookbook
+    Click on Design Link
+    Select blueprint card
+    Click on Next Button
+    Select Stack from Standard Gallery     ${LAMP STACK}
+    Click on Next Button
+    Choose Operating System       ${CENT OS}
+    Click Configure Chef Runlist link
+    Select Apache cook books
+    Select Java cook books
+    Click Configure Chef Runlist link
+#    Click on Next Button
+    Edit Organization Parameters link
+    Enter Blueprint Name         ${PHOENIX COMMERCE WITH COOKBOOK CENTOS}
+    Select Business Group
+    Select Multiple Assign User
+    Select project from the dropdown
+    Select Environment from the dropdown
+    Click on Next Button
+    Click on Workzone
+    Click on Environment
+    Click on Blueprints Tab
+    Select AppFactory       ${PHOENIX COMMERCE WITH COOKBOOK CENTOS}
+    Click on Launch button
+#    Wait for instance to be created
+    Wait for few minutes and click on Launching Blueprint close button
+    Click on Instances tab
+    Select last instance from the list
+    Click on instances table view
+    Select instance from the list and verify the instance status
+    Select a node and verify the recipies associated with the instance
+
+
+Create ubuntu OS New blueprint without cookbook
+    Click on Design Link
+    Select blueprint card
+    Click on Next Button
+    Select Stack from Standard Gallery     ${TOMCAT STACK}
+    Click on Next Button
+    Choose Operating System     ${UBUNTU OS}
+#    Click on Next Button
+    Edit Organization Parameters link
+    Enter Blueprint Name         ${PHOENIX COMMERNCE WITHOUT COOKBOOK UBUNTUOS}
+    Select Business Group
+    Select Multiple Assign User
+    Select project from the dropdown
+    Select Environment from the dropdown
+    Click on Next Button
+    Click on Workzone
+    Click on Environment
+    Click on Blueprints Tab
+    Select AppFactory       ${PHOENIX COMMERNCE WITHOUT COOKBOOK UBUNTUOS}
+    Click on Launch button
+#    Wait for instance to be created
+    Wait for few minutes and click on Launching Blueprint close button
+    Click on Instances tab
+    Select last instance from the list
+    Click on instances table view
+    Select instance from the list and verify the instance status
+
+
+Create ubuntu OS New blueprint with cookbook
+    Click on Design Link
+    Select blueprint card
+    Click on Next Button
+    Select Stack from Standard Gallery     ${LAMP STACK}
+    Click on Next Button
+    Choose Operating System      ${UBUNTU OS}
+    Click Configure Chef Runlist link
+    Select Apache cook books
+    Select server time cook books
+    Click Configure Chef Runlist link
+#    Click on Next Button
+    Edit Organization Parameters link
+    Enter Blueprint Name          ${PHOENIX COMMERCE WITH COOKBOOK UBUNTUOS}
+    Select Business Group
+    Select Multiple Assign User
+    Select project from the dropdown
+    Select Environment from the dropdown
+    Click on Next Button
+    Click on Workzone
+    Click on Environment
+    Click on Blueprints Tab
+    Select AppFactory         ${PHOENIX COMMERCE WITH COOKBOOK UBUNTUOS}
+    Click on Launch button
+#    Wait for instance to be created
+    Wait for few minutes and click on Launching Blueprint close button
+    Click on Instances tab
+    Select last instance from the list
+    Click on instances table view
+    Select instance from the list and verify the instance status
+    Select a node and verify the recipies associated with the instance
+
+Verify orchistration tab
+    Click on Workzone
+    Click on Environment
+    Click on orchistration tab
+    Click on new button
+    Enter orchistration task name
+    Select all nodes of orchistration
+    Select cookbook of orchistration
+    Click on Save task
+    Verify if the added tasks is shown under orchistration
+
+Verify if the added tasks is shown under orchistration
+            ${maxloop} =        Set Variable     200
+    :FOR    ${INDEX}    IN RANGE    1    ${maxloop}
+    \       ${instance exists} =    Run Keyword and Return Status      Wait Until Element Is Visible      xpath=.//*[@id='l3']/div/div/div/div/div[2]/div[1]/div/table/tbody/tr[${INDEX}]/td[1]
+    \       ${last index} =        Set Variable     ${INDEX}
+    \       Exit For Loop If     ${instance exists}
+#    Click on execute button under Orchistration view table
+    Click Element     xpath=.//*[@id='l3']/div/div/div/div/div[2]/div[1]/div/table/tbody/tr[${last index}]/td[4]/a
+
+Click on new button
+    Click Element    link=New
+
+Click on orchistration tab
+    Click Link      link=Orchestration         #xpath=.//*[@id='myTab3']/li[3]/a
+
+Enter orchistration task name
+    Input Text      xpath=.//*[@id='chef-dropdown']/form[1]/fieldset/section[1]/div/div/label/input    ${TASK NAME}
+
+Select all nodes of orchistration
+            ${maxloop} =        Set Variable     200
+    :FOR    ${INDEX}    IN RANGE    1    ${maxloop}
+    \       ${instance exists} =    Run Keyword and Return Status      Wait Until Element Is Visible      xpath=.//*[@id='selectedNodesChefTask']/li[${INDEX}]
+    \       ${last index} =        Set Variable     ${INDEX}
+    \       Exit For Loop If     ${instance exists}
+    \       Click Element     xpath=.//*[@id='selectedNodesChefTask']/li[${INDEX}]
+
+Select cookbook of orchistration
+    Input Text         xpath=.//*[@id='chef-dropdown']/form[2]/fieldset/section[2]/div/fieldset/section[1]/div/div[1]/ul[1]/input       get
+    Click Element      xpath=.//*[@id='chef-dropdown']/form[2]/fieldset/section[2]/div/fieldset/section[1]/div/div[1]/ul[1]/li[35]/label
+    Click Element      xpath=.//*[@id='chef-dropdown']/form[2]/fieldset/section[2]/div/fieldset/section[1]/div/div[2]/div/div[1]/button
+
+Click on Save task
+    Click Element    xpath=.//*[@id='content']/div[4]/div/div/div/a[1]
+
+Verify created Cent Operating System blueprints
+    Design and Setup Menu options should be hidden
+    Click on Workzone
+    Click on Environment
+    Click on Blueprints Tab
+    Select and launch Blueprint from Standard AppFactory Gallery       ${PHOENIX COMMERNCE WITHOUT COOKBOOK CENTOS}
+    Select and launch Blueprint from Standard AppFactory Gallery       ${PHOENIX COMMERCE WITH COOKBOOK CENTOS}
+
+Verify created ubuntu Operating System blueprints
+    Design and Setup Menu options should be hidden
+    Click on Workzone
+    Click on Environment
+    Click on Blueprints Tab
+    Select and launch Blueprint from Standard AppFactory Gallery       ${PHOENIX COMMERNCE WITHOUT COOKBOOK UBUNTUOS}
+    Select and launch Blueprint from Standard AppFactory Gallery       ${PHOENIX COMMERCE WITH COOKBOOK UBUNTUOS}
+
+
+Select a node and verify the recipies associated with the instance
+    [Arguments]    ${instance name}
+            ${maxloop} =        Set Variable     200
+    :FOR    ${INDEX}    IN RANGE    1    ${maxloop}
+    \       ${instance exists} =    Run Keyword and Return Status      Element Should Contain      xpath=.//*[@id='tableinstanceview']/tbody/tr[${INDEX}]/td[3]        ${instance name}
+    \       ${last index} =        Set Variable     ${INDEX}
+    \       Exit For Loop If     ${instance exists}
+    Click Element       xpath=.//*[@id='tableinstanceview']/tbody/tr[${last index}]/td[5]/div/span/a
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Wait Until Element Is Visible       xpath=.//*[@id='modalTableRunlist']/div/div/div[2]
+    Element Should Contain      xpath=.//*[@id='modalTableRunlist']/div/div/div[2]        recipe[java]
+    Click Element       xpath=.//*[@id='modalTableRunlist']/div/div/div[3]/button
+
+
+
+
+Design and Setup Menu options should be hidden
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Element Should Not Be Visible       xpath=//header[@id='header']/div[3]/li/a
+
+Select and launch Blueprint from Standard AppFactory Gallery
+    [Arguments]    ${Blueprint}
+            ${maxloop} =        Set Variable     200
+    :FOR    ${INDEX}    IN RANGE    1    ${maxloop}
+    \       ${blueprint exists} =    Run Keyword and Return Status      Element Should Contain      xpath=.//*[@id='collapse1']/div/div[${INDEX}]/div/ul/li[2]/u/b        ${Blueprint}
+    \       ${last index} =        Set Variable     ${INDEX}
+    \       Exit For Loop If     ${blueprint exists}
+    Click Element       xpath=.//*[@id='collapse1']/div/div[${INDEX}]/div/ul/li[2]/u/b
+    Click on Launch button
+    Wait for few minutes and click on Launching Blueprint close button
+
+Select Java and Apache cook books
+
+#    Select All From List     xpath=.//*[@id='checkout-form']/div/section[1]/div/div/fieldset/section[2]
+#    Click Element       xpath=.//*[@id='checkout-form']/div/section[1]/div/div/fieldset/section[1]/div/div[2]/div/div[3]/button
+#    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       xpath=//Input[@value='recipe[${JAVA COOKBOOK}]']
+#    Select All From List       xpath=//Input[@value='recipe[${JAVA COOKBOOK}]']
+#    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       xpath=//Input[@value='recipe[${APACHE COOKBOOK}]']
+#    Select All From List       xpath=//Input[@value='recipe[${APACHE COOKBOOK}]']
+#    Click Element      xpath=.//*[@id='checkout-form']/div/section[1]/div/div/fieldset/section[1]/div/div[2]/div/div[1]/button
+#    Click Element       xpath=.//*[@id='checkout-form']/div/section[1]/div/div/fieldset/section[1]/div/div[1]/ul[1]/li[47]/label
+#    Click Element       xpath=.//*[@id='checkout-form']/div/section[1]/div/div/fieldset/section[1]/div/div[1]/ul[1]/li[47]/label
+#    Click Element       xpath=.//*[@id='checkout-form']/div/section[1]/div/div/fieldset/section[1]/div/div[1]/ul[1]/li[4]/label
+    Input Text      xpath=//ul[@class='deploymentsCookbookList deploymentsListCSS']/input       java
+    Click Element       xpath=.//*[@id='checkout-form']/div/section[1]/div/div/fieldset/section[1]/div/div[1]/ul[1]/li[47]/label
+    Input Text      xpath=//ul[@class='deploymentsCookbookList deploymentsListCSS']/input       ${APACHE COOKBOOK}
+    Click Element       xpath=.//*[@id='checkout-form']/div/section[1]/div/div/fieldset/section[1]/div/div[1]/ul[1]/li[4]/label
+
+Select Apache cook books
+    Input Text      xpath=//ul[@class='deploymentsCookbookList deploymentsListCSS']/input       ${APACHE COOKBOOK}
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       xpath=//label[./text()='${APACHE COOKBOOK}']
+    Click Element       xpath=//label[./text()='${APACHE COOKBOOK}']       #.//*[@id='checkout-form']/div/section[1]/div/div/fieldset/section[1]/div/div[1]/ul[1]/li[4]/label
+    Click on Move Arrow Button
+
+Select Java cook books
+    Input Text      xpath=//ul[@class='deploymentsCookbookList deploymentsListCSS']/input       ${JAVA COOKBOOK}
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       xpath=//label[./text()='${JAVA COOKBOOK}']
+    Click Element       xpath=//label[./text()='${JAVA COOKBOOK}']     #.//*[@id='checkout-form']/div/section[1]/div/div/fieldset/section[1]/div/div[1]/ul[1]/li[47]/label
+    Click on Move Arrow Button
+
+Select server time cook books
+    Input Text      xpath=.//*[@id='checkout-form']/div/section[1]/div/div/fieldset/section[1]/div/div[1]/ul[1]/input       ${SERVER TIME COOKBOOK}
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       xpath=//label[./text()='${SERVER TIME COOKBOOK}']
+    Click Element       xpath=//label[./text()='${SERVER TIME COOKBOOK}']    #.//*[@id='checkout-form']/div/section[1]/div/div/fieldset/section[1]/div/div[1]/ul[1]/li[81]/label
+    Click on Move Arrow Button
+
+Click on Move Arrow Button
+    Click Element     xpath=//button[@class='btn btn-default btn-primary btnItemAdd btnItemCSS']
+
+Select Stack from Standard Gallery
+    [Arguments]    ${Standard Stack}
+            ${maxloop} =        Set Variable     200
+    :FOR    ${INDEX}    IN RANGE    1    ${maxloop}
+    \       ${standard stack exists} =    Run Keyword and Return Status      Element Should Contain      xpath=.//*[@id='individualTemplateNameGrid']/div[${INDEX}]/div/ul/li[2]/u/b        ${Standard Stack}
+    \       ${last index} =        Set Variable     ${INDEX}
+    \       Exit For Loop If     ${standard stack exists}
+    Click Element       xpath=.//*[@id='individualTemplateNameGrid']/div[${last index}]/div/ul/li[2]/u/b
+
+
+Select last instance from the list
+    Wait Until Keyword Succeeds    2 minute     1 seconds       Element Should Be Visible       xpath=.//*[@id='divinstancescardview']/div/div/ul/li[1]/div/div/div[1]/div/div/div[3]/div/span[2]/span
+            ${maxloop} =        Set Variable     200
+    :FOR    ${INDEX}    IN RANGE    1    ${maxloop}
+    \       ${no more chef server exists} =    Run Keyword and Return Status      Element Should Not Be Visible      xpath=.//*[@id='divinstancescardview']/div/div/ul/li[${INDEX}]/div/div/div[1]/div/div/div[3]/div/span[2]/span
+    \       ${last index} =        Set Variable     ${INDEX}
+    \       Exit For Loop If     ${no more chef server exists}
+#    \       ${last instance status}       Get Element Attribute      xpath=.//*[@id='tableinstanceview']/tbody/tr[${last index}-1]/td[6]@class
+#    Wait for instance to be created        ${last index}
+    Click Element       xpath=.//*[@id='divinstancescardview']/div/div[1]/ul/li[${last index}-1]/div/div/div[1]/div/div/div[3]/div/span[2]/span
+    Wait Until Keyword Succeeds    10 minute     50 seconds       Element Should Contain       xpath=.//*[@id='divinstancescardview']/div/div[1]/ul/li[${last index}-1]/div/div/div[1]/div/div/div[3]/div/span[2]/span      running
+
+
+
+Wait for instance to be created
+    [Arguments]    ${last index}
+#    Wait Until Keyword Succeeds    10 minute     40 seconds       Element Should Contain       xpath=.//*[@id='launchResultContainer']/div/div/div[2]/div[2]      Creating
+    Wait Until Keyword Succeeds    10 minute     40 seconds       Element Should Contain       xpath=.//*[@id='tableinstanceview']/tbody/tr[${last index}-1]/td[6]@class      instancestatusindicator started
+
+#Click on Instances link view
+#    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       id=instanceview
+#    Click Link     id=instanceview
+
+
+Click on Instances tab
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       xpath=.//*[@id='myTab3']/li[1]/a
+    Click Element     xpath=.//*[@id='myTab3']/li[1]/a
+
+Wait for few minutes and click on Launching Blueprint close button
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       xpath=.//*[@id='launchResultContainer']/div/div/div[3]/button
+    Click Element     xpath=.//*[@id='launchResultContainer']/div/div/div[3]/button
+
+Click on Launch button
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       xpath=//button[@class='btn pull-left btn-primary launchBtn']
+    Click Element    xpath=//button[@class='btn pull-left btn-primary launchBtn']
+
+Select AppFactory
+    [Arguments]    ${Blueprint}
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       xpath=//b[./text()='${Blueprint}']
+    Click Element     xpath=//b[./text()='${Blueprint}']
+#    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       xpath=.//*[@id='accordion-2']/div[2]/div[1]/h4/a
+#    Click Element     xpath=.//*[@id='accordion-2']/div[2]/div[1]/h4/a
+
+Click on Blueprints Tab
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       xpath=.//*[@id='myTab3']/li[2]/a
+    Click Element    xpath=.//*[@id='myTab3']/li[2]/a
+
+Click on Environment
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       xpath=//a[@title='${ENVIRONMENT NAME}' and @class='Envtextoverflow']
+    Click Element     xpath=//a[@title='${ENVIRONMENT NAME}' and @class='Envtextoverflow']
+
+
+Select Environment from the dropdown
+    Click Element     xpath=.//*[@id='s2id_envList']/a/span[2]
+    Input Text      xpath=.//*[@id='select2-drop']/div/input        ${ENVIRONMENT NAME}
+    Select Value from the list
+
+Select project from the dropdown
+    Click Element     xpath=.//*[@id='s2id_projectListInput']/a/span[2]
+    Input Text      xpath=.//*[@id='select2-drop']/div/input        ${PROJECT NAME}
+    Select Value from the list
+
+Select Business Group
+    Click Element    xpath=.//*[@id='s2id_bgListInput']/a/span[2]
+    Input Text     xpath=.//*[@id='select2-drop']/div/input        ${BUSINESS GROUP NAME}
+    Select Value from the list
+
+Enter Blueprint Name
+    [Arguments]    ${Blueprint name}
+    Input Text     id=blueprintNameInput        ${Blueprint name}
+
+Choose Operating System
+    [Arguments]    ${OPERATING SYSTEM}
+    Click Element     xpath=.//*[@id='s2id_instanceOS']/a/span[2]
+    Input Text       xpath=.//*[@id='select2-drop']/div/input       ${OPERATING SYSTEM}
+    Select Value from the list
+
+Click Configure Chef Runlist link
+    Click Element     xpath=//a[./text()='Configure Chef Runlist']
+ 
+Edit Organization Parameters link
+    Wait Until Keyword Succeeds    1 minute     1 seconds         Click Link     xpath=//a[./text()='Edit Organization Parameters']
+
+Select Value from the list
+    Click Element     xpath=.//*[@id='select2-drop']/ul/li/div
+
+Click on Next Button
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       xpath=//a[./text()=' Next ']
+    Click Link       xpath=//a[./text()=' Next ']
+
+Select blueprint card
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       xpath=//b[./text()='AppFactory']
+    Click Element       xpath=//b[./text()='AppFactory']
+
+Click on Design Link
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       xpath=//header[@id='header']/div[3]/li/a
+    Click Link        xpath=//header[@id='header']/div[3]/li/a

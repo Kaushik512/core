@@ -14,7 +14,7 @@ var extend = require('mongoose-schema-extend');
 var ObjectId = require('mongoose').Types.ObjectId;
 var schemaValidator = require('../../../dao/schema-validator');
 var uniqueValidator = require('mongoose-unique-validator');
-
+var ProviderUtil = require('../../../../lib/utils/providerUtil.js');
 
 var Schema = mongoose.Schema;
 
@@ -81,6 +81,11 @@ var openstackProviderSchema = new Schema({
         required: true,
         trim: true
     },
+    keyname:{
+        type: String,
+        required: true,
+        trim : true
+    },
     projectname: {
         type: String,
         required: true,
@@ -96,18 +101,37 @@ var openstackProviderSchema = new Schema({
 // Static methods :- 
 
 // creates a new Provider
-openstackProviderSchema.statics.createNew = function(providerData, callback) {
+openstackProviderSchema.statics.createNew = function(req,providerData, callback) {
     logger.debug("Enter createNew");
     var providerObj = providerData;
     var that = this;
+    logger.debug(JSON.stringify(providerObj));
+
     var provider = new that(providerObj);
+    
+    var inFiles = req.files.openstackinstancepem;
+     
+    logger.debug('Files found: ' + req.files.openstackinstancepem);
+
     provider.save(function(err, aProvider) {
         if (err) {
             logger.error(err);
             callback(err, null);
             return;
         }
+        var keyPair = {
+            _id: aProvider['_id']
+         }
+        ProviderUtil.saveAwsPemFiles(keyPair, req.files.openstackinstancepem, function(err, flag) {
+            if (err) {
+                logger.debug("Unable to save pem files.");
+                res.send(500, "Unable to save pem files.");
+                return;
+            }
+        });
         logger.debug("Exit createNew with provider present");
+
+
         callback(null, aProvider);
         return;
     });
@@ -225,6 +249,7 @@ openstackProviderSchema.statics.updateopenstackProviderById = function(providerI
             tenantid: providerData.tenantid,
             tenantname: providerData.tenantname,
             providerType: providerData.providerType,
+            keyname: providerData.keyname,
             serviceendpoints:{
                 compute: providerData.serviceendpoints.compute,
                 network: providerData.serviceendpoints.network,

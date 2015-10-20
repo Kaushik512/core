@@ -1,6 +1,7 @@
 var fileIo = require('./fileio');
 var extend = require('extend');
 var sshConnection = require('ssh2').Client;
+var logger = require('_pr/logger')(module);
 
 var HOST_UNREACHABLE = -5000;
 var INVALID_CREDENTIALS = -5001;
@@ -17,7 +18,8 @@ module.exports = function(opts) {
     var isConnected = false;
 
     function connect(connectionParamsObj, callback) {
-        var con = new sshConnection();
+        con = new sshConnection();
+        connectionParamsObj.readyTimeout = 40000; //timeout increased to support azure based vms
         console.log("ConnectionParamsObj==>", connectionParamsObj);
 
         try {
@@ -46,6 +48,7 @@ module.exports = function(opts) {
             isConnected = false;
             con = null;
             console.log("ERROR EVENT FIRED", err);
+
             if (err.level === 'client-authentication') {
                 console.log('Error msg:' + err);
                 callback(err, INVALID_CREDENTIALS,null);

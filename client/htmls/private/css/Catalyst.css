@@ -2,7 +2,19 @@
     position: relative;
     left: 32%;
 }
-
+.legendCustom{
+    border:0 none !important;
+    padding:0 !important;
+    width: auto !important;
+    margin-bottom: 0 !important;
+    font-size:15px !important;
+    color:#666 !important;
+}
+.fieldsetCustom{
+    border: 1px solid #dddddd !important;
+    margin: 0 2px !important;
+    padding: 0.35em 0.625em 0.75em !important;
+}
 .updateupgrade {
     background: url("../img/updateupgrade.png");
     background-repeat: no-repeat;
@@ -3876,6 +3888,7 @@ textarea:focus {
 }
 
 .form-control,
+.form-controlSelect,
 .input-lg,
 .input-sm,
 .input-xs {
@@ -4323,6 +4336,10 @@ nav ul ul>li:hover b {
 }
 
 .form-control {
+    box-shadow: none!important;
+    -webkit-box-shadow: none!important;
+}
+.form-controlSelect{
     box-shadow: none!important;
     -webkit-box-shadow: none!important;
 }
@@ -6065,7 +6082,7 @@ button {
 }
 
 .domain-role-thumbnailDev > .container {
-    -webkit-perspective: 0 !important;
+    -webkit-perspective: none !important;
 }
 
 .flip-toggle.flip .card {
@@ -8503,6 +8520,22 @@ nav ul {
     height: 36px;
 }
 
+.form-controlSelect{
+    display: inline;
+    width: 100%;
+    height: 32px;
+    padding: 6px 12px;
+    font-size: 13px;
+    line-height: 1.428571429;
+    color: #555;
+    vertical-align: middle;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    height:36px;
+}
+
 .custom-theme .productdiv4 {
     padding-left: 10px;
 }
@@ -9489,6 +9522,7 @@ table.dataTable td {
 .openstack,
 .hppubliccloud,
 .cloudstack,
+.vmware,
 .dock,
 .logo {
     background: url(../img/sprites.png) no-repeat;
@@ -9569,6 +9603,13 @@ table.dataTable td {
     width: 35px;
     height: 35px;
 }
+
+.vmware {
+    background-position: -346px -56px;
+    width: 35px;
+    height: 35px;
+}
+
 
 .rl {
     background-position: -107px -55px;
