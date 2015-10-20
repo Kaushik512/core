@@ -8,34 +8,22 @@ $(document).ready(function(){
             if($("body").hasClass("close-tree") ){
                 $("body").removeClass("close-tree");
 
-
-                /*$("#left-panel").css("width","254px");
-                $("#main").css("margin-left","254px");*/
-
                 $("#left-panel").removeClass("leftPanelMini").addClass("leftPanelExpn");
                 $("#main").removeClass("mainLtMini").addClass("mainLtExpn");
 
-                $("ul#blueprints > li > a > span").show();
-                $("ul#blueprints > li > a > b").show();
+                
             } else{
                 $("body").addClass("close-tree");
 
-                /*$("#left-panel").css("width","50px");
-                $("#main").css("margin-left","50px");*/
-
                 $("#left-panel").removeClass("leftPanelExpn").addClass("leftPanelMini");
                 $("#main").removeClass("mainLtExpn").addClass("mainLtMini");
-
-
-                $("ul#blueprints > li > a > span").hide();
-                $("ul#blueprints > li > a > b").hide();
+                
             }
     });
 
     function loadProviderJSON(){
         $.ajax({
             url: '../allproviders/list',
-            //url:'js/sampleAllProviders.json',
             success: function(data) {
                 addChildItems(data);                
             }
@@ -46,7 +34,6 @@ $(document).ready(function(){
 
         for(var i=0;i<children.length;i++){
             var id=$(children[i]).attr('data-ref');
-            //var _link = $(children[i]).attr('data-link');
             var _link = "ajax/DesignBlueprintNew.html?providerid=";
 
             if(data[id]){
@@ -72,12 +59,7 @@ $(document).ready(function(){
             });
         };
         $(treeParent).children("li.providerType").on('click', function(e){
-            if(lastSelected === $(this).attr('treeIndex')){
-                /*if( $(this).hasClass("open") ){
-                    $(this).removeClass("open");
-                }else{
-                    $(this).addClass("open");    
-                }*/
+            if(lastSelected === $(this).attr('treeIndex')){            
                 $(this).hasClass("open") ? $(this).removeClass("open") : $(this).addClass("open");                
                 lastSelected=$(this).attr('treeIndex');
             }else{
@@ -85,8 +67,6 @@ $(document).ready(function(){
                 $("#designTree").attr("lastSelected",lastSelected);
                 $(treeParent).children("li.providerType").removeClass('open selectedProvider');
                 $(this).addClass('open selectedProvider');
-                //$(treeParent).children("li.providerType").removeClass('open activ');
-                //var a=$(this).addClass('open activ').find('li').eq(0).find('a');
             }
         });
         $(treeParent).find('li.providerAccount').find('a').click(function(e){

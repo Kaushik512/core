@@ -113,11 +113,9 @@ $(document).ready(function() {
 			$('#trackTree').addClass('hide_nav');
 		}
         if ($('body').hasClass("minified")) {
-            $('.trackAlign').hide();
             $('.trackAlign1').hide();
             $('.trackAlign2').hide();
         } else {
-            $('.trackAlign').show();
             $('.trackAlign1').show();
             $('.trackAlign2').show();
         }
