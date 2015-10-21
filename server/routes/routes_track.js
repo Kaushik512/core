@@ -33,16 +33,43 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
     // Create track
     app.post('/track', function(req, res) {
         logger.debug("Got Track data: ", JSON.stringify(req.body.trackData));
-        Track.createNew(req.body.trackData, function(err, tracks) {
-            if (err) {
+
+        //updating the record when type is present.
+        Track.getTrackByType(req.body.trackData.type, function(err,tracks){
+            if(err){
+                logger.debug("error Type:>>>>>");
                 res.send(500, errorResponses.db.error);
                 return;
             }
-            if (tracks) {
-                res.send(200, tracks);
-                return;
+            if(tracks.length===0){
+                //creating new record when type is not present.
+                Track.createNew(req.body.trackData, function(err, tracks) {
+                    if (err) {
+                        logger.debug("error Type New:>>>>>");
+                        res.send(500, errorResponses.db.error);
+                        return;
+                    }
+                    if (tracks) {
+                        res.send(200, tracks);
+                        return;
+                    }
+                });
+            }else{
+                console.log(req.body.trackData);
+                var items = tracks[0].itemUrls.concat(req.body.trackData.itemUrls);
+                tracks[0].itemUrls = items;
+                tracks[0].save(function(err,track){
+                    if(err){
+                        logger.debug("error Type Update:>>>>>", err);
+                        res.send(500,errorResponses.db.error);
+                        return;
+                    }
+                    res.send(200,track);       
+                });
             }
         });
+
+        
     });
 
     // Update Track
@@ -112,4 +139,5 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             }
         });
     });
+
 };

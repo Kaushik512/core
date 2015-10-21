@@ -15,8 +15,14 @@ var uniqueValidator = require('mongoose-unique-validator');
 var Schema = mongoose.Schema;
 
 var TrackSchema = new Schema({
-    name: String,
-    url: String,
+    itemUrls: [{
+        name: String,
+        url: String,
+        childItem: [{
+            name:String,
+            url:String
+        }]
+    }],
     description: String,
     type: String
 });
@@ -103,6 +109,23 @@ TrackSchema.statics.removeTracks = function(trackId, callback) {
         }
         if (tracks) {
             logger.debug("Remove Success....");
+            callback(null, tracks);
+        }
+    });
+};
+
+//find entry by type.
+TrackSchema.statics.getTrackByType = function(trackType, callback) {
+    this.find({
+        "type": trackType
+    }, function(err, tracks) {
+        if (err) {
+            logger.debug("Got error while fetching Track: ", err);
+            callback(err, null);
+            return;
+        }
+        if (tracks) {
+            //logger.debug("Got Track: ", JSON.stringify(tracks));
             callback(null, tracks);
         }
     });

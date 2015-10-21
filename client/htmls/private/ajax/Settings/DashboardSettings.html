@@ -1,3 +1,8 @@
+<style type="text/css">
+textarea{
+width:100%;
+}
+</style>
 <div class="row">
     
         <div class="col-md-12">
@@ -57,14 +62,8 @@
                <h4 class="modal-title">
                </h4>
             </div>
-            <div class="modal-body" style="height:300px;">
-               <div class="col-lg-6 col-md-6">
-                  <label for="">Name:</label>
-                  <div class="input-groups">
-                  <input autofocus type="text" name="trackName" class="required trackName form-control" id="trackName"/>
-                  </div>
-               </div>
-               <div class="col-lg-6 col-md-6">
+            <div class="modal-body" style="height:500px;">
+                <div class="col-lg-6 col-md-6">
                   <label for="">Type:</label>
                   <div class="input-groups">
                   <select id="trackType" name="trackType" class="required form-control width-100" style="vertical-align:central">
@@ -76,16 +75,40 @@
                   </select>
                   </div>
                </div>
-               <div class="col-lg-12 col-md-12 margintop15">
-                  <label for="trackUrl">URL:</label>
-                  <div class="input-groups">
-                  <input type="url" name="trackUrl" class="required trackUrl form-control" id="trackUrl"/> 
-                  </div>
-               </div>
-               <div class="col-lg-12 col-md-12 margintop15">
+               <div class="col-lg-6 col-md-6">
                   <label for="">Description:</label>
-                  <textarea rows="5" cols="64" name="trackDescription" class="trackDescription" id="trackDescription"></textarea>
+                  <input type="text" name="trackDescription" class="trackDescription form-control" id="trackDescription">
                </div>
+
+               <div class="applicationURLContainer" id="itemSeries"> 
+                   <div class="col-lg-6 col-md-6 margintop15">
+                      <label for="">Item Name:</label>
+                      <div class="input-groups">
+                      <input type="text" name="trackName" class="required trackNameItem form-control" id="trackName"/>
+                      </div>
+                   </div>
+                   <div class="col-lg-6 col-md-6 margintop15">
+                      <label for="trackUrl">Item URL:</label>
+                      <div class="input-groups">
+                      <input type="url" name="trackUrl" class="required trackUrlItem form-control" id="trackUrl"/> 
+                      </div>
+                   </div>
+               <div class="applicationChildContainer" id="childItemSeries">
+                    <div class="col-lg-6 col-md-6 margintop15">
+                      <label for="">Child Name:</label>
+                      <div class="input-groups">
+                      <input type="text" name="childName" class="childNameItem form-control" id="childName"/>
+                      </div>
+                   </div>
+                   <div class="col-lg-6 col-md-6 margintop15">
+                      <label for="">Child URL:</label>
+                      <div class="input-groups">
+                      <input type="url" name="childUrl" class="childUrlItem form-control" id="childUrl"/> 
+                      </div>
+                   </div>
+               </div>
+       </div>
+           <a href="javascript:void(0)" class="clearfix pull-right addChildItem" data-backdrop="false" data-toggle="modal">Add Child Item</a>
                 <input type="hidden" id="trackEditHiddenInputId">
                 <input type="hidden" id="trackEditHiddenInput">
             </div>
@@ -132,6 +155,17 @@ if (!$.fn.dataTable.isDataTable('#trackTable')) {
 $(document).ready(function(e) {
     getGlobalTrack();
 });
+
+ $('.addChildItem').click(function() {
+     $('#childItemSeries').clone().find("input").val("").end().appendTo('.applicationURLContainer');
+
+    // var countApp = $('.applicationURLContainer').length;
+
+     /*if (countApp === 2) {
+         $(this).addClass('hidden');
+         return;
+     }*/
+ });
 
 //to show the focus on first input ....
 $(document).on('shown.bs.modal', function(e) {
@@ -245,16 +279,26 @@ function getGlobalTrack() {
 
 //creating a table for showcasing the list of track items on the dashboard page..
 function createTableForTrack(trackData) {
+    //alert('hello>>>>>>>'+JSON.stringify(trackData));
     var $trackNameList = $('#trackTableInput');
     var $tr = $('<tr class="trackItemRow"></tr>').attr('data-trackId', trackData._id);
     $tr.data('trackData', trackData);
     var $tdDescription = $('<td class="trackDescription">' + trackData.description + '</td>');
-    var $tdName = $('<td class="trackName"><a title="' + trackData.url + '" target="_blank" href="' + trackData.url + '">' + trackData.name + '</a></td>');
+    var temp = '';
+    if (trackData.itemUrls && trackData.itemUrls.length) {
+        for (var j = 0; j < trackData.itemUrls.length; j++) {
+            //alert(trackData.itemUrls.length);
+            var $anchor = '<span class="marginForURL"><a title="' + trackData.itemUrls[j].url + '" target="_blank" href="' + trackData.itemUrls[j].url + '">' + trackData.itemUrls[j].name + '</a></span>';
+
+            
+            temp = temp + ' ' + $anchor;
+        }
+    }
     var $tdType = $('<td class="trackType">' + trackData.type + '</td>');
     var $tdAction = $('<td/>');
 
     $tdAction.append('<div class="btn-group"><button class="btn btn-info pull-left btn-sg tableactionbutton editRowTrackUrl" data-placement="top" value="Update" title="Edit"><i class="ace-icon fa fa-pencil bigger-120"></i></button></div>').append('<div style="margin-left:14px;" class="btn-group"><button class="btn btn-danger pull-left btn-sg tableactionbutton globalTrackUrlRemove" data-placement="top" value="Remove" title="Delete"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></div>');
-    $tr.append($tdName).append($tdType).append($tdDescription).append($tdAction);
+    $tr.append('<td>'+ temp +'</td>').append($tdType).append($tdDescription).append($tdAction);
     $trackNameList.append($tr);
     $trackDatatable.row.add($tr).draw();
 
@@ -263,16 +307,15 @@ function createTableForTrack(trackData) {
         // var trackUrlData = $tr.data('trackData');
         var datatrackId = $tr.data('data-trackId');
         var $editModal = $('#modalForTrackEdit');
-        $('textarea#trackDescription').val('');
+       // $('textarea#trackDescription').val('');
         $editModal.modal('show');
         $editModal.find('#trackEditHiddenInput').val('edit');
         $editModal.find('h4.modal-title').html('Edit Dashboard Item &nbsp;-&nbsp;&nbsp;' + trackData.name);
-        $editModal.find('#trackName').val(trackData.name);
-        $editModal.find('#trackUrl').val(trackData.url);
-        $editModal.find('textarea#trackDescription').val(trackData.description);
+        $editModal.find('.trackName').val(trackData.name);
+        $editModal.find('.trackUrl').val(trackData.url);
+        $editModal.find('#trackDescription').val(trackData.description);
        // alert(trackData.type);
         $editModal.find('#trackType').val(trackData.type);
-        $('#trackType').change();
         $editModal.find('#trackEditHiddenInputId').val(trackData._id);
         //  alert(trackData._id);
         return false;
@@ -320,7 +363,6 @@ function createTableForTrack(trackData) {
 //when the user clicks on the new button the setting the value to 'new' for the hidden field to know that user is creating the new item..
 $('.addDashboardItem').click(function(e) {
     $('#trackItemUrl').trigger('reset');
-    $('#trackType').change();
     $('.modal-header').find('.modal-title').html('Create New Dashboard Item');
     $('#trackEditHiddenInput').val('new');
 });
@@ -335,10 +377,38 @@ $('#trackItemUrl').submit(function(e) {
         e.preventDefault();
         $('#saveItemSpinner').removeClass('hidden');
         var $form = $('#trackItemUrl');
-        var trackUrlNameDes = [];
+       // var trackUrlNameDes = [];
         var trackData = {};
-        trackData.name = $form.find('#trackName').val().trim();
-        trackData.url = $form.find('#trackUrl').val().trim();
+        var itemUrls = [];
+        $this = $(this);
+        
+        var itemName = $this.find('.trackNameItem').val().trim();
+        var itemURL = $this.find('.trackUrlItem').val().trim();
+        var $childURLContainers = $('.applicationChildContainer');
+        var childItem = [];
+        if (itemName && itemURL) {
+            itemUrls.push({
+                name: itemName,
+                url: itemURL,
+                childItem: childItem
+            });
+        }   
+        $childURLContainers.each(function() {
+           $this = $(this);
+           var childItemName = $this.find('.childNameItem').val().trim();
+           var childItemURL = $this.find('.childUrlItem').val().trim();
+           //console.log("child"+childItemName,childItemURL); 
+            if (childItemName && childItemURL) {
+                itemUrls[0].childItem.push({
+                    name: childItemName,
+                    url: childItemURL
+                });
+            }
+        });
+        
+        //alert(JSON.stringify(itemUrls));
+        trackData.itemUrls = itemUrls;
+      //  alert(JSON.stringify(trackData.itemUrls));
         trackData.description = $form.find('#trackDescription').val().trim();
         trackData.type = $form.find('#trackType').val();
         var dashboardEditNew = $(this).find('#trackEditHiddenInput').val();
@@ -347,25 +417,21 @@ $('#trackItemUrl').submit(function(e) {
         // alert(trackId);
         var url;
 
-        var reqBody = {
-            trackUrlNameDes: [trackData]
-        }
+        var reqBody = {};
 
         //for edit
         if (dashboardEditNew === 'edit') {
             console.log(dashboardEditNew);
             url = '../track/' + trackId + '/update';
             reqBody = {
-                "name": trackData.name,
-                "url": trackData.url,
+                "itemUrls":trackData.itemUrls,
                 "description": trackData.description,
                 "type": trackData.type
             };
         } else {
             url = '../track';
             reqBody = {
-                "name": trackData.name,
-                "url": trackData.url,
+                "itemUrls":trackData.itemUrls,
                 "description": trackData.description,
                 "type": trackData.type
             };
