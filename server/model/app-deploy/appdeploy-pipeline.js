@@ -19,7 +19,7 @@ var AppDeployPipelineSchema = new Schema({
     orgId: String,
     bgId: String,
     projectId: String,
-    envId: String,
+    envId: [String],
     loggedInUser: String,
     isEnabled: Boolean
 });
@@ -46,6 +46,41 @@ AppDeployPipelineSchema.statics.createNew = function(appDeployPipelineData, call
                     callback(null, appDeploy);
                 }
             });
+        }
+    });
+};
+// Get all AppDeploy informations.
+AppDeployPipelineSchema.statics.getAppDeployPipeline = function(projectId, callback) {
+    this.find({
+        "projectId": projectId
+    }, function(err, appDeploy) {
+        if (err) {
+            logger.debug("Got error while fetching AppDeploy: ", err);
+            callback(err, null);
+        }
+        if (appDeploy) {
+            logger.debug("Got AppDeploy: ", JSON.stringify(appDeploy));
+            callback(null, appDeploy);
+        }
+    });
+};
+//Update AppDeploy Configure
+AppDeployPipelineSchema.statics.updateConfigurePipeline = function(projectId, appDeployPipelineUpdateData, callback) {
+
+    this.update({
+        "projectId": projectId
+    }, {
+        $set: appDeployPipelineUpdateData
+    }, {
+        upsert: false
+    }, function(err, appDeploy) {
+        if (err) {
+            logger.debug("Got error while creating AppDeploy: ", err);
+            callback(err, null);
+        }
+        if (appDeploy) {
+            logger.debug("Updating AppDeploy: ", JSON.stringify(appDeploy));
+            callback(null, appDeploy);
         }
     });
 };
