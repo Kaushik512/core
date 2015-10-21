@@ -1,5 +1,6 @@
 var Client = require('node-rest-client').Client;
 var SSHExec = require('./utils/sshexec');
+var logger = require('_pr/logger')(module);
 
 function getAuthToken(host, username, password, tenantName, callback) {
     console.log("START:: getAuthToken");
@@ -89,27 +90,38 @@ var vmwareservice = function(options) {
             headers:{"Content-Type": "application/json"} 
         };
         //console.log(JSON.stringify(args));
-        callback(null,serverjson);
-        /* client.methods.postMethod(args, function(data, response) {
-            console.log("get datastoresUrl response::" + data);
-            if(data.indexOf('Completed') >= 0){
-                callback(null,data);    
+        //callback(null,serverjson);
+        client.methods.postMethod(args, function(data, response) {
+            //response format expected  {"vms_launched":["D4D-MYVMWBP1_2015-10-20_23_46_21_817"]}
+            console.log("get createServer response::" + data);
+            //if(data.indexOf('Completed') >= 0){
+            data = JSON.parse(data);
+            if(data.vms_launched && data.vms_launched.length > 0){
+                serverjson["vm_name"] = data.vms_launched[0];
+                callback(null,serverjson);    
             }
             else
                 callback("Error",null);
             
-        }); */
+        });
     }
 
-    this.getServerDetails = function(servicehost,servername,callbackdonellback){
+    this.getServerDetails = function(servicehost,servername,callback){
             client = new Client();
-        var datastoresUrl = servicehost + '/' + servername + '?ip=' + options.host + '&user=' + options.username + '&passwd=' + options.password + '&dc=' + options.dc;
+        var datastoresUrl = servicehost + '/' + servername + '/info?ip=' + options.host + '&user=' + options.username + '&passwd=' + options.password + '&dc=' + options.dc;
         console.log(datastoresUrl);
         client.registerMethod("jsonMethod", datastoresUrl, "GET");
         var args = {};
         client.methods.jsonMethod(args, function(data, response) {
-            console.log("get getServerDetails response::" + data);
-            callback(null,data);
+            data = data.toString();
+            if(data.indexOf('Not Found') > 0)
+            {
+                console.log("No VM Found - Response :" + data);
+                callback(null,null);
+            }else{
+                console.log("get getServerDetails response::" + data);
+                callback(null,data);
+            }
         });
     };
 
@@ -118,11 +130,11 @@ var vmwareservice = function(options) {
     this.updatedfloatingip = false;
 
 
-    this.trysshoninstance = function(instanceData, callback) {
+    this.trysshoninstance = function(hostip,username,pwd, callback) {
         var opts = {
-            privateKey: instanceData.credentials.pemFilePath,
-            username: instanceData.credentials.username,
-            host: instanceData.floatingipdata.floatingip.floating_ip_address,
+            password: pwd,
+            username: username,
+            host: hostip,
             instanceOS: 'linux',
             port: 22,
             cmds: ["ls -al"],
@@ -147,57 +159,58 @@ var vmwareservice = function(options) {
     this.timeouts = [];
     this.callbackdone = false;
 
-    this.waitforserverready = function(tenantId, instanceData, callback) {
+    this.waitforserverready = function(servicehost, servername,username,password, callback) {
         var self = this;
-        console.log('instanceData received:', JSON.stringify(instanceData));
+        console.log('Waiting for :', servername);
         var wfsr = function() {
-            self.getServerById(tenantId, instanceData.server.id, function(err, data) {
+            self.getServerDetails(servicehost, servername, function(err, data) {
                 if (err) {
                     callback(err, null);
                     return;
                 }
-                if (!err) {
+                if (!err && data != null) {
+                    data = JSON.parse(data);
                     console.log('Quried server:', JSON.stringify(data));
-                    if (data.server.status == 'ACTIVE') {
-                        //set the floating ip to instance
-                        if (instanceData.floatingipdata.floatingip.floating_ip_address && !self.updatedfloatingip)
-                            self.updatefloatingip(tenantId, instanceData.floatingipdata.floatingip.floating_ip_address, instanceData.server.id, function(err, data) {
-                                if (!err) {
-                                    self.updatedfloatingip = true;
-                                    console.log('Updated with floating ip');
-                                }
-                            });
-                    }
-                    if (self.updatedfloatingip) {
-                        self.trysshoninstance(instanceData, function(cdata) {
-                            console.log('End trysshoninstance:', cdata);
-                            if (cdata == 'ok') {
-                                //Clearing all timeouts
-                                console.log('Time outs found :', self.timeouts.length);
+                    //response {"name":"D4D-MYVMWBP1_2015-10-21_00_12_59_159","ip":"192.168.102.154","OS":"Ubuntu Linux (64-bit)","toolsStatus":"guestToolsRunning","state":"poweredOn","cpuUsage":{"used":0,"num":1},"memory":{"avail":1024,"used":0},"uptime":1195}
+                    if(data.toolsStatus && data.ip && data.toolsStatus == 'guestToolsRunning'){
+
+                        self.trysshoninstance(data.ip,username,password,function(cdata){
+                            if(cdata == 'ok'){
                                 for (var i = 0; i < self.timeouts.length; i++) {
-                                    console.log('Clearing timeout : ', self.timeouts[i]);
+                                    logger.debug('Clearing timeout : ', self.timeouts[i]);
                                     clearTimeout(self.timeouts[i]);
                                 }
                                 self.timeouts = [];
                                 if (!self.callbackdone) {
                                     self.callbackdone = true;
-                                    callback(null, instanceData);
+                                    callback(null, data.ip);
+                                    return;
                                 }
-
-                                return;
-                            } else {
-                                console.log('Timeout 1 set');
-                                if (!self.callbackdone)
-                                    self.timeouts.push(setTimeout(wfsr, 30000));
+                                else{
+                                    logger.debug('Timeout 1 set');
+                                    if (!self.callbackdone) {
+                                        self.timeouts.push(setTimeout(wfsr, 30000));
+                                    }
+                                }
                             }
                         });
-                    } else {
-                        console.log('Timeout 2 set');
+                    }
+                    else{
                         if (!self.callbackdone)
+                        {
+                            logger.debug('Timeout 4 set');
                             self.timeouts.push(setTimeout(wfsr, 30000));
+                        }
+                    }
+                }
+                 else{
+                        
+                        if (!self.callbackdone) {
+                            logger.debug('Timeout 2 set');
+                            self.timeouts.push(setTimeout(wfsr, 30000));
+                        }
                     }
 
-                }
             });
         };
         console.log('Timeout 3 set');
