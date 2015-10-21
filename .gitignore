@@ -7,3 +7,4 @@ server/.idea/
 tempfiles/
 seed/copychefidtoinstance.js
 server/catdata/
+server/vspheretest.js

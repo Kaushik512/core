@@ -113,9 +113,25 @@ module.exports.setRoutes = function(app, verificationFunc) {
                                 }
                             }
                         }*/
+                var platform = '';        
+
+                switch (node.os.toLowerCase()) {
+                                    case "window 2008":
+                                        platform = 'windows.png';
+                                        break;
+                                    case "linux centos":
+                                        platform = 'centos';
+                                        break;
+                                    case "linux ubuntu":
+                                        platform = 'ubuntu';
+                                        break;
+                                    default:
+                                        platform = 'unknown';
+                                }
+
 
                 var hardwareData = {
-                    platform: 'unknown',
+                    platform: platform,
                     platformVersion: 'unknown',
                     architecture: 'unknown',
                     memory: {
@@ -279,6 +295,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
                                     var actionLog = instancesDao.insertBootstrapActionLog(instance.id, instance.runlist, req.session.user.cn, timestampStarted);
                                     var logsReferenceIds = [instance.id, actionLog._id];
 
+
                                     chef.bootstrapInstance({
                                         instanceIp: instance.instanceIP,
                                         runlist: instance.runlist,
@@ -291,6 +308,19 @@ module.exports.setRoutes = function(app, verificationFunc) {
                                         jsonAttributes: null,
                                         noSudo:true
                                     }, function(err, code) {
+                                        
+                                        if(err){
+                                            instancesDao.updateActionLog(instance.id, actionLog._id, false, timestampStarted);
+
+                                            instancesDao.updateInstanceBootstrapStatus(instance.id, 'failed', function(err, updateData) {
+                                                if (err) {
+                                                    logger.error("Unable to set instance bootstarp status. failed", err);
+                                                } else {
+                                                    logger.debug("Instance bootstrap status set to failed");
+                                                }
+                                            });
+                                        }
+
                                         if (code == 0) {
                                             instancesDao.updateInstanceBootstrapStatus(instance.id, 'success', function(err, updateData) {
                                                 if (err) {
@@ -299,7 +329,10 @@ module.exports.setRoutes = function(app, verificationFunc) {
                                                     logger.debug("Instance bootstrap status set to success");
                                                 }
                                             });
+                                        }else{
+                                            instancesDao.updateActionLog(instance.id, actionLog._id, false, timestampStarted);
                                         }
+
                                     }, function(stdOutData) {
 
                                         logsDao.insertLog({
@@ -308,10 +341,12 @@ module.exports.setRoutes = function(app, verificationFunc) {
                                             log: stdOutData.toString('ascii'),
                                             timestamp: new Date().getTime()
                                         });
+
                                         if (stdOutData.toString('ascii').indexOf("Chef Client finished") > 0) {
                                             instancesDao.updateInstanceBootstrapStatus(instance.id, 'success', function(err, updateData) {
                                                 if (err) {
                                                     logger.error("Unable to set instance bootstarp status. code 0", err);
+
                                                 } else {
                                                     logsDao.insertLog({
                                                         referenceId: logsReferenceIds,
@@ -319,6 +354,8 @@ module.exports.setRoutes = function(app, verificationFunc) {
                                                         log: 'Instance Bootstraped Successfully',
                                                         timestamp: new Date().getTime()
                                                     });
+
+                                                    instancesDao.updateActionLog(instance.id, actionLog._id, true, timestampStarted);
 
                                                     logger.debug("Instance bootstrap status set to success");
 
@@ -335,6 +372,8 @@ module.exports.setRoutes = function(app, verificationFunc) {
                                             log: stdErrData.toString('ascii'),
                                             timestamp: new Date().getTime()
                                         });
+
+                                        //instancesDao.updateActionLog(instance.id, actionLog._id, false, timestampStarted);
 
                                     });
 

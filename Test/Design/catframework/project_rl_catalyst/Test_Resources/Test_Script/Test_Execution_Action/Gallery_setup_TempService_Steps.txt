@@ -1,0 +1,231 @@
+*** Settings ***
+Documentation      A resource file with reusable keywords and variables.
+...
+...                This file is part of a prototype automated test suite designed to
+...                test web application products built on top of the SLZ platform.
+...
+
+Library            Selenium2Library
+Library            String
+Library            Collections
+
+Resource           catalyst.txt
+Resource           ${CATALYST TEST DATA}/${TESTDATA}
+
+
+
+*** Keywords ***
+Catalyst User Creates New Template Type
+    Clicks on Settings
+    Clicks on Gallery Setup
+    Clicks on Template Type
+    Clicks on New Template Type Button
+    Enters the Design Template name
+    Chooses Template type Icon
+    Select Created organization
+    Select type of the template
+    Clicks Save Button in Template type page
+    
+
+Catalyst User New Template Creation
+    Clicks on Settings
+    Clicks on Gallery Setup
+    Clicks on Templates
+    Clicks on New Button to create template
+    Enters Template Name
+    Chooses Icon
+    Chooses Template Type
+    Select Created organization
+    Select CookBooks
+    Clicks on Save Button in Template Page
+    Verify Template is created
+
+Catalyst Create New Cloud Formation Template
+    Clicks on Settings
+    Clicks on Gallery Setup
+    Clicks on Templates
+    Clicks on New Button to create template
+    Enters Cloud Formation Tempalte Name
+    Chooses Icon
+    Choose Template Type for Cloud formation
+    Select Created organization
+    Upload Template File
+    Clicks on Save Button in Template Page
+    Verify Cloud formation Template is created
+
+
+
+Verify Template is created
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Element Should Contain    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${TEMPLATE NAME}']    ${TEMPLATE NAME}
+
+Verify Cloud formation Template is created
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Element Should Contain    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${CLOUD TEMPNAME}']    ${CLOUD TEMPNAME}
+    
+	
+Choose Template Type for Cloud formation
+    Click Element    css=#s2id_templatetypename > a > span.select2-chosen	
+    Sleep    1s
+    Input Text    css=#select2-drop > div > input    ${CLOUD TEMPTYPE}
+    Sleep    1s
+    Click Element    css=ul > li:first-child > div
+
+Enters Cloud Formation Tempalte Name
+    Input Text    id=templatename    ${CLOUD TEMPNAME}
+
+
+Upload Template File
+    Choose File    id=template    ${TEMPLATE FILE}	
+
+Clicks on Template Type
+    Click Element    xpath=//a[contains(text(),'Template Types')]
+
+Clicks on New Template Type Button
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    id=addnewitem
+
+Enters the Design Template name
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Input Text    id=templatetypename    ${TEMPLATE TYPENAME}
+
+Chooses Template type Icon
+    Choose File     xpath=.//*[@id='designtemplateicon']     ${TEMPLTYPEICON}
+
+Clicks Save Button in Template type page
+    Click Element    css=div.btn-group.pull-right > button
+
+Select Created organization
+    Wait Until Keyword Succeeds    1 minute     1 seconds     Select From List     id=orgname      ${ORGANIZATION NAME}
+
+Select type of the template
+    Sleep    4s
+    Click Element    css=#s2id_templatetype > .select2-choice
+    Log    after click
+    Input Text    css=#select2-drop .select2-input    ${Template Type}
+    Sleep    4s
+    Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span    
+
+
+Enters the New Template Name
+    Input Text    id=templatename    ${templatename}
+
+
+
+Clicks on Gallery Setup
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       xpath=//a[contains(text(),'Gallery Setup')]
+    Click Element    xpath=//a[contains(text(),'Gallery Setup')]
+
+Clicks on Templates
+    Click Element    xpath=//a[contains(text(),'Templates')]
+
+Clicks on New Button to create template
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       css=#newTemplate
+    Click Element    css=#newTemplate
+
+
+Enters Template Name
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Wait Until Element Is Visible    id=templatename
+    Input Text    id=templatename    ${TEMPLATE NAME}
+
+
+Chooses Icon
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Choose File     xpath=.//*[@id='templatesicon']     ${APACHEIMG}
+
+
+Chooses Template Type
+    Sleep    4s
+    Click Element    css=#s2id_templatetypename > .select2-choice
+    Log    after click
+    Input Text    css=#select2-drop .select2-input    ${TEMPLATE TYPENAME}
+    Sleep    4s
+    Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span    
+
+Select Chef Server
+    Select From List    id=configname    ${CONFIG MANAGEMENT NAME}                           
+
+
+Select CookBooks
+    Sleep   4s
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[text()='${COOKBOOK NAME1}']
+    Sleep   4s
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    id=btnaddToRunlist
+    Sleep   2s
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[text()='${COOKBOOK NAME2}']
+    Sleep   2s
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    id=btnaddToRunlist
+
+Select New CookBooks for Template
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='templatescookbooks']/div/div[1]/div[1]/label[3]
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[text()='git']
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    id=btnaddToRunlist
+
+
+
+Select Roles
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Wait Until Element Is Visible    xpath=.//*[@id='templatescookbooks']/div/fieldset/section[1]/div/div[1]/div[2]/ul/li[15]/label
+    Click Element    xpath=.//*[@id='templatescookbooks']/div/fieldset/section[1]/div/div[1]/div[2]/ul/li[15]/label          #webserver
+
+
+Clicks on >> Button
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    id=btnaddToRunlist
+
+
+Clicks on Save Button in Template Page
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    css=div.btn-group.pull-right > button
+
+
+
+
+Catalyst User Creates Service Command
+    Clicks on Settings
+    Clicks on Gallery Setup
+    Clicks on Service Command
+    Clicks on New Button to create service command
+    Select Created organization
+    Enters Service Name
+    #Choose Service Command Type
+    Select Chef Server
+    Select Service CookBooks
+    Select the Actions
+    Clicks on Save Button in Create service page
+
+
+Clicks on Service Command
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Wait Until Element Is Visible    xpath=//a[contains(text(),'Service Command')]
+    Click Element    xpath=//a[contains(text(),'Service Command')]
+
+
+Clicks on New Button to create service command
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Wait Until Element Is Visible    css=#newService
+    Click Element    css=#newService
+
+
+Enters Service Name
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Wait Until Element Is Visible    id=servicename
+    Input Text    id=servicename    ApacheService
+
+
+Choose Service Command Type
+    Click Element    xpath=.//*[@id='s2id_commandtype']/a
+    Click Element    xpath=.//*[@id='select2-drop']/ul/li[1]/div       #Chef CookBook/Recepie
+    #Click Element    xpath=.//*[@id='select2-drop']/ul/li[2]/div       #Service Command
+
+
+Select Service CookBooks
+    Sleep    4s
+    Click Element    css=#s2id_servicecookbook > .select2-choice
+    Log    after click
+    Input Text    css=#select2-drop .select2-input    ${Service Cookbook}
+    Sleep    4s
+    Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
+
+
+Select the Actions
+    Click Element    xpath=.//*[@id='chefCookbook-dropdown']/div[1]/div[1]/div[1]/label        #Start
+    Sleep    1s
+    Click Element    xpath=.//*[@id='chefCookbook-dropdown']/div[1]/div[2]/div[1]/label        #Stop
+    Sleep    2s
+    Click Element    xpath=.//*[@id='chefCookbook-dropdown']/div[2]/div[1]/div[1]/label        #Restart
+
+
+
+Clicks on Save Button in Create service page
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    css=div.btn-group.pull-right > button      
+
