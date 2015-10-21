@@ -100,13 +100,15 @@
                     <!-- <li class="left-projects-links"></li> -->
                     
                     <!--Settings tab-->
+                            <li class="left-projects-links"><a id="chefFactorySyncBtn" style="font-size:14px!important" href="javascript:void(0)" target="_blank" id="dokuNew"><i class="fa fa-refresh"></i>&nbsp;Sync</a>
+                            </li>
                     
                             <li class="left-projects-links"><a style="font-size:14px!important" href="http://help.relevancelab.com/dokuwiki" target="_blank" id="dokuNew"><i class="fa fa-question"></i>&nbsp;Help</a>
                             </li>
 
                         <li id="logout" class="btn-header transparent pull-right logouttop">
                             <!-- ../auth/signout -->
-                        <span><a href="#" logoutlink="/auth/signout" title="Sign Out" style="font-size:16px!important;">
+                        <span><a href="javascript:void(0)" logoutlink="/auth/signout" title="Sign Out" style="font-size:16px!important;">
                             <i class="fa fa-sign-out"></i>
                             </a></span></li>
                     </ul>
@@ -117,11 +119,20 @@
 <div id="dirArea">
  <ul class="nav nav-tabs">
               <li class="active"><a id="cookbook_link" href="#cookbookDirArea" data-toggle="tab">Cookbooks</a></li>
-              <li><a id="roles_tab" href="#rolesDirArea" data-toggle="tab">Roles</a></li>        
+              <li><a id="roles_tab" href="#rolesDirArea" data-toggle="tab">Roles</a></li> 
+              <li><a id="sync_tab" href="#syncDirArea" data-toggle="tab">Sync</a></li>        
  </ul>
  <div class="tab-content">
       <div class="tab-pane active" id="cookbookDirArea"></div>
       <div class="tab-pane active" id="rolesDirArea"></div>
+      <div class="tab-pane active" id="syncDirArea">
+        <div style="text-align:center">
+        <!--<input type="checkbox" />
+        <span>select All</span>-->
+        <a href="javascript:void(0)" id="syncFactoryItems">Sync</a>
+       </div>
+    </div>
+
 </div>
 </div>
 
@@ -270,6 +281,44 @@ $(function() {
 
         });
 
+    });
+
+    $('#syncFactoryItems').click(function(e) {
+        var reqData = {
+            cookbooks: [],
+            roles: []
+        };
+        $('.syncList:checked').each(function() {
+            var $this = $(this);
+            var type = $this.attr('data-itemType');
+            if(type=='cookbook') {
+                reqData.cookbooks.push($this.val());
+            } else {
+                reqData.roles.push($this.val());
+            }
+
+        });
+        console.log(reqData);
+        $.post('/cheffactory/' + urlParams.id + '/factoryItems/sync',reqData,function(){
+
+        });
+    });
+
+    $.get('/cheffactory/' + urlParams.id + '/factoryItems/', function(factoryItems) {
+        var $syncDirArea = $('#syncDirArea');
+        if (factoryItems.cookbooks && factoryItems.cookbooks.length) {
+            for (var i = 0; i < factoryItems.cookbooks.length; i++) {
+                var $div = $('<div></div>').append('<input class="syncList" data-itemType="cookbook" type="checkbox" value="' + factoryItems.cookbooks[i] + '"/><span>' + factoryItems.cookbooks[i] + '</span>');
+                $syncDirArea.append($div);
+
+            }
+        }
+        if (factoryItems.roles && factoryItems.roles.length) {
+            for (var i = 0; i < factoryItems.roles.length; i++) {
+                var $div = $('<div></div>').append('<input class="syncList" data-itemType="role" type="checkbox" value="' + factoryItems.roles[i] + '"/><span>' + factoryItems.roles[i] + '</span>');
+                $syncDirArea.append($div);
+            }
+        }
     });
 
 

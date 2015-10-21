@@ -100,7 +100,7 @@ var ChefFactory = function ChefFactory(chefSettings) {
                     cookbookName = filePath.substring(0, indexOfSlash);
                 }
                 if (cookbookName) {
-                    var chef = new Chef(chefSettings);
+
                     chef.uploadCookbook(cookbookName, function(err) {
                         if (err) {
                             callback(err);
@@ -177,7 +177,7 @@ var ChefFactory = function ChefFactory(chefSettings) {
                     cookbookName = filePath.substring(0, indexOfSlash);
                 }
                 if (cookbookName) {
-                    var chef = new Chef(chefSettings);
+
                     chef.uploadCookbook(cookbookName, function(err) {
                         if (err) {
                             callback(err);
@@ -196,6 +196,52 @@ var ChefFactory = function ChefFactory(chefSettings) {
                 message: "Invalid file path"
             }, null);
         }
+    };
+
+    this.getFactoryItems = function(callback) {
+        chef.getCookbooksList(function(err, cookbookList) {
+            if (err) {
+                callback(err, null);
+                return;
+            }
+            chef.getRolesList(function(err, rolesList) {
+                if (err) {
+                    callback(err, null);
+                    return;
+                }
+                callback(null, {
+                    cookbooks: Object.keys(cookbookList),
+                    roles: Object.keys(rolesList)
+                });
+            });
+        });
+    };
+
+    this.downloadFactoryItems = function(items, callback) {
+        var cookbookCount = 0;
+        var roleCount = 0;
+        var cookbooks = items.cookbooks;
+
+        function downloadCookbook(cookbookName) {
+            chef.downloadCookbook(cookbookName, null, function(err) {
+                cookbookCount++;
+                if (err) {
+                    callback(err);
+                    return;
+                }
+                if (cookbooks.length === cookbookCount) {
+                    callback(null);
+                } else {
+                    downloadCookbook(cookbooks[cookbookCount]);
+                }
+            });
+        }
+
+        function downloadRole(roleName, callback) {
+
+        }
+        downloadCookbook(cookbooks[cookbookCount]);
+
     };
 
 

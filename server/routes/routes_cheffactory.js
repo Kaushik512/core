@@ -98,6 +98,36 @@ module.exports.setRoutes = function(app, verificationFunc) {
         });
     });
 
+    app.get('/cheffactory/:serverId/factoryItems/', verificationFunc, function(req, res) {
+        var path = req.query.path;
+        var chefFactory = req.chefFactory;
+        chefFactory.getFactoryItems(function(err, factoryItems) {
+            if (err) {
+                res.send(500, {
+                    message: "Server Behaved Unexpectedly"
+                });
+                return;
+            }
+            res.send(200, factoryItems);
+        });
+    });
+
+    app.post('/cheffactory/:serverId/factoryItems/sync', verificationFunc, function(req, res) {
+        var path = req.query.path;
+        var chefFactory = req.chefFactory;
+        chefFactory.downloadFactoryItems(req.body, function(err) {
+            if (err) {
+                res.send(500, {
+                    message: "Server Behaved Unexpectedly"
+                });
+                return;
+            }
+            res.send(200, {
+                message: "synced"
+            });
+        });
+    });
+
     app.post('/cheffactory/:serverId/roles/', verificationFunc, function(req, res) {
         var path = req.body.filePath;
         var fileContent = req.body.fileContent;
