@@ -1,0 +1,176 @@
+<ul class="nav nav-tabs">
+<li class="pull-left active">
+ <a href="#l2" id="tabheader2" data-toggle="tab">Choose a Template</a>
+ </li>
+</ul>
+<div id="individualTemplateNameGrid">No Templates Found. Add a template from settings.</div>
+
+<script>
+var inittemplates = function(index){
+	$('#viewCreateNew').addClass('hidden');
+            $("#tabheader").html('Choose Templates');
+            var $selectedItem = $('.role-Selected');
+            if (!$selectedItem.length) {
+                alert('please choose a blueprint design');
+                return false;
+            }
+            var $clone = $selectedItem.clone().removeClass('role-Selected');
+            var selectedText = $clone.attr("data-templateType");
+            //hiding to move to next tag when docker selected
+            $('#individualTemplateNameGrid').hide();
+            var getID = parseInt($clone.attr("id").replace("grid", ""), 10);
+            var gallerytype = $clone.attr("data-gallerytype");
+            var templateurl = "/d4dMasters/readmasterjsonnew/17";
+            if (gallerytype == 'ami') {
+                // alert('to build a new selection by updating the url');
+                templateurl = '/vmimages';
+            }
+            $.ajax({
+                url: templateurl,
+                dataType: "json",
+                type: "GET",
+                cache: "true",
+                success: function(data) {
+                    console.log('templateData ==> ', data);
+                    var rowGridLength = (data.length);
+                    var getIndividualData = "";
+                    var getTempName;
+                    var getRowID, getImage;
+                    //alert(JSON.stringify(data));
+                    //alert('check');
+                    for (var z = 0; z < rowGridLength; z += 1) {
+
+                        if (gallerytype == 'ami') {
+
+                            getRowID = data[z]['_id'];
+
+                            getTemplateType = data[z]['osType'];
+                            getImage = 'img/osIcons/' + getTemplateType + '.png';
+                            getTempName = data[z]['name'];
+                            getImageData = '\'' + JSON.stringify(data[z]) + '\'';
+                            //alert(getImageData);
+                            getIndividualData += '<div class="col-sm-3 col-lg-2 col-md-3">' +
+                                '<div class="productdiv2" data-templateId="' + getTempName + '" data-' +
+                                'templateComponent="component' + z + '" ' +
+                                'imagedata=' + getImageData +
+                                'data-templateName="' + getTempName + '" data-' +
+                                'templateType="' + gallerytype + '" templatetype="' + gallerytype + '" templatename="' + getTempName + '" templatescookbooks="">' +
+                                '<ul class="list-unstyled system-prop" style="text-align:center;">' +
+                                '<li><img style="height:40px;width:auto;" alt="" ' +
+                                'src="' + getImage + '">' +
+                                '</li><li style="font-size:12px;"><u><b>' + getTempName + '</b></u></li></ul></div></div>';
+                            if (z >= rowGridLength - 1) {
+                                $('#individualTemplateNameGrid').show();
+                            }
+                            continue;
+                        }
+
+
+                        //iterate thhrough columns to get correct column and value
+                        var selectedrow = false;
+                        var currField = null;
+
+                        getTempName = data[z]['templatename'];
+
+
+                        getRowID = data[z]['rowid'];
+                        getImage = data[z]['templatesicon_filename'];
+                        getTemplateType = data[z]['templatetypename'];
+                        console.log(getTemplateType);
+
+                        if (selectedText.trim() != getTemplateType.trim())
+                            continue;
+
+                        gettemplatescookbooks = data[z]['templatescookbooks'].replace(/"/g, "");
+                        dockercontainerpathstitle = data[z]['dockercontainerpathstitle'];
+                        dockercontainerpaths = data[z]['dockercontainerpaths'];
+                        dockerreponame = data[z]['dockerreponame'];
+                        //To be removed and converted to reference when the new master model is implemented.
+                        dockerusername = '';
+                        dockercred = '';
+                        dockeremail = '';
+
+
+                        console.log('here end ' + dockercontainerpathstitle);
+                        //added to the docker template adder pop-up : Vinod
+                        $('#dockertemplateselector').append('<option value="' + dockercontainerpaths + '" title="' + dockercontainerpaths + '" reponame="' + dockerreponame + '">' + dockercontainerpathstitle + '</option>');
+                        var templateImgUrl = "img/logo.png";
+                        if (getImage) {
+                            templateImgUrl = "/d4dMasters/image/" + getRowID + "__templatesicon__" + getImage
+                        }
+                        var templateFileName = ''
+                        if (data[z]['template_filename']) {
+                            templateFileName = getRowID + '__template__' + data[z]['template_filename'];
+                        }
+                        getIndividualData += '<div class="col-sm-3 col-lg-2 col-md-3">' +
+                            '<div class="productdiv2" data-templateId="' + getTempName + '" data-' +
+                            'templateComponent="component' + z + '" ' +
+                            'dockercontainerpathstitle="' + dockercontainerpathstitle + '" ' +
+                            'dockercontainerpaths="' + dockercontainerpaths + '" ' +
+                            'dockerreponame="' + dockerreponame + '" ' +
+                            'data-templateName="' + getTempName + '" data-' +
+                            'templateType="' + gallerytype + '" templatetype="' + getTemplateType + '" templatename="' + getTempName + '" templatescookbooks="' + gettemplatescookbooks + '" cftTemplateFileName="' + templateFileName + '">' +
+                            '<ul class="list-unstyled system-prop" style="text-align:center;">' +
+                            '<li><img style="height:40px;width:auto;" alt="" ' +
+                            'src="' + templateImgUrl + '">' +
+                            '</li><li style="font-size:12px;"><u><b>' + getTempName + '</b></u></li>';
+
+                        if (getTemplateType != "Docker" && getTemplateType != "docker") {
+                            var cb = gettemplatescookbooks.split(',');
+                            var licb = '';
+                            //alert(cb.length);
+                            for (var cbi = 0; cbi < cb.length; cbi++) {
+                                licb += '<li style="font-size:10px;" blueprinttype="other">' + cb[cbi] + '</li>';
+                            }
+                            $('#individualTemplateNameGrid').show();
+                        } else //when template type is docker
+                        {
+                            //  alert(dockerreponame);
+                            var cb = dockercontainerpathstitle.split(',');
+                            var cbpath = dockercontainerpaths.split(',');
+                            var licb = '';
+                            //alert(cb.length);
+                            for (var cbi = 0; cbi < cb.length; cbi++) {
+                                licb += '<li style="font-size:10px;" path="' + cbpath[cbi] + '" title="Container" blueprinttype="dockercontainer">' + cb[cbi] + '</li>';
+                            }
+                            $('#individualTemplateNameGrid').hide();
+                        }
+
+                        getIndividualData += licb + '</ul></div></div>';
+
+
+                    }
+                    $("#individualTemplateNameGrid").html("");
+                    //$("#individualTemplateNameGrid").append(getParent);
+                    $("#individualTemplateNameGrid").append(getIndividualData).find('.productdiv2').first().click();
+                    //$("#grid0").addClass("role-Selected");
+                    //Proceeding to next step when selected type is docker
+                    if ($('#tab1').find('.role-Selected').attr('data-templatetype') === "Docker" || $('#tab1').find('.role-Selected').attr('data-templatetype') === "docker") {
+                        $('li.next').find('a').trigger('click');
+                    }
+				    $('#individualTemplateNameGrid').on("click", '.productdiv2', function() {
+				        if (!$(this).hasClass('role-Selected')) {
+				            $('#individualTemplateNameGrid').find('.role-Selected').removeClass('role-Selected');
+				            $(this).addClass('role-Selected');
+				          //  resetForm();
+				        }
+				    });
+                    $('#individualTemplateNameGrid').find('.productdiv2').first().trigger('click');
+                }
+
+
+            });
+            //console.log('in here')
+            //alert('here');
+            // var $selectedItem = $('.role-Selected');
+            // if (!$selectedItem.length) {
+            //     alert('please choose a blueprint design')
+            //     return false;
+            // }
+            // var $clone = $selectedItem.clone().removeClass('role-Selected');
+           // $('#tab' + (index + 1)).find('.temp').empty().append($clone);
+            
+}
+
+
+</script>
