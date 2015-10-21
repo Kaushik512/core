@@ -296,7 +296,7 @@ Verify Page Contains Laast Updated
     Page Should Contain    Last Updated
     Page Should Not Contain    NA
     Page Should Not Contain    No results found
-    Page Should Not Contain    Connection failed !! 
+    #Page Should Not Contain    Connection failed !! 
 
 
 
