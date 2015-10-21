@@ -1,0 +1,123 @@
+<ul class="nav nav-tabs">
+<li class="pull-left active">
+ <a href="#l2" id="tabheader1" data-toggle="tab">Choose a Template Type</a>
+ </li>
+</ul>
+<div id="templateContent">
+</div>
+
+<script>
+var providerselected = "hppubliccloud";
+$('document').ready(function(){
+	$.ajax({
+        url: "/d4dMasters/readmasterjsonnew/16",
+        dataType: "json",
+        type: "GET",
+        cache: "true",
+        success: function(data) {
+            var rowLength = JSON.stringify(data.length);
+            var containerTemp = "";
+            var selectedrow = false;
+            var getDesignTypeImg;
+            var getDesignTypeRowID;
+            //alert(JSON.stringify(data)); 
+
+            for (var i = 0; i < rowLength; i += 1) {
+
+                switch (data[i]['templatetype']) {
+                    case "chef":
+                        data[i]['position'] = 0;
+                        break;
+                    case "ami":
+                        data[i]['position'] = 1;
+                        break;
+                    case "cft":
+                        data[i]['position'] = 2;
+                        break;
+                    case "docker":
+                        data[i]['position'] = 3;
+                        break;
+                }
+
+            }
+
+            var sortbyid = function SortByID(x, y) {
+		        return x.position - y.position;
+		    }
+            data.sort(sortbyid);
+
+
+            for (var i = 0; i < rowLength; i += 1) {
+                //skipping cft if not aws provider
+                if (providerselected && (providerselected == 'openstack' || providerselected == 'hppubliccloud') && data[i]['templatetype'] && data[i]['templatetype'] == 'cft')
+                    continue;
+
+                getDesignTypeImg = data[i]['designtemplateicon_filename'];
+
+                switch (data[i].templatetypename) {
+                    case "chef":
+                        getDesignTypeImg = '/d4dMasters/image/16ae9c94-19f6-485a-8c17-9af7a0f5f23d__designtemplateicon__Appfactory.png';
+                        break;
+                    case "ami":
+                        getDesignTypeImg = '/d4dMasters/image/9d14d362-493e-4d62-b029-a6761610b017__designtemplateicon__DevopsRoles.png';
+                        break;
+                    case "docker":
+                        getDesignTypeImg = '/d4dMasters/image/b02de7dd-6101-4f0e-a95e-68d74cec86c0__designtemplateicon__Docker.png';
+                        break;
+                    case "cft":
+                        getDesignTypeImg = '/d4dMasters/image/71e62952-b464-4980-b76b-482a129f5627__designtemplateicon__Cloudformation.png';
+                        break;
+                }
+
+                //getDesignTypeImg= data[i]['designtemplateicon_filename'];
+                getDesignTypeRowID = data[i]['rowid'];
+
+                if (getDesignTypeImg) {
+                    if (getDesignTypeImg.indexOf('/d4dMasters/image') === -1) {
+                        getDesignTypeImg = "/d4dMasters/image/" + getDesignTypeRowID + "__designtemplateicon__" + getDesignTypeImg;
+                    }
+                    containerTemp += '<div class="" style="width:222px;float:left">' +
+                        ' <div id=grid' + i + ' class="blueprintdiv appfactory" data-' +
+                        'templateType="' + data[i]['templatetypename'] + '" data-gallerytype="' + data[i]['templatetype'] + '">' +
+                        '<div style="">' +
+                        '<img  style="height:25px;padding:2px" alt="" src="img/app-store-' +
+                        'icons/Logoheader.png"><span style="padding-top:4px;position:absolute;' +
+                        'padding-left: 4px;">' +
+                        '<b>' + data[i]['templatetypename'] + '</b>' +
+                        '</span></div>' +
+                        '<div style="padding-top:10px;padding-left:0px;text-align:center;">' +
+                        '<img alt="JBoss Stack" ' +
+                        'src="' + getDesignTypeImg + '" style="height:60px;width:auto;">' + '</div></div></div>';
+                } else {
+                    containerTemp += '<div class="" style="width:222px;float:left">' +
+                        ' <div id=grid' + i + ' class="blueprintdiv appfactory" data-' +
+                        'templateType="' + data[i]['templatetypename'] + '" data-gallerytype="' + data[i]['templatetype'] + '">' +
+                        '<div style="">' +
+                        '<img  style="height:25px;padding:2px" alt="" src="img/app-store-' +
+                        'icons/Logoheader.png"><span style="padding-top:4px;position:absolute;' +
+                        'padding-left: 4px;">' +
+                        '<b>' + data[i]['templatetypename'] + '</b>' +
+                        '</span></div>' +
+                        '<div style="padding-top:10px;padding-left:27px;">' +
+                        '<img style="height:40px;width:auto;" alt="" ' +
+                        'src="img/logo.png">' +
+                        '</div></div></div>';
+                }
+            }
+            //alert(selectedstack);
+            $("#templateContent").append(containerTemp);
+            $("#templateContent #grid0").addClass("role-Selected");
+            $('#templateContent').on("click", '.blueprintdiv', function() {
+		        $('#templateContent .role-Selected').removeClass('role-Selected');
+		        $(this).addClass('role-Selected');
+		        //set the context in localstorage
+
+		    });
+        }
+    });
+});
+
+</script>
+
+
+

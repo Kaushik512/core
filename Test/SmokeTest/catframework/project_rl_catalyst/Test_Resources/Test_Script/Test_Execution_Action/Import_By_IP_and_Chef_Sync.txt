@@ -1238,9 +1238,7 @@ Clicks on Orchestration Tab of the Environment
 
 
 Clicks on Choose Task Type of Jenkins
-    Click Element    css=#s2id_taskType > a > span.select2-arrow
-    Input Text    css=#select2-drop > div > input     ${TASK TYPE}
-    Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
+    Click Element    xpath=.//*[@id='taskType']/option[text()='Jenkins']
 
 Clicks on Choose Task Type of Chef
     Click Element    xpath=.//*[@id='s2id_taskType']/a
@@ -1256,9 +1254,8 @@ Enter the Task Name of Chef
 
 
 Select the Job to Run
-    Click Element    css=#s2id_jobListJenkins > a > span.select2-chosen
-    Input Text     xpath=.//*[@id='select2-drop']/div/input     ${JJOB NAME}
-    Click Element    css=ul > li:first-child > div
+    Click Element     xpath=.//*[@id='jobListJenkins']/option[text()='${JJOB NAME}']     
+    
 
 Select the AutoSync Button
     Click Element    css=#radio_yes 
@@ -1296,9 +1293,7 @@ Enters the Task Name
     Input Text    id=jenkinsTaskName     ${TASK NAME}
 
 Select the Jenkins Server
-    Click Element    css=#s2id_jenkinsServerList > a > span.select2-chosen
-    Input Text    css=#select2-drop > div > input    ${DEF_JENKINS_SERVER}
-    Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
+    Click Element    xpath=.//*[@id='jenkinsServerList']/option[text()='${JENKINSNAME}']
 
 Select Job
     Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
