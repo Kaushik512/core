@@ -56,6 +56,8 @@ var vmware = require('./routes_vmware.js');
 var servicenow = require('./routes_servicenow');
 
 
+
+
 module.exports.setRoutes = function(app,socketIo) {
 
 
@@ -97,7 +99,7 @@ module.exports.setRoutes = function(app,socketIo) {
     hppubliccloud.setRoutes(app, sessionVerificationFunc);
     azure.setRoutes(app, sessionVerificationFunc);
     vmware.setRoutes(app,sessionVerificationFunc);
-
+    
     application.setRoutes(app, sessionVerificationFunc);
 
     jira.setRoutes(app, sessionVerificationFunc);

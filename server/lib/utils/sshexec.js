@@ -89,7 +89,7 @@ module.exports = function(opts) {
                 username: options.username
             };
 
-            if (options.privateKey) {
+            if (options.privateKey) { 
                 if (options.passphrase) {
                     connectionParamsObj.passphrase = options.passphrase;
                 }
