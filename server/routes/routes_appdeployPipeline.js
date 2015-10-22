@@ -28,7 +28,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             }
             if (appDeployes.length) {
                 appDeployes[0].envId = req.body.appDeployPipelineData.envId;
-
+                appDeployes[0].envSequence = req.body.appDeployPipelineData.envSequence;
+                
                 appDeployes[0].save(function(err, appDeployes) {
                     if (err) {
                         res.send(500, "Pipeline Data Already Exist.");

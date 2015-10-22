@@ -20,6 +20,7 @@ var AppDeployPipelineSchema = new Schema({
     bgId: String,
     projectId: String,
     envId: [String],
+    envSequence: [String],
     loggedInUser: String,
     isEnabled: Boolean
 });
