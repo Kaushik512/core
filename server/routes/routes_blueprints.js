@@ -2104,6 +2104,14 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                         log: "Instance Ready..about to bootstrap",
                                                                         timestamp: timestampStarted
                                                                     });
+                                                                    var port='';
+
+                                                                    if(instance.hardware.os === 'windows'){
+                                                                        port = '5985';
+                                                                    } else {
+                                                                        port = '22';
+                                                                    }
+
                                                                     chef.bootstrapInstance({
                                                                         instanceIp: publicip,
                                                                         runlist: version.runlist,
@@ -2112,7 +2120,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                         nodeName: launchparams.VMName,
                                                                         environment: envName,
                                                                         instanceOS: instance.hardware.os,
-                                                                        jsonAttributes: null
+                                                                        jsonAttributes: null,
+                                                                        port: port
                                                                     }, function(err, code) {
                                                                         if (code == 0) {
                                                                             instancesDao.updateInstanceBootstrapStatus(instance.id, 'success', function(err, updateData) {
