@@ -273,7 +273,13 @@ var AzureCloud = function() {
 
                     if (self.updatedfloatingip) {
 
-                        self.trysshoninstance(data.OSDisk.operatingSystem,ip_address, username, pwd, function(cdata) {
+                       logger.debug("data.OSDisk.operatingSystem >>>>",data.OSDisk.operatingSystem);
+                         
+                       if(!data.OSDisk.operatingSystem === "Windows"){ 
+                         
+                         logger.debug("try ssh oninstance..");
+
+                         self.trysshoninstance(data.OSDisk.operatingSystem,ip_address, username, pwd, function(cdata) {
                             logger.debug('End trysshoninstance:', cdata);
                             if (cdata == 'ok') {
                                 //Clearing all timeouts
@@ -295,6 +301,12 @@ var AzureCloud = function() {
                                 }
                             }
                         });
+                      
+                      } else{
+                        logger.debug("Windows instance..");
+                        callback(null, ip_address);
+                      }
+
                     } else {
                         logger.debug('Timeout 2 set');
                         if (!self.callbackdone) {
