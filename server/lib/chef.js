@@ -745,6 +745,38 @@ var Chef = function(settings) {
         proc.start();
     };
 
+
+    this.downloadRole = function(roleName, roleDir, callback) {
+        var options = {
+            cwd: settings.userChefRepoLocation,
+            onError: function(err) {
+                callback(err, null);
+            },
+            onClose: function(code) {
+                logger.debug(code);
+                if (code === 0) {
+                    callback(null, true);
+                } else {
+                    callback(null, false);
+                }
+
+            }
+        };
+        var indexOfJson = roleName.indexOf('.json');
+        if(indexOfJson === -1) {
+            roleName = roleName+'.json';
+        }
+        var argList = ['download', 'roles/'+roleName];
+        if (roleDir) {
+            argList.push('-d');
+            argList.push(roleDir);
+        }
+        argList.push('--force');
+        //argList.push('--latest');
+        var proc = new Process('knife', argList, options);
+        proc.start();
+    };
+
     this.syncCookbooks = function(callback) {
         var self = this;
 

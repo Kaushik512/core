@@ -221,6 +221,7 @@ var ChefFactory = function ChefFactory(chefSettings) {
         var cookbookCount = 0;
         var roleCount = 0;
         var cookbooks = items.cookbooks;
+        var roles = items.roles;
 
         function downloadCookbook(cookbookName) {
             chef.downloadCookbook(cookbookName, null, function(err) {
@@ -230,7 +231,11 @@ var ChefFactory = function ChefFactory(chefSettings) {
                     return;
                 }
                 if (cookbooks.length === cookbookCount) {
-                    callback(null);
+                    if (roles && roles.length) {
+                        downloadRole(roles[roleCount]);
+                    } else {
+                        callback(null);
+                    }
                 } else {
                     downloadCookbook(cookbooks[cookbookCount]);
                 }
@@ -238,10 +243,26 @@ var ChefFactory = function ChefFactory(chefSettings) {
         }
 
         function downloadRole(roleName, callback) {
-
+            chef.downloadRole(roleName, null, function(err) {
+                roleCount++;
+                if (err) {
+                    callback(err);
+                    return;
+                }
+                if (roles.length === roleCount) {
+                    callback(null);
+                } else {
+                    downloadRole(roles[roleCount]);
+                }
+            });
         }
-        downloadCookbook(cookbooks[cookbookCount]);
-
+        if (cookbooks && cookbooks.length) {
+            downloadCookbook(cookbooks[cookbookCount]);
+        } else if (roles && roles.length) {
+            downloadRole(roles[roleCount]);
+        } else {
+            callback(null);
+        }
     };
 
 
