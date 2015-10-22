@@ -602,44 +602,22 @@
 </div>
 <script type="text/javascript">
 $(document).ready(function() {
-    
-    // $('#chooseNexusServer').select2();
-    // $('#chooseRepository').select2();
-    // $('#chooseArtifacts').select2();
-    // $('#chooseVersions').select2();
-    // $('#chooseRundeckProject').select2();
-    // $('#chooseEnvironment').select2();
-
-
-
-    // $('#chooseApplication').select2();
-    //debugger;
-    //getDropdownList();
     getAllApplicationData();
-    // getAllApplicationData(function(data){
-    //   constructUI(data);
-    // });
     getAllPipelineApplicationData();
     $("#divapplicationtableview").hide();
 });
-function getAllPipelineApplicationData(){
+function getAllPipelineApplicationData() {
     var projectId = urlParams.projid;
     var envNameSelected = "";
-    $.get('/app/deploy/pipeline/project/'+ projectId, function(dataPipeline) {
-        if(dataPipeline.length){
+    $.get('/app/deploy/pipeline/project/' + projectId, function(dataPipeline) {
+        if (dataPipeline.length) {
             getenvName(function(envName) {
                 envNameSelected = envName;
-             //   debugger;
-              
-
                 for (var i = 0; i < dataPipeline[0].envId.length; i++) {
                     var envUniqueText = dataPipeline[0].envId[i];
-                    var $pipelineArea = createPipelineArea(envUniqueText,envNameSelected,projectId);
-                    console.log('before ==>',$pipelineArea.parent().length);
+                    var $pipelineArea = createPipelineArea(envUniqueText, envNameSelected, projectId);
                 }
-           
             });
-           
         }
     }).fail(function() {});
 }
@@ -707,7 +685,6 @@ $('.createAppConfigure').click(function() {
                 for (var i = 0; i < dataPipeline[0].envSequence.length; i++) {
                     allEnvironments.push(dataPipeline[0].envSequence[i]);
                 }
-                //alert(selectedEnvironments.length);
                 if (selectedEnvironments.length == 0) {
                     $.get('/d4dMasters/project/' + projectId, function(dataforenvName) {
                         var individualenvName = dataforenvName[0].environmentname;
@@ -779,17 +756,13 @@ function createPipelineArea(envName,selectedEnv,projectId){
 
     $clonePipeline.find('.envSpecificAppname u').html(envName);
     $stageContainer.append($clonePipeline);
-    
-
     $.ajax({
         url: '/app/deploy/env/' + envName + '/project/' + projectId + '/list',
         type: "GET",
         async: true,
         success: function(data) {
-           // console.log('after ==>', $pipelineArea[0]);
             constructPipelineUI(data, id);
             if (envName != selectedEnv) {
-                //alert($clonePipeline.children().length);
                 $('#'+id).children().css({
                     'opacity': '0.5'
                 });
@@ -802,23 +775,11 @@ function createPipelineArea(envName,selectedEnv,projectId){
 
         }
     });
-
-
-    
-
-
-
-    //$clonePipeline.attr('id','AnshuLLLSSSS');
-    return $clonePipeline;//.append('<div>anshul</div>');
-
+    return $clonePipeline;
 }
 
 function constructPipelineUI(data, $clonePipeline) {
     $('.loadingAppDeploySpinner').hide();
-    console.log($clonePipeline);
-    //$clonePipeline.append('sdsdfsdf');
-   
-
     for (var i = 0; i < data.length; i++) {
         var $envSpecificAppInstanceUniqueCard = $('.envSpecificAppInstanceUniqueCard');
 
@@ -958,10 +919,7 @@ function constructPipelineUI(data, $clonePipeline) {
             $appInstanceUpgardeCardSpan.append(upgradeAppDeploy);
         }
         $('#'+$clonePipeline).append($cloneAppInstanceUniqueCard);
-        //$clonePipeline.append($cloneAppInstanceUniqueCard);
     }
-    //var $stageContainer = $('.stageContainer');
-    //$stageContainer.append($clonePipeline);
 }
 
 
@@ -1007,8 +965,6 @@ $('.appdeployConfigureSaveBtn').click(function(){
             });
         });
     });
-
-
     var dataDeployPipeline = {
         "appDeployPipelineData": {
             "loggedInUser": "",
@@ -1024,11 +980,6 @@ $('.appdeployConfigureSaveBtn').click(function(){
         type: 'POST',
         contentType: "application/json",
         success: function(data) {
-            console.log("I am in Post call of configure");
-            //console.log(data[0].envId);
-            // for(var i=0;i<data.envId.length;i++){
-            //     console.log(data.envId[i]);
-            // }
             $('#modalappcardConfigure').modal('hide');
         },
         error: function(jqxhr) {
