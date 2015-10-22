@@ -18,7 +18,7 @@ var projects = require('./routes_projects');
 var blueprints = require('./routes_blueprints');
 var instances = require('./routes_instances');
 var tasks = require('./routes_tasks');
-var taskStatus = require('./routes_taskstatus');
+var taskStatus = require('./routes_longjobtracker');
 var ec2 = require('./routes_aws_ec2');
 
 var jenkins = require('./routes_jenkins');

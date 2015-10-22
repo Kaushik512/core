@@ -1,4 +1,4 @@
-var taskStatusDao = require('./dao/taskstatusdao');
+var taskStatusDao = require('./taskstatusdao');
 
 function TaskStatusClass(taskId) {
 

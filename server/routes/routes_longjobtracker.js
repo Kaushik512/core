@@ -1,5 +1,5 @@
 
-var taskStatusModule = require('../model/taskstatus');
+var taskStatusModule = require('_pr/model/long-job-tracker');
 
 
 module.exports.setRoutes = function(app, sessionVerificationFunc) {

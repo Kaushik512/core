@@ -9,7 +9,7 @@
 
 #dirArea {
 	border-right: 1px solid #000000;
-    height: 100%;
+    height: 92%;
     overflow: auto;
     width: 21%;
     float:left;
@@ -100,15 +100,14 @@
                     <!-- <li class="left-projects-links"></li> -->
                     
                     <!--Settings tab-->
-                            <li class="left-projects-links"><a id="chefFactorySyncBtn" style="font-size:14px!important" href="javascript:void(0)" target="_blank" id="dokuNew"><i class="fa fa-refresh"></i>&nbsp;Sync</a>
-                            </li>
+                            
                     
                             <li class="left-projects-links"><a style="font-size:14px!important" href="http://help.relevancelab.com/dokuwiki" target="_blank" id="dokuNew"><i class="fa fa-question"></i>&nbsp;Help</a>
                             </li>
 
                         <li id="logout" class="btn-header transparent pull-right logouttop">
                             <!-- ../auth/signout -->
-                        <span><a href="javascript:void(0)" logoutlink="/auth/signout" title="Sign Out" style="font-size:16px!important;">
+                        <span><a href="/auth/signout" title="Sign Out" style="font-size:16px!important;">
                             <i class="fa fa-sign-out"></i>
                             </a></span></li>
                     </ul>
@@ -124,8 +123,8 @@
  </ul>
  <div class="tab-content">
       <div class="tab-pane active" id="cookbookDirArea"></div>
-      <div class="tab-pane active" id="rolesDirArea"></div>
-      <div class="tab-pane active" id="syncDirArea">
+      <div class="tab-pane" id="rolesDirArea"></div>
+      <div class="tab-pane" id="syncDirArea">
         <div style="text-align:center">
         <!--<input type="checkbox" />
         <span>select All</span>-->
@@ -154,6 +153,22 @@
 <img src="img/loading.gif" style="height:10%;width:auto"/>
 <span id="workingMsg"></span>
 </div>
+
+<div class="modal fade" id="chefFactorySyncResultModal" data-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title">Syncing Items</h4>
+      </div>
+      <div class="modal-body">
+      </div>
+       <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 </body>
 
 <script src="js/libs/jquery-2.0.2.min.js"></script>
@@ -174,7 +189,7 @@ $(function() {
         }
     })();
 
-
+    var $fileEditorArea = $('#fileEditorArea');
     var $fileEditorDivContianer = $('#fileEditorContainer').hide();
     var $fileEditorDiv = $('#fileEditorDiv');
     var $editorBtnContainer = $('#editorBtnContainer').hide();
@@ -192,93 +207,112 @@ $(function() {
     $rolesDirArea = $('#rolesDirArea');
     $databagDirArea = $('#databagDirArea');
     //$workingIndicatorContainer.hide();
-    var url = '/cheffactory/' + urlParams.id + '/cookbooks/'; //'/userCookbooks/save';
-    var isCookBook = true;
-    var rolesSynced = false;
-    $('#cookbook_link').on('shown.bs.tab', function(e) {
-        url = '/cheffactory/' + urlParams.id + '/cookbooks/'; //'/userCookbooks/save';
-        isCookBook = true;
-    });
-    $('#roles_tab').on('shown.bs.tab', function(e) {
-        url = '/cheffactory/' + urlParams.id + '/roles/';
-        isCookBook = false;
-        $fileEditorDivContianer.hide();
-        $editorBtnContainer.hide();
-        $fileEditorMsgContainer.show();
-        if (!rolesSynced) {
-            $workingMsg.empty().append('Please Wait ... Syncing Roles');
-            $workingIndicatorContainer.show();
-            $rolesDirArea.fileTree({
-                root: '/',
-                script: '/cheffactory/' + urlParams.id + '/roles/',
-                onFolderLoad: function(path, data) {
-                    if (path === '/') {
-                        $dirArea.show();
-                        $('#fileEditorArea').show();
-                        $workingIndicatorContainer.hide()
-                    }
+
+
+    // var url = '/cheffactory/' + urlParams.id + '/cookbooks/'; //'/userCookbooks/save';
+    // var isCookBook = true;
+    // var rolesSynced = false;
+    // $('#cookbook_link').on('shown.bs.tab', function(e) {
+    //     url = '/cheffactory/' + urlParams.id + '/cookbooks/'; //'/userCookbooks/save';
+    //     isCookBook = true;
+    // });
+    // $('#roles_tab').on('shown.bs.tab', function(e) {
+    //     url = '/cheffactory/' + urlParams.id + '/roles/';
+    //     isCookBook = false;
+    // });
+    // $('#databag_link').on('shown.bs.tab', function(e) {
+    //     alert('here');
+    // });
+
+
+    function loadDirArea() {
+        $cookbookdir.empty();
+        $rolesDirArea.empty();
+        $cookbookdir.fileTree({
+            root: '/',
+            script: '/cheffactory/' + urlParams.id + '/cookbooks/',
+            onFolderLoad: function(path, data) {
+                if (path === '/') {
+                    $dirArea.show();
+                    $('#fileEditorArea').show();
+                    $('#chefAccountMsg').append('Chef Account : ' + data.chefUserName);
+                    $workingIndicatorContainer.hide()
                 }
-            }, function(file) {
-                $fileEditorMsgContainer.hide();
-                $.get('/cheffactory/' + urlParams.id + '/roles/?path=' + file, function(data) {
-                    if (data.resType == 'file') {
-                        $fileEditorDivContianer.show();
-                        $editorBtnContainer.show();
-                        $fileEditorDiv.attr('data-file-path', file);
-                        editor.setValue(data.fileData);
-                    }
-                });
+            }
+        }, function(file) {
+            $('.save').data('saveUrl','/cheffactory/' + urlParams.id + '/cookbooks/');
+            $('.save').data('saveType','cookbook');
+            $('a').css({
+                background: 'none'
             });
-            rolesSynced = true;
-        }
-    });
-    $('#databag_link').on('shown.bs.tab', function(e) {
-        alert('here');
-    });
-
-
-
-
-    $cookbookdir.fileTree({
-        root: '/',
-        script: '/cheffactory/' + urlParams.id + '/cookbooks/',
-        onFolderLoad: function(path, data) {
-            if (path === '/') {
-                $dirArea.show();
-                $('#fileEditorArea').show();
-                $('#chefAccountMsg').append('Chef Account : ' + data.chefUserName);
-                $workingIndicatorContainer.hide()
-            }
-        }
-    }, function(file) {
-        $fileEditorMsgContainer.hide();
-        $.get('/cheffactory/' + urlParams.id + '/cookbooks/?path=' + file, function(data) {
-            if (data.resType == 'file') {
-                $fileEditorDivContianer.show();
-                $editorBtnContainer.show();
-                $fileEditorDiv.attr('data-file-path', file);
-                editor.setValue(data.fileData);
-            }
+            $('a[rel="' + file + '"]').css({
+                background: '#BDF'
+            });
+            $fileEditorMsgContainer.hide();
+            $.get('/cheffactory/' + urlParams.id + '/cookbooks/?path=' + file, function(data) {
+                if (data.resType == 'file') {
+                    $fileEditorDivContianer.show();
+                    $editorBtnContainer.show();
+                    $fileEditorDiv.attr('data-file-path', file);
+                    editor.setValue(data.fileData);
+                }
+            });
         });
-    });
+
+        $rolesDirArea.fileTree({
+            root: '/',
+            script: '/cheffactory/' + urlParams.id + '/roles/',
+            onFolderLoad: function(path, data) {
+                if (path === '/') {
+                    $dirArea.show();
+                    $('#fileEditorArea').show();
+                    $workingIndicatorContainer.hide()
+                }
+            }
+        }, function(file) {
+            $('.save').data('saveUrl','/cheffactory/' + urlParams.id + '/roles/');
+            $('.save').data('saveType','role');
+            $('a').css({
+                background: 'none'
+            });
+            $('a[rel="' + file + '"]').css({
+                background: '#BDF'
+            });
+            $fileEditorMsgContainer.hide();
+            $.get('/cheffactory/' + urlParams.id + '/roles/?path=' + file, function(data) {
+                if (data.resType == 'file') {
+                    $fileEditorDivContianer.show();
+                    $editorBtnContainer.show();
+                    $fileEditorDiv.attr('data-file-path', file);
+                    editor.setValue(data.fileData);
+                }
+            });
+        });
+    }
+    loadDirArea();
+
+    
 
     $('.save').click(function(e) {
+        var saveUrl = $(this).data('saveUrl');
+        var saveType = $(this).data('saveType');
         var filePath = $fileEditorDiv.attr('data-file-path');
         var fileContent = editor.getValue();
         var str = 'Please Wait ... Uploading Cookbook';
-        if (!isCookBook) {
+        if (saveType === 'role') {
             str = 'Please Wait ... Uploading Roles';
         }
         $workingMsg.empty().append(str);
         $workingIndicatorContainer.show();
-        $.post(url, {
+        $.post(saveUrl, {
             filePath: filePath,
             fileContent: fileContent
         }, function(data, success) {
             $workingIndicatorContainer.hide();
             console.log(data);
-        }).fail(function(){
-
+        }).fail(function() {
+           alert("Unable to save cookbook");
+           $workingIndicatorContainer.hide();
         });
 
     });
@@ -291,15 +325,80 @@ $(function() {
         $('.syncList:checked').each(function() {
             var $this = $(this);
             var type = $this.attr('data-itemType');
-            if(type=='cookbook') {
+            if (type == 'cookbook') {
                 reqData.cookbooks.push($this.val());
             } else {
                 reqData.roles.push($this.val());
             }
 
         });
+        if(!reqData.cookbooks.length && !reqData.roles.length) {
+           return;
+        }
         console.log(reqData);
-        $.post('/cheffactory/' + urlParams.id + '/factoryItems/sync',reqData,function(){
+        $dirArea.hide();
+        $fileEditorArea.hide();
+        $workingMsg.empty().append("Please wait ... syncing");
+        $workingIndicatorContainer.show();
+
+        $.post('/cheffactory/' + urlParams.id + '/factoryItems/sync', reqData, function(data) {
+            var $chefResultModalContainer = $('#chefFactorySyncResultModal');
+            var $modalBody = $chefResultModalContainer.find('.modal-body');
+            $modalBody.empty();
+            var totalLenth = reqData.cookbooks.length + reqData.roles.length;
+            var $progressBar = $('<progress value="0" max="' + totalLenth + '"></progress>').css({
+                width: '100%'
+            });
+            var $msgDiv = $('<div class="messageDiv"></div>').css({
+                width: '100%'
+            });
+
+            $modalBody.append($progressBar).append($msgDiv);
+
+            $chefResultModalContainer.modal('show');
+            var timeout;
+            var count = 0;
+
+            function pollTaskStatus(taskId, timestamp) {
+                timeout = setTimeout(function() {
+                    $.get('../taskstatus/' + taskId + '/status?timestamp=' + timestamp, function(data) {
+                        console.log(data);
+                        if (!data.completed) {
+                            if (data.statusList && data.statusList.length) {
+
+                                $progressBar.val(data.statusList.length);
+                                $msgDiv.empty();
+                                for (var i = 0; i < data.statusList.length; i++) {
+                                    $msgDiv.append($('<div></div>').append(data.statusList[i].status.message));
+                                }
+
+                                pollTaskStatus(taskId, data.statusList[data.statusList.length - 1].timestamp);
+                            } else {
+                                pollTaskStatus(taskId, timestamp);
+                            }
+                        } else {
+                            if (data.statusList && data.statusList.length) {
+                                $progressBar.val(data.statusList.length);
+                                $msgDiv.empty();
+                                for (var i = 0; i < data.statusList.length; i++) {
+                                    $msgDiv.append($('<div></div>').append(data.statusList[i].status.message));
+                                }
+                            }
+                            $progressBar.val(totalLenth);
+                            
+                            $dirArea.show();
+                            $fileEditorArea.show();
+                            $workingIndicatorContainer.hide();
+                            loadDirArea();
+
+                        }
+                    });
+                }, 5000);
+
+            }
+            pollTaskStatus(data.jobId, 0);
+
+
 
         });
     });
@@ -320,9 +419,6 @@ $(function() {
             }
         }
     });
-
-
-
 });
 </script>
 </html>

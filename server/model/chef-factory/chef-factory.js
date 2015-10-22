@@ -10,8 +10,7 @@ function fixPath(path) {
         if (path.length && path.length >= 2) {
             if (path[path.length - 1] == '/') {
                 path = path.slice(0, path.length - 1);
-                console.log('after slicing');
-                console.log(path);
+                
             }
         } else {
             if (path[0] == '/') {
@@ -47,41 +46,60 @@ var ChefFactory = function ChefFactory(chefSettings) {
     this.getCookbookData = function(path, callback) {
         path = fixPath(path);
         var rootDir = chefSettings.userChefRepoLocation + '/cookbooks/';
-        fileIo.isDir(rootDir + path, function(err, dir) {
-            if (err) {
-                callback(err);
-                return;
-            }
-            if (dir) {
-                fileIo.readDir(rootDir, path, function(err, dirList, filesList) {
+        fileIo.exists(rootDir, function(exists) {
+            if (exists) {
+                readDir();
+            } else {
+                fileIo.mkdir(rootDir, function(err, callback) {
                     if (err) {
-                        callback(err);
+                        callback(err, null);
                         return;
                     }
-                    var chefUserName;
-                    if (chefSettings.chefUserName) {
-                        chefUserName = chefSettings.chefUserName;
-                    }
-                    callback(null, {
-                        resType: 'dir',
-                        files: filesList,
-                        dirs: dirList,
-                        chefUserName: chefUserName
-                    });
+                    readDir();
                 });
-            } else { // this is a file
-                fileIo.readFile(rootDir + path, function(err, fileData) {
-                    if (err) {
-                        callback(err);
-                        return;
-                    }
-                    callback(null, {
-                        resType: "file",
-                        fileData: fileData.toString('utf-8')
-                    });
-                })
             }
         });
+
+        function readDir() {
+           
+            fileIo.isDir(rootDir + path, function(err, dir) {
+                if (err) {
+                    callback(err);
+                    return;
+                }
+                
+                if (dir) {
+                    fileIo.readDir(rootDir, path, function(err, dirList, filesList) {
+
+                        if (err) {
+                            callback(err);
+                            return;
+                        }
+                        var chefUserName;
+                        if (chefSettings.chefUserName) {
+                            chefUserName = chefSettings.chefUserName;
+                        }
+                        callback(null, {
+                            resType: 'dir',
+                            files: filesList,
+                            dirs: dirList,
+                            chefUserName: chefUserName
+                        });
+                    });
+                } else { // this is a file
+                    fileIo.readFile(rootDir + path, function(err, fileData) {
+                        if (err) {
+                            callback(err);
+                            return;
+                        }
+                        callback(null, {
+                            resType: "file",
+                            fileData: fileData.toString('utf-8')
+                        });
+                    });
+                }
+            });
+        }
     };
 
     this.saveCookbookFile = function(filePath, fileContent, callback) {
@@ -124,41 +142,56 @@ var ChefFactory = function ChefFactory(chefSettings) {
     this.getRoleData = function(path, callback) {
         path = fixPath(path);
         var rootDir = chefSettings.userChefRepoLocation + '/roles/';
-        fileIo.isDir(rootDir + path, function(err, dir) {
-            if (err) {
-                callback(err);
-                return;
-            }
-            if (dir) {
-                fileIo.readDir(rootDir, path, function(err, dirList, filesList) {
+        fileIo.exists(rootDir, function(exists) {
+            if (exists) {
+                readDir();
+            } else {
+                fileIo.mkdir(rootDir, function(err, callback) {
                     if (err) {
-                        callback(err);
+                        callback(err, null);
                         return;
                     }
-                    var chefUserName;
-                    if (chefSettings.chefUserName) {
-                        chefUserName = chefSettings.chefUserName;
-                    }
-                    callback(null, {
-                        resType: 'dir',
-                        files: filesList,
-                        dirs: dirList,
-                        chefUserName: chefUserName
-                    });
+                    readDir();
                 });
-            } else { // this is a file
-                fileIo.readFile(rootDir + path, function(err, fileData) {
-                    if (err) {
-                        callback(err);
-                        return;
-                    }
-                    callback(null, {
-                        resType: "file",
-                        fileData: fileData.toString('utf-8')
-                    });
-                })
             }
         });
+        function readDir() {
+            fileIo.isDir(rootDir + path, function(err, dir) {
+                if (err) {
+                    callback(err);
+                    return;
+                }
+                if (dir) {
+                    fileIo.readDir(rootDir, path, function(err, dirList, filesList) {
+                        if (err) {
+                            callback(err);
+                            return;
+                        }
+                        var chefUserName;
+                        if (chefSettings.chefUserName) {
+                            chefUserName = chefSettings.chefUserName;
+                        }
+                        callback(null, {
+                            resType: 'dir',
+                            files: filesList,
+                            dirs: dirList,
+                            chefUserName: chefUserName
+                        });
+                    });
+                } else { // this is a file
+                    fileIo.readFile(rootDir + path, function(err, fileData) {
+                        if (err) {
+                            callback(err);
+                            return;
+                        }
+                        callback(null, {
+                            resType: "file",
+                            fileData: fileData.toString('utf-8')
+                        });
+                    })
+                }
+            });
+        }
     };
 
     this.saveRoleFile = function(filePath, fileContent, callback) {
@@ -169,27 +202,28 @@ var ChefFactory = function ChefFactory(chefSettings) {
                     callback(err, null);
                     return;
                 }
-                //extracting cookbook name;
-                var cookbookName = '';
+                // //extracting cookbook name;
+                // var cookbookName = '';
 
-                var indexOfSlash = filePath.indexOf('/');
-                if (indexOfSlash != -1) {
-                    cookbookName = filePath.substring(0, indexOfSlash);
-                }
-                if (cookbookName) {
+                // var indexOfSlash = filePath.indexOf('/');
+                // if (indexOfSlash != -1) {
+                //     cookbookName = filePath.substring(0, indexOfSlash);
+                // }
+                // if (cookbookName) {
 
-                    chef.uploadCookbook(cookbookName, function(err) {
-                        if (err) {
-                            callback(err);
-                        } else {
-                            callback(null);
-                        }
-                    });
-                } else {
-                    callback({
-                        message: "Invalid Cookbook name"
-                    });
-                }
+                //     chef.uploadCookbook(cookbookName, function(err) {
+                //         if (err) {
+                //             callback(err);
+                //         } else {
+                //             callback(null);
+                //         }
+                //     });
+                // } else {
+                //     callback({
+                //         message: "Invalid role name"
+                //     });
+                // }
+                callback(null);
             });
         } else {
             callback({
@@ -217,6 +251,31 @@ var ChefFactory = function ChefFactory(chefSettings) {
         });
     };
 
+    this.downloadFactoryItem = function(itemName, type, callback) {
+        if (type === 'cookbook') {
+            chef.downloadCookbook(itemName, null, function(err) {
+                if (err) {
+                    callback(err);
+                    return;
+                }
+                callback(null);
+            });
+
+        } else if (type === 'role') {
+            chef.downloadRole(itemName, null, function(err) {
+                if (err) {
+                    callback(err);
+                    return;
+                }
+                callback(null);
+            });
+        } else {
+            process.nextTick(function() {
+                callback(null);
+            });
+        }
+    };
+
     this.downloadFactoryItems = function(items, callback) {
         var cookbookCount = 0;
         var roleCount = 0;
@@ -242,7 +301,7 @@ var ChefFactory = function ChefFactory(chefSettings) {
             });
         }
 
-        function downloadRole(roleName, callback) {
+        function downloadRole(roleName) {
             chef.downloadRole(roleName, null, function(err) {
                 roleCount++;
                 if (err) {
@@ -261,7 +320,9 @@ var ChefFactory = function ChefFactory(chefSettings) {
         } else if (roles && roles.length) {
             downloadRole(roles[roleCount]);
         } else {
-            callback(null);
+            process.nextTick(function() {
+                callback(null);
+            });
         }
     };
 

@@ -734,11 +734,11 @@ var Chef = function(settings) {
 
             }
         };
-        var argList = ['cookbook', 'download', cookbookName];
-        if (cookbookDir) {
-            argList.push('-d');
-            argList.push(cookbookDir);
-        }
+        var argList =['download', 'cookbooks/'+cookbookName];
+        // if (false && cookbookDir) {
+        //     argList.push('-d');
+        //     argList.push(cookbookDir);
+        // }
         argList.push('--force');
         //argList.push('--latest');
         var proc = new Process('knife', argList, options);
@@ -767,10 +767,10 @@ var Chef = function(settings) {
             roleName = roleName+'.json';
         }
         var argList = ['download', 'roles/'+roleName];
-        if (roleDir) {
-            argList.push('-d');
-            argList.push(roleDir);
-        }
+        // if (roleDir) {
+        //     argList.push('-d');
+        //     argList.push(roleDir);
+        // }
         argList.push('--force');
         //argList.push('--latest');
         var proc = new Process('knife', argList, options);

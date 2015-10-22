@@ -1,6 +1,7 @@
 var masterUtil = require('_pr/lib/utils/masterUtil.js');
 var ChefFactory = require('_pr/model/chef-factory');
-
+var longJobTracker = require('../model/long-job-tracker');
+var logger = require('_pr/logger')(module);
 
 module.exports.setRoutes = function(app, verificationFunc) {
 
@@ -65,6 +66,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
                 });
                 return;
             }
+            console.log('cookbook ==>',cookbookData);
             res.send(200, cookbookData);
         });
     });
@@ -98,6 +100,23 @@ module.exports.setRoutes = function(app, verificationFunc) {
         });
     });
 
+    app.post('/cheffactory/:serverId/roles/', verificationFunc, function(req, res) {
+        var path = req.body.filePath;
+        var fileContent = req.body.fileContent;
+        var chefFactory = req.chefFactory;
+        chefFactory.saveRoleFile(path, fileContent, function(err) {
+            if (err) {
+                console.log(err);
+                res.send(500, {
+                    message: "Server Behaved Unexpectedly"
+                });
+                return;
+            }
+            res.send(200);
+        });
+    });
+
+
     app.get('/cheffactory/:serverId/factoryItems/', verificationFunc, function(req, res) {
         var path = req.query.path;
         var chefFactory = req.chefFactory;
@@ -115,33 +134,106 @@ module.exports.setRoutes = function(app, verificationFunc) {
     app.post('/cheffactory/:serverId/factoryItems/sync', verificationFunc, function(req, res) {
         var path = req.query.path;
         var chefFactory = req.chefFactory;
-        chefFactory.downloadFactoryItems(req.body, function(err) {
+
+        var cookbookCount = 0;
+        var roleCount = 0;
+        var cookbooks = req.body.cookbooks;
+        var roles = req.body.roles;
+        var jobTracker;
+
+        if (!((cookbooks && cookbooks.length) || (roles && roles.length))) {
+            res.send(400, {
+                message: "cookbooks/roles list is empty"
+            });
+            return;
+        }
+
+
+
+        function downloadCookbook(cookbookName) {
+            chefFactory.downloadFactoryItem(cookbookName, 'cookbook', function(err) {
+                cookbookCount++;
+                var jobStatus;
+                if (err) {
+                    jobStatus = {
+                        itemName: cookbookName,
+                        itemType: 'cookbook',
+                        error: true,
+                        message: "Unable to download cookbook : " + cookbookName
+                    };
+                } else {
+                    jobStatus = {
+                        itemName: cookbookName,
+                        itemType: 'cookbook',
+                        error: false,
+                        message: "Cookbook downloaded : " + cookbookName
+                    };
+                }
+                if (cookbooks.length === cookbookCount) {
+                    if (roles && roles.length) {
+                        jobTracker.updateTaskStatus(jobStatus);
+                        downloadRole(roles[roleCount]);
+                    } else {
+                        jobTracker.endTaskStatus(true, jobStatus);
+                    }
+                } else {
+                    // updating
+                    jobTracker.updateTaskStatus(jobStatus);
+                    downloadCookbook(cookbooks[cookbookCount]);
+                }
+            });
+        }
+
+        function downloadRole(roleName) {
+            chefFactory.downloadFactoryItem(roleName, 'role', function(err) {
+                roleCount++;
+                var jobStatus;
+                if (err) {
+                    jobStatus = {
+                        itemName: roleName,
+                        itemType: 'role',
+                        error: true,
+                        message: "Unable to download role : " + roleName
+                    };
+                } else {
+                    jobStatus = {
+                        itemName: roleName,
+                        itemType: 'role',
+                        error: false,
+                        message: "Role downloaded: " + roleName
+                    };
+                }
+                if (roles.length === roleCount) {
+                    jobTracker.endTaskStatus(true, jobStatus);
+                } else {
+                    jobTracker.updateTaskStatus(jobStatus);
+                    downloadRole(roles[roleCount]);
+                }
+            });
+        }
+
+
+        longJobTracker.getTaskStatus(null, function(err, obj) {
             if (err) {
                 res.send(500, {
-                    message: "Server Behaved Unexpectedly"
+                    message: "unable to initialize Job tracker"
                 });
                 return;
+            }
+            jobTracker = obj;
+            if (cookbooks && cookbooks.length) {
+                downloadCookbook(cookbooks[cookbookCount]);
+            } else if (roles && roles.length) {
+                downloadRole(roles[roleCount]);
             }
             res.send(200, {
-                message: "synced"
+                jobId: jobTracker.getTaskId()
             });
         });
+
+
     });
 
-    app.post('/cheffactory/:serverId/roles/', verificationFunc, function(req, res) {
-        var path = req.body.filePath;
-        var fileContent = req.body.fileContent;
-        var chefFactory = req.chefFactory;
-        chefFactory.saveRoleFile(path, fileContent, function(err) {
-            if (err) {
-                res.send(500, {
-                    message: "Server Behaved Unexpectedly"
-                });
-                return;
-            }
-            res.send(200);
-        });
-    });
-
+    
 
 };

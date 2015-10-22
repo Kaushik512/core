@@ -9,7 +9,7 @@ var ObjectId = require('mongoose').Types.ObjectId;
 var uuid = require('node-uuid');
 var configmgmtDao = require('../model/d4dmasters/configmgmt.js');
 var Chef = require('../lib/chef.js');
-var taskStatusModule = require('../model/taskstatus');
+var taskStatusModule = require('../model/long-job-tracker');
 var waitForPort = require('wait-for-port');
 
 module.exports.setRoutes = function(app, verificationFunc) {
