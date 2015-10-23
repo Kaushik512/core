@@ -42,7 +42,20 @@ Creation of new Databag
     Clicks on Add New Item
     Input the ID name
     Clicks on Save button of list
+    Verfiy DataBag is created
     Capture Screenshot of the page
+    Delete the DataBag
+    Sleep    1s
+
+
+
+Delete the DataBag
+    Click Element    xpath=.//*[@id='dbNameTableTest']/tr/td/a[text()='${DATABAG NAME}']/../div/button[@title='Remove']
+    Sleep    1s
+    Click Element    xpath=.//*[text()='OK']
+
+Verfiy DataBag is created
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Element Should Contain    xpath=.//*[@id='dbNameTableTest']/tr/td/a[text()='${DATABAG NAME}']    ${DATABAG NAME}
 
 
 Select the Chefserver to create databag
