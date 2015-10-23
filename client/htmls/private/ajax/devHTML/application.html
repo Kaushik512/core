@@ -1,18 +1,3 @@
-<style type="text/css">
-input {
-    border: 1px solid #cccccc;
-}
-
-.jarviswidget .widget-body {
-    padding-bottom: 0px !important;
-}
-.spanTextApplication {
-    white-space: nowrap; 
-    width: 10em; 
-    overflow: hidden;
-    text-overflow: ellipsis; 
-}
-</style>
 <div class="tab-pane" id="l6">
     <div class="jarviswidget jarviswidget-color-blueLight" id="wid-id-application" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false" data-widget-fullscreenbutton="false" data-widget-custombutton="false" data-widget-sortable="false">
         <div>
@@ -41,7 +26,7 @@ input {
                 </div>
                 <div class="row">
                     <article class="col-sm-12 col-md-12 col-lg-12">
-                        <div class="widget-body font-size12" id="widgetAppDeploy" style="border-left: 1px solid rgb(221, 221, 221); border-right: 1px solid rgb(221, 221, 221); border-bottom: 1px solid rgb(221, 221, 221);">
+                        <div class="widget-body font-size12" id="widgetAppDeploy" style="">
                             <div class="panel-group smart-accordion-default" id="accordion-AppDeploy">
                             </div>
                             <div id="nodataAppDeploy" style="display:none">
@@ -64,6 +49,72 @@ input {
                         </div>
                     </article>
                 </div>
+                <div class="col-sm-3 col-md-3 col-lg-2 envSpecificAppTemplate" style="display:none">
+                    <div class="envSpecificAppname"><u></u></div>
+                </div>
+
+
+                <div class="col-sm-12 col-md-12 col-lg-12 col-xs-6 no-padding envSpecificAppInstanceUniqueCard padding-right5-mobile" style="display:none">
+                    <div class="panel panel-primary appCard-inner-panel role-Selectedcard-app">
+                        <div class="panel-heading appCard-inner-panel-heading">
+                            <div contenteditable="false" class="domain-roles-icon">
+                              <img class="domain-roles-icon-image" src="img/app-store-icons/Docker.png">
+                            </div>
+                            <div class="appInstanceNameCard">
+                              <span class="appInstanceNameCardSpan"></span>
+                            </div>
+                        </div>
+                        <div class="appCardBody">
+                            <div class="panel-body panel-primary appCardInfo">
+                                <div class="">
+                                    <div class="col-lg-12 col-sm-12 col-xs-12 text-align-center">
+                                      <img src="img/rsz_logo.png">
+                                    </div>
+                                    <div class="col-lg-12 col-sm-12 col-xs-12 paddingtopbottom4 text-align-center">
+                                      <div class="font-size-10">
+                                        <span>Version :</span><span class="versionAppDeploy"></span>
+                                      </div>
+                                    </div>
+                                    <div class="col-lg-12 col-sm-12 col-xs-12 paddingtopbottom4 text-align-center paddingleftright0">
+                                      <div class="font-size-10">
+                                        <span>Last Deploy :</span><span class="lastdeployAppDeploy"></span>
+                                      </div>
+                                    </div>
+                                    <div class="col-lg-12 col-sm-12 col-xs-12" style="display:none">
+                                        <span class="applicationNamePipeline"></span>
+                                        <span class="hostNamePipeline"></span>  
+                                        <span class="applicationNodeIPPipeline"></span>  
+                                        <span class="containerIdPipeline"></span>  
+                                        <span class="applicationTypePipeline"></span>
+                                        <span class="applicationStatusPipeline"></span>
+                                    </div>
+                                </div> 
+                            </div>
+                            <div class="panel-footer clearfix appCard-inner-panel-footer">
+                                <div class="col-lg-12 col-sm-12 col-xs-12 appCard-panel-foot-actiondiv">
+                                    <div class="col-lg-4 col-sm-4 col-xs-4 appCard-panel-foot-actionchildfirstDiv">
+                                        <!-- <a class="btn btn-primary btn-sm width27borderradius50 padding3" data-toggle="modal" href="#modalDetailsAppDeploy">
+                                            <i class="fa fa-th font-size-12"> </i> 
+                                        </a>  -->
+                                    </div>
+                                    <div class="col-lg-4 col-sm-4 col-xs-4 appCard-panel-foot-actionchildsecondDiv">
+                                        <!-- <a class="btn btn-primary btn-sm width27borderradius50" data-toggle="modal" href="#modalAppCardLogDetails" data-actiontype="start" rel="tooltip" data-placement="top" data-original-title="Logs info">
+                                            <i class="fa fa-info font-size-14"> </i>
+                                        </a> -->
+                                    </div>
+                                    <div class="col-lg-4 col-sm-4 col-xs-4 appCard-panel-foot-actionchildthirdDiv">
+                                        <!-- <a class="btn btn-primary btn-sm width27borderradius50" data-toggle="modal" href="#modalUpgradeAppDeploy" data-actiontype="start" rel="tooltip" data-placement="top" data-original-title="Upgrade">
+                                            <i class="fa fa-upload font-size-12"> </i>
+                                        </a> -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
                 <div class="row loadingAppDeploySpinner">
                     <article class="col-sm-12 col-md-12 col-lg-12">
                         <img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif"/>
@@ -82,59 +133,129 @@ input {
                               <span style="float:left;padding:0px !important;color:#666 !important;font-size:13px !important" class="envAppDeployName"></span>
                               <!-- <span style="font-weight:600;font-size:12px;color:rgb(102, 102, 102);" class="envAppDeployName"></span> -->
                             </h4>
+                            <!-- <span class="pull-right swap-view">
+                                <a class="btn1" id="defaultViewButton" style="" onclick="showHideControl(this.id)"> <i class="fa fa-th fa-2x txt-color-deactive font-size18" title="Card View" /></a>&nbsp;
+                                <a id="instanceview" class="btn1" onclick="showHideControl(this.id)"> <i class="fa fa-align-justify fa-2x txt-color-deactive font-size18" title="Table View" /></a>
+                            </span> -->
+                            <span class="pull-right margintopright8">                                    
+                                <a onclick="showHideControlApplication(this.id)" id="defaultViewButtonAppCard" class="btn1" rel="tooltip" data-placement="top" data-original-title="Pipeline View"> 
+                                    <i style="font-size:18px" class="fa fa-th fa-2x txt-color-active"></i>
+                                </a>&nbsp;
+                                <a onclick="showHideControlApplication(this.id)" class="btn1" id="instanceviewAppCard" rel="tooltip" data-placement="top" data-original-title="Table View"> 
+                                    <i style="font-size:18px" class="fa fa-align-justify fa-2x txt-color-deactive"></i>
+                                </a>
+                                <a href="#modalappcardConfigure" data-toggle="modal" class="createAppConfigure btn btn-primary" style="margin-top:-5px" rel="tooltip" data-placement="top" data-original-title="Configure Application">
+                                    <b><i class="fa fa-th fa-bullseye txt-color-active" style="font-size:13px;color:rgb(255, 255, 255);margin-right:5px;"></i>Configure</b>
+                                </a>
+                            </span>
                         </div>
-                        <div id="collapseAppEnv1" class="panel-collapse collapse in envAppDeployAccordian" style="padding: 5px;overflow-x: auto;min-height:300px">
-                            <div class="table-responsive table-div">
-                                <table id="tableappDeploydetails" class="table table-striped table-bordered table-hover dataTable envAppDeployTable" style="border:1px solid #eeeeee !important; text-align:center;font-size:12px;margin-top:45px;" width="100%" cellpadding="5px">
-                                    <thead>
-                                        <tr class="rowCustomStyle" style="font-weight:bold;">
-                                            <!-- <td style="color:#fff;background-color: #2c3742;">S.No.</td> -->
-                                            <td style="color:#fff;background-color: #2c3742;">App</td>
-                                            <td style="color:#fff;background-color: #2c3742;">App-Instance</td>
-                                            <td style="color:#fff;background-color: #2c3742;">Version</td>
-                                            <td style="color:#fff;background-color: #2c3742;">Host</td>
-                                            <td style="color:#fff;background-color: #2c3742;">Node IP</td>
-                                            <td style="color:#fff;background-color: #2c3742;">Last Deploy</td>
-                                            <td style="color:#fff;background-color: #2c3742;">Container ID</td>
-                                            <td style="color:#fff;background-color: #2c3742;">Application Type</td>
-                                            <td style="color:#fff;background-color: #2c3742;">Status</td>
-                                            <td style="color:#fff;background-color: #2c3742;">Logs</td>
-                                            <td style="color:#fff;background-color: #2c3742;">Upgrade</td>
-                                            <!-- <td style="color:#fff;background-color: #2c3742;">App Links</td>
-                                        <td style="color:#fff;background-color: #2c3742;">Action</td> -->
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                    </tbody>
-                                </table>
+                        <div id="divapplicationtableview">
+                            <div id="collapseAppEnv1" class="panel-collapse collapse in envAppDeployAccordian" style="padding: 5px;overflow-x: auto;min-height:300px">
+                                <div class="table-responsive table-div">
+                                    <table id="tableappDeploydetails" class="table table-striped table-bordered table-hover dataTable envAppDeployTable" style="border:1px solid #eeeeee !important; text-align:center;font-size:12px;margin-top:45px;" width="100%" cellpadding="5px">
+                                        <thead>
+                                            <tr class="rowCustomStyle" style="font-weight:bold;">
+                                                <!-- <td style="color:#fff;background-color: #2c3742;">S.No.</td> -->
+                                                <td style="color:#fff;background-color: #2c3742;">App</td>
+                                                <td style="color:#fff;background-color: #2c3742;">App-Instance</td>
+                                                <td style="color:#fff;background-color: #2c3742;">Version</td>
+                                                <td style="color:#fff;background-color: #2c3742;">Host</td>
+                                                <td style="color:#fff;background-color: #2c3742;">Node IP</td>
+                                                <td style="color:#fff;background-color: #2c3742;">Last Deploy</td>
+                                                <td style="color:#fff;background-color: #2c3742;">Container ID</td>
+                                                <td style="color:#fff;background-color: #2c3742;">Application Type</td>
+                                                <td style="color:#fff;background-color: #2c3742;">Status</td>
+                                                <td style="color:#fff;background-color: #2c3742;">Logs</td>
+                                                <td style="color:#fff;background-color: #2c3742;">Upgrade</td>
+                                                <!-- <td style="color:#fff;background-color: #2c3742;">App Links</td>
+                                            <td style="color:#fff;background-color: #2c3742;">Action</td> -->
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="table-responsive table-div fornNoDataDiv" style="display:none">
+                                    <table id="tableappDeploydetailsforNoData" class="table table-striped table-bordered table-hover dataTable" style="border:1px solid #eeeeee !important; text-align:center;font-size:12px;margin-top:45px;" width="100%" cellpadding="5px">
+                                        <thead>
+                                            <tr class="rowCustomStyle" style="font-weight:bold;">
+                                                <!-- <td style="color:#fff;background-color: #2c3742;">S.No.</td> -->
+                                                <td style="color:#fff;background-color: #2c3742;">App</td>
+                                                <td style="color:#fff;background-color: #2c3742;">App-Instance</td>
+                                                <td style="color:#fff;background-color: #2c3742;">Version</td>
+                                                <td style="color:#fff;background-color: #2c3742;">Host</td>
+                                                <td style="color:#fff;background-color: #2c3742;">Node IP</td>
+                                                <td style="color:#fff;background-color: #2c3742;">Last Deploy</td>
+                                                <td style="color:#fff;background-color: #2c3742;">Container ID</td>
+                                                <td style="color:#fff;background-color: #2c3742;">Application Type</td>
+                                                <td style="color:#fff;background-color: #2c3742;">Status</td>
+                                                <td style="color:#fff;background-color: #2c3742;">Logs</td>
+                                                <td style="color:#fff;background-color: #2c3742;">Upgrade</td>
+                                                <!-- <td style="color:#fff;background-color: #2c3742;">App Links</td>
+                                            <td style="color:#fff;background-color: #2c3742;">Action</td> -->
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
-                            <div class="table-responsive table-div fornNoDataDiv" style="display:none">
-                                <table id="tableappDeploydetailsforNoData" class="table table-striped table-bordered table-hover dataTable" style="border:1px solid #eeeeee !important; text-align:center;font-size:12px;margin-top:45px;" width="100%" cellpadding="5px">
-                                    <thead>
-                                        <tr class="rowCustomStyle" style="font-weight:bold;">
-                                            <!-- <td style="color:#fff;background-color: #2c3742;">S.No.</td> -->
-                                            <td style="color:#fff;background-color: #2c3742;">App</td>
-                                            <td style="color:#fff;background-color: #2c3742;">App-Instance</td>
-                                            <td style="color:#fff;background-color: #2c3742;">Version</td>
-                                            <td style="color:#fff;background-color: #2c3742;">Host</td>
-                                            <td style="color:#fff;background-color: #2c3742;">Node IP</td>
-                                            <td style="color:#fff;background-color: #2c3742;">Last Deploy</td>
-                                            <td style="color:#fff;background-color: #2c3742;">Container ID</td>
-                                            <td style="color:#fff;background-color: #2c3742;">Application Type</td>
-                                            <td style="color:#fff;background-color: #2c3742;">Status</td>
-                                            <td style="color:#fff;background-color: #2c3742;">Logs</td>
-                                            <td style="color:#fff;background-color: #2c3742;">Upgrade</td>
-                                            <!-- <td style="color:#fff;background-color: #2c3742;">App Links</td>
-                                        <td style="color:#fff;background-color: #2c3742;">Action</td> -->
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                    </tbody>
-                                </table>
+                        </div>
+                        <div id="divapplicationcardview">
+                            <div class="col-sm-12 col-md-12 col-lg-12 stageContainer">
+                                <!-- <div class="col-sm-3 col-md-3 col-lg-2 envSpecificAppTemplate">
+                                    <div class="envSpecificAppname"><u>QA</u></div>
+                                </div> -->
                             </div>
                         </div>
                     </div>
                 </div>
+
+                <div class="modal fade" id="modalappcardConfigure" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                          <form role="form" id="appCardForm" autocomplete="off">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                    X
+                                </button>
+                                <h4 class="modal-title">
+                                    <i class="fa fa-th-list txt-color-blue"></i>&nbsp;&nbsp;Configure Application Pipeline View
+                                </h4>
+                            </div>
+                            <div class="modal-body">
+                              <form id="formconfigureapplication">
+                                <table class="table table-bordered" cellpadding="5px" width="100%" id="tableconfigureapplication">
+                                    <thead>
+                                        <tr style="background-color: #2c3742;color: #fff;">
+                                            <th>Stages/Environments</th>
+                                            <th>Active</th>
+                                            <th>UP/DOWN</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                              </form>
+                            </div>
+                             <div class="modal-footer">
+                                <div class="btn-group" style="margin-left:200px;">                                 
+                                 <a class="btn btn-primary appdeployConfigureSaveBtn">
+                                    <i class="ace-icon fa fa-save bigger-110"></i>
+                                    Save
+                                </a>
+                                <a style="margin-left:10px;" class="btn btn-primary" data-dismiss="modal">
+                                    <i class="ace-icon fa fa-undo bigger-110"></i>
+                                    Cancel
+                                </a>
+                                </div>
+                              </div>
+                             </form>
+                        </div><!-- /.modal-content -->
+                    </div><!-- /.modal-dialog -->
+                </div>
+
+
                 <div class="modal fade" id="modalAppCardDetails" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
                     <div class="modal-dialog">
                         <div class="modal-content">
@@ -214,6 +335,81 @@ input {
                             </form>
                         </div>
                     </div>
+                </div>
+                <div class="modal fade" id="modalDetailsAppDeploy" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                          <form role="form" id="" autocomplete="off">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                    X
+                                </button>
+                                <h4 class="modal-title">
+                                    <i class="fa fa-th-list txt-color-blue"></i>&nbsp;&nbsp;Details
+                                </h4>
+                            </div>
+                           
+                            <div class="modal-body">
+                                <div class="">
+                                    <table class="table table-bordered" cellpadding="5px" width="100%" id="">
+                                        <thead>
+                                            <tr style="background-color: #2c3742;color: #fff;">
+                                                <th>Application Details</th>
+                                                <th>Application Values</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Application Name :</td>
+                                                <td class="appNameModal"></td>
+                                            </tr>
+                                            <tr>
+                                                <td>App-Instance Name :</td>
+                                                <td class="appInstanceNameModal"></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Version :</td>
+                                                <td class="versionModal"></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Host :</td>
+                                                <td class="hostNameModal"></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Node IP :</td>
+                                                <td class="nodeIpModal"></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Last Deploy :</td>
+                                                <td class="lastDeployModal"></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Container ID :</td>
+                                                <td class="containerIdModal"></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Application Type :</td>
+                                                <td class="applicationTypeModal"></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Status :</td>
+                                                <td class="statusModal"></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                             <div class="modal-footer">
+                                <div class="btn-group" style="margin-left:200px;">                                
+                                <a style="margin-left:10px;" class="btn btn-primary" data-dismiss="modal">
+                                    <i class="ace-icon fa fa-undo bigger-110"></i>
+                                    Cancel
+                                </a>
+                                </div>
+                              </div>
+                             </form>
+                        </div><!-- /.modal-content -->
+                    </div><!-- /.modal-dialog -->
                 </div>
                 <div class="modal fade" id="modalAppCardLogDetails" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
                     <div class="modal-dialog">
@@ -406,24 +602,484 @@ input {
 </div>
 <script type="text/javascript">
 $(document).ready(function() {
-    // $('#chooseNexusServer').select2();
-    // $('#chooseRepository').select2();
-    // $('#chooseArtifacts').select2();
-    // $('#chooseVersions').select2();
-    // $('#chooseRundeckProject').select2();
-    // $('#chooseEnvironment').select2();
-
-
-
-    // $('#chooseApplication').select2();
-    //debugger;
-    //getDropdownList();
     getAllApplicationData();
-    // getAllApplicationData(function(data){
-    //   constructUI(data);
-    // });
+    getAllPipelineApplicationData();
+    $("#divapplicationtableview").hide();
+});
+function getAllPipelineApplicationData() {
+    var projectId = urlParams.projid;
+    var envNameSelected = "";
+    $.get('/app/deploy/pipeline/project/' + projectId, function(dataPipeline) {
+        if (dataPipeline.length) {
+            getenvName(function(envName) {
+                envNameSelected = envName;
+                for (var i = 0; i < dataPipeline[0].envId.length; i++) {
+                    var envUniqueText = dataPipeline[0].envId[i];
+                    var $pipelineArea = createPipelineArea(envUniqueText, envNameSelected, projectId);
+                }
+            });
+        }
+    }).fail(function() {});
+}
+
+function createAttribTableRowFromJson(attributes) {
+    var $chefRunModalContainer = $('#chefRunModalContainer')
+    var $tbody = $chefRunModalContainer.find('.attributesViewTableBody').empty();
+    for (var j = 0; j < attributes.length; j++) {
+        var attributeObj = attributes[j].jsonObj;
+
+        function getVal(obj, currentKey) {
+            var keys = Object.keys(obj);
+            for (var i = 0; i < keys.length; i++) {
+                if (typeof obj[keys[i]] === 'object') {
+                    getVal(obj[keys[i]], currentKey + '/' + keys[i]);
+                } else {
+                    var keyString = currentKey + '/' + keys[i];
+                    keyString = keyString.substring(1);
+
+                    var $tr = $('<tr/>').attr({
+                        'data-attributeKey': keyString,
+                        'data-attributeValue': obj[keys[i]],
+                        'data-attributeName': attributes[j].name
+                    }).data('jsonObj', attributes[j].jsonObj);;
+
+                    var passwordField = false;
+                    var passwordField = false;
+                    var keyParts = keyString.split('/');
+                    if (keyParts.length) {
+                        var indexOfPassword = keyParts[keyParts.length - 1].indexOf('password_');
+                        if (indexOfPassword !== -1) {
+                            passwordField = true;
+                        }
+                    }
+
+                    var $tdAttributeKey = $('<td/>').html(attributes[j].name);
+                    if (passwordField) {
+                        var $tdAttributeVal = $('<td/>').html("*****");
+                    } else {
+                        var $tdAttributeVal = $('<td/>').html(obj[keys[i]]);
+                    }
+                    $tr.append($tdAttributeKey).append($tdAttributeVal);
+                    $tbody.append($tr);
+                }
+            }
+        }
+        getVal(attributeObj, '');
+    }
+}
+$('.createAppConfigure').click(function() {
+    var selectedEnvironments = [];
+    var allEnvironments = [];
+    var $tableconfigureapplication = $('#tableconfigureapplication');
+    var $tbody = $tableconfigureapplication.find('tbody').empty();
+    var projectId = urlParams.projid;
+    $.ajax({
+        url: '/app/deploy/pipeline/project/' + projectId,
+        type: "GET",
+        async: true,
+        success: function(dataPipeline) {
+            if (dataPipeline.length) {
+                for (var i = 0; i < dataPipeline[0].envId.length; i++) {
+                    selectedEnvironments.push(dataPipeline[0].envId[i]);
+                }
+                for (var i = 0; i < dataPipeline[0].envSequence.length; i++) {
+                    allEnvironments.push(dataPipeline[0].envSequence[i]);
+                }
+                if (selectedEnvironments.length == 0) {
+                    $.get('/d4dMasters/project/' + projectId, function(dataforenvName) {
+                        var individualenvName = dataforenvName[0].environmentname;
+                        individualenvName = individualenvName.split(",");
+                        for (var i = 0; i < individualenvName.length; i++) {
+                            var checked = "";
+                            if ($.inArray(individualenvName[i], selectedEnvironments) > -1) {
+                                checked = "checked";
+                            }
+                            var $tr = $('<tr/>').attr({
+                                'data-configureApplication': individualenvName[i]
+                            });
+                            var $tdenvName = $('<td class="configAppDeployUniqueName"/>').html(individualenvName[i]);
+                            var $tdActive = $('<td/>').html("<div class='iphone-toggle-buttons'><ul style='padding: 0px; margin: 0px;list-style-type: none;'><li><label for='checkbox-" + i + "'><input type='checkbox' class='appDeployCheckboxOrder' name='checkbox-" + i + "' id='checkbox-" + i + "' " + checked + " /><span></span></label></li></ul></div>");
+                            var $tdupdown = $('<td/>').html("<a class='btn btn-default btn-primary up' style='border-radius:50%;height:27px;width:27px;padding-top:0px' type='button'><i style='font-size:12px;margin-left:-5px;margin-top:5px;' class='fa  fa-chevron-up'></i></a><a class='btn btn-default btn-primary down' style='border-radius:50%;height:27px;width:27px;padding-top:0px;margin-left:10px' type='button'><i style='font-size:12px;margin-left:-5px;margin-top:5px;' class='fa  fa-chevron-down'></i></a>");
+                            $tr.append($tdenvName).append($tdActive).append($tdupdown);
+                            $tbody.append($tr);
+                        }
+                        $tableconfigureapplication.append($tbody);
+                        $tableconfigureapplication.find(".up,.down").click(function() {
+                            var row = $(this).parents("tr:first");
+                            if ($(this).is(".up")) {
+                                row.insertBefore(row.prev());
+                            } else {
+                                row.insertAfter(row.next());
+                            }
+                        });
+                    });
+                } else {
+                    for (var i = 0; i < allEnvironments.length; i++) {
+                        var checked = "";
+                        if ($.inArray(allEnvironments[i], selectedEnvironments) > -1) {
+                            checked = "checked";
+                        }
+                        var $tr = $('<tr/>').attr({
+                            'data-configureApplication': allEnvironments[i]
+                        });
+                        var $tdenvName = $('<td class="configAppDeployUniqueName"/>').html(allEnvironments[i]);
+                        var $tdActive = $('<td/>').html("<div class='iphone-toggle-buttons'><ul style='padding: 0px; margin: 0px;list-style-type: none;'><li><label for='checkbox-" + i + "'><input type='checkbox' class='appDeployCheckboxOrder' name='checkbox-" + i + "' id='checkbox-" + i + "' " + checked + " /><span></span></label></li></ul></div>");
+                        var $tdupdown = $('<td/>').html("<a class='btn btn-default btn-primary up' style='border-radius:50%;height:27px;width:27px;padding-top:0px' type='button'><i style='font-size:12px;margin-left:-5px;margin-top:5px;' class='fa  fa-chevron-up'></i></a><a class='btn btn-default btn-primary down' style='border-radius:50%;height:27px;width:27px;padding-top:0px;margin-left:10px' type='button'><i style='font-size:12px;margin-left:-5px;margin-top:5px;' class='fa  fa-chevron-down'></i></a>");
+                        $tr.append($tdenvName).append($tdActive).append($tdupdown);
+                        $tbody.append($tr);
+                    }
+                    $tableconfigureapplication.append($tbody);
+                    $tableconfigureapplication.find(".up,.down").click(function() {
+                        var row = $(this).parents("tr:first");
+                        if ($(this).is(".up")) {
+                            row.insertBefore(row.prev());
+                        } else {
+                            row.insertAfter(row.next());
+                        }
+                    });
+                }
+            }
+        },
+        error: function() {}
+    });
 });
 
+function createPipelineArea(envName,selectedEnv,projectId){
+    var $stageContainer = $('.stageContainer');
+    var $envSpecificAppTemplate = $('.envSpecificAppTemplate');
+
+    var $clonePipeline = $envSpecificAppTemplate.clone(true);
+    var id = envName+'_pipeLine';
+    $clonePipeline.attr('id',id);
+    $clonePipeline.css({display:'block'});
+    $clonePipeline.addClass('newEnvSpecificAppTemplate').removeClass('envSpecificAppTemplate');
+
+    $clonePipeline.find('.envSpecificAppname u').html(envName);
+    $stageContainer.append($clonePipeline);
+    $.ajax({
+        url: '/app/deploy/env/' + envName + '/project/' + projectId + '/list',
+        type: "GET",
+        async: true,
+        success: function(data) {
+            constructPipelineUI(data, id);
+            if (envName != selectedEnv) {
+                $('#'+id).children().css({
+                    'opacity': '0.5'
+                });
+                $('#'+id).children().bind('click', function() {
+                    return false;
+                });
+            }
+        },
+        error: function() {
+
+        }
+    });
+    return $clonePipeline;
+}
+
+function constructPipelineUI(data, $clonePipeline) {
+    $('.loadingAppDeploySpinner').hide();
+    for (var i = 0; i < data.length; i++) {
+        var $envSpecificAppInstanceUniqueCard = $('.envSpecificAppInstanceUniqueCard');
+
+        var $cloneAppInstanceUniqueCard = $envSpecificAppInstanceUniqueCard.clone(true);
+        $cloneAppInstanceUniqueCard.css({display:'block'});
+        $cloneAppInstanceUniqueCard.addClass('newEnvSpecificAppInstanceUniqueCard').removeClass('envSpecificAppInstanceUniqueCard');
+        
+        if (data[i].projectId) {
+            //Application Type as Image in Card.
+            if (!data[i].applicationType) {
+                data[i].applicationType = "NA";
+            }
+            if(data[i].applicationType == 'Package'){
+                var loc = 'img/package.png';
+                $cloneAppInstanceUniqueCard.find('.domain-roles-icon img').attr("src",loc);
+            }else if(data[i].applicationType == 'Docker'){newEnvSpecificAppTemplate
+                var loc = 'img/app-store-icons/Docker.png';
+                $cloneAppInstanceUniqueCard.find('.domain-roles-icon img').attr("src",loc);
+            }else if(data[i].applicationType == 'NA'){
+                var loc = 'img/blank.png';
+                $cloneAppInstanceUniqueCard.find('.domain-roles-icon img').attr("src",loc);
+            }
+
+            //Application Instance Name in Card.
+            if (!data[i].applicationInstanceName) {
+                if (data[i].hostName) {
+                    data[i].applicationInstanceName = data[i].hostName;
+                } else {
+                    data[i].applicationInstanceName = "NA";
+                }
+            }
+            var $appInstanceNameCardSpan = $cloneAppInstanceUniqueCard.find('.appInstanceNameCardSpan');
+            $appInstanceNameCardSpan.html(data[i].applicationInstanceName);
+
+            //Application Version in Card
+            if (!data[i].applicationVersion) {
+                data[i].applicationVersion = "NA";
+            }
+            var $appInstanceVersionCardSpan = $cloneAppInstanceUniqueCard.find('.versionAppDeploy');
+            $appInstanceVersionCardSpan.html(data[i].applicationVersion);
+
+
+            //Application Last Deploy in Card
+            if (!data[i].applicationLastDeploy) {
+                data[i].applicationLastDeploy = "NA";
+            }
+            var applicationLastDeployTime = data[i].applicationLastDeploy;
+            if ((applicationLastDeployTime.toLowerCase().indexOf("am") > -1) || (applicationLastDeployTime.toLowerCase().indexOf("pm") > -1)) {
+                applicationLastDeployTime = applicationLastDeployTime;
+            } else {
+                applicationLastDeployTime = getLocaleTime(applicationLastDeployTime);
+            }
+            var $appInstanceLastDeployCardSpan = $cloneAppInstanceUniqueCard.find('.lastdeployAppDeploy');
+            $appInstanceLastDeployCardSpan.html(applicationLastDeployTime);
+
+
+            //Application appName in Card
+            if (!data[i].applicationName) {
+                data[i].applicationName = "NA";
+            }
+            var $appInstanceApplicationNameCardSpan = $cloneAppInstanceUniqueCard.find('.applicationNamePipeline');
+            $appInstanceApplicationNameCardSpan.html(data[i].applicationName);
+
+             //Application Hostname in Card
+            if (!data[i].hostName) {
+                data[i].hostName = "NA";
+            }
+            var $appInstanceHostNameCardSpan = $cloneAppInstanceUniqueCard.find('.hostNamePipeline');
+            $appInstanceHostNameCardSpan.html(data[i].hostName);
+
+
+            //Application  Node IP in Card
+            if (!data[i].applicationNodeIP) {
+                data[i].applicationNodeIP = "NA";
+            }
+            var $appInstanceNodeIpCardSpan = $cloneAppInstanceUniqueCard.find('.applicationNodeIPPipeline');
+            $appInstanceNodeIpCardSpan.html(data[i].applicationNodeIP);
+
+
+            //Application ContainerId in Card
+            if (!data[i].containerId) {
+                data[i].containerId = "NA";
+            }
+            var $appInstanceContainerIdCardSpan = $cloneAppInstanceUniqueCard.find('.containerIdPipeline');
+            $appInstanceContainerIdCardSpan.html(data[i].containerId);
+
+
+            //Application type in Card
+            if (!data[i].applicationType) {
+                data[i].applicationType = "NA";
+            }
+            var $appInstanceApplicationTypeCardSpan = $cloneAppInstanceUniqueCard.find('.applicationTypePipeline');
+            $appInstanceApplicationTypeCardSpan.html(data[i].applicationType);
+
+
+            //Application Status in Card
+            if (!data[i].applicationStatus) {
+                data[i].applicationStatus = "NA";
+            }
+            var $appInstanceApplicationStatusCardSpan = $cloneAppInstanceUniqueCard.find('.applicationStatusPipeline');
+            $appInstanceApplicationStatusCardSpan.html(data[i].applicationStatus);
+
+            //Application Details in Card
+            var detailsAppDeploy;
+            if (!data[i]._id) {
+                detailsAppDeploy = "NA";
+            } else {
+                detailsAppDeploy = '<a class="btn btn-primary btn-sm width27borderradius50 moreinfoDetailsPipeline padding3"><i class="fa fa-th font-size-12"></i></a>';
+                // data-toggle="modal" href="#modalAppCardLogDetails" data-actiontype="start" rel="tooltip" data-placement="top" data-original-title="Logs info"
+                //logsAppDeploy = '<a class="moreinfoAppDeploy" id=' + data[i]._id + ' title="Logs Info" style="margin-left:27%"></a>';
+            }
+            var $appInstancelogsAppDeployCardSpan = $cloneAppInstanceUniqueCard.find('.appCard-panel-foot-actionchildfirstDiv');
+            $appInstancelogsAppDeployCardSpan.append(detailsAppDeploy);
+            
+
+            //Application Logs Deploy in Card
+            var logsAppDeploy;
+            if (!data[i]._id) {
+                logsAppDeploy = "NA";
+            } else {
+                logsAppDeploy = '<a class="btn btn-primary btn-sm width27borderradius50 moreinfoAppDeployPipeline padding4" id=' + data[i]._id + ' title="Logs Info"><i class="fa fa-info font-size-14"></i></a>';
+                // data-toggle="modal" href="#modalAppCardLogDetails" data-actiontype="start" rel="tooltip" data-placement="top" data-original-title="Logs info"
+                //logsAppDeploy = '<a class="moreinfoAppDeploy" id=' + data[i]._id + ' title="Logs Info" style="margin-left:27%"></a>';
+            }
+            var $appInstancelogsAppDeployCardSpan = $cloneAppInstanceUniqueCard.find('.appCard-panel-foot-actionchildsecondDiv');
+            $appInstancelogsAppDeployCardSpan.append(logsAppDeploy);
+
+            //Application Upgrade in Card
+            var upgradeAppDeploy;
+            if (!data[i]._id) {
+                upgradeAppDeploy = "NA";
+            } else {
+                upgradeAppDeploy = '<a class="btn btn-primary btn-sg tableactionbutton width27borderradius50 moreinfoUpgradePipelineAppDeploy padding2" title="Upgrade"><i class="ace-icon fa fa-upload bigger-120"></i></a>';
+                // data-actiontype="start" rel="tooltip" data-placement="top" data-original-title="Upgrade"
+            }
+            var $appInstanceUpgardeCardSpan = $cloneAppInstanceUniqueCard.find('.appCard-panel-foot-actionchildthirdDiv');
+            $appInstanceUpgardeCardSpan.append(upgradeAppDeploy);
+        }
+        $('#'+$clonePipeline).append($cloneAppInstanceUniqueCard);
+    }
+}
+
+
+var $stageContainer = $('.stageContainer');
+$stageContainer.on('click', '.moreinfoDetailsPipeline', moreinfoDetailsPipelineClickHandler);
+$stageContainer.on('click', '.moreinfoAppDeployPipeline', moreInfoAppDeployPipelineClickHandler);
+$stageContainer.on('click', '.moreinfoUpgradePipelineAppDeploy', moreInfoUpgradeAppDeployPipelineClickHandler);
+$('.appdeployConfigureSaveBtn').click(function(){
+    var $tableconfigureapplication = $('#tableconfigureapplication');
+    var projectId = urlParams.projid;
+    var envNameSelected = "";
+    $('.stageContainer').empty();
+    var configureEnvArray = [];
+    var configureEnvArraySequence = [];
+    
+    $tableconfigureapplication.find('tbody tr').each(function() {
+        $tr = $(this);
+        var envUniqueTextAllEnv = $tr.find('.configAppDeployUniqueName').text();
+        configureEnvArraySequence.push(envUniqueTextAllEnv);
+    });
+
+    
+
+    $tableconfigureapplication.find('tbody tr').filter(':has(:checkbox:checked)').each(function() {
+        var $tr = $(this);
+        var envUniqueText = $tr.find('.configAppDeployUniqueName').text();
+        configureEnvArray.push(envUniqueText);
+    });
+
+    
+    getenvName(function(envName) {
+        envNameSelected = envName;
+        configureEnvArray.forEach(function(envUniqueText) {
+            $.ajax({
+                url: '/app/deploy/env/' + envUniqueText + '/project/' + projectId + '/list',
+                type: "get",
+                async: true,
+                success: function(data) {
+                    createPipelineArea(envUniqueText, envNameSelected, projectId);
+                    //constructPipelineUI(data, envUniqueText, envNameSelected);
+                },
+                error: function() {}
+            });
+        });
+    });
+    var dataDeployPipeline = {
+        "appDeployPipelineData": {
+            "loggedInUser": "",
+        }
+    };
+    var projectId = urlParams.projid;
+    dataDeployPipeline.appDeployPipelineData.projectId = projectId;
+    dataDeployPipeline.appDeployPipelineData.envId = configureEnvArray;
+    dataDeployPipeline.appDeployPipelineData.envSequence = configureEnvArraySequence;
+    $.ajax({
+        url: '/app/deploy/data/pipeline/configure',
+        data: JSON.stringify(dataDeployPipeline),
+        type: 'POST',
+        contentType: "application/json",
+        success: function(data) {
+            $('#modalappcardConfigure').modal('hide');
+        },
+        error: function(jqxhr) {
+            $('#modalappcardConfigure').modal('hide');
+        }
+    });
+});
+
+function moreinfoDetailsPipelineClickHandler(e){
+    var $modal = $('#modalDetailsAppDeploy');
+    // var $logContainer = $modal.find('.logsForAppDeploy').show();
+    // $logContainer.empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
+    var applicationNamePipelineText = $(this).parents().eq(5).find('.applicationNamePipeline').html();
+    $modal.find('.appNameModal').html(applicationNamePipelineText);
+
+    var appInstanceNameCardSpanText = $(this).parents().eq(5).find('.appInstanceNameCardSpan').html();
+    $modal.find('.appInstanceNameModal').html(appInstanceNameCardSpanText);
+
+    var versionAppDeployText = $(this).parents().eq(5).find('.versionAppDeploy').html();
+    $modal.find('.versionModal').html(versionAppDeployText);
+
+    var hostNamePipelineText = $(this).parents().eq(5).find('.hostNamePipeline').html();
+    $modal.find('.hostNameModal').html(hostNamePipelineText);
+
+    var applicationNodeIPPipelineText = $(this).parents().eq(5).find('.applicationNodeIPPipeline').html();
+    $modal.find('.nodeIpModal').html(applicationNodeIPPipelineText);
+
+    var lastdeployAppDeployText = $(this).parents().eq(5).find('.lastdeployAppDeploy').html();
+    $modal.find('.lastDeployModal').html(lastdeployAppDeployText);
+
+    var containerIdPipelineText = $(this).parents().eq(5).find('.containerIdPipeline').html();
+    $modal.find('.containerIdModal').html(containerIdPipelineText);
+
+    var applicationTypePipelineText = $(this).parents().eq(5).find('.applicationTypePipeline').html();
+    $modal.find('.applicationTypeModal').html(applicationTypePipelineText);
+
+    var applicationStatusPipelineText = $(this).parents().eq(5).find('.applicationStatusPipeline').html();
+    $modal.find('.statusModal').html(applicationStatusPipelineText);
+
+    $modal.modal('show');
+}
+function moreInfoAppDeployPipelineClickHandler(e) {
+    var $modal = $('#modalAppCardLogDetails');
+    var $logContainer = $modal.find('.logsForAppDeploy').show();
+    $logContainer.empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
+    $.ajax({
+        url: '/app/deploy/' + this.id + '/logs',
+        type: 'GET',
+        contentType: "application/json",
+        success: function(data) {
+            var datahttp = data.indexOf("http://");
+            if (datahttp == 0) {
+                $logContainer.empty();
+                window.open(data, "_blank");
+            } else {
+                $logContainer.empty();
+                $modal.modal('show');
+                data = data.replace(/,/g, "<br />");
+                $logContainer.append(data);
+            }
+        },
+        error: function(jqxhr) {
+            $logContainer.empty();
+            $modal.modal('show');
+            $logContainer.append('No Logs Available');
+        },
+        failure: function(data) {
+
+        }
+    });
+}
+
+function moreInfoUpgradeAppDeployPipelineClickHandler(e) {
+    $('#formUpgradeAppDeploy')[0].reset();
+    $('.containerClass').hide();
+    resetSpinners();
+    var upgradeAppNameText = $(this).parents().eq(5).find('.applicationNamePipeline').html();
+    var upgradeNodeIpText = $(this).parents().eq(5).find('.applicationNodeIPPipeline').html();
+    var containerId = $(this).parents().eq(5).find('.containerIdPipeline').html();
+    if (!containerId) {
+        containerId = "NA";
+    }
+    $("#upgradeAppName").html(upgradeAppNameText);
+    $("#upgradeNodeIp").html(upgradeNodeIpText);
+    getNexusServer();
+    var $modal = $('#modalUpgradeAppDeploy');
+    $('#containerIdInput').val(containerId);
+    $modal.modal('show');
+}
+function getEnvNameforConfigure(){
+    var projectId = urlParams.projid;
+    $.get('/d4dMasters/project/' + projectId, function(dataforenvName) {
+        var individualenvName = dataforenvName[0].environmentname;
+        individualenvName = individualenvName.split(",");
+        alert(individualenvName.length);
+        for(var i=0;i<individualenvName.length;i++){
+            alert(individualenvName[i]);
+        }
+    });
+}
 function resetAllFields(){
     var $chooseRepository = $('#chooseRepository');
     $chooseRepository.empty();
@@ -766,6 +1422,7 @@ function getenvName(callback) {
     $.ajax({
         url: '/d4dMasters/env/' + envId,
         type: 'GET',
+        async: true,
         contentType: "application/json",
         success: function(dataenvName) {
             callback(dataenvName);
@@ -820,6 +1477,11 @@ function constructUI(data) {
         //console.log(selectedAppName);
         if (typeof selectedAppName != 'undefined') {
             $('#appDeployName').append().text("  for '" + selectedAppName + "'");
+            $("#widgetAppDeploy").css({
+                "border-left": "1px solid rgb(221, 221, 221)",
+                "border-right": "1px solid rgb(221, 221, 221)",
+                "border-bottom": "1px solid rgb(221, 221, 221)"
+            });
             $('#widgetAppDeploy').show();
         } else {
             $('#appDeployName').append().text("");
@@ -1111,6 +1773,11 @@ function constructUI(data) {
             // "padding-top": "20px",
             "display": "block"
         }).append($clonenoData);
+        
+        $("#nodataAppDeploy").find('.margintopright8').css({
+            "margin-top": "-2px",
+            "margin-right": "-8px"
+        });
     }
 }
 var $chooseApplication = $('#chooseApplication');
@@ -1120,6 +1787,11 @@ $chooseApplication.change(function() {
     console.log(selectedAppName);
     if (typeof selectedAppName != 'undefined') {
         $('#appDeployName').append().text("  for '" + selectedAppName + "'");
+        $("#widgetAppDeploy").css({
+            "border-left": "1px solid rgb(221, 221, 221)",
+            "border-right": "1px solid rgb(221, 221, 221)",
+            "border-bottom": "1px solid rgb(221, 221, 221)"
+        });
         $('#widgetAppDeploy').show();
     } else {
         $('#appDeployName').append().text("");
@@ -1148,9 +1820,6 @@ $('.envAppDeployModal').click(function(e) {
 $('.envAppDeployList').click(function(e) {
     constructDataListTable();
 });
-// $('.moreinfoAppDeploy').attr('id').on("click", function() {
-//     alert("I am here:");
-// });
 if (!$.fn.dataTable.isDataTable('#tableappParamDeploy')) {
     $('#tableappParamDeploy').DataTable({
         "pagingType": "full_numbers",
