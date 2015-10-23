@@ -49,7 +49,12 @@ Catalyst Addition of New Environments
     Sleep    2s
     Assign Projects for Orgnaization in Environment
     Clicks on Save Button to save the Environment
+    Verfiy the New Chef Env is created
 
+
+
+Verfiy the New Chef Env is created
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Element Should Contain    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${ENV STORE}']    ${ENV STORE}
 
 
 

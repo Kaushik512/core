@@ -111,10 +111,11 @@ Delete the Blueprint
     Click Element    xpath=.//*[text()='OK']
  
 Clicks on RL_QA Environment
+    Sleep    1s
     Click Element    xpath=//a[text()='${SUPERCAT ENV}']
 
 Clicks on Workzone
-    Click Element    id=workZoneNew
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element    id=workZoneNew
 
 Clicks on OK Button to Validate in loop
     ${said}=    Run Keyword and Return Status     Page Should Contain Element    xpath=.//*[text()='OK']
@@ -142,73 +143,55 @@ Chooses the Template User Created
 
 
 Chooses the Operating System
-    Wait Until Keyword Succeeds    1 minute     1 seconds    Wait Until Element Is Visible       xpath=//span[./text()='Select Operating System']
-    Click Element    xpath=//span[./text()='Select Operating System']
-    Sleep    3s
-    Input Text    xpath=.//*[@id='select2-drop']/div/input    ${OPERATING SYSTEM1}
-    Sleep    2s
-    Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
+    Sleep    1s
+    #Click Element    id=instanceOS
+    #Log    after click    
+    #Sleep    1s
+    Click Element    xpath=.//*[@id='instanceOS']/option[text()='${OPERATING SYSTEM1}']
+    #Wait Until Keyword Succeeds    1 minute     1 seconds    Wait Until Element Is Visible       xpath=//span[./text()='Select Operating System']
+    #Click Element    xpath=//span[./text()='Select Operating System']
+    #Sleep    3s
+    #Input Text    xpath=.//*[@id='select2-drop']/div/input    ${OPERATING SYSTEM1}
+    #Sleep    2s
+    #Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
 
 
 Select the Provider
     Sleep    4s
-    Click Element    xpath=//span[./text()='Select Provider']
-    Log    after click
-    Input Text    css=#select2-drop .select2-input    ${PROVIDER}
-    Sleep    3s
-    Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
+    #Click Element    id=providerId
+    #Log    after click
+    #Sleep    4s
+    Click Element    xpath=.//*[@id='providerId']/option[text()='${PROVIDER}']
 
 
 
 Choose the Available Images
-    Sleep    4s
-    Click Element    css=#s2id_imageId > .select2-choice
-    Log    after click
-    Input Text    css=#select2-drop .select2-input    ${IMAGE NAME1}
-    Sleep    4s
-    Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
+    #Sleep    4s
+    #Click Element    id=imageId
+    #Log    after click
+    #Sleep    4s
+    Click Element    xpath=.//*[@id='imageId']/option[text()='${IMAGE NAME1}']
+
 
 
 Choose the Region
     Sleep    4s
-    Click Element    css=#s2id_region > .select2-choice
-    Log    after click
-    Input Text    css=#select2-drop .select2-input    ${REGION NAME}
-    Sleep    4s
-    Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
+    Click Element    xpath=.//*[@id='region']/option[2]
 
 
 Select the Subnet
-    Sleep    2s
-    Click Element    css=#s2id_subnetId > a > span.select2-chosen
     Sleep    1s
-    Input Text    css=#select2-drop > div > input    ${SUBNET NAME}
-    Sleep    1s
-    Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
+    Click Element    xpath=.//*[@id='subnetId']/option[2]
 
 
 Select the Key Pair
     Execute JavaScript    $('#bootstrap-wizard-1 > div.tab-content > footer > div').attr('style','display:none')
-    Sleep    3s
-    Log    after scroll
-    Sleep    1s
-    Click Element    css=#s2id_keypairId > .select2-choice
-    Log    after click
-    Input Text    css=#select2-drop .select2-input    ${Key_Pair}
-    Sleep    1s
-    Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
+    Click Element    xpath=.//*[@id='keypairId']/option[text()='${Key_Pair}']
 
 
 Choose Instance Size
-    Sleep    3s
-    Log    after scroll
     Sleep    1s
-    Click Element    css=#s2id_instancesize > .select2-choice
-    Log    after click
-    Input Text    css=#select2-drop .select2-input    ${CentosInstanceSize}
-    Sleep    1s
-    Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span  
-
+    Click Element    xpath=.//*[@id='instancesize']/option[text()='${CentosInstanceSize}']
 
 Select the Security Group
     Sleep    3s
@@ -230,24 +213,14 @@ Enters The Blueprint Name
 
 Chooses The Business Group
     Sleep    3s
-    Log    after scroll
-    Sleep    1s
-    Click Element    css=#s2id_bgListInput > .select2-choice
-    Log    after click
-    Input Text    css=#select2-drop .select2-input    ${BUSINESS GROUP NAME1}
-    Sleep    1s
-    Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
+    #Click Element    id=bgListInput
+    Click Element    xpath=.//*[@id='bgListInput']/option[text()='${BUSINESS GROUP NAME1}']
 
 
 Chooses The Project
     Sleep    3s
-    Log    after scroll
-    Sleep    1s
-    Click Element    css=#s2id_projectListInput > .select2-choice
-    Log    after click
-    Input Text    css=#select2-drop .select2-input    ${PROJECT NAME1}
-    Sleep    1s
-    Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
+    #Click Element    id=projectListInput
+    Click Element    xpath=.//*[@id='projectListInput']/option[text()='${PROJECT NAME1}']
 
 
 Clicks on close of Configure Organization Parameters

@@ -21,7 +21,7 @@ Catalyst new Config management setup
 
 
 Catalyst creation of Databag setup
-    [Tags]       Sanity          Settings1
+    [Tags]       Sanity          Settings
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
 #    Catalyst Login
     Navigates to Config Management page
