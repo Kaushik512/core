@@ -702,13 +702,13 @@ function getTrackTreeDetails() {
                     
                     if (data[i].itemUrls[j].childItem.length > 0) {
                         trackTree[i].nodes.push({
-                            "name": "providerData",
+                            "name": "parentData",
                             "text": data[i].itemUrls[j].name,
                             "borderColor": "#000",
                             "href": 'javascript:void(0)',
                             "parent": "data",
                             "data-href": data[i].itemUrls[j].url,
-                            "nodetype": "dataList",
+                            "nodetype": "parentNode",
                             "selectable": false,
                             "icon": "fa fa-fw fa-1x fa-desktop",
                             "nodes": []
@@ -716,13 +716,13 @@ function getTrackTreeDetails() {
                         console.log("TrackAfter"+JSON.stringify(trackTree));
                     } else {
                         trackTree[i].nodes.push({
-                            "name": "providerData",
+                            "name": "parentData",
                             "text": data[i].itemUrls[j].name,
                             "borderColor": "#000",
                             "href": 'javascript:void(0)',
                             "parent": "data",
                             "data-href": data[i].itemUrls[j].url,
-                            "nodetype": "dataList",
+                            "nodetype": "parentNode",
                             "selectable": true,
                             "icon": "fa fa-fw fa-1x fa-desktop"
                         });
@@ -733,13 +733,13 @@ function getTrackTreeDetails() {
                         //alert(JSON.stringify(trackTree));
 
                         trackTree[i].nodes[j].nodes.push({
-                            "name": "providerData",
+                            "name": "childData",
                             "text": data[i].itemUrls[j].childItem[k].name,
                             "borderColor": "#000",
                             "href": 'javascript:void(0)',
                             "parent": "data",
                             "data-href": data[i].itemUrls[j].childItem[k].url,
-                            "nodetype": "dataChildList",
+                            "nodetype": "childType",
                             "selectable": true,
                             "icon": "fa fa-fw fa-1x fa-desktop"
                         });

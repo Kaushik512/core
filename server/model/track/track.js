@@ -18,12 +18,12 @@ var TrackSchema = new Schema({
     itemUrls: [{
         name: String,
         url: String,
+        description: String,
         childItem: [{
-            name:String,
-            url:String
+            name: String,
+            url: String
         }]
     }],
-    description: String,
     type: String
 });
 
@@ -60,15 +60,21 @@ TrackSchema.statics.createNew = function(trackData, callback) {
 TrackSchema.statics.updateTrack = function(trackId, trackData, callback) {
 
     logger.debug("Going to Update Track data: ", JSON.stringify(trackData));
-    var setData = {};
-    var keys = Object.keys(trackData);
-    for (var i = 0; i < keys.length; i++) {
+    // var setData = {};
+    //  var keys = Object.keys(trackData);
+    /*for (var i = 0; i < keys.length; i++) {
         setData[keys[i]] = trackData[keys[i]];
-    }
+    }*/
+    console.log(trackData.description);
     this.update({
-        "_id": trackId
+        "_id": new ObjectId(trackId),
+        "itemUrls._id": new ObjectId(trackData.itemId)
     }, {
-        $set: setData
+        $set: {
+            "itemUrls.$.name": trackData.name,
+            "itemUrls.$.url": trackData.url,
+            "itemUrls.$.description": trackData.description
+        }
     }, {
         upsert: false
     }, function(err, updateCount) {
@@ -76,15 +82,15 @@ TrackSchema.statics.updateTrack = function(trackId, trackData, callback) {
             logger.debug("Got error while creating tracks: ", err);
             callback(err, null);
         }
-        callback(null,updateCount);
-        
+        callback(null, updateCount);
+
     });
 };
 
 // Get all Track informations.
 TrackSchema.statics.getTrackById = function(trackId, callback) {
     this.find({
-        "_id": trackId
+        "_id": new ObjectId(trackId)
     }, function(err, tracks) {
         if (err) {
             logger.debug("Got error while fetching Track: ", err);
@@ -99,12 +105,21 @@ TrackSchema.statics.getTrackById = function(trackId, callback) {
 };
 
 // Remove Track informations.
-TrackSchema.statics.removeTracks = function(trackId, callback) {
-    this.remove({
+TrackSchema.statics.removeTracks = function(trackId, itemUrlId, callback) {
+    logger.debug("removing",itemUrlId);
+    this.update({
         "_id": trackId
+    }, {
+        $pull: {
+            itemUrls: {
+                "_id": new ObjectId(itemUrlId),
+            }
+        }
+    }, {
+        upsert: false
     }, function(err, tracks) {
         if (err) {
-            logger.debug("Got error while removing Tracks: ", err);
+            logger.debug("Got error while removing Tracks: ", err , itemUrlId);
             callback(err, null);
         }
         if (tracks) {
