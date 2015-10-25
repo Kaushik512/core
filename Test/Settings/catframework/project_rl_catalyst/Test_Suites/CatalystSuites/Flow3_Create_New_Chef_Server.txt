@@ -17,4 +17,14 @@ Catalyst new Config management setup
     Create New Config Management
     Catalyst Logout
     [Teardown]     Close Browser
-    
+
+
+
+Catalyst creation of Databag setup
+    [Tags]       Sanity          Settings
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+#    Catalyst Login
+    Navigates to Config Management page
+    Creation of new Databag
+    Catalyst Logout
+    [Teardown]     Close Browser

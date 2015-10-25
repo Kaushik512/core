@@ -34,6 +34,62 @@ Create New Config Management
     Verify ChefServer is Created
 
 
+Creation of new Databag
+    Select the Chefserver to create databag
+    Clicks on Adding new Databag
+    Enters the Databag name
+    Clicks on Save button
+    Clicks on Add New Item
+    Input the ID name
+    Clicks on Save button of list
+    Verfiy DataBag is created
+    Capture Screenshot of the page
+    Delete the DataBag
+    Sleep    1s
+
+
+
+Delete the DataBag
+    Click Element    xpath=.//*[@id='dbNameTableTest']/tr/td/a[text()='${DATABAG NAME}']/../div/button[@title='Remove']
+    Sleep    1s
+    Click Element    xpath=.//*[text()='OK']
+
+Verfiy DataBag is created
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Element Should Contain    xpath=.//*[@id='dbNameTableTest']/tr/td/a[text()='${DATABAG NAME}']    ${DATABAG NAME}
+
+
+Select the Chefserver to create databag
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${CONFIG MANAGEMENT NAME}']/../td[5]/div/a[3]/i
+
+
+Clicks on Adding new Databag
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element    xpath=.//*[@title='Add New Data Bag']
+
+Enters the Databag name
+    Input Text    id=instanceDataName    ${DATABAG NAME}
+
+
+Clicks on Save button
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    id=saveBTN
+
+
+Clicks on Save button of list
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    id=saveBTNList
+
+Clicks on Add New Item
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element    xpath=.//*[@title='Add New Item']
+
+Input the ID name
+    Input Text    id=instanceListID    ${ID NAME}
+
+
+Capture Screenshot of the page
+    Capture Page Screenshot
+
+
+
+
+
 Verify ChefServer is Created
     Wait Until Keyword Succeeds    1 minute     1 seconds       Element Should Contain    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${CONFIG MANAGEMENT NAME}']    ${CONFIG MANAGEMENT NAME}
 

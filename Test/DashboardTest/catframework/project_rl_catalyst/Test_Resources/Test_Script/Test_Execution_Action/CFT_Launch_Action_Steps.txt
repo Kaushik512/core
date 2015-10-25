@@ -254,7 +254,7 @@ Clicks on Job Status Button
     Click Element    xpath=.//*[@id='tablehistoryTaskForJenkins']/tbody/tr[1]/td[2]/a[3]
 
 Click on Job Dashboard Button
-    Click Element    xpath=.//*[@id='tablehistoryTaskForJenkins']/tbody/tr[1]/td[2]/a[1]
+    Click Element    xpath=.//*[@id='tablehistoryTaskForJenkins']/tbody/tr[1]/td[2]/a[2]
 
 Clicks on Close Button
     Click Element    css=.btn.btn-minier.btn-primary.hideJenkinsJob
