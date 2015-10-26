@@ -109,6 +109,7 @@ Catalyst System Monitoring Dashboard Verification
     Sleep    10s
     Clicks on Left Panel Button
     Sleep    40s
+    Verfiy page should not contain agent failed
     Verify Page Contains Ping
     Verify Page Contains Traffic
     Verify Page Contains DiskUse
@@ -360,6 +361,19 @@ Clicks on Monitoring Link
 
 Clicks on System Monitoring Link
     Click Element    xpath=.//a[text()='System Monitoring']
+
+
+Verfiy page should not contain agent failed
+    Selects the frame
+    ${Agent1}=    Run Keyword and Return Status    Page Should Not Contain    Get value from agent failed
+    ${Agent2}=    Run Keyword and Return Status    Page Should Not Contain    cannot connect to 
+    ${Agent3}=    Run Keyword and Return Status    Page Should Not Contain    No route to host    
+    Run Keyword If    '${Agent1}' == 'True' and '${Agent2}' == 'True' and '${Agent3}' == 'True'
+    ...    Log    System Monitoring Dashboard is displaying all the data of the nodes and no nodes are down.
+    ...    ELSE
+    ...    Fail    System Monitoring Dashboard is showing that Nodes are down.
+
+
 
 Verify Page Contains Ping
     Page Should Contain    Ping

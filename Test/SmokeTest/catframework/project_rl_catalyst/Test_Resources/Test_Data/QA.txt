@@ -60,7 +60,7 @@ ${GIT COOKBOOK}                     git
 ${SERVER TIME COOKBOOK}            starter
 ${DISABLED}           disabled
 ${CENT OS}            Cent OS
-${UBUNTU OS}            ubuntu
+${UBUNTU OS}            Ubuntu
 ${SUITS}                stopped
 ${UserName}             root
 
@@ -139,7 +139,7 @@ ${random}                  adarsh
 ${ADD}                     apache2              #tomcat-all
 ${ACTBOOT1}                 Pending
 ${ACTBOOT2}                 Success
-${IP Centos}                 52.24.178.71
+${IP Centos}                10.0.1.92                    #52.24.178.71
 ${AUTHN}                    Pem File 
 ${NAME}                     Bootstrap
 ${DUP MSG}                  An Instance with the same IP already exists.
@@ -170,7 +170,7 @@ ${NO MATCH}                 No matches found
 ${ENVNAME}                  QA
 ${NAMEOFINSTANCE}           Instance_Centos
 
-${IP Ubuntu}                54.68.147.50		
+${IP Ubuntu}                 10.0.1.92                #54.68.147.50		
 ${IP UBUNTUSERNAME}         ubuntu
 ${EDIT_UBUNTU_INSTANCE_NAME}     Instance_Ubuntu
 
@@ -181,7 +181,7 @@ ${IP ADD CENTOS}             52.24.178.71
 ${Proj1}                      Catalyst		
 ${Proj2}                      Primary_Edu		
 ${CookBkName}                apt
-${UbuntuUser}                 ubuntu
+${UbuntuUser}                ubuntu
 ${RUN}                       running
 
 ${DESIGNER_NAME}            Designer01
