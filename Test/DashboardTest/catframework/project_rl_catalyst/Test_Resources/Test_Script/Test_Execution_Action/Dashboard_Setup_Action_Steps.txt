@@ -126,7 +126,7 @@ Catalyst Log Monitoring Dashboard Verification
     Clicks on Log Monitoring Link
     Sleep    10s
     Clicks on Left Panel Button
-    Sleep    25s
+    Sleep    50s
     Selects the frame
     Verfiy the Page not contains no results
     Capture the Screen Shot of the Dashboard
@@ -177,6 +177,8 @@ Catalyst Notifications Dashboard Verification
     Clicks on Left Panel Button
     Sleep    10s
     Selects the frame
+    Sleep    1s
+    Capture the Screen Shot of the Dashboard
     Verify Page Contains Connected
     Verify Page Contains CatsEye
     Verify Page Contains Telemetry
@@ -186,15 +188,28 @@ Catalyst Notifications Dashboard Verification
     Verify Page Contains Stopped
     Verify Page Contains Monitoring
     Verify Page Contains Laast Updated
+    Clicks on Telemetry
+    Clicks on Adverse Events
     Capture the Screen Shot of the Dashboard
     Sleep    1s
     Unselect Frame
 
 
 
+Clicks on Telemetry
+    Selects the frame
+    Wait Until Keyword Succeeds    1 minutes    1 seconds     Click Element    xpath=.//*[@id='tabs']/li[2]/a
+    Capture the Screen Shot of the Dashboard
+    Page Should Contain    memory
+    Page Should Contain    cpu
+    Page Should Contain    disk
 
 
 
+Clicks on Adverse Events
+    Selects the frame
+    Wait Until Keyword Succeeds    1 minutes    1 seconds     Click Element    xpath=.//*[@id='tabs']/li[3]/a
+    Capture the Screen Shot of the Dashboard
 
 
 Verfiy the Page not contains no results
@@ -227,16 +242,19 @@ Clicks on Telemetry Tab
 Verify Page Contains Connected
     Page Should Contain    Connected
     Selects the frame
-    ${Connected}=    Get Text    xpath=.//*[@id='pulse-holder-monitoring-on']/div[3]
-    Log    ${Connected}
-    Run Keyword If    '${NOTIFICATIONS}' == '${Connected}'
+    ${Connect}=    Get Text    xpath=.//*[@id='pulse-holder-monitoring-on']/div[3]
+    Log    ${Connect}
+    Run Keyword If    '${NOTIFICATIONS}' == '${Connect}'
     ...    Log    Notifications Dashboard is Showing Connected
     ...    ELSE
     ...    Fail    Notifications Dashboard is not showing Connected status
     
 
 Verify Page Contains CatsEye
-    Page Should Contain    Cats Eye    
+    Page Should Contain    Cats Eye
+    Page Should Contain    Events Per Hour (Last 24 hrs)
+    Page Should Contain    Events by Type (Last 24 hrs)
+    Page Should Not Contain    Connection Failed
 
 Verify Page Contains Telemetry
     Page Should Contain    Telemetry
