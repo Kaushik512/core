@@ -61,7 +61,7 @@ var vmwareservice = function(options) {
         client.registerMethod("jsonMethod", datastoresUrl, "GET");
         var args = {};
         client.methods.jsonMethod(args, function(data, response) {
-            console.log("get datastoresUrl response::" + data);
+            console.log("get datastoresUrl response::" + data + ' :: end of data');
             callback(null,data);
         });
     }
