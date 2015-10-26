@@ -47,7 +47,15 @@ var vmwareservice = function(options) {
     }
 
     this.getVms = function(servicehost,callback){
-            //to do
+            client = new Client();
+            var vmlisturl = servicehost + '/vms?ip=' + options.host + '&user=' + options.username + '&passwd=' + options.password + '&dc=' + options.dc;
+            console.log(vmlisturl);
+            client.registerMethod("jsonMethod", vmlisturl, "GET");
+            var args = {};
+            client.methods.jsonMethod(args, function(data, response) {
+                console.log("get vmlisturl response::" + data + ' :: end of data');
+                callback(null,data);
+            });
     }
 
     this.getTemplates = function(servicehost,callback){

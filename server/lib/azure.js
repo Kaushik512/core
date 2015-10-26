@@ -238,7 +238,7 @@ this.trysshoninstance = function(ostype,ip_address, username, pwd, callback) {
 
             }
             else{
-                opts.cmds.join(' && ');
+                cmdString = opts.cmds.join(' && ');
                 //console.log(JSON.stringify(opts));
                 var sshExec = new SSHExec(opts);
                 sshExec.exec(cmdString, function(err, stdout) {
