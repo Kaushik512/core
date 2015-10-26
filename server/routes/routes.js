@@ -49,6 +49,8 @@ var puppet = require('./routes_puppet.js');
 
 var appdeploy = require('./routes_appdeploy');
 
+var appdeployPipeline = require('./routes_appdeployPipeline');
+
 var nexus = require('./routes_nexus');
 
 var vmware = require('./routes_vmware.js');
@@ -119,7 +121,9 @@ module.exports.setRoutes = function(app,socketIo) {
     puppet.setRoutes(app, sessionVerificationFunc);
 
     appdeploy.setRoutes(app, sessionVerificationFunc);
-
+    
+    appdeployPipeline.setRoutes(app, sessionVerificationFunc);
+    
     nexus.setRoutes(app, sessionVerificationFunc);
 
     servicenow.setRoutes(app, sessionVerificationFunc);

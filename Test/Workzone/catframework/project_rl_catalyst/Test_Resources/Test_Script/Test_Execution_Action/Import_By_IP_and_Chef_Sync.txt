@@ -1085,6 +1085,7 @@ Execute the Jenkins Task
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[text()='OK']
     Sleep    12s
     Capture Page Screenshot
+    Wait Until Page Contains    SUCCESS
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='assignedExecute']/div/div/div[3]/a
 
 
@@ -1460,7 +1461,7 @@ Clicks on Jenkins Cancel Button
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='btncancel']
 
 
-Catalyst creation of Chef Task
+Catalyst creation and execution of Chef Task
     #Clicks on the Project to go to Environment
     #Sleep    2s
     Clicks on Button to your > Environment
@@ -1484,7 +1485,8 @@ Execute the Chef Task
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='tableOrchestration']/tbody/tr/td[text()='${Cheftask}']/../td[5]/a/i
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[text()='OK']
     Sleep    12s
-    Capture Page Screenshot 
+    Capture Page Screenshot
+    Wait Until Page Contains    SUCCESS
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='assignedExecute']/div/div/div[3]/a
 
 Enters Chef job name

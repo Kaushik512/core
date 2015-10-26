@@ -10,13 +10,7 @@ Resource           catalyst.txt
 
 *** Variables ***
 ${BROWSER TYPE}                  firefox 
-${ENVIRONMENT SERVER}              http://d4d.rlcatalyst.com/public/login.html
-
-
-
-
-
- 
+${ENVIRONMENT SERVER}             http://d4d.rlcatalyst.com/public/login.html
 
 ${ENV}                 QA.txt
 ${VALID USER}             superadmin
