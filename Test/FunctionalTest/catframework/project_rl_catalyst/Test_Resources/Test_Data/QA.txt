@@ -25,7 +25,8 @@ ${ENVIRONMENTSERVER}                http://d4d.rlcatalyst.com/public/login.html
 #http://10.0.1.206:3003/public/login.html
 #http://10.0.1.206:3002/private/index.html#ajax/Settings/Dashboard.html
 
-
+${height}             768
+${width}           1366
 
              
 #Puppet

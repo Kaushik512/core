@@ -12,8 +12,8 @@ Resource           catalyst.txt
 ${BROWSER TYPE}                  firefox 
 ${ENVIRONMENT SERVER}              http://supercatalyst.relevancelab.com/public/login.html
 
-${height}             744
-${width}           1400
+${height}             768
+${width}           1366
 ${NA}                 $
 ${VALUE}             0
 
