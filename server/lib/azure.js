@@ -210,33 +210,50 @@ var AzureCloud = function() {
 
     this.updatedfloatingip = false;
  
-    this.trysshoninstance = function(ip_address, username, pwd, callback) {
-        var opts = {
-            //privateKey: instanceData.credentials.pemFilePath,
-            password: pwd,
-            username: username,
-            host: ip_address,
-            instanceOS: 'linux',
-            port: 22,
-            cmds: ["ls -al"],
-            cmdswin: ["del "],
-            interactiveKeyboard: true
-        }
-        var cmdString = opts.cmds.join(' && ');
-        //console.log(JSON.stringify(opts));
-        var sshExec = new SSHExec(opts);
-        sshExec.exec(cmdString, function(err, stdout) {
-            logger.debug(stdout);
-            callback(stdout);
-            return;
-        }, function(err, stdout) {
-            logger.debug('Out:', stdout); //assuming that receiving something out would be a goog sign :)
-            callback('ok');
-            return;
-        }, function(err, stdout) {
-            logger.error('Error Out:', stdout);
-        });
-    }
+this.trysshoninstance = function(ostype,ip_address, username, pwd, callback) {
+           var opts = {
+                //privateKey: instanceData.credentials.pemFilePath,
+                password: pwd,
+                username: username,
+                host: ip_address,
+                instanceOS: 'linux',
+                port: 22,
+                cmds: ["ls -al"],
+                cmdswin: ["knife wsman test"],
+                interactiveKeyboard: true
+            }
+
+            var cmdString = '';
+            if(ostype == "Windows"){
+                curl = new curl();
+                cmdString = opts.cmdswin[0] + ' ' + opts.host + ' -m' ;
+                logger.debug("cmdString >>>",cmdString);
+                curl.executecurl(cmdString,function(err,stdout){
+                    logger.debug(stdout);
+                    if(stdout.indexOf('Connected successfully') >= 0){
+                        callback('ok');
+                        return;
+                    }
+                });
+
+            }
+            else{
+                opts.cmds.join(' && ');
+                //console.log(JSON.stringify(opts));
+                var sshExec = new SSHExec(opts);
+                sshExec.exec(cmdString, function(err, stdout) {
+                    logger.debug(stdout);
+                    callback(stdout);
+                    return;
+                }, function(err, stdout) {
+                    logger.debug('Out:', stdout); //assuming that receiving something out would be a goog sign :)
+                    callback('ok');
+                    return;
+                }, function(err, stdout) {
+                    logger.error('Error Out:', stdout);
+                });
+            }
+    }        
 
     this.timeouts = [];
     this.callbackdone = false;
@@ -275,9 +292,9 @@ var AzureCloud = function() {
 
                        logger.debug("data.OSDisk.operatingSystem >>>>",data.OSDisk.operatingSystem);
                          
-                       if(!data.OSDisk.operatingSystem === "Windows"){ 
+                       /*if(!data.OSDisk.operatingSystem === "Windows"){ 
                          
-                         logger.debug("try ssh oninstance..");
+                         logger.debug("try ssh oninstance..");*/
 
                          self.trysshoninstance(data.OSDisk.operatingSystem,ip_address, username, pwd, function(cdata) {
                             logger.debug('End trysshoninstance:', cdata);
@@ -302,10 +319,10 @@ var AzureCloud = function() {
                             }
                         });
                       
-                      } else{
+                     /* } else{
                         logger.debug("Windows instance..");
                         callback(null, ip_address);
-                      }
+                      }*/
 
                     } else {
                         logger.debug('Timeout 2 set');
