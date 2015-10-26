@@ -56,19 +56,28 @@ Catalyst AWS Cost Dashboard Verification
     Clicks on AWS Cost link
     Sleep    10s
     Clicks on Left Panel Button
-    Sleep    1 minute
+    Sleep    2s
+    Selects the frame
+    Verfiy the NA in the Dashbaord
     Verify Page contains Cost Usage for Month
     Verify Page contains Cost Usage for Day
     Verify Page contains Summary
+    Verify the Total Number of Running Instances
     Verify Page contains Active Instance
     Verify Page contains Security Groups
     Verify Page contains EBS Volumes
-    Verify Page contains EBS Snapshots
+    #Verify Page contains EBS Snapshots
     Verify Page contains S3 Buckets
     Verify Page contains R53 Zone
     Verify Page contains Elastic IP
-    Verify Page contains I/O Traffic
+    #Verify Page contains I/O Traffic
     Capture the Screen Shot of the Dashboard
+    Sleep    1s
+    Unselect Frame
+
+
+Verfiy the NA in the Dashbaord
+    Current Frame Should Not Contain    NA
 
 Catalyst AWS Usage Dashboard Verification
     Clicks on Tracks Button
@@ -76,7 +85,8 @@ Catalyst AWS Usage Dashboard Verification
     Clicks on AWS Usage Link
     Sleep    10s
     Clicks on Left Panel Button
-    Sleep    40s
+    Sleep    3s
+    Selects the frame
     Verfiy the Availabiltiy zone
     Verify the Low Usage
     Verify the Total Instances
@@ -85,6 +95,9 @@ Catalyst AWS Usage Dashboard Verification
     Verify the Under Utilized Instances
     Verify the Average CPU Usage
     Capture the Screen Shot of the Dashboard
+    Sleep    1s
+    Unselect Frame
+
 
 
 Catalyst System Monitoring Dashboard Verification
@@ -114,6 +127,8 @@ Catalyst Log Monitoring Dashboard Verification
     Sleep    10s
     Clicks on Left Panel Button
     Sleep    50s
+    Selects the frame
+    Verfiy the Page not contains no results
     Capture the Screen Shot of the Dashboard
     Verify Page Contains Access-Layer-Performance
     Verify Page Contains Access-Layer-Uptime
@@ -125,6 +140,8 @@ Catalyst Log Monitoring Dashboard Verification
     Verify Page Contains Cat_Errors
     Verify Page Contains Cat-Access-Errors
     Capture the Screen Shot of the Dashboard
+    Sleep    1s
+    Unselect Frame
  
 
 Catalyst Log Monitoring Dashboard Visibility
@@ -144,7 +161,9 @@ Catalyst Log Monitoring Dashboard Visibility
     Verify Page Contains Cat-LogLevel-Percent
     Verify Page Contains Cat_Errors
     Verify Page Contains Cat-Access-Errors
-    Capture the Screen Shot of the Dashboard    
+    Capture the Screen Shot of the Dashboard 
+    Sleep    1s
+    Unselect Frame  
 
 
 
@@ -156,26 +175,57 @@ Catalyst Notifications Dashboard Verification
     Clicks on the Link to dashboard
     Sleep    10s
     Clicks on Left Panel Button
-    Sleep    50s
-    #Verify Page Contains Connected
+    Sleep    10s
+    Selects the frame
+    Sleep    1s
+    Capture the Screen Shot of the Dashboard
+    Verify Page Contains Connected
     Verify Page Contains CatsEye
     Verify Page Contains Telemetry
     Verify Page Contains Adverse Events
     Verfiy Page Contains Aws Accounts
-    #Verify Page Contains Tottal Instances
     Verify Page Contains Running
     Verify Page Contains Stopped
     Verify Page Contains Monitoring
     Verify Page Contains Laast Updated
+    Clicks on Telemetry
+    Clicks on Adverse Events
     Capture the Screen Shot of the Dashboard
     Sleep    1s
-    #Clicks on Telemetry Tab
-    #Capture the Screen Shot of the Dashboard
-    #Sleep    1s
-    #Clicks on AdverseEvents tab
-    #Capture the Screen Shot of the Dashboard
+    Unselect Frame
 
 
+
+Clicks on Telemetry
+    Selects the frame
+    Wait Until Keyword Succeeds    1 minutes    1 seconds     Click Element    xpath=.//*[@id='tabs']/li[2]/a
+    Capture the Screen Shot of the Dashboard
+    Page Should Contain    memory
+    Page Should Contain    cpu
+    Page Should Contain    disk
+
+
+
+Clicks on Adverse Events
+    Selects the frame
+    Wait Until Keyword Succeeds    1 minutes    1 seconds     Click Element    xpath=.//*[@id='tabs']/li[3]/a
+    Capture the Screen Shot of the Dashboard
+
+
+Verfiy the Page not contains no results
+    ${No Results}=    Run Keyword and Return Status    Page Should Not Contain    No results found
+    Run Keyword If    '${No Results}' == 'True'     
+    ...    Log    log monitoring dashboard has all the data present in it
+    ...    ELSE IF   '${No Results}' == 'False'
+    ...    Fail    Dashboard has No Results Found Displaying and all data is not present
+
+
+
+
+Selects the frame
+    Select Frame    css=#content > iframe
+    Sleep    1s
+    
 
 Verify Page Contains Average Wiating,timestamp
     Wait Until Keyword Succeeds    0 minutes    19 seconds     Page Should Contain    Legend
@@ -191,9 +241,20 @@ Clicks on Telemetry Tab
 
 Verify Page Contains Connected
     Page Should Contain    Connected
+    Selects the frame
+    ${Connect}=    Get Text    xpath=.//*[@id='pulse-holder-monitoring-on']/div[3]
+    Log    ${Connect}
+    Run Keyword If    '${NOTIFICATIONS}' == '${Connect}'
+    ...    Log    Notifications Dashboard is Showing Connected
+    ...    ELSE
+    ...    Fail    Notifications Dashboard is not showing Connected status
+    
 
 Verify Page Contains CatsEye
-    Page Should Contain    Cats Eye    
+    Page Should Contain    Cats Eye
+    Page Should Contain    Events Per Hour (Last 24 hrs)
+    Page Should Contain    Events by Type (Last 24 hrs)
+    Page Should Not Contain    Connection Failed
 
 Verify Page Contains Telemetry
     Page Should Contain    Telemetry
@@ -203,22 +264,57 @@ Verify Page Contains Adverse Events
 
 Verfiy Page Contains Aws Accounts
     Page Should Contain    AWS Accounts
+    Selects the frame
+    ${AWS Accounts}=    Get Text    xpath=.//*[@id='cats-eye-aws-accounts']
+    Log    ${AWS Accounts}
+    Run Keyword If    '${AWS Accounts}' == '${VALUE}'
+    ...    Fail    Notifications Dashboard is not displaying Total AWS Accounts
+    ...    ELSE
+    ...    Log     Notifications Dashboard is displaying Total AWS Accounts
+    
+    
 
 Verify Page Contains Tottal Instances
     Page Should Contain    Total instances
 
 Verify Page Contains Running
     Page Should Contain    Total Running
+    Selects the frame
+    ${Running}=    Get Text    xpath=.//*[@id='cats-eye-running-instances']
+    Log    ${Running}
+    Run Keyword If    '${Running}' == '${VALUE}'
+    ...    Fail    Notifications Dashboard is not displaying Total Instances
+    ...    ELSE
+    ...    Log     Notifications Dashboard is displaying Total Instances
+
 
 Verify Page Contains Stopped
     Page Should Contain    Stopped
+    Selects the frame
+    ${Stopped}=    Get Text    xpath=.//*[@id='cats-eye-stoppped-instances']
+    Log    ${Stopped}
+    Run Keyword If    '${Stopped}' == '${VALUE}'
+    ...    Fail    Notifications Dashboard is not displaying Stopped Instances
+    ...    ELSE
+    ...    Log     Notifications Dashboard is displaying Stopped Intances
+
 
 Verify Page Contains Monitoring
     Page Should Contain    Monitoring
+    Selects the frame
+    ${Monitoring}=    Get Text    xpath=.//*[@id='cats-eye-monitored']
+    Log    ${Monitoring}
+    Run Keyword If    '${Monitoring}' == '${VALUE}'
+    ...    Fail    Notifications Dashboard is not displaying Monitoring Data
+    ...    ELSE
+    ...    Log     Notifications Dashboard is displaying Monitoring Data
+
 
 Verify Page Contains Laast Updated
     Page Should Contain    Last Updated
-
+    Page Should Not Contain    NA
+    Page Should Not Contain    No results found
+    #Page Should Not Contain    Connection failed !! 
 
 
 
@@ -288,24 +384,83 @@ Verify Page Contains Total Memory
 
 Verfiy the Availabiltiy zone
     Page Should Contain    Avaliablity Zone
+    Selects the frame
+    ${Availabilty zone}=    Get Text    xpath=.//*[@id='container']/div/ul/li[3]/div/h2
+    Log    ${Availabilty zone}
+    ${Availabilty length}=    Get Length    ${Availabilty zone}
+    Run Keyword If    '${Availabilty length}' == '${VALUE}'
+    ...    Fail    Dashboard has no Availabilty Zone Data
+    ...    ELSE
+    ...    Log     Dashboard has Availabilty Zone Data
+
 
 Verify the Low Usage
     Page Should Contain    Low Usage
+    Selects the frame
+    ${Low Usage}=    Get Text    xpath=.//*[@id='container']/div/ul/li[4]/div/ul/li[1]/span[2]
+    Log    ${Low Usage}
+    ${Low Usagelength}=    Get Length    ${Low Usage}
+    Run Keyword If    '${Low Usagelength}' == '${VALUE}'
+    ...    Fail    Dashboard has no Low Usage Data
+    ...    ELSE
+    ...    Log     Dashboard has Low Usage Data
+
+    
+
 
 Verify the Total Instances
     Page Should Contain    Total Instances
+    Selects the frame
+    ${Totl Ins}=    Get Text    xpath=.//*[@id='container']/div/ul/li[5]/div/h2
+    Log    ${Totl Ins}
+    ${Totl Instlength}=    Get Length    ${Totl Ins}
+    Run Keyword If    '${Totl Instlength}' == '${VALUE}'
+    ...    Fail    Dashboard has no Total Instances Data
+    ...    ELSE
+    ...    Log     Dashboard has Total Instances Data
+
 
 Verify the Active Instances
     Page Should Contain    Active Instances
+    Selects the frame
+    ${Act Ins}=    Get Text    xpath=.//*[@id='container']/div/ul/li[6]/div/h2
+    Log    ${Act Ins}
+    ${Actve Instlength}=    Get Length    ${Act Ins}
+    Run Keyword If    '${Actve Instlength}' == '${VALUE}'
+    ...    Fail    Dashboard has no Active Instances Data
+    ...    ELSE
+    ...    Log     Dashboard has Active Instances Data    
+
+
 
 Verify the High Usage
     Page Should Contain    High Usage
 
+
 Verify the Under Utilized Instances
     Page Should Contain    Under-utilized Instances
+    Selects the frame
+    ${Utilized Ins}=    Get Text    xpath=.//*[@id='container']/div/ul/li[8]/div/h2
+    Log    ${Utilized Ins}
+    ${Utilizd Instlength}=    Get Length    ${Utilized Ins}
+    Run Keyword If    '${Utilizd Instlength}' == '${VALUE}'
+    ...    Fail    Dashboard has no Under utilized instances Data
+    ...    ELSE
+    ...    Log     Dashboard has Under utilized instances Data    
+
+
+
 
 Verify the Average CPU Usage
     Page Should Contain    Average CPU Usage
+    Selects the frame
+    ${CPU Usage}=    Get Text    xpath=.//*[@id='container']/div/ul/li[9]/div/h2
+    Log    ${CPU Usage}
+    ${CPU Usagelength}=    Get Length    ${CPU Usage}
+    Run Keyword If    '${CPU Usagelength}' == '${VALUE}'
+    ...    Fail    Dashboard has no Under utilized instances Data
+    ...    ELSE
+    ...    Log     Dashboard has Under utilized instances Data    
 
 
 
@@ -326,24 +481,116 @@ Clicks on Left Panel Button
 
 
 Verify Page contains Cost Usage for Month
-    Page Should Contain    Cost Usage for Month
+    Page Should Contain    Cost for Month
+    Selects the frame
+    ${Cost month}=    Get Text    xpath=.//*[@id='container']/div/ul/li[3]/div/h2
+    Log    ${Cost month}
+    Run Keyword If    '${Cost month}' == '${NA}'
+    ...    Fail    Dashboard has no Cost for Month Data
+    ...    ELSE
+    ...    Log     Dashboard has Cost for Month Data
+    
+    
+
+
+    
+
 
 Verify Page contains Cost Usage for Day
     Page Should Contain    Cost Usage for Day
+    Selects the frame
+    ${Cost day}=    Get Text    xpath=.//*[@id='container']/div/ul/li[4]/div/h2
+    Log    ${Cost day}
+    Run Keyword If    '${Cost day}' == '${NA}'
+    ...    Fail    Dashboard has no Cost Usage for Day Data
+    ...    ELSE
+    ...    Log     Dashboard has Cost Usage for Day Data
+    
+    
+
+
+Verify the Cost of EC2 day
+    Page Should Contain    Cost of EC2(day)
+    Selects the frame
+    ${Cost EC2}=    Get Text    xpath=.//*[@id='container']/div/ul/li[5]/div/h2
+    Log    ${Cost EC2}
+    Run Keyword If    '${Cost EC2}' == '${NA}'
+    ...    Fail    Dashboard has no Cost of EC2 Day Data
+    ...    ELSE
+    ...    Log     Dashboard has Cost of EC2 Day Data
+    
+
 
 Verify Page contains Summary
     Page Should Contain    Summary
+    Selects the frame
+    ${Totall Instance}=    Get Text    xpath=.//*[@id='container']/div/ul/li[9]/div/ul/li[1]/span[2]
+    Log    ${Totall Instance}
+    ${Summary length}=    Get Length    ${Totall Instance}
+    Run Keyword If    '${Summary length}' == '${VALUE}'
+    ...    Fail    Dashboard has no Total Instance Data
+    ...    ELSE
+    ...    Log     Dashboard has Total Instance Data
+    
+
+
+Verify the Total Number of Running Instances
+    Page Should Contain    Summary
+    Selects the frame
+    ${Running Instance}=    Get Text    xpath=.//*[@id='container']/div/ul/li[9]/div/ul/li[2]/span[2]
+    Log    ${Running Instance}    
+    ${Running InsLength}=    Get Length    ${Running Instance} 
+    Run Keyword If    '${Running InsLength}' == '${VALUE}'
+    ...    Fail    Dashboard has no Running Instance Data
+    ...    ELSE
+    ...    Log     Dashboard has Running Instance Data
+    
+
+
 
 Verify Page contains Active Instance
-    Page Should Contain    Active Instance 
+    Page Should Contain    Active Instance
+    Selects the frame
+    ${Active Instance}=    Get Text    xpath=.//*[@id='container']/div/ul/li[6]/div/h2
+    Log    ${Active Instance}
+    ${Active Inslength}=    Get Length    ${Active Instance}
+    Run Keyword If    '${Active Inslength}' == '${VALUE}'
+    ...    Fail    Dashboard has no Active Instance Data
+    ...    ELSE
+    ...    Log     Dashboard has Active Instance Data
+    
+
+
+    
 
 
 Verify Page contains Security Groups
     Page Should Contain    Security Groups
+    Selects the frame
+    ${Security Grp}=    Get Text    xpath=.//*[@id='container']/div/ul/li[7]/div/h2
+    Log    ${Security Grp}
+    ${Secrty GrpLength}=    Get Length    ${Security Grp}
+    Run Keyword If    '${Secrty GrpLength}' == '${VALUE}'
+    ...    Fail    Dashboard has no Security Grp Data
+    ...    ELSE
+    ...    Log     Dashboard has Security Grp Data
+    
+
+
 
 
 Verify Page contains EBS Volumes
     Page Should Contain    EBS Volumes
+    Selects the frame
+    ${EBS Volumes}=    Get Text    xpath=.//*[@id='container']/div/ul/li[8]/div/h2
+    Log    ${EBS Volumes}
+    ${EBS VolLength}=    Get Length    ${EBS Volumes}
+    Run Keyword If    '${EBS VolLength}' == '${VALUE}'
+    ...    Fail    Dashboard has no EBS Volumes Data
+    ...    ELSE
+    ...    Log     Dashboard has EBS Volumes Data
+    
+
 
 Verify Page contains EBS Snapshots
     Page Should Contain    EBS Snapshots
@@ -351,14 +598,42 @@ Verify Page contains EBS Snapshots
 
 Verify Page contains S3 Buckets
     Page Should Contain    S3 Buckets
+    Selects the frame
+    ${S3 Buckets}=    Get Text    xpath=.//*[@id='container']/div/ul/li[12]/div/h2
+    Log    ${S3 Buckets}
+    ${S3 Bucket Length}=    Get Length    ${S3 Buckets}
+    Run Keyword If    '${S3 Bucket Length}' == '${VALUE}'
+    ...    Fail    Dashboard has no S3 Buckets Data
+    ...    ELSE
+    ...    Log     Dashboard has S3 Buckets Data
+    
+
 
 
 Verify Page contains R53 Zone
     Page Should Contain    R53 Zone
+    Selects the frame
+    ${R53 Zone}=    Get Text    xpath=.//*[@id='container']/div/ul/li[11]/div/h2
+    Log    ${R53 Zone}
+    ${R53 ZoneLength}=    Get Length    ${R53 Zone}
+    Run Keyword If    '${R53 ZoneLength}' == '${VALUE}'
+    ...    Fail    Dashboard has no R53 Zone Data
+    ...    ELSE
+    ...    Log     Dashboard has R53 Zone Data
+    
 
 
 Verify Page contains Elastic IP
     Page Should Contain    Elastic IP
+    Selects the frame
+    ${Elastic IP}=    Get Text    xpath=.//*[@id='container']/div/ul/li[10]/div/h2
+    Log    ${Elastic IP}
+    ${Elastic Length}=    Get Length    ${Elastic IP}
+    Run Keyword If    '${Elastic Length}' == '${VALUE}'
+    ...    Fail    Dashboard has no Elastic IP Data
+    ...    ELSE
+    ...    Log     Dashboard has Elastic IP Data
+    
 
 
 Verify Page contains I/O Traffic

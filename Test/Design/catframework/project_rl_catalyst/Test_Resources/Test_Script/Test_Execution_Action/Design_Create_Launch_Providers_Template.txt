@@ -81,8 +81,32 @@ Catalyst Create Blueprint of Cloud Formation and Save
     Clicks on Next Button
     Clicks on OKK Button of Cloud Page
     Capture Screen shot of the page
+    Clicks on Workzone Button
+    Clicks on Infrastructure Tab
+    Clicks on Blueprints Section
+    Capture Screen shot of the page
+    Sleep    1s
+    Verfiy Cloud Formation Blueprint is created
+    Delete the Bluprint
 
 
+
+Delete the Bluprint
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element    xpath=.//b[text()='${CLOUD BLUEPRNTNAME}']
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element    xpath=.//*[@title='Delete Blueprint']
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element    xpath=.//*[text()='OK']
+
+
+Verfiy Cloud Formation Blueprint is created
+    Page Should Contain    ${CLOUD BLUEPRNTNAME}
+
+Clicks on Blueprints Section
+    Sleep    1s
+    Click Element    xpath=.//*[@id='myTab3']/li[1]/ul/li[2]/a
+
+
+Clicks on Infrastructure Tab
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element    xpath=.//*[@id='myTab3']/li[1]/a/b
 
 
 Capture Screen shot of the page
@@ -446,6 +470,26 @@ Catalyst Choose Template and Save Setup
     Clicks on Next Button
     Clicks on Confirm OK Button
     Capture Screen shot of the page
+    Clicks on Workzone Button
+    Clicks on Infrastructure Tab
+    Clicks on Blueprints Section
+    Capture Screen shot of the page
+    Sleep    1s
+    Verfiy Software Stack Blueprint is created
+    Delete the Software Stack Bluprint
+
+Verfiy Software Stack Blueprint is created
+    Page Should Contain    ${BLUEPRINT NAME}
+
+Delete the Software Stack Bluprint
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element    xpath=.//b[text()='${BLUEPRINT NAME}']
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element    xpath=.//*[@title='Delete Blueprint']
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element    xpath=.//*[text()='OK']
+
+
+
+
+
 
 
 
