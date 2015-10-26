@@ -110,6 +110,8 @@ Catalyst System Monitoring Dashboard Verification
     Clicks on Left Panel Button
     Sleep    40s
     Verfiy page should not contain agent failed
+    Veridy page contains link
+    Verfiy page Contains click here
     Verify Page Contains Ping
     Verify Page Contains Traffic
     Verify Page Contains DiskUse
@@ -127,8 +129,9 @@ Catalyst Log Monitoring Dashboard Verification
     Clicks on Log Monitoring Link
     Sleep    10s
     Clicks on Left Panel Button
-    Sleep    50s
-    Selects the frame
+    Sleep    2 minute
+    Verfiy page doesnot contain timeout
+    Verfiy the Dashboard is displayed with Legend Running
     Verfiy the Page not contains no results
     Capture the Screen Shot of the Dashboard
     Verify Page Contains Access-Layer-Performance
@@ -206,11 +209,35 @@ Clicks on Telemetry
     Page Should Contain    disk
 
 
+Verfiy page doesnot contain timeout
+    Selects the frame
+    ${gateway}=    Run Keyword and Return Status    Page Should Not Contain    Gateway Timeout
+    Run Keyword If    '${gateway}' == 'True'
+    ...    Log    log Monitoring Dashboard is not displaying Gateway Timeout
+    ...    ELSE
+    ...    Fail   log Monitoring Dashboard is displaying Gateway Timeout
+
+
+
 
 Clicks on Adverse Events
     Selects the frame
     Wait Until Keyword Succeeds    1 minutes    1 seconds     Click Element    xpath=.//*[@id='tabs']/li[3]/a
     Capture the Screen Shot of the Dashboard
+
+
+Verfiy the Dashboard is displayed with Legend Running
+    Selects the frame
+    ${legnd}=    Get Text    xpath=(//span[@class='legend-open'])[1]
+    Log    ${legnd}
+    ${log1}=    Run Keyword and Return Status    Should Be Equal    ${legnd}    ${Accesslayr}
+    Run Keyword If    '${log1}' == 'True'
+    ...    Log    In Log Monitoring Dashboard Legend is visible
+    ...    ELSE
+    ...    Fail    In Log Monitoring Dashboard Legend is NOT visible and not displayng data
+
+
+
 
 
 Verfiy the Page not contains no results
@@ -220,6 +247,28 @@ Verfiy the Page not contains no results
     ...    ELSE IF   '${No Results}' == 'False'
     ...    Fail    Dashboard has No Results Found Displaying and all data is not present
 
+
+Veridy page contains link
+    Page Should Contain    Click here
+    Page Should Contain    settings
+    Selects the frame
+    ${text}=    Get Text    xpath=html/body/div[1]/div/div[1]/div/span/a
+    Log    ${text}
+    ${link}=    Run Keyword and Return Status    Should Be Equal    ${text}    ${settn}
+    Run Keyword If    '${link}' == 'True'
+    ...    Log    In System Monitoring Dashboard Settings is visible
+    ...    ELSE
+    ...    Fail    In System Monitoring Dashboard Settings is NOT visible    
+
+
+Verfiy page Contains click here
+    ${text1}=    Get Text    css=div.container-fluid > div:nth-of-type(3) > a
+    Log    ${text1}
+    ${link1}=    Run Keyword and Return Status    Should Be Equal    ${text1}    ${click}
+    Run Keyword If    '${link1}' == 'True'
+    ...    Log    In System Monitoring Dashboard Click Here is visible
+    ...    ELSE
+    ...    Fail    In System Monitoring Dashboard Click Here is NOT visible    
 
 
 

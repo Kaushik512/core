@@ -24,7 +24,9 @@ ${JOB TITLE}                    CatalystSuites Test Log
 
 ${NOTIFICATIONS}            Connected
 
-
+${settn}                    settings
+${click}                    Click here
+${Accesslayr}                Legend
 
 #SuperCatalyst
 ${SUPERCAT TEMP}                               NodeJStemp
