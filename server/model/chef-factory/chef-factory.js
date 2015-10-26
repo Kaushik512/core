@@ -10,7 +10,7 @@ function fixPath(path) {
         if (path.length && path.length >= 2) {
             if (path[path.length - 1] == '/') {
                 path = path.slice(0, path.length - 1);
-                
+
             }
         } else {
             if (path[0] == '/') {
@@ -61,13 +61,13 @@ var ChefFactory = function ChefFactory(chefSettings) {
         });
 
         function readDir() {
-           
+
             fileIo.isDir(rootDir + path, function(err, dir) {
                 if (err) {
                     callback(err);
                     return;
                 }
-                
+
                 if (dir) {
                     fileIo.readDir(rootDir, path, function(err, dirList, filesList) {
 
@@ -102,8 +102,41 @@ var ChefFactory = function ChefFactory(chefSettings) {
         }
     };
 
+    this.uploadCookbook = function(cookbookName, callback) {
+        fileIo.readFile(chefSettings.userChefRepoLocation + '/cookbooks/' + cookbookName + '/metadata.rb', function(err, fileData) {
+            if (err) {
+                callback(err);
+                return;
+            }
+            var regEx = /name\s*['"](.*?)['"]/g;
+            //nodes = stdOutStr.match(regEx)
+            var matches;
+            var metaDatacookbookName;
+            var fileDataString = fileData.toString();
+            while (matches = regEx.exec(fileDataString)) {
+                if (matches.length == 2) {
+                    //console.log('matches',matches);
+                    metaDatacookbookName = matches[1];
+                    break;
+                }
+            }
+            if (metaDatacookbookName) {
+                cookbookName = metaDatacookbookName;
+            }
+            console.log('from rb file ===> ',metaDatacookbookName);
+            chef.uploadCookbook(cookbookName, function(err) {
+                if (err) {
+                    callback(err);
+                } else {
+                    callback(null);
+                }
+            });
+        });
+    };
+
     this.saveCookbookFile = function(filePath, fileContent, callback) {
         filePath = fixPath(filePath);
+        var self = this;
         if (filePath) {
             fileIo.writeFile(chefSettings.userChefRepoLocation + '/cookbooks/' + filePath, fileContent, 'utf-8', function(err) {
                 if (err) {
@@ -119,7 +152,7 @@ var ChefFactory = function ChefFactory(chefSettings) {
                 }
                 if (cookbookName) {
 
-                    chef.uploadCookbook(cookbookName, function(err) {
+                    self.uploadCookbook(cookbookName, function(err) {
                         if (err) {
                             callback(err);
                         } else {
@@ -155,6 +188,7 @@ var ChefFactory = function ChefFactory(chefSettings) {
                 });
             }
         });
+
         function readDir() {
             fileIo.isDir(rootDir + path, function(err, dir) {
                 if (err) {
