@@ -226,6 +226,10 @@ $(function() {
 
 
     function loadDirArea() {
+        $fileEditorDivContianer.hide();
+        $editorBtnContainer.hide();
+        $fileEditorMsgContainer.show();
+
         $cookbookdir.empty();
         $rolesDirArea.empty();
         $cookbookdir.fileTree({
@@ -242,7 +246,7 @@ $(function() {
         }, function(file) {
             $('.save').data('saveUrl','/cheffactory/' + urlParams.id + '/cookbooks/');
             $('.save').data('saveType','cookbook');
-            $('a').css({
+            $('li.file a').css({
                 background: 'none'
             });
             $('a[rel="' + file + '"]').css({
@@ -272,7 +276,7 @@ $(function() {
         }, function(file) {
             $('.save').data('saveUrl','/cheffactory/' + urlParams.id + '/roles/');
             $('.save').data('saveType','role');
-            $('a').css({
+            $('li.file a').css({
                 background: 'none'
             });
             $('a[rel="' + file + '"]').css({
@@ -310,9 +314,18 @@ $(function() {
         }, function(data, success) {
             $workingIndicatorContainer.hide();
             console.log(data);
-        }).fail(function() {
-           alert("Unable to save cookbook");
-           $workingIndicatorContainer.hide();
+        }).fail(function(jxhr) {
+            var msg = 'Unable to save cookbook/Role.';
+            console.log('jxhr==>', jxhr);
+            if (jxhr.responseJSON && jxhr.responseJSON.message) {
+                msg = jxhr.responseJSON.message;
+            }
+            if(jxhr.responseJSON && jxhr.responseJSON.stdErrMsg) {
+                msg = msg+'\n\r'+'Error Output : '+jxhr.responseJSON.stdErrMsg;
+            }
+
+            alert(msg);
+            $workingIndicatorContainer.hide();
         });
 
     });

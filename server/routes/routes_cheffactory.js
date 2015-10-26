@@ -66,7 +66,6 @@ module.exports.setRoutes = function(app, verificationFunc) {
                 });
                 return;
             }
-            console.log('cookbook ==>',cookbookData);
             res.send(200, cookbookData);
         });
     });
@@ -77,9 +76,14 @@ module.exports.setRoutes = function(app, verificationFunc) {
         var chefFactory = req.chefFactory;
         chefFactory.saveCookbookFile(path, fileContent, function(err) {
             if (err) {
-                res.send(500, {
-                    message: "Server Behaved Unexpectedly"
-                });
+                logger.debug(err);
+                var errRespJson = {
+                    message: "Server Behaved Unexpectedly",
+                };
+                if (err.stdErrMsg) {
+                    errRespJson.stdErrMsg = err.stdErrMsg;
+                }
+                res.send(500, errRespJson);
                 return;
             }
             res.send(200);
@@ -106,10 +110,14 @@ module.exports.setRoutes = function(app, verificationFunc) {
         var chefFactory = req.chefFactory;
         chefFactory.saveRoleFile(path, fileContent, function(err) {
             if (err) {
-                console.log(err);
-                res.send(500, {
-                    message: "Server Behaved Unexpectedly"
-                });
+                logger.error(err);
+                var errRespJson = {
+                    message: "Server Behaved Unexpectedly",
+                };
+                if (err.stdErrMsg) {
+                    errRespJson.stdErrMsg = err.stdErrMsg;
+                }
+                res.send(500, errRespJson);
                 return;
             }
             res.send(200);
@@ -234,6 +242,6 @@ module.exports.setRoutes = function(app, verificationFunc) {
 
     });
 
-    
+
 
 };

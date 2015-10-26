@@ -734,7 +734,7 @@ var Chef = function(settings) {
 
             }
         };
-        var argList =['download', 'cookbooks/'+cookbookName];
+        var argList = ['download', 'cookbooks/' + cookbookName];
         // if (false && cookbookDir) {
         //     argList.push('-d');
         //     argList.push(cookbookDir);
@@ -763,10 +763,10 @@ var Chef = function(settings) {
             }
         };
         var indexOfJson = roleName.indexOf('.json');
-        if(indexOfJson === -1) {
-            roleName = roleName+'.json';
+        if (indexOfJson === -1) {
+            roleName = roleName + '.json';
         }
-        var argList = ['download', 'roles/'+roleName];
+        var argList = ['download', 'roles/' + roleName];
         // if (roleDir) {
         //     argList.push('-d');
         //     argList.push(roleDir);
@@ -882,6 +882,7 @@ var Chef = function(settings) {
     };
 
     this.uploadCookbook = function(cookbookName, callback) {
+        var errOutput = '';
         var uploadCookbookOption = {
             cwd: settings.userChefRepoLocation,
             onError: function(err) {
@@ -894,20 +895,54 @@ var Chef = function(settings) {
                 } else {
                     callback({
                         message: "Cmd exited with code : " + code,
-                        retCode: code
+                        retCode: code,
+                        stdErrMsg: errOutput
                     }, false);
                 }
 
             },
             onStdOut: function(outData) {
-                logger.debug('out ==> '+outData.toString());
+                logger.debug('out ==> ' + outData.toString());
             },
             onStdErr: function(outData) {
+                errOutput = errOutput + outData.toString();
                 logger.debug("err ==> " + outData.toString());
             }
         };
         var procUploadCookbook = new Process('knife', ['cookbook', 'upload', cookbookName, '--force'], uploadCookbookOption);
         procUploadCookbook.start();
+    };
+
+    this.uploadRole = function(roleName, callback) {
+        var errOutput = '';
+        var uploadRoleOption = {
+            cwd: settings.userChefRepoLocation,
+            onError: function(err) {
+                callback(err, null);
+            },
+            onClose: function(code) {
+                logger.debug(code);
+                if (code === 0) {
+                    callback(null, true);
+                } else {
+                    callback({
+                        message: "Cmd exited with code : " + code,
+                        retCode: code,
+                        stdErrMsg: errOutput
+                    }, false);
+                }
+
+            },
+            onStdOut: function(outData) {
+                logger.debug('out ==> ' + outData.toString());
+            },
+            onStdErr: function(outData) {
+                errOutput = errOutput + outData.toString();
+                logger.debug("err ==> " + outData.toString());
+            }
+        };
+        var procUploadRole = new Process('knife', ['upload', 'roles/' + roleName, '--force'], uploadRoleOption);
+        procUploadRole.start();
     };
 
     this.createAndUploadCookbook = function(cookbookName, dependencies, callback) {

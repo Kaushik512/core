@@ -196,34 +196,34 @@ var ChefFactory = function ChefFactory(chefSettings) {
 
     this.saveRoleFile = function(filePath, fileContent, callback) {
         filePath = fixPath(filePath);
+        console.log(filePath);
         if (filePath) {
             fileIo.writeFile(chefSettings.userChefRepoLocation + '/roles/' + filePath, fileContent, 'utf-8', function(err) {
                 if (err) {
                     callback(err, null);
                     return;
                 }
-                // //extracting cookbook name;
-                // var cookbookName = '';
+                //extracting cookbook name;
+                var roleName = filePath;
 
-                // var indexOfSlash = filePath.indexOf('/');
-                // if (indexOfSlash != -1) {
-                //     cookbookName = filePath.substring(0, indexOfSlash);
-                // }
-                // if (cookbookName) {
+                var indexOfSlash = filePath.indexOf('/');
+                if (indexOfSlash != -1) {
+                    roleName = filePath.substring(0, indexOfSlash);
+                }
+                if (roleName) {
 
-                //     chef.uploadCookbook(cookbookName, function(err) {
-                //         if (err) {
-                //             callback(err);
-                //         } else {
-                //             callback(null);
-                //         }
-                //     });
-                // } else {
-                //     callback({
-                //         message: "Invalid role name"
-                //     });
-                // }
-                callback(null);
+                    chef.uploadRole(roleName, function(err) {
+                        if (err) {
+                            callback(err);
+                        } else {
+                            callback(null);
+                        }
+                    });
+                } else {
+                    callback({
+                        message: "Invalid role name"
+                    });
+                }
             });
         } else {
             callback({
