@@ -129,7 +129,14 @@
         <!--<input type="checkbox" />
         <span>select All</span>-->
         <a href="javascript:void(0)" id="syncFactoryItems">Sync</a>
-       </div>
+        </div> 
+        <div class="cookbookSyncArea">
+            <span>Cookbooks : </span>
+        </div>
+        <div class="roleSyncArea">
+         <span>Roles : </span>
+        </div>
+       
     </div>
 
 </div>
@@ -418,17 +425,19 @@ $(function() {
 
     $.get('/cheffactory/' + urlParams.id + '/factoryItems/', function(factoryItems) {
         var $syncDirArea = $('#syncDirArea');
+        var $cookbookArea = $syncDirArea.find('.cookbookSyncArea');
+        var $rolesDirArea = $syncDirArea.find('.roleSyncArea')
         if (factoryItems.cookbooks && factoryItems.cookbooks.length) {
             for (var i = 0; i < factoryItems.cookbooks.length; i++) {
                 var $div = $('<div></div>').append('<input class="syncList" data-itemType="cookbook" type="checkbox" value="' + factoryItems.cookbooks[i] + '"/><span>' + factoryItems.cookbooks[i] + '</span>');
-                $syncDirArea.append($div);
+                $cookbookArea.append($div);
 
             }
         }
         if (factoryItems.roles && factoryItems.roles.length) {
             for (var i = 0; i < factoryItems.roles.length; i++) {
                 var $div = $('<div></div>').append('<input class="syncList" data-itemType="role" type="checkbox" value="' + factoryItems.roles[i] + '"/><span>' + factoryItems.roles[i] + '</span>');
-                $syncDirArea.append($div);
+                $rolesDirArea.append($div);
             }
         }
     });
