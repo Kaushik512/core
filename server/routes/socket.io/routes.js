@@ -203,7 +203,7 @@ module.exports.setRoutes = function(socketIo) {
 
     // Sync instance status AWS with Catalyst.
 
-    var jobId = crontab.scheduleJob("*/1 * * * *", function() { //This will call this function every 3 minutes 
+    var jobId = crontab.scheduleJob("*/3 * * * *", function() { //This will call this function every 3 minutes 
         logger.debug("Cron Job run every 3 minutes!");
         var instanceState = socketIo.of('/insState');
         var socketList = [];

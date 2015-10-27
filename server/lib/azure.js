@@ -3,7 +3,8 @@ var exec = require('child_process').exec;
 var SSHExec = require('./utils/sshexec');
 var logger = require('_pr/logger')(module);
 var Process = require("./utils/process");
-var curl = require("./utils/curl.js");
+var Curl = require("./utils/curl.js");
+var appConfig = require('_pr/config');
 
 function execute(cmd, isJsonResponse, callback) {
     // logger.debug("START of executing issued command");
@@ -209,8 +210,62 @@ var AzureCloud = function() {
     }
 
     this.updatedfloatingip = false;
- 
+
+
 this.trysshoninstance = function(ostype,ip_address, username, pwd, callback) {
+           logger.debug('In trysshoninstance1');
+           var opts = {
+                //privateKey: instanceData.credentials.pemFilePath,
+                password: pwd,
+                username: username,
+                host: ip_address,
+                instanceOS: 'linux',
+                port: 22,
+                cmds: ["ls -al"],
+                cmdswin: ["knife wsman test"],
+                interactiveKeyboard: true
+            }
+
+            var cmdString = '';
+            if(ostype == "Windows"){
+                curl = new Curl();
+                cmdString = opts.cmdswin[0] + ' ' + opts.host + ' -m' ;
+                logger.debug("cmdString >>>",cmdString);
+                curl.executecurl(cmdString,function(err,stdout){
+                    logger.debug('stdout:',stdout,err);
+
+                    if(stdout && stdout.indexOf('Connected successfully') >= 0){
+                        callback('ok');
+                        return;
+                    }
+                    if(err){
+                        logger.debug('in error',err);
+                        callback('Error ',null);
+                        return;
+                    }
+
+                });
+
+            }
+            else{
+                cmdString = opts.cmds.join(' && ');
+                //console.log(JSON.stringify(opts));
+                var sshExec = new SSHExec(opts);
+                sshExec.exec(cmdString, function(err, stdout) {
+                    logger.debug(stdout);
+                    callback(stdout);
+                    return;
+                }, function(err, stdout) {
+                    logger.debug('Out:', stdout); //assuming that receiving something out would be a goog sign :)
+                    callback('ok');
+                    return;
+                }, function(err, stdout) {
+                    logger.error('Error Out:', stdout);
+                });
+            }
+    }  
+ 
+this.trysshoninstance1 = function(ostype,ip_address, username, pwd, callback) {
            var opts = {
                 //privateKey: instanceData.credentials.pemFilePath,
                 password: pwd,

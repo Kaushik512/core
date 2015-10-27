@@ -216,6 +216,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             var versionData = blueprint.getVersionData(req.params.version);
             res.send(200, versionData);
 
+
         });
 
     });
@@ -234,7 +235,26 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         });
     });
 
-
+     //for testing
+    app.get('/blueprints/azure/tryssh/:ip',function(req,res){
+        var azureCloud = new AzureCloud();
+        azureCloud.trysshoninstance('Windows',req.params["ip"],'testing','testing',function(err,data){
+            logger.debug('Output:',data);
+            if(!err)
+            {
+                logger.debug('about to send response');
+                res.send(200);
+                return;
+            }
+            else{
+                res.send(400, {
+                    message: err
+                });
+                return;
+            }
+            
+        })
+    });
 
     app.get('/blueprints/:blueprintId/launch', function(req, res) {
         logger.debug("Enter /blueprints/%s/launch -- ", req.params.blueprintId);
@@ -2129,6 +2149,12 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                                     logger.error("Unable to set instance bootstarp status. code 0", err);
                                                                                 } else {
                                                                                     logger.debug("Instance bootstrap status set to success");
+                                                                                     logsDao.insertLog({
+                                                                                        referenceId: logsReferenceIds,
+                                                                                        err: false,
+                                                                                        log: 'Instance Bootstraped Successfully',
+                                                                                        timestamp: new Date().getTime()
+                                                                                    });
                                                                                 }
                                                                             });
                                                                         }
