@@ -59,12 +59,7 @@ TrackSchema.statics.createNew = function(trackData, callback) {
 // Update all Track informations.
 TrackSchema.statics.updateTrack = function(trackId, trackData, callback) {
 
-    logger.debug("Going to Update Track data: ", JSON.stringify(trackData));
-    // var setData = {};
-    //  var keys = Object.keys(trackData);
-    /*for (var i = 0; i < keys.length; i++) {
-        setData[keys[i]] = trackData[keys[i]];
-    }*/
+    logger.debug("Update Track" , JSON.stringify(trackData));
     console.log(trackData.description);
     this.update({
         "_id": new ObjectId(trackId),
@@ -73,7 +68,8 @@ TrackSchema.statics.updateTrack = function(trackId, trackData, callback) {
         $set: {
             "itemUrls.$.name": trackData.name,
             "itemUrls.$.url": trackData.url,
-            "itemUrls.$.description": trackData.description
+            "itemUrls.$.description": trackData.description,
+            "itemUrls.$.childItem": trackData.childItem
         }
     }, {
         upsert: false
@@ -107,6 +103,8 @@ TrackSchema.statics.getTrackById = function(trackId, callback) {
 // Remove Track informations.
 TrackSchema.statics.removeTracks = function(trackId, itemUrlId, callback) {
     logger.debug("removing",itemUrlId);
+    logger.debug("trackId",trackId);
+    logger.debug("itemUrlId",itemUrlId);
     this.update({
         "_id": trackId
     }, {
