@@ -129,10 +129,10 @@ Catalyst Log Monitoring Dashboard Verification
     Clicks on Log Monitoring Link
     Sleep    10s
     Clicks on Left Panel Button
-    Sleep    2 minute
+    Sleep    4 minute
     Verfiy page doesnot contain timeout
     Verfiy the Dashboard is displayed with Legend Running
-    Verfiy the Page not contains no results
+    #Verfiy the Page not contains no results
     Capture the Screen Shot of the Dashboard
     Verify Page Contains Access-Layer-Performance
     Verify Page Contains Access-Layer-Uptime
@@ -212,10 +212,11 @@ Clicks on Telemetry
 Verfiy page doesnot contain timeout
     Selects the frame
     ${gateway}=    Run Keyword and Return Status    Page Should Not Contain    Gateway Timeout
-    Run Keyword If    '${gateway}' == 'True'
-    ...    Log    log Monitoring Dashboard is not displaying Gateway Timeout
+    ${Visualize}=    Run Keyword and Return Status    Page Should Not Contain    No Living connections
+    Run Keyword If    '${gateway}' == 'True' and '${Visualize}' == 'True'
+    ...    Log    log Monitoring Dashboard is not displaying Gateway Timeout and No living Connections
     ...    ELSE
-    ...    Fail   log Monitoring Dashboard is displaying Gateway Timeout
+    ...    Fail   log Monitoring Dashboard is displaying Gateway Timeout or No living Connections
 
 
 
@@ -377,27 +378,129 @@ Clicks on Notifications link
 
 Verify Page Contains Access-Layer-Performance
     Page Should Contain    ACCESS-LAYER-Performance
+    Selects the frame
+    ${Accss requests}=    Get Text    xpath=//li[@data-label='Average Requests_Connection']
+    Log    ${Accss requests}
+    ${performance1}=    Run Keyword and Return Status    Should Be Equal    ${Accss requests}    ${ACCESS REQUESTS}
+    ${Accss connections}=    Get Text    xpath=//li[@data-label='Average Active_connections']
+    Log    ${Accss connections}
+    ${performance2}=    Run Keyword and Return Status    Should Be Equal    ${Accss connections}    ${ACCESS CONNECTIONS}
+    ${Accss waiting}=    Get Text    xpath=//li[@data-label='Average Waiting']
+    Log    ${Accss waiting}
+    ${performance3}=    Run Keyword and Return Status    Should Be Equal    ${Accss waiting}    ${ACCESS WAITING}
+    Run Keyword If    '${performance1}' == 'True' and '${performance2}' == 'True' and '${performance3}' == 'True'
+    ...    Log    log Monitoring dashboard is displaying ACCESS LAYER Performance Graphs
+    ...    ELSE
+    ...    Fail    log Monitoring dashboard is not displaying ACCESS LAYER Performance Graphs
+
+
 
 Verify Page Contains Access-Layer-Uptime
     Page Should Contain    ACCESS-LAYER-UPTIME
+    Selects the frame
+    ${Accss uptime}=    Get Text    xpath=(//li[@data-label='running'])[1]
+    Log    ${Accss uptime}
+    ${uptime}=    Run Keyword and Return Status    Should Be Equal    ${Accss uptime}    ${ACCESS UPTIME}
+    Run Keyword If    '${uptime}' == 'True'
+    ...    Log    log Monitoring dashboard is displaying ACCESS LAYER Uptime Graphs
+    ...    ELSE
+    ...    Fail    log Monitoring dashboard is not displaying ACCESS LAYER Uptime Graphs    
+
+
+
 
 Verify Page Contains Access-Layer-Response
     Page Should Contain    ACCESS-LAYER-RESPONSE
+    Selects the frame
+    ${Accss response}=    Get Text    xpath=//li[@data-label='-']
+    Log    ${Accss response}
+    ${response}=    Run Keyword and Return Status    Should Be Equal    ${Accss response}    ${ACCESS RESPONSE}
+    Run Keyword If    '${response}' == 'True'
+    ...    Log    log Monitoring dashboard is displaying ACCESS LAYER Response Graphs
+    ...    ELSE
+    ...    Fail    log Monitoring dashboard is not displaying ACCESS LAYER Response Graphs    
+
+
+
+
+    
+
 
 Verify Page Contains Cat-Uptime
     Page Should Contain    CAT-UPTIME
+    Selects the frame
+    ${cat uptime}=    Get Text    xpath=(//li[@data-label='running'])[2]
+    Log    ${cat uptime}
+    ${ng uptime}=    Run Keyword and Return Status    Should Be Equal    ${cat uptime}    ${CAT UPTIME}
+    Run Keyword If    '${ng uptime}' == 'True'
+    ...    Log    log Monitoring dashboard is displaying CAT Uptime Graphs
+    ...    ELSE
+    ...    Fail    log Monitoring dashboard is not displaying CAT Uptime Graphs    
+
+
 
 Verify Page Contains Cat-App-Usage
     Page Should Contain    CAT-APP-USAGE
+    Selects the frame
+    ${App}=    Get Text    xpath=(//span[text()='message.@timestamp per minute'])[1]
+    Log   ${App}
+    ${App usage}=    Run Keyword and Return Status    Should Be Equal    ${App}    ${USAGE}  
+    Run Keyword If    '${App usage}' == 'True'
+    ...    Log    log monitoring dashboard is displaying cat app usage data
+    ...    ELSE
+    ...    Fail    log monitoring dashboard is not displaying cat app usage data
+    
+
+
 
 Verify Page Contains Cat-Bootstrap-Perday
-    Page Should Contain    CAT-BOOTSTRAP-PERDAY 
+    Page Should Contain    CAT-BOOTSTRAP-PERDAY
+    Selects the frame
+    ${Bootstrap}=    Get Text    xpath=(//span[text()='Top 5 host'])[1]
+    Log   ${Bootstrap}
+    ${bootstrap usage}=    Run Keyword and Return Status    Should Be Equal    ${Bootstrap}    ${BOOTSTRAP USAGE}  
+    Run Keyword If    '${bootstrap usage}' == 'True'
+    ...    Log    log monitoring dashboard is displaying cat bootstrap data
+    ...    ELSE
+    ...    Fail    log monitoring dashboard is not displaying cat bootstrap data
+
+
+
+
 
 Verify Page Contains Cat-LogLevel-Percent
     Page Should Contain    CAT-LOGLEVEL-Percent
+    Selects the frame
+    ${cat log}=    Get Text    xpath=//li[@data-label='debug']
+    Log    ${cat log}
+    ${logged1}=    Run Keyword and Return Status    Should Be Equal    ${cat log}    ${CAT DEBUG}
+    ${error}=    Get Text    xpath=//li[@data-label='error']
+    Log    ${error}
+    ${logged2}=    Run Keyword and Return Status    Should Be Equal    ${error}    ${CAT ERROR}
+    #${warn}=    Get Text    xpath=html/body/div[2]/div/div/dashboard-grid/ul/li[6]/dashboard-panel/div/visualize/div[2]/div/div[3]/ul/li[3]/span
+    #Log    ${warn}
+    #${logged3}=    Run Keyword and Return Status    Should Be Equal    ${warn}    ${CAT WARN}
+    Run Keyword If    '${logged1}' == 'True' and '${logged2}' == 'True'
+    ...    Log    log Monitoring dashboard is displaying CAT Log Level percent data
+    ...    ELSE
+    ...    Fail    log Monitoring dashboard is not displaying CAT Log Level percent data
+
+
+
+
 
 Verify Page Contains Cat_Errors
-    Page Should Contain    CAT-ERRORS    
+    Page Should Contain    CAT-ERRORS
+    Selects the frame
+    ${cat errors}=    Get Text    xpath=html/body/div[2]/div/div/dashboard-grid/ul/li[7]/dashboard-panel/div/visualize/div[2]/div/div/kbn-agg-table-group/table/tbody/tr/td/kbn-agg-table/paginated-table/paginate/div[1]/table/thead/tr/th[1]/span
+    Log   ${cat errors}
+    ${cat err}=    Run Keyword and Return Status    Should Be Equal    ${cat errors}    ${CAT ERRORS}
+    Run Keyword If    '${cat err}' == 'True'
+    ...    Log    log monitoring dashboard is displaying cat errors data
+    ...    ELSE
+    ...    Fail    log monitoring dashboard is not displaying cat errors data
+
+
 
 Verify Page Contains Cat-Access-Errors
     Page Should Contain    CAT-ACCESS-ERRORS    
