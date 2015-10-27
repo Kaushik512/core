@@ -109,6 +109,9 @@ Catalyst System Monitoring Dashboard Verification
     Sleep    10s
     Clicks on Left Panel Button
     Sleep    40s
+    Verfiy page should not contain agent failed
+    Veridy page contains link
+    Verfiy page Contains click here
     Verify Page Contains Ping
     Verify Page Contains Traffic
     Verify Page Contains DiskUse
@@ -126,8 +129,9 @@ Catalyst Log Monitoring Dashboard Verification
     Clicks on Log Monitoring Link
     Sleep    10s
     Clicks on Left Panel Button
-    Sleep    25s
-    Selects the frame
+    Sleep    2 minute
+    Verfiy page doesnot contain timeout
+    Verfiy the Dashboard is displayed with Legend Running
     Verfiy the Page not contains no results
     Capture the Screen Shot of the Dashboard
     Verify Page Contains Access-Layer-Performance
@@ -177,6 +181,8 @@ Catalyst Notifications Dashboard Verification
     Clicks on Left Panel Button
     Sleep    10s
     Selects the frame
+    Sleep    1s
+    Capture the Screen Shot of the Dashboard
     Verify Page Contains Connected
     Verify Page Contains CatsEye
     Verify Page Contains Telemetry
@@ -186,12 +192,49 @@ Catalyst Notifications Dashboard Verification
     Verify Page Contains Stopped
     Verify Page Contains Monitoring
     Verify Page Contains Laast Updated
+    Clicks on Telemetry
+    Clicks on Adverse Events
     Capture the Screen Shot of the Dashboard
     Sleep    1s
     Unselect Frame
 
 
 
+Clicks on Telemetry
+    Selects the frame
+    Wait Until Keyword Succeeds    1 minutes    1 seconds     Click Element    xpath=.//*[@id='tabs']/li[2]/a
+    Capture the Screen Shot of the Dashboard
+    Page Should Contain    memory
+    Page Should Contain    cpu
+    Page Should Contain    disk
+
+
+Verfiy page doesnot contain timeout
+    Selects the frame
+    ${gateway}=    Run Keyword and Return Status    Page Should Not Contain    Gateway Timeout
+    Run Keyword If    '${gateway}' == 'True'
+    ...    Log    log Monitoring Dashboard is not displaying Gateway Timeout
+    ...    ELSE
+    ...    Fail   log Monitoring Dashboard is displaying Gateway Timeout
+
+
+
+
+Clicks on Adverse Events
+    Selects the frame
+    Wait Until Keyword Succeeds    1 minutes    1 seconds     Click Element    xpath=.//*[@id='tabs']/li[3]/a
+    Capture the Screen Shot of the Dashboard
+
+
+Verfiy the Dashboard is displayed with Legend Running
+    Selects the frame
+    ${legnd}=    Get Text    xpath=(//span[@class='legend-open'])[1]
+    Log    ${legnd}
+    ${log1}=    Run Keyword and Return Status    Should Be Equal    ${legnd}    ${Accesslayr}
+    Run Keyword If    '${log1}' == 'True'
+    ...    Log    In Log Monitoring Dashboard Legend is visible
+    ...    ELSE
+    ...    Fail    In Log Monitoring Dashboard Legend is NOT visible and not displayng data
 
 
 
@@ -204,6 +247,28 @@ Verfiy the Page not contains no results
     ...    ELSE IF   '${No Results}' == 'False'
     ...    Fail    Dashboard has No Results Found Displaying and all data is not present
 
+
+Veridy page contains link
+    Page Should Contain    Click here
+    Page Should Contain    settings
+    Selects the frame
+    ${text}=    Get Text    xpath=html/body/div[1]/div/div[1]/div/span/a
+    Log    ${text}
+    ${link}=    Run Keyword and Return Status    Should Be Equal    ${text}    ${settn}
+    Run Keyword If    '${link}' == 'True'
+    ...    Log    In System Monitoring Dashboard Settings is visible
+    ...    ELSE
+    ...    Fail    In System Monitoring Dashboard Settings is NOT visible    
+
+
+Verfiy page Contains click here
+    ${text1}=    Get Text    css=div.container-fluid > div:nth-of-type(3) > a
+    Log    ${text1}
+    ${link1}=    Run Keyword and Return Status    Should Be Equal    ${text1}    ${click}
+    Run Keyword If    '${link1}' == 'True'
+    ...    Log    In System Monitoring Dashboard Click Here is visible
+    ...    ELSE
+    ...    Fail    In System Monitoring Dashboard Click Here is NOT visible    
 
 
 
@@ -227,16 +292,19 @@ Clicks on Telemetry Tab
 Verify Page Contains Connected
     Page Should Contain    Connected
     Selects the frame
-    ${Connected}=    Get Text    xpath=.//*[@id='pulse-holder-monitoring-on']/div[3]
-    Log    ${Connected}
-    Run Keyword If    '${NOTIFICATIONS}' == '${Connected}'
+    ${Connect}=    Get Text    xpath=.//*[@id='pulse-holder-monitoring-on']/div[3]
+    Log    ${Connect}
+    Run Keyword If    '${NOTIFICATIONS}' == '${Connect}'
     ...    Log    Notifications Dashboard is Showing Connected
     ...    ELSE
     ...    Fail    Notifications Dashboard is not showing Connected status
     
 
 Verify Page Contains CatsEye
-    Page Should Contain    Cats Eye    
+    Page Should Contain    Cats Eye
+    Page Should Contain    Events Per Hour (Last 24 hrs)
+    Page Should Contain    Events by Type (Last 24 hrs)
+    Page Should Not Contain    Connection Failed
 
 Verify Page Contains Telemetry
     Page Should Contain    Telemetry
@@ -342,6 +410,19 @@ Clicks on Monitoring Link
 
 Clicks on System Monitoring Link
     Click Element    xpath=.//a[text()='System Monitoring']
+
+
+Verfiy page should not contain agent failed
+    Selects the frame
+    ${Agent1}=    Run Keyword and Return Status    Page Should Not Contain    Get value from agent failed
+    ${Agent2}=    Run Keyword and Return Status    Page Should Not Contain    cannot connect to 
+    ${Agent3}=    Run Keyword and Return Status    Page Should Not Contain    No route to host    
+    Run Keyword If    '${Agent1}' == 'True' and '${Agent2}' == 'True' and '${Agent3}' == 'True'
+    ...    Log    System Monitoring Dashboard is displaying all the data of the nodes and no nodes are down.
+    ...    ELSE
+    ...    Fail    System Monitoring Dashboard is showing that Nodes are down.
+
+
 
 Verify Page Contains Ping
     Page Should Contain    Ping

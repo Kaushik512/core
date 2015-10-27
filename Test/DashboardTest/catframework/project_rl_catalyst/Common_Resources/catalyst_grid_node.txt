@@ -53,7 +53,7 @@ Browser is opened to login catalyst
 #    Open Browser in Grid Node    ${ENVIRONMENT SERVER}
     Set Selenium Speed    ${DELAY}
 #    Set Selenium Timeout    ${DELAY SECONDS}
-    Log   ${height }
+    Log    ${height}
     Log    ${width}
     Set Window Size    ${width}       ${height}
     Sleep      3s      Wait for screenshot to be captured and saved
