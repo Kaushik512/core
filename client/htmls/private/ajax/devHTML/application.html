@@ -615,7 +615,7 @@ function getAllPipelineApplicationData() {
                 envNameSelected = envName;
                 for (var i = 0; i < dataPipeline[0].envId.length; i++) {
                     var envUniqueText = dataPipeline[0].envId[i];
-                    var $pipelineArea = createPipelineArea(envUniqueText, envNameSelected, projectId);
+                    createPipelineArea(envUniqueText, envNameSelected, projectId);
                 }
             });
         }
@@ -756,11 +756,13 @@ function createPipelineArea(envName,selectedEnv,projectId){
 
     $clonePipeline.find('.envSpecificAppname u').html(envName);
     $stageContainer.append($clonePipeline);
+    //console.log("I am inside createPipelineArea function");
     $.ajax({
         url: '/app/deploy/env/' + envName + '/project/' + projectId + '/list',
         type: "GET",
         async: true,
         success: function(data) {
+            //console.log("I am inside success of createPipelineArea function");
             constructPipelineUI(data, id);
             if (envName != selectedEnv) {
                 $('#'+id).children().css({
@@ -781,6 +783,7 @@ function createPipelineArea(envName,selectedEnv,projectId){
 function constructPipelineUI(data, $clonePipeline) {
     $('.loadingAppDeploySpinner').hide();
     for (var i = 0; i < data.length; i++) {
+        //console.log("I am inside constructPipelineUI function");
         var $envSpecificAppInstanceUniqueCard = $('.envSpecificAppInstanceUniqueCard');
 
         var $cloneAppInstanceUniqueCard = $envSpecificAppInstanceUniqueCard.clone(true);
@@ -953,16 +956,17 @@ $('.appdeployConfigureSaveBtn').click(function(){
     getenvName(function(envName) {
         envNameSelected = envName;
         configureEnvArray.forEach(function(envUniqueText) {
-            $.ajax({
-                url: '/app/deploy/env/' + envUniqueText + '/project/' + projectId + '/list',
-                type: "get",
-                async: true,
-                success: function(data) {
-                    createPipelineArea(envUniqueText, envNameSelected, projectId);
-                    //constructPipelineUI(data, envUniqueText, envNameSelected);
-                },
-                error: function() {}
-            });
+             createPipelineArea(envUniqueText, envNameSelected, projectId);
+            // $.ajax({
+            //     url: '/app/deploy/env/' + envUniqueText + '/project/' + projectId + '/list',
+            //     type: "get",
+            //     async: true,
+            //     success: function(data) {
+                   
+            //         //constructPipelineUI(data, envUniqueText, envNameSelected);
+            //     },
+            //     error: function() {}
+            // });
         });
     });
     var dataDeployPipeline = {
@@ -1345,14 +1349,14 @@ function saveRecord() {
         dataDeploy.appDeployData.description = applicationDescription;
         dataDeploy.appDeployData.projectId = projectId;
         dataDeploy.appDeployData.applicationName = applicationName;
-        console.log(JSON.stringify(dataDeploy));
+        //console.log(JSON.stringify(dataDeploy));
         $.ajax({
             url: '/app/deploy/data/create',
             data: JSON.stringify(dataDeploy),
             type: 'POST',
             contentType: "application/json",
             success: function(data) {
-                console.log(data);
+                //console.log(data);
                 // var $chooseApplication = $('#chooseApplication');
                 // $chooseApplication.empty();
                 $('#modalAppCardDetails').modal("hide");
@@ -1438,6 +1442,7 @@ function getenvName(callback) {
 
 function getAllApplicationData() {
     var projectId = urlParams.projid;
+    //console.log("I am in getAllApplicationData function");
     getenvName(function(envName) {
         $.get('/app/deploy/env/' + envName + '/project/' + projectId + '/list', function(data) {
             constructUI(data);
@@ -1497,6 +1502,7 @@ function constructUI(data) {
 
         var $accordianTemplate = $('.accordianTemplateContainer').find('.accordianTemplate');
         var dataenvAccordianName;
+
         function moreInfoAppDeployClickHandler(e) {
             var $modal = $('#modalAppCardLogDetails');
             var $logContainer = $modal.find('.logsForAppDeploy').show();
@@ -1534,21 +1540,21 @@ function constructUI(data) {
             resetSpinners();
             //$('#chooseRepository').empty();
             var tabletrIndex = $(".moreinfoUpgradeAppDeploy").index($(this));
-            
-            var upgradeAppNameText = $('#tableappDeploydetails tbody tr:eq('+tabletrIndex+') td:first').html();
-            var upgradeNodeIpText = $('#tableappDeploydetails tbody tr:eq('+tabletrIndex+') td:nth-child(5)').html();
-            var containerId = $('#tableappDeploydetails tbody tr:eq('+tabletrIndex+') td:nth-child(7)').html();
+
+            var upgradeAppNameText = $('#tableappDeploydetails tbody tr:eq(' + tabletrIndex + ') td:first').html();
+            var upgradeNodeIpText = $('#tableappDeploydetails tbody tr:eq(' + tabletrIndex + ') td:nth-child(5)').html();
+            var containerId = $('#tableappDeploydetails tbody tr:eq(' + tabletrIndex + ') td:nth-child(7)').html();
             containerId = containerId.split("</div>")[0].split(">")[1];
             //$("#upgradeAppName").empty();
             //$("#upgradeNodeIp").empty();
-            if(!containerId){
+            if (!containerId) {
                 containerId = "NA";
             }
             $("#upgradeAppName").html(upgradeAppNameText);
             $("#upgradeNodeIp").html(upgradeNodeIpText);
             //$("#upgradeNode").val(upgradeNodeIpText);
 
-            
+
             getNexusServer();
             var $modal = $('#modalUpgradeAppDeploy');
             $('#containerIdInput').val(containerId);
@@ -1562,21 +1568,23 @@ function constructUI(data) {
         if (data && data.length) {
             var $clone = $accordianTemplate.clone(true);
             for (var i = 0; i < data.length; i++) {
-                console.log(data[i]);
+                //console.log(data[i]);
                 if (data[i].projectId) {
                     //alert("hiii");
-                    if ($('#' + data[i].projectId + data[i].applicationName + data[i].envId + '_parentAccordian').length == 0) {
+                    if ($('#'+data[i].projectId+data[i].applicationName + data[i].envId + '_parentAccordian').length == 0) {
                         //$clone.attr('id', data[i].projectId + data[i].applicationName + data[i].envId + '_parentAccordian');
                         //$clone.find('.envAppDeployAnchor').attr('data-parent', '#' + data[i].projectId + data[i].applicationName + data[i].envId + '_parentAccordian');
                         if (typeof data[i].projectId + data[i].applicationName + data[i].envId == 'undefined') {
                             dataenvAccordianName = '';
                         } else {
                             // dataenvAccordianName = 'Application : ' + data[i].applicationName + '  &  ' + 'Environment : ' + data[i].envId;
-                            
+
                             //dataenvAccordianName = 'Environment : ' + data[i].envId;
-                            dataenvAccordianName = 'Application Deployment for : ' + data[i].envId;
+                            dataenvAccordianName = 'Application Deployment for : ' + data[i].projectId;
                         }
-                        $clone.find('.panel-title').css({"padding":"10px"});
+                        $clone.find('.panel-title').css({
+                            "padding": "10px"
+                        });
                         $clone.find('.envAppDeployName').html(dataenvAccordianName);
                         //$clone.find('.envAppDeployAnchor').attr('href', '#' + data[i].projectId + data[i].applicationName + data[i].envId + '_accordian');
                         //$clone.find('.envAppDeployAccordian').attr('id', data[i].projectId + data[i].applicationName + data[i].envId + '_accordian');
@@ -1670,8 +1678,8 @@ function constructUI(data) {
                     }
                     if (!data[i].containerId) {
                         data[i].containerId = "NA";
-                    }else{
-                        data[i].containerId = '<div class="spanTextApplication" title="'+data[i].containerId+'">'+data[i].containerId+'</div>'
+                    } else {
+                        data[i].containerId = '<div class="spanTextApplication" title="' + data[i].containerId + '">' + data[i].containerId + '</div>'
                     }
                     if (!data[i].hostName) {
                         data[i].hostName = "NA";
@@ -1687,9 +1695,9 @@ function constructUI(data) {
                     }
                     var applicationLastDeployTime = data[i].applicationLastDeploy;
 
-                    if( (applicationLastDeployTime.toLowerCase().indexOf("am") > -1) || (applicationLastDeployTime.toLowerCase().indexOf("pm") > -1) ){
+                    if ((applicationLastDeployTime.toLowerCase().indexOf("am") > -1) || (applicationLastDeployTime.toLowerCase().indexOf("pm") > -1)) {
                         applicationLastDeployTime = applicationLastDeployTime;
-                    }else{
+                    } else {
                         applicationLastDeployTime = getLocaleTime(applicationLastDeployTime);
                     }
 
@@ -1758,12 +1766,17 @@ function constructUI(data) {
             });
         }
         var $accordianTemplatenoData = $('.accordianTemplateContainer').find('.accordianTemplate');
-        $accordianTemplatenoData.css({"border-color":"#fff","margin-bottom":"0px"});
-        $accordianTemplatenoData.find('.panel-title').css({"padding":"0px"});
+        $accordianTemplatenoData.css({
+            "border-color": "#fff",
+            "margin-bottom": "0px"
+        });
+        $accordianTemplatenoData.find('.panel-title').css({
+            "padding": "0px"
+        });
         var $clonenoData = $accordianTemplatenoData.clone(true);
         $clonenoData.find('#tableappDeploydetails').parent().hide();
         getenvName(function(envNameUrlParams) {
-            var dataenvAccordianNameforNoData = "Application Deployment for : "+envNameUrlParams;
+            var dataenvAccordianNameforNoData = "Application Deployment for : " + envNameUrlParams;
             $clonenoData.find('.envAppDeployName').html(dataenvAccordianNameforNoData);
         });
         $("#nodataAppDeploy").css({
@@ -1773,38 +1786,38 @@ function constructUI(data) {
             // "padding-top": "20px",
             "display": "block"
         }).append($clonenoData);
-        
+
         $("#nodataAppDeploy").find('.margintopright8').css({
             "margin-top": "-2px",
             "margin-right": "-8px"
         });
     }
 }
-var $chooseApplication = $('#chooseApplication');
+// var $chooseApplication = $('#chooseApplication');
 
-$chooseApplication.change(function() {
-    var selectedAppName = $(this).val();
-    console.log(selectedAppName);
-    if (typeof selectedAppName != 'undefined') {
-        $('#appDeployName').append().text("  for '" + selectedAppName + "'");
-        $("#widgetAppDeploy").css({
-            "border-left": "1px solid rgb(221, 221, 221)",
-            "border-right": "1px solid rgb(221, 221, 221)",
-            "border-bottom": "1px solid rgb(221, 221, 221)"
-        });
-        $('#widgetAppDeploy').show();
-    } else {
-        $('#appDeployName').append().text("");
-        $('#widgetAppDeploy').hide();
-    }
-    if (selectedAppName == 'All Application') {
-        getAllApplicationData(function(data) {
-            constructUI(data);
-        });
-    } else {
-        getParticularApplicationData(selectedAppName);
-    }
-});
+// $chooseApplication.change(function() {
+//     var selectedAppName = $(this).val();
+//     console.log(selectedAppName);
+//     if (typeof selectedAppName != 'undefined') {
+//         $('#appDeployName').append().text("  for '" + selectedAppName + "'");
+//         $("#widgetAppDeploy").css({
+//             "border-left": "1px solid rgb(221, 221, 221)",
+//             "border-right": "1px solid rgb(221, 221, 221)",
+//             "border-bottom": "1px solid rgb(221, 221, 221)"
+//         });
+//         $('#widgetAppDeploy').show();
+//     } else {
+//         $('#appDeployName').append().text("");
+//         $('#widgetAppDeploy').hide();
+//     }
+//     if (selectedAppName == 'All Application') {
+//         getAllApplicationData(function(data) {
+//             constructUI(data);
+//         });
+//     } else {
+//         getParticularApplicationData(selectedAppName);
+//     }
+// });
 $('#parameterAppDeploySaveBtn').on("click", function() {
     //saveRecord();
     //getDropdownList();
@@ -1845,7 +1858,7 @@ var urlParams = {};
     var indexOfQues = url.lastIndexOf("?");
     if (indexOfQues != -1) {
         var sub = url.substring(indexOfQues + 1);
-        console.log(sub);
+        //console.log(sub);
         var params = sub.split('&')
         for (var i = 0; i < params.length; i++) {
             var paramParts = params[i].split('=');
