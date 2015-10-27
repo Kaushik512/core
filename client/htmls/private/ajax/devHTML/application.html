@@ -607,16 +607,36 @@ $(document).ready(function() {
     $("#divapplicationtableview").hide();
 });
 function getAllPipelineApplicationData() {
+    //alert("iam in getAllPipelineApplicationData");
     var projectId = urlParams.projid;
     var envNameSelected = "";
     $.get('/app/deploy/pipeline/project/' + projectId, function(dataPipeline) {
-        if (dataPipeline.length) {
+        if (dataPipeline[0].envId.length > 0) {
+            //alert("Ia m in if part");
+            //alert(dataPipeline[0].envId.length);
             getenvName(function(envName) {
                 envNameSelected = envName;
                 for (var i = 0; i < dataPipeline[0].envId.length; i++) {
                     var envUniqueText = dataPipeline[0].envId[i];
                     createPipelineArea(envUniqueText, envNameSelected, projectId);
                 }
+            });
+        }else{
+            //alert("Ia m in else part");
+            $.get('/d4dMasters/project/' + projectId, function(dataforenvName) {
+                var individualenvName = dataforenvName[0].environmentname;
+                individualenvName = individualenvName.split(",");
+                getenvName(function(envName) {
+                    envNameSelected = envName;
+                    for (var i = 0; i < individualenvName.length; i++) {
+                        var envUniqueText = individualenvName[i];
+                        createPipelineArea(envUniqueText, envNameSelected, projectId);
+                    }
+                    // for (var i = 0; i < dataPipeline[0].envId.length; i++) {
+                    //     var envUniqueText = dataPipeline[0].envId[i];
+                    //     createPipelineArea(envUniqueText, envNameSelected, projectId);
+                    // }
+                });
             });
         }
     }).fail(function() {});
@@ -686,12 +706,13 @@ $('.createAppConfigure').click(function() {
                     allEnvironments.push(dataPipeline[0].envSequence[i]);
                 }
                 if (selectedEnvironments.length == 0) {
+                    //alert("i am in length 0");
                     $.get('/d4dMasters/project/' + projectId, function(dataforenvName) {
                         var individualenvName = dataforenvName[0].environmentname;
                         individualenvName = individualenvName.split(",");
                         for (var i = 0; i < individualenvName.length; i++) {
                             var checked = "";
-                            if ($.inArray(individualenvName[i], selectedEnvironments) > -1) {
+                            if ($.inArray(individualenvName[i], individualenvName) > -1) {
                                 checked = "checked";
                             }
                             var $tr = $('<tr/>').attr({
@@ -955,19 +976,15 @@ $('.appdeployConfigureSaveBtn').click(function(){
     
     getenvName(function(envName) {
         envNameSelected = envName;
-        configureEnvArray.forEach(function(envUniqueText) {
-             createPipelineArea(envUniqueText, envNameSelected, projectId);
-            // $.ajax({
-            //     url: '/app/deploy/env/' + envUniqueText + '/project/' + projectId + '/list',
-            //     type: "get",
-            //     async: true,
-            //     success: function(data) {
-                   
-            //         //constructPipelineUI(data, envUniqueText, envNameSelected);
-            //     },
-            //     error: function() {}
-            // });
-        });
+        if (configureEnvArray.length > 0) {
+            configureEnvArray.forEach(function(envUniqueText) {
+                createPipelineArea(envUniqueText, envNameSelected, projectId);
+            });
+        }else{
+            configureEnvArraySequence.forEach(function(envUniqueText) {
+                createPipelineArea(envUniqueText, envNameSelected, projectId);
+            });
+        }
     });
     var dataDeployPipeline = {
         "appDeployPipelineData": {
@@ -1439,6 +1456,24 @@ function getenvName(callback) {
         }
     });
 }
+function getprojectName(callback) {
+    var projectId = urlParams.projid;
+    $.ajax({
+        url: '/d4dMasters/projectname/' + projectId,
+        type: 'GET',
+        async: true,
+        contentType: "application/json",
+        success: function(datarojectName) {
+            callback(datarojectName);
+        },
+        error: function(jqxhr) {
+
+        },
+        failure: function(data1) {
+
+        }
+    });
+}
 
 function getAllApplicationData() {
     var projectId = urlParams.projid;
@@ -1576,16 +1611,23 @@ function constructUI(data) {
                         //$clone.find('.envAppDeployAnchor').attr('data-parent', '#' + data[i].projectId + data[i].applicationName + data[i].envId + '_parentAccordian');
                         if (typeof data[i].projectId + data[i].applicationName + data[i].envId == 'undefined') {
                             dataenvAccordianName = '';
+                            $clone.find('.envAppDeployName').html(dataenvAccordianName);
                         } else {
                             // dataenvAccordianName = 'Application : ' + data[i].applicationName + '  &  ' + 'Environment : ' + data[i].envId;
 
                             //dataenvAccordianName = 'Environment : ' + data[i].envId;
-                            dataenvAccordianName = 'Application Deployment for : ' + data[i].projectId;
+                            //dataenvAccordianName = 'Application Deployment for : ' + data[i].envId;
+                            getprojectName(function(projectNameUrlParams) {
+                                var dataenvAccordianName = "Application Deployment for : " + projectNameUrlParams;
+                                $clone.find('.envAppDeployName').html(dataenvAccordianName);
+                            });
                         }
                         $clone.find('.panel-title').css({
                             "padding": "10px"
                         });
-                        $clone.find('.envAppDeployName').html(dataenvAccordianName);
+                        // $clone.find('.envAppDeployName').html(dataenvAccordianName);
+
+
                         //$clone.find('.envAppDeployAnchor').attr('href', '#' + data[i].projectId + data[i].applicationName + data[i].envId + '_accordian');
                         //$clone.find('.envAppDeployAccordian').attr('id', data[i].projectId + data[i].applicationName + data[i].envId + '_accordian');
                         //$clone.find('.envAppDeployTable').attr('id', 'tableappDeploydetails');
@@ -1775,9 +1817,13 @@ function constructUI(data) {
         });
         var $clonenoData = $accordianTemplatenoData.clone(true);
         $clonenoData.find('#tableappDeploydetails').parent().hide();
-        getenvName(function(envNameUrlParams) {
-            var dataenvAccordianNameforNoData = "Application Deployment for : " + envNameUrlParams;
-            $clonenoData.find('.envAppDeployName').html(dataenvAccordianNameforNoData);
+        // getenvName(function(envNameUrlParams) {
+        //     var dataenvAccordianNameforNoData = "Application Deployment for : " + envNameUrlParams;
+        //     $clonenoData.find('.envAppDeployName').html(dataenvAccordianNameforNoData);
+        // });
+        getprojectName(function(projectNameUrlParams) {
+            var dataprojectAccordianNameforNoData = "Application Deployment for : " + projectNameUrlParams;
+            $clonenoData.find('.envAppDeployName').html(dataprojectAccordianNameforNoData);
         });
         $("#nodataAppDeploy").css({
             // "text-align": "center",
