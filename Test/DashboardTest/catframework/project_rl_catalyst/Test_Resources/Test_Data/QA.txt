@@ -40,7 +40,18 @@ ${SMOKE STATUS}                        No Status
 
 ${JENKINS JOB1}             CATALYST_SMOKE_TEST
 
-
+${ACCESS REQUESTS}            Average Requests_Connection
+${ACCESS CONNECTIONS}        Average Active_connections
+${ACCESS WAITING}            Average Waiting
+${ACCESS UPTIME}            running
+${CAT UPTIME}               running
+${ACCESS RESPONSE}         -
+${CAT DEBUG}               debug
+${CAT ERROR}                error
+${CAT WARN}                 warn
+${USAGE}                    message.@timestamp per minute
+${BOOTSTRAP USAGE}           Top 5 host
+${CAT ERRORS}                @timestamp per 10 minutes
 
 
 #AWS COST
