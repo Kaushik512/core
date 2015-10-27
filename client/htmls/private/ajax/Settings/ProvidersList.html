@@ -104,19 +104,25 @@
                                     });
                                    
                                 }
-                            function getOrganizationList(){
-                              $.get('/d4dMasters/readmasterjsonnew/1',function(data){
+                            function getOrganizationList(callback){
                                 
+                              $.get('/d4dMasters/readmasterjsonnew/1',function(data){
+                                 
+                                 // alert(d4ddata.length);
+                                 data = JSON.parse(JSON.stringify(data));
                                 for(var i=0;i<d4ddata.length;i++){
                                     for(var x=0;x<data.length;x++){
+                                        //alert(d4ddata[i].orgId[0],JSON.stringify(data[x]));
                                         if(d4ddata[i].orgId[0]==data[x]._id){
                                             d4ddata[i].orgName=data[x].orgname;
                                             break;
                                         }
+                                      
                                     }
 
                                 }
-                                
+                                callback();
+                                                              
                               });
                             }
 
@@ -134,7 +140,7 @@
                                      success: function(data, success) {
                                             data= typeof data=="string" ?JSON.parse(data):data;
                                             d4ddata=data;
-                                            getOrganizationList();
+                                            
                                             getProviderDataopenstack();
                                         },
                                         error: function(jqxhr) {
@@ -233,9 +239,13 @@
                                             for(var u = 0; u < data.length; u++){
                                                 d4ddata.push(data[u]);
                                             }
-
-                                            startup();
-                                           // getOrganizationList();
+                                           
+                                           
+                                            getOrganizationList(function(){
+                                                startup();
+                                            });
+                                            
+                                             
                                             
                                         },
                                         error: function(jqxhr) {
@@ -316,6 +326,7 @@
         //force setting the idFieldName to "rowid"
       var idFieldName = "_id";
         formData = d4ddata;
+        //alert(JSON.stringify(formData));
         var formSchema = null;
         $.each(d4ddata, function(i, item) {
             console.log("Top:" + JSON.stringify(item)); //rows
