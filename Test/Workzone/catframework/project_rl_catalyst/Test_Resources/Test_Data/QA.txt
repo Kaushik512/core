@@ -15,7 +15,8 @@ ${ENVIRONMENT SERVER}              http://d4d.rlcatalyst.com/public/login.html
 
 
 
-
+${height}             768
+${width}           1366
  
 
 ${ENV}                 QA.txt

@@ -106,14 +106,14 @@ Catalyst Import an Ubuntu Instance By IP
     ##Clicks on the Project to go to Environment
     Sleep    2s
     Clicks on Button to your > Environment
-    Sleep    3s
+    Sleep    5s
     Clicks on Import By IP Button
     Enters the IP Address of Ubuntu Box
     Select the Operating System as Ubuntu
     Input the Ubuntu User Name for IP
     Select the Config Management Chef Server
     Choose The Authentication Type as Pem File
-    Upload the PEM File for Import By IP
+    Upload the PEM File for Import By IP of ubuntu
     Clicks on Import Button to Import an Instance
     Clicks on Import Close Button
     Selects Ubuntu imported node
@@ -122,6 +122,7 @@ Catalyst Import an Ubuntu Instance By IP
     Verify the Operation as BootStrap
     Verfify the Status of the UbuntuOS Instance
     Clicks on Back To Instances
+    Sleep    5s
 
 
 Catalyst Verfication of Duplicate Node
@@ -214,7 +215,7 @@ Catalyst Verfication of IP,Status,Chef,SSH,MoreInfo and frm Ctrlpanel
     Clicks on Back To Instances
 
 
-Catalyst Import By IP Chef Client run,SSH,Stop,Start on Ubuntu Instance
+Catalyst Import By IP Chef Client run,SSH on Ubuntu Instance
     #Clicks on Settings
     #Clicks on Workzone Button
     #Sleep    2s
@@ -233,21 +234,22 @@ Catalyst Import By IP Chef Client run,SSH,Stop,Start on Ubuntu Instance
     Verify the Operation as Chef-Client-Run
     Verfiy the Chef Client Status after update
     Clicks on Back To Instances
-    Sleep    2s
-    #Clicks on SSH for ubuntu instance
-    #Sleep    3s
-    #Input the Ubuntu Usrname in Terminal
-    #Select Authenticationtype as PEM
-    #Upload the PemFile to ssh
-    #Clicking on the SubmitButton
-    #Sleep    5s
-    #Clicks on Close the Terminal
-    #Sleep    2s 
-    #Clicks on Contreol Panel
-    #Clicks on Action History
-    #Verfiy the operation as SSH
-    #Verfiy the SSH-Status after update
-    #Clicks on Back To Instances
+    Sleep    3s
+    Selects Ubuntu imported node
+    Clicks on SSH for ubuntu instance
+    Sleep    3s
+    Input the Ubuntu Usrname in Terminal
+    Select Authenticationtype as PEM
+    Upload the golden PemFile to ssh
+    Clicking on the SubmitButton
+    Sleep    8s
+    Clicks on Close the Terminal
+    Sleep    2s 
+    Clicks on Contreol Panel
+    Clicks on Action History
+    Verfiy the operation as SSH
+    Verfiy the SSH-Status after update
+    Clicks on Back To Instances
 
 
 Catalyst Verfication of IP,Status,Chef,SSH,MoreInfo on UbuntuIns frm Ctrlpanel
@@ -529,6 +531,10 @@ Select Authenticationtype as PEM
 
 Upload the PemFile to ssh
     Choose File    xpath=.//*[@id='ssh-pemfileInput']    ${CAT_INSTANCES}
+
+
+Upload the golden PemFile to ssh
+    Choose File    xpath=.//*[@id='ssh-pemfileInput']    ${Goldendemo_pem}
 
 Clicking on the SubmitButton
     Click Element    xpath=.//*[@id='ssh-login-form']/div[7]/button[1]
@@ -843,9 +849,12 @@ Select the Operating System of the Box
     Sleep    1s
     Click Element    xpath=//option[@ostype='${CENT OS}']
 
+
 Select the Operating System as Ubuntu
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    id=importinstanceOS
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='select2-drop']/ul/li[4]/div
+    Sleep    1s
+    Click Element    xpath=//option[@ostype='${UBUNTU OS}']    
+    #Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    id=importinstanceOS
+    #Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='select2-drop']/ul/li[4]/div
 
 
 
@@ -859,14 +868,20 @@ Input the Ubuntu User Name for IP
 
 
 Choose The Authentication Type as Pem File
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    id=pemFileDropdown
-    Sleep    1s
-    Click Element    xpath=.//option[@value='pemFile']
+    #Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    id=pemFileDropdown
+    #Sleep    1s
+    #Click Element    xpath=.//option[@value='pemFile']
+    Click Element    xpath=.//*[@id='pemFileDropdown']/option[text()='Pem File']
 
 
 Upload the PEM File for Import By IP
     Choose File    xpath=.//*[@id='importPemfileInput']    ${CAT_INSTANCES}
     #C:\\Users\\adarsh.RLINDIA\\Desktop\\caty\\Chef\\cat_instances.pem
+
+
+Upload the PEM File for Import By IP of ubuntu
+    Choose File    xpath=.//*[@id='importPemfileInput']    ${Goldendemo_pem}
+
 
 Clicks on Import Button to Import an Instance
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    id=addInstanceBtn
@@ -1462,7 +1477,7 @@ Clicks on Jenkins Cancel Button
 
 
 Catalyst creation of Chef Task
-    Clicks on the Project to go to Environment
+    #Clicks on the Project to go to Environment
     Sleep    2s
     Clicks on Button to your > Environment
     Sleep    2s

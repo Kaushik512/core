@@ -12,8 +12,8 @@ Resource           catalyst.txt
 ${BROWSER TYPE}                  firefox 
 ${ENVIRONMENT SERVER}              http://supercatalyst.relevancelab.com/public/login.html
 
-${height}             744
-${width}           1400
+${height}             768
+${width}           1366
 ${NA}                 $
 ${VALUE}             0
 
@@ -24,7 +24,9 @@ ${JOB TITLE}                    CatalystSuites Test Log
 
 ${NOTIFICATIONS}            Connected
 
-
+${settn}                    settings
+${click}                    Click here
+${Accesslayr}                Legend
 
 #SuperCatalyst
 ${SUPERCAT TEMP}                               NodeJStemp
@@ -38,7 +40,18 @@ ${SMOKE STATUS}                        No Status
 
 ${JENKINS JOB1}             CATALYST_SMOKE_TEST
 
-
+${ACCESS REQUESTS}            Average Requests_Connection
+${ACCESS CONNECTIONS}        Average Active_connections
+${ACCESS WAITING}            Average Waiting
+${ACCESS UPTIME}            running
+${CAT UPTIME}               running
+${ACCESS RESPONSE}         -
+${CAT DEBUG}               debug
+${CAT ERROR}                error
+${CAT WARN}                 warn
+${USAGE}                    message.@timestamp per minute
+${BOOTSTRAP USAGE}           Top 5 host
+${CAT ERRORS}                @timestamp per 10 minutes
 
 
 #AWS COST
