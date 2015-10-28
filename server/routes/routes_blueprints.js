@@ -1957,11 +1957,13 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                     username: anImage.userName,
                                                     password: anImage.instancePassword,
                                                     sshPort: "22",
-                                                    endpoints: blueprint.blueprintConfig.securityGroupIds
-
+                                                    endpoints: blueprint.blueprintConfig.securityGroupIds,
+                                                    os: blueprint.blueprintConfig.instanceOS
                                                 }
 
-                                                logger.debug("Azure VM launch params:" + launchparams);
+                                                logger.debug("blueprint.blueprintConfig.instanceOS >>>", blueprint.blueprintConfig.instanceOS);
+
+                                                //logger.debug("Azure VM launch params:" + launchparams);
 
                                                 var azureCloud = new AzureCloud();
 

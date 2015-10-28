@@ -148,8 +148,18 @@ var AzureCloud = function() {
 
         //cloudServiceName,imageName,userName,password,vmName,size,sshPort
         //var createVMcmd = "azure vm create "+ params.VMName +" "+ params.imageName +" "+ params.userName +" "+params.password+" -z \""+params.size+" -l \""+params.location+"\" -e "+ params.sshPort +"-w " + params.vnet + " -b " + params.subnet;
+        
+        if(params.os === 'windows'){
+            params.remoteCon = '-r';
+            params.port = '3389';
+        }else{
+            params.remoteCon = '-e';
+            params.port = '22';
+        }
 
-        var createVMcmd = "azure vm create " + params.VMName + " " + params.imageName + " " + params.username + " " + params.password + " -z \"" + params.size + "\" -l \"" + params.location + "\" -e " + params.sshPort + " -w " + params.vnet + " -b " + params.subnet;
+        logger.debug("Azure server Launch params >>>", params);
+
+        var createVMcmd = "azure vm create " + params.VMName + " " + params.imageName + " " + params.username + " " + params.password + " -z \"" + params.size + "\" -l \"" + params.location + "\" " + params.remoteCon + " " + params.port + " -w " + params.vnet + " -b " + params.subnet;
 
         logger.debug("Create VM command:", createVMcmd);
         var self = this;
@@ -164,13 +174,22 @@ var AzureCloud = function() {
 
             var endpointsPorts = params.endpoints;
 
+            logger.debug("endpointsPorts >>",endpointsPorts);
+
             var port = endpointsPorts.split(',')[0];
 
             logger.debug('Creating endpoint CatEndpoint with port:', port);
 
-            self.createEndPoint(params.VMName, "CatEndpoint", port, function() {
-
-            });
+            if(params.os === 'windows'){
+                self.createEndPoint(params.VMName, "default", '5985', function() {
+                      self.createEndPoint(params.VMName, "CatEndpoint", port, function() {
+                      
+                      });                
+                });
+            }else{
+                self.createEndPoint(params.VMName, "CatEndpoint", port, function() {
+                      });
+            }
 
             callback(null, data);
 
