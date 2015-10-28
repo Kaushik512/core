@@ -77,8 +77,53 @@
                     </div>
                     <!-- /.modal-dialog -->
                 </div>
+                <div class="modal fade" id="modalAppNameURL" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <form role="form" id="appURLForm" autocomplete="off">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                        &times;
+                                    </button>
+                                    <h4 class="modal-title">
+                                            <i class="fa fa-th-list txt-color-blue"></i>&nbsp;&nbsp;Add Application URL
+                                     </h4>
+                                </div>
+                                <div class="modal-body appSeriesHeight">
+                                    <!--app series-->
+                                    <div class="applicationURLContainer" id="appSeries">
+                                        <div class="col-lg-6 col-md-6 projectRepo">
+                                            <label for="">Name:</label>
+                                            <input placeholder="AppName" type="text" maxlength="8" name="appNameInput" class="form-control appName">
+                                            <b class="tooltip tooltip-top-right">
+                                            <i class="fa fa-user txt-color-teal"></i> Please enter Application</b>
+                                        </div>
+                                        <div class="col-lg-6 col-md-6 projectRepo">
+                                            <label for="">URL:</label>
+                                            <input placeholder="http://$host[:port]/appname" name="appNameURL" class="form-control appURL" type="text">
+                                            <b class="tooltip tooltip-top-right">
+                                            <i class="fa fa-user txt-color-teal"></i> Please enter URL</b>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <label id="nodeAppspinner" class=" hidden"><img style="margin-left:5px;margin-right:25px;" src="img/select2-spinner.gif"></label>
+                                    <div class="marginForButtons">
+                                        <button id="addAppBtn" class="btn btn-primary" type="submit">
+                                            <i class="fa fa-upload fa-1x"></i>&nbsp;Add
+                                        </button>
+                                        <a class="btn btn-primary" type="submit" data-dismiss="modal">
+                                            <i class="fa fa-undo fa-1x"></i>&nbsp;Cancel
+                                        </a>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <!-- /.modal-content -->
+                    </div>
+                    <!-- /.modal-dialog -->
+                </div>
 
-                
             </div>
         </div>
     </div>
@@ -121,6 +166,8 @@ function getFilteredList(data, value) {
     console.log(list);
     return list;
 }
+
+
 
 var loadOrgParams = function(orgIds){
    // alert(orgIds);
@@ -319,5 +366,141 @@ $(document).ready(function() {
     // var $wizardul = $('.wizardul').clone();
     // $wizardul.removeClass('hidden');
     // $('footer').append($wizardul);
+});
+
+if (!$.fn.dataTable.isDataTable('#tableRunlistForBlueprint')) {
+    //var $taskListArea = $('.taskListArea').empty();
+    $tasksRunlist = $('#tableRunlistForBlueprint').DataTable({
+        "pagingType": "full_numbers",
+        "bInfo": false,
+        "bLengthChange": false,
+        "paging": false,
+        "bFilter": false,
+        "aoColumns": [{
+            "bSortable": false
+        }]
+    });
+    
+}
+
+function createRunlistTable(runlist) {
+     //alert(runlist.length);
+     //$('#tableRunlist').removeClass('hidden');
+    
+     var $options = $('#cookbooksrecipesselectedList').find('option');
+     console.log("checking???" + $options);
+     if (runlist.length == 0) {
+         var runlist = [];
+         $options.each(function() {
+             var $option = $(this);
+             runlist.push($option.val());
+             console.log(runlist);
+             return runlist;
+         });
+     }
+     $tasksRunlist.clear().draw();
+     // alert(runlist.length);
+     var $runlistList = $('#tableRunlistForBlueprint');
+     $runlistList.find('tr.runlistRow').detach();
+     for (i = 0; i < runlist.length; i++) {
+         //alert('check');
+         if (runlist.length > 0) {
+             //alert('ch');
+             console.log(runlist[i].substring(runlist[i].lastIndexOf("[") + 1, runlist[i].lastIndexOf("]")));
+             
+             var $tr = $('<tr class="runlistRow"></tr>');
+             var $tdName = $('<td class="runlistDescription"></td>');
+
+             $tdName.append(runlist[i].substring(runlist[i].lastIndexOf("[") + 1, runlist[i].lastIndexOf("]")));
+             $tr.append($tdName);
+            $runlistList.append($tr);
+           //  $tasksRunlist.row.add($tr).draw();
+         }
+     }
+ }
+
+$('#saveRunlist').click(function(e) {
+    var $ccrs = $('.cookbookShow').data('$ccrs');
+    // alert($ccrs);
+    console.log($ccrs);
+    console.log($ccrs.getSelectedRunlist());
+    var runlist = $ccrs.getSelectedRunlist();
+    //alert(runlist);
+
+    // alert('here');
+    createRunlistTable(runlist);
+    $('#chefRunlistModal').modal('hide');
+    return false;
+});
+
+
+$('#newAppSeries').click(function(e) {
+    $('#appURLForm').trigger("reset");
+
+});
+$('#addAppBtn').click(function(e) {
+    var rowCount1 = $('#appUrlTable').find('tbody > tr').length;
+    //alert(rowCount1);    
+    if (rowCount1 === 2) {
+        $('#newAppSeries').addClass('hidden');
+        return;
+    }
+});
+
+$('#appURLForm').submit(function(e) {
+    var regexpURL = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
+
+    var $row = $('<tr/>');
+    var appName = $(this).find('.appName').val();
+    var appUrl = $(this).find('.appURL').val();
+    if (!(appName)) {
+        alert("Please Enter Name");
+        return false;
+    }
+    if (!(appUrl)) {
+        alert('Please Enter URL');
+        return false;
+    }
+
+    if (!regexpURL.test(appUrl)) {
+        alert('Please Enter a Valid URL');
+        return false;
+    }
+
+    $row.data('appUrlData', {
+        name: appName,
+        url: appUrl
+    })
+
+
+    var $tdName = $('<td/>');
+    $tdName.append(appName);
+    var $tdURL = $('<td/>');
+    $tdURL.append(appUrl);
+
+    var $tdAction = $('<td/>');
+    $tdAction.append('<div class="btn-group"><button class="btn btn-danger pull-left btn-sg tableactionbutton deleteURL" value="Remove" title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></div>');
+
+    //<button class="btn btn-xs btn-info pull-left EditURL" title="Update"><i class="ace-icon fa fa-pencil bigger-120"></i></button>
+    $tdAction.find('.deleteURL').click(function() {
+        $row.remove();
+        var rowCount2 = $('#appUrlTable').find('tbody > tr').length;
+        if (rowCount2 === 1) {
+            $('#appEntry').removeClass('hidden');
+            return;
+        }
+        if (rowCount2 < 3) {
+            //alert(rowCount2);
+            $('#newAppSeries').removeClass('hidden');
+            return;
+        }
+    });
+
+    $row.append($tdName).append($tdURL).append($tdAction);
+    $('#appUrlTable').find('tbody').append($row);
+    $('#modalAppNameURL').modal('hide');
+    $('#appEntry').addClass('hidden');
+    return false;
+
 });
 </script>
