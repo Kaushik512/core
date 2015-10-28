@@ -1477,7 +1477,7 @@ Clicks on Jenkins Cancel Button
 
 
 Catalyst creation of Chef Task
-    Clicks on the Project to go to Environment
+    #Clicks on the Project to go to Environment
     Sleep    2s
     Clicks on Button to your > Environment
     Sleep    2s
