@@ -1943,7 +1943,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                     res.send(500, errorResponses.db.error);
                                                     return;
                                                 }
-
+                                                anImage = JSON.parse(JSON.stringify(anImage));
                                                 logger.debug("Loaded Image -- : >>>>>>>>>>> %s", anImage);
 
                                                 var launchparams = {
@@ -2066,14 +2066,16 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
 
                                                             //waiting for server to become active
-                                                            logger.debug('Returned from Create Instance. About to send response');
+                                                            logger.debug('Returned from Create Instance.' + instcount + ' of ' + blueprint.instanceCount + '  About to send response');
                                                             //res.send(200);
-                                                            res.send(200, {
-                                                                "id": [instance.id],
-                                                                "message": "instance launch success"
-                                                            });
-                                                            logger.debug('Should have sent the response.');
-
+                                                            azureinstid.push(instance.id);
+                                                            if(azureinstid.length >= parseInt(blueprint.blueprintConfig.instanceCount)){
+                                                                res.send(200, {
+                                                                    "id": azureinstid,
+                                                                    "message": "instance launch success"
+                                                                });
+                                                                logger.debug('Should have sent the response.');
+                                                            }
 
                                                             azureCloud.waitforserverready(instance.name, launchparams.username, launchparams.password, function(err, publicip) {
 
@@ -2210,8 +2212,12 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                 }); //close createServer
                                             }) //close of VMImage getImageById
                                         }
-
-                                        launchAzureCloudBP(providerdata, blueprint);
+                                        var azureinstid = [];
+                                        var instcount = 0;
+                                        logger.debug('for state:',(instcount < parseInt(blueprint.blueprintConfig.instanceCount)),parseInt(blueprint.blueprintConfig.instanceCount));
+                                        for(instcount = 0; instcount < parseInt(blueprint.blueprintConfig.instanceCount);instcount++){
+                                                launchAzureCloudBP(providerdata, blueprint);
+                                        }
 
                                     });
 

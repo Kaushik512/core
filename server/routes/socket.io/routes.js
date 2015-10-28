@@ -322,11 +322,13 @@ module.exports.setRoutes = function(socketIo) {
 
                 //get all vmware providers
                 instances = JSON.parse(JSON.stringify(instances));
+                //to be removed when in dc.
+                return;
                 vmwareProvider.getvmwareProviders(function(err,aProvider){
                     if (err) {
                         logger.debug("Failed to get Provider!");
                     }
-                    logger.debug("Got vmware Provider: ", JSON.stringify(aProvider));
+                    //logger.debug("Got vmware Provider: ", JSON.stringify(aProvider));
                     aProvider = JSON.parse(JSON.stringify(aProvider));
                     if (aProvider) {
 
@@ -357,12 +359,12 @@ module.exports.setRoutes = function(socketIo) {
                                         if(!err){
                                         
                                          vmsonhost = JSON.parse(JSON.stringify(JSON.parse(vmsonhost)));
-                                          logger.debug('vmsonhost:',JSON.stringify(vmsonhost));
+                                        //  logger.debug('vmsonhost:',JSON.stringify(vmsonhost));
                                          for(var i = 0; i < instanceIds.length;i++){
-                                            logger.debug('Instance Details');
+                                           // logger.debug('Instance Details');
                                             //"toolsStatus":"guestToolsRunning","state":"poweredOn"
                                             for(var j = 0; j < vmsonhost["vms"].length;j++){
-                                                logger.debug('VMState:',vmsonhost.vms[j]["state"]);
+                                             //   logger.debug('VMState:',vmsonhost.vms[j]["state"]);
                                                 if(vmsonhost.vms[j]["state"] == "poweredOn"){
                                                     thisinstance(instanceIds[i],function(thisinst){
                                                         if(thisinst){
@@ -373,7 +375,7 @@ module.exports.setRoutes = function(socketIo) {
                                                                         callback(err, null);
                                                                         return;
                                                                     }
-                                                                    logger.debug("Exit updateInstanceState: running ");
+                                                                   // logger.debug("Exit updateInstanceState: running ");
                                                                 });
                                                             }
                                                         }
@@ -390,7 +392,7 @@ module.exports.setRoutes = function(socketIo) {
                                                                         callback(err, null);
                                                                         return;
                                                                     }
-                                                                    logger.debug("Exit updateInstanceState: stopped");
+                                                                //    logger.debug("Exit updateInstanceState: stopped");
                                                                 });
                                                             }
                                                         }
