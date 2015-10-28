@@ -618,7 +618,7 @@ var SettingTreeJson = [{
     }, {
         "name": "track",
         "text": "Track Setup",
-        "nodes": [{
+        "nodes": [/*{
             "name": "templates",
             "text": "Dashboard Types",
             "borderColor": "#000",
@@ -626,7 +626,7 @@ var SettingTreeJson = [{
             "selectable": true,
             "icon": "fa fa-lg fa-fw fa-files-o"
 
-        },{
+        },*/{
             "name": "templates",
             "text": "Dashboard Items",
             "borderColor": "#000",
@@ -693,7 +693,7 @@ function getTrackTreeDetails() {
                 trackTree.push({
                     "name": "data",
                     "text": data[i].type,
-                    "icon": "fa fa-tasks",
+                    "icon": "icon fa fa-line-chart",
                     "nodetype": "data",
                     "nodes": [],
                     "borderColor": "#000",
@@ -712,7 +712,7 @@ function getTrackTreeDetails() {
                             "data-href": data[i].itemUrls[j].url,
                             "nodetype": "parentNode",
                             "selectable": false,
-                            "icon": "fa fa-fw fa-1x fa-desktop",
+                            "icon": "icon fa fa-lg fa-fw fa-files-o",
                             "nodes": []
                         });
                         console.log("TrackAfter"+JSON.stringify(trackTree));
@@ -726,7 +726,7 @@ function getTrackTreeDetails() {
                             "data-href": data[i].itemUrls[j].url,
                             "nodetype": "parentNode",
                             "selectable": true,
-                            "icon": "fa fa-fw fa-1x fa-desktop"
+                            "icon": "icon fa fa-lg fa-fw fa-files-o"
                         });
                     }
                     console.log("TrackTree"+JSON.stringify(trackTree[0].nodes));

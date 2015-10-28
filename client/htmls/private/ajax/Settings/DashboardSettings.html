@@ -330,8 +330,8 @@ function createTableForTrack(trackData) {
                     //  debugger;
                     var $this = $(this);
                     var $tr = $this.parents('tr.trackItemRow');
-                    //var trackDataCheck = $tr.data('trackData');
-                    var datatrackId = $tr.data('data-trackId');
+                    var trackDataCheck = $tr.data('trackData');
+                    //var datatrackId = $tr.data('data-trackId');
                     var trackId = trackData._id;
                     var itemUrlIdEdit = trackData.itemUrls[j]._id;
                     var $editModal = $('#modalForTrackEdit');
@@ -468,7 +468,9 @@ $('#trackItemUrl').submit(function(e) {
             for (var k = 0; k < trackData.itemUrls.length; k++) {
                 itemUrls.push(trackData.itemUrls[k]);
             }
+
             trackData.itemUrls = itemUrls;
+            //alert(JSON.stringify(itemUrls);
             var itemId = $('#trackItemHiddenInputNameUrl').val();
             trackData.itemUrls[0].itemId = itemId;
             url = '../track/' + trackId + '/update';
