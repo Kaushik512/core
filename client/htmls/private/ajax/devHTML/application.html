@@ -1,3 +1,21 @@
+<style type="text/css">
+    @media (min-width: 320px) and (max-width: 767px) {
+      .padding-left5-mobile{
+        padding-left: 5px !important;
+      }
+      .padding-right5-mobile{
+        padding-right: 5px !important;
+      }
+      .margin-left10Per-mobile{
+        margin-left: 10%;
+      }
+    }
+    @media (min-width: 320px) and (max-width: 480px) {
+      .margin-left10Per-mobile{
+        margin-left: 25% !important;
+      }
+    }
+</style>
 <div class="tab-pane" id="l6">
     <div class="jarviswidget jarviswidget-color-blueLight" id="wid-id-application" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false" data-widget-fullscreenbutton="false" data-widget-custombutton="false" data-widget-sortable="false">
         <div>
@@ -49,12 +67,12 @@
                         </div>
                     </article>
                 </div>
-                <div class="col-sm-3 col-md-3 col-lg-2 envSpecificAppTemplate" style="display:none">
+                <div class="col-sm-4 col-md-3 col-lg-2 col-xs-12 envSpecificAppTemplate" style="display:none">
                     <div class="envSpecificAppname"><u></u></div>
                 </div>
 
 
-                <div class="col-sm-12 col-md-12 col-lg-12 col-xs-6 no-padding envSpecificAppInstanceUniqueCard padding-right5-mobile" style="display:none">
+                <div class="col-sm-12 col-md-12 col-lg-12 col-xs-12 no-padding envSpecificAppInstanceUniqueCard padding-right5-mobile margin-left10Per-mobile" style="display:none">
                     <div class="panel panel-primary appCard-inner-panel role-Selectedcard-app">
                         <div class="panel-heading appCard-inner-panel-heading">
                             <div contenteditable="false" class="domain-roles-icon">
@@ -138,14 +156,18 @@
                                 <a id="instanceview" class="btn1" onclick="showHideControl(this.id)"> <i class="fa fa-align-justify fa-2x txt-color-deactive font-size18" title="Table View" /></a>
                             </span> -->
                             <span class="pull-right margintopright8">                                    
-                                <a onclick="showHideControlApplication(this.id)" id="defaultViewButtonAppCard" class="btn1" rel="tooltip" data-placement="top" data-original-title="Pipeline View"> 
-                                    <i style="font-size:18px" class="fa fa-th fa-2x txt-color-active"></i>
+                                <a onclick="showHideControlApplication(this.id)" class="btn1" id="instanceviewAppCard" rel="tooltip" data-placement="top" data-original-title="History" title="History"> 
+                                    <i style="font-size:16px" class="fa fa-header fa-2x txt-color-deactive"></i>
                                 </a>&nbsp;
-                                <a onclick="showHideControlApplication(this.id)" class="btn1" id="instanceviewAppCard" rel="tooltip" data-placement="top" data-original-title="Table View"> 
-                                    <i style="font-size:18px" class="fa fa-align-justify fa-2x txt-color-deactive"></i>
+                                <!-- <a onclick="showHideControlApplication(this.id)" id="defaultViewButtonAppCard" class="btn1" rel="tooltip" data-placement="top" data-original-title="Pipeline View" style="display:none"> 
+                                    <i style="font-size:18px;transform: rotateY(180deg);" class="fa fa-paragraph fa-2x txt-color-active"></i>
+                                </a> -->
+                                <a onclick="showHideControlApplication(this.id)" id="defaultViewButtonAppCard" class="btn btn-primary" style="display:none"> 
+                                    <i class="ace-icon ace-icon fa fa-chevron-left bigger-110" style="color:#fff;margin-right:4px;"></i>Pipeline View
                                 </a>
-                                <a href="#modalappcardConfigure" data-toggle="modal" class="createAppConfigure btn btn-primary" style="margin-top:-5px" rel="tooltip" data-placement="top" data-original-title="Configure Application">
-                                    <b><i class="fa fa-th fa-bullseye txt-color-active" style="font-size:13px;color:rgb(255, 255, 255);margin-right:5px;"></i>Configure</b>
+                                
+                                <a href="#modalappcardConfigure" data-toggle="modal" class="createAppConfigure" style="margin-top:-5px" title="Configure" rel="tooltip" data-placement="top" data-original-title="Configure">
+                                    <i class="fa fa-th fa-cogs" style="margin-right: 5px; color: rgb(64, 186, 241); font-size: 18px;"></i>
                                 </a>
                             </span>
                         </div>
@@ -607,16 +629,36 @@ $(document).ready(function() {
     $("#divapplicationtableview").hide();
 });
 function getAllPipelineApplicationData() {
+    //alert("iam in getAllPipelineApplicationData");
     var projectId = urlParams.projid;
     var envNameSelected = "";
     $.get('/app/deploy/pipeline/project/' + projectId, function(dataPipeline) {
-        if (dataPipeline.length) {
+        if (dataPipeline[0].envId.length > 0) {
+            //alert("Ia m in if part");
+            //alert(dataPipeline[0].envId.length);
             getenvName(function(envName) {
                 envNameSelected = envName;
                 for (var i = 0; i < dataPipeline[0].envId.length; i++) {
                     var envUniqueText = dataPipeline[0].envId[i];
-                    var $pipelineArea = createPipelineArea(envUniqueText, envNameSelected, projectId);
+                    createPipelineArea(envUniqueText, envNameSelected, projectId);
                 }
+            });
+        }else{
+            //alert("Ia m in else part");
+            $.get('/d4dMasters/project/' + projectId, function(dataforenvName) {
+                var individualenvName = dataforenvName[0].environmentname;
+                individualenvName = individualenvName.split(",");
+                getenvName(function(envName) {
+                    envNameSelected = envName;
+                    for (var i = 0; i < individualenvName.length; i++) {
+                        var envUniqueText = individualenvName[i];
+                        createPipelineArea(envUniqueText, envNameSelected, projectId);
+                    }
+                    // for (var i = 0; i < dataPipeline[0].envId.length; i++) {
+                    //     var envUniqueText = dataPipeline[0].envId[i];
+                    //     createPipelineArea(envUniqueText, envNameSelected, projectId);
+                    // }
+                });
             });
         }
     }).fail(function() {});
@@ -686,12 +728,13 @@ $('.createAppConfigure').click(function() {
                     allEnvironments.push(dataPipeline[0].envSequence[i]);
                 }
                 if (selectedEnvironments.length == 0) {
+                    //alert("i am in length 0");
                     $.get('/d4dMasters/project/' + projectId, function(dataforenvName) {
                         var individualenvName = dataforenvName[0].environmentname;
                         individualenvName = individualenvName.split(",");
                         for (var i = 0; i < individualenvName.length; i++) {
                             var checked = "";
-                            if ($.inArray(individualenvName[i], selectedEnvironments) > -1) {
+                            if ($.inArray(individualenvName[i], individualenvName) > -1) {
                                 checked = "checked";
                             }
                             var $tr = $('<tr/>').attr({
@@ -756,11 +799,13 @@ function createPipelineArea(envName,selectedEnv,projectId){
 
     $clonePipeline.find('.envSpecificAppname u').html(envName);
     $stageContainer.append($clonePipeline);
+    //console.log("I am inside createPipelineArea function");
     $.ajax({
         url: '/app/deploy/env/' + envName + '/project/' + projectId + '/list',
         type: "GET",
         async: true,
         success: function(data) {
+            //console.log("I am inside success of createPipelineArea function");
             constructPipelineUI(data, id);
             if (envName != selectedEnv) {
                 $('#'+id).children().css({
@@ -781,6 +826,7 @@ function createPipelineArea(envName,selectedEnv,projectId){
 function constructPipelineUI(data, $clonePipeline) {
     $('.loadingAppDeploySpinner').hide();
     for (var i = 0; i < data.length; i++) {
+        //console.log("I am inside constructPipelineUI function");
         var $envSpecificAppInstanceUniqueCard = $('.envSpecificAppInstanceUniqueCard');
 
         var $cloneAppInstanceUniqueCard = $envSpecificAppInstanceUniqueCard.clone(true);
@@ -952,18 +998,15 @@ $('.appdeployConfigureSaveBtn').click(function(){
     
     getenvName(function(envName) {
         envNameSelected = envName;
-        configureEnvArray.forEach(function(envUniqueText) {
-            $.ajax({
-                url: '/app/deploy/env/' + envUniqueText + '/project/' + projectId + '/list',
-                type: "get",
-                async: true,
-                success: function(data) {
-                    createPipelineArea(envUniqueText, envNameSelected, projectId);
-                    //constructPipelineUI(data, envUniqueText, envNameSelected);
-                },
-                error: function() {}
+        if (configureEnvArray.length > 0) {
+            configureEnvArray.forEach(function(envUniqueText) {
+                createPipelineArea(envUniqueText, envNameSelected, projectId);
             });
-        });
+        }else{
+            configureEnvArraySequence.forEach(function(envUniqueText) {
+                createPipelineArea(envUniqueText, envNameSelected, projectId);
+            });
+        }
     });
     var dataDeployPipeline = {
         "appDeployPipelineData": {
@@ -987,7 +1030,17 @@ $('.appdeployConfigureSaveBtn').click(function(){
         }
     });
 });
-
+// $('#instanceviewAppCard').click(function(){
+    
+//     getenvName(function(envName) {
+//         alert("Hello");
+//         var $accordianTemplatenoData = $('.accordianTemplateContainer').find('.accordianTemplate');
+//         var $cloneData = $accordianTemplatenoData.clone(true);
+//         var dataenvAccordianName = "Application Deployment for : " + envName;
+//         $cloneData.find('.envAppDeployName').html(dataenvAccordianName);
+//         $('#accordion-AppDeploy').append($cloneData);
+//     });
+// });
 function moreinfoDetailsPipelineClickHandler(e){
     var $modal = $('#modalDetailsAppDeploy');
     // var $logContainer = $modal.find('.logsForAppDeploy').show();
@@ -1345,14 +1398,14 @@ function saveRecord() {
         dataDeploy.appDeployData.description = applicationDescription;
         dataDeploy.appDeployData.projectId = projectId;
         dataDeploy.appDeployData.applicationName = applicationName;
-        console.log(JSON.stringify(dataDeploy));
+        //console.log(JSON.stringify(dataDeploy));
         $.ajax({
             url: '/app/deploy/data/create',
             data: JSON.stringify(dataDeploy),
             type: 'POST',
             contentType: "application/json",
             success: function(data) {
-                console.log(data);
+                //console.log(data);
                 // var $chooseApplication = $('#chooseApplication');
                 // $chooseApplication.empty();
                 $('#modalAppCardDetails').modal("hide");
@@ -1435,9 +1488,28 @@ function getenvName(callback) {
         }
     });
 }
+function getprojectName(callback) {
+    var projectId = urlParams.projid;
+    $.ajax({
+        url: '/d4dMasters/projectname/' + projectId,
+        type: 'GET',
+        async: true,
+        contentType: "application/json",
+        success: function(datarojectName) {
+            callback(datarojectName);
+        },
+        error: function(jqxhr) {
+
+        },
+        failure: function(data1) {
+
+        }
+    });
+}
 
 function getAllApplicationData() {
     var projectId = urlParams.projid;
+    //console.log("I am in getAllApplicationData function");
     getenvName(function(envName) {
         $.get('/app/deploy/env/' + envName + '/project/' + projectId + '/list', function(data) {
             constructUI(data);
@@ -1497,6 +1569,7 @@ function constructUI(data) {
 
         var $accordianTemplate = $('.accordianTemplateContainer').find('.accordianTemplate');
         var dataenvAccordianName;
+
         function moreInfoAppDeployClickHandler(e) {
             var $modal = $('#modalAppCardLogDetails');
             var $logContainer = $modal.find('.logsForAppDeploy').show();
@@ -1534,21 +1607,21 @@ function constructUI(data) {
             resetSpinners();
             //$('#chooseRepository').empty();
             var tabletrIndex = $(".moreinfoUpgradeAppDeploy").index($(this));
-            
-            var upgradeAppNameText = $('#tableappDeploydetails tbody tr:eq('+tabletrIndex+') td:first').html();
-            var upgradeNodeIpText = $('#tableappDeploydetails tbody tr:eq('+tabletrIndex+') td:nth-child(5)').html();
-            var containerId = $('#tableappDeploydetails tbody tr:eq('+tabletrIndex+') td:nth-child(7)').html();
+
+            var upgradeAppNameText = $('#tableappDeploydetails tbody tr:eq(' + tabletrIndex + ') td:first').html();
+            var upgradeNodeIpText = $('#tableappDeploydetails tbody tr:eq(' + tabletrIndex + ') td:nth-child(5)').html();
+            var containerId = $('#tableappDeploydetails tbody tr:eq(' + tabletrIndex + ') td:nth-child(7)').html();
             containerId = containerId.split("</div>")[0].split(">")[1];
             //$("#upgradeAppName").empty();
             //$("#upgradeNodeIp").empty();
-            if(!containerId){
+            if (!containerId) {
                 containerId = "NA";
             }
             $("#upgradeAppName").html(upgradeAppNameText);
             $("#upgradeNodeIp").html(upgradeNodeIpText);
             //$("#upgradeNode").val(upgradeNodeIpText);
 
-            
+
             getNexusServer();
             var $modal = $('#modalUpgradeAppDeploy');
             $('#containerIdInput').val(containerId);
@@ -1562,22 +1635,31 @@ function constructUI(data) {
         if (data && data.length) {
             var $clone = $accordianTemplate.clone(true);
             for (var i = 0; i < data.length; i++) {
-                console.log(data[i]);
+                //console.log(data[i]);
                 if (data[i].projectId) {
                     //alert("hiii");
-                    if ($('#' + data[i].projectId + data[i].applicationName + data[i].envId + '_parentAccordian').length == 0) {
+                    if ($('#'+data[i].projectId+data[i].applicationName + data[i].envId + '_parentAccordian').length == 0) {
                         //$clone.attr('id', data[i].projectId + data[i].applicationName + data[i].envId + '_parentAccordian');
                         //$clone.find('.envAppDeployAnchor').attr('data-parent', '#' + data[i].projectId + data[i].applicationName + data[i].envId + '_parentAccordian');
                         if (typeof data[i].projectId + data[i].applicationName + data[i].envId == 'undefined') {
                             dataenvAccordianName = '';
+                            $clone.find('.envAppDeployName').html(dataenvAccordianName);
                         } else {
                             // dataenvAccordianName = 'Application : ' + data[i].applicationName + '  &  ' + 'Environment : ' + data[i].envId;
-                            
+
                             //dataenvAccordianName = 'Environment : ' + data[i].envId;
-                            dataenvAccordianName = 'Application Deployment for : ' + data[i].envId;
+                            //dataenvAccordianName = 'Application Deployment for : ' + data[i].projectId;
+                            getprojectName(function(projectNameUrlParams) {
+                                var dataenvAccordianName = "Application Deployment for : " + projectNameUrlParams;
+                                $clone.find('.envAppDeployName').html(dataenvAccordianName);
+                            });
                         }
-                        $clone.find('.panel-title').css({"padding":"10px"});
-                        $clone.find('.envAppDeployName').html(dataenvAccordianName);
+                        $clone.find('.panel-title').css({
+                            "padding": "10px"
+                        });
+                        // $clone.find('.envAppDeployName').html(dataenvAccordianName);
+
+
                         //$clone.find('.envAppDeployAnchor').attr('href', '#' + data[i].projectId + data[i].applicationName + data[i].envId + '_accordian');
                         //$clone.find('.envAppDeployAccordian').attr('id', data[i].projectId + data[i].applicationName + data[i].envId + '_accordian');
                         //$clone.find('.envAppDeployTable').attr('id', 'tableappDeploydetails');
@@ -1670,8 +1752,8 @@ function constructUI(data) {
                     }
                     if (!data[i].containerId) {
                         data[i].containerId = "NA";
-                    }else{
-                        data[i].containerId = '<div class="spanTextApplication" title="'+data[i].containerId+'">'+data[i].containerId+'</div>'
+                    } else {
+                        data[i].containerId = '<div class="spanTextApplication" title="' + data[i].containerId + '">' + data[i].containerId + '</div>'
                     }
                     if (!data[i].hostName) {
                         data[i].hostName = "NA";
@@ -1687,9 +1769,9 @@ function constructUI(data) {
                     }
                     var applicationLastDeployTime = data[i].applicationLastDeploy;
 
-                    if( (applicationLastDeployTime.toLowerCase().indexOf("am") > -1) || (applicationLastDeployTime.toLowerCase().indexOf("pm") > -1) ){
+                    if ((applicationLastDeployTime.toLowerCase().indexOf("am") > -1) || (applicationLastDeployTime.toLowerCase().indexOf("pm") > -1)) {
                         applicationLastDeployTime = applicationLastDeployTime;
-                    }else{
+                    } else {
                         applicationLastDeployTime = getLocaleTime(applicationLastDeployTime);
                     }
 
@@ -1758,13 +1840,22 @@ function constructUI(data) {
             });
         }
         var $accordianTemplatenoData = $('.accordianTemplateContainer').find('.accordianTemplate');
-        $accordianTemplatenoData.css({"border-color":"#fff","margin-bottom":"0px"});
-        $accordianTemplatenoData.find('.panel-title').css({"padding":"0px"});
+        $accordianTemplatenoData.css({
+            "border-color": "#fff",
+            "margin-bottom": "0px"
+        });
+        $accordianTemplatenoData.find('.panel-title').css({
+            "padding": "0px"
+        });
         var $clonenoData = $accordianTemplatenoData.clone(true);
         $clonenoData.find('#tableappDeploydetails').parent().hide();
-        getenvName(function(envNameUrlParams) {
-            var dataenvAccordianNameforNoData = "Application Deployment for : "+envNameUrlParams;
-            $clonenoData.find('.envAppDeployName').html(dataenvAccordianNameforNoData);
+        // getenvName(function(envNameUrlParams) {
+        //     var dataenvAccordianNameforNoData = "Application Deployment for : " + envNameUrlParams;
+        //     $clonenoData.find('.envAppDeployName').html(dataenvAccordianNameforNoData);
+        // });
+        getprojectName(function(projectNameUrlParams) {
+            var dataprojectAccordianNameforNoData = "Application Deployment for : " + projectNameUrlParams;
+            $clonenoData.find('.envAppDeployName').html(dataprojectAccordianNameforNoData);
         });
         $("#nodataAppDeploy").css({
             // "text-align": "center",
@@ -1773,38 +1864,38 @@ function constructUI(data) {
             // "padding-top": "20px",
             "display": "block"
         }).append($clonenoData);
-        
+
         $("#nodataAppDeploy").find('.margintopright8').css({
             "margin-top": "-2px",
             "margin-right": "-8px"
         });
     }
 }
-var $chooseApplication = $('#chooseApplication');
+// var $chooseApplication = $('#chooseApplication');
 
-$chooseApplication.change(function() {
-    var selectedAppName = $(this).val();
-    console.log(selectedAppName);
-    if (typeof selectedAppName != 'undefined') {
-        $('#appDeployName').append().text("  for '" + selectedAppName + "'");
-        $("#widgetAppDeploy").css({
-            "border-left": "1px solid rgb(221, 221, 221)",
-            "border-right": "1px solid rgb(221, 221, 221)",
-            "border-bottom": "1px solid rgb(221, 221, 221)"
-        });
-        $('#widgetAppDeploy').show();
-    } else {
-        $('#appDeployName').append().text("");
-        $('#widgetAppDeploy').hide();
-    }
-    if (selectedAppName == 'All Application') {
-        getAllApplicationData(function(data) {
-            constructUI(data);
-        });
-    } else {
-        getParticularApplicationData(selectedAppName);
-    }
-});
+// $chooseApplication.change(function() {
+//     var selectedAppName = $(this).val();
+//     console.log(selectedAppName);
+//     if (typeof selectedAppName != 'undefined') {
+//         $('#appDeployName').append().text("  for '" + selectedAppName + "'");
+//         $("#widgetAppDeploy").css({
+//             "border-left": "1px solid rgb(221, 221, 221)",
+//             "border-right": "1px solid rgb(221, 221, 221)",
+//             "border-bottom": "1px solid rgb(221, 221, 221)"
+//         });
+//         $('#widgetAppDeploy').show();
+//     } else {
+//         $('#appDeployName').append().text("");
+//         $('#widgetAppDeploy').hide();
+//     }
+//     if (selectedAppName == 'All Application') {
+//         getAllApplicationData(function(data) {
+//             constructUI(data);
+//         });
+//     } else {
+//         getParticularApplicationData(selectedAppName);
+//     }
+// });
 $('#parameterAppDeploySaveBtn').on("click", function() {
     //saveRecord();
     //getDropdownList();
@@ -1845,7 +1936,7 @@ var urlParams = {};
     var indexOfQues = url.lastIndexOf("?");
     if (indexOfQues != -1) {
         var sub = url.substring(indexOfQues + 1);
-        console.log(sub);
+        //console.log(sub);
         var params = sub.split('&')
         for (var i = 0; i < params.length; i++) {
             var paramParts = params[i].split('=');
