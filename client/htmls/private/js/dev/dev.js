@@ -20,13 +20,25 @@ function devCall() {
         if (objID) {
             if (objID == "divapplicationcardview" || objID == "defaultViewButtonAppCard") {
                 $("#divapplicationtableview").removeClass("visibleClass").hide();
+                $(".createAppConfigure").show();
+                $('#defaultViewButtonAppCard').hide();
                 $("#divapplicationcardview").addClass("visibleClass").show();
+                $('#defaultViewButtonAppCard').parents().eq(2).find('span:nth-child(2)').removeClass('margintop2right8').addClass('margintopright8');
                 $('#defaultViewButtonAppCard').find('i').removeClass('txt-color-deactive').addClass('txt-color-active');
-                $('#instanceviewAppCard').find('i').removeClass('txt-color-active').addClass('txt-color-deactive');
+                $('#instanceviewAppCard').show();
+                //$('#instanceviewAppCard').find('i').removeClass('txt-color-active').addClass('txt-color-deactive');
             } else {
                 $("#divapplicationtableview").addClass("visibleClass").show();
+                $('#defaultViewButtonAppCard').show();
+                $('#defaultViewButtonAppCard').parents().eq(2).find('span:nth-child(2)').removeClass('margintopright8').addClass('margintop2right8');
+                $(".createAppConfigure").hide();
+                getenvName(function(envName) {
+                    var dataenvAccordianName = "Application Deployment for : " + envName;
+                    $clonenoData.find('.envAppDeployName').html(dataenvAccordianName);
+                });
                 $("#divapplicationcardview").removeClass("visibleClass").hide();
-                $('#instanceviewAppCard').find('i').removeClass('txt-color-deactive').addClass('txt-color-active');
+                $('#instanceviewAppCard').hide();
+                //$('#instanceviewAppCard').find('i').removeClass('txt-color-deactive').addClass('txt-color-active');
                 $('#defaultViewButtonAppCard').find('i').removeClass('txt-color-active').addClass('txt-color-deactive');
             }
         }
