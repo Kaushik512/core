@@ -2983,7 +2983,8 @@ var $wizard = $('#bootstrap-wizard-1').bootstrapWizard({
                             reqBody.openstacksecurityGroupIds = $('#openstacksecuritygroup').val();
                             reqBody.openstacksubnet = $('#openstacksubnet').val();
 
-                            reqBody.instanceCount = 1;
+                           // reqBody.instanceCount = 1;
+                            reqBody.instanceCount = $('#instanceCount').val();
                             reqBody.instanceImageName = imageIdentifier;
 
 

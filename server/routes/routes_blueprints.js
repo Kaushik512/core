@@ -216,6 +216,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             var versionData = blueprint.getVersionData(req.params.version);
             res.send(200, versionData);
 
+
         });
 
     });
@@ -234,7 +235,26 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         });
     });
 
-
+     //for testing
+    app.get('/blueprints/azure/tryssh/:ip',function(req,res){
+        var azureCloud = new AzureCloud();
+        azureCloud.trysshoninstance('Windows',req.params["ip"],'testing','testing',function(err,data){
+            logger.debug('Output:',data);
+            if(!err)
+            {
+                logger.debug('about to send response');
+                res.send(200);
+                return;
+            }
+            else{
+                res.send(400, {
+                    message: err
+                });
+                return;
+            }
+            
+        })
+    });
 
     app.get('/blueprints/:blueprintId/launch', function(req, res) {
         logger.debug("Enter /blueprints/%s/launch -- ", req.params.blueprintId);
@@ -1923,7 +1943,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                     res.send(500, errorResponses.db.error);
                                                     return;
                                                 }
-
+                                                anImage = JSON.parse(JSON.stringify(anImage));
                                                 logger.debug("Loaded Image -- : >>>>>>>>>>> %s", anImage);
 
                                                 var launchparams = {
@@ -1937,11 +1957,13 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                     username: anImage.userName,
                                                     password: anImage.instancePassword,
                                                     sshPort: "22",
-                                                    endpoints: blueprint.blueprintConfig.securityGroupIds
-
+                                                    endpoints: blueprint.blueprintConfig.securityGroupIds,
+                                                    os: blueprint.blueprintConfig.instanceOS
                                                 }
 
-                                                logger.debug("Azure VM launch params:" + launchparams);
+                                                logger.debug("blueprint.blueprintConfig.instanceOS >>>", blueprint.blueprintConfig.instanceOS);
+
+                                                //logger.debug("Azure VM launch params:" + launchparams);
 
                                                 var azureCloud = new AzureCloud();
 
@@ -2046,14 +2068,16 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
 
                                                             //waiting for server to become active
-                                                            logger.debug('Returned from Create Instance. About to send response');
+                                                            logger.debug('Returned from Create Instance.' + instcount + ' of ' + blueprint.instanceCount + '  About to send response');
                                                             //res.send(200);
-                                                            res.send(200, {
-                                                                "id": [instance.id],
-                                                                "message": "instance launch success"
-                                                            });
-                                                            logger.debug('Should have sent the response.');
-
+                                                            azureinstid.push(instance.id);
+                                                            if(azureinstid.length >= parseInt(blueprint.blueprintConfig.instanceCount)){
+                                                                res.send(200, {
+                                                                    "id": azureinstid,
+                                                                    "message": "instance launch success"
+                                                                });
+                                                                logger.debug('Should have sent the response.');
+                                                            }
 
                                                             azureCloud.waitforserverready(instance.name, launchparams.username, launchparams.password, function(err, publicip) {
 
@@ -2129,6 +2153,12 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                                     logger.error("Unable to set instance bootstarp status. code 0", err);
                                                                                 } else {
                                                                                     logger.debug("Instance bootstrap status set to success");
+                                                                                     logsDao.insertLog({
+                                                                                        referenceId: logsReferenceIds,
+                                                                                        err: false,
+                                                                                        log: 'Instance Bootstraped Successfully',
+                                                                                        timestamp: new Date().getTime()
+                                                                                    });
                                                                                 }
                                                                             });
                                                                         }
@@ -2184,8 +2214,12 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                 }); //close createServer
                                             }) //close of VMImage getImageById
                                         }
-
-                                        launchAzureCloudBP(providerdata, blueprint);
+                                        var azureinstid = [];
+                                        var instcount = 0;
+                                        logger.debug('for state:',(instcount < parseInt(blueprint.blueprintConfig.instanceCount)),parseInt(blueprint.blueprintConfig.instanceCount));
+                                        for(instcount = 0; instcount < parseInt(blueprint.blueprintConfig.instanceCount);instcount++){
+                                                launchAzureCloudBP(providerdata, blueprint);
+                                        }
 
                                     });
 
