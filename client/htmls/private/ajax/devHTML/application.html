@@ -1,3 +1,21 @@
+<style type="text/css">
+    @media (min-width: 320px) and (max-width: 767px) {
+      .padding-left5-mobile{
+        padding-left: 5px !important;
+      }
+      .padding-right5-mobile{
+        padding-right: 5px !important;
+      }
+      .margin-left10Per-mobile{
+        margin-left: 10%;
+      }
+    }
+    @media (min-width: 320px) and (max-width: 480px) {
+      .margin-left10Per-mobile{
+        margin-left: 25% !important;
+      }
+    }
+</style>
 <div class="tab-pane" id="l6">
     <div class="jarviswidget jarviswidget-color-blueLight" id="wid-id-application" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false" data-widget-fullscreenbutton="false" data-widget-custombutton="false" data-widget-sortable="false">
         <div>
@@ -49,12 +67,12 @@
                         </div>
                     </article>
                 </div>
-                <div class="col-sm-3 col-md-3 col-lg-2 envSpecificAppTemplate" style="display:none">
+                <div class="col-sm-4 col-md-3 col-lg-2 col-xs-12 envSpecificAppTemplate" style="display:none">
                     <div class="envSpecificAppname"><u></u></div>
                 </div>
 
 
-                <div class="col-sm-12 col-md-12 col-lg-12 col-xs-6 no-padding envSpecificAppInstanceUniqueCard padding-right5-mobile" style="display:none">
+                <div class="col-sm-12 col-md-12 col-lg-12 col-xs-12 no-padding envSpecificAppInstanceUniqueCard padding-right5-mobile margin-left10Per-mobile" style="display:none">
                     <div class="panel panel-primary appCard-inner-panel role-Selectedcard-app">
                         <div class="panel-heading appCard-inner-panel-heading">
                             <div contenteditable="false" class="domain-roles-icon">
@@ -138,14 +156,18 @@
                                 <a id="instanceview" class="btn1" onclick="showHideControl(this.id)"> <i class="fa fa-align-justify fa-2x txt-color-deactive font-size18" title="Table View" /></a>
                             </span> -->
                             <span class="pull-right margintopright8">                                    
-                                <a onclick="showHideControlApplication(this.id)" id="defaultViewButtonAppCard" class="btn1" rel="tooltip" data-placement="top" data-original-title="Pipeline View"> 
-                                    <i style="font-size:18px" class="fa fa-th fa-2x txt-color-active"></i>
+                                <a onclick="showHideControlApplication(this.id)" class="btn1" id="instanceviewAppCard" rel="tooltip" data-placement="top" data-original-title="History" title="History"> 
+                                    <i style="font-size:16px" class="fa fa-header fa-2x txt-color-deactive"></i>
                                 </a>&nbsp;
-                                <a onclick="showHideControlApplication(this.id)" class="btn1" id="instanceviewAppCard" rel="tooltip" data-placement="top" data-original-title="Table View"> 
-                                    <i style="font-size:18px" class="fa fa-align-justify fa-2x txt-color-deactive"></i>
+                                <!-- <a onclick="showHideControlApplication(this.id)" id="defaultViewButtonAppCard" class="btn1" rel="tooltip" data-placement="top" data-original-title="Pipeline View" style="display:none"> 
+                                    <i style="font-size:18px;transform: rotateY(180deg);" class="fa fa-paragraph fa-2x txt-color-active"></i>
+                                </a> -->
+                                <a onclick="showHideControlApplication(this.id)" id="defaultViewButtonAppCard" class="btn btn-primary" style="display:none"> 
+                                    <i class="ace-icon ace-icon fa fa-chevron-left bigger-110" style="color:#fff;margin-right:4px;"></i>Pipeline View
                                 </a>
-                                <a href="#modalappcardConfigure" data-toggle="modal" class="createAppConfigure btn btn-primary" style="margin-top:-5px" rel="tooltip" data-placement="top" data-original-title="Configure Application">
-                                    <b><i class="fa fa-th fa-bullseye txt-color-active" style="font-size:13px;color:rgb(255, 255, 255);margin-right:5px;"></i>Configure</b>
+                                
+                                <a href="#modalappcardConfigure" data-toggle="modal" class="createAppConfigure" style="margin-top:-5px" title="Configure" rel="tooltip" data-placement="top" data-original-title="Configure">
+                                    <i class="fa fa-th fa-cogs" style="margin-right: 5px; color: rgb(64, 186, 241); font-size: 18px;"></i>
                                 </a>
                             </span>
                         </div>
@@ -1008,7 +1030,17 @@ $('.appdeployConfigureSaveBtn').click(function(){
         }
     });
 });
-
+// $('#instanceviewAppCard').click(function(){
+    
+//     getenvName(function(envName) {
+//         alert("Hello");
+//         var $accordianTemplatenoData = $('.accordianTemplateContainer').find('.accordianTemplate');
+//         var $cloneData = $accordianTemplatenoData.clone(true);
+//         var dataenvAccordianName = "Application Deployment for : " + envName;
+//         $cloneData.find('.envAppDeployName').html(dataenvAccordianName);
+//         $('#accordion-AppDeploy').append($cloneData);
+//     });
+// });
 function moreinfoDetailsPipelineClickHandler(e){
     var $modal = $('#modalDetailsAppDeploy');
     // var $logContainer = $modal.find('.logsForAppDeploy').show();
