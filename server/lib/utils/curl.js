@@ -13,7 +13,7 @@ var curl = function(){
 				callback(error,null);
 			}
 			if(stderr){
-				console.log("stderr:" + stderr);
+				console.log("stderr:" + stderr + "end of errr");
 				callback(stderr,null);
 
 			}
