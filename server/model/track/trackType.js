@@ -52,24 +52,31 @@ TrackTypeSchema.statics.createNew = function(trackTypeData, callback) {
 // Update all Track informations.
 TrackTypeSchema.statics.updateTrack = function(trackTypeId, trackTypeData, callback) {
 
-    logger.debug("Update Track" , JSON.stringify(trackTypeData));
+    //logger.debug("Update Track" , JSON.stringify(trackTypeData));
+    logger.debug("Update Track Id", trackTypeId);
     console.log(trackTypeData.description);
     this.update({
         "_id": new ObjectId(trackTypeId)
     }, {
+        $set: {
+            type: trackTypeData.type,
+            description: trackTypeData.description
+        }
+    },{
         upsert: false
     }, function(err, updateCount) {
         if (err) {
             logger.debug("Got error while creating trackType: ", err);
             callback(err, null);
         }
+       // logger.debug('updateCount:', updateCount);
         callback(null, updateCount);
 
     });
 };
 
 // Get all Track informations.
-TrackTypeSchema.statics.getTrackById = function(trackTypeId, callback) {
+TrackTypeSchema.statics.getTrackTypeById = function(trackTypeId, callback) {
     this.find({
         "_id": new ObjectId(trackTypeId)
     }, function(err, trackType) {
@@ -88,11 +95,9 @@ TrackTypeSchema.statics.getTrackById = function(trackTypeId, callback) {
 // Remove Track informations.
 TrackTypeSchema.statics.removeTracks = function(trackTypeId, callback) {
     logger.debug("trackTypeId",trackTypeId);
-    this.update({
+    this.remove({
         "_id": trackTypeId
-    }, {
-        upsert: false
-    }, function(err, trackType) {
+    },  function(err, trackType) {
         if (err) {
             logger.debug("Got error while removing Tracks: ", err);
             callback(err, null);
