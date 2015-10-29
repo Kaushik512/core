@@ -41,7 +41,7 @@ Clicks on Execute Button of the Jenkins Task Created
 
 Close the Logs Tab after the Task Completion
     Sleep    9s
-    Click Element    css=button.btn.btn-primary.pull-right
+    Click Element    xpath=.//*[@id='assignedExecute']/div/div/div[3]/a
 
 
 Catalyst checks the Jenkins task history
@@ -64,11 +64,11 @@ Clicks on Jenkins Log button in Job output column
 
 Closes the Execute Logs window
     Sleep    3s
-    Click Element    css=div.modal-body.no-padding.jenkinsChefModal > form > footer > button
+    Click Element    xpath=.//*[@id='assignedExecute']/div/div/div[3]/a
 
 Clicks on Close button to go back to List of task page
     Sleep    2s
-    Click Element    xpath=//*[@id="jenkinsJobHistory"]/div/div/div/div[1]/div/div/button
+    Click Element    css=.btn.btn-minier.btn-primary.hideJenkinsJob
 
 
 
@@ -106,14 +106,14 @@ Catalyst Import an Ubuntu Instance By IP
     ##Clicks on the Project to go to Environment
     Sleep    2s
     Clicks on Button to your > Environment
-    Sleep    3s
+    Sleep    5s
     Clicks on Import By IP Button
     Enters the IP Address of Ubuntu Box
     Select the Operating System as Ubuntu
     Input the Ubuntu User Name for IP
     Select the Config Management Chef Server
     Choose The Authentication Type as Pem File
-    Upload the PEM File for Import By IP
+    Upload the PEM File for Import By IP of ubuntu
     Clicks on Import Button to Import an Instance
     Clicks on Import Close Button
     Selects Ubuntu imported node
@@ -122,6 +122,7 @@ Catalyst Import an Ubuntu Instance By IP
     Verify the Operation as BootStrap
     Verfify the Status of the UbuntuOS Instance
     Clicks on Back To Instances
+    Sleep    5s
 
 
 Catalyst Verfication of Duplicate Node
@@ -179,21 +180,21 @@ Catalyst Import By IP Chef Client run,SSH,Stop,Start
     Verfiy the Chef Client Status after update
     Clicks on Back To Instances
     Sleep    2s
-    #Selects the imported centos node
-    #Clicks on SSH for instance
-    #Sleep    3s
-    #Input the Usrname in Terminal
-    #Select Authenticationtype as PEM
-    #Upload the PemFile to ssh
-    #Clicking on the SubmitButton
-    #Sleep    5s
-    #Clicks on Close the Terminal
-    #Sleep    2s 
-    #Clicks on Contreol Panel
-    #Clicks on Action History
-    #Verfiy the operation as SSH
-    #Verfiy the SSH-Status after update
-    #Clicks on Back To Instances
+    Selects the imported centos node
+    Clicks on SSH for instance
+    Sleep    3s
+    Input the Usrname in Terminal
+    Select Authenticationtype as PEM
+    Upload the PemFile to ssh
+    Clicking on the SubmitButton
+    Sleep    5s
+    Clicks on Close the Terminal
+    Sleep    2s 
+    Clicks on Contreol Panel
+    Clicks on Action History
+    Verfiy the operation as SSH
+    Verfiy the SSH-Status after update
+    Clicks on Back To Instances
 
 Catalyst Verfication of IP,Status,Chef,SSH,MoreInfo and frm Ctrlpanel
     Verfication of IP Address from card view
@@ -214,7 +215,7 @@ Catalyst Verfication of IP,Status,Chef,SSH,MoreInfo and frm Ctrlpanel
     Clicks on Back To Instances
 
 
-Catalyst Import By IP Chef Client run,SSH,Stop,Start on Ubuntu Instance
+Catalyst Import By IP Chef Client run,SSH on Ubuntu Instance
     #Clicks on Settings
     #Clicks on Workzone Button
     #Sleep    2s
@@ -233,21 +234,22 @@ Catalyst Import By IP Chef Client run,SSH,Stop,Start on Ubuntu Instance
     Verify the Operation as Chef-Client-Run
     Verfiy the Chef Client Status after update
     Clicks on Back To Instances
-    Sleep    2s
-    #Clicks on SSH for ubuntu instance
-    #Sleep    3s
-    #Input the Ubuntu Usrname in Terminal
-    #Select Authenticationtype as PEM
-    #Upload the PemFile to ssh
-    #Clicking on the SubmitButton
-    #Sleep    5s
-    #Clicks on Close the Terminal
-    #Sleep    2s 
-    #Clicks on Contreol Panel
-    #Clicks on Action History
-    #Verfiy the operation as SSH
-    #Verfiy the SSH-Status after update
-    #Clicks on Back To Instances
+    Sleep    3s
+    Selects Ubuntu imported node
+    Clicks on SSH for ubuntu instance
+    Sleep    3s
+    Input the Ubuntu Usrname in Terminal
+    Select Authenticationtype as PEM
+    Upload the golden PemFile to ssh
+    Clicking on the SubmitButton
+    Sleep    8s
+    Clicks on Close the Terminal
+    Sleep    2s 
+    Clicks on Contreol Panel
+    Clicks on Action History
+    Verfiy the operation as SSH
+    Verfiy the SSH-Status after update
+    Clicks on Back To Instances
 
 
 Catalyst Verfication of IP,Status,Chef,SSH,MoreInfo on UbuntuIns frm Ctrlpanel
@@ -529,6 +531,10 @@ Select Authenticationtype as PEM
 
 Upload the PemFile to ssh
     Choose File    xpath=.//*[@id='ssh-pemfileInput']    ${CAT_INSTANCES}
+
+
+Upload the golden PemFile to ssh
+    Choose File    xpath=.//*[@id='ssh-pemfileInput']    ${Goldendemo_pem}
 
 Clicking on the SubmitButton
     Click Element    xpath=.//*[@id='ssh-login-form']/div[7]/button[1]
@@ -843,9 +849,12 @@ Select the Operating System of the Box
     Sleep    1s
     Click Element    xpath=//option[@ostype='${CENT OS}']
 
+
 Select the Operating System as Ubuntu
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    id=importinstanceOS
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='select2-drop']/ul/li[4]/div
+    Sleep    1s
+    Click Element    xpath=//option[@ostype='${UBUNTU OS}']    
+    #Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    id=importinstanceOS
+    #Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='select2-drop']/ul/li[4]/div
 
 
 
@@ -859,14 +868,20 @@ Input the Ubuntu User Name for IP
 
 
 Choose The Authentication Type as Pem File
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    id=pemFileDropdown
-    Sleep    1s
-    Click Element    xpath=.//option[@value='pemFile']
+    #Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    id=pemFileDropdown
+    #Sleep    1s
+    #Click Element    xpath=.//option[@value='pemFile']
+    Click Element    xpath=.//*[@id='pemFileDropdown']/option[text()='Pem File']
 
 
 Upload the PEM File for Import By IP
     Choose File    xpath=.//*[@id='importPemfileInput']    ${CAT_INSTANCES}
     #C:\\Users\\adarsh.RLINDIA\\Desktop\\caty\\Chef\\cat_instances.pem
+
+
+Upload the PEM File for Import By IP of ubuntu
+    Choose File    xpath=.//*[@id='importPemfileInput']    ${Goldendemo_pem}
+
 
 Clicks on Import Button to Import an Instance
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    id=addInstanceBtn
@@ -1234,13 +1249,11 @@ Clicks on Jenknis New Button
     Click  Element    xpath=.//*[@id='content']/div/div/div/div/div[1]/div/div/a[2]
 
 Clicks on Orchestration Tab of the Environment
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='myTab3']/li[3]/a
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='myTab3']/li[2]/a
 
 
 Clicks on Choose Task Type of Jenkins
-    Click Element    css=#s2id_taskType > a > span.select2-arrow
-    Input Text    css=#select2-drop > div > input     ${TASK TYPE}
-    Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
+    Click Element    xpath=.//*[@id='taskType']/option[text()='Jenkins']
 
 Clicks on Choose Task Type of Chef
     Click Element    xpath=.//*[@id='s2id_taskType']/a
@@ -1256,9 +1269,8 @@ Enter the Task Name of Chef
 
 
 Select the Job to Run
-    Click Element    css=#s2id_jobListJenkins > a > span.select2-chosen
-    Input Text     xpath=.//*[@id='select2-drop']/div/input     ${JJOB NAME}
-    Click Element    css=ul > li:first-child > div
+    Click Element     xpath=.//*[@id='jobListJenkins']/option[text()='${JJOB NAME}']     
+    
 
 Select the AutoSync Button
     Click Element    css=#radio_yes 
@@ -1296,9 +1308,7 @@ Enters the Task Name
     Input Text    id=jenkinsTaskName     ${TASK NAME}
 
 Select the Jenkins Server
-    Click Element    css=#s2id_jenkinsServerList > a > span.select2-chosen
-    Input Text    css=#select2-drop > div > input    ${DEF_JENKINS_SERVER}
-    Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
+    Click Element    xpath=.//*[@id='jenkinsServerList']/option[text()='${JENKINSNAME}']
 
 Select Job
     Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
@@ -1467,7 +1477,7 @@ Clicks on Jenkins Cancel Button
 
 
 Catalyst creation of Chef Task
-    Clicks on the Project to go to Environment
+    #Clicks on the Project to go to Environment
     Sleep    2s
     Clicks on Button to your > Environment
     Sleep    2s

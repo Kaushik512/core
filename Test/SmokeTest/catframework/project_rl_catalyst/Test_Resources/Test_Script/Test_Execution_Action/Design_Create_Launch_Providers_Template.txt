@@ -66,7 +66,9 @@ Catalyst Create Blueprint of Cloud Formation and Save
     Clicks on Next Button
     Enters the New Cloud Blueprint Name
     Chooses The Business Group
+    Sleep    1s
     Chooses The Project
+    Sleep    1s
     Clicks on close Cloud Configure Organization Parameters
     Clicks on Configure Stack Parameters
     Choose the Cloud Region
@@ -82,6 +84,9 @@ Catalyst Create Blueprint of Cloud Formation and Save
     Enable the Configure Resource Node,Imageid and Instance Type
     Clicks on Next Button
     Clicks on OKK Button of Cloud Page
+
+
+
 
 	
 Select Your Cloud Blueprint
@@ -256,22 +261,23 @@ Catalyst Creation of VM Image Process for CentOS
     Sleep    5s
     Clicks on New Button of VMImage
     Enters the Image Name for CentOS
+    Select organization now
     Choosess The Provider of Image
     Select the Operating System to Image for CentOS
     Enters the Image ID for CentOS
     Enters the UserName of CentOSProviders
-    Select organization now
+    
     Clicks on Save Button of VMimage page
 
 Catalyst Creation of VM Image Process for Ubutnu
     Sleep    5s
     Clicks on New Button of VMImage
     Enters the Image Name for Ubuntu
+    Select organization now
     Choosess The Provider of Image
     Select the Operating System to Image for Ubuntu 
     Enters the Image ID for Ubuntu
     Enters the UserName of UbuntuProviders
-    Select organization now
     Clicks on Save Button of VMimage page
 
 Catalyst Creation of VM Image Process for Windows
@@ -451,36 +457,29 @@ Chooses the Template User Created
 
 Chooses the Operating System as Centos
     Sleep    1s
-    Click Element    css=#s2id_instanceOS > .select2-choice
-    Log    after click
-    Input Text    css=#select2-drop .select2-input    ${OPERATING SYSTEM1}    
-    Sleep    1s
-    Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
+    #Click Element    id=instanceOS
+    #Log    after click    
+    #Sleep    1s
+    Click Element    xpath=.//*[@id='instanceOS']/option[text()='${OPERATING SYSTEM1}']
 
 Choose the Provider
     Sleep    4s
-    Click Element    css=#s2id_providerId > .select2-choice
-    Log    after click
-    Input Text    css=#select2-drop .select2-input    ${PROVIDER NAME}
-    Sleep    4s
-    Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
+    #Click Element    id=providerId
+    #Log    after click
+    #Sleep    4s
+    Click Element    xpath=.//*[@id='providerId']/option[text()='${PROVIDER NAME}']
 
 
 Choose the Available Images
-    Sleep    4s
-    Click Element    css=#s2id_imageId > .select2-choice
-    Log    after click
-    Input Text    css=#select2-drop .select2-input    ${IMAGE NAME1}
-    Sleep    4s
-    Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
+    #Sleep    4s
+    #Click Element    id=imageId
+    #Log    after click
+    #Sleep    4s
+    Click Element    xpath=.//*[@id='imageId']/option[text()='${IMAGE NAME1}']
 
 Choose the Region
     Sleep    4s
-    Click Element    css=#s2id_region > .select2-choice
-    Log    after click
-    Input Text    css=#select2-drop .select2-input    ${REGION NAME}
-    Sleep    4s
-    Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
+    Click Element    xpath=.//*[@id='region']/option[2]
 
 
  Select the VPC
@@ -492,33 +491,16 @@ Choose the Region
     Click Element    css=ul > li > div
 
 Select the Subnet
-    Sleep    2s
-    Click Element    css=#s2id_subnetId > a > span.select2-chosen
     Sleep    1s
-    Input Text    css=#select2-drop > div > input    ${SUBNET NAME}
-    Sleep    1s
-    Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
+    Click Element    xpath=.//*[@id='subnetId']/option[2]
 
 Select the Key Pair
     Execute JavaScript    $('#bootstrap-wizard-1 > div.tab-content > footer > div').attr('style','display:none')
-    Sleep    3s
-    Log    after scroll
-    Sleep    1s
-    Click Element    css=#s2id_keypairId > .select2-choice
-    Log    after click
-    Input Text    css=#select2-drop .select2-input    ${Key_Pair}
-    Sleep    1s
-    Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
+    Click Element    xpath=.//*[@id='keypairId']/option[text()='${Key_Pair}']
 
 Choose Instance Size
-    Sleep    3s
-    Log    after scroll
     Sleep    1s
-    Click Element    css=#s2id_instancesize > .select2-choice
-    Log    after click
-    Input Text    css=#select2-drop .select2-input    ${CentosInstanceSize}
-    Sleep    1s
-    Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span  
+    Click Element    xpath=.//*[@id='instancesize']/option[text()='${CentosInstanceSize}']
 
 Select the Security Group
     Sleep    3s
@@ -550,24 +532,17 @@ Enters The Blueprint Name
 
 Chooses The Business Group
     Sleep    3s
-    Log    after scroll
-    Sleep    1s
-    Click Element    css=#s2id_bgListInput > .select2-choice
-    Log    after click
-    Input Text    css=#select2-drop .select2-input    ${BUSINESS GROUP NAME1}
-    Sleep    1s
-    Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
+    #Click Element    id=bgListInput
+    Click Element    xpath=.//*[@id='bgListInput']/option[text()='${BUSINESS GROUP NAME1}']
+
+    
 
 
 Chooses The Project
     Sleep    3s
-    Log    after scroll
-    Sleep    1s
-    Click Element    css=#s2id_projectListInput > .select2-choice
-    Log    after click
-    Input Text    css=#select2-drop .select2-input    ${PROJECT NAME1}
-    Sleep    1s
-    Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
+    #Click Element    id=projectListInput
+    Click Element    xpath=.//*[@id='projectListInput']/option[text()='${PROJECT NAME1}']
+    
 
 
 Clicks on close of Configure Organization Parameters

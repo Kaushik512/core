@@ -10,6 +10,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
         <link rel="stylesheet" type="text/css" media="screen" href="css/bootstrap.css">
         <link rel="stylesheet" type="text/css" media="screen" href="css/Catalyst.css">
+        <link rel="stylesheet" href="js/jquery-filetree/jqueryFileTree.css" />
+
 
 <style>
 
@@ -161,6 +163,9 @@ String.prototype.capitalizeFirstLetter = function() {
                     </a>
                     <ul style="display:block">
                         <li>
+                            <a href="ajax/DesignBlueprintAzure.html?provider=azure" onclick="$('#blueprints').attr('providerselected','azure');"  class="devops_providers"><div class="azure" title="Azure"><span class="menu-item-parent provider-images trackAlign">&nbsp;&nbsp;Azure</span></div></a>
+                        </li>
+                        <li>
                             <a href="ajax/Aws-Production.html" onclick="$('#blueprints').attr('providerselected','aws');" class="devops_providers"><div class="aws" title="AWS"><span class="menu-item-parent provider-images trackAlign">&nbsp;&nbsp;AWS</span></div></a>
                         </li>
                         <li>
@@ -169,8 +174,11 @@ String.prototype.capitalizeFirstLetter = function() {
                         <li>
                             <a href="ajax/DesignBlueprintpc.html?provider=hp" onclick="$('#blueprints').attr('providerselected','hppubliccloud');"  class="devops_providers"><div class="hppubliccloud" title="HP Public Cloud"><span class="menu-item-parent provider-images trackAlign">&nbsp;HP Helion</span></div></a>
                         </li>
-                        <li>
+                        <!-- <li>
                             <a href="ajax/DesignBlueprintAzure.html?provider=azure" onclick="$('#blueprints').attr('providerselected','azure');"  class="devops_providers"><div class="azure" title="Azure"><span class="menu-item-parent provider-images trackAlign">&nbsp;&nbsp;Azure</span></div></a>
+                        </li> -->
+                         <li>
+                            <a href="ajax/DesignBlueprintVmware.html?provider=vmware" onclick="$('#blueprints').attr('providerselected','vmware');" class="devops_providers"><div class="vmware" title="Vmware"><span class="menu-item-parent provider-images trackAlign">&nbsp;VMware</span></div></a>
                         </li>
                         <li>
                             <a href="ajax/RL-DevOps.html" class="devops_providers"><div class="rl" title="Data Centre"><span class="menu-item-parent provider-images trackAlign">&nbsp;Data Centre</span></div></a>
@@ -269,12 +277,13 @@ String.prototype.capitalizeFirstLetter = function() {
     <script src="js/jquery.tablesorter.min.js"></script>
     <script src="js/jquery.validate.min.js"></script>
     <script src="js/additional-methods.min.js"></script>
-
+   <script src="/socket.io/socket.io.js"></script>
    <!-- <script src="js/plugin/modalcollapse/modalcollapse.js"></script>-->
 
     <script src="js/app.js"></script>
+
     <script src="js/dev/dev.js"></script>
-    <script src="/socket.io/socket.io.js"></script>
+    
 
     
     
@@ -477,7 +486,7 @@ var SettingTreeJson = [{
                 "selectable": true,
                 "icon": "fa fa-lg fa-fw fa-random"
 
-            },/*{
+            },{
                 "name": "organizations",
                 "text": "Nexus Server",
                 "borderColor": "#000",
@@ -485,7 +494,7 @@ var SettingTreeJson = [{
                 "selectable": true,
                 "icon": "fa fa-lg fa-fw fa-random"
 
-            },*/{
+            },{
                 "name": "organizations",
                 "text": "Environments",
                 "borderColor": "#000",
@@ -518,6 +527,13 @@ var SettingTreeJson = [{
                 "href": "#ajax/Settings/ProvidersList.html",
                 "selectable": true,
                 "icon": "fa fa-lg fa-fw fa-sitemap"
+            },{
+                "name": "organizations",
+                "text": "CMDB",
+                "borderColor": "#000",
+                "href": "#ajax/Settings/CMDBList.html",
+                "selectable": true,
+                "icon": "fa fa-lg fa-fw fa-database"
             },
 
         ],
@@ -602,9 +618,17 @@ var SettingTreeJson = [{
     }, {
         "name": "track",
         "text": "Track Setup",
-        "nodes": [{
+        "nodes": [/*{
             "name": "templates",
-            "text": "Dashboard",
+            "text": "Dashboard Types",
+            "borderColor": "#000",
+            "href": "#ajax/Settings/DashboardList.html",
+            "selectable": true,
+            "icon": "fa fa-lg fa-fw fa-files-o"
+
+        },*/{
+            "name": "templates",
+            "text": "Dashboard Items",
             "borderColor": "#000",
             "href": "#ajax/Settings/DashboardSettings.html",
             "selectable": true,
@@ -653,123 +677,81 @@ function loadSettingsTree() {
 
 
 var trackTree;
-function getTrackTreeDetails(){
-  //  alert('getting tree details');
+
+function getTrackTreeDetails() {
+    //  alert('getting tree details');
     $.ajax({
         type: "get",
         dataType: "json",
         async: false,
         url: '../track',
-        success: function(data){
+        success: function(data) {
             trackTree = [];
-            var trackObj={Provider:[],Monitoring:[],Logs:[],Notifications:[]};
-           // alert(JSON.stringify(trackObj));
-            for (var i = 0; i < data.length; i++) {
-                //alert("data.type "+data[i].type);
-                if(data[i].type==='Provider'){
-                   // alert(data[i].name);
-                    trackObj.Provider.push({
-                        "name": "providerData",
-                        "text": data[i].name,
-                        "borderColor": "#000",
-                        "href": 'javascript:void(0)',
-                        "parent": "data",
-                        "data-href":data[i].url,
-                        "nodetype": "dataList",
-                        "selectable": true,
-                        "icon": "fa fa-fw fa-1x fa-desktop"
-                    });
-                }else if(data[i].type==='Monitoring'){
-                    trackObj.Monitoring.push({
-                        "name": "monitoringData",
-                        "text": data[i].name,
-                        "borderColor": "#000",
-                        "href": 'javascript:void(0)',
-                        "parent": "data",
-                        "data-href":data[i].url,
-                        "nodetype": "dataList",
-                        "selectable": true,
-                        "icon": "fa fa-fw fa-1x fa-desktop"
-                    });
-                }else if(data[i].type==='Logs'){
-                    trackObj.Logs.push({
-                        "name": "logData",
-                        "text": data[i].name,
-                        "borderColor": "#000",
-                        "href": 'javascript:void(0)',
-                        "parent": "data",
-                        "data-href":data[i].url,
-                        "nodetype": "dataList",
-                        "selectable": true,
-                        "icon": "fa fa-fw fa-1x fa-desktop"
-                    });
-                }else if(data[i].type==='Notifications'){
-                    trackObj.Notifications.push({
-                        "name": "notificationData",
-                        "text": data[i].name,
-                        "borderColor": "#000",
-                        "href": 'javascript:void(0)',
-                        "parent": "data",
-                        "data-href":data[i].url,
-                        "nodetype": "dataList",
-                        "selectable": true,
-                        "icon": "fa fa-fw fa-1x fa-desktop"
-                    });
-                }
-            }
-            
-            console.table(trackObj);
-            if (trackObj.Provider.length > 0) {
 
+            for (var i = 0; i < data.length; i++) {
+              //  console.table(trackTree);
                 trackTree.push({
-                    "name": "providers",
-                    "text": "Providers",
-                    "icon": "fa fa-tasks",
-                    "nodetype": "providers",
-                    "nodes": trackObj.Provider,
+                    "name": "data",
+                    "text": data[i].type,
+                    "icon": "icon fa fa-line-chart",
+                    "nodetype": "data",
+                    "nodes": [],
                     "borderColor": "#000",
                     "selectable": false,
                     "href": "javascript:void(0);"
                 });
+                for (var j = 0; j < data[i].itemUrls.length; j++) {
+                    
+                    if (data[i].itemUrls[j].childItem.length > 0) {
+                        trackTree[i].nodes.push({
+                            "name": "parentData",
+                            "text": data[i].itemUrls[j].name,
+                            "borderColor": "#000",
+                            "href": 'javascript:void(0)',
+                            "parent": "data",
+                            "data-href": data[i].itemUrls[j].url,
+                            "nodetype": "parentNode",
+                            "selectable": false,
+                            "icon": "icon fa fa-lg fa-fw fa-files-o",
+                            "nodes": []
+                        });
+                        console.log("TrackAfter"+JSON.stringify(trackTree));
+                    } else {
+                        trackTree[i].nodes.push({
+                            "name": "parentData",
+                            "text": data[i].itemUrls[j].name,
+                            "borderColor": "#000",
+                            "href": 'javascript:void(0)',
+                            "parent": "data",
+                            "data-href": data[i].itemUrls[j].url,
+                            "nodetype": "parentNode",
+                            "selectable": true,
+                            "icon": "icon fa fa-lg fa-fw fa-files-o"
+                        });
+                    }
+                    console.log("TrackTree"+JSON.stringify(trackTree[0].nodes));
+                    
+                    for (var k = 0; k < data[i].itemUrls[j].childItem.length; k++) {
+                        //alert(JSON.stringify(trackTree));
+
+                        trackTree[i].nodes[j].nodes.push({
+                            "name": "childData",
+                            "text": data[i].itemUrls[j].childItem[k].name,
+                            "borderColor": "#000",
+                            "href": 'javascript:void(0)',
+                            "parent": "data",
+                            "data-href": data[i].itemUrls[j].childItem[k].url,
+                            "nodetype": "childType",
+                            "selectable": true,
+                            "icon": "fa fa-fw fa-1x fa-desktop"
+                        });
+                    }
+                    // alert('child');
+                }
+
+
             }
-            if (trackObj.Monitoring.length > 0) {
-                trackTree.push({
-                    "name": "monitoring",
-                    "text": "Monitoring",
-                    "icon": "fa fa-line-chart",
-                    "nodetype": "monitoring",
-                    "nodes": trackObj.Monitoring,
-                    "borderColor": "#000",
-                    "selectable": false,
-                    "href": "javascript:void(0);"
-                });
-            }
-            if (trackObj.Logs.length > 0) {
-                trackTree.push({
-                    "name": "logs",
-                    "text": "Logs",
-                    "icon": "fa fa-bar-chart",
-                    "nodetype": "logs",
-                    "nodes": trackObj.Logs,
-                    "borderColor": "#000",
-                    "selectable": false,
-                    "href": "javascript:void(0);"
-                });
-            }
-            if (trackObj.Notifications.length > 0) {
-                trackTree.push({
-                    "name": "notifications",
-                    "text": "Notifications",
-                    "icon": "fa fa-bell-o",
-                    "nodetype": "notifications",
-                    "nodes": trackObj.Notifications,
-                    "borderColor": "#000",
-                    "selectable": false,
-                    "href": "javascript:void(0);"
-                });
-            }
-            
-           // }
+
 
             console.log(JSON.stringify(trackTree));
         }

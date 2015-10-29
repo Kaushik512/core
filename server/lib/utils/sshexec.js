@@ -1,5 +1,7 @@
 var fileIo = require('./fileio');
+var extend = require('extend');
 var sshConnection = require('ssh2').Client;
+var logger = require('_pr/logger')(module);
 
 var HOST_UNREACHABLE = -5000;
 var INVALID_CREDENTIALS = -5001;
@@ -8,13 +10,16 @@ var UNKOWN_EXCEPTION = -5003;
 var PEM_FILE_READ_ERROR = -5004;
 var CONNECTION_NOT_INITIALIZED = -5005;
 
-module.exports = function(options) {
 
-    var con;
+module.exports = function(opts) {
+    var options = extend({}, opts);
+    var sshTry = 0;
+    //var con;
     var isConnected = false;
 
     function connect(connectionParamsObj, callback) {
-        con = new sshConnection();
+        var con = new sshConnection();
+        connectionParamsObj.readyTimeout = 40000; //timeout increased to support azure based vms
         console.log("ConnectionParamsObj==>", connectionParamsObj);
 
         try {
@@ -23,34 +28,36 @@ module.exports = function(options) {
             con = null;
             console.log(connectErr);
             // a hack to make a sycnronous call asynchronous 
-            setTimeout(function() {
+            process.nextTick(function() {
                 if (connectErr.message === 'Cannot parse privateKey: Unsupported key format') {
                     console.log('Error msg:' + connectErr.message);
-                    callback(connectErr, INVALID_CREDENTIALS);
+                    callback(connectErr, INVALID_CREDENTIALS, null);
                 } else {
-                    callback(connectErr, UNKOWN_EXCEPTION);
+                    callback(connectErr, UNKOWN_EXCEPTION, null);
                 }
-            }, 500);
+            });
             return;
         }
 
         con.on('ready', function() {
             isConnected = true;
-            callback(null);
+            callback(null,null,con);
         });
 
         con.on('error', function(err) {
             isConnected = false;
             con = null;
-            console.log("ERROR EVENT FIRED",err);
+            console.log("ERROR EVENT FIRED", err);
+
             if (err.level === 'client-authentication') {
-                 console.log('Error msg:' + err);
-                callback(err, INVALID_CREDENTIALS);
+                console.log('Error msg:' + err);
+                callback(err, INVALID_CREDENTIALS,null);
             } else if (err.level === 'client-timeout') {
-                callback(err, HOST_UNREACHABLE);
+                callback(err, HOST_UNREACHABLE,null);
             } else {
-                callback(err, UNKOWN_EXCEPTION);
+                callback(err, UNKOWN_EXCEPTION,null);
             }
+            console.log('ssh error');
         });
 
         con.on('close', function(hadError) {
@@ -66,22 +73,23 @@ module.exports = function(options) {
         });
 
         con.on('keyboard-interactive', function(name, instructions, instructionsLang, prompts, finish) {
-          console.log('Connection :: keyboard-interactive');
-          finish([options.password]);
+            console.log('Connection :: keyboard-interactive');
+            finish([options.password]);
         });
 
     }
 
-    function initialize(callback) {
+    function initializeConnection(callback) {
         console.log("In SSH Initilize");
-        if (!con) {
+        //console.log('con ..>', con);
+        //if (!con) {
             var connectionParamsObj = {
                 host: options.host,
                 port: options.port,
                 username: options.username
             };
 
-            if (options.privateKey) {
+            if (options.privateKey) { 
                 if (options.passphrase) {
                     connectionParamsObj.passphrase = options.passphrase;
                 }
@@ -95,23 +103,41 @@ module.exports = function(options) {
                 });
             } else {
                 console.log("SSh password...");
-                //connectionParamsObj.password = options.password;
-                connectionParamsObj.tryKeyboard = true;
-                connect(connectionParamsObj, callback);
+
+                if (options.interactiveKeyboard) {
+                    connectionParamsObj.tryKeyboard = true;
+                    connect(connectionParamsObj, callback);
+                } else {
+                    connectionParamsObj.password = options.password;
+                    connect(connectionParamsObj, callback);
+                }
             }
-        } else {
-            callback(null);
-        }
+        /*} else {
+            process.nextTick(function() {
+                callback(null);
+            });
+        }*/
     }
 
 
     this.exec = function(cmd, onComplete, onStdOut, onStdErr) {
+        console.log("sshTry:", sshTry);
+        sshTry++;
+        var self = this;
         var execRetCode = null;
         var execSignal = null;
-        console.log('in exec:' + cmd);
-        initialize(function(err, initErrorCode) {
+        console.log('in exec: ' + cmd);
+        initializeConnection(function(err, initErrorCode, con) {
             if (err) {
-                onComplete(null, initErrorCode);
+                if (initErrorCode === -5001 && sshTry === 1) {
+                    options.interactiveKeyboard = true;
+                    con = null;
+                    isConnected = false;
+                    console.log('firing again');
+                    self.exec(cmd, onComplete, onStdOut, onStdErr);
+                } else {
+                    onComplete(null, initErrorCode);
+                }
                 return;
             }
             if (con) {
@@ -165,6 +191,7 @@ module.exports = function(options) {
                     }
                 });
             } else {
+                console.log('con is null');
                 onComplete(null, CONNECTION_NOT_INITIALIZED);
             }
 

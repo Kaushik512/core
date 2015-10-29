@@ -1046,7 +1046,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
             console.log('req== >', blueprintData);
             //var blueprintData = req.body.blueprintData;
             var dockerData, instanceData;
-            logger.debug('req.body.blueprintData.blueprintType ==>', req.body.blueprintData.blueprintType);
+            logger.debug('req.body.blueprintData.blueprintType ===>', req.body.blueprintData.blueprintType);
             if (req.body.blueprintData.blueprintType === 'docker') {
                 dockerData = {
                     dockerContainerPathsTitle: req.body.blueprintData.dockercontainerpathstitle,
@@ -1129,6 +1129,21 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     imageId: req.body.blueprintData.imageId,
                     region: req.body.blueprintData.region,
                     cloudProviderType: 'azure',
+                    cloudProviderId: req.body.blueprintData.providerId,
+                    infraManagerType: 'chef',
+                    infraManagerId: req.body.blueprintData.chefServerId,
+                    runlist: req.body.blueprintData.runlist,
+                    instanceOS: req.body.blueprintData.instanceOS,
+                    instanceCount: req.body.blueprintData.instanceCount
+                }
+                blueprintData.instanceData = instanceData;
+            }else if (req.body.blueprintData.blueprintType === 'vmware_launch') {
+                logger.debug('req.body.blueprintData.blueprintType ==>', req.body.blueprintData);
+                instanceData = {
+                    //keyPairId: req.body.blueprintData.keyPairId,
+                    dataStore: req.body.blueprintData.datastore,
+                    imageId: req.body.blueprintData.imageId,
+                    cloudProviderType: 'vmware',
                     cloudProviderId: req.body.blueprintData.providerId,
                     infraManagerType: 'chef',
                     infraManagerId: req.body.blueprintData.chefServerId,

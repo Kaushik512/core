@@ -72,9 +72,9 @@
                                                             <select id="providertype" name="providerType" unique="true" uniqueconditionedby="orgname" class="chooseOrganization width-100" style="vertical-align: central" cat-validation="required" cdata="catalyst" skiprowid="yes" onchange="UtilityMethods.providerChanged($(this).val());">
                                                                 <option value="">Select Provider</option>
                                                                 <option value="AWS">AWS</option>
-                                                                <option value="OPENSTACK">OpenStack</option>
+                                                                <!-- <option value="OPENSTACK">OpenStack</option> -->
                                                                 <option value="HPPUBLICCLOUD">HP Public Cloud</option>
-                                                                <option value="VMWARE">VMware</option>
+                                                                <!-- <option value="VMWARE">VMware</option> -->
                                                                 <option value="AZURE">Azure</option>
                                                             </select>
                                                         </div>
@@ -161,10 +161,19 @@
                                                             <!-- <i class="icon-append fa fa-building"></i> -->
                                                             <input name="openstackendpointimage" id="openstackendpointimage" class="form-control" type="text" cdata="catalyst" placeholder="Enter the Image Service Endpoint"> <span data-val-controltovalidate="orgname" id="MainContent_Req_orgname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility: hidden;">Required</span>
                                                         </div>
-                                                        <div class="col-lg-6 col-md-6">
+                                                        <div class="col-lg-6 col-md-6 hidden">
                                                             <label for="">EC2:</label>
                                                             <!-- <i class="icon-append fa fa-building"></i> -->
                                                             <input name="openstackendpointec2" id="openstackendpointec2" class="form-control" type="text" cdata="catalyst" placeholder="Enter the EC2 Service Endpoint"> <span data-val-controltovalidate="orgname" id="MainContent_Req_orgname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility: hidden;">Required</span>
+                                                        </div>
+                                                        <div class="col-lg-6 col-md-6">
+                                                            <label for="">Key Name:<span style="color: Red;" class="control-label">&nbsp;*</span></label>
+                                                            <!-- <i class="icon-append fa fa-building"></i> -->
+                                                            <input name="openstackkeyname" id="openstackkeyname" class="form-control" type="text" cdata="catalyst" placeholder="Enter Instance Key Name"> <span data-val-controltovalidate="orgname" id="MainContent_Req_orgname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility: hidden;">Required</span></div>
+                                                        <div class="col-lg-6 col-md-6">
+                                                            <label for="">Upload .pem file for Instance:<span style="color: Red;" class="control-label">&nbsp;*</span></label>
+                                                            <!-- <i class="icon-append fa fa-building"></i> -->
+                                                            <input name="openstackinstancepem" id="openstackinstancepem" class="form-control" type="file" cdata="catalyst" placeholder="Enter the Password"> <span data-val-controltovalidate="orgname" id="MainContent_Req_orgname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility: hidden;">Required</span>
                                                         </div>
                                                     </div>
                                                     <div class="row forhppubliccloud">
@@ -285,6 +294,9 @@
                 $('.addNewRegion').hide();
                 $('.forvmware').hide();
                 $('.forazure').hide();
+                $('#openstackinstancepem').closest('div').hide();
+                $('#openstackkeyname').closest('div').hide();
+                
                 $('#myForm54').attr('action', $('#myForm54').attr('action').replace(/aws/g, 'hppubliccloud'));
                 $('#myForm54').attr('action', $('#myForm54').attr('action').replace(/vmware/g, 'hppubliccloud'));
                 $('#myForm54').attr('action', $('#myForm54').attr('action').replace(/openstack/g, 'hppubliccloud'));
@@ -297,6 +309,8 @@
                 $('.addNewRegion').hide();
                 $('.forvmware').hide();
                 $('.forazure').hide();
+                 $('#openstackinstancepem').closest('div').show();
+                $('#openstackkeyname').closest('div').show();
                 $('#myForm54').attr('action', $('#myForm54').attr('action').replace(/aws/g, 'openstack'));
                 $('#myForm54').attr('action', $('#myForm54').attr('action').replace(/vmware/g, 'openstack'));
                 $('#myForm54').attr('action', $('#myForm54').attr('action').replace(/hppubliccloud/g, 'openstack'));
@@ -509,6 +523,7 @@
         $('#openstackhost').val(data.host);
         $('#openstacktenantname').val(data.tenantname);
         $('#openstackprojectname').val(data.projectname);
+        $('#openstackkeyname').val(data.keyname);
         $('#openstacktenantid').val(data.tenantid);
         $('#providertype').val(data.providerType).select2();
         $('#orgId').val(data.orgId[0]).attr({
@@ -527,6 +542,19 @@
 
 
         $('#providertype').trigger('change');
+
+    }
+    function setValuesvmware(data){
+        $('#providertype').val(data.providerType).select2();
+        $('#providertype').trigger('change');
+        $('#name').val(data.providerName);
+        $('#vmwareusername').val(data.username);
+        $('#vmwarepassword').val(data.password);
+        $('#vmwarehost').val(data.host);
+        $('#vmwaredc').val(data.dc);
+        $('#orgId').val(data.orgId[0]).attr({
+            'answer': data.orgId[0]
+        }).select2();
 
     }
 
@@ -718,8 +746,7 @@
                     error: function(jqxhr) {
                         //alert('err 1');
                         getValuesAzure();
-                        removeLoader();
-                        bootbox.alert(jqxhr.status);
+                        
                     },
                     failure: function(data) {
                         alert('fail 1');
@@ -738,11 +765,39 @@
                         data = typeof data == "string" ? JSON.parse(data) : data;
                         d4ddata = data;
                         setValuesAzure(data);
-
+                        
                         //checkForKeyPair();
                     },
                     error: function(jqxhr) {
                         //alert('err 1');
+                        getValuesVmware();
+                        removeLoader();
+                        bootbox.alert(jqxhr.status);
+                    },
+                    failure: function(data) {
+                        alert('fail 1');
+                        bootbox.alert(data);
+                    }
+                });
+
+            }
+
+            var getValuesVmware = function() {
+               
+                $.ajax({
+                    method: "GET",
+                    url: "/vmware/providers/" + UtilityMethods.getIdFromURL(),
+                    success: function(data, success) {
+                        data = typeof data == "string" ? JSON.parse(data) : data;
+                        d4ddata = data;
+                        
+                        setValuesvmware(data);
+                        removeLoader();
+                        bootbox.alert(jqxhr.status);
+                        //checkForKeyPair();
+                    },
+                    error: function(jqxhr) {
+                        alert('err 1');
 
                         removeLoader();
                         bootbox.alert(jqxhr.status);

@@ -20,7 +20,11 @@ module.exports.readDir = function(root, path, callback) {
         }
         var fileStatError = false;
         totalItems = files.length;
-        for (var i = 0; i < totalItems; i++) {
+        if (totalItems === 0) {
+            callback(null, [], []);
+            return;
+        }
+        for (var i = 0; i < files.length; i++) {
             var file = files[i];
             (function(file) {
                 fs.stat(root + path + '/' + file, function(err, stats) {

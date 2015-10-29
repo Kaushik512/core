@@ -16,6 +16,33 @@ function devCall() {
             }
         }
     }
+    window.showHideControlApplication = function(objID) {
+        if (objID) {
+            if (objID == "divapplicationcardview" || objID == "defaultViewButtonAppCard") {
+                $("#divapplicationtableview").removeClass("visibleClass").hide();
+                $(".createAppConfigure").show();
+                $('#defaultViewButtonAppCard').hide();
+                $("#divapplicationcardview").addClass("visibleClass").show();
+                $('#defaultViewButtonAppCard').parents().eq(2).find('span:nth-child(2)').removeClass('margintop2right8').addClass('margintopright8');
+                $('#defaultViewButtonAppCard').find('i').removeClass('txt-color-deactive').addClass('txt-color-active');
+                $('#instanceviewAppCard').show();
+                //$('#instanceviewAppCard').find('i').removeClass('txt-color-active').addClass('txt-color-deactive');
+            } else {
+                $("#divapplicationtableview").addClass("visibleClass").show();
+                $('#defaultViewButtonAppCard').show();
+                $('#defaultViewButtonAppCard').parents().eq(2).find('span:nth-child(2)').removeClass('margintopright8').addClass('margintop2right8');
+                $(".createAppConfigure").hide();
+                getenvName(function(envName) {
+                    var dataenvAccordianName = "Application Deployment for : " + envName;
+                    $clonenoData.find('.envAppDeployName').html(dataenvAccordianName);
+                });
+                $("#divapplicationcardview").removeClass("visibleClass").hide();
+                $('#instanceviewAppCard').hide();
+                //$('#instanceviewAppCard').find('i').removeClass('txt-color-deactive').addClass('txt-color-active');
+                $('#defaultViewButtonAppCard').find('i').removeClass('txt-color-active').addClass('txt-color-deactive');
+            }
+        }
+    }
 
     //for disabling the ssh button
     function disableSSHBtn(instanceId) {
@@ -1872,7 +1899,7 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
             dataTable.row.add($rowContainter).draw();
 
 
-            if (data.instanceState === 'pending' || data.instanceState === 'stopping') {
+            if (data.instanceState === 'pending' || data.instanceState === 'stopping' || data.instanceState === 'unknown') {
                 pollInstanceState(data._id, data.instanceState, 2000);
                 // To be removed from comment later - Vinod
             }
@@ -2338,9 +2365,14 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                             //provider logo added - currently included open stack
                             var $imgprovider = '';
                             if (data[i].blueprintType == 'openstack_launch')
-                                $imgprovider = $('<li><img src="img/openstack-card.png" style="margin-left: -94px;margin-right: 7px;margin-top: 48px;"></li>');
+                                $imgprovider = $('<li><img src="img/openstack-card.png" style="margin-left: -94px;margin-right: 7px;margin-top: 48px;" title="Openstack"></li>');
                             if (data[i].blueprintType == 'hppubliccloud_launch')
-                                $imgprovider = $('<li><img src="img/hpcloud-card.png" style="margin-left: -94px;margin-right: 7px;margin-top: 48px;"></li>');
+                                $imgprovider = $('<li><img src="img/hpcloud-card.png" style="margin-left: -94px;margin-right: 7px;margin-top: 48px;" title="HP Helion"></li>');
+                            if (data[i].blueprintType == 'azure_launch')
+                                $imgprovider = $('<li><img src="img/azure-card.png" style="margin-left: -94px;margin-right: 7px;margin-top: 48px;" title="Windows Azure"></li>');
+                            if (data[i].blueprintType == 'vmware_launch')
+                                $imgprovider = $('<li><img src="img/vmware-card.png" style="margin-left: -94px;margin-right: 7px;margin-top: 48px;" title="Vmware"></li>');
+                            
                             // alert(data[i].blueprintType);
                             var $liImage = $('<li></li>').append($img);
                             $ul.append($liImage);
@@ -4304,10 +4336,11 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
 
                     //method for executing the chef and jenkins job...
                     var $tdExecute = $('<td style="vertical-align:inherit;text-align:center;"></td>').append('<a rel="tooltip" data-placement="top" data-original-title="Execute" data-toggle="modal" href="javascript:void(0)" class="btn btn-primary btn-sg tableactionbutton"><i class="ace-icon fa fa-play bigger-120"></i></a>');
-                    $tdExecute.find('a').data('taskId', data[i]._id).attr('data-executeTaskId', data[i]._id).click(function(e) {
+                    $tdExecute.find('a').data('taskId', data[i]._id).attr('data-executeTaskId', data[i]._id).click(function(e,nexusData) {
                         var taskId = $(this).data('taskId');
 
-                        //alert(JSON.stringify(data[i]));
+                      //  alert(JSON.stringify(e.data));
+                        console.log("e == >",nexusData)
 
                         if (data[i].taskType === 'jenkins' || data[i].taskType === 'chef' || data[i].taskType === 'puppet' || data[i].taskType === 'composite') {
                             //checking for parameterized condition..
@@ -4325,7 +4358,7 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                                         var $tr = $('<tr/>');
                                         var $tdName = $('<td></td>');
                                         var $tdValue = $('<td id="selectValue"></td>');
-                                        var selectForparam = $('<select style="width:60%;"></select>').attr('key', name);
+                                        var selectForparam = $('<select style="width:60%;" class="form-controlSelect"></select>').attr('key', name);
                                         var nameForParam = data[i].taskConfig.parameterized[a].parameterName;
                                         if (nameForParam === 'Choice') {
                                             var label = $('<label style="font-size:14px;">Are you sure you want to execute? Choose the Parameter for-&nbsp <b>' + name + '<b></label>');
@@ -4349,7 +4382,7 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
 
                                                 str = '<option>' + defaultValueCheck[k] + '</option>';
 
-                                                selectForparam.append(str).select2();
+                                                selectForparam.append(str);
 
                                             } //for loop for default value ends here..
 
@@ -4478,7 +4511,7 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                                             $modal.find('.outputArea').hide();
                                             $modal.modal('show');
                                             var timestampToPoll = new Date().getTime();
-                                            $.post('../tasks/' + taskId + '/run', {}, function(data) {
+                                            $.post('../tasks/' + taskId + '/run', nexusData, function(data) {
                                                 //  alert(JSON.stringify(data));
                                                 var date = new Date().setTime(data.timestamp);
                                                 var taskTimestamp = new Date(date).toLocaleString(); //converts to human readable strings
@@ -5124,9 +5157,9 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
             $('[autofocus]', e.target).focus();
         });
 
-       // $('#importinstanceOS').select2();
-      //  $('#configManagementDropdown').select2();
-      //  $('#pemFileDropdown').select2();
+        // $('#importinstanceOS').select2();
+        //  $('#configManagementDropdown').select2();
+        //  $('#pemFileDropdown').select2();
 
 
 
@@ -5326,29 +5359,29 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
 
             // socket connection for cloudformation autoscale event
 
-            var socket = io.connect('/cloudFormationAutoScaleGroup', {
-                'force new connection': true,
-                reconnection: false
-            });
 
-            socket.on('connect', function() {
-                socket.emit('joinCFRoom', {
+
+
+            //socketAutoScale.on('connect', function() {
+                window.socketAutoScale.emit('joinCFRoom', {
                     orgId: orgId,
                     bgId: urlParams['bg'],
                     projId: projectId,
                     envId: envId
                 });
-            });
+            //});
 
-            socket.on('cfAutoScaleInstanceRemoved', function(instanceData) {
+            window.socketAutoScale.on('cfAutoScaleInstanceRemoved', function(instanceData) {
                 console.log('delete event fired');
                 $('#divinstancescardview').find('.domain-roles-caption[data-instanceId=' + instanceData.instanceId + ']').parents('.domain-role-thumbnailDev').remove();
                 var table = $('#tableinstanceview').DataTable();
                 table.row('[data-instanceid=' + instanceData.instanceId + ']').remove().draw(false);
             });
-            socket.on('cfAutoScaleInstanceAdded', function(instanceData) {
-                console.log('add event fired ==> ',instanceData);
-                addInstanceToDOM(instanceData);
+            window.socketAutoScale.on('cfAutoScaleInstanceAdded', function(instanceData) {
+                console.log('add event fired ==> ', instanceData);
+                if(orgId === instanceData.orgId && urlParams['bg'] === instanceData.bgId &&projectId ===  instanceData.projectId && envId === instanceData.envId) {
+                    addInstanceToDOM(instanceData);
+                }
             });
 
 
@@ -6018,3 +6051,12 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
 
 
 }
+
+window.socketAutoScale = io.connect('/cloudFormationAutoScaleGroup', {
+    'force new connection': true,
+    reconnection: false
+});
+
+window.socketAutoScale.on('connect', function() {
+    console.log('connected to autoscale socket');
+});

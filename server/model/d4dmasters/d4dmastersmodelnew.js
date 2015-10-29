@@ -390,6 +390,7 @@ var d4dMastersNexusServer = new mongoose.Schema(
 	nexuspassword: {type:String,trim:true},
 	configType: {type:String, trim:true},
 	hostname: {type:String,required:true, trim:true},
+	groupid: {type:String,required:true, trim:true},
 	active: {type:Boolean, trim:true,default:true},
 	rowid:{type:String,required:true, trim:true}},{collection:'d4dmastersnew'}
 );

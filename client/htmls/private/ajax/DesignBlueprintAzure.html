@@ -2241,7 +2241,7 @@ var blueprintstartup = function() {
 
             for (var i = 0; i < rowLength; i += 1) {
                 //skipping cft if not aws provider
-                if (providerselected && (providerselected == 'openstack' || providerselected == 'hppubliccloud') && data[i]['templatetype'] && data[i]['templatetype'] == 'cft')
+                if (providerselected && (providerselected == 'vmware' || providerselected == 'azure' || providerselected == 'openstack' || providerselected == 'hppubliccloud') && data[i]['templatetype'] && data[i]['templatetype'] == 'cft')
                     continue;
 
                 getDesignTypeImg = data[i]['designtemplateicon_filename'];
@@ -2983,7 +2983,8 @@ var $wizard = $('#bootstrap-wizard-1').bootstrapWizard({
                             reqBody.openstacksecurityGroupIds = $('#openstacksecuritygroup').val();
                             reqBody.openstacksubnet = $('#openstacksubnet').val();
 
-                            reqBody.instanceCount = 1;
+                           // reqBody.instanceCount = 1;
+                            reqBody.instanceCount = $('#instanceCount').val();
                             reqBody.instanceImageName = imageIdentifier;
 
 

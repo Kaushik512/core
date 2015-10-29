@@ -12,7 +12,7 @@ var blueprintsDao = require('../model/dao/blueprints');
 var instancesDao = require('../model/classes/instance/instance');
 var EC2 = require('../lib/ec2.js');
 var Chef = require('../lib/chef.js');
-var taskstatusDao = require('../model/taskstatus');
+
 var logsDao = require('../model/dao/logsdao.js');
 var configmgmtDao = require('../model/d4dmasters/configmgmt');
 var Docker = require('../model/docker.js');
@@ -46,10 +46,10 @@ var masterUtil = require('_pr/lib/utils/masterUtil');
 module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
     app.get('/instances/:instanceId', function(req, res) {
-        logger.debug("Enter get() for /instances/%s", req.params.instanceId);
+       // logger.debug("Enter get() for /instances/%s", req.params.instanceId);
         instancesDao.getInstanceById(req.params.instanceId, function(err, data) {
             if (err) {
-                logger.error("Instance fetch Failed >> ", err);
+       //         logger.error("Instance fetch Failed >> ", err);
                 res.send(500);
                 return;
             }
@@ -57,10 +57,10 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             if (data.length) {
                 res.send(data[0]);
             } else {
-                logger.error("No such Instance for >> %s", req.params.instanceId);
+            //    logger.error("No such Instance for >> %s", req.params.instanceId);
                 res.send(404);
             }
-            logger.debug("Exit get() for /instances/%s", req.params.instanceId);
+          //  logger.debug("Exit get() for /instances/%s", req.params.instanceId);
         });
     });
 
@@ -1719,7 +1719,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
 
     app.get('/instances/:instanceId/logs', function(req, res) {
-        logger.debug("Enter get() for /instances/%s/logs", req.params.instanceId);
+        //logger.debug("Enter get() for /instances/%s/logs", req.params.instanceId);
         var timestamp = req.query.timestamp;
         if (timestamp) {
             timestamp = parseInt(timestamp);
@@ -1734,7 +1734,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 res.send(500);
                 return;
             }
-            logger.debug("Exit get() for /instances/%s/logs", req.params.instanceId);
+           // logger.debug("Exit get() for /instances/%s/logs", req.params.instanceId);
             res.send(data);
 
         });

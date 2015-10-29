@@ -5,7 +5,8 @@
 </style>
 <script type="text/javascript">
     $('#trackTree ul>li').trigger('click');
-    $('#trackTree ul>li').find("[nodetype='dataList']").first().click();
+    $('#trackTree ul>li').find("[nodetype='parentNode']").first().click();
+    $('#trackTree ul>li').find("[nodetype='childType']").first().click();
     $.ajax({
         type: 'GET',
         url: '../track',
