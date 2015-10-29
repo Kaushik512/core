@@ -3,7 +3,8 @@ var exec = require('child_process').exec;
 var SSHExec = require('./utils/sshexec');
 var logger = require('_pr/logger')(module);
 var Process = require("./utils/process");
-var curl = require("./utils/curl.js");
+var Curl = require("./utils/curl.js");
+var appConfig = require('_pr/config');
 
 function execute(cmd, isJsonResponse, callback) {
     // logger.debug("START of executing issued command");
@@ -147,8 +148,18 @@ var AzureCloud = function() {
 
         //cloudServiceName,imageName,userName,password,vmName,size,sshPort
         //var createVMcmd = "azure vm create "+ params.VMName +" "+ params.imageName +" "+ params.userName +" "+params.password+" -z \""+params.size+" -l \""+params.location+"\" -e "+ params.sshPort +"-w " + params.vnet + " -b " + params.subnet;
+        
+        if(params.os === 'windows'){
+            params.remoteCon = '-r';
+            params.port = '3389';
+        }else{
+            params.remoteCon = '-e';
+            params.port = '22';
+        }
 
-        var createVMcmd = "azure vm create " + params.VMName + " " + params.imageName + " " + params.username + " " + params.password + " -z \"" + params.size + "\" -l \"" + params.location + "\" -e " + params.sshPort + " -w " + params.vnet + " -b " + params.subnet;
+        logger.debug("Azure server Launch params >>>", params);
+
+        var createVMcmd = "azure vm create " + params.VMName + " " + params.imageName + " " + params.username + " " + params.password + " -z \"" + params.size + "\" -l \"" + params.location + "\" " + params.remoteCon + " " + params.port + " -w " + params.vnet + " -b " + params.subnet;
 
         logger.debug("Create VM command:", createVMcmd);
         var self = this;
@@ -163,13 +174,22 @@ var AzureCloud = function() {
 
             var endpointsPorts = params.endpoints;
 
+            logger.debug("endpointsPorts >>",endpointsPorts);
+
             var port = endpointsPorts.split(',')[0];
 
             logger.debug('Creating endpoint CatEndpoint with port:', port);
 
-            self.createEndPoint(params.VMName, "CatEndpoint", port, function() {
-
-            });
+            if(params.os === 'windows'){
+                self.createEndPoint(params.VMName, "default", '5985', function() {
+                      self.createEndPoint(params.VMName, "CatEndpoint", port, function() {
+                      
+                      });                
+                });
+            }else{
+                self.createEndPoint(params.VMName, "CatEndpoint", port, function() {
+                      });
+            }
 
             callback(null, data);
 
@@ -209,8 +229,62 @@ var AzureCloud = function() {
     }
 
     this.updatedfloatingip = false;
- 
+
+
 this.trysshoninstance = function(ostype,ip_address, username, pwd, callback) {
+           logger.debug('In trysshoninstance1');
+           var opts = {
+                //privateKey: instanceData.credentials.pemFilePath,
+                password: pwd,
+                username: username,
+                host: ip_address,
+                instanceOS: 'linux',
+                port: 22,
+                cmds: ["ls -al"],
+                cmdswin: ["knife wsman test"],
+                interactiveKeyboard: true
+            }
+
+            var cmdString = '';
+            if(ostype == "Windows"){
+                curl = new Curl();
+                cmdString = opts.cmdswin[0] + ' ' + opts.host + ' -m' ;
+                logger.debug("cmdString >>>",cmdString);
+                curl.executecurl(cmdString,function(err,stdout){
+                    logger.debug('stdout:',stdout,err);
+
+                    if(stdout && stdout.indexOf('Connected successfully') >= 0){
+                        callback('ok');
+                        return;
+                    }
+                    if(err){
+                        logger.debug('in error',err);
+                        callback('Error ',null);
+                        return;
+                    }
+
+                });
+
+            }
+            else{
+                cmdString = opts.cmds.join(' && ');
+                //console.log(JSON.stringify(opts));
+                var sshExec = new SSHExec(opts);
+                sshExec.exec(cmdString, function(err, stdout) {
+                    logger.debug(stdout);
+                    callback(stdout);
+                    return;
+                }, function(err, stdout) {
+                    logger.debug('Out:', stdout); //assuming that receiving something out would be a goog sign :)
+                    callback('ok');
+                    return;
+                }, function(err, stdout) {
+                    logger.error('Error Out:', stdout);
+                });
+            }
+    }  
+ 
+this.trysshoninstance1 = function(ostype,ip_address, username, pwd, callback) {
            var opts = {
                 //privateKey: instanceData.credentials.pemFilePath,
                 password: pwd,
