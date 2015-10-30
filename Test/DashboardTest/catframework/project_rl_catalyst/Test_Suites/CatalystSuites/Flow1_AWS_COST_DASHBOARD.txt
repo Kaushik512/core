@@ -11,7 +11,7 @@ Library            String
 
 *** Test Cases ***
 Catalyst Get the Build Number Step
-    [Tags]       Sanity     Settings
+    [Tags]       Sanity     dashboard
     Version Number and the Jenkins Buildnumber
     [Teardown]     Close Browser
 
@@ -22,14 +22,8 @@ Catalyst AWS Cost Dashboard Automation
 #    Catalyst Login 
     Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
     Catalyst AWS Cost Dashboard Verification
-    Catalyst Logout                      
+    Catalyst Logout                     
     [Teardown]     Close Browser
-
-
-
-
-
-
 
 
     

@@ -12,10 +12,46 @@ Resource           catalyst.txt
 ${BROWSER TYPE}                  firefox 
 ${ENVIRONMENT SERVER}              http://supercatalyst.relevancelab.com/public/login.html
 
-${height}             744
-${width}           1400
+${height}             768
+${width}           1366
+${NA}                 $
+${VALUE}             0
 
 #http://d4d.rlcatalyst.com/public/login.html
+
+${NEW SUCCESS}              SUCCESS
+${JOB TITLE}                    CatalystSuites Test Log
+
+${NOTIFICATIONS}            Connected
+
+${settn}                    settings
+${click}                    Click here
+${Accesslayr}                Legend
+
+#SuperCatalyst
+${SUPERCAT TEMP}                               NodeJStemp
+${PROVIDER}                                AWS_N.Cal
+${SUPERCAT ENV}                            RL_QA
+${ROLE NAME}                              rlcatalyst
+${SSH}                                    SSH-Shell
+${JENKINS IMGNAME}                     img/jenkins.png
+${SMOKE STATUS}                        No Status
+
+
+${JENKINS JOB1}             CATALYST_SMOKE_TEST
+
+${ACCESS REQUESTS}            Average Requests_Connection
+${ACCESS CONNECTIONS}        Average Active_connections
+${ACCESS WAITING}            Average Waiting
+${ACCESS UPTIME}            running
+${CAT UPTIME}               running
+${ACCESS RESPONSE}         -
+${CAT DEBUG}               debug
+${CAT ERROR}                error
+${CAT WARN}                 warn
+${USAGE}                    message.@timestamp per minute
+${BOOTSTRAP USAGE}           Top 5 host
+${CAT ERRORS}                @timestamp per 10 minutes
 
 
 #AWS COST
@@ -23,11 +59,15 @@ ${AWS}                         AWS Cost
 
 #CFT
 ${CLOUD BP}                 JAVA_Stack
-${STACK NAME}               RLStacK
+${STACK NAME}               RLstacK
 ${JAVA}                      Java
 ${MYSQL}                     MySql
 ${BOOTSTRAP}                 Bootstrap
 ${STACK STATUS}              CREATE_COMPLETE
+${EDIT STACK1}               TestJava
+${EDIT STACK2}               TestSQL
+${CHEF CLIENT}               Chef-Client-Run
+
 
 ${ENV}                 QA.txt
 ${VALID USER}             superadmin
@@ -37,9 +77,9 @@ ${ORGANIZATION DOMAIN NAME}          www.relevancelab.com
 ${ORG ADMIN USER}               smoke_admin
 ${ORG ADMIN PASSWORD}           smoke_admin
 ${ORGADMN EMAILADD}             relevancelab@gmail.com
-${BUSINESS GROUP NAME1}           Digi_learning
+${BUSINESS GROUP NAME1}          Product
 ${BUSINESS GROUP NAME2}           SecurityBG
-${PROJECT NAME1}                  Scholastic
+${PROJECT NAME1}                  Catalyst
 ${PROJECT NAME2}                  Jira-Catalyst
 ${PROJECT DESCRIPTION}           Catalyst product automation Description
 ${ENVIRONMENT NAME}              Dev
@@ -74,11 +114,11 @@ ${SUITS}                stopped
 ${UserName}             root
 
 
-${USERPEMFILE}              ${ROOTPATH}\\Chef\\jagadeesh12.pem
+${USERPEMFILE}              ${ROOTPATH}//Chef//jagadeesh12.pem
 ${VALIDATORPEMFILE}      ${ROOTPATH}//Chef//jm012-validator.pem
-${KNIFERBFILE}                ${ROOTPATH}\\Chef\\knife.rb
+${KNIFERBFILE}                ${ROOTPATH}//Chef//knife.rb
 ${CATALYSTPEM}                ${ROOTPATH}//Chef//catalyst.pem
-${CAT_INSTANCES}              ${ROOTPATH}\\Chef\\cat_instances.pem
+${CAT_INSTANCES}              ${ROOTPATH}//Chef//cat_instances.pem
 ${TEMPLATE FILE}              ${ROOTPATH}//Chef//CatalystStack.template
 ${Goldendemo_pem}             ${ROOTPATH}//Chef//GoldenDemo.pem
 
@@ -101,7 +141,7 @@ ${RECIPE1}                 recipe[apt]
 ${OPERATING SYSTEM}        Cent OS
 ${CentosInstanceSize}      t1.micro
 ${UbuntuInstanceSize}      t2.micro
-${BLUEPRINT NAME}          Apache-Centos
+${BLUEPRINT NAME}          Apache-TestCentos
 ${BLUEPRINT NAME1}         Ubuntu-Apache
 ${NEW BLUEPRINT NAME}      ApacheNew-Edited
 ${NEW UBUNTU BLUPRNT}      UbuntuNew-Edited
@@ -116,9 +156,10 @@ ${SERVICE NAME}             MongoDB
 ${TEMP NME}                 Apac
 ${REGION NAME}           US West 
 ${VPC NAME}              vpc-b1f3ecd3
-${SUBNET NAME}           subnet-aed68ce8
-${Key_Pair}               cat_instances
+${SUBNET NAME}           subnet-e49e8286
+${Key_Pair}               GoldenDemo
 ${SECRTY GRP1}                sg-c00ee1a5 | all_open
+${SECRTY GRP}                 sg-99a3bcfb | default
 ${SECRTY GRP2}                sg-c06faca4 | HTTP&S_SG
 ${SECRTY GRP3}                sg-038f4d67 | SSH_SG
 ${SECRTY GRP4}                sg-ab6faccf | Tomcat
@@ -204,7 +245,7 @@ ${PROVDR_Name}               AWSProvider
 ${PROVIDERR}                 AWS
 ${SECRET KEY}                  qm/j8lT0/IPc1P5ud8yujUSa61+QjqeyZ/jZkIff
 ${ACCESS KEY}                  AKIAI3ETOOEFHJ62G2NQ
-${IMAGE NAME1}                 smoke_CentOS
+${IMAGE NAME1}                 CentOS_N.C6.5
 ${IMAGE NAME2}                 smoke_ubuntu
 ${IMAGE NAME3}                 smoke_Win08
 ${IMAGE NAME4}                 smoke_Win2012

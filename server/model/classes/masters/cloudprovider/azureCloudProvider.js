@@ -160,8 +160,8 @@ azurecloudProviderSchema.statics.getAzureCloudProviderById = function(providerId
             return;
         }
         if (aProvider.length) {
-            logger.debug("Exit getAzureCloudProviderById with provider present");
-            callback(null, aProvider[0]);
+            logger.debug("Exit getAzureCloudProviderById with provider present",JSON.stringify(aProvider[0]));
+            callback(null, JSON.stringify(aProvider[0]));
             return;
         } else {
             logger.debug("Exit getAzureCloudProviderById with no provider present");

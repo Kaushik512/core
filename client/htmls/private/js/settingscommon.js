@@ -683,6 +683,16 @@ function CreateTableFromJson(formID, idFieldName, createFileName) {
                 dataBags.addClass('tableactionbutton');
             }
 
+            var chefFactoryBtn = $('.rowtemplate').find('a[title="Chef Factory"]');
+
+            if (chefFactoryBtn && chefFactoryBtn.length > 0) {
+                chefFactoryBtn.attr("href", "chefFactory.html?" + idFieldValue);
+                chefFactoryBtn.attr("target", "_blank");
+                chefFactoryBtn.removeClass('btn-xs');
+                chefFactoryBtn.addClass('btn-sg');
+                chefFactoryBtn.addClass('tableactionbutton');
+            }
+
 
 
             //setting the delete button
@@ -2689,8 +2699,13 @@ function loadcookbooksinto(cookbookctrl, chefserverid) {
             } else if (jxhr.responseText) {
                 msg = jxhr.responseText;
             }
-          bootbox.alert(msg);
-          $('.servicecookbookspinner').addClass('hidden');
+            bootbox.alert({
+                message: "There are no Chef Servers Associated to this Organisation",
+                title: "Error!"
+            });
+            var $servicecookbook = $('#' + cookbookctrl);
+            $servicecookbook.trigger('change').select2('val','');
+            $('.servicecookbookspinner').addClass('hidden');
         });
 
 
@@ -2730,6 +2745,14 @@ function loadreceipesinto(receipectrls, cookbook, chefserverid, finalfunction) {
             $('.receipelistspinner').addClass('hidden');
             loadactioncheckboxes(receipectrls);
             //eval(finalfunction + '([' + receipectrls.toString() +'])');
+        }).fail(function(jxhr){
+            var msg = "Server Behaved Unexpectedly";
+            if (jxhr.responseJSON && jxhr.responseJSON.message) {
+                msg = jxhr.responseJSON.message;
+            } else if (jxhr.responseText) {
+                msg = jxhr.responseText;
+            }
+            $('.receipelistspinner').addClass('hidden');
         });
     }
 

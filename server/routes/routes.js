@@ -18,13 +18,14 @@ var projects = require('./routes_projects');
 var blueprints = require('./routes_blueprints');
 var instances = require('./routes_instances');
 var tasks = require('./routes_tasks');
-var taskStatus = require('./routes_taskstatus');
+var taskStatus = require('./routes_longjobtracker');
 var ec2 = require('./routes_aws_ec2');
 
 var jenkins = require('./routes_jenkins');
 var openstack = require('./routes_openstack');
 var hppubliccloud = require('./routes_hppubliccloud');
 var azure = require('./routes_azure');
+var vmware = require('./routes_vmware.js');
 
 var application = require('./routes_application');
 var jira = require('./routes_jira');
@@ -44,11 +45,26 @@ var globalsettings = require('./routes_globalsettings');
 
 var tracks = require('./routes_track');
 
+var trackType = require('./routes_trackType');
+
 var puppet = require('./routes_puppet.js');
 
 var appdeploy = require('./routes_appdeploy');
 
-module.exports.setRoutes = function(app,socketIo) {
+var appdeployPipeline = require('./routes_appdeployPipeline');
+
+var nexus = require('./routes_nexus');
+
+var vmware = require('./routes_vmware.js');
+
+var servicenow = require('./routes_servicenow');
+
+var cheffactory = require('./routes_cheffactory');
+
+
+
+module.exports.setRoutes = function(app, socketIo) {
+
 
 
     app.all('*', function(req, res, next) {
@@ -88,6 +104,8 @@ module.exports.setRoutes = function(app,socketIo) {
     hppubliccloud.setRoutes(app, sessionVerificationFunc);
     azure.setRoutes(app, sessionVerificationFunc);
 
+    vmware.setRoutes(app, sessionVerificationFunc);
+
     application.setRoutes(app, sessionVerificationFunc);
 
     jira.setRoutes(app, sessionVerificationFunc);
@@ -104,9 +122,19 @@ module.exports.setRoutes = function(app,socketIo) {
 
     tracks.setRoutes(app, sessionVerificationFunc);
 
+    trackType.setRoutes(app, sessionVerificationFunc);
+
     puppet.setRoutes(app, sessionVerificationFunc);
 
     appdeploy.setRoutes(app, sessionVerificationFunc);
+    
+    appdeployPipeline.setRoutes(app, sessionVerificationFunc);
+    
+    nexus.setRoutes(app, sessionVerificationFunc);
+
+    servicenow.setRoutes(app, sessionVerificationFunc);
+
+    cheffactory.setRoutes(app, sessionVerificationFunc);
 
     app.get('/', function(req, res) {
         res.redirect('/private/index.html');
@@ -130,7 +158,7 @@ module.exports.setRoutes = function(app,socketIo) {
             if (req.session.user.authorizedfiles) {
                 var authfiles = req.session.user.authorizedfiles.split(','); //To be moved to login page an hold a static variable.
                 authfiles += ',index.html,settings.html,design.html,Tracker.html,noaccess.html'
-                    // console.log(authfiles.length, req.originalUrl.indexOf('.html'));
+                // console.log(authfiles.length, req.originalUrl.indexOf('.html'));
                 if (req.originalUrl.indexOf('.html') > 0) //its a html file.
                 {
                     var urlpart = req.originalUrl.split('/');
@@ -170,7 +198,7 @@ module.exports.setRoutes = function(app,socketIo) {
 
     }
 
-    
+
 
     // for notification
 

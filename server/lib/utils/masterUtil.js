@@ -740,12 +740,14 @@ var MasterUtil = function() {
         d4dModelNew.d4dModelMastersOrg.find({
             _id: new ObjectId(orgId)
         }, function(err, orgs) {
+            
             if (orgs) {
                 for (var i = 0; i < orgs.length; i++) {
                     if (orgs[i].id === '1') {
                         orgList.push(orgs[i]);
                     }
                 }
+                logger.debug('Orgs',JSON.stringify(orgList));
                 callback(null, orgList);
             } else {
                 callback(err, null);
@@ -1678,6 +1680,26 @@ var MasterUtil = function() {
         });
     }
 
+    // Return Project Name
+    this.getProjectName = function(projectId, callback) {
+        logger.debug("Project rowids: ", projectId);
+        d4dModelNew.d4dModelMastersProjects.find({
+            rowid: projectId
+        }, function(err, projects) {
+            if (err) {
+                callback(err, null);
+            }
+            if (projects.length) {
+                logger.debug("Got Environment: ", JSON.stringify(projects));
+                callback(null, projects[0].projectname);
+                return;
+            } else {
+                callback(null, null);
+                return;
+            }
+        });
+    }
+
     // Get all appData informations.
     this.getAppDataWithDeployList = function(envName, projectId, callback) {
         logger.debug("projectId: ", projectId);
@@ -1741,6 +1763,82 @@ var MasterUtil = function() {
             }
         });
     };
+
+
+    // Get all appData informations for Specific Project
+    this.getAppDataWithDeployListforProjectId = function(projectId, callback) {
+        logger.debug("projectId: ", projectId);
+        AppDeploy.getAppDeploy(function(err, data) {
+            if (err) {
+                logger.debug("App deploy fetch error.", err);
+            }
+            logger.debug("App deploy for Project......", JSON.stringify(data));
+            logger.debug("App deploy for Project count......", data.length);
+            if (data.length) {
+                var appDataList = [];
+                var count = 0;
+                for (var i = 0; i < data.length; i++) {
+                    (function(i) {
+                        var appName = [];
+                        appName.push(data[i].applicationName);
+                        d4dModelNew.d4dModelMastersProjects.find({
+                            appdeploy: {
+                                $elemMatch: {
+                                    applicationname: appName
+                                }
+                            },
+                            rowid: projectId
+                        }, function(err, appData) {
+                            count++;
+                            if (err) {
+                                logger.debug("Failed to fetch app data", err);
+                                callback(err, null);
+                            }
+                            logger.debug("++++++++++++++++++++++++++++++++++++++++++++++++============ ", JSON.stringify(appData));
+                            if (appData.length) {
+                                var dummyData = {
+                                    _id: data[i].id,
+                                    applicationName: data[i].applicationName,
+                                    applicationInstanceName: data[i].applicationInstanceName,
+                                    applicationVersion: data[i].applicationVersion,
+                                    applicationNodeIP: data[i].applicationNodeIP,
+                                    applicationLastDeploy: data[i].applicationLastDeploy,
+                                    applicationStatus: data[i].applicationStatus,
+                                    projectId: appData[0].rowid,
+                                    envId: data[i].envId,
+                                    description: appData[0].description,
+                                    applicationType: data[i].applicationType,
+                                    containerId: data[i].containerId,
+                                    hostName: data[i].hostName
+                                };
+                                appDataList.push(dummyData);
+                                if (count === data.length) {
+                                    callback(null, appDataList);
+                                }
+                            } else {
+                                if (count === data.length) {
+                                    callback(null, appDataList);
+                                }
+                            }
+
+                        });
+                    })(i);
+                }
+            } else {
+                callback(null, []);
+            }
+        });
+    };
+
+
+
+
+
+
+
+
+
+
 
     // Get AppDeploy by name.
     this.getAppDataByName = function(envName, appName, projectId, callback) {
