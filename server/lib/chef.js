@@ -729,7 +729,10 @@ var Chef = function(settings) {
                 if (code === 0) {
                     callback(null, true);
                 } else {
-                    callback(null, false);
+                    callback({
+                        message: "cmd return code is " + code,
+                        retCode: code
+                    }, false);
                 }
 
             }
@@ -757,7 +760,10 @@ var Chef = function(settings) {
                 if (code === 0) {
                     callback(null, true);
                 } else {
-                    callback(null, false);
+                    callback({
+                        message: "cmd return code is " + code,
+                        retCode: code
+                    }, false);
                 }
 
             }

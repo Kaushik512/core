@@ -122,24 +122,54 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
     // Delete Track w.r.t. Id
     app.delete('/track/:trackId/:itemId', function(req, res) {
-        Track.getTrackById(req.params.trackId, function(err, tracks) {
+        Track.getTrackById(req.params.trackId, function(err, track) {
             if (err) {
                 res.send(500, errorResponses.db.error);
                 return;
             }
-            if (tracks) {
-                Track.removeTracks(req.params.trackId , req.params.itemId , function(err, tracks) {
-                    if (err) {
-                        logger.debug("Error while removing tracks: ", JSON.stringify(tracks));
-                        res(500, "Error while removing tracks:");
-                        return;
+            if (track) {
+
+                if (track.itemUrls && track.itemUrls.length) {
+                    var itemUrls = [];
+                    for (var i = 0; i < track.itemUrls.length; i++) {
+                        if (track.itemUrls[i].id !== req.params.itemId) {
+                            itemUrls.push(track.itemUrls[i]);
+                        }
                     }
-                    if (tracks) {
-                        logger.debug("Successfully Removed tracks.");
+                    if (itemUrls.length) {
+                        track.itemUrls = itemUrls;
+                        track.save(function(err) {
+                            if (err) {
+                                logger.debug("Error while removing tracks: ", JSON.stringify(tracks));
+                                res(500, "Error while removing tracks:");
+                                return;
+                            }
+                            res.send(200, "Successfully Removed tracks.");
+                            return;
+                        });
+                    } else {
+                        track.remove(function(err) {
+                            if (err) {
+                                logger.debug("Error while removing tracks: ", JSON.stringify(tracks));
+                                res(500, "Error while removing tracks:");
+                                return;
+                            }
+                            res.send(200, "Successfully Removed tracks.");
+                            return;
+                        });
+                    }
+
+                } else {
+                    track.remove(function(err) {
+                        if (err) {
+                            logger.debug("Error while removing tracks: ", JSON.stringify(tracks));
+                            res(500, "Error while removing tracks:");
+                            return;
+                        }
                         res.send(200, "Successfully Removed tracks.");
                         return;
-                    }
-                });
+                    });
+                }
             } else {
                 res.send(404, "Tracks not found!");
                 return;
