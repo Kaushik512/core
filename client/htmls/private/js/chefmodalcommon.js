@@ -103,7 +103,7 @@ function $chefCookbookRoleSelector(catorgname, callback, selectedRunlist, readMo
 
 
     var $row = $("<div></div>").addClass('row margin0');
-    var $divFilterContainer = $("<div></div>").addClass('col-lg-7 divtablemarginpadding');
+    var $divFilterChefContainer = $("<div></div>").addClass('col-lg-12 col-md-12 divtablemarginpadding');
     var $divtable = $("<div></div>").addClass('divtablemarginpadding');
     var $firstcol6 = $("<div></div>").addClass('col-lg-6 availableRunlistContainer');
 
@@ -131,10 +131,13 @@ function $chefCookbookRoleSelector(catorgname, callback, selectedRunlist, readMo
     var $cookbooksFilter = $('<label class="radio hidden col-lg-3" style="font-size:13px;"><input name="radio" class="runlistTypeSelectorRadioBtn" type="radio" id="cookbooks"  value="Cookbooks"/><i></i>Cookbooks</label>');
     var $allFilter = $('<label class="radio hidden col-lg-3" style="font-size:13px;"><input name="radio" class="runlistTypeSelectorRadioBtn" type="radio" id="all"  value="All"/><i></i>All</label>');
 
-    $divFilterContainer.append($allFilter);
-    $divFilterContainer.append($rolesFilter);
-    $divFilterContainer.append($cookbooksFilter);
-    $divFilterContainer.append($cookbooksFilterNew);
+    var $chefFactoryDetails = $('<label class="hidden" style="margin-left:25px;"><a id="chefFactory" href="javascript:void(0);">Chef Factory</a></label>');
+    $divFilterChefContainer.append($allFilter);
+    $divFilterChefContainer.append($rolesFilter);
+    $divFilterChefContainer.append($cookbooksFilter);
+    $divFilterChefContainer.append($cookbooksFilterNew);
+
+    $divFilterChefContainer.append($chefFactoryDetails);
 
     var $searchiconappend = $("<i></i>").addClass('icon-append fa fa-search');
     var $searchinputtextbox = $('<input type="text" placeholder="Search Cookbooks/Roles" id="textbox"/>');
@@ -143,7 +146,7 @@ function $chefCookbookRoleSelector(catorgname, callback, selectedRunlist, readMo
     });
     $firstlabelinput.append($searchiconappend);
     $firstlabelinput.append($searchinputtextbox);
-    $divFilterContainer.append($searchinputtextboxContainer);
+    $divFilterChefContainer.append($searchinputtextboxContainer);
     $inputgroup.append($firstlabelinput);
 
     var $selectCookbooksandRecipesparentdiv = $("<div></div>").addClass('btn-group selectCookbooksandRecipesdiv');
@@ -229,7 +232,7 @@ function $chefCookbookRoleSelector(catorgname, callback, selectedRunlist, readMo
 
     $secondcol6.append($inputgroupsecond);
     $divtable.append($secondcol6);
-    $row.append($divFilterContainer);
+    $row.append($divFilterChefContainer);
     $row.append($divtable);
     $chefItemdiv.append($row);
 
@@ -337,6 +340,7 @@ function $chefCookbookRoleSelector(catorgname, callback, selectedRunlist, readMo
         $searchiconappend.show();
         $chefItemdiv.find('.availableRunlistContainer');
         $('.cookbookspinner').detach();
+        $('a#chefFactory').parents('label').removeClass('hidden');
 
 
         // loading selected runlist
