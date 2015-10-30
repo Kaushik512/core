@@ -131,7 +131,7 @@ function $chefCookbookRoleSelector(catorgname, callback, selectedRunlist, readMo
     var $cookbooksFilter = $('<label class="radio hidden col-lg-3" style="font-size:13px;"><input name="radio" class="runlistTypeSelectorRadioBtn" type="radio" id="cookbooks"  value="Cookbooks"/><i></i>Cookbooks</label>');
     var $allFilter = $('<label class="radio hidden col-lg-3" style="font-size:13px;"><input name="radio" class="runlistTypeSelectorRadioBtn" type="radio" id="all"  value="All"/><i></i>All</label>');
 
-    var $chefFactoryDetails = $('<label class="hidden" style="margin-left:25px;"><a id="chefFactory" href="javascript:void(0);">Chef Factory</a></label>');
+    var $chefFactoryDetails = $('<label class="hidden" style="margin-left:25px;"><a id="chefFactory" href="javascript:void(0);" target="_black">Chef Factory</a></label>');
     $divFilterChefContainer.append($allFilter);
     $divFilterChefContainer.append($rolesFilter);
     $divFilterChefContainer.append($cookbooksFilter);
@@ -283,7 +283,7 @@ function $chefCookbookRoleSelector(catorgname, callback, selectedRunlist, readMo
         $chefItemdiv.find('#cookbooksrecipesselectedList').first().data('chefServerId', data.serverId);
         $chefItemdiv.find('#cookbooksrecipesselectedList').first().attr('data-chefServerId', data.serverId);
 
-
+        $chefFactoryDetails.find('a').attr('href','chefFactory.html?'+data.serverId);
         var cookbooks = data.cookbooks;
         var keys = Object.keys(cookbooks);
         //alert(keys);
