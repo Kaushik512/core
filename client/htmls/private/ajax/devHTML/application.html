@@ -1030,17 +1030,19 @@ $('.appdeployConfigureSaveBtn').click(function(){
         }
     });
 });
-// $('#instanceviewAppCard').click(function(){
-    
-//     getenvName(function(envName) {
-//         alert("Hello");
-//         var $accordianTemplatenoData = $('.accordianTemplateContainer').find('.accordianTemplate');
-//         var $cloneData = $accordianTemplatenoData.clone(true);
-//         var dataenvAccordianName = "Application Deployment for : " + envName;
-//         $cloneData.find('.envAppDeployName').html(dataenvAccordianName);
-//         $('#accordion-AppDeploy').append($cloneData);
-//     });
-// });
+$('#instanceviewAppCard').click(function(){
+    getenvName(function(envName) {
+        var dataenvAccordianName = "Application Deployment for : " + envName;
+        $('.envAppDeployName').html(dataenvAccordianName);
+    });
+});
+$('#defaultViewButtonAppCard').click(function(){
+    getprojectName(function(projectNameUrlParams) {
+        var dataprojectAccordianData = "Application Deployment for : " + projectNameUrlParams;
+        $('.envAppDeployName').html(dataprojectAccordianData);
+    });
+});
+
 function moreinfoDetailsPipelineClickHandler(e){
     var $modal = $('#modalDetailsAppDeploy');
     // var $logContainer = $modal.find('.logsForAppDeploy').show();
