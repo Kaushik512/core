@@ -340,7 +340,6 @@ function $chefCookbookRoleSelector(catorgname, callback, selectedRunlist, readMo
         $searchiconappend.show();
         $chefItemdiv.find('.availableRunlistContainer');
         $('.cookbookspinner').detach();
-        $('a#chefFactory').parents('label').removeClass('hidden');
 
 
         // loading selected runlist
@@ -390,6 +389,7 @@ function $chefCookbookRoleSelector(catorgname, callback, selectedRunlist, readMo
         }
         if (listVisible.all) {
             $chefItemdiv.find('#all').parents('label').removeClass('hidden');
+            $chefItemdiv.find('a#chefFactory').parents('label').removeClass('hidden');
             if (!clicked) {
                 $chefItemdiv.find('#all').click();
                 clicked = true;
