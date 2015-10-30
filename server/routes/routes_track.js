@@ -58,6 +58,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 console.log(req.body.trackData);
                 var items = tracks[0].itemUrls.concat(req.body.trackData.itemUrls);
                 tracks[0].itemUrls = items;
+                logger.debug("tracks[0]",items);
                 tracks[0].save(function(err, track) {
                     if (err) {
                         logger.debug("error Type Update:>>>>>", err);
