@@ -347,8 +347,8 @@ function createTableForTrack(trackData) {
                     $editModal.find('#trackDescription').val(trackData.itemUrls[j].description);
 
                     $editModal.find('#trackType').val(trackData.type);
-                    $('.childAppendContainer').empty();
                     if (trackData.itemUrls[j].childItem && trackData.itemUrls[j].childItem.length) {
+                            $('.childAppendContainer').empty();
                         for (var p = 0; p < trackData.itemUrls[j].childItem.length; p++) {
                                             
                             var $cloneChild = $('#childItemSeries').clone().removeClass('hidden').removeAttr('id');
@@ -437,6 +437,7 @@ $('#trackItemUrl').submit(function(e) {
         var $childURLContainers = $('.childContainer');
         var itemDescription = $this.find('#trackDescription').val().trim();
         var childItem = [];
+      //  alert("childItem" + JSON.stringify(childItem));
         if (itemName && itemURL) {
             itemUrls.push({
                 name: itemName,
@@ -471,12 +472,10 @@ $('#trackItemUrl').submit(function(e) {
         if (dashboardEditNew === 'edit') {
             console.log(dashboardEditNew);
             console.log(trackData);
-            
-
-           // alert(JSON.stringify(itemUrls));
+           // alert(trackData.itemUrls[0].childItem);
             var itemId = $('#trackItemHiddenInputNameUrl').val();
-           // alert(itemId);
             trackData.itemUrls[0].itemId = itemId;
+          //  alert("childedit" + JSON.stringify(childItem));
            // alert(JSON.stringify(trackData.itemUrls[0]));
             url = '../track/' + trackId + '/update';
             reqBody = {
@@ -490,6 +489,7 @@ $('#trackItemUrl').submit(function(e) {
                 "type": trackData.type
             };
         }
+        console.log('====',reqBody);
 
         $.ajax({
             method: "POST",

@@ -103,27 +103,59 @@ var ChefFactory = function ChefFactory(chefSettings) {
     };
 
     this.uploadCookbook = function(cookbookName, callback) {
-        fileIo.readFile(chefSettings.userChefRepoLocation + '/cookbooks/' + cookbookName + '/metadata.rb', function(err, fileData) {
+        var fileCount = 0;
+
+        function readNameFromFile(fileName, fileType, callback) {
+            fileIo.readFile(chefSettings.userChefRepoLocation + '/cookbooks/' + cookbookName + '/' + fileName, function(err, fileData) {
+                fileCount++;
+                if (err) {
+                    console.log(err);
+                    if (fileCount < 2) {
+                        readNameFromFile('metadata.json', 'json', callback);
+                    } else {
+                        callback(err, null);
+                    }
+                    return;
+                }
+                var cookbookName = null;
+                var fileDataString = fileData.toString();
+                if (fileType === 'rb') {
+                    var regEx = /name\s*['"](.*?)['"]/g;
+                    //nodes = stdOutStr.match(regEx)
+                    var matches;
+                    var metaDatacookbookName;
+
+                    while (matches = regEx.exec(fileDataString)) {
+                        if (matches.length == 2) {
+                            //console.log('matches',matches);
+                            metaDatacookbookName = matches[1];
+                            break;
+                        }
+                    }
+                    if (metaDatacookbookName) {
+                        cookbookName = metaDatacookbookName;
+                    }
+                    callback(null, cookbookName);
+
+                } else if (fileType == 'json') {
+                    var obj = JSON.parse(fileDataString);
+                    cookbookName = obj.name;
+                    callback(null, cookbookName);
+                } else {
+                    callback(null, null);
+                }
+            });
+        }
+
+        readNameFromFile('metadata.rb', 'rb', function(err, name) {
             if (err) {
                 callback(err);
                 return;
             }
-            var regEx = /name\s*['"](.*?)['"]/g;
-            //nodes = stdOutStr.match(regEx)
-            var matches;
-            var metaDatacookbookName;
-            var fileDataString = fileData.toString();
-            while (matches = regEx.exec(fileDataString)) {
-                if (matches.length == 2) {
-                    //console.log('matches',matches);
-                    metaDatacookbookName = matches[1];
-                    break;
-                }
+            if (name) {
+                cookbookName = name;
             }
-            if (metaDatacookbookName) {
-                cookbookName = metaDatacookbookName;
-            }
-            console.log('from rb file ===> ',metaDatacookbookName);
+
             chef.uploadCookbook(cookbookName, function(err) {
                 if (err) {
                     callback(err);

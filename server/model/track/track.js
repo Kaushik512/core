@@ -61,6 +61,9 @@ TrackSchema.statics.updateTrack = function(trackId, trackData, callback) {
 
     logger.debug("Update Track" , JSON.stringify(trackData));
     console.log(trackData.description);
+    if(!trackData.childItem) {
+        trackData.childItem = [];
+    }
     this.update({
         "_id": new ObjectId(trackId),
         "itemUrls._id": new ObjectId(trackData.itemId)
@@ -78,6 +81,7 @@ TrackSchema.statics.updateTrack = function(trackId, trackData, callback) {
             logger.debug("Got error while creating tracks: ", err);
             callback(err, null);
         }
+        logger.debug("updated data",JSON.stringify(trackData));
         callback(null, updateCount);
 
     });
