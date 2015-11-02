@@ -343,7 +343,7 @@ this.trysshoninstance1 = function(ostype,ip_address, username, pwd, callback) {
                     return;
                 }
                 if (!err) {
-                    logger.debug('Quried server:', JSON.stringify(data));
+                   logger.debug('Quried server:', JSON.stringify(data));
                    var ip_address = '';
                     if(data.Network.Endpoints.length > 0)
                          ip_address = data.Network.Endpoints[0].virtualIPAddress;
@@ -401,7 +401,7 @@ this.trysshoninstance1 = function(ostype,ip_address, username, pwd, callback) {
                     } else {
                         logger.debug('Timeout 2 set');
                         if (!self.callbackdone) {
-                            self.timeouts.push(setTimeout(wfsr, 30000));
+                            self.timeouts.push(setTimeout(wfsr, 120000));
                         }
                     }
 
