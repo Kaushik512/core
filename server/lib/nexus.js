@@ -92,8 +92,9 @@ var Nexus = function() {
                     var json = parser.toJson(data);
                     logger.debug("data: ", typeof json);
                     json = JSON.parse(json);
+                    logger.debug("Parsed json: ",JSON.stringify(json));
+                    var artifactList = [];
                     if (json) {
-                        var artifactList = [];
                         var artifacts = json['search-results'].data.artifact;
                         for (var i = 0; i < artifacts.length; i++) {
                             if (repoName === artifacts[i].repoId) {
