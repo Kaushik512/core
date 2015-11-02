@@ -32,10 +32,6 @@ function devCall() {
                 $('#defaultViewButtonAppCard').show();
                 $('#defaultViewButtonAppCard').parents().eq(2).find('span:nth-child(2)').removeClass('margintopright8').addClass('margintop2right8');
                 $(".createAppConfigure").hide();
-                getenvName(function(envName) {
-                    var dataenvAccordianName = "Application Deployment for : " + envName;
-                    $clonenoData.find('.envAppDeployName').html(dataenvAccordianName);
-                });
                 $("#divapplicationcardview").removeClass("visibleClass").hide();
                 $('#instanceviewAppCard').hide();
                 //$('#instanceviewAppCard').find('i').removeClass('txt-color-deactive').addClass('txt-color-active');
