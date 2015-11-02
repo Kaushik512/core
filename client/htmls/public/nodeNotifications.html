@@ -650,9 +650,12 @@
             $('#cats-eye-running-instances').html(catsEyeBody.totalRunning);
             $('#cats-eye-stoppped-instances').html(catsEyeBody.totalNonRunning);
             $('#cats-eye-monitored').html(catsEyeBody.catalystMonitored);                                                            
-            //$('#cats-eye-lastupdated').html(catsEyeBody.timestamp);       
+            //$('#cats-eye-lastupdated').html(catsEyeBody.timestamp);   
+            //alert(catsEyeBody.timestamp);
+            catsEyeBody.timestamp = catsEyeBody.timestamp.replace(/-/g, ' ');
             var newDate = new Date(catsEyeBody.timestamp);
             newDate = newDate.toLocaleString('en-GB');
+            //alert(newDate);
             $('#cats-eye-lastupdated').html("Last updated at: " + newDate);                                                     
             // clearInterval(x);
             // var x = setInterval(function(){                                                
@@ -845,7 +848,7 @@
                     <li><a href="#telemetry" data-toggle="tab">Telemetry</a></li>
                     <li><a href="#adverse-events" data-toggle="tab">Adverse Events ( <span class="notification-counter" id="notification-counter"> 0 </span> )</a></li>
 
-                    <li class="col-sm-5 pull-right">
+                    <li class="col-sm-7 pull-right">
                         <div>                            
                             <span class="last-updated-at col-sm-6 pull-right" id="cats-eye-lastupdated"></span>
                             <div id="pulse-holder-monitoring-initial">                    
