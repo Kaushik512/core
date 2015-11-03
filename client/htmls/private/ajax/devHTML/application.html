@@ -810,15 +810,35 @@ function createPipelineArea(envName,selectedEnv,projectId){
         success: function(data) {
 
             var sortedData = {};
+            
+            function ConvertTimeformat(format, str, formatStr) {
+                var time = str;
+                var hours = Number(time.match(/^(\d+)/)[1]);
+                var minutes = Number(time.match(/:(\d+)/)[1]);
+                var seconds = time.split(' ')[0].split(':')[2];
+                var AMPM = formatStr;
+                if (AMPM == "PM" && hours < 12) hours = hours + 12;
+                if (AMPM == "AM" && hours == 12) hours = hours - 12;
+                var sHours = hours.toString();
+                var sMinutes = minutes.toString();
+                var sSeconds = seconds.toString();
+                if (hours < 10) sHours = "0" + sHours;
+                if (minutes < 10) sMinutes = "0" + sMinutes;
+                if (seconds < 10) sSeconds = "0" + sSeconds;
+                return (sHours + ":" + sMinutes + ":" + sSeconds);
+            }
 
-            function convertToDateObj(str) {
-                var year = str.substring(0, 4);
-                var month = str.substring(5, 7);
+            function convertToDateObj(strInputDate) {
+                var timeStr = strInputDate.split(' ')[1];
+                var formatStr = strInputDate.split(' ')[2];
+                var str = ConvertTimeformat("24", timeStr, formatStr);
+                var year = str.substring(0, 2);
+                var month = str.substring(3, 5);
                 month = parseInt(month);
-                var day = str.substring(8, 10);
-                var hour = str.substring(11, 13);
-                var minute = str.substring(14, 16);
-                var second = str.substring(17, 19);
+                var day = str.substring(6, 8);
+                var hour = str.substring(9, 11);
+                var minute = str.substring(12, 14);
+                var second = str.substring(15, 17);
                 var dateConverted = new Date(year, month -1, day, hour, minute, second);
                 return dateConverted;
             }
