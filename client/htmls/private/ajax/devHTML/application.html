@@ -633,6 +633,9 @@ function getAllPipelineApplicationData() {
     var projectId = urlParams.projid;
     var envNameSelected = "";
     $.get('/app/deploy/pipeline/project/' + projectId, function(dataPipeline) {
+        if(dataPipeline == null || dataPipeline == "undefined" || dataPipeline.length == 0){
+            return false;
+        }
         if (dataPipeline[0].envId.length > 0) {
             //alert("Ia m in if part");
             //alert(dataPipeline[0].envId.length);
@@ -805,8 +808,70 @@ function createPipelineArea(envName,selectedEnv,projectId){
         type: "GET",
         async: true,
         success: function(data) {
-            //console.log("I am inside success of createPipelineArea function");
-            constructPipelineUI(data, id);
+
+            var sortedData = {};
+
+            function ConvertTimeformat(format, str, formatStr) {
+                var time = str;
+                var hours = Number(time.match(/^(\d+)/)[1]);
+                var minutes = Number(time.match(/:(\d+)/)[1]);
+                var seconds = time.split(' ')[0].split(':')[2];
+                var AMPM = formatStr;
+                if (AMPM == "PM" && hours < 12) hours = hours + 12;
+                if (AMPM == "AM" && hours == 12) hours = hours - 12;
+                var sHours = hours.toString();
+                var sMinutes = minutes.toString();
+                var sSeconds = seconds.toString();
+                if (hours < 10) sHours = "0" + sHours;
+                if (minutes < 10) sMinutes = "0" + sMinutes;
+                if (seconds < 10) sSeconds = "0" + sSeconds;
+                return (sHours + ":" + sMinutes + ":" + sSeconds);
+            }
+
+            function convertToDateObj(strInputDate) {
+                var timeStr = strInputDate.split(' ')[1];
+                var formatStr = strInputDate.split(' ')[2];
+                var str = ConvertTimeformat("24", timeStr, formatStr);
+                var year = strInputDate.substring(0, 2);
+                var month = strInputDate.substring(3, 5);
+                month = parseInt(month);
+                var day = strInputDate.substring(6, 8);
+                // var hour = str.substring(9, 11);
+                // var minute = str.substring(12, 14);
+                // var second = str.substring(15, 17);
+                var hour = str.substring(0, 2);
+                var minute = str.substring(3, 5);
+                var second = str.substring(6, 8);
+                var dateConverted = new Date(year, month -1, day, hour, minute, second);
+                return dateConverted;
+            }
+            
+            for (var i = 0; i < data.length; i++) {
+                if (!data[i].applicationInstanceName) {
+                    if (data[i].hostName) {
+                        data[i].applicationInstanceName = data[i].hostName;
+                    } else {
+                        data[i].applicationInstanceName = "NA";
+                    }
+                }
+                if (!sortedData[data[i].applicationInstanceName]) {
+                    sortedData[data[i].applicationInstanceName] = data[i];
+                } else {
+                    var prevDate = convertToDateObj(sortedData[data[i].applicationInstanceName].applicationLastDeploy);
+
+                    var newDate = convertToDateObj(data[i].applicationLastDeploy);
+                    if (prevDate - newDate < 0) {
+                        sortedData[data[i].applicationInstanceName] = data[i];
+                    }
+                }
+            }
+            var keys = Object.keys(sortedData);
+            var newData = [];
+            for(var i=0;i<keys.length;i++) {
+                newData.push(sortedData[keys[i]]);
+            }
+       
+            constructPipelineUI(newData, id);
             if (envName != selectedEnv) {
                 $('#'+id).children().css({
                     'opacity': '0.5'
@@ -841,7 +906,7 @@ function constructPipelineUI(data, $clonePipeline) {
             if(data[i].applicationType == 'Package'){
                 var loc = 'img/package.png';
                 $cloneAppInstanceUniqueCard.find('.domain-roles-icon img').attr("src",loc);
-            }else if(data[i].applicationType == 'Docker'){newEnvSpecificAppTemplate
+            }else if(data[i].applicationType == 'Docker'){
                 var loc = 'img/app-store-icons/Docker.png';
                 $cloneAppInstanceUniqueCard.find('.domain-roles-icon img').attr("src",loc);
             }else if(data[i].applicationType == 'NA'){
@@ -1857,7 +1922,8 @@ function constructUI(data) {
         // });
         getprojectName(function(projectNameUrlParams) {
             var dataprojectAccordianNameforNoData = "Application Deployment for : " + projectNameUrlParams;
-            $clonenoData.find('.envAppDeployName').html(dataprojectAccordianNameforNoData);
+            //var $clonenoData = $accordianTemplatenoData.clone(true);
+            $('.accordianTemplateContainer').find('.envAppDeployName').html(dataprojectAccordianNameforNoData);
         });
         $("#nodataAppDeploy").css({
             // "text-align": "center",
