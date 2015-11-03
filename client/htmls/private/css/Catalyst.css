@@ -12970,3 +12970,12 @@ form.cmxform .gray * {
 .tableCenter {
     text-align: center;
 }
+
+.imageIdentifier {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    width: 147px;
+    display: inline-block;
+    height: 35px;
+}
