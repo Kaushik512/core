@@ -172,7 +172,7 @@ Clicks on NCalifornia link
     Click Element    xpath=//a[text()='N.California']
 
 Verify Page contains Ncalifornia Cost Usage for Day
-     Page Should Contain    Cost Usage for Day
+    Page Should Contain    Cost Usage for Day
     Selects the frame
     ${NCost day}=    Get Text    xpath=.//*[@id='container']/div/ul/li[3]/div/h2
     Log    ${NCost day}
@@ -967,7 +967,7 @@ Verify Page Contains Monitoring
 
 
 Verify Page Contains Laast Updated
-    Page Should Contain    Last Updated
+    Page Should Contain    Events/Type
     Page Should Not Contain    NA
     Page Should Not Contain    No results found
     #Page Should Not Contain    Connection failed !! 
@@ -1127,12 +1127,15 @@ Verfiy page should not contain agent failed
     ${Agent2}=    Run Keyword and Return Status    Page Should Not Contain    cannot connect to 
     ${Agent3}=    Run Keyword and Return Status    Page Should Not Contain    No route to host
     ${Agent4}=    Run Keyword and Return Status    Page Should Not Contain    Couldn't reach agent
-    ${Agent5}=    Run Keyword and Return Status    Page Should Not Contain    check firewall settings    
-    Run Keyword If    '${Agent1}' == 'True' and '${Agent2}' == 'True' and '${Agent3}' == 'True' and '${Agent4}' == 'True' and '${Agent5}' == 'True'
+    #${Agent5}=    Run Keyword and Return Status    Page Should Not Contain    check firewall settings    
+    Run Keyword If    '${Agent1}' == 'True' and '${Agent2}' == 'True' and '${Agent3}' == 'True' and '${Agent4}' == 'True'
     ...    Log    System Monitoring Dashboard is displaying all the data of the nodes and no nodes are down.
     ...    ELSE
     ...    Fail    System Monitoring Dashboard is showing that Nodes are down.
 
+
+
+#and '${Agent5}' == 'True'
 
 
 Verify Page Contains Ping
