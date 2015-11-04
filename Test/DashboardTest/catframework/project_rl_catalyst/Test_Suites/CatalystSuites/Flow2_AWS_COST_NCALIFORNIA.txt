@@ -1,0 +1,19 @@
+*** Settings ***
+Documentation     Dashboard_setup_Flow.txt
+
+Resource           catalyst.txt
+Resource           ${CATALYST TEST DATA}/${TESTDATA}
+Resource           ${CATALYST ACTION}/Dashboard_Setup_Action_Steps.txt
+
+Resource           ${COMMON RESOURCES}/catalyst_grid_node.txt
+Library            String
+
+
+*** Test Cases ***
+Catalyst AWS Cost NCalifornia Automation
+    [Tags]       Sanity               dashboard
+#    Catalyst Login 
+    Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
+    Catalyst AWS Cost NCalifornia Automation
+    Catalyst Logout                     
+    [Teardown]     Close Browser

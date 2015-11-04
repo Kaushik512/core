@@ -12,7 +12,7 @@ Resource           ${CATALYST ACTION}/Organization_Setup_Action_Steps.txt
 
 *** Test Cases ***
 Catalyst Edit the Teams Setup and Assign Projects
-    [Tags]       Sanity               Smoke
+    [Tags]       Sanity               Settings
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
     Sleep    1s
@@ -24,7 +24,7 @@ Catalyst Edit the Teams Setup and Assign Projects
 
 
 Catalyst Validate Users Setup
-    [Tags]       Sanity               Smoke
+    [Tags]       Sanity               Settings
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
     Sleep    1s
@@ -34,7 +34,7 @@ Catalyst Validate Users Setup
 
 
 Catalyst Unique User Validation Setup
-    [Tags]       Sanity               Smoke
+    [Tags]       Sanity               Settings
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
     Catalyst Validation of Unique User
@@ -43,7 +43,7 @@ Catalyst Unique User Validation Setup
 
 
 Catalyst Validate Teams Setup
-    [Tags]       Sanity               Smoke
+    [Tags]       Sanity               Settings
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
     Test Validation of Creation of New Teams
@@ -53,7 +53,7 @@ Catalyst Validate Teams Setup
 
 
 Catalyst Unique Team Validation Setup
-    [Tags]       Sanity               Smoke
+    [Tags]       Sanity               Settings
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
     Catalyst Unique Team Validation  
