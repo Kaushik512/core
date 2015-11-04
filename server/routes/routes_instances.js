@@ -12,7 +12,7 @@ var blueprintsDao = require('../model/dao/blueprints');
 var instancesDao = require('../model/classes/instance/instance');
 var EC2 = require('../lib/ec2.js');
 var Chef = require('../lib/chef.js');
-
+var taskstatusDao = require('../model/taskstatus');
 var logsDao = require('../model/dao/logsdao.js');
 var configmgmtDao = require('../model/d4dmasters/configmgmt');
 var Docker = require('../model/docker.js');

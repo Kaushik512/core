@@ -4,16 +4,14 @@ var process = require('child_process').exec;
 
 
 
-var curl = function(){
+var executecurl = function(){
 
 	this.executecurl = function(cmd,callback){
 		child = process(cmd,function(error,stdout,stderr){
 			if(error){
-				console.log("error:" + error);
 				callback(error,null);
 			}
 			if(stderr){
-				console.log("stderr:" + stderr);
 				callback(stderr,null);
 
 			}
@@ -44,5 +42,5 @@ var curl = function(){
 	
 }
 
-module.exports = curl;
+module.exports = executecurl;
 

@@ -16,21 +16,6 @@ function devCall() {
             }
         }
     }
-    window.showHideControlApplication = function(objID) {
-        if (objID) {
-            if (objID == "divapplicationcardview" || objID == "defaultViewButtonAppCard") {
-                $("#divapplicationtableview").removeClass("visibleClass").hide();
-                $("#divapplicationcardview").addClass("visibleClass").show();
-                $('#defaultViewButtonAppCard').find('i').removeClass('txt-color-deactive').addClass('txt-color-active');
-                $('#instanceviewAppCard').find('i').removeClass('txt-color-active').addClass('txt-color-deactive');
-            } else {
-                $("#divapplicationtableview").addClass("visibleClass").show();
-                $("#divapplicationcardview").removeClass("visibleClass").hide();
-                $('#instanceviewAppCard').find('i').removeClass('txt-color-deactive').addClass('txt-color-active');
-                $('#defaultViewButtonAppCard').find('i').removeClass('txt-color-active').addClass('txt-color-deactive');
-            }
-        }
-    }
 
     //for disabling the ssh button
     function disableSSHBtn(instanceId) {

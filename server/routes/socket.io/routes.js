@@ -12,9 +12,6 @@ var logsDao = require('../../model/dao/logsdao.js');
 
 var crontab = require('node-crontab');
 var AWSProvider = require('../../model/classes/masters/cloudprovider/awsCloudProvider.js');
-var vmwareProvider = require('../../model/classes/masters/cloudprovider/vmwareCloudProvider.js');
-var VmwareCloud = require('_pr/lib/vmware.js');
-
 var AWSKeyPair = require('../../model/classes/masters/cloudprovider/keyPair.js');
 var EC2 = require('../../lib/ec2.js');
 var appConfig = require('_pr/config');
@@ -203,7 +200,7 @@ module.exports.setRoutes = function(socketIo) {
 
     // Sync instance status AWS with Catalyst.
 
-    var jobId = crontab.scheduleJob("*/1 * * * *", function() { //This will call this function every 3 minutes 
+    var jobId = crontab.scheduleJob("*/3 * * * *", function() { //This will call this function every 3 minutes 
         logger.debug("Cron Job run every 3 minutes!");
         var instanceState = socketIo.of('/insState');
         var socketList = [];
@@ -212,208 +209,75 @@ module.exports.setRoutes = function(socketIo) {
                 logger.debug("Error while getElementBytting instance!");
             }
            // logger.debug("Got instance: ", JSON.stringify(instances));
-
             if (instances.length > 0) {
                 AWSProvider.getAWSProviders(function(err, aProvider) {
                     if (err) {
                         logger.debug("Failed to get Provider!");
                     }
-                    logger.debug("Got Provider: ", JSON.stringify(aProvider));
-                    aProvider = JSON.parse(JSON.stringify(aProvider));
+                    logger.debug("Got Provider: ");
                     if (aProvider) {
-
-                        //proceed only if the instance is part of the aws provider
-                        for(var ap = 0; ap < aProvider.length;ap++){
-                            //loop to eliminate instances that are not part of the provider
-                            var instanceIds = [];
-                            for (var i = 0; i < instances.length; i++) {
-                                if (instances[i].platformId && instances[i].providerId) {
-                                    //add only if provider matches
-                                    if(instances[i].providerId == aProvider[ap]._id)
-                                        instanceIds.push(instances[i].platformId);
-                                    // else
-                                    //     logger.debug('Instance does not belong to provider(instance providerid,providerid):',instances[i].providerId,aProvider[ap]._id);
-                                }
+                        AWSKeyPair.getAWSKeyPairByProviderId(aProvider[0]._id, function(err, aKeyPair) {
+                            if (err) {
+                                logger.debug("Failed to get KeyPair!");
                             }
-                            if(instanceIds.length <= 0){
-                                continue; //skip next steps if not part of provider.
-                            }
-
-                            AWSKeyPair.getAWSKeyPairByProviderId(aProvider[ap]._id, function(err, aKeyPair) {
+                            logger.debug("Got KeyPair: ");
+                            if (aKeyPair) {
+                                var instanceIds = [];
+                                var cryptoConfig = appConfig.cryptoSettings;
+                                var cryptography = new Cryptography(cryptoConfig.algorithm, cryptoConfig.password);
+                                var keys = [];
+                                keys.push(aProvider[0].accessKey);
+                                keys.push(aProvider[0].secretKey);
+                                cryptography.decryptMultipleText(keys, cryptoConfig.decryptionEncoding, cryptoConfig.encryptionEncoding, function(err, decryptedKeys) {
                                     if (err) {
-                                        logger.debug("Failed to get KeyPair!");
+                                        res.send(500, "Failed to decrypt accessKey or secretKey");
+                                        return;
                                     }
-                                    logger.debug("Got KeyPair: ");
-                                    if (aKeyPair) {
-                                        
-                                        var cryptoConfig = appConfig.cryptoSettings;
-                                        var cryptography = new Cryptography(cryptoConfig.algorithm, cryptoConfig.password);
-                                        var keys = [];
-                                        keys.push(aProvider[ap].accessKey);
-                                        keys.push(aProvider[ap].secretKey);
-                                        cryptography.decryptMultipleText(keys, cryptoConfig.decryptionEncoding, cryptoConfig.encryptionEncoding, function(err, decryptedKeys) {
+                                    var ec2 = new EC2({
+                                        "access_key": decryptedKeys[0],
+                                        "secret_key": decryptedKeys[1],
+                                        "region": aKeyPair[0].region
+                                    });
+                                    logger.debug("AWS ec2: ", JSON.stringify(ec2));
+                                    for (var i = 0; i < instances.length; i++) {
+                                        if (instances[i].platformId) {
+                                            instanceIds.push(instances[i].platformId);
+                                        }
+                                    }
+                                    logger.debug("All instance Ids: ", JSON.stringify(instanceIds));
+                                    if (instanceIds.length > 0) {
+                                        ec2.describeInstances(instanceIds, function(err, awsInstances) {
                                             if (err) {
-                                                res.send(500, "Failed to decrypt accessKey or secretKey");
-                                                return;
+                                                logger.debug("Failed to describe Instances from AWS!", err);
                                             }
-                                            var ec2 = new EC2({
-                                                "access_key": decryptedKeys[0],
-                                                "secret_key": decryptedKeys[1],
-                                                "region": aKeyPair[0].region
-                                            });
-                                            logger.debug("AWS ec2: ", JSON.stringify(ec2));
-                                            // for (var i = 0; i < instances.length; i++) {
-                                            //     if (instances[i].platformId) {
-                                            //         //add only if provider matches
-
-                                            //         instanceIds.push(instances[i].platformId);
-                                            //     }
-                                            // }
-                                            logger.debug("All instance Ids: ", JSON.stringify(instanceIds));
-                                            if (instanceIds.length > 0) {
-                                                ec2.describeInstances(instanceIds, function(err, awsInstances) {
-                                                    if (err) {
-                                                        logger.debug("Failed to describe Instances from AWS!", err);
-                                                    }
-                                                    logger.debug("Described Instances from AWS: ", JSON.stringify(awsInstances));
-                                                    if (awsInstances) {
-                                                        var reservations = awsInstances.Reservations;
-                                                        for (var x = 0; x < reservations.length; x++) {
-                                                            if (instances[x].instanceState === reservations[x].Instances[0].State.Name) {
-                                                                logger.debug("Status matched......");
-                                                            } else {
-                                                                logger.debug("Status does not matched.....", instances[x]._id);
-                                                                instancesDao.updateInstanceState(instances[x]._id, reservations[x].Instances[0].State.Name, function(err, data) {
-                                                                    if (err) {
-                                                                        logger.error("Failed to updateInstance State!", err);
-                                                                        callback(err, null);
-                                                                        return;
-                                                                    }
-
-                                                                    logger.debug("Exit updateInstanceState: ");
-                                                                });
+                                            logger.debug("Described Instances from AWS: ", JSON.stringify(awsInstances));
+                                            if (awsInstances) {
+                                                var reservations = awsInstances.Reservations;
+                                                for (var x = 0; x < reservations.length; x++) {
+                                                    if (instances[x].instanceState === reservations[x].Instances[0].State.Name) {
+                                                        logger.debug("Status matched......");
+                                                    } else {
+                                                        logger.debug("Status does not matched.....", instances[x]._id);
+                                                        instancesDao.updateInstanceState(instances[x]._id, reservations[x].Instances[0].State.Name, function(err, data) {
+                                                            if (err) {
+                                                                logger.error("Failed to updateInstance State!", err);
+                                                                callback(err, null);
+                                                                return;
                                                             }
-                                                        }
-                                                    }
 
-                                                });
+                                                            logger.debug("Exit updateInstanceState: ");
+                                                        });
+                                                    }
+                                                }
                                             }
+
                                         });
                                     }
                                 });
-                           
-                        } //end of for(var ap = 0; ap < aProvider.length;ap++)
-
-                        
+                            }
+                        });
                     }
                 });
-                //get instance  from id
-
-                var thisinstance = function(instanceid,callback){
-                //    logger.debug('get instance thisinstance called');
-                    for (var i = 0; i < instances.length; i++) {
-                        if(instances[i]._id == instanceid){
-                         //   logger.debug('found match:',i,instanceid,instances[i]._id );
-                            callback(instances[i]);
-                            break;
-                       }
-                    }
-                }
-
-                //get all vmware providers
-                instances = JSON.parse(JSON.stringify(instances));
-                vmwareProvider.getvmwareProviders(function(err,aProvider){
-                    if (err) {
-                        logger.debug("Failed to get Provider!");
-                    }
-                    logger.debug("Got vmware Provider: ", JSON.stringify(aProvider));
-                    aProvider = JSON.parse(JSON.stringify(aProvider));
-                    if (aProvider) {
-
-                        //proceed only if the instance is part of the aws provider
-                        for(var ap = 0; ap < aProvider.length;ap++){
-                            //loop to eliminate instances that are not part of the provider
-                            var instanceIds = [];
-                            //filtering by provider
-                            for (var i = 0; i < instances.length; i++) {
-                                if (instances[i].platformId && instances[i].providerId) {
-                                    //add only if provider matches
-                                    if(instances[i].providerId == aProvider[ap]._id)
-                                        instanceIds.push(instances[i]._id);
-                                    // else
-                                    //     logger.debug('Instance does not belong to provider(instance providerid,providerid):',instances[i].providerId,aProvider[ap]._id);
-                                }
-                            }
-
-                            if(instanceIds.length <= 0){
-                                continue; //skip next steps if not part of provider.
-                            }
-                            else{
-                                logger.debug('Instances matching vmware provider:',instanceIds);
-                                //get all instances running on the vmware server
-                                var vmwareCloud = new VmwareCloud(aProvider[ap]);
-
-                                vmwareCloud.getVms(appConfig.vmware.serviceHost,function(err,vmsonhost){
-                                        if(!err){
-                                        
-                                         vmsonhost = JSON.parse(JSON.stringify(JSON.parse(vmsonhost)));
-                                          logger.debug('vmsonhost:',JSON.stringify(vmsonhost));
-                                         for(var i = 0; i < instanceIds.length;i++){
-                                            logger.debug('Instance Details');
-                                            //"toolsStatus":"guestToolsRunning","state":"poweredOn"
-                                            for(var j = 0; j < vmsonhost["vms"].length;j++){
-                                                logger.debug('VMState:',vmsonhost.vms[j]["state"]);
-                                                if(vmsonhost.vms[j]["state"] == "poweredOn"){
-                                                    thisinstance(instanceIds[i],function(thisinst){
-                                                        if(thisinst){
-                                                            if(thisinst.instanceState != 'running'){
-                                                                instancesDao.updateInstanceState(thisinst._id, 'running', function(err, data) {
-                                                                    if (err) {
-                                                                        logger.error("Failed to updateInstance State!", err);
-                                                                        callback(err, null);
-                                                                        return;
-                                                                    }
-                                                                    logger.debug("Exit updateInstanceState: running ");
-                                                                });
-                                                            }
-                                                        }
-
-                                                    });
-                                                }
-                                                else{
-                                                    thisinstance(instanceIds[i],function(thisinst){
-                                                        if(thisinst){
-                                                            if(thisinst.instanceState == 'running'){
-                                                                instancesDao.updateInstanceState(thisinst._id, 'stopped', function(err, data) {
-                                                                    if (err) {
-                                                                        logger.error("Failed to updateInstance State!", err);
-                                                                        callback(err, null);
-                                                                        return;
-                                                                    }
-                                                                    logger.debug("Exit updateInstanceState: stopped");
-                                                                });
-                                                            }
-                                                        }
-
-                                                    });
-                                                }
-
-                                            }
-                                         }
-                                        }
-                                        else{
-                                            logger.debug("Failed to describe Instances from vmware host!", err);
-
-                                        }
-                                });
-
-                            }
-
-                        }
-                    }
-
-                });
-
             }
         });
     });
