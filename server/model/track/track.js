@@ -15,9 +15,15 @@ var uniqueValidator = require('mongoose-unique-validator');
 var Schema = mongoose.Schema;
 
 var TrackSchema = new Schema({
-    name: String,
-    url: String,
-    description: String,
+    itemUrls: [{
+        name: String,
+        url: String,
+        description: String,
+        childItem: [{
+            name: String,
+            url: String
+        }]
+    }],
     type: String
 });
 
@@ -53,16 +59,21 @@ TrackSchema.statics.createNew = function(trackData, callback) {
 // Update all Track informations.
 TrackSchema.statics.updateTrack = function(trackId, trackData, callback) {
 
-    logger.debug("Going to Update Track data: ", JSON.stringify(trackData));
-    var setData = {};
-    var keys = Object.keys(trackData);
-    for (var i = 0; i < keys.length; i++) {
-        setData[keys[i]] = trackData[keys[i]];
+    logger.debug("Update Track" , JSON.stringify(trackData));
+    console.log(trackData.description);
+    if(!trackData.childItem) {
+        trackData.childItem = [];
     }
     this.update({
-        "_id": trackId
+        "_id": new ObjectId(trackId),
+        "itemUrls._id": new ObjectId(trackData.itemId)
     }, {
-        $set: setData
+        $set: {
+            "itemUrls.$.name": trackData.name,
+            "itemUrls.$.url": trackData.url,
+            "itemUrls.$.description": trackData.description,
+            "itemUrls.$.childItem": trackData.childItem
+        }
     }, {
         upsert: false
     }, function(err, updateCount) {
@@ -70,15 +81,16 @@ TrackSchema.statics.updateTrack = function(trackId, trackData, callback) {
             logger.debug("Got error while creating tracks: ", err);
             callback(err, null);
         }
-        callback(null,updateCount);
-        
+        logger.debug("updated data",JSON.stringify(trackData));
+        callback(null, updateCount);
+
     });
 };
 
 // Get all Track informations.
 TrackSchema.statics.getTrackById = function(trackId, callback) {
     this.find({
-        "_id": trackId
+        "_id": new ObjectId(trackId)
     }, function(err, tracks) {
         if (err) {
             logger.debug("Got error while fetching Track: ", err);
@@ -93,16 +105,44 @@ TrackSchema.statics.getTrackById = function(trackId, callback) {
 };
 
 // Remove Track informations.
-TrackSchema.statics.removeTracks = function(trackId, callback) {
-    this.remove({
+TrackSchema.statics.removeTracks = function(trackId, itemUrlId, callback) {
+    logger.debug("removing",itemUrlId);
+    logger.debug("trackId",trackId);
+    logger.debug("itemUrlId",itemUrlId);
+    this.update({
         "_id": trackId
+    }, {
+        $pull: {
+            itemUrls: {
+                "_id": new ObjectId(itemUrlId),
+            }
+        }
+    }, {
+        upsert: false
     }, function(err, tracks) {
         if (err) {
-            logger.debug("Got error while removing Tracks: ", err);
+            logger.debug("Got error while removing Tracks: ", err , itemUrlId);
             callback(err, null);
         }
         if (tracks) {
             logger.debug("Remove Success....");
+            callback(null, tracks);
+        }
+    });
+};
+
+//find entry by type.
+TrackSchema.statics.getTrackByType = function(trackType, callback) {
+    this.find({
+        "type": trackType
+    }, function(err, tracks) {
+        if (err) {
+            logger.debug("Got error while fetching Track: ", err);
+            callback(err, null);
+            return;
+        }
+        if (tracks) {
+            //logger.debug("Got Track: ", JSON.stringify(tracks));
             callback(null, tracks);
         }
     });

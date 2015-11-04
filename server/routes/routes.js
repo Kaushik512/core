@@ -45,6 +45,8 @@ var globalsettings = require('./routes_globalsettings');
 
 var tracks = require('./routes_track');
 
+var trackType = require('./routes_trackType');
+
 var puppet = require('./routes_puppet.js');
 
 var appdeploy = require('./routes_appdeploy');
@@ -113,6 +115,8 @@ module.exports.setRoutes = function(app,socketIo) {
     globalsettings.setRoutes(app, sessionVerificationFunc);
 
     tracks.setRoutes(app, sessionVerificationFunc);
+
+    trackType.setRoutes(app, sessionVerificationFunc);
 
     puppet.setRoutes(app, sessionVerificationFunc);
 

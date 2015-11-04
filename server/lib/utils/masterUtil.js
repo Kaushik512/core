@@ -1678,6 +1678,26 @@ var MasterUtil = function() {
         });
     }
 
+    // Return Project Name
+    this.getProjectName = function(projectId, callback) {
+        logger.debug("Project rowids: ", projectId);
+        d4dModelNew.d4dModelMastersProjects.find({
+            rowid: projectId
+        }, function(err, projects) {
+            if (err) {
+                callback(err, null);
+            }
+            if (projects.length) {
+                logger.debug("Got Environment: ", JSON.stringify(projects));
+                callback(null, projects[0].projectname);
+                return;
+            } else {
+                callback(null, null);
+                return;
+            }
+        });
+    }
+
     // Get all appData informations.
     this.getAppDataWithDeployList = function(envName, projectId, callback) {
         logger.debug("projectId: ", projectId);
