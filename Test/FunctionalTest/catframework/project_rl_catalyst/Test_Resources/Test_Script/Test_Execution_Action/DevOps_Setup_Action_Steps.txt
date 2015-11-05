@@ -50,6 +50,31 @@ Catalyst Create New Data Bag
     Clicks on the Item1 User Created
     
 
+Catalyst Validate Databag setup
+    Clicks on Settings
+    Clicks on DevOps Setup menu
+    Clicks on Config Management menu
+    Sleep    2s
+    Clicks on the User Creted Chef Server
+    Clicks on New Button of DataBag
+    Sleep    2s
+    Clicks on Save Button of DataBag
+    Verify the Alert message
+
+
+
+
+
+
+Verify the Alert message
+    Alert Should Be Present    text=Please Enter Name
+
+
+
+
+
+
+
 Catalyst Duplicate DataBag setup
     Clicks on Settings
     Clicks on DevOps Setup menu
@@ -62,7 +87,7 @@ Catalyst Duplicate DataBag setup
     Clicks on Save Button of DataBag
     Sleep    3s
     Verfiy the Duplicate Message of DataBag
-    Delete the DataBag Created
+    #Delete the DataBag Created
 
 
 
@@ -113,7 +138,7 @@ Enters the DataBag Name
     Input Text    id=instanceDataName    ${DATABAG NAME}
 
 Clicks on the User Creted Chef Server
-    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${CONFIG MANAGEMENT NAME}']/../td[5]/div/a[3]
+    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${CONFIG MANAGEMENT NAME}']/../td[5]/div/a[4]
 
 Clicks on New Button of DataBag
     Click Element    xpath=.//*[@title='Add New Data Bag']
@@ -125,7 +150,7 @@ Create New Config Management
     Clicks on Config Management menu
     Sleep    2s
     Clicks on New button to Create New Config Management
-    Enters config management name
+    Enters Edit ConfigMgmt name
     Enters config management user name
     Select organization for config management
     Enters config management URL
@@ -136,6 +161,73 @@ Create New Config Management
     Clicks on Save button to save the ConfigMgmt detail
     Sleep    2s
     Verfiy the ChefServer is Created in the Table
+
+
+Catalyst Editing the Chef Server created
+    Clicks on Settings
+    Clicks on DevOps Setup menu
+    Clicks on Config Management menu
+    Clicks on Edit Button of Config Mgmt created
+    Sleep    1s
+    Enters config management name
+    Clicks on Save button to save the ConfigMgmt detail
+    Sleep    2s
+    Verfiy the Editing Chef Server is created
+
+
+Catalyst Editing and Disabled setup of Databag
+    Clicks on Settings
+    Clicks on DevOps Setup menu
+    Clicks on Config Management menu
+    Clicks on the Edited ChefServer Databag button
+    Clicks on Databag created
+    Clicks on the Item for the Databag created
+    Enters the Item body for the databag
+    Clicks on Save Button List
+    Verfiy the Invalid Json error message
+    Clicks on close button of create item
+    Clicks on the Item for the Databag created
+    Verify the ID is disabled
+
+
+
+Verify the ID is disabled
+    ${disable}=    Get Element Attribute    xpath=//input[@id='instanceListID']@disabled    
+    Log    ${disable}
+    Element Should Be Disabled    xpath=.//*[@id='instanceListID']
+
+
+Clicks on close button of create item
+    Click Element    xpath=(.//*[text()='Close'])[2]
+
+
+Verfiy the Invalid Json error message
+    ${json error}=    Get Text    css=.jsonError
+    Log    ${json error}
+    ${Status}=    Run Keyword and Return Status    Should Be Equal    ${json error}    ${JSON}
+    Log    ${Status}
+    Element Should Contain    xpath=.//span[contains(., "Invalid JSON")]    Invalid JSON
+    #sPage Should Contain    ${json error}
+
+
+Enters the Item body for the databag
+    Input Text    id=instanceListName    Cat
+
+Clicks on the Item for the Databag created
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='listNameTable']/tbody/tr/td/a[text()='${INSTANCE ID}']/..//*[@title='Update']
+
+Clicks on Databag created
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=//a[text()='${DATABAG NAME}']
+    
+
+Clicks on the Edited ChefServer Databag button
+    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${CONFIG MANAGEMENT NAME}']/../td[5]/div/a[4]
+
+
+
+Clicks on Edit Button of Config Mgmt created
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${EDIT CONFIG MANAGEMENT}']/../td[5]/div/a[1]
+
 
 
 Unique Devops Configuration Management
@@ -179,10 +271,17 @@ Validate the Organization of Already Created
 
 Verfiy the ChefServer is Created in the Table
     Sleep    2s
+    Element Should Contain    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${EDIT CONFIG MANAGEMENT}']    ${EDIT CONFIG MANAGEMENT}
+    Log    ${EDIT CONFIG MANAGEMENT} Chef Server is Created
+
+
+Verfiy the Editing Chef Server is created
+    Sleep    2s
     Element Should Contain    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${CONFIG MANAGEMENT NAME}']    ${CONFIG MANAGEMENT NAME}
     Log    ${CONFIG MANAGEMENT NAME} Chef Server is Created
 
-    
+ 
+
 Vaildate Empty User Pem and Validator Pem and Knife File
     Clicks on New button to Create New Config Management
     Enters config management name
@@ -431,6 +530,12 @@ Clicks on New button to Create New Config Management
 Enters config management name
     Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       id=configname
     Input Text     id=configname      ${CONFIG MANAGEMENT NAME}
+
+
+Enters Edit ConfigMgmt name
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       id=configname
+    Input Text     id=configname      ${EDIT CONFIG MANAGEMENT}
+
 
 Enters config management user name
     Wait Until Keyword Succeeds    1 minute     1 seconds     Input Text     id=loginname      ${CONFIG MANAGEMENT USER NAME}
