@@ -563,7 +563,7 @@ Verfiy the page contains Summary of Virginia
     ...    ELSE
     ...    Log     Dashboard has network IO Data
     
-    ${Act Virginia5}=    Get Text    xpath=.//*[@id='container']/div/ul/li[4]/div/ul/li[4]/span[2]
+    ${Act Virginia5}=    Get Text    xpath=.//*[@id='container']/div/ul/li[4]/div/ul/li[5]/span[2]
     Log    ${Act Virginia5}
     ${Run Vim5}=    Get Length    ${Act Virginia5}
     Run Keyword If    '${Run Vim5}' == '${VALUE}'
