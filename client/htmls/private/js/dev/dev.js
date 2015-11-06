@@ -5380,6 +5380,39 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                 }
             });
 
+            window.socketAutoScale.on('instanceStateChanged', function(instanceData) {
+                console.log('State changed event fired ==> ', instanceData);
+                var instanceId = instanceData._id;
+                if(orgId === instanceData.orgId && urlParams['bg'] === instanceData.bgId &&projectId ===  instanceData.projectId && envId === instanceData.envId) {
+                     var $card = $('#divinstancescardview').find('.domain-roles-caption[data-instanceId=' + instanceData._id + ']');
+                      /*$card.find('.instance-state').removeClass().addClass('instance-state instance-state-text-stopped').html(instanceData.instanceState);
+                      disableInstanceActionBtns(instanceData._id);
+                      $card.find('.componentlistContainer').removeClass().addClass('componentlistContainer stopped');
+                      $('#tableinstanceview').find('tr[data-instanceid="'+instanceData._id+'"]').find('.instancestatusindicator').removeClass().addClass('instancestatusindicator stopped');
+                      */
+                      
+                    if (instanceData.instanceState == 'stopped') {
+                        enableInstanceActionStopBtn(instanceData._id);
+                    }
+                    if (instanceData.instanceState == 'running') {
+                        enableInstanceActionStartBtn(instanceData._id, instanceData.hardware.os);
+                    }
+                    if (instanceData.instanceState == 'pending' || instanceData.instanceState == 'stopping' || instanceData.instanceState == 'terminated') {
+                        disableInstanceActionBtns(instanceData._id);
+                    }
+                    if (instanceData.instanceState == 'unknown') {
+                        disableInstanceStartStopActionBtns(instanceData._id, instanceData.hardware.os);
+                    }
+                    var cssClassed = getCssClassFromStatus(instanceData.instanceState);
+                            $card.find('.componentlistContainer').removeClass().addClass('componentlistContainer').addClass(cssClassed.ringClass);
+                            disableInstanceActionBtns(instanceData._id);
+                            $card.find('.instance-state').removeClass().addClass('instance-state').addClass(cssClassed.textClass).html(instanceData.instanceState);
+                            $('.instancestatusindicator[data-instanceId="' + instanceId + '"]').removeClass().addClass('instancestatusindicator').addClass(cssClassed.tableViewStatusClass);
+
+                    //addInstanceaddInstanceToDOMToDOMaddInstanceToDOM(instanceData);
+                }
+            });
+
 
 
         } else {
