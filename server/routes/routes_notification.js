@@ -761,9 +761,26 @@ module.exports.setRoutes = function(app, socketIo) {
                                                     logger.debug("AWS ec2: ", JSON.stringify(ec2));
                                                     instanceIds.push(instances[ins].platformId);
                                                     ec2.describeInstances(instanceIds, function(err, awsInstances) {
+                                                        logger.debug("got reponse from aws instance: ", JSON.stringify(awsInstances));
                                                         if (err) {
-                                                            if (err.statusCode === 400) {
+                                                            if (err.statusCode === 400 && instances[ins].instanceState != "terminated") {
                                                                 logger.debug("Failed to describe Instances from AWS!", err);
+                                                                instancesDao.updateInstanceState(instances[ins]._id, "terminated", function(err, data) {
+                                                                    if (err) {
+                                                                        logger.error("Failed to updateInstance State!", err);
+                                                                        return;
+                                                                    }
+                                                                    var instance = instances[ins];
+                                                                    instance.instanceState = "terminated";
+                                                                    socketCloudFormationAutoScate.to(instance.orgId + ':' + instance.bgId + ':' + instance.projectId + ':' + instance.envId).emit('instanceStateChanged', instance);
+
+                                                                    logger.debug("Exit updateInstanceState: ");
+                                                                });
+                                                            }
+                                                            return;
+                                                        }
+                                                        if (awsInstances.Reservations.length === 0) {
+                                                            if (instances[ins].instanceState != "terminated") {
                                                                 instancesDao.updateInstanceState(instances[ins]._id, "terminated", function(err, data) {
                                                                     if (err) {
                                                                         logger.error("Failed to updateInstance State!", err);
