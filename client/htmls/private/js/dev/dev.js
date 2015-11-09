@@ -3530,9 +3530,12 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
         function initializingOrchestration() {
 
             $('.Orchestration').click(function(e) {
-                // $.get('../organizations/' + urlParams.org + '/businessgroups/' + urlParams['bg'] + '/projects/' + urlParams.projid + '/environments/' + urlParams.envid + '/', function(dataRelatedTask) {
-                //     initializeTaskArea(dataRelatedTask.tasks);
-                // });
+                $.get('../organizations/' + urlParams.org + '/businessgroups/' + urlParams['bg'] + '/projects/' + urlParams.projid + '/environments/' + urlParams.envid + '/', function(dataRelatedTask) {
+                    console.log("Arabinda Behera=======================>>>>>>>>>>>>");
+                    console.log(dataRelatedTask.tasks);
+                    initializeTaskArea(dataRelatedTask.tasks);
+                });
+                //alert("Hello");
                 var getbreadcrumbul = $('#ribbon').find('.breadcrumb').find('li:lt(5)');
                 var getbreadcrumbullength = getbreadcrumbul.length;
                 var DummyBreadCrumb;

@@ -392,10 +392,10 @@
             <!--assign runlist modal-->
             <div class="modal fade" id="chefRunlistModal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
                <div class="modal-dialog">
-                  <div class="modal-content" style="width:800px">
+                  <div class="modal-content">
                      <form role="form" class="cmxform" id="chefTaskRunlist" autocomplete="off">
                      <div class="modal-header">
-                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                     <button type="button" class="close chefRunlistModalClose" aria-hidden="true">
                      &times;
                      </button>
                      <h4 class="modal-title">
@@ -407,7 +407,7 @@
                      </div>
                      </div>
                      <div class="modal-footer">
-                     <a type="button" class="btn btn-default" data-dismiss="modal">Close</a>
+                     <a type="button" class="btn btn-default chefRunlistModalClose">Close</a>
                      <input type="submit" class="btn btn-primary" id="saveRunlist" value="Update Runlist">  
                      </div>   
                      </form>
@@ -421,7 +421,7 @@
             <div class="modal-content">
             <form role="form" class="cmxform" id="jobLinkCreate" autocomplete="off">
             <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+            <button type="button" class="close jobResultModalClose" aria-hidden="true">
             &times;
             </button>
             <h4 class="modal-title">
@@ -436,7 +436,7 @@
             </div>
             </div>
             <div class="modal-footer">
-            <a type="button" class="btn btn-default" data-dismiss="modal">Close</a>
+            <a type="button" class="btn btn-default jobResultModalClose">Close</a>
             <input type="submit" class="btn btn-primary" id="saveJobLinks" value="Save">  
             </div>   
             </form>
@@ -450,7 +450,7 @@
          <div class="modal-content">
          <form role="form" class="cmxform" id="parameterCreate" autocomplete="off">
          <div class="modal-header">
-         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+         <button type="button" class="close parameterModalClose" aria-hidden="true">
          &times;
          </button>
          <h4 class="modal-title">
@@ -554,7 +554,7 @@
          
          </div>
          <div class="modal-footer">
-         <a type="button" class="btn btn-default" data-dismiss="modal">Close</a>
+         <a type="button" class="btn btn-default parameterModalClose">Close</a>
          <input type="submit" class="btn btn-primary" id="saveParameter" value="Save">  
          </div>   
          </form>
@@ -567,7 +567,7 @@
          <div class="modal-dialog">
          <div class="modal-content"> 
          <div class="modal-header">
-         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+         <button type="button" class="close modalForHelpClose" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
          <h4 class="modal-title">
          &nbsp;CookBook Information
          </h4>
@@ -723,7 +723,7 @@
          </table>
          </div>
          <div class="modal-footer">
-         <a class="btn btn-primary" data-dismiss="modal">Close</a>
+         <a class="btn btn-primary modalForHelpClose">Close</a>
          </div>   
          </div>
          </div>
@@ -734,7 +734,7 @@
          <div class="modal-dialog">
          <div class="modal-content">
          <div class="modal-header">
-         <button aria-hidden="true" data-dismiss="modal" class="close" type="button">
+         <button aria-hidden="true" class="close editAttributesModalContainerClose" type="button">
          x
          </button>
          <h4 class="modal-title">
@@ -760,7 +760,7 @@
          </form>
          </div>
          <div class="modal-footer">
-         <a class="btn btn-default" data-dismiss="modal">Close</a>
+         <a class="btn btn-default editAttributesModalContainerClose">Close</a>
          <a type="submit" class="btn btn-primary saveAttribBtn">Save</a>
          </div>
          </div><!-- /.modal-content -->

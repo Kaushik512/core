@@ -675,6 +675,11 @@ $(document).ready(function() {
     getAllApplicationData();
     getAllPipelineApplicationData();
     $("#divapplicationtableview").hide();
+    if($('#chooseNexusServer :selected').text() == 'Choose Server'){
+        $('.createTaskLinkUpgrade').attr('disabled','disabled');
+    }else{
+        $('.createTaskLinkUpgrade').removeAttr('disabled');
+    }
 });
 function getAllPipelineApplicationData() {
     //alert("iam in getAllPipelineApplicationData");
@@ -1224,6 +1229,11 @@ function moreInfoUpgradeAppDeployPipelineClickHandler(e) {
     $('#formUpgradeAppDeploy')[0].reset();
     $('.containerClass').hide();
     resetSpinners();
+    if($('#chooseNexusServer :selected').text() == 'Choose Server'){
+        $('.createTaskLinkUpgrade').attr('disabled','disabled');
+    }else{
+        $('.createTaskLinkUpgrade').removeAttr('disabled');
+    }
     var upgradeAppNameText = $(this).parents().eq(5).find('.applicationNamePipeline').html();
     var upgradeNodeIpText = $(this).parents().eq(5).find('.applicationNodeIPPipeline').html();
     var containerId = $(this).parents().eq(5).find('.containerIdPipeline').html();
@@ -1726,6 +1736,11 @@ function constructUI(data) {
             $('.containerClass').hide();
             resetSpinners();
             //$('#chooseRepository').empty();
+            if ($('#chooseNexusServer :selected').text() == 'Choose Server') {
+                $('.createTaskLinkUpgrade').attr('disabled', 'disabled');
+            } else {
+                $('.createTaskLinkUpgrade').removeAttr('disabled');
+            }
             var tabletrIndex = $(".moreinfoUpgradeAppDeploy").index($(this));
 
             var upgradeAppNameText = $('#tableappDeploydetails tbody tr:eq(' + tabletrIndex + ') td:first').html();

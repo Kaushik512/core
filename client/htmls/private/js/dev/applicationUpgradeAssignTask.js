@@ -1584,4 +1584,22 @@ $(document).ready(function() {
         // httpRequest.open('GET', '/tasks/list/all', true);
         // httpRequest.send(null);
     }
+    $('.chefRunlistModalClose').on('click', function() {
+        $('#chefRunlistModal').modal("hide");
+    });
+    $('.jobResultModalClose').on('click', function() {
+        $('#jobResultModal').modal("hide");
+    });
+
+    $('.parameterModalClose').on('click', function() {
+        $('#parameterModal').modal("hide");
+    });
+
+    $('.modalForHelpClose').on('click', function() {
+        $('#modalForHelp').modal("hide");
+    });
+
+    $('.editAttributesModalContainerClose').on('click', function() {
+        $('#editAttributesModalContainer').modal("hide");
+    });
 });
