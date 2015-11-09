@@ -184,6 +184,7 @@ function devCall() {
             }
             if (!hasChefCreateTaskPermission) {
                 $('.createTaskLink').addClass('hidden');
+                $('.createTaskLinkUpgrade').addClass('hidden');
             }
             //custom
             var hasCustomCreateTaskPermission = false;
@@ -192,6 +193,7 @@ function devCall() {
             }
             if (!hasCustomCreateTaskPermission) {
                 $('.createTaskLink').addClass('hidden');
+                $('.createTaskLinkUpgrade').addClass('hidden');
             }
             //jenkins
             var hasJenkinsCreateTaskPermission = false;
@@ -200,6 +202,7 @@ function devCall() {
             }
             if (!hasJenkinsCreateTaskPermission) {
                 $('.createTaskLink').addClass('hidden');
+                $('.createTaskLinkUpgrade').addClass('hidden');
             }
         }
 
@@ -3527,6 +3530,9 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
         function initializingOrchestration() {
 
             $('.Orchestration').click(function(e) {
+                // $.get('../organizations/' + urlParams.org + '/businessgroups/' + urlParams['bg'] + '/projects/' + urlParams.projid + '/environments/' + urlParams.envid + '/', function(dataRelatedTask) {
+                //     initializeTaskArea(dataRelatedTask.tasks);
+                // });
                 var getbreadcrumbul = $('#ribbon').find('.breadcrumb').find('li:lt(5)');
                 var getbreadcrumbullength = getbreadcrumbul.length;
                 var DummyBreadCrumb;
@@ -5226,6 +5232,17 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
 
 
             window.location.href = 'index.html#ajax/assignTask.html?org=' + urlParams.org + '&bg=' + urlParams['bg'] + '&projid=' + urlParams['projid'] + '&envid=' + urlParams['envid'];
+        });
+
+        $('.createTaskLinkUpgrade').click(function(e) {
+            var hasTasksPermission = false;
+            if (haspermission("instancetasks", "execute")) {
+                hasTasksPermission = true;
+            }
+            if (!hasTasksPermission) {
+                bootbox.alert('User has no permission to Add Tasks');
+                return false;
+            }
         });
 
         //for Table view
