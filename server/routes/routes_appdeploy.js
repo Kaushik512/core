@@ -131,23 +131,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         });
     });
 
-    // Get AppDeploy w.r.t. Project Specific
-    app.get('/app/deploy/project/:projectId/list', function(req, res) {
-        logger.debug("/app/deploy/env/:envId/list called...");
-        masterUtil.getAppDataWithDeployListforProjectId(req.params.projectId, function(err, appDeploy) {
-            if (err) {
-                res.send(500, errorResponses.db.error);
-                return;
-            }
-            if (appDeploy.length) {
-                res.send(200, appDeploy);
-                return;
-            } else {
-                res.send([]);
-                return;
-            }
-        });
-    });
     // Update AppDeploy by Name
     /*app.post('/app/deploy/:appName/update', function(req, res) {
         logger.debug("Got appDeploy data: ", JSON.stringify(req.body));
