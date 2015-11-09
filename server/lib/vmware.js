@@ -54,6 +54,33 @@ var vmwareservice = function(options) {
         //to do
     }
 
+    this.startstopVM = function(servicehost,vm_name,action,callback){
+        //to do
+        client = new Client();
+        var datastoresUrl = servicehost + '/' + vm_name +'/' + action + '?ip=' + options.host + '&user=' + options.username + '&passwd=' + options.password + '&dc=' + options.dc;
+        console.log(datastoresUrl);
+        client.registerMethod("jsonMethod", datastoresUrl, "PUT");
+        var args = {};
+        client.methods.jsonMethod(args, function(data, response) {
+            console.log("get datastoresUrl response::" + data);
+            callback(null,data);
+        });
+
+    }
+
+    // this.startVM = function(servicehost,vm_name,callback){
+    //     //to do
+    //     client = new Client();
+    //     var datastoresUrl = servicehost + '/' + vm_name +'/poweron?ip=' + options.host + '&user=' + options.username + '&passwd=' + options.password + '&dc=' + options.dc;
+    //     console.log(datastoresUrl);
+    //     client.registerMethod("jsonMethod", datastoresUrl, "PUT");
+    //     var args = {};
+    //     client.methods.jsonMethod(args, function(data, response) {
+    //         console.log("get datastoresUrl response::" + data);
+    //         callback(null,data);
+    //     });
+        
+    // }
     this.getDatastores = function(servicehost,callback){
         client = new Client();
         var datastoresUrl = servicehost + '/datastores?ip=' + options.host + '&user=' + options.username + '&passwd=' + options.password + '&dc=' + options.dc;
