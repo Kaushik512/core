@@ -2368,12 +2368,12 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                                 "message": "instance launch success"
                                                                             });
                                                                             logger.debug('Should have sent the response.');
-                                                                            vmwareCloud.waitforserverready(appConfig.vmware.serviceHost,createserverdata["vm_name"], anImage.userName, anImage.instancePassword, function(err, publicip) {
+                                                                            vmwareCloud.waitforserverready(appConfig.vmware.serviceHost,createserverdata["vm_name"], anImage.userName, anImage.instancePassword, function(err, publicip,vmdata) {
                                                                                 if (!err) {
                                                                                     logger.debug('Instance Ready....');
-                                                                                    logger.debug(JSON.stringify(data)); // logger.debug(data);
+                                                                                    logger.debug(JSON.stringify(vmdata)); // logger.debug(data);
                                                                                     logger.debug('About to bootstrap Instance');
-                                                                                   
+                                                                                    
                                                                                     instancesDao.updateInstanceIp(instance.id, publicip, function(err, updateCount) {
                                                                                         if (err) {
                                                                                             logger.error("instancesDao.updateInstanceIp Failed ==>", err);
@@ -2387,6 +2387,26 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                                             return;
                                                                                         }
                                                                                         logger.debug('Instance state Updated');
+                                                                                    });
+                                                                                        
+                                                                                    var hardwareData = {
+                                                                                        platform: 'vmware',
+                                                                                        platformVersion: '',
+                                                                                        architecture: '',
+                                                                                        memory: {
+                                                                                            total: vmdata.memory.avail,
+                                                                                            free: vmdata.memory.avail,
+                                                                                        },
+                                                                                        os: vmdata.OS
+                                                                                    }
+                                                                                    
+
+                                                                                    instancesDao.setHardwareDetails(instance.id,hardwareData,function(err,updateCount){
+                                                                                        if (err) {
+                                                                                            logger.error("instancesDao.updateInstance hardware Failed ==>", err);
+                                                                                            return;
+                                                                                        }
+                                                                                        logger.debug('Instance hardware Updated');
                                                                                     });
 
                                                                                     logsDao.insertLog({
@@ -2411,6 +2431,13 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                                                 if (err) {
                                                                                                     logger.error("Unable to set instance bootstarp status. code 0", err);
                                                                                                 } else {
+                                                                                                     logsDao.insertLog({
+                                                                                                            referenceId: logsReferenceIds,
+                                                                                                            err: false,
+                                                                                                            log: 'Instance Bootstraped Successfully.',
+                                                                                                            timestamp: new Date().getTime()
+                                                                                                      });
+
                                                                                                     logger.debug("Instance bootstrap status set to success");
                                                                                                 }
                                                                                             });
@@ -2428,13 +2455,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                                                 if (err) {
                                                                                                     logger.error("Unable to set instance bootstarp status. code 0", err);
                                                                                                 } else {
-                                                                                                    logsDao.insertLog({
-                                                                                                    referenceId: logsReferenceIds,
-                                                                                                    err: false,
-                                                                                                    log: 'Instance Bootstraped Successfully',
-                                                                                                    timestamp: new Date().getTime()
-                                                                                                });
-                                                                                                 
+                                                                                                                                                                                                    
                                                                                                  logger.debug("Instance bootstrap status set to success");
 
                                                                                                 }
