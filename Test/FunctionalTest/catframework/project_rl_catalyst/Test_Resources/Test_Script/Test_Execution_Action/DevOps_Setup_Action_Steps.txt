@@ -91,6 +91,21 @@ Catalyst Duplicate DataBag setup
 
 
 
+Catalyst Deleting the Databag
+    Clicks on Settings
+    Clicks on DevOps Setup menu
+    Clicks on Config Management menu
+    Sleep    2s
+    Clicks on the User Creted Chef Server
+    Sleep    1s
+    Delete the DataBag Created    
+
+
+
+
+
+
+
 Verfiy the Duplicate Message of DataBag
     Element Should Contain    css=div.bootbox-body    ${DUPLICATE DATABAGMSG}
     Sleep    2s

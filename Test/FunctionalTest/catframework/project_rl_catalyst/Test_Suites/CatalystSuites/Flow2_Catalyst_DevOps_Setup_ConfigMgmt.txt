@@ -91,6 +91,13 @@ Catalyst Editing invalid josn & Checking Disabled DataBag Setup
     [Teardown]     Close Browser
 
 
+Catalyst Delete the DataBag Setup
+    [Tags]       Sanity         Settings
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+#    Catalyst Login
+    Catalyst Deleting the Databag
+    Catalyst Logout
+    [Teardown]     Close Browser
 
 
 

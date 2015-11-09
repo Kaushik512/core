@@ -563,7 +563,7 @@ Verfiy the page contains Summary of Virginia
     ...    ELSE
     ...    Log     Dashboard has network IO Data
     
-    ${Act Virginia5}=    Get Text    xpath=.//*[@id='container']/div/ul/li[4]/div/ul/li[4]/span[2]
+    ${Act Virginia5}=    Get Text    xpath=.//*[@id='container']/div/ul/li[4]/div/ul/li[5]/span[2]
     Log    ${Act Virginia5}
     ${Run Vim5}=    Get Length    ${Act Virginia5}
     Run Keyword If    '${Run Vim5}' == '${VALUE}'
@@ -575,16 +575,22 @@ Verfiy the page contains Summary of Virginia
 Verfiy the page contains Summary of Oregon
     Page Should Contain    Summary of Oregon
     Selects the frame
+    Sleep    2s
     ${Oregon1}=    Get Text    xpath=.//*[@id='container']/div/ul/li[5]/div/ul/li[1]/span[1]
     Log     ${Oregon1}
+    Sleep    2s
     ${Oregon2}=    Get Text    xpath=.//*[@id='container']/div/ul/li[5]/div/ul/li[2]/span[1]
     Log     ${Oregon2}
+    Sleep    2s
     ${Oregon3}=    Get Text    xpath=.//*[@id='container']/div/ul/li[5]/div/ul/li[3]/span[1]
     Log     ${Oregon3}
+    Sleep    2s
     ${Oregon4}=    Get Text    xpath=.//*[@id='container']/div/ul/li[5]/div/ul/li[4]/span[1]
     Log     ${Oregon4}
+    Sleep    2s
     ${Oregon5}=    Get Text    xpath=.//*[@id='container']/div/ul/li[5]/div/ul/li[5]/span[1]
     Log     ${Oregon5}
+    Sleep    2s
 
     ${Act Oregon1}=    Get Text    xpath=.//*[@id='container']/div/ul/li[5]/div/ul/li[1]/span[2]
     Log    ${Act Oregon1}
