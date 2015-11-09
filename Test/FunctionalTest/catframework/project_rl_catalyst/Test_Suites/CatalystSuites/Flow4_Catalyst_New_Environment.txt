@@ -43,7 +43,7 @@ Catalyst new Environments setup
 
 
 Catalyst Unique Environment Validation
-    [Tags]       Sanity               Settings1
+    [Tags]       Sanity               Settings
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
     Catalyst Unique Environment Validation
@@ -53,7 +53,7 @@ Catalyst Unique Environment Validation
 
 
 Catalyst Adding New Envirornments to the Chef          
-    [Tags]       Sanity           Settings1
+    [Tags]       Sanity           Settings
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
     Catalyst Addition of New Environments

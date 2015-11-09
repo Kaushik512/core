@@ -132,9 +132,9 @@ ${STACK NAME}                RLStack
 ${STACK INSTANCE NAME}       Node
 
 
-${USERPEMFILE}              ${ROOTPATH}\\Chef\\mycatqa.pem
+${USERPEMFILE}              ${ROOTPATH}//Chef//mycatqa.pem
 ${VALIDATORPEMFILE}         ${ROOTPATH}//Chef//cattest-validator.pem
-${KNIFERBFILE}                ${ROOTPATH}\\Chef\\knife.rb
+${KNIFERBFILE}                ${ROOTPATH}//Chef//knife.rb
 ${CATALYSTPEM}                ${ROOTPATH}//Chef//catalyst.pem
 ${CAT_INSTANCES}              ${ROOTPATH}//Chef//cat_instances.pem
 ${CATALYST STACKFILE}         ${ROOTPATH}//Chef//CatalystStack.template
