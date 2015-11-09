@@ -5383,6 +5383,7 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
             window.socketAutoScale.on('instanceStateChanged', function(instanceData) {
                 console.log('State changed event fired ==> ', instanceData);
                 var instanceId = instanceData._id;
+                var title = '';
                 if(orgId === instanceData.orgId && urlParams['bg'] === instanceData.bgId &&projectId ===  instanceData.projectId && envId === instanceData.envId) {
                      var $card = $('#divinstancescardview').find('.domain-roles-caption[data-instanceId=' + instanceData._id + ']');
                       /*$card.find('.instance-state').removeClass().addClass('instance-state instance-state-text-stopped').html(instanceData.instanceState);
@@ -5391,11 +5392,16 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                       $('#tableinstanceview').find('tr[data-instanceid="'+instanceData._id+'"]').find('.instancestatusindicator').removeClass().addClass('instancestatusindicator stopped');
                       */
                       
+                    var $tableViewInstanceId = $("tr[data-instanceId='" + instanceId + "']");
+                      title = instanceData.instanceState == "running" ? "Stop" : instanceData.instanceState == "stopped" ? "Start" : "";
+                      $('[instanceID="' + instanceId + '"]').removeClass('stopped running pending stopping unknown').addClass(instanceData.instanceState).attr('data-original-title', title);
+                      
                     if (instanceData.instanceState == 'stopped') {
                         enableInstanceActionStopBtn(instanceData._id);
                     }
                     if (instanceData.instanceState == 'running') {
                         enableInstanceActionStartBtn(instanceData._id, instanceData.hardware.os);
+                        
                     }
                     if (instanceData.instanceState == 'pending' || instanceData.instanceState == 'stopping' || instanceData.instanceState == 'terminated') {
                         disableInstanceActionBtns(instanceData._id);
@@ -5405,7 +5411,7 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                     }
                     var cssClassed = getCssClassFromStatus(instanceData.instanceState);
                             $card.find('.componentlistContainer').removeClass().addClass('componentlistContainer').addClass(cssClassed.ringClass);
-                            disableInstanceActionBtns(instanceData._id);
+                            //disableInstanceActionBtns(instanceData._id);
                             $card.find('.instance-state').removeClass().addClass('instance-state').addClass(cssClassed.textClass).html(instanceData.instanceState);
                             $('.instancestatusindicator[data-instanceId="' + instanceId + '"]').removeClass().addClass('instancestatusindicator').addClass(cssClassed.tableViewStatusClass);
 
