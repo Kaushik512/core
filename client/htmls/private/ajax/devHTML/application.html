@@ -162,6 +162,10 @@
                                 <!-- <a onclick="showHideControlApplication(this.id)" id="defaultViewButtonAppCard" class="btn1" rel="tooltip" data-placement="top" data-original-title="Pipeline View" style="display:none"> 
                                     <i style="font-size:18px;transform: rotateY(180deg);" class="fa fa-paragraph fa-2x txt-color-active"></i>
                                 </a> -->
+                                <a onclick="showHideControlApplication(this.id)" id="defaultViewButtonNewDeploy" class="btn btn-primary createNewDeploy" style="display:none;margin-right:5px;" data-toggle="modal" href="#modalUpgradeAppDeploy"> 
+                                    <i class="ace-icon fa fa-plus bigger-110" style="color:#fff;margin-right:4px;"></i>New Deploy
+                                </a>
+
                                 <a onclick="showHideControlApplication(this.id)" id="defaultViewButtonAppCard" class="btn btn-primary" style="display:none"> 
                                     <i class="ace-icon ace-icon fa fa-chevron-left bigger-110" style="color:#fff;margin-right:4px;"></i>Pipeline View
                                 </a>
@@ -261,14 +265,14 @@
                               </form>
                             </div>
                              <div class="modal-footer">
-                                <div class="btn-group" style="margin-left:200px;">                                 
+                                <div class="btn-group" style="margin-left:200px;">  
+                                <a style="margin-left:10px;" class="btn btn-default" data-dismiss="modal">
+                                    <i class="ace-icon fa fa-times bigger-110"></i>
+                                    Cancel
+                                </a>                               
                                  <a class="btn btn-primary appdeployConfigureSaveBtn">
                                     <i class="ace-icon fa fa-save bigger-110"></i>
                                     Save
-                                </a>
-                                <a style="margin-left:10px;" class="btn btn-primary" data-dismiss="modal">
-                                    <i class="ace-icon fa fa-undo bigger-110"></i>
-                                    Cancel
                                 </a>
                                 </div>
                               </div>
@@ -308,11 +312,11 @@
                                 </div>
                                 <div class="modal-footer">
                                     <div class="btn-group" style="margin-left:200px;">
+                                        <a style="margin-left:10px;" class="btn btn-default cancelAppDeploy" data-dismiss="modal">
+                                            <i class="ace-icon fa fa-times bigger-110"></i> Cancel
+                                        </a>
                                         <a class="btn btn-primary" id="parameterAppDeploySaveBtn">
                                             <i class="ace-icon fa fa-save bigger-110"></i> Save
-                                        </a>
-                                        <a style="margin-left:10px;" class="btn btn-primary cancelAppDeploy" data-dismiss="modal">
-                                            <i class="ace-icon fa fa-undo bigger-110"></i> Cancel
                                         </a>
                                     </div>
                                 </div>
@@ -349,8 +353,8 @@
                                 </div>
                                 <div class="modal-footer">
                                     <div class="btn-group" style="margin-left:200px;">
-                                        <a style="margin-left:10px;" class="btn btn-primary" data-dismiss="modal">
-                                            <i class="ace-icon fa fa-undo bigger-110"></i> Cancel
+                                        <a style="margin-left:10px;" class="btn btn-default" data-dismiss="modal">
+                                            <i class="ace-icon fa fa-times bigger-110"></i> Cancel
                                         </a>
                                     </div>
                                 </div>
@@ -423,8 +427,8 @@
                             </div>
                              <div class="modal-footer">
                                 <div class="btn-group" style="margin-left:200px;">                                
-                                <a style="margin-left:10px;" class="btn btn-primary" data-dismiss="modal">
-                                    <i class="ace-icon fa fa-undo bigger-110"></i>
+                                <a style="margin-left:10px;" class="btn btn-default" data-dismiss="modal">
+                                    <i class="ace-icon fa fa-times bigger-110"></i>
                                     Cancel
                                 </a>
                                 </div>
@@ -451,8 +455,8 @@
                                 </div>
                                 <div class="modal-footer">
                                     <div class="btn-group" style="margin-left:200px;">
-                                        <a style="margin-left:10px;" class="btn btn-primary cancelAppDeploy" data-dismiss="modal">
-                                            <i class="ace-icon fa fa-undo bigger-110"></i> Cancel
+                                        <a style="margin-left:10px;" class="btn btn-default cancelAppDeploy" data-dismiss="modal">
+                                            <i class="ace-icon fa fa-times bigger-110"></i> Cancel
                                         </a>
                                     </div>
                                 </div>
@@ -469,9 +473,12 @@
                                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
                                         X
                                     </button>
-                                    <h4 class="modal-title">
-                                    <i class="fa fa-th-list txt-color-blue"></i>&nbsp;&nbsp;Upgrade : <span id="upgradeAppName"></span> (<span id="upgradeNodeIp"></span>)
-                                </h4>
+                                    <h4 class="modal-title modaltitleforNewDeploy" style="display:none">
+                                        <i class="fa fa-th-list txt-color-blue"></i>&nbsp;&nbsp;Create New Deployment
+                                    </h4>
+                                    <h4 class="modal-title modaltitleforupgradeDeploy">
+                                        <i class="fa fa-th-list txt-color-blue"></i>&nbsp;&nbsp;Upgrade : <span id="upgradeAppName"></span> (<span id="upgradeNodeIp"></span>)
+                                    </h4>
                                 </div>
                                 <div class="modal-body">
                                     <div class="upgradeForAppDeploy">
@@ -514,7 +521,18 @@
                                                 <input id="repositoryUrl" type="text" class="form-control" name="" disabled>
                                             </div>
 
-                                            <div class="col-lg-12 col-md-12 margintop15 containerClass">
+                                            <div class="col-lg-12 col-md-12 margintop15 containerClass containerNewDeploy">
+                                                <label>Container ID:
+                                                    <span>
+                                                        <img class="containerIdspinner" src="img/select2-spinner.gif" style="display:none">
+                                                        </img>
+                                                    </span>
+                                                </label>
+                                                <input id="containerIdNewDeploy" type="text" class="form-control" name="">
+                                            </div>
+
+
+                                            <div class="col-lg-12 col-md-12 margintop15 containerClass containerUpgradeDeploy">
                                                 <label>Container ID:<span style="color:red">*</span>
                                                     <span>
                                                         <img class="containerIdspinner" src="img/select2-spinner.gif" style="display:none">
@@ -623,12 +641,16 @@
                                 </div>
                                 <div class="modal-footer">
                                     <div class="btn-group" style="margin-left:200px;">
+                                        <a style="margin-left:10px;" class="btn btn-default cancelUpgradeAppDeploy" data-dismiss="modal">
+                                            <i class="ace-icon fa fa-times bigger-110"></i> Cancel
+                                        </a>
+                                        <a style="margin-left:10px;" class="btn btn-primary saveNewAppDeploy" style="display:none">
+                                            <i class="ace-icon fa fa-location-arrow bigger-110"></i> Deploy
+                                        </a>
                                         <a style="margin-left:10px;" class="btn btn-primary saveUpgradeAppDeploy">
                                             <i class="ace-icon fa fa-save bigger-110"></i> Upgrade
                                         </a>
-                                        <a style="margin-left:10px;" class="btn btn-primary cancelUpgradeAppDeploy" data-dismiss="modal">
-                                            <i class="ace-icon fa fa-undo bigger-110"></i> Cancel
-                                        </a>
+                                        
                                     </div>
                                 </div>
                             </form>
@@ -680,6 +702,28 @@ $(document).ready(function() {
     }else{
         $('.createTaskLinkUpgrade').removeAttr('disabled');
     }
+    function newAppDeployClickHandler(e) {
+        $('#formUpgradeAppDeploy')[0].reset();
+        $('.containerClass').hide();
+        resetSpinners();
+        //$('#chooseRepository').empty();
+        if ($('#chooseNexusServer :selected').text() == 'Choose Server') {
+            $('.createTaskLinkUpgrade').attr('disabled', 'disabled');
+        } else {
+            $('.createTaskLinkUpgrade').removeAttr('disabled');
+        }
+        $('.modaltitleforupgradeDeploy').hide();
+        $('.modaltitleforNewDeploy').show();
+        $('.saveUpgradeAppDeploy').hide();
+        $('.saveNewAppDeploy').show();
+        $('.containerUpgradeDeploy').hide();
+        $('.containerNewDeploy').show();
+    
+        getNexusServer();
+        var $modal = $('#modalUpgradeAppDeploy');
+        $modal.modal('show');
+    }
+    $('#defaultViewButtonNewDeploy').on('click', newAppDeployClickHandler);
 });
 function getAllPipelineApplicationData() {
     //alert("iam in getAllPipelineApplicationData");
@@ -1229,6 +1273,13 @@ function moreInfoUpgradeAppDeployPipelineClickHandler(e) {
     $('#formUpgradeAppDeploy')[0].reset();
     $('.containerClass').hide();
     resetSpinners();
+    $('.modaltitleforNewDeploy').hide();
+    $('.modaltitleforupgradeDeploy').show();
+    $('.saveNewAppDeploy').hide();
+    $('.saveUpgradeAppDeploy').show();
+    $('.containerNewDeploy').hide();
+    //$('.containerUpgradeDeploy').show();
+    
     if($('#chooseNexusServer :selected').text() == 'Choose Server'){
         $('.createTaskLinkUpgrade').attr('disabled','disabled');
     }else{
@@ -1351,6 +1402,7 @@ $chooseRepository.change(function(e){
          $('.containerClass').hide();   
         }else{
             $('.containerClass').show();
+            $('.containerUpgradeDeploy').show();
             $('#containerIdDiv').val($('#containerIdInput').val());
         }
         var repoName = $(this).find('option:selected').attr('data-repoName');
@@ -1735,6 +1787,12 @@ function constructUI(data) {
             $('#formUpgradeAppDeploy')[0].reset();
             $('.containerClass').hide();
             resetSpinners();
+            $('.modaltitleforNewDeploy').hide();
+            $('.modaltitleforupgradeDeploy').show();
+            $('.saveNewAppDeploy').hide();
+            $('.saveUpgradeAppDeploy').show();
+            $('.containerNewDeploy').hide();
+            //$('.containerUpgradeDeploy').show();
             //$('#chooseRepository').empty();
             if ($('#chooseNexusServer :selected').text() == 'Choose Server') {
                 $('.createTaskLinkUpgrade').attr('disabled', 'disabled');

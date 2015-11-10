@@ -21,7 +21,8 @@ function devCall() {
             if (objID == "divapplicationcardview" || objID == "defaultViewButtonAppCard") {
                 $("#divapplicationtableview").removeClass("visibleClass").hide();
                 $(".createAppConfigure").show();
-                $('#defaultViewButtonAppCard').hide();
+                $('#defaultViewButtonAppCard').hide();   
+                $('#defaultViewButtonNewDeploy').hide();
                 $("#divapplicationcardview").addClass("visibleClass").show();
                 $('#defaultViewButtonAppCard').parents().eq(2).find('span:nth-child(2)').removeClass('margintop2right8').addClass('margintopright8');
                 $('#defaultViewButtonAppCard').find('i').removeClass('txt-color-deactive').addClass('txt-color-active');
@@ -30,6 +31,7 @@ function devCall() {
             } else {
                 $("#divapplicationtableview").addClass("visibleClass").show();
                 $('#defaultViewButtonAppCard').show();
+                $('#defaultViewButtonNewDeploy').show();
                 $('#defaultViewButtonAppCard').parents().eq(2).find('span:nth-child(2)').removeClass('margintopright8').addClass('margintop2right8');
                 $(".createAppConfigure").hide();
                 $("#divapplicationcardview").removeClass("visibleClass").hide();
