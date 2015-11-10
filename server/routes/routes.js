@@ -57,6 +57,7 @@ var vmware = require('./routes_vmware.js');
 
 var servicenow = require('./routes_servicenow');
 
+var appdeployPipeline = require('./routes_appdeployPipeline');
 
 module.exports.setRoutes = function(app,socketIo) {
 
@@ -125,6 +126,8 @@ module.exports.setRoutes = function(app,socketIo) {
     nexus.setRoutes(app, sessionVerificationFunc);
 
     servicenow.setRoutes(app, sessionVerificationFunc);
+
+    appdeployPipeline.setRoutes(app, sessionVerificationFunc);
 
     app.get('/', function(req, res) {
         res.redirect('/private/index.html');
