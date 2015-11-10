@@ -1,0 +1,29 @@
+*** Settings ***
+Documentation     Dashboard_setup_Flow.txt
+
+Resource           catalyst.txt
+Resource           ${CATALYST TEST DATA}/${TESTDATA}
+Resource           ${CATALYST ACTION}/Dashboard_Setup_Action_Steps.txt
+
+Resource           ${COMMON RESOURCES}/catalyst_grid_node.txt
+Library            String
+
+
+*** Test Cases ***
+Catalyst Log Monitoring Dashboard Automation
+    [Tags]       Sanity               dashboard
+#    Catalyst Login
+    Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
+    Catalyst Log Monitoring Dashboard Verification
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+#Catalyst Log Monitoring Dashboard Visibility within 20seconds
+    #[Tags]       Sanity               dashboard
+#    Catalyst Login 
+    #Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
+    #Catalyst Log Monitoring Dashboard Visibility
+    #Catalyst Logout                      
+    #[Teardown]     Close Browser
+
