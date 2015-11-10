@@ -18,7 +18,7 @@ var projects = require('./routes_projects');
 var blueprints = require('./routes_blueprints');
 var instances = require('./routes_instances');
 var tasks = require('./routes_tasks');
-var taskStatus = require('./routes_longjobtracker');
+var taskStatus = require('./routes_taskstatus');
 var ec2 = require('./routes_aws_ec2');
 
 var jenkins = require('./routes_jenkins');
@@ -51,19 +51,14 @@ var puppet = require('./routes_puppet.js');
 
 var appdeploy = require('./routes_appdeploy');
 
-var appdeployPipeline = require('./routes_appdeployPipeline');
-
 var nexus = require('./routes_nexus');
 
 var vmware = require('./routes_vmware.js');
 
 var servicenow = require('./routes_servicenow');
 
-var cheffactory = require('./routes_cheffactory');
 
-
-
-module.exports.setRoutes = function(app, socketIo) {
+module.exports.setRoutes = function(app,socketIo) {
 
 
 
@@ -103,8 +98,7 @@ module.exports.setRoutes = function(app, socketIo) {
     openstack.setRoutes(app, sessionVerificationFunc);
     hppubliccloud.setRoutes(app, sessionVerificationFunc);
     azure.setRoutes(app, sessionVerificationFunc);
-
-    vmware.setRoutes(app, sessionVerificationFunc);
+    vmware.setRoutes(app,sessionVerificationFunc);
 
     application.setRoutes(app, sessionVerificationFunc);
 
@@ -127,14 +121,10 @@ module.exports.setRoutes = function(app, socketIo) {
     puppet.setRoutes(app, sessionVerificationFunc);
 
     appdeploy.setRoutes(app, sessionVerificationFunc);
-    
-    appdeployPipeline.setRoutes(app, sessionVerificationFunc);
-    
+
     nexus.setRoutes(app, sessionVerificationFunc);
 
     servicenow.setRoutes(app, sessionVerificationFunc);
-
-    cheffactory.setRoutes(app, sessionVerificationFunc);
 
     app.get('/', function(req, res) {
         res.redirect('/private/index.html');
@@ -158,7 +148,7 @@ module.exports.setRoutes = function(app, socketIo) {
             if (req.session.user.authorizedfiles) {
                 var authfiles = req.session.user.authorizedfiles.split(','); //To be moved to login page an hold a static variable.
                 authfiles += ',index.html,settings.html,design.html,Tracker.html,noaccess.html'
-                // console.log(authfiles.length, req.originalUrl.indexOf('.html'));
+                    // console.log(authfiles.length, req.originalUrl.indexOf('.html'));
                 if (req.originalUrl.indexOf('.html') > 0) //its a html file.
                 {
                     var urlpart = req.originalUrl.split('/');
@@ -198,7 +188,7 @@ module.exports.setRoutes = function(app, socketIo) {
 
     }
 
-
+    
 
     // for notification
 

@@ -9,8 +9,8 @@ Resource           ${CATALYST ACTION}/Organization_Setup_Action_Steps.txt
 
 	
 *** Test Cases ***
-Catalyst Validation of ConfigManagement
-    [Tags]       Sanity
+Catalyst Validation of ChefServer Creation
+    [Tags]       Sanity          Settings
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
 #    Catalyst Login
     Testing All New Config Management Conditions
@@ -19,8 +19,8 @@ Catalyst Validation of ConfigManagement
 
 
 
-Catalyst Create New Config management setup
-    [Tags]       Sanity
+Catalyst Create ChefServer setup
+    [Tags]       Sanity         Settings
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
 #    Catalyst Login
     Create New Config Management
@@ -29,8 +29,18 @@ Catalyst Create New Config management setup
 
 
 
+Catalyst Edit ChefServer setup
+    [Tags]       Sanity         Settings
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+#    Catalyst Login
+    Catalyst Editing the Chef Server created
+    Catalyst Logout
+    [Teardown]     Close Browser
+
+
+
 Catalyst Verify Unique ChefServer,Organization and Org Disabled
-    [Tags]       Sanity
+    [Tags]       Sanity             Settings
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
 #    Catalyst Login
     Unique Devops Configuration Management
@@ -43,7 +53,7 @@ Catalyst Verify Unique ChefServer,Organization and Org Disabled
 
 
 Catalyst Create New DataBag Setup
-    [Tags]       Sanity         Data
+    [Tags]       Sanity         Settings
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
 #    Catalyst Login
     Catalyst Create New Data Bag
@@ -52,8 +62,19 @@ Catalyst Create New DataBag Setup
 
 
 
+Catalyst Validate DataBag Setup
+    [Tags]       Sanity         Settings
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+#    Catalyst Login
+    Catalyst Validate Databag setup
+    Catalyst Logout
+    [Teardown]     Close Browser
+
+
+
+
 Catalyst Duplicate DataBag Setup
-    [Tags]       Sanity         Data
+    [Tags]       Sanity         Settings
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
 #    Catalyst Login
     Catalyst Duplicate DataBag setup
@@ -61,10 +82,56 @@ Catalyst Duplicate DataBag Setup
     [Teardown]     Close Browser
 
 
+Catalyst Editing invalid josn & Checking Disabled DataBag Setup
+    [Tags]       Sanity         Settings
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+#    Catalyst Login
+    Catalyst Editing and Disabled setup of Databag
+    Catalyst Logout
+    [Teardown]     Close Browser
+
+
+Catalyst Delete the DataBag Setup
+    [Tags]       Sanity         Settings
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+#    Catalyst Login
+    Catalyst Deleting the Databag
+    Catalyst Logout
+    [Teardown]     Close Browser
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 Catalyst Validation of Puppet Server
-    [Tags]       Sanity         puppet
+    [Tags]       Sanity         Settings
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
 #    Catalyst Login
     Catalyst Validation of the Puppet Server Page
@@ -73,7 +140,7 @@ Catalyst Validation of Puppet Server
 
 
 Catalyst Creation of Puppet Server
-    [Tags]       Sanity         pup
+    [Tags]       Sanity         Settings
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
 #    Catalyst Login
     Catalyst Creation of the Puppet Server

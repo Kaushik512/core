@@ -43,7 +43,7 @@ ${DATABAG NAME}        DataRL
 ${INSTANCE ID}         R1267
 ${INSTANCE ID1}        S4567
 ${DUPLICATE DATABAGMSG}         Data Bag already exist on Chef.  
-
+${JSON}                        Invalid JSON       
 
 
 
@@ -60,7 +60,7 @@ ${PROJECT NAME}                  Catalyst
 ${PROJECT DESCRIPTION}           Catalyst product automation Description
 ${ENVIRONMENT NAME}              Dev
 ${CONFIG MANAGEMENT NAME}             RLChefServer                       
-
+${EDIT CONFIG MANAGEMENT}            RLServer
 
 
 ${PROVIDER}             Data Center
@@ -382,6 +382,7 @@ ${EnV1}                                Dev
 ${EnV2}                                QA
 ${REQ}                                Required
 ${EnV3}                               Preeprod
+${EnV4}                              Mach
 
 
 ${Vaildate15ChrErrMsg}              limited to 15 chars            
