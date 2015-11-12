@@ -856,7 +856,7 @@ Clicks on Adverse Events
 
 
 Verfiy the Dashboard is displayed with Legend Running
-    Selects the frame
+    #Selects the frame
     ${legnd}=    Get Text    xpath=(//span[@class='legend-open'])[1]
     Log    ${legnd}
     ${log1}=    Run Keyword and Return Status    Should Be Equal    ${legnd}    ${Accesslayr}
