@@ -82,6 +82,7 @@ Catalyst Duplicate DataBag Setup
     [Teardown]     Close Browser
 
 
+
 Catalyst Editing invalid josn & Checking Disabled DataBag Setup
     [Tags]       Sanity         Settings
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
