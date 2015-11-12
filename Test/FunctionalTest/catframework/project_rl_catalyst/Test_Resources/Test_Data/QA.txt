@@ -138,6 +138,7 @@ ${KNIFERBFILE}                ${ROOTPATH}//Chef//knife.rb
 ${CATALYSTPEM}                ${ROOTPATH}//Chef//catalyst.pem
 ${CAT_INSTANCES}              ${ROOTPATH}//Chef//cat_instances.pem
 ${CATALYST STACKFILE}         ${ROOTPATH}//Chef//CatalystStack.template
+${GOLDEN PEM}                 ${ROOTPATH}//Chef//GoldenDemo.pem
 
 ${CENTOSIMG}                  ${ROOTPATH}//Images//centos.jpg
 ${UBUNTUIMG}                  ${ROOTPATH}//Images//ubuntuu.jpg
@@ -239,7 +240,7 @@ ${IP ADD UBUNTU}            54.68.147.50
 ${IP Ubuntu}                54.68.147.50
 
 ${IP ADD CENTOS}              52.24.178.71
-${IP Centos}                  52.24.178.71
+${IP Centos}                   10.0.1.92
 
 
 ${SETTING}                    Settings
