@@ -184,6 +184,7 @@ function devCall() {
             }
             if (!hasChefCreateTaskPermission) {
                 $('.createTaskLink').addClass('hidden');
+                $('.createTaskLinkUpgrade').addClass('hidden');
             }
             //custom
             var hasCustomCreateTaskPermission = false;
@@ -192,6 +193,7 @@ function devCall() {
             }
             if (!hasCustomCreateTaskPermission) {
                 $('.createTaskLink').addClass('hidden');
+                $('.createTaskLinkUpgrade').addClass('hidden');
             }
             //jenkins
             var hasJenkinsCreateTaskPermission = false;
@@ -200,6 +202,7 @@ function devCall() {
             }
             if (!hasJenkinsCreateTaskPermission) {
                 $('.createTaskLink').addClass('hidden');
+                $('.createTaskLinkUpgrade').addClass('hidden');
             }
         }
 
@@ -3527,6 +3530,12 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
         function initializingOrchestration() {
 
             $('.Orchestration').click(function(e) {
+                $.get('../organizations/' + urlParams.org + '/businessgroups/' + urlParams['bg'] + '/projects/' + urlParams.projid + '/environments/' + urlParams.envid + '/', function(dataRelatedTask) {
+                    console.log("Arabinda Behera=======================>>>>>>>>>>>>");
+                    console.log(dataRelatedTask.tasks);
+                    initializeTaskArea(dataRelatedTask.tasks);
+                });
+                //alert("Hello");
                 var getbreadcrumbul = $('#ribbon').find('.breadcrumb').find('li:lt(5)');
                 var getbreadcrumbullength = getbreadcrumbul.length;
                 var DummyBreadCrumb;
@@ -5228,6 +5237,17 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
             window.location.href = 'index.html#ajax/assignTask.html?org=' + urlParams.org + '&bg=' + urlParams['bg'] + '&projid=' + urlParams['projid'] + '&envid=' + urlParams['envid'];
         });
 
+        $('.createTaskLinkUpgrade').click(function(e) {
+            var hasTasksPermission = false;
+            if (haspermission("instancetasks", "execute")) {
+                hasTasksPermission = true;
+            }
+            if (!hasTasksPermission) {
+                bootbox.alert('User has no permission to Add Tasks');
+                return false;
+            }
+        });
+
         //for Table view
 
 
@@ -5377,6 +5397,45 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                 console.log('add event fired ==> ', instanceData);
                 if(orgId === instanceData.orgId && urlParams['bg'] === instanceData.bgId &&projectId ===  instanceData.projectId && envId === instanceData.envId) {
                     addInstanceToDOM(instanceData);
+                }
+            });
+
+            window.socketAutoScale.on('instanceStateChanged', function(instanceData) {
+                console.log('State changed event fired ==> ', instanceData);
+                var instanceId = instanceData._id;
+                var title = '';
+                if(orgId === instanceData.orgId && urlParams['bg'] === instanceData.bgId &&projectId ===  instanceData.projectId && envId === instanceData.envId) {
+                     var $card = $('#divinstancescardview').find('.domain-roles-caption[data-instanceId=' + instanceData._id + ']');
+                      /*$card.find('.instance-state').removeClass().addClass('instance-state instance-state-text-stopped').html(instanceData.instanceState);
+                      disableInstanceActionBtns(instanceData._id);
+                      $card.find('.componentlistContainer').removeClass().addClass('componentlistContainer stopped');
+                      $('#tableinstanceview').find('tr[data-instanceid="'+instanceData._id+'"]').find('.instancestatusindicator').removeClass().addClass('instancestatusindicator stopped');
+                      */
+                      
+                    var $tableViewInstanceId = $("tr[data-instanceId='" + instanceId + "']");
+                      title = instanceData.instanceState == "running" ? "Stop" : instanceData.instanceState == "stopped" ? "Start" : "";
+                      $('[instanceID="' + instanceId + '"]').removeClass('stopped running pending stopping unknown').addClass(instanceData.instanceState).attr('data-original-title', title);
+                      
+                    if (instanceData.instanceState == 'stopped') {
+                        enableInstanceActionStopBtn(instanceData._id);
+                    }
+                    if (instanceData.instanceState == 'running') {
+                        enableInstanceActionStartBtn(instanceData._id, instanceData.hardware.os);
+                        
+                    }
+                    if (instanceData.instanceState == 'pending' || instanceData.instanceState == 'stopping' || instanceData.instanceState == 'terminated') {
+                        disableInstanceActionBtns(instanceData._id);
+                    }
+                    if (instanceData.instanceState == 'unknown') {
+                        disableInstanceStartStopActionBtns(instanceData._id, instanceData.hardware.os);
+                    }
+                    var cssClassed = getCssClassFromStatus(instanceData.instanceState);
+                            $card.find('.componentlistContainer').removeClass().addClass('componentlistContainer').addClass(cssClassed.ringClass);
+                            //disableInstanceActionBtns(instanceData._id);
+                            $card.find('.instance-state').removeClass().addClass('instance-state').addClass(cssClassed.textClass).html(instanceData.instanceState);
+                            $('.instancestatusindicator[data-instanceId="' + instanceId + '"]').removeClass().addClass('instancestatusindicator').addClass(cssClassed.tableViewStatusClass);
+
+                    //addInstanceaddInstanceToDOMToDOMaddInstanceToDOM(instanceData);
                 }
             });
 
