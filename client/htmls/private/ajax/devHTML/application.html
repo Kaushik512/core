@@ -1512,6 +1512,14 @@ function getTasks(){
 
 // on click of Upgrade button
 $('.saveUpgradeAppDeploy').on('click',function(){
+    upgradeOrDeploy();
+});
+
+$('.saveNewAppDeploy').on('click',function(){
+    upgradeOrDeploy();
+});
+
+function upgradeOrDeploy(){
     var nexusId = $('#chooseNexusServer').find('option:selected').val();
     if(!nexusId){
         alert("Please select repository server.");
@@ -1556,10 +1564,33 @@ $('.saveUpgradeAppDeploy').on('click',function(){
     if(containerId && containerId != "NA"){
         nexusData.nexusData.containerId = containerId;
     }
+
+    $.get('/d4dMasters/readmasterjsonnew/4',function(err,projData){
+        if(projData.length){
+            for(var i=0; i< projData.length; i++){
+                if(projData[i].rowid === projectId){
+                    var reqBody = {
+                        "appName": repoId,
+                        "description": repoId+" deployed."
+                        };
+                    $.ajax({
+                        url: '/d4dMasters/project/'+projectId+'/appName/update',
+                        data: JSON.stringify(reqBody),
+                        type: 'POST',
+                        contentType: "application/json",
+                        success: function(data) { 
+                        },
+                        error: function(jqxhr) {
+                        }
+                    });
+                }
+            }
+        }
+    });
         //alert(JSON.stringify(nexusData));
         $('a[data-executetaskid='+taskId+']').trigger('click',nexusData);
         $('#modalUpgradeAppDeploy').modal('hide');
-});
+}
 
 function saveRecord() {
     var dataDeploy = {
