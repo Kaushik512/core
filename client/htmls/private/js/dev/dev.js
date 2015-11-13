@@ -4344,15 +4344,63 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                     $tdExecute.find('a').data('taskId', data[i]._id).attr('data-executeTaskId', data[i]._id).click(function(e,nexusData) {
                         var taskId = $(this).data('taskId');
 
-                      //  alert(JSON.stringify(e.data));
-                        console.log("e == >",nexusData)
-
                         if (data[i].taskType === 'jenkins' || data[i].taskType === 'chef' || data[i].taskType === 'puppet' || data[i].taskType === 'composite') {
                             //checking for parameterized condition..
                             if (data[i].taskConfig.parameterized) {
 
                                 var $modalForSelect = $('#modalForSelect');
                                 var $tableBody = $('#paramTableList').empty();
+                                $('#executeJob').unbind('submit').bind('submit',function(e) {
+
+                                    $modalForSelect.modal('hide');
+                                    console.log('firing');
+                                    executeJob();
+                                    return false;
+                                });
+                                function executeJob() {
+                                    var $selects = $modalForSelect.find('.modal-body select');
+                                    //alert($select);
+                                    var reqBody = {};
+
+                                    for (var q = 0; q < $selects.length; q++) {
+                                        var select = $selects[q];
+                                        var $select = $(select);
+                                        var name = $select.attr('key');
+                                        var value = $select.val();
+                                        reqBody[name] = value;
+                                    }
+
+                                    var $taskExecuteTabsHeaderContainer = $('#taskExecuteTabsHeader').empty();
+                                    var $taskExecuteTabsContent = $('#taskExecuteTabsContent').empty();
+                                    var $modal = $('#assignedExecute');
+                                    $modal.find('.loadingContainer').show();
+                                    $modal.find('.errorMsgContainer').hide();
+                                    $modal.find('.outputArea').hide();
+                                    $modal.modal('show');
+                                    var timestampToPoll = new Date().getTime();
+
+                                    $.post('../tasks/' + taskId + '/run', {
+                                        choiceParam: reqBody
+                                    }, function(data) {
+                                        // alert(reqBody);
+
+                                        var date = new Date().setTime(data.timestamp);
+                                        var taskTimestamp = new Date(date).toLocaleString(); //converts to human readable strings
+                                        $('tr[data-taskId="' + taskId + '"] .taskrunTimestamp').html(taskTimestamp);
+
+                                        showTaskLogs(taskId, data.historyId, true);
+
+                                    }).fail(function(jxhr) {
+                                        $modal.find('.loadingContainer').hide();
+                                        $modal.find('.outputArea').hide();
+                                        var $errorContainer = $modal.find('.errorMsgContainer').show();
+                                        if (jxhr.responseJSON && jxhr.responseJSON.message) {
+                                            $errorContainer.html(jxhr.responseJSON.message);
+                                        } else {
+                                            $errorContainer.html("Server Behaved Unexpectedly");
+                                        }
+                                    });
+                                } //function ends here..
                                 for (var a = 0; a < data[i].taskConfig.parameterized.length; a++) {
                                     if (data[i].taskConfig.parameterized[a].parameterName === "Choice" || data[i].taskConfig.parameterized[a].parameterName === "String" || data[i].taskConfig.parameterized[a].parameterName === "Boolean") {
                                         // alert(data[i].taskConfig.parameterized.length);
@@ -4391,113 +4439,15 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
 
                                             } //for loop for default value ends here..
 
-                                            $('#executeJob').submit(function(e) {
-
-                                                $modalForSelect.modal('hide');
-                                                executeJob();
-                                                return false;
-                                            });
+                                            
                                         } //if ends here for default value..
 
-                                        function executeJob() {
-                                            var $selects = $modalForSelect.find('.modal-body select');
-                                            //alert($select);
-                                            var reqBody = {};
-
-                                            for (var q = 0; q < $selects.length; q++) {
-                                                var select = $selects[q];
-                                                var $select = $(select);
-                                                var name = $select.attr('key');
-                                                var value = $select.val();
-                                                reqBody[name] = value;
-                                            }
-
-                                            var $taskExecuteTabsHeaderContainer = $('#taskExecuteTabsHeader').empty();
-                                            var $taskExecuteTabsContent = $('#taskExecuteTabsContent').empty();
-                                            var $modal = $('#assignedExecute');
-                                            $modal.find('.loadingContainer').show();
-                                            $modal.find('.errorMsgContainer').hide();
-                                            $modal.find('.outputArea').hide();
-                                            $modal.modal('show');
-                                            var timestampToPoll = new Date().getTime();
-
-                                            $.post('../tasks/' + taskId + '/run', {
-                                                choiceParam: reqBody
-                                            }, function(data) {
-                                                // alert(reqBody);
-
-                                                var date = new Date().setTime(data.timestamp);
-                                                var taskTimestamp = new Date(date).toLocaleString(); //converts to human readable strings
-                                                $('tr[data-taskId="' + taskId + '"] .taskrunTimestamp').html(taskTimestamp);
-
-                                                showTaskLogs(taskId, data.historyId, true);
-
-                                            }).fail(function(jxhr) {
-                                                $modal.find('.loadingContainer').hide();
-                                                $modal.find('.outputArea').hide();
-                                                var $errorContainer = $modal.find('.errorMsgContainer').show();
-                                                if (jxhr.responseJSON && jxhr.responseJSON.message) {
-                                                    $errorContainer.html(jxhr.responseJSON.message);
-                                                } else {
-                                                    $errorContainer.html("Server Behaved Unexpectedly");
-                                                }
-                                            });
-                                        } //function ends here..
+                                        
                                     } //if loop for choice ends here..
-                                    /*else {
+                                    
 
 
-                          //condition for boolean and string..
-                          //if (data[i].taskConfig.parameterized.length >= 1) {
-                              //  alert(data[i].taskConfig.parameterized.length);
-                              bootbox.confirm({
-                                  message: "Are you sure you want to execute this Job?",
-                                  title: "Confirmation",
-
-                                  callback: function(result) {
-                                      if (result) {
-                                          var $taskExecuteTabsHeaderContainer = $('#taskExecuteTabsHeader').empty();
-                                          var $taskExecuteTabsContent = $('#taskExecuteTabsContent').empty();
-                                          var $modal = $('#assignedExecute');
-                                          $modal.find('.loadingContainer').show();
-                                          $modal.find('.errorMsgContainer').hide();
-                                          $modal.find('.outputArea').hide();
-                                          $modal.modal('show');
-                                          var timestampToPoll = new Date().getTime();
-                                          $.post('../tasks/' + taskId + '/run', {}, function(data) {
-                                              //  alert(JSON.stringify(data));
-                                              var date = new Date().setTime(data.timestamp);
-                                              var taskTimestamp = new Date(date).toLocaleString(); //converts to human readable strings
-                                              $('tr[data-taskId="' + taskId + '"] .taskrunTimestamp').html(taskTimestamp);
-
-                                              var $outputArea = $modal.find('.outputArea');
-
-                                              $outputArea.data('taskType', data.taskType);
-                                              $outputArea.data('instances', data.instances);
-                                              $outputArea.data('jenkinsServerId', data.jenkinsServerId);
-                                              $outputArea.data('jobName', data.jobName);
-                                              $outputArea.data('lastBuildNumber', data.lastBuildNumber);
-                                              $outputArea.data('currentBuildNumber', data.currentBuildNumber);
-                                              $outputArea.data('timestampStarted', data.timestamp);
-                                              showTaskLogs();
-
-                                          }).fail(function(jxhr) {
-                                              $modal.find('.loadingContainer').hide();
-                                              $modal.find('.outputArea').hide();
-                                              var $errorContainer = $modal.find('.errorMsgContainer').show();
-                                              if (jxhr.responseJSON && jxhr.responseJSON.message) {
-                                                  $errorContainer.html(jxhr.responseJSON.message);
-                                              } else {
-                                                  $errorContainer.html("Server Behaved Unexpectedly");
-                                              }
-                                          });
-
-                                      } //result ends here..
-                                  }
-                              });
-                      //    }
-                          break;
-                      }*/
+                        
                                 } //for ends here..
                                 //new else starts here..
                             } else {

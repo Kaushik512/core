@@ -1000,7 +1000,7 @@ $(document).ready(function() {
         });
         var $tdType = $('<td class="paramType"></td>');
         var $tdName = $('<td class="paramName"></td>');
-        var $tdValue = $('<td title="' + parameterizedObj.defaultValue + '" class="paramValue"></td>');
+        var $tdValue = $('<td title="' + parameterizedObj.defaultValue + '"></td>');
         var $tdDescription = $('<td title="' + parameterizedObj.description + '" class="paramDescription"></td>');
         var $tdAction = $('<td/>');
         $tdAction.append('<div style="margin-right:17px;float:right;" class="btn-group"><button class="deleteRow" value="Remove" title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></div>');
@@ -1010,7 +1010,7 @@ $(document).ready(function() {
         });
         $tdType.append(parameterizedObj.parameterName);
         $tdName.append(parameterizedObj.name);
-        $tdValue.append('<span>' + parameterizedObj.defaultValue + '</span>');
+        $tdValue.append('<span class="paramValue">' + parameterizedObj.defaultValue + '</span>');
         $tdDescription.append(parameterizedObj.description);
         // alert(parameterizedObj.name);
         $tr.append($tdName).append($tdType).append($tdValue).append($tdDescription).append($tdAction);
