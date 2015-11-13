@@ -521,7 +521,7 @@
                                                 <input id="repositoryUrl" type="text" class="form-control" name="" disabled>
                                             </div>
 
-                                            <div class="col-lg-12 col-md-12 margintop15 containerClass containerNewDeploy">
+                                            <!-- <div class="col-lg-12 col-md-12 margintop15 containerClass containerNewDeploy">
                                                 <label>Container ID:
                                                     <span>
                                                         <img class="containerIdspinner" src="img/select2-spinner.gif" style="display:none">
@@ -529,17 +529,17 @@
                                                     </span>
                                                 </label>
                                                 <input id="containerIdNewDeploy" type="text" class="form-control" name="">
-                                            </div>
+                                            </div> -->
 
 
                                             <div class="col-lg-12 col-md-12 margintop15 containerClass containerUpgradeDeploy">
-                                                <label>Container ID:<span style="color:red">*</span>
+                                                <label>Container ID:<!-- <span style="color:red">*</span> -->
                                                     <span>
                                                         <img class="containerIdspinner" src="img/select2-spinner.gif" style="display:none">
                                                         </img>
                                                     </span>
                                                 </label>
-                                                <input id="containerIdDiv" type="text" class="form-control" name="" disabled>
+                                                <input id="containerIdDiv" type="text" class="form-control" name="">
                                             </div>
 
 
@@ -706,6 +706,9 @@ $(document).ready(function() {
         $('#formUpgradeAppDeploy')[0].reset();
         $('.containerClass').hide();
         resetSpinners();
+        $('#containerIdDiv').removeAttr('disabled');
+        var $containerIdName = $('#containerIdInput').val('');
+        //alert($('#containerIdInput').val())
         //$('#chooseRepository').empty();
         if ($('#chooseNexusServer :selected').text() == 'Choose Server') {
             $('.createTaskLinkUpgrade').attr('disabled', 'disabled');
@@ -716,8 +719,8 @@ $(document).ready(function() {
         $('.modaltitleforNewDeploy').show();
         $('.saveUpgradeAppDeploy').hide();
         $('.saveNewAppDeploy').show();
-        $('.containerUpgradeDeploy').hide();
-        $('.containerNewDeploy').show();
+        $('.containerUpgradeDeploy').show();
+        //$('.containerNewDeploy').show();
     
         getNexusServer();
         var $modal = $('#modalUpgradeAppDeploy');
@@ -1277,7 +1280,7 @@ function moreInfoUpgradeAppDeployPipelineClickHandler(e) {
     $('.modaltitleforupgradeDeploy').show();
     $('.saveNewAppDeploy').hide();
     $('.saveUpgradeAppDeploy').show();
-    $('.containerNewDeploy').hide();
+    //$('.containerNewDeploy').hide();
     //$('.containerUpgradeDeploy').show();
     
     if($('#chooseNexusServer :selected').text() == 'Choose Server'){
@@ -1398,11 +1401,17 @@ $chooseRepository.change(function(e){
         $('#chooseVersions').append('<option value="">Choose Versions</option>');
         $('#repositoryUrl').val($(this).find('option:selected').attr('data-repoUrl'));
         var containerIdName = $('#containerIdInput').val();
-        if(containerIdName == 'NA'){
-         $('.containerClass').hide();   
+        //alert("containerIdName"+containerIdName);
+        if(containerIdName == 'NA' || containerIdName == ''){
+         $('.containerClass').hide();  
+         //$('.containerNewDeploy').show(); 
+         $('.containerUpgradeDeploy').show();
+
         }else{
             $('.containerClass').show();
             $('.containerUpgradeDeploy').show();
+            //$('.containerNewDeploy').hide();
+            $('#containerIdDiv').attr('disabled','disabled');
             $('#containerIdDiv').val($('#containerIdInput').val());
         }
         var repoName = $(this).find('option:selected').attr('data-repoName');
@@ -1516,6 +1525,7 @@ $('.saveUpgradeAppDeploy').on('click',function(){
 });
 
 $('.saveNewAppDeploy').on('click',function(){
+    $('#containerIdInput').val($('#containerIdDiv').val());
     upgradeOrDeploy();
 });
 
@@ -1553,6 +1563,7 @@ function upgradeOrDeploy(){
     var nexusUrl = $('#chooseNexusServer').find('option:selected').attr('data-nexusUrl');
     var nexusRepoUrl = nexusUrl+"/service/local/repositories/"+repoId+"/content/"+groupId+"/"+artifactId+"/"+versionId+"/"+artifactId+"-"+versionId+".zip";
     var containerId = $('#containerIdInput').val();
+    //alert(containerId);
     var nexusData={
         "nexusData":{
             "nexusUrl": nexusRepoUrl,
@@ -1565,24 +1576,28 @@ function upgradeOrDeploy(){
         nexusData.nexusData.containerId = containerId;
     }
 
-    $.get('/d4dMasters/readmasterjsonnew/4',function(err,projData){
+    $.get('/d4dMasters/readmasterjsonnew/4', function(projData) {
+        //alert(projData);
         if(projData.length){
             for(var i=0; i< projData.length; i++){
                 if(projData[i].rowid === projectId){
-                    var reqBody = {
-                        "appName": repoId,
-                        "description": repoId+" deployed."
-                        };
-                    $.ajax({
-                        url: '/d4dMasters/project/'+projectId+'/appName/update',
-                        data: JSON.stringify(reqBody),
-                        type: 'POST',
-                        contentType: "application/json",
-                        success: function(data) { 
-                        },
-                        error: function(jqxhr) {
-                        }
-                    });
+                    //alert(projData[i].appdeploy.length);
+                    if(projData[i].appdeploy.length === 0){
+                        var reqBody = {
+                            "appName": repoId,
+                            "description": repoId+" deployed."
+                            };
+                        $.ajax({
+                            url: '/d4dMasters/project/'+projectId+'/appName/update',
+                            data: JSON.stringify(reqBody),
+                            type: 'POST',
+                            contentType: "application/json",
+                            success: function(data) { 
+                            },
+                            error: function(jqxhr) {
+                            }
+                        });
+                    }
                 }
             }
         }
@@ -1590,6 +1605,7 @@ function upgradeOrDeploy(){
         //alert(JSON.stringify(nexusData));
         $('a[data-executetaskid='+taskId+']').trigger('click',nexusData);
         $('#modalUpgradeAppDeploy').modal('hide');
+        var $containerIdName = $('#containerIdInput').val('');
 }
 
 function saveRecord() {
@@ -1822,7 +1838,7 @@ function constructUI(data) {
             $('.modaltitleforupgradeDeploy').show();
             $('.saveNewAppDeploy').hide();
             $('.saveUpgradeAppDeploy').show();
-            $('.containerNewDeploy').hide();
+            //$('.containerNewDeploy').hide();
             //$('.containerUpgradeDeploy').show();
             //$('#chooseRepository').empty();
             if ($('#chooseNexusServer :selected').text() == 'Choose Server') {
