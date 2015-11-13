@@ -1715,25 +1715,35 @@ function getImagesWithOSFilter() {
             });*/
 
             $.get('/azure/locations', function(data) {
-                console.log("locations:",data);
+                console.log("locations response:",data);
+                data = JSON.parse(data);
+                
                 if (data) {
+                    
+                    var temp = data.Locations.Location;
+                    console.log("locations:", temp.length);
+                    
                     var str = ' <option value="">Select Location</option>';
-                    var data = JSON.parse(JSON.stringify(data));
+                    //var data = JSON.parse(JSON.stringify(temp));
 
-                    for (var i = 0; i < data.length; i++) {
+                    for (var i = 0; i < temp.length; i++) {
                         
-                        var flavorsByLocation = data[i].computeCapabilities.virtualMachinesRoleSizes;
+                        var flavorsByLocation = temp[i].ComputeCapabilities.VirtualMachinesRoleSizes.RoleSize;
                         var flavorsList = [];
 
                         for(var j=0; j<flavorsByLocation.length; j++){
                             flavorsList.push(flavorsByLocation[j]);
                         }
 
-                        str += '<option value="' + data[i].name + '"  flavors='+flavorsList.join()+'>' + data[i].name + '</option>';
+                        //str += '<option value="' + data[i].name + '"  flavors='+flavorsList.join()+'>' + data[i].name + '</option>';*/
+                        
+                        console.log(temp[i].Name);
+
+                        str += '<option value="' + temp[i].Name + '" flavors='+flavorsList.join() + '>' + temp[i].Name + '</option>';
                     }
 
                     $('#location').html(str);
-                    $('#location').select2().trigger('change');
+                    //$('#location').select2().trigger('change');
 
                     $('#location').on('change', function() {
                                    //var $vpcSpinner = $('#vpcSpinner').addClass('hidden');
@@ -1741,27 +1751,40 @@ function getImagesWithOSFilter() {
                                    var selectedLocation = $(this).val();
 
                                     $.get('/azure/networks', function(data) {
-                                        console.log("networks:",data);
+                                        console.log("networks response:",data);
+                                        data = JSON.parse(data);
+
 
                                         if (data) {
+
+                                            var networks = data.VirtualNetworkSites.VirtualNetworkSite;
+                                            console.log("networks:", networks);
+                                            
                                             var str = ' <option value="">Select VPC</option>';
-                                            var data = JSON.parse(JSON.stringify(data));
+                                            //var data = JSON.parse(JSON.stringify(data));
 
                                             var isNetwroksExists = false;
 
-                                            for (var i = 0; i < data.length; i++) {
-                                              if(selectedLocation == data[i].location){
+                                            for (var i = 0; i < networks.length; i++) {
+                                              if(selectedLocation == networks[i].Location){
 
                                                  var subnets = [];
+                                                 var temp = networks[i].Subnets.Subnet;
 
-                                                 for(var j=0; j<data[i].subnets.length;j++){
-                                                    subnets.push(data[i].subnets[j].name);
+                                                 if(temp.length){
+                                                     for(var j=0; j<temp.length;j++){
+                                                        subnets.push(temp[j].Name);
+                                                     }
+                                                 }else{
+                                                    subnets.push(temp.Name);
                                                  }
 
-                                                 str += '<option value="' + data[i].name + '" subnets="' + subnets.join() + '">' + data[i].name + '</option>';
+                                                 str += '<option value="' + networks[i].Name + '" subnets="' + subnets.join() + '">' + networks[i].Name + '</option>';
+
                                                  isNetwroksExists = true;
                                                 }
                                             }
+
                                             if(!isNetwroksExists){
                                                 str = '<option value="">No Networks exists in this location</option>';
                                             }
@@ -1789,6 +1812,8 @@ function getImagesWithOSFilter() {
                                     });
                                     
                                     $('#spinnerSize').removeClass('hidden');
+
+                                    console.log("flavors:",$(this).find(':selected').attr('flavors'));
 
                                     var flavors = $(this).find(':selected').attr('flavors').split(',');
                                     var sizeOption = ' <option value="">Choose Instanace Size</option>';

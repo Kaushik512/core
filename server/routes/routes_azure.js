@@ -1,6 +1,6 @@
 var AzureCloud = require('_pr/lib/azure');
 var logger = require('_pr/logger')(module);
-
+var xml2json = require('xml2json');
 //var hppubliccloudProvider = require('_pr/model/classes/masters/cloudprovider/hppublicCloudProvider.js');
 //var openstackProvider = require('_pr/model/classes/masters/cloudprovider/openstackCloudProvider.js');
 
@@ -20,7 +20,8 @@ module.exports.setRoutes = function(app, verificationFunc) {
                 res.send(500, err);
                 return;
             }
-            res.send(networks);
+            var json = xml2json.toJson(networks);
+            res.send(json);
             logger.debug('Exit azure get networks:' + JSON.stringify(networks));
         });
     });
@@ -37,7 +38,8 @@ module.exports.setRoutes = function(app, verificationFunc) {
                 res.send(500, err);
                 return;
             }
-            res.send(locations);
+            var json = xml2json.toJson(locations);
+            res.send(json);
             logger.debug('Exit azure get locations:' + JSON.stringify(locations));
         });
     });

@@ -1988,7 +1988,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                         }
                                                         logger.debug('Credentials encrypted..');
                                                         logger.debug('OS Launched');
-                                                        logger.debug(JSON.stringify(instanceData));
+                                                        //logger.debug("instanceData::: ",JSON.stringify(instanceData));
                                                         //Creating instance in catalyst
 
                                                         var instance = {
