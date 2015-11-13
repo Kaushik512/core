@@ -12,6 +12,7 @@ function getDefaultsConfig() {
             express_sid_key: 'express.sid',
             sessionSecret: 'sessionSekret'
         },
+        catalystAuthHeaderName: 'x-catalyst-auth',
         app_run_port: 3001,
         //userHomeDir: currentDirectory + '/catdata',
         catalystDataDir: currentDirectory + '/catdata',
@@ -134,8 +135,8 @@ function getDefaultsConfig() {
                 osType: "linux"
             }]
         },
-        vmware:{
-            serviceHost:"http://localhost:3000"
+        vmware: {
+            serviceHost: "http://localhost:3000"
         },
         db: {
             dbName: 'devops_new',
@@ -256,7 +257,7 @@ function parseArguments() {
 
 
 function getConfig(config, options) {
-    //parsing arguments	
+    //parsing arguments 
 
     if (options['catalyst-port']) {
         var catalystPort = parseInt(options['catalyst-port']);
@@ -271,7 +272,7 @@ function getConfig(config, options) {
     config.db.dbName = options['db-name'] ? options['db-name'] : config.db.dbName;
     config.ldap.host = options['ldap-host'] ? options['ldap-host'] : config.ldap.host;
     config.ldap.port = options['ldap-port'] ? options['ldap-port'] : config.ldap.port;
-    
+
     if (options['max-instance-count']) {
         var maxInstanceCount = parseInt(options['max-instance-count']);
         if (maxInstanceCount) {
