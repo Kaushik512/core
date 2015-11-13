@@ -519,53 +519,53 @@ Verify the Active Instances of Usage Summary
 Verfiy the page contains Summary of Virginia
     Page Should Contain    Summary of Virginia
     Selects the frame
-    ${Virginia1}=    Get Text    xpath=.//*[@id='container']/div/ul/li[4]/div/ul/li[1]/span[1]
+    ${Virginia1}=    Wait Until Keyword Succeeds    1 minutes    1 seconds     Get Text    xpath=.//*[@id='container']/div/ul/li[4]/div/ul/li[1]/span[1]
     Log     ${Virginia1}
-    ${Virginia2}=    Get Text    xpath=.//*[@id='container']/div/ul/li[4]/div/ul/li[2]/span[1]
+    ${Virginia2}=    Wait Until Keyword Succeeds    1 minutes    1 seconds     Get Text    xpath=.//*[@id='container']/div/ul/li[4]/div/ul/li[2]/span[1]
     Log     ${Virginia2}
-    ${Virginia3}=    Get Text    xpath=.//*[@id='container']/div/ul/li[4]/div/ul/li[3]/span[1]
+    ${Virginia3}=    Wait Until Keyword Succeeds    1 minutes    1 seconds     Get Text    xpath=.//*[@id='container']/div/ul/li[4]/div/ul/li[3]/span[1]
     Log     ${Virginia3}
-    ${Virginia4}=    Get Text    xpath=.//*[@id='container']/div/ul/li[4]/div/ul/li[4]/span[1]
+    ${Virginia4}=    Wait Until Keyword Succeeds    1 minutes    1 seconds     Get Text    xpath=.//*[@id='container']/div/ul/li[4]/div/ul/li[4]/span[1]
     Log     ${Virginia4}
-    ${Virginia5}=    Get Text    xpath=.//*[@id='container']/div/ul/li[4]/div/ul/li[5]/span[1]
+    ${Virginia5}=    Wait Until Keyword Succeeds    1 minutes    1 seconds     Get Text    xpath=.//*[@id='container']/div/ul/li[4]/div/ul/li[5]/span[1]
     Log     ${Virginia5}
 
 
-    ${Act Virginia1}=    Get Text    xpath=.//*[@id='container']/div/ul/li[4]/div/ul/li[1]/span[2]
+    ${Act Virginia1}=    Wait Until Keyword Succeeds    1 minutes    1 seconds     Get Text    xpath=.//*[@id='container']/div/ul/li[4]/div/ul/li[1]/span[2]
     Log    ${Act Virginia1}
-    ${Run Vim1}=    Get Length    ${Act Virginia1}
+    ${Run Vim1}=    Wait Until Keyword Succeeds    1 minutes    1 seconds     Get Length    ${Act Virginia1}
     Run Keyword If    '${Run Vim1}' == '${VALUE}'
     ...    Fail    Dashboard has no Active Instance Summary Data
     ...    ELSE
     ...    Log     Dashboard has Active Instance Summary Data
     
-    ${Act Virginia2}=    Get Text    xpath=.//*[@id='container']/div/ul/li[4]/div/ul/li[2]/span[2]
+    ${Act Virginia2}=    Wait Until Keyword Succeeds    1 minutes    1 seconds     Get Text    xpath=.//*[@id='container']/div/ul/li[4]/div/ul/li[2]/span[2]
     Log    ${Act Virginia2}
-    ${Run Vim2}=    Get Length    ${Act Virginia2}
+    ${Run Vim2}=    Wait Until Keyword Succeeds    1 minutes    1 seconds     Get Length    ${Act Virginia2}
     Run Keyword If    '${Run Vim2}' == '${VALUE}'
     ...    Fail    Dashboard has no utilized Instance Summary Data
     ...    ELSE
     ...    Log     Dashboard has utilized Instance Summary Data
 
-    ${Act Virginia3}=    Get Text    xpath=.//*[@id='container']/div/ul/li[4]/div/ul/li[3]/span[2]
+    ${Act Virginia3}=    Wait Until Keyword Succeeds    1 minutes    1 seconds     Get Text    xpath=.//*[@id='container']/div/ul/li[4]/div/ul/li[3]/span[2]
     Log    ${Act Virginia3}
-    ${Run Vim3}=    Get Length    ${Act Virginia3}
+    ${Run Vim3}=    Wait Until Keyword Succeeds    1 minutes    1 seconds     Get Length    ${Act Virginia3}
     Run Keyword If    '${Run Vim3}' == '${VALUE}'
     ...    Fail    Dashboard has no avg cpu usage Data
     ...    ELSE
     ...    Log     Dashboard has avg cpu usage Data
 
-    ${Act Virginia4}=    Get Text    xpath=.//*[@id='container']/div/ul/li[4]/div/ul/li[4]/span[2]
+    ${Act Virginia4}=    Wait Until Keyword Succeeds    1 minutes    1 seconds     Get Text    xpath=.//*[@id='container']/div/ul/li[4]/div/ul/li[4]/span[2]
     Log    ${Act Virginia4}
-    ${Run Vim4}=    Get Length    ${Act Virginia4}
+    ${Run Vim4}=    Wait Until Keyword Succeeds    1 minutes    1 seconds     Get Length    ${Act Virginia4}
     Run Keyword If    '${Run Vim4}' == '${VALUE}'
     ...    Fail    Dashboard has no network IO Data
     ...    ELSE
     ...    Log     Dashboard has network IO Data
     
-    ${Act Virginia5}=    Get Text    xpath=.//*[@id='container']/div/ul/li[4]/div/ul/li[5]/span[2]
+    ${Act Virginia5}=    Wait Until Keyword Succeeds    1 minutes    1 seconds     Get Text    xpath=.//*[@id='container']/div/ul/li[4]/div/ul/li[5]/span[2]
     Log    ${Act Virginia5}
-    ${Run Vim5}=    Get Length    ${Act Virginia5}
+    ${Run Vim5}=    Wait Until Keyword Succeeds    1 minutes    1 seconds     Get Length    ${Act Virginia5}
     Run Keyword If    '${Run Vim5}' == '${VALUE}'
     ...    Fail    Dashboard has no network IO Data
     ...    ELSE
@@ -576,58 +576,63 @@ Verfiy the page contains Summary of Oregon
     Page Should Contain    Summary of Oregon
     Selects the frame
     Sleep    2s
-    ${Oregon1}=    Get Text    xpath=.//*[@id='container']/div/ul/li[5]/div/ul/li[1]/span[1]
+    Focus    xpath=.//*[@id='container']/div/ul/li[5]/div/ul/li[1]/span[1]
+    ${Oregon1}=    Wait Until Keyword Succeeds    1 minutes    1 seconds     Get Text    xpath=.//*[@id='container']/div/ul/li[5]/div/ul/li[1]/span[1]
     Log     ${Oregon1}
     Sleep    2s
-    ${Oregon2}=    Get Text    xpath=.//*[@id='container']/div/ul/li[5]/div/ul/li[2]/span[1]
+    Focus    xpath=.//*[@id='container']/div/ul/li[5]/div/ul/li[2]/span[1]
+    ${Oregon2}=    Wait Until Keyword Succeeds    1 minutes    1 seconds     Get Text    xpath=.//*[@id='container']/div/ul/li[5]/div/ul/li[2]/span[1]
     Log     ${Oregon2}
     Sleep    2s
-    ${Oregon3}=    Get Text    xpath=.//*[@id='container']/div/ul/li[5]/div/ul/li[3]/span[1]
+    Focus    xpath=.//*[@id='container']/div/ul/li[5]/div/ul/li[3]/span[1]
+    ${Oregon3}=    Wait Until Keyword Succeeds    1 minutes    1 seconds     Get Text    xpath=.//*[@id='container']/div/ul/li[5]/div/ul/li[3]/span[1]
     Log     ${Oregon3}
     Sleep    2s
-    ${Oregon4}=    Get Text    xpath=.//*[@id='container']/div/ul/li[5]/div/ul/li[4]/span[1]
+    Focus    xpath=.//*[@id='container']/div/ul/li[5]/div/ul/li[4]/span[1]
+    ${Oregon4}=    Wait Until Keyword Succeeds    1 minutes    1 seconds     Get Text    xpath=.//*[@id='container']/div/ul/li[5]/div/ul/li[4]/span[1]
     Log     ${Oregon4}
     Sleep    2s
-    ${Oregon5}=    Get Text    xpath=.//*[@id='container']/div/ul/li[5]/div/ul/li[5]/span[1]
-    Log     ${Oregon5}
+    Focus    xpath=.//*[@id='container']/div/ul/li[5]/div/ul/li[5]/span[1]
+    ${Oregon5}=    Wait Until Keyword Succeeds    1 minutes    1 seconds     Get Text    xpath=.//*[@id='container']/div/ul/li[5]/div/ul/li[5]/span[1]
+    Log     ${Oregon5}  
     Sleep    2s
 
-    ${Act Oregon1}=    Get Text    xpath=.//*[@id='container']/div/ul/li[5]/div/ul/li[1]/span[2]
+    ${Act Oregon1}=    Wait Until Keyword Succeeds    1 minutes    1 seconds     Get Text    xpath=.//*[@id='container']/div/ul/li[5]/div/ul/li[1]/span[2]
     Log    ${Act Oregon1}
-    ${Run Ore1}=    Get Length    ${Act Oregon1}
+    ${Run Ore1}=    Wait Until Keyword Succeeds    1 minutes    1 seconds     Get Length    ${Act Oregon1}
     Run Keyword If    '${Run Ore1}' == '${VALUE}'
     ...    Fail    Dashboard has no Active Instances Oregon Data
     ...    ELSE
     ...    Log     Dashboard has Active Instance Oregon Data
 
-    ${Act Oregon2}=    Get Text    xpath=.//*[@id='container']/div/ul/li[5]/div/ul/li[2]/span[2]
+    ${Act Oregon2}=    Wait Until Keyword Succeeds    1 minutes    1 seconds     Get Text    xpath=.//*[@id='container']/div/ul/li[5]/div/ul/li[2]/span[2]
     Log    ${Act Oregon2}
-    ${Run Ore2}=    Get Length    ${Act Oregon2}
+    ${Run Ore2}=    Wait Until Keyword Succeeds    1 minutes    1 seconds     Get Length    ${Act Oregon2}
     Run Keyword If    '${Run Ore2}' == '${VALUE}'
     ...    Fail    Dashboard has no under utilized Instances Oregon Data
     ...    ELSE
     ...    Log     Dashboard has utilized Instances Oregon Data
 
 
-    ${Act Oregon3}=    Get Text    xpath=.//*[@id='container']/div/ul/li[5]/div/ul/li[3]/span[2]
+    ${Act Oregon3}=    Wait Until Keyword Succeeds    1 minutes    1 seconds     Get Text    xpath=.//*[@id='container']/div/ul/li[5]/div/ul/li[3]/span[2]
     Log    ${Act Oregon3}
-    ${Run Ore3}=    Get Length    ${Act Oregon3}
+    ${Run Ore3}=    Wait Until Keyword Succeeds    1 minutes    1 seconds     Get Length    ${Act Oregon3}
     Run Keyword If    '${Run Ore3}' == '${VALUE}'
     ...    Fail    Dashboard has no CPU Usage Oregon Data
     ...    ELSE
     ...    Log     Dashboard has CPU Usage Oregon Data
 
-    ${Act Oregon4}=    Get Text    xpath=.//*[@id='container']/div/ul/li[5]/div/ul/li[4]/span[2]
+    ${Act Oregon4}=    Wait Until Keyword Succeeds    1 minutes    1 seconds     Get Text    xpath=.//*[@id='container']/div/ul/li[5]/div/ul/li[4]/span[2]
     Log    ${Act Oregon4}
-    ${Run Ore4}=    Get Length    ${Act Oregon4}
+    ${Run Ore4}=    Wait Until Keyword Succeeds    1 minutes    1 seconds     Get Length    ${Act Oregon4}
     Run Keyword If    '${Run Ore4}' == '${VALUE}'
     ...    Fail    Dashboard has no Network IO Oregon Data
     ...    ELSE
     ...    Log     Dashboard has Network IO Oregon Data
 
-   ${Act Oregon5}=    Get Text    xpath=.//*[@id='container']/div/ul/li[5]/div/ul/li[5]/span[2]
+   ${Act Oregon5}=    Wait Until Keyword Succeeds    1 minutes    1 seconds     Get Text    xpath=.//*[@id='container']/div/ul/li[5]/div/ul/li[5]/span[2]
     Log    ${Act Oregon5}
-    ${Run Ore5}=    Get Length    ${Act Oregon5}
+    ${Run Ore5}=    Wait Until Keyword Succeeds    1 minutes    1 seconds     Get Length    ${Act Oregon5}
     Run Keyword If    '${Run Ore5}' == '${VALUE}'
     ...    Fail    Dashboard has no Disk IO Oregon Data
     ...    ELSE
@@ -637,53 +642,53 @@ Verfiy the page contains Summary of Oregon
 Verfiy the page contains Summary of California
     Page Should Contain    Summary of California
     Selects the frame
-    ${Oregon1}=    Get Text    xpath=.//*[@id='container']/div/ul/li[6]/div/ul/li[1]/span[1]
+    ${Oregon1}=    Wait Until Keyword Succeeds    1 minutes    1 seconds     Get Text    xpath=.//*[@id='container']/div/ul/li[6]/div/ul/li[1]/span[1]
     Log     ${Oregon1}
-    ${Oregon2}=    Get Text    xpath=.//*[@id='container']/div/ul/li[6]/div/ul/li[2]/span[1]
+    ${Oregon2}=    Wait Until Keyword Succeeds    1 minutes    1 seconds     Get Text    xpath=.//*[@id='container']/div/ul/li[6]/div/ul/li[2]/span[1]
     Log     ${Oregon2}
-    ${Oregon3}=    Get Text    xpath=.//*[@id='container']/div/ul/li[6]/div/ul/li[3]/span[1]
+    ${Oregon3}=    Wait Until Keyword Succeeds    1 minutes    1 seconds     Get Text    xpath=.//*[@id='container']/div/ul/li[6]/div/ul/li[3]/span[1]
     Log     ${Oregon3}
-    ${Oregon4}=    Get Text    xpath=.//*[@id='container']/div/ul/li[6]/div/ul/li[4]/span[1]
+    ${Oregon4}=    Wait Until Keyword Succeeds    1 minutes    1 seconds     Get Text    xpath=.//*[@id='container']/div/ul/li[6]/div/ul/li[4]/span[1]
     Log     ${Oregon4}
-    ${Oregon5}=    Get Text    xpath=.//*[@id='container']/div/ul/li[6]/div/ul/li[5]/span[1]
+    ${Oregon5}=    Wait Until Keyword Succeeds    1 minutes    1 seconds     Get Text    xpath=.//*[@id='container']/div/ul/li[6]/div/ul/li[5]/span[1]
     Log     ${Oregon5}
 
-    ${Act california1}=    Get Text    xpath=.//*[@id='container']/div/ul/li[6]/div/ul/li[1]/span[2]
+    ${Act california1}=    Wait Until Keyword Succeeds    1 minutes    1 seconds     Get Text    xpath=.//*[@id='container']/div/ul/li[6]/div/ul/li[1]/span[2]
     Log    ${Act california1}
-    ${Run cal1}=    Get Length    ${Act california1}
+    ${Run cal1}=    Wait Until Keyword Succeeds    1 minutes    1 seconds     Get Length    ${Act california1}
     Run Keyword If    '${Run cal1}' == '${VALUE}'
     ...    Fail    Dashboard has no Active Instances california Data
     ...    ELSE
     ...    Log     Dashboard has Active Instance california Data
 
-    ${Act california2}=    Get Text    xpath=.//*[@id='container']/div/ul/li[6]/div/ul/li[2]/span[2]
+    ${Act california2}=    Wait Until Keyword Succeeds    1 minutes    1 seconds     Get Text    xpath=.//*[@id='container']/div/ul/li[6]/div/ul/li[2]/span[2]
     Log    ${Act california2}
-    ${Run cal2}=    Get Length    ${Act california2}
+    ${Run cal2}=    Wait Until Keyword Succeeds    1 minutes    1 seconds     Get Length    ${Act california2}
     Run Keyword If    '${Run cal2}' == '${VALUE}'
     ...    Fail    Dashboard has no under utilized Instances california Data
     ...    ELSE
     ...    Log     Dashboard has utilized Instances california Data
 
 
-    ${Act california3}=    Get Text    xpath=.//*[@id='container']/div/ul/li[6]/div/ul/li[3]/span[2]
+    ${Act california3}=    Wait Until Keyword Succeeds    1 minutes    1 seconds     Get Text    xpath=.//*[@id='container']/div/ul/li[6]/div/ul/li[3]/span[2]
     Log    ${Act california3}
-    ${Run cal3}=    Get Length    ${Act california3}
+    ${Run cal3}=    Wait Until Keyword Succeeds    1 minutes    1 seconds     Get Length    ${Act california3}
     Run Keyword If    '${Run cal3}' == '${VALUE}'
     ...    Fail    Dashboard has no CPU Usage california Data
     ...    ELSE
     ...    Log     Dashboard has CPU Usage california Data
 
-    ${Act california4}=    Get Text    xpath=.//*[@id='container']/div/ul/li[6]/div/ul/li[4]/span[2]
+    ${Act california4}=    Wait Until Keyword Succeeds    1 minutes    1 seconds     Get Text    xpath=.//*[@id='container']/div/ul/li[6]/div/ul/li[4]/span[2]
     Log    ${Act california4}
-    ${Run cal4}=    Get Length    ${Act california4}
+    ${Run cal4}=    Wait Until Keyword Succeeds    1 minutes    1 seconds     Get Length    ${Act california4}
     Run Keyword If    '${Run cal4}' == '${VALUE}'
     ...    Fail    Dashboard has no Network IO california Data
     ...    ELSE
     ...    Log     Dashboard has Network IO california Data
 
-   ${Act california5}=    Get Text    xpath=.//*[@id='container']/div/ul/li[6]/div/ul/li[5]/span[2]
+   ${Act california5}=    Wait Until Keyword Succeeds    1 minutes    1 seconds     Get Text    xpath=.//*[@id='container']/div/ul/li[6]/div/ul/li[5]/span[2]
     Log    ${Act california5}
-    ${Run cal5}=    Get Length    ${Act california5}
+    ${Run cal5}=    Wait Until Keyword Succeeds    1 minutes    1 seconds     Get Length    ${Act california5}
     Run Keyword If    '${Run cal5}' == '${VALUE}'
     ...    Fail    Dashboard has no Disk IO california Data
     ...    ELSE
@@ -740,8 +745,9 @@ Catalyst Log Monitoring Dashboard Verification
     Clicks on Log Monitoring Link
     Sleep    10s
     Clicks on Left Panel Button
-    Sleep    4 minute
+    Sleep    20s
     Verfiy page doesnot contain timeout
+    Verify the Element visibilty to check
     Verfiy the Dashboard is displayed with Legend Running
     #Verfiy the Page not contains no results
     Capture the Screen Shot of the Dashboard
@@ -818,13 +824,24 @@ Clicks on Telemetry
     Page Should Contain    memory
     Page Should Contain    cpu
     Page Should Contain    disk
+    
+
+
+Verify the Element visibilty to check
+    Selects the frame
+    ${Visible}=    Run Keyword and Return Status    Element Should Be Visible    xpath=(//span[@class='legend-open'])[1]
+    Run Keyword If    '${Visible}' == 'True' 
+    ...    Log    log Monitoring Dashboard is displaying the Dashboard within 20 seconds with the data
+    ...    ELSE
+    ...    Fail   log Monitoring Dashboard is not displaying the Dashboard within 20 seconds with the data and its still loading or contains No results found
 
 
 Verfiy page doesnot contain timeout
     Selects the frame
     ${gateway}=    Run Keyword and Return Status    Page Should Not Contain    Gateway Timeout
+    ${gateway1}=    Run Keyword and Return Status    Page Should Not Contain     Bad Gateway
     ${Visualize}=    Run Keyword and Return Status    Page Should Not Contain    No Living connections
-    Run Keyword If    '${gateway}' == 'True' and '${Visualize}' == 'True'
+    Run Keyword If    '${gateway}' == 'True' and '${Visualize}' == 'True' and '${gateway1}' == 'True'
     ...    Log    log Monitoring Dashboard is not displaying Gateway Timeout and No living Connections
     ...    ELSE
     ...    Fail   log Monitoring Dashboard is displaying Gateway Timeout or No living Connections
@@ -839,7 +856,7 @@ Clicks on Adverse Events
 
 
 Verfiy the Dashboard is displayed with Legend Running
-    Selects the frame
+    #Selects the frame
     ${legnd}=    Get Text    xpath=(//span[@class='legend-open'])[1]
     Log    ${legnd}
     ${log1}=    Run Keyword and Return Status    Should Be Equal    ${legnd}    ${Accesslayr}
