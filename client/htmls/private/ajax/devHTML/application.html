@@ -155,7 +155,10 @@
                                 <a class="btn1" id="defaultViewButton" style="" onclick="showHideControl(this.id)"> <i class="fa fa-th fa-2x txt-color-deactive font-size18" title="Card View" /></a>&nbsp;
                                 <a id="instanceview" class="btn1" onclick="showHideControl(this.id)"> <i class="fa fa-align-justify fa-2x txt-color-deactive font-size18" title="Table View" /></a>
                             </span> -->
-                            <span class="pull-right margintopright8">                                    
+                            <span class="pull-right margintop2right8">   
+                                <a  id="defaultViewButtonNewDeploy" class="btn btn-primary createNewDeploy" style="margin-right:5px;" data-toggle="modal" href="#modalUpgradeAppDeploy"> 
+                                    <i class="ace-icon fa fa-plus bigger-110" style="color:#fff;margin-right:4px;"></i>Deploy New App
+                                </a>                                 
                                 <a onclick="showHideControlApplication(this.id)" class="btn1" id="instanceviewAppCard" rel="tooltip" data-placement="top" data-original-title="History" title="History"> 
                                     <i style="font-size:16px" class="fa fa-header fa-2x txt-color-deactive"></i>
                                 </a>&nbsp;
@@ -164,9 +167,8 @@
                                 </a> -->
                                 
                                 <!-- In application deployment -->
-                                <a onclick="showHideControlApplication(this.id)" id="defaultViewButtonNewDeploy" class="btn btn-primary createNewDeploy" style="display:none;margin-right:5px;" data-toggle="modal" href="#modalUpgradeAppDeploy"> 
-                                    <i class="ace-icon fa fa-plus bigger-110" style="color:#fff;margin-right:4px;"></i>Deploy New App
-                                </a>
+                                <!-- onclick="showHideControlApplication(this.id)" -->
+                                
 
                                  <!-- In pipelineView -->
                                 <!-- <a onclick="showHideControlApplication(this.id)" id="defaultViewButtonNewDeploy" class="btn btn-primary createNewDeploy" style="display:none;margin-right:5px;" data-toggle="modal" href="#modalUpgradeAppDeploy"> 
@@ -183,8 +185,8 @@
                             </span>
                         </div>
                         <div id="divapplicationtableview">
-                            <div id="collapseAppEnv1" class="panel-collapse collapse in envAppDeployAccordian" style="padding: 5px;overflow-x: auto;min-height:300px">
-                                <div class="table-responsive table-div">
+                            <div id="collapseAppEnv1" class="panel-collapse collapse in envAppDeployAccordian">
+                                <div class="table-responsive table-div" style="padding: 5px;overflow-x: auto;min-height:300px">
                                     <table id="tableappDeploydetails" class="table table-striped table-bordered table-hover dataTable envAppDeployTable" style="border:1px solid #eeeeee !important; text-align:center;font-size:12px;margin-top:45px;" width="100%" cellpadding="5px">
                                         <thead>
                                             <tr class="rowCustomStyle" style="font-weight:bold;">
@@ -273,11 +275,11 @@
                             </div>
                              <div class="modal-footer">
                                 <div class="btn-group" style="margin-left:200px;">  
-                                <a style="margin-left:10px;" class="btn btn-default" data-dismiss="modal">
+                                <a class="btn btn-default" data-dismiss="modal">
                                     <i class="ace-icon fa fa-times bigger-110"></i>
                                     Cancel
                                 </a>                               
-                                 <a class="btn btn-primary appdeployConfigureSaveBtn">
+                                 <a class="btn btn-primary appdeployConfigureSaveBtn" style="margin-left:10px;">
                                     <i class="ace-icon fa fa-save bigger-110"></i>
                                     Save
                                 </a>
@@ -2094,6 +2096,9 @@ function constructUI(data) {
         $accordianTemplatenoData.find('.panel-title').css({
             "padding": "0px"
         });
+        $accordianTemplatenoData.find('.margintop2right8').css({
+            "margin-top": "-6px"
+        });
         var $clonenoData = $accordianTemplatenoData.clone(true);
         $clonenoData.find('#tableappDeploydetails').parent().hide();
         // getenvName(function(envNameUrlParams) {
@@ -2103,7 +2108,8 @@ function constructUI(data) {
         getprojectName(function(projectNameUrlParams) {
             var dataprojectAccordianNameforNoData = "Application Deployment for : " + projectNameUrlParams;
             //var $clonenoData = $accordianTemplatenoData.clone(true);
-            $('.accordianTemplateContainer').find('.envAppDeployName').html(dataprojectAccordianNameforNoData);
+            //$('.accordianTemplateContainer').find('.envAppDeployName').html(dataprojectAccordianNameforNoData);
+            $clonenoData.find('.envAppDeployName').html(dataprojectAccordianNameforNoData);
         });
         $("#nodataAppDeploy").css({
             // "text-align": "center",
@@ -2112,11 +2118,13 @@ function constructUI(data) {
             // "padding-top": "20px",
             "display": "block"
         }).append($clonenoData);
+        // $clonenoData.find('.margintop2right8').html("Arabinda");
 
-        $("#nodataAppDeploy").find('.margintopright8').css({
-            "margin-top": "-2px",
-            "margin-right": "-8px"
-        });
+        //$clonenoData.find('.margintop2right8').html("Aran");
+        // $("#nodataAppDeploy").find('.margintop2right8').css({
+        //     "margin-top": "-2px !important",
+        //     "margin-right": "-8px !important"
+        // });
     }
 }
 // var $chooseApplication = $('#chooseApplication');

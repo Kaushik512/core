@@ -22,9 +22,9 @@ function devCall() {
                 $("#divapplicationtableview").removeClass("visibleClass").hide();
                 $(".createAppConfigure").show();
                 $('#defaultViewButtonAppCard').hide();   
-                $('#defaultViewButtonNewDeploy').hide();
+                $('#defaultViewButtonNewDeploy').show();
                 $("#divapplicationcardview").addClass("visibleClass").show();
-                $('#defaultViewButtonAppCard').parents().eq(2).find('span:nth-child(2)').removeClass('margintop2right8').addClass('margintopright8');
+                //$('#defaultViewButtonAppCard').parents().eq(2).find('span:nth-child(2)').removeClass('margintop2right8').addClass('margintopright8');
                 $('#defaultViewButtonAppCard').find('i').removeClass('txt-color-deactive').addClass('txt-color-active');
                 $('#instanceviewAppCard').show();
                 //$('#instanceviewAppCard').find('i').removeClass('txt-color-active').addClass('txt-color-deactive');
@@ -32,7 +32,7 @@ function devCall() {
                 $("#divapplicationtableview").addClass("visibleClass").show();
                 $('#defaultViewButtonAppCard').show();
                 $('#defaultViewButtonNewDeploy').show();
-                $('#defaultViewButtonAppCard').parents().eq(2).find('span:nth-child(2)').removeClass('margintopright8').addClass('margintop2right8');
+                //$('#defaultViewButtonAppCard').parents().eq(2).find('span:nth-child(2)').removeClass('margintopright8').addClass('margintop2right8');
                 $(".createAppConfigure").hide();
                 $("#divapplicationcardview").removeClass("visibleClass").hide();
                 $('#instanceviewAppCard').hide();
