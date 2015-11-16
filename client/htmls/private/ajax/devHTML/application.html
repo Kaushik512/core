@@ -162,9 +162,16 @@
                                 <!-- <a onclick="showHideControlApplication(this.id)" id="defaultViewButtonAppCard" class="btn1" rel="tooltip" data-placement="top" data-original-title="Pipeline View" style="display:none"> 
                                     <i style="font-size:18px;transform: rotateY(180deg);" class="fa fa-paragraph fa-2x txt-color-active"></i>
                                 </a> -->
+                                
+                                <!-- In application deployment -->
                                 <a onclick="showHideControlApplication(this.id)" id="defaultViewButtonNewDeploy" class="btn btn-primary createNewDeploy" style="display:none;margin-right:5px;" data-toggle="modal" href="#modalUpgradeAppDeploy"> 
-                                    <i class="ace-icon fa fa-plus bigger-110" style="color:#fff;margin-right:4px;"></i>New Deploy
+                                    <i class="ace-icon fa fa-plus bigger-110" style="color:#fff;margin-right:4px;"></i>Deploy New App
                                 </a>
+
+                                 <!-- In pipelineView -->
+                                <!-- <a onclick="showHideControlApplication(this.id)" id="defaultViewButtonNewDeploy" class="btn btn-primary createNewDeploy" style="display:none;margin-right:5px;" data-toggle="modal" href="#modalUpgradeAppDeploy"> 
+                                    <i class="ace-icon fa fa-plus bigger-110" style="color:#fff;margin-right:4px;"></i>Deploy New App
+                                </a> -->
 
                                 <a onclick="showHideControlApplication(this.id)" id="defaultViewButtonAppCard" class="btn btn-primary" style="display:none"> 
                                     <i class="ace-icon ace-icon fa fa-chevron-left bigger-110" style="color:#fff;margin-right:4px;"></i>Pipeline View
@@ -474,7 +481,7 @@
                                         X
                                     </button>
                                     <h4 class="modal-title modaltitleforNewDeploy" style="display:none">
-                                        <i class="fa fa-th-list txt-color-blue"></i>&nbsp;&nbsp;Create New Deployment
+                                        <i class="fa fa-th-list txt-color-blue"></i>&nbsp;&nbsp;New App Deployment
                                     </h4>
                                     <h4 class="modal-title modaltitleforupgradeDeploy">
                                         <i class="fa fa-th-list txt-color-blue"></i>&nbsp;&nbsp;Upgrade : <span id="upgradeAppName"></span> (<span id="upgradeNodeIp"></span>)
