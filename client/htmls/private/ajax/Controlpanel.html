@@ -3554,4 +3554,80 @@ $(document).ready(function() {
          return false;
      }
  });
+
+function getCssClassFromStatus(status) {
+        var cssClasses = {
+
+        };
+        switch (status) {
+
+            case 'running':
+                cssClasses.ringClass = 'started';
+                cssClasses.textClass = 'instance-state-text-started';
+                cssClasses.tableViewStatusClass = "started";
+                break;
+
+            case 'stopped':
+                cssClasses.ringClass = 'stopped';
+                cssClasses.textClass = 'instance-state-text-stopped';
+                cssClasses.tableViewStatusClass = "stopped";
+                break;
+
+            case 'terminated':
+                cssClasses.ringClass = 'stopped';
+                cssClasses.textClass = 'instance-state-text-stopped';
+                cssClasses.tableViewStatusClass = "stopped";
+                break;
+
+            default:
+                cssClasses.ringClass = 'pending';
+                cssClasses.textClass = 'instance-state-text-pending';
+                cssClasses.tableViewStatusClass = "pending";
+
+        }
+
+        return cssClasses;
+    }
+
+// Currently this code commenting due to some issue
+/*
+  window.socketAutoScale.emit('joinCFRoom', { 
+    orgId: "", 
+    bgId: "", 
+    projId: "", 
+    envId: "" 
+  });
+
+  window.socketAutoScale.on('instanceStateChanged', function(instanceData) {
+                console.log('State changed event fired ==> ', instanceData);
+                var instanceId = instanceData._id;
+                var title = '';
+                //if(orgId === instanceData.orgId && urlParams['bg'] === instanceData.bgId &&projectId ===  instanceData.projectId && envId === instanceData.envId) {
+                     var $card = $(".domain-roles-caption[data-instanceId='" + instanceId + "']");
+                      title = instanceData.instanceState == "running" ? "Stop" : instanceData.instanceState == "stopped" ? "Start" : "";
+                                $('[instanceID="' + instanceId + '"]').removeClass('stopped running pending stopping unknown').addClass(instanceData.instanceState).attr('data-original-title', title);
+                      
+                    if (instanceData.instanceState == 'stopped') {
+                        enableInstanceActionStopBtn(instanceData._id);
+                    }
+                    if (instanceData.instanceState == 'running') {
+                        enableInstanceActionStartBtn(instanceData._id, instanceData.hardware.os);
+                        
+                    }
+                    if (instanceData.instanceState == 'pending' || instanceData.instanceState == 'stopping' || instanceData.instanceState == 'terminated') {
+                        disableInstanceActionBtns(instanceData._id);
+                    }
+                    if (instanceData.instanceState == 'unknown') {
+                        disableInstanceStartStopActionBtns(instanceData._id, instanceData.hardware.os);
+                    }
+                    var $parent = $('.domain-roles-caption');
+                    var cssClassed = getCssClassFromStatus(instanceData.instanceState);
+                                    $parent.find('.componentlistContainer').removeClass().addClass('componentlistContainer').addClass(cssClassed.ringClass);
+                                    $parent.find('.instance-state').removeClass().addClass('instance-state').addClass(cssClassed.textClass).html(instanceData.instanceState);
+
+                    //addInstanceaddInstanceToDOMToDOMaddInstanceToDOM(instanceData);
+                //}
+            });
+*/
+
   </script>

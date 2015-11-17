@@ -337,7 +337,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                         return;
                     }
                     if (orgList) {
-                        vmwareProvider.getvmwareProvidersForOrg(orgList, function(err, providers) {
+                        vmwareProvider.getvmwareForOrg(orgList, function(err, providers) {
                             if (err) {
                                 logger.error(err);
                                 res.send(500, errorResponses.db.error);
@@ -2714,132 +2714,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         });
     });
 
-    app.get('/allproviders/getproviderbyid/:providerId',function(req,res){
-        logger.debug("Enter get() for /allproviders/getproviderbyid");
-        var loggedInUser = req.session.user.cn;
-        var providerId = req.params.providerId;
-        logger.debug("Providerid rcvd:",providerId);
-        var filterandsendprovider = function(aProvider){
-            if(aProvider){
-               // logger.debug('wat---------', JSON.stringify(aProvider.orgId[0]));
-                masterUtil.getOrgById(aProvider.orgId[0].trim(), function(err, orgs) {
-                   // logger.debug('Returned---------', JSON.stringify(orgs));
-                    if (err) {
-                        res.send(500, "Not able to fetch org.");
-                        return;
-                    } else {
-                        var _aProvider = {
-                            providerName: aProvider["providerName"],
-                            providerType: aProvider["providerType"],
-                            providerId: aProvider["_id"],
-                            orgId: orgs[0].rowid
-                        };
-                        res.send(_aProvider);
-                        return;
-                    }
-                });
-            }
-            else{
-                res.send(aProvider);
-                return;
-            }
-        }
-        masterUtil.getLoggedInUser(loggedInUser, function(err, anUser) {
-            if (err) {
-                res.send(500, "Failed to fetch User.");
-                return;
-            }
-            if (!anUser) {
-                res.send(500, "Invalid User.");
-                return;
-            }
-            masterUtil.getAllActiveOrg(function(err, orgList) {
-                if (err) {
-                    res.send(500, 'Not able to fetch Orgs.');
-                    return;
-                }
-                if (orgList) {
-                    logger.debug('about to get aws provider');
-                   AWSProvider.getAWSProviderById(providerId, function(err, aProvider) {
-                        if (err) {
-                            logger.error(err);
-                            res.send(500, errorResponses.db.error);
-                            return;
-                        }
-                        if (aProvider) {
-                            logger.debug('aws provider rcvd:',JSON.stringify(aProvider));
-                            filterandsendprovider(aProvider);
-                            return;
-                        }
-                        else{
-                            //not an awsprovider. Check openstack
-                            openstackProvider.getopenstackProviderById(providerId, function(err, aProvider) {
-                                if (err) {
-                                    logger.error(err);
-                                    res.send(500, errorResponses.db.error);
-                                    return;
-                                }
-                                if (aProvider) {
-                                    logger.debug('os provider rcvd:',JSON.stringify(aProvider));
-                                    filterandsendprovider(aProvider);
-                                    return;
-                                }
-                                else{
 
-                                    azurecloudProvider.getAzureCloudProviderById(providerId, function(err, aProvider) {
-                                        if (err) {
-                                            logger.error(err);
-                                            res.send(500, errorResponses.db.error);
-                                            return;
-                                        }
-                                        if (aProvider) {
-                                            logger.debug('azure provider rcvd:',JSON.stringify(aProvider));
-                                            filterandsendprovider(aProvider);
-                                            return;
-                                        }
-                                        else{
-                                            hppubliccloudProvider.gethppubliccloudProviderById(providerId, function(err, aProvider) {
-                                                if (err) {
-                                                    logger.error(err);
-                                                    res.send(500, errorResponses.db.error);
-                                                    return;
-                                                }
-                                                if (aProvider) {
-                                                    logger.debug('hp provider rcvd:',JSON.stringify(aProvider));
-                                                    filterandsendprovider(aProvider);
-                                                    return;
-                                                }
-                                                else{
-                                                    vmwareProvider.getvmwareProviderById(providerId, function(err, aProvider) {
-                                                        if (err) {
-                                                            logger.error(err);
-                                                            res.send(500, errorResponses.db.error);
-                                                            return;
-                                                        }
-                                                        if (aProvider) {
-                                                            logger.debug('vm provider rcvd:',JSON.stringify(aProvider));
-                                                            filterandsendprovider(aProvider);
-                                                            return;
-                                                        }
-                                                        else{
-                                                            //not in provider list
-                                                            filterandsendprovider({});
-                                                            return;
-                                                        }
-                                                    });
-                                                }
-                                            });
-                                        }
-                                    });
-                                }
-                            });
-                        }
-                    });
-                }
-            });
-
-        });
-    });
     // Return list of all types of available providers.
     app.get('/allproviders/list', function(req, res) {
         logger.debug("Enter get() for /allproviders/list");
@@ -3004,7 +2879,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                             var providersList = {};
 
 
-                            if (providers && providers.length > 0) {
+                            if (providers.length > 0) {
                                 var awsProviderList = [];
                                 for (var i = 0; i < providers.length; i++) {
                                     var keys = [];

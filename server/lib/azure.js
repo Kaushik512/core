@@ -9,22 +9,22 @@ var appConfig = require('_pr/config');
 function execute(cmd, isJsonResponse, callback) {
     // logger.debug("START of executing issued command");
     // exec(cmd, function(error, stdout, stderr){ 
-    // 	if(error){
-    // 		logger.error("Error",error);
-    // 		callback(error,null);
-    // 		return
-    // 	}
-    // 	if(stderr){
-    // 		logger.error("Std error",stderr);
-    // 		callback(stderr,null);
-    // 		return;
-    // 	}
+    //  if(error){
+    //      logger.error("Error",error);
+    //      callback(error,null);
+    //      return
+    //  }
+    //  if(stderr){
+    //      logger.error("Std error",stderr);
+    //      callback(stderr,null);
+    //      return;
+    //  }
 
-    //    if(isJsonResponse){	
-    // 		 var json = JSON.parse(stdout);
-    // 		 //console.log("Json:", json)
-    // 		 callback(null,json); 
-    // 		 return;
+    //    if(isJsonResponse){   
+    //       var json = JSON.parse(stdout);
+    //       //console.log("Json:", json)
+    //       callback(null,json); 
+    //       return;
     //     }
     //     callback(null,stdout); 
     //    });
@@ -350,7 +350,7 @@ this.trysshoninstance1 = function(ostype,ip_address, username, pwd, callback) {
                     else
                         ip_address = data.VirtualIPAddresses.address;
  
-		   // var ip_address = data.Network.Endpoints[0].virtualIPAddress;
+           // var ip_address = data.Network.Endpoints[0].virtualIPAddress;
                     logger.debug('Azure VM ip address:', ip_address);
 
                     if (data.InstanceStatus == 'ReadyRole') {

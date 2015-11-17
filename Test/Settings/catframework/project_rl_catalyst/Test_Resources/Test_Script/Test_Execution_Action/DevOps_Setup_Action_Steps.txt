@@ -59,7 +59,7 @@ Verfiy DataBag is created
 
 
 Select the Chefserver to create databag
-    Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${CONFIG MANAGEMENT NAME}']/../td[5]/div/a[3]/i
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${CONFIG MANAGEMENT NAME}']/../td[5]/div/a[4]/i
 
 
 Clicks on Adding new Databag

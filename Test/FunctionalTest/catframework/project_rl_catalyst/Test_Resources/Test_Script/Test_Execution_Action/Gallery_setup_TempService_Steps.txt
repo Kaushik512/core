@@ -322,7 +322,7 @@ Select Chef Server
 
 Select CookBooks
     Sleep    1s
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    css=div.col-lg-7.divtablemarginpadding > label:nth-child(3)
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='templatescookbooks']/div/div[1]/div[1]/label[3]
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[text()='${ADD}']
     #Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    id=btnaddToRunlist
 
@@ -409,12 +409,24 @@ Vaildate the Special Chars ServiceName
 
 Vaildate the No Org Selected in Services
     Clicks on SNew Button
-    Enters Service Name
-    Choose Service Command Type
-    Select Chef Server
-    Select Service CookBooks
-    Select the Actions
-    Clicks on SerSave Button
+    Selec the no org
+    #Enters Service Name
+    #Choose Service Command Type
+    #Select Chef Server
+    #Select Service CookBooks
+    #Select the Actions
+    #Clicks on SerSave Button
+
+
+Selec the no org
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='s2id_orgname']/a/span[1]
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=//div[text()='Select Organization']
+    Sleep    1s
+    ${boot box}=    Get Text    xpath=//div[@class='bootbox-body']
+    Log    ${boot box}
+    Should Be Equal   ${boot box}    ${Error}
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[text()='OK']
+    #Alert Should Be Present    text=There are no Chef Servers Associated to this Organisation
 
 
 Enters Special Chars Service Name
@@ -432,7 +444,7 @@ Service Name with Special Characters
     Clicks on Service Cancel Button
 
 Service Name with no Organziatn Selected
-    Element Should Contain    id=errmsg_orgname    ${VaildNoOrgErrMsg}
+    #Element Should Contain    id=errmsg_orgname    ${VaildNoOrgErrMsg}
     Clicks on Service Cancel Button
 
 

@@ -31,7 +31,8 @@ Validation of Adding New Providers
 
 
 Validation of Selecting No Provider Type
-    Clicks on New Button of Providers     
+    Clicks on New Button of Providers
+    Select the no provider option from dropdown     
     Enters the Name of the Provider
     Enters the Access Key
     Enters the Secret Key
@@ -40,6 +41,13 @@ Validation of Selecting No Provider Type
     Selects the Key Pair
     Uploads the Pem File for Provider
     Clicks on Save Button of the Provider
+
+
+
+Select the no provider option from dropdown
+    Wait Until Keyword Succeeds    1 minute     1 seconds     Click Element    xpath=//span[text()='AWS']
+    Wait Until Keyword Succeeds    1 minute     1 seconds     Click Element    xpath=//div[text()='Select Provider']
+
 
 No Selection of Provider Type
     [Arguments]    ${VaildProviderErrMsg}  
@@ -203,6 +211,7 @@ Catalyst Validation of OpenStack page
     Clicks on DevOps Setup menu
     Clicks on Providers           
     Clicks on New Button of Providers
+    #Select the no provider from dropdown
     Select the OpenStack Provider
     Clicks on Save Button of the Provider
     Verfiy the Error Message Displayed for OpenStack
@@ -221,14 +230,14 @@ Catalyst Validation of Public Cloud page
 
 
 
-Catalyst Validation of VMware page
+Catalyst Validation of Azure page
     Clicks on Settings
     Clicks on DevOps Setup menu
     Clicks on Providers           
     Clicks on New Button of Providers
-    Select the VMware Provider
+    Select the Azure Provider
     Clicks on Save Button of the Provider
-    Verify the Error Message Displayed for VMware
+    Verify the Error Message Displayed for Azure
     Clicks on Cancel Button of provider page
 
 
@@ -259,6 +268,37 @@ Catalyst Editing the ProviderName
     Verfiy the Provider is Created
 
 
+Catalyst Region & Keypair disabled
+    Clicks on Settings
+    Clicks on DevOps Setup menu
+    Clicks on Providers
+    Sleep    1s
+    Clicks on Edit button of the provider created
+    Verfiy the Region and the Keypair disabled
+
+
+Verfiy the Region and the Keypair disabled
+    ${Reg}=    Run Keyword and Return Status     Element Should Be Disabled    xpath=//span[text()='US West (Oregon) | us-west-2']
+    Log    ${Reg}
+    Run Keyword If    '${Reg}' == 'False'     
+    ...    Log    Region dropdown is enabled
+    ...    ELSE IF   '${Reg}' == 'True'
+    ...    Log    Region dropdwn is disabled
+    ${Key}=    Run Keyword and Return Status     Element Should Be Enabled     xpath=//span[text()='cat_instances']
+    Log    ${Key}
+    Run Keyword If    '${Key}' == 'False'     
+    ...    Log    Keypair dropdown is enabled
+    ...    ELSE IF   '${Key}' == 'True'
+    ...    Log    Keypair dropdwn is disabled
+
+
+
+     
+
+Clicks on Edit button of the provider created
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${EDIT PROVIDER NANME}']/../td[4]/div/a[1]/i
+
+
 Catalyst Unique Provider Creation Setup
     Clicks on Settings
     Clicks on DevOps Setup menu
@@ -279,6 +319,7 @@ Catalyst Unique Provider Creation Setup
 
 
 Verfiy the Error Message Displayed for OpenStack
+    #Element Should Contain    id=errmsg_providertype    ${REQ}
     Element Should Contain    id=errmsg_openstackusername    ${REQ}
     Element Should Contain    id=errmsg_openstackpassword    ${REQ}
     Element Should Contain    id=errmsg_openstackhost    ${REQ}
@@ -299,13 +340,11 @@ Verify the Error Message Displayed for HP cloud
     Element Should Contain    id=errmsg_orgId    ${REQ}
 
 
-Verify the Error Message Displayed for VMware
-    Element Should Contain    id=errmsg_vmwareusername    ${REQ}
-    Element Should Contain    id=errmsg_vmwarepassword    ${REQ}
-    Element Should Contain    id=errmsg_vmwarehost    ${REQ}
-    Element Should Contain    id=errmsg_vmwaredc   ${REQ}
+Verify the Error Message Displayed for Azure
+    Element Should Contain    id=errmsg_azureSubscriptionId    ${REQ}
     #Element Should Contain    id=errmsg_orgId    ${REQ}
-
+    Element Should Contain    id=errmsg_azureStorageAccount    ${STOREACC ERRMSG}
+    
 
 Verify the Error Message Displayed while duplicating the provider
     Element Should Contain    id=errmsg_name    ${Provider ErrMsg}
@@ -316,7 +355,7 @@ Enters the New Edit Provider Name
     Input Text    id=name    ${EDIT PROVIDER NANME}
 
 Clicks on Edit Button of Created Provider
-    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${PROVIDER NAME}']/../td[4]/div/a[1]/i
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${PROVIDER NAME}']/../td[4]/div/a[1]/i
 
 
 Verfiy the Provider is Created
@@ -1938,6 +1977,13 @@ Select the OpenStack Provider
     Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
 
 
+Select the no provider from dropdown
+    Sleep    4s
+    Click Element    css=#s2id_providertype > .select2-choice
+    Log    after click
+    Click Element    xpath=//div[text()='Select Provider']
+
+
 Select the HP Public Cloud Provider
     Sleep    4s
     Click Element    css=#s2id_providertype > .select2-choice
@@ -1947,11 +1993,11 @@ Select the HP Public Cloud Provider
     Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
 
 
-Select the VMware Provider
+Select the Azure Provider
     Sleep    4s
     Click Element    css=#s2id_providertype > .select2-choice
     Log    after click
-    Input Text    css=#select2-drop .select2-input    ${VMWARE PROVIDERR}
+    Input Text    css=#select2-drop .select2-input    ${AZURE PROVIDERR}
     Sleep    3s
     Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span    
 

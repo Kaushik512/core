@@ -21,7 +21,7 @@ Resource           ${COMMON RESOURCES}/catalyst_grid_node.txt
 
 
 Catalyst new Environments setup
-    [Tags]       Sanity               Env
+    [Tags]       Sanity               Settings
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
     Catalyst Addition and Creation of New Envirorments Setup           
@@ -30,8 +30,20 @@ Catalyst new Environments setup
 
 
 
+##Catalyst Edit Environment setup
+  ##  [Tags]       Sanity               Settings
+#    Catalyst Login
+    ##Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    ##Catalyst Edit the Environment setup           
+    ##Catalyst Logout                      
+    ##Teardown]     Close Browser
+
+
+
+
+
 Catalyst Unique Environment Validation
-    [Tags]       Sanity               Env
+    [Tags]       Sanity               Settings
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
     Catalyst Unique Environment Validation
@@ -41,7 +53,7 @@ Catalyst Unique Environment Validation
 
 
 Catalyst Adding New Envirornments to the Chef          
-    [Tags]       Sanity           Smoke
+    [Tags]       Sanity           Settings
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
     Catalyst Addition of New Environments
@@ -51,7 +63,7 @@ Catalyst Adding New Envirornments to the Chef
 
 
 Catalyst Import a Node From ConfigManagement(Chef) in to the Environment
-    [Tags]       Sanity       Import
+    [Tags]       Sanity       Settings
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
     Catalyst Import a Node from Config Management
@@ -62,7 +74,7 @@ Catalyst Import a Node From ConfigManagement(Chef) in to the Environment
 
 
 Catalyst Verify Node Imported from Config Management(Chef Server) & Delete
-    [Tags]       Sanity       Env
+    [Tags]       Sanity       Settings
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
     Catalyst Verify and Delete the InportedNode from Environment
