@@ -106,31 +106,6 @@ Catalyst Delete the DataBag Setup
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 Catalyst Validation of Puppet Server
     [Tags]       Sanity         Settings
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
@@ -147,4 +122,25 @@ Catalyst Creation of Puppet Server
     Catalyst Creation of the Puppet Server
     Catalyst Logout
     [Teardown]     Close Browser
+
+
+Catalyst Editing of Puppet Server
+    [Tags]       Sanity         Settings
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+#    Catalyst Login
+    Catalyst Edition of the Puppet Server
+    Catalyst Logout
+    [Teardown]     Close Browser
+
+
+Catalyst Unique Puppet Server validation
+    [Tags]       Sanity         Settings
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+#    Catalyst Login
+    Catalyst Unique Puppet Server verification
+    Catalyst Logout
+    [Teardown]     Close Browser
+
+
+
 

@@ -30,13 +30,15 @@ ${width}           1366
 
              
 #Puppet
-${PUPPET SERVERNAME}       	RLPuppetServer
+${PUPPET SERVERNAME}       	RLPuppet
+${PUPPET EDIT SERVERNAME}         RLPuppetServer
 ${PUPPET USERNAME}          ubuntu
 ${HOSTNAME}                 52.24.60.123
 ${Valid15ChrPuppetName}      RelevanceLabPuppet
+${Valid15ChrUsrname}          RelevanceLabsUser
 
 ${Valid15ChrErrMsg}         limited to 15 chars.
-
+${ChefServer AlreadyExisting}       	This Chef Server is already associated with an Organisation in Catalyst.
 
 #DataBag
 ${DATABAG NAME}        DataRL
@@ -109,6 +111,7 @@ ${REGION NAME}            US West
 ${BLUEPRINT TESTNAME}          TestingNew
 
 ${Unique ErrMsg}            This entry is already registered. Try another?
+
 
 ${PHOENIX COMMERNCE WITHOUT COOKBOOK UBUNTUOS}            Phoenix Commernce without Cookbook UbuntuOS
 ${PHOENIX COMMERCE WITH COOKBOOK UBUNTUOS}          Phoenix Commerce With CookBook ubuntuOS
@@ -272,7 +275,8 @@ ${ACCESS KEY}                  AKIAI3ETOOEFHJ62G2NQ
 
 ${OPENSTACK PROVIDERR}      OpenStack
 ${HP CLOUD PROVIDERR}       HP Public Cloud
-${VMWARE PROVIDERR}         VMware
+${AZURE PROVIDERR}         Azure
+${STOREACC ERRMSG}         atleast 3 characters required..
 
 
 ${Provider ErrMsg}         Provider name already exist.
@@ -540,7 +544,7 @@ ${VaildEmptyTempName}                       Required
 ${Vaild15ChrTempErrMsg}                     limited to 15 chars
 ${VaildBlankspErrMsg}                       space(s) not allowed
 ${VaildNoOrgTemplErrMsg}                    Required
-
+${Error}                          There are no Chef Servers Associated to this Organisation
 
 #Service Setup
 ${VaildEmptyServiceName}
