@@ -1,6 +1,6 @@
 var masterUtil = require('_pr/lib/utils/masterUtil.js');
 var ChefFactory = require('_pr/model/chef-factory');
-var longJobTracker = require('../model/long-job-tracker');
+var longJobTracker = require('_pr/model/taskstatus');
 var logger = require('_pr/logger')(module);
 
 module.exports.setRoutes = function(app, verificationFunc) {
@@ -93,6 +93,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
     app.get('/cheffactory/:serverId/roles/', verificationFunc, function(req, res) {
         var path = req.query.path;
         var chefFactory = req.chefFactory;
+        console.log('path ===> ',path);
         chefFactory.getRoleData(path, function(err, cookbookData) {
             if (err) {
                 res.send(500, {

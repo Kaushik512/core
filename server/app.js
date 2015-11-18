@@ -113,7 +113,7 @@ app.use(expressSession({
 }));
 
 // parse application/x-www-form-urlencoded
-app.use(expressBodyParser.urlencoded({ extended: false }))
+app.use(expressBodyParser.urlencoded({ extended: true }))
 
 // parse application/json
 app.use(expressBodyParser.json())

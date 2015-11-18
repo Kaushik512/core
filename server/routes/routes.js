@@ -57,9 +57,14 @@ var vmware = require('./routes_vmware.js');
 
 var servicenow = require('./routes_servicenow');
 
+
 var appdeployPipeline = require('./routes_appdeployPipeline');
 
-var expressServeStatic = require('serve-static')
+var chefFactory = require('./routes_cheffactory');
+
+var expressServeStatic = require('serve-static');
+
+
 
 module.exports.setRoutes = function(app,socketIo) {
 
@@ -130,6 +135,8 @@ module.exports.setRoutes = function(app,socketIo) {
     servicenow.setRoutes(app, sessionVerificationFunc);
 
     appdeployPipeline.setRoutes(app, sessionVerificationFunc);
+
+    chefFactory.setRoutes(app,sessionVerificationFunc);
 
     app.get('/', function(req, res) {
         res.redirect('/private/index.html');
