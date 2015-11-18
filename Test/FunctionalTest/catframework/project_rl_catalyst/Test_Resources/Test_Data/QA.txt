@@ -30,13 +30,15 @@ ${width}           1366
 
              
 #Puppet
-${PUPPET SERVERNAME}       	RLPuppetServer
+${PUPPET SERVERNAME}       	RLPuppet
+${PUPPET EDIT SERVERNAME}         RLPuppetServer
 ${PUPPET USERNAME}          ubuntu
 ${HOSTNAME}                 52.24.60.123
 ${Valid15ChrPuppetName}      RelevanceLabPuppet
+${Valid15ChrUsrname}          RelevanceLabsUser
 
 ${Valid15ChrErrMsg}         limited to 15 chars.
-
+${ChefServer AlreadyExisting}       	This Chef Server is already associated with an Organisation in Catalyst.
 
 #DataBag
 ${DATABAG NAME}        DataRL
@@ -110,6 +112,7 @@ ${BLUEPRINT TESTNAME}          TestingNew
 
 ${Unique ErrMsg}            This entry is already registered. Try another?
 
+
 ${PHOENIX COMMERNCE WITHOUT COOKBOOK UBUNTUOS}            Phoenix Commernce without Cookbook UbuntuOS
 ${PHOENIX COMMERCE WITH COOKBOOK UBUNTUOS}          Phoenix Commerce With CookBook ubuntuOS
 
@@ -132,12 +135,13 @@ ${STACK NAME}                RLStack
 ${STACK INSTANCE NAME}       Node
 
 
-${USERPEMFILE}              ${ROOTPATH}\\Chef\\mycatqa.pem
+${USERPEMFILE}              ${ROOTPATH}//Chef//mycatqa.pem
 ${VALIDATORPEMFILE}         ${ROOTPATH}//Chef//cattest-validator.pem
-${KNIFERBFILE}                ${ROOTPATH}\\Chef\\knife.rb
+${KNIFERBFILE}                ${ROOTPATH}//Chef//knife.rb
 ${CATALYSTPEM}                ${ROOTPATH}//Chef//catalyst.pem
 ${CAT_INSTANCES}              ${ROOTPATH}//Chef//cat_instances.pem
 ${CATALYST STACKFILE}         ${ROOTPATH}//Chef//CatalystStack.template
+${GOLDEN PEM}                 ${ROOTPATH}//Chef//GoldenDemo.pem
 
 ${CENTOSIMG}                  ${ROOTPATH}//Images//centos.jpg
 ${UBUNTUIMG}                  ${ROOTPATH}//Images//ubuntuu.jpg
@@ -239,7 +243,7 @@ ${IP ADD UBUNTU}            54.68.147.50
 ${IP Ubuntu}                54.68.147.50
 
 ${IP ADD CENTOS}              52.24.178.71
-${IP Centos}                  52.24.178.71
+${IP Centos}                   10.0.1.92
 
 
 ${SETTING}                    Settings
@@ -271,7 +275,8 @@ ${ACCESS KEY}                  AKIAI3ETOOEFHJ62G2NQ
 
 ${OPENSTACK PROVIDERR}      OpenStack
 ${HP CLOUD PROVIDERR}       HP Public Cloud
-${VMWARE PROVIDERR}         VMware
+${AZURE PROVIDERR}         Azure
+${STOREACC ERRMSG}         atleast 3 characters required..
 
 
 ${Provider ErrMsg}         Provider name already exist.
@@ -539,7 +544,7 @@ ${VaildEmptyTempName}                       Required
 ${Vaild15ChrTempErrMsg}                     limited to 15 chars
 ${VaildBlankspErrMsg}                       space(s) not allowed
 ${VaildNoOrgTemplErrMsg}                    Required
-
+${Error}                          There are no Chef Servers Associated to this Organisation
 
 #Service Setup
 ${VaildEmptyServiceName}

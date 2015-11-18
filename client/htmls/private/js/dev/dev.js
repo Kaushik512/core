@@ -184,6 +184,7 @@ function devCall() {
             }
             if (!hasChefCreateTaskPermission) {
                 $('.createTaskLink').addClass('hidden');
+                $('.createTaskLinkUpgrade').addClass('hidden');
             }
             //custom
             var hasCustomCreateTaskPermission = false;
@@ -192,6 +193,7 @@ function devCall() {
             }
             if (!hasCustomCreateTaskPermission) {
                 $('.createTaskLink').addClass('hidden');
+                $('.createTaskLinkUpgrade').addClass('hidden');
             }
             //jenkins
             var hasJenkinsCreateTaskPermission = false;
@@ -200,6 +202,7 @@ function devCall() {
             }
             if (!hasJenkinsCreateTaskPermission) {
                 $('.createTaskLink').addClass('hidden');
+                $('.createTaskLinkUpgrade').addClass('hidden');
             }
         }
 
@@ -3527,6 +3530,12 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
         function initializingOrchestration() {
 
             $('.Orchestration').click(function(e) {
+                $.get('../organizations/' + urlParams.org + '/businessgroups/' + urlParams['bg'] + '/projects/' + urlParams.projid + '/environments/' + urlParams.envid + '/', function(dataRelatedTask) {
+                    console.log("Arabinda Behera=======================>>>>>>>>>>>>");
+                    console.log(dataRelatedTask.tasks);
+                    initializeTaskArea(dataRelatedTask.tasks);
+                });
+                //alert("Hello");
                 var getbreadcrumbul = $('#ribbon').find('.breadcrumb').find('li:lt(5)');
                 var getbreadcrumbullength = getbreadcrumbul.length;
                 var DummyBreadCrumb;
@@ -4335,15 +4344,63 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                     $tdExecute.find('a').data('taskId', data[i]._id).attr('data-executeTaskId', data[i]._id).click(function(e,nexusData) {
                         var taskId = $(this).data('taskId');
 
-                      //  alert(JSON.stringify(e.data));
-                        console.log("e == >",nexusData)
-
                         if (data[i].taskType === 'jenkins' || data[i].taskType === 'chef' || data[i].taskType === 'puppet' || data[i].taskType === 'composite') {
                             //checking for parameterized condition..
                             if (data[i].taskConfig.parameterized) {
 
                                 var $modalForSelect = $('#modalForSelect');
                                 var $tableBody = $('#paramTableList').empty();
+                                $('#executeJob').unbind('submit').bind('submit',function(e) {
+
+                                    $modalForSelect.modal('hide');
+                                    console.log('firing');
+                                    executeJob();
+                                    return false;
+                                });
+                                function executeJob() {
+                                    var $selects = $modalForSelect.find('.modal-body select');
+                                    //alert($select);
+                                    var reqBody = {};
+
+                                    for (var q = 0; q < $selects.length; q++) {
+                                        var select = $selects[q];
+                                        var $select = $(select);
+                                        var name = $select.attr('key');
+                                        var value = $select.val();
+                                        reqBody[name] = value;
+                                    }
+
+                                    var $taskExecuteTabsHeaderContainer = $('#taskExecuteTabsHeader').empty();
+                                    var $taskExecuteTabsContent = $('#taskExecuteTabsContent').empty();
+                                    var $modal = $('#assignedExecute');
+                                    $modal.find('.loadingContainer').show();
+                                    $modal.find('.errorMsgContainer').hide();
+                                    $modal.find('.outputArea').hide();
+                                    $modal.modal('show');
+                                    var timestampToPoll = new Date().getTime();
+
+                                    $.post('../tasks/' + taskId + '/run', {
+                                        choiceParam: reqBody
+                                    }, function(data) {
+                                        // alert(reqBody);
+
+                                        var date = new Date().setTime(data.timestamp);
+                                        var taskTimestamp = new Date(date).toLocaleString(); //converts to human readable strings
+                                        $('tr[data-taskId="' + taskId + '"] .taskrunTimestamp').html(taskTimestamp);
+
+                                        showTaskLogs(taskId, data.historyId, true);
+
+                                    }).fail(function(jxhr) {
+                                        $modal.find('.loadingContainer').hide();
+                                        $modal.find('.outputArea').hide();
+                                        var $errorContainer = $modal.find('.errorMsgContainer').show();
+                                        if (jxhr.responseJSON && jxhr.responseJSON.message) {
+                                            $errorContainer.html(jxhr.responseJSON.message);
+                                        } else {
+                                            $errorContainer.html("Server Behaved Unexpectedly");
+                                        }
+                                    });
+                                } //function ends here..
                                 for (var a = 0; a < data[i].taskConfig.parameterized.length; a++) {
                                     if (data[i].taskConfig.parameterized[a].parameterName === "Choice" || data[i].taskConfig.parameterized[a].parameterName === "String" || data[i].taskConfig.parameterized[a].parameterName === "Boolean") {
                                         // alert(data[i].taskConfig.parameterized.length);
@@ -4382,113 +4439,15 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
 
                                             } //for loop for default value ends here..
 
-                                            $('#executeJob').submit(function(e) {
-
-                                                $modalForSelect.modal('hide');
-                                                executeJob();
-                                                return false;
-                                            });
+                                            
                                         } //if ends here for default value..
 
-                                        function executeJob() {
-                                            var $selects = $modalForSelect.find('.modal-body select');
-                                            //alert($select);
-                                            var reqBody = {};
-
-                                            for (var q = 0; q < $selects.length; q++) {
-                                                var select = $selects[q];
-                                                var $select = $(select);
-                                                var name = $select.attr('key');
-                                                var value = $select.val();
-                                                reqBody[name] = value;
-                                            }
-
-                                            var $taskExecuteTabsHeaderContainer = $('#taskExecuteTabsHeader').empty();
-                                            var $taskExecuteTabsContent = $('#taskExecuteTabsContent').empty();
-                                            var $modal = $('#assignedExecute');
-                                            $modal.find('.loadingContainer').show();
-                                            $modal.find('.errorMsgContainer').hide();
-                                            $modal.find('.outputArea').hide();
-                                            $modal.modal('show');
-                                            var timestampToPoll = new Date().getTime();
-
-                                            $.post('../tasks/' + taskId + '/run', {
-                                                choiceParam: reqBody
-                                            }, function(data) {
-                                                // alert(reqBody);
-
-                                                var date = new Date().setTime(data.timestamp);
-                                                var taskTimestamp = new Date(date).toLocaleString(); //converts to human readable strings
-                                                $('tr[data-taskId="' + taskId + '"] .taskrunTimestamp').html(taskTimestamp);
-
-                                                showTaskLogs(taskId, data.historyId, true);
-
-                                            }).fail(function(jxhr) {
-                                                $modal.find('.loadingContainer').hide();
-                                                $modal.find('.outputArea').hide();
-                                                var $errorContainer = $modal.find('.errorMsgContainer').show();
-                                                if (jxhr.responseJSON && jxhr.responseJSON.message) {
-                                                    $errorContainer.html(jxhr.responseJSON.message);
-                                                } else {
-                                                    $errorContainer.html("Server Behaved Unexpectedly");
-                                                }
-                                            });
-                                        } //function ends here..
+                                        
                                     } //if loop for choice ends here..
-                                    /*else {
+                                    
 
 
-                          //condition for boolean and string..
-                          //if (data[i].taskConfig.parameterized.length >= 1) {
-                              //  alert(data[i].taskConfig.parameterized.length);
-                              bootbox.confirm({
-                                  message: "Are you sure you want to execute this Job?",
-                                  title: "Confirmation",
-
-                                  callback: function(result) {
-                                      if (result) {
-                                          var $taskExecuteTabsHeaderContainer = $('#taskExecuteTabsHeader').empty();
-                                          var $taskExecuteTabsContent = $('#taskExecuteTabsContent').empty();
-                                          var $modal = $('#assignedExecute');
-                                          $modal.find('.loadingContainer').show();
-                                          $modal.find('.errorMsgContainer').hide();
-                                          $modal.find('.outputArea').hide();
-                                          $modal.modal('show');
-                                          var timestampToPoll = new Date().getTime();
-                                          $.post('../tasks/' + taskId + '/run', {}, function(data) {
-                                              //  alert(JSON.stringify(data));
-                                              var date = new Date().setTime(data.timestamp);
-                                              var taskTimestamp = new Date(date).toLocaleString(); //converts to human readable strings
-                                              $('tr[data-taskId="' + taskId + '"] .taskrunTimestamp').html(taskTimestamp);
-
-                                              var $outputArea = $modal.find('.outputArea');
-
-                                              $outputArea.data('taskType', data.taskType);
-                                              $outputArea.data('instances', data.instances);
-                                              $outputArea.data('jenkinsServerId', data.jenkinsServerId);
-                                              $outputArea.data('jobName', data.jobName);
-                                              $outputArea.data('lastBuildNumber', data.lastBuildNumber);
-                                              $outputArea.data('currentBuildNumber', data.currentBuildNumber);
-                                              $outputArea.data('timestampStarted', data.timestamp);
-                                              showTaskLogs();
-
-                                          }).fail(function(jxhr) {
-                                              $modal.find('.loadingContainer').hide();
-                                              $modal.find('.outputArea').hide();
-                                              var $errorContainer = $modal.find('.errorMsgContainer').show();
-                                              if (jxhr.responseJSON && jxhr.responseJSON.message) {
-                                                  $errorContainer.html(jxhr.responseJSON.message);
-                                              } else {
-                                                  $errorContainer.html("Server Behaved Unexpectedly");
-                                              }
-                                          });
-
-                                      } //result ends here..
-                                  }
-                              });
-                      //    }
-                          break;
-                      }*/
+                        
                                 } //for ends here..
                                 //new else starts here..
                             } else {
@@ -5228,6 +5187,17 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
             window.location.href = 'index.html#ajax/assignTask.html?org=' + urlParams.org + '&bg=' + urlParams['bg'] + '&projid=' + urlParams['projid'] + '&envid=' + urlParams['envid'];
         });
 
+        $('.createTaskLinkUpgrade').click(function(e) {
+            var hasTasksPermission = false;
+            if (haspermission("instancetasks", "execute")) {
+                hasTasksPermission = true;
+            }
+            if (!hasTasksPermission) {
+                bootbox.alert('User has no permission to Add Tasks');
+                return false;
+            }
+        });
+
         //for Table view
 
 
@@ -5377,6 +5347,45 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                 console.log('add event fired ==> ', instanceData);
                 if(orgId === instanceData.orgId && urlParams['bg'] === instanceData.bgId &&projectId ===  instanceData.projectId && envId === instanceData.envId) {
                     addInstanceToDOM(instanceData);
+                }
+            });
+
+            window.socketAutoScale.on('instanceStateChanged', function(instanceData) {
+                console.log('State changed event fired ==> ', instanceData);
+                var instanceId = instanceData._id;
+                var title = '';
+                if(orgId === instanceData.orgId && urlParams['bg'] === instanceData.bgId &&projectId ===  instanceData.projectId && envId === instanceData.envId) {
+                     var $card = $('#divinstancescardview').find('.domain-roles-caption[data-instanceId=' + instanceData._id + ']');
+                      /*$card.find('.instance-state').removeClass().addClass('instance-state instance-state-text-stopped').html(instanceData.instanceState);
+                      disableInstanceActionBtns(instanceData._id);
+                      $card.find('.componentlistContainer').removeClass().addClass('componentlistContainer stopped');
+                      $('#tableinstanceview').find('tr[data-instanceid="'+instanceData._id+'"]').find('.instancestatusindicator').removeClass().addClass('instancestatusindicator stopped');
+                      */
+                      
+                    var $tableViewInstanceId = $("tr[data-instanceId='" + instanceId + "']");
+                      title = instanceData.instanceState == "running" ? "Stop" : instanceData.instanceState == "stopped" ? "Start" : "";
+                      $('[instanceID="' + instanceId + '"]').removeClass('stopped running pending stopping unknown').addClass(instanceData.instanceState).attr('data-original-title', title);
+                      
+                    if (instanceData.instanceState == 'stopped') {
+                        enableInstanceActionStopBtn(instanceData._id);
+                    }
+                    if (instanceData.instanceState == 'running') {
+                        enableInstanceActionStartBtn(instanceData._id, instanceData.hardware.os);
+                        
+                    }
+                    if (instanceData.instanceState == 'pending' || instanceData.instanceState == 'stopping' || instanceData.instanceState == 'terminated') {
+                        disableInstanceActionBtns(instanceData._id);
+                    }
+                    if (instanceData.instanceState == 'unknown') {
+                        disableInstanceStartStopActionBtns(instanceData._id, instanceData.hardware.os);
+                    }
+                    var cssClassed = getCssClassFromStatus(instanceData.instanceState);
+                            $card.find('.componentlistContainer').removeClass().addClass('componentlistContainer').addClass(cssClassed.ringClass);
+                            //disableInstanceActionBtns(instanceData._id);
+                            $card.find('.instance-state').removeClass().addClass('instance-state').addClass(cssClassed.textClass).html(instanceData.instanceState);
+                            $('.instancestatusindicator[data-instanceId="' + instanceId + '"]').removeClass().addClass('instancestatusindicator').addClass(cssClassed.tableViewStatusClass);
+
+                    //addInstanceaddInstanceToDOMToDOMaddInstanceToDOM(instanceData);
                 }
             });
 

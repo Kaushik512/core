@@ -10,8 +10,8 @@ Resource           ${COMMON RESOURCES}/catalyst_grid_node.txt
 
 
 *** Test Cases ***
-Catalyst Validation And Creation of New Template
-    [Tags]       Sanity               Smoke
+Catalyst Validation And Creation,Editing of New Software Stack Template
+    [Tags]       Sanity               Settings
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
     Test Validation of Creation of New Templates
@@ -21,7 +21,7 @@ Catalyst Validation And Creation of New Template
 
 
 Catalyst Unique Template Validation Setup
-    [Tags]       Sanity               Smoke
+    [Tags]       Sanity               settings
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
     Catalyst Unique Template Validation Setup
@@ -29,8 +29,8 @@ Catalyst Unique Template Validation Setup
     [Teardown]     Close Browser
 
 
-Catalyst new Gallery Service Command setup
-    [Tags]       Sanity               Smoke
+Catalyst Validation and Creation of Service Command setup
+    [Tags]       Sanity               settings
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
     Test Validation of Creation of New Services

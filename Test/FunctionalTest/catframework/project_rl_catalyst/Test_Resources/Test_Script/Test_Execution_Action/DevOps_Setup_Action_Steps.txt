@@ -91,6 +91,21 @@ Catalyst Duplicate DataBag setup
 
 
 
+Catalyst Deleting the Databag
+    Clicks on Settings
+    Clicks on DevOps Setup menu
+    Clicks on Config Management menu
+    Sleep    2s
+    Clicks on the User Creted Chef Server
+    Sleep    1s
+    Delete the DataBag Created    
+
+
+
+
+
+
+
 Verfiy the Duplicate Message of DataBag
     Element Should Contain    css=div.bootbox-body    ${DUPLICATE DATABAGMSG}
     Sleep    2s
@@ -385,10 +400,140 @@ Catalyst Creation of the Puppet Server
     Clicks on Save Button of Puppet Server
     Verify the Puppet Server is Created
 
+Catalyst Unique Puppet Server verification
+    Clicks on Settings
+    Clicks on DevOps Setup menu
+    Clicks on Puppet Server Link Button
+    Clicks on New Button of Puppet Server Button
+    Sleep    1s
+    Enters the edited Puppet Server Name
+    Enters the Puppet Host Name
+    Clicks on Save Button of Puppet Server
+    Verfiy the Unique Error message dispalyed for puppet server name and host name
+
+
+Catalyst Edition of the Puppet Server
+    Clicks on Settings
+    Clicks on DevOps Setup menu
+    Clicks on Puppet Server Link Button
+    Clicks on edit button of puppet server created
+    Enters the edited Puppet Server Name
+    Clicks on Save Button of Puppet Server
+    Verify the edited Puppet Server is Created
+
+
+
+Verfiy the Unique Error message dispalyed for puppet server name and host name
+    Element Should Contain    id=unique_puppetservername    ${Unique ErrMsg}
+    Element Should Contain    id=unique_hostname    ${ChefServer AlreadyExisting}
+
+
+
+Clicks on edit button of puppet server created
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${PUPPET SERVERNAME}']/../td[5]/div/a[@title='Edit']
+
 Catalyst Validation of the Puppet Server Page
     Validate the 15Character PuppetServer Name
     Verfiy the Error Message displayed limited to 15Characters
+    Validate the Empty Puppet Server name
+    Verfiy the error message dispayed for empty server name
+    Validate the Empty Username for puppet
+    Verfiy the Error message displayed for empty user name
+    Validate the 15Character Username for puppet
+    Verify the Error message displayed for 15character puppet username
+    Validate the Empty host name 
+    Verify the error message dispalyed for empty hostname
+    Validate the no org selected for puppet
+    Verify the error message dispalyed for no org selected
     Validate the Empty Puppet Server Name,HostName,UserName,Organization
+
+
+
+
+Validate the no org selected for puppet
+    Clicks on New Button of Puppet Server Button
+    Sleep    1s
+    Enters the Puppet Server Name
+    Enters the Puppet UserName
+    Enters the Puppet Host Name
+    Choose the Authentication Type
+    Sleep    1s
+    Upload Pem file for Puppet Server
+    Clicks on Save Button of Puppet Server 
+
+Verify the error message dispalyed for no org selected
+    Element Should Contain    id=errmsg_orgname    ${REQ}
+    Clicks on Cancel Button of puppet Server
+
+
+Validate the Empty host name 
+    Clicks on New Button of Puppet Server Button
+    Sleep    1s
+    Enters the Puppet Server Name
+    Enters the Puppet UserName
+    Select The Organization of the OrgAdmin created
+    Choose the Authentication Type
+    Sleep    1s
+    Upload Pem file for Puppet Server
+    Clicks on Save Button of Puppet Server 
+
+
+Verify the error message dispalyed for empty hostname
+    Element Should Contain    id=errmsg_hostname    ${REQ}
+    Clicks on Cancel Button of puppet Server
+
+
+
+Enters the 15 character username for puppet
+    Input Text    id=username    ${Valid15ChrUsrname}
+
+ Validate the 15Character Username for puppet
+    Clicks on New Button of Puppet Server Button
+    Sleep    1s
+    Enters the Puppet Server Name
+    Enters the 15 character username for puppet
+    Enters the Puppet Host Name
+    Select The Organization of the OrgAdmin created
+    Choose the Authentication Type
+    Sleep    1s
+    Upload Pem file for Puppet Server
+    Clicks on Save Button of Puppet Server  
+
+Verify the Error message displayed for 15character puppet username
+    Element Should Contain    id=errmsg_username    ${Valid15ChrErrMsg}
+    Clicks on Cancel Button of puppet Server
+
+
+Validate the Empty Username for puppet
+    Clicks on New Button of Puppet Server Button
+    Sleep    1s
+    Enters the Puppet Server Name
+    Enters the Puppet Host Name
+    Select The Organization of the OrgAdmin created
+    Choose the Authentication Type
+    Sleep    1s
+    Upload Pem file for Puppet Server
+    Clicks on Save Button of Puppet Server 
+
+Verfiy the Error message displayed for empty user name
+    Element Should Contain    id=errmsg_username    ${REQ}
+    Clicks on Cancel Button of puppet Server
+
+Validate the Empty Puppet Server name
+    Clicks on New Button of Puppet Server Button
+    Sleep    1s
+    Enters the Puppet UserName
+    Enters the Puppet Host Name
+    Select The Organization of the OrgAdmin created
+    Choose the Authentication Type
+    Sleep    1s
+    Upload Pem file for Puppet Server
+    Clicks on Save Button of Puppet Server
+    
+
+Verfiy the error message dispayed for empty server name
+    Element Should Contain    id=errmsg_puppetservername    ${REQ}
+    Clicks on Cancel Button of puppet Server 
 
 
 
@@ -410,9 +555,9 @@ Validate the Empty Puppet Server Name,HostName,UserName,Organization
     
 Verify the Error Message displayed for Empty Puppet Server Name,HostName,UserName,Organization
     Element Should Contain    id=errmsg_puppetservername    ${REQ}
-    Element Should Contain    id=errmsg_puppetservername    ${REQ}
-    Element Should Contain    id=errmsg_puppetservername    ${REQ}
-    Element Should Contain    id=errmsg_puppetservername    ${REQ}
+    Element Should Contain    id=errmsg_username    ${REQ}
+    Element Should Contain    id=errmsg_hostname    ${REQ}
+    Element Should Contain    id=errmsg_orgname    ${REQ}
 
 
 Enters the 15Character PuppetServer Name
@@ -438,6 +583,9 @@ Clicks on Save Button of Puppet Server
 Verify the Puppet Server is Created
     Element Should Contain    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${PUPPET SERVERNAME}']    ${PUPPET SERVERNAME}
 
+Verify the edited Puppet Server is Created
+    Sleep    2s
+    Element Should Contain    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${PUPPET EDIT SERVERNAME}']    ${PUPPET EDIT SERVERNAME}
 
 
 Clicks on Puppet Server Link Button
@@ -448,6 +596,10 @@ Clicks on New Button of Puppet Server Button
 
 Enters the Puppet Server Name
     Input Text    id=puppetservername    ${PUPPET SERVERNAME}
+
+Enters the edited Puppet Server Name
+    Input Text    id=puppetservername    ${PUPPET EDIT SERVERNAME}            
+
 
 Enters the Puppet UserName
     Input Text    id=username    ${PUPPET USERNAME}

@@ -1,6 +1,6 @@
-var express = require("./node_modules/express");
+var express = require("express");
 var app = express();
-var engine = require("./node_modules/ejs");
+
 var path = require("path");
 var http = require("http");
 var https = require("https");
@@ -14,11 +14,22 @@ var passportLdapStrategy = require('./lib/ldapPassportStrategy.js');
 var passportADStrategy = require('./lib/adPassportStrategy.js');
 var Tail = require('tail').Tail;
 
+// express middleware
+
+var expressCompression = require('compression');
+var expressFavicon = require('serve-favicon');
+var expressCookieParser = require('cookie-parser');
+var expressSession = require('express-session');
+var expressBodyParser = require('body-parser');
+var multipart = require('connect-multiparty');
+var expressMultipartMiddleware = multipart();
+
+
 
 var appConfig = require('_pr/config');
 
-var RedisStore = require('connect-redis')(express);
-var MongoStore = require('connect-mongo')(express.session);
+//var RedisStore = require('connect-redis')(express);
+var MongoStore = require('connect-mongo')(expressSession);
 
 var mongoDbConnect = require('_pr/lib/mongodb');
 
@@ -77,8 +88,10 @@ var mongoStore = new MongoStore({
 
 app.set('port', process.env.PORT || appConfig.app_run_port);
 app.set('sport', appConfig.app_run_secure_port);
-app.use(express.compress());
-app.use(express.favicon(__dirname + '/../client/htmls/private/img/favicons/favicon.ico'));
+app.use(expressCompression());
+app.use(expressFavicon(__dirname + '/../client/htmls/private/img/favicons/favicon.ico'));
+/**
+// commented for express 4.x
 app.use(express.logger({
     format: 'dev',
     stream: {
@@ -86,24 +99,36 @@ app.use(express.logger({
             expressLogger.debug(message);
         }
     }
-}));
+}));*/
 
-app.use(express.cookieParser());
+app.use(expressCookieParser());
 
 logger.debug("Initializing Session store in mongo");
 
-app.use(express.session({
+app.use(expressSession({
     secret: 'sessionSekret',
-    store: mongoStore
+    store: mongoStore,
+    resave: false,
+    saveUninitialized: true
 }));
-app.use(express.bodyParser());
-app.use(express.methodOverride());
+
+// parse application/x-www-form-urlencoded
+app.use(expressBodyParser.urlencoded({ extended: true }))
+
+// parse application/json
+app.use(expressBodyParser.json())
+
+
+app.use(expressMultipartMiddleware);
+
+//app.use(express.methodOverride());
+
 
 //setting up passport
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use(app.router);
+//app.use(app.router);
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
@@ -125,7 +150,7 @@ io = io.listen(server, {
 
 logger.debug('Setting up application routes');
 var routes = require('./routes/routes.js');
-routes.setRoutes(app,io);
+routes.setRoutes(app, io);
 
 var socketIORoutes = require('./routes/socket.io/routes.js');
 socketIORoutes.setRoutes(io);
@@ -136,31 +161,31 @@ io.set('authorization', function(data, callback) {
     console.log('socket data ==>',data);
     
 });*/
-io.set('log level',1);
+io.set('log level', 1);
 
-io.sockets.on('connection',function(socket){
-   // socket.emit('log',"testing the log");
-   //  logger.debug('sent out socket message');
-   //console.log('file :' + './logs/catalyst.log.' + dt.getFullYear() + '-' + (dt.getMonth() + 1) + '-' + dt.getDate());
-   // logger.on('log',function(msg){
-   //      console.log('>>>>>>>>>>>>>' + msg); 
-   // });
+io.sockets.on('connection', function(socket) {
+    // socket.emit('log',"testing the log");
+    //  logger.debug('sent out socket message');
+    //console.log('file :' + './logs/catalyst.log.' + dt.getFullYear() + '-' + (dt.getMonth() + 1) + '-' + dt.getDate());
+    // logger.on('log',function(msg){
+    //      console.log('>>>>>>>>>>>>>' + msg); 
+    // });
     var dt = new Date();
     var month = dt.getMonth() + 1;
-    if(month < 10)
+    if (month < 10)
         month = '0' + month;
     console.log('file :' + './logs/catalyst.log.' + dt.getFullYear() + '-' + month + '-' + dt.getDate());
 
     var tail;
-    if(fs.existsSync('./logs/catalyst.log.' + dt.getFullYear() + '-' + month + '-' + dt.getDate() + '.2'))
-        tail  = new Tail('./logs/catalyst.log.' + dt.getFullYear() + '-' + month + '-' + dt.getDate() + '.2'); //catalyst.log.2015-06-19
-    else if(fs.existsSync('./logs/catalyst.log.' + dt.getFullYear() + '-' + month + '-' + dt.getDate() + '.1'))
-        tail  = new Tail('./logs/catalyst.log.' + dt.getFullYear() + '-' + month + '-' + dt.getDate() + '.1'); //catalyst.log.2015-06-19
+    if (fs.existsSync('./logs/catalyst.log.' + dt.getFullYear() + '-' + month + '-' + dt.getDate() + '.2'))
+        tail = new Tail('./logs/catalyst.log.' + dt.getFullYear() + '-' + month + '-' + dt.getDate() + '.2'); //catalyst.log.2015-06-19
+    else if (fs.existsSync('./logs/catalyst.log.' + dt.getFullYear() + '-' + month + '-' + dt.getDate() + '.1'))
+        tail = new Tail('./logs/catalyst.log.' + dt.getFullYear() + '-' + month + '-' + dt.getDate() + '.1'); //catalyst.log.2015-06-19
     else
-         tail  = new Tail('./logs/catalyst.log.' + dt.getFullYear() + '-' + month + '-' + dt.getDate()); //catalyst.log.2015-06-19
+        tail = new Tail('./logs/catalyst.log.' + dt.getFullYear() + '-' + month + '-' + dt.getDate()); //catalyst.log.2015-06-19
     // var tail  = new Tail('./logs/catalyst.log.2015-06-22'); //catalyst.log.2015-06-19
-    tail.on('line',function(line){
-        socket.emit('log',line);
+    tail.on('line', function(line) {
+        socket.emit('log', line);
     });
 });
 
