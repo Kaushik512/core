@@ -68,19 +68,7 @@ var vmwareservice = function(options) {
 
     }
 
-    // this.startVM = function(servicehost,vm_name,callback){
-    //     //to do
-    //     client = new Client();
-    //     var datastoresUrl = servicehost + '/' + vm_name +'/poweron?ip=' + options.host + '&user=' + options.username + '&passwd=' + options.password + '&dc=' + options.dc;
-    //     console.log(datastoresUrl);
-    //     client.registerMethod("jsonMethod", datastoresUrl, "PUT");
-    //     var args = {};
-    //     client.methods.jsonMethod(args, function(data, response) {
-    //         console.log("get datastoresUrl response::" + data);
-    //         callback(null,data);
-    //     });
-        
-    // }
+  
     this.getDatastores = function(servicehost,callback){
         client = new Client();
         var datastoresUrl = servicehost + '/datastores?ip=' + options.host + '&user=' + options.username + '&passwd=' + options.password + '&dc=' + options.dc;
@@ -119,7 +107,7 @@ var vmwareservice = function(options) {
         //console.log(JSON.stringify(args));
        // callback(null,serverjson);
          client.methods.postMethod(args, function(data, response) {
-            console.log("get datastoresUrl response::" + data);
+            console.log("get create server response::" + data);
             data = JSON.parse(data);
             if(data.vms_launched && data.vms_launched.length > 0){
                 serverjson["vm_name"] = data.vms_launched[0];
@@ -208,7 +196,7 @@ var vmwareservice = function(options) {
                                 self.timeouts = [];
                                 if (!self.callbackdone) {
                                     self.callbackdone = true;
-                                    callback(null, data.ip);
+                                    callback(null, data.ip,data);
                                     return;
                                 }
                                 else{
