@@ -57,7 +57,14 @@ var vmware = require('./routes_vmware.js');
 
 var servicenow = require('./routes_servicenow');
 
+
 var appdeployPipeline = require('./routes_appdeployPipeline');
+
+var chefFactory = require('./routes_cheffactory');
+
+var expressServeStatic = require('serve-static');
+
+
 
 module.exports.setRoutes = function(app,socketIo) {
 
@@ -129,12 +136,14 @@ module.exports.setRoutes = function(app,socketIo) {
 
     appdeployPipeline.setRoutes(app, sessionVerificationFunc);
 
+    chefFactory.setRoutes(app,sessionVerificationFunc);
+
     app.get('/', function(req, res) {
         res.redirect('/private/index.html');
     });
 
     //for public html files
-    app.use('/public', express.static(path.join(path.dirname(path.dirname(__dirname)), 'client/htmls/public')));
+    app.use('/public', expressServeStatic(path.join(path.dirname(path.dirname(__dirname)), 'client/htmls/public')));
 
     app.get('/public/login.html', function(req, res, next) {
         if (req.session && req.session.user) {
@@ -173,7 +182,7 @@ module.exports.setRoutes = function(app,socketIo) {
             res.redirect('/public/login.html');
         }
     });
-    app.use('/private', express.static(path.join(path.dirname(path.dirname(__dirname)), 'client/htmls/private')));
+    app.use('/private', expressServeStatic(path.join(path.dirname(path.dirname(__dirname)), 'client/htmls/private')));
 
 
     // for upload dir
@@ -187,7 +196,7 @@ module.exports.setRoutes = function(app,socketIo) {
             }
         });
 
-        app.use('/uploads', express.static(appConfig.staticUploadDir));
+        app.use('/uploads', expressServeStatic(appConfig.staticUploadDir));
 
     }
 
