@@ -76,6 +76,46 @@ module.exports.setRoutes = function(app, verificationFunc) {
 
     });
 
+    app.put('/vmware/:providerid/:vmname/:action',function(req,res){
+        if(req.params.action){
+            var action = '';
+            switch(req.params.action){
+                case "start":
+                    action = 'poweron';
+                    break;
+                case "stop":
+                    action = 'poweroff';
+                    break;
+            }
+            getvmwareprovider(req.params.providerid,function(err,vmwareconfig){
+                if(vmwareconfig){
+                    var vmware = new VMware(vmwareconfig);
+                    vmware.startstopVM(vmwareconfig.serviceHost,req.params.vmname,action,function(err,data){
+                        if(!err)
+                        {
+                            console.log('Recvd:',JSON.stringify(JSON.parse(data)));
+                            res.send('200',JSON.parse(data));
+                        }
+                        else{
+                            console.log('Error in action query :',err);
+                            res.send('500',null);
+                        }
+                    });
+                }
+                else{
+                    //no provider found.
+                    console.log('No Provider found :');
+                    res.send('400','No Provider found');
+                }
+
+            });
+
+        }
+        else{
+            res.send('400','No Action defined');
+        }
+    });
+
 	
 
 }
