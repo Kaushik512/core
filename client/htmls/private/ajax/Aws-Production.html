@@ -3527,7 +3527,7 @@
      dataType: "json",
 
      async: false,
-     url: "../organizations/getTreeNew",
+     url: "../organizations/getTreeForbtv",
      success: function(data) {
 
          console.log(data);
@@ -3538,8 +3538,8 @@
          var $envList = $('#envList');
          for (var i = 0; i < data.length; i++) {
 
-             console.log(data[i].businessGroups);
-             $orgListInput.append($('<option></option>').val(data[i].rowid).html(data[i].name).data('bglist', data[i].businessGroups).data('envList', data[i].environments));
+             //console.log("checkIng"+JSON.stringify(data[i].nodes));
+             $orgListInput.append($('<option></option>').val(data[i].rowid).html(data[i].name).data('bglist', data[i].nodes).data('project',data[i].nodes[0].nodes).data('envList', data[i].nodes[0].nodes));
          }
          $orgListInput.change(function(e) {
 
@@ -3556,21 +3556,9 @@
              var getBGs = $selectedOrgOption.data('bglist');
              if (getBGs != null) {
                  for (var i = 0; i < getBGs.length; i++) {
-                     $bgList.append($('<option></option>').val(getBGs[i].rowid).html(getBGs[i].name).data('projList', getBGs[i].projects));
+                     $bgList.append($('<option></option>').val(getBGs[i].rowid).html(getBGs[i].name).data('projList', getBGs[i].nodes));
                  }
              }
-
-
-             //     $envList.empty();
-             //     var getEnv = $selectedOrgOption.data('envList');
-             //     if(getEnv != null){
-             //     //alert(JSON.stringify(getEnv));
-             //     $envList.append($('<option></option>').val('choose').html('Choose'));
-             //     //alert(getEnv.length);
-             //     for (var i = 0; i < getEnv.length; i++) {
-             //    $envList.append($('<option></option>').val(getEnv[i].rowid).html(getEnv[i].name));
-             //  }
-             // }
 
              var $cookbookShow = $('.cookbookShow').empty();
              $cookbookShow.append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
@@ -3583,7 +3571,7 @@
                      tcb = templatescookbooks.split(',');
                  }
              }
-             /*var tcb = $('#tab3').find('div[class*="productdiv2"]').first().attr('templatescookbooks').split(',');*/
+             
 
              console.log(tcb);
              console.log('tcbdhd == >', tcb);
@@ -3593,19 +3581,12 @@
              console.log("Variables>>>>>" + $ccrs);
              $cookbookShow.empty();
              $cookbookShow.append($ccrs);
-            // console.log($ccrs.substring($ccrs.lastIndexOf("[") + 1, $ccrs.lastIndexOf("]")));
-             /*var $runlistList = $('#tableRunlistForBlueprint');
-             var $tr = $('<tr class="runlistRow"></tr>');
-             var $tdName = $('<td class="runlistDescription"></td>');
-
-             $tdName.append($ccrs);*/
-            // alert($ccrs);
-            // createRunlistTable($ccrs);
+            
             $tasksRunlist.clear().draw();
             for (var i = 0; i < tcb.length; i++) {
-                //alert('check');
+                
                 if (tcb.length > 0) {
-                    //alert('ch');
+            
                     console.log(tcb[i].substring(tcb[i].lastIndexOf("[") + 1, tcb[i].lastIndexOf("]")));
                     var $runlistList = $('#tableRunlistForBlueprint');
                     var $tr = $('<tr class="runlistRow"></tr>');
@@ -3634,9 +3615,9 @@
              $projectList.empty();
              $projectList.append($('<option></option>').val('choose').html('Choose'));
              var getProjs = $selectedOrgOption.data('projList');
-             // alert(getProjs.length);
+             
              for (var i = 0; i < getProjs.length; i++) {
-
+             
                  $projectList.append($('<option></option>').val(getProjs[i].rowid).html(getProjs[i].name));
              }
          });
