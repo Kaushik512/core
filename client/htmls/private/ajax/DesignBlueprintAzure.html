@@ -1714,7 +1714,7 @@ function getImagesWithOSFilter() {
                 }
             });*/
 
-            $.get('/azure/locations', function(data) {
+            $.get('/azure/'+providerVal+'/locations', function(data) {
                 console.log("locations response:",data);
                 data = JSON.parse(data);
                 
@@ -1750,7 +1750,7 @@ function getImagesWithOSFilter() {
                                    $('#vpcSpinner').removeClass('hidden');
                                    var selectedLocation = $(this).val();
 
-                                    $.get('/azure/networks', function(data) {
+                                    $.get('/azure/'+providerVal+'/networks', function(data) {
                                         console.log("networks response:",data);
                                         data = JSON.parse(data);
 

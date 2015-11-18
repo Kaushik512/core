@@ -181,6 +181,8 @@ function constructXmlInputBody(params) {
 
         /*end of template for linux type machines configuration */
 
+        configurationSets.ConfigurationSets.push(linuxProvisioningConfigurationTemplate);
+
         /*start of default endpoint template for ssh port*/
         var inputEndpointsTemplate = {
             InputEndpoint: [{
@@ -320,13 +322,13 @@ function constructCloudServiceReqBody(cloudService, location) {
     return xmlString;
 }
 
-var AzureCloud = function() {
+var AzureCloud = function(options) {
 
-    var options = {
+    /*var options = {
         subscriptionId: "f2c53cd4-5d0f-4c6d-880b-6af801de9b21",
         certLocation: "/Office/Work/Azure/certs/management.pem",
         keyLocation: "/Office/Work/Azure/certs/management.key"
-    };
+    };*/
 
     var certFile = path.resolve(__dirname, options.certLocation);
     var keyFile = path.resolve(__dirname, options.keyLocation);
@@ -389,35 +391,52 @@ var AzureCloud = function() {
             callback(null, data);
             return;
         });*/
-
-        var opts = {
-            url: "https://management.core.windows.net/" + options.subscriptionId + "/locations",
-            agentOptions: {
-                cert: fs.readFileSync(certFile),
-                key: fs.readFileSync(keyFile),
-            },
-            headers: {
-                "x-ms-version": "2015-04-01"
-            }
-        }
-
-        request.get(opts, function(err, response, body) {
-
-            logger.debug("getLocations response.statusCode: ", response.statusCode);
-
+        logger.debug("START:: getLocations");
+        fs.readFile(certFile, function(err, certData) {
             if (err) {
-                logger.error("Error...", err);
-                callback(err, null);
+                logger.error("Error reading certFile..", err);
                 return;
             }
+            logger.debug("certFile loaded");
+            fs.readFile(keyFile, function(err, keyData) {
+                if (err) {
+                    logger.error("Error reading keyFile..", err);
+                    return;
+                }
+                logger.debug("keyFile loaded");
+                var opts = {
+                    url: "https://management.core.windows.net/" + options.subscriptionId + "/locations",
+                    agentOptions: {
+                        cert: certData,
+                        key: keyData,
+                    },
+                    headers: {
+                        "x-ms-version": "2015-04-01"
+                    }
+                }
 
-            if (response.statusCode == '200') {
-                callback(null, body);
-                return;
-            } else {
-                callback(body, null);
-                return;
-            }
+                request.get(opts, function(err, response, body) {
+
+                    logger.debug("getLocations response.statusCode: ", response.statusCode);
+
+                    if (err) {
+                        logger.error("Error...", err);
+                        callback(err, null);
+                        return;
+                    }
+
+                    if (response.statusCode == '200') {
+                        logger.debug("END:: getLocations");
+                        callback(null, body);
+                        return;
+                    } else {
+                        callback(body, null);
+                        return;
+                    }
+
+                });
+
+            });
 
         });
 
@@ -435,109 +454,159 @@ var AzureCloud = function() {
             callback(null, data);
             return;
         });*/
-
-        var opts = {
-            url: "https://management.core.windows.net/" + options.subscriptionId + "/services/networking/virtualnetwork",
-            agentOptions: {
-                cert: fs.readFileSync(certFile),
-                key: fs.readFileSync(keyFile),
-            },
-            headers: {
-                "x-ms-version": "2015-04-01"
-            }
-        }
-
-        request.get(opts, function(err, response, body) {
-
-            logger.debug("getNetworks response.statusCode: ", response.statusCode);
-
+        logger.debug("START:: getNetworks");
+        fs.readFile(certFile, function(err, certData) {
             if (err) {
-                logger.error("Error...", err);
-                callback(err, null);
+                logger.error("Error reading certFile..", err);
                 return;
             }
+            logger.debug("certFile loaded");
+            fs.readFile(keyFile, function(err, keyData) {
+                if (err) {
+                    logger.error("Error reading keyFile..", err);
+                    return;
+                }
+                logger.debug("keyFile loaded");
 
-            if (response.statusCode == '200') {
-                callback(null, body);
-                return;
-            } else {
-                callback(body, null);
-                return;
-            }
+                var opts = {
+                    url: "https://management.core.windows.net/" + options.subscriptionId + "/services/networking/virtualnetwork",
+                    agentOptions: {
+                        cert: certData,
+                        key: keyData,
+                    },
+                    headers: {
+                        "x-ms-version": "2015-04-01"
+                    }
+                }
 
+                request.get(opts, function(err, response, body) {
+
+                    logger.debug("getNetworks response.statusCode: ", response.statusCode);
+
+                    if (err) {
+                        logger.error("Error...", err);
+                        callback(err, null);
+                        return;
+                    }
+
+                    if (response.statusCode == '200') {
+                        logger.debug("END:: getNetworks");
+                        callback(null, body);
+                        return;
+                    } else {
+                        callback(body, null);
+                        return;
+                    }
+
+                });
+
+            });
         });
 
     }
 
     this.createVirtualMachine = function(cloudService, reqBody, callback) {
-
-        var opts = {
-            url: "https://management.core.windows.net/" + options.subscriptionId + "/services/hostedservices/" + cloudService + "/deployments",
-            agentOptions: {
-                cert: fs.readFileSync(certFile),
-                key: fs.readFileSync(keyFile),
-            },
-            headers: {
-                "x-ms-version": "2015-04-01",
-                "Content-Type": "text/xml"
-            },
-            body: reqBody
-        }
-
-        request.post(opts, function(err, response, body) {
-
-            console.log("response.statusCode: ", response.statusCode);
-
+        logger.debug("START:: createVirtualMachine");
+        fs.readFile(certFile, function(err, certData) {
             if (err) {
-                //console.log("Error...",err);
-                callback(err, null);
+                logger.error("Error reading certFile..", err);
                 return;
             }
+            logger.debug("certFile loaded");
 
-            if (response.statusCode == '202') {
-                callback(null, "Created Virtual Machine Successfully");
-                return;
-            } else {
-                callback(body, null);
-                return;
-            }
+            fs.readFile(keyFile, function(err, keyData) {
+                if (err) {
+                    logger.error("Error reading keyFile..", err);
+                    return;
+                }
+                logger.debug("keyFile loaded");
+
+                var opts = {
+                    url: "https://management.core.windows.net/" + options.subscriptionId + "/services/hostedservices/" + cloudService + "/deployments",
+                    agentOptions: {
+                        cert: certData,
+                        key: keyData,
+                    },
+                    headers: {
+                        "x-ms-version": "2015-04-01",
+                        "Content-Type": "text/xml"
+                    },
+                    body: reqBody
+                }
+
+                request.post(opts, function(err, response, body) {
+
+                    console.log("response.statusCode: ", response.statusCode);
+
+                    if (err) {
+                        //console.log("Error...",err);
+                        callback(err, null);
+                        return;
+                    }
+
+                    if (response.statusCode == '202') {
+                        logger.debug("END:: createVirtualMachine");
+                        callback(null, "Created Virtual Machine Successfully");
+                        return;
+                    } else {
+                        callback(body, null);
+                        return;
+                    }
+                });
+            });
         });
 
     }
 
     this.createCloudService = function(reqBody, callback) {
-
-        var opts = {
-            url: "https://management.core.windows.net/" + options.subscriptionId + "/services/hostedservices",
-            agentOptions: {
-                cert: fs.readFileSync(certFile),
-                key: fs.readFileSync(keyFile),
-            },
-            headers: {
-                "x-ms-version": "2015-04-01",
-                "Content-Type": "text/xml"
-            },
-            body: reqBody
-        }
-
-        request.post(opts, function(err, response, body) {
-
-            console.log("response.statusCode: ", response.statusCode);
-
+        logger.debug("START:: createCloudService");
+        fs.readFile(certFile, function(err, certData) {
             if (err) {
-                console.log("Error in Cloud Service creation", err);
-                callback(err, null);
+                logger.error("Error reading certFile..", err);
                 return;
             }
+            logger.debug("certFile loaded");
+            fs.readFile(keyFile, function(err, keyData) {
+                if (err) {
+                    logger.error("Error reading keyFile..", err);
+                    return;
+                }
+                logger.debug("keyFile loaded");
 
-            if (response.statusCode == '201') {
-                callback(null, "Created Cloud Service Successfully");
-                return;
-            } else {
-                console.log("Error in Cloud Service creation:", body);
-                callback(body, null);
-                return;
-            }
+                var opts = {
+                    url: "https://management.core.windows.net/" + options.subscriptionId + "/services/hostedservices",
+                    agentOptions: {
+                        cert: certData,
+                        key: keyData,
+                    },
+                    headers: {
+                        "x-ms-version": "2015-04-01",
+                        "Content-Type": "text/xml"
+                    },
+                    body: reqBody
+                }
+
+                request.post(opts, function(err, response, body) {
+
+                    console.log("response.statusCode: ", response.statusCode);
+
+                    if (err) {
+                        console.log("Error in Cloud Service creation", err);
+                        callback(err, null);
+                        return;
+                    }
+
+                    if (response.statusCode == '201') {
+                        logger.debug("END:: createCloudService");
+                        callback(null, "Created Cloud Service Successfully");
+                        return;
+                    } else {
+                        console.log("Error in Cloud Service creation:", body);
+                        callback(body, null);
+                        return;
+                    }
+                });
+            });
         });
 
     }
@@ -653,36 +722,53 @@ var AzureCloud = function() {
             logger.debug("Show VM response:", data);
             callback(null, data);
         });*/
-
-        var opts = {
-            uri: "https://management.core.windows.net/" + options.subscriptionId + "/services/hostedservices/" + serverName + "/deploymentslots/Production",
-            agentOptions: {
-                cert: fs.readFileSync(certFile),
-                key: fs.readFileSync(keyFile),
-            },
-            headers: {
-                "x-ms-version": "2015-04-01"
-            }
-        }
-
-        request.get(opts, function(err, response, body) {
-
+        logger.debug("START:: getServerByName");
+        fs.readFile(certFile, function(err, certData) {
             if (err) {
-                //console.log("Error...",err);
-                callback(err, null);
+                logger.error("Error reading certFile..", err);
                 return;
             }
+            logger.debug("certFile loaded");
 
-            console.log("response.statusCode: ", response.statusCode);
+            fs.readFile(keyFile, function(err, keyData) {
+                if (err) {
+                    logger.error("Error reading keyFile..", err);
+                    return;
+                }
+                logger.debug("keyFile loaded");
 
-            if (response.statusCode == '200') {
-                callback(null, body);
-                return;
-            } else {
-                callback(body, null);
-                return;
-            }
+                var opts = {
+                    uri: "https://management.core.windows.net/" + options.subscriptionId + "/services/hostedservices/" + serverName + "/deploymentslots/Production",
+                    agentOptions: {
+                        cert: fs.readFileSync(certFile),
+                        key: fs.readFileSync(keyFile),
+                    },
+                    headers: {
+                        "x-ms-version": "2015-04-01"
+                    }
+                }
 
+                request.get(opts, function(err, response, body) {
+
+                    if (err) {
+                        //console.log("Error...",err);
+                        callback(err, null);
+                        return;
+                    }
+
+                    console.log("response.statusCode: ", response.statusCode);
+
+                    if (response.statusCode == '200') {
+                        logger.debug("END:: getServerByName");
+                        callback(null, body);
+                        return;
+                    } else {
+                        callback(body, null);
+                        return;
+                    }
+
+                });
+            });
         });
 
     }
@@ -700,8 +786,8 @@ var AzureCloud = function() {
             instanceOS: 'linux',
             port: 22,
             cmds: ["ls -al"],
-            cmdswin: ["knife wsman test"],
-            interactiveKeyboard: true
+            cmdswin: ["knife wsman test"]
+            //interactiveKeyboard: true
         }
 
         var cmdString = '';
@@ -727,6 +813,7 @@ var AzureCloud = function() {
         } else {
             cmdString = opts.cmds.join(' && ');
             //console.log(JSON.stringify(opts));
+            logger.debug("cmdString >>>", cmdString);
             var sshExec = new SSHExec(opts);
             sshExec.exec(cmdString, function(err, stdout) {
                 logger.debug(stdout);
@@ -833,7 +920,7 @@ var AzureCloud = function() {
                                 }
                         }
                     } else {
-                        logger.debug('Timeout 2 set');
+                        logger.debug('Timeout 2 set for Ip');
                         if (!self.callbackdone) {
                             self.timeouts.push(setTimeout(wfsr, 30000));
                         }

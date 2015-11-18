@@ -201,9 +201,19 @@
                                                         <div class="col-lg-6 col-md-6">
                                                             <label for="">Enter Subscription Id:<span style="color: Red;" class="control-label">&nbsp;*</span></label>
                                                             <input name="azureSubscriptionId" id="azureSubscriptionId" class="form-control" type="text" cdata="catalyst" cat-validation-azure="required" placeholder="Enter the Subscription Id"> <span data-val-controltovalidate="orgname" id="MainContent_Req_orgname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility: hidden;">Required</span></div>
-                                                        <div class="col-lg-6 col-md-6">
+                                                        <!-- <div class="col-lg-6 col-md-6">
                                                             <label for="">Enter Storage Account:<span style="color: Red;" class="control-label">&nbsp;*</span></label>
-                                                            <input name="azureStorageAccount" id="azureStorageAccount" class="form-control" type="text" cdata="catalyst" cat-validation-azure="required,min3,max24,nospecial" placeholder="Enter the Storage Account"> <span data-val-controltovalidate="orgname" id="MainContent_Req_orgname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility: hidden;">Required</span></div>
+                                                            <input name="azureStorageAccount" id="azureStorageAccount" class="form-control" type="text" cdata="catalyst" cat-validation-azure="required,min3,max24,nospecial" placeholder="Enter the Storage Account"> <span data-val-controltovalidate="orgname" id="MainContent_Req_orgname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility: hidden;">Required</span></div> -->
+                                                         <div class="col-lg-6 col-md-6">
+                                                            <label for="">Upload .pem file:<span style="color: Red;" class="control-label">&nbsp;*</span></label>
+                                                            <!-- <i class="icon-append fa fa-building"></i> -->
+                                                            <input name="azurepem" id="azurepem" class="form-control" type="file" cdata="catalyst" placeholder="Enter the pem file"> <span data-val-controltovalidate="orgname" id="MainContent_Req_orgname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility: hidden;">Required</span>
+                                                        </div>
+                                                        <div class="col-lg-6 col-md-6">
+                                                            <label for="">Upload private key file:<span style="color: Red;" class="control-label">&nbsp;*</span></label>
+                                                            <!-- <i class="icon-append fa fa-building"></i> -->
+                                                            <input name="azurekey" id="azurekey" class="form-control" type="file" cdata="catalyst" placeholder="Enter the key file"> <span data-val-controltovalidate="orgname" id="MainContent_Req_orgname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility: hidden;">Required</span>
+                                                        </div>    
                                                     </div>
                                                     <div class="row">
                                                         <div class="col-lg-6 col-md-6">
@@ -510,6 +520,8 @@
         $('#azureStorageAccount').val(data.storageAccount);
         $('#providertype').val(data.providerType.toUpperCase()).select2();
         $('#providertype').trigger('change');
+        $('#azurepem').val(data.pemFileName);
+        $('#azurekey').val(data.keyFileName);
         $('#orgId').val(data.orgId[0]).attr({
             'answer': data.orgId[0]
         }).select2();
