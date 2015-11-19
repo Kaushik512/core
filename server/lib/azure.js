@@ -291,12 +291,14 @@ function constructXmlInputBody(params) {
 function constructCloudServiceReqBody(cloudService, location) {
     logger.debug("START:: constructCloudServiceReqBody");
 
-    var base64_encode = require('base64').encode;
-    var Buffer = require('buffer').Buffer;
+    //var base64_encode = require('base64').encode;
+    //var Buffer = require('buffer').Buffer;
 
-    var buf = new Buffer(cloudService);
+    var base64_label = new Buffer(cloudService).toString('base64');
 
-    var base64_label = base64_encode(buf);
+    logger.debug('Construct base64 without base64 module:', base64_label);
+
+    //var base64_label = base64_encode(buf);
 
     var cloudServiceTemplate = {
         CreateHostedService: [{
