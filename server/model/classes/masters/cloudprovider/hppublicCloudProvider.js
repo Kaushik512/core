@@ -97,6 +97,11 @@ var hppubliccloudProviderSchema = new Schema({
         required: true,
         trim : true
     },
+    hpFileName: {
+        type: String,
+        required: true,
+        trim: true
+    },
     orgId: {
         type: [String],
         required: true,
@@ -113,9 +118,10 @@ hppubliccloudProviderSchema.statics.createNew = function(req,providerData, callb
     var that = this;
     logger.debug(JSON.stringify(providerObj));
     var provider = new that(providerObj);
-     var inFiles = req.files.hppubliccloudinstancepem;
+     var inFiles = req.files.hpFileName;
      
-    logger.debug('Files found: ' + req.files.hppubliccloudinstancepem);
+    logger.debug('Files found: ' + inFiles.fieldName);
+    
     provider.save(function(err, aProvider) {
         if (err) {
             logger.error(err);
@@ -126,7 +132,7 @@ hppubliccloudProviderSchema.statics.createNew = function(req,providerData, callb
         var keyPair = {
             _id: aProvider['_id']
          }
-        ProviderUtil.saveAwsPemFiles(keyPair, req.files.hppubliccloudinstancepem, function(err, flag) {
+        ProviderUtil.saveAwsPemFiles(keyPair, inFiles, function(err, flag) {
                         if (err) {
                             logger.debug("Unable to save pem files.");
                             res.send(500, "Unable to save pem files.");
@@ -252,6 +258,7 @@ hppubliccloudProviderSchema.statics.updatehppubliccloudProviderById = function(p
             tenantname: providerData.tenantname,
             providerType: providerData.providerType,
             keyname: providerData.keyname,
+            hpFileName: providerData.hpFileName,
             serviceendpoints:{
                 compute: providerData.serviceendpoints.compute,
                 network: providerData.serviceendpoints.network,
