@@ -1,8 +1,7 @@
-
 /* Copyright (C) Relevance Lab Private Limited- All Rights Reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
- * Written by Gobinda Das <gobinda.das@relevancelab.com>, 
+ * Written by Gobinda Das <gobinda.das@relevancelab.com>,
  * May 2015
  */
 
@@ -21,7 +20,7 @@ var Schema = mongoose.Schema;
 
 
 var azurecloudProviderSchema = new Schema({
-    id:{
+    id: {
         type: Number,
         required: true
     },
@@ -40,11 +39,21 @@ var azurecloudProviderSchema = new Schema({
         required: true,
         trim: true
     },
-    storageAccount: {
+    pemFileName: {
+        type: String,
+        required: true,
+        trim: true
+    },
+    keyFileName: {
+        type: String,
+        required: true,
+        trim: true
+    },
+    /*    storageAccount: {
         type: String,
         required: true,
         trim : true
-    },
+    },*/
     orgId: {
         type: [String],
         required: true,
@@ -55,13 +64,17 @@ var azurecloudProviderSchema = new Schema({
 // Static methods :- 
 
 // creates a new Provider
-azurecloudProviderSchema.statics.createNew = function(req,providerData, callback) {
+azurecloudProviderSchema.statics.createNew = function(req, providerData, callback) {
     logger.debug("Enter createNew");
     var providerObj = providerData;
     var that = this;
     logger.debug(JSON.stringify(providerObj));
     var provider = new that(providerObj);
-    
+
+    var inFiles = req.files.azurepem;
+
+    logger.debug('Files found: ' + req.files.azurepem + '::' + req.files.azurekey);
+
     provider.save(function(err, aProvider) {
         if (err) {
             logger.error(err);
@@ -69,13 +82,48 @@ azurecloudProviderSchema.statics.createNew = function(req,providerData, callback
             return;
         }
         logger.debug(JSON.stringify(aProvider));
+
+        var pemId = aProvider['_id'] + req.files.azurepem.fieldName;
+
+        var keyPair = {
+            _id: pemId
+        }
+
+        logger.debug("Saving azure pem file with id as:", pemId);
+
+        ProviderUtil.saveAwsPemFiles(keyPair, req.files.azurepem, function(err, flag) {
+
+            if (err) {
+                logger.debug("Unable to save pem files.");
+                res.send(500, "Unable to save pem files.");
+                return;
+            }
+
+            var keyId = aProvider['_id'] + req.files.azurekey.fieldName;
+
+            logger.debug("Saving azure key file with id as:", keyId);
+
+            keyPair = {
+                _id: keyId
+            }
+
+            ProviderUtil.saveAwsPemFiles(keyPair, req.files.azurekey, function(err, flag) {
+                if (err) {
+                    logger.debug("Unable to save pem files.");
+                    res.send(500, "Unable to save pem files.");
+                    return;
+                }
+
+            });
+
+        });
         logger.debug("Exit createNew with provider present");
         callback(null, aProvider);
         return;
     });
 };
 
-azurecloudProviderSchema.statics.getAzureCloudProviderByName = function(providerName,orgId, callback) {
+azurecloudProviderSchema.statics.getAzureCloudProviderByName = function(providerName, orgId, callback) {
     logger.debug("Enter getAzureCloudProviderByName");
     this.find({
         "providerName": providerName,
@@ -102,7 +150,7 @@ azurecloudProviderSchema.statics.getAzureCloudProviderByName = function(provider
 azurecloudProviderSchema.statics.getAzureCloudProviders = function(callback) {
     logger.debug("Enter getAzureCloudProviders");
     this.find({
-        "id" : 9
+        "id": 9
     }, function(err, providers) {
         if (err) {
             logger.error(err);
@@ -121,15 +169,17 @@ azurecloudProviderSchema.statics.getAzureCloudProviders = function(callback) {
     });
 };
 
-azurecloudProviderSchema.statics.getAzureCloudProvidersForOrg = function(orgList,callback) {
+azurecloudProviderSchema.statics.getAzureCloudProvidersForOrg = function(orgList, callback) {
     logger.debug("Enter getAzureCloudProvidersForOrg");
     var orgIds = [];
-        for(var x=0;x<orgList.length;x++){
-            orgIds.push(orgList[x]._id);
-        }
-        logger.debug("org id: ",orgIds);
+    for (var x = 0; x < orgList.length; x++) {
+        orgIds.push(orgList[x]._id);
+    }
+    logger.debug("org id: ", orgIds);
     this.find({
-        orgId : {$in:orgIds}
+        orgId: {
+            $in: orgIds
+        }
     }, function(err, providers) {
         if (err) {
             logger.error(err);
@@ -160,8 +210,10 @@ azurecloudProviderSchema.statics.getAzureCloudProviderById = function(providerId
             return;
         }
         if (aProvider.length) {
-            logger.debug("Exit getAzureCloudProviderById with provider present",JSON.stringify(aProvider[0]));
-            callback(null, JSON.stringify(aProvider[0]));
+            logger.debug("provider details:", aProvider);
+            var p = JSON.stringify(aProvider[0]);
+            logger.debug("Exit getAzureCloudProviderById with provider present", p);
+            callback(null, p);
             return;
         } else {
             logger.debug("Exit getAzureCloudProviderById with no provider present");
@@ -183,7 +235,7 @@ azurecloudProviderSchema.statics.updateAzureCloudProviderById = function(provide
             subscriptionId: providerData.azureSubscriptionId,
             storageAccount: providerData.azureStorageAccount,
             providerType: providerData.providerType,
-            orgId: providerData.orgId   
+            orgId: providerData.orgId
         }
     }, {
         upsert: false
@@ -218,11 +270,11 @@ azurecloudProviderSchema.statics.removeAzureCloudProviderById = function(provide
 };
 
 
-azurecloudProviderSchema.statics.getAzureCloudProvidersByOrgId = function(orgId,callback) {
+azurecloudProviderSchema.statics.getAzureCloudProvidersByOrgId = function(orgId, callback) {
     logger.debug("Enter getAzureCloudProvidersByOrgId");
-        logger.debug("org id: ",orgId);
+    logger.debug("org id: ", orgId);
     this.find({
-        orgId : orgId
+        orgId: orgId
     }, function(err, providers) {
         if (err) {
             logger.error(err);
