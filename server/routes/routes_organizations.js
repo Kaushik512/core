@@ -1012,6 +1012,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
         var user = req.session.user;
         var category = 'blueprints';
         var permissionto = 'create';
+        console.log('body == >', req.body,'typeof ==> ',typeof req.body);
 
         usersDao.haspermission(user.cn, category, permissionto, null, req.session.user.permissionset, function(err, data) {
             if (!err) {

@@ -410,19 +410,23 @@ Vaildate the Special Chars ServiceName
 Vaildate the No Org Selected in Services
     Clicks on SNew Button
     Selec the no org
-    Enters Service Name
-    Choose Service Command Type
-    Select Chef Server
-    Select Service CookBooks
-    Select the Actions
-    Clicks on SerSave Button
+    #Enters Service Name
+    #Choose Service Command Type
+    #Select Chef Server
+    #Select Service CookBooks
+    #Select the Actions
+    #Clicks on SerSave Button
 
 
 Selec the no org
     Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='s2id_orgname']/a/span[1]
     Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=//div[text()='Select Organization']
     Sleep    1s
-    Alert Should Be Present    text=There are no Chef Servers Associated to this Organisation
+    ${boot box}=    Get Text    xpath=//div[@class='bootbox-body']
+    Log    ${boot box}
+    Should Be Equal   ${boot box}    ${Error}
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[text()='OK']
+    #Alert Should Be Present    text=There are no Chef Servers Associated to this Organisation
 
 
 Enters Special Chars Service Name
@@ -440,7 +444,7 @@ Service Name with Special Characters
     Clicks on Service Cancel Button
 
 Service Name with no Organziatn Selected
-    Element Should Contain    id=errmsg_orgname    ${VaildNoOrgErrMsg}
+    #Element Should Contain    id=errmsg_orgname    ${VaildNoOrgErrMsg}
     Clicks on Service Cancel Button
 
 

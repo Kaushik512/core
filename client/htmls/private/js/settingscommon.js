@@ -683,6 +683,16 @@ function CreateTableFromJson(formID, idFieldName, createFileName) {
                 dataBags.addClass('tableactionbutton');
             }
 
+            var chefFactoryBtn = $('.rowtemplate').find('a[title="Chef Factory"]');
+
+            if (chefFactoryBtn && chefFactoryBtn.length > 0) {
+                chefFactoryBtn.attr("href", "chefFactory.html?" + idFieldValue);
+                chefFactoryBtn.attr("target", "_blank");
+                chefFactoryBtn.removeClass('btn-xs');
+                chefFactoryBtn.addClass('btn-sg');
+                chefFactoryBtn.addClass('tableactionbutton');
+            }
+
 
 
             //setting the delete button

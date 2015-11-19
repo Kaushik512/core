@@ -272,7 +272,7 @@ $(function() {
         $rolesDirArea.empty();
         $cookbookdir.fileTree({
             root: '/',
-            script: '/cheffactory/' + urlParams.id + '/cookbooks/',
+            script: '/cheffactory/' + urlParams.id + '/cookbooks',
             onFolderLoad: function(path, data) {
                 if (path === '/') {
                     $dirArea.show();
@@ -303,7 +303,7 @@ $(function() {
 
         $rolesDirArea.fileTree({
             root: '/',
-            script: '/cheffactory/' + urlParams.id + '/roles/',
+            script: '/cheffactory/' + urlParams.id + '/roles',
             onFolderLoad: function(path, data) {
                 if (path === '/') {
                     $dirArea.show();

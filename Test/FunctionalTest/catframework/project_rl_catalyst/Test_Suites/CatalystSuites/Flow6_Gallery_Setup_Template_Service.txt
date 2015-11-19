@@ -30,7 +30,7 @@ Catalyst Unique Template Validation Setup
 
 
 Catalyst Validation and Creation of Service Command setup
-    [Tags]       Sanity               settings1
+    [Tags]       Sanity               settings
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
     Test Validation of Creation of New Services
