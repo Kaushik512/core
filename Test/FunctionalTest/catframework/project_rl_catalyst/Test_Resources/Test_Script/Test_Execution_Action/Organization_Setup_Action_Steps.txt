@@ -27,7 +27,8 @@ Catalyst Login
 
 
 Version Number and the Jenkins Buildnumber
-    Open Browser    ${ENVIRONMENTSERVER}     ${BROWSERTYPE}
+    Browser is opened to login catalyst
+    #Open Browser    ${ENVIRONMENTSERVER}     ${BROWSERTYPE}
     Sleep    3s   
     Store the Buildnumber
 

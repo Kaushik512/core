@@ -86,9 +86,6 @@ Catalyst Validation of Azure Providers Setup
 
 
 
-
-
-
 Catalyst Validation and Creation of VM IMAGE setup
     [Tags]       Sanity               Smoke
 #    Catalyst Login
