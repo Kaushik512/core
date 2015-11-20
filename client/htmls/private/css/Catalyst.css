@@ -7999,6 +7999,9 @@ body {
 .tableactionWidthCheficon {
     width: 241px;
 }
+.tableactionWidthChef {
+    width: 152px;
+}
 
 .cookbookChefClientRun {
     height: 150px;

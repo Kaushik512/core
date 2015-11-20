@@ -65,6 +65,11 @@ module.exports.setRoutes = function(app) {
                         return next(err);
                     }
                     if (!user) {
+                        if (req.body.authType === 'token') {
+                            return res.status(400).send({
+                                message: "Invalid username or password"
+                            });
+                        }
                         return res.redirect('/public/login.html?o=try');
                     }
                     req.session.user = user;
@@ -92,6 +97,7 @@ module.exports.setRoutes = function(app) {
                                     res.send(200, {
                                         token: authToken.token
                                     });
+                                    return;
                                 });
                             } else {
                                 req.logIn(user, function(err) {
@@ -103,6 +109,11 @@ module.exports.setRoutes = function(app) {
                             }
                         } else {
                             req.session.destroy();
+                            if (req.body.authType === 'token') {
+                                return res.status(400).send({
+                                    message: "Invalid username or password"
+                                });
+                            }
                             res.redirect('/public/login.html?o=try');
                         }
                     });
@@ -137,6 +148,11 @@ module.exports.setRoutes = function(app) {
                                 }
                                 if (!isMatched) {
                                     req.session.destroy();
+                                    if (req.body.authType === 'token') {
+                                        return res.status(400).send({
+                                            message: "Invalid username or password"
+                                        });
+                                    }
                                     res.redirect('/public/login.html?o=try');
                                 } else {
                                     logger.debug('Just before role:', data[0].userrolename);
@@ -153,6 +169,7 @@ module.exports.setRoutes = function(app) {
                                             res.send(200, {
                                                 token: authToken.token
                                             });
+                                            return;
                                         });
                                     } else {
                                         req.logIn(user, function(err) {
@@ -167,6 +184,11 @@ module.exports.setRoutes = function(app) {
                             });
                         } else {
                             req.session.destroy();
+                            if (req.body.authType === 'token') {
+                                return res.status(400).send({
+                                    message: "Invalid username or password"
+                                });
+                            }
                             res.redirect('/public/login.html?o=try');
                         }
                     } else {
@@ -179,6 +201,11 @@ module.exports.setRoutes = function(app) {
             //});
 
         } else {
+            if (req.body.authType === 'token') {
+                return res.status(400).send({
+                    message: "Invalid username or password"
+                });
+            }
             res.redirect('/public/login.html?o=try');
         }
     });
