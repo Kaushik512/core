@@ -236,7 +236,8 @@ Selects the Key Pair
     Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
 
 Uploads the Pem File for Provider
-    Choose File     xpath=.//*[@class='gui-file file']     ${CAT_INSTANCES}
+    Choose File     xpath=(//input[@class='gui-file file'])[3]    ${CAT_INSTANCES}
+    #xpath=.//*[@class='gui-file file']     ${CAT_INSTANCES}
 
 
 Clicks on Save Button of the Provider
