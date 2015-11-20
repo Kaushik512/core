@@ -128,7 +128,7 @@ Catalyst Creation of New Blueprint and Delete
     Clicks on Next Button
     Chooses the Template User Created
     Clicks on Next Button
-    Chooses the Operating System
+    Chooses the Operating Systemhoose
     Sleep    4s
     Choose the Provider
     Choose the Available Images
@@ -365,11 +365,11 @@ Verfiy the Provider is Created
 Validation of Creation of New Image
     Validation of Empty Image Name  ${ValidEmptyImageName}
     Image Name Left Empty  ${ValidEmptImgNameErrMsg}
-    Validation of No Selection Provider  ${ValidEmptyNoProvider}
-    Provider field Name Left Empty  ${ValidEmptyProviderErrMsg}
+    Validation of No Selection organzation  ${ValidEmptyNoProvider}
+    Organization dropdown Left Empty  ${ValidEmptyProviderErrMsg}
     Validation of No Operating System  ${ValidEmptyNoOperatingSys}
     Operating System Left Empty  ${ValidEmptyNoOSErrMsg}
-    Validation of No Image ID  ${ValidEmptyImageID}
+    Validation of No Image ID  ${ValidEmptyImageID} 
     Image ID Left Empty  ${ValidEmptImgIDErrMsg}
     Validation of Image No User Name  ${ValidEmptyIUserName}
     Image User Name Left Empty  ${ValidEmptyIUserNameErrMsg}
@@ -379,11 +379,11 @@ Catalyst Creation of VM Image Process for CentOS
     Sleep    5s    
     Clicks on New Button of VMImage
     Enters the Image Name for CentOS
+    Select the Organizatn to Create Cent OS Img
     Choosess The Provider of Image
     Select the Operating System to Image for CentOS
     Enters the Image ID for CentOS
     Enters the UserName of CentOSProviders
-    Select the Organizatn to Create Cent OS Img
     Clicks on Save Button of Providers
     Sleep    4s
     Verfiy the Centos Img is Created
@@ -397,11 +397,11 @@ Catalyst Creation of VM Image Process for Ubutnu
     Sleep    5s
     Clicks on New Button of VMImage
     Enters the Image Name for Ubuntu
+    Select the Organizatn to Create Ubuntu Img
     Choosess The Provider of Image
     Select the Operating System to Image for Ubuntu 
     Enters the Image ID for Ubuntu
     Enters the UserName of UbuntuProviders
-    Select the Organizatn to Create Ubuntu Img
     Clicks on Save Button of Providers
     Sleep    4s
     Verfiy the Ubuntu Img is Created
@@ -415,11 +415,11 @@ Catalyst Creation of VM Image Process for Windows
     Sleep    5s
     Clicks on New Button of VMImage
     Enters the Image Name for Windows
+    Select the Organizatn to Create Windows Img
     Choosess The Provider of Image
     Select the Operating System to Image for Windows
     Enters the Image ID for Windows
     Enters the UserName of WindowsProviders
-    Select the Organizatn to Create Windows Img
     Clicks on Save Button of Providers
 
 Catalyst VM Image Edit Setup
@@ -1715,11 +1715,11 @@ Validation of Empty Image Name
     Clicks on VMImage
     Clicks on New Button of VMImage
     Enters the Empty Image Name
+    Select the Organizatn to Create Cent OS Img
     Choosess The Provider of Image
     Select the Operating System to Image for CentOS
     Enters the Image ID for CentOS
     Enters the UserName of Providers
-    Select the Organizatn to Create Cent OS Img
     Clicks on Save Button of Providers
     #Clicks on OKX Button
 
@@ -1730,11 +1730,11 @@ Catalyst Unique VM Image Validation Setup
     Clicks on VMImage
     Clicks on New Button of VMImage
     Enters the Image Name for Ubuntu
+    Select the Organizatn to Create Ubuntu Img
     Choosess The Provider of Image
     Select the Operating System to Image for Ubuntu 
     Enters the Image ID for Ubuntu
     Enters the UserName of UbuntuProviders
-    Select the Organizatn to Create Ubuntu Img
     Clicks on Save Button of Providers
     Sleep    4s
     Verify the Error Message displaye while duplicating VM Image
@@ -1857,24 +1857,24 @@ Validate the Empty Image Field
     Element Should Contain    id=errmsg_name    ${ErrMsg}
     Clicks on Image Cancel Button
 
-Validation of No Selection Provider
+Validation of No Selection organzation
     [Arguments]    ${NoProvider}
     Clicks on New Button of VMImage
     Enters the Image Name for CentOS
+    #Select the Organizatn to Create Cent OS Img
     Select the Operating System to Image for CentOS
     Enters the Image ID for CentOS
     Enters the UserName of Providers
-    Select the Organizatn to Create Cent OS Img
     Clicks on Save Button of Providers
     #Clicks on OKX Button
 
-Provider field Name Left Empty
+Organization dropdown Left Empty
     [Arguments]    ${VaildNoNameErrMsg}
-    Validate Emptyprovider name  ${VaildNoNameErrMsg}
+    Validate Emptyorg name  ${VaildNoNameErrMsg}
 
-Validate Emptyprovider name
+Validate Emptyorg name
     [Arguments]    ${ErrMsg}
-    Element Should Contain    id=errmsg_providerId    ${ErrMsg}
+    Element Should Contain    id=errmsg_orgId    ${ErrMsg}
     Clicks on Image Cancel Button
 
 
@@ -1882,10 +1882,10 @@ Validation of No Operating System
     [Arguments]    ${OperatingSystem}
     Clicks on New Button of VMImage
     Enters the Image Name for CentOS
+    Select the Organizatn to Create Cent OS Img
     Choosess The Provider of Image
     Enters the Image ID for CentOS
     Enters the UserName of Providers
-    Select the Organizatn to Create Cent OS Img
     Clicks on Save Button of Providers
     #Clicks on OKX Button
 
@@ -1902,10 +1902,10 @@ Validation of No Image ID
     [Arguments]    ${Imageidentifire}
     Clicks on New Button of VMImage
     Enters the Image Name for CentOS
+    Select the Organizatn to Create Cent OS Img
     Choosess The Provider of Image
     Select the Operating System to Image for CentOS
     Enters the UserName of Providers
-    Select the Organizatn to Create Cent OS Img
     Clicks on Save Button of Providers
     #Clicks on OKX Button
 
@@ -1922,10 +1922,10 @@ Validation of Image No User Name
     [Arguments]    ${username}
     Clicks on New Button of VMImage
     Enters the Image Name for CentOS
+    Select the Organizatn to Create Cent OS Img
     Choosess The Provider of Image
     Select the Operating System to Image for CentOS
     Enters the Image ID for CentOS
-    Select the Organizatn to Create Cent OS Img
     Clicks on Save Button of Providers
     #Clicks on OKX Button
 
@@ -2047,7 +2047,7 @@ Selects the Key Pair
 
 Uploads the Pem File for Provider
     Sleep    4s
-    Choose File    xpath=.//*[@class='gui-file file']    ${CAT_INSTANCES}
+    Choose File    xpath=(//input[@class='gui-file file'])[3]    ${CAT_INSTANCES}
     Sleep    1s
     
 
