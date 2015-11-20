@@ -128,7 +128,7 @@ Catalyst Creation of New Blueprint and Delete
     Clicks on Next Button
     Chooses the Template User Created
     Clicks on Next Button
-    Chooses the Operating System
+    Chooses the Operating Systemhoose
     Sleep    4s
     Choose the Provider
     Choose the Available Images
@@ -2047,7 +2047,7 @@ Selects the Key Pair
 
 Uploads the Pem File for Provider
     Sleep    4s
-    Choose File    xpath=.//*[@class='gui-file file']    ${CAT_INSTANCES}
+    Choose File    xpath=(//input[@class='gui-file file'])[3]    ${CAT_INSTANCES}
     Sleep    1s
     
 
