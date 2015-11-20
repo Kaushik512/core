@@ -83,7 +83,7 @@ azurecloudProviderSchema.statics.createNew = function(req, providerData, callbac
         }
         logger.debug(JSON.stringify(aProvider));
 
-        var pemId = aProvider['_id'] + req.files.azurepem.fieldName;
+        var pemId = aProvider['_id'] + req.files.azurepem.originalFilename;
 
         var keyPair = {
             _id: pemId
@@ -99,7 +99,7 @@ azurecloudProviderSchema.statics.createNew = function(req, providerData, callbac
                 return;
             }
 
-            var keyId = aProvider['_id'] + req.files.azurekey.fieldName;
+            var keyId = aProvider['_id'] + req.files.azurekey.originalFilename;
 
             logger.debug("Saving azure key file with id as:", keyId);
 
