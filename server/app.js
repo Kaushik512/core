@@ -84,6 +84,11 @@ var mongoStore = new MongoStore({
     db: appConfig.db.dbName,
     host: appConfig.db.host,
     port: appConfig.db.port
+}, function() {
+    server.listen(app.get('port'), function() {
+        logger.debug('Express server listening on port ' + app.get('port'));
+    });
+
 });
 
 app.set('port', process.env.PORT || appConfig.app_run_port);
@@ -113,7 +118,9 @@ app.use(expressSession({
 }));
 
 // parse application/x-www-form-urlencoded
-app.use(expressBodyParser.urlencoded({ extended: true }))
+app.use(expressBodyParser.urlencoded({
+    extended: true
+}))
 
 // parse application/json
 app.use(expressBodyParser.json())
@@ -189,6 +196,6 @@ io.sockets.on('connection', function(socket) {
     });
 });
 
-server.listen(app.get('port'), function() {
-    logger.debug('Express server listening on port ' + app.get('port'));
-});
+// server.listen(app.get('port'), function() {
+//     logger.debug('Express server listening on port ' + app.get('port'));
+// });
