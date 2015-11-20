@@ -197,7 +197,7 @@
                                                 <td style="color:#fff;background-color: #2c3742;">Host</td>
                                                 <td style="color:#fff;background-color: #2c3742;">Node IP</td>
                                                 <td style="color:#fff;background-color: #2c3742;">Last Deploy</td>
-                                                <td style="color:#fff;background-color: #2c3742;">Container ID</td>
+                                                <td style="color:#fff;background-color: #2c3742;">Container Name/ID</td>
                                                 <td style="color:#fff;background-color: #2c3742;">Application Type</td>
                                                 <td style="color:#fff;background-color: #2c3742;">Status</td>
                                                 <td style="color:#fff;background-color: #2c3742;">Logs</td>
@@ -221,7 +221,7 @@
                                                 <td style="color:#fff;background-color: #2c3742;">Host</td>
                                                 <td style="color:#fff;background-color: #2c3742;">Node IP</td>
                                                 <td style="color:#fff;background-color: #2c3742;">Last Deploy</td>
-                                                <td style="color:#fff;background-color: #2c3742;">Container ID</td>
+                                                <td style="color:#fff;background-color: #2c3742;">Container Name/ID</td>
                                                 <td style="color:#fff;background-color: #2c3742;">Application Type</td>
                                                 <td style="color:#fff;background-color: #2c3742;">Status</td>
                                                 <td style="color:#fff;background-color: #2c3742;">Logs</td>
@@ -419,7 +419,7 @@
                                                 <td class="lastDeployModal"></td>
                                             </tr>
                                             <tr>
-                                                <td>Container ID :</td>
+                                                <td>Container Name/ID :</td>
                                                 <td class="containerIdModal"></td>
                                             </tr>
                                             <tr>
@@ -542,7 +542,7 @@
 
 
                                             <div class="col-lg-12 col-md-12 margintop15 containerClass containerUpgradeDeploy">
-                                                <label>Container ID:<!-- <span style="color:red">*</span> -->
+                                                <label>Container Name/ID:<!-- <span style="color:red">*</span> -->
                                                     <span>
                                                         <img class="containerIdspinner" src="img/select2-spinner.gif" style="display:none">
                                                         </img>
@@ -900,6 +900,7 @@ $('.createAppConfigure').click(function() {
 });
 
 function createPipelineArea(envName,selectedEnv,projectId){
+    //alert(envName);
     var $stageContainer = $('.stageContainer');
     var $envSpecificAppTemplate = $('.envSpecificAppTemplate');
 
@@ -955,7 +956,10 @@ function createPipelineArea(envName,selectedEnv,projectId){
                 return dateConverted;
             }
             
+            // need to check
+
             for (var i = 0; i < data.length; i++) {
+                console.log("============================= ",JSON.stringify(data));
                 if (!data[i].applicationInstanceName) {
                     if (data[i].hostName) {
                         data[i].applicationInstanceName = data[i].hostName;
