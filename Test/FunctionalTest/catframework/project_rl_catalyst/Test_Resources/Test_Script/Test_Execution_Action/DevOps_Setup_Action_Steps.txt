@@ -578,7 +578,7 @@ Upload Pem file for Puppet Server
     Choose File    id=userpemfile     ${CAT_INSTANCES}
 
 Clicks on Save Button of Puppet Server
-    Click Element    css=.btn.btn-primary.btn-mini
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    css=.btn.btn-primary.btn-mini
 
 Verify the Puppet Server is Created
     Element Should Contain    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${PUPPET SERVERNAME}']    ${PUPPET SERVERNAME}
