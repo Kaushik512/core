@@ -201,6 +201,7 @@ BlueprintSchema.statics.createNew = function(blueprintData, callback) {
         blueprintType = BLUEPRINT_TYPE.AZURE_LAUNCH;
         logger.debug('blueprintData azure instacedata ==>',blueprintData.instanceData);
         blueprintConfig = AzureBlueprint.createNew(blueprintData.instanceData);
+        blueprintConfig.cloudProviderData = AzureBlueprint.createNew(blueprintData.instanceData);
     } else if ((blueprintData.blueprintType === BLUEPRINT_TYPE.VMWARE_LAUNCH) && blueprintData.instanceData) {
         blueprintType = BLUEPRINT_TYPE.VMWARE_LAUNCH;
         logger.debug('blueprintData vmware instacedata ==>',blueprintData.instanceData);

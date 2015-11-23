@@ -47,6 +47,8 @@ var shellEscape = require('shell-escape');
 var Puppet = require('_pr/lib/puppet.js');
 var masterUtil = require('_pr/lib/utils/masterUtil');
 
+var fs = require('fs');
+
 //var WINRM = require('../lib/utils/winrmexec');
 
 module.exports.setRoutes = function(app, sessionVerificationFunc) {
@@ -1638,7 +1640,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                         actionLogId: actionLog._id
                                                     });
 
-                                                    instancesDao.updateInstanceState(req.params.instanceId, currentState, function(err, updateCount) {
+                                                    instancesDao.updateInstanceState(req.params.instanceId, "stopping", function(err, updateCount) {
                                                         if (err) {
                                                             logger.error("update instance state err ==>", err);
                                                             return;
@@ -1652,7 +1654,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                     if (err) {
                                                         return;
                                                     }
-                                                    instancesDao.updateInstanceState(req.params.instanceId, state, function(err, updateCount) {
+                                                    instancesDao.updateInstanceState(req.params.instanceId, 'stopped', function(err, updateCount) {
                                                         if (err) {
                                                             logger.error("update instance state err ==>", err);
                                                             return;
@@ -1671,6 +1673,20 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                     });
 
                                                     instancesDao.updateActionLog(req.params.instanceId, actionLog._id, true, timestampEnded);
+
+                                                    fs.unlink(decryptedPemFile, function(err) {
+                                                        logger.debug("Deleting decryptedPemFile..");
+                                                        if (err) {
+                                                            logger.error("Error in deleting decryptedPemFile..");
+                                                        }
+
+                                                        fs.unlink(decryptedKeyFile, function(err) {
+                                                            logger.debug("Deleting decryptedKeyFile ..");
+                                                            if (err) {
+                                                                logger.error("Error in deleting decryptedKeyFile..");
+                                                            }
+                                                        });
+                                                    });
                                                 });
 
                                         });
@@ -1739,6 +1755,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                 if (err) {
                                                     return;
                                                 }
+
                                                 instancesDao.updateInstanceState(req.params.instanceId, state, function(err, updateCount) {
                                                     if (err) {
                                                         logger.error("update instance state err ==>", err);
@@ -1887,7 +1904,35 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
                             } else if (data[0].keyPairId && data[0].keyPairId == 'azure') {
 
-                                logger.debug("Stopping Azure ");
+                                logger.debug("Starting Azure instance..");
+
+                                var timestampStarted = new Date().getTime();
+
+                                var actionLog = instancesDao.insertStopActionLog(req.params.instanceId, req.session.user.cn, timestampStarted);
+
+                                var logReferenceIds = [req.params.instanceId];
+                                if (actionLog) {
+                                    logReferenceIds.push(actionLog._id);
+                                }
+                                logsDao.insertLog({
+                                    referenceId: logReferenceIds,
+                                    err: false,
+                                    log: "Instance Starting",
+                                    timestamp: timestampStarted
+                                });
+
+                                if (!data[0].providerId) {
+                                    res.send(500, {
+                                        message: "Insufficient provider details, to complete the operation"
+                                    });
+                                    logsDao.insertLog({
+                                        referenceId: logReferenceIds,
+                                        err: true,
+                                        log: "Insufficient provider details, to complete the operation",
+                                        timestamp: new Date().getTime()
+                                    });
+                                    return;
+                                }
 
                                 azureProvider.getAzureCloudProviderById(data[0].providerId, function(err, providerdata) {
                                     if (err) {
@@ -1908,7 +1953,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                     var cryptoConfig = appConfig.cryptoSettings;
                                     var cryptography = new Cryptography(cryptoConfig.algorithm, cryptoConfig.password);
 
-                                    var uniqueVal = uuid.v4().split('-')[0]
+                                    var uniqueVal = uuid.v4().split('-')[0];
 
                                     var decryptedPemFile = pemFile + '_' + uniqueVal + '_decypted';
                                     var decryptedKeyFile = keyFile + '_' + uniqueVal + '_decypted';
@@ -1956,7 +2001,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                         actionLogId: actionLog._id
                                                     });
 
-                                                    instancesDao.updateInstanceState(req.params.instanceId, currentState, function(err, updateCount) {
+                                                    instancesDao.updateInstanceState(req.params.instanceId, "starting", function(err, updateCount) {
                                                         if (err) {
                                                             logger.error("update instance state err ==>", err);
                                                             return;
@@ -1970,7 +2015,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                     if (err) {
                                                         return;
                                                     }
-                                                    instancesDao.updateInstanceState(req.params.instanceId, state, function(err, updateCount) {
+                                                    instancesDao.updateInstanceState(req.params.instanceId, "running", function(err, updateCount) {
                                                         if (err) {
                                                             logger.error("update instance state err ==>", err);
                                                             return;
@@ -1989,6 +2034,20 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                     });
 
                                                     instancesDao.updateActionLog(req.params.instanceId, actionLog._id, true, timestampEnded);
+
+                                                    fs.unlink(decryptedPemFile, function(err) {
+                                                        logger.debug("Deleting decryptedPemFile..");
+                                                        if (err) {
+                                                            logger.error("Error in deleting decryptedPemFile..");
+                                                        }
+
+                                                        fs.unlink(decryptedKeyFile, function(err) {
+                                                            logger.debug("Deleting decryptedKeyFile ..");
+                                                            if (err) {
+                                                                logger.error("Error in deleting decryptedKeyFile..");
+                                                            }
+                                                        });
+                                                    });
                                                 });
 
                                         });

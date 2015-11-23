@@ -771,7 +771,7 @@
                                                 <input id="instanceImage" disabled="disabled" class="form-control">
                                             </td>
                                         </tr>
-                                        <tr>
+                                        <tr class="keyPair">
                                             <td style="padding-left: 18px;padding-top:16px;">Keypair:</td>
                                             <td>
                                                 <input id="instancekeyPair" disabled="disabled" class="form-control">
@@ -807,60 +807,24 @@
                                                 <input id="instanceRunlist" class="form-control" disabled="disabled">
                                             </td>
                                         </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-default btn-primary" data-dismiss="modal">Close</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!--modal for blueprint edit read-->
-                <!--modal for blueprint read-->
-                <div class="modal fade bs-example-modal-lg" id="modalForReadCFT" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                                <h4 class="modal-title" id="myModalLabel">Blueprint Information-CFT</h4>
-                            </div>
-                            <div class="modal-body" style="height:360px;overflow-y:auto;">
-                                <!--os and the 1st tier-->
-                                <table class="table table-bordered">
-                                    <thead>
-                                        <th style="width:11%;text-align:center">Parameters</th>
-                                        <th style="width:27%;text-align:center">Values</th>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td style="padding-left: 18px;padding-top:16px;">Blueprint Name:</td>
-                                            <td>
-                                                <input id="blueprintNameCFT" disabled="disabled" class="form-control">
+                                        <tr class="hidden managementPemKey">
+                                            <td style="padding-left: 18px;padding-top:16px;">Pem File:</td>
+
+                                             <td>
+
+
+                                             <input id="managementPem" class="form-control" disabled="disabled">                                           
+
                                             </td>
                                         </tr>
-                                        <tr>
-                                            <td style="padding-left:18px;padding-top:16px">Organisation Name:</td>
-                                            <td>
-                                                <input id="blueprintORG" disabled="disabled" class="form-control">
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td style="padding-left:18px;padding-top:16px">Template Type:</td>
-                                            <td>
-                                                <input id="blueprintTemplateTypeCFT" disabled="disabled" class="form-control">
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td style="padding-left:18px;padding-top:16px">Business Group:</td>
-                                            <td>
-                                                <input id="blueprintBU" disabled="disabled" class="form-control">
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td style="padding-left:18px;padding-top:16px">Project Name:</td>
-                                            <td>
-                                                <input id="blueprintProject" disabled="disabled" class="form-control">
+                                        <tr class="hidden managementPemKey">
+                                            <td style="padding-left: 18px;padding-top:16px;">Key File:</td>
+
+                                             <td>
+
+
+                                             <input id="managementKey" class="form-control" disabled="disabled">                                           
+
                                             </td>
                                         </tr>
                                     </tbody>
@@ -873,6 +837,7 @@
                     </div>
                 </div>
                 <!--modal for blueprint edit read-->
+                
                 <!--modal for blueprint edit-->
                 <div class="modal fade bs-example-modal-lg" id="blueprintEditResultContainer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
                     <div class="modal-dialog modal-lg">
@@ -2860,7 +2825,6 @@ var $wizard = $('#bootstrap-wizard-1').bootstrapWizard({
             //alert('after validation ' + isValid);
             var tempType = $('.role-Selected').data('templatetype').toLowerCase();
 
-
             if (tempType !== "docker" && tempType !== 'cloudformation' && !isValid) {
 
                 bootbox.alert({
@@ -2876,7 +2840,7 @@ var $wizard = $('#bootstrap-wizard-1').bootstrapWizard({
                     title: "Confirm",
                     callback: function(result) {
                         if (result) {
-
+                            
                             $("#tabheader").html('Create Blueprint');
                             var $selectedTemplateArea = $('.selectedTemplateArea');
                             var $selectedItem = $selectedTemplateArea.find('.productdiv2');
@@ -3103,7 +3067,7 @@ var $wizard = $('#bootstrap-wizard-1').bootstrapWizard({
                                     var wizard = $wizard.data('bootstrapWizard');
                                     wizard.next();
                                     wizard.disablePreviouBtn();
-                                    if (tempType === 'appfactory') {
+                                    if (tempType === 'softwarestack') {
                                         $('a#blueprintInfo').attr('href', '#modalForRead').click(function(e) {
 
 
@@ -3130,6 +3094,8 @@ var $wizard = $('#bootstrap-wizard-1').bootstrapWizard({
                                             $blueprintReadContainer.find('.modal-body #instanceSecurityGroupId').val(data.blueprintConfig.cloudProviderData.securityGroupIds);
 
                                             $blueprintReadContainer.find('.modal-body #instanceVPC').val(data.blueprintConfig.cloudProviderData.vpcId);
+
+                                            $blueprintReadContainer.find('.modal-body #instanceRegion').val(data.blueprintConfig.cloudProviderData.region);
                                             // loop for getting runlist
                                             for (var j = 0; j < data.blueprintConfig.infraManagerData.versionsList.length; j++) {
 
@@ -3151,19 +3117,19 @@ var $wizard = $('#bootstrap-wizard-1').bootstrapWizard({
                                             //for getting the Provider name,Type,Region,KeyPair
                                             $.ajax({
                                                 type: "GET",
-                                                url: "/aws/providers/" + data.blueprintConfig.cloudProviderId,
+                                                url: "/azure/providers/" + data.blueprintConfig.cloudProviderId,
                                                 success: function(data) {
+                                                    data = JSON.parse(data);
                                                     $blueprintReadContainer.find('.modal-body #instanceProviderName').val(data.providerName);
                                                     $blueprintReadContainer.find('.modal-body #instanceProviderType').val(data.providerType);
                                                     // loop for getting region and Keypair
 
-                                                    for (var k = 0; k < data.keyPairs.length; k++) {
+                                                    $blueprintReadContainer.find('tr.keyPair').hide();
+                                                    $blueprintReadContainer.find('tr.managementPemKey').removeClass('hidden');
+                                                    $blueprintReadContainer.find('.modal-body #managementPem').val(data.pemFileName);
+                                                        
+                                                    $blueprintReadContainer.find('.modal-body #managementKey').val(data.keyFileName);
 
-                                                        $blueprintReadContainer.find('.modal-body #instanceRegion').val(data.keyPairs[k].region);
-                                                        $blueprintReadContainer.find('.modal-body #instancekeyPair').val(data.keyPairs[k].keyPairName);
-                                                    }
-                                                    //console.log(data);
-                                                    //
                                                 },
                                                 failure: function(data) {
                                                     alert(data.toString());

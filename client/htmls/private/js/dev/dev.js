@@ -2560,26 +2560,56 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                                                 }
                                             });
 
-                                            //for getting the Provider name,Type,Region,KeyPair
-                                            $.ajax({
-                                                type: "GET",
-                                                url: "/aws/providers/" + blueprint.blueprintConfig.cloudProviderId,
-                                                success: function(data) {
-                                                    $blueprintReadContainer.find('.modal-body #instanceProviderName').val(data.providerName);
-                                                    $blueprintReadContainer.find('.modal-body #instanceProviderType').val(data.providerType);
-                                                    // loop for getting region and Keypair
+                                            if(blueprint.blueprintConfig.cloudProviderData.cloudProviderType == 'azure'){
 
-                                                    for (var k = 0; k < data.keyPairs.length; k++) {
+                                                $.ajax({
+                                                    type: "GET",
+                                                    url: "/azure/providers/" + blueprint.blueprintConfig.cloudProviderId,
+                                                    success: function(data) {
+                                                        data = JSON.parse(data);
+                                                        
+                                                        $blueprintReadContainer.find('.modal-body #instanceProviderName').val(data.providerName);
+                                                        $blueprintReadContainer.find('.modal-body #instanceProviderType').val(data.providerType);
 
-                                                        $blueprintReadContainer.find('.modal-body #instanceRegion').val(data.keyPairs[k].region);
-                                                        $blueprintReadContainer.find('.modal-body #instancekeyPair').val(data.keyPairs[k].keyPairName);
+                                                        // loop for getting region 
+
+                                                        $blueprintReadContainer.find('.modal-body #instanceRegion').val(blueprint.blueprintConfig.cloudProviderData.region);
+
+                                                        $blueprintReadContainer.find('tr.keyPair').hide();
+                                                        $blueprintReadContainer.find('tr.managementPemKey').removeClass('hidden');
+                                                        $blueprintReadContainer.find('.modal-body #managementPem').val(data.pemFileName);
+                                                        
+                                                        $blueprintReadContainer.find('.modal-body #managementKey').val(data.keyFileName);
+
+                                                        //console.log(data);
+                                                    },
+                                                    failure: function(data) {
+                                                        alert(data.toString());
                                                     }
-                                                    //console.log(data);
-                                                },
-                                                failure: function(data) {
-                                                    alert(data.toString());
-                                                }
-                                            });
+                                                });
+
+                                            }else {
+                                                //for getting the Provider name,Type,Region,KeyPair
+                                                $.ajax({
+                                                    type: "GET",
+                                                    url: "/aws/providers/" + blueprint.blueprintConfig.cloudProviderId,
+                                                    success: function(data) {
+                                                        $blueprintReadContainer.find('.modal-body #instanceProviderName').val(data.providerName);
+                                                        $blueprintReadContainer.find('.modal-body #instanceProviderType').val(data.providerType);
+                                                        // loop for getting region and Keypair
+
+                                                        for (var k = 0; k < data.keyPairs.length; k++) {
+
+                                                            $blueprintReadContainer.find('.modal-body #instanceRegion').val(data.keyPairs[k].region);
+                                                            $blueprintReadContainer.find('.modal-body #instancekeyPair').val(data.keyPairs[k].keyPairName);
+                                                        }
+                                                        //console.log(data);
+                                                    },
+                                                    failure: function(data) {
+                                                        alert(data.toString());
+                                                    }
+                                                });
+                                           }
 
                                             var $parent = $(this).parents('.cardimage');
 
