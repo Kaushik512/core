@@ -1538,6 +1538,7 @@ $('.saveUpgradeAppDeploy').on('click',function(){
 });
 
 $('.saveNewAppDeploy').on('click',function(){
+    console.log("++++++++++ clicked.............",$('#containerIdDiv').val());
     $('#containerIdInput').val($('#containerIdDiv').val());
     upgradeOrDeploy();
 });

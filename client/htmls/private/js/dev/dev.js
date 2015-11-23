@@ -3752,8 +3752,8 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
             });
         }
 
-        /*Initialising the data table in orchestration*/
-        function initializeTaskArea(data) {
+        /*Initialising the data table in  orchestration*/
+        window.initializeTaskArea = function(data) {
 
             $('#assignedExecute').on('show.bs.modal', function() {
                 $('#assignedTaskHistory').css('z-index', 1030);
@@ -3831,6 +3831,8 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                     }]
 
                 });
+            } else {
+                var $taskDatatable = $('#tableOrchestration').DataTable();
             }
 
             if (!$.fn.dataTable.isDataTable('#tablehistoryTask')) {
@@ -4234,6 +4236,8 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                     }
                 });
             }
+
+
 
 
             for (var i = 0; i < data.length; i++) {
