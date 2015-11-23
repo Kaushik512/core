@@ -10,13 +10,13 @@ Resource           ${COMMON RESOURCES}/catalyst_grid_node.txt
 
 
 *** Test Cases ***
-#-Catalyst Validation of Environments Page
-    #-[Tags]       Sanity               Smoke
+Catalyst Validation of Environments Page
+    [Tags]       Sanity               Smoke
 #    Catalyst Login
-    #-Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
-    #-Test Validation of Creation of New Environments         
-    #-Catalyst Logout                      
-    #-[Teardown]     Close Browser
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Test Validation of Creation of New Environments         
+    Catalyst Logout                      
+    [Teardown]     Close Browser
 
 
 
@@ -30,13 +30,13 @@ Catalyst new Environments setup
 
 
 
-##Catalyst Edit Environment setup
-  ##  [Tags]       Sanity               Settings
+Catalyst Edit Environment setup
+    [Tags]       Sanity               Settings
 #    Catalyst Login
-    ##Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
-    ##Catalyst Edit the Environment setup           
-    ##Catalyst Logout                      
-    ##Teardown]     Close Browser
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst Edit the Environment setup           
+    Catalyst Logout                      
+    Teardown]     Close Browser
 
 
 
