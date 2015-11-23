@@ -29,15 +29,22 @@ Catalyst Unique Template Validation Setup
     [Teardown]     Close Browser
 
 
-Catalyst Validation and Creation of Service Command setup
+Catalyst Validation of Service Command setup
     [Tags]       Sanity               settings
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
     Test Validation of Creation of New Services
-    Catalyst User Service Command Services
     Catalyst Logout                      
     [Teardown]     Close Browser
 
+
+Catalyst Creation of Service Command setup
+    [Tags]       Sanity               settings
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst User Service Command Services
+    Catalyst Logout                      
+    [Teardown]     Close Browser
 
 
 

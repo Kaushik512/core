@@ -142,6 +142,10 @@ ${CATALYSTPEM}                ${ROOTPATH}//Chef//catalyst.pem
 ${CAT_INSTANCES}              ${ROOTPATH}//Chef//cat_instances.pem
 ${CATALYST STACKFILE}         ${ROOTPATH}//Chef//CatalystStack.template
 ${GOLDEN PEM}                 ${ROOTPATH}//Chef//GoldenDemo.pem
+${MANAGEMENT PEM}             ${ROOTPATH}//Chef//management.pem
+${PRIVATE KEYFILE}            ${ROOTPATH}//Chef//management.key
+
+
 
 ${CENTOSIMG}                  ${ROOTPATH}//Images//centos.jpg
 ${UBUNTUIMG}                  ${ROOTPATH}//Images//ubuntuu.jpg
@@ -272,6 +276,9 @@ ${EDIT PROVIDER NANME}    AWS RELPRO
 ${PROVIDERR}                 AWS
 ${SECRET KEY}                  qm/j8lT0/IPc1P5ud8yujUSa61+QjqeyZ/jZkIff
 ${ACCESS KEY}                  AKIAI3ETOOEFHJ62G2NQ
+${AZURE PROVIDERNAME}          AZUREPRO
+${SUBSCRIPTION ID}            f2c53cd4-5d0f-4c6d-880b-6af801de9b21
+
 
 ${OPENSTACK PROVIDERR}      OpenStack
 ${HP CLOUD PROVIDERR}       HP Public Cloud

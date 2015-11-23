@@ -38,6 +38,7 @@ var vmwareProvider = require('_pr/model/classes/masters/cloudprovider/vmwareClou
 
 var AwsAutoScaleInstance = require('_pr/model/aws-auto-scale-instance');
 
+var fs = require('fs');
 
 module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
@@ -2030,7 +2031,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                     projectId: blueprint.projectId,
                                                                     envId: req.query.envId,
                                                                     providerId: blueprint.blueprintConfig.cloudProviderId,
-                                                                    keyPairId: 'unknown',
+                                                                    keyPairId: 'azure',
                                                                     chefNodeName: launchparams.VMName,
                                                                     runlist: version.runlist,
                                                                     platformId: launchparams.VMName,
@@ -2118,26 +2119,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                             logger.debug(JSON.stringify(data)); // logger.debug(data);
                                                                             logger.debug('About to bootstrap Instance');
                                                                             //identifying pulic ip
-                                                                            //var publicip = '';
-                                                                            /* if (data.server.addresses.public) {
-                                                                for (var i = 0; i < data.server.addresses.public.length; i++) {
-                                                                    if (data.server.addresses.public[i]["version"] == '4') {
-                                                                        publicip = data.server.addresses.public[i].addr;
-                                                                    }
-                                                                }
-                                                            } else {
-                                                                if (data.server.addresses.private) {
-                                                                    for (var i = 0; i < data.server.addresses.private.length; i++) {
-                                                                        if (data.server.addresses.private[i]["version"] == '4') {
-                                                                            publicip = data.server.addresses.private[i].addr;
-                                                                        }
-                                                                    }
-                                                                } else {
-                                                                    logger.error("No IP found", err);
-                                                                    res.send(500);
-                                                                    return;
-                                                                }
-                                                            }*/
 
                                                                             instancesDao.updateInstanceIp(instance.id, publicip, function(err, updateCount) {
                                                                                 if (err) {
@@ -2208,6 +2189,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                                         timestamp: timestampEnded
                                                                                     });
                                                                                     instancesDao.updateActionLog(instance.id, actionLog._id, false, timestampEnded);
+                                                                                    return;
                                                                                 }
 
                                                                                 logger.debug("Azure vm bootstrap code:", code);
@@ -2237,6 +2219,34 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                                         timestamp: timestampEnded
                                                                                     });
                                                                                     instancesDao.updateActionLog(instance.id, actionLog._id, true, timestampEnded);
+
+                                                                                    chef.getNode(instance.chefNodeName, function(err, nodeData) {
+                                                                                        if (err) {
+                                                                                            logger.error("Failed chef.getNode", err);
+                                                                                            return;
+                                                                                        }
+                                                                                        var hardwareData = {};
+                                                                                        hardwareData.architecture = nodeData.automatic.kernel.machine;
+                                                                                        hardwareData.platform = nodeData.automatic.platform;
+                                                                                        hardwareData.platformVersion = nodeData.automatic.platform_version;
+                                                                                        hardwareData.memory = {
+                                                                                            total: 'unknown',
+                                                                                            free: 'unknown'
+                                                                                        };
+                                                                                        if (nodeData.automatic.memory) {
+                                                                                            hardwareData.memory.total = nodeData.automatic.memory.total;
+                                                                                            hardwareData.memory.free = nodeData.automatic.memory.free;
+                                                                                        }
+                                                                                        hardwareData.os = instance.hardware.os;
+                                                                                        instancesDao.setHardwareDetails(instance.id, hardwareData, function(err, updateData) {
+                                                                                            if (err) {
+                                                                                                logger.error("Unable to set instance hardware details  code (setHardwareDetails)", err);
+                                                                                            } else {
+                                                                                                logger.debug("Instance hardware details set successessfully");
+                                                                                            }
+                                                                                        });
+
+                                                                                    });
 
                                                                                 } else {
 
