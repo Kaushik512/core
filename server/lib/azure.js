@@ -324,6 +324,61 @@ function constructCloudServiceReqBody(cloudService, location) {
     return xmlString;
 }
 
+function constructVMShutDownReqBody() {
+    logger.debug('constructVMShutDownReqBody');
+
+    var shutDownVMTemplate = {
+        ShutdownRoleOperation: [{
+            _attr: {
+                xmlns: "http://schemas.microsoft.com/windowsazure",
+                "xmlns:i": "http://www.w3.org/2001/XMLSchema-instance"
+            }
+        }, {
+            OperationType: "ShutdownRoleOperation"
+        }]
+    }
+
+    var xmlString = xml(shutDownVMTemplate);
+
+    logger.debug("constructVMShutDownReqBody output:", xmlString);
+    logger.debug("END:: constructVMShutDownReqBody");
+
+    return xmlString;
+
+}
+
+function constructVMStartReqBody() {
+    logger.debug('constructVMStartReqBody');
+
+    var shutDownVMTemplate = {
+        StartRoleOperation: [{
+            _attr: {
+                xmlns: "http://schemas.microsoft.com/windowsazure",
+                "xmlns:i": "http://www.w3.org/2001/XMLSchema-instance"
+            }
+        }, {
+            OperationType: "StartRoleOperation"
+        }]
+    }
+
+    var xmlString = xml(shutDownVMTemplate);
+
+    logger.debug("constructVMStartReqBody output:", xmlString);
+    logger.debug("END:: constructVMStartReqBody");
+
+    return xmlString;
+
+}
+
+var instanceStateList = {
+    RUNNING: 'ReadyRole',
+    STOPPED: 'StoppedVM',
+    STOPPED_DEALLOCATED: 'StoppedDeallocated',
+    TERMINATED: 'terminated',
+    PENDING: 'pending'
+}
+
+
 var AzureCloud = function(options) {
 
     /*var options = {
@@ -334,6 +389,8 @@ var AzureCloud = function(options) {
 
     var certFile = path.resolve(__dirname, options.certLocation);
     var keyFile = path.resolve(__dirname, options.keyLocation);
+
+    var that = this;
 
     this.setSubscriptionById = function(id, callback) {
         var setSubscriptionCmd = "azure account set " + id;
@@ -379,6 +436,128 @@ var AzureCloud = function(options) {
             callback(null, data);
             return;
         });
+    }
+
+    this.shutDownVM = function(vmName, callback, onCompleteCallback) {
+
+        logger.debug("START:: shutDownVM");
+        fs.readFile(certFile, function(err, certData) {
+            if (err) {
+                logger.error("Error reading certFile..", err);
+                callback(err, null);
+                return;
+            }
+            logger.debug("certFile loaded");
+            fs.readFile(keyFile, function(err, keyData) {
+                if (err) {
+                    logger.error("Error reading keyFile..", err);
+                    callback(err, null);
+                    return;
+                }
+                logger.debug("keyFile loaded");
+
+                shtDownReqBody = constructVMShutDownReqBody();
+
+                var opts = {
+                    url: "https://management.core.windows.net/" + options.subscriptionId + "/services/hostedservices/" + vmName + "/deployments/" + vmName + "/roleinstances/" + vmName + "/Operations",
+                    agentOptions: {
+                        cert: certData,
+                        key: keyData,
+                    },
+                    headers: {
+                        "x-ms-version": "2015-04-01",
+                        "Content-Type": "text/xml"
+                    },
+                    body: shtDownReqBody
+                }
+
+                request.post(opts, function(err, response, body) {
+
+                    console.log("response.statusCode: ", response.statusCode);
+
+                    if (err) {
+                        //console.log("Error...",err);
+                        callback(err, null);
+                        return;
+                    }
+
+                    if (response.statusCode == '202') {
+                        callback(null, instanceStateList.RUNNING);
+                        return;
+                    } else {
+                        callback(body, null);
+                        return;
+                    }
+                });
+
+                pollInstanceState(vmName, instanceStateList.STOPPED, function(err, state) {
+                    onCompleteCallback(err, state);
+                });
+
+            });
+        });
+
+    }
+
+    this.startVM = function(vmName, callback, onCompleteCallback) {
+
+        logger.debug("START:: startVM");
+        fs.readFile(certFile, function(err, certData) {
+            if (err) {
+                logger.error("Error reading certFile..", err);
+                callback(err, null);
+                return;
+            }
+            logger.debug("certFile loaded");
+            fs.readFile(keyFile, function(err, keyData) {
+                if (err) {
+                    logger.error("Error reading keyFile..", err);
+                    callback(err, null);
+                    return;
+                }
+                logger.debug("keyFile loaded");
+
+                shtDownReqBody = constructVMStartReqBody();
+
+                var opts = {
+                    url: "https://management.core.windows.net/" + options.subscriptionId + "/services/hostedservices/" + vmName + "/deployments/" + vmName + "/roleinstances/" + vmName + "/Operations",
+                    agentOptions: {
+                        cert: certData,
+                        key: keyData,
+                    },
+                    headers: {
+                        "x-ms-version": "2015-04-01",
+                        "Content-Type": "text/xml"
+                    },
+                    body: shtDownReqBody
+                }
+
+                request.post(opts, function(err, response, body) {
+
+                    console.log("response.statusCode: ", response.statusCode);
+
+                    if (err) {
+                        //console.log("Error...",err);
+                        callback(err, null);
+                        return;
+                    }
+
+                    if (response.statusCode == '202') {
+                        callback(null, instanceStateList.STOPPED);
+                        return;
+                    } else {
+                        callback(body, null);
+                        return;
+                    }
+                });
+
+                pollInstanceState(vmName, instanceStateList.RUNNING, function(err, state) {
+                    onCompleteCallback(err, state);
+                });
+
+            });
+        });
+
     }
 
     this.getLocations = function(callback) {
@@ -980,6 +1159,33 @@ var AzureCloud = function(options) {
         };
         logger.debug('Timeout 3 set');
         self.timeouts.push(setTimeout(wfsr, 15000));
+    }
+
+    function pollInstanceState(instanceName, state, callback) {
+        function checkInstanceStatus(statusToCheck, delay) {
+            var timeout = setTimeout(function() {
+                that.getServerByName(instanceName, function(err, data) {
+                    if (err) {
+                        console.log('Unable to get instance state', err);
+                        callback(err, null);
+                        return;
+                    }
+                    data = xml2json.toJson(data);
+                    data = JSON.parse(data);
+
+                    var instanceState = data.Deployment.RoleInstanceList.RoleInstance.InstanceStatus;
+
+                    logger.debug('Instance Status:', instanceState);
+
+                    if (statusToCheck === instanceState) {
+                        callback(null, instanceState);
+                    } else {
+                        checkInstanceStatus(state, 5000);
+                    }
+                });
+            }, delay);
+        }
+        checkInstanceStatus(state, 1);
     }
 
 }
