@@ -20,7 +20,8 @@ Resource           ${COMMON RESOURCES}/catalyst_grid_node.txt
 
 *** Keywords ***
 Version Number and the Jenkins Buildnumber
-    Open Browser    ${ENVIRONMENT SERVER}     ${BROWSER TYPE}
+    Browser is opened to login catalyst
+    #Open Browser    ${ENVIRONMENT SERVER}     ${BROWSER TYPE}
     Sleep    5s   
     Store the Buildnumber
 
@@ -61,7 +62,8 @@ Catalyst AWS Cost Dashboard Verification
     Verfiy the NA in the Dashbaord
     Verify Page contains Cost Usage for Month
     Verify Page contains Cost Usage for Day
-    Verify the Cost of EC2 day
+    Verfiy Page contains Planned Cost 
+    #Verify the Cost of EC2 day
     Verify Page contains Summary
     Verify the Total Number of Running Instances
     Verify Page contains Active Instance
@@ -75,6 +77,66 @@ Catalyst AWS Cost Dashboard Verification
     Capture the Screen Shot of the Dashboard
     Sleep    1s
     Unselect Frame
+
+
+
+Catalyst Total AWS Cost Dashboard Verification
+    Clicks on Tracks Button
+    Sleep    8s
+    Clicks on AWS Cost total cost
+    Sleep    10s
+    Clicks on Left Panel Button
+    Sleep    2s
+    Selects the frame
+    Verfiy the total cost being displayed
+    Verfiy the Total EC2 Cost data
+    Verify the pie graph for Cost by region
+    Verify the pie graph for Cost by Tag
+    Capture the Screen Shot of the Dashboard
+    Sleep    1s
+    Unselect Frame
+
+
+
+
+
+Clicks on AWS Cost total cost
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element    xpath=//a[text()='AWS Cost']
+
+
+Verfiy the total cost being displayed
+    Page Should Contain    Total Cost
+    Selects the frame
+    ${Total cost}=    Get Text    xpath=.//*[@id='container']/div/ul/li[3]/div/h2
+    Log    ${Total cost}
+    Run Keyword If    '${Total cost}' == '${NA}' or '${Total cost}' == '${VALUE}' or '${Total cost}' == '${NA3}'
+    ...    Fail    Dashboard has no Total Cost data
+    ...    ELSE
+    ...    Log     Dashboard has Total Cost Data
+
+
+Verfiy the Total EC2 Cost data
+    Page Should Contain    Total EC2 Cost
+    Selects the frame
+    ${Total EC2}=    Get Text    xpath=.//*[@id='container']/div/ul/li[5]/div/h2
+    Log    ${Total EC2}
+    Run Keyword If    '${Total EC2}' == '${NA}' or '${Total EC2}' == '${VALUE}' or '${Total EC2}' == '${NA3}'
+    ...    Fail    Dashboard has no Total EC2 Cost data
+    ...    ELSE
+    ...    Log     Dashboard has Total EC2 Cost Data    
+
+Verify the pie graph for Cost by region
+    Page Should Contain    Cost by region
+    Selects the frame
+    ${Graph Region}=    Get Text    xpath=//div[@data-title='Cost by region']
+    Log    ${Graph Region}
+    
+Verify the pie graph for Cost by Tag
+    Page Should Contain    Cost by tag(EC2)
+    Selects the frame
+    ${Graph Tag}=    Get Text    xpath=//div[@data-title='Cost by tag(EC2)']
+    Log    ${Graph Tag}    
+
 
 
 Catalyst AWS Cost NCalifornia Automation
@@ -1297,16 +1359,32 @@ Verify Page contains Cost Usage for Month
 
 
 Verify Page contains Cost Usage for Day
-    Page Should Contain    Cost Usage for Day
+    Page Should Contain    Cost of day
     Selects the frame
-    ${Cost day}=    Get Text    xpath=.//*[@id='container']/div/ul/li[4]/div/h2
+    ${Cost day}=    Get Text    xpath=.//*[@id='container']/div/ul/li[5]/div/h2
     Log    ${Cost day}
     Run Keyword If    '${Cost day}' == '${NA}'
-    ...    Fail    Dashboard has no Cost Usage for Day Data
+    ...    Fail    Dashboard has no Cost of Day Data
     ...    ELSE
-    ...    Log     Dashboard has Cost Usage for Day Data
+    ...    Log     Dashboard has Cost of Day Data
     
-    
+ 
+Verfiy Page contains Planned Cost   
+    Page Should Contain    Planned Cost
+    Selects the frame
+    ${pland cost}=    Get Text    xpath=.//*[@id='container']/div/ul/li[4]/div/h2
+    Log    ${pland cost}
+    ${plnd costlength}=    Get Length    ${pland cost}
+    Log    ${plnd costlength}
+    Run Keyword If    '${pland cost}' == '${NA}' or '${pland cost}' == '${NA1}' or '${pland cost}' == '${NA2}'
+    ...    Fail    Dashboard has no Cost of Day Data
+    ...    ELSE
+    ...    Log     Dashboard has Cost of Day Data
+
+
+
+
+
 
 
 Verify the Cost of EC2 day
