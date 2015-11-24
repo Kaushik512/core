@@ -779,24 +779,25 @@ module.exports.setRoutes = function(app, socketIo) {
                                                             }
                                                             return;
                                                         }
-                                                        if (awsInstances.Reservations.length === 0) {
-                                                            if (instances[ins].instanceState != "terminated") {
-                                                                instancesDao.updateInstanceState(instances[ins]._id, "terminated", function(err, data) {
-                                                                    if (err) {
-                                                                        logger.error("Failed to updateInstance State!", err);
-                                                                        return;
-                                                                    }
-                                                                    var instance = instances[ins];
-                                                                    instance.instanceState = "terminated";
-                                                                    socketCloudFormationAutoScate.to(instance.orgId + ':' + instance.bgId + ':' + instance.projectId + ':' + instance.envId).emit('instanceStateChanged', instance);
 
-                                                                    logger.debug("Exit updateInstanceState: ");
-                                                                });
-                                                            }
-                                                            return;
-                                                        }
                                                         //logger.debug("Described Instances from AWS: ", JSON.stringify(awsInstances));
                                                         if (awsInstances) {
+                                                            if (awsInstances.Reservations.length === 0) {
+                                                                if (instances[ins].instanceState != "terminated") {
+                                                                    instancesDao.updateInstanceState(instances[ins]._id, "terminated", function(err, data) {
+                                                                        if (err) {
+                                                                            logger.error("Failed to updateInstance State!", err);
+                                                                            return;
+                                                                        }
+                                                                        var instance = instances[ins];
+                                                                        instance.instanceState = "terminated";
+                                                                        socketCloudFormationAutoScate.to(instance.orgId + ':' + instance.bgId + ':' + instance.projectId + ':' + instance.envId).emit('instanceStateChanged', instance);
+
+                                                                        logger.debug("Exit updateInstanceState: ");
+                                                                    });
+                                                                }
+                                                                return;
+                                                            }
                                                             var reservations = awsInstances.Reservations;
                                                             for (var x = 0; x < reservations.length; x++) {
                                                                 (function(x) {
