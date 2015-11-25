@@ -3814,7 +3814,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
         });
     });
 
-    app.post('/d4dMasters/project/:anId/appName/update', function(req, res) {
+    app.post('/d4dMasters/project/:anId/appdeploy/appName/update', function(req, res) {
         logger.debug("Updating appName in Project...");
 
                 /*db.d4dmastersnew.update({
