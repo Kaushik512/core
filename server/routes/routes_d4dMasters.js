@@ -3844,9 +3844,11 @@ module.exports.setRoutes = function(app, sessionVerification) {
             logger.debug("Update Count+++++++++++++++ ", data);
             if (err) {
                 logger.debug('Err while updating d4dModelMastersProjects' + err);
+                res.send(err);
                 return;
             }
             logger.debug('Updated project ' + req.params.anId + ' with App Name : ' + req.body.appName);
+            res.send(data);
             return;
         });
     });
