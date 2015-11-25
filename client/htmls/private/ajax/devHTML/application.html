@@ -1602,7 +1602,7 @@ function upgradeOrDeploy(){
                             "description": repoId+" deployed."
                             };
                         $.ajax({
-                            url: '/d4dMasters/project/'+projectId+'/appName/update',
+                            url: '/d4dMasters/project/'+projectId+'/appdeploy/appName/update',
                             data: JSON.stringify(reqBody),
                             type: 'POST',
                             contentType: "application/json",
