@@ -821,7 +821,7 @@ module.exports.setRoutes = function(app, socketIo) {
                                                                         });
                                                                         return;
                                                                     }else{
-                                                                        continue;
+                                                                        return;
                                                                     }
                                                                 })(x);
                                                             }
