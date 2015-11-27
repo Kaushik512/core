@@ -725,11 +725,11 @@ module.exports.setRoutes = function(app, socketIo) {
             }
 
             if (instances.length > 0) {
+                var instanceIds = [];
                 for (var ins = 0; ins < instances.length; ins++) {
                     (function(ins) {
                         //proceed only if the instance is part of the aws provider
                         if (instances[ins].providerId) {
-                            var instanceIds = [];
                             AWSProvider.getAWSProviderById(instances[ins].providerId, function(err, aProvider) {
                                 if (err) {
                                     logger.debug("Failed to get Provider!");
@@ -777,7 +777,7 @@ module.exports.setRoutes = function(app, socketIo) {
                                                                     logger.debug("Exit updateInstanceState: ");
                                                                 });
                                                             }
-                                                            //return;
+                                                            return;
                                                         }
 
                                                         //logger.debug("Described Instances from AWS: ", JSON.stringify(awsInstances));
@@ -796,14 +796,11 @@ module.exports.setRoutes = function(app, socketIo) {
                                                                         logger.debug("Exit updateInstanceState: ");
                                                                     });
                                                                 }
-                                                                //return;
+                                                                return;
                                                             }
                                                             var reservations = awsInstances.Reservations;
                                                             for (var x = 0; x < reservations.length; x++) {
                                                                 (function(x) {
-                                                                    logger.debug("instances[ins].instanceState=>>>>>>>>>> ",instances[ins].instanceState);
-                                                                    logger.debug("reservations[x].Instances[0].State.Name=>>>>>>>>> ",reservations[x].Instances[0].State.Name);
-                                                                    logger.debug("ins=>>>>>>> ",ins +"x=>>>>> "+x);
                                                                     if (instances[ins].instanceState === reservations[x].Instances[0].State.Name) {
                                                                         logger.debug("Status matched......");
                                                                     } else {
