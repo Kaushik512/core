@@ -807,13 +807,13 @@ module.exports.setRoutes = function(app, socketIo) {
                                                                         return;
                                                                     } else {
                                                                         logger.debug("Status does not matched.....", instances[ins]._id);
-                                                                        instancesDao.updateInstanceState(instances[ins]._id, reservations[x].Instances[0].State.Name, function(err, data) {
+                                                                        instancesDao.updateInstanceState(instances[ins]._id, awsInstances.Reservations[x].Instances[0].State.Name, function(err, data) {
                                                                             if (err) {
                                                                                 logger.error("Failed to updateInstance State!", err);
                                                                                 return;
                                                                             }
                                                                             var instance = instances[ins];
-                                                                            instance.instanceState = reservations[x].Instances[0].State.Name;
+                                                                            instance.instanceState = awsInstances.Reservations[x].Instances[0].State.Name;
                                                                             socketCloudFormationAutoScate.to(instance.orgId + ':' + instance.bgId + ':' + instance.projectId + ':' + instance.envId).emit('instanceStateChanged', instance);
 
 
