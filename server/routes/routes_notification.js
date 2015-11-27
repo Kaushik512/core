@@ -798,11 +798,13 @@ module.exports.setRoutes = function(app, socketIo) {
                                                                 }
                                                                 return;
                                                             }
-                                                            var reservations = awsInstances.Reservations;
-                                                            for (var x = 0; x < reservations.length; x++) {
+                                                            //var reservations = awsInstances.Reservations;
+                                                            for (var x = 0; x < awsInstances.Reservations.length; x++) {
                                                                 (function(x) {
-                                                                    if (instances[ins].instanceState === reservations[x].Instances[0].State.Name) {
+                                                                    logger.debug("ins=>>>>> ",ins +" x=>>>>>>> ",x);
+                                                                    if (instances[ins].instanceState === awsInstances.Reservations[x].Instances[0].State.Name) {
                                                                         logger.debug("Status matched......");
+                                                                        return;
                                                                     } else {
                                                                         logger.debug("Status does not matched.....", instances[ins]._id);
                                                                         instancesDao.updateInstanceState(instances[ins]._id, reservations[x].Instances[0].State.Name, function(err, data) {
@@ -817,6 +819,7 @@ module.exports.setRoutes = function(app, socketIo) {
 
                                                                             logger.debug("Exit updateInstanceState: ");
                                                                         });
+                                                                        return;
                                                                     }
                                                                 })(x);
                                                             }
