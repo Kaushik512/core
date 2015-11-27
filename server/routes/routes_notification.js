@@ -801,6 +801,7 @@ module.exports.setRoutes = function(app, socketIo) {
                                                             //var reservations = awsInstances.Reservations;
                                                             for (var x = 0; x < awsInstances.Reservations.length; x++) {
                                                                 (function(x) {
+                                                                    logger.debug("x=>>>>>>>>>>> ",x);
                                                                     logger.debug("instances[ins].platformId=>>>>> ",instances[ins].platformId +" awsInstances.Reservations[x].Instances[0].instanceId=>>>>>>> ",awsInstances.Reservations[x].Instances[0].instanceId);
                                                                     if (instances[ins].platformId === awsInstances.Reservations[x].Instances[0].instanceId && instances[ins].instanceState === awsInstances.Reservations[x].Instances[0].State.Name) {
                                                                         logger.debug("Status matched......");
@@ -819,8 +820,6 @@ module.exports.setRoutes = function(app, socketIo) {
 
                                                                             logger.debug("Exit updateInstanceState: ");
                                                                         });
-                                                                        return;
-                                                                    }else{
                                                                         return;
                                                                     }
                                                                 })(x);
