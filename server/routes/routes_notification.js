@@ -802,10 +802,10 @@ module.exports.setRoutes = function(app, socketIo) {
                                                             for (var x = 0; x < awsInstances.Reservations.length; x++) {
                                                                 (function(x) {
                                                                     logger.debug("ins=>>>>> ",ins +" x=>>>>>>> ",x);
-                                                                    if (instances[ins].instanceState === awsInstances.Reservations[x].Instances[0].State.Name) {
+                                                                    if (instances[ins].platformId === awsInstances.Reservations[x].Instances[0].instanceId && instances[ins].instanceState === awsInstances.Reservations[x].Instances[0].State.Name) {
                                                                         logger.debug("Status matched......");
                                                                         return;
-                                                                    } else {
+                                                                    } else if(instances[ins].platformId === awsInstances.Reservations[x].Instances[0].instanceId){
                                                                         logger.debug("Status does not matched.....", instances[ins]._id);
                                                                         instancesDao.updateInstanceState(instances[ins]._id, awsInstances.Reservations[x].Instances[0].State.Name, function(err, data) {
                                                                             if (err) {
