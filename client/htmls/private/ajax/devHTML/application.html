@@ -1607,8 +1607,10 @@ function upgradeOrDeploy(){
                             type: 'POST',
                             contentType: "application/json",
                             success: function(data) { 
+            
                             },
                             error: function(jqxhr) {
+                                alert("Failed to update update appName in Project.")
                             }
                         });
                     }
