@@ -725,7 +725,7 @@ module.exports.setRoutes = function(app, socketIo) {
             }
 
             if (instances.length > 0) {
-                var instanceIds = [];
+                //var instanceIds = [];
                 for (var ins = 0; ins < instances.length; ins++) {
                     (function(ins) {
                         //proceed only if the instance is part of the aws provider
@@ -759,6 +759,7 @@ module.exports.setRoutes = function(app, socketIo) {
                                                         "region": aKeyPair[0].region
                                                     });
                                                     logger.debug("AWS ec2: ", JSON.stringify(ec2));
+                                                    var instanceIds = [];
                                                     instanceIds.push(instances[ins].platformId);
                                                     ec2.describeInstances(instanceIds, function(err, awsInstances) {
                                                         logger.debug("got reponse from aws instance: ", JSON.stringify(awsInstances));
@@ -798,31 +799,23 @@ module.exports.setRoutes = function(app, socketIo) {
                                                                 }
                                                                 return;
                                                             }
-                                                            //var reservations = awsInstances.Reservations;
-                                                            for (var x = 0; x < awsInstances.Reservations.length; x++) {
-                                                                (function(x) {
-                                                                    logger.debug("x=>>>>>>>>>>> ",x);
-                                                                    logger.debug("instances[ins].platformId=>>>>> ",instances[ins].platformId +" awsInstances.Reservations[x].Instances[0].instanceId=>>>>>>> ",awsInstances.Reservations[x].Instances[0].InstanceId);
-                                                                    /*if (instances[ins].platformId === awsInstances.Reservations[x].Instances[0].instanceId && instances[ins].instanceState === awsInstances.Reservations[x].Instances[0].State.Name) {
-                                                                        logger.debug("Status matched......");
-                                                                        return;
-                                                                    } else*/ if(instances[ins].platformId === awsInstances.Reservations[x].Instances[0].InstanceId){
-                                                                        logger.debug("Status does not matched.....", instances[ins]._id);
-                                                                        instancesDao.updateInstanceState(instances[ins]._id, awsInstances.Reservations[x].Instances[0].State.Name, function(err, data) {
-                                                                            if (err) {
-                                                                                logger.error("Failed to updateInstance State!", err);
-                                                                                return;
-                                                                            }
-                                                                            var instance = instances[ins];
-                                                                            instance.instanceState = awsInstances.Reservations[x].Instances[0].State.Name;
-                                                                            socketCloudFormationAutoScate.to(instance.orgId + ':' + instance.bgId + ':' + instance.projectId + ':' + instance.envId).emit('instanceStateChanged', instance);
 
-
-                                                                            logger.debug("Exit updateInstanceState: ");
-                                                                        });
+                                                            logger.debug("instances[ins].platformId=>>>>> ", instances[ins].platformId + " awsInstances.Reservations[x].Instances[0].instanceId=>>>>>>> ", awsInstances.Reservations[0].Instances[0].InstanceId);
+                                                            if (instances[ins].platformId === awsInstances.Reservations[0].Instances[0].InstanceId) {
+                                                                logger.debug("Status does not matched.....", instances[ins]._id);
+                                                                instancesDao.updateInstanceState(instances[ins]._id, awsInstances.Reservations[0].Instances[0].State.Name, function(err, data) {
+                                                                    if (err) {
+                                                                        logger.error("Failed to updateInstance State!", err);
                                                                         return;
                                                                     }
-                                                                })(x);
+                                                                    var instance = instances[ins];
+                                                                    instance.instanceState = awsInstances.Reservations[0].Instances[0].State.Name;
+                                                                    socketCloudFormationAutoScate.to(instance.orgId + ':' + instance.bgId + ':' + instance.projectId + ':' + instance.envId).emit('instanceStateChanged', instance);
+
+
+                                                                    logger.debug("Exit updateInstanceState: ");
+                                                                });
+                                                                return;
                                                             }
                                                         }
 
