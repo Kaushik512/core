@@ -18,7 +18,10 @@ var jenkinsTaskSchema = taskTypeSchema.extend({
     isParameterized: Boolean,
     parameterized: [{
         parameterName: String,
-        name: String,
+        name:{
+            type:String,
+            unique:true
+        },
         defaultValue: [String],
         description: String
     }]

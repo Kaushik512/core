@@ -133,6 +133,7 @@ Catalyst Creation of New Blueprint and Delete
     Choose the Provider
     Choose the Available Images
     Choose the Region
+    
     #Select the VPC
     Select the Subnet
     Select the Key Pair
@@ -242,16 +243,48 @@ Catalyst Validation of Azure page
 
 
 
+Catalyst creation of Azure provider
+    Clicks on Settings
+    Clicks on DevOps Setup menu
+    Clicks on Providers           
+    Clicks on New Button of Providers
+    Select the Azure Provider
+    Enters the Name of Azure Provider
+    Enters the Subscription ID
+    Upload the Management pem file
+    Upload the Private keyfile
+    Select the org for Azure provider
+    Clicks on Save Button of the Provider
+    Verfiy the Azure Provider is created
 
 
 
+Select the org for Azure provider
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=//span[text()='Select Organization']
+    Input Text    css=#select2-drop .select2-input    ${ORGANIZATION NAME}
+    Sleep    4s
+    Click Element    css=.select2-result-label
 
 
 
+Enters the Name of Azure Provider
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Input Text    id=name    ${AZURE PROVIDERNAME}
+
+Enters the Subscription ID
+    Input Text    id=azureSubscriptionId    ${SUBSCRIPTION ID}
+
+Upload the Management pem file
+    Choose File    id=azurepem    ${MANAGEMENT PEM}
+
+Upload the Private keyfile
+    Choose File    id=azurekey    ${PRIVATE KEYFILE}
+
+Verfiy the Azure Provider is created
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Element Should Contain    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${AZURE PROVIDERNAME}']    ${AZURE PROVIDERNAME}
 
 
 Clicks on Cancel Button of provider page
-    Click Element    css=#btncancel
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    css=#btncancel
 
 
 
@@ -343,9 +376,8 @@ Verify the Error Message Displayed for HP cloud
 Verify the Error Message Displayed for Azure
     Element Should Contain    id=errmsg_azureSubscriptionId    ${REQ}
     #Element Should Contain    id=errmsg_orgId    ${REQ}
-    Element Should Contain    id=errmsg_azureStorageAccount    ${STOREACC ERRMSG}
+    #Element Should Contain    id=errmsg_azureStorageAccount    ${STOREACC ERRMSG}
     
-
 Verify the Error Message Displayed while duplicating the provider
     Element Should Contain    id=errmsg_name    ${Provider ErrMsg}
     Sleep    2s
@@ -365,11 +397,11 @@ Verfiy the Provider is Created
 Validation of Creation of New Image
     Validation of Empty Image Name  ${ValidEmptyImageName}
     Image Name Left Empty  ${ValidEmptImgNameErrMsg}
-    Validation of No Selection Provider  ${ValidEmptyNoProvider}
-    Provider field Name Left Empty  ${ValidEmptyProviderErrMsg}
+    Validation of No Selection organzation  ${ValidEmptyNoProvider}
+    Organization dropdown Left Empty  ${ValidEmptyProviderErrMsg}
     Validation of No Operating System  ${ValidEmptyNoOperatingSys}
     Operating System Left Empty  ${ValidEmptyNoOSErrMsg}
-    Validation of No Image ID  ${ValidEmptyImageID}
+    Validation of No Image ID  ${ValidEmptyImageID} 
     Image ID Left Empty  ${ValidEmptImgIDErrMsg}
     Validation of Image No User Name  ${ValidEmptyIUserName}
     Image User Name Left Empty  ${ValidEmptyIUserNameErrMsg}
@@ -379,11 +411,11 @@ Catalyst Creation of VM Image Process for CentOS
     Sleep    5s    
     Clicks on New Button of VMImage
     Enters the Image Name for CentOS
+    Select the Organizatn to Create Cent OS Img
     Choosess The Provider of Image
     Select the Operating System to Image for CentOS
     Enters the Image ID for CentOS
     Enters the UserName of CentOSProviders
-    Select the Organizatn to Create Cent OS Img
     Clicks on Save Button of Providers
     Sleep    4s
     Verfiy the Centos Img is Created
@@ -397,11 +429,11 @@ Catalyst Creation of VM Image Process for Ubutnu
     Sleep    5s
     Clicks on New Button of VMImage
     Enters the Image Name for Ubuntu
+    Select the Organizatn to Create Ubuntu Img
     Choosess The Provider of Image
     Select the Operating System to Image for Ubuntu 
     Enters the Image ID for Ubuntu
     Enters the UserName of UbuntuProviders
-    Select the Organizatn to Create Ubuntu Img
     Clicks on Save Button of Providers
     Sleep    4s
     Verfiy the Ubuntu Img is Created
@@ -415,11 +447,11 @@ Catalyst Creation of VM Image Process for Windows
     Sleep    5s
     Clicks on New Button of VMImage
     Enters the Image Name for Windows
+    Select the Organizatn to Create Windows Img
     Choosess The Provider of Image
     Select the Operating System to Image for Windows
     Enters the Image ID for Windows
     Enters the UserName of WindowsProviders
-    Select the Organizatn to Create Windows Img
     Clicks on Save Button of Providers
 
 Catalyst VM Image Edit Setup
@@ -859,7 +891,7 @@ Catalyst Choose Template and Save Setup for UBUNTU
     Clicks on Next Button
     Chooses the Operating System as Ubuntu
     Choose the Provider
-    Choose the Available Images
+    Choose the Available Images for ubuntu
     Choose the Region
     #Select the VPC
     Select the Subnet
@@ -1299,9 +1331,10 @@ Catlayst verfication of Instance Stop Setup and Disable of Ubuntu
 
 
 Chooses the Operating System as Ubuntu
-    Click Element    xpath=.//*[@id='s2id_instanceOS']/a
-    Input Text    xpath=.//*[@id='select2-drop']/div/input    ${OPERATING SYSTEM2}
-    Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
+    #Click Element    xpath=.//*[@id='s2id_instanceOS']/a
+    #Input Text    xpath=.//*[@id='select2-drop']/div/input    ${OPERATING SYSTEM2}
+    #Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
+    Click Element    xpath=.//*[@id='instanceOS']/option[text()='${OPERATING SYSTEM2}']
 
 #Enters The Blueprint Name
     #Input Text    id=blueprintNameInput    ${BLUEPRINT NAME1}
@@ -1715,11 +1748,11 @@ Validation of Empty Image Name
     Clicks on VMImage
     Clicks on New Button of VMImage
     Enters the Empty Image Name
+    Select the Organizatn to Create Cent OS Img
     Choosess The Provider of Image
     Select the Operating System to Image for CentOS
     Enters the Image ID for CentOS
     Enters the UserName of Providers
-    Select the Organizatn to Create Cent OS Img
     Clicks on Save Button of Providers
     #Clicks on OKX Button
 
@@ -1730,11 +1763,11 @@ Catalyst Unique VM Image Validation Setup
     Clicks on VMImage
     Clicks on New Button of VMImage
     Enters the Image Name for Ubuntu
+    Select the Organizatn to Create Ubuntu Img
     Choosess The Provider of Image
     Select the Operating System to Image for Ubuntu 
     Enters the Image ID for Ubuntu
     Enters the UserName of UbuntuProviders
-    Select the Organizatn to Create Ubuntu Img
     Clicks on Save Button of Providers
     Sleep    4s
     Verify the Error Message displaye while duplicating VM Image
@@ -1746,11 +1779,12 @@ Verify the Error Message displaye while duplicating VM Image
     Sleep    1s
 
 Choose the Provider
-    Click Element    xpath=.//*[@id='s2id_providerId']/a/span[1]
-    Sleep    1s
-    Input Text    xpath=.//*[@id='select2-drop']/div/input    ${EDIT PROVIDER NANME}
-    Sleep    1s
-    Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
+    #Click Element    xpath=.//*[@id='s2id_providerId']/a/span[1]
+    #Sleep    1s
+    #Input Text    xpath=.//*[@id='select2-drop']/div/input    ${EDIT PROVIDER NANME}
+    #Sleep    1s
+    #Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
+    Click Element    xpath=.//*[@id='providerId']/option[text()='${EDIT PROVIDER NANME}']
 
 
     #Click Element    css=#s2id_providerId > .select2-choice
@@ -1761,20 +1795,26 @@ Choose the Provider
 
 
 Choose the Available Images
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='s2id_imageId']/a/span[1]
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='select2-drop']/ul/li[2]/div
+    #Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='s2id_imageId']/a/span[1]
+    #Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='select2-drop']/ul/li[2]/div
+    Click Element    xpath=.//*[@id='imageId']/option[text()='${IMAGE NAME1}']
+
+
+Choose the Available Images for ubuntu
+    #Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='s2id_imageId']/a/span[1]
+    #Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='select2-drop']/ul/li[2]/div
+    Click Element    xpath=.//*[@id='imageId']/option[text()='${IMAGE NAME2}']
+
+
+
 
 Choose the Region
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='s2id_region']/a/span[1]
-    Input Text    xpath=.//*[@id='select2-drop']/div/input    US West
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
-    Sleep    10s
+    Sleep    4s
+    Click Element    xpath=.//*[@id='region']/option[2]
 
 Select the Subnet
-    Sleep    2s
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='s2id_subnetId']/a/span[1]
-    Input Text    xpath=.//*[@id='select2-drop']/div/input    ${SUBNET NAME}
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
+    Sleep    1s
+    Click Element    xpath=.//*[@id='subnetId']/option[2]
 
 Select the VPC
     Sleep    5s
@@ -1790,43 +1830,19 @@ Select the VPC
 
 Select the Key Pair
     Execute JavaScript    $('#bootstrap-wizard-1 > div.tab-content > footer > div').attr('style','display:none')
-    Sleep    3s
-    Log    after scroll
-    Sleep    1s
-    Click Element    css=#s2id_keypairId > .select2-choice
-    Log    after click
-    Input Text    css=#select2-drop .select2-input    cat_instances
-    Sleep    1s
-    Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
-    
+    Click Element    xpath=.//*[@id='keypairId']/option[text()='${KEYPAIRNAME}']
     
     
 
 Choose Instance Size
-    Sleep    3s
-    Log    after scroll
     Sleep    1s
-    Click Element    css=#s2id_instancesize > .select2-choice
-    Log    after click
-    Input Text    css=#select2-drop .select2-input    ${CentosInstanceSize}
-    Sleep    1s
-    Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
+    Click Element    xpath=.//*[@id='instancesize']/option[text()='${CentosInstanceSize}']
     
 
-
-
-
-
-
 Choose Instance Size for Ubuntu
-    Sleep    3s
-    Log    after scroll
     Sleep    1s
-    Click Element    css=#s2id_instancesize > .select2-choice
-    Log    after click
-    Input Text    css=#select2-drop .select2-input    ${UbuntuInstanceSize}
-    Sleep    1s
-    Click Element    xpath=//*[@id='select2-drop']/ul/li/div
+    Click Element    xpath=.//*[@id='instancesize']/option[text()='${UbuntuInstanceSize}']
+
     
 
 Select the Security Group
@@ -1857,24 +1873,24 @@ Validate the Empty Image Field
     Element Should Contain    id=errmsg_name    ${ErrMsg}
     Clicks on Image Cancel Button
 
-Validation of No Selection Provider
+Validation of No Selection organzation
     [Arguments]    ${NoProvider}
     Clicks on New Button of VMImage
     Enters the Image Name for CentOS
+    #Select the Organizatn to Create Cent OS Img
     Select the Operating System to Image for CentOS
     Enters the Image ID for CentOS
     Enters the UserName of Providers
-    Select the Organizatn to Create Cent OS Img
     Clicks on Save Button of Providers
     #Clicks on OKX Button
 
-Provider field Name Left Empty
+Organization dropdown Left Empty
     [Arguments]    ${VaildNoNameErrMsg}
-    Validate Emptyprovider name  ${VaildNoNameErrMsg}
+    Validate Emptyorg name  ${VaildNoNameErrMsg}
 
-Validate Emptyprovider name
+Validate Emptyorg name
     [Arguments]    ${ErrMsg}
-    Element Should Contain    id=errmsg_providerId    ${ErrMsg}
+    Element Should Contain    id=errmsg_orgId    ${ErrMsg}
     Clicks on Image Cancel Button
 
 
@@ -1882,10 +1898,10 @@ Validation of No Operating System
     [Arguments]    ${OperatingSystem}
     Clicks on New Button of VMImage
     Enters the Image Name for CentOS
+    Select the Organizatn to Create Cent OS Img
     Choosess The Provider of Image
     Enters the Image ID for CentOS
     Enters the UserName of Providers
-    Select the Organizatn to Create Cent OS Img
     Clicks on Save Button of Providers
     #Clicks on OKX Button
 
@@ -1902,10 +1918,10 @@ Validation of No Image ID
     [Arguments]    ${Imageidentifire}
     Clicks on New Button of VMImage
     Enters the Image Name for CentOS
+    Select the Organizatn to Create Cent OS Img
     Choosess The Provider of Image
     Select the Operating System to Image for CentOS
     Enters the UserName of Providers
-    Select the Organizatn to Create Cent OS Img
     Clicks on Save Button of Providers
     #Clicks on OKX Button
 
@@ -1922,10 +1938,10 @@ Validation of Image No User Name
     [Arguments]    ${username}
     Clicks on New Button of VMImage
     Enters the Image Name for CentOS
+    Select the Organizatn to Create Cent OS Img
     Choosess The Provider of Image
     Select the Operating System to Image for CentOS
     Enters the Image ID for CentOS
-    Select the Organizatn to Create Cent OS Img
     Clicks on Save Button of Providers
     #Clicks on OKX Button
 
@@ -1995,7 +2011,8 @@ Select the HP Public Cloud Provider
 
 Select the Azure Provider
     Sleep    4s
-    Click Element    css=#s2id_providertype > .select2-choice
+    Click Element    xpath=//span[text()='AWS']
+    #css=#s2id_providertype > .select2-choice
     Log    after click
     Input Text    css=#select2-drop .select2-input    ${AZURE PROVIDERR}
     Sleep    3s
@@ -2047,7 +2064,7 @@ Selects the Key Pair
 
 Uploads the Pem File for Provider
     Sleep    4s
-    Choose File    xpath=.//*[@class='gui-file file']    ${CAT_INSTANCES}
+    Choose File    xpath=(//input[@class='gui-file file'])[3]    ${CAT_INSTANCES}
     Sleep    1s
     
 
@@ -2210,14 +2227,14 @@ Chooses the Template User Created
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='individualTemplateNameGrid']/div/div/ul/li/u/b[text()="${TEMPLATE NAME}"]
 
 Chooses the Operating System
-    Wait Until Keyword Succeeds    1 minute     1 seconds    Wait Until Element Is Visible       xpath=//span[./text()='Select Operating System']
-    Click Element    xpath=//span[./text()='Select Operating System']
+    #Wait Until Keyword Succeeds    1 minute     1 seconds    Wait Until Element Is Visible       xpath=//span[./text()='Select Operating System']
+    #Click Element    xpath=//span[./text()='Select Operating System']
     #Focus    xpath=.//*[@id='s2id_instanceOS']/a/span[2]
     #Press Key    xpath=.//*[@id='s2id_instanceOS']/a/span[2]     13
-    Sleep    3s
-    Input Text    xpath=.//*[@id='select2-drop']/div/input    ${OPERATING SYSTEM1}
-    Sleep    2s
-    Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
+    #Sleep    3s
+    #Input Text    xpath=.//*[@id='select2-drop']/div/input    ${OPERATING SYSTEM1}
+    #Sleep    2s
+    Click Element    xpath=.//*[@id='instanceOS']/option[text()='${OPERATING SYSTEM1}']
 
 #Choose Instance Size
     #Click Element    xpath=.//*[@id='s2id_intanceTypeControl']/a/span[1]
@@ -2290,24 +2307,12 @@ Enters The ubuntu Blueprint Name
 
 Chooses The Business Group
     Sleep    3s
-    Log    after scroll 
-    Sleep    1s
-    Click Element    css=#s2id_bgListInput > .select2-choice
-    Log    after click
-    Input Text    css=#select2-drop .select2-input    ${BUSINESS GROUP NAME}
-    Sleep    1s
-    Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
+    Click Element    xpath=.//*[@id='bgListInput']/option[text()='${BUSINESS GROUP NAME}']
 
     
 Chooses The Project
     Sleep    3s
-    Log    after scroll
-    Sleep    1s
-    Click Element    css=#s2id_projectListInput > .select2-choice
-    Log    after click
-    Input Text    css=#select2-drop .select2-input    ${Proj1}
-    Sleep    1s
-    Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span    
+    Click Element    xpath=.//*[@id='projectListInput']/option[text()='${Proj1}']
 
 
 

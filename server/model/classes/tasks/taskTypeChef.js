@@ -62,6 +62,13 @@ chefTaskSchema.methods.execute = function(userName, baseUrl, choiceParam, nexusD
                 }
             });
         }
+        if (nexusData.containerPort) {
+            objectArray.push({
+                "rlcatalyst": {
+                    "containerPort": nexusData.containerPort
+                }
+            });
+        }
     }
 
     var attributeObj = utils.mergeObjects(objectArray);

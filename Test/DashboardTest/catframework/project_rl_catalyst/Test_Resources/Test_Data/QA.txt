@@ -16,6 +16,10 @@ ${height}             768
 ${width}           1366
 ${NA}                 $
 ${VALUE}             0
+${NA1}               $K
+${NA2}               $0K
+${NA3}               $0
+
 
 #http://d4d.rlcatalyst.com/public/login.html
 

@@ -43,6 +43,9 @@
 #createProvider .row {
     margin-bottom: 10px;
 }
+.azureBlock{
+    margin-top: 26px;
+}
 </style>
 <div class="row" id="createProvider">
     <div class="col-md-12">
@@ -50,7 +53,7 @@
             <form id="myForm54" enctype="mutlipart/form-data" action="/aws/providers" method="post">
                 <div class="widget-box">
                     <div class="widget-header">
-                        <h4 class="widget-margin" style="color: black;">Add New Provider<span id="spnprovider"></span></h4>
+                        <h4 class="widget-margin" style="color: black;"><span id="spnprovider"></span></h4>
                     </div>
                     <div class="widget-body">
                         <div class="widget-main" style="min-height: 300px">
@@ -192,20 +195,49 @@
                                                             <!-- <i class="icon-append fa fa-building"></i> -->
                                                             <input name="hppubliccloudkeyname" id="hppubliccloudkeyname" class="form-control" type="text" cdata="catalyst" placeholder="Enter Instance Key Name"> <span data-val-controltovalidate="orgname" id="MainContent_Req_orgname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility: hidden;">Required</span></div>
                                                         <div class="col-lg-6 col-md-6">
+                                                            <div class="smart-forms">
                                                             <label for="">Upload .pem file for Instance:<span style="color: Red;" class="control-label">&nbsp;*</span></label>
-                                                            <!-- <i class="icon-append fa fa-building"></i> -->
-                                                            <input name="hppubliccloudinstancepem" id="hppubliccloudinstancepem" class="form-control" type="file" cdata="catalyst" placeholder="Enter the Password"> <span data-val-controltovalidate="orgname" id="MainContent_Req_orgname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility: hidden;">Required</span>
+                                                            
+                                                            <!-- <input name="hppubliccloudinstancepem" id="hppubliccloudinstancepem" class="form-control" type="file" cdata="catalyst" placeholder="Enter the Password"> -->
+                                                            <label for="hpFileName" name="field" class="field file">
+                                                            <div class="imgdiv" value="1"></div>
+                                                              <span class="button btn-primary">Browse</span><input name="hpFileName" id="hpFileName" keyfield="configname" type="file" class="gui-file file" name="fileObject"><input type="text" readonly="" class="gui-input fileHPPem" name="fileName"><input type="text" class="folderpath" style="visibility:hidden;" cdata="catalyst" />
+                                                          </label>
+                                                          </div>
                                                         </div>
                                                     </div>
-                                                    <div class="row forazure">
+                                                    <div class="row forazure azureBlock">
                                                         <div class="col-lg-6 col-md-6">
                                                             <label for="">Enter Subscription Id:<span style="color: Red;" class="control-label">&nbsp;*</span></label>
                                                             <input name="azureSubscriptionId" id="azureSubscriptionId" class="form-control" type="text" cdata="catalyst" cat-validation-azure="required" placeholder="Enter the Subscription Id"> <span data-val-controltovalidate="orgname" id="MainContent_Req_orgname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility: hidden;">Required</span></div>
-                                                        <div class="col-lg-6 col-md-6">
-                                                            <label for="">Enter Storage Account:<span style="color: Red;" class="control-label">&nbsp;*</span></label>
-                                                            <input name="azureStorageAccount" id="azureStorageAccount" class="form-control" type="text" cdata="catalyst" cat-validation-azure="required,min3,max24,nospecial" placeholder="Enter the Storage Account"> <span data-val-controltovalidate="orgname" id="MainContent_Req_orgname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility: hidden;">Required</span></div>
-                                                    </div>
-                                                    <div class="row">
+                                                        
+                                                         <div class="col-lg-6 col-md-6">
+                                                            <div class="smart-forms">
+                                                            <label for="">Upload .pem file:<span style="color: Red;" class="control-label">&nbsp;*</span></label>
+                                                            <!-- <i class="icon-append fa fa-building"></i> -->
+                                                            <!-- <input name="azurepem" id="azurepem" class="form-control" type="file" cdata="catalyst" placeholder="Enter the pem file"> -->
+                                                        
+                                                            <label for="azurepem" name="field" class="field file">
+                                                              <div class="imgdiv" value="1"></div>
+                                                              <span class="button btn-primary">Browse</span><input name="azurepem" id="azurepem" keyfield="configname" type="file" class="gui-file file" name="fileObject"><input type="text" readonly="" class="gui-input fileAzurePem" name="fileName"><input type="text" class="folderpath" style="visibility:hidden;" cdata="catalyst" />
+                                                            </label>
+                                                        </div>
+                                                        </div>
+                                                        </div>
+                                                        <div class="row">
+                                                        <div class="col-lg-6 col-md-6 forazure">
+                                                            <div class="smart-forms">
+                                                            <label for="">Upload private key file:<span style="color: Red;" class="control-label">&nbsp;*</span></label>
+                                                            <!-- <i class="icon-append fa fa-building"></i> -->
+                                                            <!-- <input name="azurekey" id="azurekey" class="form-control" type="file" cdata="catalyst" placeholder="Enter the key file"> -->
+                                                            <label for="azurekey" class="field file">
+                                                              <div class="imgdiv" value="1"></div>
+                                                              <span class="button btn-primary">Browse</span><input name="azurekey" id="azurekey" keyfield="configname" type="file" class="gui-file"><input type="text" readonly="" class="gui-input fileAzureKey" name="fileName">
+                                                            </label>
+                                                        </div>
+                                                        </div>    
+                                                    
+                                                    
                                                         <div class="col-lg-6 col-md-6">
                                                             <label for="name">Organization Name:<span style="color: Red;" class="control-label">&nbsp;*</span></label>
                                                             <select id="orgId" name="orgId" unique="true" uniqueconditionedby="orgname" class="chooseOrganization width-100" style="vertical-align: central" cat-validation="required" cat-validation-openstack="required" cdata="catalyst" skiprowid="yes">
@@ -453,27 +485,7 @@
     }
 
     function setValueshppubliccloud(data) {
-        //     var hppubliccloudusername = req.body.openstackusername;
-        // var hppubliccloudpassword = req.body.openstackpassword;
-        // var hppubliccloudhost = req.body.openstackhost;
-        // var hppubliccloudtenantid = req.body.openstacktenantid;
-        // var hppubliccloudtenantname = req.body.openstacktenantname;
-        // var hppubliccloudprojectname = req.body.openstackprojectname;
-        // var providerName = req.body.providerName;
-        // var providerType = req.body.providerType.toLowerCase();
-        // var hppubliccloudkeyname = req.body.hppubliccloudkeyname;
-        // var hppubliccloudregion = req.body.hppubliccloudregion;
-
-        // var serviceendpoints = {
-        //     compute: req.body.openstackendpointcompute,
-        //     network: req.body.openstackendpointnetwork,
-        //     image: req.body.openstackendpointimage,
-        //     ec2: req.body.openstackendpointec2,
-        //     identity: req.body.openstackendpointidentity,
-
-        // };    
-
-        //alert(JSON.stringify(data.providerType));
+        //alert(JSON.stringify(data));
 
         $('#name').val(data.providerName);
         $('#providertype').val(data.providerType.toUpperCase()).select2();
@@ -498,7 +510,9 @@
         $('#openstackendpointimage').val(data.serviceendpoints.image);
 
         $('#openstackendpointnetwork').val(data.serviceendpoints.network);
-
+        bindChange_importPemFile();
+        var $pemFileLocation = $('.forhppubliccloud');
+        $pemFileLocation.find('input.fileHPPem').val(data.hpFileName);
         $('#hppubliccloudkeyname').val(data.keyname);
         $('#hppubliccloudregion').val(data.region).select2();
 
@@ -507,9 +521,14 @@
     function setValuesAzure(data) {
         $('#name').val(data.providerName);
         $('#azureSubscriptionId').val(data.subscriptionId);
-        $('#azureStorageAccount').val(data.storageAccount);
+       // $('#azureStorageAccount').val(data.storageAccount);
         $('#providertype').val(data.providerType.toUpperCase()).select2();
         $('#providertype').trigger('change');
+        bindChange_importPemFile();
+        var $parentRow = $('.forazure');
+        var $keyRow = $('.row');
+        $parentRow.find('input.fileAzurePem').val(data.pemFileName);
+        $keyRow.find('input.fileAzureKey').val(data.keyFileName);
         $('#orgId').val(data.orgId[0]).attr({
             'answer': data.orgId[0]
         }).select2();
@@ -594,12 +613,12 @@
 
 
     $(document).ready(function() {
+        $("input[type='password']").val('');
         $("#name").focus();
-        //isUserTypeSuperAdmin();
         $('#accessKey').blur(KeyChangeHandler);
         $('#secretKey').blur(KeyChangeHandler);
         $('select').select2();
-       // $('.widget-main').css('height','450px').css('overflow-y','scroll'); //to be removed after the the class if fixed globally
+       
         $('#providertype').val('AWS').trigger('change');
         getOrganizationList();
 
@@ -680,6 +699,7 @@
         });
 
         if (!UtilityMethods.getIdFromURL()) {
+            $('.widget-header').find('h4.widget-margin').html('Add New Provider');
             var createTemplateInstance = new createTemplate($('#appender'));
             $('#appender').append(createTemplateInstance.getFinalTemplate(true));
             bindChange_importPemFile();
@@ -688,7 +708,9 @@
             getRegionList();
             $('select.region').change(checkForKeyPair);
         } else {
+            $('.widget-header').find('h4.widget-margin').html('Edit Provider');
             $('#myForm54').attr('action', '/aws/providers/' + UtilityMethods.getIdFromURL() + '/update');
+
             $.ajax({
                 method: "GET",
                 url: "/aws/providers/" + UtilityMethods.getIdFromURL(),
@@ -701,7 +723,6 @@
                 error: function(jqxhr) {
                     removeLoader();
                     getopenstackprovider();
-                    bootbox.alert(jqxhr.status);
                 },
                 failure: function(data) {
                     bootbox.alert(data);
@@ -719,13 +740,13 @@
                         //checkForKeyPair();
                     },
                     error: function(jqxhr) {
-                        //alert('err 1');
+                        
                         getValueshppubliccloud();
                         removeLoader();
-                        bootbox.alert(jqxhr.status);
+                        
                     },
                     failure: function(data) {
-                        alert('fail 1');
+                        
                         bootbox.alert(data);
                     }
                 }); //else getopenstackprovider
@@ -744,12 +765,12 @@
                         //checkForKeyPair();
                     },
                     error: function(jqxhr) {
-                        //alert('err 1');
+                        
                         getValuesAzure();
                         
                     },
                     failure: function(data) {
-                        alert('fail 1');
+                        
                         bootbox.alert(data);
                     }
                 }); //else getopenstackprovider
@@ -769,13 +790,13 @@
                         //checkForKeyPair();
                     },
                     error: function(jqxhr) {
-                        //alert('err 1');
+                        
                         getValuesVmware();
                         removeLoader();
-                        bootbox.alert(jqxhr.status);
+                        
                     },
                     failure: function(data) {
-                        alert('fail 1');
+                        
                         bootbox.alert(data);
                     }
                 });
@@ -797,13 +818,13 @@
                         //checkForKeyPair();
                     },
                     error: function(jqxhr) {
-                        alert('err 1');
+                        
 
                         removeLoader();
-                        bootbox.alert(jqxhr.status);
+                        
                     },
                     failure: function(data) {
-                        alert('fail 1');
+                        
                         bootbox.alert(data);
                     }
                 });

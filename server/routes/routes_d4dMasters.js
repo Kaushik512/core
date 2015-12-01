@@ -1,7 +1,7 @@
 /* Copyright (C) Relevance Lab Private Limited- All Rights Reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
- * Written by Gobinda Das <gobinda.das@relevancelab.com>,
+ * Written by Vinod Nair and Gobinda Das <gobinda.das@relevancelab.com>,
  * May 2015
  */
 
@@ -956,7 +956,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                             res.send(pList);
                             return;
                         });
-                    }  else if (req.params.id === '26') {
+                    } else if (req.params.id === '26') {
                         // For Puppet Server
                         masterUtil.getNexusServers(orgList, function(err, pList) {
                             if (err) {
@@ -2825,19 +2825,19 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                             });
                                         });
 
-                                    } else if(req.params.id === '4'){
+                                    } else if (req.params.id === '4') {
                                         bodyJson['appdeploy'] = JSON.parse(bodyJson['appdeploy']);
                                         var projectModel = new d4dModelNew.d4dModelMastersProjects(bodyJson);
-                                            projectModel.save(function(err, data) {
-                                                if (err) {
-                                                    logger.error('Hit Save error', err);
-                                                    res.send(500);
-                                                    return;
-                                                }
-                                                res.send(200);
+                                        projectModel.save(function(err, data) {
+                                            if (err) {
+                                                logger.error('Hit Save error', err);
+                                                res.send(500);
                                                 return;
-                                            });
-                                    }else {
+                                            }
+                                            res.send(200);
+                                            return;
+                                        });
+                                    } else {
                                         logger.debug("FLD>>>>>>>>>>>>> ", FLD);
                                         eval('var mastersrdb =  new d4dModelNew.' + dbtype + '({' + JSON.parse(FLD) + '})');
                                         mastersrdb.save(function(err, data) {
@@ -3788,8 +3788,8 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 res.send(500, "Failed to fetch  Environment");
                 return;
             }
-            if(!data){
-                res.send(404,"No Environment Found.");
+            if (!data) {
+                res.send(404, "No Environment Found.");
                 return;
             }
             res.send(data);
@@ -3805,13 +3805,51 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 res.send(500, "Failed to fetch  Environment");
                 return;
             }
-            if(!data){
-                res.send(404,"No Environment Found.");
+            if (!data) {
+                res.send(404, "No Environment Found.");
                 return;
             }
             res.send(data);
             return;
         });
     });
-}
 
+    app.post('/d4dMasters/project/:anId/appdeploy/appName/update', function(req, res) {
+        logger.debug("Updating appName in Project...");
+
+                /*db.d4dmastersnew.update({
+            "rowid": "95213423-50d1-4dce-b6f4-0d51c4460998"
+        }, {
+            $set: {
+                "appdeploy": [{
+                    applicationname: "catalyst",
+                    "appdescription": "Test app deploy"
+                }]
+            }
+        })
+        */
+        d4dModelNew.d4dModelMastersProjects.update({
+            rowid: req.params.anId,
+            id: '4'
+        }, {
+            $set: {
+                "appdeploy": [{
+                    applicationname: req.body.appName,
+                        appdescription: req.body.description
+                }]
+            }
+        }, {
+            upsert: false
+        }, function(err, data) {
+            logger.debug("Update Count+++++++++++++++ ", data);
+            if (err) {
+                logger.debug('Err while updating d4dModelMastersProjects' + err);
+                res.send(err);
+                return;
+            }
+            logger.debug('Updated project ' + req.params.anId + ' with App Name : ' + req.body.appName);
+            res.send(data);
+            return;
+        });
+    });
+}

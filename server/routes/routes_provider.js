@@ -608,6 +608,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         var hppubliccloudkeyname = req.body.hppubliccloudkeyname;
         var hppubliccloudregion = req.body.hppubliccloudregion;
 
+        var hpFileName = req.files.hpFileName.originalFilename;
+
         var serviceendpoints = {
             compute: req.body.openstackendpointcompute,
             network: req.body.openstackendpointnetwork,
@@ -720,6 +722,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                         serviceendpoints: serviceendpoints,
                         region: hppubliccloudregion,
                         keyname: hppubliccloudkeyname,
+                        hpFileName: hpFileName,
                         orgId: orgId
                     };
                     hppubliccloudProvider.gethppubliccloudProviderByName(providerData.providerName, providerData.orgId, function(err, prov) {
@@ -757,6 +760,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                         host: hppubliccloudhost,
                                         providerName: provider.providerName,
                                         providerType: provider.providerType,
+                                        hpFileName: provider.hpFileName,
                                         orgId: orgs[0].rowid,
                                         orgName: orgs[0].orgname,
                                         tenantid: hppubliccloudtenantid,
@@ -907,6 +911,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         var providerName = req.body.providerName;
         var providerType = req.body.providerType.toLowerCase();
         var hppubliccloudkeyname = req.body.hppubliccloudkeyname;
+        var hpFileName = req.files.hpFileName.originalFilename;
         var hppubliccloudregion = req.body.hppubliccloudregion;
 
         var serviceendpoints = {
@@ -986,6 +991,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             projectname: hppubliccloudprojectname,
             serviceendpoints: serviceendpoints,
             region: hppubliccloudregion,
+            hpFileName: hpFileName,
             keyname: hppubliccloudkeyname,
             orgId: orgId
         };
@@ -1131,10 +1137,20 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         var category = configmgmtDao.getCategoryFromID("9");
         var permissionto = 'create';
         var azureSubscriptionId = req.body.azureSubscriptionId;
-        var azureStorageAccount = req.body.azureStorageAccount;
+        //var azureStorageAccount = req.body.azureStorageAccount;
+
+        logger.debug("Pem file name:", req.files);
+        logger.debug("Pem file name:", req.files.azurepem.originalFilename);
+        logger.debug("Key file name:", req.files.azurekey.originalFilename);
+        //logger.debug("file Object:", req.files.azurepem);
+
+        logger.debug("details>> ",req.files.azurepem);
 
         var providerName = req.body.providerName;
         var providerType = req.body.providerType.toLowerCase();
+
+        var pemFileName = req.files.azurepem.originalFilename;
+        var keyFileName = req.files.azurekey.originalFilename;
 
         var orgId = req.body.orgId;
 
@@ -1142,10 +1158,10 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             res.send(400, "Please Enter SubscriptionId.");
             return;
         }
-        if (typeof azureStorageAccount === 'undefined' || azureStorageAccount.length === 0) {
+        /*if (typeof azureStorageAccount === 'undefined' || azureStorageAccount.length === 0) {
             res.send(400, "Please Enter Storage Account.");
             return;
-        }
+        }*/
 
         if (typeof providerName === 'undefined' || providerName.length === 0) {
             res.send(400, "Please Enter Name.");
@@ -1153,6 +1169,16 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         }
         if (typeof providerType === 'undefined' || providerType.length === 0) {
             res.send(400, "Please Enter ProviderType.");
+            return;
+        }
+        if (typeof pemFileName === 'undefined' || orgId.length === 0) {
+            res.status(400);
+            res.send("Please upload azure subscription pem file");
+            return;
+        }
+        if (typeof keyFileName === 'undefined' || orgId.length === 0) {
+            res.status(400);
+            res.send("Please upload azure subscription key file");
             return;
         }
         if (typeof orgId === 'undefined' || orgId.length === 0) {
@@ -1189,9 +1215,11 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                     var providerData = {
                         id: 9,
                         subscriptionId: azureSubscriptionId,
-                        storageAccount: azureStorageAccount,
+                        //storageAccount: azureStorageAccount,
                         providerName: providerName,
                         providerType: providerType,
+                        pemFileName: pemFileName,
+                        keyFileName: keyFileName,
                         orgId: orgId
                     };
                     azurecloudProvider.getAzureCloudProviderByName(providerData.providerName, providerData.orgId, function(err, prov) {
@@ -1225,9 +1253,11 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                         _id: provider._id,
                                         id: 9,
                                         subscriptionId: azureSubscriptionId,
-                                        storageAccount: azureStorageAccount,
+                                        //storageAccount: azureStorageAccount,
                                         providerName: provider.providerName,
                                         providerType: provider.providerType,
+                                        pemFileName: pemFileName,
+                                        keyFileName: keyFileName,
                                         orgId: orgs[0].rowid,
                                         orgName: orgs[0].orgname,
                                         __v: provider.__v,
@@ -1345,8 +1375,10 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 return;
             }
             if (aProvider) {
-
-                masterUtil.getOrgById(aProvider.orgId[0], function(err, orgs) {
+                logger.debug(aProvider);
+                var provider = JSON.parse(aProvider)
+                logger.debug(provider.orgId);
+                masterUtil.getOrgById(provider.orgId[0], function(err, orgs) {
                     if (err) {
                         res.send(500, "Not able to fetch org.");
                         return;
@@ -1372,9 +1404,15 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         var permissionto = 'create';
 
         var azureSubscriptionId = req.body.azureSubscriptionId;
-        var azureStorageAccount = req.body.azureStorageAccount;
+        //var azureStorageAccount = req.body.azureStorageAccount;
         var providerName = req.body.providerName;
         var providerType = req.body.providerType.toLowerCase();
+
+        logger.debug("Pem file name:", req.files.azurepem.originalFilename);
+        logger.debug("Key file name:", req.files.azurekey.originalFilename);
+
+        var pemFileName = req.files.azurepem.originalFilename;
+        var keyFileName = req.files.azurekey.originalFilename;
 
         var orgId = req.body.orgId;
 
@@ -1382,8 +1420,18 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             res.send(400, "Please Enter Subscription Id.");
             return;
         }
-        if (typeof azureStorageAccount === 'undefined' || azureStorageAccount.length === 0) {
+        /*if (typeof azureStorageAccount === 'undefined' || azureStorageAccount.length === 0) {
             res.send(400, "Please Enter Storage Account.");
+            return;
+        }*/
+        if (typeof pemFileName === 'undefined' || orgId.length === 0) {
+            res.status(400);
+            res.send("Please upload azure subscription pem file");
+            return;
+        }
+        if (typeof keyFileName === 'undefined' || orgId.length === 0) {
+            res.status(400);
+            res.send("Please upload azure subscription key file");
             return;
         }
 
@@ -1400,9 +1448,11 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         var providerData = {
             id: 9,
             azureSubscriptionId: azureSubscriptionId,
-            azureStorageAccount: azureStorageAccount,
+            //azureStorageAccount: azureStorageAccount,
             providerName: providerName,
             providerType: providerType,
+            pemFileName: pemFileName,
+            keyFileName: keyFileName,
             orgId: orgId
         };
         logger.debug("provider>>>>>>>>>>>> %s", providerData.providerType);
@@ -1446,9 +1496,11 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                     _id: req.params.providerId,
                                     id: 9,
                                     subscriptionId: azureSubscriptionId,
-                                    storageAccount: azureStorageAccount,
+                                    //storageAccount: azureStorageAccount,
                                     providerName: providerData.providerName,
                                     providerType: providerData.providerType,
+                                    pemFileName: pemFileName,
+                                    keyFileName: keyFileName,
                                     orgId: orgs[0].rowid,
                                     orgName: orgs[0].orgname
                                 };

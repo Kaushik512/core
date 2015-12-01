@@ -33,6 +33,7 @@ Catalyst User New Template Creation
     Select CookBooks
     Clicks on >> Button
     Clicks on Save Button
+    Sleep    2s
     Validate the Edit Template name  ${ValidTEditemplName}
     Verfiy the Template is Created
 
@@ -366,6 +367,9 @@ Test Validation of Creation of New Services
 
 
 Catalyst User Service Command Services
+    Clicks on Settings
+    Clicks on Gallery Setup
+    Clicks on Service Command
     Clicks on SNew Button
     Select Created organization
     Enters Service Name

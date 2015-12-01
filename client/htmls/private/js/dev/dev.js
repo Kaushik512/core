@@ -21,16 +21,18 @@ function devCall() {
             if (objID == "divapplicationcardview" || objID == "defaultViewButtonAppCard") {
                 $("#divapplicationtableview").removeClass("visibleClass").hide();
                 $(".createAppConfigure").show();
-                $('#defaultViewButtonAppCard').hide();
+                $('#defaultViewButtonAppCard').hide();   
+                $('#defaultViewButtonNewDeploy').show();
                 $("#divapplicationcardview").addClass("visibleClass").show();
-                $('#defaultViewButtonAppCard').parents().eq(2).find('span:nth-child(2)').removeClass('margintop2right8').addClass('margintopright8');
+                //$('#defaultViewButtonAppCard').parents().eq(2).find('span:nth-child(2)').removeClass('margintop2right8').addClass('margintopright8');
                 $('#defaultViewButtonAppCard').find('i').removeClass('txt-color-deactive').addClass('txt-color-active');
                 $('#instanceviewAppCard').show();
                 //$('#instanceviewAppCard').find('i').removeClass('txt-color-active').addClass('txt-color-deactive');
             } else {
                 $("#divapplicationtableview").addClass("visibleClass").show();
                 $('#defaultViewButtonAppCard').show();
-                $('#defaultViewButtonAppCard').parents().eq(2).find('span:nth-child(2)').removeClass('margintopright8').addClass('margintop2right8');
+                $('#defaultViewButtonNewDeploy').show();
+                //$('#defaultViewButtonAppCard').parents().eq(2).find('span:nth-child(2)').removeClass('margintopright8').addClass('margintop2right8');
                 $(".createAppConfigure").hide();
                 $("#divapplicationcardview").removeClass("visibleClass").hide();
                 $('#instanceviewAppCard').hide();
@@ -3750,8 +3752,8 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
             });
         }
 
-        /*Initialising the data table in orchestration*/
-        function initializeTaskArea(data) {
+        /*Initialising the data table in  orchestration*/
+        window.initializeTaskArea = function(data) {
 
             $('#assignedExecute').on('show.bs.modal', function() {
                 $('#assignedTaskHistory').css('z-index', 1030);
@@ -3829,6 +3831,8 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                     }]
 
                 });
+            } else {
+                var $taskDatatable = $('#tableOrchestration').DataTable();
             }
 
             if (!$.fn.dataTable.isDataTable('#tablehistoryTask')) {
@@ -4232,6 +4236,8 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                     }
                 });
             }
+
+
 
 
             for (var i = 0; i < data.length; i++) {

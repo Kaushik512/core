@@ -14,12 +14,17 @@ module.exports.readDir = function(root, path, callback) {
     var totalItems = 0;
     var that = this;
     fs.readdir(root + path, function(err, files) {
+      
         if (err) {
             callback(err);
             return;
         }
         var fileStatError = false;
         totalItems = files.length;
+        if (totalItems === 0) {
+            callback(null, dirList, filesList);
+            return;
+        }
         for (var i = 0; i < totalItems; i++) {
             var file = files[i];
             (function(file) {
@@ -95,7 +100,8 @@ module.exports.writeFile = function(path, data, encoding, callback) {
 }
 
 module.exports.exists = function(path, callback) {
-    fs.exists(path, function(exists) {
+    fs.exists(path, function(exists, err) {
+        console.log(exists, err);
         if (exists) {
             callback(exists);
         } else {

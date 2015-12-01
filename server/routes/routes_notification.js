@@ -725,11 +725,11 @@ module.exports.setRoutes = function(app, socketIo) {
             }
 
             if (instances.length > 0) {
+                //var instanceIds = [];
                 for (var ins = 0; ins < instances.length; ins++) {
                     (function(ins) {
                         //proceed only if the instance is part of the aws provider
                         if (instances[ins].providerId) {
-                            var instanceIds = [];
                             AWSProvider.getAWSProviderById(instances[ins].providerId, function(err, aProvider) {
                                 if (err) {
                                     logger.debug("Failed to get Provider!");
@@ -759,6 +759,7 @@ module.exports.setRoutes = function(app, socketIo) {
                                                         "region": aKeyPair[0].region
                                                     });
                                                     logger.debug("AWS ec2: ", JSON.stringify(ec2));
+                                                    var instanceIds = [];
                                                     instanceIds.push(instances[ins].platformId);
                                                     ec2.describeInstances(instanceIds, function(err, awsInstances) {
                                                         logger.debug("got reponse from aws instance: ", JSON.stringify(awsInstances));
@@ -779,45 +780,42 @@ module.exports.setRoutes = function(app, socketIo) {
                                                             }
                                                             return;
                                                         }
-                                                        if (awsInstances.Reservations.length === 0) {
-                                                            if (instances[ins].instanceState != "terminated") {
-                                                                instancesDao.updateInstanceState(instances[ins]._id, "terminated", function(err, data) {
+
+                                                        //logger.debug("Described Instances from AWS: ", JSON.stringify(awsInstances));
+                                                        if (awsInstances) {
+                                                            if (awsInstances.Reservations.length === 0) {
+                                                                if (instances[ins].instanceState != "terminated") {
+                                                                    instancesDao.updateInstanceState(instances[ins]._id, "terminated", function(err, data) {
+                                                                        if (err) {
+                                                                            logger.error("Failed to updateInstance State!", err);
+                                                                            return;
+                                                                        }
+                                                                        var instance = instances[ins];
+                                                                        instance.instanceState = "terminated";
+                                                                        socketCloudFormationAutoScate.to(instance.orgId + ':' + instance.bgId + ':' + instance.projectId + ':' + instance.envId).emit('instanceStateChanged', instance);
+
+                                                                        logger.debug("Exit updateInstanceState: ");
+                                                                    });
+                                                                }
+                                                                return;
+                                                            }
+
+                                                            logger.debug("instances[ins].platformId=>>>>> ", instances[ins].platformId + " awsInstances.Reservations[x].Instances[0].instanceId=>>>>>>> ", awsInstances.Reservations[0].Instances[0].InstanceId);
+                                                            if (instances[ins].platformId === awsInstances.Reservations[0].Instances[0].InstanceId) {
+                                                                logger.debug("Status does not matched.....", instances[ins]._id);
+                                                                instancesDao.updateInstanceState(instances[ins]._id, awsInstances.Reservations[0].Instances[0].State.Name, function(err, data) {
                                                                     if (err) {
                                                                         logger.error("Failed to updateInstance State!", err);
                                                                         return;
                                                                     }
                                                                     var instance = instances[ins];
-                                                                    instance.instanceState = "terminated";
+                                                                    instance.instanceState = awsInstances.Reservations[0].Instances[0].State.Name;
                                                                     socketCloudFormationAutoScate.to(instance.orgId + ':' + instance.bgId + ':' + instance.projectId + ':' + instance.envId).emit('instanceStateChanged', instance);
+
 
                                                                     logger.debug("Exit updateInstanceState: ");
                                                                 });
-                                                            }
-                                                            return;
-                                                        }
-                                                        //logger.debug("Described Instances from AWS: ", JSON.stringify(awsInstances));
-                                                        if (awsInstances) {
-                                                            var reservations = awsInstances.Reservations;
-                                                            for (var x = 0; x < reservations.length; x++) {
-                                                                (function(x) {
-                                                                    if (instances[ins].instanceState === reservations[x].Instances[0].State.Name) {
-                                                                        logger.debug("Status matched......");
-                                                                    } else {
-                                                                        logger.debug("Status does not matched.....", instances[ins]._id);
-                                                                        instancesDao.updateInstanceState(instances[ins]._id, reservations[x].Instances[0].State.Name, function(err, data) {
-                                                                            if (err) {
-                                                                                logger.error("Failed to updateInstance State!", err);
-                                                                                return;
-                                                                            }
-                                                                            var instance = instances[ins];
-                                                                            instance.instanceState = reservations[x].Instances[0].State.Name;
-                                                                            socketCloudFormationAutoScate.to(instance.orgId + ':' + instance.bgId + ':' + instance.projectId + ':' + instance.envId).emit('instanceStateChanged', instance);
-
-
-                                                                            logger.debug("Exit updateInstanceState: ");
-                                                                        });
-                                                                    }
-                                                                })(x);
+                                                                return;
                                                             }
                                                         }
 

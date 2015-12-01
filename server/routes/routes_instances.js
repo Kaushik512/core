@@ -1,7 +1,7 @@
 /* Copyright (C) Relevance Lab Private Limited- All Rights Reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
- * Written by Gobinda Das <gobinda.das@relevancelab.com>,
+ * Written by Anshul Srivastava and Gobinda Das <gobinda.das@relevancelab.com>,
  * May 2015
  */
 
@@ -31,6 +31,8 @@ var AWSProvider = require('_pr/model/classes/masters/cloudprovider/awsCloudProvi
 var AWSKeyPair = require('../model/classes/masters/cloudprovider/keyPair.js');
 var VMware = require('_pr/lib/vmware');
 var vmwareCloudProvider = require('_pr/model/classes/masters/cloudprovider/vmwareCloudProvider.js');
+var azureProvider = require('_pr/model/classes/masters/cloudprovider/azureCloudProvider.js');
+var AzureCloud = require('_pr/lib/azure');
 
 var ChefClientExecution = require('../model/classes/instance/chefClientExecution/chefClientExecution.js');
 
@@ -50,10 +52,10 @@ var masterUtil = require('_pr/lib/utils/masterUtil');
 module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
     app.get('/instances/:instanceId', function(req, res) {
-       // logger.debug("Enter get() for /instances/%s", req.params.instanceId);
+        // logger.debug("Enter get() for /instances/%s", req.params.instanceId);
         instancesDao.getInstanceById(req.params.instanceId, function(err, data) {
             if (err) {
-       //         logger.error("Instance fetch Failed >> ", err);
+                //         logger.error("Instance fetch Failed >> ", err);
                 res.send(500);
                 return;
             }
@@ -61,10 +63,10 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             if (data.length) {
                 res.send(data[0]);
             } else {
-            //    logger.error("No such Instance for >> %s", req.params.instanceId);
+                //    logger.error("No such Instance for >> %s", req.params.instanceId);
                 res.send(404);
             }
-          //  logger.debug("Exit get() for /instances/%s", req.params.instanceId);
+            //  logger.debug("Exit get() for /instances/%s", req.params.instanceId);
         });
     });
 
@@ -1427,7 +1429,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         }); //haspermission
     });
 
-    
+
 
     app.get('/instances/:instanceId/stopInstance', function(req, res) {
         logger.debug("Enter get() for /instances/%s/stopInstance", req.params.instanceId);
@@ -1479,8 +1481,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                 return;
                             }
                             //checking if provider is vmware
-                            
-                            if(data[0].hardware.platform && data[0].hardware.platform == 'vmware'){
+
+                            if (data[0].hardware.platform && data[0].hardware.platform == 'vmware') {
                                 vmwareCloudProvider.getvmwareProviderById(data[0].providerId, function(err, providerdata) {
 
                                     logger.debug('IN getvmwareProviderById: data: ');
@@ -1490,11 +1492,10 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                         host: '',
                                         username: '',
                                         password: '',
-                                        dc:'',
-                                        serviceHost:''
+                                        dc: '',
+                                        serviceHost: ''
                                     };
-                                    if(data)
-                                    {
+                                    if (data) {
                                         vmwareconfig.host = providerdata.host;
                                         vmwareconfig.username = providerdata.username;
                                         vmwareconfig.password = providerdata.password;
@@ -1503,17 +1504,15 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                         logger.debug('IN getvmwareProviderById: vmwareconfig: ');
                                         logger.debug(JSON.stringify(appConfig.vmware));
                                         logger.debug(JSON.stringify(vmwareconfig));
-                                    }
-                                    else{
+                                    } else {
                                         vmwareconfig = null;
                                     }
                                     //  data.tenantName = "demo";
                                     //callback(null, vmwareconfig);
-                                    if(vmwareconfig){
+                                    if (vmwareconfig) {
                                         var vmware = new VMware(vmwareconfig);
-                                        vmware.startstopVM(vmwareconfig.serviceHost,data[0].name,'poweroff',function(err,vmdata){
-                                            if(!err)
-                                            {
+                                        vmware.startstopVM(vmwareconfig.serviceHost, data[0].name, 'poweroff', function(err, vmdata) {
+                                            if (!err) {
                                                 var timestampEnded = new Date().getTime();
 
 
@@ -1541,15 +1540,14 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                 });
                                                 instancesDao.updateActionLog(req.params.instanceId, actionLog._id, true, timestampEnded);
 
-                                               // logger.debug('Recvd:',JSON.stringify(JSON.parse(vmdata)));
+                                                // logger.debug('Recvd:',JSON.stringify(JSON.parse(vmdata)));
                                                 res.send(200, {
                                                     instanceCurrentState: 'stopped',
                                                     actionLogId: actionLog._id
                                                 });
                                                 return;
-                                            }
-                                            else{
-                                                logger.debug('Error in action query :',err);
+                                            } else {
+                                                logger.debug('Error in action query :', err);
                                                 var timestampEnded = new Date().getTime();
                                                 logsDao.insertLog({
                                                     referenceId: logReferenceIds,
@@ -1557,21 +1555,129 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                     log: "Unable to stop instance",
                                                     timestamp: timestampEnded
                                                 });
-                                                res.send('500',null);
+                                                res.send('500', null);
                                                 return;
                                             }
                                         });
-                                    }
-                                    else{
+                                    } else {
                                         //no provider found.
                                         logger.debug('No Provider found :');
-                                        res.send('400','No Provider found');
+                                        res.send('400', 'No Provider found');
                                         return;
                                     }
                                 });
-                                
-                            }
-                            else{
+
+                            } else if (data[0].keyPairId && data[0].keyPairId == 'azure') {
+
+                                logger.debug("Stopping Azure ");
+
+                                azureProvider.getAzureCloudProviderById(data[0].providerId, function(err, providerdata) {
+                                    if (err) {
+                                        logger.error('getAzureCloudProviderById ', err);
+                                        return;
+                                    }
+
+                                    logger.debug('providerdata:', providerdata);
+                                    providerdata = JSON.parse(providerdata);
+
+                                    var settings = appConfig;
+                                    var pemFile = settings.instancePemFilesDir + providerdata._id + providerdata.pemFileName;
+                                    var keyFile = settings.instancePemFilesDir + providerdata._id + providerdata.keyFileName;
+
+                                    logger.debug("pemFile path:", pemFile);
+                                    logger.debug("keyFile path:", pemFile);
+
+                                    var cryptoConfig = appConfig.cryptoSettings;
+                                    var cryptography = new Cryptography(cryptoConfig.algorithm, cryptoConfig.password);
+
+                                    var uniqueVal = uuid.v4().split('-')[0];
+
+                                    var decryptedPemFile = pemFile + '_' + uniqueVal + '_decypted';
+                                    var decryptedKeyFile = keyFile + '_' + uniqueVal + '_decypted';
+
+                                    cryptography.decryptFile(pemFile, cryptoConfig.decryptionEncoding, decryptedPemFile, cryptoConfig.encryptionEncoding, function(err) {
+                                        if (err) {
+                                            logger.error('Pem file decryption failed>> ', err);
+                                            return;
+                                        }
+
+                                        cryptography.decryptFile(keyFile, cryptoConfig.decryptionEncoding, decryptedKeyFile, cryptoConfig.encryptionEncoding, function(err) {
+                                            if (err) {
+                                                logger.error('key file decryption failed>> ', err);
+                                                return;
+                                            }
+
+                                            var options = {
+                                                subscriptionId: providerdata.subscriptionId,
+                                                certLocation: decryptedPemFile,
+                                                keyLocation: decryptedKeyFile
+                                            };
+
+                                            var azureCloud = new AzureCloud(options);
+
+                                            azureCloud.shutDownVM(data[0].chefNodeName, function(err, currentState) {
+
+                                                    if (err) {
+                                                        var timestampEnded = new Date().getTime();
+                                                        logsDao.insertLog({
+                                                            referenceId: logReferenceIds,
+                                                            err: true,
+                                                            log: "Unable to stop instance",
+                                                            timestamp: timestampEnded
+                                                        });
+                                                        instancesDao.updateActionLog(req.params.instanceId, actionLog._id, false, timestampEnded);
+                                                        res.send(500, {
+                                                            actionLogId: actionLog._id
+                                                        });
+                                                        return;
+                                                    }
+
+                                                    logger.debug("Exit get() for /instances/%s/stopInstance", req.params.instanceId);
+                                                    res.send(200, {
+                                                        instanceCurrentState: currentState,
+                                                        actionLogId: actionLog._id
+                                                    });
+
+                                                    instancesDao.updateInstanceState(req.params.instanceId, currentState, function(err, updateCount) {
+                                                        if (err) {
+                                                            logger.error("update instance state err ==>", err);
+                                                            return;
+                                                        }
+                                                        logger.debug('instance state upadated');
+                                                    });
+
+
+                                                },
+                                                function(err, state) {
+                                                    if (err) {
+                                                        return;
+                                                    }
+                                                    instancesDao.updateInstanceState(req.params.instanceId, state, function(err, updateCount) {
+                                                        if (err) {
+                                                            logger.error("update instance state err ==>", err);
+                                                            return;
+                                                        }
+
+                                                        logger.debug('instance state upadated');
+                                                    });
+
+                                                    var timestampEnded = new Date().getTime();
+
+                                                    logsDao.insertLog({
+                                                        referenceId: logReferenceIds,
+                                                        err: false,
+                                                        log: "Instance Stopped",
+                                                        timestamp: timestampEnded
+                                                    });
+
+                                                    instancesDao.updateActionLog(req.params.instanceId, actionLog._id, true, timestampEnded);
+                                                });
+
+                                        });
+                                    });
+                                });
+
+                            } else {
                                 AWSProvider.getAWSProviderById(data[0].providerId, function(err, aProvider) {
                                     if (err) {
                                         logger.error(err);
@@ -1688,7 +1794,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                             return;
                         }
                         if (data.length) {
-                            if(data[0].hardware.platform && data[0].hardware.platform == 'vmware'){
+                            if (data[0].hardware.platform && data[0].hardware.platform == 'vmware') {
                                 vmwareCloudProvider.getvmwareProviderById(data[0].providerId, function(err, providerdata) {
                                     var timestampStarted = new Date().getTime();
                                     var actionLog = instancesDao.insertStartActionLog(req.params.instanceId, req.session.user.cn, timestampStarted);
@@ -1704,30 +1810,27 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                         host: '',
                                         username: '',
                                         password: '',
-                                        dc:'',
-                                        serviceHost:''
+                                        dc: '',
+                                        serviceHost: ''
                                     };
-                                    if(data)
-                                    {
+                                    if (data) {
                                         vmwareconfig.host = providerdata.host;
                                         vmwareconfig.username = providerdata.username;
                                         vmwareconfig.password = providerdata.password;
                                         vmwareconfig.dc = providerdata.dc;
                                         vmwareconfig.serviceHost = appConfig.vmware.serviceHost;
                                         logger.debug('IN getvmwareProviderById: vmwareconfig: ');
-                                       // logger.debug(JSON.stringify(appConfig.vmware));
-                                       // logger.debug(JSON.stringify(vmwareconfig));
-                                    }
-                                    else{
+                                        // logger.debug(JSON.stringify(appConfig.vmware));
+                                        // logger.debug(JSON.stringify(vmwareconfig));
+                                    } else {
                                         vmwareconfig = null;
                                     }
                                     //  data.tenantName = "demo";
                                     //callback(null, vmwareconfig);
-                                    if(vmwareconfig){
+                                    if (vmwareconfig) {
                                         var vmware = new VMware(vmwareconfig);
-                                        vmware.startstopVM(vmwareconfig.serviceHost,data[0].name,'poweron',function(err,vmdata){
-                                            if(!err)
-                                            {
+                                        vmware.startstopVM(vmwareconfig.serviceHost, data[0].name, 'poweron', function(err, vmdata) {
+                                            if (!err) {
                                                 var timestampEnded = new Date().getTime();
 
 
@@ -1755,15 +1858,14 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                 });
                                                 instancesDao.updateActionLog(req.params.instanceId, actionLog._id, true, timestampEnded);
 
-                                             //   logger.debug('Recvd:',JSON.stringify(JSON.parse(vmdata)));
+                                                //   logger.debug('Recvd:',JSON.stringify(JSON.parse(vmdata)));
                                                 res.send(200, {
                                                     instanceCurrentState: 'running',
                                                     actionLogId: actionLog._id
                                                 });
                                                 return;
-                                            }
-                                            else{
-                                                logger.debug('Error in action query :',err);
+                                            } else {
+                                                logger.debug('Error in action query :', err);
                                                 var timestampEnded = new Date().getTime();
                                                 logsDao.insertLog({
                                                     referenceId: logReferenceIds,
@@ -1771,21 +1873,129 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                     log: "Unable to start instance",
                                                     timestamp: timestampEnded
                                                 });
-                                                res.send('500',null);
+                                                res.send('500', null);
                                                 return;
                                             }
                                         });
-                                    }
-                                    else{
+                                    } else {
                                         //no provider found.
                                         logger.debug('No Provider found :');
-                                        res.send('400','No Provider found');
+                                        res.send('400', 'No Provider found');
                                         return;
                                     }
                                 });
-                                
-                            }
-                            else{
+
+                            } else if (data[0].keyPairId && data[0].keyPairId == 'azure') {
+
+                                logger.debug("Stopping Azure ");
+
+                                azureProvider.getAzureCloudProviderById(data[0].providerId, function(err, providerdata) {
+                                    if (err) {
+                                        logger.error('getAzureCloudProviderById ', err);
+                                        return;
+                                    }
+
+                                    logger.debug('providerdata:', providerdata);
+                                    providerdata = JSON.parse(providerdata);
+
+                                    var settings = appConfig;
+                                    var pemFile = settings.instancePemFilesDir + providerdata._id + providerdata.pemFileName;
+                                    var keyFile = settings.instancePemFilesDir + providerdata._id + providerdata.keyFileName;
+
+                                    logger.debug("pemFile path:", pemFile);
+                                    logger.debug("keyFile path:", pemFile);
+
+                                    var cryptoConfig = appConfig.cryptoSettings;
+                                    var cryptography = new Cryptography(cryptoConfig.algorithm, cryptoConfig.password);
+
+                                    var uniqueVal = uuid.v4().split('-')[0]
+
+                                    var decryptedPemFile = pemFile + '_' + uniqueVal + '_decypted';
+                                    var decryptedKeyFile = keyFile + '_' + uniqueVal + '_decypted';
+
+                                    cryptography.decryptFile(pemFile, cryptoConfig.decryptionEncoding, decryptedPemFile, cryptoConfig.encryptionEncoding, function(err) {
+                                        if (err) {
+                                            logger.error('Pem file decryption failed>> ', err);
+                                            return;
+                                        }
+
+                                        cryptography.decryptFile(keyFile, cryptoConfig.decryptionEncoding, decryptedKeyFile, cryptoConfig.encryptionEncoding, function(err) {
+                                            if (err) {
+                                                logger.error('key file decryption failed>> ', err);
+                                                return;
+                                            }
+
+                                            var options = {
+                                                subscriptionId: providerdata.subscriptionId,
+                                                certLocation: decryptedPemFile,
+                                                keyLocation: decryptedKeyFile
+                                            };
+
+                                            var azureCloud = new AzureCloud(options);
+
+                                            azureCloud.startVM(data[0].chefNodeName, function(err, currentState) {
+
+                                                    if (err) {
+                                                        var timestampEnded = new Date().getTime();
+                                                        logsDao.insertLog({
+                                                            referenceId: logReferenceIds,
+                                                            err: true,
+                                                            log: "Unable to start instance",
+                                                            timestamp: timestampEnded
+                                                        });
+                                                        instancesDao.updateActionLog(req.params.instanceId, actionLog._id, false, timestampEnded);
+                                                        res.send(500, {
+                                                            actionLogId: actionLog._id
+                                                        });
+                                                        return;
+                                                    }
+
+                                                    logger.debug("Exit get() for /instances/%s/startInstance", req.params.instanceId);
+                                                    res.send(200, {
+                                                        instanceCurrentState: currentState,
+                                                        actionLogId: actionLog._id
+                                                    });
+
+                                                    instancesDao.updateInstanceState(req.params.instanceId, currentState, function(err, updateCount) {
+                                                        if (err) {
+                                                            logger.error("update instance state err ==>", err);
+                                                            return;
+                                                        }
+                                                        logger.debug('instance state upadated');
+                                                    });
+
+
+                                                },
+                                                function(err, state) {
+                                                    if (err) {
+                                                        return;
+                                                    }
+                                                    instancesDao.updateInstanceState(req.params.instanceId, state, function(err, updateCount) {
+                                                        if (err) {
+                                                            logger.error("update instance state err ==>", err);
+                                                            return;
+                                                        }
+
+                                                        logger.debug('instance state upadated');
+                                                    });
+
+                                                    var timestampEnded = new Date().getTime();
+
+                                                    logsDao.insertLog({
+                                                        referenceId: logReferenceIds,
+                                                        err: false,
+                                                        log: "Instance Started",
+                                                        timestamp: timestampEnded
+                                                    });
+
+                                                    instancesDao.updateActionLog(req.params.instanceId, actionLog._id, true, timestampEnded);
+                                                });
+
+                                        });
+                                    });
+                                });
+
+                            } else {
                                 AWSProvider.getAWSProviderById(data[0].providerId, function(err, aProvider) {
                                     if (err) {
                                         logger.error(err);
@@ -1933,7 +2143,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 res.send(500);
                 return;
             }
-           // logger.debug("Exit get() for /instances/%s/logs", req.params.instanceId);
+            // logger.debug("Exit get() for /instances/%s/logs", req.params.instanceId);
             res.send(data);
 
         });
