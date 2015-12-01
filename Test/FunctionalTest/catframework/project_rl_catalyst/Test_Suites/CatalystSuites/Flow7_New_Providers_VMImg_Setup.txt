@@ -98,7 +98,7 @@ Catalyst Creation of New Azure Provider Setup
 
 
 Catalyst Validation and Creation of VM IMAGE setup
-    [Tags]       Sanity               Smoke
+    [Tags]       Sanity               Settings
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
     Validation of Creation of New Image
@@ -111,7 +111,7 @@ Catalyst Validation and Creation of VM IMAGE setup
 
 
 Catalyst Editing the VM Image Setup
-    [Tags]       Sanity               VMImage
+    [Tags]       Sanity               Settings
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
     Catalyst VM Image Edit Setup

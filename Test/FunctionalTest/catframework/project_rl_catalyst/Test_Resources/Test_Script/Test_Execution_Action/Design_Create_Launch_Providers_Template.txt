@@ -412,7 +412,7 @@ Catalyst Creation of VM Image Process for CentOS
     Clicks on New Button of VMImage
     Enters the Image Name for CentOS
     Select the Organizatn to Create Cent OS Img
-    Choosess The Provider of Image
+    #Choosess The Provider of Image
     Select the Operating System to Image for CentOS
     Enters the Image ID for CentOS
     Enters the UserName of CentOSProviders
@@ -430,7 +430,7 @@ Catalyst Creation of VM Image Process for Ubutnu
     Clicks on New Button of VMImage
     Enters the Image Name for Ubuntu
     Select the Organizatn to Create Ubuntu Img
-    Choosess The Provider of Image
+    #Choosess The Provider of Image
     Select the Operating System to Image for Ubuntu 
     Enters the Image ID for Ubuntu
     Enters the UserName of UbuntuProviders
@@ -448,7 +448,7 @@ Catalyst Creation of VM Image Process for Windows
     Clicks on New Button of VMImage
     Enters the Image Name for Windows
     Select the Organizatn to Create Windows Img
-    Choosess The Provider of Image
+    #Choosess The Provider of Image
     Select the Operating System to Image for Windows
     Enters the Image ID for Windows
     Enters the UserName of WindowsProviders
@@ -865,7 +865,7 @@ Catlayst verfication of CentOS Instance Stop Setup and Disable
     Verify the Start Button Enabled
     Verfiy the Applink Button is Dispalyed
     Clicks on Contreol Panel
-    Verify the IP Address after Launch of Instance
+    Verify the IP Address after Launch of Instance in controlpanel
     Verify the Stopped CHEF Client Run after Updation
     Verfiy the Stopped SSH is Disabled after Updation
     Verify the Start Button Enabled from Contrl Panel
@@ -873,10 +873,18 @@ Catlayst verfication of CentOS Instance Stop Setup and Disable
     Verify the Machine status from CntrlPanel
     Verify the Total Memory from CntrlPanel
     Verify the Free Memory from CntrlPanel
-    Verfiy the OS Frm ContrlPanel
+    Verfiy the OS Frm ContrlPanels
     Verfify the Chef Bootstrap frm ContrlPanel
     Verify the Runlist from CntrlPanel
     Clicks on Back To Instances
+
+
+
+Verify the IP Address after Launch of Instance in controlpanel
+    ${EXTRACTED}=    Execute Javascript    $('span.instance-details-id.instance-details-ip').parent().find("strong").text();
+    #Get Text    xpath=.//*[@id='controlPanelContainer']/div/div/ul/li[contains(.,"${NEW BLUEPRINT NAME}")]/div/div/div/div/div/div[3]/div/span[@class='instance-details-id instance-details-ip']
+    Log    ${EXTRACTED}
+    Run Keyword If    '${STATS}' != '${EXTRACTED}'    Log    ${PRINTSTMT}
 
 
 
@@ -1313,7 +1321,7 @@ Catlayst verfication of Instance Stop Setup and Disable of Ubuntu
     Verify the Ubuntuu Start Button Enabled
     Verfiy the More Info Button Dispalyed off Ubuntu
     Clicks on Contreol Panel
-    Verify the IP Address after Launch of Ubuntu Instance
+    Verify the IP Address after Launch of ubuntu Instance in controlpanel
     Verify the Ubuntuu Stopped CHEF Client Run after Updation
     Verfiy the Ubuntu Stopped SSH is Disabled after Updation
     Verify the Ubuntu Start Button Enabled from Contrl Panel
@@ -1328,6 +1336,10 @@ Catlayst verfication of Instance Stop Setup and Disable of Ubuntu
 
 
 
+Verify the IP Address after Launch of ubuntu Instance in controlpanel
+    ${EXTRACTED}=    Get Text    xpath=.//*[@id='controlPanelContainer']/div/div/ul/li[contains(.,"${NEW UBUNTU BLUPRNT}")]/div/div/div/div/div/div[3]/div/span[1]/strong
+    Log    ${EXTRACTED}
+    Run Keyword If    '${STATS}' != '${EXTRACTED}'    Log    ${PRINTSTMT}
 
 
 Chooses the Operating System as Ubuntu
@@ -1596,11 +1608,13 @@ Verfified the STOPPED Status of Ubuntu
 
 
 Verify the IP Address after Launch of Instance
-    ${EXTRACTED}=    Get Text    xpath=//.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${BLUEPRINT NAME}")]/div/div/div[1]/div/div/div[3]/div/span[1]/strong[@class='instanceip']
+    ${EXTRACTED}=    Get Text    xpath=//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${BLUEPRINT NAME}")]/div/div/div/div[3]/div/span[1]/strong[@class='instanceip']
+    Log    ${EXTRACTED}
     Run Keyword If    '${STATS}' != '${EXTRACTED}'    Log    ${PRINTSTMT}
 
 Verify the IP Address after Launch of Ubuntu Instance
-    ${EXTRACTED}=    Get Text     xpath=//.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${BLUEPRINT NAME1}")]/div/div/div[1]/div/div/div[3]/div/span[1]/strong[@class='instanceip']
+    ${EXTRACTED}=    Get Text     xpath=//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${BLUEPRINT NAME1ssssssssssss}")]/div/div/div/div[3]/div/span[1]/strong[@class='instanceip']
+    Log    ${EXTRACTED}
     Run Keyword If    '${STATS}' != '${EXTRACTED}'    Log    ${PRINTSTMT} is the IP Address
 
 
@@ -1749,7 +1763,7 @@ Validation of Empty Image Name
     Clicks on New Button of VMImage
     Enters the Empty Image Name
     Select the Organizatn to Create Cent OS Img
-    Choosess The Provider of Image
+    #Choosess The Provider of Image
     Select the Operating System to Image for CentOS
     Enters the Image ID for CentOS
     Enters the UserName of Providers
@@ -1899,7 +1913,7 @@ Validation of No Operating System
     Clicks on New Button of VMImage
     Enters the Image Name for CentOS
     Select the Organizatn to Create Cent OS Img
-    Choosess The Provider of Image
+    #Choosess The Provider of Image
     Enters the Image ID for CentOS
     Enters the UserName of Providers
     Clicks on Save Button of Providers
@@ -1919,7 +1933,7 @@ Validation of No Image ID
     Clicks on New Button of VMImage
     Enters the Image Name for CentOS
     Select the Organizatn to Create Cent OS Img
-    Choosess The Provider of Image
+    #Choosess The Provider of Image
     Select the Operating System to Image for CentOS
     Enters the UserName of Providers
     Clicks on Save Button of Providers
@@ -1939,7 +1953,7 @@ Validation of Image No User Name
     Clicks on New Button of VMImage
     Enters the Image Name for CentOS
     Select the Organizatn to Create Cent OS Img
-    Choosess The Provider of Image
+    #Choosess The Provider of Image
     Select the Operating System to Image for CentOS
     Enters the Image ID for CentOS
     Clicks on Save Button of Providers
