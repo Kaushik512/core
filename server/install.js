@@ -257,7 +257,7 @@ function parseArguments() {
 
 
 function getConfig(config, options) {
-    //parsing arguments	
+    //parsing arguments 
 
     if (options['catalyst-port']) {
         var catalystPort = parseInt(options['catalyst-port']);

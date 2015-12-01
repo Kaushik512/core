@@ -37,7 +37,12 @@ var EC2 = function(awsSettings) {
             options.MaxResults = 1000;
         }
         ec.describeInstances(options, function(err, data) {
-            callback(err, data);
+            if(err){
+                logger.debug("Got instanceState info with error: ",err);
+                callback(err,null);
+            }
+            logger.debug("Got instanceState info: ",JSON.stringify(data));
+            callback(null, data);
         });
 
     };

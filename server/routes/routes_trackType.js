@@ -63,7 +63,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 res.send(404, "Tracks not found!");
                 return;
             }
-            Track.updateTrack(req.params.trackTypeId, function(err, updateCount) {
+            Track.updateTrack(req.params.trackTypeId, req.body.trackTypeData, function(err, updateCount) {
                 if (err) {
                     res.send(500, errorResponses.db.error);
                     return;
@@ -77,7 +77,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
     // Get Track w.r.t. Id
     app.get('/trackType/:trackTypeId', function(req, res) {
-        Track.getTrackById(req.params.trackTypeId, function(err, trackType) {
+        Track.getTrackTypeById(req.params.trackTypeId, function(err, trackType) {
             if (err) {
                 res.send(500, errorResponses.db.error);
                 return;
@@ -94,7 +94,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
     // Delete Track w.r.t. Id
     app.delete('/trackType/:trackTypeId', function(req, res) {
-        Track.getTrackById(req.params.trackTypeId, function(err, trackType) {
+        Track.getTrackTypeById(req.params.trackTypeId, function(err, trackType) {
             if (err) {
                 res.send(500, errorResponses.db.error);
                 return;

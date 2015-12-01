@@ -10,10 +10,11 @@ Library            String
 
 
 *** Test Cases ***
-Catalyst AWS Usage Dashboard Automation
+Catalyst Uptime Monitoring Dashboard Automation
     [Tags]       Sanity               dashboard
 #    Catalyst Login 
     Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
-    Catalyst AWS Usage Dashboard Verification
+    Catalyst Uptime monitoring dashboard verification
     Catalyst Logout                      
     [Teardown]     Close Browser
+

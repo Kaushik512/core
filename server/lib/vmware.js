@@ -47,21 +47,40 @@ var vmwareservice = function(options) {
     }
 
     this.getVms = function(servicehost,callback){
-            client = new Client();
-            var vmlisturl = servicehost + '/vms?ip=' + options.host + '&user=' + options.username + '&passwd=' + options.password + '&dc=' + options.dc;
-            console.log(vmlisturl);
-            client.registerMethod("jsonMethod", vmlisturl, "GET");
-            var args = {};
-            client.methods.jsonMethod(args, function(data, response) {
-                console.log("get vmlisturl response::" + data + ' :: end of data');
-                callback(null,data);
-            });
+            //to do
     }
 
     this.getTemplates = function(servicehost,callback){
         //to do
     }
 
+    this.startstopVM = function(servicehost,vm_name,action,callback){
+        //to do
+        client = new Client();
+        var datastoresUrl = servicehost + '/' + vm_name +'/' + action + '?ip=' + options.host + '&user=' + options.username + '&passwd=' + options.password + '&dc=' + options.dc;
+        console.log(datastoresUrl);
+        client.registerMethod("jsonMethod", datastoresUrl, "PUT");
+        var args = {};
+        client.methods.jsonMethod(args, function(data, response) {
+            console.log("get datastoresUrl response::" + data);
+            callback(null,data);
+        });
+
+    }
+
+    // this.startVM = function(servicehost,vm_name,callback){
+    //     //to do
+    //     client = new Client();
+    //     var datastoresUrl = servicehost + '/' + vm_name +'/poweron?ip=' + options.host + '&user=' + options.username + '&passwd=' + options.password + '&dc=' + options.dc;
+    //     console.log(datastoresUrl);
+    //     client.registerMethod("jsonMethod", datastoresUrl, "PUT");
+    //     var args = {};
+    //     client.methods.jsonMethod(args, function(data, response) {
+    //         console.log("get datastoresUrl response::" + data);
+    //         callback(null,data);
+    //     });
+        
+    // }
     this.getDatastores = function(servicehost,callback){
         client = new Client();
         var datastoresUrl = servicehost + '/datastores?ip=' + options.host + '&user=' + options.username + '&passwd=' + options.password + '&dc=' + options.dc;
@@ -69,7 +88,7 @@ var vmwareservice = function(options) {
         client.registerMethod("jsonMethod", datastoresUrl, "GET");
         var args = {};
         client.methods.jsonMethod(args, function(data, response) {
-            console.log("get datastoresUrl response::" + data + ' :: end of data');
+            console.log("get datastoresUrl response::" + data);
             callback(null,data);
         });
     }
@@ -98,11 +117,9 @@ var vmwareservice = function(options) {
             headers:{"Content-Type": "application/json"} 
         };
         //console.log(JSON.stringify(args));
-        //callback(null,serverjson);
-        client.methods.postMethod(args, function(data, response) {
-            //response format expected  {"vms_launched":["D4D-MYVMWBP1_2015-10-20_23_46_21_817"]}
-            console.log("get createServer response::" + data);
-            //if(data.indexOf('Completed') >= 0){
+       // callback(null,serverjson);
+         client.methods.postMethod(args, function(data, response) {
+            console.log("get datastoresUrl response::" + data);
             data = JSON.parse(data);
             if(data.vms_launched && data.vms_launched.length > 0){
                 serverjson["vm_name"] = data.vms_launched[0];
@@ -111,10 +128,10 @@ var vmwareservice = function(options) {
             else
                 callback("Error",null);
             
-        });
+        }); 
     }
 
-    this.getServerDetails = function(servicehost,servername,callback){
+     this.getServerDetails = function(servicehost,servername,callback){
             client = new Client();
         var datastoresUrl = servicehost + '/' + servername + '/info?ip=' + options.host + '&user=' + options.username + '&passwd=' + options.password + '&dc=' + options.dc;
         console.log(datastoresUrl);

@@ -61,6 +61,27 @@ Catalyst Addition and Creation of New Envirorments Setup
     Verfiy the Environmentnew is Created
 
 
+Catalyst Edit the Environment setup
+    Clicks on Settings
+    Clicks on DevOps Setup menu
+    Clicks on EEnvironments menu line
+    Sleep    1s
+    Clicks on Edit button the Environment3 created
+    Sleep    1s
+    Select the new Environment
+    Clicks on Save Button to save the Environments
+    Verify the Environment is created
+
+
+
+
+Clicks on Edit button the Environment3 created
+    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${EnV3}']/../td[6]/div/a
+
+Verify the Environment is created
+    Sleep    1s
+    Element Should Contain    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${EnV4}']/../td[text()='${ORGANIZATION NAME}']    ${EnV4}
+
 
 Catalyst Unique Environment Validation
     Clicks on Settings
@@ -167,14 +188,14 @@ Input the Environment Name in the Search
 Node is Inported in the Environment
     Sleep    4s
     #Element Should Contain    xpath=//div[@class='domain-roles-heading']//span[text()='{IP Centos}']    ${IP Centos}
-    Element Should Contain    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${IP Centos}")]/div/div/div/div[3]/div/span[1]/strong    ${IP Centos}
+    Element Should Contain    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${IP Centos}")]/div/div/div/div[3]/div/span[1]/strong    null       #${IP Centos}
 
 
 Clicks on Workzone
     Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element    xpath=.//*[@id='workZoneNew']
 
 Verify the Node Importedd
-    Sleep    2s
+    Sleep    5s
     Element Should Contain    css=.messageDiv>div    Node Imported : ${IP Centos}
     Sleep    4s
 
@@ -186,15 +207,16 @@ Clicks on Config Managementt
 
 Verfiy the Environment is Created
     Sleep    3s
-    Element Should Contain    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${EnV1}']/../td[text()='${ORGANIZATION NAME}']    ${ORGANIZATION NAME}
+    Element Should Contain    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${EnV1}']    ${EnV1}
     Sleep    2s
-    Element Should Contain    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${EnV2}']/../td[text()='${ORGANIZATION NAME}']    ${ORGANIZATION NAME}
+    Element Should Contain    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${EnV2}']    ${EnV2}
 
 
 Verfiy the Environmentnew is Created
     Sleep    3s
-    Element Should Contain    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${EnV3}']/../td[text()='${ORGANIZATION NAME}']    ${ORGANIZATION NAME}
+    Element Should Contain    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${EnV3}']    ${EnV3}
 
+    
 Clicks on Import Nodes Button of Chef Server
     Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${CONFIG MANAGEMENT NAME}']/../td[5]/div/a[2]
     Sleep    50s
@@ -207,12 +229,20 @@ Clicks on Import Nodes Button of Server for Sync
 
 Find the Instance and Impoert to the Environment
     Sleep    2 minutes
-    Click Element    xpath=.//*[@id='organiz']/table/tbody/tr/td[text()='52.24.178.71']/../td[6]/div/a/span[2]
+    Click Element    xpath=.//*[@id='organiz']/table/tbody/tr/td[text()='10.0.1.92']/../td[6]/div/a/span[2]
     Sleep    1s
     Input Text    css=#select2-drop > div > input    ${ENVNAME}
     Sleep    1s
     Click Element    css=ul > li:first-child > div
+    ${Env status}=    Run Keyword and Return Status    Element Should Be Visible    xpath=.//*[text()='OK']
+    Run Keyword If    '${Env status}' == 'False'
+    ...    Log    OK Button is not displayed to change the Environment    
+    ...    ELSE IF    '${Env status}' == 'True'
+    ...    Clicks on ok button to change the environment
 
+
+Clicks on ok button to change the environment
+    Click Element    xpath=.//*[text()='OK']
     
 
     
@@ -256,7 +286,7 @@ Choose the Authentication as Pem in Inportnodes
     Click Element    xpath=//div[text()='Pem File']
 
 Upload the PEM file in Inport Nodes
-    Choose File    id=importPemfileInput    ${CAT_INSTANCES}
+    Choose File    id=importPemfileInput    ${GOLDEN PEM}
     #C:\\Users\\adarsh.RLINDIA\\Desktop\\caty\\Chef\\cat_instances.pem
 
 Clicks on Import Button in Import Nodes
@@ -461,6 +491,12 @@ Select the Environment3
     Input Text    css=#select2-drop .select2-input     ${EnV3}
     Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element    xpath=.//*[@id='select2-drop']/ul/li[contains("${EnV3}",.)]
 
+
+Select the new Environment
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element    css=#s2id_environmentname > .select2-choice
+    Sleep    1s
+    Input Text    css=#select2-drop .select2-input     ${EnV4}
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element    xpath=.//*[@id='select2-drop']/ul/li[contains("${EnV3}",.)]
 
 
 Assign Teams1

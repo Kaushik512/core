@@ -570,6 +570,23 @@
                                                     </select>
                                                 </div>
                                             </div>
+                                            <div class="col-lg-6 col-md-6" style="margin-top: 6px;">
+                                                <label>
+                                                    <span></span>
+                                                </label>
+                                                <div class="input-groups">
+                                                    <a class="btn btn-primary createTaskLinkUpgrade">
+                                                        <i class="ace-icon fa fa-indent bigger-110"></i> Create New Job
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            <!-- <div class="col-lg-6 col-md-6">
+                                                <div class="btn-group">
+                                                    <a style="margin-left:10px;" class="btn btn-primary cancelAppDeploy" data-dismiss="modal">
+                                                        <i class="ace-icon fa fa-undo bigger-110"></i> Cancel
+                                                    </a>
+                                                </div>
+                                            </div> -->
                                             <!-- <div class="col-lg-6 col-md-6">
                                                 <label for="">RunDeck Project:<span style="color:red">*</span></label>
                                                 <div class="input-groups">
@@ -622,17 +639,56 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="modalassignTaskUpgrade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form role="form" id="" autocomplete="off">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        X
+                    </button>
+                    <h4 class="modal-title">
+                    <i class="fa fa-indent txt-color-blue"></i>&nbsp;&nbsp;Create New Job
+                </h4>
+                </div>
+                <div class="modal-body">
+                   
+                </div>
+                <!-- <div class="modal-footer">
+                    <div class="btn-group" style="margin-left:200px;">
+                        <a style="margin-left:10px;" class="btn btn-default btn-mini" data-dismiss="modal">
+                            <i class="ace-icon fa fa-times bigger-110"></i> Cancel
+                        </a>
+                        <a style="margin-left:10px;" class="btn btn-primary btnSaveTask btn-mini">
+                            <i class="ace-icon fa fa-check bigger-110"></i> Save
+                        </a>
+                        
+                    </div>
+                </div> -->
+            </form>
+        </div>
+    </div>
+</div>
 <script type="text/javascript">
+// assignTaskUpgradeApp.html
 $(document).ready(function() {
     getAllApplicationData();
     getAllPipelineApplicationData();
     $("#divapplicationtableview").hide();
+    if($('#chooseNexusServer :selected').text() == 'Choose Server'){
+        $('.createTaskLinkUpgrade').attr('disabled','disabled');
+    }else{
+        $('.createTaskLinkUpgrade').removeAttr('disabled');
+    }
 });
 function getAllPipelineApplicationData() {
     //alert("iam in getAllPipelineApplicationData");
     var projectId = urlParams.projid;
     var envNameSelected = "";
     $.get('/app/deploy/pipeline/project/' + projectId, function(dataPipeline) {
+        if(dataPipeline == null || dataPipeline == "undefined" || dataPipeline.length == 0){
+            return false;
+        }
         if (dataPipeline[0].envId.length > 0) {
             //alert("Ia m in if part");
             //alert(dataPipeline[0].envId.length);
@@ -805,8 +861,70 @@ function createPipelineArea(envName,selectedEnv,projectId){
         type: "GET",
         async: true,
         success: function(data) {
-            //console.log("I am inside success of createPipelineArea function");
-            constructPipelineUI(data, id);
+
+            var sortedData = {};
+
+            function ConvertTimeformat(format, str, formatStr) {
+                var time = str;
+                var hours = Number(time.match(/^(\d+)/)[1]);
+                var minutes = Number(time.match(/:(\d+)/)[1]);
+                var seconds = time.split(' ')[0].split(':')[2];
+                var AMPM = formatStr;
+                if (AMPM == "PM" && hours < 12) hours = hours + 12;
+                if (AMPM == "AM" && hours == 12) hours = hours - 12;
+                var sHours = hours.toString();
+                var sMinutes = minutes.toString();
+                var sSeconds = seconds.toString();
+                if (hours < 10) sHours = "0" + sHours;
+                if (minutes < 10) sMinutes = "0" + sMinutes;
+                if (seconds < 10) sSeconds = "0" + sSeconds;
+                return (sHours + ":" + sMinutes + ":" + sSeconds);
+            }
+
+            function convertToDateObj(strInputDate) {
+                var timeStr = strInputDate.split(' ')[1];
+                var formatStr = strInputDate.split(' ')[2];
+                var str = ConvertTimeformat("24", timeStr, formatStr);
+                var year = strInputDate.substring(0, 2);
+                var month = strInputDate.substring(3, 5);
+                month = parseInt(month);
+                var day = strInputDate.substring(6, 8);
+                // var hour = str.substring(9, 11);
+                // var minute = str.substring(12, 14);
+                // var second = str.substring(15, 17);
+                var hour = str.substring(0, 2);
+                var minute = str.substring(3, 5);
+                var second = str.substring(6, 8);
+                var dateConverted = new Date(year, month -1, day, hour, minute, second);
+                return dateConverted;
+            }
+            
+            for (var i = 0; i < data.length; i++) {
+                if (!data[i].applicationInstanceName) {
+                    if (data[i].hostName) {
+                        data[i].applicationInstanceName = data[i].hostName;
+                    } else {
+                        data[i].applicationInstanceName = "NA";
+                    }
+                }
+                if (!sortedData[data[i].applicationInstanceName]) {
+                    sortedData[data[i].applicationInstanceName] = data[i];
+                } else {
+                    var prevDate = convertToDateObj(sortedData[data[i].applicationInstanceName].applicationLastDeploy);
+
+                    var newDate = convertToDateObj(data[i].applicationLastDeploy);
+                    if (prevDate - newDate < 0) {
+                        sortedData[data[i].applicationInstanceName] = data[i];
+                    }
+                }
+            }
+            var keys = Object.keys(sortedData);
+            var newData = [];
+            for(var i=0;i<keys.length;i++) {
+                newData.push(sortedData[keys[i]]);
+            }
+       
+            constructPipelineUI(newData, id);
             if (envName != selectedEnv) {
                 $('#'+id).children().css({
                     'opacity': '0.5'
@@ -841,7 +959,7 @@ function constructPipelineUI(data, $clonePipeline) {
             if(data[i].applicationType == 'Package'){
                 var loc = 'img/package.png';
                 $cloneAppInstanceUniqueCard.find('.domain-roles-icon img').attr("src",loc);
-            }else if(data[i].applicationType == 'Docker'){newEnvSpecificAppTemplate
+            }else if(data[i].applicationType == 'Docker'){
                 var loc = 'img/app-store-icons/Docker.png';
                 $cloneAppInstanceUniqueCard.find('.domain-roles-icon img').attr("src",loc);
             }else if(data[i].applicationType == 'NA'){
@@ -1030,17 +1148,19 @@ $('.appdeployConfigureSaveBtn').click(function(){
         }
     });
 });
-// $('#instanceviewAppCard').click(function(){
-    
-//     getenvName(function(envName) {
-//         alert("Hello");
-//         var $accordianTemplatenoData = $('.accordianTemplateContainer').find('.accordianTemplate');
-//         var $cloneData = $accordianTemplatenoData.clone(true);
-//         var dataenvAccordianName = "Application Deployment for : " + envName;
-//         $cloneData.find('.envAppDeployName').html(dataenvAccordianName);
-//         $('#accordion-AppDeploy').append($cloneData);
-//     });
-// });
+$('#instanceviewAppCard').click(function(){
+    getenvName(function(envName) {
+        var dataenvAccordianName = "Application Deployment for : " + envName;
+        $('.envAppDeployName').html(dataenvAccordianName);
+    });
+});
+$('#defaultViewButtonAppCard').click(function(){
+    getprojectName(function(projectNameUrlParams) {
+        var dataprojectAccordianData = "Application Deployment for : " + projectNameUrlParams;
+        $('.envAppDeployName').html(dataprojectAccordianData);
+    });
+});
+
 function moreinfoDetailsPipelineClickHandler(e){
     var $modal = $('#modalDetailsAppDeploy');
     // var $logContainer = $modal.find('.logsForAppDeploy').show();
@@ -1109,6 +1229,11 @@ function moreInfoUpgradeAppDeployPipelineClickHandler(e) {
     $('#formUpgradeAppDeploy')[0].reset();
     $('.containerClass').hide();
     resetSpinners();
+    if($('#chooseNexusServer :selected').text() == 'Choose Server'){
+        $('.createTaskLinkUpgrade').attr('disabled','disabled');
+    }else{
+        $('.createTaskLinkUpgrade').removeAttr('disabled');
+    }
     var upgradeAppNameText = $(this).parents().eq(5).find('.applicationNamePipeline').html();
     var upgradeNodeIpText = $(this).parents().eq(5).find('.applicationNodeIPPipeline').html();
     var containerId = $(this).parents().eq(5).find('.containerIdPipeline').html();
@@ -1177,6 +1302,11 @@ function getNexusServer(){
 }
 var $nexusServer = $('#chooseNexusServer');
 $nexusServer.change(function(e){
+    if($('#chooseNexusServer :selected').text() == 'Choose Server'){
+        $('.createTaskLinkUpgrade').attr('disabled','disabled');
+    }else{
+        $('.createTaskLinkUpgrade').removeAttr('disabled');
+    }
     resetAllFields();
     getNexusServerRepo($(this).val());
     getTasks();
@@ -1606,6 +1736,11 @@ function constructUI(data) {
             $('.containerClass').hide();
             resetSpinners();
             //$('#chooseRepository').empty();
+            if ($('#chooseNexusServer :selected').text() == 'Choose Server') {
+                $('.createTaskLinkUpgrade').attr('disabled', 'disabled');
+            } else {
+                $('.createTaskLinkUpgrade').removeAttr('disabled');
+            }
             var tabletrIndex = $(".moreinfoUpgradeAppDeploy").index($(this));
 
             var upgradeAppNameText = $('#tableappDeploydetails tbody tr:eq(' + tabletrIndex + ') td:first').html();
@@ -1855,7 +1990,8 @@ function constructUI(data) {
         // });
         getprojectName(function(projectNameUrlParams) {
             var dataprojectAccordianNameforNoData = "Application Deployment for : " + projectNameUrlParams;
-            $clonenoData.find('.envAppDeployName').html(dataprojectAccordianNameforNoData);
+            //var $clonenoData = $accordianTemplatenoData.clone(true);
+            $('.accordianTemplateContainer').find('.envAppDeployName').html(dataprojectAccordianNameforNoData);
         });
         $("#nodataAppDeploy").css({
             // "text-align": "center",
@@ -1964,4 +2100,14 @@ function getLocaleTime(str){
         return applicationLastDeployTime.slice(0, -6);
     }
 }
+$('.createTaskLinkUpgrade').click(function(e) {
+    //alert("Hello Arab");
+    $('#modalassignTaskUpgrade').modal("show");
+    $("#modalassignTaskUpgrade .modal-body").empty();
+    $("#modalassignTaskUpgrade .modal-body").load("ajax/assignTaskUpgradeApp.html"); 
+});
+// $('#btncancel').click(function() {
+//     $('#modalassignTaskUpgrade').modal("hide");
+// });
 </script>
+<script src="js/dev/applicationUpgradeAssignTask.js"></script>
