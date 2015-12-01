@@ -756,6 +756,7 @@ $(document).ready(function() {
                     var url = taskData.jobResultURL;
                     taskData.jobResultURL = url;
                     $.post('../tasks/' + urlParams.taskId + '/update', reqBody, function(data) {
+                        window.initializeTaskArea([data]);
                         console.log(data);
 
                         $('.btnBack').click();
@@ -779,7 +780,7 @@ $(document).ready(function() {
                 //  alert(JSON.stringify(reqBody));
                 $.post('../tasks/' + urlParams.taskId + '/update', reqBody, function(data) {
                     console.log(data);
-
+                    window.initializeTaskArea([data]);
                     $('.btnBack').click();
                     if ($('#chooseJobType')) {
                         getTasks();
@@ -812,6 +813,7 @@ $(document).ready(function() {
 
                     $.post('../organizations/' + urlParams.org + '/businessgroups/' + urlParams['bg'] + '/projects/' + urlParams.projid + '/environments/' + urlParams.envid + '/tasks', reqBody, function(data) {
                         console.log(data);
+                         window.initializeTaskArea([data]);
                         //alert('spinner');
                         $('.btnBack').click();
                         if ($('#chooseJobType')) {
@@ -839,6 +841,7 @@ $(document).ready(function() {
                 };
                 $.post('../organizations/' + urlParams.org + '/businessgroups/' + urlParams['bg'] + '/projects/' + urlParams.projid + '/environments/' + urlParams.envid + '/tasks', reqBody, function(data) {
                     console.log("My composite data:",data);
+                     window.initializeTaskArea([data]);
                     $('.btnBack').click();
                     // $(".alert-message").alert();
                     // window.setTimeout(function() {
@@ -867,6 +870,7 @@ $(document).ready(function() {
                 };
                 $.post('../organizations/' + urlParams.org + '/businessgroups/' + urlParams['bg'] + '/projects/' + urlParams.projid + '/environments/' + urlParams.envid + '/tasks', reqBody, function(data) {
                     console.log(data);
+                     window.initializeTaskArea([data]);
                     $('.btnBack').click();
                     if ($('#chooseJobType')) {
                         getTasks();
