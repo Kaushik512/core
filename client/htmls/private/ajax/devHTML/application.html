@@ -909,29 +909,7 @@ $('.createAppConfigure').click(function() {
     });
 });
 
-function createPipelineArea(envName,selectedEnv,projectId){
-    //alert(envName);
-    var $stageContainer = $('.stageContainer');
-    var $envSpecificAppTemplate = $('.envSpecificAppTemplate');
-
-    var $clonePipeline = $envSpecificAppTemplate.clone(true);
-    var id = envName+'_pipeLine';
-    $clonePipeline.attr('id',id);
-    $clonePipeline.css({display:'block'});
-    $clonePipeline.addClass('newEnvSpecificAppTemplate').removeClass('envSpecificAppTemplate');
-
-    $clonePipeline.find('.envSpecificAppname u').html(envName);
-    $stageContainer.append($clonePipeline);
-    //console.log("I am inside createPipelineArea function");
-    $.ajax({
-        url: '/app/deploy/env/' + envName + '/project/' + projectId + '/list',
-        type: "GET",
-        async: true,
-        success: function(data) {
-
-            var sortedData = {};
-
-            function ConvertTimeformat(format, str, formatStr) {
+function ConvertTimeformat(format, str, formatStr) {
                 var time = str;
                 var hours = Number(time.match(/^(\d+)/)[1]);
                 var minutes = Number(time.match(/:(\d+)/)[1]);
@@ -965,11 +943,36 @@ function createPipelineArea(envName,selectedEnv,projectId){
                 var dateConverted = new Date(year, month -1, day, hour, minute, second);
                 return dateConverted;
             }
+
+function createPipelineArea(envName,selectedEnv,projectId){
+    //alert(envName);
+    var $stageContainer = $('.stageContainer');
+    var $envSpecificAppTemplate = $('.envSpecificAppTemplate');
+
+    var $clonePipeline = $envSpecificAppTemplate.clone(true);
+    var id = envName+'_pipeLine';
+    $clonePipeline.attr('id',id);
+    $clonePipeline.css({display:'block'});
+    $clonePipeline.addClass('newEnvSpecificAppTemplate').removeClass('envSpecificAppTemplate');
+
+    $clonePipeline.find('.envSpecificAppname u').html(envName);
+    $stageContainer.append($clonePipeline);
+    //console.log("I am inside createPipelineArea function");
+    $.ajax({
+        url: '/app/deploy/env/' + envName + '/project/' + projectId + '/list',
+        type: "GET",
+        async: true,
+        success: function(data) {
+
+            
+            var sortedDataList = [];
+            var keys=[];
             
             // need to check
-
+        if(data.length){
             for (var i = 0; i < data.length; i++) {
-                console.log("============================= ",JSON.stringify(data));
+                (function(i){
+                    var sortedData = {};
                 if (!data[i].applicationInstanceName) {
                     if (data[i].hostName) {
                         data[i].applicationInstanceName = data[i].hostName;
@@ -987,11 +990,15 @@ function createPipelineArea(envName,selectedEnv,projectId){
                         sortedData[data[i].applicationInstanceName] = data[i];
                     }
                 }
+                sortedDataList.push(sortedData);
+                keys.push(Object.keys(sortedData));
+                })(i);
             }
-            var keys = Object.keys(sortedData);
+        }
+            //var keys = Object.keys(sortedDataList);
             var newData = [];
             for(var i=0;i<keys.length;i++) {
-                newData.push(sortedData[keys[i]]);
+                newData.push(sortedDataList[i][keys[i]]);
             }
        
             constructPipelineUI(newData, id);
