@@ -1380,16 +1380,23 @@ function getNexusServer(){
         $('.reposerverspinner').css('display','none');
         if(nexus.length){
             for(var i=0;i< nexus.length;i++){
-                $('#chooseNexusServer').append('<option data-nexusUrl = "'+nexus[i].hostname+'" value='+nexus[i].rowid+'>'+nexus[i].nexusservername+'</option>');
+                $('#chooseNexusServer').append('<option data-nexusUrl = "'+nexus[i].hostname+'" value='+nexus[i].rowid+' data-serverType = "'+nexus[i].configType+'">'+nexus[i].nexusservername+'</option>');
             }
         }
     });
 }
 var $nexusServer = $('#chooseNexusServer');
 $nexusServer.change(function(e){
+    var nexusServerType = $('#chooseNexusServer :selected').attr('data-serverType');
+    //alert(nexusServerType);
     if($('#chooseNexusServer :selected').text() == 'Choose Server'){
+        $('.containerUpgradeDeploy').show();
         $('.createTaskLinkUpgrade').attr('disabled','disabled');
+    }else if(nexusServerType == 'nexus'){
+        $('.containerUpgradeDeploy').hide();
+        $('.createTaskLinkUpgrade').removeAttr('disabled');
     }else{
+        $('.containerUpgradeDeploy').show();
         $('.createTaskLinkUpgrade').removeAttr('disabled');
     }
     resetAllFields();
