@@ -1,129 +1,123 @@
 *** Settings ***
-Documentation     Cloud_Formation_Template_setup_Flow.txt
+Documentation     Providers_VMImage_setup_Flow.txt
 
 Resource           catalyst.txt
 Resource           ${CATALYST TEST DATA}/${TESTDATA}
 Resource           ${CATALYST ACTION}/Organization_Setup_Action_Steps.txt
-Resource           ${CATALYST ACTION}/New_Creation_Launch_Cloud_Formation_Template.txt
+Resource           ${CATALYST ACTION}/Design_Create_Launch_Providers_Template.txt
 Resource           ${COMMON RESOURCES}/catalyst_grid_node.txt
 
 
+
 *** Test Cases ***
-Catalyst Create New Docker setup
+Catalyst new PROVIDERS setup
     [Tags]       Sanity               Smoke
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
-    Catalyst Creation of New Docker Setup   
+    Catalyst Creation of Providers Setup 
+    Validation of Adding New Providers
     Catalyst Logout                      
     [Teardown]     Close Browser
 
 
-
-
-
-Catalyst Validation of Cloud Formation Template setup
-     [Tags]       Sanity               Smoke
-#    Catalyst Login
-    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
-    Catalyst Validation of New Cloud Formation Template    
-    Catalyst Logout                      
-    [Teardown]     Close Browser
-
-
-
-Catalyst Creation of New Cloud Formation Template setup
+Catalyst new VM IMAGE setup
     [Tags]       Sanity               Smoke
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
-    Catalyst Creation of New Cloud Formation Template    
+    Validation of Creation of New Image
+    Catalyst Creation of VM Image Process for CentOS
+    Catalyst Creation of VM Image Process for Ubutnu
+    Catalyst Creation of VM Image Process for Windows      
     Catalyst Logout                      
     [Teardown]     Close Browser
 
 
 
-Catalyst Editing of New Cloud Formation Template setup
+
+
+
+
+
+Catalyst new CENT OS DESIGN setup
     [Tags]       Sanity               Smoke
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
-    Catalyst Editing the cloud formation template    
+    Catalyst Choose Template and Save Setup
+    Sleep    20s
+    Catlayst Workzone and Status Setup          
     Catalyst Logout                      
     [Teardown]     Close Browser
+    
 
-
-Catalyst Unique Cloud Formation Template setup
+Catalyst new CENT OS WORKZONE setup
     [Tags]       Sanity               Smoke
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
-    Catalyst Unique cloud formation template    
+    ##Catalyst Check INFORMATION Status
+    Catalyst Work SSH CHEFCLIENT STOP Setup after LAUNCH
     Catalyst Logout                      
     [Teardown]     Close Browser
 
 
-
-
-#Blueprint Design page
-Catalyst Validation of the CloudFormation Blueprint Page
-    [Tags]       Sanity        Smoke
-#    Catalyst Login
-    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
-    Catalyst Validation of CloudFormation BlueprintPage    
-    Catalyst Logout                      
-    [Teardown]     Close Browser
-
-
-
-
-Catalyst Create New Cloud Formation Blueprint setup
+Catalyst NEW CENT OS INSTANCE CONTROL PANEL setup
     [Tags]       Sanity               Smoke
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
-    Catalyst Creation of New Cloud Formation Blueprint and Save   
+    Catlayst verfication of Instance Stop Setup and Disable
     Catalyst Logout                      
-    [Teardown]     Close Browser
+    [Teardown]     Close Browser    
 
 
-
-Catalyst Launch of Cloud Formation Blueprint
+Catalyst Grid View of the Stopped Instance and Restart,SSH,Chef Run,Start
     [Tags]       Sanity               Smoke
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
-    Catalyst Launch Cloud Formation Blueprint   
+    Catalyst Grid View Start ,Stop ,SSH ,Chef ,Client ,Log Setup
     Catalyst Logout                      
-    [Teardown]     Close Browser
+    [Teardown]     Close Browser    
 
 
 
-Catalyst Edit the Stack Instance Name
+
+
+
+
+
+
+Catalyst new UBUNTU DESIGN setup
     [Tags]       Sanity               Smoke
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
-    Catalyst Edit the Cloud Formation instance name
+    Catalyst Choose Template and Save Setup for UBUNTU
+    Sleep    10s
+    Catlayst Workzone and Status Setup for Ubuntu       
     Catalyst Logout                      
     [Teardown]     Close Browser
 
 
-Catalyst Verfication of BootStrap on the Java Stack Instance
+Catalyst new UBUNTU WORKZONE setup
     [Tags]       Sanity               Smoke
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
-    Catalyst Verify the Bootstrap of the Instance
+    ##Catalyst Check INFORMATION Status for Ubuntu
+    Catalyst Work SSH CHEFCLIENT STOP Setup after LAUNCH of Ubuntu
     Catalyst Logout                      
     [Teardown]     Close Browser
 
 
-Catalyst Chef Client Run on the Java Stack Instance
+Catalyst UBUNTU INSTANCE CONTROL PANEL setup
     [Tags]       Sanity               Smoke
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
-    Catalyst chef client run on the Instance
+    Catlayst verfication of Instance Stop Setup and Disable of Ubuntu
     Catalyst Logout                      
     [Teardown]     Close Browser
 
 
-Catalyst SSH on the Java Stack Instance
+Catalyst Ubuntu Instance Grid View of Stopped Instance and Restart,SSH,Chef Run,Start
     [Tags]       Sanity               Smoke
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
-    Catalyst SSH on the Instance
+    Catalyst Grid View Start ,Stop ,SSH ,Chef ,Client ,Log Setup
     Catalyst Logout                      
-    [Teardown]     Close Browser
+    [Teardown]     Close Browser 

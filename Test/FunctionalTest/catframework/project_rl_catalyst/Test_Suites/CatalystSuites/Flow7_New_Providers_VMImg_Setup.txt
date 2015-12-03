@@ -53,7 +53,7 @@ Catalyst Unique PROVIDERS validation setup
 
 
 Catalyst Validation of OpenStack Providers Setup
-    [Tags]       Sanity               Smoke
+    [Tags]       Sanity               Settings
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
     Catalyst Validation of OpenStack page
@@ -73,10 +73,19 @@ Catalyst Validation of HP Public Cloud Providers Setup
 
 
 Catalyst Validation of Azure Providers Setup
-    [Tags]       Sanity               Smoke
+    [Tags]       Sanity               Settings
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
     Catalyst Validation of Azure page
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+Catalyst Creation of New Azure Provider Setup
+    [Tags]       Sanity               Settings
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst creation of Azure provider
     Catalyst Logout                      
     [Teardown]     Close Browser
 
@@ -86,8 +95,10 @@ Catalyst Validation of Azure Providers Setup
 
 
 
+
+
 Catalyst Validation and Creation of VM IMAGE setup
-    [Tags]       Sanity               Smoke
+    [Tags]       Sanity               Settings
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
     Validation of Creation of New Image
@@ -100,7 +111,7 @@ Catalyst Validation and Creation of VM IMAGE setup
 
 
 Catalyst Editing the VM Image Setup
-    [Tags]       Sanity               VMImage
+    [Tags]       Sanity               Settings
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
     Catalyst VM Image Edit Setup

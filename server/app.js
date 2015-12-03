@@ -117,13 +117,15 @@ app.use(expressSession({
     saveUninitialized: true
 }));
 
+
 // parse application/x-www-form-urlencoded
 app.use(expressBodyParser.urlencoded({
+    limit: '50mb',
     extended: true
 }))
 
 // parse application/json
-app.use(expressBodyParser.json())
+app.use(expressBodyParser.json({limit: '50mb'}))
 
 
 app.use(expressMultipartMiddleware);

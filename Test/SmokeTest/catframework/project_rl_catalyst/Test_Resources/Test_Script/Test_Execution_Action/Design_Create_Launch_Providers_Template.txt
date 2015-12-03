@@ -538,7 +538,6 @@ Chooses The Business Group
 
     
 
-
 Chooses The Project
     Sleep    3s
     #Click Element    id=projectListInput

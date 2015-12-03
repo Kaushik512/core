@@ -10,50 +10,19 @@ Resource           ${COMMON RESOURCES}/catalyst_grid_node.txt
 
 
 *** Test Cases ***
-Catalyst Validation of Environments Page
+Catalyst new Environments setup
     [Tags]       Sanity               Smoke
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
-    Test Validation of Creation of New Environments         
-    Catalyst Logout                      
-    [Teardown]     Close Browser
-
-
-
-Catalyst new Environments setup
-    [Tags]       Sanity               Settings
-#    Catalyst Login
-    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Test Validation of Creation of New Environments
     Catalyst Addition and Creation of New Envirorments Setup           
     Catalyst Logout                      
     [Teardown]     Close Browser
 
 
 
-Catalyst Edit Environment setup
-    [Tags]       Sanity               Settings
-#    Catalyst Login
-    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
-    Catalyst Edit the Environment setup           
-    Catalyst Logout                      
-    Teardown]     Close Browser
-
-
-
-
-
-Catalyst Unique Environment Validation
-    [Tags]       Sanity               Settings
-#    Catalyst Login
-    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
-    Catalyst Unique Environment Validation
-    Catalyst Logout                      
-    [Teardown]     Close Browser
-
-
-
-Catalyst Adding New Envirornments to the Chef          
-    [Tags]       Sanity           Settings
+Catalyst Adding New Envirornments to the Chef          #from chef server
+    [Tags]       Sanity       ps
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
     Catalyst Addition of New Environments
@@ -62,24 +31,11 @@ Catalyst Adding New Envirornments to the Chef
 
 
 
-Catalyst Import a Node From ConfigManagement(Chef) in to the Environment
-    [Tags]       Sanity       Settings
-#    Catalyst Login
-    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
-    Catalyst Import a Node from Config Management
-    Catalyst Logout
-    [Teardown]     Close Browser
 
 
 
 
-Catalyst Verify Node Imported from Config Management(Chef Server) & Delete
-    [Tags]       Sanity       Settings
-#    Catalyst Login
-    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
-    Catalyst Verify and Delete the InportedNode from Environment
-    Catalyst Logout
-    [Teardown]     Close Browser
+
 
 
 

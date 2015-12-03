@@ -3199,11 +3199,14 @@
                              var $appUrlTableBody = $('#appUrlTable tbody');
                              var $trs = $appUrlTableBody.find('tr');
                              //alert($trs.length);
-                             $trs.each(function(e) {
-                                 var $this = $(this);
-                                 appUrls.push($this.data('appUrlData'));
-                             });
-                             reqBody.appUrls = appUrls;
+                            $trs.each(function(e) {
+                                var $this = $(this);
+                                if ($this.data('appUrlData')) {
+                                    appUrls.push($this.data('appUrlData'));
+                                }
+                            });
+                            
+                            reqBody.appUrls = appUrls;
 
                              // for cft templates
                              //reqBody.stackName = $('#cftStackNameInput').val();

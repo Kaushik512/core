@@ -1716,7 +1716,9 @@ var MasterUtil = function() {
                         d4dModelNew.d4dModelMastersProjects.find({
                             appdeploy: {
                                 $elemMatch: {
-                                    applicationname: appName
+                                    //{ $regex : new RegExp(thename, "i") }
+                                    // The regex will enable case-insensitive
+                                    applicationname: { $regex : new RegExp(appName, "i")}
                                 }
                             },
                             rowid: projectId
