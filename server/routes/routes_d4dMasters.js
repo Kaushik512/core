@@ -2545,6 +2545,9 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     if (req.params.id === "26") {
                         bodyJson["configType"] = "nexus";
                     }
+                    if (req.params.id === "18") {
+                        bodyJson["configType"] = "docker";
+                    }
                     logger.debug("Full bodyJson:::: ", JSON.stringify(bodyJson));
                     if (req.params.id === "25") {
                         bodyJson["configType"] = "puppet";

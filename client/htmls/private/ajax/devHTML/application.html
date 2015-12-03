@@ -742,6 +742,7 @@ $(document).ready(function() {
         //$('.containerNewDeploy').show();
     
         getNexusServer();
+        getDockerServer();
         var $modal = $('#modalUpgradeAppDeploy');
         $modal.modal('show');
     }
@@ -1326,6 +1327,7 @@ function moreInfoUpgradeAppDeployPipelineClickHandler(e) {
     $("#upgradeAppName").html(upgradeAppNameText);
     $("#upgradeNodeIp").html(upgradeNodeIpText);
     getNexusServer();
+    getDockerServer();
     var $modal = $('#modalUpgradeAppDeploy');
     $('#containerIdInput').val(containerId);
     $modal.modal('show');
@@ -1385,6 +1387,17 @@ function getNexusServer(){
         }
     });
 }
+
+function getDockerServer(){
+    $.get('/d4dMasters/readmasterjsonnew/18', function(dockerData) {
+        if(dockerData.length){
+            for(var i=0; i< dockerData.length; i++){
+                $('#chooseNexusServer').append('<option value='+dockerData[i].rowid+'>'+dockerData[i].dockerreponame+'</option>');
+            }
+        }
+    });
+}
+
 var $nexusServer = $('#chooseNexusServer');
 $nexusServer.change(function(e){
     var nexusServerType = $('#chooseNexusServer :selected').attr('data-serverType');
@@ -1425,6 +1438,7 @@ function getNexusServerRepo(nexusId) {
         $('.repospinner').css('display', 'none');
     }
 }
+
 var $chooseRepository = $('#chooseRepository');
 $chooseRepository.change(function(e){
         var $repositoryUrl = $('#repositoryUrl');
@@ -1909,6 +1923,7 @@ function constructUI(data) {
 
 
             getNexusServer();
+            getDockerServer();
             var $modal = $('#modalUpgradeAppDeploy');
             $('#containerIdInput').val(containerId);
             //$logContainer.empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
