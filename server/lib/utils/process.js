@@ -63,19 +63,20 @@ var Process = function(appPath, argList, options) {
         processRunning = true;
         if (typeof onStdOut === 'function') {
             proc.stdout.on('data', function(data) {
-                //console.log('stdout: ==> ' + data);
+                console.log('process stdout: ==> ' + data);
                 onStdOut(data);
             });
         }
 
         if (typeof onStdErr === 'function') {
             proc.stderr.on('data', function(errData) {
-                //console.log('stderr: ==> ' + errData);
+                console.log('process stderr: ==> ' + errData);
                 onStdErr(errData);
             });
         }
         if (typeof onClose === 'function') {
             proc.on('close', function(code) {
+                console.log('process return code ==> '+code);
                 processRunning = false;
                 onClose(code);
             });

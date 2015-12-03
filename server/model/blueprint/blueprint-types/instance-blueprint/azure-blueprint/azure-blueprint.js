@@ -66,6 +66,7 @@ var azureInstanceBlueprintSchema = new Schema({
         type: String,
         required: true
     },
+    cloudProviderData : Schema.Types.Mixed,
     infraMangerType: String,
     infraManagerId: String,
     infraManagerData: Schema.Types.Mixed
