@@ -2315,6 +2315,8 @@ var $wizard = $('#bootstrap-wizard-1').bootstrapWizard({
     'tabClass': 'form-wizard',
     'onNext': function(tab, navigation, index) {
 
+        alert(index)
+
         console.log(navigation, index)
         if (index === 1) {
             $('#viewCreateNew').addClass('hidden');
@@ -2333,6 +2335,7 @@ var $wizard = $('#bootstrap-wizard-1').bootstrapWizard({
             var templateurl = "/d4dMasters/readmasterjsonnew/17";
             if (gallerytype == 'ami') {
                 // alert('to build a new selection by updating the url');
+                
                 templateurl = '/vmimages';
             }
             $.ajax({
@@ -2474,6 +2477,7 @@ var $wizard = $('#bootstrap-wizard-1').bootstrapWizard({
             $('.' + $selectedItem.attr('data-templateType')).find('.productdiv2:first').trigger('click');
 
         } else if (index == 2) {
+
             $("#tabheader").html('Choose Template');
             //   var $selectedTemplateArea = $('.selectedTemplateArea')
             //   var $selectedItem = $selectedTemplateArea.find('.productdiv2');
@@ -2778,8 +2782,9 @@ var $wizard = $('#bootstrap-wizard-1').bootstrapWizard({
                         $('#instanceOS').val(vmimage.osName);
                         $('#instanceOS').change().attr('disabled', 'disabled');
                         $('#providerId').val(vmimage.providerId);
-                        $('#providerId').change().attr('disabled', 'disabled');
+                        //$('#providerId').change().attr('disabled', 'disabled');
                         $('#orgnameSelect').attr('disabled', 'disabled');
+
                     } else {
                         $('#instanceOS').removeAttr('disabled');
                         $('#providerId').removeAttr('disabled');
