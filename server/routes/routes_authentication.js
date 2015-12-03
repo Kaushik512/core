@@ -86,7 +86,7 @@ module.exports.setRoutes = function(app) {
 
                             logger.debug('Just before role:', data[0].userrolename);
                             user.roleName = "Admin";
-                            user.authorizedfiles = 'Track,Workspace,blueprints,Settings';
+                            user.authorizedfiles = ["Track","Workspace","blueprints","Settings"];
                             if (req.body.authType === 'token') {
 
                                 AuthToken.createNew(req.session.user, function(err, authToken) {
@@ -157,7 +157,7 @@ module.exports.setRoutes = function(app) {
                                 } else {
                                     logger.debug('Just before role:', data[0].userrolename);
                                     user.roleName = "Admin";
-                                    user.authorizedfiles = 'Track,Workspace,blueprints,Settings';
+                                    user.authorizedfiles = ["Track","Workspace","blueprints","Settings"];
 
                                     if (req.body.authType === 'token') {
                                         AuthToken.createNew(req.session.user, function(err, authToken) {

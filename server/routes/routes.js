@@ -158,7 +158,8 @@ module.exports.setRoutes = function(app,socketIo) {
     app.all('/private/*', function(req, res, next) {
         if (req.session && req.session.user) {
             if (req.session.user.authorizedfiles) {
-                var authfiles = req.session.user.authorizedfiles.split(','); //To be moved to login page an hold a static variable.
+                //var authfiles = req.session.user.authorizedfiles.split(','); //To be moved to login page an hold a static variable.
+                var authfiles = req.session.user.authorizedfiles;
                 authfiles += ',index.html,settings.html,design.html,Tracker.html,noaccess.html'
                     // console.log(authfiles.length, req.originalUrl.indexOf('.html'));
                 if (req.originalUrl.indexOf('.html') > 0) //its a html file.
