@@ -2844,7 +2844,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                         });
 
                                     } else if (req.params.id === '4') {
-                                        bodyJson['appdeploy'] = JSON.parse(bodyJson['appdeploy']);
+                                        bodyJson['repositories'] = JSON.parse(bodyJson['repositories']);
                                         var projectModel = new d4dModelNew.d4dModelMastersProjects(bodyJson);
                                         projectModel.save(function(err, data) {
                                             if (err) {
@@ -2909,9 +2909,9 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                     // Update settings
 
                                     if (req.params.id === '4') {
-                                        bodyJson['appdeploy'] = JSON.parse(bodyJson['appdeploy']);
+                                        bodyJson['repositories'] = JSON.parse(bodyJson['repositories']);
                                         delete rowtoedit._id; //fixing the issue of 
-                                        rowtoedit["appdeploy"] = bodyJson['appdeploy'];
+                                        rowtoedit["repositories"] = bodyJson['repositories'];
                                         logger.debug('Rowtoedit: %s', JSON.stringify(rowtoedit));
                                         eval('d4dModelNew.' + dbtype).update({
                                             rowid: bodyJson["rowid"],

@@ -69,6 +69,10 @@
                                             </table>
                                           </div>
                                         </div>
+                                        <div class="col-lg-6 col-md-6" style="margin-top:25px; display:none">
+                                          <label for="name">Repository Details:</label>
+                                          <input autofocus name="ctl00$MainContent$orgname" value="" id="repositories" class="form-control" type="text"  cdata="catalyst">
+                                       </div>
                                         <div class="col-lg-6 col-md-6" style="display:none">
                                           <a style="cursor:pointer;" data-toggle="modal" data-backdrop="false" id="appanchorDetails" href="#appdetailsModal"> <img title="Add App Details" data-placement="top" rel="tooltip" class="addappDetails" style="float:right;margin-top:20px;" src="img/add.png"></a>
                                           <label style="float:left;margin-top:20px;">Application Details :</label>
@@ -226,7 +230,7 @@
       if (queryString == 'new') {
       } else {
         $.get('/d4dMasters/readmasterjsonnew/4', function(data) {
-            for (var i = 0; i < data.length; i++) {
+            /*for (var i = 0; i < data.length; i++) {
                 if (queryString == data[i].rowid) {
                     var appDeployList = data[i].appdeploy;
                     if (appDeployList.length && appDeployList[0].applicationname) {
@@ -256,6 +260,89 @@
                         }
                     }
                 }
+            }*/
+
+            for (var i = 0; i < data.length; i++) {
+              (function(i){
+                if (queryString == data[i].rowid) {
+                        var repo = data[i].repositories;
+                        if(repo){
+                            var $repoDeployTbody = $('#repoDeployTbody');
+                            var nexusList = repo.nexus;
+                            var dockerList = repo.docker;
+                            if(nexusList.length){
+                            for(var j=0; j < nexusList.length; j++){
+                              (function(j){
+                                 var $tr = $('<tr class="repoDetailsRow"></tr>');
+                                 var $tdName = $('<td class="tdrepoName" value=' + nexusList[j] + ' style="word-break: break-word;"></td>');
+                                 $tr.data('repoName', nexusList[j]);
+                                 var $tdrepoServerName = $('<td class="tdrepoServerName" value="nexus" style="word-break: break-word;"></td>');
+                                 $tr.data('repoServerName', "nexus");
+
+                                 $tdName.append(nexusList[j]);
+                                 $tdrepoServerName.append("nexus");
+                                 var $tdAction = $('<td/>');
+                                 $tdAction.append('<div style="margin-right:17px;float:right;" class="btn-group"><button class="deleteRow" value="Remove" title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></div>');
+
+                                 $tdAction.find('.deleteRow').click(function() {
+                                     $repoDetails.row($tr).remove().draw(true);
+                                 });
+
+                                 $tr.append($tdrepoServerName).append($tdName).append($tdAction);
+                                 $repoDeployTbody.append($tr);
+                                 $repoDetails.row.add($tr).draw();
+                              })(j);
+                            }
+                          }
+                          if(dockerList.length){
+                            for(var k =0; k < dockerList.length; k++){
+                              (function(k){
+                                var $tr = $('<tr class="repoDetailsRow"></tr>');
+                                 var $tdName = $('<td class="tdrepoName" value=' + dockerList[k] + ' style="word-break: break-word;"></td>');
+                                 $tr.data('repoName', dockerList[k]);
+                                 var $tdrepoServerName = $('<td class="tdrepoServerName" value="docker" style="word-break: break-word;"></td>');
+                                 $tr.data('repoServerName', "docker");
+
+                                 $tdName.append(dockerList[k]);
+                                 $tdrepoServerName.append("docker");
+                                 var $tdAction = $('<td/>');
+                                 $tdAction.append('<div style="margin-right:17px;float:right;" class="btn-group"><button class="deleteRow" value="Remove" title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></div>');
+
+                                 $tdAction.find('.deleteRow').click(function() {
+                                     $repoDetails.row($tr).remove().draw(true);
+                                 });
+
+                                 $tr.append($tdrepoServerName).append($tdName).append($tdAction);
+                                 $repoDeployTbody.append($tr);
+                                 $repoDetails.row.add($tr).draw();
+                              })(k);
+                            }
+                          }
+                        }
+
+                            /*var $tr = $('<tr class="appDeployRow"></tr>');
+                            var $tdName = $('<td class="tdappName" value=' + applicationConstructName + ' style="word-break: break-word;"></td>');
+                            $tr.data('appName', applicationConstructName);
+
+                            var $tdDescription = $('<td class="tdappDescription" value=' + applicationConstructDesc + ' style="word-break: break-word;"></td>');
+                            $tr.data('appDesc', applicationConstructDesc);
+
+                            $tdName.append(applicationConstructName);
+                            $tdDescription.append(applicationConstructDesc);
+                            var $tdAction = $('<td/>');
+                            $tdAction.append('<div style="margin-right:17px;float:right;" class="btn-group"><button class="deleteRow" value="Remove" title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></div>');
+
+                            $tdAction.find('.deleteRow').click(function() {
+                                $appDetails.row($tr).remove().draw(true);
+                            });
+
+                            $tr.append($tdName).append($tdDescription).append($tdAction);
+                            $appDeployTbody.append($tr);
+                            $appDetails.row.add($tr).draw();*/
+                        //}
+                    //}
+                }
+             })(i);
             }
         });
       }
@@ -373,7 +460,7 @@
      }
    });
     $("#savecreateProjectbtn").click(function(e) {
-        var appdeploy = [];
+       /* var appdeploy = [];
         var $appDeployTableBody = $('#tableappDetails tbody');
         var $trs = $appDeployTableBody.find('tr');
         $trs.each(function(e) {
@@ -386,7 +473,33 @@
         });
         //alert(JSON.stringify(appdeploy));
         var appDeployString = JSON.stringify(appdeploy);
-        $('#appdeploy').val(appDeployString);
+        $('#appdeploy').val(appDeployString);*/
+
+        /*repositories:{
+          nexus: [String],
+          docker: [String]
+        }*/
+
+        var repositories = {
+          nexus: [],
+          docker: []
+        };
+        var nexusList = [];
+        var dockerList = [];
+        var $repoTableBody = $('#tablerepositoryDetails tbody');
+        var $trs = $repoTableBody.find('tr');
+        $trs.each(function(e){
+          var $this = $(this);
+          if($this.data('repoServerName') === 'nexus'){
+            nexusList.push($this.data('repoName'));
+          }
+          if($this.data('repoServerName') === 'docker'){
+            dockerList.push($this.data('repoName'));
+          }
+        });
+        repositories.nexus = nexusList;
+        repositories.docker = dockerList;
+        $('#repositories').val(JSON.stringify(repositories));
     });
    
    function isUserTypeSuperAdmin(){
