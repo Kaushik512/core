@@ -1444,6 +1444,26 @@ var InstancesDao = function() {
 
         });
     };
+
+    // Method to give list of all Docker instances for Org,BG,Proj and Env.
+    this.getInstancesByOrgBgProjectAndEnvForDocker = function(orgId, bgId, projectId, envId, callback) {
+        var queryObj = {
+            orgId: orgId,
+            bgId: bgId,
+            projectId: projectId,
+            envId: envId,
+            docker: { $exists : true }
+        }
+        Instances.find(queryObj, {
+            'actionLogs': false
+        }, function(err, instances) {
+            if (err) {
+                callback(err, null);
+                return;
+            }
+            callback(null, instances);
+        });
+    };
 };
 
 module.exports = new InstancesDao();

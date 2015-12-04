@@ -2110,4 +2110,20 @@ module.exports.setRoutes = function(app, sessionVerification) {
             logger.debug("Exit post() for /organizations/%s/businessgroups/%s/projects/%s/environments/%s/providers/%s/images/%s/blueprints", req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId, req.params.providerId, req.params.imageId);
         });
     });
+    
+    // End point which will give list of all Docker instances for Org,BG,Proj and Env.
+    app.get('/organizations/:orgId/businessgroups/:bgId/projects/:projectId/environments/:envId/docker/instances', function(req, res) {
+        instancesDao.getInstancesByOrgBgProjectAndEnvForDocker(req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId, function(err, instances) {
+            if (err) {
+                res.status(500).send({
+                    "errorCode": 500,
+                    "message": "Error occured while fetching docker instances."
+                });
+                return;
+            }
+            res.send(instances);
+            return;
+        });
+    });
+
 }
