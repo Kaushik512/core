@@ -12,6 +12,8 @@ var request = require('request');
 var xml = require('xml');
 var xml2json = require('xml2json');
 
+var waitForPort = require('wait-for-port');
+
 function execute(cmd, isJsonResponse, callback) {
     // logger.debug("START of executing issued command");
     // exec(cmd, function(error, stdout, stderr){ 
@@ -975,8 +977,26 @@ var AzureCloud = function(options) {
         if (ostype == "Windows") {
             curl = new Curl();
             cmdString = opts.cmdswin[0] + ' ' + opts.host + ' -m';
-            logger.debug("cmdString >>>", cmdString);
-            curl.executecurl(cmdString, function(err, stdout) {
+            //logger.debug("cmdString >>>", cmdString);
+
+            var openport = 5985;
+
+            logger.debug('checking windows port 5985 for node with ip : ' + opts.host);
+
+            waitForPort(opts.host, openport, function(err) {
+                if (err) {
+                    logger.error(err);
+                    callback('Error ', null);
+                    return;
+                }else{
+                     logger.debug('port enabled');
+                     callback('ok');
+                     return;
+                }
+                
+            });
+
+            /*curl.executecurl(cmdString, function(err, stdout) {
                 logger.debug('stdout:', stdout, err);
 
                 if (stdout && stdout.indexOf('Connected successfully') >= 0) {
@@ -989,7 +1009,7 @@ var AzureCloud = function(options) {
                     return;
                 }
 
-            });
+            });*/
 
         } else {
             cmdString = opts.cmds.join(' && ');
