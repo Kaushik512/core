@@ -186,24 +186,39 @@ module.exports.setRoutes = function(app, sessionVerification) {
             }]
         });
         logger.debug("Exit get() for /d4dMasters/getuser");
-
-
-        // var query = {};
-        // console.log(req.session.user);
-        // query['loginname'] = req.session.user.cn; //building the query 
-        // query['id'] = '7';
-
-        // console.log(req.session.user.cn);
-
-        // d4dModelNew.d4dModelMastersUsers.find(query, function(err, d4dMasterJson) {
-        //     if (err) {
-        //         console.log("Hit and error:" + err);
-        //     }
-        //     res.end(JSON.stringify(d4dMasterJson));
-        //     console.log("sent response" + JSON.stringify(d4dMasterJson));
-        // });
-
     });
+
+    // Get the current loggedin user details with permissionset and authorized files
+     app.get('/d4dMasters/loggedin/user', function(req, res) {
+         if (req.session.user) {
+            var pSet = req.session.user.permissionset;
+            if(pSet.length > 1){
+                var pSetList = [];
+                for(var i=0; i < pSet.length; i++){
+                    if(pSet[i].rolename === "Admin"){
+                        req.session.user.permissionset = pSet[i];
+                        res.send(req.session.user);
+                        return;
+                    }else{
+                        pSetList.push(pSet[i]);
+                    }
+                }
+                req.session.user.permissionset = pSetList;
+                res.send(req.session.user);
+                return;
+            }else{
+                res.send(req.session.user);
+                return;
+            }
+         } else {
+            res.status(404).send({
+                 "errorCode": 404,
+                 "message": "User not found in session."
+            });
+            return;
+         }
+     });
+
 
     app.get('/d4dMasters/authorizedfiles', function(req, res) {
         logger.debug("Enter get() for /d4dMasters/authorizedfiles");

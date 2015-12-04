@@ -1977,8 +1977,10 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                 var cryptoConfig = appConfig.cryptoSettings;
                                                 var cryptography = new Cryptography(cryptoConfig.algorithm, cryptoConfig.password);
 
-                                                var decryptedPemFile = pemFile + '_decypted';
-                                                var decryptedKeyFile = keyFile + '_decypted';
+                                                var uniqueVal = uuid.v4().split('-')[0];
+
+                                                var decryptedPemFile = pemFile + '_' + uniqueVal + '_decypted';
+                                                var decryptedKeyFile = keyFile + '_' + uniqueVal + '_decypted';
 
                                                 cryptography.decryptFile(pemFile, cryptoConfig.decryptionEncoding, decryptedPemFile, cryptoConfig.encryptionEncoding, function(err) {
                                                     if (err) {
@@ -2036,8 +2038,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                     runlist: version.runlist,
                                                                     platformId: launchparams.VMName,
                                                                     appUrls: blueprint.appUrls,
-                                                                    instanceIP: 'unknown',
-                                                                    instanceState: 'unknown',
+                                                                    instanceIP: 'pending',
+                                                                    instanceState: 'pending',
                                                                     bootStrapStatus: 'waiting',
                                                                     users: blueprint.users,
                                                                     hardware: {
