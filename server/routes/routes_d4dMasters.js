@@ -2944,6 +2944,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                     }
 
                                     if (req.params.id === '18') {
+                                        logger.debug("===========----------------- ", bodyJson['dockerrepositories']);
                                         bodyJson['dockerrepositories'] = JSON.parse(bodyJson['dockerrepositories']);
                                         delete rowtoedit._id; //fixing the issue of 
                                         rowtoedit["dockerrepositories"] = bodyJson['dockerrepositories'];

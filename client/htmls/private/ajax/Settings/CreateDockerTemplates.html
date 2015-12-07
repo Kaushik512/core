@@ -107,7 +107,7 @@
                   <i class="ace-icon fa fa-times bigger-110"></i>
                   Cancel
                   </a>
-                  <button class="btn btn-primary btn-mini">
+                  <button class="btn btn-primary btn-mini" id="savecreateDockerbtn">
                   <i class="ace-icon fa fa-check bigger-110"></i>
                   Save
                   </button>
@@ -135,8 +135,8 @@
             </div>
             <div class="modal-body" style="height:100px;">
                <div class="col-lg-6 col-md-6">
-                  <label for="dockerrepoName">Name</label>
-                  <input type="text" name="dockerrepoName" class="form-control" id="dockerrepoNameCreate" placeholder="relevancelab/tomcat" />
+                  <label>Name</label>
+                  <input type="text" class="form-control" id="dockerrepoNameCreate" placeholder="relevancelab/tomcat" />
                </div>
             </div>
             <div class="modal-footer">
@@ -179,6 +179,16 @@
    }
    $("#tabledockerrepositoryDetails_length").hide();
    $("#tabledockerrepositoryDetails_filter").hide();
+   $("#savecreateDockerbtn").click(function(e){
+      var dockerrepositories = [];
+        var $repoTableBody = $('#tabledockerrepositoryDetails tbody');
+        var $trs = $repoTableBody.find('tr');
+        $trs.each(function(e){
+          var $this = $(this);
+            dockerrepositories.push($this.attr('dockerrepoName'));
+        });
+        $('#dockerrepositories').val(JSON.stringify(dockerrepositories));
+   });
    $("#savedockerRepoDetails").click(function(e) {
        e.preventDefault();
        var repoName = $("#dockerrepoNameCreate").val();
@@ -189,7 +199,7 @@
           var $repoDeployTbody = $('#dockerrepoDeployTbody');
           var $tr = $('<tr class="dockerrepoDetailsRow"></tr>');
           var $tdName = $('<td class="tddockerrepoName" value=' + repoName + ' style="word-break: break-word;"></td>');
-          $tr.data('dockerrepoName', repoName);
+          $tr.attr('dockerrepoName', repoName);
 
 
           $tdName.append(repoName);
@@ -206,17 +216,6 @@
           $("#dockerrepodetailsModal").hide();
        } else {
           alert("Please Enter Correct Format of the Docker Repository Name");
-       }
-       if (repoName != '' && repoName.match(regExpSymbol)) {
-           var dockerrepositories = [];
-        var $repoTableBody = $('#tabledockerrepositoryDetails tbody');
-        var $trs = $repoTableBody.find('tr');
-        $trs.each(function(e){
-          var $this = $(this);
-            dockerrepositories.push($this.data('dockerrepoName'));
-        });
-        $('#dockerrepositories').val(JSON.stringify(dockerrepositories));
-        //alert(JSON.stringify(dockerrepositories));
        }
    });
    
@@ -325,7 +324,7 @@
                   (function(j){
                     var $tr = $('<tr class="dockerrepoDetailsRow"></tr>');
                     var $tdName = $('<td class="tddockerreponame" value=' + repoList[j] + ' style="word-break: break-word;"></td>');
-                    $tr.data('dockerreponame', repoList[j]);
+                    $tr.attr('dockerrepoName', repoList[j]);
                     $tdName.append(repoList[j]);
                     var $tdAction = $('<td/>');
                     $tdAction.append('<div style="margin-right:17px;float:right;" class="btn-group"><button class="deleteRow" value="Remove" title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></div>');
