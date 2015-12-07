@@ -2515,8 +2515,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
                         var serviceCmd = "service " + serviceData.command + " " + req.params.actionType;
                         var sudoCmd = "sudo";
-                        if (options.password) {
-                            sudoCmd = 'echo \"' + options.password + '\" | sudo -S';
+                        if (sshParamObj.password) {
+                            sudoCmd = 'echo \"' + sshParamObj.password + '\" | sudo -S';
                         }
                         serviceCmd = sudoCmd + " " + serviceCmd;
 
@@ -3151,5 +3151,87 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
         });
 
+    });
+
+    app.post('/instances/:instanceId/remediation', function(req, res) {
+        logger.debug("Enter get() for /instances/%s/redemption", req.params.instanceId);
+        instancesDao.getInstanceById(req.params.instanceId, function(err, instances) {
+            if (err) {
+                logger.error("Failed to fetch ActionLogs: ", err);
+                res.send(500,{
+                    message:"DB error"
+                });
+                return;
+            }
+            if (!instances.length) {
+                res.send(404, {
+                    message: "Instance not found"
+                });
+                return;
+            }
+            var instance = instances[0];
+            credentialCryptography.decryptCredential(instance.credentials, function(err, decryptedCredentials) {
+                if (err) {
+                    res.send(500, {
+                        message: "error occured while decrypting credentials"
+                    });
+                    return;
+                }
+                var sshParamObj = {
+                    host: instance.instanceIP,
+                    port: 22,
+                    username: instance.credentials.username,
+                };
+                var sudoCmd;
+                if (decryptedCredentials.pemFileLocation) {
+                    sshParamObj.privateKey = decryptedCredentials.pemFileLocation;
+                } else {
+                    sshParamObj.password = decryptedCredentials.password;
+                }
+
+                var serviceCmd = "service " + req.body.service + " " + req.body.action;
+                var sudoCmd = "sudo";
+                if (sshParamObj.password) {
+                    sudoCmd = 'echo \"' + sshParamObj.password + '\" | sudo -S';
+                }
+                serviceCmd = sudoCmd + " " + serviceCmd;
+
+
+                var sshConnection = new SSH(sshParamObj);
+
+                sshConnection.exec(serviceCmd, function(err, ret) {
+                    if (decryptedCredentials.pemFileLocation) {
+                        fileIo.removeFile(decryptedCredentials.pemFileLocation, function(err) {
+                            if (err) {
+                                logger.error("Unable to delete temp pem file =>", err);
+                            } else {
+                                logger.error("temp pem file deleted =>", err);
+                            }
+                        });
+                    }
+                    if (err) {
+                        res.send(500, {
+                            message: "Unable to run service cmd on instance"
+                        });
+                        return;
+                    }
+                    if (ret === 0) {
+                        res.send(200, {
+                            message: "cmd ran successfully"
+                        });
+                    } else {
+                        res.send(500, {
+                            message: "cmd failed. code : " + ret
+                        });
+                    }
+
+                }, function(stdout) {
+                    logger.debug(stdout.toString());
+                }, function(stderr) {
+                    logger.debug(stderr.toString());
+                });
+
+            });
+        });
     });
 };
