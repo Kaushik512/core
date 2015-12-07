@@ -520,7 +520,7 @@
                                                 </div>
                                             </div>
                                             
-                                            <div class="col-lg-12 col-md-12 margintop15">
+                                            <div class="col-lg-12 col-md-12 margintop15 repoUrlClass">
                                                 <label>Repository URL:<span style="color:red">*</span>
                                                     <span>
                                                         <img class="repourlspinner" src="img/select2-spinner.gif" style="display:none">
@@ -541,7 +541,7 @@
                                             </div> -->
 
 
-                                            <div class="col-lg-12 col-md-12 margintop15 containerClass containerUpgradeDeploy">
+                                            <div class="col-lg-12 col-md-12 margintop15 containerClass containerIdClass containerUpgradeDeploy">
                                                 <label>Container Name/ID:<!-- <span style="color:red">*</span> -->
                                                     <span>
                                                         <img class="containerIdspinner" src="img/select2-spinner.gif" style="display:none">
@@ -551,7 +551,7 @@
                                                 <input id="containerIdDiv" type="text" class="form-control" name="">
                                             </div>
 
-                                            <div class="col-lg-12 col-md-12 margintop15 containerClass containerUpgradeDeploy">
+                                            <div class="col-lg-12 col-md-12 margintop15 containerClass  containerPortClass containerUpgradeDeploy">
                                                 <label>Container Port:<!-- <span style="color:red">*</span> -->
                                                     <span>
                                                         <img class="containerIdspinner" src="img/select2-spinner.gif" style="display:none">
@@ -562,7 +562,7 @@
                                             </div>
 
 
-                                            <div class="col-lg-6 col-md-6 margintop15">
+                                            <div class="col-lg-6 col-md-6 margintop15 artifactClass">
                                                 <label for="">Artifacts:<span style="color:red">*</span>
                                                     <span>
                                                         <img class="artifactsspinner" src="img/select2-spinner.gif" style="display:none">
@@ -576,7 +576,7 @@
                                                 </div>
                                             </div>
 
-                                            <div class="col-lg-6 col-md-6 margintop15">
+                                            <div class="col-lg-6 col-md-6 margintop15 versionClass">
                                                 <label for="">Versions:<span style="color:red">*</span>
                                                     <span>
                                                         <img class="versionspinner" src="img/select2-spinner.gif" style="display:none">
@@ -722,10 +722,16 @@ $(document).ready(function() {
         $('.createTaskLinkUpgrade').removeAttr('disabled');
     }
     function newAppDeployClickHandler(e) {
+        $('.containerIdClass').hide();
+        $('.containerPortClass').hide();
+        $('.repoUrlClass').hide();
+        $('.artifactClass').hide();
+        $('.versionClass').hide();
+
         $('#formUpgradeAppDeploy')[0].reset();
-        $('.containerClass').hide();
+       // $('.containerClass').hide();
         resetSpinners();
-        $('#containerIdDiv').removeAttr('disabled');
+        //$('#containerIdDiv').removeAttr('disabled');
         var $containerIdName = $('#containerIdInput').val('');
         //alert($('#containerIdInput').val())
         //$('#chooseRepository').empty();
@@ -738,7 +744,7 @@ $(document).ready(function() {
         $('.modaltitleforNewDeploy').show();
         $('.saveUpgradeAppDeploy').hide();
         $('.saveNewAppDeploy').show();
-        $('.containerUpgradeDeploy').show();
+        //$('.containerUpgradeDeploy').show();
         //$('.containerNewDeploy').show();
     
         getNexusServer();
@@ -1392,7 +1398,7 @@ function getDockerServer(){
     $.get('/d4dMasters/readmasterjsonnew/18', function(dockerData) {
         if(dockerData.length){
             for(var i=0; i< dockerData.length; i++){
-                $('#chooseNexusServer').append('<option value='+dockerData[i].rowid+'>'+dockerData[i].dockerreponame+'</option>');
+                $('#chooseNexusServer').append('<option value='+dockerData[i].rowid+' data-serverType = "'+dockerData[i].configType+'">'+dockerData[i].dockerreponame+'</option>');
             }
         }
     });
@@ -1403,19 +1409,61 @@ $nexusServer.change(function(e){
     var nexusServerType = $('#chooseNexusServer :selected').attr('data-serverType');
     //alert(nexusServerType);
     if($('#chooseNexusServer :selected').text() == 'Choose Server'){
-        $('.containerUpgradeDeploy').show();
+        $('.containerIdClass').hide();
+        $('.containerPortClass').hide();
+        $('.repoUrlClass').hide();
+        $('.artifactClass').hide();
+        $('.versionClass').hide();
         $('.createTaskLinkUpgrade').attr('disabled','disabled');
+
+        // Reset all values
+        resetAllFields();
+
     }else if(nexusServerType == 'nexus'){
         $('.containerUpgradeDeploy').hide();
         $('.createTaskLinkUpgrade').removeAttr('disabled');
-    }else{
+        $('.repoUrlClass').show();
+        $('.artifactClass').show();
+        $('.versionClass').show();
+        $('.containerIdClass').hide();
+        $('.containerPortClass').hide();
+        resetAllFields();
+        getNexusServerRepo($(this).val());
+        getTasks();
+    }else{ // It's Docker
         $('.containerUpgradeDeploy').show();
         $('.createTaskLinkUpgrade').removeAttr('disabled');
+
+        $('.repoUrlClass').hide();
+        $('.artifactClass').hide();
+        $('.versionClass').hide();
+
+        resetAllFields();
+        getDockerRepoes($(this).val());
+        getTasks();
     }
-    resetAllFields();
-    getNexusServerRepo($(this).val());
-    getTasks();
+    
 });
+
+function getDockerRepoes(dockerId){
+    $('.repospinner').css('display', 'inline-block');
+    var $chooseRepository = $('#chooseRepository');
+    if(dockerId){
+        $.get('/d4dMasters/docker/'+dockerId , function(docker){
+            $('.repospinner').css('display', 'none');
+            if(docker){
+                var dockerRepos = docker.dockerrepositories;
+                if(dockerRepos.length){
+                    for(var x=0; x< dockerRepos.length; x++){
+                        $('#chooseRepository').append('<option value="' + dockerRepos[x] + '">' + dockerRepos[x] + '</option>');
+                    }
+                }
+            }
+        });
+    }else {
+        $('.repospinner').css('display', 'none');
+    }
+}
 
 function getNexusServerRepo(nexusId) {
 
@@ -1441,12 +1489,16 @@ function getNexusServerRepo(nexusId) {
 
 var $chooseRepository = $('#chooseRepository');
 $chooseRepository.change(function(e){
+    var nexusServerType = $('#chooseNexusServer :selected').attr('data-serverType');
+    if(nexusServerType === 'nexus'){
+        $('.containerIdClass').hide();
+        $('.containerPortClass').hide();
+        $('.repoUrlClass').show();
+        $('.artifactClass').show();
+        $('.versionClass').show();
+
         var $repositoryUrl = $('#repositoryUrl');
         $repositoryUrl.val("");
-        var $containerId = $('#containerIdDiv');
-        $containerId.val("");
-        var $containerPort = $('#containerPort');
-        $containerPort.val("");
         var $chooseArtifacts = $('#chooseArtifacts');
         $chooseArtifacts.empty();
         $('#chooseArtifacts').append('<option value="">Choose Artifacts</option>');
@@ -1454,23 +1506,19 @@ $chooseRepository.change(function(e){
         $chooseVersions.empty();
         $('#chooseVersions').append('<option value="">Choose Versions</option>');
         $('#repositoryUrl').val($(this).find('option:selected').attr('data-repoUrl'));
-        var containerIdName = $('#containerIdInput').val();
-        //alert("containerIdName"+containerIdName);
-        if(containerIdName == 'NA' || containerIdName == ''){
-         $('.containerClass').hide();  
-         //$('.containerNewDeploy').show(); 
-         $('.containerUpgradeDeploy').show();
-
-        }else{
-            $('.containerClass').show();
-            $('.containerUpgradeDeploy').show();
-            //$('.containerNewDeploy').hide();
-            $('#containerIdDiv').attr('disabled','disabled');
-            $('#containerIdDiv').val($('#containerIdInput').val());
-        }
+        
         var repoName = $(this).find('option:selected').attr('data-repoName');
         var nexusId = $('#chooseNexusServer').val();
         getNexusServerRepoArtifact(nexusId,repoName);
+    } else{
+        $('.containerIdClass').show();
+        $('.containerPortClass').show();
+        $('.repoUrlClass').hide();
+        $('.artifactClass').hide();
+        $('.versionClass').hide();
+
+    }
+        
     });
 
 function getNexusServerRepoArtifact(nexusId,repoName){
