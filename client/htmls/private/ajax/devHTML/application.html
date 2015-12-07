@@ -1623,14 +1623,96 @@ function getTasks(){
 
 // on click of Upgrade button
 $('.saveUpgradeAppDeploy').on('click',function(){
-    upgradeOrDeploy();
+    var nexusServerType = $('#chooseNexusServer :selected').attr('data-serverType');
+    if(nexusServerType === 'nexus'){
+        upgradeOrDeploy();
+    }else{
+        deployNewForDocker();
+    }
 });
 
 $('.saveNewAppDeploy').on('click',function(){
-    console.log("++++++++++ clicked.............",$('#containerIdDiv').val());
-    $('#containerIdInput').val($('#containerIdDiv').val());
-    upgradeOrDeploy();
+    var nexusServerType = $('#chooseNexusServer :selected').attr('data-serverType');
+    if(nexusServerType === 'nexus'){
+        upgradeOrDeploy();
+    }else{
+        $('#containerIdInput').val($('#containerIdDiv').val());
+        deployNewForDocker();
+    }
 });
+
+// Deploy New App for Docker Container
+function deployNewForDocker(){
+    var nexusId = $('#chooseNexusServer').find('option:selected').val();
+    if(!nexusId){
+        alert("Please select repository server.");
+        return false;
+    }
+    var repoId = $('#chooseRepository').find('option:selected').val();
+    if(!repoId){
+        alert("Please select repository.");
+        return false;
+    }
+    var containerId = $('#containerIdInput').val();
+    var containerPort = $('#containerPort').val();
+
+    if(!containerPort){
+        alert("Please specify port.");
+        return false;
+    }
+    var taskId = $('#chooseJobType').find('option:selected').val();
+    if(!taskId){
+        alert("Please select job.");
+        return false;
+    }
+    var orgId = urlParams.org;
+    var bgId = urlParams.bg;
+    var projectId = urlParams.projid;
+    var envId = urlParams.envid;
+    
+    var nexusData={
+        "nexusData":{
+            "nexusUrl": "",
+            "version": "",
+            "containerId": containerId,
+            "containerPort": containerPort,
+            "dockerRepo": repoId
+        }
+    };
+
+    $.get('/d4dMasters/readmasterjsonnew/4', function(projData) {
+        //alert(projData);
+        if(projData.length){
+            for(var i=0; i< projData.length; i++){
+                if(projData[i].rowid === projectId){
+                    //alert(projData[i].appdeploy.length);
+                    if(projData[i].appdeploy.length === 0){
+                        var reqBody = {
+                            "appName": repoId,
+                            "description": repoId+" deployed."
+                            };
+                        $.ajax({
+                            url: '/d4dMasters/project/'+projectId+'/appdeploy/appName/update',
+                            data: JSON.stringify(reqBody),
+                            type: 'POST',
+                            contentType: "application/json",
+                            success: function(data) { 
+            
+                            },
+                            error: function(jqxhr) {
+                                alert("Failed to update update appName in Project.")
+                            }
+                        });
+                    }
+                }
+            }
+        }
+    });
+        //alert(JSON.stringify(nexusData));
+        $('a[data-executetaskid='+taskId+']').trigger('click',nexusData);
+        $('#modalUpgradeAppDeploy').modal('hide');
+        var $containerIdName = $('#containerIdInput').val('');
+}
 
 function upgradeOrDeploy(){
     var nexusId = $('#chooseNexusServer').find('option:selected').val();
@@ -1673,13 +1755,15 @@ function upgradeOrDeploy(){
             "nexusUrl": nexusRepoUrl,
             "version": versionId,
             "containerId": "",
-            "containerPort": ""
+            "containerPort": "",
+            "dockerRepo": ""
         }
     };
 
     if(containerId && containerId != "NA"){
         nexusData.nexusData.containerId = containerId;
         nexusData.nexusData.containerPort = containerPort;
+        nexusData.nexusData.dockerRepo = repoId;
     }
 
     $.get('/d4dMasters/readmasterjsonnew/4', function(projData) {

@@ -29,7 +29,7 @@ var jenkinsTaskSchema = taskTypeSchema.extend({
 
 // Instance Method :- run task
 jenkinsTaskSchema.methods.execute = function(userName, baseUrl, choiceParam, nexusData, onExecute, onComplete) {
-    logger.debug("Choice Param in:::  anshul ",choiceParam);
+    logger.debug("Choice Param in::: ",choiceParam);
     var self = this;
     //this.parameterized.name = choiceParam;
     configmgmtDao.getJenkinsDataFromId(this.jenkinsServerId, function(err, jenkinsData) {
