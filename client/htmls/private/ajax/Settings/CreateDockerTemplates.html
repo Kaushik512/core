@@ -84,6 +84,10 @@
                                             </table>
                                           </div>
                                         </div>
+                                        <div class="col-lg-6 col-md-6" style="margin-top:25px; display:none">
+                                          <label for="name">Repository Details:</label>
+                                          <input autofocus name="ctl00$MainContent$orgname" value="" id="dockerrepositories" class="form-control" type="text"  cdata="catalyst">
+                                        </div>
                                     </div>
                                     <!-- end widget content -->
                                  </div>
@@ -148,6 +152,7 @@
       </div>
    </div>
 </div>
+
 <!--modal for Repo Deploy Details ends here-->
 <!--Popup for selecting a cloud provider before proceeding-->
 <script>
@@ -203,24 +208,15 @@
           alert("Please Enter Correct Format of the Docker Repository Name");
        }
        if (repoName != '' && repoName.match(regExpSymbol)) {
-           // var $repoDeployTbody = $('#dockerrepoDeployTbody');
-           // var $tr = $('<tr class="dockerrepoDetailsRow"></tr>');
-           // var $tdName = $('<td class="tddockerrepoName" value=' + repoName + ' style="word-break: break-word;"></td>');
-           // $tr.data('dockerrepoName', repoName);
-
-
-           // $tdName.append(repoName);
-           // var $tdAction = $('<td/>');
-           // $tdAction.append('<div style="margin-right:17px;float:right;" class="btn-group"><button class="deleteRow" value="Remove" title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></div>');
-
-           // $tdAction.find('.deleteRow').click(function() {
-           //     $repoDetails.row($tr).remove().draw(true);
-           // });
-
-           // $tr.append($tdName).append($tdAction);
-           // $repoDeployTbody.append($tr);
-           // $repoDetails.row.add($tr).draw();
-           // $("#dockerrepodetailsModal").hide();
+           var dockerrepositories = [];
+        var $repoTableBody = $('#tabledockerrepositoryDetails tbody');
+        var $trs = $repoTableBody.find('tr');
+        $trs.each(function(e){
+          var $this = $(this);
+            dockerrepositories.push($this.data('dockerrepoName'));
+        });
+        $('#dockerrepositories').val(JSON.stringify(dockerrepositories));
+        //alert(JSON.stringify(dockerrepositories));
        }
    });
    
@@ -244,8 +240,8 @@
     }
     //return;
       setTimeout(function(){
-        if(validatedockeruser($('#dockeruserid'),$('#dockerpassword')))
-           {
+        /*if(validatedockeruser($('#dockeruserid'),$('#dockerpassword')))
+           {*/
             //alert('here');
             $("#masterssavespinner").detach();
             button.removeAttr('disabled');   
@@ -253,10 +249,10 @@
                    setfolderpath(); 
                    saveform('18');
                }
-           } else {
+           /*} else {
             $("#masterssavespinner").detach();
             button.removeAttr('disabled');
-           }
+           }*/
       },500)
        
    }
@@ -315,6 +311,39 @@
            return false; // for demo
        });
    });
+
+   $(document).ready(function() {
+    var url = window.location.href;
+      var queryString = url.substring(url.indexOf('?') + 1 );
+      if (queryString != 'new') {
+        $.get('/d4dMasters/docker/'+queryString, function(data) {
+          if(data){
+              var repoList = data.dockerrepositories;
+              if(repoList.length){
+                var $repoDeployTbody = $('#dockerrepoDeployTbody');;
+                for(var j=0; j < repoList.length; j++){
+                  (function(j){
+                    var $tr = $('<tr class="dockerrepoDetailsRow"></tr>');
+                    var $tdName = $('<td class="tddockerreponame" value=' + repoList[j] + ' style="word-break: break-word;"></td>');
+                    $tr.data('dockerreponame', repoList[j]);
+                    $tdName.append(repoList[j]);
+                    var $tdAction = $('<td/>');
+                    $tdAction.append('<div style="margin-right:17px;float:right;" class="btn-group"><button class="deleteRow" value="Remove" title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></div>');
+                      $tdAction.find('.deleteRow').click(function() {
+                        $repoDetails.row($tr).remove().draw(true);
+                      });
+                      $tr.append($tdName).append($tdAction);
+                      $repoDeployTbody.append($tr);
+                      $repoDetails.row.add($tr).draw();
+                  })(j);
+                }
+              }
+            }
+        });
+        
+      }
+   });
+
    function isUserTypeSuperAdmin(){
     $.get('/d4dMasters/loggedInUser',function(data){
       if(!data.isSuperAdmin){

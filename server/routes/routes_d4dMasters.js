@@ -2855,6 +2855,18 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                             res.send(200);
                                             return;
                                         });
+                                    } else if (req.params.id === '18') {
+                                        bodyJson['dockerrepositories'] = JSON.parse(bodyJson['dockerrepositories']);
+                                        var dockerModel = new d4dModelNew.d4dModelMastersDockerConfig(bodyJson);
+                                        dockerModel.save(function(err, data) {
+                                            if (err) {
+                                                logger.error('Hit Save error', err);
+                                                res.send(500);
+                                                return;
+                                            }
+                                            res.send(200);
+                                            return;
+                                        });
                                     } else {
                                         logger.debug("FLD>>>>>>>>>>>>> ", FLD);
                                         eval('var mastersrdb =  new d4dModelNew.' + dbtype + '({' + JSON.parse(FLD) + '})');
@@ -2916,6 +2928,29 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                         eval('d4dModelNew.' + dbtype).update({
                                             rowid: bodyJson["rowid"],
                                             "id": "4"
+                                        }, {
+                                            $set: rowtoedit
+                                        }, {
+                                            upsert: false
+                                        }, function(err, saveddata) {
+                                            if (err) {
+                                                logger.error('Hit Save error', err);
+                                                res.send(500);
+                                                return;
+                                            }
+                                            res.send(200);
+                                            return;
+                                        });
+                                    }
+
+                                    if (req.params.id === '18') {
+                                        bodyJson['dockerrepositories'] = JSON.parse(bodyJson['dockerrepositories']);
+                                        delete rowtoedit._id; //fixing the issue of 
+                                        rowtoedit["dockerrepositories"] = bodyJson['dockerrepositories'];
+                                        logger.debug('Rowtoedit: %s', JSON.stringify(rowtoedit));
+                                        eval('d4dModelNew.' + dbtype).update({
+                                            rowid: bodyJson["rowid"],
+                                            "id": "18"
                                         }, {
                                             $set: rowtoedit
                                         }, {
@@ -3828,6 +3863,23 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 return;
             }
             res.send(data);
+            return;
+        });
+    });
+
+    app.get('/d4dMasters/docker/:anId', function(req, res) {
+        logger.debug("Entered to Project name...");
+        masterUtil.getDockerById(req.params.anId, function(err, data) {
+            if (err) {
+                logger.debug("Failed to fetch  Docker", err);
+                res.send(500, "Failed to fetch  Docker");
+                return;
+            }
+            if (!data.length) {
+                res.send(404, "No Docker Found.");
+                return;
+            }
+            res.send(data[0]);
             return;
         });
     });

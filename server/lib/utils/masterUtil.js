@@ -1850,6 +1850,23 @@ var MasterUtil = function() {
             }
         });
     }
+
+
+    // Return Docker
+    this.getDockerById = function(anId, callback) {
+        d4dModelNew.d4dModelMastersDockerConfig.find({
+            rowid: anId,
+            id: "18"
+        }, function(err, dockers) {
+            if(err){
+                logger.debug("Error to get Docker: ",err);
+                callback(err,null);
+                return;
+            }
+            callback(null,dockers);
+            return;
+        });
+    }
 }
 
 
