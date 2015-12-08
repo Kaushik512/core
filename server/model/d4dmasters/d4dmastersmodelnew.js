@@ -195,7 +195,7 @@ var d4dMastersDockerConfig = new mongoose.Schema(
 	orgname_rowid: {type:[String], trim:true},
 	folderpath: {type:String,trim:true},
 	active: {type:Boolean, trim:true,default:true},
-	dockerrepositories:{type: [String]},
+	//dockerrepositories:{type: [String]},
 	configType: {type:String, trim:true},
 	rowid:{type:String,required:true, trim:true}},{collection:'d4dmastersnew'}	
 );

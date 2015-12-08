@@ -67,7 +67,7 @@
                                              </label>
                                           </div>
                                        </div>
-                                        <div class="col-lg-6 col-md-6">
+                                        <div class="col-lg-6 col-md-6" style="display:none">
                                           <a style="cursor:pointer;" data-toggle="modal" data-backdrop="false" id="dockerrepoanchorDetails" href="#dockerrepodetailsModal"> <img title="Add Repo Details" data-placement="top" rel="tooltip" class="adddockerrepoDetails" style="float:right;margin-top:20px;" src="img/add.png"></a>
                                           <label style="float:left;margin-top:20px;">Repositories :</label>
                                           <div class="table-responsive table-div">
@@ -179,7 +179,8 @@
    }
    $("#tabledockerrepositoryDetails_length").hide();
    $("#tabledockerrepositoryDetails_filter").hide();
-   $("#savecreateDockerbtn").click(function(e){
+   // For now repositories table view not required, so commenting the code.
+   /*$("#savecreateDockerbtn").click(function(e){
       var dockerrepositories = [];
         var $repoTableBody = $('#tabledockerrepositoryDetails tbody');
         var $trs = $repoTableBody.find('tr');
@@ -188,7 +189,7 @@
             dockerrepositories.push($this.attr('dockerrepoName'));
         });
         $('#dockerrepositories').val(JSON.stringify(dockerrepositories));
-   });
+   });*/
    $("#savedockerRepoDetails").click(function(e) {
        e.preventDefault();
        var repoName = $("#dockerrepoNameCreate").val();
@@ -311,7 +312,9 @@
        });
    });
 
-   $(document).ready(function() {
+// For now repositories table view not required, so commenting the code.
+
+   /*$(document).ready(function() {
     var url = window.location.href;
       var queryString = url.substring(url.indexOf('?') + 1 );
       if (queryString != 'new') {
@@ -341,7 +344,7 @@
         });
         
       }
-   });
+   });*/
 
    function isUserTypeSuperAdmin(){
     $.get('/d4dMasters/loggedInUser',function(data){

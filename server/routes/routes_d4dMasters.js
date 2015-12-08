@@ -2855,7 +2855,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                             res.send(200);
                                             return;
                                         });
-                                    } else if (req.params.id === '18') {
+                                    } /*else if (req.params.id === '18') {
                                         bodyJson['dockerrepositories'] = JSON.parse(bodyJson['dockerrepositories']);
                                         var dockerModel = new d4dModelNew.d4dModelMastersDockerConfig(bodyJson);
                                         dockerModel.save(function(err, data) {
@@ -2867,7 +2867,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                             res.send(200);
                                             return;
                                         });
-                                    } else {
+                                    }*/ else {
                                         logger.debug("FLD>>>>>>>>>>>>> ", FLD);
                                         eval('var mastersrdb =  new d4dModelNew.' + dbtype + '({' + JSON.parse(FLD) + '})');
                                         mastersrdb.save(function(err, data) {
@@ -2943,7 +2943,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                         });
                                     }
 
-                                    if (req.params.id === '18') {
+                                    /*if (req.params.id === '18') {
                                         logger.debug("===========----------------- ", bodyJson['dockerrepositories']);
                                         bodyJson['dockerrepositories'] = JSON.parse(bodyJson['dockerrepositories']);
                                         delete rowtoedit._id; //fixing the issue of 
@@ -2965,7 +2965,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                             res.send(200);
                                             return;
                                         });
-                                    }
+                                    }*/
                                     if (req.params.id === "7") {
                                         d4dModelNew.d4dModelMastersUsers.find({
                                             "id": req.params.id,
