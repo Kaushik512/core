@@ -3887,40 +3887,78 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
     app.post('/d4dMasters/project/:anId/appdeploy/appName/update', function(req, res) {
         logger.debug("Updating appName in Project...");
-
-                /*db.d4dmastersnew.update({
-            "rowid": "95213423-50d1-4dce-b6f4-0d51c4460998"
-        }, {
-            $set: {
-                "appdeploy": [{
-                    applicationname: "catalyst",
-                    "appdescription": "Test app deploy"
-                }]
-            }
-        })
-        */
-        d4dModelNew.d4dModelMastersProjects.update({
-            rowid: req.params.anId,
+        var appName = req.body.appName;
+        var appDescription = req.body.description;
+        var projectId = req.params.anId;
+        var count = 0;
+        d4dModelNew.d4dModelMastersProjects.find({
+            rowid: projectId,
             id: '4'
-        }, {
-            $set: {
-                "appdeploy": [{
-                    applicationname: req.body.appName,
-                        appdescription: req.body.description
-                }]
-            }
-        }, {
-            upsert: false
-        }, function(err, data) {
-            logger.debug("Update Count+++++++++++++++ ", data);
-            if (err) {
-                logger.debug('Err while updating d4dModelMastersProjects' + err);
-                res.send(err);
+        },function(err,project){
+            if(err){
+                logger.debug("Failed to find Project",err);
                 return;
             }
-            logger.debug('Updated project ' + req.params.anId + ' with App Name : ' + req.body.appName);
-            res.send(data);
-            return;
+            if(project.length){
+                var appdeploy = project[0].appdeploy;
+                if(appdeploy.length){
+                    for(var i=0; i< appdeploy.length;i++){
+                        if(appdeploy[i].applicationname === appName){
+                            count++;
+                        }
+                    }
+                    if(!count){
+                        d4dModelNew.d4dModelMastersProjects.update({
+                            rowid: projectId,
+                            id: '4'
+                        }, {
+                            $push: {
+                                "appdeploy": {
+                                    applicationname: appName,
+                                    appdescription: appDescription
+                                }
+                            }
+                        }, {
+                            upsert: false
+                        }, function(err, data) {
+                            if (err) {
+                                logger.debug('Err while updating d4dModelMastersProjects' + err);
+                                res.send(err);
+                                return;
+                            }
+                            logger.debug('Updated project ' + req.params.anId + ' with App Name : ' + req.body.appName);
+                            res.send(data);
+                            return;
+                        });
+                    }else{
+                        res.send(200);
+                        return;
+                    }
+                }else{
+                    d4dModelNew.d4dModelMastersProjects.update({
+                            rowid: projectId,
+                            id: '4'
+                        }, {
+                            $push: {
+                                "appdeploy": {
+                                    applicationname: appName,
+                                    appdescription: appDescription
+                                }
+                            }
+                        }, {
+                            upsert: false
+                        }, function(err, data) {
+                            if (err) {
+                                logger.debug('Err while updating d4dModelMastersProjects' + err);
+                                res.send(err);
+                                return;
+                            }
+                            logger.debug('Updated project ' + req.params.anId + ' with App Name : ' + req.body.appName);
+                            res.send(data);
+                            return;
+                        });
+                }
+            }
         });
     });
 }

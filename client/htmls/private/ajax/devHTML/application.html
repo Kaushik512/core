@@ -1703,7 +1703,7 @@ function deployNewForDocker(){
     var bgId = urlParams.bg;
     var projectId = urlParams.projid;
     var envId = urlParams.envid;
-    
+    var appName = repoId.split("/")[1];
     var nexusData={
         "nexusData":{
             "nexusUrl": "",
@@ -1717,10 +1717,10 @@ function deployNewForDocker(){
     $.get('/d4dMasters/project/'+projectId, function(projData) {
         //alert(projData);
         if(projData.length){
-            if(projData[0].appdeploy.length === 0){
+            //if(projData[0].appdeploy.length === 0){
                 var reqBody = {
-                    "appName": repoId,
-                    "description": repoId+" deployed."
+                    "appName": appName,
+                    "description": appName+" deployed."
                 };
                 $.ajax({
                     url: '/d4dMasters/project/'+projectId+'/appdeploy/appName/update',
@@ -1733,7 +1733,7 @@ function deployNewForDocker(){
                         alert("Failed to update update appName in Project.")
                     }
                 });
-            }
+            //}
         }
     });
         //alert(JSON.stringify(nexusData));
@@ -1794,32 +1794,25 @@ function upgradeOrDeploy(){
         nexusData.nexusData.dockerRepo = repoId;
     }
 
-    $.get('/d4dMasters/readmasterjsonnew/4', function(projData) {
+    $.get('/d4dMasters/project/'+projectId, function(projData) {
         //alert(projData);
         if(projData.length){
-            for(var i=0; i< projData.length; i++){
-                if(projData[i].rowid === projectId){
-                    //alert(projData[i].appdeploy.length);
-                    if(projData[i].appdeploy.length === 0){
-                        var reqBody = {
-                            "appName": repoId,
-                            "description": repoId+" deployed."
-                            };
-                        $.ajax({
-                            url: '/d4dMasters/project/'+projectId+'/appdeploy/appName/update',
-                            data: JSON.stringify(reqBody),
-                            type: 'POST',
-                            contentType: "application/json",
-                            success: function(data) { 
+            var reqBody = {
+                "appName": repoId,
+                "description": repoId+" deployed."
+                };
+                $.ajax({
+                    url: '/d4dMasters/project/'+projectId+'/appdeploy/appName/update',
+                    data: JSON.stringify(reqBody),
+                    type: 'POST',
+                    contentType: "application/json",
+                    success: function(data) { 
             
-                            },
-                            error: function(jqxhr) {
-                                alert("Failed to update update appName in Project.")
-                            }
-                        });
+                    },
+                    error: function(jqxhr) {
+                        alert("Failed to update update appName in Project.")
                     }
-                }
-            }
+                });
         }
     });
         //alert(JSON.stringify(nexusData));
