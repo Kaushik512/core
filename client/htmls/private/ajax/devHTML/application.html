@@ -1550,7 +1550,6 @@ $chooseRepository.change(function(e){
         $('.repoUrlClass').hide();
         $('.artifactClass').hide();
         $('.versionClass').hide();
-
     }
         
     });
@@ -1715,9 +1714,7 @@ function deployNewForDocker(){
     };
 
     $.get('/d4dMasters/project/'+projectId, function(projData) {
-        //alert(projData);
         if(projData.length){
-            //if(projData[0].appdeploy.length === 0){
                 var reqBody = {
                     "appName": appName,
                     "description": appName+" deployed."
@@ -1733,10 +1730,8 @@ function deployNewForDocker(){
                         alert("Failed to update update appName in Project.")
                     }
                 });
-            //}
         }
     });
-        //alert(JSON.stringify(nexusData));
         $('a[data-executetaskid='+taskId+']').trigger('click',nexusData);
         $('#modalUpgradeAppDeploy').modal('hide');
         var $containerIdName = $('#containerIdInput').val('');
@@ -1775,8 +1770,8 @@ function upgradeOrDeploy(){
     var groupId = $('#chooseArtifacts').find('option:selected').attr('data-groupId').replace(/\./g, '/');
     var nexusUrl = $('#chooseNexusServer').find('option:selected').attr('data-nexusUrl');
     var nexusRepoUrl = nexusUrl+"/service/local/repositories/"+repoId+"/content/"+groupId+"/"+artifactId+"/"+versionId+"/"+artifactId+"-"+versionId+".zip";
-    var containerId = $('#containerIdInput').val();
-    var containerPort = $('#containerPort').val();
+    /*var containerId = $('#containerIdInput').val();
+    var containerPort = $('#containerPort').val();*/
     //alert(containerPort);
     var nexusData={
         "nexusData":{
@@ -1788,11 +1783,11 @@ function upgradeOrDeploy(){
         }
     };
 
-    if(containerId && containerId != "NA"){
+    /*if(containerId && containerId != "NA"){
         nexusData.nexusData.containerId = containerId;
         nexusData.nexusData.containerPort = containerPort;
         nexusData.nexusData.dockerRepo = repoId;
-    }
+    }*/
 
     $.get('/d4dMasters/project/'+projectId, function(projData) {
         //alert(projData);
