@@ -127,6 +127,7 @@ var InstanceSchema = new Schema({
         required: false,
         trim: true
     },
+    providerType: String,
     keyPairId: {
         type: String,
         required: false,
@@ -1452,7 +1453,9 @@ var InstancesDao = function() {
             bgId: bgId,
             projectId: projectId,
             envId: envId,
-            docker: { $exists : true }
+            docker: {
+                $exists: true
+            }
         }
         Instances.find(queryObj, {
             'actionLogs': false

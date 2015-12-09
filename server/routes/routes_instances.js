@@ -1240,7 +1240,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                 runlist: req.body.runlist,
                                                 overrideRunlist: false,
                                                 jsonAttributes: JSON.stringify(jsonAttributeObj)
-                                                    //parallel:true
+                                                //parallel:true
                                             }
                                             logger.debug('decryptCredentials ==>', decryptedCredentials);
                                             if (decryptedCredentials.pemFileLocation) {
@@ -1484,7 +1484,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                             }
                             //checking if provider is vmware
 
-                            if (data[0].hardware.platform && data[0].hardware.platform == 'vmware') {
+                            if (data[0].providerType && data[0].providerType == 'vmware') {
                                 vmwareCloudProvider.getvmwareProviderById(data[0].providerId, function(err, providerdata) {
 
                                     logger.debug('IN getvmwareProviderById: data: ');
@@ -1811,7 +1811,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                             return;
                         }
                         if (data.length) {
-                            if (data[0].hardware.platform && data[0].hardware.platform == 'vmware') {
+                            if (data[0].providerType && data[0].providerType == 'vmware') {
                                 vmwareCloudProvider.getvmwareProviderById(data[0].providerId, function(err, providerdata) {
                                     var timestampStarted = new Date().getTime();
                                     var actionLog = instancesDao.insertStartActionLog(req.params.instanceId, req.session.user.cn, timestampStarted);
@@ -2473,7 +2473,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                 port: 22,
                                 runlist: runlist, // runing service runlist
                                 overrideRunlist: true
-                                    //parallel:true
+                                //parallel:true
                             }
                             if (decryptedCredentials.pemFileLocation) {
                                 chefClientOptions.privateKey = decryptedCredentials.pemFileLocation;
@@ -3252,7 +3252,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 return;
             }
             if (instances.length) {
-                var containerList=[];
+                var containerList = [];
                 for (var i = 0; i < instances.length; i++) {
                     var _docker = new Docker();
                     var stdmessages = '';
@@ -3262,8 +3262,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                     var stdOut = '';
                     var instanceObj = {
                         "containers": "",
-                        "instanceId":instances[i]._id,
-                        "instanceName":instances[i].name,
+                        "instanceId": instances[i]._id,
+                        "instanceName": instances[i].name,
                         "instanceIP": instances[i].instanceIP
                     };
                     _docker.runDockerCommands(cmd, instances[i]._id, function(err, retCode) {
@@ -3281,8 +3281,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                             if (_stdout[v].length == 1)
                                 start = true;
                             if (v >= _stdout.length - 1)
-                                //res.end(so);
-                            instanceObj.containers = so;
+                            //res.end(so);
+                                instanceObj.containers = so;
                             containerList.push(instanceObj);
                         });
 
