@@ -2473,15 +2473,15 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                                             console.log(urlParams.projid);
 
                                             var $blueprintReadContainerCFT = $(id);
-                                            $blueprintReadContainerCFT.find('.modal-body #blueprintORG').val(orgName);
-                                            $blueprintReadContainerCFT.find('.modal-body #blueprintBU').val(bgName);
-                                            $blueprintReadContainerCFT.find('.modal-body #blueprintProject').val(projName);
+                                            $blueprintReadContainerCFT.find('.modal-body #blueprintORG').val(orgName).show();
+                                            $blueprintReadContainerCFT.find('.modal-body #blueprintBU').val(bgName).show();
+                                            $blueprintReadContainerCFT.find('.modal-body #blueprintProject').val(projName).show();
                                             //  alert(JSON.stringify(data));
 
                                             var $blueprintReadContainer = $(id);
-                                            $blueprintReadContainer.find('.modal-body #blueprintORG').val(orgName);
-                                            $blueprintReadContainer.find('.modal-body #blueprintBU').val(bgName);
-                                            $blueprintReadContainer.find('.modal-body #blueprintProject').val(projName);
+                                            $blueprintReadContainer.find('.modal-body #blueprintORG').val(orgName).show();
+                                            $blueprintReadContainer.find('.modal-body #blueprintBU').val(bgName).show();
+                                            $blueprintReadContainer.find('.modal-body #blueprintProject').val(projName).show();
                                         }
                                     });
                                 }
