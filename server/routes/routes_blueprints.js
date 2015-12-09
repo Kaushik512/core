@@ -446,6 +446,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                         projectId: blueprint.projectId,
                                                                         envId: req.query.envId,
                                                                         providerId: cloudProvider.cloudProviderId,
+                                                                        providerType:blueprint.blueprintConfig.cloudProviderType,
                                                                         keyPairId: cloudProvider.cloudProviderData.keyPairId,
                                                                         chefNodeName: instanceData.InstanceId,
                                                                         runlist: version.runlist,
@@ -1453,6 +1454,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                     projectId: blueprint.projectId,
                                                     envId: req.query.envId,
                                                     providerId: blueprint.blueprintConfig.cloudProviderId,
+                                                    providerType: blueprint.blueprintConfig.cloudProviderType,
                                                     keyPairId: 'unknown',
                                                     chefNodeName: instanceData.server.id,
                                                     runlist: version.runlist,
@@ -1717,6 +1719,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                     projectId: blueprint.projectId,
                                                     envId: req.query.envId,
                                                     providerId: blueprint.blueprintConfig.cloudProviderId,
+                                                    providerType: blueprint.blueprintConfig.cloudProviderType,
                                                     keyPairId: 'unknown',
                                                     chefNodeName: instanceData.server.id,
                                                     runlist: version.runlist,
@@ -2033,6 +2036,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                     projectId: blueprint.projectId,
                                                                     envId: req.query.envId,
                                                                     providerId: blueprint.blueprintConfig.cloudProviderId,
+                                                                    providerType: blueprint.blueprintConfig.cloudProviderType,
                                                                     keyPairId: 'azure',
                                                                     chefNodeName: launchparams.VMName,
                                                                     runlist: version.runlist,
@@ -2377,6 +2381,12 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
 
                                                         vmwareCloud.createServer(appConfig.vmware.serviceHost, anImage.imageIdentifier, serverjson, function(err, createserverdata) {
+                                                            if (err) {
+                                                                res.send(500, {
+                                                                    message: "Server Behaved Unexpectedly"
+                                                                });
+                                                                return;
+                                                            }
                                                             if (!err) {
                                                                 //send the response back and create the instance 
                                                                 var credentials = {
@@ -2404,6 +2414,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                         projectId: blueprint.projectId,
                                                                         envId: req.query.envId,
                                                                         providerId: blueprint.blueprintConfig.cloudProviderId,
+                                                                        providerType:blueprint.blueprintConfig.cloudProviderType,
                                                                         keyPairId: 'unknown',
                                                                         chefNodeName: createserverdata["vm_name"],
                                                                         runlist: version.runlist,
@@ -2414,7 +2425,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                         bootStrapStatus: 'waiting',
                                                                         users: blueprint.users,
                                                                         hardware: {
-                                                                            platform: 'vmware',
+                                                                            platform: 'unknown',
                                                                             platformVersion: 'unknown',
                                                                             architecture: 'unknown',
                                                                             memory: {
@@ -2502,26 +2513,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                                     logger.debug('Instance state Updated');
                                                                                 });
 
-                                                                                var hardwareData = {
-                                                                                    platform: 'vmware',
-                                                                                    platformVersion: '',
-                                                                                    architecture: '',
-                                                                                    memory: {
-                                                                                        total: vmdata.memory.avail,
-                                                                                        free: vmdata.memory.avail,
-                                                                                    },
-                                                                                    os: vmdata.OS
-                                                                                }
-
-
-                                                                                instancesDao.setHardwareDetails(instance.id, hardwareData, function(err, updateCount) {
-                                                                                    if (err) {
-                                                                                        logger.error("instancesDao.updateInstance hardware Failed ==>", err);
-                                                                                        return;
-                                                                                    }
-                                                                                    logger.debug('Instance hardware Updated');
-                                                                                });
-
+                                                                                
                                                                                 logsDao.insertLog({
                                                                                     referenceId: logsReferenceIds,
                                                                                     err: false,
@@ -2554,6 +2546,56 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                                                 logger.debug("Instance bootstrap status set to success");
                                                                                             }
                                                                                         });
+
+                                                                                        chef.getNode(instance.chefNodeName, function(err, nodeData) {
+                                                                                            if (err) {
+                                                                                                logger.error("Failed chef.getNode", err);
+                                                                                                return;
+                                                                                            }
+                                                                                            var hardwareData = {};
+                                                                                            hardwareData.architecture = nodeData.automatic.kernel.machine;
+                                                                                            hardwareData.platform = nodeData.automatic.platform;
+                                                                                            hardwareData.platformVersion = nodeData.automatic.platform_version;
+                                                                                            hardwareData.memory = {
+                                                                                                total: 'unknown',
+                                                                                                free: 'unknown'
+                                                                                            };
+                                                                                            if (nodeData.automatic.memory) {
+                                                                                                hardwareData.memory.total = nodeData.automatic.memory.total;
+                                                                                                hardwareData.memory.free = nodeData.automatic.memory.free;
+                                                                                            }
+                                                                                            hardwareData.os = instance.hardware.os;
+                                                                                            instancesDao.setHardwareDetails(instance.id, hardwareData, function(err, updateData) {
+                                                                                                if (err) {
+                                                                                                    logger.error("Unable to set instance hardware details  code (setHardwareDetails)", err);
+                                                                                                } else {
+                                                                                                    logger.debug("Instance hardware details set successessfully");
+                                                                                                }
+                                                                                            });
+                                                                                            //Checking docker status and updating
+                                                                                            var _docker = new Docker();
+                                                                                            _docker.checkDockerStatus(instance.id,
+                                                                                                function(err, retCode) {
+                                                                                                    if (err) {
+                                                                                                        logger.error("Failed _docker.checkDockerStatus", err);
+                                                                                                        res.send(500);
+                                                                                                        return;
+                                                                                                        //res.end('200');
+
+                                                                                                    }
+                                                                                                    logger.debug('Docker Check Returned:' + retCode);
+                                                                                                    if (retCode == '0') {
+                                                                                                        instancesDao.updateInstanceDockerStatus(instance.id, "success", '', function(data) {
+                                                                                                            logger.debug('Instance Docker Status set to Success');
+                                                                                                        });
+
+                                                                                                    }
+                                                                                                });
+
+                                                                                        });
+
+
+
                                                                                     }
                                                                                 }, function(stdOutData) {
 
@@ -2595,8 +2637,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                 });
                                                             }
                                                         });
-
-
 
                                                     }
                                                 });
