@@ -446,7 +446,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                         projectId: blueprint.projectId,
                                                                         envId: req.query.envId,
                                                                         providerId: cloudProvider.cloudProviderId,
-                                                                        providerType:blueprint.blueprintConfig.cloudProviderType,
+                                                                        providerType: blueprint.blueprintConfig.cloudProviderType,
                                                                         keyPairId: cloudProvider.cloudProviderData.keyPairId,
                                                                         chefNodeName: instanceData.InstanceId,
                                                                         runlist: version.runlist,
@@ -2414,7 +2414,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                         projectId: blueprint.projectId,
                                                                         envId: req.query.envId,
                                                                         providerId: blueprint.blueprintConfig.cloudProviderId,
-                                                                        providerType:blueprint.blueprintConfig.cloudProviderType,
+                                                                        providerType: blueprint.blueprintConfig.cloudProviderType,
                                                                         keyPairId: 'unknown',
                                                                         chefNodeName: createserverdata["vm_name"],
                                                                         runlist: version.runlist,
@@ -2513,7 +2513,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                                     logger.debug('Instance state Updated');
                                                                                 });
 
-                                                                                
+
                                                                                 logsDao.insertLog({
                                                                                     referenceId: logsReferenceIds,
                                                                                     err: false,
@@ -2531,7 +2531,27 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                                     instanceOS: instance.hardware.os,
                                                                                     jsonAttributes: null
                                                                                 }, function(err, code) {
+                                                                                    var timestampEnded = new Date().getTime();
+                                                                                    if (err) {
+                                                                                        instancesDao.updateInstanceBootstrapStatus(instance.id, 'failed', function(err, updateData) {
+                                                                                            if (err) {
+                                                                                                logger.error("Unable to set instance bootstarp status. code 0", err);
+                                                                                            } else {
+                                                                                                logsDao.insertLog({
+                                                                                                    referenceId: logsReferenceIds,
+                                                                                                    err: false,
+                                                                                                    log: 'Instance Bootstraped Successfully.',
+                                                                                                    timestamp: timestampEnded
+                                                                                                });
+
+                                                                                                logger.debug("Instance bootstrap status set to success");
+                                                                                            }
+                                                                                        });
+                                                                                        instancesDao.updateActionLog(instance.id, actionLog._id, false, timestampEnded);
+                                                                                        return;
+                                                                                    }
                                                                                     if (code == 0) {
+
                                                                                         instancesDao.updateInstanceBootstrapStatus(instance.id, 'success', function(err, updateData) {
                                                                                             if (err) {
                                                                                                 logger.error("Unable to set instance bootstarp status. code 0", err);
@@ -2540,7 +2560,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                                                     referenceId: logsReferenceIds,
                                                                                                     err: false,
                                                                                                     log: 'Instance Bootstraped Successfully.',
-                                                                                                    timestamp: new Date().getTime()
+                                                                                                    timestamp: timestampEnded
                                                                                                 });
 
                                                                                                 logger.debug("Instance bootstrap status set to success");
@@ -2593,8 +2613,28 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                                                 });
 
                                                                                         });
+                                                                                        instancesDao.updateActionLog(instance.id, actionLog._id, true, timestampEnded);
 
 
+
+
+                                                                                    } else {
+                                                                                        instancesDao.updateInstanceBootstrapStatus(instance.id, 'failed', function(err, updateData) {
+                                                                                            if (err) {
+                                                                                                logger.error("Unable to set instance bootstarp status. code 0", err);
+                                                                                            } else {
+                                                                                                logsDao.insertLog({
+                                                                                                    referenceId: logsReferenceIds,
+                                                                                                    err: false,
+                                                                                                    log: 'Instance Bootstraped Successfully.',
+                                                                                                    timestamp: timestampEnded
+                                                                                                });
+
+                                                                                                logger.debug("Instance bootstrap status set to success");
+                                                                                            }
+                                                                                        });
+                                                                                        instancesDao.updateActionLog(instance.id, actionLog._id, false, timestampEnded);
+                                                                                        return;
 
                                                                                     }
                                                                                 }, function(stdOutData) {
