@@ -1850,6 +1850,40 @@ var MasterUtil = function() {
             }
         });
     }
+
+    // Return all Templates for Org and TemplateType
+    this.getTemplatesByOrgAndTemplateType = function(orgId,templateType, callback) {
+        var templateList = [];
+        var rowIds = [];
+        rowIds.push(orgId);
+        d4dModelNew.d4dModelMastersTemplatesList.find({
+            orgname_rowid: {
+                $in: rowIds
+            },
+            templatetypename: templateType
+        }, function(err, templates) {
+            if (err) {
+                callback(err, null);
+            }
+            if (templates) {
+                configmgmtDao.getRowids(function(err, rowidlist) {
+                    for (var i = 0; i < templates.length; i++) {
+                        if (templates[i].id === '17') {
+                            names = configmgmtDao.convertRowIDToValue(templates[i].orgname_rowid, rowidlist)
+                            templates[i].orgname = names;
+                            templateList.push(templates[i]);
+                        }
+                    }
+                    callback(null, templateList);
+                    return;
+                });
+            } else {
+                callback(null, templateList);
+                return;
+            }
+
+        });
+    }
 }
 
 
