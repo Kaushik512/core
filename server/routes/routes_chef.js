@@ -184,7 +184,9 @@ module.exports.setRoutes = function(app, verificationFunc) {
             }
 
             if (node.automatic.cloud) {
-                nodeIp = node.automatic.cloud.public_ipv4;
+                if (node.automatic.cloud.public_ipv4 && node.automatic.cloud.public_ipv4 !== 'null') {
+                    nodeIp = node.automatic.cloud.public_ipv4;
+                }
                 if (node.automatic.cloud.provider === 'ec2') {
                     if (node.automatic.ec2) {
                         platformId = node.automatic.ec2.instance_id;
@@ -377,7 +379,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
                                         nodeIp = node.automatic.ipaddress;
                                     }
 
-                                    if (node.automatic.cloud) {
+                                    if (node.automatic.cloud && node.automatic.cloud.public_ipv4 && node.automatic.cloud.public_ipv4 !== 'null') {
                                         nodeIp = node.automatic.cloud.public_ipv4;
                                     }
 
@@ -397,30 +399,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
                                             });
                                             return;
                                         }
-                                        /*if (nodeIp != 'unknown') {
-                                            var cmd = 'ping -c 1 -w 1 ' + nodeIp;
-                                            var curl = new Curl();
-                                            console.log("Pinging Node to check if alive :" + cmd);
-                                            curl.executecurl(cmd, function(err, stdout) {
-                                                if (stdout) {
-                                                    if (stdout.indexOf('1 received') > 0) {
-                                                        node.isAlive = 'running';
-                                                    } else {
-                                                        node.isAlive = 'unknown';
-                                                    }
-                                                    //    console.log('node ===>', node);
-                                                    insertNodeInMongo(node);
-                                                    console.log('importing node ' + node.name);
-                                                    updateTaskStatusNode(nodeName, "Node Imported : " + nodeName, false, count);
-                                                }
-                                            });
-                                        } else {
-                                            //     console.log('node ===>', node);
-                                            node.isAlive = 'unknown';
-                                            insertNodeInMongo(node);
-                                            console.log('importing node ' + node.name);
-                                            updateTaskStatusNode(nodeName, "Node Imported : " + nodeName, false, count);
-                                        }*/
+
                                         var openport = 22;
                                         if (node.automatic.platform === 'windows') {
                                             openport = 5985;
@@ -1233,6 +1212,6 @@ module.exports.setRoutes = function(app, verificationFunc) {
         });
     });
 
-    
+
 
 };
