@@ -3079,6 +3079,39 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 };
                 nodeList.push(instance);
             }
+            var nodeListLength = nodeList.length;
+            logger.debug("I am in count of Total Instances", nodeListLength);
+            res.send(nodeList);
+        });
+    });
+    // List out all Active AWS nodes.
+    app.post('/aws/providers/activenode/list', function(req, res) {
+        logger.debug("Enter List Active AWS Nodes: ");
+
+        var ec2 = new EC2({
+            "access_key": req.body.accessKey,
+            "secret_key": req.body.secretKey,
+            "region": req.body.region
+        });
+        ec2.listActiveInstances(function(err, nodes) {
+            if (err) {
+                logger.debug("Unable to list nodes from AWS.", err);
+                res.send("Unable to list nodes from AWS.", 500);
+                return;
+            }
+            logger.debug("Success to list nodes from AWS.");
+            var nodeList = [];
+            for (var i = 0; i < nodes.Reservations.length; i++) {
+                var instance = {
+                    "instance": nodes.Reservations[i].Instances[0].InstanceId,
+                    "privateIp": nodes.Reservations[i].Instances[0].PrivateIpAddress,
+                    "publicIp": nodes.Reservations[i].Instances[0].PublicIpAddress,
+                    "privateDnsName": nodes.Reservations[i].Instances[0].PrivateDnsName
+                };
+                nodeList.push(instance);
+            }
+            var nodeListLength = nodeList.length;
+            logger.debug("I am in count of Active Instances", nodeListLength);
             res.send(nodeList);
         });
     });
