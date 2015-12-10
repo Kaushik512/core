@@ -2536,11 +2536,14 @@ $.get('../instances/' + urlParams.id, function(data) {
               if(data2.blueprints[j]._id == data.blueprintData.blueprintId){
                 if(typeof data2.blueprints[j].blueprintConfig.cloudProviderData != "undefined"){
 
-                  securityGroupIDs=data2.blueprints[j].blueprintConfig.cloudProviderData.securityGroupIds[0];
-                  instanceSIZE = data2.blueprints[j].blueprintConfig.cloudProviderData.instanceType;
-                  vpcTYPE = data2.blueprints[j].blueprintConfig.cloudProviderData.vpcId;
-                  subnetID = data2.blueprints[j].blueprintConfig.cloudProviderData.subnetId;
-                  versionLatest = data2.blueprints[j].blueprintConfig.infraManagerData.latestVersion;
+                  securityGroupIDs=data2.blueprints[j].blueprintConfig.cloudProviderData.securityGroupIds || '';
+                  if(securityGroupIDs && securityGroupIDs.length) {
+                    securityGroupIDs = securityGroupIDs.join(',');
+                  }
+                  instanceSIZE = data2.blueprints[j].blueprintConfig.cloudProviderData.instanceType || '';
+                  vpcTYPE = data2.blueprints[j].blueprintConfig.cloudProviderData.vpcId || '';
+                  subnetID = data2.blueprints[j].blueprintConfig.cloudProviderData.subnetId || '';
+                  versionLatest = data2.blueprints[j].blueprintConfig.infraManagerData.latestVersion|| '';
                   
 
                   $tr = $('<tr style="line-height:2.3"></tr>');

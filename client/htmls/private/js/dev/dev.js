@@ -2590,7 +2590,29 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                                                     }
                                                 });
 
-                                            }else {
+                                            } else if(blueprint.blueprintConfig.cloudProviderData.cloudProviderType == 'vmware'){
+
+
+                                                $.ajax({
+                                                    type: "GET",
+                                                    url: "/vmware/providers/" + blueprint.blueprintConfig.cloudProviderId,
+                                                    success: function(data) {
+                                                        //data = JSON.parse(data);
+
+                                                        
+                                                        $blueprintReadContainer.find('.modal-body #instanceProviderName').val(data.providerName);
+                                                        $blueprintReadContainer.find('.modal-body #instanceProviderType').val(data.providerType);
+
+                                                        // loop for getting region 
+
+                                                        //console.log(data);
+                                                    },
+                                                    failure: function(data) {
+                                                        alert(data.toString());
+                                                    }
+                                                });
+
+                                            } else {
                                                 //for getting the Provider name,Type,Region,KeyPair
                                                 $.ajax({
                                                     type: "GET",
