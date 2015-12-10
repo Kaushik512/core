@@ -25,6 +25,30 @@ var SSHExec = require('./utils/sshexec');
 
 var app_config;
 
+
+function fixTemplateRunlist(runlist) {
+    var tempRunlist = [];
+    for (var i = 0; i < runlist.length; i++) {
+        var indexOfTemplateMarker = runlist[i].indexOf(':-:');
+        if (indexOfTemplateMarker !== -1) {
+            if (runlist[i].length - 1 > 0) {
+                var runlistSubString = runlist[i].substring(indexOfTemplateMarker+3, runlist[i].length - 1);
+                var templateRunlist = runlistSubString.split(',')
+                if (templateRunlist.length) {
+                    tempRunlist = tempRunlist.concat(templateRunlist);
+                }
+            }
+
+        } else {
+            tempRunlist.push(runlist[i]);
+        }
+
+    }
+    return tempRunlist;
+
+}
+
+
 var Chef = function(settings) {
 
 
@@ -417,6 +441,10 @@ var Chef = function(settings) {
             params.runlist = [];
 
         }
+
+        //fixing template runlist
+        params.runlist = fixTemplateRunlist(params.runlist);
+
         var argList = ['bootstrap'];
 
         if (params.instanceOS == 'windows') {
@@ -587,6 +615,11 @@ var Chef = function(settings) {
         if (!runlist) {
             runlist = [];
         }
+
+        // fix for template runlist
+        runlist = fixTemplateRunlist(runlist);
+
+
         //options.jsonAttributes = JSON.stringify({"A":{"B":{"passedin":"Cool Test"}}});
 
         runlist = chefDefaults.defaultChefClientRunCookbooks.concat(runlist);
