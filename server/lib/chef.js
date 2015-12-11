@@ -427,6 +427,15 @@ var Chef = function(settings) {
         argList.push(params.instanceIp);
 
         var runlist = chefDefaults.defaultChefCookbooks.concat(params.runlist);
+        if (params.instanceOS == 'windows') {
+            if (chefDefaults.defaultChefCookbooksWindows) {
+                runlist = chefDefaults.defaultChefCookbooksWindows.concat(runlist);
+            }
+        } else {
+            if (chefDefaults.defaultChefCookbooksLinux) {
+                runlist = chefDefaults.defaultChefCookbooksLinux.concat(runlist);
+            }
+        }
 
         var credentialArg;
         if (params.pemFilePath && (params.instanceOS != 'windows')) {

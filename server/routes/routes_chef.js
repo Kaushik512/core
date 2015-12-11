@@ -1,7 +1,7 @@
 /* Copyright (C) Relevance Lab Private Limited- All Rights Reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
- * Written by Gobinda Das <gobinda.das@relevancelab.com>, 
+ * Written by Gobinda Das <gobinda.das@relevancelab.com>,
  * May 2015
  */
 
@@ -184,7 +184,9 @@ module.exports.setRoutes = function(app, verificationFunc) {
             }
 
             if (node.automatic.cloud) {
-                nodeIp = node.automatic.cloud.public_ipv4;
+                if (node.automatic.cloud.public_ipv4 && node.automatic.cloud.public_ipv4 !== 'null') {
+                    nodeIp = node.automatic.cloud.public_ipv4;
+                }
                 if (node.automatic.cloud.provider === 'ec2') {
                     if (node.automatic.ec2) {
                         platformId = node.automatic.ec2.instance_id;
@@ -377,7 +379,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
                                         nodeIp = node.automatic.ipaddress;
                                     }
 
-                                    if (node.automatic.cloud) {
+                                    if (node.automatic.cloud && node.automatic.cloud.public_ipv4 && node.automatic.cloud.public_ipv4 !== 'null') {
                                         nodeIp = node.automatic.cloud.public_ipv4;
                                     }
 
@@ -397,35 +399,12 @@ module.exports.setRoutes = function(app, verificationFunc) {
                                             });
                                             return;
                                         }
-                                        /*if (nodeIp != 'unknown') {
-                                            var cmd = 'ping -c 1 -w 1 ' + nodeIp;
-                                            var curl = new Curl();
-                                            console.log("Pinging Node to check if alive :" + cmd);
-                                            curl.executecurl(cmd, function(err, stdout) {
-                                                if (stdout) {
-                                                    if (stdout.indexOf('1 received') > 0) {
-                                                        node.isAlive = 'running';
-                                                    } else {
-                                                        node.isAlive = 'unknown';
-                                                    }
-                                                    //    console.log('node ===>', node);
-                                                    insertNodeInMongo(node);
-                                                    console.log('importing node ' + node.name);
-                                                    updateTaskStatusNode(nodeName, "Node Imported : " + nodeName, false, count);
-                                                }
-                                            });
-                                        } else {
-                                            //     console.log('node ===>', node);
-                                            node.isAlive = 'unknown';
-                                            insertNodeInMongo(node);
-                                            console.log('importing node ' + node.name);
-                                            updateTaskStatusNode(nodeName, "Node Imported : " + nodeName, false, count);
-                                        }*/
+
                                         var openport = 22;
                                         if (node.automatic.platform === 'windows') {
                                             openport = 5985;
                                         }
-                                        logger.debug('checking port for node with ip : '+nodeIp);
+                                        logger.debug('checking port for node with ip : ' + nodeIp);
                                         waitForPort(nodeIp, openport, function(err) {
                                             if (err) {
                                                 console.log(err);
@@ -500,14 +479,14 @@ module.exports.setRoutes = function(app, verificationFunc) {
             });
             chef.createEnvironment(req.body.envName, function(err, envName) {
                 if (err) {
-                    res.send(500,"Error to create Env on chef.");
+                    res.send(500, "Error to create Env on chef.");
                     return;
-                }else if (envName === 409) {
+                } else if (envName === 409) {
                     logger.debug("Got 409");
-                    res.send(409,"Environment Already Exist.");
+                    res.send(409, "Environment Already Exist.");
                     return;
                 } else {
-                    logger.debug("envName: ",envName);
+                    logger.debug("envName: ", envName);
                     res.send(envName);
                     return;
                 }
@@ -783,7 +762,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
                 chefValidationPemFile: chefDetails.validatorpemfile,
                 hostedChefUrl: chefDetails.url,
             });
-            console.log("Chef...>>>>>>>>>>>>>>>>>>> "+JSON.stringify(chef));
+            console.log("Chef...>>>>>>>>>>>>>>>>>>> " + JSON.stringify(chef));
             chef.getCookbook(req.params.cookbookName, function(err, cookbooks) {
                 console.log(err);
                 if (err) {
@@ -800,12 +779,12 @@ module.exports.setRoutes = function(app, verificationFunc) {
 
     });
 
-    
+
     // Create new Data Bag.
     app.post("/chef/servers/:serverId/databag/create", function(req, res) {
         logger.debug("Enter /chef/../databag/create");
         var loggedInUser = req.session.user;
-        masterUtil.hasPermission("databag", "create", loggedInUser, function(err,isPermitted) {
+        masterUtil.hasPermission("databag", "create", loggedInUser, function(err, isPermitted) {
             logger.debug("Got permission to create DataBag: ", isPermitted);
             if (isPermitted) {
                 configmgmtDao.getChefServerDetails(req.params.serverId, function(err, chefDetails) {
@@ -845,14 +824,16 @@ module.exports.setRoutes = function(app, verificationFunc) {
                     });
                 });
             } else {
-                res.send(403, {"message":"You do't have permission to create DataBag."});
+                res.send(403, {
+                    "message": "You do't have permission to create DataBag."
+                });
                 return;
             }
         });
     });
 
     // List all Data Bags.
-    app.get("/chef/servers/:serverId/databag/list",function(req,res){
+    app.get("/chef/servers/:serverId/databag/list", function(req, res) {
         logger.debug("Enter /chef/../databag/list");
         configmgmtDao.getChefServerDetails(req.params.serverId, function(err, chefDetails) {
             if (err) {
@@ -870,11 +851,11 @@ module.exports.setRoutes = function(app, verificationFunc) {
                 chefValidationPemFile: chefDetails.validatorpemfile,
                 hostedChefUrl: chefDetails.url,
             });
-            console.log("Chef...>>>>>>>>>>>>>>>>>>> "+JSON.stringify(chef));
-            chef.getDataBags(function(err,dataBags){
-                if(err){
+            console.log("Chef...>>>>>>>>>>>>>>>>>>> " + JSON.stringify(chef));
+            chef.getDataBags(function(err, dataBags) {
+                if (err) {
                     logger.debug("Exit /chef/../databag/list");
-                    res.send(500,"Failed to get Data Bag from Chef.");
+                    res.send(500, "Failed to get Data Bag from Chef.");
                     return;
                 }
                 logger.debug("Exit /chef/../databag/list");
@@ -888,7 +869,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
     app.delete("/chef/servers/:serverId/databag/:dataBagName/delete", function(req, res) {
         logger.debug("Enter /chef/../databag/../delete");
         var loggedInUser = req.session.user;
-        masterUtil.hasPermission("databag", "delete", loggedInUser, function(err,isPermitted) {
+        masterUtil.hasPermission("databag", "delete", loggedInUser, function(err, isPermitted) {
             if (isPermitted) {
                 logger.debug("Got permission to remove DataBag: ", isPermitted);
                 configmgmtDao.getChefServerDetails(req.params.serverId, function(err, chefDetails) {
@@ -924,7 +905,9 @@ module.exports.setRoutes = function(app, verificationFunc) {
                     });
                 });
             } else {
-                res.send(403, {"message":"You don't have permission to Delete DataBag."});
+                res.send(403, {
+                    "message": "You don't have permission to Delete DataBag."
+                });
                 return;
             }
         });
@@ -935,7 +918,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
     app.post("/chef/servers/:serverId/databag/:dataBagName/item/create", function(req, res) {
         logger.debug("Enter /chef/../databag/../item/create");
         var loggedInUser = req.session.user;
-        masterUtil.hasPermission("databag", "create", loggedInUser, function(err,isPermitted) {
+        masterUtil.hasPermission("databag", "create", loggedInUser, function(err, isPermitted) {
             if (isPermitted) {
                 logger.debug("Got permission to create DataBagItem: ", isPermitted);
                 configmgmtDao.getChefServerDetails(req.params.serverId, function(err, chefDetails) {
@@ -1000,7 +983,9 @@ module.exports.setRoutes = function(app, verificationFunc) {
                     });
                 });
             } else {
-                res.send(403, {"message":"You don't have permission to create DataBagItem."});
+                res.send(403, {
+                    "message": "You don't have permission to create DataBagItem."
+                });
                 return;
             }
         });
@@ -1053,7 +1038,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
     app.post("/chef/servers/:serverId/databag/:dataBagName/item/:itemId/update", function(req, res) {
         logger.debug("Enter /chef/../databag/../item/update");
         var loggedInUser = req.session.user;
-        masterUtil.hasPermission("databag", "modify", loggedInUser, function(err,isPermitted) {
+        masterUtil.hasPermission("databag", "modify", loggedInUser, function(err, isPermitted) {
             if (isPermitted) {
                 logger.debug("Got permission to update DataBagItem: ", isPermitted);
                 configmgmtDao.getChefServerDetails(req.params.serverId, function(err, chefDetails) {
@@ -1108,7 +1093,9 @@ module.exports.setRoutes = function(app, verificationFunc) {
                     });
                 });
             } else {
-                res.send(403, {"message":"You don't have permission to Update DataBagItem."});
+                res.send(403, {
+                    "message": "You don't have permission to Update DataBagItem."
+                });
                 return;
             }
         });
@@ -1118,7 +1105,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
     app.delete("/chef/servers/:serverId/databag/:dataBagName/item/:itemName/delete", function(req, res) {
         logger.debug("Enter /chef/../databag/../item/delete");
         var loggedInUser = req.session.user;
-        masterUtil.hasPermission("databag", "delete", loggedInUser, function(err,isPermitted) {
+        masterUtil.hasPermission("databag", "delete", loggedInUser, function(err, isPermitted) {
             if (isPermitted) {
                 logger.debug("Got permission to remove DataBagItem: ", isPermitted);
                 configmgmtDao.getChefServerDetails(req.params.serverId, function(err, chefDetails) {
@@ -1150,7 +1137,9 @@ module.exports.setRoutes = function(app, verificationFunc) {
                     });
                 });
             } else {
-                res.send(403, {"message":"You don't have permission to delete DataBagItem."});
+                res.send(403, {
+                    "message": "You don't have permission to delete DataBagItem."
+                });
                 return;
             }
         });
@@ -1191,7 +1180,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
     });
 
     // Delete env from chef.
-    app.delete("/chef/servers/:serverId/environments/:envName",function(req,res){
+    app.delete("/chef/servers/:serverId/environments/:envName", function(req, res) {
         logger.debug("Enter /chef/../environments");
         configmgmtDao.getChefServerDetails(req.params.serverId, function(err, chefDetails) {
             if (err) {
@@ -1209,11 +1198,11 @@ module.exports.setRoutes = function(app, verificationFunc) {
                 chefValidationPemFile: chefDetails.validatorpemfile,
                 hostedChefUrl: chefDetails.url,
             });
-            logger.debug("Chef...>>>>>>>>>>>>>>>>>>> ",JSON.stringify(chef));
-            chef.deleteEnvironment(req.params.envName,function(err,env){
-                if(err){
-                    logger.debug("Exit /chef/../environments ",err);
-                    res.send(500,"Failed to delete environments on Chef.");
+            logger.debug("Chef...>>>>>>>>>>>>>>>>>>> ", JSON.stringify(chef));
+            chef.deleteEnvironment(req.params.envName, function(err, env) {
+                if (err) {
+                    logger.debug("Exit /chef/../environments ", err);
+                    res.send(500, "Failed to delete environments on Chef.");
                     return;
                 }
                 logger.debug("Exit /chef/../environments");
@@ -1222,4 +1211,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
             });
         });
     });
+
+
+
 };

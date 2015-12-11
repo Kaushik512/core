@@ -2655,8 +2655,8 @@ var $wizard = $('#bootstrap-wizard-1').bootstrapWizard({
                         var vmimage = JSON.parse($('.productdiv2.role-Selected').first().attr('imagedata'));
                         $('#instanceOS').val(vmimage.osName);
                         $('#instanceOS').change().attr('disabled', 'disabled');
-                        $('#providerId').val(vmimage.providerId);
-                        $('#providerId').change().attr('disabled', 'disabled');
+                        //$('#providerId').val(vmimage.providerId);
+                        //$('#providerId').change().attr('disabled', 'disabled');
                         $('#orgnameSelect').attr('disabled', 'disabled');
                     } else {
                         $('#instanceOS').removeAttr('disabled');
