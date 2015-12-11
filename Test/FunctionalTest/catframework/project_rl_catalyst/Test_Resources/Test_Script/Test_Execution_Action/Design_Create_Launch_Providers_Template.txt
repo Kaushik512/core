@@ -259,6 +259,40 @@ Catalyst creation of Azure provider
 
 
 
+Catalyst Editing of Azure provider
+    Clicks on Settings
+    Clicks on DevOps Setup menu
+    Clicks on Providers
+    Clicks on Edit button of the Azure provider created
+    Enters the new Name of Azure Provider
+    Clicks on Save Button of the Provider
+    Verify the Edited Azure provider is created
+
+Catalyst Unique Azure provider
+    Clicks on Settings
+    Clicks on DevOps Setup menu
+    Clicks on Providers
+    Clicks on New Button of Providers
+    Select the Azure Provider
+    Enters the new Name of Azure Provider
+    Enters the Subscription ID
+    Upload the Management pem file
+    Upload the Private keyfile
+    Select the org for Azure provider
+    Clicks on Save Button of the Provider
+    Verify the error message displayed for already existing azure provider
+
+
+Verify the error message displayed for already existing azure provider
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Element Should Contain    id=errmsg_name    ${Provider ErrMsg}
+
+
+Verify the Edited Azure provider is created
+    Element Should Contain    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${AZURE EDIT PROVIDERNAME}']    ${AZURE EDIT PROVIDERNAME}    
+
+Clicks on Edit button of the Azure provider created
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${AZURE PROVIDERNAME}']/../td[4]/div/a[@title='Edit']
+
 Select the org for Azure provider
     Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=//span[text()='Select Organization']
     Input Text    css=#select2-drop .select2-input    ${ORGANIZATION NAME}
@@ -269,6 +303,9 @@ Select the org for Azure provider
 
 Enters the Name of Azure Provider
     Wait Until Keyword Succeeds    1 minute     1 seconds    Input Text    id=name    ${AZURE PROVIDERNAME}
+
+Enters the new Name of Azure Provider
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Input Text    id=name    ${AZURE EDIT PROVIDERNAME}    
 
 Enters the Subscription ID
     Input Text    id=azureSubscriptionId    ${SUBSCRIPTION ID}
