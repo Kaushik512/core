@@ -2473,15 +2473,15 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                                             console.log(urlParams.projid);
 
                                             var $blueprintReadContainerCFT = $(id);
-                                            $blueprintReadContainerCFT.find('.modal-body #blueprintORG').val(orgName);
-                                            $blueprintReadContainerCFT.find('.modal-body #blueprintBU').val(bgName);
-                                            $blueprintReadContainerCFT.find('.modal-body #blueprintProject').val(projName);
+                                            $blueprintReadContainerCFT.find('.modal-body #blueprintORG').val(orgName).show().parents('tr').show();
+                                            $blueprintReadContainerCFT.find('.modal-body #blueprintBU').val(bgName).show().parents('tr').show();;
+                                            $blueprintReadContainerCFT.find('.modal-body #blueprintProject').val(projName).show().parents('tr').show();
                                             //  alert(JSON.stringify(data));
 
                                             var $blueprintReadContainer = $(id);
-                                            $blueprintReadContainer.find('.modal-body #blueprintORG').val(orgName);
-                                            $blueprintReadContainer.find('.modal-body #blueprintBU').val(bgName);
-                                            $blueprintReadContainer.find('.modal-body #blueprintProject').val(projName);
+                                            $blueprintReadContainer.find('.modal-body #blueprintORG').val(orgName).show().parents('tr').show();
+                                            $blueprintReadContainer.find('.modal-body #blueprintBU').val(bgName).show().parents('tr').show();
+                                            $blueprintReadContainer.find('.modal-body #blueprintProject').val(projName).show().parents('tr').show();
                                         }
                                     });
                                 }
@@ -2542,6 +2542,7 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                                         $liRead.click(function(e) {
 
                                             var $blueprintReadContainer = $('#modalForRead');
+                                            $blueprintReadContainer.find('tbody tr').hide();
                                             $blueprintReadContainer.find('.modal-body #blueprintNameInputNew').val(blueprint.name);
                                             if (blueprint.templateType === 'chef') {
                                                 $('.modal-title').html('Blueprint Information-Software Stack');
@@ -2557,7 +2558,7 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                                                 url: "/vmimages/" + blueprint.blueprintConfig.cloudProviderData.imageId,
                                                 success: function(data) {
                                                     console.log(data);
-                                                    $blueprintReadContainer.find('.modal-body #instanceImage').val(data.name);
+                                                    $blueprintReadContainer.find('.modal-body #instanceImage').val(data.name).parents('tr').show();
                                                     //alert(data.name);
                                                 }
                                             });
@@ -2570,18 +2571,18 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                                                     success: function(data) {
                                                         data = JSON.parse(data);
                                                         
-                                                        $blueprintReadContainer.find('.modal-body #instanceProviderName').val(data.providerName);
-                                                        $blueprintReadContainer.find('.modal-body #instanceProviderType').val(data.providerType);
+                                                        $blueprintReadContainer.find('.modal-body #instanceProviderName').val(data.providerName).parents('tr').show();;
+                                                        $blueprintReadContainer.find('.modal-body #instanceProviderType').val(data.providerType).parents('tr').show();;
 
                                                         // loop for getting region 
 
-                                                        $blueprintReadContainer.find('.modal-body #instanceRegion').val(blueprint.blueprintConfig.cloudProviderData.region);
+                                                        $blueprintReadContainer.find('.modal-body #instanceRegion').val(blueprint.blueprintConfig.cloudProviderData.region).parents('tr').show();;
 
-                                                        $blueprintReadContainer.find('tr.keyPair').hide();
-                                                        $blueprintReadContainer.find('tr.managementPemKey').removeClass('hidden');
-                                                        $blueprintReadContainer.find('.modal-body #managementPem').val(data.pemFileName);
+                                                        //$blueprintReadContainer.find('tr.keyPair').hide();
+                                                        //$blueprintReadContainer.find('tr.managementPemKey').removeClass('hidden');
+                                                        $blueprintReadContainer.find('.modal-body #managementPem').val(data.pemFileName).parents('tr').show();;
                                                         
-                                                        $blueprintReadContainer.find('.modal-body #managementKey').val(data.keyFileName);
+                                                        $blueprintReadContainer.find('.modal-body #managementKey').val(data.keyFileName).parents('tr').show();
 
                                                         //console.log(data);
                                                     },
@@ -2590,20 +2591,42 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                                                     }
                                                 });
 
-                                            }else {
+                                            } else if(blueprint.blueprintConfig.cloudProviderData.cloudProviderType == 'vmware'){
+
+
+                                                $.ajax({
+                                                    type: "GET",
+                                                    url: "/vmware/providers/" + blueprint.blueprintConfig.cloudProviderId,
+                                                    success: function(data) {
+                                                        //data = JSON.parse(data);
+
+                                                        
+                                                        $blueprintReadContainer.find('.modal-body #instanceProviderName').val(data.providerName).parents('tr').show();;
+                                                        $blueprintReadContainer.find('.modal-body #instanceProviderType').val(data.providerType).parents('tr').show();;
+
+                                                        // loop for getting region 
+
+                                                        //console.log(data);
+                                                    },
+                                                    failure: function(data) {
+                                                        alert(data.toString());
+                                                    }
+                                                });
+
+                                            } else {
                                                 //for getting the Provider name,Type,Region,KeyPair
                                                 $.ajax({
                                                     type: "GET",
                                                     url: "/aws/providers/" + blueprint.blueprintConfig.cloudProviderId,
                                                     success: function(data) {
-                                                        $blueprintReadContainer.find('.modal-body #instanceProviderName').val(data.providerName);
-                                                        $blueprintReadContainer.find('.modal-body #instanceProviderType').val(data.providerType);
+                                                        $blueprintReadContainer.find('.modal-body #instanceProviderName').val(data.providerName).parents('tr').show();;
+                                                        $blueprintReadContainer.find('.modal-body #instanceProviderType').val(data.providerType).parents('tr').show();;
                                                         // loop for getting region and Keypair
 
                                                         for (var k = 0; k < data.keyPairs.length; k++) {
 
-                                                            $blueprintReadContainer.find('.modal-body #instanceRegion').val(data.keyPairs[k].region);
-                                                            $blueprintReadContainer.find('.modal-body #instancekeyPair').val(data.keyPairs[k].keyPairName);
+                                                            $blueprintReadContainer.find('.modal-body #instanceRegion').val(data.keyPairs[k].region).parents('tr').show();;
+                                                            $blueprintReadContainer.find('.modal-body #instancekeyPair').val(data.keyPairs[k].keyPairName).parents('tr').show();;
                                                         }
                                                         //console.log(data);
                                                     },
@@ -2620,29 +2643,32 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                                             //for getting the blueprint name
 
                                             //for getting the OsName
-                                            $blueprintReadContainer.find('.modal-body #instanceOSNew').val(blueprint.blueprintConfig.cloudProviderData.instanceOS);
+                                            $blueprintReadContainer.find('.modal-body #instanceOSNew').val(blueprint.blueprintConfig.cloudProviderData.instanceOS).parents('tr').show();
                                             //for getting the instance Size
-                                            $blueprintReadContainer.find('.modal-body #instancesizeNew').val(blueprint.blueprintConfig.cloudProviderData.instanceType);
+                                            if (blueprint.blueprintConfig.cloudProviderType == 'aws') {
+                                                $blueprintReadContainer.find('.modal-body #instancesizeNew').val(blueprint.blueprintConfig.cloudProviderData.instanceType).parents('tr').show();
 
-                                            //for getting the SubnetId
-                                            $blueprintReadContainer.find('.modal-body #instanceSubnetId').val(blueprint.blueprintConfig.cloudProviderData.subnetId);
-                                            //loop for getting the Security Group
+                                                //for getting the SubnetId
+                                                $blueprintReadContainer.find('.modal-body #instanceSubnetId').val(blueprint.blueprintConfig.cloudProviderData.subnetId).parents('tr').show();
+                                                //loop for getting the Security Group
 
-                                            $blueprintReadContainer.find('.modal-body #instanceSecurityGroupId').val(blueprint.blueprintConfig.cloudProviderData.securityGroupIds);
+                                                $blueprintReadContainer.find('.modal-body #instanceSecurityGroupId').val(blueprint.blueprintConfig.cloudProviderData.securityGroupIds).parents('tr').show();
 
-                                            //for getting the VPC
-                                            $blueprintReadContainer.find('.modal-body #instanceVPC').val(blueprint.blueprintConfig.cloudProviderData.vpcId)
+                                                //for getting the VPC
+                                                $blueprintReadContainer.find('.modal-body #instanceVPC').val(blueprint.blueprintConfig.cloudProviderData.vpcId).parents('tr').show();
 
+                                            } 
+                                            
                                             // loop for getting runlist
                                             for (var j = 0; j < blueprint.blueprintConfig.infraManagerData.versionsList.length; j++) {
 
-                                                $blueprintReadContainer.find('.modal-body #instanceRunlist').val(blueprint.blueprintConfig.infraManagerData.versionsList[j].runlist);
+                                                $blueprintReadContainer.find('.modal-body #instanceRunlist').val(blueprint.blueprintConfig.infraManagerData.versionsList[j].runlist).parents('tr').show();
 
                                                 //for getting the version
-                                                $blueprintReadContainer.find('.modal-body #instanceVersion').val(blueprint.blueprintConfig.infraManagerData.versionsList[j].ver);
+                                                $blueprintReadContainer.find('.modal-body #instanceVersion').val(blueprint.blueprintConfig.infraManagerData.versionsList[j].ver).parents('tr').show();
 
                                             }
-                                            $blueprintReadContainer.find('.modal-body #blueprintTemplateType').val(blueprint.templateType);
+                                            $blueprintReadContainer.find('.modal-body #blueprintTemplateType').val(blueprint.templateType).parents('tr').show();
 
                                             getOrgProjDetails($blueprintReadContainer);
 

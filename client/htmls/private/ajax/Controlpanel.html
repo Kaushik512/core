@@ -2536,11 +2536,14 @@ $.get('../instances/' + urlParams.id, function(data) {
               if(data2.blueprints[j]._id == data.blueprintData.blueprintId){
                 if(typeof data2.blueprints[j].blueprintConfig.cloudProviderData != "undefined"){
 
-                  securityGroupIDs=data2.blueprints[j].blueprintConfig.cloudProviderData.securityGroupIds[0];
-                  instanceSIZE = data2.blueprints[j].blueprintConfig.cloudProviderData.instanceType;
-                  vpcTYPE = data2.blueprints[j].blueprintConfig.cloudProviderData.vpcId;
-                  subnetID = data2.blueprints[j].blueprintConfig.cloudProviderData.subnetId;
-                  versionLatest = data2.blueprints[j].blueprintConfig.infraManagerData.latestVersion;
+                  securityGroupIDs=data2.blueprints[j].blueprintConfig.cloudProviderData.securityGroupIds || '';
+                  if(securityGroupIDs && securityGroupIDs.length) {
+                    securityGroupIDs = securityGroupIDs.join(',');
+                  }
+                  instanceSIZE = data2.blueprints[j].blueprintConfig.cloudProviderData.instanceType || '';
+                  vpcTYPE = data2.blueprints[j].blueprintConfig.cloudProviderData.vpcId || '';
+                  subnetID = data2.blueprints[j].blueprintConfig.cloudProviderData.subnetId || '';
+                  versionLatest = data2.blueprints[j].blueprintConfig.infraManagerData.latestVersion|| '';
                   
 
                   $tr = $('<tr style="line-height:2.3"></tr>');
@@ -2550,7 +2553,12 @@ $.get('../instances/' + urlParams.id, function(data) {
 
 
                   //alert(subnetID);
-                  $tr = $('<tr style="line-height:2.3"></tr>');
+                  if(data1.providerType && data1.providerType=='vmware'){
+                     $tr = $('<tr style="line-height:2.3"></tr>');
+                    $tr.append('<td scope="col" style="font-size:12px;">DataStore</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + data2.blueprints[j].blueprintConfig.cloudProviderData.dataStore + '</td>');
+                    $blueprintTbody.append($tr);
+                  } else {
+                    $tr = $('<tr style="line-height:2.3"></tr>');
                   $tr.append('<td scope="col" style="font-size:12px;">Instance Size</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + instanceSIZE + '</td>');
                   $blueprintTbody.append($tr);
 
@@ -2567,6 +2575,8 @@ $.get('../instances/' + urlParams.id, function(data) {
                   $tr = $('<tr style="line-height:2.3"></tr>');
                   $tr.append('<td scope="col" style="font-size:12px;">Security Group</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + securityGroupIDs + '</td>');
                   $blueprintTbody.append($tr);
+                  }
+                  
 
                   $tr = $('<tr style="line-height:2.3"></tr>');
                   $tr.append('<td scope="col" style="font-size:12px;">Version</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + versionLatest + '</td>');

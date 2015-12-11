@@ -34,13 +34,13 @@ var vmwareInstanceBlueprintSchema = new Schema({
     },
     network: {
         type: String,
-        
+
         trim: true
     },
-    
+
     securityGroupIds: {
         type: [String],
-     
+
         trim: true
     },
 
@@ -50,14 +50,14 @@ var vmwareInstanceBlueprintSchema = new Schema({
     },
     subnet: {
         type: String,
-    
-         trim: true
+
+        trim: true
     },
     instanceOS: {
         type: String,
         // required: true
     },
-    instanceCount:{
+    instanceCount: {
         type: String,
     },
     instanceImageName: {
@@ -70,7 +70,8 @@ var vmwareInstanceBlueprintSchema = new Schema({
     },
     infraMangerType: String,
     infraManagerId: String,
-    infraManagerData: Schema.Types.Mixed
+    infraManagerData: Schema.Types.Mixed,
+    cloudProviderData: Schema.Types.Mixed
 });
 
 vmwareInstanceBlueprintSchema.methods.launch = function(ver, callback) {
@@ -98,8 +99,7 @@ function getCloudProviderConfigType(blueprint) {
         CloudProviderConfig = AWSBlueprint;
     } else if (blueprint.infraMangerType === CLOUD_PROVIDER_TYPE.azure) {
         return null;
-    }
-    else if (blueprint.infraMangerType === CLOUD_PROVIDER_TYPE.vmware) {
+    } else if (blueprint.infraMangerType === CLOUD_PROVIDER_TYPE.vmware) {
         CloudProviderConfig = vmwareBlueprint;
     } else {
         return null;
@@ -154,16 +154,24 @@ vmwareInstanceBlueprintSchema.methods.getCloudProviderData = function() {
 vmwareInstanceBlueprintSchema.statics.createNew = function(awsData) {
     var self = this;
     logger.debug('In vmwareInstanceBlueprintSchema createNew');
-   
+
 
     var infraManagerBlueprint = CHEFInfraBlueprint.createNew({
-            runlist: awsData.runlist
-        });
+        runlist: awsData.runlist
+    });
     awsData.infraManagerData = infraManagerBlueprint;
     awsData.infraMangerType = "chef";
     awsData.infraManagerId = awsData.infraManagerId;
     awsData.dataStore = awsData.dataStore;
     awsData.imageId = awsData.imageId;
+    console.log(awsData);
+    awsData.cloudProviderData = {
+        instanceCount: awsData.instanceCount,
+        instanceOS: awsData.instanceOS,
+        imageId: awsData.imageId,
+        dataStore: awsData.dataStore,
+        cloudProviderType: awsData.cloudProviderType
+    };
     logger.debug('--------------->>>>>' + JSON.stringify(awsData));
 
     var awsInstanceBlueprint = new self(awsData);
