@@ -33,7 +33,7 @@ function fixTemplateRunlist(runlist) {
         if (indexOfTemplateMarker !== -1) {
             if (runlist[i].length - 1 > 0) {
                 var runlistSubString = runlist[i].substring(indexOfTemplateMarker+3, runlist[i].length - 1);
-                var templateRunlist = runlistSubString.split(',')
+                var templateRunlist = runlistSubString.split('*!*');
                 if (templateRunlist.length) {
                     tempRunlist = tempRunlist.concat(templateRunlist);
                 }
