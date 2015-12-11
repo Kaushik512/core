@@ -561,6 +561,9 @@
                                                 <input id="containerPort" type="text" class="form-control" name="">
                                             </div>
 
+                                            
+                                                <input id="upgradeValue" type="hidden" />
+
 
                                             <div class="col-lg-6 col-md-6 margintop15 artifactClass">
                                                 <label for="">Artifacts:<span style="color:red">*</span>
@@ -722,6 +725,8 @@ $(document).ready(function() {
         $('.createTaskLinkUpgrade').removeAttr('disabled');
     }
     function newAppDeployClickHandler(e) {
+
+        $('#upgradeValue').val("");
         $('.containerIdClass').hide();
         $('.containerPortClass').hide();
         $('.repoUrlClass').hide();
@@ -1703,13 +1708,15 @@ function deployNewForDocker(){
     var projectId = urlParams.projid;
     var envId = urlParams.envid;
     var appName = repoId.split("/")[1];
+    var upgrade = $('#upgradeValue').val();
     var nexusData={
         "nexusData":{
             "nexusUrl": "",
             "version": "",
             "containerId": containerId,
             "containerPort": containerPort,
-            "dockerRepo": repoId
+            "dockerRepo": repoId,
+            "upgrade": upgrade
         }
     };
 
@@ -1773,13 +1780,15 @@ function upgradeOrDeploy(){
     /*var containerId = $('#containerIdInput').val();
     var containerPort = $('#containerPort').val();*/
     //alert(containerPort);
+    var upgrade = $('#upgradeValue').val();
     var nexusData={
         "nexusData":{
             "nexusUrl": nexusRepoUrl,
             "version": versionId,
             "containerId": "",
             "containerPort": "",
-            "dockerRepo": ""
+            "dockerRepo": "",
+            "upgrade": upgrade
         }
     };
 
@@ -2039,6 +2048,8 @@ function constructUI(data) {
         }
 
         function moreInfoUpgradeAppDeployClickHandler(e) {
+
+            $('#upgradeValue').val("true");
             $('#formUpgradeAppDeploy')[0].reset();
             $('.containerClass').hide();
             resetSpinners();

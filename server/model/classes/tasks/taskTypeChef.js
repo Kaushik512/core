@@ -77,6 +77,14 @@ chefTaskSchema.methods.execute = function(userName, baseUrl, choiceParam, nexusD
                 }
             });
         }
+
+        if (nexusData.upgrade) {
+            objectArray.push({
+                "rlcatalyst": {
+                    "upgrade": nexusData.upgrade
+                }
+            });
+        }
     }
 
     var attributeObj = utils.mergeObjects(objectArray);
