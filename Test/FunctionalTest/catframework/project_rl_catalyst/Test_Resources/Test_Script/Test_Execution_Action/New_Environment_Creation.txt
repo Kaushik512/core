@@ -163,7 +163,7 @@ Catalyst Verify and Delete the InportedNode from Environment
 
 
 Verfiy Node Deleted
-    Page Should Not Contain    ${IP Centos}
+    Page Should Not Contain    ${NODE}
 
 
 Delete the Node
@@ -173,7 +173,7 @@ Delete the Node
 
 
 Select the CheckBox to Import
-    Click Element    xpath=.//*[@id='organiz']/table/tbody/tr/td[text()='${IP Centos}']/../td[7]/label/i
+    Click Element    xpath=.//*[@id='organiz']/table/tbody/tr/td[text()='${NODE}']/../td[7]/label/i
     Sleep    2s
 
 Clicks on Close of ConfigMgmt Button
@@ -188,7 +188,7 @@ Input the Environment Name in the Search
 Node is Inported in the Environment
     Sleep    4s
     #Element Should Contain    xpath=//div[@class='domain-roles-heading']//span[text()='{IP Centos}']    ${IP Centos}
-    Element Should Contain    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${IP Centos}")]/div/div/div/div[3]/div/span[1]/strong    null       #${IP Centos}
+    Element Should Contain    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${NODE}")]/div/div/div/div[3]/div/span[1]/strong    null       #${IP Centos}
 
 
 Clicks on Workzone
@@ -196,7 +196,7 @@ Clicks on Workzone
 
 Verify the Node Importedd
     Sleep    5s
-    Element Should Contain    css=.messageDiv>div    Node Imported : ${IP Centos}
+    Element Should Contain    css=.messageDiv>div    Node Imported : ${NODE}
     Sleep    4s
 
 
@@ -229,7 +229,7 @@ Clicks on Import Nodes Button of Server for Sync
 
 Find the Instance and Impoert to the Environment
     Sleep    2 minutes
-    Click Element    xpath=.//*[@id='organiz']/table/tbody/tr/td[text()='10.0.1.92']/../td[6]/div/a/span[2]
+    Click Element    xpath=.//*[@id='organiz']/table/tbody/tr/td[text()='${NODE}']/../td[6]/div/a/span[2]
     Sleep    1s
     Input Text    css=#select2-drop > div > input    ${ENVNAME}
     Sleep    1s

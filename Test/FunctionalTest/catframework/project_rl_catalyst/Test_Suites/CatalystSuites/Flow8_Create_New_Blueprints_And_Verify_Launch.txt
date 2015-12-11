@@ -100,7 +100,7 @@ Catalyst CENT OS EDIT NAME setup
 
 
 Catalyst CENT OS INSTANCE CONTROL PANEL setup
-    [Tags]       Sanity               Settings1
+    [Tags]       Sanity               Settings
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
     Catlayst verfication of CentOS Instance Stop Setup and Disable
