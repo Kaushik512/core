@@ -725,7 +725,7 @@ $(document).ready(function() {
         $('.createTaskLinkUpgrade').removeAttr('disabled');
     }
     function newAppDeployClickHandler(e) {
-
+        $('#containerIdDiv').removeAttr('disabled');
         $('#upgradeValue').val("");
         $('.containerIdClass').hide();
         $('.containerPortClass').hide();
@@ -1442,7 +1442,12 @@ $nexusServer.change(function(e){
         $('.repoUrlClass').hide();
         $('.artifactClass').hide();
         $('.versionClass').hide();
-
+        var containerId = $('#containerIdInput').val();
+        var upgrade = $('#upgradeValue').val();
+        if(containerId != "NA" && upgrade == "true"){
+            $('#containerIdDiv').val(containerId);
+            $('#containerIdDiv').attr('disabled','disabled');
+        }
         resetAllFields();
         getDockerRepoes();
         getTasks();
@@ -2048,7 +2053,9 @@ function constructUI(data) {
         }
 
         function moreInfoUpgradeAppDeployClickHandler(e) {
-
+            $('.repoUrlClass').hide();
+            $('.artifactClass').hide();
+            $('.versionClass').hide();
             $('#upgradeValue').val("true");
             $('#formUpgradeAppDeploy')[0].reset();
             $('.containerClass').hide();
