@@ -3961,4 +3961,16 @@ module.exports.setRoutes = function(app, sessionVerification) {
             }
         });
     });
+
+    app.get('/d4dMasters/org/:orgId/templateType/:templateType/templates', function(req, res) {
+        masterUtil.getTemplatesByOrgAndTemplateType(req.params.orgId,req.params.templateType,function(err,templates){
+            if(err){
+                logger.debug("Error getting templates",err);
+                res.status(500).send({"errorCode": 500,"message":"Error getting templates"});
+                return;
+            }
+            res.send(templates);
+            return;
+        });
+    });
 }
