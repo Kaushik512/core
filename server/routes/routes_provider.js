@@ -144,6 +144,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
     //Create VMWare Provider
     app.post('/vmware/providers', function(req, res) {
 
+        console.log(req.body);
+
         logger.debug("Enter post() for /vmware.providers.", typeof req.body.fileName);
         var user = req.session.user;
         var category = configmgmtDao.getCategoryFromID("9");
@@ -381,6 +383,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 return;
             }
             if (aProvider) {
+                console.log(aProvider);
 
                 masterUtil.getOrgById(aProvider.orgId[0], function(err, orgs) {
                     if (err) {
@@ -475,6 +478,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
     app.post('/vmware/providers/:providerId/update', function(req, res) {
         logger.debug("Enter post() for /providers/vmware/%s/update", req.params.providerId);
          logger.debug("Enter post() for /vmware.providers.", typeof req.body.fileName);
+         console.log(req.body);
         var user = req.session.user;
         var category = configmgmtDao.getCategoryFromID("9");
         var permissionto = 'create';
@@ -524,9 +528,10 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             host: vmwarehost,
             providerName: providerName,
             providerType: providerType,
-            dc: vmwaredc,
+            tenantid: vmwaredc,
             orgId: orgId
         };
+    
         logger.debug("provider>>>>>>>>>>>> %s", providerData.providerType);
         logger.debug("provider data>>>>>>>>>>>> %s", JSON.stringify(providerData));
 

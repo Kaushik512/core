@@ -31,6 +31,8 @@ function getDefaultsConfig() {
             chefReposDirName: 'chef-repos',
             cookbooksDirName: 'cookbooks',
             defaultChefCookbooks: [],
+            defaultChefCookbooksLinux: ['recipe[starter]'],
+            defaultChefCookbooksWindows:[],
             ohaiHints: ['ec2'],
             attributeExtractorCookbookName: 'attrib',
             defaultChefClientRunCookbooks: [],

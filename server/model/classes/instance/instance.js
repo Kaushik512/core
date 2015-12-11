@@ -127,6 +127,7 @@ var InstanceSchema = new Schema({
         required: false,
         trim: true
     },
+    providerType: String,
     keyPairId: {
         type: String,
         required: false,
@@ -1442,6 +1443,28 @@ var InstancesDao = function() {
             logger.debug("Exit getAllInstances");
             callback(null, data);
 
+        });
+    };
+
+    // Method to give list of all Docker instances for Org,BG,Proj and Env.
+    this.getInstancesByOrgBgProjectAndEnvForDocker = function(orgId, bgId, projectId, envId, callback) {
+        var queryObj = {
+            orgId: orgId,
+            bgId: bgId,
+            projectId: projectId,
+            envId: envId,
+            docker: {
+                $exists: true
+            }
+        }
+        Instances.find(queryObj, {
+            'actionLogs': false
+        }, function(err, instances) {
+            if (err) {
+                callback(err, null);
+                return;
+            }
+            callback(null, instances);
         });
     };
 };

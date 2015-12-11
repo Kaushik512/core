@@ -47,6 +47,8 @@ var shellEscape = require('shell-escape');
 var Puppet = require('_pr/lib/puppet.js');
 var masterUtil = require('_pr/lib/utils/masterUtil');
 
+var fs = require('fs');
+
 //var WINRM = require('../lib/utils/winrmexec');
 
 module.exports.setRoutes = function(app, sessionVerificationFunc) {
@@ -1482,7 +1484,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                             }
                             //checking if provider is vmware
 
-                            if (data[0].hardware.platform && data[0].hardware.platform == 'vmware') {
+                            if (data[0].providerType && data[0].providerType == 'vmware') {
                                 vmwareCloudProvider.getvmwareProviderById(data[0].providerId, function(err, providerdata) {
 
                                     logger.debug('IN getvmwareProviderById: data: ');
@@ -1638,7 +1640,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                         actionLogId: actionLog._id
                                                     });
 
-                                                    instancesDao.updateInstanceState(req.params.instanceId, currentState, function(err, updateCount) {
+                                                    instancesDao.updateInstanceState(req.params.instanceId, "stopping", function(err, updateCount) {
                                                         if (err) {
                                                             logger.error("update instance state err ==>", err);
                                                             return;
@@ -1652,7 +1654,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                     if (err) {
                                                         return;
                                                     }
-                                                    instancesDao.updateInstanceState(req.params.instanceId, state, function(err, updateCount) {
+                                                    instancesDao.updateInstanceState(req.params.instanceId, 'stopped', function(err, updateCount) {
                                                         if (err) {
                                                             logger.error("update instance state err ==>", err);
                                                             return;
@@ -1671,6 +1673,20 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                     });
 
                                                     instancesDao.updateActionLog(req.params.instanceId, actionLog._id, true, timestampEnded);
+
+                                                    fs.unlink(decryptedPemFile, function(err) {
+                                                        logger.debug("Deleting decryptedPemFile..");
+                                                        if (err) {
+                                                            logger.error("Error in deleting decryptedPemFile..");
+                                                        }
+
+                                                        fs.unlink(decryptedKeyFile, function(err) {
+                                                            logger.debug("Deleting decryptedKeyFile ..");
+                                                            if (err) {
+                                                                logger.error("Error in deleting decryptedKeyFile..");
+                                                            }
+                                                        });
+                                                    });
                                                 });
 
                                         });
@@ -1739,6 +1755,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                 if (err) {
                                                     return;
                                                 }
+
                                                 instancesDao.updateInstanceState(req.params.instanceId, state, function(err, updateCount) {
                                                     if (err) {
                                                         logger.error("update instance state err ==>", err);
@@ -1794,7 +1811,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                             return;
                         }
                         if (data.length) {
-                            if (data[0].hardware.platform && data[0].hardware.platform == 'vmware') {
+                            if (data[0].providerType && data[0].providerType == 'vmware') {
                                 vmwareCloudProvider.getvmwareProviderById(data[0].providerId, function(err, providerdata) {
                                     var timestampStarted = new Date().getTime();
                                     var actionLog = instancesDao.insertStartActionLog(req.params.instanceId, req.session.user.cn, timestampStarted);
@@ -1887,7 +1904,35 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
                             } else if (data[0].keyPairId && data[0].keyPairId == 'azure') {
 
-                                logger.debug("Stopping Azure ");
+                                logger.debug("Starting Azure instance..");
+
+                                var timestampStarted = new Date().getTime();
+
+                                var actionLog = instancesDao.insertStopActionLog(req.params.instanceId, req.session.user.cn, timestampStarted);
+
+                                var logReferenceIds = [req.params.instanceId];
+                                if (actionLog) {
+                                    logReferenceIds.push(actionLog._id);
+                                }
+                                logsDao.insertLog({
+                                    referenceId: logReferenceIds,
+                                    err: false,
+                                    log: "Instance Starting",
+                                    timestamp: timestampStarted
+                                });
+
+                                if (!data[0].providerId) {
+                                    res.send(500, {
+                                        message: "Insufficient provider details, to complete the operation"
+                                    });
+                                    logsDao.insertLog({
+                                        referenceId: logReferenceIds,
+                                        err: true,
+                                        log: "Insufficient provider details, to complete the operation",
+                                        timestamp: new Date().getTime()
+                                    });
+                                    return;
+                                }
 
                                 azureProvider.getAzureCloudProviderById(data[0].providerId, function(err, providerdata) {
                                     if (err) {
@@ -1908,7 +1953,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                     var cryptoConfig = appConfig.cryptoSettings;
                                     var cryptography = new Cryptography(cryptoConfig.algorithm, cryptoConfig.password);
 
-                                    var uniqueVal = uuid.v4().split('-')[0]
+                                    var uniqueVal = uuid.v4().split('-')[0];
 
                                     var decryptedPemFile = pemFile + '_' + uniqueVal + '_decypted';
                                     var decryptedKeyFile = keyFile + '_' + uniqueVal + '_decypted';
@@ -1956,7 +2001,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                         actionLogId: actionLog._id
                                                     });
 
-                                                    instancesDao.updateInstanceState(req.params.instanceId, currentState, function(err, updateCount) {
+                                                    instancesDao.updateInstanceState(req.params.instanceId, "starting", function(err, updateCount) {
                                                         if (err) {
                                                             logger.error("update instance state err ==>", err);
                                                             return;
@@ -1970,7 +2015,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                     if (err) {
                                                         return;
                                                     }
-                                                    instancesDao.updateInstanceState(req.params.instanceId, state, function(err, updateCount) {
+                                                    instancesDao.updateInstanceState(req.params.instanceId, "running", function(err, updateCount) {
                                                         if (err) {
                                                             logger.error("update instance state err ==>", err);
                                                             return;
@@ -1989,6 +2034,20 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                     });
 
                                                     instancesDao.updateActionLog(req.params.instanceId, actionLog._id, true, timestampEnded);
+
+                                                    fs.unlink(decryptedPemFile, function(err) {
+                                                        logger.debug("Deleting decryptedPemFile..");
+                                                        if (err) {
+                                                            logger.error("Error in deleting decryptedPemFile..");
+                                                        }
+
+                                                        fs.unlink(decryptedKeyFile, function(err) {
+                                                            logger.debug("Deleting decryptedKeyFile ..");
+                                                            if (err) {
+                                                                logger.error("Error in deleting decryptedKeyFile..");
+                                                            }
+                                                        });
+                                                    });
                                                 });
 
                                         });
@@ -2456,8 +2515,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
                         var serviceCmd = "service " + serviceData.command + " " + req.params.actionType;
                         var sudoCmd = "sudo";
-                        if (options.password) {
-                            sudoCmd = 'echo \"' + options.password + '\" | sudo -S';
+                        if (sshParamObj.password) {
+                            sudoCmd = 'echo \"' + sshParamObj.password + '\" | sudo -S';
                         }
                         serviceCmd = sudoCmd + " " + serviceCmd;
 
@@ -3092,5 +3151,152 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
         });
 
+    });
+
+    app.post('/instances/:instanceId/remediation', function(req, res) {
+        logger.debug("Enter get() for /instances/%s/redemption", req.params.instanceId);
+        instancesDao.getInstanceById(req.params.instanceId, function(err, instances) {
+            if (err) {
+                logger.error("Failed to fetch ActionLogs: ", err);
+                res.send(500, {
+                    message: "DB error"
+                });
+                return;
+            }
+            if (!instances.length) {
+                res.send(404, {
+                    message: "Instance not found"
+                });
+                return;
+            }
+            var instance = instances[0];
+            credentialCryptography.decryptCredential(instance.credentials, function(err, decryptedCredentials) {
+                if (err) {
+                    res.send(500, {
+                        message: "error occured while decrypting credentials"
+                    });
+                    return;
+                }
+                var sshParamObj = {
+                    host: instance.instanceIP,
+                    port: 22,
+                    username: instance.credentials.username,
+                };
+                var sudoCmd;
+                if (decryptedCredentials.pemFileLocation) {
+                    sshParamObj.privateKey = decryptedCredentials.pemFileLocation;
+                } else {
+                    sshParamObj.password = decryptedCredentials.password;
+                }
+
+                var serviceCmd = "service " + req.body.service + " " + req.body.action;
+                var sudoCmd = "sudo";
+                if (sshParamObj.password) {
+                    sudoCmd = 'echo \"' + sshParamObj.password + '\" | sudo -S';
+                }
+                serviceCmd = sudoCmd + " " + serviceCmd;
+
+
+                var sshConnection = new SSH(sshParamObj);
+
+                sshConnection.exec(serviceCmd, function(err, ret) {
+                    if (decryptedCredentials.pemFileLocation) {
+                        fileIo.removeFile(decryptedCredentials.pemFileLocation, function(err) {
+                            if (err) {
+                                logger.error("Unable to delete temp pem file =>", err);
+                            } else {
+                                logger.error("temp pem file deleted =>", err);
+                            }
+                        });
+                    }
+                    if (err) {
+                        res.send(500, {
+                            message: "Unable to run service cmd on instance"
+                        });
+                        return;
+                    }
+                    if (ret === 0) {
+                        res.send(200, {
+                            message: "cmd ran successfully"
+                        });
+                    } else {
+                        res.send(500, {
+                            message: "cmd failed. code : " + ret
+                        });
+                    }
+
+                }, function(stdout) {
+                    logger.debug(stdout.toString());
+                }, function(stderr) {
+                    logger.debug(stderr.toString());
+                });
+
+            });
+        });
+    });
+
+    app.get('/instances/org/:orgId/bu/:buId/project/:projectId/env/:envId/docker/containers', function(req, res) {
+        logger.debug("Enter get() for /instances/dockercontainerdetails/%s", req.params.instanceid);
+        var orgId = req.params.orgId;
+        var buId = req.params.buId;
+        var projectId = req.params.projectId;
+        var envId = req.params.envId;
+
+        instancesDao.getInstancesByOrgBgProjectAndEnvForDocker(orgId, buId, projectId, envId, function(err, instances) {
+            if (err) {
+                logger.debug("Failed to fetch instances: ", err);
+                res.status(500).send({
+                    "errorCode": 500,
+                    "message": "Failed to fetch instances"
+                });
+                return;
+            }
+            if (instances.length) {
+                var containerList = [];
+                for (var i = 0; i < instances.length; i++) {
+                    var _docker = new Docker();
+                    var stdmessages = '';
+                    var cmd = 'echo -e \"GET /containers/json?all=1 HTTP/1.0\r\n\" | sudo nc -U /var/run/docker.sock';
+
+                    logger.debug('cmd received: ', cmd);
+                    var stdOut = '';
+                    var instanceObj = {
+                        "containers": "",
+                        "instanceId": instances[i]._id,
+                        "instanceName": instances[i].name,
+                        "instanceIP": instances[i].instanceIP
+                    };
+                    _docker.runDockerCommands(cmd, instances[i]._id, function(err, retCode) {
+                        //alert('Done');
+                        var _stdout = stdOut.split('\r\n');
+                        logger.debug('Docker containers : %s', _stdout.length);
+                        var start = false;
+                        var so = '';
+                        _stdout.forEach(function(k, v) {
+                            logger.debug(_stdout[v] + ':' + _stdout[v].length);
+                            if (start == true) {
+                                so += _stdout[v];
+                                logger.debug(v + ':' + _stdout[v].length);
+                            }
+                            if (_stdout[v].length == 1)
+                                start = true;
+                            if (v >= _stdout.length - 1)
+                            //res.end(so);
+                                instanceObj.containers = so;
+                            containerList.push(instanceObj);
+                        });
+
+                    }, function(stdOutData) {
+                        stdOut += stdOutData;
+                        // alert(stdOutData);
+                    }, function(stdOutErr) {
+                        logger.error("Error hits to fetch docker details", stdOutErr);
+                        //res.send(500);
+                    });
+                }
+                res.send(containerList);
+                return;
+            }
+        });
     });
 };

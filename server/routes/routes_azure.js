@@ -6,6 +6,8 @@ var fs = require('fs');
 var appConfig = require('_pr/config');
 var Cryptography = require('../lib/utils/cryptography');
 
+var uuid = require('node-uuid');
+
 //var hppubliccloudProvider = require('_pr/model/classes/masters/cloudprovider/hppublicCloudProvider.js');
 //var openstackProvider = require('_pr/model/classes/masters/cloudprovider/openstackCloudProvider.js');
 
@@ -37,8 +39,10 @@ module.exports.setRoutes = function(app, verificationFunc) {
             var cryptoConfig = appConfig.cryptoSettings;
             var cryptography = new Cryptography(cryptoConfig.algorithm, cryptoConfig.password);
 
-            var decryptedPemFile = pemFile + '_decypted';
-            var decryptedKeyFile = keyFile + '_decypted';
+            var uniqueVal = uuid.v4().split('-')[0];
+
+            var decryptedPemFile = pemFile + '_' + uniqueVal + '_decypted';
+            var decryptedKeyFile = keyFile + '_' + uniqueVal + '_decypted';
 
             cryptography.decryptFile(pemFile, cryptoConfig.decryptionEncoding, decryptedPemFile, cryptoConfig.encryptionEncoding, function(err) {
                 if (err) {
@@ -69,7 +73,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
                         var json = xml2json.toJson(networks);
                         res.send(json);
                         logger.debug('Exit azure get networks:' + JSON.stringify(networks));
-                        
+
                         fs.unlink(decryptedPemFile, function(err) {
                             logger.debug("Deleting decryptedPemFile..");
                             if (err) {
@@ -114,8 +118,10 @@ module.exports.setRoutes = function(app, verificationFunc) {
             var cryptoConfig = appConfig.cryptoSettings;
             var cryptography = new Cryptography(cryptoConfig.algorithm, cryptoConfig.password);
 
-            var decryptedPemFile = pemFile + '_decypted';
-            var decryptedKeyFile = keyFile + '_decypted';
+            var uniqueVal = uuid.v4().split('-')[0];
+
+            var decryptedPemFile = pemFile + '_' + uniqueVal + '_decypted';
+            var decryptedKeyFile = keyFile + '_' + uniqueVal + '_decypted';
 
             cryptography.decryptFile(pemFile, cryptoConfig.decryptionEncoding, decryptedPemFile, cryptoConfig.encryptionEncoding, function(err) {
                 if (err) {
