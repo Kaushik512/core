@@ -26,127 +26,13 @@ var Cryptography = require('../lib/utils/cryptography');
 var appConfig = require('_pr/config');
 
 var ALLDashboardProvider = require('../model/dashboard/dashboard.js');
+var instancesDao = require('../model/classes/instance/instance');
 module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
     // app.all("/aws/providers/*", sessionVerificationFunc);
     app.all("/dashboard/providers/*", sessionVerificationFunc);
     var cryptoConfig = appConfig.cryptoSettings;
     var cryptography = new Cryptography(cryptoConfig.algorithm, cryptoConfig.password);
-
-
-    // Return list of all available AWS Providers.
-    app.get('/dashboard/providers', function(req, res) {
-        console.log(" i am in dashboard api");
-
-        logger.debug("Enter get() for /providers");
-        var loggedInUser = req.session.user.cn;
-        masterUtil.getLoggedInUser(loggedInUser, function(err, anUser) {
-            if (err) {
-                res.send(500, "Failed to fetch User.");
-                return;
-            }
-            if (!anUser) {
-                res.send(500, "Invalid User.");
-                return;
-            }
-            if (anUser.orgname_rowid[0] === "") {
-                masterUtil.getAllActiveOrg(function(err, orgList) {
-                    if (err) {
-                        res.send(500, 'Not able to fetch Orgs.');
-                        return;
-                    }
-                    if (orgList) {
-                        AWSProvider.getAWSProvidersForOrg(orgList, function(err, providers) {
-                            if (err) {
-                                logger.error(err);
-                                res.send(500, errorResponses.db.error);
-                                return;
-                            }
-                            logger.debug("providers>>> ", JSON.stringify(providers));
-                            var providersList = [];
-
-                            if (providers.length > 0) {
-                                for (var i = 0; i < providers.length; i++) {
-                                    var keys = [];
-                                    keys.push(providers[i].accessKey);
-                                    keys.push(providers[i].secretKey);
-                                    cryptography.decryptMultipleText(keys, cryptoConfig.decryptionEncoding, cryptoConfig.encryptionEncoding, function(err, decryptedKeys) {
-                                        if (err) {
-                                            res.send(500, "Failed to decrypt accessKey or secretKey");
-                                            return;
-                                        }
-                                        providers[i].accessKey = decryptedKeys[0];
-                                        providers[i].secretKey = decryptedKeys[1];
-                                        providersList.push(providers[i]);
-                                        logger.debug("providers>>> ", JSON.stringify(providers));
-                                        if (providers.length === providersList.length) {
-                                            res.send(providersList);
-                                            return;
-                                        }
-                                    });
-                                }
-                            } else {
-                                res.send(200, []);
-                                return;
-                            }
-                        });
-                    } else {
-                        res.send(200, []);
-                        return;
-                    }
-                });
-            } else {
-                masterUtil.getOrgs(loggedInUser, function(err, orgList) {
-                    if (err) {
-                        res.send(500, 'Not able to fetch Orgs.');
-                        return;
-                    }
-                    if (orgList) {
-                        AWSProvider.getAWSProvidersForOrg(orgList, function(err, providers) {
-                            if (err) {
-                                logger.error(err);
-                                res.send(500, errorResponses.db.error);
-                                return;
-                            }
-                            var providersList = [];
-                            logger.debug("Providers::::::::::::::::::: ", providers === null);
-                            if (providers === null) {
-                                res.send(providersList);
-                                return;
-                            }
-                            if (providers.length > 0) {
-                                for (var i = 0; i < providers.length; i++) {
-                                    var keys = [];
-                                    keys.push(providers[i].accessKey);
-                                    keys.push(providers[i].secretKey);
-                                    cryptography.decryptMultipleText(keys, cryptoConfig.decryptionEncoding, cryptoConfig.encryptionEncoding, function(err, decryptedKeys) {
-                                        if (err) {
-                                            res.sned(500, "Failed to decrypt accessKey or secretKey");
-                                            return;
-                                        }
-                                        providers[i].accessKey = decryptedKeys[0];
-                                        providers[i].secretKey = decryptedKeys[1];
-                                        providersList.push(providers[i]);
-                                        logger.debug("providers>>> ", JSON.stringify(providers));
-                                        if (providers.length === providersList.length) {
-                                            res.send(providersList);
-                                            return;
-                                        }
-                                    });
-                                }
-                            } else {
-                                res.send(providersList);
-                                return;
-                            }
-                        });
-                    } else {
-                        res.send(200, []);
-                        return;
-                    }
-                });
-            }
-        });
-    });
 
     app.get('/dashboard/providers/totalinstances', function(req, res) {
         console.log(" i am in totalinstances api");
@@ -195,49 +81,70 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                         providers[i].accessKey = decryptedKeys[0];
                                         providers[i].secretKey = decryptedKeys[1];
                                         providersList.push(providers[i]);
-                                        logger.debug("providers>>> ", JSON.stringify(providers));
-                                        // if (providers.length === providersList.length) {
-                                        //     res.send(providersList);
-                                        //     console.log("Provider List===========>"+providersList.length);
-                                        //     return;
-                                        // }
-                                        var regions = ["us-east-1", "us-west-1", "us-west-2"];
-                                        for (var j = 0; j < regions.length; j++) {
-                                            var ec2 = new EC2({
-                                                "access_key": providers[i].accessKey,
-                                                "secret_key": providers[i].secretKey,
-                                                "region": regions[j]
-                                            });
-                                            ec2.listInstances(function(err, nodes) {
-                                                countRegion++;
-                                                if (err) {
-                                                    logger.debug("Unable to list nodes from AWS.", err);
-                                                    res.send("Unable to list nodes from AWS.", 500);
-                                                    return;
-                                                }
-                                                logger.debug("Success to list nodes from AWS.");
-                                                var nodeList = [];
-                                                for (var k = 0; k < nodes.Reservations.length; k++) {
-                                                    var instance = {
-                                                        "instance": nodes.Reservations[k].Instances[0].InstanceId
-                                                    };
-                                                    nodeList.push(instance);
-                                                }
-                                                var nodeListLength = nodeList.length;
-                                                logger.debug("I am in count of Total Instances", nodeListLength);
-                                                //res.send(nodeList);
-                                                totalcount = totalcount + nodeListLength;
-                                                if(countProvider === providers.length && countRegion === providers.length*regions.length) {
-                                                    res.send(200,{
-                                                        totalcount:totalcount
-                                                    });
-                                                    return;
-                                                }
-                                            });
-                                        }
-                                        
                                     });
+                                    logger.debug("providers>>> ", JSON.stringify(providers));
+                                    if (providers.length === providersList.length) {
+                                        var exists = {},
+                                            uniqueProviderList = [],
+                                            elm;
+                                        for (var i = 0; i < providersList.length; i++) {
+                                            elm = providersList[i];
+                                            if (!exists[elm]) {
+                                                uniqueProviderList.push(elm);
+                                                exists[elm] = true;
+                                            }
+                                        }
+                                        console.log("uniqueProviderList===================>" + uniqueProviderList);
+                                        for (var n = 0; n < uniqueProviderList.length; n++) {
+                                            var regions = ["us-east-1", "us-west-1", "us-west-2"];
+                                            for (var j = 0; j < regions.length; j++) {
+                                                var ec2 = new EC2({
+                                                    "access_key": uniqueProviderList[n].accessKey,
+                                                    "secret_key": uniqueProviderList[n].secretKey,
+                                                    "region": regions[j]
+                                                });
+                                                ec2.listInstances(function(err, nodes) {
+                                                    countRegion++;
+                                                    if (err) {
+                                                        logger.debug("Unable to list nodes from AWS.", err);
+                                                        res.send("Unable to list nodes from AWS.", 500);
+                                                        return;
+                                                    }
+                                                    logger.debug("Success to list nodes from AWS.");
+                                                    var nodeList = [];
+                                                    for (var k = 0; k < nodes.Reservations.length; k++) {
+                                                        var instance = {
+                                                            "instance": nodes.Reservations[k].Instances[0].InstanceId
+                                                        };
+                                                        nodeList.push(instance);
+                                                    }
+                                                    var nodeListLength = nodeList.length;
+                                                    logger.debug("I am in count of Total Instances", nodeListLength);
+                                                    //res.send(nodeList);
+                                                    totalcount = totalcount + nodeListLength;
+                                                    if (countProvider === uniqueProviderList.length && countRegion === uniqueProviderList.length * regions.length) {
+                                                        ALLDashboardProvider.createNew(totalcount, function(err, totalcountInstances) {
+                                                            if (err) {
+                                                                res.send(500, "Unable to fetch Total Count");
+                                                                return;
+                                                            }
+                                                            if (totalcountInstances) {
+                                                                res.send(200, totalcountInstances);
+                                                                return;
+                                                            }
+                                                        });
+                                                        // res.send(200, {
+                                                        //     totalcount: totalcount
+                                                        // });
+                                                        return;
+                                                    }
+                                                });
+                                            }
+                                        }
+
+                                    }
                                 }
+                                //console.log("providersList++++++++++++++++++"+providersList.length);
                             } else {
                                 res.send(200, []);
                                 return;
@@ -269,6 +176,9 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                 return;
                             }
                             if (providers.length > 0) {
+                                var countProvider = 0;
+                                var countRegion = 0;
+                                var totalcount = 0;
                                 for (var i = 0; i < providers.length; i++) {
                                     var keys = [];
                                     keys.push(providers[i].accessKey);
@@ -282,11 +192,62 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                         providers[i].secretKey = decryptedKeys[1];
                                         providersList.push(providers[i]);
                                         logger.debug("providers>>> ", JSON.stringify(providers));
-                                        if (providers.length === providersList.length) {
-                                            res.send(providersList);
-                                            return;
-                                        }
+                                        // if (providers.length === providersList.length) {
+                                        //     res.send(providersList);
+                                        //     return;
+                                        // }
                                     });
+                                    logger.debug("providers>>> ", JSON.stringify(providers));
+                                    if (providers.length === providersList.length) {
+                                        var exists = {},
+                                            uniqueProviderList = [],
+                                            elm;
+                                        for (var i = 0; i < providersList.length; i++) {
+                                            elm = providersList[i];
+                                            if (!exists[elm]) {
+                                                uniqueProviderList.push(elm);
+                                                exists[elm] = true;
+                                            }
+                                        }
+                                        console.log("uniqueProviderList===================>" + uniqueProviderList);
+                                        for (var n = 0; n < uniqueProviderList.length; n++) {
+                                            var regions = ["us-east-1", "us-west-1", "us-west-2"];
+                                            for (var j = 0; j < regions.length; j++) {
+                                                var ec2 = new EC2({
+                                                    "access_key": uniqueProviderList[n].accessKey,
+                                                    "secret_key": uniqueProviderList[n].secretKey,
+                                                    "region": regions[j]
+                                                });
+                                                ec2.listInstances(function(err, nodes) {
+                                                    countRegion++;
+                                                    if (err) {
+                                                        logger.debug("Unable to list nodes from AWS.", err);
+                                                        res.send("Unable to list nodes from AWS.", 500);
+                                                        return;
+                                                    }
+                                                    logger.debug("Success to list nodes from AWS.");
+                                                    var nodeList = [];
+                                                    for (var k = 0; k < nodes.Reservations.length; k++) {
+                                                        var instance = {
+                                                            "instance": nodes.Reservations[k].Instances[0].InstanceId
+                                                        };
+                                                        nodeList.push(instance);
+                                                    }
+                                                    var nodeListLength = nodeList.length;
+                                                    logger.debug("I am in count of Total Instances", nodeListLength);
+                                                    //res.send(nodeList);
+                                                    totalcount = totalcount + nodeListLength;
+                                                    if (countProvider === uniqueProviderList.length && countRegion === uniqueProviderList.length * regions.length) {
+                                                        res.send(200, {
+                                                            totalcount: totalcount
+                                                        });
+                                                        return;
+                                                    }
+                                                });
+                                            }
+                                        }
+
+                                    }
                                 }
                             } else {
                                 res.send(providersList);
@@ -299,6 +260,14 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                     }
                 });
             }
+        });
+    });
+    
+    app.get('/dashboard/providers/totalmanagedinstances', function(req, res) {
+        instancesDao.getAllInstances(function(err, instances) {
+            if (err) {logger.debug("Error while getElementBytting instance!");
+            }
+
         });
     });
     // // Return list of all types of available providers.
