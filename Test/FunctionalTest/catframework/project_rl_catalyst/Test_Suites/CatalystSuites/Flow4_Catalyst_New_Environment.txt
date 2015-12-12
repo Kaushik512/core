@@ -63,7 +63,7 @@ Catalyst Adding New Envirornments to the Chef
 
 
 Catalyst Import a Node From ConfigManagement(Chef) in to the Environment
-    [Tags]       Sanity       Settings
+    [Tags]       Sanity       Smoke
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
     Catalyst Import a Node from Config Management
@@ -74,7 +74,7 @@ Catalyst Import a Node From ConfigManagement(Chef) in to the Environment
 
 
 Catalyst Verify Node Imported from Config Management(Chef Server) & Delete
-    [Tags]       Sanity       Settings
+    [Tags]       Sanity       Smoke1
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
     Catalyst Verify and Delete the InportedNode from Environment

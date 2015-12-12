@@ -339,7 +339,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                         return;
                     }
                     if (orgList) {
-                        vmwareProvider.getvmwareForOrg(orgList, function(err, providers) {
+                        vmwareProvider.getvmwareProvidersForOrg(orgList, function(err, providers) {
                             if (err) {
                                 logger.error(err);
                                 res.send(500, errorResponses.db.error);

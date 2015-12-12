@@ -28,7 +28,7 @@ ${ENVIRONMENTSERVER}                http://d4d.rlcatalyst.com/public/login.html
 ${height}             768
 ${width}           1366
 
-             
+${NODE}              10.0.1.200
 #Puppet
 ${PUPPET SERVERNAME}       	RLPuppet
 ${PUPPET EDIT SERVERNAME}         RLPuppetServer
@@ -285,6 +285,7 @@ ${PROVIDERR}                 AWS
 ${SECRET KEY}                  qm/j8lT0/IPc1P5ud8yujUSa61+QjqeyZ/jZkIff
 ${ACCESS KEY}                  AKIAI3ETOOEFHJ62G2NQ
 ${AZURE PROVIDERNAME}          AZUREPRO
+${AZURE EDIT PROVIDERNAME}     AZURE PROVIDER
 ${SUBSCRIPTION ID}            f2c53cd4-5d0f-4c6d-880b-6af801de9b21
 
 

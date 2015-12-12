@@ -169,7 +169,7 @@ ${NO MATCH}                 No matches found
 ${ENVNAME}                  QA
 ${NAMEOFINSTANCE}           Instance_Centos
 
-${IP Ubuntu}                 10.0.1.92                #54.68.147.50		
+${IP Ubuntu}                 10.0.1.200              		
 ${IP UBUNTUSERNAME}         ubuntu
 ${EDIT_UBUNTU_INSTANCE_NAME}     Instance_Ubuntu
 

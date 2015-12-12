@@ -188,6 +188,8 @@ var vmwareservice = function(options) {
                     return;
                 }
                 if (!err && data != null) {
+                    console.log(data);
+                    console.log('trying to parses'); 
                     data = JSON.parse(data);
                     console.log('Quried server:', JSON.stringify(data));
                     //response {"name":"D4D-MYVMWBP1_2015-10-21_00_12_59_159","ip":"192.168.102.154","OS":"Ubuntu Linux (64-bit)","toolsStatus":"guestToolsRunning","state":"poweredOn","cpuUsage":{"used":0,"num":1},"memory":{"avail":1024,"used":0},"uptime":1195}
