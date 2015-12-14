@@ -520,7 +520,7 @@
                                                 </div>
                                             </div>
                                             
-                                            <div class="col-lg-12 col-md-12 margintop15">
+                                            <div class="col-lg-12 col-md-12 margintop15 repoUrlClass">
                                                 <label>Repository URL:<span style="color:red">*</span>
                                                     <span>
                                                         <img class="repourlspinner" src="img/select2-spinner.gif" style="display:none">
@@ -541,18 +541,18 @@
                                             </div> -->
 
 
-                                            <div class="col-lg-12 col-md-12 margintop15 containerClass containerUpgradeDeploy">
+                                            <div class="col-lg-12 col-md-12 margintop15 containerClass containerIdClass containerUpgradeDeploy">
                                                 <label>Container Name/ID:<!-- <span style="color:red">*</span> -->
                                                     <span>
                                                         <img class="containerIdspinner" src="img/select2-spinner.gif" style="display:none">
                                                         </img>
                                                     </span>
                                                 </label>
-                                                <input id="containerIdDiv" type="text" class="form-control" name="">
+                                                <input id="containerIdDiv" type="text" class="form-control" />
                                             </div>
 
-                                            <div class="col-lg-12 col-md-12 margintop15 containerClass containerUpgradeDeploy">
-                                                <label>Container Port:<!-- <span style="color:red">*</span> -->
+                                            <div class="col-lg-12 col-md-12 margintop15 containerClass  containerPortClass containerUpgradeDeploy">
+                                                <label>Container Port:<span style="color:red">*</span>
                                                     <span>
                                                         <img class="containerIdspinner" src="img/select2-spinner.gif" style="display:none">
                                                         </img>
@@ -561,8 +561,11 @@
                                                 <input id="containerPort" type="text" class="form-control" name="">
                                             </div>
 
+                                            
+                                                <input id="upgradeValue" type="hidden" />
 
-                                            <div class="col-lg-6 col-md-6 margintop15">
+
+                                            <div class="col-lg-6 col-md-6 margintop15 artifactClass">
                                                 <label for="">Artifacts:<span style="color:red">*</span>
                                                     <span>
                                                         <img class="artifactsspinner" src="img/select2-spinner.gif" style="display:none">
@@ -576,7 +579,7 @@
                                                 </div>
                                             </div>
 
-                                            <div class="col-lg-6 col-md-6 margintop15">
+                                            <div class="col-lg-6 col-md-6 margintop15 versionClass">
                                                 <label for="">Versions:<span style="color:red">*</span>
                                                     <span>
                                                         <img class="versionspinner" src="img/select2-spinner.gif" style="display:none">
@@ -722,10 +725,18 @@ $(document).ready(function() {
         $('.createTaskLinkUpgrade').removeAttr('disabled');
     }
     function newAppDeployClickHandler(e) {
-        $('#formUpgradeAppDeploy')[0].reset();
-        $('.containerClass').hide();
-        resetSpinners();
         $('#containerIdDiv').removeAttr('disabled');
+        $('#upgradeValue').val("");
+        $('.containerIdClass').hide();
+        $('.containerPortClass').hide();
+        $('.repoUrlClass').hide();
+        $('.artifactClass').hide();
+        $('.versionClass').hide();
+
+        $('#formUpgradeAppDeploy')[0].reset();
+       // $('.containerClass').hide();
+        resetSpinners();
+        //$('#containerIdDiv').removeAttr('disabled');
         var $containerIdName = $('#containerIdInput').val('');
         //alert($('#containerIdInput').val())
         //$('#chooseRepository').empty();
@@ -738,10 +749,11 @@ $(document).ready(function() {
         $('.modaltitleforNewDeploy').show();
         $('.saveUpgradeAppDeploy').hide();
         $('.saveNewAppDeploy').show();
-        $('.containerUpgradeDeploy').show();
+        //$('.containerUpgradeDeploy').show();
         //$('.containerNewDeploy').show();
     
         getNexusServer();
+        getDockerServer();
         var $modal = $('#modalUpgradeAppDeploy');
         $modal.modal('show');
     }
@@ -1326,6 +1338,7 @@ function moreInfoUpgradeAppDeployPipelineClickHandler(e) {
     $("#upgradeAppName").html(upgradeAppNameText);
     $("#upgradeNodeIp").html(upgradeNodeIpText);
     getNexusServer();
+    getDockerServer();
     var $modal = $('#modalUpgradeAppDeploy');
     $('#containerIdInput').val(containerId);
     $modal.modal('show');
@@ -1380,30 +1393,99 @@ function getNexusServer(){
         $('.reposerverspinner').css('display','none');
         if(nexus.length){
             for(var i=0;i< nexus.length;i++){
-                $('#chooseNexusServer').append('<option data-nexusUrl = "'+nexus[i].hostname+'" value='+nexus[i].rowid+'>'+nexus[i].nexusservername+'</option>');
+                $('#chooseNexusServer').append('<option data-nexusUrl = "'+nexus[i].hostname+'" value='+nexus[i].rowid+' data-serverType = "'+nexus[i].configType+'">'+nexus[i].nexusservername+'</option>');
             }
         }
     });
 }
+
+function getDockerServer(){
+    $.get('/d4dMasters/readmasterjsonnew/18', function(dockerData) {
+        if(dockerData.length){
+            for(var i=0; i< dockerData.length; i++){
+                $('#chooseNexusServer').append('<option value='+dockerData[i].rowid+' data-serverType = "'+dockerData[i].configType+'">'+dockerData[i].dockerreponame+'</option>');
+            }
+        }
+    });
+}
+
 var $nexusServer = $('#chooseNexusServer');
 $nexusServer.change(function(e){
+    var nexusServerType = $('#chooseNexusServer :selected').attr('data-serverType');
+    //alert(nexusServerType);
     if($('#chooseNexusServer :selected').text() == 'Choose Server'){
+        $('.containerIdClass').hide();
+        $('.containerPortClass').hide();
+        $('.repoUrlClass').hide();
+        $('.artifactClass').hide();
+        $('.versionClass').hide();
         $('.createTaskLinkUpgrade').attr('disabled','disabled');
-    }else{
+
+        // Reset all values
+        resetAllFields();
+
+    }else if(nexusServerType == 'nexus'){
+        $('.containerUpgradeDeploy').hide();
         $('.createTaskLinkUpgrade').removeAttr('disabled');
+        $('.repoUrlClass').show();
+        $('.artifactClass').show();
+        $('.versionClass').show();
+        $('.containerIdClass').hide();
+        $('.containerPortClass').hide();
+        resetAllFields();
+        getNexusServerRepo($(this).val());
+        getTasks();
+    }else{ // It's Docker
+        resetAllFields();
+        $('.containerUpgradeDeploy').show();
+        $('.createTaskLinkUpgrade').removeAttr('disabled');
+
+        $('.repoUrlClass').hide();
+        $('.artifactClass').hide();
+        $('.versionClass').hide();
+        $('.containerIdClass').show();
+        $('.containerPortClass').show();
+        var containerId = $('#containerIdInput').val();
+        var upgrade = $('#upgradeValue').val();
+        if(containerId != "NA" && upgrade == "true"){
+            $('#containerIdDiv').val(containerId);
+            $('#containerIdDiv').attr('disabled','disabled');
+        }/*else{
+            $('.containerIdClass').hide();
+            $('.containerPortClass').hide();
+        }*/
+        getDockerRepoes();
+        getTasks();
     }
-    resetAllFields();
-    getNexusServerRepo($(this).val());
-    getTasks();
+    
 });
 
-function getNexusServerRepo(nexusId) {
-
-    //resetAllFields();
+function getDockerRepoes(){
     $('.repospinner').css('display', 'inline-block');
-    /*if(nexusId == '' && nexusId == null){
-        $('.repospinner').css('display','none');
-    }*/
+    var $chooseRepository = $('#chooseRepository');
+    var projectId = urlParams.projid;
+    if(projectId){
+        $.get('/d4dMasters/project/'+projectId, function(anProject){
+            $('.repospinner').css('display', 'none');
+            if(anProject.length){
+                anProject = anProject[0];
+                if(anProject.repositories){
+                    var repositories = anProject.repositories.docker;
+                    if(repositories.length){
+                        for(var x=0; x< repositories.length; x++){
+                            $('#chooseRepository').append('<option value="' + repositories[x] + '">' + repositories[x] + '</option>');
+                        }
+                    }
+                }    
+            }
+        });
+    }else {
+        $('.repospinner').css('display', 'none');
+    }
+}
+
+/*function getNexusServerRepo(nexusId) {
+    $('.repospinner').css('display', 'inline-block');
     var $chooseRepository = $('#chooseRepository');
     if (nexusId) {
         $.get('/nexus/' + nexusId + '/repositories', function(nexusRepos) {
@@ -1417,15 +1499,55 @@ function getNexusServerRepo(nexusId) {
     } else {
         $('.repospinner').css('display', 'none');
     }
+}*/
+
+function getNexusServerRepo(nexusId) {
+    $('.repospinner').css('display', 'inline-block');
+    var $chooseRepository = $('#chooseRepository');
+    var projectId = urlParams.projid;
+    if (nexusId) {
+        $.get('/nexus/' + nexusId + '/repositories', function(nexusRepos) {
+            $('.repospinner').css('display', 'none');
+            if (nexusRepos.length) {
+
+                $.get('/d4dMasters/project/'+projectId, function(anProject){
+                    if(anProject.length){
+                        project = anProject[0];
+                        if(project.repositories){
+                            var repositories = project.repositories.nexus;
+                            if(repositories.length){
+                                for(var x=0; x< repositories.length; x++){
+                                    (function(x){
+                                        for (var i = 0; i < nexusRepos.length; i++) {
+                                            if(repositories[x] === nexusRepos[i].name){
+                                                $('#chooseRepository').append('<option data-repoName="' + nexusRepos[i].name + '" data-repoUrl="' + nexusRepos[i].resourceURI + '" value="' + nexusRepos[i].id + '">' + nexusRepos[i].name + '</option>');
+                                            }
+                                        }
+                                    })(x);
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    } else {
+        $('.repospinner').css('display', 'none');
+    }
 }
+
 var $chooseRepository = $('#chooseRepository');
 $chooseRepository.change(function(e){
+    var nexusServerType = $('#chooseNexusServer :selected').attr('data-serverType');
+    if(nexusServerType === 'nexus'){
+        $('.containerIdClass').hide();
+        $('.containerPortClass').hide();
+        $('.repoUrlClass').show();
+        $('.artifactClass').show();
+        $('.versionClass').show();
+
         var $repositoryUrl = $('#repositoryUrl');
         $repositoryUrl.val("");
-        var $containerId = $('#containerIdDiv');
-        $containerId.val("");
-        var $containerPort = $('#containerPort');
-        $containerPort.val("");
         var $chooseArtifacts = $('#chooseArtifacts');
         $chooseArtifacts.empty();
         $('#chooseArtifacts').append('<option value="">Choose Artifacts</option>');
@@ -1433,23 +1555,18 @@ $chooseRepository.change(function(e){
         $chooseVersions.empty();
         $('#chooseVersions').append('<option value="">Choose Versions</option>');
         $('#repositoryUrl').val($(this).find('option:selected').attr('data-repoUrl'));
-        var containerIdName = $('#containerIdInput').val();
-        //alert("containerIdName"+containerIdName);
-        if(containerIdName == 'NA' || containerIdName == ''){
-         $('.containerClass').hide();  
-         //$('.containerNewDeploy').show(); 
-         $('.containerUpgradeDeploy').show();
-
-        }else{
-            $('.containerClass').show();
-            $('.containerUpgradeDeploy').show();
-            //$('.containerNewDeploy').hide();
-            $('#containerIdDiv').attr('disabled','disabled');
-            $('#containerIdDiv').val($('#containerIdInput').val());
-        }
+        
         var repoName = $(this).find('option:selected').attr('data-repoName');
         var nexusId = $('#chooseNexusServer').val();
         getNexusServerRepoArtifact(nexusId,repoName);
+    } else{
+        $('.containerIdClass').show();
+        $('.containerPortClass').show();
+        $('.repoUrlClass').hide();
+        $('.artifactClass').hide();
+        $('.versionClass').hide();
+    }
+        
     });
 
 function getNexusServerRepoArtifact(nexusId,repoName){
@@ -1554,14 +1671,88 @@ function getTasks(){
 
 // on click of Upgrade button
 $('.saveUpgradeAppDeploy').on('click',function(){
-    upgradeOrDeploy();
+    var nexusServerType = $('#chooseNexusServer :selected').attr('data-serverType');
+    if(nexusServerType === 'nexus'){
+        upgradeOrDeploy();
+    }else{
+        deployNewForDocker();
+    }
 });
 
 $('.saveNewAppDeploy').on('click',function(){
-    console.log("++++++++++ clicked.............",$('#containerIdDiv').val());
-    $('#containerIdInput').val($('#containerIdDiv').val());
-    upgradeOrDeploy();
+    var nexusServerType = $('#chooseNexusServer :selected').attr('data-serverType');
+    if(nexusServerType === 'nexus'){
+        upgradeOrDeploy();
+    }else{
+        $('#containerIdInput').val($('#containerIdDiv').val());
+        deployNewForDocker();
+    }
 });
+
+// Deploy New App for Docker Container
+function deployNewForDocker(){
+    var nexusId = $('#chooseNexusServer').find('option:selected').val();
+    if(!nexusId){
+        alert("Please select repository server.");
+        return false;
+    }
+    var repoId = $('#chooseRepository').find('option:selected').val();
+    if(!repoId){
+        alert("Please select repository.");
+        return false;
+    }
+    var containerId = $('#containerIdInput').val();
+    var containerPort = $('#containerPort').val();
+
+    if(!containerPort){
+        alert("Please specify port.");
+        return false;
+    }
+    var taskId = $('#chooseJobType').find('option:selected').val();
+    if(!taskId){
+        alert("Please select job.");
+        return false;
+    }
+    var orgId = urlParams.org;
+    var bgId = urlParams.bg;
+    var projectId = urlParams.projid;
+    var envId = urlParams.envid;
+    var appName = repoId.split("/")[1];
+    var upgrade = $('#upgradeValue').val();
+    var nexusData={
+        "nexusData":{
+            "nexusUrl": "",
+            "version": "",
+            "containerId": containerId,
+            "containerPort": containerPort,
+            "dockerRepo": repoId,
+            "upgrade": upgrade
+        }
+    };
+
+    $.get('/d4dMasters/project/'+projectId, function(projData) {
+        if(projData.length){
+                var reqBody = {
+                    "appName": appName,
+                    "description": appName+" deployed."
+                };
+                $.ajax({
+                    url: '/d4dMasters/project/'+projectId+'/appdeploy/appName/update',
+                    data: JSON.stringify(reqBody),
+                    type: 'POST',
+                    contentType: "application/json",
+                    success: function(data) { 
+                    },
+                    error: function(jqxhr) {
+                        //alert("Failed to update update appName in Project.")
+                    }
+                });
+        }
+    });
+        $('a[data-executetaskid='+taskId+']').trigger('click',nexusData);
+        $('#modalUpgradeAppDeploy').modal('hide');
+        var $containerIdName = $('#containerIdInput').val('');
+}
 
 function upgradeOrDeploy(){
     var nexusId = $('#chooseNexusServer').find('option:selected').val();
@@ -1596,49 +1787,46 @@ function upgradeOrDeploy(){
     var groupId = $('#chooseArtifacts').find('option:selected').attr('data-groupId').replace(/\./g, '/');
     var nexusUrl = $('#chooseNexusServer').find('option:selected').attr('data-nexusUrl');
     var nexusRepoUrl = nexusUrl+"/service/local/repositories/"+repoId+"/content/"+groupId+"/"+artifactId+"/"+versionId+"/"+artifactId+"-"+versionId+".zip";
-    var containerId = $('#containerIdInput').val();
-    var containerPort = $('#containerPort').val();
+    /*var containerId = $('#containerIdInput').val();
+    var containerPort = $('#containerPort').val();*/
     //alert(containerPort);
+    var upgrade = $('#upgradeValue').val();
     var nexusData={
         "nexusData":{
             "nexusUrl": nexusRepoUrl,
             "version": versionId,
             "containerId": "",
-            "containerPort": ""
+            "containerPort": "",
+            "dockerRepo": "",
+            "upgrade": upgrade
         }
     };
 
-    if(containerId && containerId != "NA"){
+    /*if(containerId && containerId != "NA"){
         nexusData.nexusData.containerId = containerId;
         nexusData.nexusData.containerPort = containerPort;
-    }
+        nexusData.nexusData.dockerRepo = repoId;
+    }*/
 
-    $.get('/d4dMasters/readmasterjsonnew/4', function(projData) {
+    $.get('/d4dMasters/project/'+projectId, function(projData) {
         //alert(projData);
         if(projData.length){
-            for(var i=0; i< projData.length; i++){
-                if(projData[i].rowid === projectId){
-                    //alert(projData[i].appdeploy.length);
-                    if(projData[i].appdeploy.length === 0){
-                        var reqBody = {
-                            "appName": repoId,
-                            "description": repoId+" deployed."
-                            };
-                        $.ajax({
-                            url: '/d4dMasters/project/'+projectId+'/appdeploy/appName/update',
-                            data: JSON.stringify(reqBody),
-                            type: 'POST',
-                            contentType: "application/json",
-                            success: function(data) { 
+            var reqBody = {
+                "appName": repoId,
+                "description": repoId+" deployed."
+                };
+                $.ajax({
+                    url: '/d4dMasters/project/'+projectId+'/appdeploy/appName/update',
+                    data: JSON.stringify(reqBody),
+                    type: 'POST',
+                    contentType: "application/json",
+                    success: function(data) { 
             
-                            },
-                            error: function(jqxhr) {
-                                alert("Failed to update update appName in Project.")
-                            }
-                        });
+                    },
+                    error: function(jqxhr) {
+                        //alert("Failed to update update appName in Project.")
                     }
-                }
-            }
+                });
         }
     });
         //alert(JSON.stringify(nexusData));
@@ -1870,6 +2058,10 @@ function constructUI(data) {
         }
 
         function moreInfoUpgradeAppDeployClickHandler(e) {
+            $('.repoUrlClass').hide();
+            $('.artifactClass').hide();
+            $('.versionClass').hide();
+            $('#upgradeValue').val("true");
             $('#formUpgradeAppDeploy')[0].reset();
             $('.containerClass').hide();
             resetSpinners();
@@ -1902,6 +2094,7 @@ function constructUI(data) {
 
 
             getNexusServer();
+            getDockerServer();
             var $modal = $('#modalUpgradeAppDeploy');
             $('#containerIdInput').val(containerId);
             //$logContainer.empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
