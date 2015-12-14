@@ -2696,8 +2696,9 @@ $.get('../instances/' + urlParams.id, function(data) {
     $cfmwareTbody.append($tr);
 
     $tr = $('<tr style="line-height:2.3"></tr>');
-    console.log('data --runlist', data.runlist.join());
-    $tr.append('<td scope="col" style="font-size:12px;">Runlist</td><td scope="col"> : </td><td scope="col" style="font-size:12px;" class="runlistInfoContainer" > ' + data.runlist.join() + '</td>');
+   
+    var runlistName = $chefCookbookRoleSelector.getRunlistNames(data.runlist);
+    $tr.append('<td scope="col" style="font-size:12px;">Runlist</td><td scope="col"> : </td><td scope="col" style="font-size:12px;" class="runlistInfoContainer" > ' + runlistName.join(' , ') + '</td>');
     $cfmwareTbody.append($tr);
 
     //$collapseTaskAreaTbody.empty();
