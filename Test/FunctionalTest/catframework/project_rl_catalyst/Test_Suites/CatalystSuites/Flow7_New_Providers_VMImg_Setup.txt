@@ -10,7 +10,7 @@ Resource           ${COMMON RESOURCES}/catalyst_grid_node.txt
 
 
 *** Test Cases ***
-Catalyst Validation and Creation of AWS PROVIDERS setup
+Catalyst Validation and Creation of AWS PROVIDERS setup        #AWS PROVIDERS SETUP
     [Tags]       Sanity            Smoke 
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
@@ -21,7 +21,7 @@ Catalyst Validation and Creation of AWS PROVIDERS setup
 
 
 
-Catalyst Edit Provider Name
+Catalyst Edit AWS Provider Name
     [Tags]       Sanity             Smoke  
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
@@ -31,7 +31,7 @@ Catalyst Edit Provider Name
 
 
 
-Catalyst Unique PROVIDERS validation setup
+Catalyst Unique AWS PROVIDERS validation setup
     [Tags]       Sanity               Smoke
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
@@ -51,17 +51,17 @@ Catalyst Unique PROVIDERS validation setup
 
 
 
-
+#OPENSTACK PROVIDERS SETUP
 Catalyst Validation of OpenStack Providers Setup
     [Tags]       Sanity               Settings
-#    Catalyst Login
+#    Catalyst Login 
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
     Catalyst Validation of OpenStack page
     Catalyst Logout                      
     [Teardown]     Close Browser
 
 
-
+#HP PUBLIC CLOUD PROVIDERS SETUP
 Catalyst Validation of HP Public Cloud Providers Setup
     [Tags]       Sanity               Smoke
 #    Catalyst Login
@@ -72,6 +72,9 @@ Catalyst Validation of HP Public Cloud Providers Setup
 
 
 
+
+
+#AZURE PROVIDERS SETUP
 Catalyst Validation of Azure Providers Setup
     [Tags]       Sanity               Settings
 #    Catalyst Login
@@ -91,12 +94,33 @@ Catalyst Creation of New Azure Provider Setup
 
 
 
+Catalyst Editing the Azure provider created
+    [Tags]       Sanity               Settings
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst Editing of Azure provider
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+
+Catalyst Unique Azure provider validation setup
+    [Tags]       Sanity               Settings1
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst Unique Azure provider
+    Catalyst Logout                      
+    [Teardown]     Close Browser
 
 
 
 
 
 
+
+
+
+#VM IMAGE  SETUP
 Catalyst Validation and Creation of VM IMAGE setup
     [Tags]       Sanity               Settings
 #    Catalyst Login
