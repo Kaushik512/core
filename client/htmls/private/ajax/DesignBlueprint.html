@@ -1439,35 +1439,16 @@
  function createRunlistTable(runlist) {
      //alert(runlist.length);
      //$('#tableRunlist').removeClass('hidden');
-    
-     var $options = $('#cookbooksrecipesselectedList').find('option');
-     console.log("checking???" + $options);
-     if (runlist.length == 0) {
-         var runlist = [];
-         $options.each(function() {
-             var $option = $(this);
-             runlist.push($option.val());
-             console.log(runlist);
-             return runlist;
-         });
-     }
-     $tasksRunlist.clear().draw();
-     // alert(runlist.length);
-     for (i = 0; i < runlist.length; i++) {
-         //alert('check');
-         if (runlist.length > 0) {
-             //alert('ch');
-             console.log(runlist[i].substring(runlist[i].lastIndexOf("[") + 1, runlist[i].lastIndexOf("]")));
-             var $runlistList = $('#tableRunlistForBlueprint');
-             var $tr = $('<tr class="runlistRow"></tr>');
-             var $tdName = $('<td class="runlistDescription"></td>');
-
-             $tdName.append(runlist[i].substring(runlist[i].lastIndexOf("[") + 1, runlist[i].lastIndexOf("]")));
-             $tr.append($tdName);
-             $runlistList.append($tr);
-             $tasksRunlist.row.add($tr).draw();
-         }
-     }
+    $tasksRunlist.clear().draw();
+    // alert(runlist.length);
+    for (i = 0; i < runlist.length; i++) {
+        var $runlistList = $('#tableRunlistForBlueprint');
+        var $tr = $('<tr class="runlistRow"></tr>');
+        var $tdName = $('<td class="runlistDescription">'+runlist[i]+'</td>');
+        $tr.append($tdName);
+        $runlistList.append($tr);
+        $tasksRunlist.row.add($tr).draw();
+    }
  }
 
  $('#saveRunlist').click(function(e) {
@@ -1479,7 +1460,7 @@
      // alert(runlist);
     
          // alert('here');
-         createRunlistTable(runlist);
+         createRunlistTable($ccrs.getRunlistNames());
          $('#chefRunlistModal').modal('hide');
          return false;
     
@@ -2642,7 +2623,7 @@ function getProviderListold() {
                             '</li><li style="font-size:12px;"><u><b>' + getTempName + '</b></u></li>';
 
                          if (getTemplateType != "Docker" && getTemplateType != "docker") {
-                             var cb = gettemplatescookbooks.split(',');
+                              var cb = $chefCookbookRoleSelector.getRunlistNames(gettemplatescookbooks.split(','));
                              var licb = '';
                              //alert(cb.length);
                              for (var cbi = 0; cbi < cb.length; cbi++) {
@@ -3570,21 +3551,15 @@ function getProviderListold() {
              $tdName.append($ccrs);*/
             // alert($ccrs);
             // createRunlistTable($ccrs);
+            var currentRunlistNames = $ccrs.getRunlistNames(tcb);
             $tasksRunlist.clear().draw();
-            for (var i = 0; i < tcb.length; i++) {
-                //alert('check');
-                if (tcb.length > 0) {
-                    //alert('ch');
-                    console.log(tcb[i].substring(tcb[i].lastIndexOf("[") + 1, tcb[i].lastIndexOf("]")));
-                    var $runlistList = $('#tableRunlistForBlueprint');
-                    var $tr = $('<tr class="runlistRow"></tr>');
-                    var $tdName = $('<td class="runlistDescription"></td>');
-
-                    $tdName.append(tcb[i].substring(tcb[i].lastIndexOf("[") + 1, tcb[i].lastIndexOf("]")));
-                    $tr.append($tdName);
-                    $runlistList.append($tr);
-                    $tasksRunlist.row.add($tr).draw();
-                }
+            for (var i = 0; i < currentRunlistNames.length; i++) {
+                var $runlistList = $('#tableRunlistForBlueprint');
+                var $tr = $('<tr class="runlistRow"></tr>');
+                var $tdName = $('<td class="runlistDescription">'+currentRunlistNames[i]+'</td>');
+                $tr.append($tdName);
+                $runlistList.append($tr);
+                $tasksRunlist.row.add($tr).draw();
             }
 
              $cookbookShow.data('$ccrs', $ccrs)

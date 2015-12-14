@@ -52,7 +52,28 @@
                                           <div  id="environmentname" multiselect="multiselect" datatype="select" sourcepath="3" datapath="masterjson.rows.row"  linkedto="orgname" class="input-group from-control col-md-12 widthBox" cdata="catalyst">
                                           </div>
                                         </div>
-                                        <div class="col-lg-6 col-md-6" style="display:none">
+                                        <div class="col-lg-6 col-md-6">
+                                          <a style="cursor:pointer;" data-toggle="modal" data-backdrop="false" id="repoanchorDetails" href="#repodetailsModal"> <img title="Add App Details" data-placement="top" rel="tooltip" class="addrepoDetails" style="float:right;margin-top:20px;" src="img/add.png"></a>
+                                          <label style="float:left;margin-top:20px;">Repositories Details :</label>
+                                          <div class="table-responsive table-div">
+                                            <table id="tablerepositoryDetails" class="table table-striped table-bordered table-hover dataTable" style="border:1px solid #eeeeee !important; text-align:center;font-size:12px;margin-top:45px;" width="100%" cellpadding="5px">
+                                                <thead>
+                                                    <tr class="rowCustomStyle" style="font-weight:bold;">
+                                                        <td style="color:#fff;background-color: #2c3742; width:35%">Repository</td>
+                                                        <td style="color:#fff;background-color: #2c3742;">Name</td>
+                                                        <td style="color:#fff;background-color: #2c3742; width:10%">Action</td>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="repoDeployTbody">
+                                                </tbody>
+                                            </table>
+                                          </div>
+                                        </div>
+                                        <div class="col-lg-6 col-md-6" style="margin-top:25px; display:none">
+                                          <label for="name">Repository Details:</label>
+                                          <input autofocus name="ctl00$MainContent$orgname" value="" id="repositories" class="form-control" type="text"  cdata="catalyst">
+                                       </div>
+                                        <!-- <div class="col-lg-6 col-md-6" style="display:none">
                                           <a style="cursor:pointer;" data-toggle="modal" data-backdrop="false" id="appanchorDetails" href="#appdetailsModal"> <img title="Add App Details" data-placement="top" rel="tooltip" class="addappDetails" style="float:right;margin-top:20px;" src="img/add.png"></a>
                                           <label style="float:left;margin-top:20px;">Application Details :</label>
                                           <div class="table-responsive table-div">
@@ -68,11 +89,11 @@
                                                 </tbody>
                                             </table>
                                           </div>
-                                        </div>
-                                        <div class="col-lg-6 col-md-6" style="margin-top:25px; display:none">
+                                        </div> -->
+                                        <!-- <div class="col-lg-6 col-md-6" style="margin-top:25px; display:none">
                                           <label for="name">Application Name:</label>
                                           <input autofocus name="ctl00$MainContent$orgname" value="" id="appdeploy" class="form-control" type="text"  cdata="catalyst">
-                                       </div>
+                                       </div> -->
 
                                  <!-- <div class="col-lg-6 col-md-6 smart-form" style="margin-top:25px;">
                                     <label for="category">Assign Teams:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
@@ -113,8 +134,60 @@
    </div>
 </div>
 
+<!--modal for Repo Deploy Details-->
+<div class="modal fade" id="repodetailsModal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+   <div class="modal-dialog">
+      <div class="modal-content">
+         <form class="" id="repoDetailsCreate" autocomplete="off">
+            <div class="modal-header">
+               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+               &times;
+               </button>
+               <h4 class="modal-title">
+                  <img style="width:18px;margin-left:6px;" src="img/tasksmall.png">&nbsp;&nbsp;Add Repository Details
+               </h4>
+            </div>
+            <div class="modal-body" style="height:150px;">
+              <div class="col-lg-6 col-md-6">
+                <label for="">Repository Server:<span style="color:red">*</span>
+                    <span>
+                        <img class="reposerverspinner" src="img/select2-spinner.gif" style="display:none">
+                        </img>
+                    </span>
+                </label>
+                <div class="input-groups">
+                    <select id="chooseRepoServer" name="" class="required width-100 form-control">
+                        <!-- <option value="">Choose Server</option> -->
+                        <option value="nexus">Nexus</option>
+                        <option value="docker">Docker</option>
+                    </select>
+                </div>
+              </div>
+               <div class="col-lg-6 col-md-6">
+                  <label for="repoName">Name</label>
+                  <input type="text" name="repoName" class="form-control" id="repoNameCreate"/>
+               </div>
+               <div class="col-lg-12 col-md-12" style="margin-top:20px">
+                 
+                 <span style="color:red;font-size:12px">* For Docker repository name should be username/tag (e.g. relevancelab/catalyst)</span>
+               </div>
+            </div>
+            <div class="modal-footer">
+              <a type="button" class="btn btn-default" data-dismiss="modal">
+                <i class="ace-icon fa fa-times bigger-110" style="margin-right: 5px;"></i>Cancel
+              </a>
+              <button class="btn btn-primary btn-mini" id="saveRepoDetails">
+                <i class="ace-icon fa fa-check bigger-110"></i>
+                Save
+              </button>
+            </div>
+         </form>
+      </div>
+   </div>
+</div>
+<!--modal for Repo Deploy Details ends here-->
 <!--modal for App Deploy Details-->
-<div class="modal fade" id="appdetailsModal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+<!-- <div class="modal fade" id="appdetailsModal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
    <div class="modal-dialog">
       <div class="modal-content">
          <form class="" id="appDetailsCreate" autocomplete="off">
@@ -144,12 +217,11 @@
                 <i class="ace-icon fa fa-check bigger-110"></i>
                 Save
               </button>
-               <!-- <input type="submit" class="btn btn-primary" id="saveAppDeploy" value="Save">   -->
             </div>
          </form>
       </div>
    </div>
-</div>
+</div> -->
 <!--modal for App Deploy Details ends here-->
 <script>
    //Form Name
@@ -161,7 +233,7 @@
       if (queryString == 'new') {
       } else {
         $.get('/d4dMasters/readmasterjsonnew/4', function(data) {
-            for (var i = 0; i < data.length; i++) {
+            /*for (var i = 0; i < data.length; i++) {
                 if (queryString == data[i].rowid) {
                     var appDeployList = data[i].appdeploy;
                     if (appDeployList.length && appDeployList[0].applicationname) {
@@ -191,14 +263,123 @@
                         }
                     }
                 }
+            }*/
+
+            for (var i = 0; i < data.length; i++) {
+              (function(i){
+                if (queryString == data[i].rowid) {
+                        var repo = data[i].repositories;
+                        if(repo){
+                            var $repoDeployTbody = $('#repoDeployTbody');
+                            var nexusList = repo.nexus;
+                            var dockerList = repo.docker;
+                            if(nexusList.length){
+                            for(var j=0; j < nexusList.length; j++){
+                              (function(j){
+                                 var $tr = $('<tr class="repoDetailsRow"></tr>');
+                                 var $tdName = $('<td class="tdrepoName" value=' + nexusList[j] + ' style="word-break: break-word;"></td>');
+                                 $tr.data('repoName', nexusList[j]);
+                                 var $tdrepoServerName = $('<td class="tdrepoServerName" value="nexus" style="word-break: break-word;"></td>');
+                                 $tr.data('repoServerName', "nexus");
+
+                                 $tdName.append(nexusList[j]);
+                                 $tdrepoServerName.append("nexus");
+                                 var $tdAction = $('<td/>');
+                                 $tdAction.append('<div style="margin-right:17px;float:right;" class="btn-group"><button class="deleteRow" value="Remove" title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></div>');
+
+                                 $tdAction.find('.deleteRow').click(function() {
+                                     $repoDetails.row($tr).remove().draw(true);
+                                 });
+
+                                 $tr.append($tdrepoServerName).append($tdName).append($tdAction);
+                                 $repoDeployTbody.append($tr);
+                                 $repoDetails.row.add($tr).draw();
+                              })(j);
+                            }
+                          }
+                          if(dockerList.length){
+                            for(var k =0; k < dockerList.length; k++){
+                              (function(k){
+                                var $tr = $('<tr class="repoDetailsRow"></tr>');
+                                 var $tdName = $('<td class="tdrepoName" value=' + dockerList[k] + ' style="word-break: break-word;"></td>');
+                                 $tr.data('repoName', dockerList[k]);
+                                 var $tdrepoServerName = $('<td class="tdrepoServerName" value="docker" style="word-break: break-word;"></td>');
+                                 $tr.data('repoServerName', "docker");
+
+                                 $tdName.append(dockerList[k]);
+                                 $tdrepoServerName.append("docker");
+                                 var $tdAction = $('<td/>');
+                                 $tdAction.append('<div style="margin-right:17px;float:right;" class="btn-group"><button class="deleteRow" value="Remove" title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></div>');
+
+                                 $tdAction.find('.deleteRow').click(function() {
+                                     $repoDetails.row($tr).remove().draw(true);
+                                 });
+
+                                 $tr.append($tdrepoServerName).append($tdName).append($tdAction);
+                                 $repoDeployTbody.append($tr);
+                                 $repoDetails.row.add($tr).draw();
+                              })(k);
+                            }
+                          }
+                        }
+
+                            /*var $tr = $('<tr class="appDeployRow"></tr>');
+                            var $tdName = $('<td class="tdappName" value=' + applicationConstructName + ' style="word-break: break-word;"></td>');
+                            $tr.data('appName', applicationConstructName);
+
+                            var $tdDescription = $('<td class="tdappDescription" value=' + applicationConstructDesc + ' style="word-break: break-word;"></td>');
+                            $tr.data('appDesc', applicationConstructDesc);
+
+                            $tdName.append(applicationConstructName);
+                            $tdDescription.append(applicationConstructDesc);
+                            var $tdAction = $('<td/>');
+                            $tdAction.append('<div style="margin-right:17px;float:right;" class="btn-group"><button class="deleteRow" value="Remove" title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></div>');
+
+                            $tdAction.find('.deleteRow').click(function() {
+                                $appDetails.row($tr).remove().draw(true);
+                            });
+
+                            $tr.append($tdName).append($tdDescription).append($tdAction);
+                            $appDeployTbody.append($tr);
+                            $appDetails.row.add($tr).draw();*/
+                        //}
+                    //}
+                }
+             })(i);
             }
         });
       }
+   });
+   $('#repoanchorDetails').click(function(e) {
+      $("#repodetailsModal").show();
+      $('#repoDetailsCreate').trigger("reset");
    });
    $('#appanchorDetails').click(function(e) {
       $("#appdetailsModal").show();
       $('#appDetailsCreate').trigger("reset");
    });
+   if (!$.fn.dataTable.isDataTable('#tablerepositoryDetails')) {
+      $repoDetails = $('#tablerepositoryDetails').DataTable({
+           "pagingType": "full_numbers",
+           "iDisplayLength": 5,
+           "aLengthMenu": [
+               [5, 40, 100, -1],
+               [5, 40, 100, "All"]
+           ],
+           "aoColumns": [
+               {
+                   "bSortable": true
+               }, {
+                   "bSortable": true
+               }, {
+                   "bSortable": true
+               }
+           ]
+       });
+   }
+   $("#tablerepositoryDetails_length").hide();
+   $("#tablerepositoryDetails_filter").hide();
+
    if (!$.fn.dataTable.isDataTable('#tableappDetails')) {
       $appDetails = $('#tableappDetails').DataTable({
            "pagingType": "full_numbers",
@@ -221,8 +402,37 @@
    $("#tableappDetails_length").hide();
    $("#tableappDetails_filter").hide();
 
+   $("#saveRepoDetails").click(function(e) {
+     e.preventDefault();
+     var repoServerName = $("#chooseRepoServer").val();
+     var repoName = $("#repoNameCreate").val();
+     if (repoName == '') {
+         alert("Please enter Repository Name");
+     }
+     if (repoName != '') {
+         var $repoDeployTbody = $('#repoDeployTbody');
+         var $tr = $('<tr class="repoDetailsRow"></tr>');
+         var $tdName = $('<td class="tdrepoName" value=' + repoName + ' style="word-break: break-word;"></td>');
+         $tr.data('repoName', repoName);
+         var $tdrepoServerName = $('<td class="tdrepoServerName" value=' + repoServerName + ' style="word-break: break-word;"></td>');
+         $tr.data('repoServerName', repoServerName);
 
-   $("#saveAppDeploy").click(function(e) {
+         $tdName.append(repoName);
+         $tdrepoServerName.append(repoServerName);
+         var $tdAction = $('<td/>');
+         $tdAction.append('<div style="margin-right:17px;float:right;" class="btn-group"><button class="deleteRow" value="Remove" title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></div>');
+
+         $tdAction.find('.deleteRow').click(function() {
+             $repoDetails.row($tr).remove().draw(true);
+         });
+
+         $tr.append($tdrepoServerName).append($tdName).append($tdAction);
+         $repoDeployTbody.append($tr);
+         $repoDetails.row.add($tr).draw();
+         $("#repodetailsModal").hide();
+     }
+   });
+   /*$("#saveAppDeploy").click(function(e) {
      e.preventDefault();
      var appName = $("#applicationName").val();
      var appDesc = $("#applicationDesc").val();
@@ -251,9 +461,9 @@
          $appDetails.row.add($tr).draw();
          $("#appdetailsModal").hide();
      }
-   });
+   });*/
     $("#savecreateProjectbtn").click(function(e) {
-        var appdeploy = [];
+       /* var appdeploy = [];
         var $appDeployTableBody = $('#tableappDetails tbody');
         var $trs = $appDeployTableBody.find('tr');
         $trs.each(function(e) {
@@ -266,7 +476,33 @@
         });
         //alert(JSON.stringify(appdeploy));
         var appDeployString = JSON.stringify(appdeploy);
-        $('#appdeploy').val(appDeployString);
+        $('#appdeploy').val(appDeployString);*/
+
+        /*repositories:{
+          nexus: [String],
+          docker: [String]
+        }*/
+
+        var repositories = {
+          nexus: [],
+          docker: []
+        };
+        var nexusList = [];
+        var dockerList = [];
+        var $repoTableBody = $('#tablerepositoryDetails tbody');
+        var $trs = $repoTableBody.find('tr');
+        $trs.each(function(e){
+          var $this = $(this);
+          if($this.data('repoServerName') === 'nexus'){
+            nexusList.push($this.data('repoName'));
+          }
+          if($this.data('repoServerName') === 'docker'){
+            dockerList.push($this.data('repoName'));
+          }
+        });
+        repositories.nexus = nexusList;
+        repositories.docker = dockerList;
+        $('#repositories').val(JSON.stringify(repositories));
     });
    
    function isUserTypeSuperAdmin(){

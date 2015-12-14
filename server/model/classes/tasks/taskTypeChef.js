@@ -44,6 +44,7 @@ chefTaskSchema.methods.execute = function(userName, baseUrl, choiceParam, nexusD
     }
     //var cookbookName = self.runlist[0].split("role[")[1].split("]")[0];
     //logger.debug("cookbook name: ",cookbookName);
+    // While passing extra attribute to chef cookbook "rlcatalyst" is used as attribute.
     if (nexusData) {
         objectArray.push({
             "rlcatalyst": {
@@ -66,6 +67,21 @@ chefTaskSchema.methods.execute = function(userName, baseUrl, choiceParam, nexusD
             objectArray.push({
                 "rlcatalyst": {
                     "containerPort": nexusData.containerPort
+                }
+            });
+        }
+        if (nexusData.containerPort) {
+            objectArray.push({
+                "rlcatalyst": {
+                    "dockerRepo": nexusData.dockerRepo
+                }
+            });
+        }
+
+        if (nexusData.upgrade) {
+            objectArray.push({
+                "rlcatalyst": {
+                    "upgrade": nexusData.upgrade
                 }
             });
         }

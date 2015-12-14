@@ -66,7 +66,35 @@
 
 }).call(this);
 
+function getNameFormChefRunlist(item) {
+    var name = '';
+    var indexOfBracketOpen = item.indexOf('[');
+    if (indexOfBracketOpen != -1) {
+        var indexOfBracketClose = item.indexOf(']');
+        if (indexOfBracketClose != -1) {
+            name = item.substring(indexOfBracketOpen + 1, indexOfBracketClose);
+        }
+    }
+    return name;
+
+}
+
+function getNameFromTemplateRunlist(item) {
+    var indexOfTemplateMarker = item.indexOf(':-:');
+    if (indexOfTemplateMarker !== -1) {
+        var indexOfBracket = item.indexOf('[');
+        if (indexOfBracket !== -1) {
+            var name = item.substring(indexOfBracket + 1, indexOfTemplateMarker);
+        }
+    }
+    return name;
+}
+
 function $chefCookbookRoleSelector(catorgname, callback, selectedRunlist, readMode, listVisible) {
+
+
+
+
     if (!selectedRunlist) {
         selectedRunlist = [];
     }
@@ -85,18 +113,47 @@ function $chefCookbookRoleSelector(catorgname, callback, selectedRunlist, readMo
         },
         getChefServerId: function() {
             return this.find('#cookbooksrecipesselectedList').attr('data-chefServerId');
-        }
+        },
+        getRunlistNames: function(runlist) {
+            console.log(runlist);
+            if (!(runlist && runlist.length)) {
+                runlist = [];
+                var $options = this.find('#cookbooksrecipesselectedList').find('option');
+                $options.each(function() {
+                    var $option = $(this);
+                    var item = $option.val();
+                    runlist.push(item);
+                });
+            }
+            var runlistNames = [];
+            runlist.forEach(function(item) {
+                var name = '';
+                if (item.indexOf('recipe') === 0) {
+                    name = getNameFormChefRunlist(item);
+                } else if (item.indexOf('role') === 0) {
+                    name = getNameFormChefRunlist(item);
+                } else {
+                    name = getNameFromTemplateRunlist(item);
+                }
+                runlistNames.push(name);
+            });
+            console.log(runlistNames)
+            return runlistNames;
+        },
     });
 
     var defaultVisilbleList = {
         cookbooks: true,
         roles: true,
         deploy: false,
+        templates: false,
         all: true
     };
     if (!listVisible) {
         listVisible = defaultVisilbleList;
+
     }
+    //listVisible.templates = true;
     //listVisible = $.extend(listVisible, defaultVisilbleList, listVisible);
 
     console.log(listVisible);
@@ -122,20 +179,22 @@ function $chefCookbookRoleSelector(catorgname, callback, selectedRunlist, readMo
 
 
     //checking for tasks class(deploy,all)
-    var $cookbooksFilterNew = $('<label class="radio hidden col-lg-4" style="font-size:13px;"><input class="runlistTypeSelectorRadioBtn" name="radio" type="radio" id="deployCookbooks"  value="DeployCookbooks"/><i></i>Deploy Cookbooks</label>');
+    var $cookbooksFilterDeploy = $('<label class="radio hidden col-lg-4" style="font-size:13px;"><input class="runlistTypeSelectorRadioBtn" name="radio" type="radio" id="deployCookbooks"  value="DeployCookbooks"/><i></i>Deploy Cookbooks</label>');
     //var $allFilterNew = $('<label class="radio" style="margin: 5px;font-size:13px;"><input name="radio" type="radio" id="allNew"  value="All"/><i></i>All</label>');
-    
+
     //$firstlabelinput.append($allFilterNew);
 
     var $rolesFilter = $('<label class="radio hidden col-lg-3" style="font-size:13px;"><input name="radio" class="runlistTypeSelectorRadioBtn" type="radio" id="roles"  value="Roles"/><i></i>Roles</label>');
     var $cookbooksFilter = $('<label class="radio hidden col-lg-3" style="font-size:13px;"><input name="radio" class="runlistTypeSelectorRadioBtn" type="radio" id="cookbooks"  value="Cookbooks"/><i></i>Cookbooks</label>');
     var $allFilter = $('<label class="radio hidden col-lg-3" style="font-size:13px;"><input name="radio" class="runlistTypeSelectorRadioBtn" type="radio" id="all"  value="All"/><i></i>All</label>');
+    var $templatesFilter = $('<label class="radio hidden col-lg-3" style="font-size:13px;"><input name="radio" class="runlistTypeSelectorRadioBtn" type="radio" id="templatesSelector"  value="Templates"/><i></i>Templates</label>');
 
     var $chefFactoryDetails = $('<label class="hidden" style="margin-left:25px;"><a id="chefFactory" href="javascript:void(0);" target="_black">Chef Factory</a></label>');
     $divFilterChefContainer.append($allFilter);
     $divFilterChefContainer.append($rolesFilter);
     $divFilterChefContainer.append($cookbooksFilter);
-    $divFilterChefContainer.append($cookbooksFilterNew);
+    $divFilterChefContainer.append($templatesFilter);
+    $divFilterChefContainer.append($cookbooksFilterDeploy);
 
     $divFilterChefContainer.append($chefFactoryDetails);
 
@@ -244,6 +303,7 @@ function $chefCookbookRoleSelector(catorgname, callback, selectedRunlist, readMo
 
     var cookbookDataList = [];
     var rolesDataList = [];
+    var templatesDataList = [];
     var deployCookbookList = [];
 
     $chefItemdiv.find('.runlistTypeSelectorRadioBtn').change(function() {
@@ -258,6 +318,8 @@ function $chefCookbookRoleSelector(catorgname, callback, selectedRunlist, readMo
             cookbookrecipesTotallist = cookbookrecipesTotallist.concat(cookbookDataList);
         } else if (val == 'DeployCookbooks') {
             cookbookrecipesTotallist = cookbookrecipesTotallist.concat(deployCookbookList);
+        } else if (val === 'Templates') {
+            cookbookrecipesTotallist = cookbookrecipesTotallist.concat(templatesDataList);
         }
         console.log('val ==> ', val);
 
@@ -283,7 +345,7 @@ function $chefCookbookRoleSelector(catorgname, callback, selectedRunlist, readMo
         $chefItemdiv.find('#cookbooksrecipesselectedList').first().data('chefServerId', data.serverId);
         $chefItemdiv.find('#cookbooksrecipesselectedList').first().attr('data-chefServerId', data.serverId);
 
-        $chefFactoryDetails.find('a').attr('href','chefFactory.html?'+data.serverId);
+        $chefFactoryDetails.find('a').attr('href', 'chefFactory.html?' + data.serverId);
         var cookbooks = data.cookbooks;
         var keys = Object.keys(cookbooks);
         //alert(keys);
@@ -334,79 +396,123 @@ function $chefCookbookRoleSelector(catorgname, callback, selectedRunlist, readMo
 
 
 
-        $loadingContainerGap.hide();
-        $beforesearchappend.hide();
-        $searchinputtextbox.show();
-        $searchiconappend.show();
-        $chefItemdiv.find('.availableRunlistContainer');
-        $('.cookbookspinner').detach();
 
+        // loading templates  
+        $.get('/d4dMasters/org/' + catorgname + '/templateType/SoftwareStack/templates', function(templates) {
 
-        // loading selected runlist
-        console.log(selectedRunlist); 
-        for (var i = 0; i < selectedRunlist.length; i++) {
-            var className = 'cookbook';
-            console.log(selectedRunlist[i]);
-            if (selectedRunlist[i].indexOf('recipe') === 0) {
-                className = 'cookbook';
-            } else {
-                className = 'roles';
+            for (i = 0; i < templates.length; i++) {
+                var display = 'none';
+                var templateRunlist = templates[i].templatescookbooks;
+                if (!templateRunlist) {
+                    templateRunlist = '';
+                }
+                var obj = {
+                    value: 'template[' + templates[i].templatename + ':-:' + templateRunlist.split(',').join('*!*') + ']',
+                    name: templates[i].templatename,
+                    Class: "runlistTemplate",
+                    display: display
+                };
+                if (selectedRunlist.indexOf(obj.value) === -1) {
+                    obj.display = 'block';
+                }
+                templatesDataList.push(obj);
             }
-            var name = '';
-            var item = selectedRunlist[i];
-            var indexOfBracketOpen = item.indexOf('[');
-            if (indexOfBracketOpen != -1) {
-                var indexOfBracketClose = item.indexOf(']');
-                if (indexOfBracketClose != -1) {
-                    name = item.substring(indexOfBracketOpen + 1, indexOfBracketClose);
+
+            // loading selected runlist
+            console.log(selectedRunlist);
+            for (var i = 0; i < selectedRunlist.length; i++) {
+                var className = 'cookbook';
+                console.log(selectedRunlist[i]);
+                var name = '';
+                if (selectedRunlist[i].indexOf('recipe') === 0) {
+                    className = 'cookbook';
+                    name = getNameFormChefRunlist(selectedRunlist[i]);
+                } else if (selectedRunlist[i].indexOf('role') === 0) {
+                    className = 'roles';
+                    name = getNameFormChefRunlist(selectedRunlist[i]);
+                } else {
+                    className = 'runlistTemplate';
+                    name = getNameFromTemplateRunlist(selectedRunlist[i]);
+                }
+
+                var $selOption = $('<option class=' + className + ' value=' + selectedRunlist[i] + '>' + name + '</option>')
+                console.log($selOption);
+                $chefItemdiv.find('#cookbooksrecipesselectedList').append($selOption);
+            }
+
+            $loadingContainerGap.hide();
+            $beforesearchappend.hide();
+            $searchinputtextbox.show();
+            $searchiconappend.show();
+            $chefItemdiv.find('.availableRunlistContainer');
+            $('.cookbookspinner').detach();
+
+            var clicked = false;
+            if (listVisible.deploy) {
+                $chefItemdiv.find('#deployCookbooks').parents('label').removeClass('hidden');
+                $chefItemdiv.find('#deployCookbooks').click();
+                //clicked = false;
+            }
+            if (listVisible.roles) {
+                $chefItemdiv.find('#roles').parents('label').removeClass('hidden');
+                if (!clicked) {
+                    $chefItemdiv.find('#roles').click();
+                    // clicked = false;
                 }
             }
-            var $selOption = $('<option class=' + className + ' value=' + selectedRunlist[i] + '>' + name + '</option>')
-            console.log($selOption);
-            $chefItemdiv.find('#cookbooksrecipesselectedList').append($selOption);
-        }
-
-
-        var clicked = false;
-        if (listVisible.deploy) {
-            $chefItemdiv.find('#deployCookbooks').parents('label').removeClass('hidden');
-            $chefItemdiv.find('#deployCookbooks').click();
-            //clicked = false;
-        }
-        if (listVisible.roles) {
-            $chefItemdiv.find('#roles').parents('label').removeClass('hidden');
-            if (!clicked) {
-                $chefItemdiv.find('#roles').click();
-               // clicked = false;
+            if (listVisible.cookbooks) {
+                $chefItemdiv.find('#cookbooks').parents('label').removeClass('hidden');
+                if (!clicked) {
+                    $chefItemdiv.find('#cookbooks').click();
+                    // clicked = false;
+                }
             }
-        }
-        if (listVisible.cookbooks) {
-            $chefItemdiv.find('#cookbooks').parents('label').removeClass('hidden');
-            if (!clicked) {
-                $chefItemdiv.find('#cookbooks').click();
-               // clicked = false;
+            if (listVisible.templates) {
+                $chefItemdiv.find('#templatesSelector').parents('label').removeClass('hidden');
+                if (!clicked) {
+                    $chefItemdiv.find('#templatesSelector').click();
+                    // clicked = false;
+                }
             }
-        }
-        if (listVisible.all) {
-            $chefItemdiv.find('#all').parents('label').removeClass('hidden');
-            $chefItemdiv.find('a#chefFactory').parents('label').removeClass('hidden');
-            if (!clicked) {
-                $chefItemdiv.find('#all').click();
-                clicked = true;
+            if (listVisible.all) {
+                $chefItemdiv.find('#all').parents('label').removeClass('hidden');
+                $chefItemdiv.find('a#chefFactory').parents('label').removeClass('hidden');
+                if (!clicked) {
+                    $chefItemdiv.find('#all').click();
+                    clicked = true;
+                }
             }
-        }
 
+            if (typeof callback === 'function') {
+                callback('done');
+            }
+        }).fail(function(data) {
+            var message = "Server Behaved Unexpectedly";
+            if (data.responseJSON && data.responseJSON.message) {
+                message = data.responseJSON.message;
+            }
+            var $erroMsgArea = $('<span></span>').css({
+                'color': 'red'
+            }).text(' ' + message);
+            $('.cookbookspinner').detach();
+            $firstlabelinput.append($erroMsgArea);
+        });
+        // if (typeof callback === 'function') {
+        //     callback('done');
+        // }
 
-        if (typeof callback === 'function') {
-            callback('done');
-        }
     }).fail(function(data) {
+        var message = "Server Behaved Unexpectedly";
+        if (data.responseJSON && data.responseJSON.message) {
+            message = data.responseJSON.message;
+        }
         var $erroMsgArea = $('<span></span>').css({
             'color': 'red'
-        }).text(' ' + data.responseJSON.message);
+        }).text(' ' + message);
         $('.cookbookspinner').detach();
         $firstlabelinput.append($erroMsgArea);
     });
+
 
 
 
@@ -573,7 +679,43 @@ $chefCookbookRoleSelector.getSelectedRunlist = function() {
 
 $chefCookbookRoleSelector.getChefServerId = function() {
     return $('#cookbooksrecipesselectedList').attr('data-chefServerId');
-}
+};
+$chefCookbookRoleSelector.getRunlistNames = function(runlist) {
+    if (!(runlist && runlist.length)) {
+        runlist = [];
+    }
+    var runlistNames = [];
+    runlist.forEach(function(item) {
+        if(item) {
+        var name = '';
+        if (item.indexOf('recipe') === 0) {
+            name = getNameFormChefRunlist(item);
+        } else if (item.indexOf('role') === 0) {
+            name = getNameFormChefRunlist(item);
+        } else {
+            name = getNameFromTemplateRunlist(item);
+        }
+        runlistNames.push(name);
+       }
+    });
+    
+    return runlistNames;
+
+};
+$chefCookbookRoleSelector.getRunlistFromTemplate = function(template) {
+    var indexOfTemplateMarker = template.indexOf(':-:');
+        if (indexOfTemplateMarker !== -1) {
+            
+                var runlistSubString = template.substring(indexOfTemplateMarker+3, template.length - 1);
+                var templateRunlist = runlistSubString.split('*!*');
+                return templateRunlist;
+            
+        } else {
+           return [];
+        }
+    
+
+};
 
 
 //ChefItem added below

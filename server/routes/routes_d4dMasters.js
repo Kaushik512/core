@@ -2560,6 +2560,9 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     if (req.params.id === "26") {
                         bodyJson["configType"] = "nexus";
                     }
+                    if (req.params.id === "18") {
+                        bodyJson["configType"] = "docker";
+                    }
                     logger.debug("Full bodyJson:::: ", JSON.stringify(bodyJson));
                     if (req.params.id === "25") {
                         bodyJson["configType"] = "puppet";
@@ -2841,7 +2844,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                         });
 
                                     } else if (req.params.id === '4') {
-                                        bodyJson['appdeploy'] = JSON.parse(bodyJson['appdeploy']);
+                                        bodyJson['repositories'] = JSON.parse(bodyJson['repositories']);
                                         var projectModel = new d4dModelNew.d4dModelMastersProjects(bodyJson);
                                         projectModel.save(function(err, data) {
                                             if (err) {
@@ -2852,7 +2855,19 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                             res.send(200);
                                             return;
                                         });
-                                    } else {
+                                    } /*else if (req.params.id === '18') {
+                                        bodyJson['dockerrepositories'] = JSON.parse(bodyJson['dockerrepositories']);
+                                        var dockerModel = new d4dModelNew.d4dModelMastersDockerConfig(bodyJson);
+                                        dockerModel.save(function(err, data) {
+                                            if (err) {
+                                                logger.error('Hit Save error', err);
+                                                res.send(500);
+                                                return;
+                                            }
+                                            res.send(200);
+                                            return;
+                                        });
+                                    }*/ else {
                                         logger.debug("FLD>>>>>>>>>>>>> ", FLD);
                                         eval('var mastersrdb =  new d4dModelNew.' + dbtype + '({' + JSON.parse(FLD) + '})');
                                         mastersrdb.save(function(err, data) {
@@ -2906,9 +2921,9 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                     // Update settings
 
                                     if (req.params.id === '4') {
-                                        bodyJson['appdeploy'] = JSON.parse(bodyJson['appdeploy']);
+                                        bodyJson['repositories'] = JSON.parse(bodyJson['repositories']);
                                         delete rowtoedit._id; //fixing the issue of 
-                                        rowtoedit["appdeploy"] = bodyJson['appdeploy'];
+                                        rowtoedit["repositories"] = bodyJson['repositories'];
                                         logger.debug('Rowtoedit: %s', JSON.stringify(rowtoedit));
                                         eval('d4dModelNew.' + dbtype).update({
                                             rowid: bodyJson["rowid"],
@@ -2927,6 +2942,30 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                             return;
                                         });
                                     }
+
+                                    /*if (req.params.id === '18') {
+                                        logger.debug("===========----------------- ", bodyJson['dockerrepositories']);
+                                        bodyJson['dockerrepositories'] = JSON.parse(bodyJson['dockerrepositories']);
+                                        delete rowtoedit._id; //fixing the issue of 
+                                        rowtoedit["dockerrepositories"] = bodyJson['dockerrepositories'];
+                                        logger.debug('Rowtoedit: %s', JSON.stringify(rowtoedit));
+                                        eval('d4dModelNew.' + dbtype).update({
+                                            rowid: bodyJson["rowid"],
+                                            "id": "18"
+                                        }, {
+                                            $set: rowtoedit
+                                        }, {
+                                            upsert: false
+                                        }, function(err, saveddata) {
+                                            if (err) {
+                                                logger.error('Hit Save error', err);
+                                                res.send(500);
+                                                return;
+                                            }
+                                            res.send(200);
+                                            return;
+                                        });
+                                    }*/
                                     if (req.params.id === "7") {
                                         d4dModelNew.d4dModelMastersUsers.find({
                                             "id": req.params.id,
@@ -3829,42 +3868,97 @@ module.exports.setRoutes = function(app, sessionVerification) {
         });
     });
 
-    app.post('/d4dMasters/project/:anId/appdeploy/appName/update', function(req, res) {
-        logger.debug("Updating appName in Project...");
-
-                /*db.d4dmastersnew.update({
-            "rowid": "95213423-50d1-4dce-b6f4-0d51c4460998"
-        }, {
-            $set: {
-                "appdeploy": [{
-                    applicationname: "catalyst",
-                    "appdescription": "Test app deploy"
-                }]
-            }
-        })
-        */
-        d4dModelNew.d4dModelMastersProjects.update({
-            rowid: req.params.anId,
-            id: '4'
-        }, {
-            $set: {
-                "appdeploy": [{
-                    applicationname: req.body.appName,
-                        appdescription: req.body.description
-                }]
-            }
-        }, {
-            upsert: false
-        }, function(err, data) {
-            logger.debug("Update Count+++++++++++++++ ", data);
+    app.get('/d4dMasters/docker/:anId', function(req, res) {
+        logger.debug("Entered to Project name...");
+        masterUtil.getDockerById(req.params.anId, function(err, data) {
             if (err) {
-                logger.debug('Err while updating d4dModelMastersProjects' + err);
-                res.send(err);
+                logger.debug("Failed to fetch  Docker", err);
+                res.send(500, "Failed to fetch  Docker");
                 return;
             }
-            logger.debug('Updated project ' + req.params.anId + ' with App Name : ' + req.body.appName);
-            res.send(data);
+            if (!data.length) {
+                res.send(404, "No Docker Found.");
+                return;
+            }
+            res.send(data[0]);
             return;
+        });
+    });
+
+    app.post('/d4dMasters/project/:anId/appdeploy/appName/update', function(req, res) {
+        logger.debug("Updating appName in Project...");
+        var appName = req.body.appName;
+        var appDescription = req.body.description;
+        var projectId = req.params.anId;
+        var count = 0;
+        d4dModelNew.d4dModelMastersProjects.find({
+            rowid: projectId,
+            id: '4'
+        },function(err,project){
+            if(err){
+                logger.debug("Failed to find Project",err);
+                return;
+            }
+            if(project.length){
+                var appdeploy = project[0].appdeploy;
+                if(appdeploy.length){
+                    for(var i=0; i< appdeploy.length;i++){
+                        if(appdeploy[i].applicationname === appName){
+                            count++;
+                        }
+                    }
+                    if(!count){
+                        d4dModelNew.d4dModelMastersProjects.update({
+                            rowid: projectId,
+                            id: '4'
+                        }, {
+                            $push: {
+                                "appdeploy": {
+                                    applicationname: appName,
+                                    appdescription: appDescription
+                                }
+                            }
+                        }, {
+                            upsert: false
+                        }, function(err, data) {
+                            if (err) {
+                                logger.debug('Err while updating d4dModelMastersProjects' + err);
+                                res.send(err);
+                                return;
+                            }
+                            logger.debug('Updated project ' + req.params.anId + ' with App Name : ' + req.body.appName);
+                            res.send(data);
+                            return;
+                        });
+                    }else{
+                        res.send(200);
+                        return;
+                    }
+                }else{
+                    d4dModelNew.d4dModelMastersProjects.update({
+                            rowid: projectId,
+                            id: '4'
+                        }, {
+                            $push: {
+                                "appdeploy": {
+                                    applicationname: appName,
+                                    appdescription: appDescription
+                                }
+                            }
+                        }, {
+                            upsert: false
+                        }, function(err, data) {
+                            if (err) {
+                                logger.debug('Err while updating d4dModelMastersProjects' + err);
+                                res.send(err);
+                                return;
+                            }
+                            logger.debug('Updated project ' + req.params.anId + ' with App Name : ' + req.body.appName);
+                            res.send(data);
+                            return;
+                        });
+                }
+            }
         });
     });
 

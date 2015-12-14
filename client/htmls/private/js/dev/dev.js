@@ -1142,7 +1142,12 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                 }
                 var $ccrs = $chefCookbookRoleSelector(urlParams.org, function(data) {
 
-                }, runlist, readMode);
+                }, runlist, readMode,{
+                     cookbooks: true,
+                     roles: true,
+                     templates: true,
+                     all: true
+                });
                 $ccrs.find('#cookbooksrecipesselectedList').attr('data-instanceid', instanceId);
 
                 $chefRunModalContainer.find('.chefRunlistContainer').empty().append($ccrs).data('$ccrs', $ccrs);
@@ -2660,12 +2665,14 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                                             } 
                                             
                                             // loop for getting runlist
-                                            for (var j = 0; j < blueprint.blueprintConfig.infraManagerData.versionsList.length; j++) {
-
-                                                $blueprintReadContainer.find('.modal-body #instanceRunlist').val(blueprint.blueprintConfig.infraManagerData.versionsList[j].runlist).parents('tr').show();
+                                            var versionsList = blueprint.blueprintConfig.infraManagerData.versionsList;
+                                            if (versionsList && versionsList.length) {
+                                                
+                                                var runlistName = $chefCookbookRoleSelector.getRunlistNames(versionsList[versionsList.length-1].runlist);
+                                                $blueprintReadContainer.find('.modal-body #instanceRunlist').val(runlistName.join(' , ')).parents('tr').show();
 
                                                 //for getting the version
-                                                $blueprintReadContainer.find('.modal-body #instanceVersion').val(blueprint.blueprintConfig.infraManagerData.versionsList[j].ver).parents('tr').show();
+                                                $blueprintReadContainer.find('.modal-body #instanceVersion').val(versionsList[versionsList.length-1].ver).parents('tr').show();
 
                                             }
                                             $blueprintReadContainer.find('.modal-body #blueprintTemplateType').val(blueprint.templateType).parents('tr').show();
@@ -3392,10 +3399,10 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                 }
                 for (var i = 0; i < runlist.length; i++) {
 
-                    if (runlist[i].indexOf('recipe') === 0) {
-                        className = 'cookbook';
-                    } else {
-                        className = 'roles';
+                    if (runlist[i].indexOf('template') === 0) {
+                         var templateRunlist = $chefCookbookRoleSelector.getRunlistFromTemplate(runlist[i]);
+                        runlist = runlist.concat(templateRunlist);
+                        continue;
                     }
                     var name = '';
                     var item = runlist[i];
@@ -3407,9 +3414,13 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                         }
                     }
                     if (runlist[i].indexOf('recipe') === 0) {
-                        reqBody.cookbooks.push(name);
+                        if(reqBody.cookbooks.indexOf(name) === -1) {
+                            reqBody.cookbooks.push(name);
+                        }
                     } else {
-                        reqBody.roles.push(name);
+                        if(reqBody.roles.indexOf(name) === -1) {
+                            reqBody.roles.push(name);
+                        }
                     }
 
                 }
@@ -4373,8 +4384,9 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                             var $taskRunListContainer = $('.taskRunListContainer').empty();
                             var runlist = $(this).data('taskRunlist');
                             if (runlist && runlist.length) {
-                                for (var i = 0; i < runlist.length; i++) {
-                                    $li = $('<li></li>').append(runlist[i].substring(runlist[i].lastIndexOf("[") + 1, runlist[i].lastIndexOf("]"))).css({
+                                var runlistName = $chefCookbookRoleSelector.getRunlistNames(runlist);
+                                for (var i = 0; i < runlistName.length; i++) {
+                                    $li = $('<li></li>').append(runlistName[i]).css({
                                         "font-size": "12px"
                                     });
                                     $taskRunListContainer.append($li);
