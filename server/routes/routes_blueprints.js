@@ -2408,7 +2408,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                     //Creating instance in catalyst
 
                                                                     var instance = {
-                                                                        name: createserverdata["vm_name"],
+                                                                        name:blueprint.name,
                                                                         orgId: blueprint.orgId,
                                                                         bgId: blueprint.bgId,
                                                                         projectId: blueprint.projectId,
@@ -2421,7 +2421,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                         platformId: createserverdata["vm_name"],
                                                                         appUrls: blueprint.appUrls,
                                                                         instanceIP: 'unknown',
-                                                                        instanceState: 'unknown',
+                                                                        instanceState: 'pending',
                                                                         bootStrapStatus: 'waiting',
                                                                         users: blueprint.users,
                                                                         hardware: {
@@ -2493,6 +2493,10 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                         });
                                                                         logger.debug('Should have sent the response.');
                                                                         vmwareCloud.waitforserverready(appConfig.vmware.serviceHost, createserverdata["vm_name"], anImage.userName, anImage.instancePassword, function(err, publicip, vmdata) {
+                                                                            if (err) {
+                                                                                logger.error("Instance wait failes",err);
+                                                                                return;
+                                                                            }
                                                                             if (!err) {
                                                                                 logger.debug('Instance Ready....');
                                                                                 logger.debug(JSON.stringify(vmdata)); // logger.debug(data);
