@@ -1212,12 +1212,13 @@ $(document).ready(function() {
             cookbooks: [],
             roles: []
         }
+        
         for (var i = 0; i < runlist.length; i++) {
 
-            if (runlist[i].indexOf('recipe') === 0) {
-                className = 'cookbook';
-            } else {
-                className = 'roles';
+            if (runlist[i].indexOf('template') === 0) {
+                var templateRunlist = $chefCookbookRoleSelector.getRunlistFromTemplate(runlist[i]);
+                runlist = runlist.concat(templateRunlist);
+                continue;
             }
             var name = '';
             var item = runlist[i];
@@ -1229,9 +1230,13 @@ $(document).ready(function() {
                 }
             }
             if (runlist[i].indexOf('recipe') === 0) {
-                reqBody.cookbooks.push(name);
+                if(reqBody.cookbooks.indexOf(name) === -1) {
+                    reqBody.cookbooks.push(name);
+                }
             } else {
-                reqBody.roles.push(name);
+                if(reqBody.roles.indexOf(name) === -1) {
+                    reqBody.roles.push(name);
+                }
             }
 
         }

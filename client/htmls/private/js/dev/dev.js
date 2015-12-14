@@ -1142,7 +1142,12 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                 }
                 var $ccrs = $chefCookbookRoleSelector(urlParams.org, function(data) {
 
-                }, runlist, readMode);
+                }, runlist, readMode,{
+                     cookbooks: true,
+                     roles: true,
+                     templates: true,
+                     all: true
+                });
                 $ccrs.find('#cookbooksrecipesselectedList').attr('data-instanceid', instanceId);
 
                 $chefRunModalContainer.find('.chefRunlistContainer').empty().append($ccrs).data('$ccrs', $ccrs);
@@ -3394,10 +3399,10 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                 }
                 for (var i = 0; i < runlist.length; i++) {
 
-                    if (runlist[i].indexOf('recipe') === 0) {
-                        className = 'cookbook';
-                    } else {
-                        className = 'roles';
+                    if (runlist[i].indexOf('template') === 0) {
+                         var templateRunlist = $chefCookbookRoleSelector.getRunlistFromTemplate(runlist[i]);
+                        runlist = runlist.concat(templateRunlist);
+                        continue;
                     }
                     var name = '';
                     var item = runlist[i];
@@ -3409,9 +3414,13 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                         }
                     }
                     if (runlist[i].indexOf('recipe') === 0) {
-                        reqBody.cookbooks.push(name);
+                        if(reqBody.cookbooks.indexOf(name) === -1) {
+                            reqBody.cookbooks.push(name);
+                        }
                     } else {
-                        reqBody.roles.push(name);
+                        if(reqBody.roles.indexOf(name) === -1) {
+                            reqBody.roles.push(name);
+                        }
                     }
 
                 }

@@ -146,14 +146,14 @@ function $chefCookbookRoleSelector(catorgname, callback, selectedRunlist, readMo
         cookbooks: true,
         roles: true,
         deploy: false,
-        templates: true,
+        templates: false,
         all: true
     };
     if (!listVisible) {
         listVisible = defaultVisilbleList;
 
     }
-    listVisible.templates = true;
+    //listVisible.templates = true;
     //listVisible = $.extend(listVisible, defaultVisilbleList, listVisible);
 
     console.log(listVisible);
@@ -698,6 +698,20 @@ $chefCookbookRoleSelector.getRunlistNames = function(runlist) {
         runlistNames.push(name);
     });
     return runlistNames;
+
+};
+$chefCookbookRoleSelector.getRunlistFromTemplate = function(template) {
+    var indexOfTemplateMarker = template.indexOf(':-:');
+        if (indexOfTemplateMarker !== -1) {
+            
+                var runlistSubString = template.substring(indexOfTemplateMarker+3, template.length - 1);
+                var templateRunlist = runlistSubString.split('*!*');
+                return templateRunlist;
+            
+        } else {
+           return [];
+        }
+    
 
 };
 
