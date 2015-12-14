@@ -25,15 +25,106 @@ var configmgmtDao = require('../model/d4dmasters/configmgmt.js');
 var Cryptography = require('../lib/utils/cryptography');
 var appConfig = require('_pr/config');
 
-var ALLDashboardProvider = require('../model/dashboard/dashboard.js');
+var providersdashboard = require('../model/dashboard/dashboard.js');
 var instancesDao = require('../model/classes/instance/instance');
+var crontab = require('node-crontab');
+var CW = require('../lib/cloudwatch.js');
 module.exports.setRoutes = function(app, sessionVerificationFunc) {
-
     // app.all("/aws/providers/*", sessionVerificationFunc);
     app.all("/dashboard/providers/*", sessionVerificationFunc);
     var cryptoConfig = appConfig.cryptoSettings;
     var cryptography = new Cryptography(cryptoConfig.algorithm, cryptoConfig.password);
 
+    var totalInstancesCronJob = crontab.scheduleJob("* * /1 * *", function() { //This will call this function every 3 minutes 
+        logger.debug("Cron Job run every 60 minutes!!!!!!!!!!!!!!+++++++++");
+        AWSProvider.getAWSProviders(function(err, providers) {
+            if (err) {
+                logger.error(err);
+                return;
+            }
+            //logger.debug("providers>>> ", JSON.stringify(providers));
+            var providersList = [];
+            if (providers.length > 0) {
+                var countProvider = 0;
+                var countRegion = 0;
+                var totalcount = 0;
+                for (var i = 0; i < providers.length; i++) {
+                    var keys = [];
+                    keys.push(providers[i].accessKey);
+                    keys.push(providers[i].secretKey);
+                    cryptography.decryptMultipleText(keys, cryptoConfig.decryptionEncoding, cryptoConfig.encryptionEncoding, function(err, decryptedKeys) {
+                        countProvider++;
+                        if (err) {
+                            return;
+                        }
+                        providers[i].accessKey = decryptedKeys[0];
+                        providers[i].secretKey = decryptedKeys[1];
+                        providersList.push(providers[i]);
+                    });
+                    //logger.debug("providers>>> ", JSON.stringify(providers));
+                    if (providers.length === providersList.length) {
+                        var exists = {},
+                            uniqueProviderList = [],
+                            elm;
+                        for (var i = 0; i < providersList.length; i++) {
+                            elm = providersList[i];
+                            if (!exists[elm]) {
+                                uniqueProviderList.push(elm);
+                                exists[elm] = true;
+                            }
+                        }
+                        //console.log("uniqueProviderList===================>" + uniqueProviderList);
+                        for (var n = 0; n < uniqueProviderList.length; n++) {
+                            var regions = ["us-east-1", "us-west-1", "us-west-2"];
+                            for (var j = 0; j < regions.length; j++) {
+                                var ec2 = new EC2({
+                                    "access_key": uniqueProviderList[n].accessKey,
+                                    "secret_key": uniqueProviderList[n].secretKey,
+                                    "region": regions[j]
+                                });
+                                ec2.listInstances(function(err, nodes) {
+                                    countRegion++;
+                                    if (err) {
+                                        logger.debug("Unable to list nodes from AWS.", err);
+                                        return;
+                                    }
+                                    logger.debug("Success to list nodes from AWS.");
+                                    var nodeList = [];
+                                    for (var k = 0; k < nodes.Reservations.length; k++) {
+                                        var instance = {
+                                            "instance": nodes.Reservations[k].Instances[0].InstanceId
+                                        };
+                                        nodeList.push(instance);
+                                    }
+                                    var nodeListLength = nodeList.length;
+                                    logger.debug("I am in count of Total Instances", nodeListLength);
+                                    totalcount = totalcount + nodeListLength;
+                                    if (countProvider === uniqueProviderList.length && countRegion === uniqueProviderList.length * regions.length) {
+                                        providersdashboard.createNew(totalcount, function(err, totalcountInstances) {
+                                            if (err) {
+                                                return;
+                                            }
+                                            if (totalcountInstances) {
+                                                console.log("I am in totalcount to save++++++++++++++++");
+                                                //res.send(200, totalcountInstances);
+                                                return;
+                                            }
+                                        });
+                                        return;
+                                    }
+                                });
+                            }
+                        }
+
+                    }
+                }
+                //console.log("providersList++++++++++++++++++"+providersList.length);
+            } else {
+                //res.send(200, []);
+                return;
+            }
+        });
+    });
     app.get('/dashboard/providers/totalinstances', function(req, res) {
         console.log(" i am in totalinstances api");
         logger.debug("Enter get() for /providers");
@@ -123,19 +214,19 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                     //res.send(nodeList);
                                                     totalcount = totalcount + nodeListLength;
                                                     if (countProvider === uniqueProviderList.length && countRegion === uniqueProviderList.length * regions.length) {
-                                                        ALLDashboardProvider.createNew(totalcount, function(err, totalcountInstances) {
-                                                            if (err) {
-                                                                res.send(500, "Unable to fetch Total Count");
-                                                                return;
-                                                            }
-                                                            if (totalcountInstances) {
-                                                                res.send(200, totalcountInstances);
-                                                                return;
-                                                            }
-                                                        });
-                                                        // res.send(200, {
-                                                        //     totalcount: totalcount
+                                                        // providersdashboard.createNew(totalcount, function(err, totalcountInstances) {
+                                                        //     if (err) {
+                                                        //         res.send(500, "Unable to fetch Total Count");
+                                                        //         return;
+                                                        //     }
+                                                        //     if (totalcountInstances) {
+                                                        //         res.send(200, totalcountInstances);
+                                                        //         return;
+                                                        //     }
                                                         // });
+                                                        res.send(200, {
+                                                            totalcount: totalcount
+                                                        });
                                                         return;
                                                     }
                                                 });
@@ -263,13 +354,76 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         });
     });
     
+    
     app.get('/dashboard/providers/totalmanagedinstances', function(req, res) {
         instancesDao.getAllInstances(function(err, instances) {
-            if (err) {logger.debug("Error while getElementBytting instance!");
+            if (err) {
+                logger.debug("Error while getElementBytting instance!");
             }
 
         });
     });
+
+    app.get('/dashboard/providers/totalcost', function(req, res) {
+        var cloudwatch = new CW({
+            "access_key": "AKIAJEP7C6AIIXGB6NJA",
+            "secret_key": "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",
+            "region": "us-east-1"
+        });
+
+        cloudwatch.getTotalCost(function(err, nodes) {
+            if(err){
+                res.send(500, "Failed to fetch Total Cost.");
+                return;
+            }
+            if(nodes){
+                console.log("I am in getting cost API ######################"+nodes);
+            }
+        });
+
+        cloudwatch.getTotalCostYesterday(function(err, nodesYesterday) {
+            if(err){
+                res.send(500, "Failed to fetch Total Cost.");
+                return;
+            }
+            if(nodesYesterday){
+                console.log("I am in getting cost API nodesYesterday######################"+nodesYesterday);
+            }
+        });
+    });
+
+
+
+    app.get('/dashboard/providers/totalusages', function(req, res) {
+        var cloudwatch = new CW({
+            "access_key": "AKIAJEP7C6AIIXGB6NJA",
+            "secret_key": "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",
+            "region": "us-east-1"
+        });
+
+        cloudwatch.getTotalCost(function(err, nodes) {
+            if(err){
+                res.send(500, "Failed to fetch Total Cost.");
+                return;
+            }
+            if(nodes){
+                console.log("I am in getting cost API ######################"+nodes);
+            }
+        });
+
+        cloudwatch.getTotalCostYesterday(function(err, nodesYesterday) {
+            if(err){
+                res.send(500, "Failed to fetch Total Cost.");
+                return;
+            }
+            if(nodesYesterday){
+                console.log("I am in getting cost API nodesYesterday######################"+nodesYesterday);
+            }
+        });
+    });
+
+
+
     // // Return list of all types of available providers.
     // app.get('/allproviders/list', function(req, res) {
     //     logger.debug("Enter get() for /allproviders/list");

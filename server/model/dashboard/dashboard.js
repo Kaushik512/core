@@ -18,7 +18,7 @@ var uniqueValidator = require('mongoose-unique-validator');
 var Schema = mongoose.Schema;
 
 
-var allDashboardProviderSchema = new Schema({
+var providersdashboardSchema = new Schema({
     totalinstancecount: {
         type: Number,
         required: true
@@ -30,7 +30,7 @@ var allDashboardProviderSchema = new Schema({
 });
 
 // creates a new Provider
-allDashboardProviderSchema.statics.createNew = function(dashboardProviderData, callback) {
+providersdashboardSchema.statics.createNew = function(dashboardProviderData, callback) {
     logger.debug("Enter createNew dashboard");
     //var dashboardProviderObj = dashboardProviderData;
     var that = this;
@@ -49,7 +49,30 @@ allDashboardProviderSchema.statics.createNew = function(dashboardProviderData, c
         return;
     });
 };
+providersdashboardSchema.statics.getAllAWSProvidersDashboard = function(dashboardAllAwsProviderData, callback) {
+    logger.debug("Enter dashboardAllAwsProviderData");
+      
+    this.find({
+        orgId : orgId
+    }, function(err, providers) {
+        if (err) {
+            logger.error(err);
+            callback(err, null);
+            return;
+        }
+        if (providers.length) {
+            logger.debug("Exit getAWSProvidersByOrgId with providers present");
+            callback(null, providers);
+            return;
+        } else {
+            logger.debug("Exit getAWSProvidersByOrgId with no providers present");
+            callback(null, null);
+            return;
+        }
 
-var ALLDashboardProvider = mongoose.model('ALLDashboardProvider', allDashboardProviderSchema);
+    });
+};
 
-module.exports = ALLDashboardProvider;
+var providersdashboard = mongoose.model('providersdashboard', providersdashboardSchema);
+
+module.exports = providersdashboard;
