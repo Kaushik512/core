@@ -84,7 +84,7 @@ function getNameFromTemplateRunlist(item) {
     if (indexOfTemplateMarker !== -1) {
         var indexOfBracket = item.indexOf('[');
         if (indexOfBracket !== -1) {
-            name = item.substring(indexOfBracket + 1, indexOfTemplateMarker);
+            var name = item.substring(indexOfBracket + 1, indexOfTemplateMarker);
         }
     }
     return name;
@@ -311,7 +311,7 @@ function $chefCookbookRoleSelector(catorgname, callback, selectedRunlist, readMo
         var val = $chefItemdiv.find('.runlistTypeSelectorRadioBtn:checked').val();
         var selectedRunlist = $chefItemdiv.getSelectedRunlist();
         if (val == 'All') {
-            cookbookrecipesTotallist = cookbookrecipesTotallist.concat(cookbookDataList, rolesDataList, templatesDataList);
+            cookbookrecipesTotallist = cookbookrecipesTotallist.concat(cookbookDataList, rolesDataList);
         } else if (val == 'Roles') {
             cookbookrecipesTotallist = cookbookrecipesTotallist.concat(rolesDataList);
         } else if (val == 'Cookbooks') {
@@ -681,12 +681,12 @@ $chefCookbookRoleSelector.getChefServerId = function() {
     return $('#cookbooksrecipesselectedList').attr('data-chefServerId');
 };
 $chefCookbookRoleSelector.getRunlistNames = function(runlist) {
-    console.log(runlist);
     if (!(runlist && runlist.length)) {
         runlist = [];
     }
     var runlistNames = [];
     runlist.forEach(function(item) {
+        if(item) {
         var name = '';
         if (item.indexOf('recipe') === 0) {
             name = getNameFormChefRunlist(item);
@@ -696,7 +696,9 @@ $chefCookbookRoleSelector.getRunlistNames = function(runlist) {
             name = getNameFromTemplateRunlist(item);
         }
         runlistNames.push(name);
+       }
     });
+    
     return runlistNames;
 
 };
