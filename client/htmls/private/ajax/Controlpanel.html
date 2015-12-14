@@ -3058,7 +3058,14 @@ function addActionLogRow(actionLog) {
         var keys = Object.keys(actionData);
         for (var j = 0; j < keys.length; j++) {
             if (actionData[keys[j]] && actionData[keys[j]].length) {
-                $tdData.append($('<span></span>').append(keys[j] + ' : ').append(actionData[keys[j]]));
+                var data = actionData[keys[j]];
+                if(keys[j] == 'runlist') {
+                  data = $chefCookbookRoleSelector.getRunlistNames(data);
+                  if(data.length) {
+                    data = data.join(' , ');
+                  }
+                }
+                $tdData.append($('<span></span>').append(keys[j] + ' : ').append(data));
                 $tdData.append('<br/>');
             }
         }

@@ -525,10 +525,22 @@ function CreateTableFromJson(formID, idFieldName, createFileName) {
                         if (inputC.attr('datatype') == 'list') {
                             v = v.replace(/,/g, "<br/>");
                             inputC.html('<a style="pointer:" data-toggle="popover" data-content="' + v + '" id="cellitem_' + i + '_' + k + '">View</a>');
-                        } else
+                        } else {
                             inputC.html(v);
-                    } else
-                        inputC.html(v);
+                        }
+                    } else {
+                        if(inputC.attr('datafield') == 'templatescookbooks'){
+                            
+                            v = $chefCookbookRoleSelector.getRunlistNames(v.split(','));
+                            if(v.length) {
+                              v = v.join(' , ');
+                            }
+                            inputC.html(v); 
+                        } else {
+                          inputC.html(v);    
+                        } 
+                        
+                    }
 
                 }
             }
