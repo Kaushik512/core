@@ -18,8 +18,8 @@ var uniqueValidator = require('mongoose-unique-validator');
 var Schema = mongoose.Schema;
 
 
-var providersdashboardSchema = new Schema({
-    totalinstancecount: {
+var dashboardcostsSchema = new Schema({
+    totalcostcount: {
         type: Number,
         required: true
     },
@@ -30,26 +30,47 @@ var providersdashboardSchema = new Schema({
 });
 
 // creates a new Provider
-providersdashboardSchema.statics.createNew = function(dashboardProviderData, callback) {
+dashboardcostsSchema.statics.createNew = function(dashboardCostsData, callback) {
     logger.debug("Enter createNew dashboard");
     //var dashboardProviderObj = dashboardProviderData;
     var that = this;
-    var dashboardProvider = new that({
-        totalinstancecount: dashboardProviderData,
+    var dashboardCosts = new that({
+        totalcostcount: dashboardCostsData,
         timestamp: new Date().getTime(),
     });
-    dashboardProvider.save(function(err, aProvider) {
+    dashboardCosts.save(function(err, aProvider) {
         if (err) {
             logger.error(err);
             callback(err, null);
             return;
         }
-        logger.debug("Exit createNew with dashboardProvider present");
+        logger.debug("Exit createNew with getLatestcostDataInfo present");
         callback(null, aProvider);
         return;
     });
 };
-providersdashboardSchema.statics.getAllAWSProvidersDashboard = function(dashboardAllAwsProviderData, callback) {
+
+dashboardcostsSchema.statics.getLatestCostInfo = function(callback) {
+    logger.debug("Enter getLatestcostDataInfo");
+      
+    this.find(function(err, costData) {
+        if (err) {
+            logger.error(err);
+            callback(err, null);
+            return;
+        }
+        if (costData.length) {
+            logger.debug("Exit getLatestcostDataInfo with providers present");
+            callback(null, costData);
+            return;
+        } else {
+            logger.debug("Exit getLatestcostDataInfo with no providers present");
+            callback(null, null);
+            return;
+        }
+    }).sort({_id:-1}).limit(1);
+};
+/*providersdashboardSchema.statics.getAllAWSProvidersDashboard = function(dashboardAllAwsProviderData, callback) {
     logger.debug("Enter dashboardAllAwsProviderData");
       
     this.find({
@@ -71,8 +92,8 @@ providersdashboardSchema.statics.getAllAWSProvidersDashboard = function(dashboar
         }
 
     });
-};
+};*/
 
-var providersdashboard = mongoose.model('providersdashboard', providersdashboardSchema);
+var dashboardcosts = mongoose.model('dashboardcosts', dashboardcostsSchema);
 
-module.exports = providersdashboard;
+module.exports = dashboardcosts;

@@ -85,7 +85,7 @@ var CW = function(awsSettings) {
           }
       ],
     };
-    this.getTotalCost = function(callback){
+    this.getTotalCostMaximum = function(callback){
         cloudwatch.getMetricStatistics(params,function(err,data){
             if(err){
                 logger.debug("Error occurred for listing aws instances: ",err);
@@ -97,7 +97,7 @@ var CW = function(awsSettings) {
             }
         });
     };
-    this.getTotalCostYesterday = function(callback){
+    this.getTotalCostMinimum = function(nodes,callback){
         cloudwatch.getMetricStatistics(params1,function(err,data1){
             if(err){
                 logger.debug("Error occurred for listing aws instances: ",err);
@@ -105,57 +105,14 @@ var CW = function(awsSettings) {
             }else{
                 logger.debug("Able to list all aws minimum instances: ");
                 //logger.debug(JSON.stringify(data1));
-                callback(null,data1.Datapoints[0].Minimum);
+                var uptoTodayTotalCost = nodes;
+                var uptoYesterdayTotalCost = data1.Datapoints[0].Minimum;
+                var todayTotalCost = uptoTodayTotalCost - uptoYesterdayTotalCost;
+                //callback(null,data1.Datapoints[0].Minimum);
+                callback(null,todayTotalCost);
             }
         });
     };
-
-
-   //  this.getMetricStatistics = function( function(err, data) {
-   //    if (err) console.log(err, err.stack); // an error occurred
-   //    else
-   //       //console.log("cost job for now"+data.Datapoints[0].Maximum);
-   //       //day_cost= data.Datapoints[0].Maximum;
-   //       callback(null,data);
-
-   //       //var cost_month = 1200;
-   //        // send_event('cost_month',{current:month_cost,last:cost_month});    // successful response
-   //        // send_event('cost_plan',{current:cost_month});
-   // });
-
-    // var that = this;
-
-    // this.listInstances = function(callback){
-    //     ec.describeInstances(function(err,instances){
-    //         if(err){
-    //             logger.debug("Error occurred for listing aws instances: ",err);
-    //             callback(err,null);
-    //         }else{
-    //             logger.debug("Able to list all aws instances: ");
-    //             callback(null,instances);
-    //         }
-    //     });
-    // };
-
-
-    // this.describeInstances = function(instanceIds, callback) {
-    //     logger.debug('fetching instances for ==>',instanceIds);
-    //     var options = {};
-
-    //     if (instanceIds && instanceIds.length) {
-    //         options.InstanceIds = instanceIds;
-    //     } else {
-    //         options.MaxResults = 1000;
-    //     }
-    //     ec.describeInstances(options, function(err, data) {
-    //         if(err){
-    //             logger.debug("Got instanceState info with error: ",err);
-    //             callback(err,null);
-    //         }
-    //         logger.debug("Got instanceState info: ",JSON.stringify(data));
-    //         callback(null, data);
-    //     });
-    // };
 }
 
 module.exports = CW;

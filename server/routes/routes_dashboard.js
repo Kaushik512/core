@@ -25,7 +25,8 @@ var configmgmtDao = require('../model/d4dmasters/configmgmt.js');
 var Cryptography = require('../lib/utils/cryptography');
 var appConfig = require('_pr/config');
 
-var providersdashboard = require('../model/dashboard/dashboard.js');
+var providersdashboard = require('../model/dashboard/dashboardinstances.js');
+var dashboardcosts = require('../model/dashboard/dashboardcosts.js');
 var instancesDao = require('../model/classes/instance/instance');
 var crontab = require('node-crontab');
 var CW = require('../lib/cloudwatch.js');
@@ -34,8 +35,9 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
     app.all("/dashboard/providers/*", sessionVerificationFunc);
     var cryptoConfig = appConfig.cryptoSettings;
     var cryptography = new Cryptography(cryptoConfig.algorithm, cryptoConfig.password);
-
-    var totalInstancesCronJob = crontab.scheduleJob("* * /1 * *", function() { //This will call this function every 3 minutes 
+    
+    //This will call this function for every hours and saves into monogdb.
+    var totalInstancesCronJob = crontab.scheduleJob("0 * * * *", function() {
         logger.debug("Cron Job run every 60 minutes!!!!!!!!!!!!!!+++++++++");
         AWSProvider.getAWSProviders(function(err, providers) {
             if (err) {
@@ -125,7 +127,97 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             }
         });
     });
-    app.get('/dashboard/providers/totalinstances', function(req, res) {
+    
+    //This will call this function for every day at 11.59P.M and saves into monogdb.
+    var totalCostsCronJob = crontab.scheduleJob("04 01 * * *", function() {
+        logger.debug("Cron Job run every 1hours!!!!!!!!!!!!!!+++++++++ Mu hebi hero");
+        AWSProvider.getAWSProviders(function(err, providers) {
+            if (err) {
+                logger.error(err);
+                return;
+            }
+            logger.debug("providers >>> ", JSON.stringify(providers));
+            var providersList = [];
+            if (providers.length > 0) {
+                var countProvider = 0;
+                var countRegion = 0;
+                var totalcount = 0;
+                for (var i = 0; i < providers.length; i++) {
+                    var keys = [];
+                    keys.push(providers[i].accessKey);
+                    keys.push(providers[i].secretKey);
+                    cryptography.decryptMultipleText(keys, cryptoConfig.decryptionEncoding, cryptoConfig.encryptionEncoding, function(err, decryptedKeys) {
+                        countProvider++;
+                        if (err) {
+                            return;
+                        }
+                        providers[i].accessKey = decryptedKeys[0];
+                        providers[i].secretKey = decryptedKeys[1];
+                        providersList.push(providers[i]);
+                    });
+                    logger.debug("providers>>> ", JSON.stringify(providers));
+                    if (providers.length === providersList.length) {
+                        var exists = {},
+                            uniqueProviderList = [],
+                            elm;
+                        for (var i = 0; i < providersList.length; i++) {
+                            elm = providersList[i];
+                            if (!exists[elm]) {
+                                uniqueProviderList.push(elm);
+                                exists[elm] = true;
+                            }
+                        }
+                        console.log("uniqueProviderList cronjob===================>" + uniqueProviderList);
+                        for (var n = 0; n < uniqueProviderList.length; n++) {
+                            var regions = ["us-east-1"];
+                            for (var j = 0; j < regions.length; j++) {
+                                // var ec2 = new EC2({
+                                //     "access_key": uniqueProviderList[n].accessKey,
+                                //     "secret_key": uniqueProviderList[n].secretKey,
+                                //     "region": regions[j]
+                                // });
+                                var cloudwatch = new CW({
+                                    "access_key": uniqueProviderList[n].accessKey,
+                                    "secret_key": uniqueProviderList[n].secretKey,
+                                    "region": regions[j]
+                                });
+                                cloudwatch.getTotalCostMaximum(function(err, nodes) {
+                                    if(err){
+                                        res.send(500, "Failed to fetch Total Cost.");
+                                        return;
+                                    }
+                                    if(nodes){
+                                        cloudwatch.getTotalCostMinimum(nodes, function(err, costToday) {
+                                            if(err){
+                                                res.send(500, "Failed to fetch Total Cost.");
+                                                return;
+                                            }
+                                            if (costToday) {
+                                                var finalCost = parseInt(costToday.toString());
+                                                dashboardcosts.createNew(finalCost, function(err, totalcost) {
+                                                    console.log("I am in getting cost for Today######################" + finalCost);
+                                                    // res.send(200, {
+                                                    //     totalcost: costToday
+                                                    // });
+                                                });
+                                                
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                        }
+                    }
+                }
+                //console.log("providersList++++++++++++++++++"+providersList.length);
+            } else {
+                //res.send(200, []);
+                return;
+            }
+        });
+    }); 
+
+    /*app.get('/dashboard/providers/totalinstances', function(req, res) {
         console.log(" i am in totalinstances api");
         logger.debug("Enter get() for /providers");
         var loggedInUser = req.session.user.cn;
@@ -352,75 +444,84 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 });
             }
         });
+    });*/
+    
+    app.get('/dashboard/providers/totalinstances', function(req, res) {
+        providersdashboard.getLatestProviderInfo(function(err, providerDataLatest) {
+            if (err) {
+                return;
+            }
+            if (providerDataLatest) {
+                console.log("I am in providerData of Latest++++++++++++++++");
+                res.send(200, providerDataLatest);
+                return;
+            }
+        });
+    });
+
+    app.get('/dashboard/providers/totalcosts', function(req, res) {
+        dashboardcosts.getLatestCostInfo(function(err, costsDataLatest) {
+            if (err) {
+                return;
+            }
+            if (costsDataLatest) {
+                console.log("I am in costsData of Latest++++++++++++++++");
+                res.send(200, costsDataLatest);
+                return;
+            }
+        });
     });
     
-    
-    app.get('/dashboard/providers/totalmanagedinstances', function(req, res) {
+    /*app.get('/dashboard/providers/totalmanagedinstances', function(req, res) {
         instancesDao.getAllInstances(function(err, instances) {
             if (err) {
                 logger.debug("Error while getElementBytting instance!");
+                return;
             }
-
+            if(instances){
+                res.send(200, instances);
+                return;
+            }
         });
-    });
+    });*/
 
-    app.get('/dashboard/providers/totalcost', function(req, res) {
+    /*app.get('/dashboard/providers/totalcost', function(req, res) {
         var cloudwatch = new CW({
             "access_key": "AKIAJEP7C6AIIXGB6NJA",
             "secret_key": "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",
             "region": "us-east-1"
         });
-
-        cloudwatch.getTotalCost(function(err, nodes) {
+        cloudwatch.getTotalCostMaximum(function(err, nodes) {
             if(err){
                 res.send(500, "Failed to fetch Total Cost.");
                 return;
             }
             if(nodes){
-                console.log("I am in getting cost API ######################"+nodes);
+                cloudwatch.getTotalCostMinimum(nodes, function(err, costToday) {
+                    if(err){
+                        res.send(500, "Failed to fetch Total Cost.");
+                        return;
+                    }
+                    if (costToday) {
+                        console.log("I am in getting cost for Today######################" + costToday);
+                        res.send(200, {
+                            totalcost: costToday
+                        });
+                    }
+                });
             }
         });
-
-        cloudwatch.getTotalCostYesterday(function(err, nodesYesterday) {
-            if(err){
-                res.send(500, "Failed to fetch Total Cost.");
-                return;
-            }
-            if(nodesYesterday){
-                console.log("I am in getting cost API nodesYesterday######################"+nodesYesterday);
-            }
-        });
-    });
+    });*/
 
 
 
-    app.get('/dashboard/providers/totalusages', function(req, res) {
+    /*app.get('/dashboard/providers/totalusages', function(req, res) {
         var cloudwatch = new CW({
             "access_key": "AKIAJEP7C6AIIXGB6NJA",
             "secret_key": "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",
             "region": "us-east-1"
         });
-
-        cloudwatch.getTotalCost(function(err, nodes) {
-            if(err){
-                res.send(500, "Failed to fetch Total Cost.");
-                return;
-            }
-            if(nodes){
-                console.log("I am in getting cost API ######################"+nodes);
-            }
-        });
-
-        cloudwatch.getTotalCostYesterday(function(err, nodesYesterday) {
-            if(err){
-                res.send(500, "Failed to fetch Total Cost.");
-                return;
-            }
-            if(nodesYesterday){
-                console.log("I am in getting cost API nodesYesterday######################"+nodesYesterday);
-            }
-        });
-    });
+    });*/
 
 
 
