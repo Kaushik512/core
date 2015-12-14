@@ -152,6 +152,10 @@ var d4dMastersProjects = new mongoose.Schema(
 		applicationname: String,
 		appdescription: String
 	}],
+	repositories:{
+		nexus: [String],
+		docker: [String]
+	},
 	/*teamname: {type:String, trim:true},
 	teamname_rowid: {type:String, trim:true},*/
 	rowid:{type:String,required:true, trim:true}},{collection:'d4dmastersnew'}
@@ -191,6 +195,8 @@ var d4dMastersDockerConfig = new mongoose.Schema(
 	orgname_rowid: {type:[String], trim:true},
 	folderpath: {type:String,trim:true},
 	active: {type:Boolean, trim:true,default:true},
+	//dockerrepositories:{type: [String]},
+	configType: {type:String, trim:true},
 	rowid:{type:String,required:true, trim:true}},{collection:'d4dmastersnew'}	
 );
 var d4dModelMastersDockerConfig = mongoose.model('d4dModelMastersDockerConfig',d4dMastersDockerConfig,'d4dmastersnew');
