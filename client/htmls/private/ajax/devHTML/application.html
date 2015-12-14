@@ -552,7 +552,7 @@
                                             </div>
 
                                             <div class="col-lg-12 col-md-12 margintop15 containerClass  containerPortClass containerUpgradeDeploy">
-                                                <label>Container Port:<!-- <span style="color:red">*</span> -->
+                                                <label>Container Port:<span style="color:red">*</span>
                                                     <span>
                                                         <img class="containerIdspinner" src="img/select2-spinner.gif" style="display:none">
                                                         </img>
@@ -1443,14 +1443,17 @@ $nexusServer.change(function(e){
         $('.repoUrlClass').hide();
         $('.artifactClass').hide();
         $('.versionClass').hide();
+        $('.containerIdClass').show();
+        $('.containerPortClass').show();
         var containerId = $('#containerIdInput').val();
         var upgrade = $('#upgradeValue').val();
         if(containerId != "NA" && upgrade == "true"){
             $('#containerIdDiv').val(containerId);
             $('#containerIdDiv').attr('disabled','disabled');
-        }else{
+        }/*else{
             $('.containerIdClass').hide();
-        }
+            $('.containerPortClass').hide();
+        }*/
         getDockerRepoes();
         getTasks();
     }
