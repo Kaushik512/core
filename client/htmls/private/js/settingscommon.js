@@ -2242,7 +2242,7 @@ function saveform(formID, operationTypes) {
             var runlist = $ccrs.getSelectedRunlist();
 
             //alert('hit on run list' + v2.join(','));
-            v.push(runlist.join(','));
+            v.push(runlist.join());
         }
         if (k != '') {
             //data1.append(k,"[" + v.toString() + "]");

@@ -1513,7 +1513,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                     //callback(null, vmwareconfig);
                                     if (vmwareconfig) {
                                         var vmware = new VMware(vmwareconfig);
-                                        vmware.startstopVM(vmwareconfig.serviceHost, data[0].name, 'poweroff', function(err, vmdata) {
+                                        vmware.startstopVM(vmwareconfig.serviceHost, data[0].platformId, 'poweroff', function(err, vmdata) {
                                             if (!err) {
                                                 var timestampEnded = new Date().getTime();
 
@@ -1846,7 +1846,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                     //callback(null, vmwareconfig);
                                     if (vmwareconfig) {
                                         var vmware = new VMware(vmwareconfig);
-                                        vmware.startstopVM(vmwareconfig.serviceHost, data[0].name, 'poweron', function(err, vmdata) {
+                                        vmware.startstopVM(vmwareconfig.serviceHost, data[0].platformId, 'poweron', function(err, vmdata) {
                                             if (!err) {
                                                 var timestampEnded = new Date().getTime();
 

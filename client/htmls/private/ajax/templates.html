@@ -116,7 +116,7 @@ var inittemplates = function(index){
                             '</li><li style="font-size:12px;"><u><b>' + getTempName + '</b></u></li>';
 
                         if (getTemplateType != "Docker" && getTemplateType != "docker") {
-                            var cb = gettemplatescookbooks.split(',');
+                             var cb = $chefCookbookRoleSelector.getRunlistNames(gettemplatescookbooks.split(','));
                             var licb = '';
                             //alert(cb.length);
                             for (var cbi = 0; cbi < cb.length; cbi++) {
