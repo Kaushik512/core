@@ -105,7 +105,7 @@ Catalyst Editing the Azure provider created
 
 
 Catalyst Unique Azure provider validation setup
-    [Tags]       Sanity               Settings1
+    [Tags]       Sanity               Settings
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
     Catalyst Unique Azure provider
@@ -120,7 +120,7 @@ Catalyst Unique Azure provider validation setup
 
 
 
-#VM IMAGE  SETUP
+#AWS VM IMAGE  SETUP
 Catalyst Validation and Creation of VM IMAGE setup
     [Tags]       Sanity               Settings
 #    Catalyst Login
@@ -153,5 +153,6 @@ Catalyst Unique VM IMAGE setup
 
 
 
+#AZURE VM IMAGE SETUP
 
 
