@@ -252,10 +252,10 @@ function getDockerServer(){
    function getDockerRepositories(){
     $('.reposerverspinner').css('display', 'inline-block');
     $('#repoNameCreate').empty();
+    $('#repoNameCreate').append('<option value = "" > Choose Repository </option>');
       $.get('/d4dMasters/readmasterjsonnew/17',function(templates){
         if(templates.length){
           $('.reposerverspinner').css('display', 'none');
-          $('#repoNameCreate').append('<option value = "" > Choose Repository </option>');
           for(var i=0; i< templates.length; i++){
             if(templates[i].dockercontainerpaths){
               $('#repoNameCreate').append('<option value='+templates[i].dockercontainerpaths+'>'+templates[i].dockercontainerpaths+'</option>');
@@ -268,12 +268,12 @@ function getDockerServer(){
    function getNexusServerRepositories(nexusId) {
     $('.reposerverspinner').css('display', 'inline-block');
     $('#repoNameCreate').empty();
+    $('#repoNameCreate').append('<option value = "" > Choose Repository </option>');
     var $chooseRepository = $('#chooseRepository');
         if (nexusId) {
         $.get('/nexus/' + nexusId + '/repositories', function(nexusRepos) {
             $('.reposerverspinner').css('display', 'none');
             if (nexusRepos.length) {
-              $('#repoNameCreate').append('<option value = "" > Choose Repository </option>');
               for (var i = 0; i < nexusRepos.length; i++) {
                 $('#repoNameCreate').append('<option data-repoName="' + nexusRepos[i].name + '" value="' + nexusRepos[i].id + '">' + nexusRepos[i].name + '</option>');
               }
@@ -359,6 +359,8 @@ function getDockerServer(){
    $('#repoanchorDetails').click(function(e) {
       $("#repodetailsModal").show();
       $('#repoDetailsCreate').trigger("reset");
+      $('#repoNameCreate').empty();
+      $('#repoNameCreate').append('<option value = "" > Choose Repository </option>');
    });
    $('#appanchorDetails').click(function(e) {
       $("#appdetailsModal").show();
@@ -448,17 +450,15 @@ function getDockerServer(){
         };
         var nexusList = [];
         var dockerList = [];
-        var $repoTableBody = $('#tablerepositoryDetails tbody');
-        var $trs = $repoTableBody.find('tr');
-        $trs.each(function(e){
-          var $this = $(this);
-          if($this.data('repoServerName') === 'nexus'){
-            nexusList.push($this.data('repoName'));
+        var tableData = $repoDetails.data();
+        for(var i=0; i< tableData.length;i++){
+          if(tableData[i][0] === 'nexus'){
+            nexusList.push(tableData[i][1]);
           }
-          if($this.data('repoServerName') === 'docker'){
-            dockerList.push($this.data('repoName'));
+          if(tableData[i][0] === 'docker'){
+            dockerList.push(tableData[i][1]);
           }
-        });
+        }
         repositories.nexus = nexusList;
         repositories.docker = dockerList;
         //alert(JSON.stringify(repositories));
