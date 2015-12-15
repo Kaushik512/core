@@ -150,27 +150,39 @@
             <div class="modal-body" style="height:150px;">
               <div class="col-lg-6 col-md-6">
                 <label for="">Repository Server:<span style="color:red">*</span>
-                    <span>
+                    <!-- <span>
                         <img class="reposerverspinner" src="img/select2-spinner.gif" style="display:none">
                         </img>
-                    </span>
+                    </span> -->
                 </label>
                 <div class="input-groups">
                     <select id="chooseRepoServer" name="" class="required width-100 form-control">
-                        <!-- <option value="">Choose Server</option> -->
-                        <option value="nexus">Nexus</option>
-                        <option value="docker">Docker</option>
+                        <option value="">Choose Server</option>
+                        <!-- <option value="nexus">Nexus</option>
+                        <option value="docker">Docker</option> -->
                     </select>
                 </div>
               </div>
-               <div class="col-lg-6 col-md-6">
+               <!-- <div class="col-lg-6 col-md-6">
                   <label for="repoName">Name</label>
                   <input type="text" name="repoName" class="form-control" id="repoNameCreate"/>
                </div>
                <div class="col-lg-12 col-md-12" style="margin-top:20px">
                  
                  <span style="color:red;font-size:12px">* For Docker repository name should be username/tag (e.g. relevancelab/catalyst)</span>
-               </div>
+               </div> -->
+
+               <div class="col-lg-6 col-md-6">
+                    <label for="">Repository Name:<span style="color:red">*</span>
+                    <span>
+                        <img class="reposerverspinner" src="img/select2-spinner.gif" style="display:none">
+                        </img>
+                    </span>
+                </label>
+                    <select id="repoNameCreate" name="" class="form-control">
+                        <option value="">Choose Repository</option>
+                    </select>
+                </div>
             </div>
             <div class="modal-footer">
               <a type="button" class="btn btn-default" data-dismiss="modal">
@@ -185,46 +197,94 @@
       </div>
    </div>
 </div>
-<!--modal for Repo Deploy Details ends here-->
-<!--modal for App Deploy Details-->
-<!-- <div class="modal fade" id="appdetailsModal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
-   <div class="modal-dialog">
-      <div class="modal-content">
-         <form class="" id="appDetailsCreate" autocomplete="off">
-            <div class="modal-header">
-               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-               &times;
-               </button>
-               <h4 class="modal-title">
-                  <img style="width:18px;margin-left:6px;" src="img/tasksmall.png">&nbsp;&nbsp;Add App Deploy Details
-               </h4>
-            </div>
-            <div class="modal-body" style="height:100px;">
-               <div class="col-lg-6 col-md-6">
-                  <label for="applicationName">Application Name<span style="color:Red;" class="control-label">&nbsp;*</span></label>
-                  <input type="text" name="applicationName" class="form-control applicationNameCreate" id="applicationName" autofocus/>
-               </div>
-               <div class="col-lg-6 col-md-6">
-                  <label for="applicationDesc">Application Description</label>
-                  <input type="text" name="applicationDesc" class="form-control applicationDescCreate" id="applicationDesc"/>
-               </div>
-            </div>
-            <div class="modal-footer">
-              <a type="button" class="btn btn-default" data-dismiss="modal">
-                <i class="ace-icon fa fa-times bigger-110" style="margin-right: 5px;"></i>Cancel
-              </a>
-              <button class="btn btn-primary btn-mini" id="saveAppDeploy">
-                <i class="ace-icon fa fa-check bigger-110"></i>
-                Save
-              </button>
-            </div>
-         </form>
-      </div>
-   </div>
-</div> -->
-<!--modal for App Deploy Details ends here-->
 <script>
    //Form Name
+
+   $(document).ready(function() {
+      getNexusServer();
+      getDockerServer();
+    });
+
+    function getNexusServer(){
+    var $repoServer = $('#chooseRepoServer');
+    $repoServer.empty();
+    $('#chooseRepoServer').append('<option value="">Choose Server</option>');
+    //$('.reposerverspinner').css('display','inline-block');
+    $.get('/d4dMasters/readmasterjsonnew/26',function(nexus){
+        //$('.reposerverspinner').css('display','none');
+        if(nexus.length){
+            for(var i=0;i< nexus.length;i++){
+                $('#chooseRepoServer').append('<option data-nexusId = "'+nexus[i].rowid+'" value='+nexus[i].configType+' data-serverType = "'+nexus[i].configType+'">'+nexus[i].nexusservername+'</option>');
+            }
+        }
+    });
+}
+
+function getDockerServer(){
+    $.get('/d4dMasters/readmasterjsonnew/18', function(dockerData) {
+        if(dockerData.length){
+            for(var i=0; i< dockerData.length; i++){
+                $('#chooseRepoServer').append('<option value='+dockerData[i].configType+' data-serverType = "'+dockerData[i].configType+'">'+dockerData[i].dockerreponame+'</option>');
+            }
+        }
+    });
+}
+
+
+   var $chooseRepoServer = $('#chooseRepoServer');
+   $chooseRepoServer.change(function(e){
+    $('chooseRepoServer').empty();
+    $('#repoNameCreate').empty();
+    var serverType = $('#chooseRepoServer :selected').attr('data-serverType');
+    var serverId = $('#chooseRepoServer :selected').attr('data-nexusId');
+    
+    if(serverType === "nexus"){
+      getNexusServerRepositories(serverId);
+    }else if(serverType === "docker"){
+      getDockerRepositories();
+    }else{
+      $('#repoNameCreate').append('<option value = "" > Choose Repository </option>');
+    }
+      
+   });
+
+
+   function getDockerRepositories(){
+    $('.reposerverspinner').css('display', 'inline-block');
+    $('#repoNameCreate').empty();
+      $.get('/d4dMasters/readmasterjsonnew/17',function(templates){
+        if(templates.length){
+          $('.reposerverspinner').css('display', 'none');
+          $('#repoNameCreate').append('<option value = "" > Choose Repository </option>');
+          for(var i=0; i< templates.length; i++){
+            if(templates[i].dockercontainerpaths){
+              $('#repoNameCreate').append('<option value='+templates[i].dockercontainerpaths+'>'+templates[i].dockercontainerpaths+'</option>');
+            }
+          }
+        }
+      });
+   }
+
+   function getNexusServerRepositories(nexusId) {
+    $('.reposerverspinner').css('display', 'inline-block');
+    $('#repoNameCreate').empty();
+    var $chooseRepository = $('#chooseRepository');
+        if (nexusId) {
+        $.get('/nexus/' + nexusId + '/repositories', function(nexusRepos) {
+            $('.reposerverspinner').css('display', 'none');
+            if (nexusRepos.length) {
+              $('#repoNameCreate').append('<option value = "" > Choose Repository </option>');
+              for (var i = 0; i < nexusRepos.length; i++) {
+                $('#repoNameCreate').append('<option data-repoName="' + nexusRepos[i].name + '" value="' + nexusRepos[i].id + '">' + nexusRepos[i].name + '</option>');
+              }
+            }
+        });
+    } else {
+        $('.reposerverspinner').css('display', 'none');
+    }
+}
+
+
    $(document).ready(function() {
       var url = window.location.href;
       var queryString = url.substring(url.indexOf('?') + 1 );
@@ -233,38 +293,6 @@
       if (queryString == 'new') {
       } else {
         $.get('/d4dMasters/readmasterjsonnew/4', function(data) {
-            /*for (var i = 0; i < data.length; i++) {
-                if (queryString == data[i].rowid) {
-                    var appDeployList = data[i].appdeploy;
-                    if (appDeployList.length && appDeployList[0].applicationname) {
-                        for (var j = 0; j < appDeployList.length; j++) {
-                            var $appDeployTbody = $('#appDeployTbody');
-                            var applicationConstructName = appDeployList[j].applicationname;
-                            var applicationConstructDesc = appDeployList[j].appdescription;
-                            var $tr = $('<tr class="appDeployRow"></tr>');
-                            var $tdName = $('<td class="tdappName" value=' + applicationConstructName + ' style="word-break: break-word;"></td>');
-                            $tr.data('appName', applicationConstructName);
-
-                            var $tdDescription = $('<td class="tdappDescription" value=' + applicationConstructDesc + ' style="word-break: break-word;"></td>');
-                            $tr.data('appDesc', applicationConstructDesc);
-
-                            $tdName.append(applicationConstructName);
-                            $tdDescription.append(applicationConstructDesc);
-                            var $tdAction = $('<td/>');
-                            $tdAction.append('<div style="margin-right:17px;float:right;" class="btn-group"><button class="deleteRow" value="Remove" title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></div>');
-
-                            $tdAction.find('.deleteRow').click(function() {
-                                $appDetails.row($tr).remove().draw(true);
-                            });
-
-                            $tr.append($tdName).append($tdDescription).append($tdAction);
-                            $appDeployTbody.append($tr);
-                            $appDetails.row.add($tr).draw();
-                        }
-                    }
-                }
-            }*/
-
             for (var i = 0; i < data.length; i++) {
               (function(i){
                 if (queryString == data[i].rowid) {
@@ -322,28 +350,6 @@
                             }
                           }
                         }
-
-                            /*var $tr = $('<tr class="appDeployRow"></tr>');
-                            var $tdName = $('<td class="tdappName" value=' + applicationConstructName + ' style="word-break: break-word;"></td>');
-                            $tr.data('appName', applicationConstructName);
-
-                            var $tdDescription = $('<td class="tdappDescription" value=' + applicationConstructDesc + ' style="word-break: break-word;"></td>');
-                            $tr.data('appDesc', applicationConstructDesc);
-
-                            $tdName.append(applicationConstructName);
-                            $tdDescription.append(applicationConstructDesc);
-                            var $tdAction = $('<td/>');
-                            $tdAction.append('<div style="margin-right:17px;float:right;" class="btn-group"><button class="deleteRow" value="Remove" title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></div>');
-
-                            $tdAction.find('.deleteRow').click(function() {
-                                $appDetails.row($tr).remove().draw(true);
-                            });
-
-                            $tr.append($tdName).append($tdDescription).append($tdAction);
-                            $appDeployTbody.append($tr);
-                            $appDetails.row.add($tr).draw();*/
-                        //}
-                    //}
                 }
              })(i);
             }
@@ -403,6 +409,7 @@
    $("#tableappDetails_filter").hide();
 
    $("#saveRepoDetails").click(function(e) {
+
      e.preventDefault();
      var repoServerName = $("#chooseRepoServer").val();
      var repoName = $("#repoNameCreate").val();
@@ -431,58 +438,10 @@
          $repoDetails.row.add($tr).draw();
          $("#repodetailsModal").hide();
      }
+     $("#repoNameCreate").empty();
+     $('#repoNameCreate').append('<option value = "" > Choose Repository </option>');
    });
-   /*$("#saveAppDeploy").click(function(e) {
-     e.preventDefault();
-     var appName = $("#applicationName").val();
-     var appDesc = $("#applicationDesc").val();
-     if (appName == '') {
-         alert("Please enter Application Name");
-     }
-     if (appName != '') {
-         var $appDeployTbody = $('#appDeployTbody');
-         var $tr = $('<tr class="appDeployRow"></tr>');
-         var $tdName = $('<td class="tdappName" value=' + appName + ' style="word-break: break-word;"></td>');
-         $tr.data('appName', appName);
-         var $tdDescription = $('<td class="tdappDescription" value=' + appDesc + ' style="word-break: break-word;"></td>');
-         $tr.data('appDesc', appDesc);
-
-         $tdName.append(appName);
-         $tdDescription.append(appDesc);
-         var $tdAction = $('<td/>');
-         $tdAction.append('<div style="margin-right:17px;float:right;" class="btn-group"><button class="deleteRow" value="Remove" title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></div>');
-
-         $tdAction.find('.deleteRow').click(function() {
-             $appDetails.row($tr).remove().draw(true);
-         });
-
-         $tr.append($tdName).append($tdDescription).append($tdAction);
-         $appDeployTbody.append($tr);
-         $appDetails.row.add($tr).draw();
-         $("#appdetailsModal").hide();
-     }
-   });*/
     $("#savecreateProjectbtn").click(function(e) {
-       /* var appdeploy = [];
-        var $appDeployTableBody = $('#tableappDetails tbody');
-        var $trs = $appDeployTableBody.find('tr');
-        $trs.each(function(e) {
-            var $this = $(this);
-            var dataDeploy = {
-                applicationname: $this.data('appName'),
-                appdescription: $this.data('appDesc'),
-            };
-            appdeploy.push(dataDeploy);
-        });
-        //alert(JSON.stringify(appdeploy));
-        var appDeployString = JSON.stringify(appdeploy);
-        $('#appdeploy').val(appDeployString);*/
-
-        /*repositories:{
-          nexus: [String],
-          docker: [String]
-        }*/
-
         var repositories = {
           nexus: [],
           docker: []
@@ -502,6 +461,7 @@
         });
         repositories.nexus = nexusList;
         repositories.docker = dockerList;
+        //alert(JSON.stringify(repositories));
         $('#repositories').val(JSON.stringify(repositories));
     });
    
