@@ -19,3 +19,11 @@ Catalyst Create New Blueprint
     [Teardown]     Close Browser
 
 
+Catalyst Delete Blueprint
+    [Tags]       Sanity               BP
+#    Catalyst Login 
+    Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
+    Catalyst deletion of New Blueprint
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
