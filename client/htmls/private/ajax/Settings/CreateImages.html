@@ -8,7 +8,7 @@
         <form id="myForm22" action="">
           <div class="col-md-12">
             <div class="widget-box">
-              <div class="widget-header"><h4 style="color:black;padding-top:9px;">Create Image <span id="
+              <div class="widget-header"><h4 class="widget-margin" style="color: black;"><span id="
                 spnimage"></span></h4></div>
                 <div class="widget-body">
                   <div class="widget-main" style="min-height:300px">
@@ -448,6 +448,7 @@ $(document).ready(function() {
     $('select').select2();
 
     if (UtilityMethods.getIdFromURL()) {
+        $('.widget-header').find('h4.widget-margin').html('Edit Image');
         console.log("In updation :", UtilityMethods.getIdFromURL());
 
         $.get('/vmimages/' + UtilityMethods.getIdFromURL(), function(data) {
@@ -467,6 +468,8 @@ $(document).ready(function() {
             }
 
         });
+    }else{
+      $('.widget-header').find('h4.widget-margin').html('Add New Image');
     }
 
 });
