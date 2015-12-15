@@ -2135,7 +2135,12 @@ $.get('../instances/' + urlParams.id, function(data) {
             if (localStorage.getItem('userRole') === '[Consumer]') {
                 readMode = true;
             }
-            var $ccrs = $chefCookbookRoleSelector(urlParams.org, null, runlist, readMode);
+            var $ccrs = $chefCookbookRoleSelector(urlParams.org, null, runlist, readMode,{
+                     cookbooks: true,
+                     roles: true,
+                     templates: true,
+                     all: true
+                });
             
             $controlPanelChefRunModalContainer.find('.chefRunlistContainer').empty().append($ccrs);
             $controlPanelChefRunModalContainer.find('.chefRunlistContainer').data('$ccrs', $ccrs);
@@ -2263,10 +2268,10 @@ $.get('../instances/' + urlParams.id, function(data) {
         }
         for (var i = 0; i < runlist.length; i++) {
 
-            if (runlist[i].indexOf('recipe') === 0) {
-                className = 'cookbook';
-            } else {
-                className = 'roles';
+            if (runlist[i].indexOf('template') === 0) {
+                var templateRunlist = $chefCookbookRoleSelector.getRunlistFromTemplate(runlist[i]);
+                runlist = runlist.concat(templateRunlist);
+                continue;
             }
             var name = '';
             var item = runlist[i];
@@ -2278,9 +2283,13 @@ $.get('../instances/' + urlParams.id, function(data) {
                 }
             }
             if (runlist[i].indexOf('recipe') === 0) {
-                reqBody.cookbooks.push(name);
+                if(reqBody.cookbooks.indexOf(name) === -1) {
+                    reqBody.cookbooks.push(name);
+                }
             } else {
-                reqBody.roles.push(name);
+                if(reqBody.roles.indexOf(name) === -1) {
+                    reqBody.roles.push(name);
+                }
             }
 
         }
@@ -3049,7 +3058,14 @@ function addActionLogRow(actionLog) {
         var keys = Object.keys(actionData);
         for (var j = 0; j < keys.length; j++) {
             if (actionData[keys[j]] && actionData[keys[j]].length) {
-                $tdData.append($('<span></span>').append(keys[j] + ' : ').append(actionData[keys[j]]));
+                var data = actionData[keys[j]];
+                if(keys[j] == 'runlist') {
+                  data = $chefCookbookRoleSelector.getRunlistNames(data);
+                  if(data.length) {
+                    data = data.join(' , ');
+                  }
+                }
+                $tdData.append($('<span></span>').append(keys[j] + ' : ').append(data));
                 $tdData.append('<br/>');
             }
         }

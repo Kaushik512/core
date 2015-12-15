@@ -84,7 +84,7 @@ function getNameFromTemplateRunlist(item) {
     if (indexOfTemplateMarker !== -1) {
         var indexOfBracket = item.indexOf('[');
         if (indexOfBracket !== -1) {
-            name = item.substring(indexOfBracket + 1, indexOfTemplateMarker);
+            var name = item.substring(indexOfBracket + 1, indexOfTemplateMarker);
         }
     }
     return name;
@@ -146,14 +146,14 @@ function $chefCookbookRoleSelector(catorgname, callback, selectedRunlist, readMo
         cookbooks: true,
         roles: true,
         deploy: false,
-        templates: true,
+        templates: false,
         all: true
     };
     if (!listVisible) {
         listVisible = defaultVisilbleList;
 
     }
-    listVisible.templates = true;
+    //listVisible.templates = true;
     //listVisible = $.extend(listVisible, defaultVisilbleList, listVisible);
 
     console.log(listVisible);
@@ -311,7 +311,7 @@ function $chefCookbookRoleSelector(catorgname, callback, selectedRunlist, readMo
         var val = $chefItemdiv.find('.runlistTypeSelectorRadioBtn:checked').val();
         var selectedRunlist = $chefItemdiv.getSelectedRunlist();
         if (val == 'All') {
-            cookbookrecipesTotallist = cookbookrecipesTotallist.concat(cookbookDataList, rolesDataList, templatesDataList);
+            cookbookrecipesTotallist = cookbookrecipesTotallist.concat(cookbookDataList, rolesDataList);
         } else if (val == 'Roles') {
             cookbookrecipesTotallist = cookbookrecipesTotallist.concat(rolesDataList);
         } else if (val == 'Cookbooks') {
@@ -681,12 +681,12 @@ $chefCookbookRoleSelector.getChefServerId = function() {
     return $('#cookbooksrecipesselectedList').attr('data-chefServerId');
 };
 $chefCookbookRoleSelector.getRunlistNames = function(runlist) {
-    console.log(runlist);
     if (!(runlist && runlist.length)) {
         runlist = [];
     }
     var runlistNames = [];
     runlist.forEach(function(item) {
+        if(item) {
         var name = '';
         if (item.indexOf('recipe') === 0) {
             name = getNameFormChefRunlist(item);
@@ -696,8 +696,24 @@ $chefCookbookRoleSelector.getRunlistNames = function(runlist) {
             name = getNameFromTemplateRunlist(item);
         }
         runlistNames.push(name);
+       }
     });
+    
     return runlistNames;
+
+};
+$chefCookbookRoleSelector.getRunlistFromTemplate = function(template) {
+    var indexOfTemplateMarker = template.indexOf(':-:');
+        if (indexOfTemplateMarker !== -1) {
+            
+                var runlistSubString = template.substring(indexOfTemplateMarker+3, template.length - 1);
+                var templateRunlist = runlistSubString.split('*!*');
+                return templateRunlist;
+            
+        } else {
+           return [];
+        }
+    
 
 };
 
