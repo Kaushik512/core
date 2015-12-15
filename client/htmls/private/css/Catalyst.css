@@ -706,6 +706,18 @@
     font-size: 12px;
 }
 
+.runlistTemplate {
+    /*background: url("img/Runlist.png");background-repeat : no-repeat; height: 47px;padding-left: 50px; background-position:2px 2px;*/
+    background: url("../img/recipe.png");
+    background-repeat: no-repeat;
+    height: 24px;
+    padding-left: 34px !important;
+    padding-top: 6px !important;
+    background-position: 4px 2px;
+    font-size: 12px;
+}
+
+
 .taskimg {
     background: url("../img/tasksmall.png");
     background-repeat: no-repeat;

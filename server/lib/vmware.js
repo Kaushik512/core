@@ -1,6 +1,7 @@
 var Client = require('node-rest-client').Client;
 var SSHExec = require('./utils/sshexec');
 var logger = require('_pr/logger')(module);
+var waitForPort = require('wait-for-port');
 
 function getAuthToken(host, username, password, tenantName, callback) {
     console.log("START:: getAuthToken");
@@ -162,99 +163,111 @@ var vmwareservice = function(options) {
         var cmdString = opts.cmds.join(' && ');
         console.log(JSON.stringify(opts));
         var sshExec = new SSHExec(opts);
-        sshExec.exec(cmdString, function(err, stdout) {
-            console.log(stdout);
-            callback(stdout);
+        sshExec.exec(cmdString, function(err, retCode) {
+            if(err) {
+                callback(err,null);
+                return;
+            }
+            if(retCode === 0) {
+               callback(null,retCode);
+            
+            } else {
+              callback({
+                message:"error runnning cmd",
+                code:retCode
+              },null);
+            }
             return;
         }, function(err, stdout) {
-            console.log('Out:', stdout); //assuming that receiving something out would be a goog sign :)
-            callback('ok');
+            console.log('Out:', stdout);
             return;
         }, function(err, stdout) {
             console.log('Error Out:', stdout);
         });
 
-    }
-    this.timeouts = [];
-    this.callbackdone = false;
+    };
 
+    this.waitForPortOnInstance = function(hostip, callback) {
+         waitForPort(hostip, 22, function(err) {
+                                            if (err) {
+                                                console.log(err);
+                                                callback(err);
+                                                return;
+                                            }
+                                             callback(null);
+                                        });
+
+    };
+    
     this.waitforserverready = function(servicehost, servername, username, password, callback) {
         var self = this;
         console.log('Waiting for :', servername);
-        var wfsr = function() {
+        var count = 0;
+        var limit = 20;
+        function wfsr() {
+            count++;
             self.getServerDetails(servicehost, servername, function(err, data) {
                 if (err) {
                     callback(err, null);
                     return;
                 }
-                if (!err && data != null) {
-                    data = JSON.parse(data);
+                    try {
+                      data = JSON.parse(data);
+                    } catch(err){
+                        console.log(err);
+                        logger.debug('Timeout set in catch');
+                        if (count<limit) {
+                             logger.debug('Timeout 4 set in catch count ==> '+count);
+                             setTimeout(wfsr, 30000);
+                            } else {
+                              callback({
+                                  message:"Instance is not responding"
+                                 });
+                            }
+                        return;
+                    }
+
                     console.log('Quried server:', JSON.stringify(data));
                     //response {"name":"D4D-MYVMWBP1_2015-10-21_00_12_59_159","ip":"192.168.102.154","OS":"Ubuntu Linux (64-bit)","toolsStatus":"guestToolsRunning","state":"poweredOn","cpuUsage":{"used":0,"num":1},"memory":{"avail":1024,"used":0},"uptime":1195}
-                    if (data.toolsStatus && data.ip && data.toolsStatus == 'guestToolsRunning') {
-
-                        self.trysshoninstance(data.ip, username, password, function(cdata) {
-                            if (cdata == 'ok') {
-                                for (var i = 0; i < self.timeouts.length; i++) {
-                                    logger.debug('Clearing timeout : ', self.timeouts[i]);
-                                    clearTimeout(self.timeouts[i]);
-                                }
-                                self.timeouts = [];
-                                if (!self.callbackdone) {
-                                    self.callbackdone = true;
-                                    callback(null, data.ip, data);
-                                    return;
-                                } else {
-                                    logger.debug('Timeout 1 set');
-                                    if (!self.callbackdone) {
-                                        self.timeouts.push(setTimeout(wfsr, 30000));
-                                    }
-                                }
+                    if (data && data.toolsStatus && data.ip && data.toolsStatus == 'guestToolsRunning') {
+                        self.waitForPortOnInstance(data.ip, function(err) {
+                            if(err) {
+                                if (count<limit) {
+                              logger.debug('Timeout 4 set count ==> '+count);
+                              setTimeout(wfsr, 30000);
+                            } else {
+                              callback({
+                                  message:"Instance is not responding"
+                               });
                             }
+                            return;
+
+                            }
+                                logger.debug('anshul ==> calling callback');
+                                callback(null, data.ip, data);
+                                return;
+                             
+                            
                         });
                     } else {
-                        if (!self.callbackdone) {
-                            logger.debug('Timeout 4 set');
-                            self.timeouts.push(setTimeout(wfsr, 30000));
+                        if (count<limit) {
+                            logger.debug('Timeout 4 set '+count);
+                            setTimeout(wfsr, 30000);
+                        } else {
+                            callback({
+                                message:"Instance is not responding"
+                            });
+                            return;
                         }
                     }
-                } else {
-
-                    if (!self.callbackdone) {
-                        logger.debug('Timeout 2 set');
-                        self.timeouts.push(setTimeout(wfsr, 30000));
-                    }
-                }
-
+               
             });
         };
         console.log('Timeout 3 set');
-        self.timeouts.push(setTimeout(wfsr, 15000));
+        setTimeout(wfsr, 15000);
     }
 }
 
-
-
-// this.waitforserverready1 = function(tenantId,serverId,callback){
-// 	var self = this;
-// 	var checkifserverready = function(){
-// 		 self.getServerById(tenantId,serverId,function(err,data){
-// 	                if (err) {
-// 	                	callback(err, null);
-// 	                	return;
-// 	            	}
-// 	                if(!err){
-// 	                        var networks = Object.keys(data.server.addresses);
-// 	                        if(networks.length > 0){
-
-// 	                        }
-// 	                        else{
-
-// 	                        }
-// 	                }
-// 	        });
-// 	}
-// }
 
 
 module.exports = vmwareservice;

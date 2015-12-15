@@ -91,8 +91,8 @@ if (!$.fn.dataTable.isDataTable('#tableJobList')) {
         "aoColumns": [{
             "bSortable": false,
             "sWidth": "80%",
-         },{
-            "bSortable":false,
+        }, {
+            "bSortable": false,
             "sWidth": "20%"
         }]
     });
@@ -109,14 +109,14 @@ if (!$.fn.dataTable.isDataTable('#tableParameters')) {
         "bFilter": false,
         "aoColumns": [{
             "bSortable": false
-         },{
+        }, {
             "bSortable": false
-         },{
+        }, {
             "bSortable": false
-         },{
+        }, {
             "bSortable": false
-         },{
-            "bSortable":false,
+        }, {
+            "bSortable": false,
             "sWidth": "20%"
         }]
     });
@@ -124,7 +124,7 @@ if (!$.fn.dataTable.isDataTable('#tableParameters')) {
 
 $(document).ready(function() {
     $('[data-toggle="popover"]').popover({
-       trigger: 'focus'
+        trigger: 'focus'
     });
 
     $('.addListUrl').click(function(e) {
@@ -132,7 +132,7 @@ $(document).ready(function() {
     });
     $('.addListParam').click(function(e) {
         $('#parameterCreate').trigger('reset');
-       // $('#parametersSelect').("val","");
+        // $('#parametersSelect').("val","");
         $('#booleanTable').addClass('hidden');
         $('#stringTable').addClass('hidden');
         $('#choiceTable').addClass('hidden');
@@ -170,11 +170,11 @@ function validatejson(attrctrl) {
 }
 
 $(document).ready(function() {
-   // $(".chooseTasktype").select2();
-   // $("#jenkinsServerList").select2();
-   // $("#jobListJenkins").select2();
-   // $("#parametersSelect").select2();
-   // $(".assignuserListJenkins").select2();
+    // $(".chooseTasktype").select2();
+    // $("#jenkinsServerList").select2();
+    // $("#jobListJenkins").select2();
+    // $("#parametersSelect").select2();
+    // $(".assignuserListJenkins").select2();
 
 
     $(document).on('shown.bs.modal', function(e) {
@@ -184,10 +184,10 @@ $(document).ready(function() {
     var $addParameters = $('#addParameters');
     var $addParametersFalse = $('#addParametersFalse');
 
-    $addParametersFalse.change(function(){
-      if ($(this).is(":checked")){
-         $('.addParameters').addClass('hidden');
-      }
+    $addParametersFalse.change(function() {
+        if ($(this).is(":checked")) {
+            $('.addParameters').addClass('hidden');
+        }
     });
 
     $addParameters.change(function() {
@@ -203,8 +203,18 @@ $(document).ready(function() {
         //console.log(taskData);
         //   alert(JSON.stringify(taskData));
         console.log("I am in loadUIData");
+        var $ccrs = $chefCookbookRoleSelector(urlParams.org, function(data) {
+
+        }, runlist, false, {
+            deploy: true,
+            all: true,
+            roles: false,
+            cookbooks: false,
+            templates: true,
+            
+        });
         if (taskData) {
-         console.log("I am in loadUIData inside taskData");
+            console.log("I am in loadUIData inside taskData");
             $('.widget-header').find('.widget-margin').html('Edit Job');
             $('.inputTaskName').val(taskData.name);
             $('#compositeTaskName').val(taskData.name);
@@ -219,17 +229,17 @@ $(document).ready(function() {
                 // alert(taskData.taskConfig.runlist);
                 if (taskData.taskConfig.runlist.length > 0) {
                     // alert(taskData.taskConfig.runlist.length);
-                    createRunlistTable(taskData.taskConfig.runlist);
+                    createRunlistTable($ccrs.getRunlistNames(taskData.taskConfig.runlist));
                 }
             }
             if (taskData && taskData.taskType === 'composite') {
-               if (taskData.taskConfig.assignTasks.length > 0) {
-                  //alert(taskData.taskConfig.assignTasks.length);
-                  var _assignedTasks = taskData.taskConfig.assignTasks;
-                  // loadTaskLists(_assignedTasks);
-                  loadTaskLists(taskData);
+                if (taskData.taskConfig.assignTasks.length > 0) {
+                    //alert(taskData.taskConfig.assignTasks.length);
+                    var _assignedTasks = taskData.taskConfig.assignTasks;
+                    // loadTaskLists(_assignedTasks);
+                    loadTaskLists(taskData);
 
-               }
+                }
             }
 
             // console.log('urls ===> ',taskData.taskConfig.jobResultURL);
@@ -344,14 +354,7 @@ $(document).ready(function() {
         if (taskData && taskData.taskType === 'chef') {
             runlist = taskData.taskConfig.runlist;
         }
-        var $ccrs = $chefCookbookRoleSelector(urlParams.org, function(data) {
 
-        }, runlist, false, {
-            deploy: true,
-            all: true,
-            roles: false,
-            cookbooks: false
-        });
 
 
         //to get the name of the chef server that is associated with the organisation...
@@ -519,9 +522,9 @@ $(document).ready(function() {
         var taskData = {};
         //alert(taskType);
         taskData.taskType = taskType;
-        
+
         if (taskType === 'chef') {
-           
+
             var $saveSpinner = $('#spinnerForSave');
             var taskName = $('#chefTaskName').val();
             if (!taskName) {
@@ -536,7 +539,7 @@ $(document).ready(function() {
             var chefJobDescription = $('textarea#chefDescription').val();
 
             taskData.description = chefJobDescription;
-             
+
             var $selectedNodes = $('#selectedNodesChefTask input[type=checkbox]');
             // var $addParameters = $('#addParameters input[type=checkbox]');
 
@@ -577,9 +580,9 @@ $(document).ready(function() {
             });
             taskData.attributes = attributes;
             $('.btnSaveTask').attr('disabled', 'disabled');
-            
+
         } else if (taskType === 'puppet') {
-           
+
             var $saveSpinner = $('#spinnerForSave');
             var taskName = $('#puppetTaskName').val();
             if (!taskName) {
@@ -593,7 +596,7 @@ $(document).ready(function() {
             var puppetJobDescription = $('#puppetDescription').val();
 
             taskData.description = puppetJobDescription;
-            
+
             var $selectedNodes = $('#selectedNodesPuppetTask input[type=checkbox]');
             // var $addParameters = $('#addParameters input[type=checkbox]');
 
@@ -612,9 +615,9 @@ $(document).ready(function() {
                 return false;
             }
 
-            
+
             taskData.nodeIds = nodesList;
-            
+
             //taskData.attributesjson = $('#attrtextarea').val().trim();
             $('.btnSaveTask').attr('disabled', 'disabled');
         } else if (taskType === 'jenkins') {
@@ -760,7 +763,7 @@ $(document).ready(function() {
                         console.log(data);
 
                         $('.btnBack').click();
-                        if($('#chooseJobType')){
+                        if ($('#chooseJobType')) {
                             getTasks();
                         }
                         bootbox.alert({
@@ -813,7 +816,7 @@ $(document).ready(function() {
 
                     $.post('../organizations/' + urlParams.org + '/businessgroups/' + urlParams['bg'] + '/projects/' + urlParams.projid + '/environments/' + urlParams.envid + '/tasks', reqBody, function(data) {
                         console.log(data);
-                         window.initializeTaskArea([data]);
+                        window.initializeTaskArea([data]);
                         //alert('spinner');
                         $('.btnBack').click();
                         if ($('#chooseJobType')) {
@@ -840,8 +843,8 @@ $(document).ready(function() {
                     taskData: taskData
                 };
                 $.post('../organizations/' + urlParams.org + '/businessgroups/' + urlParams['bg'] + '/projects/' + urlParams.projid + '/environments/' + urlParams.envid + '/tasks', reqBody, function(data) {
-                    console.log("My composite data:",data);
-                     window.initializeTaskArea([data]);
+                    console.log("My composite data:", data);
+                    window.initializeTaskArea([data]);
                     $('.btnBack').click();
                     // $(".alert-message").alert();
                     // window.setTimeout(function() {
@@ -870,7 +873,7 @@ $(document).ready(function() {
                 };
                 $.post('../organizations/' + urlParams.org + '/businessgroups/' + urlParams['bg'] + '/projects/' + urlParams.projid + '/environments/' + urlParams.envid + '/tasks', reqBody, function(data) {
                     console.log(data);
-                     window.initializeTaskArea([data]);
+                    window.initializeTaskArea([data]);
                     $('.btnBack').click();
                     if ($('#chooseJobType')) {
                         getTasks();
@@ -956,7 +959,7 @@ $(document).ready(function() {
                 var defaultValue = [];
 
                 parameterizedObj.defaultValue = $('#choiceValue').val().trim();
-               // alert(parameterizedObj.defaultValue);
+                // alert(parameterizedObj.defaultValue);
                 defaultValue = parameterizedObj.defaultValue.split(',');
 
                 parameterizedObj.defaultValue = defaultValue;
@@ -1053,8 +1056,8 @@ $(document).ready(function() {
                 createParametersTable(null, parameterType);
                 $('#parameterModal').modal('hide');
                 return false;
-            } else if(parameterType === "choice"){
-               createParametersTable(null, parameterType);
+            } else if (parameterType === "choice") {
+                createParametersTable(null, parameterType);
                 $('#parameterModal').modal('hide');
                 return false;
             } else {
@@ -1078,26 +1081,26 @@ $(document).ready(function() {
             booleanName: {
                 required: true
             },
-            booleanDescription:{
-               required:true
+            booleanDescription: {
+                required: true
             },
-            stringName:{
-               required:true
+            stringName: {
+                required: true
             },
-            stringValue:{
-               required:true
+            stringValue: {
+                required: true
             },
-            stringDescription:{
-               required:true
+            stringDescription: {
+                required: true
             },
-            choiceName:{
-               required:true
+            choiceName: {
+                required: true
             },
-            choiceValue:{
-               required:true
+            choiceValue: {
+                required: true
             },
-            choiceDescription:{
-               required:true
+            choiceDescription: {
+                required: true
             }
         },
         messages: {
@@ -1107,23 +1110,23 @@ $(document).ready(function() {
             booleanDescription: {
                 required: "&nbsp;(Required)"
             },
-            stringName:{
-               required:"&nbsp;(Required)"
+            stringName: {
+                required: "&nbsp;(Required)"
             },
-            stringValue:{
-               required:"&nbsp;(Required)"
+            stringValue: {
+                required: "&nbsp;(Required)"
             },
-            stringDescription:{
-               required:"&nbsp;(Required)"
+            stringDescription: {
+                required: "&nbsp;(Required)"
             },
-            choiceName:{
-               required:"&nbsp;(Required)"
+            choiceName: {
+                required: "&nbsp;(Required)"
             },
-            choiceValue:{
-               required:"&nbsp;(Required)"
+            choiceValue: {
+                required: "&nbsp;(Required)"
             },
-            choiceDescription:{
-               required:"&nbsp;(Required)"
+            choiceDescription: {
+                required: "&nbsp;(Required)"
             }
         },
         onkeyup: false,
@@ -1133,32 +1136,15 @@ $(document).ready(function() {
     function createRunlistTable(runlist) {
         //alert(runlist.length);
         //$('#tableRunlist').removeClass('hidden');
-        var $options = $('#cookbooksrecipesselectedList').find('option');
-        if (runlist.length == 0) {
-            var runlist = [];
-            $options.each(function() {
-                var $option = $(this);
-                runlist.push($option.val());
-                console.log(runlist);
-                return runlist;
-            });
-        }
         $tasksRunlist.clear().draw();
-        //alert(runlist.length);
+        // alert(runlist.length);
         for (i = 0; i < runlist.length; i++) {
-         //alert('check');
-            if (runlist.length > 0) {
-               //alert('ch');
-                console.log(runlist[i].substring(runlist[i].lastIndexOf("[") + 1, runlist[i].lastIndexOf("]")));
-                var $runlistList = $('#tableRunlist');
-                var $tr = $('<tr class="runlistRow"></tr>');
-                var $tdName = $('<td class="runlistDescription"></td>');
-
-                $tdName.append(runlist[i].substring(runlist[i].lastIndexOf("[") + 1, runlist[i].lastIndexOf("]")));
-                $tr.append($tdName);
-                $runlistList.append($tr);
-                $tasksRunlist.row.add($tr).draw();
-            }
+            var $runlistList = $('#tableRunlistForBlueprint');
+            var $tr = $('<tr class="runlistRow"></tr>');
+            var $tdName = $('<td class="runlistDescription">' + runlist[i] + '</td>');
+            $tr.append($tdName);
+            $runlistList.append($tr);
+            $tasksRunlist.row.add($tr).draw();
         }
     }
 
@@ -1174,20 +1160,16 @@ $(document).ready(function() {
                         $this.hide();
 
                         if ($this.attr('class') == 'taskimgchef') {
-                           var dummychefId = $this.attr('id');
-                           var dummychefValue = $this.attr('value');
-                           $selectedtaskList.append($('<option class="taskimgchef" id="' + dummychefId + '" value="' + dummychefValue + '">' + dummychefValue + '</option>'));
-                        } 
-
-                        else if ($this.attr('class') == 'taskimgpuppet') {
-                           var dummypuppetId = $this.attr('id');
-                           var dummypuppetValue = $this.attr('value');
-                           $selectedtaskList.append($('<option class="taskimgpuppet" id="' + dummypuppetId + '" value="' + dummypuppetValue + '">' + dummypuppetValue + '</option>'));
-                        } 
-
-                        else if ($this.attr('class') == 'taskimgjenkins') {
-                           var dummyjenkinsId = $this.attr('id');
-                           var dummyjenkinsValue = $this.attr('value');
+                            var dummychefId = $this.attr('id');
+                            var dummychefValue = $this.attr('value');
+                            $selectedtaskList.append($('<option class="taskimgchef" id="' + dummychefId + '" value="' + dummychefValue + '">' + dummychefValue + '</option>'));
+                        } else if ($this.attr('class') == 'taskimgpuppet') {
+                            var dummypuppetId = $this.attr('id');
+                            var dummypuppetValue = $this.attr('value');
+                            $selectedtaskList.append($('<option class="taskimgpuppet" id="' + dummypuppetId + '" value="' + dummypuppetValue + '">' + dummypuppetValue + '</option>'));
+                        } else if ($this.attr('class') == 'taskimgjenkins') {
+                            var dummyjenkinsId = $this.attr('id');
+                            var dummyjenkinsValue = $this.attr('value');
                             $selectedtaskList.append($('<option class="taskimgjenkins" id="' + dummyjenkinsId + '" value="' + dummyjenkinsValue + '">' + dummyjenkinsValue + '</option>'));
                         }
                         /*$.get('/tasks/' + assignTasks[i], function(data) {
@@ -1206,11 +1188,11 @@ $(document).ready(function() {
     }
 
     $('#saveRunlist').click(function(e) {
-     var $ccrs = $('.runlistContainer').data('$ccrs');
-     var runlist = $ccrs.getSelectedRunlist();
-     createRunlistTable(runlist);
-     $('#chefRunlistModal').modal('hide');
-     return false;
+        var $ccrs = $('.runlistContainer').data('$ccrs');
+        var runlist = $ccrs.getSelectedRunlist();
+        createRunlistTable($ccrs.getRunlistNames());
+        $('#chefRunlistModal').modal('hide');
+        return false;
     });
 
     $('#editAttributesBtn').click(function(e) {
@@ -1230,12 +1212,13 @@ $(document).ready(function() {
             cookbooks: [],
             roles: []
         }
+        
         for (var i = 0; i < runlist.length; i++) {
 
-            if (runlist[i].indexOf('recipe') === 0) {
-                className = 'cookbook';
-            } else {
-                className = 'roles';
+            if (runlist[i].indexOf('template') === 0) {
+                var templateRunlist = $chefCookbookRoleSelector.getRunlistFromTemplate(runlist[i]);
+                runlist = runlist.concat(templateRunlist);
+                continue;
             }
             var name = '';
             var item = runlist[i];
@@ -1247,9 +1230,13 @@ $(document).ready(function() {
                 }
             }
             if (runlist[i].indexOf('recipe') === 0) {
-                reqBody.cookbooks.push(name);
+                if(reqBody.cookbooks.indexOf(name) === -1) {
+                    reqBody.cookbooks.push(name);
+                }
             } else {
-                reqBody.roles.push(name);
+                if(reqBody.roles.indexOf(name) === -1) {
+                    reqBody.roles.push(name);
+                }
             }
 
         }
@@ -1486,7 +1473,7 @@ $(document).ready(function() {
             $('.puppetTaskType').hide();
             $("#chef-dropdown").show();
             $('.chefTaskType').show();
-           
+
         } else if (this.value == "jenkins") {
             $('.chefTaskType').hide();
             $("#chef-dropdown").hide();
@@ -1496,8 +1483,8 @@ $(document).ready(function() {
             $('.puppetTaskType').hide();
             $("#Jenkins-dropdown").show();
             $('.jenkinsTaskType').show();
-           
-        }  else if (this.value == "puppet") {
+
+        } else if (this.value == "puppet") {
             $("#Jenkins-dropdown").hide();
             $('.jenkinsTaskType').hide();
             $('.chefTaskType').hide();
@@ -1506,8 +1493,8 @@ $(document).ready(function() {
             $('.compositeTaskType').hide();
             $("#Puppet-dropdown").show();
             $('.puppetTaskType').show();
-            
-         } else if (this.value == "composite") {
+
+        } else if (this.value == "composite") {
             $("#Jenkins-dropdown").hide();
             $('.jenkinsTaskType').hide();
             $('.chefTaskType').hide();
@@ -1519,13 +1506,14 @@ $(document).ready(function() {
             $('.chefInstance').hide();
             $('.puppetInstance').hide();
             loadTaskLists();
-         }
+        }
     });
+
     function loadTaskLists(taskData) {
         //To get Task Lists
         $.get('/tasks/list/all', function(taskLists) {
             $('#compositeTasksList').empty();
-            console.log("I am in Console"+urlParams.envid);
+            console.log("I am in Console" + urlParams.envid);
             for (var i = 0; i < taskLists.length; i++) {
                 if (taskLists[i].envId == urlParams.envid) {
                     if (taskLists[i].taskType == 'chef') {
@@ -1556,7 +1544,7 @@ $(document).ready(function() {
         //     // process the server response
         //     if (httpRequest.readyState === 4 && httpRequest.status == 200) {
         //         // everything is good, the response is received
-                
+
         //         $('#compositeTasksList').empty();
 
         //           var taskLists = JSON.parse(httpRequest.response);
@@ -1578,7 +1566,7 @@ $(document).ready(function() {
         //              $('#compositeTasksList').append($('<option class="'+info[0]+'" id="' + taskLists[i]._id + '" value="' + taskLists[i].name + '">' + taskLists[i].name + '</option>'));
         //           }
 
-                  
+
 
         //        }
         //        createtaskComposite(taskData);

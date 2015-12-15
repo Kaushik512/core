@@ -157,7 +157,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
     });
 
     app.get('/openstack/:providerid/securityGroups', function(req, res) {
-    	logger.debug('Inside openstack get securityGroups',JSON.stringify(openstackconfig));
+    	//logger.debug('Inside openstack get securityGroups',JSON.stringify(openstackconfig));
 
         getopenstackprovider(req.params.providerid,function(err,openstackconfig){
 
