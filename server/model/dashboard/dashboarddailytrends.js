@@ -18,8 +18,8 @@ var uniqueValidator = require('mongoose-unique-validator');
 var Schema = mongoose.Schema;
 
 
-var dashboardcostsSchema = new Schema({
-    totalcostcount: {
+var dashboarddailytrendsSchema = new Schema({
+    totaldailytrendcount: {
         type: Number,
         required: true
     },
@@ -30,47 +30,47 @@ var dashboardcostsSchema = new Schema({
 });
 
 // creates a new Provider
-dashboardcostsSchema.statics.createNew = function(dashboardCostsData, callback) {
-    logger.debug("Enter createNew cost dashboard");
+dashboarddailytrendsSchema.statics.createNew = function(dashboarddailytrendsData, callback) {
+    logger.debug("Enter createNew dashboard");
     //var dashboardProviderObj = dashboardProviderData;
     var that = this;
-    var dashboardCosts = new that({
-        totalcostcount: dashboardCostsData,
+    var dashboarddailytrends = new that({
+        totaldailytrendcount: dashboarddailytrendsData,
         timestamp: new Date().getTime(),
     });
-    dashboardCosts.save(function(err, aProvider) {
+    dashboarddailytrends.save(function(err, aProvider) {
         if (err) {
             logger.error(err);
             callback(err, null);
             return;
         }
-        logger.debug("Exit createNew with getLatestcostDataInfo present");
+        logger.debug("Exit createNew with getLatestdailytrendDataInfo present");
         callback(null, aProvider);
         return;
     });
 };
 
-dashboardcostsSchema.statics.getLatestCostInfo = function(callback) {
-    logger.debug("Enter getLatestcostDataInfo");
+dashboarddailytrendsSchema.statics.getLatestdailytrendInfo = function(callback) {
+    logger.debug("Enter getLatestdailytrendDataInfo");
       
-    this.find(function(err, costData) {
+    this.find(function(err, dailytrendData) {
         if (err) {
             logger.error(err);
             callback(err, null);
             return;
         }
-        if (costData.length) {
-            logger.debug("Exit getLatestcostDataInfo with providers present");
-            callback(null, costData);
+        if (dailytrendData.length) {
+            logger.debug("Exit getLatestdailytrendDataInfo with providers present");
+            callback(null, dailytrendData);
             return;
         } else {
-            logger.debug("Exit getLatestcostDataInfo with no providers present");
+            logger.debug("Exit getLatestdailytrendDataInfo with no providers present");
             callback(null, null);
             return;
         }
     }).sort({_id:-1}).limit(1);
 };
 
-var dashboardcosts = mongoose.model('dashboardcosts', dashboardcostsSchema);
+var dashboarddailytrends = mongoose.model('dashboarddailytrends', dashboarddailytrendsSchema);
 
-module.exports = dashboardcosts;
+module.exports = dashboarddailytrends;

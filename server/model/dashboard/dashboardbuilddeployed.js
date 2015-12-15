@@ -18,8 +18,8 @@ var uniqueValidator = require('mongoose-unique-validator');
 var Schema = mongoose.Schema;
 
 
-var dashboardcostsSchema = new Schema({
-    totalcostcount: {
+var dashboarddeployedbuildsSchema = new Schema({
+    totaldeployedbuildcount: {
         type: Number,
         required: true
     },
@@ -30,47 +30,47 @@ var dashboardcostsSchema = new Schema({
 });
 
 // creates a new Provider
-dashboardcostsSchema.statics.createNew = function(dashboardCostsData, callback) {
-    logger.debug("Enter createNew cost dashboard");
+dashboarddeployedbuildsSchema.statics.createNew = function(dashboarddeployedbuildsData, callback) {
+    logger.debug("Enter createNew dashboard");
     //var dashboardProviderObj = dashboardProviderData;
     var that = this;
-    var dashboardCosts = new that({
-        totalcostcount: dashboardCostsData,
+    var dashboarddeployedbuilds = new that({
+        totaldeployedbuildcount: dashboarddeployedbuildsData,
         timestamp: new Date().getTime(),
     });
-    dashboardCosts.save(function(err, aProvider) {
+    dashboarddeployedbuilds.save(function(err, aProvider) {
         if (err) {
             logger.error(err);
             callback(err, null);
             return;
         }
-        logger.debug("Exit createNew with getLatestcostDataInfo present");
+        logger.debug("Exit createNew with getLatestdeployedbuildDataInfo present");
         callback(null, aProvider);
         return;
     });
 };
 
-dashboardcostsSchema.statics.getLatestCostInfo = function(callback) {
-    logger.debug("Enter getLatestcostDataInfo");
+dashboarddeployedbuildsSchema.statics.getLatestdeployedbuildInfo = function(callback) {
+    logger.debug("Enter getLatestdeployedbuildDataInfo");
       
-    this.find(function(err, costData) {
+    this.find(function(err, deployedbuildData) {
         if (err) {
             logger.error(err);
             callback(err, null);
             return;
         }
-        if (costData.length) {
-            logger.debug("Exit getLatestcostDataInfo with providers present");
-            callback(null, costData);
+        if (deployedbuildData.length) {
+            logger.debug("Exit getLatestdeployedbuildDataInfo with providers present");
+            callback(null, deployedbuildData);
             return;
         } else {
-            logger.debug("Exit getLatestcostDataInfo with no providers present");
+            logger.debug("Exit getLatestdeployedbuildDataInfo with no providers present");
             callback(null, null);
             return;
         }
     }).sort({_id:-1}).limit(1);
 };
 
-var dashboardcosts = mongoose.model('dashboardcosts', dashboardcostsSchema);
+var dashboarddeployedbuilds = mongoose.model('dashboarddeployedbuilds', dashboarddeployedbuildsSchema);
 
-module.exports = dashboardcosts;
+module.exports = dashboarddeployedbuilds;

@@ -1,13 +1,11 @@
-
 /* Copyright (C) Relevance Lab Private Limited- All Rights Reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
- * Written by Gobinda Das <gobinda.das@relevancelab.com>, 
- * May 2015
+ * Written by Arabinda Behera <arabinda.behera@relevancelab.com>, 
+ * December 2015
  */
 
-// This file act as a Model which contains provider schema and dao methods.
-
+// This file act as a Model which contains instances dashboard schema.
 var logger = require('_pr/logger')(module);
 var mongoose = require('mongoose');
 var extend = require('mongoose-schema-extend');
@@ -17,18 +15,16 @@ var uniqueValidator = require('mongoose-unique-validator');
 
 var Schema = mongoose.Schema;
 
-
 var providersdashboardSchema = new Schema({
     totalinstancecount: {
         type: Number,
         required: true
     },
-    timestamp:{
+    timestamp: {
         type: Number,
         required: true
     }
 });
-
 // creates a new Provider
 providersdashboardSchema.statics.createNew = function(dashboardProviderData, callback) {
     logger.debug("Enter createNew dashboard");
@@ -52,7 +48,7 @@ providersdashboardSchema.statics.createNew = function(dashboardProviderData, cal
 
 providersdashboardSchema.statics.getLatestProviderInfo = function(callback) {
     logger.debug("Enter getLatestProviderInfo");
-      
+
     this.find(function(err, providerData) {
         if (err) {
             logger.error(err);
@@ -68,31 +64,10 @@ providersdashboardSchema.statics.getLatestProviderInfo = function(callback) {
             callback(null, null);
             return;
         }
-    }).sort({_id:-1}).limit(1);
+    }).sort({
+        _id: -1
+    }).limit(1);
 };
-/*providersdashboardSchema.statics.getAllAWSProvidersDashboard = function(dashboardAllAwsProviderData, callback) {
-    logger.debug("Enter dashboardAllAwsProviderData");
-      
-    this.find({
-        orgId : orgId
-    }, function(err, providers) {
-        if (err) {
-            logger.error(err);
-            callback(err, null);
-            return;
-        }
-        if (providers.length) {
-            logger.debug("Exit getAWSProvidersByOrgId with providers present");
-            callback(null, providers);
-            return;
-        } else {
-            logger.debug("Exit getAWSProvidersByOrgId with no providers present");
-            callback(null, null);
-            return;
-        }
-
-    });
-};*/
 
 var providersdashboard = mongoose.model('providersdashboard', providersdashboardSchema);
 

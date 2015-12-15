@@ -18,8 +18,8 @@ var uniqueValidator = require('mongoose-unique-validator');
 var Schema = mongoose.Schema;
 
 
-var dashboardcostsSchema = new Schema({
-    totalcostcount: {
+var dashboarduptimesSchema = new Schema({
+    totaluptimecount: {
         type: Number,
         required: true
     },
@@ -30,47 +30,47 @@ var dashboardcostsSchema = new Schema({
 });
 
 // creates a new Provider
-dashboardcostsSchema.statics.createNew = function(dashboardCostsData, callback) {
-    logger.debug("Enter createNew cost dashboard");
+dashboarduptimesSchema.statics.createNew = function(dashboarduptimesData, callback) {
+    logger.debug("Enter createNew dashboard");
     //var dashboardProviderObj = dashboardProviderData;
     var that = this;
-    var dashboardCosts = new that({
-        totalcostcount: dashboardCostsData,
+    var dashboarduptimes = new that({
+        totaluptimecount: dashboarduptimesData,
         timestamp: new Date().getTime(),
     });
-    dashboardCosts.save(function(err, aProvider) {
+    dashboarduptimes.save(function(err, aProvider) {
         if (err) {
             logger.error(err);
             callback(err, null);
             return;
         }
-        logger.debug("Exit createNew with getLatestcostDataInfo present");
+        logger.debug("Exit createNew with getLatestuptimeDataInfo present");
         callback(null, aProvider);
         return;
     });
 };
 
-dashboardcostsSchema.statics.getLatestCostInfo = function(callback) {
-    logger.debug("Enter getLatestcostDataInfo");
+dashboarduptimesSchema.statics.getLatestuptimeInfo = function(callback) {
+    logger.debug("Enter getLatestuptimeDataInfo");
       
-    this.find(function(err, costData) {
+    this.find(function(err, uptimeData) {
         if (err) {
             logger.error(err);
             callback(err, null);
             return;
         }
-        if (costData.length) {
-            logger.debug("Exit getLatestcostDataInfo with providers present");
-            callback(null, costData);
+        if (uptimeData.length) {
+            logger.debug("Exit getLatestuptimeDataInfo with providers present");
+            callback(null, uptimeData);
             return;
         } else {
-            logger.debug("Exit getLatestcostDataInfo with no providers present");
+            logger.debug("Exit getLatestuptimeDataInfo with no providers present");
             callback(null, null);
             return;
         }
     }).sort({_id:-1}).limit(1);
 };
 
-var dashboardcosts = mongoose.model('dashboardcosts', dashboardcostsSchema);
+var dashboarduptimes = mongoose.model('dashboarduptimes', dashboarduptimesSchema);
 
-module.exports = dashboardcosts;
+module.exports = dashboarduptimes;
