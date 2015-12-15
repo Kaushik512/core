@@ -3359,10 +3359,10 @@ function isFormValid(formid) {
                         errormessageforInput(currCtrl.attr('id'), "Atleast a lower case char is required.");
                         currCtrl.focus();
                     }
-                    if(!/[A-Z]/.test(str)){
+                    /*if(!/[A-Z]/.test(str)){
                         errormessageforInput(currCtrl.attr('id'), "Atleast a upper case char is required.");
                         currCtrl.focus();
-                    }
+                    }*/
                     if(!/[!@#$%^&*]/.test(str)){
                         errormessageforInput(currCtrl.attr('id'), "Atleast a special char is required.");
                         currCtrl.focus();
