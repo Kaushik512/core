@@ -11,7 +11,7 @@
                                 <div class="panel-group smart-accordion-default" id="accordion-1" style="overflow-y: auto;">
                                     <div class="panel panel-default">
                                         <div class="panel-heading">
-                                            <h4 class="panel-title" style="width:86%">
+                                            <h4 class="panel-title panelStyle">
                                             <a data-toggle="collapse" style="float:left;font-size:13px;">Instances</a>
                                             <div class="instanceloaderspinner hidden"><img   src="img/select2-spinner.gif"> Loading Instances</div>
                                             <form type="post" id="instancesearchform">
@@ -202,11 +202,11 @@
                     </h4>
                 </div>
 
-                <div class="modal-body modal-height">
-                        
+                <div class="modal-body">
+                        <fieldset>
 
                         <span id="spanforshefserverfound">
-                        <div class="col-lg-6 col-md-6">
+                        <div class="col-lg-6 col-md-6 col-sm-6">
                             
                             <label for="instanceFQDN">Enter IP Address<span style="color:Red;" class="control-label">&nbsp;*</span>
                                 </label>
@@ -214,7 +214,7 @@
                             <input type="text" name="instanceFQDN" class="form-control" id="instanceFQDN" autofocus/>
                         </div>
                         </div>
-                        <div class="col-lg-6 col-md-6">
+                        <div class="col-lg-6 col-md-6 col-sm-6">
                             
                             <label for="importinstanceOS">Choose Operating System<span style="color:Red;">&nbsp;*</span></label>
                             <div class="input-groups">
@@ -224,7 +224,7 @@
                         </div>
                     
                     
-                        <div class="col-lg-6 col-md-6" style="margin-top:15px">
+                        <div class="col-lg-6 col-md-6 col-sm-6" style="margin-top:15px">
                             
                             <label for="instanceUsername">Username<span style="color:Red;" class="control-label">&nbsp;*</span></label>
                                 <div class="input-groups">
@@ -232,7 +232,7 @@
                         </div>
 
                         </div>
-                        <div class="col-lg-6 col-md-6" style="margin-top:15px">
+                        <div class="col-lg-6 col-md-6 col-sm-6" style="margin-top:15px">
 
                             <label for="">Config Management<span style="color:Red;" class="control-label">&nbsp;*</span></label>
                             <select id="configManagementDropdown"  class="width-100 form-control" >
@@ -240,7 +240,7 @@
                             </select>
 
                         </div>
-                        <div class="col-lg-6 col-md-6" style="margin-top:15px">
+                        <div class="col-lg-6 col-md-6 col-sm-6" style="margin-top:15px">
 
                             <label for="">Choose Authentication Type<span style="color:Red;" class="control-label">&nbsp;*</span></label>
                             <select id="pemFileDropdown"  class="authenticationType width-100 form-control">
@@ -251,7 +251,7 @@
                         </div>
                     
                     <!-- <div class="col-lg-12 ipLEFT"> -->
-                        <div class="col-lg-6 col-md-6 authPassword" style="margin-top:15px">
+                        <div class="col-lg-6 col-md-6 col-sm-6 authPassword" style="margin-top:15px">
                             <label for="instancePassword">Password<span style="color:Red;" class="control-label">&nbsp;*</span></label>
                                 <div class="input-groups">
                             <input type="password" name="instancePassword" class="form-control" id="instancePassword" />
@@ -259,7 +259,7 @@
                     </div>
                     <!-- </div> -->
                     <!-- <div class="col-lg-12 ipLEFT"> -->
-                        <div class="col-lg-6 col-md-6 authPemFile" style="margin-top:15px">
+                        <div class="col-lg-6 col-md-6 col-sm-6 authPemFile" style="margin-top:15px">
                             
                                 <label for="importPemfileInput">Pem File<span style="color:Red;" class="control-label">&nbsp;*</span><span style="color:Red;" id="requiredPemFile" class="hidden">&nbsp;Required</span></label>
                                 <div class="input-groups">
@@ -271,14 +271,14 @@
                      
                         <!--app series-->
                         <div class="applicationURLContainer" id="appSeries12"> 
-                            <div class="col-lg-6 col-md-6" style="margin-top:15px;">
+                            <div class="col-lg-6 col-md-6 col-sm-6" style="margin-top:15px;">
 
                             <label for="">Application Name</label>
 
                             <input placeholder="AppName" maxlength="8" type="text" name="appNameInput" class="form-control appName">
                            </div>
 
-                           <div class="col-lg-6 col-md-6" style="margin-top:15px">
+                           <div class="col-lg-6 col-md-6 col-sm-6" style="margin-top:15px">
 
                             <label for="appNameURL">Application URL<span style="color:Red;" id="validURL" class="hidden">&nbsp;Please Enter a Valid URL</span></label>
                             <div class="input-groups">
@@ -288,7 +288,7 @@
                         </div>
                         <a href="javascript:void(0)" class="clearfix pull-right addNewApp1 appDesignNew" data-backdrop="false" data-toggle="modal">Add Application URL</a>
 
-
+                    </fieldset>
                 </div>
                 <div class="modal-footer">
                     <label id="nodeimportipspinner" class=" hidden"><img  style="margin-left:5px;margin-right:25px;" src="img/select2-spinner.gif"></label>
