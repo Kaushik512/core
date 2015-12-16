@@ -231,12 +231,10 @@ $(document).ready(function() {
                 }
             }
             if (taskData && taskData.taskType === 'composite') {
-                if (taskData.taskConfig.assignTasks.length > 0) {
-                    //alert(taskData.taskConfig.assignTasks.length);
-                    var _assignedTasks = taskData.taskConfig.assignTasks;
-                    // loadTaskLists(_assignedTasks);
-                    loadTaskLists(taskData);
-
+                if (taskData.taskConfig.assignTasks && taskData.taskConfig.assignTasks.length) {
+                    if (taskData.taskConfig.assignTasks.length > 0) {
+                        loadTaskLists(taskData);
+                    }
                 }
             }
 
@@ -436,7 +434,7 @@ $(document).ready(function() {
                 $spinnerJobForUrl.removeClass('hidden');
                 for (var i = 0; i < jenkinsList.length; i++) {
                     var keys = Object.keys(jenkinsList[i]);
-                    console.log("=========== " + JSON.stringify(jenkinsList[i][keys[0]]));
+                   
                     jenkinsServerId = jenkinsList[i][keys[0]];
                 }
                 //alert(JSON.stringify($option));
@@ -732,10 +730,15 @@ $(document).ready(function() {
             //alert($trs.length);
             $orderoptions.each(function(e) {
                 var $this = $(this);
-                console.log("I am in Logs");
-                console.log($this);
                 assignTasks.push($this.attr('id'));
             });
+            if(!$orderoptions.length){
+                bootbox.alert({
+                    message: 'Please Select a Task',
+                    title: 'Error'
+                });
+                return false;
+            }
             taskData.assignTasks = assignTasks;
             $('.btnSaveTask').attr('disabled', 'disabled');
         } else {
@@ -1527,50 +1530,6 @@ $(document).ready(function() {
             alert("TaskLists load Failed");
         });
 
-
-
-        // var httpRequest;
-        // if (window.XMLHttpRequest) { // Mozilla, Safari, IE7+ ...
-        //     httpRequest = new XMLHttpRequest();
-        // } else if (window.ActiveXObject) { // IE 6 and older
-        //     httpRequest = new ActiveXObject("Microsoft.XMLHTTP");
-        // }
-
-        // httpRequest.onreadystatechange = function() {
-        //     // process the server response
-        //     if (httpRequest.readyState === 4 && httpRequest.status == 200) {
-        //         // everything is good, the response is received
-
-        //         $('#compositeTasksList').empty();
-
-        //           var taskLists = JSON.parse(httpRequest.response);
-        //           console.log(taskLists);
-        //           for (var i = 0; i < taskLists.length; i++) {
-        //            if ((taskLists[i].envId == urlParams.envid) && (taskLists[i].taskType != 'composite') ) {
-        //                 var info = [];
-        //                if (taskLists[i].taskType == 'chef') {
-        //                    info.push("taskimgchef");
-        //                    $('#compositeTasksList').append($('<option class="taskimgchef" id="' + taskLists[i]._id + '" value="' + taskLists[i].name + '">' + taskLists[i].name + '</option>'));
-        //                } else if (taskLists[i].taskType == 'puppet') {
-        //                    info.push("taskimgpuppet");
-        //                    /*$('#compositeTasksList').append($('<option class="taskimgpuppet" id="' + taskLists[i]._id + '" value="' + taskLists[i].name + '">' + taskLists[i].name + '</option>'));*/
-        //                } else if (taskLists[i].taskType == 'jenkins') {
-        //                    info.push("taskimgjenkins");
-        //                    /*$('#compositeTasksList').append($('<option class="taskimgjenkins" id="' + taskLists[i]._id + '" value="' + taskLists[i].name + '">' + taskLists[i].name + '</option>'));*/
-        //                }
-
-        //              $('#compositeTasksList').append($('<option class="'+info[0]+'" id="' + taskLists[i]._id + '" value="' + taskLists[i].name + '">' + taskLists[i].name + '</option>'));
-        //           }
-
-
-
-        //        }
-        //        createtaskComposite(taskData);
-        //     } 
-        // };
-
-        // httpRequest.open('GET', '/tasks/list/all', true);
-        // httpRequest.send(null);
     }
     $('.chefRunlistModalClose').on('click', function() {
         $('#chefRunlistModal').modal("hide");

@@ -4393,9 +4393,9 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                         });
                     } else if (data[i].taskType === 'composite') {
                         //if job type is composite..
-                        var $tdComposite = $('<td style="vertical-align:inherit;text-align:center;font-size">N/A</td>');
+                        var $tdComposite = $('<td style="vertical-align:inherit;text-align:center;font-size">-</td>');
                         $tr.append($tdComposite);
-                    } else {
+                    } else if (data[i].taskType === 'jenkins') {
                         //if job type is jenkins show job url..
                         var jobURLS = 'http://' + data[i].taskConfig.jobURL;
 
@@ -4778,7 +4778,7 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                             //$modal.find('.outputArea').hide();
 
                         });
-                    } else {
+                    } else if(data[i].taskType === 'jenkins') {
                         //history for jenkins job type...description mentioned above..
                         var $tdHistory = $('<td style="vertical-align:inherit;text-align:center;"></td>').append('<a rel="tooltip" data-placement="top" data-original-title="History" data-toggle="modal" href="javascript:void(0)" class="btn btn-primary btn-sg tableactionbutton"><i class="ace-icon fa fa-header bigger-120"></i></a>');
                         $tdHistory.find('a').data('taskId', data[i]._id).data('autosyncFlag', data[i].taskConfig.autoSyncFlag).attr('data-historyTaskId', data[i]._id).click(function(e) {
